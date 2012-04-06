@@ -40,5 +40,15 @@
 			<source>${basedir}/../license-LGPL.txt</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-	</files>
+        </files>
+
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/..</directory>
+			<outputDirectory>/source</outputDirectory>
+                        <excludes>
+                          <exclude>**/target/**</exclude>
+                        </excludes>
+		</fileSet>
+	</fileSets>
 </assembly>
