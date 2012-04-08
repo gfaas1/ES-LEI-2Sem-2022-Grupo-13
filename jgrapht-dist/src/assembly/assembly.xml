@@ -33,7 +33,15 @@
 	
 	<files>
 		<file>
-			<source>${basedir}/../README.html</source>
+			<source>${basedir}/../README.md</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<file>
+			<source>${basedir}/../HISTORY.md</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<file>
+			<source>${basedir}/../CONTRIBUTORS.md</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
