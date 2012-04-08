@@ -180,11 +180,6 @@
 
   <table border="1" cellspacing="0" cellpadding="5" style=
   "border-collapse: collapse; margin-left:1em;" bordercolor="#7AA1E6" bgcolor="#FFFFFF">
-    <tr>
-      <td valign="top"><b><code>jgrapht-jdk1.6.jar</code></b></td>
-
-      <td>the compiled JGraphT library for JRE 1.6</td>
-    </tr>
 
     <tr>
       <td valign="top"><b><code>README.html</code></b></td>
@@ -208,43 +203,32 @@
       <td valign="top"><b><code>lib/</code></b></td>
 
       <td>
-        libraries required for build:
+        JGraphT libraries:
 
         <ul compact>
-          <li><code>junit.jar</code></li>
+          <li><code>jgrapht-core-x.y.z.jar</code>:  core library</li>
 
-          <li><code>jgraph.jar</code></li>
+          <li><code>jgrapht-demo-x.y.z.jar</code>:  demo classes</li>
 
-          <li><code>TGGraphLayout.jar</code></li>
+          <li><code>jgrapht-ext-x.y.z.jar</code>:  extensions</li>
+
+          <li><code>jgrapht-x.y.z-combined.jar</code>:  all libraries rolled into one</li>
+
+          <li><code>jgraph-a.b.c.jar</code>:  JGraph dependency library</li>
         </ul>
       </td>
     </tr>
 
     <tr>
-      <td valign="top"><b><code>src/</code></b></td>
+      <td valign="top"><b><code>source/</code></b></td>
 
-      <td>source code</td>
+      <td>complete source tree used to build this release</td>
     </tr>
 
     <tr>
-      <td valign="top"><code><b>testsrc/</b></code></td>
+      <td valign="top"><code><b>pom.xml</b></code></td>
 
-      <td>source code of unit tests</td>
-    </tr>
-
-    <tr>
-      <td valign="top"><code><b>META-INF/MANIFEST.MF</b></code></td>
-      <td>meta information for use as an OSGi plug-in (e.g. within an Eclipse RCP application)</td>
-    </tr>
-    <tr>
-      <td valign="top"><code><b>build.properties</b></code></td>
-      <td>describes content of OSGi plug-in export</td>
-    </tr>
-
-    <tr>
-      <td valign="top"><code><b>build.xml</b></code></td>
-
-      <td>ant buildfile</td>
+      <td>Maven project file</td>
     </tr>
 
   </table>
@@ -294,8 +278,7 @@
     &nbsp;</li>
 
     <li>JUnit is a unit testing framework. You need JUnit only if you want to
-    run the unit tests. The <code>junit.jar</code> runtime file is included in
-    this distribution. JUnit is licensed under the terms of the IBM Common
+    run the unit tests.  JUnit is licensed under the terms of the IBM Common
     Public License. You can find out more about JUnit and/or download the
     latest version from <a href=
     "http://www.junit.org">http://www.junit.org</a>. The JUnit tests included
@@ -303,18 +286,15 @@
     &nbsp;</li>
 
     <li>XMLUnit extends JUnit with XML capabilities. You need XMLUnit
-    only if you want to run the unit tests. The
-    <code>xmlunit-1.0.jar</code> runtime file is included in this
-    distribution. XMLUnit is licensed under the terms of the BSD
+    only if you want to run the unit tests.
+    XMLUnit is licensed under the terms of the BSD
     License. You can find out more about XMLUnit and/or download the
     latest version from <a href=
     "http://xmlunit.sourceforge.net">http://xmlunit.sourceforge.net</a>.</li>
 
     <li>JGraph is a graph visualization and editing component. You
     need JGraph only if you want to create graph visualizations using
-    the JGraphT-to-JGraph adapter. The <code>jgraph.jar</code> runtime
-    file of JGraph is included in this distribution (file
-    lib/lib-readme.txt has version information). JGraph is licensed
+    the JGraphT-to-JGraph adapter.  JGraph is licensed
     under the terms of the GNU Lesser General Public License
     (LGPL). You can find more about JGraph and/or download the latest
     version from <a href=
@@ -322,10 +302,8 @@
 
     <li>Touchgraph is a graph visualization and layout component. You
     need Touchgraph only if you want to create graph visualizations
-    using the JGraphT-to-Touchgraph converter. The
-    <code>TGGraphLayout.jar</code> runtime file of Touchgraph is included
-    in this distribution (file lib/lib-readme.txt has version
-    information). Touchgraph is licensed under the terms of an Apache-style
+    using the JGraphT-to-Touchgraph converter.
+    Touchgraph is licensed under the terms of an Apache-style
     License. You can find more about Touchgraph
     and/or download the latest version from <a href=
     "http://sourceforge.net/projects/touchgraph">http://sourceforge.net/projects/touchgraph</a>.</li>
@@ -352,9 +330,14 @@
   for everyone in the JGraphT community to share information about the
   project.</p>
 
+  <p>Source code is hosted
+  on <a href="https://github.com/lingeringsocket/jgrapht">github</a>.
+  You can send contributions as pull requests here.</p>
+
   <h2>Your Improvements</h2>
 
-  <p>If you add improvements to JGraphT please send them to us. We will add them
+  <p>If you add improvements to JGraphT please send them to us as pull 
+  requests on github. We will add them
   to the next release so that everyone can enjoy them. You might also benefit
   from it: others may fix bugs in your source files or may continue to enhance
   them.</p>
@@ -365,6 +348,8 @@
 
   <ul>
     <li><b>version 0.8.4</b> (under development): 
+    Move to github for source control, and Apache Maven for build,
+    contributed by Andreas Schnaiter and Owen Jacobson.
     </li>
 
     <li><b>version 0.8.3</b> (20-Jan-2012): fix regression in
