@@ -19,6 +19,22 @@ Please note that JGraphT is distributed WITHOUT ANY WARRANTY; without even the i
 
 Please refer to the license for details.
 
+## Contents ##
+
+- `README.md` this file
+- `CONTRIBUTORS.md` list of contributors
+- `HISTORY.md` changelog
+- `licence-LGPL.txt` GNU Lesser General Public License
+- `javadoc/` Javadoc documentation
+- `lib/` JGraphT libraries:
+- `jgrapht-core-x.y.z.jar` core library
+- `jgrapht-demo-x.y.z.jar` demo classes
+- `jgrapht-ext-x.y.z.jar` extensions
+- `jgrapht-x.y.z-combined.jar` all libraries rolled into one
+- `jgraph-a.b.c.jar` JGraph dependency library
+- `source/` complete source tree used to build this release
+- `pom.xml` Maven project file
+
 ## Getting Started ##
 
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
