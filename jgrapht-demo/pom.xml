@@ -19,6 +19,7 @@
 					<archive>
 						<manifest>
 							<mainClass>org.jgrapht.demo.JGraphAdapterDemo</mainClass>
+                                                        <addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
 				</configuration>
