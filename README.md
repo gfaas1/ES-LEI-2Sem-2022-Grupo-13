@@ -77,8 +77,6 @@ Source code is hosted on [github](https://github.com/lingeringsocket/jgrapht). Y
 
 If you add improvements to JGraphT please send them to us as pull requests on github. We will add them to the next release so that everyone can enjoy them. You might also benefit from it: others may fix bugs in your source files or may continue to enhance them.
 
-
-
 ## Thanks ##
 
 With regards from
