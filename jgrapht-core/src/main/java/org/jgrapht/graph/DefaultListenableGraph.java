@@ -79,9 +79,9 @@ public class DefaultListenableGraph<V, E>
 
     //~ Instance fields --------------------------------------------------------
 
-    private ArrayList<GraphListener<V, E>> graphListeners =
+    private List<GraphListener<V, E>> graphListeners =
         new ArrayList<GraphListener<V, E>>();
-    private ArrayList<VertexSetListener<V>> vertexSetListeners =
+    private List<VertexSetListener<V>> vertexSetListeners =
         new ArrayList<VertexSetListener<V>>();
     private FlyweightEdgeEvent<V, E> reuseableEdgeEvent;
     private FlyweightVertexEvent<V> reuseableVertexEvent;
@@ -165,7 +165,7 @@ public class DefaultListenableGraph<V, E>
         E e = super.addEdge(sourceVertex, targetVertex);
 
         if (e != null) {
-            fireEdgeAdded(e);
+            fireEdgeAdded(e, sourceVertex, targetVertex);
         }
 
         return e;
@@ -179,7 +179,7 @@ public class DefaultListenableGraph<V, E>
         boolean added = super.addEdge(sourceVertex, targetVertex, e);
 
         if (added) {
-            fireEdgeAdded(e);
+            fireEdgeAdded(e, sourceVertex, targetVertex);
         }
 
         return added;
@@ -244,7 +244,7 @@ public class DefaultListenableGraph<V, E>
         E e = super.removeEdge(sourceVertex, targetVertex);
 
         if (e != null) {
-            fireEdgeRemoved(e);
+            fireEdgeRemoved(e, sourceVertex, targetVertex);
         }
 
         return e;
@@ -255,10 +255,13 @@ public class DefaultListenableGraph<V, E>
      */
     public boolean removeEdge(E e)
     {
+        V sourceVertex = getEdgeSource(e);
+        V targetVertex = getEdgeTarget(e);
+        
         boolean modified = super.removeEdge(e);
 
         if (modified) {
-            fireEdgeRemoved(e);
+            fireEdgeRemoved(e, sourceVertex, targetVertex);
         }
 
         return modified;
@@ -305,15 +308,19 @@ public class DefaultListenableGraph<V, E>
      * Notify listeners that the specified edge was added.
      *
      * @param edge the edge that was added.
+     *
+     * @param source edge source
+     *
+     * @param target edge target
      */
-    protected void fireEdgeAdded(E edge)
+    protected void fireEdgeAdded(E edge, V source, V target)
     {
         GraphEdgeChangeEvent<V, E> e =
-            createGraphEdgeChangeEvent(GraphEdgeChangeEvent.EDGE_ADDED, edge);
+            createGraphEdgeChangeEvent(
+                GraphEdgeChangeEvent.EDGE_ADDED,
+                edge, source, target);
 
-        for (int i = 0; i < graphListeners.size(); i++) {
-            GraphListener<V, E> l = graphListeners.get(i);
-
+        for (GraphListener<V, E> l : graphListeners) {
             l.edgeAdded(e);
         }
     }
@@ -322,17 +329,19 @@ public class DefaultListenableGraph<V, E>
      * Notify listeners that the specified edge was removed.
      *
      * @param edge the edge that was removed.
+     *
+     * @param source edge source
+     *
+     * @param target edge target
      */
-    protected void fireEdgeRemoved(E edge)
+    protected void fireEdgeRemoved(E edge, V source, V target)
     {
         GraphEdgeChangeEvent<V, E> e =
             createGraphEdgeChangeEvent(
                 GraphEdgeChangeEvent.EDGE_REMOVED,
-                edge);
+                edge, source, target);
 
-        for (int i = 0; i < graphListeners.size(); i++) {
-            GraphListener<V, E> l = graphListeners.get(i);
-
+        for (GraphListener<V, E> l : graphListeners) {
             l.edgeRemoved(e);
         }
     }
@@ -349,15 +358,11 @@ public class DefaultListenableGraph<V, E>
                 GraphVertexChangeEvent.VERTEX_ADDED,
                 vertex);
 
-        for (int i = 0; i < vertexSetListeners.size(); i++) {
-            VertexSetListener<V> l = vertexSetListeners.get(i);
-
+        for (VertexSetListener<V> l : vertexSetListeners) {
             l.vertexAdded(e);
         }
 
-        for (int i = 0; i < graphListeners.size(); i++) {
-            GraphListener<V, E> l = graphListeners.get(i);
-
+        for (GraphListener<V, E> l : graphListeners) {
             l.vertexAdded(e);
         }
     }
@@ -374,15 +379,11 @@ public class DefaultListenableGraph<V, E>
                 GraphVertexChangeEvent.VERTEX_REMOVED,
                 vertex);
 
-        for (int i = 0; i < vertexSetListeners.size(); i++) {
-            VertexSetListener<V> l = vertexSetListeners.get(i);
-
+        for (VertexSetListener<V> l : vertexSetListeners) {
             l.vertexRemoved(e);
         }
 
-        for (int i = 0; i < graphListeners.size(); i++) {
-            GraphListener<V, E> l = graphListeners.get(i);
-
+        for (GraphListener<V, E> l : graphListeners) {
             l.vertexRemoved(e);
         }
     }
@@ -397,16 +398,18 @@ public class DefaultListenableGraph<V, E>
     }
 
     private GraphEdgeChangeEvent<V, E> createGraphEdgeChangeEvent(
-        int eventType,
-        E edge)
+        int eventType, E edge, V source, V target)
     {
         if (reuseEvents) {
             reuseableEdgeEvent.setType(eventType);
             reuseableEdgeEvent.setEdge(edge);
+            reuseableEdgeEvent.setEdgeSource(source);
+            reuseableEdgeEvent.setEdgeTarget(target);
 
             return reuseableEdgeEvent;
         } else {
-            return new GraphEdgeChangeEvent<V, E>(this, eventType, edge);
+            return new GraphEdgeChangeEvent<V, E>(
+                this, eventType, edge, source, target);
         }
     }
 
@@ -455,6 +458,16 @@ public class DefaultListenableGraph<V, E>
             this.edge = e;
         }
 
+        protected void setEdgeSource(VV v)
+        {
+            this.edgeSource = v;
+        }
+        
+        protected void setEdgeTarget(VV v)
+        {
+            this.edgeTarget = v;
+        }
+        
         /**
          * Set the event type of this event.
          *

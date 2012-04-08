@@ -63,16 +63,19 @@ public class NeighborIndexTest
 
     public void testNeighborSet()
     {
-        ListenableUndirectedGraph<String, DefaultEdge> g =
-            new ListenableUndirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+        // We use Object instead of DefaultEdge for the edge type
+        // in order to cover the case in
+        // https://sourceforge.net/tracker/index.php?func=detail&aid=3486775&group_id=86459&atid=579687
+        ListenableUndirectedGraph<String, Object> g =
+            new ListenableUndirectedGraph<String, Object>(
+                Object.class);
         g.addVertex(V1);
         g.addVertex(V2);
 
         g.addEdge(V1, V2);
 
-        NeighborIndex<String, DefaultEdge> index =
-            new NeighborIndex<String, DefaultEdge>(g);
+        NeighborIndex<String, Object> index =
+            new NeighborIndex<String, Object>(g);
         g.addGraphListener(index);
 
         Set neighbors1 = index.neighborsOf(V1);
@@ -105,16 +108,16 @@ public class NeighborIndexTest
 
     public void testDirectedNeighborSet()
     {
-        ListenableDirectedGraph<String, DefaultEdge> g =
-            new ListenableDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+        ListenableDirectedGraph<String, Object> g =
+            new ListenableDirectedGraph<String, Object>(
+                Object.class);
         g.addVertex(V1);
         g.addVertex(V2);
 
         g.addEdge(V1, V2);
 
-        DirectedNeighborIndex<String, DefaultEdge> index =
-            new DirectedNeighborIndex<String, DefaultEdge>(g);
+        DirectedNeighborIndex<String, Object> index =
+            new DirectedNeighborIndex<String, Object>(g);
         g.addGraphListener(index);
 
         Set p = index.predecessorsOf(V1);

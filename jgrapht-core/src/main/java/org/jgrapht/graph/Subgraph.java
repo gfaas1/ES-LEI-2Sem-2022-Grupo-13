@@ -502,8 +502,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         {
             if (isInduced) {
                 E edge = e.getEdge();
-                V source = base.getEdgeSource(edge);
-                V target = base.getEdgeTarget(edge);
+                V source = e.getEdgeSource();
+                V target = e.getEdgeTarget();
                 if (containsVertex(source) && containsVertex(target)) {
                     addEdge(
                         source,

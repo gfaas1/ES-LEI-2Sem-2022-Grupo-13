@@ -178,8 +178,8 @@ public class DirectedNeighborIndex<V, E>
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         E edge = e.getEdge();
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
+        V source = e.getEdgeSource();
+        V target = e.getEdgeTarget();
         if (successorMap.containsKey(source)) {
             successorMap.get(source).removeNeighbor(target);
         }

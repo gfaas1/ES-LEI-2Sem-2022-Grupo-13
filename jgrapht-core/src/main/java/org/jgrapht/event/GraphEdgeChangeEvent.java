@@ -87,6 +87,16 @@ public class GraphEdgeChangeEvent<V, E>
      */
     protected E edge;
 
+    /**
+     * The source vertex of the edge that this event is related to.
+     */
+    protected V edgeSource;
+
+    /**
+     * The target vertex of the edge that this event is related to.
+     */
+    protected V edgeTarget;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -94,12 +104,33 @@ public class GraphEdgeChangeEvent<V, E>
      *
      * @param eventSource the source of this event.
      * @param type the event type of this event.
-     * @param e the edge that this event is related to.
+     * @param edge the edge that this event is related to.
+     *
+     * @deprecated Use new constructor which takes vertex parameters.
      */
-    public GraphEdgeChangeEvent(Object eventSource, int type, E e)
+    public GraphEdgeChangeEvent(
+        Object eventSource, int type, E edge)
+    {
+        this(eventSource, type, edge, null, null);
+    }
+
+    /**
+     * Constructor for GraphEdgeChangeEvent.
+     *
+     * @param eventSource the source of this event.
+     * @param type the event type of this event.
+     * @param edge the edge that this event is related to.
+     * @param edgeSource edge source vertex
+     * @param edgeTarget edge target vertex
+     */
+    public GraphEdgeChangeEvent(
+        Object eventSource, int type, E edge,
+        V edgeSource, V edgeTarget)
     {
         super(eventSource, type);
-        edge = e;
+        this.edge = edge;
+        this.edgeSource = edgeSource;
+        this.edgeTarget = edgeTarget;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -107,11 +138,31 @@ public class GraphEdgeChangeEvent<V, E>
     /**
      * Returns the edge that this event is related to.
      *
-     * @return the edge that this event is related to.
+     * @return event edge
      */
     public E getEdge()
     {
         return edge;
+    }
+
+    /**
+     * Returns the source vertex that this event is related to.
+     *
+     * @return event source vertex
+     */
+    public V getEdgeSource()
+    {
+        return edgeSource;
+    }
+
+    /**
+     * Returns the target vertex that this event is related to.
+     *
+     * @return event target vertex
+     */
+    public V getEdgeTarget()
+    {
+        return edgeTarget;
     }
 }
 
