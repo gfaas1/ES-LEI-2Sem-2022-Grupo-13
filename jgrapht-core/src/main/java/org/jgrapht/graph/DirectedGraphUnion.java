@@ -54,7 +54,7 @@ public class DirectedGraphUnion<V, E>
 
     //~ Constructors -----------------------------------------------------------
 
-    DirectedGraphUnion(
+    public DirectedGraphUnion(
         DirectedGraph<V, E> g1,
         DirectedGraph<V, E> g2,
         WeightCombiner operator)
@@ -62,7 +62,7 @@ public class DirectedGraphUnion<V, E>
         super(g1, g2, operator);
     }
 
-    DirectedGraphUnion(DirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
+    public DirectedGraphUnion(DirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
     {
         super(g1, g2);
     }
