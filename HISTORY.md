@@ -5,7 +5,7 @@ Changes to JGraphT in each version:
 - **version 0.8.4** (under development): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter and Owen Jacobson.
 	- Add source/target vertices to edge events to fix sf.net bug 3486775, spotted by Frank Mori Hess.
-	 - Add EdmondsBlossomShrinking algorithm, contributed by Alejandro R. Lopez del Huerto.
+	- Add EdmondsBlossomShrinking algorithm, contributed by Alejandro R. Lopez del Huerto.
 
 
 - **version 0.8.3** (20-Jan-2012): 
