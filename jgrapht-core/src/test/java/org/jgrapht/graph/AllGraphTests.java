@@ -76,7 +76,8 @@ public final class AllGraphTests
         suite.addTest(new TestSuite(CloneTest.class));
         suite.addTest(new TestSuite(SerializationTest.class));
         suite.addTest(new TestSuite(GenericGraphsTest.class));
-
+        suite.addTest(new TestSuite(HashCodeTest.class));
+        suite.addTest(new TestSuite(EqualsTest.class));
         // $JUnit-END$
         return suite;
     }

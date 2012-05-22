@@ -28,7 +28,7 @@
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * Original Author:  Barak Naveh
- * Contributor(s):   Christian Hammer
+ * Contributor(s):   Christian Hammer, Vladimir Kostyukov
  *
  * $Id$
  *
@@ -38,13 +38,15 @@
  * 11-Mar-2004 : Made generic (CH);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- *
+ * 22-May-2012 : Added hashCode() and equals() methods implementation (VK);
+ * 
  */
 package org.jgrapht.graph;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.util.TypeUtil;
 
 
 /**
@@ -225,6 +227,95 @@ public abstract class AbstractGraph<V, E>
         }
 
         return "(" + vertexSet + ", " + renderedEdges + ")";
+    }
+
+    /**
+     * Returns the hash code of graph.
+     * 
+     * @see Object#hashCode();
+     */
+    public int hashCode()
+    {
+        int result = 17;
+        
+        for (V v: vertexSet()) {
+            result += v.hashCode(); 
+        }
+
+        result = 27 * result;
+
+        for (E e: edgeSet()) {
+            int source = getEdgeSource(e).hashCode();
+            int target = getEdgeTarget(e).hashCode();
+
+            int part = 37;
+
+            if (!(e instanceof IntrusiveEdge)) {
+                part = 7 * part + e.hashCode(); 
+            }
+
+            // this is a "paring function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK)
+            int paring = ((source + target) * (source + target + 1) / 2) + target;
+            part = 7 * part + paring;
+
+            long weight = (long) getEdgeWeight(e);
+            part = 7 * part + (int) (weight ^ (weight >>> 32));
+
+            result += part;
+        }
+
+        return result;
+    }
+
+    /**
+     * @see Object#equals(Object);
+     */
+    public boolean equals(Object object)
+    {
+        if (this == object) return true;
+        if (object == null) return false;
+        if (!(object instanceof Graph)) return false;
+
+        // TODO: maybe we should add class checking here:
+        // for example: Undirected and Directed are different graphs, but could looks the same (have same hashCodes()) (VK)
+
+        TypeUtil<Graph<V, E>> typeDecl = null;
+        Graph<V, E> g = TypeUtil.uncheckedCast(object, typeDecl);
+
+        if (vertexSet().size() != g.vertexSet().size() 
+            || edgeSet().size() != g.edgeSet().size()) return false;
+
+        for (V v: vertexSet()) {
+            if (!g.containsVertex(v)) return false;
+        }
+
+        for (V v: g.vertexSet()) {
+            if (!containsVertex(v)) return false;
+        }
+
+        for (E e: edgeSet()) {
+            if (e instanceof IntrusiveEdge) {
+                if (!g.containsEdge(getEdgeSource(e), getEdgeTarget(e))) return false;
+                E edge = g.getEdge(getEdgeSource(e), getEdgeTarget(e)); 
+                if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(edge)) > 10e-7) return false;
+            } else {
+                if (!g.containsEdge(e)) return false;
+                if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(e)) > 10e-7) return false;
+            }
+        }
+
+        for (E e: g.edgeSet()) {
+            if (e instanceof IntrusiveEdge) {
+                if (!containsEdge(g.getEdgeSource(e), g.getEdgeTarget(e))) return false;
+                E edge = getEdge(g.getEdgeSource(e), g.getEdgeTarget(e)); 
+                if (Math.abs(g.getEdgeWeight(e) - getEdgeWeight(edge)) > 10e-7) return false;
+            } else {
+                if (!containsEdge(e)) return false;
+                if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(e)) > 10e-7) return false;
+            }
+        }
+
+       return true;
     }
 }
 
