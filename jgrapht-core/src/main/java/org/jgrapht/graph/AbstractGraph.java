@@ -248,7 +248,7 @@ public abstract class AbstractGraph<V, E>
                 part = 27 * part + e.hashCode(); 
             }
 
-            // this is a "piaring function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK)
+            // this is a "pairing function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK)
             int pairing = ((source + target) * (source + target + 1) / 2) + target;
             part = 27 * part + pairing;
 

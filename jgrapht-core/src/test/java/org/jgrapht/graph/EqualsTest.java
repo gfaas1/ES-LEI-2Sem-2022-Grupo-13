@@ -102,4 +102,87 @@ public class EqualsTest
         assertTrue(g2.equals(g1));
         assertTrue(!g3.equals(g2));
     }
+
+    /**
+     * Tests equals() method of SimpleGraph.
+     */
+    public void testSimpleGraph()
+    {
+        UndirectedGraph<String, DefaultEdge> g1 =
+            new SimpleGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addVertex(v4);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v2, v3);
+        g1.addEdge(v3, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 = 
+             new SimpleGraph<String, DefaultEdge>(
+                 DefaultEdge.class);
+        g2.addVertex(v4);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v2, v3);
+        g2.addEdge(v1, v2);
+
+        UndirectedGraph<String, DefaultEdge> g3 = 
+            new SimpleGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+       g3.addVertex(v4);
+       g3.addVertex(v3);
+       g3.addVertex(v2);
+       g3.addVertex(v1);
+       g3.addEdge(v3, v1);
+       g3.addEdge(v2, v3);
+
+        assertTrue(g2.equals(g1));
+        assertTrue(!g3.equals(g2));
+    }
+
+    /**
+     * Tests equals() method for diefferent graphs.
+     */
+    public void testDifferentGraphs()
+    {
+        DirectedGraph<String, DefaultEdge> g1 =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addVertex(v4);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v2, v3);
+        g1.addEdge(v3, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 = 
+             new SimpleGraph<String, DefaultEdge>(
+                 DefaultEdge.class);
+        g2.addVertex(v4);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v2, v3);
+        g2.addEdge(v1, v2);
+
+        UndirectedGraph<String, DefaultEdge> g3 = 
+            new SimpleGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g3.addVertex(v1);
+        g3.addVertex(v2);
+        g3.addVertex(v3);
+        g3.addVertex(v4);
+        g3.addEdge(v2, v3);
+        g3.addEdge(v3, v1);
+        g3.addEdge(v1, v2);
+
+        assertTrue(!g2.equals(g1));
+        assertTrue(g3.equals(g2));
+    }
 }

@@ -104,4 +104,79 @@ public class HashCodeTest
         assertEquals(g1.hashCode(), g2.hashCode());
         assertTrue(g3.hashCode() != g2.hashCode());
     }
+
+    /**
+     * Tests hashCode() method of SimpleGraph.
+     */
+    public void testSimpleGraph()
+    {
+        UndirectedGraph<String, DefaultEdge> g1 =
+            new SimpleGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v3, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 = 
+             new SimpleGraph<String, DefaultEdge>(
+                 DefaultEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v1, v2);
+
+        UndirectedGraph<String, DefaultEdge> g3 = 
+            new SimpleGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v3, v1);
+        g3.addEdge(v2, v3);
+        g3.addEdge(v1, v2);
+
+        assertEquals(g1.hashCode(), g2.hashCode());
+        assertTrue(g3.hashCode() != g2.hashCode());
+    }
+
+    /**
+     * Tests hashCode() method of different graphs.
+     */
+    public void testDifferentGraphs()
+    {
+        DirectedGraph<String, DefaultEdge> g1 =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v3, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 = 
+             new SimpleGraph<String, DefaultEdge>(
+                 DefaultEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v1, v2);
+
+        DirectedGraph<String, DefaultEdge> g3 = 
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v3, v1);
+        g3.addEdge(v2, v3);
+        g3.addEdge(v1, v2);
+
+        assertEquals(g1.hashCode(), g2.hashCode());
+        assertTrue(g3.hashCode() != g1.hashCode());
+    }
+    
 }
