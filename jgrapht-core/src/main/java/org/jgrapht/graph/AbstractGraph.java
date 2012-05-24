@@ -236,30 +236,24 @@ public abstract class AbstractGraph<V, E>
      */
     public int hashCode()
     {
-        int result = 17;
-        
-        for (V v: vertexSet()) {
-            result += v.hashCode(); 
-        }
-
-        result = 27 * result;
+        int result = vertexSet().hashCode();
 
         for (E e: edgeSet()) {
             int source = getEdgeSource(e).hashCode();
             int target = getEdgeTarget(e).hashCode();
 
-            int part = 37;
+            int part = 27;
 
             if (!(e instanceof IntrusiveEdge)) {
-                part = 7 * part + e.hashCode(); 
+                part = 27 * part + e.hashCode(); 
             }
 
-            // this is a "paring function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK)
-            int paring = ((source + target) * (source + target + 1) / 2) + target;
-            part = 7 * part + paring;
+            // this is a "piaring function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK)
+            int pairing = ((source + target) * (source + target + 1) / 2) + target;
+            part = 27 * part + pairing;
 
             long weight = (long) getEdgeWeight(e);
-            part = 7 * part + (int) (weight ^ (weight >>> 32));
+            part = 27 * part + (int) (weight ^ (weight >>> 32));
 
             result += part;
         }
@@ -275,23 +269,12 @@ public abstract class AbstractGraph<V, E>
         if (this == object) return true;
         if (object == null) return false;
         if (!(object instanceof Graph)) return false;
-
-        // TODO: maybe we should add class checking here:
-        // for example: Undirected and Directed are different graphs, but could looks the same (have same hashCodes()) (VK)
+        if (getClass() != object.getClass()) return false;
 
         TypeUtil<Graph<V, E>> typeDecl = null;
         Graph<V, E> g = TypeUtil.uncheckedCast(object, typeDecl);
 
-        if (vertexSet().size() != g.vertexSet().size() 
-            || edgeSet().size() != g.edgeSet().size()) return false;
-
-        for (V v: vertexSet()) {
-            if (!g.containsVertex(v)) return false;
-        }
-
-        for (V v: g.vertexSet()) {
-            if (!containsVertex(v)) return false;
-        }
+        if (!vertexSet().equals(g.vertexSet())) return false;
 
         for (E e: edgeSet()) {
             if (e instanceof IntrusiveEdge) {

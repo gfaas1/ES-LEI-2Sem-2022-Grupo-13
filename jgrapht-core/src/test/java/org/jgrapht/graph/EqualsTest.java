@@ -63,7 +63,7 @@ public class EqualsTest
     }
 
     /**
-     * Tests hashCode method of DefaultDirectedGraph.
+     * Tests equals() method of DefaultDirectedGraph.
      */
     public void testDefaultDirectedGraph()
     {
@@ -89,6 +89,17 @@ public class EqualsTest
         g2.addEdge(v2, v3);
         g2.addEdge(v1, v2);
 
+        DirectedGraph<String, DefaultEdge> g3 = 
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+       g3.addVertex(v4);
+       g3.addVertex(v3);
+       g3.addVertex(v2);
+       g3.addVertex(v1);
+       g3.addEdge(v3, v1);
+       g3.addEdge(v2, v3);
+
         assertTrue(g2.equals(g1));
+        assertTrue(!g3.equals(g2));
     }
 }

@@ -65,7 +65,7 @@ public class HashCodeTest
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * Tests hashCode method of DefaultDirectedGraph.
+     * Tests hashCode() method of DefaultDirectedGraph.
      */
     public void testDefaultDirectedGraph()
     {
@@ -101,7 +101,7 @@ public class HashCodeTest
         g3.addEdge(v2, v3);
         g3.addEdge(v1, v2);
 
-        assertTrue(g2.hashCode() == g1.hashCode());
+        assertEquals(g1.hashCode(), g2.hashCode());
         assertTrue(g3.hashCode() != g2.hashCode());
     }
 }
