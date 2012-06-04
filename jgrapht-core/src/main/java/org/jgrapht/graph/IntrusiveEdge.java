@@ -28,7 +28,7 @@
  * (C) Copyright 2006-2008, by John V. Sichi and Contributors.
  *
  * Original Author:  John V. Sichi
- * Contributor(s): -
+ * Contributor(s):   -
  *
  * $Id$
  *
@@ -78,4 +78,5 @@ class IntrusiveEdge
         }
     }
 }
+
 // End IntrusiveEdge.java
