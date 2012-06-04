@@ -40,7 +40,10 @@
 
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 
 public class EqualsTest
     extends EnhancedTestCase
@@ -99,8 +102,8 @@ public class EqualsTest
        g3.addEdge(v3, v1);
        g3.addEdge(v2, v3);
 
-        assertTrue(g2.equals(g1));
-        assertTrue(!g3.equals(g2));
+       assertTrue(g2.equals(g1));
+       assertTrue(!g3.equals(g2));
     }
 
     /**
@@ -145,7 +148,7 @@ public class EqualsTest
     }
 
     /**
-     * Tests equals() method for diefferent graphs.
+     * Tests equals() method for different graphs.
      */
     public void testDifferentGraphs()
     {
@@ -171,18 +174,254 @@ public class EqualsTest
         g2.addEdge(v2, v3);
         g2.addEdge(v1, v2);
 
-        UndirectedGraph<String, DefaultEdge> g3 = 
-            new SimpleGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+        assertTrue(!g2.equals(g1));
+    }
+
+    /**
+     * Tests graph with non-Intrusive edges.
+     */
+    public void testGraphsWithNonIntrusiveEdge()
+    {
+        DirectedGraph<String, String> g1 =
+            new DefaultDirectedGraph<String, String>(
+                String.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2, v1 + v2);
+        g1.addEdge(v3, v1, v3 + v1);
+
+        DirectedGraph<String, String> g2 = 
+             new DefaultDirectedGraph<String, String>(
+                 String.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1, v3 + v1);
+        g2.addEdge(v1, v2, v1 + v2);
+
+        DirectedGraph<String, String> g3 = 
+            new DefaultDirectedGraph<String, String>(
+                String.class);
+       g3.addVertex(v3);
+       g3.addVertex(v2);
+       g3.addVertex(v1);
+       g3.addEdge(v3, v1, v3 + v1);
+       g3.addEdge(v1, v2, v1 + v2);
+       g3.addEdge(v2, v3, v2 + v3);
+
+        assertTrue(g1.equals(g2));
+        assertTrue(!g2.equals(g3));
+    }
+
+    /**
+     * Tests pseudo graph.
+     */
+    public void testPseudograph() {
+        UndirectedGraph<String, DefaultEdge> g1 =
+            new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v2, v3);
+        g1.addEdge(v3, v1);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v1, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 =
+            new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v1, v1);
+        g2.addEdge(v1, v2);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v2, v3);
+        g2.addEdge(v1, v2);
+
+        UndirectedGraph<String, DefaultEdge> g3 =
+            new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v1, v1);
+        g3.addEdge(v1, v2);
+        g3.addEdge(v3, v1);
+        g3.addEdge(v2, v3);
+
+        assertTrue(g1.equals(g2));
+        assertTrue(!g2.equals(g3));
+    }
+
+    /**
+     * Tests weighted graph.
+     */
+    public void testWeightedGraph() {
+        WeightedGraph<String, DefaultWeightedEdge> g1 =
+            new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        DefaultWeightedEdge e112 = g1.addEdge(v1, v2);
+        DefaultWeightedEdge e131 = g1.addEdge(v3, v1);
+        g1.setEdgeWeight(e112, 10.0);
+        g1.setEdgeWeight(e131, 20.0);
+
+        WeightedGraph<String, DefaultWeightedEdge> g2 = 
+             new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
+                 DefaultWeightedEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        DefaultWeightedEdge e231 = g2.addEdge(v3, v1);
+        DefaultWeightedEdge e212 = g2.addEdge(v1, v2);
+        g2.setEdgeWeight(e212, 10.0);
+        g2.setEdgeWeight(e231, 20.0);
+
+        WeightedGraph<String, DefaultWeightedEdge> g3 = 
+            new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
+       g3.addVertex(v3);
+       g3.addVertex(v2);
+       g3.addVertex(v1);
+       DefaultWeightedEdge e331 = g3.addEdge(v3, v1);
+       DefaultWeightedEdge e312 = g3.addEdge(v1, v2);
+       g3.setEdgeWeight(e312, 20.0);
+       g3.setEdgeWeight(e331, 30.0);
+
+       assertTrue(g1.equals(g2));
+       assertTrue(!g2.equals(g3));
+    }
+
+    /**
+     * Tests graph with custom edges.
+     */
+    public void testGrapshWithCustomEdges() {
+        UndirectedGraph<String, CustomEdge> g1 =
+            new SimpleGraph<String, CustomEdge>(
+                CustomEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2, new CustomEdge("v1-v2"));
+        g1.addEdge(v3, v1, new CustomEdge("v3-v1"));
+
+        UndirectedGraph<String, CustomEdge> g2 =
+            new SimpleGraph<String, CustomEdge>(
+                CustomEdge.class);
+        g2.addVertex(v1);
+        g2.addVertex(v2);
+        g2.addVertex(v3);
+        g2.addEdge(v1, v2, new CustomEdge("v1-v2"));
+        g2.addEdge(v3, v1, new CustomEdge("v3-v1"));
+
+        UndirectedGraph<String, CustomEdge> g3 =
+            new SimpleGraph<String, CustomEdge>(
+                CustomEdge.class);
         g3.addVertex(v1);
         g3.addVertex(v2);
         g3.addVertex(v3);
-        g3.addVertex(v4);
-        g3.addEdge(v2, v3);
-        g3.addEdge(v3, v1);
-        g3.addEdge(v1, v2);
+        g3.addEdge(v1, v2, new CustomEdge("v1::v2"));
+        g3.addEdge(v3, v1, new CustomEdge("v3-v1"));
 
-        assertTrue(!g2.equals(g1));
-        assertTrue(g3.equals(g2));
+        assertTrue(g1.equals(g2));
+        assertTrue(!g2.equals(g3));
+    }
+
+    /**
+     * Tests graphs witch custom weighted eges.
+     */
+    public void testGrapshWithCustomWeightedEdges() {
+        WeightedGraph<String, CustomWeightedEdge> g1 =
+            new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
+                CustomWeightedEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        CustomWeightedEdge e112 = new CustomWeightedEdge("v1-v2"); 
+        g1.addEdge(v1, v2, e112);
+        CustomWeightedEdge e131 = new CustomWeightedEdge("v3-v1"); 
+        g1.addEdge(v3, v1, e131);
+        g1.setEdgeWeight(e112, 10.0);
+        g1.setEdgeWeight(e131, 20.0);
+
+        WeightedGraph<String, CustomWeightedEdge> g2 = 
+             new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
+                 CustomWeightedEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        CustomWeightedEdge e231 = new CustomWeightedEdge("v3-v1"); 
+        g2.addEdge(v3, v1, e231);
+        CustomWeightedEdge e212 = new CustomWeightedEdge("v1-v2");
+        g2.addEdge(v1, v2, e212);
+        g2.setEdgeWeight(e212, 10.0);
+        g2.setEdgeWeight(e231, 20.0);
+
+        WeightedGraph<String, CustomWeightedEdge> g3 = 
+            new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
+                CustomWeightedEdge.class);
+       g3.addVertex(v3);
+       g3.addVertex(v2);
+       g3.addVertex(v1);
+       CustomWeightedEdge e331 = new CustomWeightedEdge("v3-v1");
+       g3.addEdge(v3, v1, e331);
+       CustomWeightedEdge e312 = new CustomWeightedEdge("v1-v2");
+       g3.addEdge(v1, v2, e312);
+       g3.setEdgeWeight(e312, 20.0);
+       g3.setEdgeWeight(e331, 30.0);
+
+       assertTrue(g1.equals(g2));
+       assertTrue(!g2.equals(g3));
+    }
+
+    /**
+     * Custom edge class.
+     */
+    public static class CustomEdge
+        extends DefaultEdge
+    {
+        private static final long serialVersionUID = 1L;
+        private String label;
+
+        public CustomEdge(String label) {
+            this.label = label; 
+        }
+
+        public boolean equals(Object obj)
+        {
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (!(obj instanceof CustomEdge)) return false;
+
+            CustomEdge edge = (CustomEdge) obj;
+            return label.equals(edge.label);
+        }
+    }
+
+    /**
+     * Custom weighted edge class.
+     */
+    public static class CustomWeightedEdge
+        extends DefaultWeightedEdge
+    {
+        private static final long serialVersionUID = 1L;
+        private String label;
+
+        public CustomWeightedEdge(String label) {
+            this.label = label; 
+        }
+
+        public boolean equals(Object obj)
+        {
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (!(obj instanceof CustomWeightedEdge)) return false;
+
+            CustomWeightedEdge edge = (CustomWeightedEdge) obj;
+            return label.equals(edge.label);
+        }
     }
 }

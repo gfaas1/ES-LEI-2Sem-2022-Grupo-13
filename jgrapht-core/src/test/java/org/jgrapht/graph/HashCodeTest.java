@@ -91,18 +91,7 @@ public class HashCodeTest
         g2.addEdge(v2, v3);
         g2.addEdge(v1, v2);
 
-        DirectedGraph<String, DefaultEdge> g3 = 
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g3.addVertex(v3);
-        g3.addVertex(v2);
-        g3.addVertex(v1);
-        g3.addEdge(v3, v1);
-        g3.addEdge(v2, v3);
-        g3.addEdge(v1, v2);
-
         assertEquals(g1.hashCode(), g2.hashCode());
-        assertTrue(g3.hashCode() != g2.hashCode());
     }
 
     /**
@@ -128,22 +117,11 @@ public class HashCodeTest
         g2.addEdge(v3, v1);
         g2.addEdge(v1, v2);
 
-        UndirectedGraph<String, DefaultEdge> g3 = 
-            new SimpleGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g3.addVertex(v3);
-        g3.addVertex(v2);
-        g3.addVertex(v1);
-        g3.addEdge(v3, v1);
-        g3.addEdge(v2, v3);
-        g3.addEdge(v1, v2);
-
         assertEquals(g1.hashCode(), g2.hashCode());
-        assertTrue(g3.hashCode() != g2.hashCode());
     }
 
     /**
-     * Tests hashCode() method of different graphs.
+     * Tests hashCode() method for different graphs.
      */
     public void testDifferentGraphs()
     {
@@ -165,18 +143,135 @@ public class HashCodeTest
         g2.addEdge(v3, v1);
         g2.addEdge(v1, v2);
 
-        DirectedGraph<String, DefaultEdge> g3 = 
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g3.addVertex(v3);
-        g3.addVertex(v2);
-        g3.addVertex(v1);
-        g3.addEdge(v3, v1);
-        g3.addEdge(v2, v3);
-        g3.addEdge(v1, v2);
+        assertEquals(g1.hashCode(), g2.hashCode());
+    }
+
+    /**
+     * Tests hashCode() method for graph with non-Intrusive edges.
+     */
+    public void testGraphsWithNonIntrusiveEdge()
+    {
+        DirectedGraph<String, String> g1 =
+            new DefaultDirectedGraph<String, String>(
+                String.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2, v1 + v2);
+        g1.addEdge(v3, v1, v3 + v1);
+
+        UndirectedGraph<String, String> g2 = 
+             new SimpleGraph<String, String>(
+                 String.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1, v3 + v1);
+        g2.addEdge(v1, v2, v1 + v2);
 
         assertEquals(g1.hashCode(), g2.hashCode());
-        assertTrue(g3.hashCode() != g1.hashCode());
     }
-    
+
+    /**
+     * Tests hashCode() method for weighted graphs.
+     */
+    public void testWeghtedGraphs()
+    {
+        WeightedGraph<String, DefaultWeightedEdge> g1 =
+            new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        DefaultWeightedEdge e112 = g1.addEdge(v1, v2);
+        DefaultWeightedEdge e131 = g1.addEdge(v3, v1);
+        g1.setEdgeWeight(e112, 10.0);
+        g1.setEdgeWeight(e131, 20.0);
+
+        WeightedGraph<String, DefaultWeightedEdge> g2 = 
+             new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+                 DefaultWeightedEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        DefaultWeightedEdge e231 = g2.addEdge(v3, v1);
+        DefaultWeightedEdge e212 = g2.addEdge(v1, v2);
+        g2.setEdgeWeight(e212, 10.0);
+        g2.setEdgeWeight(e231, 20.0);
+
+        assertEquals(g1.hashCode(), g2.hashCode());
+    }
+
+    /**
+     * Tests hashCode() method for pseudo graphs.
+     */
+    public void testPseudograph() {
+        UndirectedGraph<String, DefaultEdge> g1 =
+            new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v2, v3);
+        g1.addEdge(v3, v1);
+        g1.addEdge(v1, v2);
+        g1.addEdge(v1, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 =
+            new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v1, v1);
+        g2.addEdge(v1, v2);
+        g2.addEdge(v3, v1);
+        g2.addEdge(v2, v3);
+        g2.addEdge(v1, v2);
+
+        assertEquals(g1.hashCode(), g2.hashCode());
+    }
+
+    /**
+     * Tests hashCode() method for graphs with custom edges.
+     */
+    public void testGraphsWithCustomEdges() {
+        DirectedGraph<String, CustomEdge> g1 =
+            new DefaultDirectedGraph<String, CustomEdge>(
+                CustomEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        g1.addEdge(v1, v2, new CustomEdge("v1-v2"));
+        g1.addEdge(v3, v1, new CustomEdge("v3-v1"));
+
+        DirectedGraph<String, CustomEdge> g2 =
+            new DefaultDirectedGraph<String, CustomEdge>(
+                CustomEdge.class);
+        g2.addVertex(v3);
+        g2.addVertex(v2);
+        g2.addVertex(v1);
+        g2.addEdge(v3, v1, new CustomEdge("v3-v1"));
+        g2.addEdge(v1, v2, new CustomEdge("v1-v2"));
+
+        assertEquals(g1.hashCode(), g2.hashCode());
+    }
+ 
+    /**
+     * Custom edge class.
+     */
+    public static class CustomEdge
+        extends DefaultEdge
+    {
+        private static final long serialVersionUID = 1L;
+        private String label;
+
+        public CustomEdge(String label) {
+            this.label = label; 
+        }
+
+        public int hashCode()
+        {
+            return label.hashCode();
+        }
+    }
 }

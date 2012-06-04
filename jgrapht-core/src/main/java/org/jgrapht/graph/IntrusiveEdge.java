@@ -28,14 +28,13 @@
  * (C) Copyright 2006-2008, by John V. Sichi and Contributors.
  *
  * Original Author:  John V. Sichi
- * Contributor(s): Vladimir Kostyukov
+ * Contributor(s): -
  *
  * $Id$
  *
  * Changes
  * -------
  * 28-May-2006 : Initial revision (JVS);
- * 22-May-2012 : Added hashCode() method implementation (VK);
  *
  */
 package org.jgrapht.graph;
@@ -66,15 +65,6 @@ class IntrusiveEdge
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * @see Object#hashCode()
-     */
-    final public int hashCode()
-    {
-        return super.hashCode();
-    }
-    
-    
     /**
      * @see Object#clone()
      */
