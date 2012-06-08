@@ -22,9 +22,9 @@
  * Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  */
-/* --------------
- * EqualsTest.java
- * --------------
+/* --------------------------
+ * EqualsAndHashCodeTest.java
+ * --------------------------
  * (C) Copyright 2012, by Vladimir Kostyukov and Contributors.
  *
  * Original Author:  Vladimir Kostyukov
@@ -34,18 +34,15 @@
  *
  * Changes
  * -------
- * 22-May-2012 : Initial revision (VK);
+ * 08-Jun-2012 : Initial revision (VK);
  *
  */
 
 package org.jgrapht.graph;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.WeightedGraph;
+import org.jgrapht.*;
 
-public class EqualsTest
+public class EqualsAndHashCodeTest
     extends EnhancedTestCase
 {
     //~ Instance fields --------------------------------------------------------
@@ -60,13 +57,13 @@ public class EqualsTest
     /**
      * @see junit.framework.TestCase#TestCase(java.lang.String)
      */
-    public EqualsTest(String name)
+    public EqualsAndHashCodeTest(String name)
     {
         super(name);
     }
 
     /**
-     * Tests equals() method of DefaultDirectedGraph.
+     * Tests equals/hashCode methods for directed graphs.
      */
     public void testDefaultDirectedGraph()
     {
@@ -77,9 +74,9 @@ public class EqualsTest
         g1.addVertex(v2);
         g1.addVertex(v3);
         g1.addVertex(v4);
-        g1.addEdge(v1, v2);
-        g1.addEdge(v2, v3);
-        g1.addEdge(v3, v1);
+        DefaultEdge e12 = g1.addEdge(v1, v2);
+        DefaultEdge e23 = g1.addEdge(v2, v3);
+        DefaultEdge e31 = g1.addEdge(v3, v1);
 
         DirectedGraph<String, DefaultEdge> g2 = 
              new DefaultDirectedGraph<String, DefaultEdge>(
@@ -88,26 +85,28 @@ public class EqualsTest
         g2.addVertex(v3);
         g2.addVertex(v2);
         g2.addVertex(v1);
-        g2.addEdge(v3, v1);
-        g2.addEdge(v2, v3);
-        g2.addEdge(v1, v2);
+        g2.addEdge(v3, v1, e31);
+        g2.addEdge(v2, v3, e23);
+        g2.addEdge(v1, v2, e12);
 
         DirectedGraph<String, DefaultEdge> g3 = 
             new DefaultDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
-       g3.addVertex(v4);
-       g3.addVertex(v3);
-       g3.addVertex(v2);
-       g3.addVertex(v1);
-       g3.addEdge(v3, v1);
-       g3.addEdge(v2, v3);
+        g3.addVertex(v4);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v3, v1, e31);
+        g3.addEdge(v2, v3, e23);
 
-       assertTrue(g2.equals(g1));
-       assertTrue(!g3.equals(g2));
+        assertTrue(g2.equals(g1));
+        assertTrue(!g3.equals(g2));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Tests equals() method of SimpleGraph.
+     * Tests equals/hashCode methods for undirected graphs.
      */
     public void testSimpleGraph()
     {
@@ -118,9 +117,9 @@ public class EqualsTest
         g1.addVertex(v2);
         g1.addVertex(v3);
         g1.addVertex(v4);
-        g1.addEdge(v1, v2);
-        g1.addEdge(v2, v3);
-        g1.addEdge(v3, v1);
+        DefaultEdge e12 = g1.addEdge(v1, v2);
+        DefaultEdge e23 = g1.addEdge(v2, v3);
+        DefaultEdge e31 = g1.addEdge(v3, v1);
 
         UndirectedGraph<String, DefaultEdge> g2 = 
              new SimpleGraph<String, DefaultEdge>(
@@ -129,56 +128,28 @@ public class EqualsTest
         g2.addVertex(v3);
         g2.addVertex(v2);
         g2.addVertex(v1);
-        g2.addEdge(v3, v1);
-        g2.addEdge(v2, v3);
-        g2.addEdge(v1, v2);
+        g2.addEdge(v3, v1, e31);
+        g2.addEdge(v2, v3, e23);
+        g2.addEdge(v1, v2, e12);
 
         UndirectedGraph<String, DefaultEdge> g3 = 
             new SimpleGraph<String, DefaultEdge>(
                 DefaultEdge.class);
-       g3.addVertex(v4);
-       g3.addVertex(v3);
-       g3.addVertex(v2);
-       g3.addVertex(v1);
-       g3.addEdge(v3, v1);
-       g3.addEdge(v2, v3);
+        g3.addVertex(v4);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v3, v1, e31);
+        g3.addEdge(v2, v3, e23);
 
         assertTrue(g2.equals(g1));
         assertTrue(!g3.equals(g2));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Tests equals() method for different graphs.
-     */
-    public void testDifferentGraphs()
-    {
-        DirectedGraph<String, DefaultEdge> g1 =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g1.addVertex(v1);
-        g1.addVertex(v2);
-        g1.addVertex(v3);
-        g1.addVertex(v4);
-        g1.addEdge(v1, v2);
-        g1.addEdge(v2, v3);
-        g1.addEdge(v3, v1);
-
-        UndirectedGraph<String, DefaultEdge> g2 = 
-             new SimpleGraph<String, DefaultEdge>(
-                 DefaultEdge.class);
-        g2.addVertex(v4);
-        g2.addVertex(v3);
-        g2.addVertex(v2);
-        g2.addVertex(v1);
-        g2.addEdge(v3, v1);
-        g2.addEdge(v2, v3);
-        g2.addEdge(v1, v2);
-
-        assertTrue(!g2.equals(g1));
-    }
-
-    /**
-     * Tests graph with non-Intrusive edges.
+     * Tests equals/hashCode methods for graphs with non-Intrusive edges.
      */
     public void testGraphsWithNonIntrusiveEdge()
     {
@@ -203,102 +174,67 @@ public class EqualsTest
         DirectedGraph<String, String> g3 = 
             new DefaultDirectedGraph<String, String>(
                 String.class);
-       g3.addVertex(v3);
-       g3.addVertex(v2);
-       g3.addVertex(v1);
-       g3.addEdge(v3, v1, v3 + v1);
-       g3.addEdge(v1, v2, v1 + v2);
-       g3.addEdge(v2, v3, v2 + v3);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        g3.addEdge(v3, v1, v3 + v1);
+        g3.addEdge(v1, v2, v1 + v2);
+        g3.addEdge(v2, v3, v2 + v3);
 
         assertTrue(g1.equals(g2));
         assertTrue(!g2.equals(g3));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Tests pseudo graph.
+     * Tests equals/hashCode methods for graphs with multiple edges and loops.
      */
-    public void testPseudograph() {
+    public void testPseudograph()
+    {
         UndirectedGraph<String, DefaultEdge> g1 =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
         g1.addVertex(v1);
         g1.addVertex(v2);
         g1.addVertex(v3);
-        g1.addEdge(v1, v2);
-        g1.addEdge(v2, v3);
-        g1.addEdge(v3, v1);
-        g1.addEdge(v1, v2);
-        g1.addEdge(v1, v1);
+        DefaultEdge e121 = g1.addEdge(v1, v2);
+        DefaultEdge e23 = g1.addEdge(v2, v3);
+        DefaultEdge e31 = g1.addEdge(v3, v1);
+        DefaultEdge e122 = g1.addEdge(v1, v2);
+        DefaultEdge e11 = g1.addEdge(v1, v1);
 
         UndirectedGraph<String, DefaultEdge> g2 =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
         g2.addVertex(v3);
         g2.addVertex(v2);
         g2.addVertex(v1);
-        g2.addEdge(v1, v1);
-        g2.addEdge(v1, v2);
-        g2.addEdge(v3, v1);
-        g2.addEdge(v2, v3);
-        g2.addEdge(v1, v2);
+        g2.addEdge(v1, v1, e11);
+        g2.addEdge(v1, v2, e121);
+        g2.addEdge(v3, v1, e31);
+        g2.addEdge(v2, v3, e23);
+        g2.addEdge(v1, v2, e122);
 
         UndirectedGraph<String, DefaultEdge> g3 =
             new Pseudograph<String, DefaultEdge>(DefaultEdge.class);
         g3.addVertex(v3);
         g3.addVertex(v2);
         g3.addVertex(v1);
-        g3.addEdge(v1, v1);
-        g3.addEdge(v1, v2);
-        g3.addEdge(v3, v1);
-        g3.addEdge(v2, v3);
+        g3.addEdge(v1, v1, e11);
+        g3.addEdge(v1, v2, e121);
+        g3.addEdge(v3, v1, e31);
+        g3.addEdge(v2, v3, e23);
 
         assertTrue(g1.equals(g2));
         assertTrue(!g2.equals(g3));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Tests weighted graph.
+     * Tests equals/hashCode methods for graphs with custom edges.
      */
-    public void testWeightedGraph() {
-        WeightedGraph<String, DefaultWeightedEdge> g1 =
-            new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
-        g1.addVertex(v1);
-        g1.addVertex(v2);
-        g1.addVertex(v3);
-        DefaultWeightedEdge e112 = g1.addEdge(v1, v2);
-        DefaultWeightedEdge e131 = g1.addEdge(v3, v1);
-        g1.setEdgeWeight(e112, 10.0);
-        g1.setEdgeWeight(e131, 20.0);
-
-        WeightedGraph<String, DefaultWeightedEdge> g2 = 
-             new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
-                 DefaultWeightedEdge.class);
-        g2.addVertex(v3);
-        g2.addVertex(v2);
-        g2.addVertex(v1);
-        DefaultWeightedEdge e231 = g2.addEdge(v3, v1);
-        DefaultWeightedEdge e212 = g2.addEdge(v1, v2);
-        g2.setEdgeWeight(e212, 10.0);
-        g2.setEdgeWeight(e231, 20.0);
-
-        WeightedGraph<String, DefaultWeightedEdge> g3 = 
-            new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
-       g3.addVertex(v3);
-       g3.addVertex(v2);
-       g3.addVertex(v1);
-       DefaultWeightedEdge e331 = g3.addEdge(v3, v1);
-       DefaultWeightedEdge e312 = g3.addEdge(v1, v2);
-       g3.setEdgeWeight(e312, 20.0);
-       g3.setEdgeWeight(e331, 30.0);
-
-       assertTrue(g1.equals(g2));
-       assertTrue(!g2.equals(g3));
-    }
-
-    /**
-     * Tests graph with custom edges.
-     */
-    public void testGrapshWithCustomEdges() {
+    public void testGrapshWithCustomEdges()
+    {
         UndirectedGraph<String, CustomEdge> g1 =
             new SimpleGraph<String, CustomEdge>(
                 CustomEdge.class);
@@ -328,12 +264,15 @@ public class EqualsTest
 
         assertTrue(g1.equals(g2));
         assertTrue(!g2.equals(g3));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Tests graphs witch custom weighted eges.
+     * Tests equals/hashCode methods for graphs witch custom weighted edges.
      */
-    public void testGrapshWithCustomWeightedEdges() {
+    public void testGrapshWithCustomWeightedEdges()
+    {
         WeightedGraph<String, CustomWeightedEdge> g1 =
             new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
                 CustomWeightedEdge.class);
@@ -363,22 +302,24 @@ public class EqualsTest
         WeightedGraph<String, CustomWeightedEdge> g3 = 
             new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
                 CustomWeightedEdge.class);
-       g3.addVertex(v3);
-       g3.addVertex(v2);
-       g3.addVertex(v1);
-       CustomWeightedEdge e331 = new CustomWeightedEdge("v3-v1");
-       g3.addEdge(v3, v1, e331);
-       CustomWeightedEdge e312 = new CustomWeightedEdge("v1-v2");
-       g3.addEdge(v1, v2, e312);
-       g3.setEdgeWeight(e312, 20.0);
-       g3.setEdgeWeight(e331, 30.0);
+        g3.addVertex(v3);
+        g3.addVertex(v2);
+        g3.addVertex(v1);
+        CustomWeightedEdge e331 = new CustomWeightedEdge("v3-v1");
+        g3.addEdge(v3, v1, e331);
+        CustomWeightedEdge e312 = new CustomWeightedEdge("v1-v2");
+        g3.addEdge(v1, v2, e312);
+        g3.setEdgeWeight(e312, 20.0);
+        g3.setEdgeWeight(e331, 30.0);
 
-       assertTrue(g1.equals(g2));
-       assertTrue(!g2.equals(g3));
+        assertTrue(g1.equals(g2));
+        assertTrue(!g2.equals(g3));
+
+        assertEquals(g2.hashCode(), g1.hashCode());
     }
 
     /**
-     * Custom edge class.
+     * Simple custom edge class.
      */
     public static class CustomEdge
         extends DefaultEdge
@@ -386,15 +327,27 @@ public class EqualsTest
         private static final long serialVersionUID = 1L;
         private String label;
 
-        public CustomEdge(String label) {
+        public CustomEdge(String label)
+        {
             this.label = label; 
+        }
+
+        public int hashCode()
+        {
+            return label.hashCode();
         }
 
         public boolean equals(Object obj)
         {
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (!(obj instanceof CustomEdge)) return false;
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof CustomEdge)) {
+                return false;
+            }
 
             CustomEdge edge = (CustomEdge) obj;
             return label.equals(edge.label);
@@ -402,7 +355,7 @@ public class EqualsTest
     }
 
     /**
-     * Custom weighted edge class.
+     * Weighted custom edge class.
      */
     public static class CustomWeightedEdge
         extends DefaultWeightedEdge
@@ -410,15 +363,27 @@ public class EqualsTest
         private static final long serialVersionUID = 1L;
         private String label;
 
-        public CustomWeightedEdge(String label) {
+        public CustomWeightedEdge(String label)
+        {
             this.label = label; 
+        }
+
+        public int hashCode()
+        {
+            return label.hashCode();
         }
 
         public boolean equals(Object obj)
         {
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (!(obj instanceof CustomWeightedEdge)) return false;
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof CustomWeightedEdge)) {
+                return false;
+            }
 
             CustomWeightedEdge edge = (CustomWeightedEdge) obj;
             return label.equals(edge.label);

@@ -38,16 +38,16 @@
  * 11-Mar-2004 : Made generic (CH);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- * 22-May-2012 : Added hashCode() and equals() methods implementation (VK);
+ * 08-Jun-2012 : Added hashCode() and equals() methods implementation (VK);
  * 
  */
 package org.jgrapht.graph;
 
 import java.util.*;
-import java.lang.reflect.*;
+
 
 import org.jgrapht.*;
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.util.*;
 
 
 /**
@@ -231,9 +231,13 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Returns a hash code value for the graph.
+     * Returns a hash code value for this graph. The hash code of a graph is 
+     * defined to be the sum of the hash codes of vertices and edges in the 
+     * graph. It is also based on graph topology and edges weights.
      * 
-     * @see Object#hashCode();
+     * @return the hash code value this graph
+     * 
+     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
      */
     public int hashCode()
     {
@@ -241,36 +245,18 @@ public abstract class AbstractGraph<V, E>
 
         for (E e: edgeSet()) {
 
-            int part = 27;
-
-            if (!(e instanceof IntrusiveEdge)) {
-               part = 27 * part + e.hashCode();
-            } else {
-                // we should check if there is any overridden hashCode() method in hierarchy
-                // so, users can write their own edge classes as subclasses of DefaultEdge
-                // with custom implementation of hashCode() method (VK);
-                try {
-                    Method hashCode = e.getClass().getMethod("hashCode", new Class<?>[0]);
-                    if (hashCode.getDeclaringClass() != Object.class) {
-                        part = 27 * part + e.hashCode();
-                    }
-                } catch (NoSuchMethodException ignored) {
-                    // should never happens, we always have hashCode() method (VK);
-                }
-            }
+            int part = e.hashCode();
 
             int source = getEdgeSource(e).hashCode();
             int target = getEdgeTarget(e).hashCode();
 
-            // this is a "pairing function" (see details here: http://en.wikipedia.org/wiki/Pairing_function) (VK);
-            int pairing = ((source + target) * (source + target + 1) / 2) + target;
+            // see http://en.wikipedia.org/wiki/Pairing_function (VK);
+            int pairing = ((source + target) * 
+                (source + target + 1) / 2) + target;
             part = 27 * part + pairing;
 
-            // we also should add hash code of weighted edge to result (VK);
-            if (e instanceof DefaultWeightedEdge) {
-                long weight = (long) getEdgeWeight(e);
-                part = 27 * part + (int) (weight ^ (weight >>> 32));
-            }
+            long weight = (long) getEdgeWeight(e);
+            part = 27 * part + (int) (weight ^ (weight >>> 32));
 
             hash += part;
         }
@@ -279,69 +265,57 @@ public abstract class AbstractGraph<V, E>
     }
 
     /**
-     * Indicates whether some other graph is "equal to" this one.
+     * Indicates whether some other object is "equal to" this graph. 
+     * Returns <code>true</code> if the given object is also a graph, 
+     * the two graphs are instances of the same graph class, 
+     * have identical vertices and edges sets with the same weights.
      * 
-     * @see Object#equals(Object);
+     * @param obj object to be compared for equality with this graph
+     * 
+     * @return <code>true</code> if the specified object is equal to this graph 
+     * 
+     * @see {@link Object#equals(Object)}, {@link Object#hashCode()}
      */
-    public boolean equals(Object object)
+    public boolean equals(Object obj)
     {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
 
         TypeUtil<Graph<V, E>> typeDecl = null;
-        Graph<V, E> g = TypeUtil.uncheckedCast(object, typeDecl);
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj, typeDecl);
 
-        if (!vertexSet().equals(g.vertexSet())) return false;
+        if (!vertexSet().equals(g.vertexSet())) {
+            return false;
+        }
+        if (edgeSet().size() != g.edgeSet().size()) {
+            return false;
+        }
 
-        Set<E> otherEdges = new LinkedHashSet<E>(g.edgeSet());
         for (E e: edgeSet()) {
-            // first of all we should check that the same vertices are connected in other graph (VK);
             V source = getEdgeSource(e);
             V target = getEdgeTarget(e);
 
-            if (!g.containsEdge(source, target)) return false;
-
-            if (e instanceof IntrusiveEdge) {
-                // we also should check if there is any overridden equals() method in hierarchy
-                // so, users can write their own edge classes as subclasses of DefaultEdge
-                // with custom implementation of equals() method (VK);
-                try {
-                    Method equals = e.getClass().getMethod("equals", new Class<?>[] { Object.class });
-                    boolean edgeFound = false;
-                    for (E ee: g.getAllEdges(source, target)) {
-                        if (!otherEdges.contains(ee)) continue;
-                        if (equals.getDeclaringClass() != Object.class) {
-                            if (e.equals(ee)) {
-                                if (e instanceof DefaultWeightedEdge) {
-                                    if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(ee)) > 10e-7) return false;
-                                }
-                                otherEdges.remove(ee);
-                                edgeFound = true;
-                                break;
-                            }
-                        } else {
-                            if (e instanceof DefaultWeightedEdge) {
-                                if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(ee)) < 10e-7) {
-                                    otherEdges.remove(ee);
-                                    edgeFound = true;
-                                    break;
-                                }
-                            } else {
-                                otherEdges.remove(ee);
-                                edgeFound = true;
-                                break;
-                            }
-                        }
+            boolean found = false;
+            for (E ee: g.getAllEdges(source, target)) {
+                if (e == ee || e.equals(ee)) {
+                    if (e != ee && Math.abs(getEdgeWeight(e) 
+                        - g.getEdgeWeight(ee)) > 10e-7)
+                    {
+                        return false;
                     }
-                    if (!edgeFound) return false;
-                } catch (NoSuchMethodException ignored) {
-                    // should never happens, we always have equals() method (VK);
+                    found = true;
+                    break;
                 }
-            } else if (!otherEdges.remove(e)) return false;
-        }
+            }
 
-        // finally, if edges set of the other graph is empty - graphs are equal (VK);
-        if (!otherEdges.isEmpty()) return false;
+            if (!found) {
+                return false;
+            }
+        }
 
         return true;
     }
