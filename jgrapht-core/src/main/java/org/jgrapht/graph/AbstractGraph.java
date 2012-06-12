@@ -296,23 +296,21 @@ public abstract class AbstractGraph<V, E>
         }
 
         for (E e: edgeSet()) {
+
             V source = getEdgeSource(e);
             V target = getEdgeTarget(e);
 
-            boolean found = false;
-            for (E ee: g.getAllEdges(source, target)) {
-                if (e == ee || e.equals(ee)) {
-                    if (e != ee && Math.abs(getEdgeWeight(e) 
-                        - g.getEdgeWeight(ee)) > 10e-7)
-                    {
-                        return false;
-                    }
-                    found = true;
-                    break;
-                }
+            if (!g.containsEdge(e)) {
+                return false;
             }
 
-            if (!found) {
+            if (!g.getEdgeSource(e).equals(source) 
+                || !g.getEdgeTarget(e).equals(target)) 
+            {
+                return false;
+            }
+
+            if (Math.abs(getEdgeWeight(e) - g.getEdgeWeight(e)) > 10e-7) {
                 return false;
             }
         }

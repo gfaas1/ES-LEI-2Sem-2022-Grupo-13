@@ -40,6 +40,9 @@
 
 package org.jgrapht.graph;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jgrapht.*;
 
 public class EqualsAndHashCodeTest
@@ -266,6 +269,66 @@ public class EqualsAndHashCodeTest
         assertTrue(!g2.equals(g3));
 
         assertEquals(g2.hashCode(), g1.hashCode());
+    }
+
+    /**
+     * Tests equals/hashCode for graphs transformed to weighted.
+     */
+    public void testAsWeightedGraphs() {
+        UndirectedGraph<String, DefaultEdge> g1 = 
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        g1.addVertex(v1);
+        g1.addVertex(v2);
+        g1.addVertex(v3);
+        DefaultEdge e12 = g1.addEdge(v1, v2);
+        DefaultEdge e23 = g1.addEdge(v2, v3);
+        DefaultEdge e31 = g1.addEdge(v3, v1);
+
+        UndirectedGraph<String, DefaultEdge> g2 = 
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        g2.addVertex(v1);
+        g2.addVertex(v2);
+        g2.addVertex(v3);
+        g2.addEdge(v1, v2, e12);
+        g2.addEdge(v2, v3, e23);
+        g2.addEdge(v3, v1, e31);
+
+        Map<DefaultEdge, Double> weightMap1 =
+            new HashMap<DefaultEdge, Double>();
+
+        weightMap1.put(e12, 10.0);
+        weightMap1.put(e23, 20.0);
+        weightMap1.put(e31, 30.0);
+
+        WeightedGraph<String, DefaultEdge> g3 =
+            new AsWeightedGraph<String, DefaultEdge>(
+                g1, weightMap1);
+
+        Map<DefaultEdge, Double> weightMap2 =
+            new HashMap<DefaultEdge, Double>();
+
+        weightMap2.put(e12, 10.0);
+        weightMap2.put(e23, 20.0);
+        weightMap2.put(e31, 30.0);
+
+        WeightedGraph<String, DefaultEdge> g4 =
+            new AsWeightedGraph<String, DefaultEdge>(
+                g2, weightMap2);
+
+        Map<DefaultEdge, Double> weightMap3 =
+            new HashMap<DefaultEdge, Double>();
+
+        weightMap3.put(e12, 100.0);
+        weightMap3.put(e23, 200.0);
+        weightMap3.put(e31, 300.0);
+
+        WeightedGraph<String, DefaultEdge> g5 =
+            new AsWeightedGraph<String, DefaultEdge>(
+                g2, weightMap3);
+
+        assertTrue(g1.equals(g2));
+        assertTrue(g3.equals(g4));
+        assertTrue(!g4.equals(g5));
     }
 
     /**

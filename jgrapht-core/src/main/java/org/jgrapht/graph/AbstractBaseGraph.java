@@ -499,7 +499,11 @@ public abstract class AbstractBaseGraph<V, E>
     public double getEdgeWeight(E e)
     {
         if (e instanceof DefaultWeightedEdge) {
-            return ((DefaultWeightedEdge) e).getWeight();
+            if (edgeMap.containsKey(e)) {
+                return ((DefaultWeightedEdge) edgeMap.get(e)).getWeight();
+            } else {
+                return ((DefaultWeightedEdge) e).getWeight();
+            }
         } else {
             return WeightedGraph.DEFAULT_EDGE_WEIGHT;
         }
@@ -511,7 +515,11 @@ public abstract class AbstractBaseGraph<V, E>
     public void setEdgeWeight(E e, double weight)
     {
         assert (e instanceof DefaultWeightedEdge) : e.getClass();
-        ((DefaultWeightedEdge) e).weight = weight;
+        if (edgeMap.containsKey(e)) {
+            ((DefaultWeightedEdge) edgeMap.get(e)).weight = weight;
+        } else {
+            ((DefaultWeightedEdge) e).weight = weight;
+        }
     }
 
     private Specifics createSpecifics()
