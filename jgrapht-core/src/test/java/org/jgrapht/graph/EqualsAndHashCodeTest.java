@@ -34,7 +34,7 @@
  *
  * Changes
  * -------
- * 08-Jun-2012 : Initial revision (VK);
+ * 12-Jun-2012 : Initial revision (VK);
  *
  */
 
@@ -327,7 +327,11 @@ public class EqualsAndHashCodeTest
                 g2, weightMap3);
 
         assertTrue(g1.equals(g2));
+        assertEquals(g2.hashCode(), g1.hashCode());
+
         assertTrue(g3.equals(g4));
+        assertEquals(g4.hashCode(), g3.hashCode());
+
         assertTrue(!g4.equals(g5));
     }
 

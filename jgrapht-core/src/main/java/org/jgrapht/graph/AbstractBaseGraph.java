@@ -30,6 +30,7 @@
  * Original Author:  Barak Naveh
  * Contributor(s):   John V. Sichi
  *                   Christian Hammer
+ *                   Vladimir Kostyukov
  *
  * $Id$
  *
@@ -43,6 +44,7 @@
  * 01-Jun-2005 : Added EdgeListFactory (JVS);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
+ * 12-Jun-2012 : Changed (get/set)EdgeWeight for graph equals support (VK);
  *
  */
 package org.jgrapht.graph;
