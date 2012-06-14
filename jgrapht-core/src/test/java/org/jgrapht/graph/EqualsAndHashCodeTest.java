@@ -34,7 +34,7 @@
  *
  * Changes
  * -------
- * 12-Jun-2012 : Initial revision (VK);
+ * 14-Jun-2012 : Initial revision (VK);
  *
  */
 
@@ -336,56 +336,6 @@ public class EqualsAndHashCodeTest
     }
 
     /**
-     * Tests equals/hashCode methods for graphs witch custom weighted edges.
-     */
-    public void testGrapshWithCustomWeightedEdges()
-    {
-        WeightedGraph<String, CustomWeightedEdge> g1 =
-            new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
-                CustomWeightedEdge.class);
-        g1.addVertex(v1);
-        g1.addVertex(v2);
-        g1.addVertex(v3);
-        CustomWeightedEdge e112 = new CustomWeightedEdge("v1-v2"); 
-        g1.addEdge(v1, v2, e112);
-        CustomWeightedEdge e131 = new CustomWeightedEdge("v3-v1"); 
-        g1.addEdge(v3, v1, e131);
-        g1.setEdgeWeight(e112, 10.0);
-        g1.setEdgeWeight(e131, 20.0);
-
-        WeightedGraph<String, CustomWeightedEdge> g2 = 
-             new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
-                 CustomWeightedEdge.class);
-        g2.addVertex(v3);
-        g2.addVertex(v2);
-        g2.addVertex(v1);
-        CustomWeightedEdge e231 = new CustomWeightedEdge("v3-v1"); 
-        g2.addEdge(v3, v1, e231);
-        CustomWeightedEdge e212 = new CustomWeightedEdge("v1-v2");
-        g2.addEdge(v1, v2, e212);
-        g2.setEdgeWeight(e212, 10.0);
-        g2.setEdgeWeight(e231, 20.0);
-
-        WeightedGraph<String, CustomWeightedEdge> g3 = 
-            new DefaultDirectedWeightedGraph<String, CustomWeightedEdge>(
-                CustomWeightedEdge.class);
-        g3.addVertex(v3);
-        g3.addVertex(v2);
-        g3.addVertex(v1);
-        CustomWeightedEdge e331 = new CustomWeightedEdge("v3-v1");
-        g3.addEdge(v3, v1, e331);
-        CustomWeightedEdge e312 = new CustomWeightedEdge("v1-v2");
-        g3.addEdge(v1, v2, e312);
-        g3.setEdgeWeight(e312, 20.0);
-        g3.setEdgeWeight(e331, 30.0);
-
-        assertTrue(g1.equals(g2));
-        assertTrue(!g2.equals(g3));
-
-        assertEquals(g2.hashCode(), g1.hashCode());
-    }
-
-    /**
      * Simple custom edge class.
      */
     public static class CustomEdge
@@ -417,42 +367,6 @@ public class EqualsAndHashCodeTest
             }
 
             CustomEdge edge = (CustomEdge) obj;
-            return label.equals(edge.label);
-        }
-    }
-
-    /**
-     * Weighted custom edge class.
-     */
-    public static class CustomWeightedEdge
-        extends DefaultWeightedEdge
-    {
-        private static final long serialVersionUID = 1L;
-        private String label;
-
-        public CustomWeightedEdge(String label)
-        {
-            this.label = label; 
-        }
-
-        public int hashCode()
-        {
-            return label.hashCode();
-        }
-
-        public boolean equals(Object obj)
-        {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof CustomWeightedEdge)) {
-                return false;
-            }
-
-            CustomWeightedEdge edge = (CustomWeightedEdge) obj;
             return label.equals(edge.label);
         }
     }

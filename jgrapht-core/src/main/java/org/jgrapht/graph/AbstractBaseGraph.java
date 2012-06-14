@@ -30,7 +30,6 @@
  * Original Author:  Barak Naveh
  * Contributor(s):   John V. Sichi
  *                   Christian Hammer
- *                   Vladimir Kostyukov
  *
  * $Id$
  *
@@ -44,7 +43,6 @@
  * 01-Jun-2005 : Added EdgeListFactory (JVS);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- * 12-Jun-2012 : Changed (get/set)EdgeWeight for graph equals support (VK);
  *
  */
 package org.jgrapht.graph;
@@ -501,11 +499,7 @@ public abstract class AbstractBaseGraph<V, E>
     public double getEdgeWeight(E e)
     {
         if (e instanceof DefaultWeightedEdge) {
-            if (edgeMap.containsKey(e)) {
-                return ((DefaultWeightedEdge) edgeMap.get(e)).getWeight();
-            } else {
-                return ((DefaultWeightedEdge) e).getWeight();
-            }
+            return ((DefaultWeightedEdge) e).getWeight();
         } else {
             return WeightedGraph.DEFAULT_EDGE_WEIGHT;
         }
@@ -517,11 +511,7 @@ public abstract class AbstractBaseGraph<V, E>
     public void setEdgeWeight(E e, double weight)
     {
         assert (e instanceof DefaultWeightedEdge) : e.getClass();
-        if (edgeMap.containsKey(e)) {
-            ((DefaultWeightedEdge) edgeMap.get(e)).weight = weight;
-        } else {
-            ((DefaultWeightedEdge) e).weight = weight;
-        }
+        ((DefaultWeightedEdge) e).weight = weight;
     }
 
     private Specifics createSpecifics()

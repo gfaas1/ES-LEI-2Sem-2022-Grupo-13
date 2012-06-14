@@ -39,7 +39,7 @@
  * 11-Mar-2004 : Made generic (CH);
  * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
  * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- * 12-Jun-2012 : Added hashCode() and equals() methods implementation (VK);
+ * 14-Jun-2012 : Added hashCode() and equals() methods implementation (VK);
  * 
  */
 package org.jgrapht.graph;
