@@ -47,6 +47,8 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Robby McKilliam
 - Yuriy Nakonechnyy
 - Alejandro R. Lopez del Huerto
+- Vladimir Kostyukov
+- Ernst de Ridder
 
 (if we have missed your name on this list, please email us to get it fixed).
 
