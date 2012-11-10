@@ -157,31 +157,4 @@ public class MinSourceSinkCut<V,E> {
 		return sink;
 	}
 	
-	public static void main(String[] args){
-		System.out.println("Min Cut test:");
-		DirectedGraph<Integer, DefaultWeightedEdge> graph=new DefaultDirectedWeightedGraph <Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-		Integer[] vertices={0,1,2,3,4,5,6};
-		for(Integer i: vertices)
-			graph.addVertex(i);
-		
-		Graphs.addEdge(graph, 0, 1, 2);
-		Graphs.addEdge(graph, 0, 2, 6);
-		Graphs.addEdge(graph, 0, 3, 3);
-		Graphs.addEdge(graph, 1, 2, 4);
-		Graphs.addEdge(graph, 3, 2, 2);
-		Graphs.addEdge(graph, 1, 4, 1);
-		Graphs.addEdge(graph, 3, 5, 6);
-		Graphs.addEdge(graph, 2, 4, 2);
-		Graphs.addEdge(graph, 2, 6, 1);
-		Graphs.addEdge(graph, 5, 2, 4);
-		Graphs.addEdge(graph, 4, 6, 8);
-		Graphs.addEdge(graph, 5, 6, 7);
-		System.out.println("Edges: "+graph.edgeSet().size()+" Vertices: "+graph.vertexSet().size());
-		MinSourceSinkCut<Integer, DefaultWeightedEdge> mc=new MinSourceSinkCut<Integer, DefaultWeightedEdge>(graph);
-		mc.computeMinCut(0, 6);
-		System.out.println("Cut weight: "+mc.cutWeight);
-		System.out.println("Partition 1: "+mc.getSourcePartition().toString());
-		System.out.println("Partition 2: "+mc.getSinkPartition().toString());
-		System.out.println("Cut edges: "+mc.getCutEdges().toString());
-	}
 }
