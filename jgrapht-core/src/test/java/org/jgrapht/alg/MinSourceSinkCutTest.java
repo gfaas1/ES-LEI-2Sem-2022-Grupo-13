@@ -16,6 +16,11 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.junit.Test;
 
+/**
+ * Test class for the MinSourceSinkCut class.
+ * @author Joris Kinable
+ *
+ */
 public class MinSourceSinkCutTest extends TestCase{
 
 	/**
