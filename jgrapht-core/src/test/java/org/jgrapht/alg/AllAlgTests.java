@@ -92,6 +92,7 @@ public final class AllAlgTests
         suite.addTest(new TestSuite(StoerWagnerMinimumCutTest.class));
         suite.addTest(new TestSuite(EdmondsBlossomShrinkingTest.class));
         suite.addTest(new TestSuite(MinSourceSinkCutTest.class));
+        suite.addTest(new TestSuite(MaxBipartiteMatchingTest.class));
         
         // $JUnit-END$
         return suite;
