@@ -102,9 +102,6 @@ public class MinSourceSinkCutTest extends TestCase{
 		//Test the current sink
 		assertEquals(6, mc.getCurrentSink(), 0);
 		
-		System.out.println("Weight: "+mc.getCutWeight());
-		System.out.println("Source partition: "+mc.getSourcePartition());
-		
 		//Test the source and sink partitions
 		List<Integer> l1 = Arrays.asList(new Integer[] {0, 1, 4});
 		List<Integer> l2 = Arrays.asList(new Integer[] {2, 3, 5, 6});
