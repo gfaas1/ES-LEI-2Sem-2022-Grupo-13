@@ -19,7 +19,7 @@ import junit.framework.TestCase;
  * @author Joris Kinable
  *
  */
-public class MaxBipartiteMatchingTest extends TestCase{
+public class HopcroftKarpBipartiteMatchingTest extends TestCase{
 
 	/**
 	 * Random test graph 1
@@ -27,10 +27,10 @@ public class MaxBipartiteMatchingTest extends TestCase{
 	public void testBipartiteMatching1(){
 		UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 		List<Integer> partition1=Arrays.asList(new Integer[]{0,1,2,3});
-		List<Integer> partition2=Arrays.asList(new Integer[]{4,5,6,7});		
+		List<Integer> partition2=Arrays.asList(new Integer[]{4,5,6,7});	
 		Graphs.addAllVertices(graph, partition1);
 		Graphs.addAllVertices(graph,partition2);
-
+		
 		DefaultEdge e00=graph.addEdge(partition1.get(0), partition2.get(0));
 		DefaultEdge e01=graph.addEdge(partition1.get(0), partition2.get(1));
 		DefaultEdge e02=graph.addEdge(partition1.get(0), partition2.get(2));
@@ -42,7 +42,7 @@ public class MaxBipartiteMatchingTest extends TestCase{
 		DefaultEdge e21=graph.addEdge(partition1.get(2), partition2.get(1));
 		
 		
-		MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);
+		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm=new HopcroftKarpBipartiteMatching<Integer,DefaultEdge>(graph,new HashSet<Integer>(partition1),new HashSet<Integer>(partition2));
 		assertEquals(3, bm.getSize(), 0);
 		List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e11, e02, e20});
 	    Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
@@ -71,7 +71,7 @@ public class MaxBipartiteMatchingTest extends TestCase{
 		DefaultEdge e52=graph.addEdge(partition1.get(5), partition2.get(2));
 		DefaultEdge e55=graph.addEdge(partition1.get(5), partition2.get(5));
 		
-		MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);
+		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm=new HopcroftKarpBipartiteMatching<Integer,DefaultEdge>(graph,new HashSet<Integer>(partition1),new HashSet<Integer>(partition2));
 		assertEquals(6, bm.getSize(), 0);
 		List<DefaultEdge> l1 = Arrays.asList(new DefaultEdge[] {e21, e13, e00, e42, e34, e55});
 	    Set<DefaultEdge> matching = new HashSet<DefaultEdge>(l1);
@@ -87,7 +87,7 @@ public class MaxBipartiteMatchingTest extends TestCase{
 		List<Integer> partition2=Arrays.asList(new Integer[]{1});		
 		Graphs.addAllVertices(graph, partition1);
 		Graphs.addAllVertices(graph,partition2);
-		MaxBipartiteMatching<Integer,DefaultEdge> bm=new MaxBipartiteMatching<Integer,DefaultEdge>(graph,partition1,partition2);
+		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm=new HopcroftKarpBipartiteMatching<Integer,DefaultEdge>(graph,new HashSet<Integer>(partition1),new HashSet<Integer>(partition2));
 		assertEquals(Collections.EMPTY_SET, bm.getMatching());
 	}
 }

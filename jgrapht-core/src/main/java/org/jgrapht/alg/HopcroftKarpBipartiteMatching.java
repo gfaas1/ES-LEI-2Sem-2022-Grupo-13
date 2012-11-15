@@ -4,42 +4,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.Multigraph;
 
 
 /**
  * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in an undirected
- * bipartite graph. The algorithm runs in O(|E|*√|V|) time.
+ * simple bipartite graph. The algorithm runs in O(|E|*√|V|) time.
  * The original algorithm is described in:
  * Hopcroft, John E.; Karp, Richard M. (1973), "An n5/2 algorithm for maximum matchings in bipartite graphs",
  * SIAM Journal on Computing 2 (4): 225–231, doi:10.1137/0202019
  * 
- * A course overview of the algorithm is given in: http://en.wikipedia.org/wiki/Hopcroft-Karp_algorithm
+ * A coarse overview of the algorithm is given in: http://en.wikipedia.org/wiki/Hopcroft-Karp_algorithm
  * 
  * Note: the behavior of this class is undefined when the input isn't a bipartite graph, i.e. when there are edges within a single partition!
  * 
  * @author Joris Kinable
  */
 
-public class MaxBipartiteMatching<V,E> {
+public class HopcroftKarpBipartiteMatching<V,E> {
 
-	private UndirectedGraph<V, E> graph;
-	private final List<V> partition1; //Partitions of bipartite graph
-	private final List<V> partition2;
-	private HashSet<E> matching; //Set containing the matchings
+	private final UndirectedGraph<V, E> graph;
+	private final Set<V> partition1; //Partitions of bipartite graph
+	private final Set<V> partition2;
+	private Set<E> matching; //Set containing the matchings
 	
 	private final HashSet<V> unmatchedVertices1; //Set which contains the unmatched vertices in partition 1
 	private final HashSet<V> unmatchedVertices2;
 	
 	
-	public MaxBipartiteMatching(UndirectedGraph<V, E> graph, List<V> partition1, List<V> partition2){
+	public HopcroftKarpBipartiteMatching(UndirectedGraph<V, E> graph, Set<V> partition1, Set<V> partition2){
 		this.graph=graph;
 		this.partition1=partition1;
 		this.partition2=partition2;
@@ -48,9 +51,28 @@ public class MaxBipartiteMatching<V,E> {
 		unmatchedVertices1=new HashSet<V>(partition1);
 		unmatchedVertices2=new HashSet<V>(partition2);
 		
+		this.checkInputData();
 		this.maxMatching();
 	}
 	
+	/**
+	 * Checks whether the input data meets the requirements: simple undirected graph and bipartite partitions.
+	 */
+	private void checkInputData(){
+		if(graph instanceof Multigraph)
+			throw new IllegalArgumentException("Multi graphs are not allowed as input, only simple graphs!");
+		//Test the bipartiteness
+		Set<V> neighborsSet1=new HashSet<V>();
+		for(V v: partition1)
+			neighborsSet1.addAll(Graphs.neighborListOf(graph, v));
+		if(interSectionNotEmpty(partition1, neighborsSet1))
+			throw new IllegalArgumentException("There are edges within partition 1, i.e. not a bipartite graph");
+		Set<V> neighborsSet2=new HashSet<V>();
+		for(V v: partition2)
+			neighborsSet2.addAll(Graphs.neighborListOf(graph, v));
+		if(interSectionNotEmpty(partition2, neighborsSet2))
+			throw new IllegalArgumentException("There are edges within partition 2, i.e. not a bipartite graph");		
+	}
 	/**
 	 * Greedily match the vertices in partition1 to the vertices in partition2.
 	 * For each vertex in partition 1, check whether there is an edge to an unmatched vertex in
@@ -78,16 +100,18 @@ public class MaxBipartiteMatching<V,E> {
 	 */
 	private void maxMatching(){
 		this.greedyMatch();
-		List<LinkedList<V>> augmentingPaths=this.getAugmentingPaths();
-		//System.out.println("Augmenting paths: "+augmentingPaths);
-		for(LinkedList<V> augmentingPath: augmentingPaths){
-			unmatchedVertices1.remove(augmentingPath.getFirst());
-			unmatchedVertices2.remove(augmentingPath.getLast());
-			this.symmetricDifference(augmentingPath);
+		
+		List<LinkedList<V>> augmentingPaths=this.getAugmentingPaths(); //Get a list with augmenting paths
+		while(!augmentingPaths.isEmpty()){
+			for(Iterator<LinkedList<V>> it=augmentingPaths.iterator(); it.hasNext();){ //Process all augmenting paths
+				LinkedList<V> augmentingPath=it.next();
+				unmatchedVertices1.remove(augmentingPath.getFirst());
+				unmatchedVertices2.remove(augmentingPath.getLast());
+				this.symmetricDifference(augmentingPath);
+				it.remove();
+			}
+			augmentingPaths.addAll(this.getAugmentingPaths()); //Check whether there are new augmenting paths available
 		}
-		//System.out.println("Maximum matching: "+matching);
-		//System.out.println("UnmatchedVertices1: "+unmatchedVertices1);
-		//System.out.println("UnmatchedVertices2: "+unmatchedVertices2);
 	}
 	
 	/**
@@ -122,14 +146,7 @@ public class MaxBipartiteMatching<V,E> {
 		Set<V> evenLayer;
 		Set<V> usedVertices=new HashSet<V>(unmatchedVertices1);
 		
-		boolean finished=false;
-		
-		//System.out.println("greedy matching: "+matching);
-		//System.out.println("oddlayer: "+oddLayer);
-		
-		do{
-			
-			
+		while(true){
 			//Create a new even Layer
 			//A new layer can ONLY contain vertices which are not used in the previous layers
 			//Edges between odd and even layers can NOT be part of the matching
@@ -149,22 +166,17 @@ public class MaxBipartiteMatching<V,E> {
 				}
 			}
 			usedVertices.addAll(evenLayer);
-			//System.out.println("evenlayer: "+evenLayer);
-			//System.out.println("layerMap: "+layeredMap);
 			
 			//Check whether we are finished generating layers.
 			//We are finished if 1. the last layer is empty or 2. if we reached free vertices in partition2.
-			if(evenLayer.size()==0 || this.interSectionNotEmpty(evenLayer, unmatchedVertices2)){
-				finished=true;
-				continue;
-			}
+			if(evenLayer.size()==0 || this.interSectionNotEmpty(evenLayer, unmatchedVertices2))
+				break;
 			
 			//Create a new odd Layer
 			//A new layer can ONLY contain vertices which are not used in the previous layers
 			//Edges between EVEN and ODD layers SHOULD be part of the matching
 			oddLayer=new HashSet<V>();
 			for(V vertex: evenLayer){
-				//List<V> neighbors=this.getNeighbors(vertex);
 				List<V> neighbors=Graphs.neighborListOf(graph, vertex);
 				for(V neighbor: neighbors){
 					if(usedVertices.contains(neighbor) || !matching.contains(graph.getEdge(vertex, neighbor)))
@@ -178,9 +190,7 @@ public class MaxBipartiteMatching<V,E> {
 				}
 			}
 			usedVertices.addAll(oddLayer);
-			//System.out.println("oddLayer: "+oddLayer);
-			//System.out.println("layerMap: "+layeredMap);
-		}while(!finished);
+		}
 		
 		//Check whether there exist augmenting paths. If not, return an empty list.
 		//Else, we need to generate the augmenting paths which start at free vertices in
@@ -190,8 +200,6 @@ public class MaxBipartiteMatching<V,E> {
 		}else{
 			evenLayer.retainAll(unmatchedVertices2);
 		}
-		
-		//System.out.println("last evenlayer: "+evenLayer);
 		
 		//Finally, do a depth-first search, starting on the free vertices in the last even layer.
 		//Objective is to find as many vertex disjoint paths as possible.
