@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
 	- Add source/target vertices to edge events to fix sf.net bug 3486775, spotted by Frank Mori Hess.
 	- Add EdmondsBlossomShrinking algorithm, contributed by Alejandro R. Lopez del Huerto.
 	- Fix empty diameter calculation in FloydWarshallShortestPaths, contributed by Ernst de Ridder (bug spotted by Jens Lehmann)
+	- Add HopcroftKarpBipartiteMatching and MinSourceSinkCut, contributed by Joris Kinable
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.
