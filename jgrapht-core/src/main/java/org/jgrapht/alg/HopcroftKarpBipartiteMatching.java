@@ -1,3 +1,40 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ */
+/* -------------------------
+ * HopcroftKarpBipartiteMatching.java
+ * -------------------------
+ * (C) Copyright 2012-2012, by Joris Kinable and Contributors.
+ *
+ * Original Author:  Joris Kinable
+ * Contributor(s):
+ *
+ * Changes
+ * -------
+ * 26-Nov-2012 : Initial revision (JK);
+ *
+ */
 package org.jgrapht.alg;
 
 import java.util.ArrayList;
@@ -38,8 +75,8 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 	private final Set<V> partition2;
 	private Set<E> matching; //Set containing the matchings
 	
-	private final HashSet<V> unmatchedVertices1; //Set which contains the unmatched vertices in partition 1
-	private final HashSet<V> unmatchedVertices2;
+	private final Set<V> unmatchedVertices1; //Set which contains the unmatched vertices in partition 1
+	private final Set<V> unmatchedVertices2;
 	
 	
 	public HopcroftKarpBipartiteMatching(UndirectedGraph<V, E> graph, Set<V> partition1, Set<V> partition2){
@@ -51,14 +88,14 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 		unmatchedVertices1=new HashSet<V>(partition1);
 		unmatchedVertices2=new HashSet<V>(partition2);
 		
-		this.checkInputData();
+		assert this.checkInputData();
 		this.maxMatching();
 	}
 	
 	/**
 	 * Checks whether the input data meets the requirements: simple undirected graph and bipartite partitions.
 	 */
-	private void checkInputData(){
+	private boolean checkInputData(){
 		if(graph instanceof Multigraph)
 			throw new IllegalArgumentException("Multi graphs are not allowed as input, only simple graphs!");
 		//Test the bipartiteness
@@ -71,7 +108,8 @@ public class HopcroftKarpBipartiteMatching<V,E> {
 		for(V v: partition2)
 			neighborsSet2.addAll(Graphs.neighborListOf(graph, v));
 		if(interSectionNotEmpty(partition2, neighborsSet2))
-			throw new IllegalArgumentException("There are edges within partition 2, i.e. not a bipartite graph");		
+			throw new IllegalArgumentException("There are edges within partition 2, i.e. not a bipartite graph");
+                return true;
 	}
 	/**
 	 * Greedily match the vertices in partition1 to the vertices in partition2.
