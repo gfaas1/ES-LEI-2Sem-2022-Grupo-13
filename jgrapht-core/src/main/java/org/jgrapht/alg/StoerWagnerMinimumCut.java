@@ -151,10 +151,8 @@ public class StoerWagnerMinimumCut<V, E>
         // Now iteratively update the queue to get the required vertex ordering
 
         while (!queue.isEmpty()) {
-            //System.out.println("Q:"+ queue);
             Set<V> v = queue.poll().vertex;
             dmap.remove(v);
-            //System.out.println("q:"+ v);
 
             beforelast = last;
             last = v;
@@ -180,8 +178,6 @@ public class StoerWagnerMinimumCut<V, E>
 
         //merge the last added vertices
         mergeVertices(beforelast, last);
-
-        //System.out.println("C:"+ bestCut +" "+ bestCutWeight);
     }
 
     /**
