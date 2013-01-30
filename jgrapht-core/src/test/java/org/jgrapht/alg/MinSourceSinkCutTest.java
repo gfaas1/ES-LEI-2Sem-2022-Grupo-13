@@ -69,6 +69,12 @@ public class MinSourceSinkCutTest extends TestCase{
 	    List<DefaultWeightedEdge> l3=Arrays.asList(new DefaultWeightedEdge[] {e03, e26, e24, e14});
 	    Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
 	    assertEquals(cutEdges, mc.getCutEdges());
+	    
+	    cutEdges=mc.getCutEdges();
+	    double weight=0;
+	    for(DefaultWeightedEdge e: cutEdges)
+	    	weight+=graph.getEdgeWeight(e);
+	    assertEquals(7.0, weight);
 	}
 	
 	/**
@@ -117,6 +123,13 @@ public class MinSourceSinkCutTest extends TestCase{
 	    List<DefaultWeightedEdge> l3=Arrays.asList(new DefaultWeightedEdge[] {e03, e02, e12, e46});
 	    Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
 	    assertEquals(cutEdges, mc.getCutEdges());
+	    
+	    cutEdges=mc.getCutEdges();
+	    double weight=0;
+	    for(DefaultWeightedEdge e: cutEdges)
+	    	weight+=graph.getEdgeWeight(e);
+	    //assertEquals(0.875, weight);
+	    assertTrue(Math.abs(weight-0.875)<0.000000001);
 	}
 	
 	/**
