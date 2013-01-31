@@ -52,6 +52,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Vladimir Kostyukov
 - Ernst de Ridder
 - Joris Kinable
+- Michal Pasieka
 
 (if we have missed your name on this list, please email us to get it fixed).
 
