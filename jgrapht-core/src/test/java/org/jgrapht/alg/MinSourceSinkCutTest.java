@@ -128,8 +128,7 @@ public class MinSourceSinkCutTest extends TestCase{
 	    double weight=0;
 	    for(DefaultWeightedEdge e: cutEdges)
 	    	weight+=graph.getEdgeWeight(e);
-	    //assertEquals(0.875, weight);
-	    assertTrue(Math.abs(weight-0.875)<0.000000001);
+	    assertEquals(0.875, weight,0.000000001);
 	}
 	
 	/**
