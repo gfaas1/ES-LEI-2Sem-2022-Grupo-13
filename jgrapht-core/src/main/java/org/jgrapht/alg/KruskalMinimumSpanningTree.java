@@ -2,7 +2,7 @@
  * JGraphT : a free Java graph-theory library
  * ==========================================
  *
- * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Info:  http://org.org.jgrapht.sourceforge.net/
  * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
  *
  * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
@@ -37,10 +37,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MinimumSpanningTree;
+import org.jgrapht.alg.util.UnionFind;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
+import java.util.*;
 
 
 /**
@@ -54,7 +55,7 @@ import org.jgrapht.alg.util.*;
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
-public class KruskalMinimumSpanningTree<V, E>
+public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, E>
 {
     //~ Instance fields --------------------------------------------------------
 
@@ -102,25 +103,18 @@ public class KruskalMinimumSpanningTree<V, E>
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * Returns the edges making up the tree found.
-     *
-     * @return Set of Edges
-     */
-    public Set<E> getEdgeSet()
+    @Override
+    public Set<E> getMinimumSpanningTreeEdgeSet()
     {
         return edgeList;
     }
 
-    /**
-     * Returns the cost of the minimum spanning tree or forest.
-     *
-     * @return Cost of the spanning tree
-     */
-    public double getSpanningTreeCost()
+    @Override
+    public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
     }
+
 }
 
 // End KruskalMinimumSpanningTree.java
