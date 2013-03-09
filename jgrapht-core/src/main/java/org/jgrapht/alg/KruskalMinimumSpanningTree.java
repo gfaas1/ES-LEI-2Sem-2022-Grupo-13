@@ -2,7 +2,7 @@
  * JGraphT : a free Java graph-theory library
  * ==========================================
  *
- * Project Info:  http://org.org.jgrapht.sourceforge.net/
+ * Project Info:  http://jgrapht.sourceforge.net/
  * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
  *
  * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
@@ -113,6 +113,27 @@ public class KruskalMinimumSpanningTree<V, E> implements MinimumSpanningTree<V, 
     public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
+    }
+
+
+    /**
+     * Returns edges set constituting the minimum spanning tree/forest
+     *
+     * @return minimum spanning-tree edges set
+     */
+    @Deprecated
+    public Set<E> getEdgeSet() {
+        return getMinimumSpanningTreeEdgeSet();
+    }
+
+    /**
+     * Returns total weight of the minimum spanning tree/forest.
+     *
+     * @return minimum spanning-tree total weight
+     */
+    @Deprecated
+    public double getSpanningTreeCost() {
+        return getMinimumSpanningTreeTotalWeight();
     }
 
 }
