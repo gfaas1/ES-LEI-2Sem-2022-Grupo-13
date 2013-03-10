@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
 	- Add `HopcroftKarpBipartiteMatching` and `MinSourceSinkCut`, contributed by Joris Kinable
 	- Fix multiple bugs in `StoerWagnerMinimumCut`, contributed by Ernst de Ridder
 	- Fix path weight bug in `FloydWarshallShortestPaths`, contributed by Michal Pasieka
+	- Add `Prim MinimumSpanningTree`, contributed by Alexey Kudinkin
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.
