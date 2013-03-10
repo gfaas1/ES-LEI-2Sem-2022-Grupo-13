@@ -88,7 +88,7 @@ public final class AllAlgTests
         suite.addTest(new TestSuite(ChromaticNumberTest.class));
         suite.addTest(new TestSuite(EulerianCircuitTest.class));
         suite.addTest(new TestSuite(HamiltonianCycleTest.class));
-        suite.addTest(new TestSuite(MinimumSpanningTreeTests.class));
+        suite.addTest(new TestSuite(MinimumSpanningTreeTest.class));
         suite.addTest(new TestSuite(StoerWagnerMinimumCutTest.class));
         suite.addTest(new TestSuite(EdmondsBlossomShrinkingTest.class));
         suite.addTest(new TestSuite(MinSourceSinkCutTest.class));

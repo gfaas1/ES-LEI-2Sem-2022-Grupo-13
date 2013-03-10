@@ -23,7 +23,7 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  */
 /* ------------------------------
- * MinimumSpanningTreeTests.java
+ * MinimumSpanningTreeTest.java
  * ------------------------------
  * (C) Copyright 2010-2010, by Tom Conerly and Contributors.
  *
@@ -48,7 +48,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
-public class MinimumSpanningTreeTests
+public class MinimumSpanningTreeTest
     extends TestCase
 {
     //~ Static fields/initializers ---------------------------------------------
@@ -198,4 +198,4 @@ public class MinimumSpanningTreeTests
 
 }
 
-// End MinimumSpanningTreeTests.java
+// End MinimumSpanningTreeTest.java
