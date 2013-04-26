@@ -121,25 +121,26 @@ final class RankingPathElementList<V, E>
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
 
         // loop over the path elements in increasing order of weight.
-        for (int i = 0; i < elementList.size(); i++) {
+        for (int i = 0;
+             (i < elementList.size()) && (size() < maxSize); i++)
+        {
             RankingPathElement<V, E> prevPathElement = elementList.get(i);
 
             if (isNotValidPath(prevPathElement, edge)) {
+                // go to the next path element in the loop
                 continue;
             }
 
-            if (size() < this.maxSize) {
-                double weight = calculatePathWeight(prevPathElement, edge);
-                RankingPathElement<V, E> newPathElement =
-                    new RankingPathElement<V, E>(
-                        this.graph,
-                        prevPathElement,
-                        edge,
-                        weight);
+            double weight = calculatePathWeight(prevPathElement, edge);
+            RankingPathElement<V, E> newPathElement =
+                new RankingPathElement<V, E>(
+                    this.graph,
+                    prevPathElement,
+                    edge,
+                    weight);
 
-                // the new path is inserted at the end of the list.
-                this.pathElements.add(newPathElement);
-            }
+            // the new path is inserted at the end of the list.
+            this.pathElements.add(newPathElement);
         }
     }
 
@@ -379,14 +380,18 @@ final class RankingPathElementList<V, E>
         RankingPathElement<V, E> prevPathElement,
         E edge)
     {
+        V endVertex = Graphs.getOppositeVertex(this.graph, edge,
+            prevPathElement.getVertex());
+        assert (endVertex.equals(this.vertex));
+
         RankingPathElement<V, E> pathElementToTest = prevPathElement;
-        while (pathElementToTest.getPrevEdge() != null) {
-            if (pathElementToTest.getVertex() == this.vertex) {
+        do {
+            if (pathElementToTest.getVertex().equals(endVertex)) {
                 return false;
             } else {
                 pathElementToTest = pathElementToTest.getPrevPathElement();
             }
-        }
+        } while (pathElementToTest != null);
 
         return true;
     }

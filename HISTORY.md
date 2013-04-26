@@ -12,6 +12,7 @@ Changes to JGraphT in each version:
 	- Fix path weight bug in `FloydWarshallShortestPaths`, contributed by Michal Pasieka
 	- Add `PrimMinimumSpanningTree`, contributed by Alexey Kudinkin
 	- Add `DirectedWeightedPseudograph`, and fix 'DirectedMultigraph' contributed by Adam Gouge
+        - More KSP bugfixes (spotted by Sebastian Mueller, fixed by Guillaume Boulmier)
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.

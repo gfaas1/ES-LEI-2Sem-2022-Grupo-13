@@ -39,11 +39,13 @@
  */
 package org.jgrapht.alg;
 
+import java.io.*;
 import java.util.*;
 
 import junit.framework.*;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 
 /**
@@ -294,6 +296,62 @@ public class KShortestPathCostTest
             assertTrue(
                 pathElementResult.getWeight()
                 == prevPathElementResult.getWeight());
+        }
+    }
+
+    /**
+     * Currently disabled since it takes more than a few seconds to run.
+     * @see <a
+     * href="http://jgrapht-users.107614.n3.nabble.com/quot-graph-must-contain-the-start-vertex-quot-when-running-KShortestPaths-td4024797.html">bug
+     * description</a>.
+     */
+    public void _testIllegalArgumentExceptionGraphNotThrown()
+        throws Exception
+    {
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph =
+            new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
+
+        
+        InputStream fstream = getClass().getClassLoader().getResourceAsStream(
+            "edges.txt");
+        BufferedReader in = new BufferedReader(new InputStreamReader(fstream));
+
+        String[] edgeText;
+        DefaultWeightedEdge ed;
+        String line = in.readLine();
+        while (line != null) {
+            edgeText = line.split("\t");
+
+            graph.addVertex(edgeText[0]);
+            graph.addVertex(edgeText[1]);
+            ed = graph.addEdge(edgeText[0], edgeText[1]);
+            graph.setEdgeWeight(ed, Double.parseDouble(edgeText[2]));
+
+            line = in.readLine();
+        }
+
+        // Close the input stream
+        in.close();
+            
+        DefaultWeightedEdge src = graph.getEdge("M013", "M014");
+
+        KShortestPaths<String, DefaultWeightedEdge> kPaths =
+            new KShortestPaths<String, DefaultWeightedEdge>(
+                graph, graph.getEdgeSource(src), 5);
+        List<GraphPath<String, DefaultWeightedEdge>> paths = null;
+
+        try {
+            paths = kPaths.getPaths(graph.getEdgeTarget(src));
+            for (GraphPath<String, DefaultWeightedEdge> path : paths) {
+                for (DefaultWeightedEdge edge : path.getEdgeList()) {
+                    System.out.print("<" + graph.getEdgeSource(edge) + "\t"
+                        + graph.getEdgeTarget(edge) + "\t" + edge + ">\t");
+                }
+                System.out.println(": " + path.getWeight());
+            }
+        } catch (IllegalArgumentException e) {
+            fail("IllegalArgumentException thrown");
         }
     }
 }
