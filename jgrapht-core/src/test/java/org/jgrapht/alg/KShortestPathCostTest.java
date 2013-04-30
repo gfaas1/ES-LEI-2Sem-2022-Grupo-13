@@ -301,6 +301,8 @@ public class KShortestPathCostTest
 
     /**
      * Currently disabled since it takes more than a few seconds to run.
+     * Also need to actually check the output instead of printing.
+     *
      * @see <a
      * href="http://jgrapht-users.107614.n3.nabble.com/quot-graph-must-contain-the-start-vertex-quot-when-running-KShortestPaths-td4024797.html">bug
      * description</a>.

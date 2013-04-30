@@ -392,7 +392,7 @@ class KShortestPathsIterator<V, E>
                     vertex);
 
             // check if the path does not loop over the start vertex.
-            if (vertexReachedByEdge != this.startVertex) {
+            if (!vertexReachedByEdge.equals(this.startVertex)) {
                 if (this.seenDataContainer.containsKey(vertexReachedByEdge)) {
                     boolean relaxed =
                         tryToAddNewPaths(vertexReachedByEdge,
