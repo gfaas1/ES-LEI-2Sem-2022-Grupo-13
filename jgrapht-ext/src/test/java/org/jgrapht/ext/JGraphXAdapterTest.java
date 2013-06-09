@@ -21,13 +21,15 @@ import com.mxgraph.model.mxICell;
 /**
  * Test methods for the class JGraphXAdapter.
  */
-public class JGraphXAdapterTest {
+public class JGraphXAdapterTest 
+{
 
     /**
      * Test scenarios under normal conditions.
      */
     @Test
-    public final void genericTest() {
+    public void genericTest() 
+    {
         ListenableGraph<String, DefaultEdge> jGraphT 
          = new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
@@ -78,7 +80,8 @@ public class JGraphXAdapterTest {
      * Tests the correct implementation of the GraphListener interface.
      */
     @Test
-    public final void listenerTest() {
+    public void listenerTest() 
+    {
         ListenableGraph<String, String> jGraphT 
             = new ListenableDirectedGraph<String, String>(String.class);
         
@@ -159,7 +162,8 @@ public class JGraphXAdapterTest {
      * Tests conditions if graph is initialized without a JgraphT graph.
      */
     @Test
-    public final void nullInitializationTest() {
+    public void nullInitializationTest() 
+    {
         try {
             new JGraphXAdapter<String, String>(null);
             fail("Expected illegal argument exception");
@@ -177,7 +181,8 @@ public class JGraphXAdapterTest {
      * Tests the JGraphXAdapter with 1.000 nodes and 1.000 edges.
      */
     @Test
-    public final void loadTest() {
+    public void loadTest() 
+    {
         final int maxVertices = 1000;
         final int maxEdges = 1000;
 
@@ -210,7 +215,8 @@ public class JGraphXAdapterTest {
      * Tests if JGraphXAdapter works with not-listenable Graphs.
      */
     @Test
-    public final void notListenableTest() {
+    public void notListenableTest() 
+    {
         Graph<String, String> jGraphT 
             = new DefaultDirectedGraph<String, String>(String.class);
         // fill graph with data
@@ -260,7 +266,8 @@ public class JGraphXAdapterTest {
      * Test if duplicate Entries are saved only once.
      */
     @Test
-    public final void duplicateEntriesTest() {
+    public void duplicateEntriesTest() 
+    {
         ListenableGraph<String, DefaultEdge> jGraphT 
          = new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         
@@ -333,7 +340,8 @@ public class JGraphXAdapterTest {
      * @param <V>
      *            The class used for the vertices of the JGraphXAdapter
      */
-    private <V, E> void testMapping(final JGraphXAdapter<V, E> graph) {
+    private <V, E> void testMapping(JGraphXAdapter<V, E> graph) 
+    {
 
         // Edges
         HashMap<mxICell, E> cellToEdgeMap = graph.getCellToEdgeMap();
@@ -400,9 +408,8 @@ public class JGraphXAdapterTest {
      * @return True, if set and collection are equivalent; False if not.
      * 
      */
-    private <T> boolean compare(
-            final Collection<T> collection, final Set<T> set) {
-
+    private <T> boolean compare(Collection<T> collection, Set<T> set)
+    {
         Set<T> compareSet = new HashSet<T>();
         compareSet.addAll(collection);
 

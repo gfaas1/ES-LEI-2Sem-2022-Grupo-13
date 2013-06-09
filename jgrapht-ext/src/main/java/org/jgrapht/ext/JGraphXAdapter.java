@@ -33,7 +33,8 @@ import com.mxgraph.view.mxGraph;
  * @param <E> Edge
  */
 public class JGraphXAdapter<V, E> extends mxGraph implements
-        GraphListener<V, E> {
+        GraphListener<V, E> 
+{
 
     //~ Instance fields --------------------------------------------------------
     
@@ -79,7 +80,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * Throws a IllegalArgumentException if the graph is null.
      * @param graph casted to graph
      */
-    public JGraphXAdapter(ListenableGraph<V, E> graph) {
+    public JGraphXAdapter(ListenableGraph<V, E> graph) 
+    {
         // call normal constructor with graph class
         this((Graph<V, E>) graph);
         
@@ -95,7 +97,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * Throws an IllegalArgumentException if the parameter is null.
      * @param graph is a graph
      */
-    public JGraphXAdapter(Graph<V, E> graph) {
+    public JGraphXAdapter(Graph<V, E> graph) 
+    {
         super();
         
         // Don't accept null as jgrapht graph
@@ -119,7 +122,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * visualization mxICells.
      * @return {@link #vertexToCellMap}
      */
-    public HashMap<V, mxICell> getVertexToCellMap() {
+    public HashMap<V, mxICell> getVertexToCellMap() 
+    {
         return vertexToCellMap;
     }
 
@@ -127,7 +131,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * Returns Hashmap which maps the edges onto their visualization mxICells.
      * @return {@link #edgeToCellMap}
      */
-    public HashMap<E, mxICell> getEdgeToCellMap() {
+    public HashMap<E, mxICell> getEdgeToCellMap() 
+    {
         return edgeToCellMap;
     }
 
@@ -135,7 +140,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * Returns Hashmap which maps the visualization mxICells onto their edges.
      * @return {@link #cellToEdgeMap}
      */
-    public HashMap<mxICell, E> getCellToEdgeMap() {
+    public HashMap<mxICell, E> getCellToEdgeMap() 
+    {
         return cellToEdgeMap;
     }
 
@@ -144,7 +150,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * onto their vertices.
      * @return {@link #cellToVertexMap}
      */
-    public HashMap<mxICell, V> getCellToVertexMap() {
+    public HashMap<mxICell, V> getCellToVertexMap() 
+    {
         return cellToVertexMap;
     }
     
@@ -152,12 +159,14 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
   //~ GraphListener Interface --------------------------------------------------
     
     @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e) {
+    public void vertexAdded(GraphVertexChangeEvent<V> e) 
+    {
         addJGraphTVertex(e.getVertex());
     }
 
     @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e) {
+    public void vertexRemoved(GraphVertexChangeEvent<V> e) 
+    {
         
         mxICell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell });
@@ -187,12 +196,14 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
 
     @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
+    public void edgeAdded(GraphEdgeChangeEvent<V, E> e) 
+    {
         addJGraphTEdge(e.getEdge());
     }
 
     @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
+    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e) 
+    {
         removeEdge(e.getEdge());
     }
     
@@ -207,7 +218,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * @param edge
      *            The edge that will be removed
      */
-    private void removeEdge(E edge) {
+    private void removeEdge(E edge) 
+    {
         mxICell cell = edgeToCellMap.remove(edge);
         removeCells(new Object[] { cell });
         
@@ -222,7 +234,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * 
      * @param vertex vertex to be added to the graph
      */
-    private void addJGraphTVertex(V vertex) {
+    private void addJGraphTVertex(V vertex) 
+    {
 
         getModel().beginUpdate();
 
@@ -249,7 +262,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * @param edge edge to be added to the graph. Source and target
      *  vertices are needed.
      */
-    private void addJGraphTEdge(E edge) {
+    private void addJGraphTEdge(E edge) 
+    {
 
         getModel().beginUpdate();
 
@@ -289,7 +303,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * 
      * @param graph the graph to be added to the existing graph.
      */
-    private void insertJGraphT(Graph<V, E> graph) {
+    private void insertJGraphT(Graph<V, E> graph) 
+    {
         
         for (V vertex : graph.vertexSet()) {
             addJGraphTVertex(vertex);
