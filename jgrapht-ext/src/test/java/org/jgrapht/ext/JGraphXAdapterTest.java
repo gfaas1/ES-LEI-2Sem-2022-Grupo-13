@@ -21,7 +21,7 @@ import com.mxgraph.model.mxICell;
 /**
  * Test methods for the class JGraphXAdapter.
  */
-public class JGraphXAdapterTests {
+public class JGraphXAdapterTest {
 
     /**
      * Test scenarios under normal conditions.
@@ -409,3 +409,5 @@ public class JGraphXAdapterTests {
         return set.equals(compareSet);
     }
 }
+
+//End JGraphXAdapterTest.java
