@@ -72,7 +72,7 @@ public class TarjanLowestCommonAncestor<V, E> {
 	    uf.addElement(u);
 	    ancestors.put(u, u);
 	    for (E vEdge : g.edgesOf(u)) {
-		if (g.getEdgeSource(vEdge) == u) {
+		if (g.getEdgeSource(vEdge).equals(u)) {
 		    V v = g.getEdgeTarget(vEdge);
 		    V result = calculate(v);
 		    // fraction horrible because of the recursion
@@ -82,10 +82,10 @@ public class TarjanLowestCommonAncestor<V, E> {
 		    ancestors.put(uf.find(u), u);
 		}
 		black.add(u);
-		if (black.contains(a) && b == u) {
+		if (black.contains(a) && b.equals(u)) {
 		    return ancestors.get(uf.find(a));
 		}
-		if (black.contains(b) && a == u) {
+		if (black.contains(b) && a.equals(u)) {
 		    return ancestors.get(uf.find(b));
 		}
 	    }
