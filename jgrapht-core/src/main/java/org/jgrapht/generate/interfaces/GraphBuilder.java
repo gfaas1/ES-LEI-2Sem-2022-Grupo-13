@@ -1,4 +1,4 @@
-package org.jgrapht.graph.builder.interfaces;
+package org.jgrapht.generate.interfaces;
 
 import org.jgrapht.Graph;
 

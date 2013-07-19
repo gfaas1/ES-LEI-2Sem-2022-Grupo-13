@@ -3,8 +3,8 @@ package org.jgrapht.alg;
 import junit.framework.TestCase;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.WeightedGraph;
+import org.jgrapht.generate.SimpleWeightedBipartiteGraphMatrixGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.builder.SimpleWeightedBipartiteGraphMatrixBuilder;
 import org.jgrapht.util.VertexPair;
 import org.junit.Assert;
 
@@ -79,7 +79,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest extends TestCa
         List<? extends V> second    = secondPartition.subList(0, partitionCardinality);
 
         WeightedGraph<V, WeightedEdge> target =
-            new SimpleWeightedBipartiteGraphMatrixBuilder<V, WeightedEdge>()
+            new SimpleWeightedBipartiteGraphMatrixGenerator<V, WeightedEdge>()
                 .first  (first)
                 .second (second)
                 .weights(costMatrix)

@@ -1,11 +1,11 @@
-package org.jgrapht.graph.builder;
+package org.jgrapht.generate;
 
 
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.List;
 
-public class SimpleWeightedGraphMatrixBuilder<V, E> extends WeightedGraphBuilder<V, E> {
+public class SimpleWeightedGraphMatrixGenerator<V, E> extends WeightedGraphGenerator<V, E> {
 
     protected List<V> vertices;
 
@@ -63,7 +63,7 @@ public class SimpleWeightedGraphMatrixBuilder<V, E> extends WeightedGraphBuilder
 
     }
 
-    public SimpleWeightedGraphMatrixBuilder<V, E> vertices(List<V> vertices) {
+    public SimpleWeightedGraphMatrixGenerator<V, E> vertices(List<V> vertices) {
         this.vertices = vertices;
         return this;
     }

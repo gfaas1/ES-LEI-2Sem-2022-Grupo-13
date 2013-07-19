@@ -1,4 +1,4 @@
-package org.jgrapht.graph.builder;
+package org.jgrapht.generate;
 
 
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -6,7 +6,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleWeightedBipartiteGraphMatrixBuilder<V, E> extends WeightedGraphBuilder<V, E> {
+public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E> extends WeightedGraphGenerator<V, E> {
 
     List<V> first;
 
@@ -58,12 +58,12 @@ public class SimpleWeightedBipartiteGraphMatrixBuilder<V, E> extends WeightedGra
 
     }
 
-    public SimpleWeightedBipartiteGraphMatrixBuilder<V, E> first(List<? extends V> first) {
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(List<? extends V> first) {
         this.first = new ArrayList<V>(first);
         return this;
     }
 
-    public SimpleWeightedBipartiteGraphMatrixBuilder<V, E> second(List<? extends V> second) {
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(List<? extends V> second) {
         this.second = new ArrayList<V>(second);
         return this;
     }
