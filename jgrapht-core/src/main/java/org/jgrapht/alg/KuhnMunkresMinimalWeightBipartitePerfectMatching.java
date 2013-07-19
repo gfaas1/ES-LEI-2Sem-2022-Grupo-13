@@ -33,7 +33,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.interfaces.WeightedMatching;
+import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -57,8 +57,13 @@ import java.util.Set;
  * @author Alexey Kudinkin
  *
  */
-public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E> implements WeightedMatching<V, E> {
+public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E> implements WeightedMatchingAlgorithm<V, E> {
 
+    /**
+     * @param G   target weighted bipartite graph to find matching in
+     * @param S   first vertex partition of the target bipartite graph
+     * @param T   second vertex partition of the target bipartite graph
+     */
     public KuhnMunkresMinimalWeightBipartitePerfectMatching(
         final WeightedGraph<V, E> G,
         List<? extends V> S,
@@ -98,11 +103,6 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E> implements W
 
         return edges;
 
-    }
-
-    @Override
-    public int getSize() {
-        return matching.length;
     }
 
     @Override

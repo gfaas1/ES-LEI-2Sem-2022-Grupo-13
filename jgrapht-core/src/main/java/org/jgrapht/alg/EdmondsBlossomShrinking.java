@@ -38,7 +38,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.Matching;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.util.ArrayUnenforcedSet;
 
 import java.util.*;
@@ -50,7 +50,7 @@ import java.util.*;
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
  */
-public class EdmondsBlossomShrinking<V, E> implements Matching<V, E> {
+public class EdmondsBlossomShrinking<V, E> implements MatchingAlgorithm<V, E> {
 
     // ~ Instance fields
     // --------------------------------------------------------
@@ -79,6 +79,9 @@ public class EdmondsBlossomShrinking<V, E> implements Matching<V, E> {
     // ~ Deprecated Methods
     // ----------------------------------------------------------------
 
+    /**
+     * See `getMatching` as preferred alternative to this one
+     */
     @Deprecated
     public Set<E> findMatch(final UndirectedGraph<V, E> g) {
         return new EdmondsBlossomShrinking<V, E>(g).getMatching();
@@ -92,11 +95,6 @@ public class EdmondsBlossomShrinking<V, E> implements Matching<V, E> {
         if (matching == null)
             matching = findMatch();
         return Collections.unmodifiableSet(matching);
-    }
-
-    @Override
-    public int getSize() {
-        return getMatching().size();
     }
 
     /**
@@ -157,10 +155,6 @@ public class EdmondsBlossomShrinking<V, E> implements Matching<V, E> {
                 V to = graph.getEdgeSource(e);
                 if (to == v)
                     to = graph.getEdgeTarget(e);
-//            for (V to : graph.vertexSet()) {
-//                if (!graph.containsEdge(v, to)) {
-//                    continue;
-//                }
                 if ((base.get(v) == base.get(to)) || (match.get(v) == to)) {
                     continue;
                 }

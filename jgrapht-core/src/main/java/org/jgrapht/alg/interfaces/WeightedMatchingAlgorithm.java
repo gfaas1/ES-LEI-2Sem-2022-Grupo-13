@@ -32,25 +32,20 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.Set;
-
 /**
- * Allows to derive <a href=http://en.wikipedia.org/wiki/Matching_(graph_theory)>matching</a>
- * from given graph
+ * Allows to derive weighted matching from <i>general</i> graph
+ * @see MatchingAlgorithm
  *
- * @param <V>   vertex concept type
- * @param <E>   edge concept type
+ * @param <V>
+ * @param <E>
  */
-public abstract interface Matching<V, E> {
+public interface WeightedMatchingAlgorithm<V, E> extends MatchingAlgorithm<V, E> {
 
-  /**
-   * Returns edges being part of the matching
-   */
-  public Set<E> getMatching();
-
-  /**
-   * Return size of a matching
-   */
-  public int getSize();
+    /**
+     * Returns weight of a matching found
+     *
+     * @return      weight of a matching found
+     */
+    public double getMatchingWeight();
 
 }

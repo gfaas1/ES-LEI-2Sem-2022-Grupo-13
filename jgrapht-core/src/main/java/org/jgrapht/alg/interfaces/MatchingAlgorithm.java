@@ -23,7 +23,7 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  */
 /* -------------------------
- * MinimumSpanningTree.java
+ * MatchingAlgorithm.java
  * -------------------------
  *
  * Original Author:  Alexey Kudinkin
@@ -32,20 +32,20 @@
  */
 package org.jgrapht.alg.interfaces;
 
-/**
- * Allows to derive weighted matching from <i>general</i> graph
- * @see Matching
- *
- * @param <V>
- * @param <E>
- */
-public interface WeightedMatching<V, E> extends Matching<V, E> {
+import java.util.Set;
 
-    /**
-     * Returns weight of a matching found
-     *
-     * @return      weight of a matching found
-     */
-    public double getMatchingWeight();
+/**
+ * Allows to derive <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a>
+ * from given graph
+ *
+ * @param <V>   vertex concept type
+ * @param <E>   edge concept type
+ */
+public abstract interface MatchingAlgorithm<V, E> {
+
+  /**
+   * Returns set of edges making up the matching
+   */
+  public Set<E> getMatching();
 
 }

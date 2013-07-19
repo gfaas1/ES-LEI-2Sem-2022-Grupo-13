@@ -39,7 +39,7 @@ package org.jgrapht.alg;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.Matching;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.Multigraph;
 
 import java.util.*;
@@ -59,7 +59,7 @@ import java.util.*;
  * @author Joris Kinable
  */
 
-public class HopcroftKarpBipartiteMatching<V,E> implements Matching<V, E> {
+public class HopcroftKarpBipartiteMatching<V,E> implements MatchingAlgorithm<V, E> {
 
 	private final UndirectedGraph<V, E> graph;
 	private final Set<V> partition1; //Partitions of bipartite graph
@@ -89,7 +89,7 @@ public class HopcroftKarpBipartiteMatching<V,E> implements Matching<V, E> {
 	private boolean checkInputData(){
 		if(graph instanceof Multigraph)
 			throw new IllegalArgumentException("Multi graphs are not allowed as input, only simple graphs!");
-		//Test the bipartiteness
+		//Test the bipartite-ness
 		Set<V> neighborsSet1=new HashSet<V>();
 		for(V v: partition1)
 			neighborsSet1.addAll(Graphs.neighborListOf(graph, v));
@@ -187,13 +187,10 @@ public class HopcroftKarpBipartiteMatching<V,E> implements Matching<V, E> {
 
 
 
-					if(usedVertices.contains(neighbor) /* || matching.contains(graph.getEdge(vertex, neighbor)) */ )
-
-                        // Vertices placed into odd-layer may not be matched by any other vertices except for the one
-                        // we came from
-
+					if(usedVertices.contains(neighbor))
+            // Vertices placed into odd-layer may not be matched by any other vertices except for the one
+            // we came from
 						continue;
-
 					else{
 						evenLayer.add(neighbor);
 						if(!layeredMap.containsKey(neighbor))
@@ -294,11 +291,6 @@ public class HopcroftKarpBipartiteMatching<V,E> implements Matching<V, E> {
     @Override
 	public Set<E> getMatching() {
 		return Collections.unmodifiableSet(matching);
-	}
-
-    @Override
-	public int getSize(){
-		return matching.size();
 	}
 
 }
