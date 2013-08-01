@@ -34,7 +34,6 @@ public class TarjanLowestCommonAncestor<V, E> {
      * Calculate the LCMs between a set of pairs (<code>a</code> and <code>b</code>) treating <code>start</code> as the
      * root we want to search from, and setting the LCA of each pair in its LCA field
      */
-    @SafeVarargs
     public List<V> calculate(V start, List<LcaRequestResponse<V>> lrr) {
 	return new Worker(lrr).calculate(start);
     }
@@ -54,7 +53,6 @@ public class TarjanLowestCommonAncestor<V, E> {
 	// the two vertex that we want to find the LCA for
 	private List<LcaRequestResponse<V>> lrr;
 
-	@SafeVarargs
 	private Worker(List<LcaRequestResponse<V>> lrr) {
 	    this.lrr = lrr;
 	}
