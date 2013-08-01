@@ -1,5 +1,9 @@
 package org.jgrapht.alg;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.TarjanLowestCommonAncestor.LcaRequestResponse;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -57,10 +61,19 @@ public class TarjanLowestCommonAncestorTest {
 	LcaRequestResponse<String> bg = new LcaRequestResponse<String>("b", "g");
 	LcaRequestResponse<String> ed = new LcaRequestResponse<String>("e", "d");
 	LcaRequestResponse<String> fd = new LcaRequestResponse<String>("f", "d");
-	new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", bg, ed, fd);
+	List<LcaRequestResponse<String>> list = new LinkedList<LcaRequestResponse<String>> ();
+	list.add(bg);
+	list.add(ed);
+	list.add(fd);
+	
+	List<String> result = new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", list);
+	// check that the mutable input parameters have changed
 	Assert.assertEquals("b",bg.getLca());
 	Assert.assertEquals("b",ed.getLca());
 	Assert.assertEquals("d",fd.getLca());
+	// check the returned result is correct
+	Assert.assertEquals(Arrays.asList(new String[]{"b","b","d"}),result);
+	
 	
 	// test it the other way around
 	Assert.assertEquals("d", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "d", "f"));

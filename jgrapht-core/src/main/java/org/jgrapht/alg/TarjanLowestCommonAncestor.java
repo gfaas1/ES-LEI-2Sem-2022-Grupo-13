@@ -25,17 +25,18 @@ public class TarjanLowestCommonAncestor<V, E> {
      * search from.
      */
     public V calculate(V start, V a, V b) {
-	LcaRequestResponse<V> lrr = new LcaRequestResponse<V>(a, b);
-	new Worker(lrr).calculate(start);
-	return lrr.getLca();
+	List<LcaRequestResponse<V>> list = new LinkedList<LcaRequestResponse<V>>();
+	list.add(new LcaRequestResponse<V>(a, b));
+	return calculate(start, list).get(0);
     }
-    
+
     /**
-     * Calculate the LCMs between a set of pairs (<code>a</code> and <code>b</code>) treating <code>start</code> as the root we want to
-     * search from, and setting the LCA of each pair in its LCA field
+     * Calculate the LCMs between a set of pairs (<code>a</code> and <code>b</code>) treating <code>start</code> as the
+     * root we want to search from, and setting the LCA of each pair in its LCA field
      */
-    public void calculate(V start, LcaRequestResponse<V>... lrr) {
-	new Worker(lrr).calculate(start);
+    @SafeVarargs
+    public List<V> calculate(V start, List<LcaRequestResponse<V>> lrr) {
+	return new Worker(lrr).calculate(start);
     }
 
     /* The worker class keeps the state whilst doing calculations. */
@@ -51,9 +52,10 @@ public class TarjanLowestCommonAncestor<V, E> {
 	// instead of u.colour = black we do black.add(u)
 	private Set<V> black = new HashSet<V>();
 	// the two vertex that we want to find the LCA for
-	private LcaRequestResponse<V>[] lrr;
+	private List<LcaRequestResponse<V>> lrr;
 
-	private Worker(LcaRequestResponse<V>... lrr) {
+	@SafeVarargs
+	private Worker(List<LcaRequestResponse<V>> lrr) {
 	    this.lrr = lrr;
 	}
 
@@ -77,7 +79,7 @@ public class TarjanLowestCommonAncestor<V, E> {
 	 *            the starting node (called recursively)
 	 * @return the LCM if found, if not null
 	 */
-	private void calculate(final V u) {
+	private List<V> calculate(final V u) {
 	    uf.addElement(u);
 	    ancestors.put(u, u);
 	    for (E vEdge : g.edgesOf(u)) {
@@ -98,6 +100,11 @@ public class TarjanLowestCommonAncestor<V, E> {
 			}
 		    }
 	    }
+	    List<V> result = new LinkedList<V>();
+	    for (LcaRequestResponse<V> current : lrr) {
+		result.add(current.getLca());
+	    }
+	    return result;
 	}
     }
 
