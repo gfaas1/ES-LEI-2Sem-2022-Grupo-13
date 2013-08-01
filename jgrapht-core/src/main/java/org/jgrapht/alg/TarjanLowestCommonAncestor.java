@@ -25,7 +25,17 @@ public class TarjanLowestCommonAncestor<V, E> {
      * search from.
      */
     public V calculate(V start, V a, V b) {
-	return new Worker(a, b).calculate(start);
+	LcaRequestResponse<V> lrr = new LcaRequestResponse<V>(a, b);
+	new Worker(lrr).calculate(start);
+	return lrr.getLca();
+    }
+    
+    /**
+     * Calculate the LCMs between a set of pairs (<code>a</code> and <code>b</code>) treating <code>start</code> as the root we want to
+     * search from, and setting the LCA of each pair in its LCA field
+     */
+    public void calculate(V start, LcaRequestResponse<V>... lrr) {
+	new Worker(lrr).calculate(start);
     }
 
     /* The worker class keeps the state whilst doing calculations. */
@@ -41,11 +51,10 @@ public class TarjanLowestCommonAncestor<V, E> {
 	// instead of u.colour = black we do black.add(u)
 	private Set<V> black = new HashSet<V>();
 	// the two vertex that we want to find the LCA for
-	private V a, b;
+	private LcaRequestResponse<V>[] lrr;
 
-	private Worker(V a, V b) {
-	    this.a = a;
-	    this.b = b;
+	private Worker(LcaRequestResponse<V>... lrr) {
+	    this.lrr = lrr;
 	}
 
 	/**
@@ -68,28 +77,53 @@ public class TarjanLowestCommonAncestor<V, E> {
 	 *            the starting node (called recursively)
 	 * @return the LCM if found, if not null
 	 */
-	private V calculate(final V u) {
+	private void calculate(final V u) {
 	    uf.addElement(u);
 	    ancestors.put(u, u);
 	    for (E vEdge : g.edgesOf(u)) {
 		if (g.getEdgeSource(vEdge).equals(u)) {
 		    V v = g.getEdgeTarget(vEdge);
-		    V result = calculate(v);
-		    // fraction horrible because of the recursion
-		    if (result != null)
-			return result;
+		    calculate(v);
 		    uf.union(u, v);
 		    ancestors.put(uf.find(u), u);
 		}
 		black.add(u);
-		if (black.contains(a) && b.equals(u)) {
-		    return ancestors.get(uf.find(a));
-		}
-		if (black.contains(b) && a.equals(u)) {
-		    return ancestors.get(uf.find(b));
-		}
+		for (LcaRequestResponse<V> current : lrr)
+		    if (current.getLca() == null) {
+			if (black.contains(current.getA()) && current.getB().equals(u)) {
+			    current.setLca(ancestors.get(uf.find(current.getA())));
+			}
+			if (black.contains(current.getB()) && current.getA().equals(u)) {
+			    current.setLca(ancestors.get(uf.find(current.getB())));
+			}
+		    }
 	    }
-	    return null;
 	}
+    }
+
+    public static class LcaRequestResponse<V> {
+	private V a, b, lca;
+
+	public LcaRequestResponse(V a, V b) {
+	    this.a = a;
+	    this.b = b;
+	}
+
+	public V getA() {
+	    return a;
+	}
+
+	public V getB() {
+	    return b;
+	}
+
+	public V getLca() {
+	    return lca;
+	}
+
+	void setLca(V lca) {
+	    this.lca = lca;
+	}
+
     }
 }

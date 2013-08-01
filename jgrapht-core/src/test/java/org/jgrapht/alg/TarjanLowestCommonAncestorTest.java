@@ -1,6 +1,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.TarjanLowestCommonAncestor.LcaRequestResponse;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.junit.Assert;
@@ -51,6 +52,16 @@ public class TarjanLowestCommonAncestorTest {
 	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "b", "g"));
 	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "e", "d"));
 	Assert.assertEquals("d", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "f", "d"));
+	// now all together in one call
+	
+	LcaRequestResponse<String> bg = new LcaRequestResponse<String>("b", "g");
+	LcaRequestResponse<String> ed = new LcaRequestResponse<String>("e", "d");
+	LcaRequestResponse<String> fd = new LcaRequestResponse<String>("f", "d");
+	new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", bg, ed, fd);
+	Assert.assertEquals("b",bg.getLca());
+	Assert.assertEquals("b",ed.getLca());
+	Assert.assertEquals("d",fd.getLca());
+	
 	// test it the other way around
 	Assert.assertEquals("d", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("a", "d", "f"));
     }
