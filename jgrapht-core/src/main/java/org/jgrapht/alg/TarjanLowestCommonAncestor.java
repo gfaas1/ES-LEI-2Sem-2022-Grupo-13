@@ -51,10 +51,29 @@ public class TarjanLowestCommonAncestor<V, E> {
 	// instead of u.colour = black we do black.add(u)
 	private Set<V> black = new HashSet<V>();
 	// the two vertex that we want to find the LCA for
-	private List<LcaRequestResponse<V>> lrr;
+    private List<LcaRequestResponse<V>> LRR;
+    private Map<V, Set<LcaRequestResponse<V>>> LRRMap;
 
-	private Worker(List<LcaRequestResponse<V>> lrr) {
-	    this.lrr = lrr;
+	private Worker(List<LcaRequestResponse<V>> LRR) {
+        this.LRR    = LRR;
+        this.LRRMap = new HashMap<V, Set<LcaRequestResponse<V>>>();
+
+        for (LcaRequestResponse<V> r : LRR)
+        {
+            // Populate A's response-set
+            Set<LcaRequestResponse<V>> ars = LRRMap.get(r.getA());
+            if (ars == null)
+                LRRMap.put(r.getA(), ars = new HashSet<LcaRequestResponse<V>>());
+
+            ars.add(r);
+
+            // Populate B's response-set
+            Set<LcaRequestResponse<V>> brs = LRRMap.get(r.getB());
+            if (brs == null)
+                LRRMap.put(r.getB(), brs = new HashSet<LcaRequestResponse<V>>());
+
+            brs.add(r);
+        }
 	}
 
 	/**
@@ -81,26 +100,36 @@ public class TarjanLowestCommonAncestor<V, E> {
 	    uf.addElement(u);
 	    ancestors.put(u, u);
 	    for (E vEdge : g.edgesOf(u)) {
-		if (g.getEdgeSource(vEdge).equals(u)) {
-		    V v = g.getEdgeTarget(vEdge);
-		    calculate(v);
-		    uf.union(u, v);
-		    ancestors.put(uf.find(u), u);
-		}
-		black.add(u);
-		for (LcaRequestResponse<V> current : lrr)
-		    if (current.getLca() == null) {
-			if (black.contains(current.getA()) && current.getB().equals(u)) {
-			    current.setLca(ancestors.get(uf.find(current.getA())));
-			}
-			if (black.contains(current.getB()) && current.getA().equals(u)) {
-			    current.setLca(ancestors.get(uf.find(current.getB())));
-			}
-		    }
-	    }
+            if (g.getEdgeSource(vEdge).equals(u)) {
+                V v = g.getEdgeTarget(vEdge);
+                calculate(v);
+                uf.union(u, v);
+                ancestors.put(uf.find(u), u);
+            }
+            black.add(u);
+
+            Set<LcaRequestResponse<V>> uLRR = LRRMap.get(u);
+            if (uLRR != null)
+            {
+                for (Iterator<LcaRequestResponse<V>> irr = uLRR.iterator(); irr.hasNext(); )
+                {
+                    LcaRequestResponse<V> rr = irr.next();
+
+                    if (black.contains(rr.getB()) && rr.getA().equals(u)) {
+                        rr.setLca(ancestors.get(uf.find(rr.getB())));
+                    }
+                    if (black.contains(rr.getA()) && rr.getB().equals(u)) {
+                        rr.setLca(ancestors.get(uf.find(rr.getA())));
+                    }
+
+                    irr.remove();
+                }
+            }
+        }
+
 	    List<V> result = new LinkedList<V>();
-	    for (LcaRequestResponse<V> current : lrr) {
-		result.add(current.getLca());
+	    for (LcaRequestResponse<V> current : LRR) {
+		    result.add(current.getLca());
 	    }
 	    return result;
 	}
