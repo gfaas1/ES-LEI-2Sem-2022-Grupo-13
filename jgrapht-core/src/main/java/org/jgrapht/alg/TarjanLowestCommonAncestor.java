@@ -51,29 +51,19 @@ public class TarjanLowestCommonAncestor<V, E> {
 	// instead of u.colour = black we do black.add(u)
 	private Set<V> black = new HashSet<V>();
 	// the two vertex that we want to find the LCA for
-    private List<LcaRequestResponse<V>> LRR;
-    private Map<V, Set<LcaRequestResponse<V>>> LRRMap;
+	private List<LcaRequestResponse<V>> lrr;
+	private MultiMap<V> lrrMap;
 
-	private Worker(List<LcaRequestResponse<V>> LRR) {
-        this.LRR    = LRR;
-        this.LRRMap = new HashMap<V, Set<LcaRequestResponse<V>>>();
+	private Worker(List<LcaRequestResponse<V>> lrr) {
+	    this.lrr = lrr;
+	    this.lrrMap = new MultiMap<V>();
 
-        for (LcaRequestResponse<V> r : LRR)
-        {
-            // Populate A's response-set
-            Set<LcaRequestResponse<V>> ars = LRRMap.get(r.getA());
-            if (ars == null)
-                LRRMap.put(r.getA(), ars = new HashSet<LcaRequestResponse<V>>());
-
-            ars.add(r);
-
-            // Populate B's response-set
-            Set<LcaRequestResponse<V>> brs = LRRMap.get(r.getB());
-            if (brs == null)
-                LRRMap.put(r.getB(), brs = new HashSet<LcaRequestResponse<V>>());
-
-            brs.add(r);
-        }
+	    // put in the reverse links from a and b entries back to the
+	    // LcaRequestReponse they're contained in
+	    for (LcaRequestResponse<V> r : lrr) {
+		lrrMap.getOrCreate(r.getA()).add(r);
+		lrrMap.getOrCreate(r.getB()).add(r);
+	    }
 	}
 
 	/**
@@ -100,36 +90,32 @@ public class TarjanLowestCommonAncestor<V, E> {
 	    uf.addElement(u);
 	    ancestors.put(u, u);
 	    for (E vEdge : g.edgesOf(u)) {
-            if (g.getEdgeSource(vEdge).equals(u)) {
-                V v = g.getEdgeTarget(vEdge);
-                calculate(v);
-                uf.union(u, v);
-                ancestors.put(uf.find(u), u);
-            }
-            black.add(u);
+		if (g.getEdgeSource(vEdge).equals(u)) {
+		    V v = g.getEdgeTarget(vEdge);
+		    calculate(v);
+		    uf.union(u, v);
+		    ancestors.put(uf.find(u), u);
+		}
+		black.add(u);
 
-            Set<LcaRequestResponse<V>> uLRR = LRRMap.get(u);
-            if (uLRR != null)
-            {
-                for (Iterator<LcaRequestResponse<V>> irr = uLRR.iterator(); irr.hasNext(); )
-                {
-                    LcaRequestResponse<V> rr = irr.next();
-
-                    if (black.contains(rr.getB()) && rr.getA().equals(u)) {
-                        rr.setLca(ancestors.get(uf.find(rr.getB())));
-                    }
-                    if (black.contains(rr.getA()) && rr.getB().equals(u)) {
-                        rr.setLca(ancestors.get(uf.find(rr.getA())));
-                    }
-
-                    irr.remove();
-                }
-            }
-        }
+		Set<LcaRequestResponse<V>> requestsForNodeU = lrrMap.get(u);
+		if (requestsForNodeU != null) {
+		    for (LcaRequestResponse<V> rr : requestsForNodeU) {
+			if (black.contains(rr.getB()) && rr.getA().equals(u)) {
+			    rr.setLca(ancestors.get(uf.find(rr.getB())));
+			}
+			if (black.contains(rr.getA()) && rr.getB().equals(u)) {
+			    rr.setLca(ancestors.get(uf.find(rr.getA())));
+			}
+		    }
+		    // once we've dealt with it - remove it (to save memory?)
+		    lrrMap.remove(u);
+		}
+	    }
 
 	    List<V> result = new LinkedList<V>();
-	    for (LcaRequestResponse<V> current : LRR) {
-		    result.add(current.getLca());
+	    for (LcaRequestResponse<V> current : lrr) {
+		result.add(current.getLca());
 	    }
 	    return result;
 	}
@@ -159,5 +145,14 @@ public class TarjanLowestCommonAncestor<V, E> {
 	    this.lca = lca;
 	}
 
+    }
+
+    @SuppressWarnings("serial")
+    private static final class MultiMap<V> extends HashMap<V, Set<LcaRequestResponse<V>>> {
+	public Set<LcaRequestResponse<V>> getOrCreate(V key) {
+	    if (!containsKey(key))
+		put(key, new HashSet<LcaRequestResponse<V>>());
+	    return get(key);
+	}
     }
 }
