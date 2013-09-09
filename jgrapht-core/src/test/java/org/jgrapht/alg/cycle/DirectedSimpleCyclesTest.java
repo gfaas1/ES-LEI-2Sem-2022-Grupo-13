@@ -23,7 +23,7 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
  */
 /* -------------------------
- * DirectedSimpleCycles.java
+ * DirectedSimpleCyclesTest.java
  * -------------------------
  * (C) Copyright 2013, by Nikolay Ognyanov
  *
