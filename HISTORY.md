@@ -14,7 +14,7 @@ Changes to JGraphT in each version:
 	- Add `DirectedWeightedPseudograph`, and fix 'DirectedMultigraph' contributed by Adam Gouge
 	- More KSP bugfixes (spotted by Sebastian Mueller, fixed by Guillaume Boulmier)
 	- Add `KuhnMunkresMinimalWeightBipartitePerfectMatching` and associated generators+interfaces (contributed by Alexey Kudinkin)
-	- Add cycle enumeration (contributed by Nikolay Ognyanov)
+	- Add cycle enumeration (contributed by Nikolay Ognyanov, originally from http://code.google.com/p/niographs/ )
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.
