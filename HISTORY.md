@@ -15,7 +15,7 @@ Changes to JGraphT in each version:
 	- More KSP bugfixes (spotted by Sebastian Mueller, fixed by Guillaume Boulmier)
 	- Add `KuhnMunkresMinimalWeightBipartitePerfectMatching` and associated generators+interfaces (contributed by Alexey Kudinkin)
 	- Add cycle enumeration (contributed by Nikolay Ognyanov, originally from http://code.google.com/p/niographs/ )
-        - Update `removeAllEdges` to match specification (contributed by Graham Hill)
+	- Update `removeAllEdges` to match specification (contributed by Graham Hill)
 
 
 - **version 0.8.3** (20-Jan-2012): 
