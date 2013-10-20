@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 0.8.4** (under development): 
+- **version 0.9.0** (under development): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter and Owen Jacobson.
 	- Add source/target vertices to edge events to fix sf.net bug 3486775, spotted by Frank Mori Hess.
 	- Add `EdmondsBlossomShrinking` algorithm, contributed by Alejandro R. Lopez del Huerto.
@@ -16,6 +16,7 @@ Changes to JGraphT in each version:
 	- Add `KuhnMunkresMinimalWeightBipartitePerfectMatching` and associated generators+interfaces (contributed by Alexey Kudinkin)
 	- Add cycle enumeration (contributed by Nikolay Ognyanov, originally from http://code.google.com/p/niographs/ )
 	- Update `removeAllEdges` to match specification (contributed by Graham Hill)
+	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
 
 
 - **version 0.8.3** (20-Jan-2012): 

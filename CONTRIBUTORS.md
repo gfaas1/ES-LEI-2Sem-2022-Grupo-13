@@ -57,6 +57,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Adam Gouge
 - Nikolay Ognyanov
 - Graham Hill (AzrgExplorers)
+- Leo Crawford
 
 (if we have missed your name on this list, please email us to get it fixed).
 
