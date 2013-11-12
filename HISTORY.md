@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
 	- Add cycle enumeration (contributed by Nikolay Ognyanov, originally from http://code.google.com/p/niographs/ )
 	- Update `removeAllEdges` to match specification (contributed by Graham Hill)
 	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
+	- Add `JGraphXAdapter`, contributed by Sebastian Hubenschmid
 
 
 - **version 0.8.3** (20-Jan-2012): 
