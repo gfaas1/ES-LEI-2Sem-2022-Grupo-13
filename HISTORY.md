@@ -18,7 +18,7 @@ Changes to JGraphT in each version:
 	- Update `removeAllEdges` to match specification (contributed by Graham Hill)
 	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
 	- Add `JGraphXAdapter`, contributed by Sebastian Hubenschmid and JeanYves Tinevez
-
+	- Add LGPL/EPL dual licensing, coordinated by Oliver Kopp
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.
