@@ -179,6 +179,19 @@
                         <mavenExecutorId>forked-path</mavenExecutorId>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>triemax</groupId>
+                    <artifactId>jalopy-maven</artifactId>
+                    <version>1.9.4-108</version>
+                    <configuration>
+                      <compile>true</compile>
+                      <backup>true</backup>
+                      <force>true</force>
+                      <history>CRC32</history>
+                      <fileFormat>UNIX</fileFormat>
+                      <convention>etc/triemax-jalopy-settings.xml</convention>
+                    </configuration>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
