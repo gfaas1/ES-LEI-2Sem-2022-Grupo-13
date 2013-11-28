@@ -49,7 +49,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<finalName>${project.artifactId}-${project.version}-shade</finalName>
+					<finalName>${project.artifactId}-${project.version}-uber</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

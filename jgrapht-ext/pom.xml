@@ -36,14 +36,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<artifactSet>
-						<includes>
-							<include>net.sf.jgrapht</include>
-						</includes>
-					</artifactSet>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<shadedClassifierName>combined</shadedClassifierName>
-					<finalName>jgrapht-${project.version}-combined</finalName>
+					<finalName>${project.artifactId}-${project.version}-uber</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
