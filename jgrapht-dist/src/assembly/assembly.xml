@@ -48,6 +48,10 @@
 			<source>${basedir}/../license-LGPL.txt</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
+		<file>
+			<source>${basedir}/../license-EPL.txt</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
         </files>
 
 	<fileSets>
@@ -57,6 +61,13 @@
                         <excludes>
                           <exclude>**/target/**</exclude>
                         </excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/../target/site/apidocs</directory>
+			<outputDirectory>/javadoc</outputDirectory>
+                        <includes>
+                          <include>**/*</include>
+                        </includes>
 		</fileSet>
 	</fileSets>
 </assembly>
