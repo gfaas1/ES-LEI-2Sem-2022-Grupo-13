@@ -46,7 +46,7 @@ Please refer to the license for details.
 - `jgrapht-core-x.y.z.jar` core library
 - `jgrapht-demo-x.y.z.jar` demo classes
 - `jgrapht-ext-x.y.z.jar` extensions
-- `jgrapht-ext-x.y.z-combined.jar` all libraries rolled into one
+- `jgrapht-ext-x.y.z-uber.jar` all libraries rolled into one
 - `jgraph-a.b.c.jar` JGraph dependency library
 - `jgraphx-a.b.c.jar` JGraphX dependency library
 - `source/` complete source tree used to build this release
