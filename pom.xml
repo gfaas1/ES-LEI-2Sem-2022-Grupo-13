@@ -28,7 +28,7 @@
 	<scm>
 		<url>https://github.com/jgrapht/jgrapht.git</url>
 		<connection>scm:git:git://github.com/jgrapht/jgrapht.git</connection>
-		<developerConnection>git@github.com:jgrapht/jgrapht.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:jgrapht/jgrapht.git</developerConnection>
 	</scm>
 	<issueManagement>
 		<url>http://sourceforge.net/tracker/?group_id=86459</url>
