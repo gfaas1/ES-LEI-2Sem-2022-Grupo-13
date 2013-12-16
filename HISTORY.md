@@ -3,7 +3,7 @@
 Changes to JGraphT in each version:
 
 - **version 0.9.1** (under development): 
-	- No changes yet.
+	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
@@ -22,7 +22,7 @@ Changes to JGraphT in each version:
 	- Add `TarjanLowestCommonAncestor`, contributed by Leo Crawford
 	- Add `JGraphXAdapter`, contributed by Sebastian Hubenschmid and JeanYves Tinevez
 	- Add LGPL/EPL dual licensing, coordinated by Oliver Kopp
-	- Refactoring for `DirectedAcyclicGraph`, contributed by javierj
+	- Refactoring for `DirectedAcyclicGraph`, contributed by Javier Gutierrez
 
 - **version 0.8.3** (20-Jan-2012): 
 	- fix regression in `DOTExporter` inadvertently introduced by `0.8.2` changes.
