@@ -55,4 +55,12 @@ public class SimpleGraphPathTest
         }
     }
     
+    public void testStartVertex() {
+        assertTrue(path.getStartVertex().equals("v1"));
+    }
+    
+    public void testEndVertex() {
+        assertTrue(path.getEndVertex().equals("v4"));
+    }
+    
 }

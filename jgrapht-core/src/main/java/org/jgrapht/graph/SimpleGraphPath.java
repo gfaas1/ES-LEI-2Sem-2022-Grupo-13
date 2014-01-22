@@ -36,14 +36,13 @@ public class SimpleGraphPath<V, E>
     @Override
     public V getStartVertex()
     {
-        return this.vertices.get(0);
+        return this.getVertexList().get(0);
     }
 
     @Override
     public V getEndVertex()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.getVertexList().get(getVertexList().size() - 1);
     }
 
     @Override
