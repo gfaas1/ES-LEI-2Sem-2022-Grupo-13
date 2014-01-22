@@ -22,13 +22,17 @@ public class SimpleGraphPath<V, E>
     {
         this.graph = simpleGraph;
         this.vertices = vertices;
-        
+
         for (int i = 0; i < getVertexList().size() - 1; i++) {
-            if (getGraph().getEdge(getVertexList().get(i), getVertexList().get(i + 1)) == null) {
-                throw new IllegalArgumentException("The specified vertices do not form a path");
+            if (getGraph().getEdge(
+                getVertexList().get(i),
+                getVertexList().get(i + 1)) == null)
+            {
+                throw new IllegalArgumentException(
+                    "The specified vertices do not form a path");
             }
         }
-        
+
     }
 
     @Override
