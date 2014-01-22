@@ -7,6 +7,10 @@ import java.util.List;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+/**
+ * A vertex-based representation of a simple path. The graph must be simple for
+ * the vertices to uniquely determine a path. See {@link SimpleGraph}
+ */
 public class SimpleGraphPath<V, E>
     implements GraphPath<V, E>
 {
