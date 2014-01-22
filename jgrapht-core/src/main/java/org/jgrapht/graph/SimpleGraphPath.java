@@ -71,6 +71,9 @@ public class SimpleGraphPath<V, E>
         return result;
     }
 
+    /**
+     * @return A list of the vertices that define the path.
+     */
     public List<V> getVertexList()
     {
         return vertices;
