@@ -40,7 +40,7 @@ public class SimpleGraphPathTest
         DefaultEdge[] expectedEdges = {
             graph.getEdge("v1", "v2"),
             graph.getEdge("v2", "v4") };
-        assertEquals(path.getEdgeList(), Arrays.asList(expectedEdges));
+        assertEquals(Arrays.asList(expectedEdges), path.getEdgeList());
     }
     
 }
