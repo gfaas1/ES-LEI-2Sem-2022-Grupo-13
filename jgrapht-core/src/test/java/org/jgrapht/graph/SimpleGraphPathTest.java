@@ -43,4 +43,16 @@ public class SimpleGraphPathTest
         assertEquals(Arrays.asList(expectedEdges), path.getEdgeList());
     }
     
+    public void testInvalidVertexList() {
+        List<String> invalidPath = new ArrayList<String>();
+        invalidPath.add("v1");
+        invalidPath.add("v2");
+        invalidPath.add("v3");
+        try {
+            new SimpleGraphPath<String, DefaultEdge>(graph, invalidPath);
+        } catch (IllegalArgumentException e) {
+            assertTrue();
+        }
+    }
+    
 }
