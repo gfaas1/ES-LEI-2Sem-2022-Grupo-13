@@ -1,11 +1,8 @@
 package org.jgrapht.graph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 
 public class SimpleGraphPathTest
     extends EnhancedTestCase

@@ -1,11 +1,8 @@
 package org.jgrapht.graph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 
 /**
  * A vertex-based representation of a simple path. The graph must be simple for
@@ -88,5 +85,5 @@ public class SimpleGraphPath<V, E>
         }
         return total;
     }
- 
+
 }
