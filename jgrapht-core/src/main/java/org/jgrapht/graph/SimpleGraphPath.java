@@ -18,6 +18,12 @@ public class SimpleGraphPath<V, E>
     private SimpleGraph<V, E> graph;
     private List<V> vertices;
 
+    /**
+     * @param simpleGraph The simple graph where the path is.
+     * @param vertices A list of vertices that make up the path.
+     * @throws IllegalArgumentException if the vertices are not in the path or
+     *         if they do not define a path in the graph.
+     */
     public SimpleGraphPath(SimpleGraph<V, E> simpleGraph, List<V> vertices)
     {
         this.graph = simpleGraph;
