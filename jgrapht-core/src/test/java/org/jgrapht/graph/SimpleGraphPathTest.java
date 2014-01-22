@@ -63,4 +63,8 @@ public class SimpleGraphPathTest
         assertTrue(path.getEndVertex().equals("v4"));
     }
     
+    public void testPathWeight() {
+        assertEquals(2.0, path.getWeight());
+    }
+    
 }

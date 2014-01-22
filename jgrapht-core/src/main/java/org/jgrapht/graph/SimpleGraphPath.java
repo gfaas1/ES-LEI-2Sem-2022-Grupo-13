@@ -82,8 +82,11 @@ public class SimpleGraphPath<V, E>
     @Override
     public double getWeight()
     {
-        // TODO Auto-generated method stub
-        return 0;
+        double total = 0;
+        for (E e : getEdgeList()) {
+            total += getGraph().getEdgeWeight(e);
+        }
+        return total;
     }
-
+ 
 }
