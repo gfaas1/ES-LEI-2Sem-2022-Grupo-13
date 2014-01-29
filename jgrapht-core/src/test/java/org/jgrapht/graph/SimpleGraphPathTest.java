@@ -65,7 +65,7 @@ public class SimpleGraphPathTest
         pathVertices.add("v2");
         pathVertices.add("v4");
         
-        path = new SimpleGraphPath<String, DefaultEdge>(graph, pathVertices);
+        path = new SimpleGraphPath<String, DefaultEdge>(graph, pathVertices, 1);
     }
 
     public void testEdgeList()
@@ -82,7 +82,7 @@ public class SimpleGraphPathTest
         invalidPath.add("v2");
         invalidPath.add("v3");
         try {
-            new SimpleGraphPath<String, DefaultEdge>(graph, invalidPath);
+            new SimpleGraphPath<String, DefaultEdge>(graph, invalidPath, 1);
             
         } catch (IllegalArgumentException e) {
             assertTrue();
@@ -98,7 +98,7 @@ public class SimpleGraphPathTest
     }
     
     public void testPathWeight() {
-        assertEquals(2.0, path.getWeight());
+        assertEquals(1.0, path.getWeight());
     }
     
 }

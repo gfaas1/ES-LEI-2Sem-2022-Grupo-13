@@ -50,6 +50,8 @@ public class SimpleGraphPath<V, E>
 
     private SimpleGraph<V, E> graph;
     private List<V> vertices;
+    private List<E> edges;
+    private double weight;
 
     /**
      * @param simpleGraph The simple graph where the path is.
@@ -57,16 +59,21 @@ public class SimpleGraphPath<V, E>
      * @throws IllegalArgumentException if the vertices are not in the path or
      *         if they do not define a path in the graph.
      */
-    public SimpleGraphPath(SimpleGraph<V, E> simpleGraph, List<V> vertices)
+    public SimpleGraphPath(SimpleGraph<V, E> simpleGraph, List<V> vertices, double weight)
     {
         this.graph = simpleGraph;
         this.vertices = vertices;
+        this.edges = new ArrayList<E>();
+        this.weight = weight;
 
         for (int i = 0; i < getVertexList().size() - 1; i++) {
-            if (getGraph().getEdge(
+            E currentEdge = getGraph().getEdge(
                 getVertexList().get(i),
-                getVertexList().get(i + 1)) == null)
+                getVertexList().get(i + 1));
+            if (getGraph().containsEdge(currentEdge))
             {
+                edges.add(currentEdge);
+            } else {
                 throw new IllegalArgumentException(
                     "The specified vertices do not form a path");
             }
@@ -95,13 +102,7 @@ public class SimpleGraphPath<V, E>
     @Override
     public List<E> getEdgeList()
     {
-        List<E> result = new ArrayList<E>();
-        for (int i = 0; i < getVertexList().size() - 1; i++) {
-            result.add(this.getGraph().getEdge(
-                getVertexList().get(i),
-                getVertexList().get(i + 1)));
-        }
-        return result;
+        return this.edges;
     }
 
     /**
@@ -109,17 +110,13 @@ public class SimpleGraphPath<V, E>
      */
     public List<V> getVertexList()
     {
-        return vertices;
+        return this.vertices;
     }
 
     @Override
     public double getWeight()
     {
-        double total = 0;
-        for (E e : getEdgeList()) {
-            total += getGraph().getEdgeWeight(e);
-        }
-        return total;
+        return weight;
     }
 
 }
