@@ -1,5 +1,6 @@
 package org.jgrapht.alg;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -70,7 +71,7 @@ public class NaiveLcaFinderTest {
     
     @Test
     public void testLoops() {
-	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
 	g.addVertex("b");
@@ -101,7 +102,7 @@ public class NaiveLcaFinderTest {
     
     @Test
     public void testArrivalOrder() {
-	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
 	g.addVertex("a");
 	g.addVertex("b");
