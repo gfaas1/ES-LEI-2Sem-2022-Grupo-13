@@ -40,7 +40,7 @@ import org.jgrapht.Graph;
 
 public class NaiveLcaFinder<V, E> {
 
-    private Graph<V, E> graph;
+    private DirectedGraph<V, E> graph;
 
     /**
      * Find the Lowest Common Ancestor of a directed graph.
