@@ -134,7 +134,7 @@ public class NaiveLcaFinder<V, E> {
     private Set<V> allParents(Set<V> vertexSet) {
 	HashSet<V> result = new HashSet<V>();
 	for (V e : vertexSet) {
-	    for (E edge : graph.edgesOf(e)) {
+	    for (E edge : graph.incomingEdgesOf(e)) {
 		if (graph.getEdgeTarget(edge).equals(e))
 		    result.add(graph.getEdgeSource(edge));
 	    }
