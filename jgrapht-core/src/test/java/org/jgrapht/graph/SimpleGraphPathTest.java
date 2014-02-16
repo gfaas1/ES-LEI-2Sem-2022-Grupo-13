@@ -83,7 +83,16 @@ public class SimpleGraphPathTest
         invalidPath.add("v3");
         try {
             new SimpleGraphPath<String, DefaultEdge>(graph, invalidPath, 1);
-            
+        } catch (IllegalArgumentException e) {
+            assertTrue();
+        }
+    }
+    
+    public void testSingleVertexList() {
+        List<String> invalidPath = new ArrayList<String>();
+        invalidPath.add("v1");
+        try {
+            new SimpleGraphPath<String, DefaultEdge>(graph, invalidPath, 1);
         } catch (IllegalArgumentException e) {
             assertTrue();
         }

@@ -65,6 +65,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Javier Gutierrez (javierj)
 - Nicolas Fortin
 - Peter Goldstein
+- Rodrigo Lopez Dato
 
 (if we have missed your name on this list, please email us to get it fixed).
 

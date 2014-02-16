@@ -67,11 +67,16 @@ public class SimpleGraphPath<V, E>
         this.edges = new ArrayList<E>();
         this.weight = weight;
 
+        if (vertices.size() < 2) {
+            throw new IllegalArgumentException(
+                "At least two vertices are required to form a path");
+        }
+        
         for (int i = 0; i < getVertexList().size() - 1; i++) {
             E currentEdge = getGraph().getEdge(
                 getVertexList().get(i),
                 getVertexList().get(i + 1));
-            if (getGraph().containsEdge(currentEdge))
+            if (currentEdge != null)
             {
                 edges.add(currentEdge);
             } else {
