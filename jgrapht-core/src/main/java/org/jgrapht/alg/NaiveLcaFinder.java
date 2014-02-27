@@ -79,17 +79,30 @@ public class NaiveLcaFinder<V, E> {
     }
 
     /**
-     * Return the LCA of a and b
+     * Return the first found LCA of a and b
      * 
      * @param a
      *            the first element to find LCA for
      * @param b
      *            the other element to find the LCA for
-     * @return the LCA of a and b, or null if there is no LCA.
+     * @return the first found LCA of a and b, or null if there is no LCA.
      */
     public V findLca(V a, V b) {
 	return findLca(Collections.singleton(a), Collections.singleton(b), new LinkedHashSet<V>(),
 		new LinkedHashSet<V>());
+    }
+    
+    /**
+     * Return all the LCA of a and b. Currently not implemented
+     * 
+     * @param a
+     *            the first element to find LCA for
+     * @param b
+     *            the other element to find the LCA for
+     * @return the set of all LCA of a and b, or empty set if there is no LCA.
+     */
+    public V findLcas(V a, V b) {
+	throw new UnsupportedOperationException("findLcas has not yet been implemented");
     }
 
     /**
