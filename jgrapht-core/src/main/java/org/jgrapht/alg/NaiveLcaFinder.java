@@ -101,7 +101,7 @@ public class NaiveLcaFinder<V, E> {
      *            the other element to find the LCA for
      * @return the set of all LCA of a and b, or empty set if there is no LCA.
      */
-    public V findLcas(V a, V b) {
+    public Set<V> findLcas(V a, V b) {
 	throw new UnsupportedOperationException("findLcas has not yet been implemented");
     }
 
