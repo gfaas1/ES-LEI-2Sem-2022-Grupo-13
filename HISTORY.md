@@ -11,6 +11,7 @@ Changes to JGraphT in each version:
 	- Make getEdgeWeight throw NPE on null edge, suggested by Joris Kinable
 	- Clarify that shortest path length is weighted, per gjafachini
 	- Add DAG constructor that takes an edge factory, and make TarjanLCA constructor public, contributed by Anders Wallgren
+	- Fixed rounding error in graph generation, contributed by Siarhei
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
