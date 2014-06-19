@@ -104,7 +104,8 @@ public class HawickJamesSimpleCycles<V, E> implements
 
 		B = new ArrayList[nVertices];
 		for (int i = 0; i < nVertices; i++) {
-			B[i] = new ArrayList<Integer>(nVertices);
+			//B[i] = new ArrayList<Integer>(nVertices);
+			B[i] = new ArrayList<Integer>();
 		}
 
 		iToV = (V[]) graph.vertexSet().toArray();
