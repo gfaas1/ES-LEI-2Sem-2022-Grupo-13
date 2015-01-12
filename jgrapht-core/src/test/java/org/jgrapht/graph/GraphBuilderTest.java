@@ -92,8 +92,9 @@ public class GraphBuilderTest
 
     public void testAddGraph() {
         Graph<String, DefaultEdge> g1 =
-                new DirectedGraphBuilder<String, DefaultEdge, DefaultDirectedGraph<String, DefaultEdge>>
-                (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                DefaultDirectedGraph.<String, DefaultEdge>builder(DefaultEdge.class)
+//                new DirectedGraphBuilder<String, DefaultEdge, DefaultDirectedGraph<String, DefaultEdge>>
+//                (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
                 .addVertex(v1)
                 .addEdge(v2, v3)
                 .buildUnmodifiable();

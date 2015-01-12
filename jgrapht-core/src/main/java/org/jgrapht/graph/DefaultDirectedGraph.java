@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -77,6 +78,21 @@ public class DefaultDirectedGraph<V, E>
     public DefaultDirectedGraph(EdgeFactory<V, E> ef)
     {
         super(ef, false, true);
+    }
+    
+
+    public static <V, E> DirectedGraphBuilderBase
+            <V, E, ? extends DefaultDirectedGraph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V,E>>(
+                new DefaultDirectedGraph<V, E>(edgeClass));
+    }
+
+    public static <V, E> DirectedGraphBuilderBase
+            <V, E, ? extends DefaultDirectedGraph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V,E>>(
+                new DefaultDirectedGraph<V, E>(ef));
     }
 }
 

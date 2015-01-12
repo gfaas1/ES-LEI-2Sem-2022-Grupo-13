@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -76,6 +77,21 @@ public class Multigraph<V, E>
     public Multigraph(EdgeFactory<V, E> ef)
     {
         super(ef, true, false);
+    }
+    
+
+    public static <V, E> UndirectedGraphBuilderBase
+            <V, E, ? extends Multigraph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new UndirectedGraphBuilder<V, E, Multigraph<V,E>>(
+                new Multigraph<V, E>(edgeClass));
+    }
+
+    public static <V, E> UndirectedGraphBuilderBase
+            <V, E, ? extends Multigraph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new UndirectedGraphBuilder<V, E, Multigraph<V,E>>(
+                new Multigraph<V, E>(ef));
     }
 }
 

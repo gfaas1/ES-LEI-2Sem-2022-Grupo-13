@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -74,6 +75,22 @@ public class SimpleDirectedWeightedGraph<V, E>
     public SimpleDirectedWeightedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+    }
+    
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends SimpleDirectedWeightedGraph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, SimpleDirectedWeightedGraph<V, E>>(
+                new SimpleDirectedWeightedGraph<V, E>(edgeClass));
+    }
+
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends SimpleDirectedWeightedGraph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, SimpleDirectedWeightedGraph<V, E>>(
+                new SimpleDirectedWeightedGraph<V, E>(ef));
     }
 }
 

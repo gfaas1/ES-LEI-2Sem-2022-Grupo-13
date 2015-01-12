@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -75,6 +76,22 @@ public class DirectedWeightedMultigraph<V, E>
     public DirectedWeightedMultigraph(EdgeFactory<V, E> ef)
     {
         super(ef);
+    }
+    
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends DirectedWeightedMultigraph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, DirectedWeightedMultigraph<V, E>>(
+                new DirectedWeightedMultigraph<V, E>(edgeClass));
+    }
+
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends DirectedWeightedMultigraph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, DirectedWeightedMultigraph<V, E>>(
+                new DirectedWeightedMultigraph<V, E>(ef));
     }
 }
 

@@ -38,6 +38,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -71,6 +72,21 @@ public class DirectedPseudograph<V, E>
     public DirectedPseudograph(EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
+    }
+    
+
+    public static <V, E> DirectedGraphBuilderBase
+            <V, E, ? extends DirectedPseudograph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new DirectedGraphBuilder<V, E, DirectedPseudograph<V,E>>(
+                new DirectedPseudograph<V, E>(edgeClass));
+    }
+
+    public static <V, E> DirectedGraphBuilderBase
+            <V, E, ? extends DirectedPseudograph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new DirectedGraphBuilder<V, E, DirectedPseudograph<V,E>>(
+                new DirectedPseudograph<V, E>(ef));
     }
 }
 
