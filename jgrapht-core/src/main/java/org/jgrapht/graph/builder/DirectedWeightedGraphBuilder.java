@@ -43,7 +43,7 @@ import org.jgrapht.*;
  * If you want to extend this class, see {@link DirectedWeightedGraphBuilderBase}.
  */
 public final class DirectedWeightedGraphBuilder
-        <V, E, G extends WeightedGraph<V, E> & DirectedGraph<V, E>>
+        <V, E, G extends DirectedGraph<V, E> & WeightedGraph<V, E>>
         extends DirectedWeightedGraphBuilderBase<V, E, G,
                 DirectedWeightedGraphBuilder<V, E, G>>
 {

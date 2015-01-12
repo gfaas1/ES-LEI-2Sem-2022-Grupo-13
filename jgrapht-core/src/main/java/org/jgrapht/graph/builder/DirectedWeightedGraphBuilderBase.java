@@ -37,15 +37,14 @@
 package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
 
 /**
  * Base class for {@link DirectedWeightedGraphBuilder} for extending.
  */
 public abstract class DirectedWeightedGraphBuilderBase
-        <V, E, G extends WeightedGraph<V, E> & DirectedGraph<V, E>,
+        <V, E, G extends DirectedGraph<V, E> & WeightedGraph<V, E>,
                 B extends DirectedWeightedGraphBuilderBase<V, E, G, B>>
-        extends AbstractWeightedGraphBuilder<V, E, G, B>
+        extends DirectedGraphBuilderBase<V, E, G, B>
 {
 
 
@@ -62,9 +61,21 @@ public abstract class DirectedWeightedGraphBuilderBase
     }
 
 
-    @Override
-    public UnmodifiableDirectedGraph<V, E> buildUnmodifiable() {
-        return new UnmodifiableDirectedGraph<V, E>(this.graph);
+    /**
+     * Adds an weighted edge to the graph being built.
+     * The source and target vertices are added to the graph,
+     * if not already included.
+     * 
+     * @param source source vertex of the edge.
+     * @param target target vertex of the edge.
+     * @param weight weight of the edge. 
+     * @return this builder object
+     * @see Graphs#addEdgeWithVertices(Graph, Object, Object, double)
+     */
+    public B addEdge(V source, V target, double weight)
+    {
+        Graphs.addEdgeWithVertices(this.graph, source, target, weight);
+        return this.self();
     }
 }
 

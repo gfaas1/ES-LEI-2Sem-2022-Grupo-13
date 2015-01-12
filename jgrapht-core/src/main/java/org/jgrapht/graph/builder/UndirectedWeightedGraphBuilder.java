@@ -43,7 +43,7 @@ import org.jgrapht.*;
  * If you want to extend this class, see {@link UndirectedWeightedGraphBuilderBase}.
  */
 public final class UndirectedWeightedGraphBuilder
-        <V, E, G extends WeightedGraph<V, E> & UndirectedGraph<V, E>>
+        <V, E, G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>
         extends UndirectedWeightedGraphBuilderBase<V, E, G,
                 UndirectedWeightedGraphBuilder<V, E, G>>
 {
