@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -75,6 +76,21 @@ public class Pseudograph<V, E>
     public Pseudograph(EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
+    }
+    
+
+    public static <V, E> UndirectedGraphBuilderBase
+            <V, E, ? extends Pseudograph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new UndirectedGraphBuilder<V, E, Pseudograph<V,E>>(
+                new Pseudograph<V, E>(edgeClass));
+    }
+
+    public static <V, E> UndirectedGraphBuilderBase
+            <V, E, ? extends Pseudograph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new UndirectedGraphBuilder<V, E, Pseudograph<V,E>>(
+                new Pseudograph<V, E>(ef));
     }
 }
 

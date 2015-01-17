@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -75,6 +76,22 @@ public class DirectedWeightedPseudograph<V, E>
     public DirectedWeightedPseudograph(EdgeFactory<V, E> ef)
     {
         super(ef);
+    }
+    
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends DirectedWeightedPseudograph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, DirectedWeightedPseudograph<V, E>>(
+                new DirectedWeightedPseudograph<V, E>(edgeClass));
+    }
+
+    public static <V, E> DirectedWeightedGraphBuilderBase
+            <V, E, ? extends DirectedWeightedPseudograph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new DirectedWeightedGraphBuilder
+                <V, E, DirectedWeightedPseudograph<V, E>>(
+                new DirectedWeightedPseudograph<V, E>(ef));
     }
 }
 

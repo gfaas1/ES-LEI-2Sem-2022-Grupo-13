@@ -39,6 +39,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.builder.*;
 
 
 /**
@@ -76,6 +77,22 @@ public class WeightedPseudograph<V, E>
     public WeightedPseudograph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+    }
+    
+    public static <V, E> UndirectedWeightedGraphBuilderBase
+            <V, E, ? extends WeightedPseudograph<V,E>, ?>
+            builder(Class<? extends E> edgeClass) {
+        return new UndirectedWeightedGraphBuilder
+                <V, E, WeightedPseudograph<V, E>>(
+                new WeightedPseudograph<V, E>(edgeClass));
+    }
+
+    public static <V, E> UndirectedWeightedGraphBuilderBase
+            <V, E, ? extends WeightedPseudograph<V,E>, ?>
+            builder(EdgeFactory<V, E> ef) {
+        return new UndirectedWeightedGraphBuilder
+                <V, E, WeightedPseudograph<V, E>>(
+                new WeightedPseudograph<V, E>(ef));
     }
 }
 
