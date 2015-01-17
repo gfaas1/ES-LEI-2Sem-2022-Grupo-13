@@ -16,6 +16,7 @@ Changes to JGraphT in each version:
 	- Use annotations to simplify test suites, contributed by Jan Altenbernd
 	- Add missing Override/Deprecated annotations, contributed by Jan Altenbernd
 	- Update maven-compiler-plugin version, contributed by Andrew Chen
+	- Add builder package, contributed by Andrew Chen
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
