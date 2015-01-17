@@ -69,6 +69,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Anders Wallgren
 - Siarhei
 - Jan Altenbernd
+- Andrew Chen
 
 (if we have missed your name on this list, please email us to get it fixed).
 
