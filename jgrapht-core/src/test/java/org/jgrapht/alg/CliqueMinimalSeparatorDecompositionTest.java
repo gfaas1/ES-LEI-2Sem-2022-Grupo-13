@@ -40,10 +40,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.Subgraph;
 
 import junit.framework.TestCase;
 
@@ -78,6 +82,69 @@ public class CliqueMinimalSeparatorDecompositionTest
         // validate graph
         assertEquals(4, g.vertexSet().size());
         assertEquals(5, g.edgeSet().size());
+
+        CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd = 
+            new CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge>(g);
+        // check triangulation
+        assertEquals(4, cmsd.getMinimalTriangulation().vertexSet().size());
+        assertEquals(5, cmsd.getMinimalTriangulation().edgeSet().size());
+
+        // check atoms
+        boolean atom1found = false, atom2found = false;
+        for (Set<Integer> atom : cmsd.getAtoms()) {
+            if (atom.equals(new HashSet<Integer>(
+                Arrays.asList(new Integer[] { 1, 2, 3 }))))
+            {
+                atom1found = true;
+            } else if (atom.equals(new HashSet<Integer>(
+                Arrays.asList(new Integer[] { 2, 3, 4 }))))
+            {
+                atom2found = true;
+            }
+        }
+        assertEquals(2, cmsd.getAtoms().size());
+        assertTrue(atom1found);
+        assertTrue(atom2found);
+
+        // check seprators
+        boolean separator1found = false;
+        for (Set<Integer> separator : cmsd.getSeparators()) {
+            if (separator.equals(new HashSet<Integer>(
+                Arrays.asList(new Integer[] { 2, 3 }))))
+            {
+                separator1found = true;
+            }
+        }
+        assertEquals(1, cmsd.getSeparators().size());
+        assertTrue(separator1found);
+    }
+    /**
+     * Test pseudo graph based on:<br>
+     * <code>o-o<br>
+     * |/|<br>
+     * o-o<br></code>
+     */
+    public void testPseudograph1()
+    {
+        Pseudograph<Integer, DefaultEdge> g = 
+            new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+        g.addVertex(4);
+        g.addEdge(1, 1);
+        g.addEdge(1, 2);
+        g.addEdge(2, 2);
+        g.addEdge(2, 3);
+        g.addEdge(2, 3);
+        g.addEdge(3, 4);
+        g.addEdge(1, 3);
+        g.addEdge(2, 4);
+        g.addEdge(2, 4);
+        g.addEdge(2, 4);
+        // validate graph
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd = 
             new CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge>(g);
@@ -564,9 +631,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             // check seprators
             for (Set<Integer> separator : cmsd.getSeparators()) {
                 assertTrue(separator.size() >= 1);
-                assertTrue(CliqueMinimalSeparatorDecomposition.isClique(
-                    g,
-                    separator));
+                assertTrue(isClique(g, separator));
             }
             assertTrue(cmsd.getSeparators().size() < cmsd.getAtoms().size());
 
@@ -579,6 +644,27 @@ public class CliqueMinimalSeparatorDecompositionTest
                     .intValue() >= 2);
             }
         }
+    }
+
+    /**
+     * Check whether the subgraph of <code>graph</code> induced by the given
+     * <code>vertices</code> is complete, i.e. a clique.
+     * 
+     * @param graph the graph.
+     * @param vertices the vertices to induce the subgraph from.
+     * @return true if the induced subgraph is a clique.
+     */
+    private static <V, E> boolean isClique(
+        UndirectedGraph<V, E> graph,
+        Set<V> vertices)
+    {
+        for (V v1 : vertices) {
+            for (V v2 : vertices) {
+                if (v1 != v2 && graph.getEdge(v1, v2) == null)
+                    return false;
+            }
+        }
+        return true;
     }
 
 }
