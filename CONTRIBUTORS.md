@@ -70,6 +70,10 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Siarhei
 - Jan Altenbernd
 - Andrew Chen
+- Florian Buenzli
+- Thomas Tschager
+- Tomas Hruz
+- Philipp Hoppen
 
 (if we have missed your name on this list, please email us to get it fixed).
 
