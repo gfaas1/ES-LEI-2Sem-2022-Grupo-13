@@ -74,6 +74,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Thomas Tschager
 - Tomas Hruz
 - Philipp Hoppen
+- Chris Wensel
 
 (if we have missed your name on this list, please email us to get it fixed).
 
