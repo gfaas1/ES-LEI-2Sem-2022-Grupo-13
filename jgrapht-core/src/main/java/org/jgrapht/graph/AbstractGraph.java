@@ -60,7 +60,7 @@ import org.jgrapht.util.*;
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
 {
-    
+
 
     /**
      * Construct a new empty graph object.
@@ -69,7 +69,7 @@ public abstract class AbstractGraph<V, E>
     {
     }
 
-    
+
 
     /**
      * @see Graph#containsEdge(Object, Object)
@@ -160,7 +160,7 @@ public abstract class AbstractGraph<V, E>
         } else if (v == null) {
             throw new NullPointerException();
         } else {
-            throw new IllegalArgumentException("no such vertex in graph");
+            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
         }
     }
 
