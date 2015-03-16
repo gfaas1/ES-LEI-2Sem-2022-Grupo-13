@@ -65,7 +65,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * Construct a new empty graph object.
      */
-    public AbstractGraph()
+    protected AbstractGraph()
     {
     }
 

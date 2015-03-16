@@ -93,7 +93,7 @@ public abstract class AbstractBaseGraph<V, E>
 
 
     /**
-     * Construct a new pseudograph. The pseudograph can either be directed or
+     * Construct a new graph. The graph can either be directed or
      * undirected, depending on the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
@@ -103,7 +103,7 @@ public abstract class AbstractBaseGraph<V, E>
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
      */
-    public AbstractBaseGraph(
+    protected AbstractBaseGraph(
         EdgeFactory<V, E> ef,
         boolean allowMultipleEdges,
         boolean allowLoops)
