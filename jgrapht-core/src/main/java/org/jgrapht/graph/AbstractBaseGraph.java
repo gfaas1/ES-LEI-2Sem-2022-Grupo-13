@@ -70,13 +70,13 @@ public abstract class AbstractBaseGraph<V, E>
         Cloneable,
         Serializable
 {
-    
+
 
     private static final long serialVersionUID = -1263088497616142427L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
 
-    
+
 
     boolean allowingLoops;
 
@@ -90,7 +90,7 @@ public abstract class AbstractBaseGraph<V, E>
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
-    
+
 
     /**
      * Construct a new pseudograph. The pseudograph can either be directed or
@@ -122,7 +122,7 @@ public abstract class AbstractBaseGraph<V, E>
         this.edgeSetFactory = new ArrayListFactory<V, E>();
     }
 
-    
+
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -534,16 +534,22 @@ public abstract class AbstractBaseGraph<V, E>
     private Specifics createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
-            return new DirectedSpecifics();
+            return createDirectedSpecifics();
         } else if (this instanceof UndirectedGraph<?, ?>) {
-            return new UndirectedSpecifics();
+            return createUndirectedSpecifics();
         } else {
             throw new IllegalArgumentException(
                 "must be instance of either DirectedGraph or UndirectedGraph");
         }
     }
 
-    
+    protected UndirectedSpecifics createUndirectedSpecifics() {
+        return new UndirectedSpecifics();
+    }
+
+    protected DirectedSpecifics createDirectedSpecifics() {
+        return new DirectedSpecifics();
+    }
 
     /**
      * .
@@ -678,7 +684,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @author Barak Naveh
      */
-    private static class DirectedEdgeContainer<VV, EE>
+    protected static class DirectedEdgeContainer<VV, EE>
         implements Serializable
     {
         private static final long serialVersionUID = 7494242245729767106L;
@@ -768,7 +774,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @author Barak Naveh
      */
-    private class DirectedSpecifics
+    protected class DirectedSpecifics
         extends Specifics
         implements Serializable
     {
@@ -776,8 +782,15 @@ public abstract class AbstractBaseGraph<V, E>
         private static final String NOT_IN_DIRECTED_GRAPH =
             "no such operation in a directed graph";
 
-        private Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected =
-            new LinkedHashMap<V, DirectedEdgeContainer<V, E>>();
+        protected Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected;
+
+        public DirectedSpecifics() {
+            this(new LinkedHashMap<V, DirectedEdgeContainer<V, E>>());
+        }
+
+        public DirectedSpecifics(Map<V, DirectedEdgeContainer<V, E>> vertexMap) {
+            this.vertexMapDirected = vertexMap;
+        }
 
         @Override
         public void addVertex(V v)
@@ -1042,7 +1055,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @author Barak Naveh
      */
-    private class UndirectedSpecifics
+    protected class UndirectedSpecifics
         extends Specifics
         implements Serializable
     {
@@ -1050,8 +1063,15 @@ public abstract class AbstractBaseGraph<V, E>
         private static final String NOT_IN_UNDIRECTED_GRAPH =
             "no such operation in an undirected graph";
 
-        private Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected =
-            new LinkedHashMap<V, UndirectedEdgeContainer<V, E>>();
+        private Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected;
+
+        public UndirectedSpecifics() {
+            this(new LinkedHashMap<V, UndirectedEdgeContainer<V, E>>());
+        }
+
+        public UndirectedSpecifics(Map<V, UndirectedEdgeContainer<V, E>> vertexMap) {
+            this.vertexMapUndirected = vertexMap;
+        }
 
         @Override
         public void addVertex(V v)

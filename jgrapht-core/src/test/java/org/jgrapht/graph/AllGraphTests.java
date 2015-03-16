@@ -58,7 +58,8 @@ import org.junit.runners.*;
     SerializationTest.class,
     SimpleDirectedGraphTest.class,
     SimpleGraphPathTest.class,
-    SubgraphTest.class
+    SubgraphTest.class,
+    SimpleIdentityDirectedGraphTest.class
 })
 public final class AllGraphTests
 {
