@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
 	- Add builder package, contributed by Andrew Chen
 	- Add CliqueMinimalSeparatorDecomposition, contributed by Florian Buenzli, Thomas Tschager, Tomas Hruz, and Philipp Hoppen
         - Include vertex #toString value in excn message, contributed by Chris Wensel
+        - Open up Specifics to allow for custom backing containers, contributed by Chris Wensel
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
