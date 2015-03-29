@@ -33,18 +33,9 @@
  * -------
  * 18-Jun-2014 : Initial revision (NO);
  */
-package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.cycle.DirectedSimpleCycles;
+import java.util.*;
+import org.jgrapht.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by
