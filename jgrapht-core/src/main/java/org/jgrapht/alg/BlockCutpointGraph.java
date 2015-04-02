@@ -46,7 +46,8 @@ import org.jgrapht.graph.*;
 /**
  * Definition of a <a href="http://mathworld.wolfram.com/Block.html">block of a
  * graph</a> in MathWorld.<br>
- * </br> Definition and lemma taken from the article <a
+ *
+ * Definition and lemma taken from the article <a
  * href="http://www.albany.edu/~goel/publications/rosencrantz2005.pdf">
  * Structure-Based Resilience Metrics for Service-Oriented Networks</a>:
  *

@@ -41,11 +41,13 @@ import org.jgrapht.util.*;
 
 /**
  * For permutation like this:
+ *<ol>
  * <li>1,2 are the same eq.group (numbers)
  * <li>a,b are og the same eq.group (letters)
  * <li>'$' is of its own eq. group (signs) Let the order of the group be
  * (arbitrary): signs,numbers,letters (note that for performance reasons, this
  * arbitrary order is the worst! see Performance section below)
+ *</ol>
  *
  * <p>These are the possible compound perm: [$,1,2,a,b,c]
  *

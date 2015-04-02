@@ -72,7 +72,7 @@ public interface DirectedSimpleCycles<V, E>
     void setGraph(DirectedGraph<V, E> graph);
 
     /**
-     * Finds the simple cycles of the graph.<br/>
+     * Finds the simple cycles of the graph.<br>
      * Note that the full algorithm is executed on every call since the graph
      * may have changed between calls.
      *

@@ -72,7 +72,7 @@ public interface UndirectedCycleBase<V, E>
     void setGraph(UndirectedGraph<V, E> graph);
 
     /**
-     * Finds a cycle base of the graph.<br/>
+     * Finds a cycle base of the graph.<br>
      * Note that the full algorithm is executed on every call since the graph
      * may have changed between calls.
      *

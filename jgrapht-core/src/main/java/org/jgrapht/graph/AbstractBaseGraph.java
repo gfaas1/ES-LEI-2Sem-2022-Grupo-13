@@ -859,9 +859,6 @@ public abstract class AbstractBaseGraph<V, E>
             return null;
         }
 
-        /**
-         * @see AbstractBaseGraph#addEdgeToTouchingVertices(Edge)
-         */
         @Override
         public void addEdgeToTouchingVertices(E e)
         {
@@ -911,7 +908,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         /**
-         * @see DirectedGraph#inDegree(Object)
+         * @see DirectedGraph#inDegreeOf(Object)
          */
         @Override
         public int inDegreeOf(V vertex)
@@ -920,7 +917,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         /**
-         * @see DirectedGraph#incomingEdges(Object)
+         * @see DirectedGraph#incomingEdgesOf(Object)
          */
         @Override
         public Set<E> incomingEdgesOf(V vertex)
@@ -929,7 +926,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         /**
-         * @see DirectedGraph#outDegree(Object)
+         * @see DirectedGraph#outDegreeOf(Object)
          */
         @Override
         public int outDegreeOf(V vertex)
@@ -938,7 +935,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         /**
-         * @see DirectedGraph#outgoingEdges(Object)
+         * @see DirectedGraph#outgoingEdgesOf(Object)
          */
         @Override
         public Set<E> outgoingEdgesOf(V vertex)
@@ -946,9 +943,6 @@ public abstract class AbstractBaseGraph<V, E>
             return getEdgeContainer(vertex).getUnmodifiableOutgoingEdges();
         }
 
-        /**
-         * @see AbstractBaseGraph#removeEdgeFromTouchingVertices(Edge)
-         */
         @Override
         public void removeEdgeFromTouchingVertices(E e)
         {
@@ -1165,9 +1159,6 @@ public abstract class AbstractBaseGraph<V, E>
             return equalStraight || equalInverted;
         }
 
-        /**
-         * @see AbstractBaseGraph#addEdgeToTouchingVertices(Edge)
-         */
         @Override
         public void addEdgeToTouchingVertices(E e)
         {
@@ -1181,9 +1172,6 @@ public abstract class AbstractBaseGraph<V, E>
             }
         }
 
-        /**
-         * @see UndirectedGraph#degreeOf(V)
-         */
         @Override
         public int degreeOf(V vertex)
         {
@@ -1207,7 +1195,7 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         /**
-         * @see Graph#edgesOf(V)
+         * @see Graph#edgesOf(Object)
          */
         @Override
         public Set<E> edgesOf(V vertex)
@@ -1251,9 +1239,6 @@ public abstract class AbstractBaseGraph<V, E>
             throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
         }
 
-        /**
-         * @see AbstractBaseGraph#removeEdgeFromTouchingVertices(Edge)
-         */
         @Override
         public void removeEdgeFromTouchingVertices(E e)
         {

@@ -55,7 +55,6 @@ import org.jgrapht.*;
  * <li>Format/Line...</li>
  * <li>Line ends: End: (choose an arrow)</li>
  * </ol>
- * </p>
  *
  * @author Avner Linder
  */

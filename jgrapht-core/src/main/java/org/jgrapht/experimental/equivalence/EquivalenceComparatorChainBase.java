@@ -41,8 +41,9 @@ import java.util.*;
 /**
  * This class implements comparator chaining.
  *
- * <p>Usage examples:
- * <li> <i>graph-theory, node equivalence:</i> You can create a comparator for
+ * <br>Usage examples:
+ * <br>
+ * <i>graph-theory, node equivalence:</i> You can create a comparator for
  * the inDegree of a node, another for the total weight of outDegree edges, and
  * a third which checks the business content of the node. You know that the
  * first topological comparators has dozens of different groups, but the
@@ -50,12 +51,12 @@ import java.util.*;
  * performance will be gained by:
  *
  * <blockquote><code>
- * <p>EquivalenceComparatorChainBase eqChain = new
+ * EquivalenceComparatorChainBase eqChain = new
  * EquivalenceComparatorChainBase(fastNodesDegreeComparator);
  *
- * <p>eqChain.addComparatorAfter(ABitSlowerEdgeWeightComparator);
+ * eqChain.addComparatorAfter(ABitSlowerEdgeWeightComparator);
  *
- * <p>eqChain.addComparatorAfter(slowestBuisnessContentsComparator);</code>
+ * eqChain.addComparatorAfter(slowestBuisnessContentsComparator);</code>
  * </blockquote>
  *
  * @param <E> the type of the elements in the set

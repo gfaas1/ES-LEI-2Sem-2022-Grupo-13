@@ -43,7 +43,7 @@ import org.jgrapht.*;
 /**
  * Find all simple cycles of a directed graph using the Tarjan's algorithm.
  *
- * <p/>See:<br/>
+ * <p>See:<br>
  * R. Tarjan, Enumeration of the elementary circuits of a directed graph, SIAM
  * J. Comput., 2 (1973), pp. 211-216.
  *

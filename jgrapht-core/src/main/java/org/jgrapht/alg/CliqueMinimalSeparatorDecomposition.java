@@ -66,9 +66,9 @@ import org.jgrapht.graph.SimpleGraph;
  * end we have a set of atoms. The CMS decomposition is unique and yields the
  * set of the atoms independent of the order of the decomposition.
  * 
- * @author Florian Buenzli <fbuenzli@student.ethz.ch>
- * @author Thomas Tschager <thomas.tschager@inf.ethz.ch>
- * @author Tomas Hruz <tomas.hruz@inf.ethz.ch>
+ * @author Florian Buenzli (fbuenzli@student.ethz.ch)
+ * @author Thomas Tschager (thomas.tschager@inf.ethz.ch)
+ * @author Tomas Hruz (tomas.hruz@inf.ethz.ch)
  * @author Philipp Hoppen
  */
 public class CliqueMinimalSeparatorDecomposition<V, E>

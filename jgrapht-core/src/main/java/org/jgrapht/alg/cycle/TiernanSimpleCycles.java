@@ -43,7 +43,7 @@ import org.jgrapht.*;
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.
  *
- * <p/>See:<br/>
+ * <p>See:<br>
  * J.C.Tiernan An Efficient Search Algorithm Find the Elementary Circuits of a
  * Graph., Communications of the ACM, vol.13, 12, (1970), pp. 722 - 726.
  *

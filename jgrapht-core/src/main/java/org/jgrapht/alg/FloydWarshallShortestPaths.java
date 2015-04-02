@@ -50,7 +50,7 @@ import org.jgrapht.util.*;
  * O(n^3) time. It can also calculate the graph diameter.
  *
  * @author Tom Larkworthy
- * @author Soren Davidsen <soren@tanesha.net>
+ * @author Soren Davidsen (soren@tanesha.net)
  */
 public class FloydWarshallShortestPaths<V, E>
 {

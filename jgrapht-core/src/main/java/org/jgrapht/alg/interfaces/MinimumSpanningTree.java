@@ -35,7 +35,7 @@ import java.util.*;
 /**
  * Allows to derive <a href=http://en.wikipedia.org/wiki/Minimum_spanning_tree>
  * minimum spanning tree</a> from given undirected connected graph. In the case
- * of disconnected graphs it would rather derive minimum spanning <i>forest<i/>
+ * of disconnected graphs it would rather derive minimum spanning <i>forest</i>
  *
  * @param <V> vertex concept type
  * @param <E> edge concept type

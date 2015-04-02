@@ -36,10 +36,10 @@
 package org.jgrapht.util;
 
 /**
- * Representation of a pair of vertices; to be replaced by Pair<V,V> if Sun ever
+ * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if Sun ever
  * gets around to adding Pair to java.util.
  *
- * @author Soren <soren@tanesha.net>
+ * @author Soren (soren@tanesha.net)
  */
 public class VertexPair<V>
 {

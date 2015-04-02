@@ -43,7 +43,7 @@ import org.jgrapht.*;
 /**
  * Find a cycle base of an undirected graph using the Paton's algorithm.
  *
- * <p/>See:<br/>
+ * <p>See:<br>
  * K. Paton, An algorithm for finding a fundamental set of cycles for an
  * undirected linear graph, Comm. ACM 12 (1969), pp. 514-518.
  *

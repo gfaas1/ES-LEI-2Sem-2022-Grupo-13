@@ -40,8 +40,8 @@ import org.jgrapht.*;
 
 
 /**
- * Holds graph information as int labels only. vertexes: 1,2,3,4 edges:1->2 ,
- * 3->4 ,1->1. Implementation as imutable graph by int[] for vetexes and
+ * Holds graph information as int labels only. vertexes: 1,2,3,4 edges:1-&gt;2 ,
+ * 3-&gt;4 ,1-&gt;1. Implementation as imutable graph by int[] for vetexes and
  * LabelsEdge[] for edges. The current algorithms do not support graph with
  * multiple edges (Multigraph / Pseudograph). For the maintaner: The reason for
  * it is the use of edges sets of LabelsEdge in which the equals checks for

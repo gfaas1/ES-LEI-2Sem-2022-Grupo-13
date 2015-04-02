@@ -90,7 +90,7 @@ public class VertexDegreeEquivalenceComparator<V, E>
     }
 
     /**
-     * Hashes using the in & out degree of a vertex
+     * Hashes using the in and out degree of a vertex
      *
      * @see EquivalenceComparator#equivalenceHashcode(Object, Object)
      */

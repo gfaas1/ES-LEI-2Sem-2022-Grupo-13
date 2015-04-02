@@ -210,7 +210,6 @@ public class DirectedAcyclicGraph<V, E>
      * <li>there is not already an edge (fromVertex, toVertex) in the graph
      * <li>the edge does not induce a cycle in the graph
      * </ul>
-     * </p>
      *
      * @return null if the edge is already in the graph, else the created edge
      * is returned
@@ -254,7 +253,6 @@ public class DirectedAcyclicGraph<V, E>
      * <li>there is not already an edge (fromVertex, toVertex) in the graph
      * <li>the edge does not induce a cycle in the graph
      * </ul>
-     * </p>
      *
      * @return true if the edge was added to the graph
      *

@@ -63,7 +63,7 @@ import java.util.*;
 
                 public Object nextElement() throws NoSuchElementException {
                     counter++;
-                    if (counter>=100)
+                    if (counter &lt;= 100)
                         throw new NoSuchElementException();
                     else
                         return new Integer(counter);
@@ -79,8 +79,8 @@ import java.util.*;
         public Object nextElement() {
             return this.nextSupplier.nextElement();
         }
-  }</pre>
- * </code>
+  }</code>
+ * </pre>
  *
  * @author Assaf_Lehr
  */

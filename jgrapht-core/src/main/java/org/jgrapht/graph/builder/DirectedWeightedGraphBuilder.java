@@ -39,7 +39,7 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 
 /**
- * A builder class for {@link DirectedWeightedGraph}.
+ * A builder class for directed weighted graphs}.
  * If you want to extend this class, see {@link DirectedWeightedGraphBuilderBase}.
  */
 public final class DirectedWeightedGraphBuilder
@@ -52,10 +52,10 @@ public final class DirectedWeightedGraphBuilder
     /**
      * Creates a builder based on {@code baseGraph}.
      * {@code baseGraph} must be mutable.
-     * </p>
+     * <p>
      * The recomended way to use this constructor is:
      * {@code new DirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
-     * </p>
+     * <p>
      * NOTE: {@code baseGraph} should not be an existing graph. If you want to
      * add an existing graph to the graph being built, you should use the
      * {@link #addVertex(Object)} method.

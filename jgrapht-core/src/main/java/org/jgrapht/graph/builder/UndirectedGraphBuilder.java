@@ -51,10 +51,10 @@ public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
     /**
      * Creates a builder based on {@code baseGraph}.
      * {@code baseGraph} must be mutable.
-     * </p>
+     * <p>
      * The recomended way to use this constructor is:
      * {@code new UndirectedGraphBuilder<...>(new YourGraph<...>(...))}.
-     * </p>
+     * <p>
      * NOTE: {@code baseGraph} should not be an existing graph. If you want to
      * add an existing graph to the graph being built, you should use the
      * {@link #addVertex(Object)} method.

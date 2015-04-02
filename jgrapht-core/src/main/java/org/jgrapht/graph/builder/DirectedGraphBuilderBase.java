@@ -54,7 +54,6 @@ public abstract class DirectedGraphBuilderBase
      * {@code baseGraph} must be mutable.
      * 
      * @param baseGraph the graph object to base building on
-     * @see DirectedGraphBuilder#DirectedGraphBuilder(Graph)
      */
     public DirectedGraphBuilderBase(G baseGraph)
     {

@@ -54,7 +54,6 @@ public abstract class UndirectedGraphBuilderBase
      * {@code baseGraph} must be mutable.
      * 
      * @param baseGraph the graph object to base building on
-     * @see UndirectedGraphBuilder#UndirectedGraphBuilder(Graph)
      */
     public UndirectedGraphBuilderBase(G baseGraph)
     {

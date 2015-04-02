@@ -70,8 +70,8 @@ public class NaiveLcaFinder<V, E> {
      * parents(b) union b) (and the same with a and b swapped) <br>
      * continues
      * <p>
-     * This means at the end of recursion n, we know if there is an LCA that has a path of <=n to a and b. Of course we
-     * may have to wait longer if the path to a is of length n, but the path to b>n. at the first loop we have a path of
+     * This means at the end of recursion n, we know if there is an LCA that has a path of &lt;=n to a and b. Of course we
+     * may have to wait longer if the path to a is of length n, but the path to b&gt;n. at the first loop we have a path of
      * 0 length from the nodes we are considering as LCA to their respective children which we wish to find the LCA for.
      */
     public NaiveLcaFinder(DirectedGraph<V, E> graph) {

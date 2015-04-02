@@ -39,12 +39,14 @@ import java.util.*;
 
 /**
  * Iterates through permutations of N elements.
+ *<ol>
  * <li>use getNext() to get the next permutation order, for example(N=4):
  * perm0=[1,2,3,4] perm1=[1,2,4,3] perm2=[1,3,2,4] .
- * <li>use hasNext() or verify by counter<getTotalNumberOfPermutations () that
+ * <li>use hasNext() or verify by counter&lt;getTotalNumberOfPermutations () that
  * you do not overflow the max number. RunTimeException will be thrown if you
  * do. Getting the next permutation is done in O(N) Note: This class is not
  * thread safe.
+ *</ol>
  *
  * @author Assaf
  * @since May 20, 2005
@@ -87,7 +89,7 @@ public class IntegerPermutationIter
     }
 
     /**
-     * Uses a predefined array (sorted), for example: [3,1,1,2,1]-->[1,1,1,2,3];
+     * Uses a predefined array (sorted), for example: [3,1,1,2,1]--&gt;[1,1,1,2,3];
      * note that there are much less than 5! premutations here, because of the
      * repetitive 1s.
      *

@@ -41,11 +41,13 @@ import java.util.*;
  * EquivalenceSet is a Set of elements which have been determined to be
  * equivalent using EquivalenceComparator. The class makes sure the set size
  * will be one or more.
+ *<ol>
  * <li>The group can only be created using the factory method
  * createGroupWithElement().
  * <li>The equals and hashcode of a group uses the EquivalenceComparator on one
  * of the group members, thus it is actually checking whether the "other" is in
  * the same group.
+ *</ol>
  *
  * @param <E> the type of the elements in the set
  * @param <C> the type of the context the element is compared against, e.g. a

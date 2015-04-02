@@ -50,10 +50,10 @@ public final class DirectedGraphBuilder<V, E, G extends DirectedGraph<V, E>>
     /**
      * Creates a builder based on {@code baseGraph}.
      * {@code baseGraph} must be mutable.
-     * </p>
+     * <p>
      * The recomended way to use this constructor is:
      * {@code new DirectedGraphBuilder<...>(new YourGraph<...>(...))}.
-     * </p>
+     * <p>
      * NOTE: {@code baseGraph} should not be an existing graph. If you want to
      * add an existing graph to the graph being built, you should use the
      * {@link #addVertex(Object)} method.
