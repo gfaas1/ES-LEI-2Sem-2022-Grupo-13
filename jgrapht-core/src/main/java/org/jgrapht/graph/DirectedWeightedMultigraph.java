@@ -44,8 +44,8 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A directed weighted multigraph. A directed weighted multigraph is a
- * non-simple directed graph in which no loops are permitted, but multiple
- * edges between any two vertices are permitted, and edges have weights.
+ * non-simple directed graph in which no loops are permitted, but multiple edges
+ * between any two vertices are permitted, and edges have weights.
  */
 public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>
@@ -77,20 +77,24 @@ public class DirectedWeightedMultigraph<V, E>
     {
         super(ef);
     }
+
     
-    public static <V, E> DirectedWeightedGraphBuilderBase
-            <V, E, ? extends DirectedWeightedMultigraph<V,E>, ?>
-            builder(Class<? extends E> edgeClass) {
-        return new DirectedWeightedGraphBuilder
-                <V, E, DirectedWeightedMultigraph<V, E>>(
+
+    public static <V, E> DirectedWeightedGraphBuilderBase<V,
+        E, ? extends DirectedWeightedMultigraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
+    {
+        return new DirectedWeightedGraphBuilder<V,
+            E, DirectedWeightedMultigraph<V, E>>(
                 new DirectedWeightedMultigraph<V, E>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase
-            <V, E, ? extends DirectedWeightedMultigraph<V,E>, ?>
-            builder(EdgeFactory<V, E> ef) {
-        return new DirectedWeightedGraphBuilder
-                <V, E, DirectedWeightedMultigraph<V, E>>(
+    public static <V, E> DirectedWeightedGraphBuilderBase<V,
+        E, ? extends DirectedWeightedMultigraph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
+    {
+        return new DirectedWeightedGraphBuilder<V,
+            E, DirectedWeightedMultigraph<V, E>>(
                 new DirectedWeightedMultigraph<V, E>(ef));
     }
 }

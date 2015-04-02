@@ -104,8 +104,7 @@ public class WheelGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void generateGraph(
+    @Override public void generateGraph(
         Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)
@@ -120,8 +119,7 @@ public class WheelGraphGenerator<V, E>
         final Collection<V> rim = new ArrayList<V>();
         VertexFactory<V> rimVertexFactory =
             new VertexFactory<V>() {
-                @Override
-                public V createVertex()
+                @Override public V createVertex()
                 {
                     V vertex = vertexFactory.createVertex();
                     rim.add(vertex);

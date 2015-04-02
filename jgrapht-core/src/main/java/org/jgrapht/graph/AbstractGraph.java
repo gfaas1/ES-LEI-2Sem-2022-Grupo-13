@@ -60,7 +60,7 @@ import org.jgrapht.util.*;
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
 {
-
+    
 
     /**
      * Construct a new empty graph object.
@@ -69,13 +69,12 @@ public abstract class AbstractGraph<V, E>
     {
     }
 
-
+    
 
     /**
      * @see Graph#containsEdge(Object, Object)
      */
-    @Override
-    public boolean containsEdge(V sourceVertex, V targetVertex)
+    @Override public boolean containsEdge(V sourceVertex, V targetVertex)
     {
         return getEdge(sourceVertex, targetVertex) != null;
     }
@@ -83,8 +82,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
-    @Override
-    public boolean removeAllEdges(Collection<? extends E> edges)
+    @Override public boolean removeAllEdges(Collection<? extends E> edges)
     {
         boolean modified = false;
 
@@ -98,8 +96,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Object, Object)
      */
-    @Override
-    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    @Override public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> removed = getAllEdges(sourceVertex, targetVertex);
         if (removed == null) {
@@ -113,8 +110,7 @@ public abstract class AbstractGraph<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
-    @Override
-    public boolean removeAllVertices(Collection<? extends V> vertices)
+    @Override public boolean removeAllVertices(Collection<? extends V> vertices)
     {
         boolean modified = false;
 
@@ -132,8 +128,7 @@ public abstract class AbstractGraph<V, E>
      *
      * @return a string representation of this graph.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return toStringFromSets(
             vertexSet(),
@@ -160,7 +155,8 @@ public abstract class AbstractGraph<V, E>
         } else if (v == null) {
             throw new NullPointerException();
         } else {
-            throw new IllegalArgumentException("no such vertex in graph: " + v.toString());
+            throw new IllegalArgumentException(
+                "no such vertex in graph: " + v.toString());
         }
     }
 
@@ -244,8 +240,7 @@ public abstract class AbstractGraph<V, E>
      *
      * @see Object#hashCode()
      */
-    @Override
-    public int hashCode()
+    @Override public int hashCode()
     {
         int hash = vertexSet().hashCode();
 
@@ -282,8 +277,7 @@ public abstract class AbstractGraph<V, E>
      *
      * @see Object#equals(Object)
      */
-    @Override
-    public boolean equals(Object obj)
+    @Override public boolean equals(Object obj)
     {
         if (this == obj) {
             return true;

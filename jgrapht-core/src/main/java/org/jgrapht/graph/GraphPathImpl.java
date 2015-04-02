@@ -80,43 +80,37 @@ public class GraphPathImpl<V, E>
     
 
     // implement GraphPath
-    @Override
-    public Graph<V, E> getGraph()
+    @Override public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     // implement GraphPath
-    @Override
-    public V getStartVertex()
+    @Override public V getStartVertex()
     {
         return startVertex;
     }
 
     // implement GraphPath
-    @Override
-    public V getEndVertex()
+    @Override public V getEndVertex()
     {
         return endVertex;
     }
 
     // implement GraphPath
-    @Override
-    public List<E> getEdgeList()
+    @Override public List<E> getEdgeList()
     {
         return edgeList;
     }
 
     // implement GraphPath
-    @Override
-    public double getWeight()
+    @Override public double getWeight()
     {
         return weight;
     }
 
     // override Object
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return edgeList.toString();
     }

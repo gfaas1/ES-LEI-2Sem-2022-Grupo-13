@@ -182,8 +182,7 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * @see java.util.Iterator#hasNext()
      */
-    @Override
-    public boolean hasNext()
+    @Override public boolean hasNext()
     {
         if (startVertex != null) {
             encounterStartVertex();
@@ -221,8 +220,7 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * @see java.util.Iterator#next()
      */
-    @Override
-    public V next()
+    @Override public V next()
     {
         if (startVertex != null) {
             encounterStartVertex();
@@ -531,8 +529,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see CrossComponentIterator.Specifics#edgesOf(Object)
          */
-        @Override
-        public Set<? extends EE> edgesOf(VV vertex)
+        @Override public Set<? extends EE> edgesOf(VV vertex)
         {
             return graph.outgoingEdgesOf(vertex);
         }
@@ -560,8 +557,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /**
          * @see CrossComponentIterator.Specifics#edgesOf(Object)
          */
-        @Override
-        public Set<EE> edgesOf(VV vertex)
+        @Override public Set<EE> edgesOf(VV vertex)
         {
             return graph.edgesOf(vertex);
         }

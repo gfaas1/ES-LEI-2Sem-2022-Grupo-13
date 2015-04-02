@@ -140,8 +140,7 @@ public class FibonacciHeapNode<T>
      *
      * @return string representing this object
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return Double.toString(key);
     }

@@ -80,8 +80,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
     /**
      * Construct a complete bipartite graph
      */
-    @Override
-    public void generateGraph(
+    @Override public void generateGraph(
         Graph<V, E> target,
         final VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)

@@ -54,7 +54,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class Graphs
 {
-
+    
 
     /**
      * Creates a new edge and adds it to the specified graph similarly to the
@@ -411,7 +411,8 @@ public abstract class Graphs
         } else if (v.equals(target)) {
             return source;
         } else {
-            throw new IllegalArgumentException("no such vertex: " + v.toString());
+            throw new IllegalArgumentException(
+                "no such vertex: " + v.toString());
         }
     }
 

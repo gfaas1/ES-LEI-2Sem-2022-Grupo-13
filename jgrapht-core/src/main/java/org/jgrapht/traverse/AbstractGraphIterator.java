@@ -86,8 +86,7 @@ public abstract class AbstractGraphIterator<V, E>
      * @return <code>true</code> if traverses across connected components,
      * otherwise <code>false</code>.
      */
-    @Override
-    public boolean isCrossComponentTraversal()
+    @Override public boolean isCrossComponentTraversal()
     {
         return crossComponentTraversal;
     }
@@ -95,8 +94,7 @@ public abstract class AbstractGraphIterator<V, E>
     /**
      * @see GraphIterator#setReuseEvents(boolean)
      */
-    @Override
-    public void setReuseEvents(boolean reuseEvents)
+    @Override public void setReuseEvents(boolean reuseEvents)
     {
         this.reuseEvents = reuseEvents;
     }
@@ -104,8 +102,7 @@ public abstract class AbstractGraphIterator<V, E>
     /**
      * @see GraphIterator#isReuseEvents()
      */
-    @Override
-    public boolean isReuseEvents()
+    @Override public boolean isReuseEvents()
     {
         return reuseEvents;
     }
@@ -115,8 +112,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @param l the traversal listener to be added.
      */
-    @Override
-    public void addTraversalListener(TraversalListener<V, E> l)
+    @Override public void addTraversalListener(TraversalListener<V, E> l)
     {
         if (!traversalListeners.contains(l)) {
             traversalListeners.add(l);
@@ -129,8 +125,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @throws UnsupportedOperationException
      */
-    @Override
-    public void remove()
+    @Override public void remove()
     {
         throw new UnsupportedOperationException();
     }
@@ -140,8 +135,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @param l the traversal listener to be removed.
      */
-    @Override
-    public void removeTraversalListener(TraversalListener<V, E> l)
+    @Override public void removeTraversalListener(TraversalListener<V, E> l)
     {
         traversalListeners.remove(l);
         nListeners = traversalListeners.size();

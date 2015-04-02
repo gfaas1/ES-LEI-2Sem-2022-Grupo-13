@@ -65,8 +65,7 @@ class IntrusiveEdge
     /**
      * @see Object#clone()
      */
-    @Override
-    public Object clone()
+    @Override public Object clone()
     {
         try {
             return super.clone();

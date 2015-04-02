@@ -39,20 +39,22 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+
 /**
  * Base class for {@link UndirectedGraphBuilder} for extending.
  */
-public abstract class UndirectedGraphBuilderBase
-        <V, E, G extends UndirectedGraph<V, E>,
-                B extends UndirectedGraphBuilderBase<V, E, G, B>>
-        extends AbstractGraphBuilder<V, E, G, B>
+public abstract class UndirectedGraphBuilderBase<V,
+    E,
+    G extends UndirectedGraph<V, E>,
+    B extends UndirectedGraphBuilderBase<V, E, G, B>>
+    extends AbstractGraphBuilder<V, E, G, B>
 {
-
+    
 
     /**
-     * Creates a builder based on {@code baseGraph}.
-     * {@code baseGraph} must be mutable.
-     * 
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
+     * mutable.
+     *
      * @param baseGraph the graph object to base building on
      */
     public UndirectedGraphBuilderBase(G baseGraph)
@@ -60,9 +62,10 @@ public abstract class UndirectedGraphBuilderBase
         super(baseGraph);
     }
 
+    
 
-    @Override
-    public UnmodifiableUndirectedGraph<V, E> buildUnmodifiable() {
+    @Override public UnmodifiableUndirectedGraph<V, E> buildUnmodifiable()
+    {
         return new UnmodifiableUndirectedGraph<V, E>(this.graph);
     }
 }

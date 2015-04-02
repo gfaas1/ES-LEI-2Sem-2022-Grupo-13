@@ -38,28 +38,29 @@ package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
 
-/**
- * A builder class for undirected weighted graphs.
- * If you want to extend this class, see {@link UndirectedWeightedGraphBuilderBase}.
- */
-public final class UndirectedWeightedGraphBuilder
-        <V, E, G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>
-        extends UndirectedWeightedGraphBuilderBase<V, E, G,
-                UndirectedWeightedGraphBuilder<V, E, G>>
-{
 
+/**
+ * A builder class for undirected weighted graphs. If you want to extend this
+ * class, see {@link UndirectedWeightedGraphBuilderBase}.
+ */
+public final class UndirectedWeightedGraphBuilder<V,
+    E, G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>
+    extends UndirectedWeightedGraphBuilderBase<V,
+        E, G, UndirectedWeightedGraphBuilder<V, E, G>>
+{
+    
 
     /**
-     * Creates a builder based on {@code baseGraph}.
-     * {@code baseGraph} must be mutable.
-     * <p>
-     * The recomended way to use this constructor is:
-     * {@code new UndirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
-     * <p>
-     * NOTE: {@code baseGraph} should not be an existing graph. If you want to
-     * add an existing graph to the graph being built, you should use the
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
+     * mutable.
+     *
+     * <p>The recomended way to use this constructor is: {@code new
+     * UndirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
+     *
+     * <p>NOTE: {@code baseGraph} should not be an existing graph. If you want
+     * to add an existing graph to the graph being built, you should use the
      * {@link #addVertex(Object)} method.
-     * 
+     *
      * @param baseGraph the graph object to base building on
      */
     public UndirectedWeightedGraphBuilder(G baseGraph)
@@ -67,9 +68,9 @@ public final class UndirectedWeightedGraphBuilder
         super(baseGraph);
     }
 
+    
 
-    @Override
-    protected UndirectedWeightedGraphBuilder<V, E, G> self()
+    @Override protected UndirectedWeightedGraphBuilder<V, E, G> self()
     {
         return this;
     }

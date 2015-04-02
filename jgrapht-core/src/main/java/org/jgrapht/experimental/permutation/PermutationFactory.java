@@ -41,19 +41,16 @@ package org.jgrapht.experimental.permutation;
  *
  * <p>These types are:
  *
- * <p>
- * All elements are different. There are N! possible permutations.
+ * <p>All elements are different. There are N! possible permutations.
  *
  * <p><i>example:</i> source=[1,2,3]
  * result=[1,2,3][1,3,2][2,1,3][2,3,1][3,1,2][3,2,1]
  *
- * <p>
- * Some of the elements are the same.
+ * <p>Some of the elements are the same.
  *
  * <p><i>example:</i> source=[1,1,2] result=[1,1,2][1,2,1][2,1,1]
  *
- * <p>
- * There are separate permutations groups, which are connected to one
+ * <p>There are separate permutations groups, which are connected to one
  * sequence. Permutations are allowed only inside the group. Possible sequences:
  * product of factorial of each group. see example.
  *

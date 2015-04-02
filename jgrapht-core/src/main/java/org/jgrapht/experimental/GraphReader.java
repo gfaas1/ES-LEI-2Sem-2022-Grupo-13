@@ -140,8 +140,7 @@ public class GraphReader<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void generateGraph(
+    @Override public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)

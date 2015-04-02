@@ -209,8 +209,7 @@ public class CycleDetector<V, E>
         /**
          * {@inheritDoc}
          */
-        @Override
-        protected void encounterVertexAgain(V vertex, E edge)
+        @Override protected void encounterVertexAgain(V vertex, E edge)
         {
             super.encounterVertexAgain(vertex, edge);
 
@@ -246,8 +245,7 @@ public class CycleDetector<V, E>
         /**
          * {@inheritDoc}
          */
-        @Override
-        protected V provideNextVertex()
+        @Override protected V provideNextVertex()
         {
             V v = super.provideNextVertex();
 

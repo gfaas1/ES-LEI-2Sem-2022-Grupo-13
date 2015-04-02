@@ -78,20 +78,24 @@ public class DefaultDirectedWeightedGraph<V, E>
     {
         super(ef);
     }
+
     
-    public static <V, E> DirectedWeightedGraphBuilderBase
-            <V, E, ? extends DefaultDirectedWeightedGraph<V,E>, ?>
-            builder(Class<? extends E> edgeClass) {
-        return new DirectedWeightedGraphBuilder
-                <V, E, DefaultDirectedWeightedGraph<V, E>>(
+
+    public static <V, E> DirectedWeightedGraphBuilderBase<V,
+        E, ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
+    {
+        return new DirectedWeightedGraphBuilder<V,
+            E, DefaultDirectedWeightedGraph<V, E>>(
                 new DefaultDirectedWeightedGraph<V, E>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase
-            <V, E, ? extends DefaultDirectedWeightedGraph<V,E>, ?>
-            builder(EdgeFactory<V, E> ef) {
-        return new DirectedWeightedGraphBuilder
-                <V, E, DefaultDirectedWeightedGraph<V, E>>(
+    public static <V, E> DirectedWeightedGraphBuilderBase<V,
+        E, ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
+    {
+        return new DirectedWeightedGraphBuilder<V,
+            E, DefaultDirectedWeightedGraph<V, E>>(
                 new DefaultDirectedWeightedGraph<V, E>(ef));
     }
 }

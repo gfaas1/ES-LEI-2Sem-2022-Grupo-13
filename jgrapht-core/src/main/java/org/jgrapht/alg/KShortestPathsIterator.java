@@ -134,8 +134,7 @@ class KShortestPathsIterator<V, E>
      * @return <code>true</code> if at least one path has been improved during
      * the previous pass, <code>false</code> otherwise.
      */
-    @Override
-    public boolean hasNext()
+    @Override public boolean hasNext()
     {
         if (!this.startVertexEncountered) {
             encounterStartVertex();
@@ -156,8 +155,7 @@ class KShortestPathsIterator<V, E>
      *
      * @see java.util.Iterator#next()
      */
-    @Override
-    public Set<V> next()
+    @Override public Set<V> next()
     {
         if (!this.startVertexEncountered) {
             encounterStartVertex();
@@ -190,8 +188,7 @@ class KShortestPathsIterator<V, E>
      *
      * @see java.util.Iterator#remove()
      */
-    @Override
-    public void remove()
+    @Override public void remove()
     {
         throw new UnsupportedOperationException();
     }

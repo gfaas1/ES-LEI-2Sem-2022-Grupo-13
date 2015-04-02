@@ -143,7 +143,6 @@ public class TarjanLowestCommonAncestor<V, E>
                 // once we've dealt with it - remove it (to save memory?)
                 lrrMap.remove(u);
             }
-            
 
             List<V> result = new LinkedList<V>();
             for (LcaRequestResponse<V> current : lrr) {

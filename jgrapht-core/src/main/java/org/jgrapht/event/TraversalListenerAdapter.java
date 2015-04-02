@@ -53,8 +53,7 @@ public class TraversalListenerAdapter<V, E>
     /**
      * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)
      */
-    @Override
-    public void connectedComponentFinished(
+    @Override public void connectedComponentFinished(
         ConnectedComponentTraversalEvent e)
     {
     }
@@ -62,32 +61,29 @@ public class TraversalListenerAdapter<V, E>
     /**
      * @see TraversalListener#connectedComponentStarted(ConnectedComponentTraversalEvent)
      */
-    @Override
-    public void connectedComponentStarted(ConnectedComponentTraversalEvent e)
+    @Override public void connectedComponentStarted(
+        ConnectedComponentTraversalEvent e)
     {
     }
 
     /**
      * @see TraversalListener#edgeTraversed(EdgeTraversalEvent)
      */
-    @Override
-    public void edgeTraversed(EdgeTraversalEvent<V, E> e)
+    @Override public void edgeTraversed(EdgeTraversalEvent<V, E> e)
     {
     }
 
     /**
      * @see TraversalListener#vertexTraversed(VertexTraversalEvent)
      */
-    @Override
-    public void vertexTraversed(VertexTraversalEvent<V> e)
+    @Override public void vertexTraversed(VertexTraversalEvent<V> e)
     {
     }
 
     /**
      * @see TraversalListener#vertexFinished(VertexTraversalEvent)
      */
-    @Override
-    public void vertexFinished(VertexTraversalEvent<V> e)
+    @Override public void vertexFinished(VertexTraversalEvent<V> e)
     {
     }
 }

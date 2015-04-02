@@ -105,8 +105,7 @@ public class GraphEdgeChangeEvent<V, E>
      *
      * @deprecated Use new constructor which takes vertex parameters.
      */
-    @Deprecated
-    public GraphEdgeChangeEvent(
+    @Deprecated public GraphEdgeChangeEvent(
         Object eventSource,
         int type,
         E edge)

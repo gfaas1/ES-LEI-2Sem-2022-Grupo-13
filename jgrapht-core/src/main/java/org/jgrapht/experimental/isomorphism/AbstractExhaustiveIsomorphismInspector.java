@@ -365,8 +365,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
      *
      * @return <code>true</code> iff the two graphs are isomorphic
      */
-    @Override
-    public boolean isIsomorphic()
+    @Override public boolean isIsomorphic()
     {
         return !(this.nextSupplier.isEnumerationStartedEmpty());
     }
@@ -374,8 +373,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     /* (non-Javadoc)
      * @see java.util.Enumeration#hasMoreElements()
      */
-    @Override
-    public boolean hasNext()
+    @Override public boolean hasNext()
     {
         boolean result = this.nextSupplier.hasMoreElements();
 
@@ -385,8 +383,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     /**
      * @see java.util.Iterator#next()
      */
-    @Override
-    public IsomorphismRelation next()
+    @Override public IsomorphismRelation next()
     {
         return this.nextSupplier.nextElement();
     }
@@ -394,8 +391,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     /* (non-Javadoc)
      * @see java.util.Iterator#remove()
      */
-    @Override
-    public void remove()
+    @Override public void remove()
     {
         throw new UnsupportedOperationException(
             "remove() method is not supported in AdaptiveIsomorphismInspectorFactory."
@@ -407,8 +403,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
     private class NextFunctor
         implements PrefetchIterator.NextElementFunctor<IsomorphismRelation>
     {
-        @Override
-        public IsomorphismRelation nextElement()
+        @Override public IsomorphismRelation nextElement()
             throws NoSuchElementException
         {
             IsomorphismRelation resultRelation = findNextIsomorphicGraph();

@@ -58,11 +58,10 @@ public class HamiltonianCycle
      * (hamiltonian cycle). This algorithm requires that the graph be complete
      * and the triangle inequality exists (if x,y,z are vertices then
      * d(x,y)+d(y,z) &lt; d(x,z) for all x,y,z) then this algorithm will
-     * guarantee a
-     * hamiltonian cycle such that the total weight of the cycle is less than or
-     * equal to double the total weight of the optimal hamiltonian cycle. The
-     * optimal solution is NP-complete, so this is a decent approximation that
-     * runs in polynomial time.
+     * guarantee a hamiltonian cycle such that the total weight of the cycle is
+     * less than or equal to double the total weight of the optimal hamiltonian
+     * cycle. The optimal solution is NP-complete, so this is a decent
+     * approximation that runs in polynomial time.
      *
      * @param <V>
      * @param <E>

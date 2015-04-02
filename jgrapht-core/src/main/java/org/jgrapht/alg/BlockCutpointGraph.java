@@ -46,7 +46,6 @@ import org.jgrapht.graph.*;
 /**
  * Definition of a <a href="http://mathworld.wolfram.com/Block.html">block of a
  * graph</a> in MathWorld.<br>
- *
  * Definition and lemma taken from the article <a
  * href="http://www.albany.edu/~goel/publications/rosencrantz2005.pdf">
  * Structure-Based Resilience Metrics for Service-Oriented Networks</a>:
@@ -322,14 +321,12 @@ public class BlockCutpointGraph<V, E>
             this.target = target;
         }
 
-        @Override
-        public V getSource()
+        @Override public V getSource()
         {
             return this.source;
         }
 
-        @Override
-        public V getTarget()
+        @Override public V getTarget()
         {
             return this.target;
         }
@@ -345,14 +342,12 @@ public class BlockCutpointGraph<V, E>
             this.vertexComponent = vertexComponent;
         }
 
-        @Override
-        public boolean isEdgeMasked(E edge)
+        @Override public boolean isEdgeMasked(E edge)
         {
             return false;
         }
 
-        @Override
-        public boolean isVertexMasked(V vertex)
+        @Override public boolean isVertexMasked(V vertex)
         {
             if (this.vertexComponent.contains(vertex)) {
                 // vertex belongs to component then we do not mask it.

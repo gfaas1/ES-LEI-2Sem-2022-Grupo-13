@@ -66,15 +66,13 @@ public class DirectedGraphUnion<V, E>
 
     
 
-    @Override
-    public int inDegreeOf(V vertex)
+    @Override public int inDegreeOf(V vertex)
     {
         Set<E> res = incomingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override
-    public Set<E> incomingEdgesOf(V vertex)
+    @Override public Set<E> incomingEdgesOf(V vertex)
     {
         Set<E> res = new HashSet<E>();
         if (getG1().containsVertex(vertex)) {
@@ -86,15 +84,13 @@ public class DirectedGraphUnion<V, E>
         return Collections.unmodifiableSet(res);
     }
 
-    @Override
-    public int outDegreeOf(V vertex)
+    @Override public int outDegreeOf(V vertex)
     {
         Set<E> res = outgoingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override
-    public Set<E> outgoingEdgesOf(V vertex)
+    @Override public Set<E> outgoingEdgesOf(V vertex)
     {
         Set<E> res = new HashSet<E>();
         if (getG1().containsVertex(vertex)) {

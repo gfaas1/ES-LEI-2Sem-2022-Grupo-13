@@ -63,8 +63,7 @@ public class ClassBasedVertexFactory<V>
     /**
      * @see VertexFactory#createVertex()
      */
-    @Override
-    public V createVertex()
+    @Override public V createVertex()
     {
         try {
             return this.vertexClass.newInstance();

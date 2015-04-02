@@ -117,8 +117,7 @@ public class RandomGraphGenerator<V, E>
      *
      * @see GraphGenerator#generateGraph(Graph, VertexFactory, Map)
      */
-    @Override
-    public void generateGraph(
+    @Override public void generateGraph(
         Graph<V, E> target,
         VertexFactory<V> vertexFactory,
         Map<String, V> resultMap)
@@ -208,11 +207,11 @@ public class RandomGraphGenerator<V, E>
         /**
          * Checks if the graph can contain the givven numberOfEdges according to
          * the graph type restrictions. For example:
-         *<ol>
-         * <li>#V means number of
-         * vertexes in graph
+         *
+         * <ol>
+         * <li>#V means number of vertexes in graph
          * <li>a Simple Graph, can have max of #V*(#V-1)/2 edges. etc
-         *</ol>
+         * </ol>
          *
          * @param targetGraph guranteed to start with zero edges.
          * @param numberOfEdges
@@ -229,7 +228,8 @@ public class RandomGraphGenerator<V, E>
      * chooses an edge and tries to add it. If the add fails from any reason
      * (like: self edge / multiple edges in unpermitted graph type) it will just
      * choose another and try again. Performance:
-     *<ol>
+     *
+     * <ol>
      * <li>when the number of possible edges becomes slim , this class will have
      * a very poor performance , cause it will not use gready methods to choose
      * them. for example : In simple graph , if #V = N (#x = number Of x) and we
@@ -238,7 +238,7 @@ public class RandomGraphGenerator<V, E>
      * kind of graphs.</li>
      * <li>If the numberOfEdges is bigger than what the graph can add, there
      * will be an infinite loop here. It is not tested.</li>
-     *</ol>
+     * </ol>
      *
      * @author Assaf
      * @since Aug 6, 2005
@@ -246,8 +246,7 @@ public class RandomGraphGenerator<V, E>
     public class DefaultEdgeTopologyFactory<VV, EE>
         implements EdgeTopologyFactory<VV, EE>
     {
-        @Override
-        public void createEdges(
+        @Override public void createEdges(
             Graph<VV, EE> targetGraph,
             Map<Integer, VV> orderToVertexMap,
             int numberOfEdges,
@@ -338,8 +337,7 @@ public class RandomGraphGenerator<V, E>
          * @see RandomGraphGenerator.EdgeTopologyFactory#isNumberOfEdgesValid(Graph,
          * int)
          */
-        @Override
-        public boolean isNumberOfEdgesValid(
+        @Override public boolean isNumberOfEdgesValid(
             Graph<VV, EE> targetGraph,
             int numberOfEdges)
         {

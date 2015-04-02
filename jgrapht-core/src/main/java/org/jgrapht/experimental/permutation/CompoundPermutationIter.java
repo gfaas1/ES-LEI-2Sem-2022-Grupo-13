@@ -41,13 +41,14 @@ import org.jgrapht.util.*;
 
 /**
  * For permutation like this:
- *<ol>
+ *
+ * <ol>
  * <li>1,2 are the same eq.group (numbers)
  * <li>a,b are og the same eq.group (letters)
  * <li>'$' is of its own eq. group (signs) Let the order of the group be
  * (arbitrary): signs,numbers,letters (note that for performance reasons, this
  * arbitrary order is the worst! see Performance section below)
- *</ol>
+ * </ol>
  *
  * <p>These are the possible compound perm: [$,1,2,a,b,c]
  *
@@ -169,8 +170,7 @@ public class CompoundPermutationIter
         // calc max
     }
 
-    @Override
-    public Object next()
+    @Override public Object next()
     {
         return getNext();
     }
@@ -261,8 +261,7 @@ public class CompoundPermutationIter
         this.permArray[groupIndex].getNext();
     }
 
-    @Override
-    public boolean hasNext()
+    @Override public boolean hasNext()
     {
         boolean result;
         if (this.iterCounter < this.max) {
@@ -281,8 +280,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#nextPermutation()
      */
-    @Override
-    public int [] nextPermutation()
+    @Override public int [] nextPermutation()
     {
         return (int []) next();
     }
@@ -290,8 +288,7 @@ public class CompoundPermutationIter
     /* (non-Javadoc)
      * @see ArrayPermutationsIter#hasNextPermutaions()
      */
-    @Override
-    public boolean hasNextPermutaions()
+    @Override public boolean hasNextPermutaions()
     {
         return hasNext();
     }
@@ -301,8 +298,7 @@ public class CompoundPermutationIter
      *
      * @see java.util.Iterator#remove()
      */
-    @Override
-    public void remove()
+    @Override public void remove()
     {
         throw new UnsupportedOperationException();
     }

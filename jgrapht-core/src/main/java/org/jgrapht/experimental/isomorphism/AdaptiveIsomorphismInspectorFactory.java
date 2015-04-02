@@ -43,12 +43,13 @@ import org.jgrapht.graph.*;
 /**
  * This class serves as a factory for GraphIsomorphismInspector concrete
  * implementations. It can be used in two ways:
- *<ol>
+ *
+ * <ol>
  * <li>You can can let this class to determine what is the most efficient
  * algorithm for your graph.
  * <li>You can specify the type of your graph (planar / tree / other) and save
  * this class the graph-checking time.
- *</ol>
+ * </ol>
  *
  * <p>Note that the concrete implementations are package-private and should not
  * be created directly. If you are the maintainer of the package, you can add
@@ -233,8 +234,8 @@ public class AdaptiveIsomorphismInspectorFactory
 
     /**
      * @return ExhaustiveInspector, where the equivalence comparator is chained
-     * with a topological comparator. This implementation uses:
-     * vertex degree size comparator
+     * with a topological comparator. This implementation uses: vertex degree
+     * size comparator
      */
     @SuppressWarnings("unchecked")
     protected static <V, E> GraphIsomorphismInspector

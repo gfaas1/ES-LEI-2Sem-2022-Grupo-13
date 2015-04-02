@@ -98,8 +98,7 @@ public interface GraphIterator<V, E>
      *
      * @throws UnsupportedOperationException
      */
-    @Override
-    public void remove();
+    @Override public void remove();
 
     /**
      * Removes the specified traversal listener from this iterator.

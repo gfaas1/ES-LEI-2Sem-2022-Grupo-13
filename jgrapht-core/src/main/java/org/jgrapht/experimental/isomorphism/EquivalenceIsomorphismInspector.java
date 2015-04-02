@@ -312,8 +312,7 @@ class EquivalenceIsomorphismInspector<V, E>
      * @see AbstractExhaustiveIsomorphismInspector#areVertexSetsOfTheSameEqualityGroup(
      * Set, Set)
      */
-    @Override
-    protected boolean areVertexSetsOfTheSameEqualityGroup(
+    @Override protected boolean areVertexSetsOfTheSameEqualityGroup(
         Set vertexSet1,
         Set vertexSet2)
     {

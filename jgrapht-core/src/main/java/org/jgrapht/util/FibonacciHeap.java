@@ -353,8 +353,7 @@ public class FibonacciHeap<T>
      *
      * @return String of this.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         if (minNode == null) {
             return "FibonacciHeap=[]";

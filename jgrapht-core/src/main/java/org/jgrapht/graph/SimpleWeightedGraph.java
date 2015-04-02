@@ -75,20 +75,23 @@ public class SimpleWeightedGraph<V, E>
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
+
     
-    public static <V, E> UndirectedWeightedGraphBuilderBase
-            <V, E, ? extends SimpleWeightedGraph<V,E>, ?>
-            builder(Class<? extends E> edgeClass) {
-        return new UndirectedWeightedGraphBuilder
-                <V, E, SimpleWeightedGraph<V, E>>(
+
+    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
+        E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
+    {
+        return new UndirectedWeightedGraphBuilder<V,
+            E, SimpleWeightedGraph<V, E>>(
                 new SimpleWeightedGraph<V, E>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase
-            <V, E, ? extends SimpleWeightedGraph<V,E>, ?>
-            builder(EdgeFactory<V, E> ef) {
-        return new UndirectedWeightedGraphBuilder
-                <V, E, SimpleWeightedGraph<V, E>>(
+    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
+        E, ? extends SimpleWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    {
+        return new UndirectedWeightedGraphBuilder<V,
+            E, SimpleWeightedGraph<V, E>>(
                 new SimpleWeightedGraph<V, E>(ef));
     }
 }

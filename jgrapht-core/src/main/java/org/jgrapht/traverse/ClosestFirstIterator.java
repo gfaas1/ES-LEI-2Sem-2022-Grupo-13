@@ -51,9 +51,8 @@ import org.jgrapht.util.*;
  *
  * <p>The metric for <i>closest</i> here is the weighted path length from a
  * start vertex, i.e. Graph.getEdgeWeight(Edge) is summed to calculate path
- * length. Negative edge weights will result in an
- * IllegalArgumentException. Optionally, path length may be bounded by a finite
- * radius.</p>
+ * length. Negative edge weights will result in an IllegalArgumentException.
+ * Optionally, path length may be bounded by a finite radius.</p>
  *
  * @author John V. Sichi
  * @since Sep 2, 2003
@@ -114,8 +113,8 @@ public class ClosestFirstIterator<V, E>
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
-     * @param radius limit on weighted path length, or
-     * Double.POSITIVE_INFINITY for unbounded search.
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY
+     * for unbounded search.
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
@@ -128,8 +127,8 @@ public class ClosestFirstIterator<V, E>
     
 
     // override AbstractGraphIterator
-    @Override
-    public void setCrossComponentTraversal(boolean crossComponentTraversal)
+    @Override public void setCrossComponentTraversal(
+        boolean crossComponentTraversal)
     {
         if (initialized) {
             checkRadiusTraversal(crossComponentTraversal);
@@ -138,9 +137,9 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
-     * Get the weighted length of the shortest path known to the given
-     * vertex. If the vertex has already been visited, then it is truly the
-     * shortest path length; otherwise, it is the best known upper bound.
+     * Get the weighted length of the shortest path known to the given vertex.
+     * If the vertex has already been visited, then it is truly the shortest
+     * path length; otherwise, it is the best known upper bound.
      *
      * @param vertex vertex being sought from start vertex
      *
@@ -184,8 +183,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
-    @Override
-    protected boolean isConnectedComponentExhausted()
+    @Override protected boolean isConnectedComponentExhausted()
     {
         if (heap.size() == 0) {
             return true;
@@ -203,8 +201,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
-    @Override
-    protected void encounterVertex(V vertex, E edge)
+    @Override protected void encounterVertex(V vertex, E edge)
     {
         double shortestPathLength;
         if (edge == null) {
@@ -224,8 +221,7 @@ public class ClosestFirstIterator<V, E>
      * @param vertex the vertex re-encountered
      * @param edge the edge via which the vertex was re-encountered
      */
-    @Override
-    protected void encounterVertexAgain(V vertex, E edge)
+    @Override protected void encounterVertexAgain(V vertex, E edge)
     {
         FibonacciHeapNode<QueueEntry<V, E>> node = getSeenData(vertex);
 
@@ -245,8 +241,7 @@ public class ClosestFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
-    @Override
-    protected V provideNextVertex()
+    @Override protected V provideNextVertex()
     {
         FibonacciHeapNode<QueueEntry<V, E>> node = heap.removeMin();
         node.getData().frozen = true;

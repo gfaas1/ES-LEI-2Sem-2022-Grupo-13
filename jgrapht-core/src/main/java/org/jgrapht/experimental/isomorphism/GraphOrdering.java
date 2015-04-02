@@ -160,8 +160,7 @@ public class GraphOrdering<V, E>
        mapVertexToOrder=        labelsOrder=
      * </pre>
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         StringBuffer sb = new StringBuffer();
         sb.append("mapVertexToOrder=");
@@ -200,8 +199,7 @@ public class GraphOrdering<V, E>
          *
          * @see java.lang.Object#equals(java.lang.Object)
          */
-        @Override
-        public boolean equals(Object obj)
+        @Override public boolean equals(Object obj)
         {
             LabelsEdge otherEdge = (LabelsEdge) obj;
             if ((this.source == otherEdge.source)
@@ -216,14 +214,12 @@ public class GraphOrdering<V, E>
         /**
          * @see java.lang.Object#hashCode()
          */
-        @Override
-        public int hashCode()
+        @Override public int hashCode()
         {
             return this.hashCode; // filled on constructor
         }
 
-        @Override
-        public String toString()
+        @Override public String toString()
         {
             return this.source + "->" + this.target;
         }

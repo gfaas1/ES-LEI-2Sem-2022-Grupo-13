@@ -94,8 +94,7 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
      */
-    @Override
-    protected boolean isConnectedComponentExhausted()
+    @Override protected boolean isConnectedComponentExhausted()
     {
         return queue.isEmpty();
     }
@@ -103,8 +102,7 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertex(Object, Object)
      */
-    @Override
-    protected void encounterVertex(V vertex, E edge)
+    @Override protected void encounterVertex(V vertex, E edge)
     {
         putSeenData(vertex, null);
         queue.add(vertex);
@@ -113,16 +111,14 @@ public class BreadthFirstIterator<V, E>
     /**
      * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
      */
-    @Override
-    protected void encounterVertexAgain(V vertex, E edge)
+    @Override protected void encounterVertexAgain(V vertex, E edge)
     {
     }
 
     /**
      * @see CrossComponentIterator#provideNextVertex()
      */
-    @Override
-    protected V provideNextVertex()
+    @Override protected V provideNextVertex()
     {
         return queue.removeFirst();
     }

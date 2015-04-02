@@ -825,8 +825,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see JGraphModelAdapter.CellFactory#createEdgeCell(Object)
          */
-        @Override
-        public DefaultEdge createEdgeCell(EE jGraphTEdge)
+        @Override public DefaultEdge createEdgeCell(EE jGraphTEdge)
         {
             return new DefaultEdge(jGraphTEdge);
         }
@@ -834,8 +833,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see JGraphModelAdapter.CellFactory#createVertexCell(Object)
          */
-        @Override
-        public DefaultGraphCell createVertexCell(VV jGraphTVertex)
+        @Override public DefaultGraphCell createVertexCell(VV jGraphTVertex)
         {
             return new DefaultGraphCell(jGraphTVertex);
         }
@@ -861,8 +859,7 @@ public class JGraphModelAdapter<V, E>
          *
          * @param e
          */
-        @Override
-        public void graphChanged(GraphModelEvent e)
+        @Override public void graphChanged(GraphModelEvent e)
         {
             // We first remove edges that have to be removed, then we
             // remove vertices, then we add vertices and finally we add
@@ -1028,8 +1025,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
          */
-        @Override
-        public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+        @Override public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
         {
             E jtEdge = e.getEdge();
 
@@ -1041,8 +1037,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
          */
-        @Override
-        public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+        @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
         {
             E jtEdge = e.getEdge();
 
@@ -1054,8 +1049,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
          */
-        @Override
-        public void vertexAdded(GraphVertexChangeEvent<V> e)
+        @Override public void vertexAdded(GraphVertexChangeEvent<V> e)
         {
             V jtVertex = e.getVertex();
 
@@ -1067,8 +1061,7 @@ public class JGraphModelAdapter<V, E>
         /**
          * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
          */
-        @Override
-        public void vertexRemoved(GraphVertexChangeEvent<V> e)
+        @Override public void vertexRemoved(GraphVertexChangeEvent<V> e)
         {
             V jtVertex = e.getVertex();
 

@@ -79,20 +79,23 @@ public class DefaultDirectedGraph<V, E>
     {
         super(ef, false, true);
     }
+
     
 
-    public static <V, E> DirectedGraphBuilderBase
-            <V, E, ? extends DefaultDirectedGraph<V,E>, ?>
-            builder(Class<? extends E> edgeClass) {
-        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V,E>>(
-                new DefaultDirectedGraph<V, E>(edgeClass));
+    public static <V, E> DirectedGraphBuilderBase<V,
+        E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
+    {
+        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V, E>>(
+            new DefaultDirectedGraph<V, E>(edgeClass));
     }
 
-    public static <V, E> DirectedGraphBuilderBase
-            <V, E, ? extends DefaultDirectedGraph<V,E>, ?>
-            builder(EdgeFactory<V, E> ef) {
-        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V,E>>(
-                new DefaultDirectedGraph<V, E>(ef));
+    public static <V, E> DirectedGraphBuilderBase<V,
+        E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
+    {
+        return new DirectedGraphBuilder<V, E, DefaultDirectedGraph<V, E>>(
+            new DefaultDirectedGraph<V, E>(ef));
     }
 }
 

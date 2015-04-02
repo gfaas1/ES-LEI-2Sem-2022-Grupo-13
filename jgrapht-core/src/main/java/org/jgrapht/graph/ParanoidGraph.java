@@ -71,8 +71,7 @@ public class ParanoidGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    @Override
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         verifyAdd(edgeSet(), e);
         return super.addEdge(sourceVertex, targetVertex, e);
@@ -81,8 +80,7 @@ public class ParanoidGraph<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
-    @Override
-    public boolean addVertex(V v)
+    @Override public boolean addVertex(V v)
     {
         verifyAdd(vertexSet(), v);
         return super.addVertex(v);

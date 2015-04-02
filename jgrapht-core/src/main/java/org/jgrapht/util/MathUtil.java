@@ -36,9 +36,10 @@ package org.jgrapht.util;
 
 /**
  * Math Utilities. Currently contains the following:
- *<ol>
+ *
+ * <ol>
  * <li>factorial(int N) - caclulate the factorial of N (aka N!)</li>
- *</ol>
+ * </ol>
  *
  * @author Assaf
  * @since May 30, 2005

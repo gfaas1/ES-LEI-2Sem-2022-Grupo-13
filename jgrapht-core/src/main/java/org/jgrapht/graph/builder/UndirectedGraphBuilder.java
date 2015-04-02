@@ -38,27 +38,27 @@ package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
 
+
 /**
- * A builder class for {@link Graph}.
- * If you want to extend this class, see {@link UndirectedGraphBuilderBase}.
+ * A builder class for {@link Graph}. If you want to extend this class, see
+ * {@link UndirectedGraphBuilderBase}.
  */
 public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
-        extends UndirectedGraphBuilderBase<V, E, G,
-                UndirectedGraphBuilder<V, E, G>>
+    extends UndirectedGraphBuilderBase<V, E, G, UndirectedGraphBuilder<V, E, G>>
 {
-
+    
 
     /**
-     * Creates a builder based on {@code baseGraph}.
-     * {@code baseGraph} must be mutable.
-     * <p>
-     * The recomended way to use this constructor is:
-     * {@code new UndirectedGraphBuilder<...>(new YourGraph<...>(...))}.
-     * <p>
-     * NOTE: {@code baseGraph} should not be an existing graph. If you want to
-     * add an existing graph to the graph being built, you should use the
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
+     * mutable.
+     *
+     * <p>The recomended way to use this constructor is: {@code new
+     * UndirectedGraphBuilder<...>(new YourGraph<...>(...))}.
+     *
+     * <p>NOTE: {@code baseGraph} should not be an existing graph. If you want
+     * to add an existing graph to the graph being built, you should use the
      * {@link #addVertex(Object)} method.
-     * 
+     *
      * @param baseGraph the graph object to base building on
      */
     public UndirectedGraphBuilder(G baseGraph)
@@ -66,9 +66,9 @@ public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
         super(baseGraph);
     }
 
+    
 
-    @Override
-    protected UndirectedGraphBuilder<V, E, G> self()
+    @Override protected UndirectedGraphBuilder<V, E, G> self()
     {
         return this;
     }

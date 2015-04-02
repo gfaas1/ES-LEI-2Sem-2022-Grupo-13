@@ -62,10 +62,10 @@ package org.jgrapht.experimental.equivalence;
  *
  * <p>and if it is determined by both properties: (the original figure) The
  * isomorphism inspection may return different result according to this choice.
- * If the other graph is: (male,"Don")---&gt;(male,"Sunny")----&gt;(male,"Jo") In no
- * eq.set they are Isomorphic, but for the two other cases they are not. Other
- * examples: Nodes with the same degree, Edges with the same weight, Graphs with
- * the same number of nodes and edges.
+ * If the other graph is: (male,"Don")---&gt;(male,"Sunny")----&gt;(male,"Jo")
+ * In no eq.set they are Isomorphic, but for the two other cases they are not.
+ * Other examples: Nodes with the same degree, Edges with the same weight,
+ * Graphs with the same number of nodes and edges.
  *
  * @param <E> the type of the elements in the set
  * @param <C> the type of the context the element is compared against, e.g. a

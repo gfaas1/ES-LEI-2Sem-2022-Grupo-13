@@ -81,8 +81,7 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Collection#contains(java.lang.Object)
      */
-    @Override
-    public boolean contains(Object o)
+    @Override public boolean contains(Object o)
     {
         return this.edgeSet.contains(o)
             && !this.mask.isEdgeMasked(TypeUtil.uncheckedCast(o, edgeTypeDecl));
@@ -91,8 +90,7 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Set#iterator()
      */
-    @Override
-    public Iterator<E> iterator()
+    @Override public Iterator<E> iterator()
     {
         return new PrefetchIterator<E>(new MaskEdgeSetNextElementFunctor());
     }
@@ -100,8 +98,7 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Set#size()
      */
-    @Override
-    public int size()
+    @Override public int size()
     {
         if (this.size == -1) {
             this.size = 0;
@@ -125,8 +122,7 @@ class MaskEdgeSet<V, E>
             this.iter = MaskEdgeSet.this.edgeSet.iterator();
         }
 
-        @Override
-        public E nextElement()
+        @Override public E nextElement()
             throws NoSuchElementException
         {
             E edge = this.iter.next();

@@ -117,8 +117,7 @@ public class NeighborIndex<V, E>
     /**
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
-    @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    @Override public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
         E edge = e.getEdge();
         V source = graph.getEdgeSource(edge);
@@ -144,8 +143,7 @@ public class NeighborIndex<V, E>
     /**
      * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
      */
-    @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         E edge = e.getEdge();
         V source = e.getEdgeSource();
@@ -161,8 +159,7 @@ public class NeighborIndex<V, E>
     /**
      * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
      */
-    @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e)
+    @Override public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
         // nothing to cache until there are edges
     }
@@ -170,8 +167,7 @@ public class NeighborIndex<V, E>
     /**
      * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
      */
-    @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    @Override public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
         neighborMap.remove(e.getVertex());
     }
