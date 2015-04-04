@@ -163,7 +163,7 @@ code coverage.
 
 <li>Commit all work and push to github.
 
-<li>Run <code>mvn clean deploy</code> to push the latest snapshot to Sonatype.
+<li>Run <code>mvn -Dmaven.artifact.threads=1 clean deploy</code> to push the latest snapshot to Sonatype.
 
 <li>Run <code>mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform</code> to create the Maven artifacts and push them to Maven Central
 
