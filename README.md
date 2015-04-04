@@ -1,17 +1,17 @@
 # JGraphT
 
-Released: December, 2013</p>
+Released: May, 2015</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
-(C) Copyright 2003-2013, by Barak Naveh and Contributors. All rights
+(C) Copyright 2003-2015, by Barak Naveh and Contributors. All rights
 reserved.
 
 Please address all contributions, suggestions, and inquiries to the current project administrator [John Sichi](mailto:perfecthash@users.sf.net)
 
 ## Introduction ##
 
-JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 1.6 or later).
+JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 1.7 or later).
 
 JGraphT may be used under the terms of either the
 
@@ -74,7 +74,7 @@ A local copy of the Javadoc HTML files is included in this distribution. The lat
 
 ## Dependencies ##
 
-- JGraphT requires JDK 1.6 or later to build.
+- JGraphT requires JDK 1.7 or later to build.
 - [JUnit](http://www.junit.org) is a unit testing framework. You need JUnit only if you want to run the unit tests.  JUnit is licensed under the terms of the IBM Common Public License.  The JUnit tests included with JGraphT have been created using JUnit `3.8.1`.
 - [XMLUnit](http://xmlunit.sourceforge.net) extends JUnit with XML capabilities. You need XMLUnit only if you want to run the unit tests.  XMLUnit is licensed under the terms of the BSD
     License.
