@@ -1,6 +1,6 @@
 # JGraphT
 
-Released: May, 2015</p>
+Released: April 5, 2015</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
@@ -55,9 +55,19 @@ Please refer to the license for details.
 
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
 
-To run the graph visualization demo, try executing this command in the lib directory:
+To run the graph visualization demo from the downloaded release, try executing this command in the lib directory:
 
     java -jar jgrapht-demo-x.y.z.jar
+
+## Using via Maven
+
+Starting from 0.9.0, every JGraphT release is published to the Maven Central Repository.  You can add a dependency from your project as follows:
+
+```
+  <groupId>org.jgrapht</groupId>
+  <artifactId>jgrapht-core</artifactId>
+  <version>0.9.1</version>
+```
 
 ## Upgrading Versions ##
 
