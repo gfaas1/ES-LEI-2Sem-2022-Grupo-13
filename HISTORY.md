@@ -21,10 +21,10 @@ Changes to JGraphT in each version:
 	- Update maven-compiler-plugin version, contributed by Andrew Chen
 	- Add builder package, contributed by Andrew Chen
 	- Add CliqueMinimalSeparatorDecomposition, contributed by Florian Buenzli, Thomas Tschager, Tomas Hruz, and Philipp Hoppen
-        - Include vertex #toString value in excn message, contributed by Chris Wensel
-        - Open up Specifics to allow for custom backing containers, contributed by Chris Wensel
-        - Make abstract graph constructors protected, contributed by John Sichi
-        - Moved to JDK 1.7
+	- Include vertex #toString value in excn message, contributed by Chris Wensel
+	- Open up Specifics to allow for custom backing containers, contributed by Chris Wensel
+	- Make abstract graph constructors protected, contributed by John Sichi
+	- Moved to JDK 1.7
 
 - **version 0.9.0** (06-Dec-2013): 
 	- Move to github for source control, and Apache Maven for build, contributed by Andreas Schnaiter, Owen Jacobson, and Isaac Kleinman.
