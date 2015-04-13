@@ -36,6 +36,7 @@
 
 import java.util.*;
 import org.jgrapht.*;
+import org.jgrapht.alg.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by
