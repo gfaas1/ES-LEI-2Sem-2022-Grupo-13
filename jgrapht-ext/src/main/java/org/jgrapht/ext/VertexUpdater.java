@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* ------------------
- * VertexProvider.java
+ * VertexUpdater.java
  * ------------------
  * (C) Copyright 2015, by  Wil Selwood.
  *
@@ -32,17 +32,17 @@ package org.jgrapht.ext;
 import java.util.Map;
 
 /**
- * Creates a Vertex of type V
- * @param <V> Vertex type
+ * Type to handle updates to a vertex when an import gets more information
+ * about a vertex after it has been created.
+ * @param <V>
  */
-public interface VertexProvider<V> {
+public interface VertexUpdater<V> {
 
    /**
-    * Create a vertex
-    * @param label the label of the vertex
-    * @param attributes any other attributes of the vertex
-    * @return the vertex.
+    * Update vertex with the extra attributes.
+    * @param vertex to update
+    * @param attributes to add to the vertex
     */
-   V buildVertex(String label, Map<String, String> attributes);
+   void updateVertex(V vertex, Map<String, String> attributes);
 
 }
