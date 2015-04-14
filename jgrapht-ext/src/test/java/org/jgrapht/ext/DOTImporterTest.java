@@ -266,7 +266,7 @@ public class DOTImporterTest extends TestCase
 
    public void testNonConfiguredUpdate() {
       String input = "graph G {\n"
-                     + "a -- b;\n"
+                     + "a -- b // this is before the attributes for this test\n"
                      + "a [foo=\"bar\"];\n"
                      + "}";
       Multigraph<TestVertex, DefaultEdge> result

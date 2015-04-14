@@ -107,7 +107,7 @@ public class DOTImporter<V,E> {
 
          // trim off line comments.
          if (line.contains("//")) {
-            line = line.substring(line.indexOf("//"), line.length());
+            line = line.substring(0, line.indexOf("//"));
          }
 
          // with \r\n or just ;\n line ends we get blanks. Filter here.
