@@ -3,7 +3,7 @@
 Changes to JGraphT in each version:
 
 - **version 0.9.2** (under development): 
-	- Nothing yet, you could be the first!
+	- Add `DOTImporter`, contributed by Wil Selwood
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
