@@ -4,6 +4,7 @@
 package org.jgrapht.experimental.subgraphisomorphism;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 
 import org.jgrapht.Graph;
@@ -156,8 +157,10 @@ public class VF2SubgraphIsomorphismInspector<V,E> implements
 			return tmp;
 		}
 		
-		//todo: add "throws ..."
-		return matchAndCheck();
+		SubgraphIsomorphismRelation<V,E> rel = matchAndCheck();
+		if (rel == null)
+			throw new NoSuchElementException();
+		return rel;
 	}
 
 	@Override
