@@ -13,7 +13,7 @@ import org.jgrapht.Graph;
  *
  */
 public class VF2SubgraphIsomorphismInspector<V,E> implements
-		SubgraphIsomorphismInspector<SubgraphIsomorphismRelation> {
+		SubgraphIsomorphismInspector<SubgraphIsomorphismRelation<V,E>> {
 
 	private Graph<V,E> graph1,
 	                   graph2;
@@ -99,7 +99,7 @@ public class VF2SubgraphIsomorphismInspector<V,E> implements
 	}
 	
 	// to be removed..
-	private SubgraphIsomorphismRelation<V,E> singleMatch(VF2SubState s)
+	private SubgraphIsomorphismRelation<V,E> singleMatch(VF2SubState<V,E> s)
 	{
 		if (s.isGoal())
 			return s.getCurrentMatching();
@@ -110,7 +110,7 @@ public class VF2SubgraphIsomorphismInspector<V,E> implements
 		while (found == null && s.nextPair())	{
 			if (s.isFeasiblePair())
 			{
-				VF2SubState s2 = new VF2SubState(s);
+				VF2SubState<V,E> s2 = new VF2SubState<V,E>(s);
 				s2.addPair();
 				found = singleMatch(s2);
 				s2.backtrack();
@@ -149,7 +149,7 @@ public class VF2SubgraphIsomorphismInspector<V,E> implements
 	}
 
 	@Override
-	public SubgraphIsomorphismRelation next() {
+	public SubgraphIsomorphismRelation<V,E> next() {
 		if (nextRelation != null)	{
 			SubgraphIsomorphismRelation<V,E> tmp = nextRelation;
 			nextRelation = null;

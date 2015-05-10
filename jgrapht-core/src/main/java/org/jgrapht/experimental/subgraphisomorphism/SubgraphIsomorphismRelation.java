@@ -3,17 +3,13 @@
  */
 package org.jgrapht.experimental.subgraphisomorphism;
 
-import java.util.Iterator;
-import java.util.Set;
 import java.util.TreeSet;
-
-import org.jgrapht.GraphMapping;
 
 /**
  * @author fabian
  *
  */
-public class SubgraphIsomorphismRelation<V,E> implements GraphMapping<V, E> {
+public class SubgraphIsomorphismRelation<V,E> implements GraphSubgraphMapping<V, E> {
 	
 	GraphOrdering<V,E> g1,
 	                   g2;
@@ -65,7 +61,7 @@ public class SubgraphIsomorphismRelation<V,E> implements GraphMapping<V, E> {
 			e2 = g1.getEdge(core2[eOrder[0]], core2[eOrder[1]]);
 		}
 		
-		return null;
+		return e2;
 	}
 
 	public boolean hasVertexCorrespondence(V v)	{

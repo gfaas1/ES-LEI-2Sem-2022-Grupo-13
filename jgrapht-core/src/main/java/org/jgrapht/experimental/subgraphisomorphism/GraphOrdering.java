@@ -3,10 +3,8 @@ package org.jgrapht.experimental.subgraphisomorphism;
 import org.jgrapht.Graph;
 import org.jgrapht.DirectedGraph;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -43,10 +41,10 @@ public class GraphOrdering<V,E> {
 	
 	public int[] getOutEdges(int vertexOrder)	{
 		V v            = mapOrderToVertex.get(new Integer(vertexOrder));
-		Set<E> edgeSet = new HashSet();
+		Set<E> edgeSet = new HashSet<E>();
 		
 		if (graph instanceof DirectedGraph<?,?>)
-			edgeSet = ((DirectedGraph) graph).outgoingEdgesOf(v);
+			edgeSet = ((DirectedGraph<V,E>) graph).outgoingEdgesOf(v);
 		else
 			edgeSet = graph.edgesOf(v);
 		
@@ -65,10 +63,10 @@ public class GraphOrdering<V,E> {
 	
 	public int[] getInEdges(int vertexOrder)	{
 		V v            = mapOrderToVertex.get(new Integer(vertexOrder));
-		Set<E> edgeSet = new HashSet();
+		Set<E> edgeSet = new HashSet<E>();
 		
 		if (graph instanceof DirectedGraph<?,?>)
-			edgeSet = ((DirectedGraph) graph).incomingEdgesOf(v);
+			edgeSet = ((DirectedGraph<V,E>) graph).incomingEdgesOf(v);
 		else
 			edgeSet = graph.edgesOf(v);
 		
