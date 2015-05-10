@@ -6,7 +6,6 @@ import org.jgrapht.DirectedGraph;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 
 public class GraphOrdering<V,E> {
@@ -14,24 +13,39 @@ public class GraphOrdering<V,E> {
 	private Graph<V,E> graph;
 
 	private Map<V, Integer> mapVertexToOrder;
-	private Map<Integer, V> mapOrderToVertex;
-	private int vertexCount;
+	private Object[]        mapOrderToVertex;
+	private int             vertexCount;
+	
+	private int[][]         outgoingEdges;
+	private int[][]         incomingEdges;
 	
 	
-	public GraphOrdering(Graph<V,E> graph)
+	public GraphOrdering(Graph<V,E> graph, boolean orderByDegree)
 	{
 		this.graph            = graph;
 		
+		Set<V> vertexSet = graph.vertexSet();
+		vertexCount = vertexSet.size();
 		mapVertexToOrder = new HashMap<V, Integer>();
-		mapOrderToVertex = new HashMap<Integer, V>();
+		mapOrderToVertex = new Object[vertexCount];
+		
+		outgoingEdges    = new int[vertexCount][];
+		incomingEdges    = new int[vertexCount][];
 		
 		Integer i = 0;
-		for(V vertex : graph.vertexSet())	{
+		for(V vertex : vertexSet)	{
 			mapVertexToOrder.put(vertex, i);
-			mapOrderToVertex.put(i++, vertex);	
+			mapOrderToVertex[i] = vertex;
+			
+			outgoingEdges[i]   = null;
+			incomingEdges[i++] = null;
 		}
 		
-		vertexCount = i.intValue();
+		// todo: orderByDegree
+	}
+	
+	public GraphOrdering(Graph<V,E> graph)	{
+		this(graph, false);
 	}
 	
 	
@@ -40,8 +54,11 @@ public class GraphOrdering<V,E> {
 	}
 	
 	public int[] getOutEdges(int vertexOrder)	{
-		V v            = mapOrderToVertex.get(new Integer(vertexOrder));
-		Set<E> edgeSet = new HashSet<E>();
+		if (outgoingEdges[vertexOrder] != null)
+			return outgoingEdges[vertexOrder];
+		
+		V v            = getVertex(vertexOrder);
+		Set<E> edgeSet = null;
 		
 		if (graph instanceof DirectedGraph<?,?>)
 			edgeSet = ((DirectedGraph<V,E>) graph).outgoingEdgesOf(v);
@@ -58,12 +75,15 @@ public class GraphOrdering<V,E> {
 					source == v ? target : source);
 		}
 		
-		return vertexArray;
+		return outgoingEdges[vertexOrder] = vertexArray;
 	}
 	
 	public int[] getInEdges(int vertexOrder)	{
-		V v            = mapOrderToVertex.get(new Integer(vertexOrder));
-		Set<E> edgeSet = new HashSet<E>();
+		if (incomingEdges[vertexOrder] != null)
+			return incomingEdges[vertexOrder];
+		
+		V v            = getVertex(vertexOrder);
+		Set<E> edgeSet = null;
 		
 		if (graph instanceof DirectedGraph<?,?>)
 			edgeSet = ((DirectedGraph<V,E>) graph).incomingEdgesOf(v);
@@ -80,23 +100,25 @@ public class GraphOrdering<V,E> {
 					source == v ? target : source);
 		}
 		
-		return vertexArray;
+		return incomingEdges[vertexOrder] = vertexArray;
 	}
 	
 	public boolean hasEdge(int v1Order, int v2Order)	{
-		V v1 = mapOrderToVertex.get(new Integer(v1Order)),
-		  v2 = mapOrderToVertex.get(new Integer(v2Order));
+		V v1 = getVertex(v1Order),
+		  v2 = getVertex(v2Order);
 		
 		return graph.containsEdge(v1, v2);
 	}
 	
+	// be careful: there's no check for NULL_NODE
+	@SuppressWarnings("unchecked")
 	public V getVertex(int vertexOrder)	{
-		return mapOrderToVertex.get(new Integer(vertexOrder));
+		return (V) mapOrderToVertex[vertexOrder];
 	}
 	
 	public E getEdge(int v1Order, int v2Order)	{
-		V v1 = mapOrderToVertex.get(new Integer(v1Order)),
-		  v2 = mapOrderToVertex.get(new Integer(v2Order));
+		V v1 = getVertex(v1Order),
+		  v2 = getVertex(v2Order);
 		
 		// this may be problematic on multigraphs..
 		return graph.getEdge(v1, v2);

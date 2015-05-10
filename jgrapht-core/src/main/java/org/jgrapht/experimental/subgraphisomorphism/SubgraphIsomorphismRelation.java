@@ -11,6 +11,8 @@ import java.util.TreeSet;
  */
 public class SubgraphIsomorphismRelation<V,E> implements GraphSubgraphMapping<V, E> {
 	
+	private static int NULL_NODE;
+	
 	GraphOrdering<V,E> g1,
 	                   g2;
 	
@@ -24,6 +26,8 @@ public class SubgraphIsomorphismRelation<V,E> implements GraphSubgraphMapping<V,
 			int[] core1,
 			int[] core2)
 	{
+		NULL_NODE = Integer.MAX_VALUE;
+		
 		this.g1 = g1;
 		this.g2 = g2;
 		this.core1 = core1.clone();
@@ -33,35 +37,48 @@ public class SubgraphIsomorphismRelation<V,E> implements GraphSubgraphMapping<V,
 	
 	@Override
 	public V getVertexCorrespondence(V v, boolean forward) {
-		int vOrdering, uOrdering;
-		V u;
+		GraphOrdering<V,E> firstGraph, secondGraph;
+		int[] core;
 		
 		if (forward)	{
-			vOrdering = g1.getVertexOrder(v);
-			uOrdering = core1[vOrdering];
-			u = g2.getVertex(uOrdering);
+			firstGraph  = g1;
+			secondGraph = g2;
+			core        = core1;
 		} else {
-			vOrdering = g2.getVertexOrder(v);
-			uOrdering = core2[vOrdering];
-			u = g1.getVertex(uOrdering);
+			firstGraph  = g2;
+			secondGraph = g1;
+			core        = core2;
 		}
 		
-		return u;
+		int vOrdering = firstGraph.getVertexOrder(v),
+			uOrdering = core[vOrdering];
+		
+		if (uOrdering == NULL_NODE)
+			return null;
+		
+		return secondGraph.getVertex(uOrdering);
 	}
 
 	@Override
 	public E getEdgeCorrespondence(E e, boolean forward) {
-		E e2;
+		GraphOrdering<V,E> firstGraph, secondGraph;
+		int[] core;
 		
 		if (forward)	{
-			int[] eOrder = g1.getEdgeOrder(e);
-			e2 = g2.getEdge(core1[eOrder[0]], core1[eOrder[1]]);
+			firstGraph  = g1;
+			secondGraph = g2;
+			core        = core1;
 		} else {
-			int[] eOrder = g2.getEdgeOrder(e);
-			e2 = g1.getEdge(core2[eOrder[0]], core2[eOrder[1]]);
+			firstGraph  = g2;
+			secondGraph = g1;
+			core        = core2;
 		}
 		
-		return e2;
+		int[] eOrder = firstGraph.getEdgeOrder(e);
+		if (core[eOrder[0]] == NULL_NODE || core[eOrder[1]] == NULL_NODE)
+			return null;
+		
+		return secondGraph.getEdge(core[eOrder[0]], core[eOrder[1]]);
 	}
 
 	public boolean hasVertexCorrespondence(V v)	{
