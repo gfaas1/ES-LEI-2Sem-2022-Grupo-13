@@ -100,5 +100,22 @@ public class SubgraphIsomorphismRelation<V,E> implements GraphSubgraphMapping<V,
 							getVertexCorrespondence(v, true) : "~~") + " ";
 		return str.substring(0, str.length()-1) + "]";			
 	}
+	
+	/**
+	 * Checks for equality. Assuming both are relations for the same graphs.
+	 * 
+	 * @param rel the corresponding SubgraphIsomorphismRelation
+	 * @return
+	 */
+	public boolean equals(SubgraphIsomorphismRelation<V,E> rel)
+	{
+		for (V v : g2.getGraph().vertexSet())	{
+			if (getVertexCorrespondence(v, false) != 
+					rel.getVertexCorrespondence(v, false))
+				return false;
+		}
+		
+		return true;
+	}
 
 }
