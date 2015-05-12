@@ -58,6 +58,7 @@ public class FloydWarshallShortestPaths<V, E>
 
     private Graph<V, E> graph;
     private List<V> vertices;
+    private Map<V, Integer> vertexIndices;
     private int nShortestPaths = 0;
     private double diameter = Double.NaN;
     private double [][] d = null;
@@ -70,6 +71,11 @@ public class FloydWarshallShortestPaths<V, E>
     {
         this.graph = graph;
         this.vertices = new ArrayList<V>(graph.vertexSet());
+        this.vertexIndices = new HashMap<V, Integer>(this.vertices.size());
+        int i = 0;
+        for (V vertex : vertices) {
+            vertexIndices.put(vertex, i++);
+        }
     }
 
     
@@ -122,16 +128,17 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         // initialize matrix, 2
+        boolean directed = graph instanceof DirectedGraph<?, ?>;
         Set<E> edges = graph.edgeSet();
         for (E edge : edges) {
             V v1 = graph.getEdgeSource(edge);
             V v2 = graph.getEdgeTarget(edge);
 
-            int v_1 = vertices.indexOf(v1);
-            int v_2 = vertices.indexOf(v2);
+            int v_1 = vertexIndices.get(v1);
+            int v_2 = vertexIndices.get(v2);
 
             d[v_1][v_2] = graph.getEdgeWeight(edge);
-            if (!(graph instanceof DirectedGraph<?, ?>)) {
+            if (!directed) {
                 d[v_2][v_1] = graph.getEdgeWeight(edge);
             }
         }
@@ -162,7 +169,7 @@ public class FloydWarshallShortestPaths<V, E>
     {
         lazyCalculateMatrix();
 
-        return d[vertices.indexOf(a)][vertices.indexOf(b)];
+        return d[vertexIndices.get(a)][vertexIndices.get(b)];
     }
 
     /**
@@ -219,8 +226,8 @@ public class FloydWarshallShortestPaths<V, E>
 
     private GraphPath<V, E> getShortestPathImpl(V a, V b)
     {
-        int v_a = vertices.indexOf(a);
-        int v_b = vertices.indexOf(b);
+        int v_a = vertexIndices.get(a);
+        int v_b = vertexIndices.get(b);
 
         List<E> edges = new ArrayList<E>();
         shortestPathRecur(edges, v_a, v_b);
