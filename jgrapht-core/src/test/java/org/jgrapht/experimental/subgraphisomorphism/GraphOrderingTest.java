@@ -46,11 +46,11 @@ public class GraphOrderingTest {
 		assertEquals(5, g1Ordering.getVertexCount());
 		
 		
-		int v1o = g1Ordering.getVertexOrder(v1),
-			v2o = g1Ordering.getVertexOrder(v2),
-			v3o = g1Ordering.getVertexOrder(v3),
-			v4o = g1Ordering.getVertexOrder(v4),
-			v5o = g1Ordering.getVertexOrder(v5);
+		int v1o = g1Ordering.getVertexNumber(v1),
+			v2o = g1Ordering.getVertexNumber(v2),
+			v3o = g1Ordering.getVertexNumber(v3),
+			v4o = g1Ordering.getVertexNumber(v4),
+			v5o = g1Ordering.getVertexNumber(v5);
 		
 		int[] v1Outs  = {v2o, v3o, v4o};
 		int[] v1Outs_ = g1Ordering.getOutEdges(v1o);
@@ -176,11 +176,11 @@ public class GraphOrderingTest {
 		assertEquals(5, g1Ordering.getVertexCount());
 		
 		
-		int v1o = g1Ordering.getVertexOrder(v1),
-			v2o = g1Ordering.getVertexOrder(v2),
-			v3o = g1Ordering.getVertexOrder(v3),
-			v4o = g1Ordering.getVertexOrder(v4),
-			v5o = g1Ordering.getVertexOrder(v5);
+		int v1o = g1Ordering.getVertexNumber(v1),
+			v2o = g1Ordering.getVertexNumber(v2),
+			v3o = g1Ordering.getVertexNumber(v3),
+			v4o = g1Ordering.getVertexNumber(v4),
+			v5o = g1Ordering.getVertexNumber(v5);
 		
 		int[] v1Outs  = {v2o};
 		int[] v1Outs_ = g1Ordering.getOutEdges(v1o);
