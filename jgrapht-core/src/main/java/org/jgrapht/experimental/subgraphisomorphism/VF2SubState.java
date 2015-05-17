@@ -43,6 +43,8 @@ public class VF2SubState<V, E> {
 
     private Comparator<V> vertexComparator;
     private Comparator<E> edgeComparator;
+    
+    private String indent;
 
     /**
      * @param g1 first GraphOrdering
@@ -76,6 +78,8 @@ public class VF2SubState<V, E> {
         addedVertex1 = addVertex1 = addVertex2 = NULL_NODE;
 
         t1BothLen = t2BothLen = t1InLen = t2InLen = t1OutLen = t2OutLen = 0;
+        
+        indent = "";
     }
 
     /**
@@ -95,6 +99,7 @@ public class VF2SubState<V, E> {
         out2  = s.out2;
 
         coreLen = s.coreLen;
+        updateIndent();
 
         n1 = s.n1;
         n2 = s.n2;
@@ -112,6 +117,12 @@ public class VF2SubState<V, E> {
         addVertex1   = s.addVertex1;
         addVertex2   = s.addVertex2;
         addedVertex1 = s.addedVertex1;
+    }
+    
+    private void updateIndent() {
+        indent = "";
+        for (int i = 0; i < coreLen; i++)
+            indent += "  ";
     }
 
     /**
@@ -194,10 +205,16 @@ public class VF2SubState<V, E> {
             }
         }
 
-        if (addVertex1 < n1 && addVertex2 < n2)
+        if (addVertex1 < n1 && addVertex2 < n2) {
+            System.out.println(indent + "nextPair> nächstes Kandidatenpaar: (" +
+                            g1.getVertex(addVertex1) + ", " +
+                            g2.getVertex(addVertex2) + ")");
             return true;
+        }
 
         // there are no more pairs..
+        System.out.println(indent + "nextPair> keine weiteren Kandidatenpaare");
+        
         addVertex1 = addVertex2 = NULL_NODE;
         return false;
     }
@@ -206,7 +223,11 @@ public class VF2SubState<V, E> {
      * adds the pair to the current matching.
      */
     public void addPair() {
+        System.out.println(indent + "addPair> (" + g1.getVertex(addVertex1) + ", " +
+                        g2.getVertex(addVertex2) + ") hinzugefügt");
+        
         coreLen++;
+        updateIndent();
         addedVertex1 = addVertex1;
 
         if (in1[addVertex1] == 0) {
@@ -290,6 +311,9 @@ public class VF2SubState<V, E> {
      * graph2 and the second one vertex of nextPair.
      */
     public boolean isFeasiblePair() {
+        String pairstr  = "(" + g1.getVertex(addVertex1) + ", " +
+                        g2.getVertex(addVertex2) + ")",
+               abortmsg = indent + "isFeasiblePair> " + pairstr + " passt nicht ins aktuelle Matching";
         // check for semantic equality of both vertexes
         if (!areCompatibleVertexes(addVertex1, addVertex2))
             return false;
@@ -307,8 +331,10 @@ public class VF2SubState<V, E> {
                 int other2 = core1[other1];
                 if (!g2.hasEdge(addVertex2, other2) ||
                                 !areCompatibleEdges(addVertex1, other1,
-                                                    addVertex2, other2))
+                                                    addVertex2, other2))    {
+                    System.out.println(abortmsg);
                     return false;
+                }
             } else {
                 if (in1[other1] > 0)
                     termIn1++;
@@ -325,8 +351,10 @@ public class VF2SubState<V, E> {
                 int other2 = core1[other1];
                 if (!g2.hasEdge(other2, addVertex2) ||
                                 !areCompatibleEdges(other1, addVertex1,
-                                                    other2, addVertex2))
+                                                    other2, addVertex2))    {
+                    System.out.println(abortmsg);
                     return false;
+                }
             } else {
                 if (in1[other1] > 0)
                     termIn1++;
@@ -341,8 +369,10 @@ public class VF2SubState<V, E> {
         for (int other2 : g2.getOutEdges(addVertex2)) {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
-                if (!g1.hasEdge(addVertex1, other1))
+                if (!g1.hasEdge(addVertex1, other1))    {
+                    System.out.println(abortmsg);
                     return false;
+                }
             } else {
                 if (in2[other2] > 0)
                     termIn2++;
@@ -357,8 +387,10 @@ public class VF2SubState<V, E> {
         for (int other2 : g2.getInEdges(addVertex2)) {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
-                if (!g1.hasEdge(other1, addVertex1))
+                if (!g1.hasEdge(other1, addVertex1))    {
+                    System.out.println(abortmsg);
                     return false;
+                }
             } else {
                 if (in2[other2] > 0)
                     termIn2++;
@@ -369,7 +401,13 @@ public class VF2SubState<V, E> {
             }
         }
 
-        return termIn1 >= termIn2 && termOut1 >= termOut2 && new1 >= new2;
+        if (termIn1 >= termIn2 && termOut1 >= termOut2 && new1 >= new2) {
+            System.out.println(indent + "isFeasiblePair> " + pairstr + " passt");
+            return true;
+        } else {
+            System.out.println(abortmsg);
+            return false;
+        }
     }
 
     /**
@@ -377,7 +415,10 @@ public class VF2SubState<V, E> {
      */
     public void backtrack() {
         int addedVertex2 = core1[addedVertex1];
-
+        
+        System.out.println(indent + "backtrack> entferne (" + g1.getVertex(addedVertex1) + ", " +
+                        g2.getVertex(addedVertex2) + ") aus dem Matching");
+        
         if (in1[addedVertex1] == coreLen)
             in1[addedVertex1] = 0;
 
@@ -412,6 +453,7 @@ public class VF2SubState<V, E> {
 
         core1[addedVertex1] = core2[addedVertex2] = NULL_NODE;
         coreLen--;
+        updateIndent();
         addedVertex1 = NULL_NODE;
     }
 
