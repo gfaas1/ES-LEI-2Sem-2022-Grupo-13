@@ -318,12 +318,18 @@ public class VF2SubState<V, E> {
         if (!areCompatibleVertexes(addVertex1, addVertex2))
             return false;
 
-        int termOut1 = 0,
-            termOut2 = 0,
-            termIn1 = 0,
-            termIn2 = 0,
-            new1 = 0,
-            new2 = 0;
+        int termOutPred1 = 0,
+            termOutPred2 = 0,
+            termInPred1 = 0,
+            termInPred2 = 0,
+            newPred1 = 0,
+            newPred2 = 0,
+            termOutSucc1 = 0,
+            termOutSucc2 = 0,
+            termInSucc1 = 0,
+            termInSucc2 = 0,
+            newSucc1 = 0,
+            newSucc2 = 0;
 
         // check outgoing edges of addVertex1
         for (int other1 : g1.getOutEdges(addVertex1)) {
@@ -337,11 +343,11 @@ public class VF2SubState<V, E> {
                 }
             } else {
                 if (in1[other1] > 0)
-                    termIn1++;
+                    termInSucc1++;
                 if (out1[other1] > 0)
-                    termOut1++;
+                    termOutSucc1++;
                 if (in1[other1] == 0 && out1[other1] == 0)
-                    new1++;
+                    newSucc1++;
             }
         }
 
@@ -357,11 +363,11 @@ public class VF2SubState<V, E> {
                 }
             } else {
                 if (in1[other1] > 0)
-                    termIn1++;
+                    termInPred1++;
                 if (out1[other1] > 0)
-                    termOut1++;
+                    termOutPred1++;
                 if (in1[other1] == 0 && out1[other1] == 0)
-                    new1++;
+                    newPred1++;
             }
         }
 
@@ -375,11 +381,11 @@ public class VF2SubState<V, E> {
                 }
             } else {
                 if (in2[other2] > 0)
-                    termIn2++;
+                    termInSucc2++;
                 if (out2[other2] > 0)
-                    termOut2++;
+                    termOutSucc2++;
                 if (in2[other2] == 0 && out2[other2] == 0)
-                    new2++;
+                    newSucc2++;
             }
         }
 
@@ -393,15 +399,15 @@ public class VF2SubState<V, E> {
                 }
             } else {
                 if (in2[other2] > 0)
-                    termIn2++;
+                    termInPred2++;
                 if (out2[other2] > 0)
-                    termOut2++;
+                    termOutPred2++;
                 if (in2[other2] == 0 && out2[other2] == 0)
-                    new2++;
+                    newPred2++;
             }
         }
 
-        if (termIn1 >= termIn2 && termOut1 >= termOut2 && new1 >= new2) {
+        if (termInPred1 >= termInPred2 && termOutPred1 >= termOutPred2 && newPred1 >= newPred2 && termInSucc1 >= termInSucc2 && termOutSucc1 >= termOutSucc2 && newSucc1 >= newSucc2) {
             System.out.println(indent + "isFeasiblePair> " + pairstr + " passt");
             return true;
         } else {
