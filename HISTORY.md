@@ -4,6 +4,7 @@ Changes to JGraphT in each version:
 
 - **version 0.9.2** (under development): 
 	- Add `DOTImporter`, contributed by Wil Selwood
+	- Optimize `FloydWarshallShortestPaths`, contributed by Mihhail Verhovtsov
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
