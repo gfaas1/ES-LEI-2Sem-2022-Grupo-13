@@ -424,8 +424,8 @@ public class VF2SubState<V, E> {
         else
         {
             String cause = "",
-                   v1 = (String) g1.getVertex(addVertex1),
-                   v2 = (String) g2.getVertex(addVertex2);
+                   v1 = g1.getVertex(addVertex1).toString(),
+                   v2 = g2.getVertex(addVertex2).toString();
         
             if (termInPred2 > termInPred1)
                 cause = "|Tin2 ∩ Pred(Graph2, " + v2 + ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
