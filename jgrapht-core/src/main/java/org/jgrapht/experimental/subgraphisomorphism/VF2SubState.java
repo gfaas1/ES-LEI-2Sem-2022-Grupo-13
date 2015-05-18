@@ -338,7 +338,8 @@ public class VF2SubState<V, E> {
                 if (!g2.hasEdge(addVertex2, other2) ||
                                 !areCompatibleEdges(addVertex1, other1,
                                                     addVertex2, other2))    {
-                    System.out.println(abortmsg);
+                    System.out.println(abortmsg + ": Kante von " + g2.getVertex(addVertex2) +
+                                    " nach " + g2.getVertex(other2) + " fehlt im 2. Graph");
                     return false;
                 }
             } else {
@@ -358,7 +359,8 @@ public class VF2SubState<V, E> {
                 if (!g2.hasEdge(other2, addVertex2) ||
                                 !areCompatibleEdges(other1, addVertex1,
                                                     other2, addVertex2))    {
-                    System.out.println(abortmsg);
+                    System.out.println(abortmsg + ": Kante von " + g2.getVertex(other2) +
+                                    " nach " + g2.getVertex(addVertex2) + " fehlt im 2. Graph");
                     return false;
                 }
             } else {
@@ -376,7 +378,8 @@ public class VF2SubState<V, E> {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(addVertex1, other1))    {
-                    System.out.println(abortmsg);
+                    System.out.println(abortmsg + ": Kante von " + g1.getVertex(addVertex1) +
+                                    " nach " + g1.getVertex(other1) + " fehlt im 1. Graph");
                     return false;
                 }
             } else {
@@ -394,7 +397,8 @@ public class VF2SubState<V, E> {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(other1, addVertex1))    {
-                    System.out.println(abortmsg);
+                    System.out.println(abortmsg + ": Kante von " + g1.getVertex(other1) +
+                                    " nach " + g1.getVertex(addVertex1) + " fehlt im 1. Graph");
                     return false;
                 }
             } else {
@@ -407,11 +411,36 @@ public class VF2SubState<V, E> {
             }
         }
 
-        if (termInPred1 >= termInPred2 && termOutPred1 >= termOutPred2 && newPred1 >= newPred2 && termInSucc1 >= termInSucc2 && termOutSucc1 >= termOutSucc2 && newSucc1 >= newSucc2) {
+        if (termInPred1 >= termInPred2 &&
+            termOutPred1 >= termOutPred2 &&
+            newPred1 >= newPred2 &&
+            termInSucc1 >= termInSucc2 &&
+            termOutSucc1 >= termOutSucc2 &&
+            newSucc1 >= newSucc2)
+        {
             System.out.println(indent + "isFeasiblePair> " + pairstr + " passt");
             return true;
-        } else {
-            System.out.println(abortmsg);
+        }
+        else
+        {
+            String cause = "",
+                   v1 = (String) g1.getVertex(addVertex1),
+                   v2 = (String) g2.getVertex(addVertex2);
+        
+            if (termInPred2 > termInPred1)
+                cause = "|Tin2 ∩ Pred(Graph2, " + v2 + ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
+            else if (termOutPred2 > termOutPred1)
+                cause = "|Tout2 ∩ Pred(Graph2, " + v2 + ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
+            else if (newPred2 > newPred2)
+                cause = "|N‾ ∩ Pred(Graph2, " + v2 + ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
+            else if (termInPred2 > termInPred1)
+                cause = "|Tin2 ∩ Succ(Graph2, " + v2 + ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
+            else if (termOutSucc2 > termOutSucc1)
+                cause = "|Tout2 ∩ Succ(Graph2, " + v2 + ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
+            else if (newSucc2 > newSucc2)
+                cause = "|N‾ ∩ Succ(Graph2, " + v2 + ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
+            
+            System.out.println(abortmsg + ": " + cause);
             return false;
         }
     }
