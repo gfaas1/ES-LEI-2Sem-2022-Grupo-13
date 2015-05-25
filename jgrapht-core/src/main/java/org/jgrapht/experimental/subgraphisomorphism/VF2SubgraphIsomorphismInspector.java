@@ -13,7 +13,7 @@ import org.jgrapht.Graph;
  * @author Fabian Späh
  *
  * @param <V> the type of the vertices
- * @param <E> the type of the nodes
+ * @param <E> the type of the edges
  */
 public class VF2SubgraphIsomorphismInspector<V, E>
     implements SubgraphIsomorphismInspector<SubgraphIsomorphismRelation<V, E>>

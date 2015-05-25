@@ -14,6 +14,8 @@ import java.util.Comparator;
 public class VF2SubState<V, E> {
 
     public static final int NULL_NODE = -1;
+    
+    private static final boolean DEBUG = true;
 
     private int[] core1,
                   core2,
@@ -43,8 +45,6 @@ public class VF2SubState<V, E> {
 
     private Comparator<V> vertexComparator;
     private Comparator<E> edgeComparator;
-    
-    private String indent;
 
     /**
      * @param g1 first GraphOrdering
@@ -78,8 +78,6 @@ public class VF2SubState<V, E> {
         addedVertex1 = addVertex1 = addVertex2 = NULL_NODE;
 
         t1BothLen = t2BothLen = t1InLen = t2InLen = t1OutLen = t2OutLen = 0;
-        
-        indent = "";
     }
 
     /**
@@ -99,7 +97,6 @@ public class VF2SubState<V, E> {
         out2  = s.out2;
 
         coreLen = s.coreLen;
-        updateIndent();
 
         n1 = s.n1;
         n2 = s.n2;
@@ -117,12 +114,6 @@ public class VF2SubState<V, E> {
         addVertex1   = s.addVertex1;
         addVertex2   = s.addVertex2;
         addedVertex1 = s.addedVertex1;
-    }
-    
-    private void updateIndent() {
-        indent = "";
-        for (int i = 0; i < coreLen; i++)
-            indent += "  ";
     }
 
     /**
@@ -206,15 +197,15 @@ public class VF2SubState<V, E> {
         }
 
         if (addVertex1 < n1 && addVertex2 < n2) {
-            System.out.println(indent + "nextPair> nächstes Kandidatenpaar: (" +
+            showLog("nextPair", "next candidate pair: (" +
                             g1.getVertex(addVertex1) + ", " +
                             g2.getVertex(addVertex2) + ")");
             return true;
         }
 
         // there are no more pairs..
-        System.out.println(indent + "nextPair> keine weiteren Kandidatenpaare");
-        
+        showLog("nextPair", "no more candidate pairs");
+
         addVertex1 = addVertex2 = NULL_NODE;
         return false;
     }
@@ -223,11 +214,10 @@ public class VF2SubState<V, E> {
      * adds the pair to the current matching.
      */
     public void addPair() {
-        System.out.println(indent + "addPair> (" + g1.getVertex(addVertex1) + ", " +
-                        g2.getVertex(addVertex2) + ") hinzugefügt");
+        showLog("addPair", "(" + g1.getVertex(addVertex1) + ", " +
+                        g2.getVertex(addVertex2) + ") added");
         
         coreLen++;
-        updateIndent();
         addedVertex1 = addVertex1;
 
         if (in1[addVertex1] == 0) {
@@ -313,7 +303,7 @@ public class VF2SubState<V, E> {
     public boolean isFeasiblePair() {
         String pairstr  = "(" + g1.getVertex(addVertex1) + ", " +
                         g2.getVertex(addVertex2) + ")",
-               abortmsg = indent + "isFeasiblePair> " + pairstr + " passt nicht ins aktuelle Matching";
+               abortmsg = pairstr + " does not fit in the current matching";
         // check for semantic equality of both vertexes
         if (!areCompatibleVertexes(addVertex1, addVertex2))
             return false;
@@ -338,8 +328,10 @@ public class VF2SubState<V, E> {
                 if (!g2.hasEdge(addVertex2, other2) ||
                                 !areCompatibleEdges(addVertex1, other1,
                                                     addVertex2, other2))    {
-                    System.out.println(abortmsg + ": Kante von " + g2.getVertex(addVertex2) +
-                                    " nach " + g2.getVertex(other2) + " fehlt im 2. Graph");
+                    showLog("isFeasiblePair", abortmsg + ": edge from " +
+                                    g2.getVertex(addVertex2) + " to " +
+                                    g2.getVertex(other2) +
+                                    " is missing in the 2nd graph");
                     return false;
                 }
             } else {
@@ -359,8 +351,10 @@ public class VF2SubState<V, E> {
                 if (!g2.hasEdge(other2, addVertex2) ||
                                 !areCompatibleEdges(other1, addVertex1,
                                                     other2, addVertex2))    {
-                    System.out.println(abortmsg + ": Kante von " + g2.getVertex(other2) +
-                                    " nach " + g2.getVertex(addVertex2) + " fehlt im 2. Graph");
+                    showLog("isFeasbilePair", abortmsg + ": edge from " +
+                                    g2.getVertex(other2) + " to " +
+                                    g2.getVertex(addVertex2) +
+                                    " is missing in the 2nd graph");
                     return false;
                 }
             } else {
@@ -378,8 +372,10 @@ public class VF2SubState<V, E> {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(addVertex1, other1))    {
-                    System.out.println(abortmsg + ": Kante von " + g1.getVertex(addVertex1) +
-                                    " nach " + g1.getVertex(other1) + " fehlt im 1. Graph");
+                    showLog("isFeasbilePair", abortmsg + ": edge from " +
+                                    g1.getVertex(addVertex1) + " to " +
+                                    g1.getVertex(other1) +
+                                    " is missing in the 1st graph");
                     return false;
                 }
             } else {
@@ -397,8 +393,10 @@ public class VF2SubState<V, E> {
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(other1, addVertex1))    {
-                    System.out.println(abortmsg + ": Kante von " + g1.getVertex(other1) +
-                                    " nach " + g1.getVertex(addVertex1) + " fehlt im 1. Graph");
+                    showLog("isFeasiblePair", abortmsg + ": edge from " +
+                                    g1.getVertex(other1) + " to " +
+                                    g1.getVertex(addVertex1) +
+                                    " is missing in the 1st graph");
                     return false;
                 }
             } else {
@@ -418,7 +416,7 @@ public class VF2SubState<V, E> {
             termOutSucc1 >= termOutSucc2 &&
             newSucc1 >= newSucc2)
         {
-            System.out.println(indent + "isFeasiblePair> " + pairstr + " passt");
+            showLog("isFeasiblePair", pairstr + " fits");
             return true;
         }
         else
@@ -428,19 +426,25 @@ public class VF2SubState<V, E> {
                    v2 = g2.getVertex(addVertex2).toString();
         
             if (termInPred2 > termInPred1)
-                cause = "|Tin2 ∩ Pred(Graph2, " + v2 + ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
+                cause = "|Tin2 ∩ Pred(Graph2, " + v2 +
+                    ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
             else if (termOutPred2 > termOutPred1)
-                cause = "|Tout2 ∩ Pred(Graph2, " + v2 + ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
+                cause = "|Tout2 ∩ Pred(Graph2, " + v2 +
+                    ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
             else if (newPred2 > newPred2)
-                cause = "|N‾ ∩ Pred(Graph2, " + v2 + ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
+                cause = "|N‾ ∩ Pred(Graph2, " + v2 +
+                    ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
             else if (termInPred2 > termInPred1)
-                cause = "|Tin2 ∩ Succ(Graph2, " + v2 + ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
+                cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
+                    ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
             else if (termOutSucc2 > termOutSucc1)
-                cause = "|Tout2 ∩ Succ(Graph2, " + v2 + ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
+                cause = "|Tout2 ∩ Succ(Graph2, " + v2 +
+                    ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
             else if (newSucc2 > newSucc2)
-                cause = "|N‾ ∩ Succ(Graph2, " + v2 + ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
+                cause = "|N‾ ∩ Succ(Graph2, " + v2 +
+                    ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
             
-            System.out.println(abortmsg + ": " + cause);
+            showLog("isFeasbilePair", abortmsg + ": " + cause);
             return false;
         }
     }
@@ -451,8 +455,8 @@ public class VF2SubState<V, E> {
     public void backtrack() {
         int addedVertex2 = core1[addedVertex1];
         
-        System.out.println(indent + "backtrack> entferne (" + g1.getVertex(addedVertex1) + ", " +
-                        g2.getVertex(addedVertex2) + ") aus dem Matching");
+        showLog("backtrack", "remove (" + g1.getVertex(addedVertex1) + ", " +
+                        g2.getVertex(addedVertex2) + ") from the matching");
         
         if (in1[addedVertex1] == coreLen)
             in1[addedVertex1] = 0;
@@ -488,7 +492,6 @@ public class VF2SubState<V, E> {
 
         core1[addedVertex1] = core2[addedVertex2] = NULL_NODE;
         coreLen--;
-        updateIndent();
         addedVertex1 = NULL_NODE;
     }
 
@@ -524,5 +527,20 @@ public class VF2SubState<V, E> {
 
     public void resetAddVertexes() {
         addVertex1 = addVertex2 = NULL_NODE;
+    }
+    
+    
+    /**
+     * creates the debug output if DEBUG is true.
+     * @param method
+     * @param str
+     */
+    private void showLog(String method, String str)    {
+        if (!DEBUG)
+            return;
+        
+        char[] indent = new char[2 * coreLen];
+        Arrays.fill(indent, ' ');
+        System.out.println((new String(indent)) + method + "> " + str);
     }
 }
