@@ -196,16 +196,16 @@ public class GraphOrdering<V, E> {
     }
     
     
-    private class GeneralVertexDegreeComparator<V> implements Comparator<V>
+    private class GeneralVertexDegreeComparator<V2> implements Comparator<V2>
     {
-        private Graph<V,?> graph;
+        private Graph<V2,?> graph;
         
-        GeneralVertexDegreeComparator(Graph<V,?> graph)  {
+        GeneralVertexDegreeComparator(Graph<V2,?> graph)  {
             this.graph = graph;
         }
         
         @Override
-        public int compare(V v1, V v2) {
+        public int compare(V2 v1, V2 v2) {
             return graph.edgesOf(v1).size() - graph.edgesOf(v2).size();
         }
     }

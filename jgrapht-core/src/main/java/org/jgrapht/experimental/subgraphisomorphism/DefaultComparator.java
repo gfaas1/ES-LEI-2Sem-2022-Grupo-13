@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  * This is a default implementation for the check on semantic equality between
- * vertices and edges.
+ * vertices or edges.
  * 
  * @author Fabian Späh
  */
