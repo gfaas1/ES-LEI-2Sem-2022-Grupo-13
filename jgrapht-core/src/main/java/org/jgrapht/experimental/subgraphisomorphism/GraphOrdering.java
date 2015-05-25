@@ -3,7 +3,10 @@ package org.jgrapht.experimental.subgraphisomorphism;
 import org.jgrapht.Graph;
 import org.jgrapht.DirectedGraph;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +40,11 @@ public class GraphOrdering<V, E> {
     public GraphOrdering(Graph<V, E> graph, boolean orderByDegree) {
         this.graph = graph;
 
-        Set<V> vertexSet = graph.vertexSet();
+        List<V> vertexSet = new ArrayList<V>(graph.vertexSet());
+        if (orderByDegree)
+            java.util.Collections.sort(vertexSet,
+                            new GeneralVertexDegreeComparator<V>(graph));
+        
         vertexCount      = vertexSet.size();
         mapVertexToOrder = new HashMap<V, Integer>();
         mapOrderToVertex = new Object[vertexCount];
@@ -53,8 +60,6 @@ public class GraphOrdering<V, E> {
             outgoingEdges[i]   = null;
             incomingEdges[i++] = null;
         }
-
-        // TODO: orderByDegree
     }
 
     /**
@@ -188,6 +193,21 @@ public class GraphOrdering<V, E> {
 
     public Graph<V, E> getGraph() {
         return graph;
+    }
+    
+    
+    private class GeneralVertexDegreeComparator<V> implements Comparator<V>
+    {
+        private Graph<V,?> graph;
+        
+        GeneralVertexDegreeComparator(Graph<V,?> graph)  {
+            this.graph = graph;
+        }
+        
+        @Override
+        public int compare(V v1, V v2) {
+            return graph.edgesOf(v1).size() - graph.edgesOf(v2).size();
+        }
     }
 
 }

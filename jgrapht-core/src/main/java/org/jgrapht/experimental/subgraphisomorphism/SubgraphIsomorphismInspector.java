@@ -8,7 +8,7 @@ import java.util.Iterator;
  * @param <E> the type of all mappings to be iterated over.
  */
 
-public interface SubgraphIsomorphismInspector<E> extends Iterator<E>
+public interface SubgraphIsomorphismInspector<T> extends Iterator<T>
 {
 
     public boolean isSubgraphIsomorphic();

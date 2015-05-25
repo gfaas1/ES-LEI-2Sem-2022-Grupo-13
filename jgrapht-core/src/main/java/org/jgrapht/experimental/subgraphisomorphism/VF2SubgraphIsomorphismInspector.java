@@ -49,8 +49,8 @@ public class VF2SubgraphIsomorphismInspector<V, E>
         this.graph2           = graph2;
         this.vertexComparator = vertexComparator;
         this.edgeComparator   = edgeComparator;
-        this.ordering1        = new GraphOrdering<V, E>(graph1);
-        this.ordering2        = new GraphOrdering<V, E>(graph2);
+        this.ordering1        = new GraphOrdering<V, E>(graph1, true);
+        this.ordering2        = new GraphOrdering<V, E>(graph2, true);
         this.stateStack       = new Stack<VF2SubState<V, E>>();
     }
 

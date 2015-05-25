@@ -15,7 +15,7 @@ public class VF2SubState<V, E> {
 
     public static final int NULL_NODE = -1;
     
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private int[] core1,
                   core2,
@@ -310,16 +310,16 @@ public class VF2SubState<V, E> {
 
         int termOutPred1 = 0,
             termOutPred2 = 0,
-            termInPred1 = 0,
-            termInPred2 = 0,
-            newPred1 = 0,
-            newPred2 = 0,
+            termInPred1  = 0,
+            termInPred2  = 0,
+            newPred1     = 0,
+            newPred2     = 0,
             termOutSucc1 = 0,
             termOutSucc2 = 0,
-            termInSucc1 = 0,
-            termInSucc2 = 0,
-            newSucc1 = 0,
-            newSucc2 = 0;
+            termInSucc1  = 0,
+            termInSucc2  = 0,
+            newSucc1     = 0,
+            newSucc2     = 0;
 
         // check outgoing edges of addVertex1
         for (int other1 : g1.getOutEdges(addVertex1)) {
