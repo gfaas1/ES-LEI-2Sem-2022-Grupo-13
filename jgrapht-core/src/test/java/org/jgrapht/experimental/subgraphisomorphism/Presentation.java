@@ -6,6 +6,7 @@ package org.jgrapht.experimental.subgraphisomorphism;
 import static org.junit.Assert.*;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.GraphMapping;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class Presentation {
         SubgraphIsomorphismInspector<SubgraphIsomorphismRelation<String, DefaultEdge>>
             insp = new VF2SubgraphIsomorphismInspector<String, DefaultEdge>(g1, g2);
         
-        GraphSubgraphMapping<String, DefaultEdge> map = insp.next();
+        GraphMapping<String, DefaultEdge> map = insp.next();
         System.out.println(map);
         assertEquals("[v1=~~ v2=w1 v3=w3 v4=~~ v5=w4 v6=w2]", map.toString());
     }

@@ -2,6 +2,8 @@ package org.jgrapht.experimental.subgraphisomorphism;
 
 import java.util.TreeSet;
 
+import org.jgrapht.GraphMapping;
+
 /**
  * @author Fabian Späh
  *
@@ -10,7 +12,7 @@ import java.util.TreeSet;
  */
 
 public class SubgraphIsomorphismRelation<V, E>
-    implements GraphSubgraphMapping<V, E>
+    implements GraphMapping<V, E>
 {
 
     GraphOrdering<V, E> g1,
@@ -84,16 +86,23 @@ public class SubgraphIsomorphismRelation<V, E>
         return secondGraph.getEdge(core[eNumbers[0]], core[eNumbers[1]]);
     }
 
-    @Override
+    /**
+     * @param v
+     * @return is there a corresponding vertex to v in the subgraph
+     */
     public boolean hasVertexCorrespondence(V v) {
         return getVertexCorrespondence(v, true) != null;
     }
 
-    @Override
+    /**
+     * @param e
+     * @return is there a corresponding edge to e in the subgraph
+     */
     public boolean hasEdgeCorrespondence(E e) {
         return getEdgeCorrespondence(e, true) != null;
     }
 
+    @Override
     public String toString() {
         String str = "[";
 
