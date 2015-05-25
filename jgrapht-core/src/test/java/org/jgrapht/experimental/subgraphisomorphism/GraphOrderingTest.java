@@ -6,9 +6,14 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.experimental.subgraphisomorphism.*;
 import org.junit.Test;
 
+/**
+ * Testing the class org.jgrapht.experimental.subgraphisomorphism.GraphOrdering
+ * 
+ * @author Fabian Späh
+ *
+ */
 public class GraphOrderingTest {
 
 	@Test

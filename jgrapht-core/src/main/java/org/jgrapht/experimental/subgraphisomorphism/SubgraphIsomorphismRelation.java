@@ -115,7 +115,7 @@ public class SubgraphIsomorphismRelation<V, E>
     }
 
     /**
-     * Checks for equality. Assuming both are relations for the same graphs.
+     * Checks for equality. Assuming both are relations on the same graphs.
      * 
      * @param rel the corresponding SubgraphIsomorphismRelation
      * @return do both relations map to the same vertices
