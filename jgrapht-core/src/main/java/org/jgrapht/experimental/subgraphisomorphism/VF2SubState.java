@@ -15,36 +15,36 @@ public class VF2SubState<V, E> {
 
     public static final int NULL_NODE = -1;
     
-    private static final boolean DEBUG = false;
+    protected static final boolean DEBUG = false;
 
-    private int[] core1,
-                  core2,
-                  in1,
-                  in2,
-                  out1,
-                  out2;
+    protected int[] core1,
+                    core2,
+                    in1,
+                    in2,
+                    out1,
+                    out2;
 
-    private int coreLen,
+    protected int coreLen,
 
-                n1,
-                n2,
+                  n1,
+                  n2,
 
-                t1BothLen,
-                t2BothLen,
-                t1InLen,
-                t2InLen,
-                t1OutLen,
-                t2OutLen,
+                  t1BothLen,
+                  t2BothLen,
+                  t1InLen,
+                  t2InLen,
+                  t1OutLen,
+                  t2OutLen,
 
-                addedVertex1,
-                addVertex1,
-                addVertex2;
+                  addedVertex1,
+                  addVertex1,
+                  addVertex2;
 
-    private GraphOrdering<V, E> g1,
-                                g2;
+    protected GraphOrdering<V, E> g1,
+                                  g2;
 
-    private Comparator<V> vertexComparator;
-    private Comparator<E> edgeComparator;
+    protected Comparator<V> vertexComparator;
+    protected Comparator<E> edgeComparator;
 
     /**
      * @param g1 first GraphOrdering
@@ -511,7 +511,7 @@ public class VF2SubState<V, E> {
      * @param v2
      * @return v1 and v2 are equivalent
      */
-    private boolean areCompatibleVertexes(int v1, int v2) {
+    protected boolean areCompatibleVertexes(int v1, int v2) {
         return vertexComparator.compare(g1.getVertex(v1),
                         g2.getVertex(v2)) == 0;
     }
@@ -524,12 +524,12 @@ public class VF2SubState<V, E> {
      * @param u2
      * @return edges are equivalent
      */
-    private boolean areCompatibleEdges(int v1, int v2, int u1, int u2) {
+    protected boolean areCompatibleEdges(int v1, int v2, int u1, int u2) {
         return edgeComparator.compare(g1.getEdge(v1, v2),
                         g2.getEdge(u1, u2)) == 0;
     }
 
-    public SubgraphIsomorphismRelation<V, E> getCurrentMatching() {
+    protected SubgraphIsomorphismRelation<V, E> getCurrentMatching() {
         SubgraphIsomorphismRelation<V, E> rel =
             new SubgraphIsomorphismRelation<V, E>(g1, g2, core1, core2);
         return rel;
@@ -545,7 +545,7 @@ public class VF2SubState<V, E> {
      * @param method
      * @param str
      */
-    private void showLog(String method, String str)    {
+    protected void showLog(String method, String str)    {
         if (!DEBUG)
             return;
         

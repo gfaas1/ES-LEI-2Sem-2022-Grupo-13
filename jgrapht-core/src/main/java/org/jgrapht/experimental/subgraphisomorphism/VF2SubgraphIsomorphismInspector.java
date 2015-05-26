@@ -19,20 +19,19 @@ public class VF2SubgraphIsomorphismInspector<V, E>
     implements SubgraphIsomorphismInspector<SubgraphIsomorphismRelation<V, E>>
 {
 
-    @SuppressWarnings("unused")
-    private Graph<V, E> graph1,
-                        graph2;
+    protected Graph<V, E> graph1,
+                          graph2;
 
-    private Comparator<V> vertexComparator;
-    private Comparator<E> edgeComparator;
+    protected Comparator<V> vertexComparator;
+    protected Comparator<E> edgeComparator;
 
-    private SubgraphIsomorphismRelation<V, E> nextRelation;
-    private Boolean                           hadOneRelation;
+    protected SubgraphIsomorphismRelation<V, E> nextRelation;
+    protected Boolean                           hadOneRelation;
 
-    private GraphOrdering<V, E> ordering1,
-                                ordering2;
+    protected GraphOrdering<V, E> ordering1,
+                                  ordering2;
 
-    private Stack<VF2SubState<V, E>> stateStack;
+    protected Stack<VF2SubState<V, E>> stateStack;
 
     /**
      * @param graph1 the first graph
@@ -75,7 +74,7 @@ public class VF2SubgraphIsomorphismInspector<V, E>
      * 
      * @return null or one matching between graph1 and graph2
      */
-    private SubgraphIsomorphismRelation<V, E> match() {
+    protected SubgraphIsomorphismRelation<V, E> match() {
         VF2SubState<V, E> s;
 
         if (stateStack.isEmpty()) {
@@ -88,8 +87,7 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             stateStack.pop().backtrack();
             s = stateStack.pop();
         }
-
-        // s.resetAddVertexes();
+        
 
         while (true) {
             while (s.nextPair()) {
@@ -115,7 +113,7 @@ public class VF2SubgraphIsomorphismInspector<V, E>
         }
     }
 
-    private SubgraphIsomorphismRelation<V, E> matchAndCheck() {
+    protected SubgraphIsomorphismRelation<V, E> matchAndCheck() {
         SubgraphIsomorphismRelation<V, E> rel = match();
         if (rel != null)
             hadOneRelation = true;
