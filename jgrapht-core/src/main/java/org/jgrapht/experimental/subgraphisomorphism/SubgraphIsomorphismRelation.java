@@ -1,6 +1,6 @@
 package org.jgrapht.experimental.subgraphisomorphism;
 
-import java.util.TreeSet;
+import java.util.Set;
 
 import org.jgrapht.GraphMapping;
 
@@ -105,13 +105,16 @@ public class SubgraphIsomorphismRelation<V, E>
     @Override
     public String toString() {
         String str = "[";
-
-        // somehow enforce an ordering on the vertices of g1..
-        TreeSet<V> vertexSet = new TreeSet<V>(g1.getGraph().vertexSet());
-        for (V v : vertexSet)
-            str += v.toString() + "=" +(hasVertexCorrespondence(v) ?
-                            getVertexCorrespondence(v, true) : "~~") + " ";
-        return str.substring(0, str.length() - 1) + "]";
+        Set<V> vertexSet = g1.getGraph().vertexSet();
+        
+        int i = 0;
+        for (V v : vertexSet)   {
+            V u = getVertexCorrespondence(v, true);
+            str += (i++ == 0 ? "" : " ") + v.toString() + "=" +
+                            (u == null ? "~~" : u);
+        }
+        
+        return str + "]";
     }
 
     /**

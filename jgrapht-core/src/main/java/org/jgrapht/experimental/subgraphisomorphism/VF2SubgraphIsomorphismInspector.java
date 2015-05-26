@@ -19,6 +19,7 @@ public class VF2SubgraphIsomorphismInspector<V, E>
     implements SubgraphIsomorphismInspector<SubgraphIsomorphismRelation<V, E>>
 {
 
+    @SuppressWarnings("unused")
     private Graph<V, E> graph1,
                         graph2;
 
@@ -80,6 +81,9 @@ public class VF2SubgraphIsomorphismInspector<V, E>
         if (stateStack.isEmpty()) {
             s = new VF2SubState<V, E>(ordering1, ordering2,
                             vertexComparator, edgeComparator);
+            
+            if (graph2.vertexSet().isEmpty())
+                return hadOneRelation != null ? null : s.getCurrentMatching();
         } else {
             stateStack.pop().backtrack();
             s = stateStack.pop();
@@ -109,33 +113,6 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             s.backtrack();
             s = stateStack.pop();
         }
-    }
-
-    // to be removed..
-    private SubgraphIsomorphismRelation<V, E> singleMatch(VF2SubState<V, E> s) {
-        if (s.isGoal())
-            return s.getCurrentMatching();
-
-        s.resetAddVertexes();
-        SubgraphIsomorphismRelation<V, E> found = null;
-
-        while (found == null && s.nextPair()) {
-            if (s.isFeasiblePair()) {
-                VF2SubState<V, E> s2 = new VF2SubState<V, E>(s);
-                s2.addPair();
-                found = singleMatch(s2);
-                s2.backtrack();
-            }
-        }
-
-        return found;
-    }
-
-    private SubgraphIsomorphismRelation<V, E> singleMatch() {
-        VF2SubState<V, E> s = new VF2SubState<V, E>(ordering1, ordering2,
-                        vertexComparator, edgeComparator);
-
-        return singleMatch(s);
     }
 
     private SubgraphIsomorphismRelation<V, E> matchAndCheck() {

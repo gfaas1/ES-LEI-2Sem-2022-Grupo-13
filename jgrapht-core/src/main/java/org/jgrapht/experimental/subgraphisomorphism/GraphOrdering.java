@@ -196,7 +196,7 @@ public class GraphOrdering<V, E> {
     }
     
     
-    private class GeneralVertexDegreeComparator<V2> implements Comparator<V2>
+    private static class GeneralVertexDegreeComparator<V2> implements Comparator<V2>
     {
         private Graph<V2,?> graph;
         
