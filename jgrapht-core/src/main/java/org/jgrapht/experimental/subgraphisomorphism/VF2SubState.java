@@ -344,6 +344,49 @@ public class VF2SubState<V, E> {
             }
         }
 
+        // check outgoing edges of addVertex2
+        for (int other2 : g2.getOutEdges(addVertex2)) {
+            if (core2[other2] != NULL_NODE) {
+                int other1 = core2[other2];
+                if (!g1.hasEdge(addVertex1, other1))    {
+                    showLog("isFeasbilePair", abortmsg + ": edge from " +
+                                    g1.getVertex(addVertex1) + " to " +
+                                    g1.getVertex(other1) +
+                                    " is missing in the 1st graph");
+                    return false;
+                }
+            } else {
+                if (in2[other2] > 0)
+                    termInSucc2++;
+                if (out2[other2] > 0)
+                    termOutSucc2++;
+                if (in2[other2] == 0 && out2[other2] == 0)
+                    newSucc2++;
+            }
+        }
+        
+        if (termInSucc1 < termInSucc2 ||
+            termOutSucc1 < termOutSucc2 ||
+            newSucc1 < newSucc2)
+        {
+            String cause = "",
+                      v1 = g1.getVertex(addVertex1).toString(),
+                      v2 = g2.getVertex(addVertex2).toString();
+     
+            if (termInSucc2 > termInSucc1)
+                cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
+                    ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
+            else if (termOutSucc2 > termOutSucc1)
+                cause = "|Tout2 ∩ Succ(Graph2, " + v2 +
+                    ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
+            else if (newSucc2 > newSucc1)
+                cause = "|N‾ ∩ Succ(Graph2, " + v2 +
+                    ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
+
+            showLog("isFeasbilePair", abortmsg + ": " + cause);
+            return false;
+        }
+
         // check incoming edges of addVertex1
         for (int other1 : g1.getInEdges(addVertex1)) {
             if (core1[other1] != NULL_NODE) {
@@ -364,27 +407,6 @@ public class VF2SubState<V, E> {
                     termOutPred1++;
                 if (in1[other1] == 0 && out1[other1] == 0)
                     newPred1++;
-            }
-        }
-
-        // check outgoing edges of addVertex2
-        for (int other2 : g2.getOutEdges(addVertex2)) {
-            if (core2[other2] != NULL_NODE) {
-                int other1 = core2[other2];
-                if (!g1.hasEdge(addVertex1, other1))    {
-                    showLog("isFeasbilePair", abortmsg + ": edge from " +
-                                    g1.getVertex(addVertex1) + " to " +
-                                    g1.getVertex(other1) +
-                                    " is missing in the 1st graph");
-                    return false;
-                }
-            } else {
-                if (in2[other2] > 0)
-                    termInSucc2++;
-                if (out2[other2] > 0)
-                    termOutSucc2++;
-                if (in2[other2] == 0 && out2[other2] == 0)
-                    newSucc2++;
             }
         }
 
@@ -411,10 +433,7 @@ public class VF2SubState<V, E> {
 
         if (termInPred1 >= termInPred2 &&
             termOutPred1 >= termOutPred2 &&
-            newPred1 >= newPred2 &&
-            termInSucc1 >= termInSucc2 &&
-            termOutSucc1 >= termOutSucc2 &&
-            newSucc1 >= newSucc2)
+            newPred1 >= newPred2)
         {
             showLog("isFeasiblePair", pairstr + " fits");
             return true;
@@ -422,8 +441,8 @@ public class VF2SubState<V, E> {
         else
         {
             String cause = "",
-                   v1 = g1.getVertex(addVertex1).toString(),
-                   v2 = g2.getVertex(addVertex2).toString();
+                      v1 = g1.getVertex(addVertex1).toString(),
+                      v2 = g2.getVertex(addVertex2).toString();
         
             if (termInPred2 > termInPred1)
                 cause = "|Tin2 ∩ Pred(Graph2, " + v2 +
@@ -431,18 +450,9 @@ public class VF2SubState<V, E> {
             else if (termOutPred2 > termOutPred1)
                 cause = "|Tout2 ∩ Pred(Graph2, " + v2 +
                     ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
-            else if (newPred2 > newPred2)
+            else if (newPred2 > newPred1)
                 cause = "|N‾ ∩ Pred(Graph2, " + v2 +
                     ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
-            else if (termInPred2 > termInPred1)
-                cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
-                    ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
-            else if (termOutSucc2 > termOutSucc1)
-                cause = "|Tout2 ∩ Succ(Graph2, " + v2 +
-                    ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
-            else if (newSucc2 > newSucc2)
-                cause = "|N‾ ∩ Succ(Graph2, " + v2 +
-                    ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
             
             showLog("isFeasbilePair", abortmsg + ": " + cause);
             return false;
