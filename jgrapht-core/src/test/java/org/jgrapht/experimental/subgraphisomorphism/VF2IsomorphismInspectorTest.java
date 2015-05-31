@@ -2,6 +2,7 @@ package org.jgrapht.experimental.subgraphisomorphism;
 
 import static org.junit.Assert.*;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -59,7 +60,18 @@ public class VF2IsomorphismInspectorTest {
             new VF2IsomorphismInspector<Integer, DefaultEdge>(g2, g2);
         assertEquals("[1=1 2=2 3=3]", vf3.next().toString());
         assertEquals("[1=3 2=2 3=1]", vf3.next().toString());
+    }
+    
+    @Test
+    public void test2() {
+        DirectedGraph<Integer, DefaultEdge> g1 =
+            SubgraphIsomorphismTestUtils.randomGraph(10, 30, 12345);
+        DirectedGraph<Integer, DefaultEdge> g2 =
+            SubgraphIsomorphismTestUtils.randomSubgraph(g1, 7, 54321);
         
+        VF2IsomorphismInspector<Integer, DefaultEdge> vf2 =
+            new VF2IsomorphismInspector<Integer, DefaultEdge>(g1, g2);
+        assertEquals(false, vf2.hasNext());
     }
 
 }

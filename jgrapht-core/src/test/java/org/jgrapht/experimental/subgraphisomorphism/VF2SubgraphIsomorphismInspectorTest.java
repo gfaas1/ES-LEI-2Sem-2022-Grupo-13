@@ -72,6 +72,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
 		assertEquals("[v1=v8 v2=v7 v3=v6 v4=~~ v5=~~]", rel.toString());
 	}
 	
+	/**
+	 * Tests three edge cases: Both graphs empty, second graph empty and first
+	 * graph empty.
+	 */
 	@Test
 	public void testEdgeCases()    {
 	    /*
@@ -256,6 +260,9 @@ public class VF2SubgraphIsomorphismInspectorTest {
             SubgraphIsomorphismTestUtils.containsAllMatchings(vf4, g5, g6));
     }
     
+    /**
+     * Tests if a all given matchings are correct (on some random graphs).
+     */
     @Test
     public void testRandomGraphs() {
         Random rnd = new Random();
@@ -291,6 +298,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
         }
     }
     
+    /**
+     * Tests if all given matchings are correct and if every matching is found
+     * (on random graphs).
+     */
     @Test
     public void testRandomGraphsExhaustive() {
         Random rnd = new Random();
