@@ -35,7 +35,7 @@ public class VF2IsomorphismInspector<V,E> extends
         VF2SubState<V, E> s;
 
         if (stateStack.isEmpty()) {
-            s = new VF2SubState<V, E>(ordering1, ordering2,
+            s = new VF2State<V, E>(ordering1, ordering2,
                             vertexComparator, edgeComparator);
             
             if (graph2.vertexSet().isEmpty())
