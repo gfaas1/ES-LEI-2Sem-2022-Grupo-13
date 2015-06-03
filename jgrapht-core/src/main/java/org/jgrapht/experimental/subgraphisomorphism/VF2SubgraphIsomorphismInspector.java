@@ -6,6 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.Pseudograph;
 
 /**
  * Implements the VF2 subgraph isomorphism algorithm.
@@ -45,6 +49,15 @@ public class VF2SubgraphIsomorphismInspector<V, E>
                     Comparator<V> vertexComparator,
                     Comparator<E> edgeComparator)
     {
+        if (graph1 instanceof Multigraph  || graph2 instanceof Multigraph ||
+            graph1 instanceof Pseudograph || graph2 instanceof Pseudograph ||
+            graph1 instanceof DirectedMultigraph ||
+            graph2 instanceof DirectedMultigraph ||
+            graph1 instanceof DirectedPseudograph ||
+            graph2 instanceof DirectedPseudograph)
+            throw new UnsupportedOperationException("Graphs with multiple "
+                            + "edges are not supported");
+            
         this.graph1           = graph1;
         this.graph2           = graph2;
         this.vertexComparator = vertexComparator;
