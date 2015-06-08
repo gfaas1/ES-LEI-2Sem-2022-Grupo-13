@@ -9,7 +9,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * @author Fabian Späh
@@ -133,6 +135,23 @@ public class VF2SubgraphIsomorphismInspectorTest {
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g5, g6);
         
         assertEquals(false, vf4.hasNext());
+	}
+	
+	@Rule
+	public ExpectedException thrown  = ExpectedException.none();
+	
+	@Test
+	public void testExceptions()   {
+	    DirectedGraph<Integer, DefaultEdge> g1 = 
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+	    
+	    UndirectedGraph<Integer, DefaultEdge> g2 =
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+	    
+	    thrown.expect(IllegalArgumentException.class);
+	    @SuppressWarnings("unused")
+        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g1, g2);
 	}
 
     @Test

@@ -5,7 +5,9 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.Multigraph;
@@ -55,8 +57,15 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             graph2 instanceof DirectedMultigraph ||
             graph1 instanceof DirectedPseudograph ||
             graph2 instanceof DirectedPseudograph)
-            throw new UnsupportedOperationException("Graphs with multiple "
+            throw new UnsupportedOperationException("graphs with multiple "
                             + "edges are not supported");
+        
+        if (graph1 instanceof DirectedGraph &&
+                        graph2 instanceof UndirectedGraph ||
+            graph1 instanceof UndirectedGraph &&
+                        graph2 instanceof DirectedGraph)
+            throw new IllegalArgumentException("can not match directed with "
+                            + "undirected graphs");
             
         this.graph1           = graph1;
         this.graph2           = graph2;
