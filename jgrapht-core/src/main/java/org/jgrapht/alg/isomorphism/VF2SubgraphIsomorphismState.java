@@ -1,25 +1,36 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import java.util.Comparator;
 
-/**
- * @author fabian
- *
- */
-public class VF2State<V,E> extends VF2SubState<V,E> {
 
-    public VF2State(GraphOrdering<V, E> g1,
-                    GraphOrdering<V, E> g2,
+public class VF2SubgraphIsomorphismState<V,E>
+    extends VF2State<V,E>
+{
+
+    public VF2SubgraphIsomorphismState(
+                    GraphOrdering<V,E> g1,
+                    GraphOrdering<V,E> g2,
                     Comparator<V> vertexComparator,
-                    Comparator<E> edgeComparator)
-    {
+                    Comparator<E> edgeComparator) {
         super(g1, g2, vertexComparator, edgeComparator);
     }
 
+    public VF2SubgraphIsomorphismState(VF2State<V,E> s) {
+        super(s);
+    }
+
+
+    /**
+     * @return true, if the already matched vertices of graph1 plus the first
+     * vertex of nextPair are subgraph isomorphic to the already matched
+     * vertices of graph2 and the second one vertex of nextPair.
+     */
+    @Override
     public boolean isFeasiblePair() {
         String pairstr  = "(" + g1.getVertex(addVertex1) + ", " +
-                        g2.getVertex(addVertex2) + ")",
+                                g2.getVertex(addVertex2) + ")",
                abortmsg = pairstr + " does not fit in the current matching";
+        
         // check for semantic equality of both vertexes
         if (!areCompatibleVertexes(addVertex1, addVertex2))
             return false;
@@ -81,9 +92,9 @@ public class VF2State<V,E> extends VF2SubState<V,E> {
             }
         }
         
-        if (termInSucc1 != termInSucc2 ||
-            termOutSucc1 != termOutSucc2 ||
-            newSucc1 != newSucc2)
+        if (termInSucc1 < termInSucc2 ||
+            termOutSucc1 < termOutSucc2 ||
+            newSucc1 < newSucc2)
         {
             String cause = "",
                       v1 = g1.getVertex(addVertex1).toString(),
@@ -91,13 +102,13 @@ public class VF2State<V,E> extends VF2SubState<V,E> {
      
             if (termInSucc2 > termInSucc1)
                 cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
-                    ")| != |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
+                    ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
             else if (termOutSucc2 > termOutSucc1)
                 cause = "|Tout2 ∩ Succ(Graph2, " + v2 +
-                    ")| != |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
+                    ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
             else if (newSucc2 > newSucc1)
                 cause = "|N‾ ∩ Succ(Graph2, " + v2 +
-                    ")| != |N‾ ∩ Succ(Graph1, " + v1 + ")|";
+                    ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
 
             showLog("isFeasbilePair", abortmsg + ": " + cause);
             return false;
@@ -147,9 +158,9 @@ public class VF2State<V,E> extends VF2SubState<V,E> {
             }
         }
 
-        if (termInPred1 == termInPred2 &&
-            termOutPred1 == termOutPred2 &&
-            newPred1 == newPred2)
+        if (termInPred1 >= termInPred2 &&
+            termOutPred1 >= termOutPred2 &&
+            newPred1 >= newPred2)
         {
             showLog("isFeasiblePair", pairstr + " fits");
             return true;
@@ -162,17 +173,17 @@ public class VF2State<V,E> extends VF2SubState<V,E> {
         
             if (termInPred2 > termInPred1)
                 cause = "|Tin2 ∩ Pred(Graph2, " + v2 +
-                    ")| != |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
+                    ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
             else if (termOutPred2 > termOutPred1)
                 cause = "|Tout2 ∩ Pred(Graph2, " + v2 +
-                    ")| != |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
+                    ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
             else if (newPred2 > newPred1)
                 cause = "|N‾ ∩ Pred(Graph2, " + v2 +
-                    ")| != |N‾ ∩ Pred(Graph1, " + v1 + ")|";
+                    ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
             
             showLog("isFeasbilePair", abortmsg + ": " + cause);
             return false;
         }
     }
-    
+
 }

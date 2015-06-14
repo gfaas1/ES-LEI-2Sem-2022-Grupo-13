@@ -1,12 +1,10 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import java.util.Comparator;
 
 /**
  * This is a default implementation for the check on semantic equality between
  * vertices or edges.
- * 
- * @author Fabian Späh
  */
 
 public class DefaultComparator<T> implements Comparator<T> {

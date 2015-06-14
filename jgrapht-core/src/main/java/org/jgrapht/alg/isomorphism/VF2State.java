@@ -1,4 +1,4 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,7 +11,8 @@ import java.util.Comparator;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class VF2SubState<V, E> {
+public abstract class VF2State<V,E>
+{
 
     public static final int NULL_NODE = -1;
     
@@ -40,20 +41,21 @@ public class VF2SubState<V, E> {
                   addVertex1,
                   addVertex2;
 
-    protected GraphOrdering<V, E> g1,
-                                  g2;
+    protected GraphOrdering<V,E> g1,
+                                 g2;
 
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;
 
+
     /**
-     * @param g1 first GraphOrdering
-     * @param g2 second GraphOrdering (possible subgraph)
+     * @param g1 GraphOrdering on first graph
+     * @param g2 GraphOrdering on second graph (possible subgraph)
      * @param vertexComparator comparator for semantic equality of vertices
      * @param edgeComparator comparator for semantic equality of edges
      */
-    public VF2SubState(GraphOrdering<V, E> g1,
-                    GraphOrdering<V, E> g2,
+    public VF2State(GraphOrdering<V,E> g1,
+                    GraphOrdering<V,E> g2,
                     Comparator<V> vertexComparator,
                     Comparator<E> edgeComparator)
     {
@@ -85,7 +87,7 @@ public class VF2SubState<V, E> {
      * 
      * @param s
      */
-    public VF2SubState(VF2SubState<V, E> s) {
+    public VF2State(VF2State<V, E> s) {
         g1 = s.g1;
         g2 = s.g2;
 
@@ -115,6 +117,7 @@ public class VF2SubState<V, E> {
         addVertex2   = s.addVertex2;
         addedVertex1 = s.addedVertex1;
     }
+
 
     /**
      * calculates a pair of nodes which may be added to the current matching,
@@ -300,164 +303,7 @@ public class VF2SubState<V, E> {
      * vertex of nextPair are isomorphic to the already matched vertices of
      * graph2 and the second one vertex of nextPair.
      */
-    public boolean isFeasiblePair() {
-        String pairstr  = "(" + g1.getVertex(addVertex1) + ", " +
-                        g2.getVertex(addVertex2) + ")",
-               abortmsg = pairstr + " does not fit in the current matching";
-        // check for semantic equality of both vertexes
-        if (!areCompatibleVertexes(addVertex1, addVertex2))
-            return false;
-
-        int termOutPred1 = 0,
-            termOutPred2 = 0,
-            termInPred1  = 0,
-            termInPred2  = 0,
-            newPred1     = 0,
-            newPred2     = 0,
-            termOutSucc1 = 0,
-            termOutSucc2 = 0,
-            termInSucc1  = 0,
-            termInSucc2  = 0,
-            newSucc1     = 0,
-            newSucc2     = 0;
-
-        // check outgoing edges of addVertex1
-        for (int other1 : g1.getOutEdges(addVertex1)) {
-            if (core1[other1] != NULL_NODE) {
-                int other2 = core1[other1];
-                if (!g2.hasEdge(addVertex2, other2) ||
-                                !areCompatibleEdges(addVertex1, other1,
-                                                    addVertex2, other2))    {
-                    showLog("isFeasiblePair", abortmsg + ": edge from " +
-                                    g2.getVertex(addVertex2) + " to " +
-                                    g2.getVertex(other2) +
-                                    " is missing in the 2nd graph");
-                    return false;
-                }
-            } else {
-                if (in1[other1] > 0)
-                    termInSucc1++;
-                if (out1[other1] > 0)
-                    termOutSucc1++;
-                if (in1[other1] == 0 && out1[other1] == 0)
-                    newSucc1++;
-            }
-        }
-
-        // check outgoing edges of addVertex2
-        for (int other2 : g2.getOutEdges(addVertex2)) {
-            if (core2[other2] != NULL_NODE) {
-                int other1 = core2[other2];
-                if (!g1.hasEdge(addVertex1, other1))    {
-                    showLog("isFeasbilePair", abortmsg + ": edge from " +
-                                    g1.getVertex(addVertex1) + " to " +
-                                    g1.getVertex(other1) +
-                                    " is missing in the 1st graph");
-                    return false;
-                }
-            } else {
-                if (in2[other2] > 0)
-                    termInSucc2++;
-                if (out2[other2] > 0)
-                    termOutSucc2++;
-                if (in2[other2] == 0 && out2[other2] == 0)
-                    newSucc2++;
-            }
-        }
-        
-        if (termInSucc1 < termInSucc2 ||
-            termOutSucc1 < termOutSucc2 ||
-            newSucc1 < newSucc2)
-        {
-            String cause = "",
-                      v1 = g1.getVertex(addVertex1).toString(),
-                      v2 = g2.getVertex(addVertex2).toString();
-     
-            if (termInSucc2 > termInSucc1)
-                cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
-                    ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
-            else if (termOutSucc2 > termOutSucc1)
-                cause = "|Tout2 ∩ Succ(Graph2, " + v2 +
-                    ")| > |Tout1 ∩ Succ(Graph1, " + v1 + ")|";
-            else if (newSucc2 > newSucc1)
-                cause = "|N‾ ∩ Succ(Graph2, " + v2 +
-                    ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
-
-            showLog("isFeasbilePair", abortmsg + ": " + cause);
-            return false;
-        }
-
-        // check incoming edges of addVertex1
-        for (int other1 : g1.getInEdges(addVertex1)) {
-            if (core1[other1] != NULL_NODE) {
-                int other2 = core1[other1];
-                if (!g2.hasEdge(other2, addVertex2) ||
-                                !areCompatibleEdges(other1, addVertex1,
-                                                    other2, addVertex2))    {
-                    showLog("isFeasbilePair", abortmsg + ": edge from " +
-                                    g2.getVertex(other2) + " to " +
-                                    g2.getVertex(addVertex2) +
-                                    " is missing in the 2nd graph");
-                    return false;
-                }
-            } else {
-                if (in1[other1] > 0)
-                    termInPred1++;
-                if (out1[other1] > 0)
-                    termOutPred1++;
-                if (in1[other1] == 0 && out1[other1] == 0)
-                    newPred1++;
-            }
-        }
-
-        // check incoming edges of addVertex2
-        for (int other2 : g2.getInEdges(addVertex2)) {
-            if (core2[other2] != NULL_NODE) {
-                int other1 = core2[other2];
-                if (!g1.hasEdge(other1, addVertex1))    {
-                    showLog("isFeasiblePair", abortmsg + ": edge from " +
-                                    g1.getVertex(other1) + " to " +
-                                    g1.getVertex(addVertex1) +
-                                    " is missing in the 1st graph");
-                    return false;
-                }
-            } else {
-                if (in2[other2] > 0)
-                    termInPred2++;
-                if (out2[other2] > 0)
-                    termOutPred2++;
-                if (in2[other2] == 0 && out2[other2] == 0)
-                    newPred2++;
-            }
-        }
-
-        if (termInPred1 >= termInPred2 &&
-            termOutPred1 >= termOutPred2 &&
-            newPred1 >= newPred2)
-        {
-            showLog("isFeasiblePair", pairstr + " fits");
-            return true;
-        }
-        else
-        {
-            String cause = "",
-                      v1 = g1.getVertex(addVertex1).toString(),
-                      v2 = g2.getVertex(addVertex2).toString();
-        
-            if (termInPred2 > termInPred1)
-                cause = "|Tin2 ∩ Pred(Graph2, " + v2 +
-                    ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
-            else if (termOutPred2 > termOutPred1)
-                cause = "|Tout2 ∩ Pred(Graph2, " + v2 +
-                    ")| > |Tout1 ∩ Pred(Graph1, " + v1 + ")|";
-            else if (newPred2 > newPred1)
-                cause = "|N‾ ∩ Pred(Graph2, " + v2 +
-                    ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
-            
-            showLog("isFeasbilePair", abortmsg + ": " + cause);
-            return false;
-        }
-    }
+    public abstract boolean isFeasiblePair();
 
     /**
      * removes the last added pair from the matching
@@ -529,10 +375,8 @@ public class VF2SubState<V, E> {
                         g2.getEdge(u1, u2)) == 0;
     }
 
-    protected SubgraphIsomorphismRelation<V, E> getCurrentMatching() {
-        SubgraphIsomorphismRelation<V, E> rel =
-            new SubgraphIsomorphismRelation<V, E>(g1, g2, core1, core2);
-        return rel;
+    public IsomorphicGraphMapping<V,E> getCurrentMapping()    {
+        return new IsomorphicGraphMapping<V,E>(g1, g2, core1, core2);
     }
 
     public void resetAddVertexes() {
@@ -541,7 +385,7 @@ public class VF2SubState<V, E> {
     
     
     /**
-     * creates the debug output if DEBUG is true.
+     * creates the debug output only if DEBUG is true.
      * @param method
      * @param str
      */

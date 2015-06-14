@@ -1,8 +1,9 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -24,10 +25,11 @@ public class SubgraphIsomorphismTestUtils
         showLog(">> ");
         boolean isCorrect = true;
         
-        while(vf2.hasNext())
+        for (Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> mappings =
+                        vf2.getMappings(); mappings.hasNext();)
         {
             isCorrect = isCorrect &&
-                            isCorrectMatching(vf2.next(), g1, g2);
+                            isCorrectMatching(mappings.next(), g1, g2);
             showLog(".");
         }
         showLog("\n");
@@ -37,7 +39,7 @@ public class SubgraphIsomorphismTestUtils
     
     
     public static boolean isCorrectMatching(
-                    SubgraphIsomorphismRelation<Integer, DefaultEdge> rel,
+                    IsomorphicGraphMapping<Integer, DefaultEdge> rel,
                     DirectedGraph<Integer, DefaultEdge> g1,
                     DirectedGraph<Integer, DefaultEdge> g2)
     {
@@ -158,16 +160,16 @@ public class SubgraphIsomorphismTestUtils
             Graph<Integer, DefaultEdge> g2)
     {
         boolean correct = true;
-        ArrayList<SubgraphIsomorphismRelation<Integer, DefaultEdge>> matchings =
-                getMatchings(g1, g2);
+        ArrayList<IsomorphicGraphMapping<Integer, DefaultEdge>> matchings = 
+                        getMatchings(g1, g2);
         
-        loop:while(vf2.hasNext()) {
-            SubgraphIsomorphismRelation<Integer, DefaultEdge> rel1 =
-                    vf2.next();
+        loop:for(Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> mappings = 
+                        vf2.getMappings(); mappings.hasNext();) {
+            IsomorphicGraphMapping<Integer, DefaultEdge> rel1 = mappings.next();
             
             showLog("> " + rel1 + " ..");
             
-            for (SubgraphIsomorphismRelation<Integer, DefaultEdge>
+            for (IsomorphicGraphMapping<Integer, DefaultEdge>
                         rel2 : matchings)
             {
                 if (rel1.equals(rel2))  {
@@ -185,7 +187,7 @@ public class SubgraphIsomorphismTestUtils
             correct = false;
             
             showLog("-- no counterpart for:\n");
-            for (SubgraphIsomorphismRelation<Integer, DefaultEdge> match : matchings)
+            for (IsomorphicGraphMapping<Integer, DefaultEdge> match : matchings)
                 showLog("  " + match + "\n");
         }
         
@@ -203,7 +205,7 @@ public class SubgraphIsomorphismTestUtils
      * @param g2 second Graph, smaller or equal to g1
      * @return
      */
-    private static ArrayList<SubgraphIsomorphismRelation<Integer, DefaultEdge>>
+    private static ArrayList<IsomorphicGraphMapping<Integer, DefaultEdge>>
         getMatchings(Graph<Integer, DefaultEdge> g1,
                      Graph<Integer, DefaultEdge> g2)
     {
@@ -218,8 +220,8 @@ public class SubgraphIsomorphismTestUtils
         ArrayList<ArrayList<Integer>> perms =
                         getPermutations(new boolean[n1], n2);
         
-        ArrayList<SubgraphIsomorphismRelation<Integer, DefaultEdge>> rels = 
-            new ArrayList<SubgraphIsomorphismRelation<Integer, DefaultEdge>>();
+        ArrayList<IsomorphicGraphMapping<Integer, DefaultEdge>> rels = 
+            new ArrayList<IsomorphicGraphMapping<Integer, DefaultEdge>>();
         
         
         loop:for (ArrayList<Integer> perm : perms)  {
@@ -239,7 +241,7 @@ public class SubgraphIsomorphismTestUtils
             }
             
             int[] core1 = new int[n1];
-            Arrays.fill(core1, VF2SubState.NULL_NODE);
+            Arrays.fill(core1, VF2State.NULL_NODE);
             
             for (i = 0; i < n2; i++)
                 core1[core2[i]] = i;
@@ -250,14 +252,14 @@ public class SubgraphIsomorphismTestUtils
                         u1 = core1[v1],
                         u2 = core1[v2];
                 
-                if (u1 == VF2SubState.NULL_NODE || u2 == VF2SubState.NULL_NODE)
+                if (u1 == VF2State.NULL_NODE || u2 == VF2State.NULL_NODE)
                     continue;
                 
                 if (!g2.containsEdge(u1, u2))
                     continue loop;
             }
             
-            rels.add(new SubgraphIsomorphismRelation<Integer, DefaultEdge>(
+            rels.add(new IsomorphicGraphMapping<Integer, DefaultEdge>(
                       g1o, g2o, core1, core2));
         }
         

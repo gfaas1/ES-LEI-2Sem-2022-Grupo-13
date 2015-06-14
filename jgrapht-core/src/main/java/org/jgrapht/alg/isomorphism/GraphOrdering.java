@@ -1,4 +1,4 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.DirectedGraph;
@@ -32,6 +32,7 @@ public class GraphOrdering<V, E> {
     private int[][]         outgoingEdges;
     private int[][]         incomingEdges;
 
+
     /**
      * @param graph the graph to be ordered
      * @param orderByDegree should the vertices be ordered by their degree. This
@@ -44,7 +45,7 @@ public class GraphOrdering<V, E> {
         if (orderByDegree)
             java.util.Collections.sort(vertexSet,
                             new GeneralVertexDegreeComparator<V>(graph));
-        
+
         vertexCount      = vertexSet.size();
         mapVertexToOrder = new HashMap<V, Integer>();
         mapOrderToVertex = new Object[vertexCount];
@@ -61,6 +62,7 @@ public class GraphOrdering<V, E> {
             incomingEdges[i++] = null;
         }
     }
+
 
     /**
      * @param graph the graph to be ordered
@@ -101,7 +103,7 @@ public class GraphOrdering<V, E> {
             V source = graph.getEdgeSource(edge),
               target = graph.getEdgeTarget(edge);
             vertexArray[i++] =
-                mapVertexToOrder.get(source == v ? target : source);
+                mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
         return outgoingEdges[vertexNumber] = vertexArray;
@@ -132,7 +134,7 @@ public class GraphOrdering<V, E> {
             V source = graph.getEdgeSource(edge),
               target = graph.getEdgeTarget(edge);
             vertexArray[i++] =
-                mapVertexToOrder.get(source == v ? target : source);
+                mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
         return incomingEdges[vertexNumber] = vertexArray;
@@ -158,13 +160,10 @@ public class GraphOrdering<V, E> {
      */
     @SuppressWarnings("unchecked")
     public V getVertex(int vertexNumber) {
-        return (V) mapOrderToVertex[vertexNumber];
+        return (V)mapOrderToVertex[vertexNumber];
     }
 
     /**
-     * this implementation may lead to problems on multigraphs, because only
-     * one of possibly more edges is returned.
-     * 
      * @param v1Number the number identifying the vertex v1
      * @param v2Number the number identifying the vertex v2
      * @return the edge from v1 to v2
@@ -174,8 +173,6 @@ public class GraphOrdering<V, E> {
 
         return graph.getEdge(v1, v2);
     }
-
-    // experimental methods.. (for use in TestCases/...)
 
     public int getVertexNumber(V v) {
         return mapVertexToOrder.get(v).intValue();
@@ -195,15 +192,16 @@ public class GraphOrdering<V, E> {
         return graph;
     }
     
-    
-    private static class GeneralVertexDegreeComparator<V2> implements Comparator<V2>
+
+    private static class GeneralVertexDegreeComparator<V2>
+        implements Comparator<V2>
     {
         private Graph<V2,?> graph;
-        
+
         GeneralVertexDegreeComparator(Graph<V2,?> graph)  {
             this.graph = graph;
         }
-        
+
         @Override
         public int compare(V2 v1, V2 v2) {
             return graph.edgesOf(v1).size() - graph.edgesOf(v2).size();

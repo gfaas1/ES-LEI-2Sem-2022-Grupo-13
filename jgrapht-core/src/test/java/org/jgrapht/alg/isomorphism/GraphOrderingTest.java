@@ -1,4 +1,4 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
 import static org.junit.Assert.*;
 
@@ -9,10 +9,7 @@ import org.jgrapht.graph.*;
 import org.junit.Test;
 
 /**
- * Testing the class org.jgrapht.experimental.subgraphisomorphism.GraphOrdering
- * 
- * @author Fabian Späh
- *
+ * Testing the class GraphOrdering
  */
 public class GraphOrderingTest {
 

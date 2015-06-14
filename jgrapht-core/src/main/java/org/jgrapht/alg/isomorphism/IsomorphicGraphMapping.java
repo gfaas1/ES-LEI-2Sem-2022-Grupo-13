@@ -1,6 +1,8 @@
-package org.jgrapht.experimental.subgraphisomorphism;
+package org.jgrapht.alg.isomorphism;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.jgrapht.GraphMapping;
 
@@ -11,7 +13,7 @@ import org.jgrapht.GraphMapping;
  * @param <E> the type of the edges
  */
 
-public class SubgraphIsomorphismRelation<V, E>
+public class IsomorphicGraphMapping<V, E>
     implements GraphMapping<V, E>
 {
 
@@ -27,7 +29,7 @@ public class SubgraphIsomorphismRelation<V, E>
      * @param core1
      * @param core2
      */
-    public SubgraphIsomorphismRelation(
+    public IsomorphicGraphMapping(
                     GraphOrdering<V, E> g1,
                     GraphOrdering<V, E> g2,
                     int[] core1,
@@ -57,7 +59,7 @@ public class SubgraphIsomorphismRelation<V, E>
         int vNumber = firstGraph.getVertexNumber(v),
             uNumber = core[vNumber];
 
-        if (uNumber == VF2SubState.NULL_NODE)
+        if (uNumber == VF2State.NULL_NODE)
             return null;
 
         return secondGraph.getVertex(uNumber);
@@ -79,14 +81,16 @@ public class SubgraphIsomorphismRelation<V, E>
         }
 
         int[] eNumbers = firstGraph.getEdgeNumbers(e);
-        if (core[eNumbers[0]] == VF2SubState.NULL_NODE ||
-                        core[eNumbers[1]] == VF2SubState.NULL_NODE)
+        if (core[eNumbers[0]] == VF2State.NULL_NODE ||
+                        core[eNumbers[1]] == VF2State.NULL_NODE)
             return null;
 
         return secondGraph.getEdge(core[eNumbers[0]], core[eNumbers[1]]);
     }
 
     /**
+     * Checks if a vertex v from the first graph has a corresponding vertex in 
+     * the second graph
      * @param v
      * @return is there a corresponding vertex to v in the subgraph
      */
@@ -95,6 +99,8 @@ public class SubgraphIsomorphismRelation<V, E>
     }
 
     /**
+     * Checks if a edge e from the first graph has a corresponding edge in the 
+     * second graph
      * @param e
      * @return is there a corresponding edge to e in the subgraph
      */
@@ -106,27 +112,31 @@ public class SubgraphIsomorphismRelation<V, E>
     public String toString() {
         String str = "[";
         Set<V> vertexSet = g1.getGraph().vertexSet();
+        Map<String, V> vertexMap = new TreeMap<String, V>();
         
+        for (V v : vertexSet)
+            vertexMap.put(v.toString(), v);
+
         int i = 0;
-        for (V v : vertexSet)   {
-            V u = getVertexCorrespondence(v, true);
-            str += (i++ == 0 ? "" : " ") + v.toString() + "=" +
+        for (Map.Entry<String, V> entry : vertexMap.entrySet())   {
+            V u = getVertexCorrespondence(entry.getValue(), true);
+            str += (i++ == 0 ? "" : " ") + entry.getKey() + "=" +
                             (u == null ? "~~" : u);
         }
-        
+
         return str + "]";
     }
 
     /**
-     * Checks for equality. Assuming both are relations on the same graphs.
+     * Checks for equality. Assuming both are mappings on the same graphs.
      * 
      * @param rel the corresponding SubgraphIsomorphismRelation
      * @return do both relations map to the same vertices
      */
-    public boolean equals(SubgraphIsomorphismRelation<V, E> rel) {
+    public boolean equals(GraphMapping<V, E> rel) {
         for (V v : g2.getGraph().vertexSet()) {
-            if (getVertexCorrespondence(v, false) !=
-                            rel.getVertexCorrespondence(v, false))
+            if (!getVertexCorrespondence(v, false).equals(
+                            rel.getVertexCorrespondence(v, false)))
                 return false;
         }
 
