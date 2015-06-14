@@ -6,12 +6,65 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 
 public class VF2SubgraphIsomorphismInspectorTest {
+
+    /**
+     * Tests graph types: In case of invalid graph types or invalid
+     * combination of graph arguments InvalidArgumentException is
+     * expected
+     */
+    @Test
+    public void testGraphTypes()    {
+
+        DirectedGraph<Integer, DefaultEdge> dg1 =
+                new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        dg1.addVertex(1);
+        dg1.addVertex(2);
+
+        dg1.addEdge(1, 2);
+
+        SimpleGraph<Integer, DefaultEdge> sg1 =
+                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        sg1.addVertex(1);
+        sg1.addVertex(2);
+
+        sg1.addEdge(1, 2);
+
+        Multigraph<Integer, DefaultEdge> mg1 =
+                new Multigraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        mg1.addVertex(1);
+        mg1.addVertex(2);
+
+        mg1.addEdge(1, 2);
+
+        Pseudograph<Integer, DefaultEdge> pg1 =
+                new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        pg1.addVertex(1);
+        pg1.addVertex(2);
+
+        pg1.addEdge(1, 2);
+
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(mg1,mg1);
+            gt1.getMappings().next();
+            Assert.fail("graphs with multiple "
+                    + "edges are not supported");
+        } catch (UnsupportedOperationException ex) {
+        }
+
+    }
+
 
     @Test
     public void testSingleMatching() {
