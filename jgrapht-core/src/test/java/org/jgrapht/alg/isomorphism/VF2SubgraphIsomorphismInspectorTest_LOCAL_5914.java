@@ -165,11 +165,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
         
         assertEquals(false, vf6.isomorphismExists());
 
-
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6b =
-            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g3, g6);
-
-        assertEquals(false, vf6.isomorphismExists());
+//        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6b =
+//            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g3, g6);
+//
+//        assertEquals("[1=5 2=6 3=7 4=~~]",
+//                        vf6b.getMappings().next().toString());
 
 
         /* graph no edges, subgraph contains edge */
@@ -380,11 +380,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         assertEquals(false, vfs6.isomorphismExists());
 
-
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6b =
-            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg3, sg6);
-
-        assertEquals(false, vfs6.isomorphismExists());
+//        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6b =
+//            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg3, sg6);
+//
+//        assertEquals("[1=5 2=6 3=7 4=~~]",
+//                        vfs6b.getMappings().next().toString());
 
 
         /* graph no edges, subgraph contains edge */

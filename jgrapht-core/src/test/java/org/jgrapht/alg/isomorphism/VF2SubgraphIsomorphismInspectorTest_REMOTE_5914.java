@@ -165,7 +165,6 @@ public class VF2SubgraphIsomorphismInspectorTest {
         
         assertEquals(false, vf6.isomorphismExists());
 
-
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6b =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g3, g6);
 
@@ -379,7 +378,6 @@ public class VF2SubgraphIsomorphismInspectorTest {
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg4, sg6);
 
         assertEquals(false, vfs6.isomorphismExists());
-
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6b =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg3, sg6);
@@ -680,7 +678,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
     
     @Test
     public void testHugeGraph() {
-        int n = 700;
+        int n = 1000;
         long time = System.currentTimeMillis();
         
         DirectedGraph<Integer, DefaultEdge> g1 =
@@ -693,11 +691,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
         
         assertEquals(true, vf2.isomorphismExists());
         
-        SubgraphIsomorphismTestUtils.showLog(
-                        "|V1| = " + g1.vertexSet().size() + 
-                      ", |E1| = " + g1.edgeSet().size() + 
-                      ", |V2| = " + g2.vertexSet().size() + 
-                      ", |E2| = " + g2.edgeSet().size() +
-                      " - " + (System.currentTimeMillis() - time) + "ms");
+        System.out.println("|V1| = " + g1.vertexSet().size() + 
+                         ", |E1| = " + g1.edgeSet().size() + 
+                         ", |V2| = " + g2.vertexSet().size() + 
+                         ", |E2| = " + g2.edgeSet().size() +
+                         " - " + (System.currentTimeMillis() - time) + "ms");
     }
 }
