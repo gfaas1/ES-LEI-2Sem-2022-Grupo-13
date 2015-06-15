@@ -2,25 +2,34 @@ package org.jgrapht.alg.isomorphism;
 
 import static org.junit.Assert.*;
 
-import java.lang.Object;
 import java.util.*;
-
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.omg.CORBA.*;
+
 
 
 public class VF2SubgraphIsomorphismInspectorTest {
 
 
     @Rule
-    public ExpectedException thrown  = ExpectedException.none();
-
+    public ExpectedException thrown1  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown2  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown5  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown6  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown7  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown8  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown9  = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown10  = ExpectedException.none();
 
     /**
      * Tests graph types: In case of invalid graph types or invalid
@@ -67,14 +76,14 @@ public class VF2SubgraphIsomorphismInspectorTest {
         pg1.addEdge(1, 2);
 
         /* GT-1 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown1.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
                 new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
                         (mg1,mg1);
 
         /* GT-2 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown2.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt2 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
@@ -93,46 +102,45 @@ public class VF2SubgraphIsomorphismInspectorTest {
         assertEquals("[1=1 2=2]", gt4.getMappings().next().toString());
 
         /* GT-5 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown5.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt5 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (sg1,mg1);
 
         /* GT-6 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown6.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (sg1,pg1);
 
         /* GT-7 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown7.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (dg1,mg1);
 
         /* GT-8 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown8.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt8 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (dg1,pg1);
 
         /* GT-9 */
-        thrown.expect(UnsupportedOperationException.class);
+        thrown9.expect(UnsupportedOperationException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt9 =
               new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (pg1,mg1);
 
         /* GT-10 */
-        thrown.expect(IllegalArgumentException.class);
+        thrown10.expect(IllegalArgumentException.class);
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg1, dg1);
-
     }
 
 
@@ -336,7 +344,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                     (sg5c, sg4c);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[0=0 1=1 2=2 3=3 4=~~]",
         vfs10.getMappings().next().toString());
 
@@ -347,12 +359,14 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4v3e, sg4v3e);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[1=1 2=2 3=3 4=4]",
                 vfs11.getMappings().next().toString());
-        /* assertEquals(true,
-            SubgraphIsomorphismTestUtils.containsAllMatchings(vfs11,
-                    sg4v3e, sg4v3e)); */
+
 
         /* ECS-12: not connected graphs of different size */
         SimpleGraph<Integer, DefaultEdge> sg6v4enc =
@@ -388,11 +402,13 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg6v4enc, sg5v4enc);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[0=~~ 1=8 2=9 3=10 4=6 5=7]",
                 vfs12.getMappings().next().toString());
-
-
     }
 
 
@@ -604,7 +620,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg5c, dg4c);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[0=0 1=1 2=2 3=3 4=~~]",
                 vf10.getMappings().next().toString());
 
@@ -615,7 +635,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg4v3e);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[1=1 2=2 3=3 4=4]",
                 vf11.getMappings().next().toString());
         /* assertEquals(true,
@@ -658,7 +682,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg6v4enc, dg5v4enc);
 
-        // first mapping found
+        /* expected result is the mapping that is usually first found,
+         * it is possible that a different matching is found first
+         * (false result), though the algorithm works correctly,
+         * especially if an ordering of the vertices is applied
+         */
         assertEquals("[0=~~ 1=8 2=10 3=9 4=7 5=6]",
                 vf12.getMappings().next().toString());
 
@@ -871,7 +899,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
     }
 
     /* HG:
-    * meaasures time needed to check a pair of huge random graphs
+    * measures time needed to check a pair of huge random graphs
     *
     * */
     @Test
