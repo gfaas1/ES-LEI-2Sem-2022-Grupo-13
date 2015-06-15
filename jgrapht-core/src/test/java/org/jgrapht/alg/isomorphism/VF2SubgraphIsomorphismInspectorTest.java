@@ -24,8 +24,8 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
     /**
      * Tests graph types: In case of invalid graph types or invalid
-     * combination of graph arguments InvalidArgumentException is
-     * expected
+     * combination of graph arguments UnsupportedOperationException or
+     * InvalidArgumentException is expected
      */
     @Test
     public void testGraphTypes()    {
@@ -39,25 +39,6 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         dg1.addEdge(1, 2);
 
-        /* labeled directed graph */
-        /* DirectedGraph<Object, DefaultEdge> dgol1 =
-                new DefaultDirectedGraph<Object, DefaultEdge>
-                        (DefaultEdge.class);
-
-        dgol1.addVertex("v1");
-        dgol1.addVertex("v2");
-
-        dgol1.addEdge("v1", "v2"); */
-
-         /* labeled directed graph */
-        /* DirectedGraph<Object, DefaultEdge> dgou1 =
-                new DefaultDirectedGraph<Object, DefaultEdge>
-                        (DefaultEdge.class);
-
-        dgou1.addVertex(1);
-        dgou1.addVertex(2);
-
-        dgou1.addEdge(1, 2); */
 
         SimpleGraph<Integer, DefaultEdge> sg1 =
                 new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
@@ -67,6 +48,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         sg1.addEdge(1, 2);
 
+
         Multigraph<Integer, DefaultEdge> mg1 =
                 new Multigraph<Integer, DefaultEdge>(DefaultEdge.class);
 
@@ -74,6 +56,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         mg1.addVertex(2);
 
         mg1.addEdge(1, 2);
+
 
         Pseudograph<Integer, DefaultEdge> pg1 =
                 new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
@@ -149,13 +132,6 @@ public class VF2SubgraphIsomorphismInspectorTest {
         @SuppressWarnings("unused")
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg1, dg1);
-        /* try {
-            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (sg1,dg1);
-            Assert.fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException ex) {
-        }*/
 
     }
 
@@ -364,20 +340,8 @@ public class VF2SubgraphIsomorphismInspectorTest {
         assertEquals("[0=0 1=1 2=2 3=3 4=~~]",
         vfs10.getMappings().next().toString());
 
-        /* assertEquals(true,
-            SubgraphIsomorphismTestUtils.containsAllMatchings(vfs10,
-                    sg5c, sg4c));*/
-
 
         /* ECS-11: isomorphic graphs */
-
-        /* VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs11b =
-            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                               (sg4c, sg4c);
-
-        // first mapping found
-        assertEquals("[0=0 1=1 2=2 3=3]",
-                vfs11b.getMappings().next().toString()); */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs11 =
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
@@ -644,10 +608,6 @@ public class VF2SubgraphIsomorphismInspectorTest {
         assertEquals("[0=0 1=1 2=2 3=3 4=~~]",
                 vf10.getMappings().next().toString());
 
-        /* assertEquals(true,
-            SubgraphIsomorphismTestUtils.containsAllMatchings(vf10,
-                    dg5c, dg4c));*/
-
 
         /* ECD-11: isomorphic graphs */
 
@@ -835,7 +795,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
     }
 
     /** RG-1:
-     * Tests if a all given matchings are correct (on some random graphs).
+     * Tests if a all matchings are correct (on some random graphs).
      */
     @Test
     public void testRandomGraphs() {
@@ -875,7 +835,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
 
     /** RG-2:
-     * Tests if all given matchings are correct and if every matching is found
+     * Tests if all matchings are correct and if every matching is found
      * (on random graphs).
      */
     @Test
@@ -910,7 +870,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
         }
     }
 
-
+    /* HG:
+    * meaasures time needed to check a pair of huge random graphs
+    *
+    * */
     @Test
     public void testHugeGraph() {
         int n = 1000;
