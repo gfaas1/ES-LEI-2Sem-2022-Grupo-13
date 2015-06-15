@@ -169,7 +169,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6b =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g3, g6);
 
-        assertEquals(false, vf6.isomorphismExists());
+        assertEquals(false, vf6b.isomorphismExists());
 
 
         /* graph no edges, subgraph contains edge */
@@ -384,7 +384,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6b =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg3, sg6);
 
-        assertEquals(false, vfs6.isomorphismExists());
+        assertEquals(false, vfs6b.isomorphismExists());
 
 
         /* graph no edges, subgraph contains edge */
@@ -699,5 +699,65 @@ public class VF2SubgraphIsomorphismInspectorTest {
                       ", |V2| = " + g2.vertexSet().size() + 
                       ", |E2| = " + g2.edgeSet().size() +
                       " - " + (System.currentTimeMillis() - time) + "ms");
+    }
+    
+    @Test
+    public void testSemanticCheck() {
+        /*
+         *       a---<3>---b
+         *       |         |
+         * g1 = <4>       <1>   g2 = A---<6>---b---<5>---B
+         *       |         |
+         *       A---<2>---B
+         */
+        SimpleGraph<String, Integer> g1 =
+            new SimpleGraph<String, Integer>(Integer.class),
+                                     g2 =
+            new SimpleGraph<String, Integer>(Integer.class);
+                                          
+        g1.addVertex("a");
+        g1.addVertex("b");
+        g1.addVertex("A");
+        g1.addVertex("B");
+        
+        g1.addEdge("a", "b", 3);
+        g1.addEdge("b", "B", 1);
+        g1.addEdge("B", "A", 2);
+        g1.addEdge("A", "a", 4);
+
+        g2.addVertex("A");
+        g2.addVertex("b");
+        g2.addVertex("B");
+        
+        g2.addEdge("A", "b", 6);
+        g2.addEdge("b", "B", 5);
+        
+        VF2SubgraphIsomorphismInspector<String, Integer> vf2 =
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+                            new VertexComp(),
+                            new EdgeComp());
+        
+        Iterator<IsomorphicGraphMapping<String, Integer>> iter =
+            vf2.getMappings();
+
+        assertEquals("[A=A B=b a=~~ b=B]", iter.next().toString());
+        assertEquals(false, iter.hasNext());
+    }
+    
+    private class VertexComp implements Comparator<String>  {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.toLowerCase().equals(o2.toLowerCase()))
+                return 0;
+            else
+                return 1;
+        }
+    }
+    
+    private class EdgeComp implements Comparator<Integer>   {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            return (o1 % 2) - (o2 % 2);
+        }
     }
 }
