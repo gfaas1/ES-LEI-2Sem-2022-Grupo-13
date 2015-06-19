@@ -731,17 +731,50 @@ public class VF2SubgraphIsomorphismInspectorTest {
         
         g2.addEdge("A", "b", 6);
         g2.addEdge("b", "B", 5);
-        
+
+        // test vertex and edge comparator
         VF2SubgraphIsomorphismInspector<String, Integer> vf2 =
             new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
                             new VertexComp(),
                             new EdgeComp());
-        
+
         Iterator<IsomorphicGraphMapping<String, Integer>> iter =
             vf2.getMappings();
 
         assertEquals("[A=A B=b a=~~ b=B]", iter.next().toString());
         assertEquals(false, iter.hasNext());
+
+        // test vertex comparator
+        VF2SubgraphIsomorphismInspector<String, Integer> vf3 =
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+                            new VertexComp(),
+                            new DefaultComparator<Integer>());
+
+        Iterator<IsomorphicGraphMapping<String, Integer>> iter2 =
+            vf3.getMappings();
+
+        Set<String> mappings = 
+            new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
+                                              "[A=~~ B=B a=A b=b]"));
+        assertEquals(true, mappings.remove(iter2.next().toString()));
+        assertEquals(true, mappings.remove(iter2.next().toString()));
+        assertEquals(false, iter2.hasNext());
+
+        // test edge comparator
+        VF2SubgraphIsomorphismInspector<String, Integer> vf4 =
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+                            new DefaultComparator<String>(),
+                            new EdgeComp());
+
+        Iterator<IsomorphicGraphMapping<String, Integer>> iter3 =
+            vf4.getMappings();
+
+        Set<String> mappings2 = 
+            new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
+                                              "[A=A B=~~ a=b b=B]"));
+        assertEquals(true, mappings2.remove(iter3.next().toString()));
+        assertEquals(true, mappings2.remove(iter3.next().toString()));
+        assertEquals(false, iter3.hasNext());
     }
     
     private class VertexComp implements Comparator<String>  {
