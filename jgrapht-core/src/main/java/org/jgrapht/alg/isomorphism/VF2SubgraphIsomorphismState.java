@@ -30,7 +30,7 @@ public class VF2SubgraphIsomorphismState<V,E>
         String pairstr  = "(" + g1.getVertex(addVertex1) + ", " +
                                 g2.getVertex(addVertex2) + ")",
                abortmsg = pairstr + " does not fit in the current matching";
-        
+
         // check for semantic equality of both vertexes
         if (!areCompatibleVertexes(addVertex1, addVertex2))
             return false;
@@ -91,7 +91,7 @@ public class VF2SubgraphIsomorphismState<V,E>
                     newSucc2++;
             }
         }
-        
+
         if (termInSucc1 < termInSucc2 ||
             termOutSucc1 < termOutSucc2 ||
             newSucc1 < newSucc2)
@@ -100,7 +100,7 @@ public class VF2SubgraphIsomorphismState<V,E>
                 String cause = "",
                           v1 = g1.getVertex(addVertex1).toString(),
                           v2 = g2.getVertex(addVertex2).toString();
-         
+
                 if (termInSucc2 > termInSucc1)
                     cause = "|Tin2 ∩ Succ(Graph2, " + v2 +
                         ")| > |Tin1 ∩ Succ(Graph1, " + v1 + ")|";
@@ -110,10 +110,10 @@ public class VF2SubgraphIsomorphismState<V,E>
                 else if (newSucc2 > newSucc1)
                     cause = "|N‾ ∩ Succ(Graph2, " + v2 +
                         ")| > |N‾ ∩ Succ(Graph1, " + v1 + ")|";
-    
+
                 showLog("isFeasbilePair", abortmsg + ": " + cause);
             }
-            
+
             return false;
         }
 
@@ -174,7 +174,7 @@ public class VF2SubgraphIsomorphismState<V,E>
                 String cause = "",
                           v1 = g1.getVertex(addVertex1).toString(),
                           v2 = g2.getVertex(addVertex2).toString();
-            
+
                 if (termInPred2 > termInPred1)
                     cause = "|Tin2 ∩ Pred(Graph2, " + v2 +
                         ")| > |Tin1 ∩ Pred(Graph1, " + v1 + ")|";
@@ -184,10 +184,10 @@ public class VF2SubgraphIsomorphismState<V,E>
                 else if (newPred2 > newPred1)
                     cause = "|N‾ ∩ Pred(Graph2, " + v2 +
                         ")| > |N‾ ∩ Pred(Graph1, " + v1 + ")|";
-                
+
                 showLog("isFeasbilePair", abortmsg + ": " + cause);
             }
-            
+
             return false;
         }
     }

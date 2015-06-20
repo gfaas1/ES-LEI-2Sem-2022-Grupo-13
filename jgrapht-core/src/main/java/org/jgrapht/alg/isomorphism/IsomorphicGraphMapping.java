@@ -6,13 +6,13 @@ import java.util.TreeMap;
 
 import org.jgrapht.GraphMapping;
 
+
 /**
  * @author Fabian Späh
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-
 public class IsomorphicGraphMapping<V, E>
     implements GraphMapping<V, E>
 {
@@ -113,7 +113,7 @@ public class IsomorphicGraphMapping<V, E>
         String str = "[";
         Set<V> vertexSet = g1.getGraph().vertexSet();
         Map<String, V> vertexMap = new TreeMap<String, V>();
-        
+
         for (V v : vertexSet)
             vertexMap.put(v.toString(), v);
 

@@ -3,6 +3,7 @@ package org.jgrapht.alg.isomorphism;
 import java.util.Arrays;
 import java.util.Comparator;
 
+
 /**
  * controls the matching between two graphs according to the VF2 algorithm.
  * 
@@ -15,7 +16,7 @@ public abstract class VF2State<V,E>
 {
 
     public static final int NULL_NODE = -1;
-    
+
     protected static final boolean DEBUG = false;
 
     protected int[] core1,
@@ -219,7 +220,7 @@ public abstract class VF2State<V,E>
     public void addPair() {
         showLog("addPair", "(" + g1.getVertex(addVertex1) + ", " +
                         g2.getVertex(addVertex2) + ") added");
-        
+
         coreLen++;
         addedVertex1 = addVertex1;
 
@@ -310,10 +311,10 @@ public abstract class VF2State<V,E>
      */
     public void backtrack() {
         int addedVertex2 = core1[addedVertex1];
-        
+
         showLog("backtrack", "remove (" + g1.getVertex(addedVertex1) + ", " +
                         g2.getVertex(addedVertex2) + ") from the matching");
-        
+
         if (in1[addedVertex1] == coreLen)
             in1[addedVertex1] = 0;
 
@@ -382,8 +383,8 @@ public abstract class VF2State<V,E>
     public void resetAddVertexes() {
         addVertex1 = addVertex2 = NULL_NODE;
     }
-    
-    
+
+
     /**
      * creates the debug output only if DEBUG is true.
      * @param method
@@ -392,7 +393,7 @@ public abstract class VF2State<V,E>
     protected void showLog(String method, String str)    {
         if (!DEBUG)
             return;
-        
+
         char[] indent = new char[2 * coreLen];
         Arrays.fill(indent, ' ');
         System.out.println((new String(indent)) + method + "> " + str);

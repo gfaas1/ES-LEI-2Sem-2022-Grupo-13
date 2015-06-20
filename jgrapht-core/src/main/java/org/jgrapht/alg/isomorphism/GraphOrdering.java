@@ -10,18 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
- * 
  * This class represents the order on the graph vertices. There are also some
  * helper-functions for receiving outgoing/incoming edges, etc.
  * 
  * @author Fabian Späh
- *
+ * 
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
 
-public class GraphOrdering<V, E> {
+public class GraphOrdering<V, E>
+{
 
     private Graph<V, E>     graph;
 
@@ -191,7 +192,7 @@ public class GraphOrdering<V, E> {
     public Graph<V, E> getGraph() {
         return graph;
     }
-    
+
 
     private static class GeneralVertexDegreeComparator<V2>
         implements Comparator<V2>

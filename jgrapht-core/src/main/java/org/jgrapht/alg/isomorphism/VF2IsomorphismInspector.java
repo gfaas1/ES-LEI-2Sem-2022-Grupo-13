@@ -11,6 +11,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.Pseudograph;
 
+
 public abstract class VF2IsomorphismInspector<V,E>
     implements IsomorphismInspector<V,E>
 {
@@ -23,6 +24,7 @@ public abstract class VF2IsomorphismInspector<V,E>
 
     protected GraphOrdering<V,E> ordering1,
                                  ordering2;
+
 
     /**
      * This implementation of the VF2 algorithm does not support graphs with
@@ -85,5 +87,5 @@ public abstract class VF2IsomorphismInspector<V,E>
         Iterator<IsomorphicGraphMapping<V,E>> iter = getMappings();
         return iter.hasNext();
     }
-    
+
 }

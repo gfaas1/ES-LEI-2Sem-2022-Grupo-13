@@ -10,7 +10,7 @@ public class VF2GraphIsomorphismInspector<V,E>
 {
 
     public VF2GraphIsomorphismInspector(
-                    Graph<V,E> graph1, 
+                    Graph<V,E> graph1,
                     Graph<V,E> graph2,
                     Comparator<V> vertexComparator,
                     Comparator<E> edgeComparator)
