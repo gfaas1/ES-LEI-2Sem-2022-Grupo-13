@@ -28,6 +28,10 @@ public class VF2GraphMappingIterator<V,E>
         VF2State<V, E> s;
 
         if (stateStack.isEmpty()) {
+            if (ordering1.getGraph().vertexSet().size() !=
+                            ordering2.getGraph().vertexSet().size())
+                return null;
+
             s = new VF2GraphIsomorphismState<V, E>(ordering1, ordering2,
                             vertexComparator, edgeComparator);
 
