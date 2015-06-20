@@ -33,14 +33,19 @@ public class GraphOrdering<V, E>
     private int[][]         outgoingEdges;
     private int[][]         incomingEdges;
 
+    private boolean         cacheEdges;
+
 
     /**
      * @param graph the graph to be ordered
      * @param orderByDegree should the vertices be ordered by their degree. This
      *        speeds up the VF2 algorithm.
      */
-    public GraphOrdering(Graph<V, E> graph, boolean orderByDegree) {
-        this.graph = graph;
+    public GraphOrdering(Graph<V, E> graph,
+                         boolean orderByDegree,
+                         boolean cacheEdges) {
+        this.graph      = graph;
+        this.cacheEdges = cacheEdges;
 
         List<V> vertexSet = new ArrayList<V>(graph.vertexSet());
         if (orderByDegree)
@@ -69,7 +74,7 @@ public class GraphOrdering<V, E>
      * @param graph the graph to be ordered
      */
     public GraphOrdering(Graph<V, E> graph) {
-        this(graph, false);
+        this(graph, false, true);
     }
 
     /**
@@ -86,7 +91,7 @@ public class GraphOrdering<V, E>
      *         by an edge outgoing from v.
      */
     public int[] getOutEdges(int vertexNumber) {
-        if (outgoingEdges[vertexNumber] != null)
+        if (cacheEdges && outgoingEdges[vertexNumber] != null)
             return outgoingEdges[vertexNumber];
 
         V v = getVertex(vertexNumber);
@@ -117,7 +122,7 @@ public class GraphOrdering<V, E>
      *         by an edge incoming to v.
      */
     public int[] getInEdges(int vertexNumber) {
-        if (incomingEdges[vertexNumber] != null)
+        if (cacheEdges && incomingEdges[vertexNumber] != null)
             return incomingEdges[vertexNumber];
 
         V v            = getVertex(vertexNumber);

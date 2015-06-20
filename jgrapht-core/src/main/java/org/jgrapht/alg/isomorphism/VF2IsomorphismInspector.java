@@ -33,12 +33,14 @@ public abstract class VF2IsomorphismInspector<V,E>
      * @param graph2 the second graph
      * @param vertexComparator comparator for semantic equivalence of vertices
      * @param edgeComparator comparator for semantic equivalence of edges
+     * @param cacheEdges if true, edges get cached for faster access
      */
     public VF2IsomorphismInspector(
                     Graph<V, E> graph1,
                     Graph<V, E> graph2,
                     Comparator<V> vertexComparator,
-                    Comparator<E> edgeComparator)
+                    Comparator<E> edgeComparator,
+                    boolean cacheEdges)
     {
         if (graph1 instanceof Multigraph  || graph2 instanceof Multigraph ||
             graph1 instanceof Pseudograph || graph2 instanceof Pseudograph ||
@@ -60,8 +62,46 @@ public abstract class VF2IsomorphismInspector<V,E>
         this.graph2           = graph2;
         this.vertexComparator = vertexComparator;
         this.edgeComparator   = edgeComparator;
-        this.ordering1        = new GraphOrdering<V, E>(graph1, true);
-        this.ordering2        = new GraphOrdering<V, E>(graph2, true);
+        this.ordering1        = new GraphOrdering<V, E>(graph1, true,
+                                                        cacheEdges);
+        this.ordering2        = new GraphOrdering<V, E>(graph2, true,
+                                                        cacheEdges);
+    }
+
+    /**
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     * @param vertexComparator comparator for semantic equivalence of vertices
+     * @param edgeComparator comparator for semantic equivalence of edges
+     */
+    public VF2IsomorphismInspector(
+                    Graph<V,E> graph1,
+                    Graph<V,E> graph2,
+                    Comparator<V> vertexComparator,
+                    Comparator<E> edgeComparator)
+    {
+        this(graph1,
+             graph2,
+             vertexComparator,
+             edgeComparator,
+             true);
+    }
+
+    /**
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     * @param cacheEdges if true, edges get cached for faster access
+     */
+    public VF2IsomorphismInspector(
+                    Graph<V,E> graph1,
+                    Graph<V,E> graph2,
+                    boolean cacheEdges)
+    {
+        this(graph1,
+             graph2,
+             new DefaultComparator<V>(),
+             new DefaultComparator<E>(),
+             cacheEdges);
     }
 
     /**
@@ -74,8 +114,7 @@ public abstract class VF2IsomorphismInspector<V,E>
     {
         this(graph1,
              graph2,
-             new DefaultComparator<V>(),
-             new DefaultComparator<E>());
+             true);
     }
 
 
