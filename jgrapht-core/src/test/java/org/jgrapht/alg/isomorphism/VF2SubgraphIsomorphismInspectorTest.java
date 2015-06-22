@@ -1,36 +1,53 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -------------------------
+ * VF2SubgraphIsomorphismInspectorTest.java
+ * -------------------------
+ * (C) Copyright 2015, by Fabian Späh and Contributors.
+ *
+ * Original Author:  Fabian Späh
+ * Contributor(s):   Rita Dobler
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ * 20-Jun-2015 : Initial revision (FS);
+ *
+ */
 package org.jgrapht.alg.isomorphism;
 
 import static org.junit.Assert.*;
 
 import java.util.*;
+
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 
-
-public class VF2SubgraphIsomorphismInspectorTest {
-
-
-    @Rule
-    public ExpectedException thrown1  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown2  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown5  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown6  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown7  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown8  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown9  = ExpectedException.none();
-    @Rule
-    public ExpectedException thrown10  = ExpectedException.none();
+public class VF2SubgraphIsomorphismInspectorTest
+{
 
     /**
      * Tests graph types: In case of invalid graph types or invalid
@@ -40,21 +57,16 @@ public class VF2SubgraphIsomorphismInspectorTest {
     @Test
     public void testGraphTypes()    {
 
-        DirectedGraph<Integer, DefaultEdge> dg0 ;
-
         DirectedGraph<Integer, DefaultEdge> dg1 =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg1.addVertex(1);
         dg1.addVertex(2);
 
         dg1.addEdge(1, 2);
 
-        SimpleGraph<Integer, DefaultEdge> sg0;
-
         SimpleGraph<Integer, DefaultEdge> sg1 =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg1.addVertex(1);
         sg1.addVertex(2);
@@ -63,7 +75,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
 
         Multigraph<Integer, DefaultEdge> mg1 =
-                new Multigraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new Multigraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         mg1.addVertex(1);
         mg1.addVertex(2);
@@ -72,115 +84,133 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
 
         Pseudograph<Integer, DefaultEdge> pg1 =
-                new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
+            new Pseudograph<Integer, DefaultEdge>(DefaultEdge.class);
 
         pg1.addVertex(1);
         pg1.addVertex(2);
 
         pg1.addEdge(1, 2);
 
-        /* GT-0 */ /*test graph=NULL not possible because of compiler error */
-        /*VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt0 =
+
+        /* GT-0 test graph=null */
+
+        try {
+            @SuppressWarnings("unused")
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt0 =
                 new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
-                        (sg0,sg1); */
+                            (null, sg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (NullPointerException ex) { }
+
 
         /* GT-1: multigraphs */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
-                    new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
-                            (mg1,mg1);
+                new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
+                            (mg1, mg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-2: pseudographs */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt2 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (pg1,pg1);
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (pg1, pg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-3: simple graphs */
+
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt3 =
-           new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                       (sg1,sg1);
-        assertEquals("[1=1 2=2]", gt3.getMappings().next().toString());
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (sg1, sg1);
+        assertEquals(true, gt3.getMappings().hasNext());
+
 
         /* GT-4: directed graphs */
+
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt4 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                        (dg1,dg1);
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (dg1, dg1);
         assertEquals("[1=1 2=2]", gt4.getMappings().next().toString());
 
+
         /* GT-5: simple graph + multigraph */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt5 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (sg1,mg1);
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (sg1, mg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-6: simple graph + pseudograph */
-        try {
-            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (sg1,pg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
 
-        /* GT-7: directed graph + mulitgraph */
         try {
-            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (dg1,mg1);
+            @SuppressWarnings("unused")
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (sg1, pg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
+
+        /* GT-7: directed graph + multigraph */
+
+        try {
+            @SuppressWarnings("unused")
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (dg1, mg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-8: directed graph + pseudograph */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt8 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (dg1,pg1);
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (dg1, pg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-9: pseudograph + multigraph */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt9 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                            (pg1,mg1);
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (pg1, mg1);
             Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex){
-            /* Expected Exception found */
-        }
+        } catch (UnsupportedOperationException ex) { }
+
 
         /* GT-10: simple graph + directed graph */
+
         try {
+            @SuppressWarnings("unused")
             VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
-                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (sg1, dg1);
             Assert.fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException ex){
-            /* Expected Exception found */
-        }
+        } catch (IllegalArgumentException ex) { }
     }
 
 
     /**
-    * Tests edge cases on simple graphs
-    */
+     * Tests edge cases on simple graphs
+     */
     @Test
     public void testEdgeCasesSimpleGraph()    {
 
@@ -193,7 +223,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs1 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg0v, sg0v2);
+                        (sg0v, sg0v2);
 
         assertEquals("[]", vfs1.getMappings().next().toString());
 
@@ -214,7 +244,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs2 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg4v3e, sg0v);
+                        (sg4v3e, sg0v);
 
         assertEquals("[1=~~ 2=~~ 3=~~ 4=~~]",
                         vfs2.getMappings().next().toString());
@@ -224,7 +254,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs3 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg0v, sg4v3e);
+                        (sg0v, sg4v3e);
 
         assertEquals(false, vfs3.isomorphismExists());
 
@@ -232,18 +262,18 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECS-4: graph non-empty, subgraph single vertex */
 
         SimpleGraph<Integer, DefaultEdge> sg1v =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg1v.addVertex(5);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs4 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg4v3e, sg1v);
+                        (sg4v3e, sg1v);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter =
-            vfs4.getMappings();
+                        vfs4.getMappings();
 
-        Set<String> mappings = 
+        Set<String> mappings =
             new HashSet<String>(Arrays.asList("[1=5 2=~~ 3=~~ 4=~~]",
                                               "[1=~~ 2=5 3=~~ 4=~~]",
                                               "[1=~~ 2=~~ 3=5 4=~~]",
@@ -259,7 +289,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs5 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg0v, sg1v);
+                        (sg0v, sg1v);
 
         assertEquals(false, vfs5.isomorphismExists());
 
@@ -267,7 +297,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECS-6: subgraph with vertices, but no edges */
 
         SimpleGraph<Integer, DefaultEdge> sg3v0e =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg3v0e.addVertex(5);
         sg3v0e.addVertex(6);
@@ -275,32 +305,33 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg4v3e, sg3v0e);
+                        (sg4v3e, sg3v0e);
 
         assertEquals(false, vfs6.isomorphismExists());
+
 
         /* ECS-7: graph and subgraph with vertices, but no edges */
 
         SimpleGraph<Integer, DefaultEdge> sg2v0e =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg2v0e.addVertex(1);
         sg2v0e.addVertex(2);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs7 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg3v0e, sg2v0e);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter7 =
-                vfs7.getMappings();
+                        vfs7.getMappings();
 
         Set<String> mappings7 =
-                new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
-                        "[5=1 6=~~ 7=2]",
-                        "[5=2 6=1 7=~~]",
-                        "[5=~~ 6=1 7=2]",
-                        "[5=2 6=~~ 7=1]",
-                        "[5=~~ 6=2 7=1]"));
+            new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
+                                              "[5=1 6=~~ 7=2]",
+                                              "[5=2 6=1 7=~~]",
+                                              "[5=~~ 6=1 7=2]",
+                                              "[5=2 6=~~ 7=1]",
+                                              "[5=~~ 6=2 7=1]"));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
@@ -322,16 +353,16 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs8 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg3v0e, sg2v1e);
+                        (sg3v0e, sg2v1e);
 
         assertEquals(false, vfs8.isomorphismExists());
 
 
         /* ECS-9: complete graphs of different size,
-        * graph smaller than subgraph*/
+         * graph smaller than subgraph */
 
         SimpleGraph<Integer, DefaultEdge> sg5k =
-                    new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg5k.addVertex(0);
         sg5k.addVertex(1);
@@ -351,7 +382,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         sg5k.addEdge(3, 4);
 
         SimpleGraph<Integer, DefaultEdge> sg4k =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg4k.addVertex(0);
         sg4k.addVertex(1);
@@ -366,7 +397,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         sg4k.addEdge(2, 3);
 
         SimpleGraph<Integer, DefaultEdge> sg3k =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg3k.addVertex(0);
         sg3k.addVertex(1);
@@ -377,94 +408,72 @@ public class VF2SubgraphIsomorphismInspectorTest {
         sg3k.addEdge(1, 2);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs9 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4k, sg5k);
 
         assertEquals(false, vfs9.isomorphismExists());
 
+
         /* ECS-10: complete graphs of different size,
-        * graph bigger than subgraph*/
+         * graph bigger than subgraph */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs10 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (sg4k, sg3k);
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                        (sg4k, sg3k);
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter10 =
-                vfs10.getMappings();
+                        vfs10.getMappings();
 
         Set<String> mappings10 =
-                new HashSet<String>(Arrays.asList(
-                        "[0=0 1=1 2=2 3=~~]",
-                        "[0=0 1=1 2=~~ 3=2]",
-                        "[0=0 1=~~ 2=1 3=2]",
-                        "[0=~~ 1=0 2=1 3=2]",
-                        "[0=1 1=0 2=2 3=~~]",
-                        "[0=1 1=0 2=~~ 3=2]",
-                        "[0=1 1=~~ 2=0 3=2]",
-                        "[0=~~ 1=1 2=0 3=2]",
-                        "[0=2 1=1 2=0 3=~~]",
-                        "[0=2 1=1 2=~~ 3=0]",
-                        "[0=2 1=~~ 2=1 3=0]",
-                        "[0=~~ 1=2 2=1 3=0]",
-                        "[0=0 1=2 2=1 3=~~]",
-                        "[0=0 1=2 2=~~ 3=1]",
-                        "[0=0 1=~~ 2=2 3=1]",
-                        "[0=~~ 1=0 2=2 3=1]",
-                        "[0=1 1=2 2=0 3=~~]",
-                        "[0=1 1=2 2=~~ 3=0]",
-                        "[0=1 1=~~ 2=2 3=0]",
-                        "[0=~~ 1=1 2=2 3=0]",
-                        "[0=2 1=0 2=1 3=~~]",
-                        "[0=2 1=0 2=~~ 3=1]",
-                        "[0=2 1=~~ 2=0 3=1]",
-                        "[0=~~ 1=2 2=0 3=1]"
-                ));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
-        assertEquals(true, mappings10.remove(iter10.next().toString()));
+            new HashSet<String>(Arrays.asList("[0=0 1=1 2=2 3=~~]",
+                                              "[0=0 1=1 2=~~ 3=2]",
+                                              "[0=0 1=~~ 2=1 3=2]",
+                                              "[0=~~ 1=0 2=1 3=2]",
+                                              "[0=1 1=0 2=2 3=~~]",
+                                              "[0=1 1=0 2=~~ 3=2]",
+                                              "[0=1 1=~~ 2=0 3=2]",
+                                              "[0=~~ 1=1 2=0 3=2]",
+                                              "[0=2 1=1 2=0 3=~~]",
+                                              "[0=2 1=1 2=~~ 3=0]",
+                                              "[0=2 1=~~ 2=1 3=0]",
+                                              "[0=~~ 1=2 2=1 3=0]",
+                                              "[0=0 1=2 2=1 3=~~]",
+                                              "[0=0 1=2 2=~~ 3=1]",
+                                              "[0=0 1=~~ 2=2 3=1]",
+                                              "[0=~~ 1=0 2=2 3=1]",
+                                              "[0=1 1=2 2=0 3=~~]",
+                                              "[0=1 1=2 2=~~ 3=0]",
+                                              "[0=1 1=~~ 2=2 3=0]",
+                                              "[0=~~ 1=1 2=2 3=0]",
+                                              "[0=2 1=0 2=1 3=~~]",
+                                              "[0=2 1=0 2=~~ 3=1]",
+                                              "[0=2 1=~~ 2=0 3=1]",
+                                              "[0=~~ 1=2 2=0 3=1]"));
+        for (int i = 0; i < 24; i++)
+            assertEquals(true, mappings10.remove(iter10.next().toString()));
         assertEquals(false, iter10.hasNext());
 
 
         /* ECS-11: isomorphic graphs */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs11 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4v3e, sg4v3e);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter11 =
-                vfs11.getMappings();
+                        vfs11.getMappings();
 
         Set<String> mappings11 =
-                new HashSet<String>(Arrays.asList("[1=1 2=2 3=3 4=4]",
-                        "[1=4 2=3 3=2 4=1]"));
+            new HashSet<String>(Arrays.asList("[1=1 2=2 3=3 4=4]",
+                                              "[1=4 2=3 3=2 4=1]"));
         assertEquals(true, mappings11.remove(iter11.next().toString()));
         assertEquals(true, mappings11.remove(iter11.next().toString()));
         assertEquals(false, iter11.hasNext());
 
 
         /* ECS-12: not connected graphs of different size */
+
         SimpleGraph<Integer, DefaultEdge> sg6v4enc =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg6v4enc.addVertex(0);
         sg6v4enc.addVertex(1);
@@ -479,7 +488,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         sg6v4enc.addEdge(4, 5);
 
         SimpleGraph<Integer, DefaultEdge> sg5v4enc =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         sg5v4enc.addVertex(6);
         sg5v4enc.addVertex(7);
@@ -493,43 +502,33 @@ public class VF2SubgraphIsomorphismInspectorTest {
         sg5v4enc.addEdge(8, 10);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs12 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg6v4enc, sg5v4enc);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter12 =
-                vfs12.getMappings();
+                        vfs12.getMappings();
 
         Set<String> mappings12 =
-                new HashSet<String>(Arrays.asList(
-                        "[0=~~ 1=8 2=10 3=9 4=7 5=6]",
-                        "[0=~~ 1=9 2=8 3=10 4=7 5=6]",
-                        "[0=~~ 1=10 2=9 3=8 4=7 5=6]",
-                        "[0=~~ 1=8 2=10 3=9 4=6 5=7]",
-                        "[0=~~ 1=9 2=8 3=10 4=6 5=7]",
-                        "[0=~~ 1=10 2=9 3=8 4=6 5=7]",
-                        "[0=~~ 1=10 2=8 3=9 4=7 5=6]",
-                        "[0=~~ 1=8 2=9 3=10 4=7 5=6]",
-                        "[0=~~ 1=9 2=10 3=8 4=7 5=6]",
-                        "[0=~~ 1=10 2=8 3=9 4=6 5=7]",
-                        "[0=~~ 1=8 2=9 3=10 4=6 5=7]",
-                        "[0=~~ 1=9 2=10 3=8 4=6 5=7]"));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
-        assertEquals(true, mappings12.remove(iter12.next().toString()));
+            new HashSet<String>(Arrays.asList("[0=~~ 1=8 2=10 3=9 4=7 5=6]",
+                                              "[0=~~ 1=9 2=8 3=10 4=7 5=6]",
+                                              "[0=~~ 1=10 2=9 3=8 4=7 5=6]",
+                                              "[0=~~ 1=8 2=10 3=9 4=6 5=7]",
+                                              "[0=~~ 1=9 2=8 3=10 4=6 5=7]",
+                                              "[0=~~ 1=10 2=9 3=8 4=6 5=7]",
+                                              "[0=~~ 1=10 2=8 3=9 4=7 5=6]",
+                                              "[0=~~ 1=8 2=9 3=10 4=7 5=6]",
+                                              "[0=~~ 1=9 2=10 3=8 4=7 5=6]",
+                                              "[0=~~ 1=10 2=8 3=9 4=6 5=7]",
+                                              "[0=~~ 1=8 2=9 3=10 4=6 5=7]",
+                                              "[0=~~ 1=9 2=10 3=8 4=6 5=7]"));
+        for (int i = 0; i < 12; i++)
+            assertEquals(true, mappings12.remove(iter12.next().toString()));
         assertEquals(false, iter12.hasNext());
    }
 
 
-    /* Tests edge cases on directed graphs
+    /**
+     * Tests edge cases on directed graphs
      */
     @Test
     public void testEdgeCasesDirectedGraph()    {
@@ -537,15 +536,13 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-1: graph and subgraph empty */
 
         DirectedGraph<Integer, DefaultEdge> dg0v =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                    (DefaultEdge.class),
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class),
                                             dg0v2 =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                    (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf1 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
-                    (dg0v, dg0v2);
+                        (dg0v, dg0v2);
 
         assertEquals("[]", vf1.getMappings().next().toString());
 
@@ -553,8 +550,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-2: graph non-empty, subgraph empty */
 
         DirectedGraph<Integer, DefaultEdge> dg4v3e =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg4v3e.addVertex(1);
         dg4v3e.addVertex(2);
@@ -566,17 +562,17 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg4v3e.addEdge(3, 4);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg0v);
 
         assertEquals("[1=~~ 2=~~ 3=~~ 4=~~]",
-                vf2.getMappings().next().toString());
+                        vf2.getMappings().next().toString());
 
 
         /* ECD-3: graph empty, subgraph non-empty */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf3 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg0v, dg4v3e);
 
         assertEquals(false, vf3.isomorphismExists());
@@ -585,23 +581,22 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-4: graph non-empty, subgraph single vertex */
 
         DirectedGraph<Integer, DefaultEdge> dg1v =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg1v.addVertex(5);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf4 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg1v);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter4 =
                 vf4.getMappings();
 
         Set<String> mappings =
-                new HashSet<String>(Arrays.asList("[1=5 2=~~ 3=~~ 4=~~]",
-                        "[1=~~ 2=5 3=~~ 4=~~]",
-                        "[1=~~ 2=~~ 3=5 4=~~]",
-                        "[1=~~ 2=~~ 3=~~ 4=5]"));
+            new HashSet<String>(Arrays.asList("[1=5 2=~~ 3=~~ 4=~~]",
+                                              "[1=~~ 2=5 3=~~ 4=~~]",
+                                              "[1=~~ 2=~~ 3=5 4=~~]",
+                                              "[1=~~ 2=~~ 3=~~ 4=5]"));
         assertEquals(true, mappings.remove(iter4.next().toString()));
         assertEquals(true, mappings.remove(iter4.next().toString()));
         assertEquals(true, mappings.remove(iter4.next().toString()));
@@ -612,15 +607,16 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-5: graph empty, subgraph single vertex */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf5 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg0v, dg1v);
 
         assertEquals(false, vf5.isomorphismExists());
 
+
         /* ECD-6: subgraph with vertices, but no edges */
 
         DirectedGraph<Integer, DefaultEdge> dg3v0e =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
+            new DefaultDirectedGraph<Integer, DefaultEdge>
                         (DefaultEdge.class);
 
         dg3v0e.addVertex(5);
@@ -628,34 +624,35 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg3v0e.addVertex(7);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg3v0e);
 
         assertEquals(false, vf6.isomorphismExists());
 
+
         /* ECD-7: graph and subgraph with vertices, but no edges */
 
         DirectedGraph<Integer, DefaultEdge> dg2v0e =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
+            new DefaultDirectedGraph<Integer, DefaultEdge>
                         (DefaultEdge.class);
 
         dg2v0e.addVertex(1);
         dg2v0e.addVertex(2);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf7 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg3v0e, dg2v0e);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter7 =
-                vf7.getMappings();
+                        vf7.getMappings();
 
         Set<String> mappings7 =
-                new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
-                        "[5=1 6=~~ 7=2]",
-                        "[5=2 6=1 7=~~]",
-                        "[5=~~ 6=1 7=2]",
-                        "[5=2 6=~~ 7=1]",
-                        "[5=~~ 6=2 7=1]"));
+            new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
+                                              "[5=1 6=~~ 7=2]",
+                                              "[5=2 6=1 7=~~]",
+                                              "[5=~~ 6=1 7=2]",
+                                              "[5=2 6=~~ 7=1]",
+                                              "[5=~~ 6=2 7=1]"));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
         assertEquals(true, mappings7.remove(iter7.next().toString()));
@@ -668,7 +665,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-8: graph no edges, subgraph contains single edge */
 
         DirectedGraph<Integer, DefaultEdge> dg2v1e =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
+            new DefaultDirectedGraph<Integer, DefaultEdge>
                         (DefaultEdge.class);
 
         dg2v1e.addVertex(5);
@@ -677,18 +674,17 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg2v1e.addEdge(5, 6);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf8 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg3v0e, dg2v1e);
 
         assertEquals(false, vf8.isomorphismExists());
 
 
         /* ECD-9: complete graphs of different size,
-        * graph smaller than subgraph*/
+         * graph smaller than subgraph */
 
         DirectedGraph<Integer, DefaultEdge> dg5c =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg5c.addVertex(0);
         dg5c.addVertex(1);
@@ -708,8 +704,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg5c.addEdge(3, 4);
 
         DirectedGraph<Integer, DefaultEdge> dg4c =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg4c.addVertex(0);
         dg4c.addVertex(1);
@@ -724,27 +719,28 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg4c.addEdge(2, 3);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf9 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4c, dg5c);
 
         assertEquals(false, vf9.isomorphismExists());
 
+
         /* ECD-10: complete graphs of different size,
-        * graph bigger than subgraph*/
+         * graph bigger than subgraph */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf10 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg5c, dg4c);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter10 =
-                vf10.getMappings();
+            vf10.getMappings();
 
         Set<String> mappings10 =
-                new HashSet<String>(Arrays.asList("[0=0 1=1 2=2 3=3 4=~~]",
-                        "[0=0 1=1 2=2 3=~~ 4=3]",
-                        "[0=0 1=1 2=~~ 3=2 4=3]",
-                        "[0=0 1=~~ 2=1 3=2 4=3]",
-                        "[0=~~ 1=0 2=1 3=2 4=3]"));
+            new HashSet<String>(Arrays.asList("[0=0 1=1 2=2 3=3 4=~~]",
+                                              "[0=0 1=1 2=2 3=~~ 4=3]",
+                                              "[0=0 1=1 2=~~ 3=2 4=3]",
+                                              "[0=0 1=~~ 2=1 3=2 4=3]",
+                                              "[0=~~ 1=0 2=1 3=2 4=3]"));
         assertEquals(true, mappings10.remove(iter10.next().toString()));
         assertEquals(true, mappings10.remove(iter10.next().toString()));
         assertEquals(true, mappings10.remove(iter10.next().toString()));
@@ -756,18 +752,18 @@ public class VF2SubgraphIsomorphismInspectorTest {
         /* ECD-11: isomorphic graphs */
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf11 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg4v3e);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter11 =
-                vf11.getMappings();
+                        vf11.getMappings();
 
-        assertEquals("[1=1 2=2 3=3 4=4]",
-                iter11.next().toString());
+        assertEquals("[1=1 2=2 3=3 4=4]", iter11.next().toString());
         assertEquals(false, iter11.hasNext());
 
 
         /* ECD-12: not connected graphs of different size */
+
         DirectedGraph<Integer, DefaultEdge> dg6v4enc =
                 new DefaultDirectedGraph<Integer, DefaultEdge>
                         (DefaultEdge.class);
@@ -785,8 +781,7 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg6v4enc.addEdge(4, 5);
 
         DirectedGraph<Integer, DefaultEdge> dg5v4enc =
-                new DefaultDirectedGraph<Integer, DefaultEdge>
-                        (DefaultEdge.class);
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         dg5v4enc.addVertex(6);
         dg5v4enc.addVertex(7);
@@ -800,16 +795,16 @@ public class VF2SubgraphIsomorphismInspectorTest {
         dg5v4enc.addEdge(8, 10);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf12 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg6v4enc, dg5v4enc);
 
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter12 =
-                vf12.getMappings();
+                        vf12.getMappings();
 
         Set<String> mappings12 =
-                new HashSet<String>(Arrays.asList("[0=~~ 1=8 2=10 3=9 4=7 5=6]",
-                        "[0=~~ 1=9 2=8 3=10 4=7 5=6]",
-                        "[0=~~ 1=10 2=9 3=8 4=7 5=6]"));
+            new HashSet<String>(Arrays.asList("[0=~~ 1=8 2=10 3=9 4=7 5=6]",
+                                              "[0=~~ 1=9 2=8 3=10 4=7 5=6]",
+                                              "[0=~~ 1=10 2=9 3=8 4=7 5=6]"));
         assertEquals(true, mappings12.remove(iter12.next().toString()));
         assertEquals(true, mappings12.remove(iter12.next().toString()));
         assertEquals(true, mappings12.remove(iter12.next().toString()));
@@ -817,13 +812,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
     }
 
 
-
     @Test
     public void testExhaustive() {
 
         /* DET-1:
          *
-         * 
          *      0   3
          *      |  /|        0 2
          * g1 = | 2 |   g2 = |/
@@ -832,9 +825,9 @@ public class VF2SubgraphIsomorphismInspectorTest {
          */
 
         SimpleGraph<Integer, DefaultEdge> g1 =
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class),
-                                         g2 = 
-                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class),
+                                          g2 =
+            new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         g1.addVertex(0);
         g1.addVertex(1);
@@ -861,11 +854,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
             SubgraphIsomorphismTestUtils.containsAllMatchings(vf2, g1, g2));
 
 
-
-        /* DET-2: (example from VF2 presentation)
+        /* DET-2:
          *
          * g3 = ...   g4 = ...
-         * 
+         *
          */
 
         DirectedGraph<Integer, DefaultEdge> g3 =
@@ -946,7 +938,9 @@ public class VF2SubgraphIsomorphismInspectorTest {
             SubgraphIsomorphismTestUtils.containsAllMatchings(vf4, g5, g6));
     }
 
-    /** RG-1:
+
+    /**
+     * RG-1:
      * Tests if a all matchings are correct (on some random graphs).
      */
     @Test
@@ -956,13 +950,13 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         for (int i = 1; i < 50; i++)    {
             int vertexCount    = 2 + rnd.nextInt(i),
-                edgeCount      = vertexCount + 
+                edgeCount      = vertexCount +
                     rnd.nextInt(vertexCount * (vertexCount - 1)) / 2,
                 subVertexCount = 1 + rnd.nextInt(vertexCount);
 
             DirectedGraph<Integer, DefaultEdge> g1 =
-                SubgraphIsomorphismTestUtils.randomGraph(vertexCount,
-                                edgeCount, i),
+                SubgraphIsomorphismTestUtils.randomGraph(vertexCount, edgeCount,
+                                i),
                                                 g2 =
                 SubgraphIsomorphismTestUtils.randomSubgraph(g1, subVertexCount,
                                 i);
@@ -986,7 +980,8 @@ public class VF2SubgraphIsomorphismInspectorTest {
     }
 
 
-    /** RG-2:
+    /**
+     * RG-2:
      * Tests if all matchings are correct and if every matching is found
      * (on random graphs).
      */
@@ -999,12 +994,12 @@ public class VF2SubgraphIsomorphismInspectorTest {
             int vertexCount    = 3 + rnd.nextInt(5),
                 edgeCount      = rnd.nextInt(vertexCount * (vertexCount - 1)),
                 subVertexCount = 2 + rnd.nextInt(vertexCount),
-                subEdgeCount   = rnd.nextInt(subVertexCount * 
+                subEdgeCount   = rnd.nextInt(subVertexCount *
                                     (subVertexCount - 1));
 
             DirectedGraph<Integer, DefaultEdge> g1 =
-                SubgraphIsomorphismTestUtils.randomGraph(vertexCount,
-                                edgeCount, i),
+                SubgraphIsomorphismTestUtils.randomGraph(vertexCount, edgeCount,
+                                i),
                                                 g2 =
                 SubgraphIsomorphismTestUtils.randomGraph(subVertexCount,
                                 subEdgeCount, i);
@@ -1016,16 +1011,19 @@ public class VF2SubgraphIsomorphismInspectorTest {
             SubgraphIsomorphismTestUtils.showLog(i + ": " + vertexCount +
                             "v, " + edgeCount + "e ....\n");
 
-            assertEquals(true,
-                SubgraphIsomorphismTestUtils.containsAllMatchings
-                        (vf2, g1, g2));
+            assertEquals(true, SubgraphIsomorphismTestUtils.containsAllMatchings
+                                (vf2, g1, g2));
         }
     }
 
 
-    /* SEM */
+    /**
+     * SEM
+     * Tests the edge- and vertex-comparator
+     */
     @Test
     public void testSemanticCheck() {
+
         /*
          *       a---<3>---b
          *       |         |
@@ -1033,10 +1031,11 @@ public class VF2SubgraphIsomorphismInspectorTest {
          *       |         |
          *       A---<2>---B
          */
+
         SimpleGraph<String, Integer> g1 =
-                new SimpleGraph<String, Integer>(Integer.class),
+            new SimpleGraph<String, Integer>(Integer.class),
                                      g2 =
-                new SimpleGraph<String, Integer>(Integer.class);
+            new SimpleGraph<String, Integer>(Integer.class);
 
         g1.addVertex("a");
         g1.addVertex("b");
@@ -1056,54 +1055,56 @@ public class VF2SubgraphIsomorphismInspectorTest {
         g2.addEdge("A", "b", 6);
         g2.addEdge("b", "B", 5);
 
+
         /* SEM-1
-        * test vertex and edge comparator */
+         * test vertex and edge comparator */
+
         VF2SubgraphIsomorphismInspector<String, Integer> vf2 =
-                new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
                         new VertexComp(),
                         new EdgeComp());
 
-
         Iterator<IsomorphicGraphMapping<String, Integer>> iter =
-                vf2.getMappings();
-
+            vf2.getMappings();
 
         assertEquals("[A=A B=b a=~~ b=B]", iter.next().toString());
         assertEquals(false, iter.hasNext());
 
 
         /* SEM-2
-        *  test vertex comparator */
+         * test vertex comparator */
+
         VF2SubgraphIsomorphismInspector<String, Integer> vf3 =
-                new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
                         new VertexComp(),
                         new DefaultComparator<Integer>());
 
-
         Iterator<IsomorphicGraphMapping<String, Integer>> iter2 =
-                vf3.getMappings();
+            vf3.getMappings();
 
         Set<String> mappings =
-                new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
-                        "[A=~~ B=B a=A b=b]"));
+            new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
+                                              "[A=~~ B=B a=A b=b]"));
         assertEquals(true, mappings.remove(iter2.next().toString()));
         assertEquals(true, mappings.remove(iter2.next().toString()));
         assertEquals(false, iter2.hasNext());
 
+
         /* SEM-3
-        *  test edge comparator */
+         * test edge comparator */
+
         VF2SubgraphIsomorphismInspector<String, Integer> vf4 =
-                new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
+            new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
                         new DefaultComparator<String>(),
                         new EdgeComp());
 
         Iterator<IsomorphicGraphMapping<String, Integer>> iter3 =
-                vf4.getMappings();
+                        vf4.getMappings();
 
 
         Set<String> mappings2 =
-                new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
-                        "[A=A B=~~ a=b b=B]"));
+            new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
+                                              "[A=A B=~~ a=b b=B]"));
         assertEquals(true, mappings2.remove(iter3.next().toString()));
         assertEquals(true, mappings2.remove(iter3.next().toString()));
         assertEquals(false, iter3.hasNext());
@@ -1127,12 +1128,10 @@ public class VF2SubgraphIsomorphismInspectorTest {
     }
 
 
-
-
-    /* HG:
-    * measures time needed to check a pair of huge random graphs
-    *
-    * */
+    /**
+     * HG:
+     * measures time needed to check a pair of huge random graphs
+     */
     @Test
     public void testHugeGraph() {
         int n = 700;
@@ -1147,14 +1146,13 @@ public class VF2SubgraphIsomorphismInspectorTest {
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(g1, g2);
 
         assertEquals(true, vf2.isomorphismExists());
-        
+
         SubgraphIsomorphismTestUtils.showLog(
-                        "|V1| = " + g1.vertexSet().size() + 
-                      ", |E1| = " + g1.edgeSet().size() + 
-                      ", |V2| = " + g2.vertexSet().size() + 
+                        "|V1| = " + g1.vertexSet().size() +
+                      ", |E1| = " + g1.edgeSet().size() +
+                      ", |V2| = " + g2.vertexSet().size() +
                       ", |E2| = " + g2.edgeSet().size() +
                       " - " + (System.currentTimeMillis() - time) + "ms");
     }
-    
-}
 
+}
