@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -78,76 +79,102 @@ public class VF2SubgraphIsomorphismInspectorTest {
 
         pg1.addEdge(1, 2);
 
-        /* GT-0 */ /*test not possible because of compiler error */
+        /* GT-0 */ /*test graph=NULL not possible because of compiler error */
         /*VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt0 =
                 new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
                         (sg0,sg1); */
 
-        /* GT-1 */
-        thrown1.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
-                new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
-                        (mg1,mg1);
+        /* GT-1: multigraphs */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
+                    new VF2SubgraphIsomorphismInspector<Integer,DefaultEdge>
+                            (mg1,mg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-2 */
-        thrown2.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt2 =
-            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(pg1,pg1);
+        /* GT-2: pseudographs */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt2 =
+                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (pg1,pg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-3 */
+        /* GT-3: simple graphs */
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt3 =
            new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                        (sg1,sg1);
         assertEquals("[1=1 2=2]", gt3.getMappings().next().toString());
 
-        /* GT-4 */
+        /* GT-4: directed graphs */
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt4 =
                 new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg1,dg1);
         assertEquals("[1=1 2=2]", gt4.getMappings().next().toString());
 
-        /* GT-5 */
-        thrown5.expect(UnsupportedOperationException.class);
-        /*@SuppressWarnings("unused")
-        /*VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt5 =
+        /* GT-5: simple graph + multigraph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt5 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (sg1,mg1);
-*/
-        /* GT-6 */
-        thrown6.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
+
+        /* GT-6: simple graph + pseudograph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (sg1,pg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-7 */
-        thrown7.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
+        /* GT-7: directed graph + mulitgraph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (dg1,mg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-8 */
-        thrown8.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt8 =
+        /* GT-8: directed graph + pseudograph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt8 =
                     new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (dg1,pg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-9 */
-        thrown9.expect(UnsupportedOperationException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt9 =
-              new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+        /* GT-9: pseudograph + multigraph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt9 =
+                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                             (pg1,mg1);
+            Assert.fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException ex){
+            /* Expected Exception found */
+        }
 
-        /* GT-10 */
-        thrown10.expect(IllegalArgumentException.class);
-        @SuppressWarnings("unused")
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
-                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>(sg1, dg1);
+        /* GT-10: simple graph + directed graph */
+        try {
+            VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
+                    new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                            (sg1, dg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex){
+            /* Expected Exception found */
+        }
     }
 
 
@@ -367,29 +394,29 @@ public class VF2SubgraphIsomorphismInspectorTest {
         Set<String> mappings10 =
                 new HashSet<String>(Arrays.asList(
                         "[0=0 1=1 2=2 3=~~]",
-                        "[0=0 1=1 2=~~ 4=2]",
-                        "[0=0 1=~~ 3=1 4=2]",
-                        "[0=~~ 2=0 3=1 4=2]",
+                        "[0=0 1=1 2=~~ 3=2]",
+                        "[0=0 1=~~ 2=1 3=2]",
+                        "[0=~~ 1=0 2=1 3=2]",
                         "[0=1 1=0 2=2 3=~~]",
-                        "[0=1 1=0 2=~~ 4=2]",
-                        "[0=1 1=~~ 3=0 4=2]",
-                        "[0=~~ 2=1 3=0 4=2]",
+                        "[0=1 1=0 2=~~ 3=2]",
+                        "[0=1 1=~~ 2=0 3=2]",
+                        "[0=~~ 1=1 2=0 3=2]",
                         "[0=2 1=1 2=0 3=~~]",
-                        "[0=2 1=1 2=~~ 4=0]",
-                        "[0=2 1=~~ 3=1 4=0]",
-                        "[0=~~ 2=2 3=1 4=0]",
+                        "[0=2 1=1 2=~~ 3=0]",
+                        "[0=2 1=~~ 2=1 3=0]",
+                        "[0=~~ 1=2 2=1 3=0]",
                         "[0=0 1=2 2=1 3=~~]",
-                        "[0=0 1=2 2=~~ 4=1]",
-                        "[0=0 1=~~ 3=2 4=1]",
-                        "[0=~~ 2=0 3=2 4=1]",
+                        "[0=0 1=2 2=~~ 3=1]",
+                        "[0=0 1=~~ 2=2 3=1]",
+                        "[0=~~ 1=0 2=2 3=1]",
                         "[0=1 1=2 2=0 3=~~]",
-                        "[0=1 1=2 2=~~ 4=0]",
-                        "[0=1 1=~~ 3=2 4=0]",
-                        "[0=~~ 2=1 3=2 4=0]",
-                        "[0=2 1=1 2=0 3=~~]",
-                        "[0=2 1=1 2=~~ 4=0]",
-                        "[0=2 1=~~ 3=1 4=0]",
-                        "[0=~~ 2=2 3=1 4=0]"
+                        "[0=1 1=2 2=~~ 3=0]",
+                        "[0=1 1=~~ 2=2 3=0]",
+                        "[0=~~ 1=1 2=2 3=0]",
+                        "[0=2 1=0 2=1 3=~~]",
+                        "[0=2 1=0 2=~~ 3=1]",
+                        "[0=2 1=~~ 2=0 3=1]",
+                        "[0=~~ 1=2 2=0 3=1]"
                 ));
         assertEquals(true, mappings10.remove(iter10.next().toString()));
         assertEquals(true, mappings10.remove(iter10.next().toString()));
@@ -736,9 +763,8 @@ public class VF2SubgraphIsomorphismInspectorTest {
         Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter11 =
                 vf11.getMappings();
 
-        Set<String> mappings11 =
-                new HashSet<String>(Arrays.asList("[1=1 2=2 3=3 4=4]"));
-        assertEquals(true, mappings11.remove(iter11.next().toString()));
+        assertEquals("[1=1 2=2 3=3 4=4]",
+                iter11.next().toString());
         assertEquals(false, iter11.hasNext());
 
 
@@ -1129,4 +1155,104 @@ public class VF2SubgraphIsomorphismInspectorTest {
                          ", |E2| = " + g2.edgeSet().size() +
                          " - " + (System.currentTimeMillis() - time) + "ms");
     }
-}
+
+
+
+
+    @Test
+    public void testSpecialCase() {
+
+        SimpleGraph<Integer, DefaultEdge> g3 =
+                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        g3.addVertex(0);
+        g3.addVertex(1);
+        g3.addVertex(2);
+        g3.addVertex(3);
+        g3.addVertex(4);
+        g3.addVertex(5);
+
+        g3.addEdge(0, 1);
+        g3.addEdge(1, 2);
+        g3.addEdge(2, 3);
+        g3.addEdge(3, 4);
+        g3.addEdge(5, 2);
+        g3.addEdge(5, 3);
+        g3.addEdge(5, 4);
+
+        SimpleGraph<Integer, DefaultEdge> g4 =
+                new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        g4.addVertex(0);
+        g4.addVertex(1);
+        g4.addVertex(2);
+        g4.addVertex(3);
+        g4.addVertex(4);
+        g4.addVertex(5);
+
+        g4.addEdge(0, 1);
+        g4.addEdge(1, 2);
+        g4.addEdge(2, 3);
+        g4.addEdge(4, 2);
+        g4.addEdge(5, 2);
+        g4.addEdge(5, 3);
+        g4.addEdge(4, 5);
+
+        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs2 =
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                        (g3, g4);
+
+        assertEquals(false, vfs2.isomorphismExists());
+
+
+        ListenableUndirectedGraph<Integer, DefaultEdge> g5 =
+                new ListenableUndirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        g5.addVertex(0);
+        g5.addVertex(1);
+        g5.addVertex(2);
+        g5.addVertex(3);
+        g5.addVertex(4);
+        g5.addVertex(5);
+
+        g5.addEdge(0, 1);
+        g5.addEdge(1, 2);
+        g5.addEdge(2, 3);
+        g5.addEdge(3, 4);
+        g5.addEdge(5, 2);
+        g5.addEdge(5, 3);
+        g5.addEdge(5, 4);
+
+        ListenableUndirectedGraph<Integer, DefaultEdge> g6 =
+                new ListenableUndirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+
+        g6.addVertex(0);
+        g6.addVertex(1);
+        g6.addVertex(2);
+        g6.addVertex(3);
+        g6.addVertex(4);
+        g6.addVertex(5);
+
+        g6.addEdge(0, 1);
+//        g6.addEdge(1, 0);
+        g6.addEdge(1, 2);
+//        g6.addEdge(2, 1);
+        g6.addEdge(2, 3);
+//        g6.addEdge(3, 2);
+        g6.addEdge(4, 5);
+//        g6.addEdge(5, 4);
+        g6.addEdge(4, 2);
+//        g6.addEdge(2, 4);
+        g6.addEdge(5, 2);
+//        g6.addEdge(2, 5);
+        g6.addEdge(5, 3);
+//        g6.addEdge(3, 5);
+
+        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs3 =
+                new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
+                        (g5, g6);
+
+        assertEquals(false, vfs3.isomorphismExists());
+        }
+    }
+
