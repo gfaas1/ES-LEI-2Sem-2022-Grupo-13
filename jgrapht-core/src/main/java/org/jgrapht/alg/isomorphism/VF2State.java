@@ -395,8 +395,8 @@ public abstract class VF2State<V,E>
      * @return v1 and v2 are equivalent
      */
     protected boolean areCompatibleVertexes(int v1, int v2) {
-        return vertexComparator.compare(g1.getVertex(v1),
-                        g2.getVertex(v2)) == 0;
+        return vertexComparator == null ||
+            vertexComparator.compare(g1.getVertex(v1), g2.getVertex(v2)) == 0;
     }
 
     /**
@@ -408,8 +408,8 @@ public abstract class VF2State<V,E>
      * @return edges are equivalent
      */
     protected boolean areCompatibleEdges(int v1, int v2, int u1, int u2) {
-        return edgeComparator.compare(g1.getEdge(v1, v2),
-                        g2.getEdge(u1, u2)) == 0;
+        return edgeComparator == null ||
+            edgeComparator.compare(g1.getEdge(v1, v2), g2.getEdge(u1, u2)) == 0;
     }
 
     public IsomorphicGraphMapping<V,E> getCurrentMapping()    {

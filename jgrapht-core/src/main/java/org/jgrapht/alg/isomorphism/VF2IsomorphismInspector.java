@@ -135,8 +135,8 @@ public abstract class VF2IsomorphismInspector<V,E>
     {
         this(graph1,
              graph2,
-             new DefaultComparator<V>(),
-             new DefaultComparator<E>(),
+             null,
+             null,
              cacheEdges);
     }
 
