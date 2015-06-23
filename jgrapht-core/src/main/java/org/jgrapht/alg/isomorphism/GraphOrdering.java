@@ -68,6 +68,7 @@ public class GraphOrdering<V, E>
 
     private int[][]         outgoingEdges;
     private int[][]         incomingEdges;
+    private Boolean[][]     adjMatrix;
 
     private boolean         cacheEdges;
 
@@ -76,6 +77,8 @@ public class GraphOrdering<V, E>
      * @param graph the graph to be ordered
      * @param orderByDegree should the vertices be ordered by their degree. This
      *        speeds up the VF2 algorithm.
+     * @param cacheEdges if true, the class creates a adjacency matrix and two
+     *        arrays for incoming and outgoing edges for fast access.
      */
     public GraphOrdering(Graph<V, E> graph,
                          boolean orderByDegree,
@@ -94,6 +97,7 @@ public class GraphOrdering<V, E>
 
         outgoingEdges    = new int[vertexCount][];
         incomingEdges    = new int[vertexCount][];
+        adjMatrix        = new Boolean[vertexCount][vertexCount];
 
         Integer i = 0;
         for (V vertex : vertexSet) {
@@ -188,10 +192,22 @@ public class GraphOrdering<V, E>
      * @return exists the edge from v1 to v2
      */
     public boolean hasEdge(int v1Number, int v2Number) {
-        V v1 = getVertex(v1Number),
-          v2 = getVertex(v2Number);
+        V v1, v2;
+        Boolean containsEdge = null;
 
-        return graph.containsEdge(v1, v2);
+        if (cacheEdges)
+            containsEdge = adjMatrix[v1Number][v2Number];
+
+        if (!cacheEdges || containsEdge == null) {
+            v1 = getVertex(v1Number);
+            v2 = getVertex(v2Number);
+            containsEdge = graph.containsEdge(v1, v2);
+        }
+        
+        if (cacheEdges && adjMatrix[v1Number][v2Number] == null)
+            adjMatrix[v1Number][v2Number] = containsEdge;
+
+        return containsEdge;
     }
 
     /**
