@@ -161,6 +161,42 @@ public class DOTImporterTest extends TestCase
 
    }
 
+   public void testDashLabelVertex() throws ImportException {
+      String input = "graph G {\n"
+                     + "a [label=\"------this------contains-------dashes------\"]\n"
+                     + "}";
+
+      Multigraph<String, DefaultEdge> result = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
+
+      DOTImporter<String, DefaultEdge> importer = new DOTImporter<String, DefaultEdge>(
+            new VertexProvider<String>() {
+               @Override
+               public String buildVertex(String label, Map<String, String> attributes) {
+                  return label;
+               }
+            },
+            new EdgeProvider<String, DefaultEdge>() {
+               @Override
+               public DefaultEdge buildEdge(String from, String to, String label,
+                                            Map<String, String> attributes) {
+                  return new DefaultEdge();
+               }
+            },
+            new VertexUpdater<String>() {
+               @Override
+               public void updateVertex(String vertex, Map<String, String> attributes) {
+                  // do nothing strings can't update.
+               }
+            }
+      );
+
+      importer.read(input, result);
+
+      Assert.assertEquals(1, result.vertexSet().size());
+      Assert.assertTrue(result.vertexSet().contains("------this------contains-------dashes------"));
+
+   }
+
    public void testEmptyString()
    {
       testGarbage("", "Dot string was empty");

@@ -122,7 +122,7 @@ public class DOTImporter<V,E> {
             throw new ImportException(
                   "graph level properties are not currently supported."
             );
-         } else if (!line.contains("-")) {
+         } else if (isVertexLine(line)) {
             // probably a vertex
             Map<String, String> attributes = extractAttributes(line);
 
@@ -291,5 +291,13 @@ public class DOTImporter<V,E> {
               && !(input.charAt(result - 1) == '\\'
                    && input.charAt(result - 2) == '\\')); // unless its escaped
       return result;
+   }
+
+   private boolean isVertexLine(String input) {
+      if(input.contains("[")) {
+         return ! input.substring(0, input.indexOf('[')).contains("-");
+      } else {
+         return ! input.contains("-");
+      }
    }
 }
