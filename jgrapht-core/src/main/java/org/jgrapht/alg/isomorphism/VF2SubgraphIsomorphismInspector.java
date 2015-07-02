@@ -42,7 +42,7 @@ import org.jgrapht.Graph;
 
 
 public class VF2SubgraphIsomorphismInspector<V,E>
-    extends VF2IsomorphismInspector<V,E>
+    extends VF2AbstractIsomorphismInspector<V,E>
 {
 
     public VF2SubgraphIsomorphismInspector(

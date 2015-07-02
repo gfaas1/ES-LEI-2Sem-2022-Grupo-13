@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -------------------------
- * VF2IsomorphismInspector.java
+ * VF2AbstractIsomorphismInspector.java
  * -------------------------
  * (C) Copyright 2015, by Fabian Späh and Contributors.
  *
@@ -48,7 +48,7 @@ import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.Pseudograph;
 
 
-public abstract class VF2IsomorphismInspector<V,E>
+public abstract class VF2AbstractIsomorphismInspector<V,E>
     implements IsomorphismInspector<V,E>
 {
 
@@ -71,12 +71,12 @@ public abstract class VF2IsomorphismInspector<V,E>
      * @param edgeComparator comparator for semantic equivalence of edges
      * @param cacheEdges if true, edges get cached for faster access
      */
-    public VF2IsomorphismInspector(
-                    Graph<V, E> graph1,
-                    Graph<V, E> graph2,
-                    Comparator<V> vertexComparator,
-                    Comparator<E> edgeComparator,
-                    boolean cacheEdges)
+    public VF2AbstractIsomorphismInspector(
+            Graph<V, E> graph1,
+            Graph<V, E> graph2,
+            Comparator<V> vertexComparator,
+            Comparator<E> edgeComparator,
+            boolean cacheEdges)
     {
         if (graph1 instanceof Multigraph  || graph2 instanceof Multigraph ||
             graph1 instanceof Pseudograph || graph2 instanceof Pseudograph ||
@@ -110,11 +110,11 @@ public abstract class VF2IsomorphismInspector<V,E>
      * @param vertexComparator comparator for semantic equivalence of vertices
      * @param edgeComparator comparator for semantic equivalence of edges
      */
-    public VF2IsomorphismInspector(
-                    Graph<V,E> graph1,
-                    Graph<V,E> graph2,
-                    Comparator<V> vertexComparator,
-                    Comparator<E> edgeComparator)
+    public VF2AbstractIsomorphismInspector(
+            Graph<V, E> graph1,
+            Graph<V, E> graph2,
+            Comparator<V> vertexComparator,
+            Comparator<E> edgeComparator)
     {
         this(graph1,
              graph2,
@@ -128,10 +128,10 @@ public abstract class VF2IsomorphismInspector<V,E>
      * @param graph2 the second graph
      * @param cacheEdges if true, edges get cached for faster access
      */
-    public VF2IsomorphismInspector(
-                    Graph<V,E> graph1,
-                    Graph<V,E> graph2,
-                    boolean cacheEdges)
+    public VF2AbstractIsomorphismInspector(
+            Graph<V, E> graph1,
+            Graph<V, E> graph2,
+            boolean cacheEdges)
     {
         this(graph1,
              graph2,
@@ -144,9 +144,9 @@ public abstract class VF2IsomorphismInspector<V,E>
      * @param graph1 the first graph
      * @param graph2 the second graph
      */
-    public VF2IsomorphismInspector(
-                    Graph<V, E> graph1,
-                    Graph<V, E> graph2)
+    public VF2AbstractIsomorphismInspector(
+            Graph<V, E> graph1,
+            Graph<V, E> graph2)
     {
         this(graph1,
              graph2,
