@@ -44,7 +44,9 @@ import org.jgrapht.GraphMapping;
 
 
 /**
- * @author Fabian Späh
+ * This class represents a GraphMapping between two (subgraph)isomorphic graphs.
+ * In the subgraph isomorphic case, the second one is assumed to be a subgraph
+ * of the first one.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
@@ -166,10 +168,10 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks for equality. Assuming both are mappings on the same graphs.
      * 
-     * @param rel the corresponding SubgraphIsomorphismRelation
+     * @param rel the corresponding mapping
      * @return do both relations map to the same vertices
      */
-    public boolean equals(GraphMapping<V, E> rel) {
+    public boolean isEqualMapping(GraphMapping<V, E> rel) {
         for (V v : g2.getGraph().vertexSet()) {
             if (!getVertexCorrespondence(v, false).equals(
                             rel.getVertexCorrespondence(v, false)))
