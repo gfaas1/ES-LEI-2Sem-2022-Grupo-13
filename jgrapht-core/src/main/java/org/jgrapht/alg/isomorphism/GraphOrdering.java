@@ -51,8 +51,6 @@ import java.util.Set;
  * This class represents the order on the graph vertices. There are also some
  * helper-functions for receiving outgoing/incoming edges, etc.
  * 
- * @author Fabian Späh
- * 
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
@@ -63,7 +61,7 @@ class GraphOrdering<V, E>
     private Graph<V, E>     graph;
 
     private Map<V, Integer> mapVertexToOrder;
-    private Object[]        mapOrderToVertex;
+    private ArrayList<V>    mapOrderToVertex;
     private int             vertexCount;
 
     private int[][]         outgoingEdges;
@@ -93,19 +91,18 @@ class GraphOrdering<V, E>
 
         vertexCount      = vertexSet.size();
         mapVertexToOrder = new HashMap<V, Integer>();
-        mapOrderToVertex = new Object[vertexCount];
+        mapOrderToVertex = new ArrayList<V>(vertexCount);
 
-        outgoingEdges    = new int[vertexCount][];
-        incomingEdges    = new int[vertexCount][];
-        adjMatrix        = new Boolean[vertexCount][vertexCount];
+        if (cacheEdges) {
+            outgoingEdges = new int[vertexCount][];
+            incomingEdges = new int[vertexCount][];
+            adjMatrix = new Boolean[vertexCount][vertexCount];
+        }
 
         Integer i = 0;
         for (V vertex : vertexSet) {
-            mapVertexToOrder.put(vertex, i);
-            mapOrderToVertex[i] = vertex;
-
-            outgoingEdges[i]   = null;
-            incomingEdges[i++] = null;
+            mapVertexToOrder.put(vertex, i++);
+            mapOrderToVertex.add(vertex);
         }
     }
 
@@ -152,7 +149,10 @@ class GraphOrdering<V, E>
                 mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
-        return outgoingEdges[vertexNumber] = vertexArray;
+        if (cacheEdges)
+            outgoingEdges[vertexNumber] = vertexArray;
+
+        return vertexArray;
     }
 
     /**
@@ -183,7 +183,10 @@ class GraphOrdering<V, E>
                 mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
-        return incomingEdges[vertexNumber] = vertexArray;
+        if (cacheEdges)
+            incomingEdges[vertexNumber] = vertexArray;
+
+        return vertexArray;
     }
 
     /**
@@ -211,14 +214,13 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * be careful: there's no check for a invalid vertexNumber
+     * be careful: there's no check against an invalid vertexNumber
      * 
      * @param vertexNumber the number identifying the vertex v
      * @return v
      */
-    @SuppressWarnings("unchecked")
     public V getVertex(int vertexNumber) {
-        return (V)mapOrderToVertex[vertexNumber];
+        return mapOrderToVertex.get(vertexNumber);
     }
 
     /**
