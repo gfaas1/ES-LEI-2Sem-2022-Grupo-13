@@ -39,7 +39,7 @@ package org.jgrapht.alg.isomorphism;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 
 public abstract class VF2MappingIterator<V, E>
@@ -55,7 +55,7 @@ public abstract class VF2MappingIterator<V, E>
     protected GraphOrdering<V,E> ordering1,
                                  ordering2;
 
-    protected Stack<VF2State<V,E>> stateStack;
+    protected ArrayDeque<VF2State<V,E>> stateStack;
 
 
     public VF2MappingIterator(
@@ -68,7 +68,7 @@ public abstract class VF2MappingIterator<V, E>
         this.ordering2        = ordering2;
         this.vertexComparator = vertexComparator;
         this.edgeComparator   = edgeComparator;
-        this.stateStack       = new Stack<VF2State<V,E>>();
+        this.stateStack       = new ArrayDeque<VF2State<V, E>>();
     }
 
 
