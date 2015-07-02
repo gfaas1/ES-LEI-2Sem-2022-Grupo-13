@@ -41,6 +41,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.AlwaysEqualComparator;
 import org.jgrapht.graph.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -1077,7 +1078,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<String, Integer> vf3 =
             new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
                         new VertexComp(),
-                        new DefaultComparator<Integer>());
+                        new AlwaysEqualComparator<Integer>());
 
         Iterator<IsomorphicGraphMapping<String, Integer>> iter2 =
             vf3.getMappings();
@@ -1095,7 +1096,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         VF2SubgraphIsomorphismInspector<String, Integer> vf4 =
             new VF2SubgraphIsomorphismInspector<String, Integer>(g1, g2,
-                        new DefaultComparator<String>(),
+                        new AlwaysEqualComparator<String>(),
                         new EdgeComp());
 
         Iterator<IsomorphicGraphMapping<String, Integer>> iter3 =
