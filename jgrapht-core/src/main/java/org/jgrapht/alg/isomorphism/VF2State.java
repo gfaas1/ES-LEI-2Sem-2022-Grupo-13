@@ -48,7 +48,7 @@ import java.util.Comparator;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public abstract class VF2State<V,E>
+abstract class VF2State<V,E>
 {
 
     public static final int NULL_NODE = -1;

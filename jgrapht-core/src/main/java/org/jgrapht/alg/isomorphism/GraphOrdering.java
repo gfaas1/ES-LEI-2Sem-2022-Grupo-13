@@ -57,7 +57,7 @@ import java.util.Set;
  * @param <E> the type of the edges
  */
 
-public class GraphOrdering<V, E>
+class GraphOrdering<V, E>
 {
 
     private Graph<V, E>     graph;
