@@ -44,7 +44,7 @@ import java.util.NoSuchElementException;
 import java.util.ArrayDeque;
 
 
-public abstract class VF2MappingIterator<V, E>
+abstract class VF2MappingIterator<V, E>
     implements Iterator<GraphMapping<V,E>>
 {
 

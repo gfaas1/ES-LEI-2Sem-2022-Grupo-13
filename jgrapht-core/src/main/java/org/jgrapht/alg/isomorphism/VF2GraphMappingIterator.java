@@ -48,7 +48,7 @@ import org.jgrapht.Graph;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class VF2GraphMappingIterator<V,E>
+class VF2GraphMappingIterator<V,E>
     extends VF2MappingIterator<V, E>
 {
 

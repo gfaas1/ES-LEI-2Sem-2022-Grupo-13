@@ -49,7 +49,7 @@ import org.jgrapht.Graph;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public class VF2SubgraphMappingIterator<V,E>
+class VF2SubgraphMappingIterator<V,E>
     extends VF2MappingIterator<V,E>
 {
 
