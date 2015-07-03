@@ -44,6 +44,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.GraphMapping;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -86,8 +87,7 @@ public class VF2GraphIsomorphismInspectorTest
         VF2GraphIsomorphismInspector<String, DefaultEdge> vf2 =
             new VF2GraphIsomorphismInspector<String, DefaultEdge>(g1, g1);
 
-        Iterator<IsomorphicGraphMapping<String, DefaultEdge>> iter =
-                        vf2.getMappings();
+        Iterator<GraphMapping<String, DefaultEdge>> iter = vf2.getMappings();
 
         Set<String> mappings =
             new HashSet<String>(Arrays.asList("[v1=v1 v2=v2 v3=v3]",
@@ -122,8 +122,7 @@ public class VF2GraphIsomorphismInspectorTest
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf3 =
             new VF2GraphIsomorphismInspector<Integer, DefaultEdge>(g2, g2);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter2 =
-                        vf3.getMappings();
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter2 = vf3.getMappings();
 
         Set<String> mappings2 =
             new HashSet<String>(Arrays.asList("[1=1 2=2 3=3]",

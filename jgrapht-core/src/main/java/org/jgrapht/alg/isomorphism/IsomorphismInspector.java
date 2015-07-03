@@ -36,6 +36,8 @@
  */
 package org.jgrapht.alg.isomorphism;
 
+import org.jgrapht.GraphMapping;
+
 import java.util.Iterator;
 
 
@@ -46,7 +48,7 @@ import java.util.Iterator;
 public interface IsomorphismInspector<V,E>
 {
 
-    public Iterator<IsomorphicGraphMapping<V,E>> getMappings();
+    public Iterator<GraphMapping<V,E>> getMappings();
 
     public boolean isomorphismExists();
 

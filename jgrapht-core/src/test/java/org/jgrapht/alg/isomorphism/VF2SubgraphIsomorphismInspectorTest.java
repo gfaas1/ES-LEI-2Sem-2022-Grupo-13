@@ -271,8 +271,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4v3e, sg1v);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter =
-                        vfs4.getMappings();
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter = vfs4.getMappings();
 
         Set<String> mappings =
             new HashSet<String>(Arrays.asList("[1=5 2=~~ 3=~~ 4=~~]",
@@ -323,8 +322,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg3v0e, sg2v0e);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter7 =
-                        vfs7.getMappings();
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter7 = vfs7.getMappings();
 
         Set<String> mappings7 =
             new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
@@ -421,7 +419,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs10 =
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4k, sg3k);
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter10 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter10 =
                         vfs10.getMappings();
 
         Set<String> mappings10 =
@@ -460,7 +458,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg4v3e, sg4v3e);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter11 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter11 =
                         vfs11.getMappings();
 
         Set<String> mappings11 =
@@ -506,7 +504,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (sg6v4enc, sg5v4enc);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter12 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter12 =
                         vfs12.getMappings();
 
         Set<String> mappings12 =
@@ -590,8 +588,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg1v);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter4 =
-                vf4.getMappings();
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter4 = vf4.getMappings();
 
         Set<String> mappings =
             new HashSet<String>(Arrays.asList("[1=5 2=~~ 3=~~ 4=~~]",
@@ -644,8 +641,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg3v0e, dg2v0e);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter7 =
-                        vf7.getMappings();
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter7 = vf7.getMappings();
 
         Set<String> mappings7 =
             new HashSet<String>(Arrays.asList("[5=1 6=2 7=~~]",
@@ -733,7 +729,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg5c, dg4c);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter10 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter10 =
             vf10.getMappings();
 
         Set<String> mappings10 =
@@ -756,7 +752,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg4v3e, dg4v3e);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter11 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter11 =
                         vf11.getMappings();
 
         assertEquals("[1=1 2=2 3=3 4=4]", iter11.next().toString());
@@ -799,7 +795,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             new VF2SubgraphIsomorphismInspector<Integer, DefaultEdge>
                         (dg6v4enc, dg5v4enc);
 
-        Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>> iter12 =
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter12 =
                         vf12.getMappings();
 
         Set<String> mappings12 =
@@ -969,7 +965,7 @@ public class VF2SubgraphIsomorphismInspectorTest
             SubgraphIsomorphismTestUtils.showLog(i + ": " + vertexCount +
                             "v, " + edgeCount + "e ");
 
-            for (Iterator<IsomorphicGraphMapping<Integer, DefaultEdge>>
+            for (Iterator<GraphMapping<Integer, DefaultEdge>>
                     mappings = vf2.getMappings(); mappings.hasNext();) {
                 assertEquals(true,
                     SubgraphIsomorphismTestUtils.isCorrectMatching(
@@ -1065,8 +1061,7 @@ public class VF2SubgraphIsomorphismInspectorTest
                         new VertexComp(),
                         new EdgeComp());
 
-        Iterator<IsomorphicGraphMapping<String, Integer>> iter =
-            vf2.getMappings();
+        Iterator<GraphMapping<String, Integer>> iter = vf2.getMappings();
 
         assertEquals("[A=A B=b a=~~ b=B]", iter.next().toString());
         assertEquals(false, iter.hasNext());
@@ -1080,8 +1075,7 @@ public class VF2SubgraphIsomorphismInspectorTest
                         new VertexComp(),
                         new AlwaysEqualComparator<Integer>());
 
-        Iterator<IsomorphicGraphMapping<String, Integer>> iter2 =
-            vf3.getMappings();
+        Iterator<GraphMapping<String, Integer>> iter2 = vf3.getMappings();
 
         Set<String> mappings =
             new HashSet<String>(Arrays.asList("[A=A B=b a=~~ b=B]",
@@ -1099,8 +1093,7 @@ public class VF2SubgraphIsomorphismInspectorTest
                         new AlwaysEqualComparator<String>(),
                         new EdgeComp());
 
-        Iterator<IsomorphicGraphMapping<String, Integer>> iter3 =
-                        vf4.getMappings();
+        Iterator<GraphMapping<String, Integer>> iter3 = vf4.getMappings();
 
 
         Set<String> mappings2 =

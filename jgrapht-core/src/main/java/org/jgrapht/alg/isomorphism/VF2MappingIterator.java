@@ -36,6 +36,8 @@
  */
 package org.jgrapht.alg.isomorphism;
 
+import org.jgrapht.GraphMapping;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -43,7 +45,7 @@ import java.util.ArrayDeque;
 
 
 public abstract class VF2MappingIterator<V, E>
-    implements Iterator<IsomorphicGraphMapping<V,E>>
+    implements Iterator<GraphMapping<V,E>>
 {
 
     protected Comparator<V> vertexComparator;

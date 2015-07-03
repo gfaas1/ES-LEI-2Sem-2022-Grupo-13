@@ -41,6 +41,7 @@ import java.util.Iterator;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMapping;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
@@ -155,11 +156,11 @@ public abstract class VF2AbstractIsomorphismInspector<V,E>
 
 
     @Override
-    public abstract Iterator<IsomorphicGraphMapping<V, E>> getMappings();
+    public abstract Iterator<GraphMapping<V, E>> getMappings();
 
     @Override
     public boolean isomorphismExists() {
-        Iterator<IsomorphicGraphMapping<V,E>> iter = getMappings();
+        Iterator<GraphMapping<V,E>> iter = getMappings();
         return iter.hasNext();
     }
 
