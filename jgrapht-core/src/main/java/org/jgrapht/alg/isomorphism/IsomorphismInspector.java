@@ -42,6 +42,8 @@ import java.util.Iterator;
 
 
 /**
+ * This is a general interface for graph and subgraph isomorphism.
+ *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */

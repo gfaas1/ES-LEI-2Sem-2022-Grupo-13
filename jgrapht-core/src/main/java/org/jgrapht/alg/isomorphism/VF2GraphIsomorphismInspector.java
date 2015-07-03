@@ -41,6 +41,18 @@ import java.util.Comparator;
 import org.jgrapht.Graph;
 
 
+/**
+ * This is an implementation of the VF2 algorithm using its feature of detecting
+ * <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">
+ * isomorphism between two graphs</a> as described in Cordella et al. A
+ * (sub)graph isomorphism algorithm for matching large graphs (2004),
+ * DOI:10.1109/TPAMI.2004.75,
+ * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
+ * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
+ *
+ * @param <V> the type of the vertices
+ * @param <E> the type of the edges
+ */
 public class VF2GraphIsomorphismInspector<V,E>
     extends VF2AbstractIsomorphismInspector<V,E>
 {

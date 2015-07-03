@@ -41,6 +41,13 @@ import java.util.Comparator;
 import org.jgrapht.Graph;
 
 
+/**
+ * This class is used to iterate over all existing (isomorphic) mappings between
+ * to graphs. It is used by the {@link VF2GraphIsomorphismInspector}.
+ *
+ * @param <V> the type of the vertices
+ * @param <E> the type of the edges
+ */
 public class VF2GraphMappingIterator<V,E>
     extends VF2MappingIterator<V, E>
 {
