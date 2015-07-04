@@ -64,8 +64,8 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * @param g1 the first graph
      * @param g2 the second graph which is a possible subgraph of g1
-     * @param core1
-     * @param core2
+     * @param core1 the mapping as array (forwards)
+     * @param core2 the mapping as array (backwards)
      */
     public IsomorphicGraphMapping(
                     GraphOrdering<V, E> g1,
@@ -129,7 +129,6 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks if a vertex v from the first graph has a corresponding vertex in 
      * the second graph
-     * @param v
      * @return is there a corresponding vertex to v in the subgraph
      */
     public boolean hasVertexCorrespondence(V v) {
@@ -139,7 +138,6 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks if a edge e from the first graph has a corresponding edge in the 
      * second graph
-     * @param e
      * @return is there a corresponding edge to e in the subgraph
      */
     public boolean hasEdgeCorrespondence(E e) {
