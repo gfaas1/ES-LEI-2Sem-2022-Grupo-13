@@ -105,12 +105,6 @@ public abstract class VF2AbstractIsomorphismInspector<V,E>
                                                         cacheEdges);
     }
 
-    /**
-     * @param graph1 the first graph
-     * @param graph2 the second graph
-     * @param vertexComparator comparator for semantic equivalence of vertices
-     * @param edgeComparator comparator for semantic equivalence of edges
-     */
     public VF2AbstractIsomorphismInspector(
             Graph<V, E> graph1,
             Graph<V, E> graph2,
@@ -124,11 +118,6 @@ public abstract class VF2AbstractIsomorphismInspector<V,E>
              true);
     }
 
-    /**
-     * @param graph1 the first graph
-     * @param graph2 the second graph
-     * @param cacheEdges if true, edges get cached for faster access
-     */
     public VF2AbstractIsomorphismInspector(
             Graph<V, E> graph1,
             Graph<V, E> graph2,
@@ -141,10 +130,6 @@ public abstract class VF2AbstractIsomorphismInspector<V,E>
              cacheEdges);
     }
 
-    /**
-     * @param graph1 the first graph
-     * @param graph2 the second graph
-     */
     public VF2AbstractIsomorphismInspector(
             Graph<V, E> graph1,
             Graph<V, E> graph2)
