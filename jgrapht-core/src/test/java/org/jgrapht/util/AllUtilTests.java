@@ -34,17 +34,13 @@
  */
 package org.jgrapht.util;
 
-import org.jgrapht.experimental.equivalence.*;
-import org.jgrapht.experimental.permutation.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     FibonacciHeapTest.class,
-    PrefetchIteratorTest.class,
-    CompoundPermutationIterTest.class,
-    EquivalenceGroupCreatorTest.class
+    PrefetchIteratorTest.class
 })
 public class AllUtilTests
 {

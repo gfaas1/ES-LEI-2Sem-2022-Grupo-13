@@ -36,7 +36,6 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.experimental.isomorphism.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -61,7 +60,6 @@ import org.junit.runners.*;
     FloydWarshallShortestPathsTest.class,
     HamiltonianCycleTest.class,
     HopcroftKarpBipartiteMatchingTest.class,
-    IsomorphismInspectorTest.class,
     KShortestPathCostTest.class,
     KShortestPathKValuesTest.class,
     KSPDiscardsValidPathsTest.class,

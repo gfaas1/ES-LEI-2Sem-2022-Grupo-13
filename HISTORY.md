@@ -6,6 +6,7 @@ Changes to JGraphT in each version:
 	- Add `DOTImporter`, contributed by Wil Selwood
 	- Optimize `FloydWarshallShortestPaths`, contributed by Mihhail Verhovtsov
 	- Add VF2 isomorphism and subgraph isomorphism detection, contributed by Fabian Späh
+        - Remove old experimental isomorphism implementation
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
