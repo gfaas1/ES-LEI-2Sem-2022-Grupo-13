@@ -21,8 +21,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.util.VertexPair;
 import org.junit.Assert;
+import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -110,6 +113,22 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest extends TestCa
 
         return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(target, first, second);
 
+    }
+
+
+
+    public void testForEmptyGraph() {
+
+        WeightedGraph<V, WeightedEdge> graph =
+                new SimpleWeightedGraph<V, WeightedEdge>(WeightedEdge.class);
+
+        List<? extends V> emptyList = Collections.emptyList();
+
+        Assert.assertTrue(new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(
+                graph,
+                emptyList,
+                emptyList).getMatching().isEmpty()
+        );
     }
 
     public void test3x3SimpleAssignmentTask() {
