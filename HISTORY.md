@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
 	- Optimize `FloydWarshallShortestPaths`, contributed by Mihhail Verhovtsov
 	- Add VF2 isomorphism and subgraph isomorphism detection, contributed by Fabian Späh
         - Remove old experimental isomorphism implementation
+        - Fix for empty graph input to `KuhnMunkresMinimalWeightBipartitePerfectMatching`, contributed by Szabolcs Besenyei
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin

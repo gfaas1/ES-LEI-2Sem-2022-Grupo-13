@@ -79,7 +79,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Mihhail Verhovtsov
 - Fabian Späh
 - Rita Dobler
-
+- Szabolcs Besenyei
 
 (if we have missed your name on this list, please email us to get it fixed).
 
