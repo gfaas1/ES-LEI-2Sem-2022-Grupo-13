@@ -43,7 +43,7 @@ import org.jgrapht.Graph;
 
 /**
  * This class is used to iterate over all existing (subgraph isomorphic)
- * mappings between to graphs. It is used by the
+ * mappings between two graphs. It is used by the
  * {@link VF2SubgraphIsomorphismInspector}.
  *
  * @param <V> the type of the vertices
