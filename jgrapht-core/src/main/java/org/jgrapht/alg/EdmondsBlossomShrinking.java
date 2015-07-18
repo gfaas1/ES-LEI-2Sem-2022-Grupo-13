@@ -34,11 +34,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.util.ArrayUnenforcedSet;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
+import java.util.*;
 
 
 /**
@@ -61,13 +61,9 @@ public class EdmondsBlossomShrinking<V, E>
     private Set<E> matching;
 
     private Map<V, V> match;
-    private Map<V, V> p;
-    private Map<V, V> base;
-    private Queue<V> q;
-    private Set<V> used;
-    private Set<V> blossom;
+    private Map<V, V> path;
+    private Map<V, V> contracted;
 
-    
 
     // ~ Constructors
     // ----------------------------------------------------------------
@@ -114,17 +110,17 @@ public class EdmondsBlossomShrinking<V, E>
     {
         Set<E> result = new ArrayUnenforcedSet<E>();
         match = new HashMap<V, V>();
-        p = new HashMap<V, V>();
-        q = new ArrayDeque<V>();
-        base = new HashMap<V, V>();
-        used = new HashSet<V>();
-        blossom = new HashSet<V>();
+        path = new HashMap<V, V>();
+        contracted = new HashMap<V, V>();
 
         for (V i : graph.vertexSet()) {
+            // Any augmenting path should start with _exposed_ vertex
+            // (vertex may not escape match-set being added once)
             if (!match.containsKey(i)) {
+                // Match is maximal iff graph G contains no more augmenting paths
                 V v = findPath(i);
                 while (v != null) {
-                    V pv = p.get(v);
+                    V pv = path.get(v);
                     V ppv = match.get(pv);
                     match.put(v, pv);
                     match.put(pv, v);
@@ -147,52 +143,67 @@ public class EdmondsBlossomShrinking<V, E>
 
     private V findPath(V root)
     {
-        used.clear();
-        p.clear();
-        base.clear();
+        Set<V>      used    = new HashSet<V>();
+        Queue<V>    q       = new ArrayDeque<V>();
+
+        // Expand graph back from its contracted state
+        path.clear();
+        contracted.clear();
 
         for (V i : graph.vertexSet()) {
-            base.put(i, i);
+            contracted.put(i, i);
         }
 
         used.add(root);
         q.add(root);
+
         while (!q.isEmpty()) {
             V v = q.remove();
+
             for (E e : graph.edgesOf(v)) {
                 V to = graph.getEdgeSource(e);
+
                 if (to == v) {
                     to = graph.getEdgeTarget(e);
                 }
-                if ((base.get(v) == base.get(to)) || (match.get(v) == to)) {
+
+                if ((contracted.get(v) == contracted.get(to)) || (match.get(v) == to)) {
                     continue;
                 }
+
+                // Check whether we've hit a 'blossom'
                 if ((to == root)
-                    || ((match.containsKey(to))
-                        && (p.containsKey(match.get(to)))))
-                {
-                    V curbase = lca(graph, v, to);
-                    blossom.clear();
-                    markPath(v, curbase, to);
-                    markPath(to, curbase, v);
+                || ((match.containsKey(to)) && (path.containsKey(match.get(to))))) {
+                    V stem = lca(v, to);
+
+                    Set<V> blossom = new HashSet<V>();
+
+                    // ?
+                    markPath(v, to, stem, blossom);
+                    markPath(to, v, stem, blossom);
 
                     for (V i : graph.vertexSet()) {
-                        if (base.containsKey(i)
-                            && blossom.contains(base.get(i)))
+                        if (contracted.containsKey(i) && blossom.contains(contracted.get(i)))
                         {
-                            base.put(i, curbase);
+                            contracted.put(i, stem);
+                            // ???
                             if (!used.contains(i)) {
                                 used.add(i);
                                 q.add(i);
                             }
                         }
                     }
-                } else if (!p.containsKey(to)) {
-                    p.put(to, v);
+
+                // Check whether we've had hit a loop (of even length (!) presumably)
+                } else if (!path.containsKey(to)) {
+                    path.put(to, v);
+
                     if (!match.containsKey(to)) {
                         return to;
                     }
+
                     to = match.get(to);
+
                     used.add(to);
                     q.add(to);
                 }
@@ -201,34 +212,34 @@ public class EdmondsBlossomShrinking<V, E>
         return null;
     }
 
-    private void markPath(V v, V b, V child)
+    private void markPath(V v, V child, V stem, Set<V> blossom)
     {
-        while (base.get(v) != b) {
-            blossom.add(base.get(v));
-            blossom.add(base.get(match.get(v)));
-            p.put(v, child);
+        while (contracted.get(v) != stem) {
+            blossom.add(contracted.get(v));
+            blossom.add(contracted.get(match.get(v)));
+            path.put(v, child);
             child = match.get(v);
-            v = p.get(match.get(v));
+            v = path.get(match.get(v));
         }
     }
 
-    private V lca(UndirectedGraph<V, E> g, V a, V b)
+    private V lca(V a, V b)
     {
         Set<V> seen = new HashSet<V>();
         for (;;) {
-            a = base.get(a);
+            a = contracted.get(a);
             seen.add(a);
             if (!match.containsKey(a)) {
                 break;
             }
-            a = p.get(match.get(a));
+            a = path.get(match.get(a));
         }
         for (;;) {
-            b = base.get(b);
+            b = contracted.get(b);
             if (seen.contains(b)) {
                 return b;
             }
-            b = p.get(match.get(b));
+            b = path.get(match.get(b));
         }
     }
 }
