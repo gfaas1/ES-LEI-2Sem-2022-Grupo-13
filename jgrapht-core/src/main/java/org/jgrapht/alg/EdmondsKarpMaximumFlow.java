@@ -34,9 +34,9 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
 
-import org.jgrapht.*;
+import java.util.*;
 
 
 /**
@@ -199,13 +199,20 @@ public final class EdmondsKarpMaximumFlow<V, E>
         for (;;) {
             breadthFirstSearch();
             if (!nodes.get(currentSink).visited) {
+                maximumFlowValue = 0.0;
                 maximumFlow = new HashMap<E, Double>();
                 for (int i = 0; i < numNodes; i++) {
                     for (Arc currentArc : nodes.get(i).outgoingArcs) {
+                        if (currentArc.head == currentSink)
+                            maximumFlowValue += currentArc.flow;
+
                         if (currentArc.prototype != null) {
                             maximumFlow.put(
                                 currentArc.prototype,
                                 currentArc.flow);
+
+                            // _DBG
+                            //System.out.println(currentArc.prototype + " : " + currentArc.capacity + " : " + currentArc.flow);
                         }
                     }
                 }
@@ -219,23 +226,56 @@ public final class EdmondsKarpMaximumFlow<V, E>
     {
         for (int i = 0; i < numNodes; i++) {
             nodes.get(i).visited = false;
+            nodes.get(i).lastArcs = null;
         }
+
         Queue<Integer> queue = new LinkedList<Integer>();
         queue.offer(currentSource);
+
         nodes.get(currentSource).visited = true;
         nodes.get(currentSource).flowAmount = Double.POSITIVE_INFINITY;
+
+        nodes.get(currentSink).flowAmount = 0.0;
+
+        boolean seenSink = false;
+
         while (queue.size() != 0) {
             int currentNode = queue.poll();
+
             for (Arc currentArc : nodes.get(currentNode).outgoingArcs) {
                 if ((currentArc.flow + epsilon) < currentArc.capacity) {
-                    if (!nodes.get(currentArc.head).visited) {
-                        nodes.get(currentArc.head).visited = true;
-                        nodes.get(currentArc.head).flowAmount =
+
+                    Node currentArcHead = nodes.get(currentArc.head);
+
+                    if (currentArc.head == currentSink) {
+
+                        currentArcHead.visited = true;
+
+                        if (currentArcHead.lastArcs == null)
+                            currentArcHead.lastArcs = new ArrayList<Arc>();
+
+                        currentArcHead.lastArcs.add(currentArc);
+
+                        currentArcHead.flowAmount +=
                             Math.min(
                                 nodes.get(currentNode).flowAmount,
                                 currentArc.capacity - currentArc.flow);
-                        nodes.get(currentArc.head).lastArc = currentArc;
-                        queue.add(currentArc.head);
+
+                        seenSink = true;
+
+                    } else if (!currentArcHead.visited) {
+
+                        currentArcHead.visited = true;
+
+                        currentArcHead.flowAmount =
+                            Math.min(
+                                nodes.get(currentNode).flowAmount,
+                                currentArc.capacity - currentArc.flow);
+
+                        currentArcHead.lastArcs = Collections.singletonList(currentArc);
+
+                        if (!seenSink)
+                            queue.add(currentArc.head);
                     }
                 }
             }
@@ -244,14 +284,40 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
     private void augmentFlow()
     {
-        double deltaFlow = nodes.get(currentSink).flowAmount;
-        maximumFlowValue += deltaFlow;
-        int currentNode = currentSink;
-        while (currentNode != currentSource) {
-            nodes.get(currentNode).lastArc.flow += deltaFlow;
-            nodes.get(currentNode).lastArc.reversed.flow -= deltaFlow;
-            currentNode = nodes.get(currentNode).lastArc.tail;
+        boolean[] seen = new boolean[nodes.size()];
+
+        for (Arc lastArc : nodes.get(currentSink).lastArcs) {
+            double deltaFlow =
+                Math.min(
+                    nodes.get(lastArc.tail).flowAmount,
+                    lastArc.capacity - lastArc.flow);
+
+            if (augmentFlowAlongInternal(deltaFlow, lastArc.tail, seen)) {
+                lastArc.flow += deltaFlow;
+                lastArc.reversed.flow -= deltaFlow;
+            }
+
+            // _DBG
+            assert (lastArc.flow + DEFAULT_EPSILON <= lastArc.capacity);
         }
+    }
+
+    private boolean augmentFlowAlongInternal(double deltaFlow, int node, boolean[] seen) {
+        if (node == currentSource)
+            return true;
+        if (seen[node])
+            return false;
+
+        seen[node] = true;
+
+        Arc prevArc = nodes.get(node).lastArcs.get(0);
+        if (augmentFlowAlongInternal(deltaFlow, prevArc.tail, seen)) {
+            prevArc.flow += deltaFlow;
+            prevArc.reversed.flow -= deltaFlow;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -318,9 +384,9 @@ public final class EdmondsKarpMaximumFlow<V, E>
         List<Arc> outgoingArcs = new ArrayList<Arc>(); // list of outgoing arcs
                                                        // in the residual
                                                        // network
-        boolean visited; // this mark is used during BFS to mark visited nodes
-        Arc lastArc; // last arc in the shortest path
-        double flowAmount; // amount of flow, we are able to push here
+        boolean visited;    // this mark is used during BFS to mark visited nodes
+        List<Arc> lastArcs; // last arc(-s) in the shortest path
+        double flowAmount;  // amount of flow, we are able to push here
 
         Node(
             V prototype)
