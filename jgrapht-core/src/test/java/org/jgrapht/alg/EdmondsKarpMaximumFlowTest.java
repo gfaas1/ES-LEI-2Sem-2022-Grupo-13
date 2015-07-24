@@ -35,16 +35,34 @@
 package org.jgrapht.alg;
 
 import junit.framework.TestCase;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.MaximumFlow;
+import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.TimeValue;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
-public final class EdmondsKarpMaximumFlowTest
+@State(Scope.Thread)
+public class EdmondsKarpMaximumFlowTest
     extends TestCase
 {
+    public static final int PERF_BENCHMARK_VERTICES_COUNT   = 1000;
+    public static final int PERF_BENCHMARK_EDGES_COUNT      = 100000;
+
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -128,41 +146,86 @@ public final class EdmondsKarpMaximumFlowTest
         }
     }
 
-    /**
-     * .
-     */
+    public static class RandomGraphBenchmark {
+        @Benchmark
+        public void run() {
+            RandomGraphGenerator<Integer, DefaultWeightedEdge> rgg
+                = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT);
+
+            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> wg
+                = new SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>(new EdgeFactory<Integer, DefaultWeightedEdge>() {
+                @Override
+                public DefaultWeightedEdge createEdge(Integer sourceVertex, Integer targetVertex) {
+                    return new DefaultWeightedEdge();
+                }
+            });
+
+            rgg.generateGraph(wg, new VertexFactory<Integer>() {
+                int i;
+                @Override
+                public Integer createVertex() {
+                    return ++i;
+                }
+            }, null);
+
+            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
+                new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(wg);
+
+            Object[] vs = wg.vertexSet().stream().toArray();
+
+            solver.buildMaximumFlow((Integer) vs[0], (Integer) vs[vs.length - 1]);
+        }
+    }
+
+    public void testPerformance() throws RunnerException {
+        Options opt = new OptionsBuilder()
+            .include(".*" + RandomGraphBenchmark.class.getSimpleName() + ".*")
+            .mode (Mode.AverageTime)
+            .timeUnit(TimeUnit.NANOSECONDS)
+            .warmupTime(TimeValue.seconds(1))
+            .warmupIterations(3)
+            .measurementTime(TimeValue.seconds(1))
+            .measurementIterations(5)
+            .forks(1)
+            .shouldFailOnError(true)
+            .shouldDoGC(true)
+            .build();
+
+        new Runner(opt).run();
+    }
+
     public void testLogic()
     {
         runTest(
-            new int[]{},
-            new int[]{},
-            new double[]{},
-            new int[]{1},
-            new int[]{4057218},
-            new double[]{0.0});
+            new int[] {},
+            new int[] {},
+            new double[] {},
+            new int[] { 1 },
+            new int[] { 4057218 },
+            new double[] { 0.0 });
         runTest(
-            new int[]{3, 1, 4, 3, 2, 8, 2, 5, 7},
-            new int[]{1, 4, 8, 2, 8, 6, 5, 7, 6},
-            new double[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
-            new int[]{3},
-            new int[]{6},
-            new double[]{2});
+            new int[] { 3, 1, 4, 3, 2, 8, 2, 5, 7 },
+            new int[] { 1, 4, 8, 2, 8, 6, 5, 7, 6 },
+            new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            new int[] { 3 },
+            new int[] { 6 },
+            new double[] { 2 });
         runTest(
-            new int[]{5, 5, 5, 1, 1, 4, 2, 7, 8, 3},
-            new int[]{1, 4, 2, 7, 8, 3, 8, 6, 6, 6},
-            new double[]{7, 8, 573146, 31337, 1, 1, 1, 1, 2391717, 170239},
-            new int[]{5},
-            new int[]{6},
-            new double[]{4.0});
+            new int[] { 5, 5, 5, 1, 1, 4, 2, 7, 8, 3 },
+            new int[] { 1, 4, 2, 7, 8, 3, 8, 6, 6, 6 },
+            new double[] { 7, 8, 573146, 31337, 1, 1, 1, 1, 2391717, 170239 },
+            new int[] { 5 },
+            new int[] { 6 },
+            new double[] { 4.0 });
         runTest(
-            new int[]{1, 1, 2, 2, 3},
-            new int[]{2, 3, 3, 4, 4},
-            new double[]{
+            new int[] { 1, 1, 2, 2, 3 },
+            new int[] { 2, 3, 3, 4, 4 },
+            new double[] {
                 1000000000.0, 1000000000.0, 1.0, 1000000000.0, 1000000000.0
             },
-            new int[]{1},
-            new int[]{4},
-            new double[]{2000000000.0});
+            new int[] { 1 },
+            new int[] { 4 },
+            new double[] { 2000000000.0 });
     }
 
     private void runTest(
