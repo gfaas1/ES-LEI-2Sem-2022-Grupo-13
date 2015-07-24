@@ -34,9 +34,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.MaximumFlow;
 
-import org.jgrapht.*;
+import java.util.*;
 
 
 /**
@@ -91,9 +93,9 @@ public class MinSourceSinkCut<V, E>
         minCut = new HashSet<V>();
 
         //First compute a maxFlow from source to sink
-        ekMaxFlow.calculateMaximumFlow(source, sink);
-        this.cutWeight = ekMaxFlow.getMaximumFlowValue();
-        Map<E, Double> maxFlow = ekMaxFlow.getMaximumFlow();
+        MaximumFlow<V, E> maxFlow = ekMaxFlow.buildMaximumFlow(source, sink);
+
+        this.cutWeight = maxFlow.getValue();
 
         Queue<V> processQueue = new LinkedList<V>();
         processQueue.add(source);
@@ -111,7 +113,7 @@ public class MinSourceSinkCut<V, E>
             for (Iterator<E> it = outEdges.iterator(); it.hasNext();) {
                 E edge = it.next();
                 double edgeCapacity = graph.getEdgeWeight(edge);
-                double flowValue = maxFlow.get(edge);
+                double flowValue = maxFlow.getFlow().get(edge);
                 if (Math.abs(edgeCapacity - flowValue) <= epsilon) { //No residual capacity on the edge
                     it.remove();
                 }
@@ -126,7 +128,7 @@ public class MinSourceSinkCut<V, E>
                 E edge = it.next();
 
                 //double edgeCapacity=graph.getEdgeWeight(edge);
-                double flowValue = maxFlow.get(edge);
+                double flowValue = maxFlow.getFlow().get(edge);
                 if (flowValue <= epsilon) { //There is no flow on this edge
                     it.remove();
                 }

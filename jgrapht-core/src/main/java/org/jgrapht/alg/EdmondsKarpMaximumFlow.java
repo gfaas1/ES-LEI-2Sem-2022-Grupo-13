@@ -35,6 +35,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 
 import java.util.*;
 
@@ -57,26 +58,23 @@ import java.util.*;
  * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
  * (Lecture Notes)</i>.
  */
-public final class EdmondsKarpMaximumFlow<V, E>
+public final class EdmondsKarpMaximumFlow<V, E> implements MaximumFlowAlgorithm<V, E>
 {
-    
-
     /**
      * Default tolerance.
      */
     public static final double DEFAULT_EPSILON = 0.000000001;
 
-    
-
     private DirectedGraph<V, E> network; // our network
-    private double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
-    private int currentSource; // current source vertex
-    private int currentSink; // current sink vertex
-    private Map<E, Double> maximumFlow; // current maximum flow
-    private Double maximumFlowValue; // current maximum flow value
-    private int numNodes; // number of nodes in the network
+
+    private double epsilon;     // tolerance (DEFAULT_EPSILON or user-defined)
+    private int currentSource;  // current source vertex
+    private int currentSink;    // current sink vertex
+    private int numNodes;       // number of nodes in the network
+
     private Map<V, Integer> indexer; // mapping from vertices to their indexes
                                      // in the internal representation
+
     private List<Node> nodes; // internal representation of the network
 
     
@@ -126,13 +124,74 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
         currentSource = -1;
         currentSink = -1;
-        maximumFlow = null;
-        maximumFlowValue = null;
 
         buildInternalNetwork();
     }
 
-    
+
+    /**
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
+     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
+     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
+     * network</tt> passed to the constructor, and they must be different.
+     *
+     * @param source source vertex
+     * @param sink sink vertex
+     */
+    public MaximumFlow<V, E> buildMaximumFlow(V source, V sink)
+    {
+        if (!network.containsVertex(source)) {
+            throw new IllegalArgumentException(
+                "invalid source (null or not from this network)");
+        }
+        if (!network.containsVertex(sink)) {
+            throw new IllegalArgumentException(
+                "invalid sink (null or not from this network)");
+        }
+
+        if (source.equals(sink)) {
+            throw new IllegalArgumentException("source is equal to sink");
+        }
+
+        currentSource = indexer.get(source);
+        currentSink = indexer.get(sink);
+
+        for (int i = 0; i < numNodes; i++) {
+            for (Arc currentArc : nodes.get(i).outgoingArcs) {
+                currentArc.flow = 0.0;
+            }
+        }
+
+        final Map<E, Double> maxFlow = new HashMap<E, Double>();
+
+        double maxFlowValue;
+
+        for (;;) {
+            breadthFirstSearch();
+
+            if (!nodes.get(currentSink).visited) {
+                maxFlowValue = 0.0;
+                for (int i = 0; i < numNodes; i++) {
+                    for (Arc currentArc : nodes.get(i).outgoingArcs) {
+                        if (currentArc.head == currentSink)
+                            maxFlowValue += currentArc.flow;
+
+                        if (currentArc.prototype != null) {
+                            maxFlow.put(
+                                currentArc.prototype,
+                                currentArc.flow);
+                        }
+                    }
+                }
+                break;
+            }
+
+            augmentFlow();
+        }
+
+        return new VerbatimMaximumFlow<V, E>(maxFlowValue, maxFlow);
+    }
+
 
     // converting the original network into internal more convenient format
     private void buildInternalNetwork()
@@ -158,67 +217,6 @@ public final class EdmondsKarpMaximumFlow<V, E>
                 nodes.get(i).outgoingArcs.add(e1);
                 nodes.get(j).outgoingArcs.add(e2);
             }
-        }
-    }
-
-    /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
-     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
-     *
-     * @param source source vertex
-     * @param sink sink vertex
-     */
-    public void calculateMaximumFlow(
-        V source,
-        V sink)
-    {
-        if (!network.containsVertex(source)) {
-            throw new IllegalArgumentException(
-                "invalid source (null or not from this network)");
-        }
-        if (!network.containsVertex(sink)) {
-            throw new IllegalArgumentException(
-                "invalid sink (null or not from this network)");
-        }
-
-        if (source.equals(sink)) {
-            throw new IllegalArgumentException("source is equal to sink");
-        }
-
-        currentSource = indexer.get(source);
-        currentSink = indexer.get(sink);
-
-        for (int i = 0; i < numNodes; i++) {
-            for (Arc currentArc : nodes.get(i).outgoingArcs) {
-                currentArc.flow = 0.0;
-            }
-        }
-        maximumFlowValue = 0.0;
-        for (;;) {
-            breadthFirstSearch();
-            if (!nodes.get(currentSink).visited) {
-                maximumFlowValue = 0.0;
-                maximumFlow = new HashMap<E, Double>();
-                for (int i = 0; i < numNodes; i++) {
-                    for (Arc currentArc : nodes.get(i).outgoingArcs) {
-                        if (currentArc.head == currentSink)
-                            maximumFlowValue += currentArc.flow;
-
-                        if (currentArc.prototype != null) {
-                            maximumFlow.put(
-                                currentArc.prototype,
-                                currentArc.flow);
-
-                            // _DBG
-                            //System.out.println(currentArc.prototype + " : " + currentArc.capacity + " : " + currentArc.flow);
-                        }
-                    }
-                }
-                return;
-            }
-            augmentFlow();
         }
     }
 
@@ -318,33 +316,6 @@ public final class EdmondsKarpMaximumFlow<V, E>
         }
 
         return false;
-    }
-
-    /**
-     * Returns maximum flow value, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
-     *
-     * @return maximum flow value
-     */
-    public Double getMaximumFlowValue()
-    {
-        return maximumFlowValue;
-    }
-
-    /**
-     * Returns maximum flow, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
-     *
-     * @return <i>read-only</i> mapping from edges to doubles - flow values
-     */
-    public Map<E, Double> getMaximumFlow()
-    {
-        if (maximumFlow == null) {
-            return null;
-        }
-        return Collections.unmodifiableMap(maximumFlow);
     }
 
     /**
