@@ -45,6 +45,48 @@ import org.jgrapht.graph.AbstractBaseGraph;
  * <a href="http://www.graphviz.org/doc/info/lang.html">
  *    http://www.graphviz.org/doc/info/lang.html</a></p>
  *
+ * state machine description (In dot format naturally):
+ *
+ * digraph G {
+ *    1 [label="start" description="Entry point"];
+ *    2 [label="header" description="Processing The header"];
+ *    3 [label="next" description="work out what the type of the next node is"];
+ *    4 [label="edge" description="process an edge entry"];
+ *    5 [label="edge_quotes" description="process a section of an edge in quotes"];
+ *    6 [label="node" description="process a node entry"];
+ *    7 [label="node_quotes" description="process a section of a node in quotes"];
+ *    8 [label="line_comment" description="process and ignore a line comment"];
+ *    9 [label="block_comment" description="process and ignore a block comment"];
+ *    10 [label="done" description="exit point"];
+ *    1 -> 2;
+ *    2 -> 3;
+ *    3 -> 4;
+ *    4 -> 3;
+ *    4 -> 5;
+ *    5 -> 4;
+ *    3 -> 6;
+ *    6 -> 3;
+ *    6 -> 7;
+ *    7 -> 6;
+ *    3 -> 10;
+ *    2 -> 8;
+ *    8 -> 2;
+ *    2 -> 9;
+ *    9 -> 2;
+ *    3 -> 8;
+ *    8 -> 3;
+ *    3 -> 9;
+ *    9 -> 3;
+ *    4 -> 8;
+ *    8 -> 4;
+ *    4 -> 9;
+ *    9 -> 4;
+ *    6 -> 8;
+ *    8 -> 6;
+ *    6 -> 9;
+ *    9 -> 6;
+ * }
+ *
  * @author Wil Selwood
  */
 public class DOTImporter<V,E> {
