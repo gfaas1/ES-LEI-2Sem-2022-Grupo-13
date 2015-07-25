@@ -36,7 +36,7 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.Comparator;
+import java.util.*;
 
 
 /**
@@ -45,10 +45,12 @@ import java.util.Comparator;
 public class AlwaysEqualComparator<T>
     implements Comparator<T>
 {
+    
 
-    @Override
-    public int compare(T arg0, T arg1) {
+    @Override public int compare(T arg0, T arg1)
+    {
         return 0;
     }
-
 }
+
+// End AlwaysEqualComparator.java

@@ -31,9 +31,8 @@ package org.jgrapht.ext;
 
 import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 
 /**
@@ -41,12 +40,13 @@ import org.jgrapht.graph.AbstractBaseGraph;
  *
  * <p>For a description of the format see <a
  * href="http://en.wikipedia.org/wiki/DOT_language">
- * http://en.wikipedia.org/wiki/DOT_language</a> and
- * <a href="http://www.graphviz.org/doc/info/lang.html">
- *    http://www.graphviz.org/doc/info/lang.html</a></p>
+ * http://en.wikipedia.org/wiki/DOT_language</a> and <a
+ * href="http://www.graphviz.org/doc/info/lang.html">
+ * http://www.graphviz.org/doc/info/lang.html</a></p>
  *
  * state machine description (In dot format naturally):
- *<pre><code>
+ *
+ * <pre><code>
  *
  * digraph G {
  *    1 [label="start" description="Entry point"];
@@ -92,535 +92,631 @@ import org.jgrapht.graph.AbstractBaseGraph;
  *
  * @author Wil Selwood
  */
-public class DOTImporter<V,E> {
+public class DOTImporter<V, E>
+{
+    
 
-   // Constants for the state machine
-   private static final int HEADER = 1;
-   private static final int NODE = 2;
-   private static final int EDGE = 3;
-   private static final int LINE_COMMENT = 4;
-   private static final int BLOCK_COMMENT = 5;
-   private static final int NODE_QUOTES = 6;
-   private static final int EDGE_QUOTES = 7;
-   private static final int NEXT = 8;
-   private static final int DONE = 32;
+    // Constants for the state machine
+    private static final int HEADER = 1;
+    private static final int NODE = 2;
+    private static final int EDGE = 3;
+    private static final int LINE_COMMENT = 4;
+    private static final int BLOCK_COMMENT = 5;
+    private static final int NODE_QUOTES = 6;
+    private static final int EDGE_QUOTES = 7;
+    private static final int NEXT = 8;
+    private static final int DONE = 32;
 
+    
 
-   private VertexProvider<V>  vertexProvider;
-   private VertexUpdater<V>   vertexUpdater;
-   private EdgeProvider<V, E> edgeProvider;
+    private VertexProvider<V> vertexProvider;
+    private VertexUpdater<V> vertexUpdater;
+    private EdgeProvider<V, E> edgeProvider;
 
-   /**
-    * Constructs a new DOTImporter with the given providers
-    * @param vertexProvider Provider to create a vertex
-    * @param edgeProvider Provider to create an edge
-    */
-   public DOTImporter(VertexProvider<V> vertexProvider,
-                      EdgeProvider<V, E> edgeProvider)
-   {
-      this.vertexProvider = vertexProvider;
-      this.vertexUpdater = null;
-      this.edgeProvider = edgeProvider;
-   }
+    
 
-   /**
-    * Constructs a new DOTImporter with the given providers
-    * @param vertexProvider Provider to create a vertex
-    * @param edgeProvider Provider to create an edge
-    * @param updater Method used to update an existing Vertex
-    */
-   public DOTImporter(VertexProvider<V> vertexProvider,
-                      EdgeProvider<V, E> edgeProvider,
-                      VertexUpdater<V> updater)
-   {
-      this.vertexProvider = vertexProvider;
-      this.vertexUpdater = updater;
-      this.edgeProvider = edgeProvider;
-   }
+    /**
+     * Constructs a new DOTImporter with the given providers
+     *
+     * @param vertexProvider Provider to create a vertex
+     * @param edgeProvider Provider to create an edge
+     */
+    public DOTImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider)
+    {
+        this.vertexProvider = vertexProvider;
+        this.vertexUpdater = null;
+        this.edgeProvider = edgeProvider;
+    }
 
-   /**
-    * Read a dot formatted string and populate the provided graph.
-    * @param input the content of a dot file.
-    * @param graph the graph to update.
-    * @throws ImportException if there is a problem parsing the file.
-    */
-   public void read(String input, AbstractBaseGraph<V, E> graph)
-         throws ImportException
-   {
+    /**
+     * Constructs a new DOTImporter with the given providers
+     *
+     * @param vertexProvider Provider to create a vertex
+     * @param edgeProvider Provider to create an edge
+     * @param updater Method used to update an existing Vertex
+     */
+    public DOTImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider,
+        VertexUpdater<V> updater)
+    {
+        this.vertexProvider = vertexProvider;
+        this.vertexUpdater = updater;
+        this.edgeProvider = edgeProvider;
+    }
 
-      if (input == null || input.isEmpty()) {
-         throw new ImportException("Dot string was empty");
-      }
+    
 
-      Map<String, V> vertexes = new HashMap<String, V>();
+    /**
+     * Read a dot formatted string and populate the provided graph.
+     *
+     * @param input the content of a dot file.
+     * @param graph the graph to update.
+     *
+     * @throws ImportException if there is a problem parsing the file.
+     */
+    public void read(String input, AbstractBaseGraph<V, E> graph)
+        throws ImportException
+    {
+        if ((input == null) || input.isEmpty()) {
+            throw new ImportException("Dot string was empty");
+        }
 
-      int state = HEADER;
-      int lastState = HEADER;
-      int position = 0;
+        Map<String, V> vertexes = new HashMap<String, V>();
 
-      StringBuilder sectionBuffer = new StringBuilder();
+        int state = HEADER;
+        int lastState = HEADER;
+        int position = 0;
 
-      while (state != DONE && position < input.length()) {
-         int existingState = state;
-         switch(state) {
+        StringBuilder sectionBuffer = new StringBuilder();
+
+        while ((state != DONE) && (position < input.length())) {
+            int existingState = state;
+            switch (state) {
             case HEADER:
-               state = processHeader(input, position, sectionBuffer, graph);
-               break;
+                state = processHeader(input, position, sectionBuffer, graph);
+                break;
             case NODE:
-               state = processNode(input, position, sectionBuffer, graph, vertexes);
-               break;
+                state =
+                    processNode(
+                        input,
+                        position,
+                        sectionBuffer,
+                        graph,
+                        vertexes);
+                break;
             case EDGE:
-               state = processEdge(input, position, sectionBuffer, graph, vertexes);
-               break;
+                state =
+                    processEdge(
+                        input,
+                        position,
+                        sectionBuffer,
+                        graph,
+                        vertexes);
+                break;
             case LINE_COMMENT:
-               state = processLineComment(input, position, sectionBuffer, lastState);
-               if (state == lastState) {
-                  // when we leave a line comment we need the new line to still appear in the old block
-                  position = position - 1;
-               }
-               break;
+                state =
+                    processLineComment(
+                        input,
+                        position,
+                        sectionBuffer,
+                        lastState);
+                if (state == lastState) {
+                    // when we leave a line comment we need the new line to
+                    // still appear in the old block
+                    position = position - 1;
+                }
+                break;
             case BLOCK_COMMENT:
-               state = processBlockComment(input, position, lastState);
-               break;
+                state = processBlockComment(input, position, lastState);
+                break;
             case NODE_QUOTES:
-               state = processNodeQuotes(input, position, sectionBuffer);
-               break;
+                state = processNodeQuotes(input, position, sectionBuffer);
+                break;
             case EDGE_QUOTES:
-               state = processEdgeQuotes(input, position, sectionBuffer);
-               break;
+                state = processEdgeQuotes(input, position, sectionBuffer);
+                break;
             case NEXT:
-               state = processNext(input, position, sectionBuffer, graph, vertexes);
-               break;
+                state =
+                    processNext(
+                        input,
+                        position,
+                        sectionBuffer,
+                        graph,
+                        vertexes);
+                break;
+
             // DONE not included here as we can't get to it with the while loop.
             default:
-               throw new ImportException("Error importing escaped state machine");
-         }
-
-         position = position + 1;
-
-         if (state != existingState) {
-            lastState = existingState;
-         }
-
-      }
-
-      // if we get to the end and are some how still in the header the input must be invalid.
-      if(state == HEADER) {
-         throw new ImportException("Invalid Header");
-      }
-
-   }
-
-   /**
-    * Process the header block.
-    * @param input the input string to read from.
-    * @param position how far along the input string we are.
-    * @param sectionBuffer Current buffer.
-    * @param graph the graph we are updating
-    * @return the new state.
-    * @throws ImportException if there is a problem with the header section.
-    */
-   private int processHeader(String input, int position, StringBuilder sectionBuffer, AbstractBaseGraph<V, E> graph)
-         throws ImportException {
-      if(isStartOfLineComment(input, position)) {
-         return LINE_COMMENT;
-      }
-
-      if(isStartOfBlockComment(input, position)) {
-         return BLOCK_COMMENT;
-      }
-
-      char current = input.charAt(position);
-      sectionBuffer.append(current);
-      if (current == '{') {
-         // reached the end of the header. Validate it.
-
-         String[] headerParts = sectionBuffer.toString().split(" ", 4);
-         if (headerParts.length < 3) {
-            throw new ImportException("Not enough parts in header");
-         }
-
-         int i = 0;
-         if (graph.isAllowingMultipleEdges() && headerParts[i].equals("strict")) {
-            throw new ImportException(
-                  "graph defines strict but Multigraph given."
-            );
-         } else if (headerParts[i].equals("strict")) {
-            i = i + 1;
-         }
-
-         if (graph instanceof DirectedGraph && headerParts[i].equals("graph") ) {
-            throw new ImportException(
-                  "input asks for undirected graph and directed graph provided."
-            );
-         } else if (!(graph instanceof DirectedGraph)
-                    && headerParts[i].equals("digraph")) {
-            throw new ImportException(
-                  "input asks for directed graph but undirected graph provided."
-            );
-         } else if(!headerParts[i].equals("graph")
-                   && !headerParts[i].equals("digraph")){
-            throw new ImportException("unknown graph type");
-         }
-
-         sectionBuffer.setLength(0); //reset the buffer.
-         return NEXT;
-      }
-      return HEADER;
-
-   }
-
-   /**
-    * When we start a new section of the graph we don't know what it is going to be.
-    *
-    * We work in here until we can work out what type of section this is.
-    *
-    * @param input the input string to read from.
-    * @param position how far into the string we have got.
-    * @param sectionBuffer the current section.
-    * @param graph the graph we are creating.
-    * @param vertexes the existing set of vertexes that have been created so far.
-    * @return the next state.
-    * @throws ImportException if there is a problem with creating a node.
-    */
-   private int processNext(String input,
-                           int position,
-                           StringBuilder sectionBuffer,
-                           AbstractBaseGraph<V, E> graph,
-                           Map<String, V> vertexes)
-         throws ImportException
-   {
-      if(isStartOfLineComment(input, position)) {
-         return LINE_COMMENT;
-      }
-
-      if(isStartOfBlockComment(input, position)) {
-         return BLOCK_COMMENT;
-      }
-
-      char current = input.charAt(position);
-
-      // ignore new line characters or section breaks between identified sections.
-      if (current == '\n' || current == '\r') {
-         return NEXT;
-      }
-
-      // if the buffer is currently empty skip spaces too.
-      if (sectionBuffer.length() == 0 && (current == ' ' || current == ';')) {
-         return NEXT;
-      }
-
-      // If we have a semi colon and some thing in the buffer we must be at the end of a block.
-      // as we can't have had a dash yet we must be at the end of a node.
-      if(current == ';') {
-         processCompleteNode(sectionBuffer.toString(), graph, vertexes);
-         sectionBuffer.setLength(0);
-         return NEXT;
-      }
-
-      sectionBuffer.append(input.charAt(position));
-      if (position < input.length() - 1) {
-         char next = input.charAt(position + 1);
-         if (current == '-') {
-
-            if (next == '-' && graph instanceof DirectedGraph) {
-               throw new ImportException("graph is directed but undirected edge found");
-            } else if (next == '>' && !(graph instanceof DirectedGraph)) {
-               throw new ImportException("graph is undirected but directed edge found");
-            } else if (next == '-' || next == '>') {
-               return EDGE;
+                throw new ImportException(
+                    "Error importing escaped state machine");
             }
-         }
 
-      }
+            position = position + 1;
 
-      if(current == '[') {
-         return NODE;   // if this was an edge we should have found a dash before here.
-      }
+            if (state != existingState) {
+                lastState = existingState;
+            }
+        }
 
-      return NEXT;
-   }
+        // if we get to the end and are some how still in the header the input
+        // must be invalid.
+        if (state == HEADER) {
+            throw new ImportException("Invalid Header");
+        }
+    }
 
-   /**
-    * Process a node entry. When we detect that we are at the end of the node create it in the graph.
-    *
-    * @param input the input string to read from.
-    * @param position how far into the string we have got.
-    * @param sectionBuffer the current section.
-    * @param graph the graph we are creating.
-    * @param vertexes the existing set of vertexes that have been created so far.
-    * @return the next state.
-    * @throws ImportException if there is a problem with creating a node.
-    */
-   private int processNode(String input,
-                           int position,
-                           StringBuilder sectionBuffer,
-                           AbstractBaseGraph<V, E> graph,
-                           Map<String, V> vertexes) throws ImportException {
-      if(isStartOfLineComment(input, position)) {
-         return LINE_COMMENT;
-      }
+    /**
+     * Process the header block.
+     *
+     * @param input the input string to read from.
+     * @param position how far along the input string we are.
+     * @param sectionBuffer Current buffer.
+     * @param graph the graph we are updating
+     *
+     * @return the new state.
+     *
+     * @throws ImportException if there is a problem with the header section.
+     */
+    private int processHeader(
+        String input,
+        int position,
+        StringBuilder sectionBuffer,
+        AbstractBaseGraph<V, E> graph)
+        throws ImportException
+    {
+        if (isStartOfLineComment(input, position)) {
+            return LINE_COMMENT;
+        }
 
-      if(isStartOfBlockComment(input, position)) {
-         return BLOCK_COMMENT;
-      }
+        if (isStartOfBlockComment(input, position)) {
+            return BLOCK_COMMENT;
+        }
 
-      char current = input.charAt(position);
-      sectionBuffer.append(input.charAt(position));
-      if (current == '"') {
-         return NODE_QUOTES;
-      }
-      if (current == ']' || current == ';') {
-         processCompleteNode(sectionBuffer.toString(), graph, vertexes);
-         sectionBuffer.setLength(0);
-         return NEXT;
-      }
+        char current = input.charAt(position);
+        sectionBuffer.append(current);
+        if (current == '{') {
+            // reached the end of the header. Validate it.
 
-      return NODE;
-   }
+            String [] headerParts = sectionBuffer.toString().split(" ", 4);
+            if (headerParts.length < 3) {
+                throw new ImportException("Not enough parts in header");
+            }
 
+            int i = 0;
+            if (graph.isAllowingMultipleEdges()
+                && headerParts[i].equals("strict"))
+            {
+                throw new ImportException(
+                    "graph defines strict but Multigraph given.");
+            } else if (headerParts[i].equals("strict")) {
+                i = i + 1;
+            }
 
-   /**
-    * Process a quoted section of a node entry. This skips most of the exit conditions so quoted strings can contain
-    * comments, semi colons, dashes, newlines and so on.
-    * @param input the input string to read from.
-    * @param position how far into the string we have got.
-    * @param sectionBuffer the current section.
-    * @return the state for the next character.
-    */
-   private int processNodeQuotes(String input, int position, StringBuilder sectionBuffer) {
-      char current = input.charAt(position);
-      sectionBuffer.append(input.charAt(position));
+            if ((graph instanceof DirectedGraph)
+                && headerParts[i].equals("graph"))
+            {
+                throw new ImportException(
+                    "input asks for undirected graph and directed graph provided.");
+            } else if (
+                !(graph instanceof DirectedGraph)
+                && headerParts[i].equals("digraph"))
+            {
+                throw new ImportException(
+                    "input asks for directed graph but undirected graph provided.");
+            } else if (
+                !headerParts[i].equals("graph")
+                && !headerParts[i].equals("digraph"))
+            {
+                throw new ImportException("unknown graph type");
+            }
 
-      if (current == '"') {
-         if (input.charAt(current - 1) != '\\') {
-            return NODE;
-         }
-      }
-      return NODE_QUOTES;
-   }
+            sectionBuffer.setLength(0); //reset the buffer.
+            return NEXT;
+        }
+        return HEADER;
+    }
 
-   private int processEdge(String input,
-                           int position,
-                           StringBuilder sectionBuffer,
-                           AbstractBaseGraph<V, E> graph,
-                           Map<String, V> vertexes) {
-      if(isStartOfLineComment(input, position)) {
-         return LINE_COMMENT;
-      }
+    /**
+     * When we start a new section of the graph we don't know what it is going
+     * to be. We work in here until we can work out what type of section this
+     * is.
+     *
+     * @param input the input string to read from.
+     * @param position how far into the string we have got.
+     * @param sectionBuffer the current section.
+     * @param graph the graph we are creating.
+     * @param vertexes the existing set of vertexes that have been created so
+     * far.
+     *
+     * @return the next state.
+     *
+     * @throws ImportException if there is a problem with creating a node.
+     */
+    private int processNext(
+        String input,
+        int position,
+        StringBuilder sectionBuffer,
+        AbstractBaseGraph<V, E> graph,
+        Map<String, V> vertexes)
+        throws ImportException
+    {
+        if (isStartOfLineComment(input, position)) {
+            return LINE_COMMENT;
+        }
 
-      if(isStartOfBlockComment(input, position)) {
-         return BLOCK_COMMENT;
-      }
+        if (isStartOfBlockComment(input, position)) {
+            return BLOCK_COMMENT;
+        }
 
-      char current = input.charAt(position);
-      sectionBuffer.append(input.charAt(position));
-      if (current == '"') {
-         return EDGE_QUOTES;
-      }
+        char current = input.charAt(position);
 
-      if (current == ';' || current == '\r' || current == '\n') {
-         processCompleteEdge(sectionBuffer.toString(), graph, vertexes);
-         sectionBuffer.setLength(0);
-         return NEXT;
-      }
+        // ignore new line characters or section breaks between identified
+        // sections.
+        if ((current == '\n') || (current == '\r')) {
+            return NEXT;
+        }
 
-      return EDGE;
-   }
+        // if the buffer is currently empty skip spaces too.
+        if ((sectionBuffer.length() == 0)
+            && ((current == ' ') || (current == ';')))
+        {
+            return NEXT;
+        }
 
-   private int processEdgeQuotes(String input, int position, StringBuilder sectionBuffer) {
-      char current = input.charAt(position);
-      sectionBuffer.append(input.charAt(position));
+        // If we have a semi colon and some thing in the buffer we must be at
+        // the end of a block. as we can't have had a dash yet we must be at the
+        // end of a node.
+        if (current == ';') {
+            processCompleteNode(sectionBuffer.toString(), graph, vertexes);
+            sectionBuffer.setLength(0);
+            return NEXT;
+        }
 
-      if (current == '"') {
-         if (input.charAt(current - 1) != '\\') {
-            return EDGE;
-         }
-      }
-      return EDGE_QUOTES;
-   }
+        sectionBuffer.append(input.charAt(position));
+        if (position < (input.length() - 1)) {
+            char next = input.charAt(position + 1);
+            if (current == '-') {
+                if ((next == '-') && (graph instanceof DirectedGraph)) {
+                    throw new ImportException(
+                        "graph is directed but undirected edge found");
+                } else if ((next == '>') && !(graph instanceof DirectedGraph)) {
+                    throw new ImportException(
+                        "graph is undirected but directed edge found");
+                } else if ((next == '-') || (next == '>')) {
+                    return EDGE;
+                }
+            }
+        }
 
-   private int processLineComment(String input, int position, StringBuilder sectionBuffer, int returnState) {
-      char current = input.charAt(position);
-      if (current == '\r' || current == '\n') {
-         sectionBuffer.append(current);
-         return returnState;
-      }
+        if (current == '[') {
+            return
+                NODE; // if this was an edge we should have found a dash before
+                      // here.
+        }
 
-      return LINE_COMMENT;
-   }
+        return NEXT;
+    }
 
-   private int processBlockComment(String input, int position, int returnState) {
-      char current = input.charAt(position);
-      if (current == '/') {
-         if (input.charAt(position - 1) == '*') {
+    /**
+     * Process a node entry. When we detect that we are at the end of the node
+     * create it in the graph.
+     *
+     * @param input the input string to read from.
+     * @param position how far into the string we have got.
+     * @param sectionBuffer the current section.
+     * @param graph the graph we are creating.
+     * @param vertexes the existing set of vertexes that have been created so
+     * far.
+     *
+     * @return the next state.
+     *
+     * @throws ImportException if there is a problem with creating a node.
+     */
+    private int processNode(
+        String input,
+        int position,
+        StringBuilder sectionBuffer,
+        AbstractBaseGraph<V, E> graph,
+        Map<String, V> vertexes)
+        throws ImportException
+    {
+        if (isStartOfLineComment(input, position)) {
+            return LINE_COMMENT;
+        }
+
+        if (isStartOfBlockComment(input, position)) {
+            return BLOCK_COMMENT;
+        }
+
+        char current = input.charAt(position);
+        sectionBuffer.append(input.charAt(position));
+        if (current == '"') {
+            return NODE_QUOTES;
+        }
+        if ((current == ']') || (current == ';')) {
+            processCompleteNode(sectionBuffer.toString(), graph, vertexes);
+            sectionBuffer.setLength(0);
+            return NEXT;
+        }
+
+        return NODE;
+    }
+
+    /**
+     * Process a quoted section of a node entry. This skips most of the exit
+     * conditions so quoted strings can contain comments, semi colons, dashes,
+     * newlines and so on.
+     *
+     * @param input the input string to read from.
+     * @param position how far into the string we have got.
+     * @param sectionBuffer the current section.
+     *
+     * @return the state for the next character.
+     */
+    private int processNodeQuotes(
+        String input,
+        int position,
+        StringBuilder sectionBuffer)
+    {
+        char current = input.charAt(position);
+        sectionBuffer.append(input.charAt(position));
+
+        if (current == '"') {
+            if (input.charAt(current - 1) != '\\') {
+                return NODE;
+            }
+        }
+        return NODE_QUOTES;
+    }
+
+    private int processEdge(
+        String input,
+        int position,
+        StringBuilder sectionBuffer,
+        AbstractBaseGraph<V, E> graph,
+        Map<String, V> vertexes)
+    {
+        if (isStartOfLineComment(input, position)) {
+            return LINE_COMMENT;
+        }
+
+        if (isStartOfBlockComment(input, position)) {
+            return BLOCK_COMMENT;
+        }
+
+        char current = input.charAt(position);
+        sectionBuffer.append(input.charAt(position));
+        if (current == '"') {
+            return EDGE_QUOTES;
+        }
+
+        if ((current == ';') || (current == '\r') || (current == '\n')) {
+            processCompleteEdge(sectionBuffer.toString(), graph, vertexes);
+            sectionBuffer.setLength(0);
+            return NEXT;
+        }
+
+        return EDGE;
+    }
+
+    private int processEdgeQuotes(
+        String input,
+        int position,
+        StringBuilder sectionBuffer)
+    {
+        char current = input.charAt(position);
+        sectionBuffer.append(input.charAt(position));
+
+        if (current == '"') {
+            if (input.charAt(current - 1) != '\\') {
+                return EDGE;
+            }
+        }
+        return EDGE_QUOTES;
+    }
+
+    private int processLineComment(
+        String input,
+        int position,
+        StringBuilder sectionBuffer,
+        int returnState)
+    {
+        char current = input.charAt(position);
+        if ((current == '\r') || (current == '\n')) {
+            sectionBuffer.append(current);
             return returnState;
-         }
-      }
+        }
 
-      return BLOCK_COMMENT;
-   }
+        return LINE_COMMENT;
+    }
 
-   private boolean isStartOfLineComment(String input, int position) {
-      char current = input.charAt(position);
-      if(current == '#') {
-         return true;
-      } else if(current == '/') {
-         if(position < input.length() -1) {
-            if(input.charAt(position + 1) == '/') {
-               return true;
+    private int processBlockComment(String input, int position, int returnState)
+    {
+        char current = input.charAt(position);
+        if (current == '/') {
+            if (input.charAt(position - 1) == '*') {
+                return returnState;
             }
-         }
-      }
-      return false;
-   }
+        }
 
-   private boolean isStartOfBlockComment(String input, int position) {
-      char current = input.charAt(position);
-      if(current == '/') {
-         if(position < input.length() -1) {
-            if(input.charAt(position + 1) == '*') {
-               return true;
+        return BLOCK_COMMENT;
+    }
+
+    private boolean isStartOfLineComment(String input, int position)
+    {
+        char current = input.charAt(position);
+        if (current == '#') {
+            return true;
+        } else if (current == '/') {
+            if (position < (input.length() - 1)) {
+                if (input.charAt(position + 1) == '/') {
+                    return true;
+                }
             }
-         }
-      }
-      return false;
-   }
+        }
+        return false;
+    }
 
-   private void processCompleteNode(String node, AbstractBaseGraph<V, E> graph, Map<String, V> vertexes)
-         throws ImportException
-   {
+    private boolean isStartOfBlockComment(String input, int position)
+    {
+        char current = input.charAt(position);
+        if (current == '/') {
+            if (position < (input.length() - 1)) {
+                if (input.charAt(position + 1) == '*') {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-      Map<String, String> attributes = extractAttributes(node);
+    private void processCompleteNode(
+        String node,
+        AbstractBaseGraph<V, E> graph,
+        Map<String, V> vertexes)
+        throws ImportException
+    {
+        Map<String, String> attributes = extractAttributes(node);
 
-      String id = node.trim();
-      int bracketIndex = node.indexOf('[');
-      if (bracketIndex > 0) {
-         id = node.substring(0, node.indexOf('[')).trim();
-      }
+        String id = node.trim();
+        int bracketIndex = node.indexOf('[');
+        if (bracketIndex > 0) {
+            id = node.substring(0, node.indexOf('[')).trim();
+        }
 
-      String label = attributes.get("label");
-      if (label == null) {
-         label = id;
-      }
+        String label = attributes.get("label");
+        if (label == null) {
+            label = id;
+        }
 
-      V existing = vertexes.get(id);
-      if (existing == null) {
-         V vertex = vertexProvider.buildVertex(label, attributes);
-         graph.addVertex(vertex);
-         vertexes.put(id, vertex);
-      } else {
-         if (vertexUpdater != null) {
-            vertexUpdater.updateVertex(existing, attributes);
-         } else {
-            throw new ImportException(
-                  "Update required for vertex "
-                  + label
-                  + " but no vertexUpdater provided"
-            );
-         }
-      }
-   }
+        V existing = vertexes.get(id);
+        if (existing == null) {
+            V vertex = vertexProvider.buildVertex(label, attributes);
+            graph.addVertex(vertex);
+            vertexes.put(id, vertex);
+        } else {
+            if (vertexUpdater != null) {
+                vertexUpdater.updateVertex(existing, attributes);
+            } else {
+                throw new ImportException(
+                    "Update required for vertex "
+                    + label
+                    + " but no vertexUpdater provided");
+            }
+        }
+    }
 
-   private void processCompleteEdge(String edge, AbstractBaseGraph<V, E> graph, Map<String, V> vertexes) {
-      Map<String, String> attributes = extractAttributes(edge);
+    private void processCompleteEdge(
+        String edge,
+        AbstractBaseGraph<V, E> graph,
+        Map<String, V> vertexes)
+    {
+        Map<String, String> attributes = extractAttributes(edge);
 
-      List<String> ids = extractEdgeIds(edge);
+        List<String> ids = extractEdgeIds(edge);
 
-      // for each pair of ids in the list create an edge.
-      for(int i = 0; i < ids.size() - 1; i++) {
-         V v1 = getVertex(ids.get(i), vertexes, graph);
-         V v2 = getVertex(ids.get(i+1), vertexes, graph);
+        // for each pair of ids in the list create an edge.
+        for (int i = 0; i < (ids.size() - 1); i++) {
+            V v1 = getVertex(ids.get(i), vertexes, graph);
+            V v2 = getVertex(ids.get(i + 1), vertexes, graph);
 
-         E resultEdge = edgeProvider.buildEdge(v1,
-                                         v2,
-                                         attributes.get("label"),
-                                         attributes);
-         graph.addEdge(v1, v2, resultEdge);
-      }
-   }
+            E resultEdge =
+                edgeProvider.buildEdge(
+                    v1,
+                    v2,
+                    attributes.get("label"),
+                    attributes);
+            graph.addEdge(v1, v2, resultEdge);
+        }
+    }
 
-   // if a vertex id doesn't already exist create one for it
-   // with no attributes.
-   private V getVertex(String id, Map<String, V> vertexes, Graph<V, E> graph)
-   {
-      V v = vertexes.get(id);
-      if (v == null) {
-         v = vertexProvider.buildVertex(id, new HashMap<String, String>());
-         graph.addVertex(v);
-         vertexes.put(id, v);
-      }
-      return v;
-   }
+    // if a vertex id doesn't already exist create one for it
+    // with no attributes.
+    private V getVertex(String id, Map<String, V> vertexes, Graph<V, E> graph)
+    {
+        V v = vertexes.get(id);
+        if (v == null) {
+            v = vertexProvider.buildVertex(id, new HashMap<String, String>());
+            graph.addVertex(v);
+            vertexes.put(id, v);
+        }
+        return v;
+    }
 
-   private List<String> extractEdgeIds(String line)
-   {
-      String idChunk = line.trim();
-      if(idChunk.endsWith(";")) {
-         idChunk = idChunk.substring(0, idChunk.length() - 1);
-      }
-      int bracketIndex = idChunk.indexOf('[');
-      if (bracketIndex > 1) {
-         idChunk = idChunk.substring(0, bracketIndex).trim();
-      }
-      int index = 0;
-      List<String> ids = new ArrayList<String>();
-      while(index < idChunk.length()) {
-         int nextSpace = idChunk.indexOf(' ', index);
-         String chunk;
-         if ( nextSpace > 0) { // is this the last chunk
-            chunk = idChunk.substring(index, nextSpace);
-            index = nextSpace + 1;
-         } else {
-            chunk = idChunk.substring(index);
-            index = idChunk.length() + 1;
-         }
-         if(!chunk.equals("--") && !chunk.equals("->")) {  // a label then?
-            ids.add(chunk);
-         }
+    private List<String> extractEdgeIds(String line)
+    {
+        String idChunk = line.trim();
+        if (idChunk.endsWith(";")) {
+            idChunk = idChunk.substring(0, idChunk.length() - 1);
+        }
+        int bracketIndex = idChunk.indexOf('[');
+        if (bracketIndex > 1) {
+            idChunk = idChunk.substring(0, bracketIndex).trim();
+        }
+        int index = 0;
+        List<String> ids = new ArrayList<String>();
+        while (index < idChunk.length()) {
+            int nextSpace = idChunk.indexOf(' ', index);
+            String chunk;
+            if (nextSpace > 0) { // is this the last chunk
+                chunk = idChunk.substring(index, nextSpace);
+                index = nextSpace + 1;
+            } else {
+                chunk = idChunk.substring(index);
+                index = idChunk.length() + 1;
+            }
+            if (!chunk.equals("--") && !chunk.equals("->")) { // a label then?
+                ids.add(chunk);
+            }
+        }
 
-      }
+        return ids;
+    }
 
-      return ids;
-   }
+    private Map<String, String> extractAttributes(String line)
+    {
+        Map<String, String> attributes = new HashMap<String, String>();
+        int bracketIndex = line.indexOf("[");
+        if (bracketIndex > 0) {
+            attributes =
+                splitAttributes(
+                    line.substring(bracketIndex + 1, line.lastIndexOf(']'))
+                        .trim());
+        }
+        return attributes;
+    }
 
-   private Map<String, String> extractAttributes(String line)
-   {
-      Map<String, String> attributes = new HashMap<String, String>();
-      int bracketIndex = line.indexOf("[");
-      if (bracketIndex > 0) {
-         attributes = splitAttributes(
-               line.substring(bracketIndex + 1, line.lastIndexOf(']')).trim()
-         );
-      }
-      return attributes;
-   }
+    private Map<String, String> splitAttributes(String input)
+    {
+        int index = 0;
+        Map<String, String> result = new HashMap<String, String>();
+        while (index < input.length()) {
+            int nextEquals = input.indexOf('=', index);
+            String key = input.substring(index, nextEquals).trim();
+            int firstQuote = input.indexOf('\"', nextEquals) + 1;
+            int secondQuote = findNextQuote(input, firstQuote);
+            String value = input.substring(firstQuote, secondQuote);
+            result.put(key, value);
+            index = secondQuote + 1;
+        }
+        return result;
+    }
 
-   private Map<String, String> splitAttributes(String input)
-   {
-      int index = 0;
-      Map<String, String> result = new HashMap<String, String>();
-      while(index < input.length()) {
-         int nextEquals = input.indexOf('=', index);
-         String key = input.substring(index, nextEquals).trim();
-         int firstQuote = input.indexOf('\"', nextEquals) + 1;
-         int secondQuote = findNextQuote(input, firstQuote);
-         String value = input.substring(firstQuote, secondQuote);
-         result.put(key, value);
-         index = secondQuote+1;
-      }
-      return result;
-   }
-
-
-   private int findNextQuote(String input, int start) {
-      int result = start;
-      do {
-         result = input.indexOf('\"', result + 1);
-         // if the previous character is an escape then keep going
-      } while(input.charAt(result - 1) == '\\'
-              && !(input.charAt(result - 1) == '\\'
-                   && input.charAt(result - 2) == '\\')); // unless its escaped
-      return result;
-   }
+    private int findNextQuote(String input, int start)
+    {
+        int result = start;
+        do {
+            result = input.indexOf('\"', result + 1);
+            // if the previous character is an escape then keep going
+        } while (
+            (input.charAt(result - 1) == '\\')
+            && !((input.charAt(result - 1) == '\\')
+                && (input.charAt(result - 2) == '\\'))); // unless its escaped
+        return result;
+    }
 }
+
+// End DOTImporter.java

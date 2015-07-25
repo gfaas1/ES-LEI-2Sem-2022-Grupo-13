@@ -34,11 +34,11 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.util.ArrayUnenforcedSet;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 
 /**
@@ -64,6 +64,7 @@ public class EdmondsBlossomShrinking<V, E>
     private Map<V, V> path;
     private Map<V, V> contracted;
 
+    
 
     // ~ Constructors
     // ----------------------------------------------------------------
@@ -117,7 +118,8 @@ public class EdmondsBlossomShrinking<V, E>
             // Any augmenting path should start with _exposed_ vertex
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(i)) {
-                // Match is maximal iff graph G contains no more augmenting paths
+                // Match is maximal iff graph G contains no more augmenting
+                // paths
                 V v = findPath(i);
                 while (v != null) {
                     V pv = path.get(v);
@@ -143,8 +145,8 @@ public class EdmondsBlossomShrinking<V, E>
 
     private V findPath(V root)
     {
-        Set<V>      used    = new HashSet<V>();
-        Queue<V>    q       = new ArrayDeque<V>();
+        Set<V> used = new HashSet<V>();
+        Queue<V> q = new ArrayDeque<V>();
 
         // Expand graph back from its contracted state
         path.clear();
@@ -167,13 +169,17 @@ public class EdmondsBlossomShrinking<V, E>
                     to = graph.getEdgeTarget(e);
                 }
 
-                if ((contracted.get(v) == contracted.get(to)) || (match.get(v) == to)) {
+                if ((contracted.get(v) == contracted.get(to))
+                    || (match.get(v) == to))
+                {
                     continue;
                 }
 
                 // Check whether we've hit a 'blossom'
                 if ((to == root)
-                || ((match.containsKey(to)) && (path.containsKey(match.get(to))))) {
+                    || ((match.containsKey(to))
+                        && (path.containsKey(match.get(to)))))
+                {
                     V stem = lca(v, to);
 
                     Set<V> blossom = new HashSet<V>();
@@ -183,9 +189,11 @@ public class EdmondsBlossomShrinking<V, E>
                     markPath(to, v, stem, blossom);
 
                     for (V i : graph.vertexSet()) {
-                        if (contracted.containsKey(i) && blossom.contains(contracted.get(i)))
+                        if (contracted.containsKey(i)
+                            && blossom.contains(contracted.get(i)))
                         {
                             contracted.put(i, stem);
+
                             // ???
                             if (!used.contains(i)) {
                                 used.add(i);
@@ -194,7 +202,8 @@ public class EdmondsBlossomShrinking<V, E>
                         }
                     }
 
-                // Check whether we've had hit a loop (of even length (!) presumably)
+                    // Check whether we've had hit a loop (of even length (!)
+                    // presumably)
                 } else if (!path.containsKey(to)) {
                     path.put(to, v);
 
