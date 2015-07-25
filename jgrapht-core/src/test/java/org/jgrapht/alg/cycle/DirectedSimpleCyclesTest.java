@@ -32,6 +32,7 @@
  * Changes
  * -------
  * 06-Sep-2013 : Initial revision (NO);
+ * 18-Jun-2014 : Hawick and James test;
  */
 package org.jgrapht.alg.cycle;
 
@@ -61,11 +62,14 @@ public class DirectedSimpleCyclesTest
             new JohnsonSimpleCycles<Integer, DefaultEdge>();
         SzwarcfiterLauerSimpleCycles<Integer, DefaultEdge> szwarcfiterLauerFinder =
             new SzwarcfiterLauerSimpleCycles<Integer, DefaultEdge>();
+        HawickJamesSimpleCycles<Integer, DefaultEdge> hawickJamesFinder =
+                new HawickJamesSimpleCycles<Integer, DefaultEdge>();
 
         testAlgorithm(tiernanFinder);
         testAlgorithm(tarjanFinder);
         testAlgorithm(johnsonFinder);
         testAlgorithm(szwarcfiterLauerFinder);
+        testAlgorithm(hawickJamesFinder);
     }
 
     private void testAlgorithm(
