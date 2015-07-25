@@ -37,6 +37,8 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                 }
             }
         );
+
+        buildInternal();
     }
 
     @Override
@@ -59,7 +61,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         }
     }
 
-    public void initialize(VertexExtension source, Queue<VertexExtension> active) {
+    public void initialize(VertexExtension source, VertexExtension sink, Queue<VertexExtension> active) {
         source.label    = network.vertexSet().size();
         source.excess   = Double.POSITIVE_INFINITY;
 
@@ -73,7 +75,9 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
 
         for (EdgeExtension ex : source.<EdgeExtension>getOutgoing()) {
             pushFlowThrough(ex, ex.capacity);
-            active.offer(ex.<VertexExtension>getTarget());
+
+            if (ex.getTarget().prototype != sink.prototype)
+                active.offer(ex.<VertexExtension>getTarget());
         }
     }
 
@@ -81,12 +85,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
     public MaximumFlow<V, E> buildMaximumFlow(V source, V sink) {
         Queue<VertexExtension> active = new ArrayDeque<VertexExtension>();
 
-        buildInternal();
-
-        VertexExtension sourceX = extendedVertex(source);
-        VertexExtension sinkX   = extendedVertex(sink);
-
-        initialize(sourceX, active);
+        initialize(extendedVertex(source), extendedVertex(sink), active);
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
@@ -94,7 +93,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                 for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
                     if (isAdmissible(ex)) {
                         // NB(kudinkin): Concerns?
-                        if (ex.getTarget() != sinkX && ex.getTarget() != sourceX)
+                        if (ex.getTarget().prototype != sink && ex.getTarget().prototype != source)
                             active.offer(ex.<VertexExtension>getTarget());
 
                         // Check whether we're rip off the excess
@@ -150,7 +149,14 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         ex.getSource().excess -= f;
         ex.getTarget().excess += f;
 
+        // _DBG
+        assert(ex.getSource().excess >= 0.0 && ex.getTarget().excess >= 0);
+
         EdgeExtension iex = ex.getInverse();
+
+        // _DBG
+//        System.out.println("{ " + (ex.prototype == null ? "" : ex.prototype)  + " } F/CAP " + ex.flow + " / " + ex.capacity +
+//                                                                                " IF/ICAP " + ex.getInverse().flow + " / " + ex.getInverse().capacity+ " SUR " + f);
 
         // _DBG
         assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
@@ -158,12 +164,14 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         if (compareFlowTo(iex.flow, f) == -1) {
             double d = f - iex.flow;
 
-            ex.flow += d;
+            ex.flow      += d;
+            ex.capacity  -= iex.flow;
 
             iex.flow      = 0;
             iex.capacity += d;
         } else {
-            iex.flow -= f;
+            ex.capacity -= f;
+            iex.flow    -= f;
         }
     }
 
