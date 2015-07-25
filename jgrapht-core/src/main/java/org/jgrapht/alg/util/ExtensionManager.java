@@ -4,19 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExtensionManager<T, E> {
-    private Class<E>    extensionKlass;
-    private Map<T, E>   extensions = new HashMap<T, E>();
+    private ExtensionFactory<E> extensionFactory;
+    private Map<T, E>           extensions = new HashMap<T, E>();
 
-    public ExtensionManager(Class<E> extensionKlass) {
-        this.extensionKlass = extensionKlass;
+    public interface ExtensionFactory<E> {
+        E create();
+    }
+
+    public ExtensionManager(ExtensionFactory<E> factory) {
+        this.extensionFactory = factory;
     }
 
     public static abstract class BaseExtension {
         public BaseExtension() {}
     }
 
-    private E createInstance() throws IllegalAccessException, InstantiationException {
-        return extensionKlass.newInstance();
+    public E createInstance() throws IllegalAccessException, InstantiationException {
+        return extensionFactory.create();
     }
 
     public E get(T t)
