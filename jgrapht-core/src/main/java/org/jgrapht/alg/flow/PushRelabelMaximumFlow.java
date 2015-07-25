@@ -84,7 +84,11 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         Queue<VertexExtension> active = new ArrayDeque<VertexExtension>();
 
         buildInternal();
-        initialize(extendedVertex(source), active);
+
+        VertexExtension sourceX = extendedVertex(source);
+        VertexExtension sinkX   = extendedVertex(sink);
+
+        initialize(sourceX, active);
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
@@ -92,7 +96,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                 for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
                     if (isAdmissible(ex)) {
                         // NB(kudinkin): Concerns?
-                        if (ex.getTarget() != extendedVertex(sink))
+                        if (ex.getTarget() != sinkX && ex.getTarget() != sourceX)
                             active.offer(ex.<VertexExtension>getTarget());
 
                         // Check whether we're rip off the excess
@@ -133,8 +137,9 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         }
 
         // Sanity
-        if (min != Integer.MAX_VALUE)
+        if (min != Integer.MAX_VALUE) {
             vx.label = min + 1;
+        }
     }
 
     private boolean discharge(EdgeExtension ex) {

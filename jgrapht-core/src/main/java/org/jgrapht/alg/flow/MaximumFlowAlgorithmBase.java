@@ -145,9 +145,6 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         for (E e : getNetwork().edgeSet()) {
             EdgeExtensionBase ex = extendedEdge(e);
             maxFlow.put(e, ex.flow);
-
-            // _DBG
-            System.out.println(e + " F/CAP " + ex.flow + "/" + ex.capacity);
         }
 
         return maxFlow;
