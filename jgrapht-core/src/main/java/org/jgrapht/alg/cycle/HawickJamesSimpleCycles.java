@@ -42,9 +42,9 @@ import org.jgrapht.*;
 /**
  * Find all simple cycles of a directed graph using the algorithm described by
  * Hawick and James.
- * 
- * <p/>
- * See:<br/>
+ *
+ *<p>
+ * See:<br>
  * K. A. Hawick, H. A. James. Enumerating Circuits and Loops in Graphs with
  * Self-Arcs and Multiple-Arcs. Computational Science Technical Note CSTN-013,
  * 2008

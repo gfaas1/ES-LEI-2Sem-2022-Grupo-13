@@ -46,6 +46,7 @@ import org.jgrapht.graph.AbstractBaseGraph;
  *    http://www.graphviz.org/doc/info/lang.html</a></p>
  *
  * state machine description (In dot format naturally):
+ *<pre><code>
  *
  * digraph G {
  *    1 [label="start" description="Entry point"];
@@ -58,34 +59,36 @@ import org.jgrapht.graph.AbstractBaseGraph;
  *    8 [label="line_comment" description="process and ignore a line comment"];
  *    9 [label="block_comment" description="process and ignore a block comment"];
  *    10 [label="done" description="exit point"];
- *    1 -> 2;
- *    2 -> 3;
- *    3 -> 4;
- *    4 -> 3;
- *    4 -> 5;
- *    5 -> 4;
- *    3 -> 6;
- *    6 -> 3;
- *    6 -> 7;
- *    7 -> 6;
- *    3 -> 10;
- *    2 -> 8;
- *    8 -> 2;
- *    2 -> 9;
- *    9 -> 2;
- *    3 -> 8;
- *    8 -> 3;
- *    3 -> 9;
- *    9 -> 3;
- *    4 -> 8;
- *    8 -> 4;
- *    4 -> 9;
- *    9 -> 4;
- *    6 -> 8;
- *    8 -> 6;
- *    6 -> 9;
- *    9 -> 6;
+ *    1 -&gt; 2;
+ *    2 -&gt; 3;
+ *    3 -&gt; 4;
+ *    4 -&gt; 3;
+ *    4 -&gt; 5;
+ *    5 -&gt; 4;
+ *    3 -&gt; 6;
+ *    6 -&gt; 3;
+ *    6 -&gt; 7;
+ *    7 -&gt; 6;
+ *    3 -&gt; 10;
+ *    2 -&gt; 8;
+ *    8 -&gt; 2;
+ *    2 -&gt; 9;
+ *    9 -&gt; 2;
+ *    3 -&gt; 8;
+ *    8 -&gt; 3;
+ *    3 -&gt; 9;
+ *    9 -&gt; 3;
+ *    4 -&gt; 8;
+ *    8 -&gt; 4;
+ *    4 -&gt; 9;
+ *    9 -&gt; 4;
+ *    6 -&gt; 8;
+ *    8 -&gt; 6;
+ *    6 -&gt; 9;
+ *    9 -&gt; 6;
  * }
+ *
+ * </code></pre>
  *
  * @author Wil Selwood
  */
