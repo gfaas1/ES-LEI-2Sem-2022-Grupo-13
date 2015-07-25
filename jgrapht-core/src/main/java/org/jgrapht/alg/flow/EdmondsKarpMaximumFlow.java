@@ -163,8 +163,8 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
             throw new IllegalArgumentException("source is equal to sink");
         }
 
-        currentSource   = vertexExtended0(source);
-        currentSink     = vertexExtended0(sink);
+        currentSource   = extendedVertex(source);
+        currentSink     = extendedVertex(sink);
 
         Map<E, Double> maxFlow;
 
@@ -188,19 +188,19 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
         return new VerbatimMaximumFlow<V, E>(maxFlowValue, maxFlow);
     }
 
-    protected VertexExtension vertexExtended0(V v) {
+    protected VertexExtension extendedVertex(V v) {
         return this.vertexExtended(v);
     }
 
-    protected EdgeExtension edgeExtended0(E e) {
+    protected EdgeExtension extendedEdge(E e) {
         return this.edgeExtended(e);
     }
 
     private void breadthFirstSearch()
     {
         for (V v : network.vertexSet()) {
-            vertexExtended0(v).visited  = false;
-            vertexExtended0(v).lastArcs = null;
+            extendedVertex(v).visited  = false;
+            extendedVertex(v).lastArcs = null;
         }
 
         Queue<VertexExtension> queue = new LinkedList<VertexExtension>();
@@ -216,12 +216,11 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
         while (queue.size() != 0) {
             VertexExtension ux = queue.poll();
 
-            for (int i = 0; i < ux.outgoing.size(); ++i) {
-                EdgeExtension ex = (EdgeExtension) ux.outgoing.get(i);
+            for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
 
                 if ((ex.flow + epsilon) < ex.capacity) {
 
-                    VertexExtension vx = (VertexExtension) ex.target;
+                    VertexExtension vx = ex.getTarget();
 
                     if (vx == currentSink) {
 
@@ -256,11 +255,11 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
 
         for (EdgeExtension ex : currentSink.lastArcs) {
             double deltaFlow =
-                Math.min(ex.source.excess, ex.capacity - ex.flow);
+                Math.min(ex.getSource().excess, ex.capacity - ex.flow);
 
-            if (augmentFlowAlongInternal(deltaFlow, (VertexExtension) ex.source, seen)) {
-                ex.flow         += deltaFlow;
-                ex.inverse.flow -= deltaFlow;
+            if (augmentFlowAlongInternal(deltaFlow, ex.<VertexExtension>getSource(), seen)) {
+                ex.flow              += deltaFlow;
+                ex.getInverse().flow -= deltaFlow;
             }
 
             // _DBG
@@ -277,9 +276,9 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
         seen.add(node);
 
         EdgeExtension prev = node.lastArcs.get(0);
-        if (augmentFlowAlongInternal(deltaFlow, (VertexExtension) prev.source, seen)) {
-            prev.flow         += deltaFlow;
-            prev.inverse.flow -= deltaFlow;
+        if (augmentFlowAlongInternal(deltaFlow, prev.<VertexExtension>getSource(), seen)) {
+            prev.flow               += deltaFlow;
+            prev.getInverse().flow  -= deltaFlow;
             return true;
         }
 
