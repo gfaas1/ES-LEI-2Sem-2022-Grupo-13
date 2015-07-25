@@ -59,10 +59,6 @@ import java.util.*;
  * (Lecture Notes)</i>.
  */
 public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V, E> {
-    /**
-     * Default tolerance.
-     */
-    public static final double DEFAULT_EPSILON = 0.000000001;
 
     private DirectedGraph<V, E> network; // our network
 

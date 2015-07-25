@@ -12,6 +12,11 @@ import java.util.Map;
 
 public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgorithm<V, E> {
 
+    /**
+     * Default tolerance.
+     */
+    public static final double DEFAULT_EPSILON = 1e-9;
+
     private ExtensionManager<V, ? extends VertexExtensionBase>  vXs;
     private ExtensionManager<E, ? extends EdgeExtensionBase>    eXs;
 

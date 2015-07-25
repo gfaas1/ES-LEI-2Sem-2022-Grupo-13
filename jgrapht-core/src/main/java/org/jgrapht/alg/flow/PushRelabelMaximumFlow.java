@@ -18,8 +18,6 @@ import java.util.Queue;
  */
 public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> {
 
-    private static final double EPSILON = 1e-6;
-
     private DirectedGraph<V, E> network;
 
     public PushRelabelMaximumFlow(DirectedGraph<V, E> network) {
@@ -57,7 +55,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
     public class EdgeExtension extends EdgeExtensionBase {
 
         private boolean hasCapacity() {
-            return Math.abs(capacity - flow) > EPSILON;
+            return Math.abs(capacity - flow) > DEFAULT_EPSILON;
         }
     }
 
@@ -152,40 +150,26 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         ex.getSource().excess -= f;
         ex.getTarget().excess += f;
 
-        // Check whether there's an inverse edge
-//        if (network.containsEdge(v, u)) {
-            // Inverse edge
-            EdgeExtension iex = ex.getInverse();
+        EdgeExtension iex = ex.getInverse();
 
-            // _DBG
-            assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
+        // _DBG
+        assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
 
-            if (compareFlowTo(iex.flow, f) == -1) {
-                double d = f - iex.flow;
+        if (compareFlowTo(iex.flow, f) == -1) {
+            double d = f - iex.flow;
 
-                ex.flow += d;
+            ex.flow += d;
 
-                iex.flow      = 0;
-                iex.capacity += d;
-            } else {
-                iex.flow -= f;
-            }
-//        } else {
-//            E ie = network.addEdge(v, u);
-//
-//            EdgeExtension iex = extendedEdge(ie);
-//
-//            ex.flow += f;
-//            iex.capacity = f;
-//        }
-
-        //if (!ex.hasCapacity())
-        //    network.removeEdge(ex);
+            iex.flow      = 0;
+            iex.capacity += d;
+        } else {
+            iex.flow -= f;
+        }
     }
 
     private int compareFlowTo(double flow, double val) {
         double diff = flow - val;
-        if (Math.abs(diff) < EPSILON)
+        if (Math.abs(diff) < DEFAULT_EPSILON)
             return 0;
         else
             return diff < 0 ? -1 : 1;
