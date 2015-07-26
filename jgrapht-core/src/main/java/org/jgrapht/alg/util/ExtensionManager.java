@@ -19,28 +19,18 @@ public class ExtensionManager<T, E> {
         public BaseExtension() {}
     }
 
-    public E createInstance() throws IllegalAccessException, InstantiationException {
+    public E createInstance() {
         return extensionFactory.create();
     }
 
     public E get(T t)
     {
-        try {
+        if (extensions.containsKey(t))
+            return extensions.get(t);
 
-            if (extensions.containsKey(t))
-                return extensions.get(t);
-
-            E x = createInstance();
-
-            extensions.put(t, x);
-
-            return x;
-
-        } catch (IllegalAccessException e) {
-            throw new ExtensionManagerInstantiationException(e);
-        } catch (InstantiationException e) {
-            throw new ExtensionManagerInstantiationException(e);
-        }
+        E x = createInstance();
+        extensions.put(t, x);
+        return x;
     }
 
     public static class ExtensionManagerInstantiationException extends RuntimeException {
