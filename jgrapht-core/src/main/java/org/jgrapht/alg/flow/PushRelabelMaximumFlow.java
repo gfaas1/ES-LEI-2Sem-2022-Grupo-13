@@ -169,7 +169,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
 
         @Override
         public String toString() {
-            return prototype.toString() + String.format(" { F/CAP: %d / %d } ", flow, capacity);
+            return prototype.toString() + String.format(" { F/CAP: %f / %f } ", flow, capacity);
         }
     }
 
