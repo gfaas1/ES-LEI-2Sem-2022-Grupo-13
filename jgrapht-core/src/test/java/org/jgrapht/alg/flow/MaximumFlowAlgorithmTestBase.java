@@ -17,7 +17,6 @@ import java.util.Map;
 
 public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
 
-
     abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network);
 
     public void testN0()
@@ -217,46 +216,31 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
             null
         );
 
-        System.out.println("== GENERATED ==");
+        System.out.println("\n=== GENERATED ===\n");
 
         Object[] vs = network.vertexSet().stream().toArray();
 
         Integer source = (Integer) vs[0];
         Integer sink = (Integer) vs[vs.length - 1];
 
-        checkPushRelabel(network, source, sink);
-        checkEdmondsKarp(network, source, sink);
+        MaximumFlow<Integer, DefaultWeightedEdge> maxFlow = createSolver(network).buildMaximumFlow(source, sink);
 
+        check(maxFlow, source, sink, network);
+
+        // _DBG
         System.out.println(rgg.getRandomSeed());
 
-//        dumpGraph(network, source, sink);
+        // _DBG
+        //dumpGraph(network, source, sink);
     }
 
-    private void checkPushRelabel(SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network, Integer source, Integer sink) {
-        MaximumFlow<Integer, DefaultWeightedEdge> pr = new PushRelabelMaximumFlow<Integer, DefaultWeightedEdge>(network).buildMaximumFlow(source, sink);
-
-        System.out.println("------------");
-        System.out.println("PUSH-RELABEL");
-        System.out.println("------------");
-
-        dumpFlow(pr);
-
-        MaximumFlowAlgorithmTestBase.verify(source, sink, pr.getValue(), network, pr);
+    private static void check(MaximumFlow<Integer, DefaultWeightedEdge> maxFlow, int source, int sink, DirectedGraph<Integer, DefaultWeightedEdge> network) {
+        MaximumFlowAlgorithmTestBase.verify(source, sink, maxFlow.getValue(), network, maxFlow);
+        dumpFlow(maxFlow);
     }
 
-    private void checkEdmondsKarp(SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network, Integer source, Integer sink) {
-        MaximumFlow<Integer, DefaultWeightedEdge> ek = new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(network).buildMaximumFlow(source, sink);
-
-        System.out.println("------------");
-        System.out.println("EDMONDS-KARP");
-        System.out.println("------------");
-
-        dumpFlow(ek);
-
-//        MaximumFlowAlgorithmTestBase.verify(source, sink, ek.getValue(), network, ek);
-    }
-
-    private void dumpFlow(MaximumFlow<Integer, DefaultWeightedEdge> maxFlow) {
+    private static void dumpFlow(MaximumFlow<Integer, DefaultWeightedEdge> maxFlow) {
+        System.out.println("\n=== FLOW ===\n");
         System.out.println("VALUE:  " + maxFlow.getValue());
 
         System.out.println("FLOW:   ");
@@ -266,8 +250,8 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
     }
 
     private static void dumpGraph(DirectedGraph<Integer, DefaultWeightedEdge> g, Integer source, Integer sink) {
-        List<Integer> heads = new ArrayList(g.edgeSet().size());
-        List<Integer> tails = new ArrayList(g.edgeSet().size());
+        List<Integer> heads = new ArrayList<Integer>(g.edgeSet().size());
+        List<Integer> tails = new ArrayList<Integer>(g.edgeSet().size());
 
         List<Double> weights = new ArrayList<Double>(g.edgeSet().size());
 
