@@ -3,7 +3,7 @@ package org.jgrapht.alg.flow;
 import com.sun.tools.javac.util.Pair;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.util.ExtensionManager.ExtensionFactory;
+import org.jgrapht.alg.util.Extension.ExtensionFactory;
 
 import java.util.*;
 

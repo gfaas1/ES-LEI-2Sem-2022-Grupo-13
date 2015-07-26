@@ -2,8 +2,8 @@ package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.alg.util.ExtensionManager;
-import org.jgrapht.alg.util.ExtensionManager.ExtensionFactory;
+import org.jgrapht.alg.util.Extension;
+import org.jgrapht.alg.util.Extension.ExtensionFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,15 +17,15 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
      */
     public static final double DEFAULT_EPSILON = 1e-9;
 
-    private ExtensionManager<V, ? extends VertexExtensionBase>  vXs;
-    private ExtensionManager<E, ? extends EdgeExtensionBase>    eXs;
+    private Extension<V, ? extends VertexExtensionBase> vXs;
+    private Extension<E, ? extends EdgeExtensionBase> eXs;
 
     /* package */ abstract DirectedGraph<V, E> getNetwork();
 
     <VE extends VertexExtensionBase, EE extends EdgeExtensionBase>
     void init(ExtensionFactory<VE> vertexExtensionFactory, ExtensionFactory<EE> edgeExtensionFactory) {
-        vXs = new ExtensionManager<V, VE>(vertexExtensionFactory);
-        eXs = new ExtensionManager<E, EE>(edgeExtensionFactory);
+        vXs = new Extension<V, VE>(vertexExtensionFactory);
+        eXs = new Extension<E, EE>(edgeExtensionFactory);
 
         buildInternal();
     }
@@ -103,7 +103,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
     }
 
 
-    /* package */ class VertexExtensionBase extends ExtensionManager.BaseExtension
+    /* package */ class VertexExtensionBase extends Extension.BaseExtension
     {
         private final List<? extends EdgeExtensionBase> outgoing = new ArrayList<EdgeExtensionBase>();
 
@@ -116,7 +116,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         double excess;
     }
 
-    /* package */ class EdgeExtensionBase extends ExtensionManager.BaseExtension {
+    /* package */ class EdgeExtensionBase extends Extension.BaseExtension {
 
         private VertexExtensionBase source;
         private VertexExtensionBase target;

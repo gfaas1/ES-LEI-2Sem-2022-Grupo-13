@@ -35,7 +35,7 @@
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.util.ExtensionManager.ExtensionFactory;
+import org.jgrapht.alg.util.Extension.ExtensionFactory;
 
 import java.util.*;
 

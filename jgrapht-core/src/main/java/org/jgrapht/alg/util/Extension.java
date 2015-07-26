@@ -3,7 +3,7 @@ package org.jgrapht.alg.util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExtensionManager<T, E> {
+public class Extension<T, E> {
     private ExtensionFactory<E> extensionFactory;
     private Map<T, E>           extensions = new HashMap<T, E>();
 
@@ -11,7 +11,7 @@ public class ExtensionManager<T, E> {
         E create();
     }
 
-    public ExtensionManager(ExtensionFactory<E> factory) {
+    public Extension(ExtensionFactory<E> factory) {
         this.extensionFactory = factory;
     }
 
