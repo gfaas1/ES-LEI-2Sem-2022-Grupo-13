@@ -67,6 +67,9 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
     private VertexExtension currentSource;  // current source vertex
     private VertexExtension currentSink;    // current sink vertex
 
+    private final ExtensionFactory<VertexExtension>   vertexExtensionsFactory;
+    private final ExtensionFactory<EdgeExtension>     edgeExtensionsFactory;
+
     class EdgeExtension extends EdgeExtensionBase { }
 
     class VertexExtension extends VertexExtensionBase {
@@ -99,20 +102,19 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
      */
     public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network, double epsilon)
     {
-        init(
-            new ExtensionFactory<VertexExtension>() {
-                @Override
-                public VertexExtension create() {
-                    return EdmondsKarpMaximumFlow.this.new VertexExtension();
-                }
-            },
-            new ExtensionFactory<EdgeExtension>() {
-                @Override
-                public EdgeExtension create() {
-                    return EdmondsKarpMaximumFlow.this.new EdgeExtension();
-                }
+        this.vertexExtensionsFactory = new ExtensionFactory<VertexExtension>() {
+            @Override
+            public VertexExtension create() {
+                return EdmondsKarpMaximumFlow.this.new VertexExtension();
             }
-        );
+        };
+
+        this.edgeExtensionsFactory = new ExtensionFactory<EdgeExtension>() {
+            @Override
+            public EdgeExtension create() {
+                return EdmondsKarpMaximumFlow.this.new EdgeExtension();
+            }
+        };
 
         if (network == null) {
             throw new NullPointerException("network is null");
@@ -130,8 +132,6 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
 
         this.network = network;
         this.epsilon = epsilon;
-
-        buildInternal();
     }
 
 
@@ -146,6 +146,8 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
      */
     public MaximumFlow<V, E> buildMaximumFlow(V source, V sink)
     {
+        super.init(vertexExtensionsFactory, edgeExtensionsFactory);
+
         if (!network.containsVertex(source)) {
             throw new IllegalArgumentException(
                 "invalid source (null or not from this network)");

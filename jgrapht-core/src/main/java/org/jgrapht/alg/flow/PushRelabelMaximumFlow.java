@@ -20,25 +20,29 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
 
     private DirectedGraph<V, E> network;
 
-    public PushRelabelMaximumFlow(DirectedGraph<V, E> network) {
-        this.network = network;
+    private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
+    private final ExtensionFactory<EdgeExtension>   edgeExtensionsFactory;
 
-        init(
-            new ExtensionFactory<VertexExtension>() {
-                @Override
-                public VertexExtension create() {
-                    return PushRelabelMaximumFlow.this.new VertexExtension();
-                }
-            },
-            new ExtensionFactory<EdgeExtension>() {
+    public PushRelabelMaximumFlow(DirectedGraph<V, E> network) {
+        this.network    = network;
+
+        this.vertexExtensionsFactory = new ExtensionFactory<VertexExtension>() {
+            @Override
+            public VertexExtension create() {
+                return PushRelabelMaximumFlow.this.new VertexExtension();
+            }
+        };
+
+        this.edgeExtensionsFactory = new ExtensionFactory<EdgeExtension>() {
                 @Override
                 public EdgeExtension create() {
                     return PushRelabelMaximumFlow.this.new EdgeExtension();
                 }
-            }
-        );
+        };
+    }
 
-        buildInternal();
+    void init() {
+        super.init(vertexExtensionsFactory, edgeExtensionsFactory);
     }
 
     @Override
@@ -83,6 +87,8 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
 
     @Override
     public MaximumFlow<V, E> buildMaximumFlow(V source, V sink) {
+        init();
+
         Queue<VertexExtension> active = new ArrayDeque<VertexExtension>();
 
         initialize(extendedVertex(source), extendedVertex(sink), active);

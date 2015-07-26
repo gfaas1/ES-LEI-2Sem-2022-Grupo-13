@@ -26,9 +26,11 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
     void init(ExtensionFactory<VE> vertexExtensionFactory, ExtensionFactory<EE> edgeExtensionFactory) {
         vXs = new ExtensionManager<V, VE>(vertexExtensionFactory);
         eXs = new ExtensionManager<E, EE>(edgeExtensionFactory);
+
+        buildInternal();
     }
 
-    protected void buildInternal()
+    private void buildInternal()
     {
         DirectedGraph<V, E> n = getNetwork();
 
