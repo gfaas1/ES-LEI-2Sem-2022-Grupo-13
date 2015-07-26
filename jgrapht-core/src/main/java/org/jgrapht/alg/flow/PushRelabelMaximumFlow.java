@@ -1,5 +1,7 @@
 package org.jgrapht.alg.flow;
 
+import com.sun.tools.javac.util.Pair;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.util.ExtensionManager.ExtensionFactory;
 
@@ -23,9 +25,95 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<EdgeExtension>   edgeExtensionsFactory;
 
+    // Label pruning
+
     private Map<Integer, Integer> labeling;
 
     boolean flowBack;
+
+    // Diagnostic
+
+    private static final boolean DIAGNOSTIC_ENABLED = true;
+
+    private class PushRelabelDiagnostic {
+
+        // Discharges
+        Map<Pair<V, V>, Integer> discharges = new HashMap<Pair<V, V>, Integer>();
+        long dischargesCounter = 0;
+
+        private void incrementDischarges(EdgeExtension ex) {
+            Pair<V, V> p = Pair.of(ex.getSource().prototype, ex.getTarget().prototype);
+            if (!discharges.containsKey(p))
+                discharges.put(p, 0);
+            discharges.put(p, discharges.get(p) + 1);
+
+            dischargesCounter++;
+        }
+
+        // Relabels
+        Map<Pair<Integer, Integer>, Integer> relabels = new HashMap<Pair<Integer, Integer>, Integer>();
+        long relabelsCounter = 0;
+
+        private void incrementRelabels(int from, int to) {
+            Pair<Integer, Integer> p = Pair.of(from, to);
+            if (!relabels.containsKey(p))
+                relabels.put(p, 0);
+            relabels.put(p, relabels.get(p) + 1);
+
+            relabelsCounter++;
+        }
+
+        void dump() {
+            Map<Integer, Integer> labels = new HashMap<Integer, Integer>();
+
+            for (V v : network.vertexSet()) {
+                VertexExtension vx = extendedVertex(v);
+
+                if (!labels.containsKey(vx.label)) {
+                    labels.put(vx.label, 0);
+                }
+
+                labels.put(vx.label, labels.get(vx.label) + 1);
+            }
+
+            System.out.println("LABELS  ");
+            System.out.println("------  ");
+            System.out.println(labels);
+
+            List<Map.Entry<Pair<Integer, Integer>, Integer>> relabelsSorted =
+                new ArrayList<Map.Entry<Pair<Integer, Integer>, Integer>>(relabels.entrySet());
+
+            Collections.sort(relabelsSorted, new Comparator<Map.Entry<Pair<Integer, Integer>, Integer>>() {
+                @Override
+                public int compare(Map.Entry<Pair<Integer, Integer>, Integer> o1, Map.Entry<Pair<Integer, Integer>, Integer> o2) {
+                    return -(o1.getValue() - o2.getValue());
+                }
+            });
+
+            System.out.println("RELABELS    ");
+            System.out.println("--------    ");
+            System.out.println("    Count:  " + relabelsCounter);
+            System.out.println("            " + relabelsSorted);
+
+            List<Map.Entry<Pair<V, V>, Integer>> dischargesSorted
+                = new ArrayList<Map.Entry<Pair<V, V>, Integer>>(discharges.entrySet());
+
+            Collections.sort(dischargesSorted, new Comparator<Map.Entry<Pair<V, V>, Integer>>() {
+                @Override
+                public int compare(Map.Entry<Pair<V, V>, Integer> one, Map.Entry<Pair<V, V>, Integer> other) {
+                    return -(one.getValue() - other.getValue());
+                }
+            });
+
+            System.out.println("DISCHARGES  ");
+            System.out.println("----------  ");
+            System.out.println("    Count:  " + dischargesCounter);
+            System.out.println("            " + dischargesSorted);
+        }
+    }
+
+    private PushRelabelDiagnostic diagnostic;
+
 
     public PushRelabelMaximumFlow(DirectedGraph<V, E> network) {
         this.network    = network;
@@ -63,12 +151,22 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         private boolean hasExcess() {
             return excess > 0;
         }
+
+        @Override
+        public String toString() {
+            return prototype.toString() + String.format(" { LBL: %d } ", label);
+        }
     }
 
     public class EdgeExtension extends EdgeExtensionBase {
 
         private boolean hasCapacity() {
-            return Math.abs(capacity - flow) > DEFAULT_EPSILON;
+            return compareFlowTo(capacity, flow) > 0;
+        }
+
+        @Override
+        public String toString() {
+            return prototype.toString() + String.format(" { F/CAP: %d / %d } ", flow, capacity);
         }
     }
 
@@ -116,6 +214,10 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                 }
             }
         }
+
+        // _DBG
+        if (DIAGNOSTIC_ENABLED)
+            System.out.println("INIT LABELING " + labeling);
     }
 
     @Override
@@ -165,6 +267,10 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             maxFlowValue += maxFlow.get(e);
         }
 
+        // _DBG
+        if (DIAGNOSTIC_ENABLED)
+            diagnostic.dump();
+
         return new VerbatimMaximumFlow<V, E>(maxFlowValue, maxFlow);
     }
 
@@ -180,6 +286,10 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                     min = ux.label;
             }
         }
+
+        // _DBG
+        if (DIAGNOSTIC_ENABLED)
+            diagnostic.incrementRelabels(vx.label, min + 1);
 
         if (LABEL_PRUNE_ENABLED) {
             assert (labeling.get(vx.label) > 0);
@@ -204,8 +314,14 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             labeling.put(l, labeling.get(l) + 1);
     }
 
+
     private boolean discharge(EdgeExtension ex) {
         VertexExtension ux = ex.getSource();
+
+        // _DBG
+        if (DIAGNOSTIC_ENABLED)
+            diagnostic.incrementDischarges(ex);
+
         pushFlowThrough(ex, Math.min(ux.excess, ex.capacity - ex.flow));
         return !ux.hasExcess();
     }
@@ -218,10 +334,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         assert(ex.getSource().excess >= 0.0 && ex.getTarget().excess >= 0);
 
         EdgeExtension iex = ex.getInverse();
-
-        // _DBG
-//        System.out.println("{ " + (ex.prototype == null ? "" : ex.prototype)  + " } F/CAP " + ex.flow + " / " + ex.capacity +
-//                                                                                " IF/ICAP " + ex.getInverse().flow + " / " + ex.getInverse().capacity+ " SUR " + f);
 
         // _DBG
         assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
