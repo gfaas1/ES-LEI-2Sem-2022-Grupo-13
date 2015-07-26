@@ -131,6 +131,9 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                 return PushRelabelMaximumFlow.this.new EdgeExtension();
             }
         };
+
+        if (DIAGNOSTIC_ENABLED)
+            this.diagnostic = new PushRelabelDiagnostic();
     }
 
     void init() {
