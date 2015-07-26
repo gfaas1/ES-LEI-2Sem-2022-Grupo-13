@@ -153,6 +153,26 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         double flow;
     }
 
+    protected void pushFlowThrough(EdgeExtensionBase ex, double f) {
+        EdgeExtensionBase iex = ex.<EdgeExtensionBase>getInverse();
+
+        // _DBG
+        assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
+
+        if (compareFlowTo(iex.flow, f) == -1) {
+            double d = f - iex.flow;
+
+            ex.flow      += d;
+            ex.capacity  -= iex.flow;
+
+            iex.flow      = 0;
+            iex.capacity += d;
+        } else {
+            ex.capacity -= f;
+            iex.flow    -= f;
+        }
+    }
+
     protected Map<E, Double> composeFlow() {
         Map<E, Double> maxFlow = new HashMap<E, Double>();
         for (E e : getNetwork().edgeSet()) {
@@ -161,5 +181,13 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         }
 
         return maxFlow;
+    }
+
+    protected int compareFlowTo(double flow, double val) {
+        double diff = flow - val;
+        if (Math.abs(diff) < DEFAULT_EPSILON)
+            return 0;
+        else
+            return diff < 0 ? -1 : 1;
     }
 }

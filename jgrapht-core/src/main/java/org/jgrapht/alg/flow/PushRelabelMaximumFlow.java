@@ -329,38 +329,14 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         return !ux.hasExcess();
     }
 
-    private void pushFlowThrough(EdgeExtension ex, double f) {
+    protected void pushFlowThrough(EdgeExtension ex, double f) {
         ex.getSource().excess -= f;
         ex.getTarget().excess += f;
 
         // _DBG
         assert(ex.getSource().excess >= 0.0 && ex.getTarget().excess >= 0);
 
-        EdgeExtension iex = ex.getInverse();
-
-        // _DBG
-        assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
-
-        if (compareFlowTo(iex.flow, f) == -1) {
-            double d = f - iex.flow;
-
-            ex.flow      += d;
-            ex.capacity  -= iex.flow;
-
-            iex.flow      = 0;
-            iex.capacity += d;
-        } else {
-            ex.capacity -= f;
-            iex.flow    -= f;
-        }
-    }
-
-    private int compareFlowTo(double flow, double val) {
-        double diff = flow - val;
-        if (Math.abs(diff) < DEFAULT_EPSILON)
-            return 0;
-        else
-            return diff < 0 ? -1 : 1;
+        super.pushFlowThrough(ex, f);
     }
 
     private boolean isAdmissible(EdgeExtension e) {

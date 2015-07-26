@@ -256,12 +256,8 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
                 Math.min(ex.getSource().excess, ex.capacity - ex.flow);
 
             if (augmentFlowAlongInternal(deltaFlow, ex.<VertexExtension>getSource(), seen)) {
-                ex.flow              += deltaFlow;
-                ex.getInverse().flow -= deltaFlow;
+                pushFlowThrough(ex, deltaFlow);
             }
-
-            // _DBG
-            assert (ex.flow + DEFAULT_EPSILON <= ex.capacity);
         }
     }
 
@@ -275,8 +271,7 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
 
         EdgeExtension prev = node.lastArcs.get(0);
         if (augmentFlowAlongInternal(deltaFlow, prev.<VertexExtension>getSource(), seen)) {
-            prev.flow               += deltaFlow;
-            prev.getInverse().flow  -= deltaFlow;
+            pushFlowThrough(prev, deltaFlow);
             return true;
         }
 
