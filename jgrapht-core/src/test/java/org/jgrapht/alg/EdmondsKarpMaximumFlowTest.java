@@ -171,7 +171,7 @@ public class EdmondsKarpMaximumFlowTest
             EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
                 new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(wg);
 
-            Object[] vs = wg.vertexSet().stream().toArray();
+            Object[] vs = wg.vertexSet().toArray();
 
             solver.buildMaximumFlow((Integer) vs[0], (Integer) vs[vs.length - 1]);
         }
