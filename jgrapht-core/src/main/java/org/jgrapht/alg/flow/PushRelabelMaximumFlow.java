@@ -3,9 +3,7 @@ package org.jgrapht.alg.flow;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.util.ExtensionManager.ExtensionFactory;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * <p><a href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm">
@@ -18,10 +16,16 @@ import java.util.Queue;
  */
 public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> {
 
+    private static final boolean LABEL_PRUNE_ENABLED = true;
+
     private DirectedGraph<V, E> network;
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<EdgeExtension>   edgeExtensionsFactory;
+
+    private Map<Integer, Integer> labeling;
+
+    boolean flowBack;
 
     public PushRelabelMaximumFlow(DirectedGraph<V, E> network) {
         this.network    = network;
@@ -34,15 +38,18 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         };
 
         this.edgeExtensionsFactory = new ExtensionFactory<EdgeExtension>() {
-                @Override
-                public EdgeExtension create() {
-                    return PushRelabelMaximumFlow.this.new EdgeExtension();
-                }
+            @Override
+            public EdgeExtension create() {
+                return PushRelabelMaximumFlow.this.new EdgeExtension();
+            }
         };
     }
 
     void init() {
         super.init(vertexExtensionsFactory, edgeExtensionsFactory);
+
+        this.labeling = new HashMap<Integer, Integer>();
+        this.flowBack = false;
     }
 
     @Override
@@ -69,19 +76,45 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         source.label    = network.vertexSet().size();
         source.excess   = Double.POSITIVE_INFINITY;
 
-        for (V v : network.vertexSet()) {
-            if (v == source.prototype) {
-                // NOP
-            } else {
-                extendedVertex(v).label = 0;
-            }
-        }
+        label(source, sink);
 
         for (EdgeExtension ex : source.<EdgeExtension>getOutgoing()) {
             pushFlowThrough(ex, ex.capacity);
 
             if (ex.getTarget().prototype != sink.prototype)
                 active.offer(ex.<VertexExtension>getTarget());
+        }
+    }
+
+    private void label(VertexExtension source, VertexExtension sink) {
+        Set<VertexExtension>    seen = new HashSet<VertexExtension>();
+        Queue<VertexExtension>  q    = new ArrayDeque<VertexExtension>();
+
+        q.offer(sink);
+
+        sink.label = 0;
+
+        seen.add(sink);
+        seen.add(source);
+
+        while (!q.isEmpty()) {
+            VertexExtension ux = q.poll();
+            for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
+                VertexExtension vx = ex.getTarget();
+                if (!seen.contains(vx)) {
+                    seen.add(vx);
+
+                    vx.label = ux.label + 1;
+                    q.add(vx);
+
+                    if (LABEL_PRUNE_ENABLED) {
+                        if (!labeling.containsKey(vx.label))
+                            labeling.put(vx.label, 1);
+                        else
+                            labeling.put(vx.label, labeling.get(vx.label) + 1);
+                    }
+                }
+            }
         }
     }
 
@@ -113,6 +146,15 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                     relabel(ux);
                 else
                     break;
+
+                // Check whether we still have any vertices with the label '1'
+                if (LABEL_PRUNE_ENABLED) {
+                    if (!flowBack && !labeling.containsKey(0) && !labeling.containsKey(1)) {
+                        // This supposed to drastically improve performance
+                        extendedVertex(source).label = Collections.max(labeling.keySet()) + 1;
+                        flowBack = true;
+                    }
+                }
             }
         }
 
@@ -139,10 +181,27 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             }
         }
 
+        if (LABEL_PRUNE_ENABLED) {
+            assert (labeling.get(vx.label) > 0);
+            updateLabeling(vx, min + 1);
+        }
+
         // Sanity
         if (min != Integer.MAX_VALUE) {
             vx.label = min + 1;
         }
+    }
+
+    private void updateLabeling(VertexExtension vx, int l) {
+        if (labeling.get(vx.label) == 1)
+            labeling.remove(vx.label);
+        else
+            labeling.put(vx.label, labeling.get(vx.label) - 1);
+
+        if (!labeling.containsKey(l))
+            labeling.put(l, 1);
+        else
+            labeling.put(l, labeling.get(l) + 1);
     }
 
     private boolean discharge(EdgeExtension ex) {
