@@ -22,8 +22,10 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
     public static final int PERF_BENCHMARK_VERTICES_COUNT   = 1000;
     public static final int PERF_BENCHMARK_EDGES_COUNT      = 100000;
 
-    @State(Scope.Thread)
+    @State(Scope.Benchmark)
     private static abstract class RandomGraphBenchmarkBase {
+
+        public static final long SEED = 1446523573696201013l;
 
         private MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver;
 
@@ -35,7 +37,7 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
         @Setup
         public void setup() {
             RandomGraphGenerator<Integer, DefaultWeightedEdge> rgg
-                = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT);
+                = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network
                 = new SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>(new EdgeFactory<Integer, DefaultWeightedEdge>() {
