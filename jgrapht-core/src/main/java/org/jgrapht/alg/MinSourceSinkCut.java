@@ -36,6 +36,7 @@ package org.jgrapht.alg;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.flow.EdmondsKarpMaximumFlow;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.MaximumFlow;
 
 import java.util.*;
