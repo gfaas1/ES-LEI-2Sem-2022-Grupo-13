@@ -41,39 +41,45 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
                 V v = n.getEdgeTarget(e);
 
                 VertexExtensionBase vx = extendedVertex(v);
-                EdgeExtensionBase   ex = extendedEdge(e);
 
-                ex.source    = ux;
-                ex.target    = vx;
-                ex.capacity  = n.getEdgeWeight(e);
-                ex.prototype = e;
-
-                EdgeExtensionBase iex = createInverse(ex);
+                EdgeExtensionBase ex    = createEdge(ux, vx, e, n.getEdgeWeight(e));
+                EdgeExtensionBase iex   = createInverse(ex, n);
 
                 ux.getOutgoing().add(ex);
-                vx.getOutgoing().add(iex);
+
+                // NB: Any better?
+                if (iex.prototype == null)
+                    vx.getOutgoing().add(iex);
             }
         }
     }
 
-    private EdgeExtensionBase createInverse(EdgeExtensionBase ex) {
-        EdgeExtensionBase iex = null;
+    private EdgeExtensionBase createEdge(VertexExtensionBase source, VertexExtensionBase target, E e, double weight) {
+        EdgeExtensionBase ex = extendedEdge(e);
 
-        try {
+        ex.source    = source;
+        ex.target    = target;
+        ex.capacity  = weight;
+        ex.prototype = e;
 
+        return ex;
+    }
+
+    private EdgeExtensionBase createInverse(EdgeExtensionBase ex, DirectedGraph<V, E> n) {
+        EdgeExtensionBase iex;
+
+        if (n.containsEdge(ex.target.prototype, ex.source.prototype)) {
+            E ie = n.getEdge(ex.target.prototype, ex.source.prototype);
+            iex = createEdge(ex.target, ex.source, ie, n.getEdgeWeight(ie));
+        } else {
             iex = eXs.createInstance();
 
             iex.source = ex.target;
             iex.target = ex.source;
-
-            ex.inverse  = iex;
-            iex.inverse = ex;
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
         }
+
+        ex.inverse  = iex;
+        iex.inverse = ex;
 
         return iex;
     }
