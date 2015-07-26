@@ -34,10 +34,15 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -57,20 +62,19 @@ import org.jgrapht.graph.*;
 public class RandomGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    
-
     private static long seedUniquifier = 8682522807148012L;
-
-    
 
     protected int numOfVertexes;
     protected int numOfEdges;
     protected Random randomizer;
     private long randomizerSeed;
 
-    
-
     public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges)
+    {
+        this(aNumOfVertexes, aNumOfEdges, chooseRandomSeedOnce());
+    }
+
+    public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges, long seed)
     {
         if ((aNumOfVertexes < 0) || (aNumOfEdges < 0)) {
             throw new IllegalArgumentException("must be non-negative");
@@ -78,7 +82,7 @@ public class RandomGraphGenerator<V, E>
         this.numOfVertexes = aNumOfVertexes;
         this.numOfEdges = aNumOfEdges;
 
-        this.randomizerSeed = chooseRandomSeedOnce();
+        this.randomizerSeed = seed;
         this.randomizer = new Random(this.randomizerSeed);
     }
 
@@ -104,6 +108,10 @@ public class RandomGraphGenerator<V, E>
     private void resetRandomSeed()
     {
         this.randomizer.setSeed(this.randomizerSeed);
+    }
+
+    public long getRandomSeed() {
+        return this.randomizerSeed;
     }
 
     /**
