@@ -1,9 +1,8 @@
 package org.jgrapht.alg.flow;
 
-import com.sun.tools.javac.util.Pair;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.util.Extension.ExtensionFactory;
+import org.jgrapht.alg.util.Pair;
 
 import java.util.*;
 
