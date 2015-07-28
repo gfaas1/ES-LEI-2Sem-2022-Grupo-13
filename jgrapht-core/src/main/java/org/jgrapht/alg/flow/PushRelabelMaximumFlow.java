@@ -32,7 +32,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
 
     // Diagnostic
 
-    private static final boolean DIAGNOSTIC_ENABLED = true;
+    private static final boolean DIAGNOSTIC_ENABLED = false;
 
     private class PushRelabelDiagnostic {
 
