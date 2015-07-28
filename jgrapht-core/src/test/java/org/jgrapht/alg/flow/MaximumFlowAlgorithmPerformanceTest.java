@@ -61,7 +61,7 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
 
             solver = createSolver(network);
 
-            Object[] vs = network.vertexSet().stream().toArray();
+            Object[] vs = network.vertexSet().toArray();
 
             source  = (Integer) vs[0];
             sink    = (Integer) vs[vs.length - 1];

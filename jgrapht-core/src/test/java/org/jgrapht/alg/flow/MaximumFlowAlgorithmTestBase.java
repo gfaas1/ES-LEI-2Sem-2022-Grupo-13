@@ -218,7 +218,7 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
 
         System.out.println("\n=== GENERATED ===\n");
 
-        Object[] vs = network.vertexSet().stream().toArray();
+        Object[] vs = network.vertexSet().toArray();
 
         Integer source = (Integer) vs[0];
         Integer sink = (Integer) vs[vs.length - 1];
