@@ -77,7 +77,6 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         List<? extends V> S,
         List<? extends V> T)
     {
-
         // Validate graph being complete bipartite with equally-sized partitions
         if (S.size() != T.size()) {
             throw new IllegalArgumentException(
@@ -95,12 +94,14 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         firstPartition = S;
         secondPartition = T;
 
-        // Expected behaviour for an empty graph is to return an empty set, so we check this last
+        // Expected behaviour for an empty graph is to return an empty set, so
+        // we check this last
         if (G.vertexSet().isEmpty()) {
-            matching = new int[]{};
+            matching = new int[] {};
         } else {
             matching =
-                    new KuhnMunkresMatrixImplementation<V, E>(G, S, T).buildMatching();
+                new KuhnMunkresMatrixImplementation<V, E>(G, S, T)
+                .buildMatching();
         }
     }
 

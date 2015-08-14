@@ -209,7 +209,7 @@ public class DOTImporterTest extends TestCase
                      + "gfdgfdsgfdsg\n"
                      + "jdhgkjfdshgsjkhl\n";
 
-      testGarbage(input, "unknown graph type");
+      testGarbage(input, "Invalid Header");
    }
 
    public void testGarbageStringInvalidFirstLine()
@@ -217,14 +217,14 @@ public class DOTImporterTest extends TestCase
       String input = "jsfhgkjdsfhgkfds\n"
                      + "fdsgfdsgfd\n";
 
-      testGarbage(input, "not enough parts on first line");
+      testGarbage(input, "Invalid Header");
    }
 
    public void testGarbageStringNotEnoughLines()
    {
       String input = "jsfhgkjdsfhgkfds\n";
 
-      testGarbage(input, "Dot string was invalid");
+      testGarbage(input, "Invalid Header");
    }
 
    public void testIncompatibleGraphMulti() {
@@ -298,6 +298,66 @@ public class DOTImporterTest extends TestCase
          }
       }
 
+   }
+
+   public void testParametersWithSemicolons() throws ImportException {
+      String input = "graph G {\n  1 [ label=\"this label; contains a semi colon\" ];\n}\n";
+      Multigraph<TestVertex, DefaultEdge> result
+            = new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+      DOTImporter<TestVertex, DefaultEdge> importer
+            = new DOTImporter<TestVertex, DefaultEdge>(
+            new VertexProvider<TestVertex>() {
+               @Override
+               public TestVertex buildVertex(String label,
+                                             Map<String, String> attributes) {
+                  return new TestVertex(label, attributes);
+               }
+            },
+            new EdgeProvider<TestVertex, DefaultEdge>() {
+               @Override
+               public DefaultEdge buildEdge(TestVertex from,
+                                            TestVertex to,
+                                            String label,
+                                            Map<String, String> attributes) {
+                  return new DefaultEdge();
+               }
+            }
+      );
+
+
+      importer.read(input, result);
+      Assert.assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
+      Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+   }
+
+   public void testNoLineEndBetweenNodes() throws ImportException {
+      String input = "graph G {\n  1 [ label=\"this label; contains a semi colon\" ];  2 [ label=\"wibble\" ] \n}\n";
+      Multigraph<TestVertex, DefaultEdge> result
+            = new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+      DOTImporter<TestVertex, DefaultEdge> importer
+            = new DOTImporter<TestVertex, DefaultEdge>(
+            new VertexProvider<TestVertex>() {
+               @Override
+               public TestVertex buildVertex(String label,
+                                             Map<String, String> attributes) {
+                  return new TestVertex(label, attributes);
+               }
+            },
+            new EdgeProvider<TestVertex, DefaultEdge>() {
+               @Override
+               public DefaultEdge buildEdge(TestVertex from,
+                                            TestVertex to,
+                                            String label,
+                                            Map<String, String> attributes) {
+                  return new DefaultEdge();
+               }
+            }
+      );
+
+
+      importer.read(input, result);
+      Assert.assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
+      Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
    }
 
    public void testNonConfiguredUpdate() {

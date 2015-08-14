@@ -192,7 +192,7 @@ public class NaiveLcaFinder<V, E>
      * passed in to give predictable results.
      *
      * @param x set containing vertex
-     * @param y  set containing vertex, which may be ordered to give predictable
+     * @param y set containing vertex, which may be ordered to give predictable
      * results
      *
      * @return the first element of y that is also in x, or null if no such
