@@ -33,11 +33,9 @@
  */
 package org.jgrapht.alg;
 
-import java.util.Arrays;
-import java.util.BitSet;
+import java.util.*;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 public class TransitiveReductionTest {
     @Test
@@ -79,13 +77,16 @@ public class TransitiveReductionTest {
             {
                 System.arraycopy(matrix, 0, path_matrix, 0, matrix.length);
 
-                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(path_matrix);
+                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(
+                        path_matrix);
 
-                TransitiveReduction.transformToPathMatrix(pathMatrixAsBitSetArray);
+                TransitiveReduction
+                        .transformToPathMatrix(pathMatrixAsBitSetArray);
 
                 path_matrix = asIntArray(pathMatrixAsBitSetArray);
             }
-            // System.out.println(Arrays.deepToString(path_matrix) + " path matrix");
+            // System.out.println(Arrays.deepToString(path_matrix) + " path
+            // matrix");
 
             Assert.assertArrayEquals(expected_path_matrix, path_matrix);
         }
@@ -94,18 +95,24 @@ public class TransitiveReductionTest {
         {
             int[][] transitively_reduced_matrix = new int[n][n];
             {
-                System.arraycopy(path_matrix, 0, transitively_reduced_matrix, 0, matrix.length);
+                System.arraycopy(path_matrix, 0, transitively_reduced_matrix, 0,
+                        matrix.length);
 
-                final BitSet[] transitivelyReducedMatrixAsBitSetArray = asBitSetArray(transitively_reduced_matrix);
+                final BitSet[] transitivelyReducedMatrixAsBitSetArray = asBitSetArray(
+                        transitively_reduced_matrix);
 
-                TransitiveReduction.transitiveReduction(transitivelyReducedMatrixAsBitSetArray);
+                TransitiveReduction.transitiveReduction(
+                        transitivelyReducedMatrixAsBitSetArray);
 
-                transitively_reduced_matrix = asIntArray(transitivelyReducedMatrixAsBitSetArray);
+                transitively_reduced_matrix = asIntArray(
+                        transitivelyReducedMatrixAsBitSetArray);
             }
 
-            // System.out.println(Arrays.deepToString(transitively_reduced_matrix) + " transitive reduction");
+            // System.out.println(Arrays.deepToString(transitively_reduced_matrix)
+            // + " transitive reduction");
 
-            Assert.assertArrayEquals(expected_transitively_reduced_matrix, transitively_reduced_matrix);
+            Assert.assertArrayEquals(expected_transitively_reduced_matrix,
+                    transitively_reduced_matrix);
         }
     }
 

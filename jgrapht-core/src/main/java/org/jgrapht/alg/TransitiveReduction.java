@@ -33,20 +33,20 @@
  */
 package org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
 
 /**
- * An implementation of Harry Hsu's 
+ * An implementation of Harry Hsu's
  * <a href="https://en.wikipedia.org/wiki/Transitive_reduction">transitive
  * reduction algorithm</a>.
  * 
  * <p>
- * cf. <a href="http://projects.csail.mit.edu/jacm/References/hsu1975:11.html">Harry Hsu. "An algorithm for finding a minimal equivalent graph of a digraph.", Journal of the ACM, 22(1):11-16, January 1975.</a> 
+ * cf.
+ * <a href="http://projects.csail.mit.edu/jacm/References/hsu1975:11.html">Harry
+ * Hsu. "An algorithm for finding a minimal equivalent graph of a digraph.",
+ * Journal of the ACM, 22(1):11-16, January 1975.</a>
  * </p>
  * 
  * <p>
@@ -127,20 +127,21 @@ public class TransitiveReduction<V, E> {
      * input parameter.
      * 
      * <p>
-     * You may want to clone the graph before, as transitive edges will be pitilessly
-     * removed.
+     * You may want to clone the graph before, as transitive edges will be
+     * pitilessly removed.
      * <p>
      * 
      * <p>
      * e.g.
      * 
      * <pre>
-     * {@code
-     * DirectedGraph<V, T> soonToBePrunedDirectedGraph;
+     * {
+     *     &#64;code
+     *     DirectedGraph<V, T> soonToBePrunedDirectedGraph;
      * 
-     * new TransitiveReduction<V, T>().reduce(soonToBePrunedDirectedGraph);
+     *     new TransitiveReduction<V, T>().reduce(soonToBePrunedDirectedGraph);
      * 
-     * // pruned !
+     *     // pruned !
      * }
      * </pre>
      * </p>
@@ -190,7 +191,8 @@ public class TransitiveReduction<V, E> {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (!transitivelyReducedMatrix[i].get(j)) {
-                    directedGraph.removeEdge(directedGraph.getEdge(vertices.get(i), vertices.get(j)));
+                    directedGraph.removeEdge(directedGraph
+                            .getEdge(vertices.get(i), vertices.get(j)));
                 }
             }
         }
