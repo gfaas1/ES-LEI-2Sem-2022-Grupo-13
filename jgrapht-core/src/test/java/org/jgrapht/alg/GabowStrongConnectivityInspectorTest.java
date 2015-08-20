@@ -124,7 +124,7 @@ public class GabowStrongConnectivityInspectorTest
             actualSets.add(sg.vertexSet());
 
             StrongConnectivityInspector<String, DefaultEdge> ci =
-                    new GabowStrongConnectivityInspector<>(sg);
+                    new GabowStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
 
