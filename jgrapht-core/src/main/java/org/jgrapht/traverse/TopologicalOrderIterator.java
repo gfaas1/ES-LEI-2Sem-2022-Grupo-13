@@ -41,6 +41,7 @@ package org.jgrapht.traverse;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
 import org.jgrapht.util.*;
 
 
@@ -64,7 +65,7 @@ import org.jgrapht.util.*;
  * that, nor to fail-fast; the results with cyclic input (including self-loops)
  * or concurrent modifications are undefined. To precheck a graph for cycles,
  * consider using {@link org.jgrapht.alg.CycleDetector} or {@link
- * org.jgrapht.alg.StrongConnectivityInspector}.</p>
+ * KosarajuStrongConnectivityInspector}.</p>
  *
  * @author Marden Neubert
  * @since Dec 18, 2004

@@ -132,8 +132,8 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
             throw new IllegalArgumentException("Null graph.");
         }
         initState();
-        StrongConnectivityInspector<V, E> inspector =
-            new StrongConnectivityInspector<V, E>(graph);
+        KosarajuStrongConnectivityInspector<V, E> inspector =
+            new KosarajuStrongConnectivityInspector<V, E>(graph);
         List<Set<V>> sccs = inspector.stronglyConnectedSets();
         for (Set<V> scc : sccs) {
             int maxInDegree = -1;

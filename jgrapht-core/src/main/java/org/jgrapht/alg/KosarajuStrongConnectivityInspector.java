@@ -40,6 +40,7 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.StrongConnectivityInspector;
 import org.jgrapht.graph.*;
 
 
@@ -51,14 +52,14 @@ import org.jgrapht.graph.*;
  *
  * <p>Unlike {@link org.jgrapht.alg.ConnectivityInspector}, this class does not
  * implement incremental inspection. The full algorithm is executed at the first
- * call of {@link StrongConnectivityInspector#stronglyConnectedSets()} or {@link
- * StrongConnectivityInspector#isStronglyConnected()}.</p>
+ * call of {@link KosarajuStrongConnectivityInspector#stronglyConnectedSets()} or {@link
+ * KosarajuStrongConnectivityInspector#isStronglyConnected()}.</p>
  *
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
  */
-public class StrongConnectivityInspector<V, E>
+public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnectivityInspector<V,E>
 {
     
 
@@ -86,7 +87,7 @@ public class StrongConnectivityInspector<V, E>
      *
      * @throws IllegalArgumentException
      */
-    public StrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
+    public KosarajuStrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
     {
         if (directedGraph == null) {
             throw new IllegalArgumentException("null not allowed for graph!");
@@ -181,7 +182,7 @@ public class StrongConnectivityInspector<V, E>
      * u and v are contained in the strongly connected component.</p>
      *
      * <p>NOTE: Calling this method will first execute {@link
-     * StrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
+     * KosarajuStrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
      * subgraphs, use that method.</p>
      *
      * @return a list of subgraphs representing the strongly connected
@@ -299,18 +300,12 @@ public class StrongConnectivityInspector<V, E>
 
         private boolean isDiscovered()
         {
-            if ((bitfield & 1) == 1) {
-                return true;
-            }
-            return false;
+            return (bitfield & 1) == 1;
         }
 
         private boolean isFinished()
         {
-            if ((bitfield & 2) == 2) {
-                return true;
-            }
-            return false;
+            return (bitfield & 2) == 2;
         }
 
         private void setDiscovered(boolean discovered)

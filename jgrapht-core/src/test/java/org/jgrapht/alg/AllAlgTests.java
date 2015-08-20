@@ -52,6 +52,7 @@ import org.junit.runners.*;
     BronKerboschCliqueFinderTest.class,
     ChromaticNumberTest.class,
     ConnectivityInspectorTest.class,
+    GabowStrongConnectivityInspectorTest.class,
     CycleDetectorTest.class,
     DijkstraShortestPathTest.class,
     EdmondsBlossomShrinkingTest.class,

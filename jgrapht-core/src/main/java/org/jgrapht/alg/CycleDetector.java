@@ -119,8 +119,8 @@ public class CycleDetector<V, E>
     {
         // ProbeIterator can't be used to handle this case,
         // so use StrongConnectivityInspector instead.
-        StrongConnectivityInspector<V, E> inspector =
-            new StrongConnectivityInspector<V, E>(graph);
+        KosarajuStrongConnectivityInspector<V, E> inspector =
+            new KosarajuStrongConnectivityInspector<V, E>(graph);
         List<Set<V>> components = inspector.stronglyConnectedSets();
 
         // A vertex participates in a cycle if either of the following is
