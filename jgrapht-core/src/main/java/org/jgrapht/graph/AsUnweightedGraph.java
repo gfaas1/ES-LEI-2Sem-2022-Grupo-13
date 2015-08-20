@@ -91,7 +91,10 @@ public class AsUnweightedGraph<V, E>
      */
     @Override public double getEdgeWeight(E e)
     {
-        return WeightedGraph.DEFAULT_EDGE_WEIGHT;
+        if (e == null)
+            throw new NullPointerException();
+        else
+            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
     }
 }
 

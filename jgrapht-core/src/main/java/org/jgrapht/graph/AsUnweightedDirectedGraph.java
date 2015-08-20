@@ -58,21 +58,13 @@ import org.jgrapht.*;
  * graph is serializable.</p>
  *
  * @author Lucas J. Scharenbroich
+ * @author Joris Kinable
  * @since Sep 7, 2007
  */
 public class AsUnweightedDirectedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable,
-        DirectedGraph<V, E>
+    extends AsUnweightedGraph<V, E>
+    implements DirectedGraph<V, E>
 {
-    
-
-    /**
-     */
-    private static final long serialVersionUID = -4320818446777715312L;
-
-    
-
     /**
      * Constructor for AsUnweightedGraph.
      *
@@ -84,19 +76,6 @@ public class AsUnweightedDirectedGraph<V, E>
         super(g);
     }
 
-    
-
-    /**
-     * @see Graph#getEdgeWeight
-     */
-    @Override public double getEdgeWeight(E e)
-    {
-        if (e == null) {
-            throw new NullPointerException();
-        } else {
-            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
-        }
-    }
 }
 
 // End AsUnweightedDirectedGraph.java
