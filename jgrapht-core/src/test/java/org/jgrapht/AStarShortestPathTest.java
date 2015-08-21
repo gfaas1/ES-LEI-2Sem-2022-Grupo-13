@@ -91,7 +91,7 @@ public class AStarShortestPathTest extends TestCase{
 
     public void testLabyrinth1(){
         this.readLabyrinth(labyrinth1);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<>(graph);
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<Node, DefaultWeightedEdge>(graph);
         GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNotNull(path);
         assertEquals((int)path.getWeight(), 47);
@@ -106,7 +106,7 @@ public class AStarShortestPathTest extends TestCase{
 
     public void testLabyrinth2(){
         this.readLabyrinth(labyrinth2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<>(graph);
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<Node, DefaultWeightedEdge>(graph);
         GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNull(path);
     }
@@ -125,7 +125,7 @@ public class AStarShortestPathTest extends TestCase{
         Graphs.addEdge(multigraph,n2,n3, 7.0);
         Graphs.addEdge(multigraph,n2,n3, 9);
         Graphs.addEdge(multigraph,n2,n3, 2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<>(multigraph);
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<Node, DefaultWeightedEdge>(multigraph);
         GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(n1, n3, new ManhattanDistance());
         assertNotNull(path);
         assertEquals((int)path.getWeight(), 6);
