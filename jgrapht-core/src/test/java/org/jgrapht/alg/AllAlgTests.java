@@ -36,6 +36,7 @@
  */
 package org.jgrapht.alg;
 
+import org.jgrapht.AStarShortestPathTest;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -46,6 +47,7 @@ import org.junit.runners.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    AStarShortestPathTest.class,
     BellmanFordShortestPathTest.class,
     BiconnectivityInspectorTest.class,
     BlockCutpointGraphTest.class,
