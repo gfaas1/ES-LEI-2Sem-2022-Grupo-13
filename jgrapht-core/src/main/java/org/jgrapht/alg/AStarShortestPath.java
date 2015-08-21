@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -------------------------
- * EdmondsBlossomShrinkingTest.java
+ * AStarShortestPath.java
  * -------------------------
  * (C) Copyright 2012-2012, by Alejandro Ramon Lopez del Huerto and Contributors.
  *
