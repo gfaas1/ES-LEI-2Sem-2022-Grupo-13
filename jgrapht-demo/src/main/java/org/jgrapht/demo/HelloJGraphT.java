@@ -109,7 +109,7 @@ public final class HelloJGraphT
     }
 
     /**
-     * Craete a toy graph based on String objects.
+     * Create a toy graph based on String objects.
      *
      * @return a graph based on String objects.
      */
