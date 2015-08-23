@@ -294,9 +294,6 @@ public final class EdmondsKarpMaximumFlow<V, E> implements MaximumFlowAlgorithm<
                 lastArc.flow += deltaFlow;
                 lastArc.reversed.flow -= deltaFlow;
             }
-
-            // _DBG
-            assert (lastArc.flow + DEFAULT_EPSILON <= lastArc.capacity);
         }
     }
 
