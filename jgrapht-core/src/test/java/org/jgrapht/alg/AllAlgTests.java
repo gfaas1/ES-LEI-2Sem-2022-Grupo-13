@@ -52,7 +52,6 @@ import org.junit.runners.*;
     BronKerboschCliqueFinderTest.class,
     ChromaticNumberTest.class,
     ConnectivityInspectorTest.class,
-    GabowStrongConnectivityInspectorTest.class,
     CycleDetectorTest.class,
     DijkstraShortestPathTest.class,
     EdmondsBlossomShrinkingTest.class,
@@ -71,6 +70,7 @@ import org.junit.runners.*;
     NaiveLcaFinderTest.class,
     NeighborIndexTest.class,
     StoerWagnerMinimumCutTest.class,
+    StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class,
     VertexCoversTest.class
