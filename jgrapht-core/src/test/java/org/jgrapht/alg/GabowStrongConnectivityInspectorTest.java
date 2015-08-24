@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.interfaces.StrongConnectivityInspector;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.generate.RingGraphGenerator;
 import org.jgrapht.graph.*;
 
@@ -93,7 +93,7 @@ public class GabowStrongConnectivityInspectorTest
 
         g.addEdge(V3, V4); // only weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
                 new GabowStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -123,7 +123,7 @@ public class GabowStrongConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                     new GabowStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -150,7 +150,7 @@ public class GabowStrongConnectivityInspectorTest
         g.addEdge(V4, V3); // only weakly connected
         g.addEdge(V3, V2); // only weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
                 new GabowStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -180,7 +180,7 @@ public class GabowStrongConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                     new GabowStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -209,7 +209,7 @@ public class GabowStrongConnectivityInspectorTest
         g.addEdge(V2, V4);
         g.addEdge(V3, V4); // weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
                 new GabowStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -238,7 +238,7 @@ public class GabowStrongConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                     new GabowStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -271,7 +271,7 @@ public class GabowStrongConnectivityInspectorTest
                 },
                 null);
 
-        StrongConnectivityInspector<Integer, String> sc =
+        StrongConnectivityAlgorithm<Integer, String> sc =
                 new GabowStrongConnectivityInspector<Integer, String>(
                         graph);
         Set<Set<Integer>> expected = new HashSet<Set<Integer>>();

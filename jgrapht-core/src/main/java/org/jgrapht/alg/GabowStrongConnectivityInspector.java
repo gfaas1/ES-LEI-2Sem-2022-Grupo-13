@@ -10,21 +10,21 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.interfaces.StrongConnectivityInspector;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  * Allows obtaining the strongly connected components of a directed graph.
  *
  *The implemented algorithm follows Cheriyan-Mehlhorn/Gabow's algorithm
- *Presented in Path-based depth-first search for strong and biconnected componentsby Gabow (2000).
+ *Presented in Path-based depth-first search for strong and biconnected components by Gabow (2000).
  *The running time is order of O(|V|+|E|)
  *
  * @author Sarah Komla-Ebri
  * @since September, 2013
  */
 
-public class GabowStrongConnectivityInspector<V, E> implements StrongConnectivityInspector<V,E>
+public class GabowStrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V,E>
 {
     //~ Instance fields --------------------------------------------------------
 
@@ -47,7 +47,7 @@ public class GabowStrongConnectivityInspector<V, E> implements StrongConnectivit
     //store the numbers
     private Deque<Integer> B = new ArrayDeque<Integer>();
 
-    //number of vertexes
+    //number of vertices
     private int c;
 
     //~ Constructors -----------------------------------------------------------

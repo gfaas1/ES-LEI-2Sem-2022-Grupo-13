@@ -42,7 +42,7 @@ import java.util.*;
 import junit.framework.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.StrongConnectivityInspector;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
@@ -185,7 +185,7 @@ public class ConnectivityInspectorTest
 
         g.addEdge(V3, V4); // only weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
             new KosarajuStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -215,7 +215,7 @@ public class ConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                 new KosarajuStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -242,7 +242,7 @@ public class ConnectivityInspectorTest
         g.addEdge(V4, V3); // only weakly connected
         g.addEdge(V3, V2); // only weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
             new KosarajuStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -272,7 +272,7 @@ public class ConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                 new KosarajuStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -301,7 +301,7 @@ public class ConnectivityInspectorTest
         g.addEdge(V2, V4);
         g.addEdge(V3, V4); // weakly connected
 
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
             new KosarajuStrongConnectivityInspector<String, DefaultEdge>(g);
 
         // convert from List to Set because we need to ignore order
@@ -330,7 +330,7 @@ public class ConnectivityInspectorTest
         for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
-            StrongConnectivityInspector<String, DefaultEdge> ci =
+            StrongConnectivityAlgorithm<String, DefaultEdge> ci =
                 new KosarajuStrongConnectivityInspector<String, DefaultEdge>(sg);
             assertTrue(ci.isStronglyConnected());
         }
@@ -363,7 +363,7 @@ public class ConnectivityInspectorTest
             },
             null);
 
-        StrongConnectivityInspector<Integer, String> sc =
+        StrongConnectivityAlgorithm<Integer, String> sc =
             new KosarajuStrongConnectivityInspector<Integer, String>(
                 graph);
         Set<Set<Integer>> expected = new HashSet<Set<Integer>>();
@@ -372,6 +372,7 @@ public class ConnectivityInspectorTest
             expected,
             new HashSet<Set<Integer>>(sc.stronglyConnectedSets()));
     }
+
 }
 
 // End ConnectivityInspectorTest.java

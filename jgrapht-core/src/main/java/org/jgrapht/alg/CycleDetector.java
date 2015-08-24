@@ -40,6 +40,7 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.traverse.*;
 
 
@@ -118,8 +119,8 @@ public class CycleDetector<V, E>
     public Set<V> findCycles()
     {
         // ProbeIterator can't be used to handle this case,
-        // so use StrongConnectivityInspector instead.
-        KosarajuStrongConnectivityInspector<V, E> inspector =
+        // so use StrongConnectivityAlgorithm instead.
+        StrongConnectivityAlgorithm<V, E> inspector =
             new KosarajuStrongConnectivityInspector<V, E>(graph);
         List<Set<V>> components = inspector.stronglyConnectedSets();
 
@@ -151,7 +152,7 @@ public class CycleDetector<V, E>
      * <p>REVIEW jvs 25-Aug-2006: This implementation is not guaranteed to cover
      * all cases. If you want to be absolutely certain that you report vertices
      * from all cycles containing v, it's safer (but less efficient) to use
-     * StrongConnectivityInspector instead and return the strongly connected
+     * StrongConnectivityAlgorithm instead and return the strongly connected
      * component containing v.
      *
      * @param v the vertex to test
