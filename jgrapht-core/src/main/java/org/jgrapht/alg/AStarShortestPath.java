@@ -22,19 +22,20 @@
 /* -------------------------
  * AStarShortestPath.java
  * -------------------------
- * (C) Copyright 2012-2012, by Alejandro Ramon Lopez del Huerto and Contributors.
+ * (C) Copyright 2015-2015, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
- * Original Author:  Alejandro Ramon Lopez del Huerto
+ * Original Author:  Joris Kinable
  * Contributor(s):
  *
  * Changes
  * -------
- * 24-Jan-2012 : Initial revision (ARLH);
+ * Aug-2015 : Initial version;
  *
  */
 package org.jgrapht.alg;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.graph.GraphPathImpl;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
@@ -58,6 +59,8 @@ import java.util.*;
  * is desired, so ideally we would expand node i first. Using the FibonacciHeap, this is not necessarily the case though. This could be improved in a later version.
  *
  * @author Joris Kinable
+ * @author Jon Robison
+ * @author Thomas Breitbart
  *
  * @since Aug, 2015
  */
@@ -202,15 +205,4 @@ public class AStarShortestPath<V,E> {
         return numberOfExpandedNodes;
     }
 
-    /**
-     * Interface for an admissible heuristic used in the A* search
-     * @param <V> vertex type
-     */
-    public interface AStarAdmissibleHeuristic<V>{
-        /**
-         * An admissible "heuristic estimate" of the distance from x to the goal
-         * (usually denoted h(x)). This is the good guess function.
-         */
-        public double getCostEstimate(V start, V goal);
-    }
 }

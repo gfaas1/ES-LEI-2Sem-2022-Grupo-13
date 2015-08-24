@@ -1,7 +1,44 @@
-package org.jgrapht;
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -------------------------
+ * AStarShortestPathTest.java
+ * -------------------------
+ * (C) Copyright 2015-2015, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ *
+ * Original Author:  Joris Kinable
+ * Contributor(s):
+ *
+ * Changes
+ * -------
+ * Aug-2015 : Initial version;
+ *
+ */
+package org.jgrapht.alg;
 
 import junit.framework.TestCase;
-import org.jgrapht.alg.AStarShortestPath;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -76,7 +113,7 @@ public class AStarShortestPathTest extends TestCase{
             for (int j = 0; j < labyrinth[0].length()-2; j++) {
                 if(nodes[i][j] == null || nodes[i][j+2]==null)
                     continue;
-                Graphs.addEdge(graph, nodes[i][j], nodes[i][j+2], 1);
+                Graphs.addEdge(graph, nodes[i][j], nodes[i][j + 2], 1);
             }
         }
         //b. Vertical edges
@@ -89,6 +126,9 @@ public class AStarShortestPathTest extends TestCase{
         }
     }
 
+    /**
+     * Test on a graph with a path from the source node to the target node.
+     */
     public void testLabyrinth1(){
         this.readLabyrinth(labyrinth1);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<Node, DefaultWeightedEdge>(graph);
@@ -104,6 +144,9 @@ public class AStarShortestPathTest extends TestCase{
         assertEquals(path.getEdgeList().size(), 47);
     }
 
+    /**
+     * Test on a graph where there is no path from the source node to the target node.
+     */
     public void testLabyrinth2(){
         this.readLabyrinth(labyrinth2);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath=new AStarShortestPath<Node, DefaultWeightedEdge>(graph);
@@ -111,13 +154,19 @@ public class AStarShortestPathTest extends TestCase{
         assertNull(path);
     }
 
+    /**
+     * This test verifies whether multigraphs are processed correctly. In a multigraph, there are multiple edges between the same vertex pair.
+     * Each of these edges can have a different cost. Here we create a simple multigraph A-B-C with multiple edges between (A,B) and (B,C) and
+     * query the shortest path, which is simply the cheapest edge between (A,B) plus the cheapest edge between (B,C). The admissible heuristic
+     * in this test is not important.
+     */
     public void testMultiGraph(){
         WeightedMultigraph<Node, DefaultWeightedEdge> multigraph=new WeightedMultigraph<Node, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         Node n1=new Node(0,0);
         multigraph.addVertex(n1);
-        Node n2=new Node(0,0);
+        Node n2=new Node(1,0);
         multigraph.addVertex(n2);
-        Node n3=new Node(0,0);
+        Node n3=new Node(2,0);
         multigraph.addVertex(n3);
         Graphs.addEdge(multigraph,n1,n2, 5.0);
         Graphs.addEdge(multigraph,n1,n2, 4.0);
@@ -132,14 +181,14 @@ public class AStarShortestPathTest extends TestCase{
         assertEquals(path.getEdgeList().size(), 2);
     }
 
-    private class ManhattanDistance implements AStarShortestPath.AStarAdmissibleHeuristic<Node> {
+    private class ManhattanDistance implements AStarAdmissibleHeuristic<Node> {
         @Override
         public double getCostEstimate(Node start, Node goal) {
             return Math.abs(start.x-goal.x)+Math.abs(start.y-goal.y);
         }
     }
 
-    private class EuclideanDistance implements AStarShortestPath.AStarAdmissibleHeuristic<Node> {
+    private class EuclideanDistance implements AStarAdmissibleHeuristic<Node> {
         @Override
         public double getCostEstimate(Node start, Node goal) {
             return Math.sqrt(Math.pow(start.x-goal.x,2)+Math.pow(start.y-goal.y,2));

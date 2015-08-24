@@ -36,7 +36,6 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.AStarShortestPathTest;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
