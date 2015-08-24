@@ -20,11 +20,11 @@
  * the Eclipse Foundation.
  */
 /* ------------------------------
- * ConnectivityInspectorTest.java
+ * StrongConnectivityAlgorithmTest.java
  * ------------------------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2008, by Sarah Komla-Ebri and Contributors.
  *
- * Original Author:  Barak Naveh
+ * Original Author:  Sarah Komla-Ebri
  * Contributor(s):   John V. Sichi, Joris Kinable
  *
  * $Id$
