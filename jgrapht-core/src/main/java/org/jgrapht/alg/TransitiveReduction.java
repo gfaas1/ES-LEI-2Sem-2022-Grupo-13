@@ -61,7 +61,22 @@ import org.jgrapht.*;
  * @since Aug 13, 2015
  */
 
-public class TransitiveReduction<V, E> {
+public class TransitiveReduction {
+
+    /**
+     * Singleton instance.
+     */
+    public static final TransitiveReduction INSTANCE = new TransitiveReduction();
+
+    
+
+    /**
+     * Private Constructor.
+     */
+    private TransitiveReduction()
+    {
+    }
+
 
     /**
      * The matrix passed as input parameter will be transformed into a path
@@ -139,7 +154,7 @@ public class TransitiveReduction<V, E> {
      *     &#64;code
      *     DirectedGraph<V, T> soonToBePrunedDirectedGraph;
      * 
-     *     new TransitiveReduction<V, T>().reduce(soonToBePrunedDirectedGraph);
+     *     TransitiveReduction.INSTANCE.reduce(soonToBePrunedDirectedGraph);
      * 
      *     // pruned !
      * }
@@ -149,7 +164,7 @@ public class TransitiveReduction<V, E> {
      * @param directedGraph
      *            the directed graph that will be reduced transitively
      */
-    public void reduce(final DirectedGraph<V, E> directedGraph) {
+    public <V, E> void reduce(final DirectedGraph<V, E> directedGraph) {
 
         final List<V> vertices = new ArrayList<V>(directedGraph.vertexSet());
 
