@@ -81,6 +81,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Rita Dobler
 - Szabolcs Besenyei
 - Luiz Kill
+- Christophe Thiebaud
 
 (if we have missed your name on this list, please email us to get it fixed).
 

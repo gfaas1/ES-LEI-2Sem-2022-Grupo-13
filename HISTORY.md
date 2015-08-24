@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
         - Remove old experimental isomorphism implementation
         - Fix for empty graph input to `KuhnMunkresMinimalWeightBipartitePerfectMatching`, contributed by Szabolcs Besenyei
         - Fix for `EdmondsBlossomShrinking`, contributed by Alexey Kudinkin
+        - Add `TransitiveReduction`, contributed by Christophe Thiebaud
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin
