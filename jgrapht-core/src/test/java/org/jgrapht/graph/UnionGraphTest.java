@@ -38,9 +38,12 @@ package org.jgrapht.graph;
 
 import junit.framework.TestCase;
 import org.jgrapht.*;
+import org.jgrapht.util.WeightCombiner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Unit test for the {@link DirectedGraphUnion} class, {@link UndirectedGraphUnion} class, {@link MixedGraphUnion} class.
@@ -174,4 +177,41 @@ public class UnionGraphTest extends TestCase {
         assertEquals(3, graphUnion.inDegreeOf(v4));
 
     }
+
+    /**
+     * Test the weight combiner for graphs having an edge in common.
+     */
+    public void testWeightCombiner(){
+        //Create two graphs, both having the same vertices {0,1} and the same weighted edge (0,1)
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> g1=new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g1, Arrays.asList(0,1));
+        DefaultWeightedEdge edge=g1.addEdge(0,1);
+        g1.setEdgeWeight(edge, 10);
+
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> g2=new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g2, Arrays.asList(0,1));
+        g2.addEdge(0,1, edge);
+        //We need to create a mask of the second graph if we want to store the edge with a different weight. Simply setting g2.setEdgeWeight(edge,20) would override the edge weight for the same edge in g1 as well!
+        Map<DefaultWeightedEdge, Double> weightMap=new HashMap<DefaultWeightedEdge, Double>();
+        weightMap.put(edge, 20.0);
+        WeightedGraph<Integer, DefaultWeightedEdge> g2Masked=new AsWeightedGraph<Integer, DefaultWeightedEdge>(g2, weightMap);
+
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionSum=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.SUM);
+        assertEquals(30.0, graphUnionSum.getEdgeWeight(edge));
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionFirst=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.FIRST);
+        assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge));
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionSecond=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.SECOND);
+        assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge));
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMax=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.MAX);
+        assertEquals(20.0, graphUnionMax.getEdgeWeight(edge));
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMin=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.MIN);
+        assertEquals(10.0, graphUnionMin.getEdgeWeight(edge));
+        GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMult=new GraphUnion<Integer, DefaultWeightedEdge, WeightedGraph<Integer, DefaultWeightedEdge>>(g1, g2Masked, WeightCombiner.MULT);
+        assertEquals(200.0, graphUnionMult.getEdgeWeight(edge));
+
+        assertEquals(10.0, g1.getEdgeWeight(edge));
+        assertEquals(10.0, g2.getEdgeWeight(edge));
+        assertEquals(20.0, g2Masked.getEdgeWeight(edge));
+    }
+
 }
