@@ -183,15 +183,15 @@ public class AStarShortestPathTest extends TestCase{
 
     private class ManhattanDistance implements AStarAdmissibleHeuristic<Node> {
         @Override
-        public double getCostEstimate(Node start, Node goal) {
-            return Math.abs(start.x-goal.x)+Math.abs(start.y-goal.y);
+        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
+            return Math.abs(sourceVertex.x- targetVertex.x)+Math.abs(sourceVertex.y- targetVertex.y);
         }
     }
 
     private class EuclideanDistance implements AStarAdmissibleHeuristic<Node> {
         @Override
-        public double getCostEstimate(Node start, Node goal) {
-            return Math.sqrt(Math.pow(start.x-goal.x,2)+Math.pow(start.y-goal.y,2));
+        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
+            return Math.sqrt(Math.pow(sourceVertex.x- targetVertex.x,2)+Math.pow(sourceVertex.y- targetVertex.y,2));
         }
     }
 
