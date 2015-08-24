@@ -49,7 +49,21 @@ public class UndirectedGraphUnion<V, E>
 
     private static final long serialVersionUID = -740199233080172450L;
 
-    
+
+    UndirectedGraphUnion(
+            UndirectedGraph<V, E> g1,
+            UndirectedGraph<V, E> g2,
+            WeightCombiner operator)
+    {
+        super(g1, g2, operator);
+    }
+
+    UndirectedGraphUnion(
+            UndirectedGraph<V, E> g1,
+            UndirectedGraph<V, E> g2)
+    {
+        super(g1, g2);
+    }
 
     UndirectedGraphUnion(
         UndirectedGraph<V, E> g1,

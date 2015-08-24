@@ -25,7 +25,7 @@
  * (C) Copyright 2009-2009, by Tom Larkworthy and Contributors
  *
  * Original Author:  Tom Larkworthy
- * Contributor(s):   Soren Davidsen
+ * Contributor(s):   Soren Davidsen, Joris Kinable
  *
  * $Id: FloydWarshallShortestPaths.java 755 2012-01-18 23:50:37Z perfecthash $
  *
@@ -33,6 +33,7 @@
  * -------
  * 29-Jun-2009 : Initial revision (TL);
  * 03-Dec-2009 : Optimized and enhanced version (SD);
+ * Aug 2015: Algorithm now works with Mixed-Graphs. Included some performance tweaks.
  *
  */
 package org.jgrapht.alg;
@@ -41,7 +42,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 
 
 /**
@@ -142,8 +142,8 @@ public class FloydWarshallShortestPaths<V, E>
         }else{ //This works for both Directed and Mixed graphs! Iterating over the arcs and querying source/sink does not suffice for graphs which contain both edges and arcs
             DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)graph;
             for(V v1 : directedGraph.vertexSet()){
+                int v_1 = vertexIndices.get(v1);
                 for(V v2 : Graphs.successorListOf(directedGraph, v1)){
-                    int v_1 = vertexIndices.get(v1);
                     int v_2 = vertexIndices.get(v2);
                     d[v_1][v_2] =directedGraph.getEdgeWeight(directedGraph.getEdge(v1, v2));
                 }
@@ -183,8 +183,7 @@ public class FloydWarshallShortestPaths<V, E>
      * @return the diameter (longest of all the shortest paths) computed for the
      * graph. If the graph is vertexless, return 0.0.
      */
-    public double getDiameter()
-    {
+    public double getDiameter() {
         lazyCalculateMatrix();
 
         if (Double.isNaN(diameter)) {
@@ -202,17 +201,14 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Get the shortest path between two vertices. Note: The paths are
-     * calculated using a recursive algorithm. It *will* give problems on paths
-     * longer than the stack allows.
+     * Get the shortest path between two vertices.
      *
      * @param a From vertice
      * @param b To vertice
      *
      * @return the path, or null if none found
      */
-    public GraphPath<V, E> getShortestPath(V a, V b)
-    {
+    public GraphPath<V, E> getShortestPath(V a, V b) {
         lazyCalculateMatrix();
 
         int v_a = vertexIndices.get(a);
