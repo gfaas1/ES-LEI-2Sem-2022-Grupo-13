@@ -54,6 +54,17 @@ public interface WeightCombiner
         };
 
     /**
+     * Multiplication of weights.
+     */
+    public WeightCombiner MULT =
+        new WeightCombiner() {
+            @Override public double combine(double a, double b)
+            {
+                return a * b;
+            }
+        };
+
+    /**
      * Minimum weight.
      */
     public WeightCombiner MIN =
