@@ -1,3 +1,38 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -------------------------
+ * GabowStrongConnectivityInspector.java
+ * -------------------------
+ * (C) Copyright 2013-2015, by Sarah Komla-Ebri and Contributors
+ *
+ * Original Author:  Sarah Komla-Ebri
+ * Contributor(s):   Joris Kinable
+ *
+ *
+ * Changes
+ * -------
+ * 25-Aug-2015 : Initial revision;
+ *
+ */
 package org.jgrapht.alg;
 
 import java.util.ArrayDeque;

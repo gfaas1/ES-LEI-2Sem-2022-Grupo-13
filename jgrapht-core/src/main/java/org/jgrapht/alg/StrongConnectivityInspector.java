@@ -59,6 +59,8 @@ import java.util.*;
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
+ *
+ * @deprecated Use {@link KosarajuStrongConnectivityInspector} instead.
  */
 @Deprecated
 public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V,E>
