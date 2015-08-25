@@ -145,7 +145,7 @@ public class FibonacciHeap<T>
     {
         if (k > x.key) {
             throw new IllegalArgumentException(
-                "decreaseKey() got larger key value");
+                "decreaseKey() got larger key value. Current key: "+x.key+" new key: "+k);
         }
 
         x.key = k;

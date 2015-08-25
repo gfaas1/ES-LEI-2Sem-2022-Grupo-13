@@ -46,6 +46,7 @@ import org.junit.runners.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    AStarShortestPathTest.class,
     BellmanFordShortestPathTest.class,
     BiconnectivityInspectorTest.class,
     BlockCutpointGraphTest.class,
