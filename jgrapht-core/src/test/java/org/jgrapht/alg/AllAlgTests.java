@@ -71,6 +71,7 @@ import org.junit.runners.*;
     NaiveLcaFinderTest.class,
     NeighborIndexTest.class,
     StoerWagnerMinimumCutTest.class,
+    StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class,
     VertexCoversTest.class

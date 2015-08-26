@@ -223,7 +223,7 @@ public class JohnsonSimpleCycles<V, E>
     {
         // Find SCCs in the subgraph induced
         // by vertices startIndex and beyond.
-        // A call to StrongConnectivityInspector
+        // A call to StrongConnectivityAlgorithm
         // would be too expensive because of the
         // need to materialize the subgraph.
         // So - do a local search by the Tarjan's

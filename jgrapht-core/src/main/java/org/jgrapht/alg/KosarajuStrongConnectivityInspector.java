@@ -37,35 +37,31 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
-import org.jgrapht.graph.DirectedSubgraph;
-import org.jgrapht.graph.EdgeReversedGraph;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
+import org.jgrapht.graph.*;
 
 
 /**
- * <p>Complements the {@link ConnectivityInspector} class with
+ * <p>Complements the {@link org.jgrapht.alg.ConnectivityInspector} class with
  * the capability to compute the strongly connected components of a directed
  * graph. The algorithm is implemented after "Cormen et al: Introduction to
  * agorithms", Chapter 22.5. It has a running time of O(V + E).</p>
  *
- * <p>Unlike {@link ConnectivityInspector}, this class does not
+ * <p>Unlike {@link org.jgrapht.alg.ConnectivityInspector}, this class does not
  * implement incremental inspection. The full algorithm is executed at the first
- * call of {@link StrongConnectivityInspector#stronglyConnectedSets()} or {@link
- * StrongConnectivityInspector#isStronglyConnected()}.</p>
+ * call of {@link KosarajuStrongConnectivityInspector#stronglyConnectedSets()} or {@link
+ * KosarajuStrongConnectivityInspector#isStronglyConnected()}.</p>
  *
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
- *
- * @deprecated Use {@link KosarajuStrongConnectivityInspector} instead.
  */
-@Deprecated
-public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V,E>
+public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V,E>
 {
-
+    
 
     // the graph to compute the strongly connected sets for
     private final DirectedGraph<V, E> graph;
@@ -82,7 +78,7 @@ public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgo
     // maps vertices to their VertexData object
     private Map<V, VertexData<V>> vertexToVertexData;
 
-
+    
 
     /**
      * The constructor of the StrongConnectivityAlgorithm class.
@@ -91,7 +87,7 @@ public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgo
      *
      * @throws IllegalArgumentException
      */
-    public StrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
+    public KosarajuStrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
     {
         if (directedGraph == null) {
             throw new IllegalArgumentException("null not allowed for graph!");
@@ -186,7 +182,7 @@ public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgo
      * u and v are contained in the strongly connected component.</p>
      *
      * <p>NOTE: Calling this method will first execute {@link
-     * StrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
+     * KosarajuStrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
      * subgraphs, use that method.</p>
      *
      * @return a list of subgraphs representing the strongly connected

@@ -32,7 +32,7 @@
  * Changes
  * -------
  * 07-Aug-2003 : Initial revision (BN);
- * 20-Apr-2005 : Added StrongConnectivityInspector test (JVS);
+ * 20-Apr-2005 : Added KosarajuStrongConnectivityInspector test (JVS);
  *
  */
 package org.jgrapht.alg;
@@ -42,6 +42,7 @@ import java.util.*;
 import junit.framework.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
@@ -166,211 +167,6 @@ public class ConnectivityInspectorTest
         assertEquals(false, inspector.isGraphConnected());
     }
 
-    /**
-     * .
-     */
-    public void testStronglyConnected1()
-    {
-        DirectedGraph<String, DefaultEdge> g =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        g.addVertex(V3);
-        g.addVertex(V4);
-
-        g.addEdge(V1, V2);
-        g.addEdge(V2, V1); // strongly connected
-
-        g.addEdge(V3, V4); // only weakly connected
-
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
-            new StrongConnectivityInspector<String, DefaultEdge>(g);
-
-        // convert from List to Set because we need to ignore order
-        // during comparison
-        Set<Set<String>> actualSets =
-            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
-
-        // construct the expected answer
-        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
-        Set<String> set = new HashSet<String>();
-        set.add(V1);
-        set.add(V2);
-        expectedSets.add(set);
-        set = new HashSet<String>();
-        set.add(V3);
-        expectedSets.add(set);
-        set = new HashSet<String>();
-        set.add(V4);
-        expectedSets.add(set);
-
-        assertEquals(expectedSets, actualSets);
-
-        actualSets.clear();
-
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
-            actualSets.add(sg.vertexSet());
-
-            StrongConnectivityInspector<String, DefaultEdge> ci =
-                new StrongConnectivityInspector<String, DefaultEdge>(sg);
-            assertTrue(ci.isStronglyConnected());
-        }
-
-        assertEquals(expectedSets, actualSets);
-    }
-
-    /**
-     * .
-     */
-    public void testStronglyConnected2()
-    {
-        DirectedGraph<String, DefaultEdge> g =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        g.addVertex(V3);
-        g.addVertex(V4);
-
-        g.addEdge(V1, V2);
-        g.addEdge(V2, V1); // strongly connected
-
-        g.addEdge(V4, V3); // only weakly connected
-        g.addEdge(V3, V2); // only weakly connected
-
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
-            new StrongConnectivityInspector<String, DefaultEdge>(g);
-
-        // convert from List to Set because we need to ignore order
-        // during comparison
-        Set<Set<String>> actualSets =
-            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
-
-        // construct the expected answer
-        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
-        Set<String> set = new HashSet<String>();
-        set.add(V1);
-        set.add(V2);
-        expectedSets.add(set);
-        set = new HashSet<String>();
-        set.add(V3);
-        expectedSets.add(set);
-        set = new HashSet<String>();
-        set.add(V4);
-        expectedSets.add(set);
-
-        assertEquals(expectedSets, actualSets);
-
-        actualSets.clear();
-
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
-            actualSets.add(sg.vertexSet());
-
-            StrongConnectivityInspector<String, DefaultEdge> ci =
-                new StrongConnectivityInspector<String, DefaultEdge>(sg);
-            assertTrue(ci.isStronglyConnected());
-        }
-
-        assertEquals(expectedSets, actualSets);
-    }
-
-    /**
-     * .
-     */
-    public void testStronglyConnected3()
-    {
-        DirectedGraph<String, DefaultEdge> g =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
-        g.addVertex(V1);
-        g.addVertex(V2);
-        g.addVertex(V3);
-        g.addVertex(V4);
-
-        g.addEdge(V1, V2);
-        g.addEdge(V2, V3);
-        g.addEdge(V3, V1); // strongly connected
-
-        g.addEdge(V1, V4);
-        g.addEdge(V2, V4);
-        g.addEdge(V3, V4); // weakly connected
-
-        StrongConnectivityInspector<String, DefaultEdge> inspector =
-            new StrongConnectivityInspector<String, DefaultEdge>(g);
-
-        // convert from List to Set because we need to ignore order
-        // during comparison
-        Set<Set<String>> actualSets =
-            new HashSet<Set<String>>(inspector.stronglyConnectedSets());
-
-        // construct the expected answer
-        Set<Set<String>> expectedSets = new HashSet<Set<String>>();
-        Set<String> set = new HashSet<String>();
-        set.add(V1);
-        set.add(V2);
-        set.add(V3);
-        expectedSets.add(set);
-        set = new HashSet<String>();
-        set.add(V4);
-        expectedSets.add(set);
-
-        assertEquals(expectedSets, actualSets);
-
-        actualSets.clear();
-
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
-
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
-            actualSets.add(sg.vertexSet());
-
-            StrongConnectivityInspector<String, DefaultEdge> ci =
-                new StrongConnectivityInspector<String, DefaultEdge>(sg);
-            assertTrue(ci.isStronglyConnected());
-        }
-
-        assertEquals(expectedSets, actualSets);
-    }
-
-    public void testStronglyConnected4()
-    {
-        DefaultDirectedGraph<Integer, String> graph =
-            new DefaultDirectedGraph<Integer, String>(
-                new EdgeFactory<Integer, String>() {
-                    @Override
-                    public String createEdge(Integer from, Integer to)
-                    {
-                        return (from + "->" + to).intern();
-                    }
-                });
-
-        new RingGraphGenerator<Integer, String>(3).generateGraph(
-            graph,
-            new VertexFactory<Integer>() {
-                private int i = 0;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return i++;
-                }
-            },
-            null);
-
-        StrongConnectivityInspector<Integer, String> sc =
-            new StrongConnectivityInspector<Integer, String>(
-                graph);
-        Set<Set<Integer>> expected = new HashSet<Set<Integer>>();
-        expected.add(graph.vertexSet());
-        assertEquals(
-            expected,
-            new HashSet<Set<Integer>>(sc.stronglyConnectedSets()));
-    }
 }
 
 // End ConnectivityInspectorTest.java

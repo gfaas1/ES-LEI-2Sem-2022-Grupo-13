@@ -52,7 +52,7 @@ import org.jgrapht.traverse.*;
  * graph</i> is specified at construction time and cannot be modified.
  * Currently, the inspector supports connected components for an undirected
  * graph and weakly connected components for a directed graph. To find strongly
- * connected components, use {@link StrongConnectivityInspector} instead.
+ * connected components, use {@link KosarajuStrongConnectivityInspector} instead.
  *
  * <p>The inspector methods work in a lazy fashion: no computation is performed
  * unless immediately necessary. Computation are done once and results and
