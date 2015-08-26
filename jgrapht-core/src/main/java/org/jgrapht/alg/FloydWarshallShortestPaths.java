@@ -138,6 +138,8 @@ public class FloydWarshallShortestPaths<V, E>
                 int v_1 = vertexIndices.get(graph.getEdgeSource(edge));
                 int v_2 = vertexIndices.get(graph.getEdgeTarget(edge));
                 d[v_1][v_2] =d[v_2][v_1] =graph.getEdgeWeight(edge);
+                backtrace[v_1][v_2]=v_2;
+                backtrace[v_2][v_1]=v_1;
             }
         }else{ //This works for both Directed and Mixed graphs! Iterating over the arcs and querying source/sink does not suffice for graphs which contain both edges and arcs
             DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)graph;
@@ -146,6 +148,7 @@ public class FloydWarshallShortestPaths<V, E>
                 for(V v2 : Graphs.successorListOf(directedGraph, v1)){
                     int v_2 = vertexIndices.get(v2);
                     d[v_1][v_2] =directedGraph.getEdgeWeight(directedGraph.getEdge(v1, v2));
+                    backtrace[v_1][v_2]=v_2;
                 }
             }
         }
@@ -157,7 +160,7 @@ public class FloydWarshallShortestPaths<V, E>
                     double ik_kj = d[i][k] + d[k][j];
                     if (ik_kj < d[i][j]) {
                         d[i][j] = ik_kj;
-                        backtrace[i][j] = k;
+                        backtrace[i][j] = backtrace[i][k];
                     }
                 }
             }
@@ -211,6 +214,7 @@ public class FloydWarshallShortestPaths<V, E>
     public GraphPath<V, E> getShortestPath(V a, V b) {
         lazyCalculateMatrix();
 
+
         int v_a = vertexIndices.get(a);
         int v_b = vertexIndices.get(b);
 
@@ -226,6 +230,27 @@ public class FloydWarshallShortestPaths<V, E>
             u=v;
         }
         return new GraphPathImpl<V, E>(graph, a, b, edges, d[v_a][v_b]);
+    }
+
+    public List<V> getShortestPathAsVertexList(V a, V b) {
+        lazyCalculateMatrix();
+
+        int v_a = vertexIndices.get(a);
+        int v_b = vertexIndices.get(b);
+
+        if(backtrace[v_a][v_b]==-1) //No path exists
+            return null;
+
+        //Reconstruct the path
+        List<V> pathVertexList = new ArrayList<V>();
+        pathVertexList.add(a);
+        int u=v_a;
+        while(u != v_b){
+            int v=backtrace[u][v_b];
+            pathVertexList.add(vertices.get(v));
+            u=v;
+        }
+        return pathVertexList;
     }
 
     /**
