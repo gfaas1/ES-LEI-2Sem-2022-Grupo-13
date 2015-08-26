@@ -72,16 +72,12 @@ public class FloydWarshallShortestPathsTest
             };
 
         for (int i = 0; i < 10; i++) {
-            SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =
-                new SimpleDirectedGraph<Integer, DefaultWeightedEdge>(
-                    DefaultWeightedEdge.class);
-
+            //Generate directed graph
+            SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =new SimpleDirectedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
             gen.generateGraph(directed, f, new HashMap<String, Integer>());
 
             // setup our shortest path measurer
-            FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
-                new FloydWarshallShortestPaths<Integer, DefaultWeightedEdge>(
-                    directed);
+            FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =new FloydWarshallShortestPaths<Integer, DefaultWeightedEdge>(directed);
 
             for (Integer v1 : directed.vertexSet()) {
                 for (Integer v2 : directed.vertexSet()) {
@@ -91,17 +87,15 @@ public class FloydWarshallShortestPathsTest
                             directed,
                             v1,
                             v2).getPathLength();
-                    assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                        || (Double.isInfinite(fwSp)
-                            && Double.isInfinite(dijSp)));
+                    assertTrue( (Math.abs(dijSp - fwSp) < .01) || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
+                    GraphPath<Integer, DefaultWeightedEdge> path=fw.getShortestPath(v1, v2);
+                    if(path != null)
+                        this.verifyPath(directed, path, fw.shortestDistance(v1, v2));
                 }
             }
 
-            SimpleGraph<Integer, DefaultWeightedEdge> undirected =
-                new SimpleGraph<Integer, DefaultWeightedEdge>(
-                    DefaultWeightedEdge.class);
-
+            //Generate Undirected graph
+            SimpleGraph<Integer, DefaultWeightedEdge> undirected =new SimpleGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
             gen.generateGraph(undirected, f, new HashMap<String, Integer>());
 
             // setup our shortest path measurer
@@ -116,12 +110,30 @@ public class FloydWarshallShortestPathsTest
                             undirected,
                             v1,
                             v2).getPathLength();
-                    assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                        || (Double.isInfinite(fwSp)
-                            && Double.isInfinite(dijSp)));
+                    assertTrue((Math.abs(dijSp - fwSp) < .01) || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
+                    GraphPath<Integer, DefaultWeightedEdge> path=fw.getShortestPath(v1, v2);
+                    if(path != null)
+                        this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
                 }
             }
+        }
+    }
+
+    /**
+     * Verify whether the path calculated by FloydWarshallShortestPaths is an actual valid path.
+     */
+    private <V,E> void verifyPath(Graph<V,E> graph, GraphPath<V,E> path, double pathCost){
+        assertEquals(pathCost, path.getWeight(), .00000001);
+        double verifiedEdgeCost=0;
+        for (E e : path.getEdgeList()) {
+            assertNotNull(e);
+            verifiedEdgeCost+=graph.getEdgeWeight(e);
+        }
+        assertEquals(pathCost, verifiedEdgeCost, .00000001);
+        try{
+            Graphs.getPathVertexList(path);
+        }catch (IllegalArgumentException e){
+            fail("Invalid path encountered: the sequence of edges does not present a valid path through the graph");
         }
     }
 
@@ -181,15 +193,23 @@ public class FloydWarshallShortestPathsTest
     }
     
     public void testWeightedEdges() {
-    	SimpleGraph<String, DefaultWeightedEdge> weighted = 
-    		new SimpleGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    	SimpleDirectedGraph<String, DefaultWeightedEdge> weighted =
+    		new SimpleDirectedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
     	weighted.addVertex("a");
     	weighted.addVertex("b");
-    	weighted.setEdgeWeight(weighted.addEdge("a", "b"), 5.0);
-    	FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =
-                new FloydWarshallShortestPaths<String, DefaultWeightedEdge>(weighted);
+        DefaultWeightedEdge edge=weighted.addEdge("a", "b");
+    	weighted.setEdgeWeight(edge, 5.0);
+    	FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =new FloydWarshallShortestPaths<String, DefaultWeightedEdge>(weighted);
     	double sD = fw.shortestDistance("a", "b");
         assertEquals(5.0, sD, 0.1);
+        GraphPath<String, DefaultWeightedEdge> path=fw.getShortestPath("a", "b");
+        assertNotNull(path);
+        assertEquals(Arrays.asList(edge), path.getEdgeList());
+        assertEquals("a", path.getStartVertex());
+        assertEquals("b", path.getEndVertex());
+        assertEquals(5.0, path.getWeight());
+        assertEquals(weighted, path.getGraph());
+        assertNull(fw.getShortestPath("b", "a"));
     }
 }
 

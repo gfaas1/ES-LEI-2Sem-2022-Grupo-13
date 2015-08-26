@@ -66,7 +66,7 @@ import java.util.*;
  */
 public class AStarShortestPath<V,E> {
 
-    private final WeightedGraph<V, E> graph;
+    private final Graph<V, E> graph;
 
     //List of open nodes
     protected FibonacciHeap<V> openList;
@@ -83,7 +83,7 @@ public class AStarShortestPath<V,E> {
     protected int numberOfExpandedNodes;
 
 
-    public AStarShortestPath(WeightedGraph<V, E> graph) {
+    public AStarShortestPath(Graph<V, E> graph) {
         if(graph==null)
             throw new IllegalArgumentException("Graph cannot be null!");
         this.graph = graph;
