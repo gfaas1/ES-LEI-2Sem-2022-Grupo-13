@@ -308,7 +308,7 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         if (DIAGNOSTIC_ENABLED)
             diagnostic.dump();
 
-        return new VerbatimMaximumFlow<V, E>(maxFlowValue, maxFlow);
+        return new MaximumFlow<V, E>(maxFlowValue, maxFlow);
     }
 
     private void relabel(VertexExtension vx) {
