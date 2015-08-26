@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
 	- Add `AStarShortestPath`, contributed by Joris Kinable, Jon Robinson, and Thomas Breitbart
 	- More `FloydWarshallShortestPaths` optimizations, contributed by Joris Kinable
 	- Add `MixedGraphUnion` and `AsWeightedDirectedGraph`; fix UndirectedGraphUnion constructors; contributed by Joris Kinable
+	- Add `GabowStrongConnectivityInspector` and `KosarajuStrongConnectivityInspector`, contributed by Joris Kinable
 
 - **version 0.9.1** (5-Apr-2015): 
 	- Auto-generation of bundle manifest, contributed by Nicolas Fortin

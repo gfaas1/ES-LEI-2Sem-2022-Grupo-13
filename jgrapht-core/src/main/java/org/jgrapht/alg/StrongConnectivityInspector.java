@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* --------------------------
- * StrongConnectivityAlgorithm.java
+ * StrongConnectivityInspector.java
  * --------------------------
  * (C) Copyright 2005-2008, by Christian Soltenborn and Contributors.
  *
