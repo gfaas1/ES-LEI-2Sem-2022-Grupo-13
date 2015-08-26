@@ -23,9 +23,10 @@
  * EdmondsKarpMaximumFlow.java
  * -----------------
  * (C) Copyright 2008-2008, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
  * Original Author:  Ilya Razenshteyn
- * Contributor(s):   -
+ * Contributor(s):   Alexey Kudinkin
  *
  * $Id$
  *
@@ -57,6 +58,8 @@ import java.util.*;
  *
  * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
  * (Lecture Notes)</i>.
+ *
+ * @author Ilya Razensteyn
  */
 public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V, E> {
 

@@ -1,3 +1,37 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * MaximumFlowAlgorithmBase.java
+ * -----------------
+ * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
+ *
+ * Original Author:  Alexey Kudinkin
+ * Contributor(s):
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ */
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
@@ -10,6 +44,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class backing algorithms allowing to derive <a
+ * href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a> from
+ * the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow network</a>
+ *
+ * @param <V> vertex concept type
+ * @param <E> edge concept type
+ *
+ * @author Alexey Kudinkin
+ */
 public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgorithm<V, E> {
 
     /**
@@ -86,7 +130,6 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         return iex;
     }
 
-    // DIE, JAVA, DIE!
     private VertexExtensionBase extendedVertex(V v) {
         return this.<VertexExtensionBase>vertexExtended(v);
     }
