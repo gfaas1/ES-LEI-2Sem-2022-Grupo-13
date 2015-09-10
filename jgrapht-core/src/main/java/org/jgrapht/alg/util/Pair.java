@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * PushRelabelMaximumFlow.java
+ * Pair.java
  * -----------------
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
