@@ -52,14 +52,12 @@ import java.util.*;
  */
 public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> {
 
-    private static final boolean LABEL_PRUNE_ENABLED = true;
-
     private DirectedGraph<V, E> network;
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<EdgeExtension>   edgeExtensionsFactory;
 
-    // Label pruning
+    // Label pruning helpers
 
     private Map<Integer, Integer> labeling;
 
@@ -242,12 +240,16 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                     vx.label = ux.label + 1;
                     q.add(vx);
 
-                    if (LABEL_PRUNE_ENABLED) {
-                        if (!labeling.containsKey(vx.label))
-                            labeling.put(vx.label, 1);
-                        else
-                            labeling.put(vx.label, labeling.get(vx.label) + 1);
-                    }
+                    // NOTA BENE:
+                    //  This is part of label-pruning mechanic which
+                    //  targets to diminish all 'useless' relabels during
+                    //  "flow-back" phase of the algorithm pushing excess
+                    //  flow back to the source
+
+                    if (!labeling.containsKey(vx.label))
+                        labeling.put(vx.label, 1);
+                    else
+                        labeling.put(vx.label, labeling.get(vx.label) + 1);
                 }
             }
         }
@@ -285,12 +287,15 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
                     break;
 
                 // Check whether we still have any vertices with the label '1'
-                if (LABEL_PRUNE_ENABLED) {
-                    if (!flowBack && !labeling.containsKey(0) && !labeling.containsKey(1)) {
-                        // This supposed to drastically improve performance
-                        extendedVertex(source).label = Collections.max(labeling.keySet()) + 1;
-                        flowBack = true;
-                    }
+                if (!flowBack && !labeling.containsKey(0) && !labeling.containsKey(1)) {
+                    // This supposed to drastically improve performance
+                    // cutting off the necessity to drive labels of all vertices
+                    // up to value 'N' one-by-one not entailing eny effective discharge --
+                    // at this point there is no vertex with the label <= 1 in the
+                    // network & therefore no 'discharging-path' to the _sink_ also
+                    // signalling that we're in the flow-back stage of the algorithm
+                    extendedVertex(source).label = Collections.max(labeling.keySet()) + 1;
+                    flowBack = true;
                 }
             }
         }
@@ -323,10 +328,8 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         if (DIAGNOSTIC_ENABLED)
             diagnostic.incrementRelabels(vx.label, min + 1);
 
-        if (LABEL_PRUNE_ENABLED) {
-            assert (labeling.get(vx.label) > 0);
-            updateLabeling(vx, min + 1);
-        }
+        assert (labeling.get(vx.label) > 0);
+        updateLabeling(vx, min + 1);
 
         // Sanity
         if (min != Integer.MAX_VALUE) {
