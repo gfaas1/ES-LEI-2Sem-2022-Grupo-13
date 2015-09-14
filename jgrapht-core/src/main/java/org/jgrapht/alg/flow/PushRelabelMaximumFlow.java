@@ -252,7 +252,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             }
         }
 
-        // _DBG
         if (DIAGNOSTIC_ENABLED)
             System.out.println("INIT LABELING " + labeling);
     }
@@ -270,7 +269,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             for (;;) {
                 for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
                     if (isAdmissible(ex)) {
-                        // NB(kudinkin): Concerns?
                         if (ex.getTarget().prototype != sink && ex.getTarget().prototype != source)
                             active.offer(ex.<VertexExtension>getTarget());
 
@@ -304,7 +302,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             maxFlowValue += maxFlow.get(e);
         }
 
-        // _DBG
         if (DIAGNOSTIC_ENABLED)
             diagnostic.dump();
 
@@ -312,7 +309,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
     }
 
     private void relabel(VertexExtension vx) {
-        // _DBG
         assert(vx.hasExcess());
 
         int min = Integer.MAX_VALUE;
@@ -324,7 +320,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
             }
         }
 
-        // _DBG
         if (DIAGNOSTIC_ENABLED)
             diagnostic.incrementRelabels(vx.label, min + 1);
 
@@ -355,7 +350,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
     private boolean discharge(EdgeExtension ex) {
         VertexExtension ux = ex.getSource();
 
-        // _DBG
         if (DIAGNOSTIC_ENABLED)
             diagnostic.incrementDischarges(ex);
 
@@ -367,7 +361,6 @@ public class PushRelabelMaximumFlow<V, E> extends MaximumFlowAlgorithmBase<V,E> 
         ex.getSource().excess -= f;
         ex.getTarget().excess += f;
 
-        // _DBG
         assert(ex.getSource().excess >= 0.0 && ex.getTarget().excess >= 0);
 
         super.pushFlowThrough(ex, f);

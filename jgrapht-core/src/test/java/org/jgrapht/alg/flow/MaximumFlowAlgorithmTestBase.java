@@ -222,13 +222,6 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
 
     public void testRandomGraph() {
         RandomGraphGenerator<Integer, DefaultWeightedEdge> rgg
-// BREAKS PR
-//            = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(500, 20000, 1446523573696201013l);
-
-// BREAKS EK
-//            = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(500, 20000, 1446594310545620013l);
-
-
             = new RandomGraphGenerator<Integer, DefaultWeightedEdge>(10, 30, 1446604632765594013l);
 
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network

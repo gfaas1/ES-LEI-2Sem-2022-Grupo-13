@@ -50,8 +50,8 @@ public interface MaximumFlowAlgorithm<V, E> {
 
     class MaximumFlow<V, E> {
 
-        Double value;
-        Map<E, Double> flow;
+        private Double value;
+        private Map<E, Double> flow;
 
         public MaximumFlow(Double value, Map<E, Double> flow)
         {
