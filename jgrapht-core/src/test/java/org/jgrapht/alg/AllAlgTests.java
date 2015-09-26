@@ -36,8 +36,10 @@
  */
 package org.jgrapht.alg;
 
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.jgrapht.alg.flow.EdmondsKarpMaximumFlowTest;
+import org.jgrapht.alg.flow.PushRelabelMaximumFlowTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  * A TestSuite for all tests in this package.
@@ -57,6 +59,7 @@ import org.junit.runners.*;
     DijkstraShortestPathTest.class,
     EdmondsBlossomShrinkingTest.class,
     EdmondsKarpMaximumFlowTest.class,
+    PushRelabelMaximumFlowTest.class,
     EulerianCircuitTest.class,
     FloydWarshallShortestPathsTest.class,
     HamiltonianCycleTest.class,

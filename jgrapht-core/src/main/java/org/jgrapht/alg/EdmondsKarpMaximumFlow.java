@@ -34,52 +34,29 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import java.util.Collections;
+import java.util.Map;
 
 
 /**
- * A <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> is a
- * directed graph where each edge has a capacity and each edge receives a flow.
- * The amount of flow on an edge can not exceed the capacity of the edge (note,
- * that all capacities must be non-negative). A flow must satisfy the
- * restriction that the amount of flow into a vertex equals the amount of flow
- * out of it, except when it is a source, which "produces" flow, or sink, which
- * "consumes" flow.
- *
- * <p>This class computes maximum flow in a network using <a href =
- * "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp
- * algorithm</a>. Be careful: for large networks this algorithm may consume
- * significant amount of time (its upper-bound complexity is O(VE^2), where V -
- * amount of vertices, E - amount of edges in the network).
- *
- * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
- * (Lecture Notes)</i>.
+ * @deprecated Use {@link org.jgrapht.alg.flow.EdmondsKarpMaximumFlow} instead
  */
-public final class EdmondsKarpMaximumFlow<V, E>
+@Deprecated
+public final class EdmondsKarpMaximumFlow<V, E> implements MaximumFlowAlgorithm<V, E>
 {
-    
+    private org.jgrapht.alg.flow.EdmondsKarpMaximumFlow<V, E> engine;
+
+    private MaximumFlowAlgorithm.MaximumFlow<V, E> maxFlow;
+
+    private V currentSource;
+    private V currentSink;
 
     /**
      * Default tolerance.
      */
     public static final double DEFAULT_EPSILON = 0.000000001;
-
-    
-
-    private DirectedGraph<V, E> network; // our network
-    private double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
-    private int currentSource; // current source vertex
-    private int currentSink; // current sink vertex
-    private Map<E, Double> maximumFlow; // current maximum flow
-    private Double maximumFlowValue; // current maximum flow value
-    private int numNodes; // number of nodes in the network
-    private Map<V, Integer> indexer; // mapping from vertices to their indexes
-                                     // in the internal representation
-    private List<Node> nodes; // internal representation of the network
-
-    
 
     /**
      * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i>
@@ -104,61 +81,14 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
      */
-    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network,
-        double epsilon)
+    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network, double epsilon)
     {
-        if (network == null) {
-            throw new NullPointerException("network is null");
-        }
-        if (epsilon <= 0) {
-            throw new IllegalArgumentException(
-                "invalid epsilon (must be positive)");
-        }
-        for (E e : network.edgeSet()) {
-            if (network.getEdgeWeight(e) < -epsilon) {
-                throw new IllegalArgumentException(
-                    "invalid capacity (must be non-negative)");
-            }
-        }
-
-        this.network = network;
-        this.epsilon = epsilon;
-
-        currentSource = -1;
-        currentSink = -1;
-        maximumFlow = null;
-        maximumFlowValue = null;
-
-        buildInternalNetwork();
+        engine = new org.jgrapht.alg.flow.EdmondsKarpMaximumFlow<V, E>(network, epsilon);
     }
 
-    
-
-    // converting the original network into internal more convenient format
-    private void buildInternalNetwork()
+    private void build()
     {
-        numNodes = network.vertexSet().size();
-        nodes = new ArrayList<Node>();
-        Iterator<V> it = network.vertexSet().iterator();
-        indexer = new HashMap<V, Integer>();
-        for (int i = 0; i < numNodes; i++) {
-            V currentNode = it.next();
-            nodes.add(new Node(currentNode));
-            indexer.put(currentNode, i);
-        }
-        for (int i = 0; i < numNodes; i++) {
-            V we = nodes.get(i).prototype;
-            for (E e : network.outgoingEdgesOf(we)) {
-                V he = network.getEdgeTarget(e);
-                int j = indexer.get(he);
-                Arc e1 = new Arc(i, j, network.getEdgeWeight(e), e);
-                Arc e2 = new Arc(j, i, 0.0, null);
-                e1.reversed = e2;
-                e2.reversed = e1;
-                nodes.get(i).outgoingArcs.add(e1);
-                nodes.get(j).outgoingArcs.add(e2);
-            }
-        }
+        maxFlow = engine.buildMaximumFlow(currentSource, currentSink);
     }
 
     /**
@@ -174,84 +104,10 @@ public final class EdmondsKarpMaximumFlow<V, E>
         V source,
         V sink)
     {
-        if (!network.containsVertex(source)) {
-            throw new IllegalArgumentException(
-                "invalid source (null or not from this network)");
-        }
-        if (!network.containsVertex(sink)) {
-            throw new IllegalArgumentException(
-                "invalid sink (null or not from this network)");
-        }
+        currentSource   = source;
+        currentSink     = sink;
 
-        if (source.equals(sink)) {
-            throw new IllegalArgumentException("source is equal to sink");
-        }
-
-        currentSource = indexer.get(source);
-        currentSink = indexer.get(sink);
-
-        for (int i = 0; i < numNodes; i++) {
-            for (Arc currentArc : nodes.get(i).outgoingArcs) {
-                currentArc.flow = 0.0;
-            }
-        }
-        maximumFlowValue = 0.0;
-        for (;;) {
-            breadthFirstSearch();
-            if (!nodes.get(currentSink).visited) {
-                maximumFlow = new HashMap<E, Double>();
-                for (int i = 0; i < numNodes; i++) {
-                    for (Arc currentArc : nodes.get(i).outgoingArcs) {
-                        if (currentArc.prototype != null) {
-                            maximumFlow.put(
-                                currentArc.prototype,
-                                currentArc.flow);
-                        }
-                    }
-                }
-                return;
-            }
-            augmentFlow();
-        }
-    }
-
-    private void breadthFirstSearch()
-    {
-        for (int i = 0; i < numNodes; i++) {
-            nodes.get(i).visited = false;
-        }
-        Queue<Integer> queue = new LinkedList<Integer>();
-        queue.offer(currentSource);
-        nodes.get(currentSource).visited = true;
-        nodes.get(currentSource).flowAmount = Double.POSITIVE_INFINITY;
-        while (queue.size() != 0) {
-            int currentNode = queue.poll();
-            for (Arc currentArc : nodes.get(currentNode).outgoingArcs) {
-                if ((currentArc.flow + epsilon) < currentArc.capacity) {
-                    if (!nodes.get(currentArc.head).visited) {
-                        nodes.get(currentArc.head).visited = true;
-                        nodes.get(currentArc.head).flowAmount =
-                            Math.min(
-                                nodes.get(currentNode).flowAmount,
-                                currentArc.capacity - currentArc.flow);
-                        nodes.get(currentArc.head).lastArc = currentArc;
-                        queue.add(currentArc.head);
-                    }
-                }
-            }
-        }
-    }
-
-    private void augmentFlow()
-    {
-        double deltaFlow = nodes.get(currentSink).flowAmount;
-        maximumFlowValue += deltaFlow;
-        int currentNode = currentSink;
-        while (currentNode != currentSource) {
-            nodes.get(currentNode).lastArc.flow += deltaFlow;
-            nodes.get(currentNode).lastArc.reversed.flow -= deltaFlow;
-            currentNode = nodes.get(currentNode).lastArc.tail;
-        }
+        build();
     }
 
     /**
@@ -263,7 +119,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      */
     public Double getMaximumFlowValue()
     {
-        return maximumFlowValue;
+        return maxFlow.getValue();
     }
 
     /**
@@ -275,10 +131,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      */
     public Map<E, Double> getMaximumFlow()
     {
-        if (maximumFlow == null) {
-            return null;
-        }
-        return Collections.unmodifiableMap(maximumFlow);
+        return Collections.unmodifiableMap(maxFlow.getFlow());
     }
 
     /**
@@ -289,10 +142,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      */
     public V getCurrentSource()
     {
-        if (currentSource == -1) {
-            return null;
-        }
-        return nodes.get(currentSource).prototype;
+        return currentSource;
     }
 
     /**
@@ -303,55 +153,17 @@ public final class EdmondsKarpMaximumFlow<V, E>
      */
     public V getCurrentSink()
     {
-        if (currentSink == -1) {
-            return null;
-        }
-        return nodes.get(currentSink).prototype;
+        return currentSink;
     }
 
-    
+    @Override
+    public MaximumFlow<V, E> buildMaximumFlow(V source, V sink) {
+        currentSource   = source;
+        currentSink     = sink;
 
-    // class used for internal representation of network
-    class Node
-    {
-        V prototype; // corresponding node in the original network
-        List<Arc> outgoingArcs = new ArrayList<Arc>(); // list of outgoing arcs
-                                                       // in the residual
-                                                       // network
-        boolean visited; // this mark is used during BFS to mark visited nodes
-        Arc lastArc; // last arc in the shortest path
-        double flowAmount; // amount of flow, we are able to push here
+        build();
 
-        Node(
-            V prototype)
-        {
-            this.prototype = prototype;
-        }
-    }
-
-    // class used for internal representation of network
-    class Arc
-    {
-        int tail; // "from"
-        int head; // "to"
-        double capacity; // capacity (can be zero)
-        double flow; // current flow (can be negative)
-        Arc reversed; // for each arc in the original network we are to create
-                      // reversed arc
-        E prototype; // corresponding edge in the original network, can be null,
-                     // if it is reversed arc
-
-        Arc(
-            int tail,
-            int head,
-            double capacity,
-            E prototype)
-        {
-            this.tail = tail;
-            this.head = head;
-            this.capacity = capacity;
-            this.prototype = prototype;
-        }
+        return maxFlow;
     }
 }
 
