@@ -186,7 +186,7 @@ public final class EdmondsKarpMaximumFlow<V, E> extends MaximumFlowAlgorithmBase
             augmentFlow();
         }
 
-        return new MaximumFlow<V, E>(maxFlowValue, maxFlow);
+        return new MaximumFlowImpl<V, E>(maxFlowValue, maxFlow);
     }
 
     protected VertexExtension extendedVertex(V v) {

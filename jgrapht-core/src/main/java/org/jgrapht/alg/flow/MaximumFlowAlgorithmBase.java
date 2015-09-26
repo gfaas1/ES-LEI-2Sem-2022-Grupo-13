@@ -64,7 +64,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
     private Extension<V, ? extends VertexExtensionBase> vXs;
     private Extension<E, ? extends EdgeExtensionBase> eXs;
 
-    /* package */ abstract DirectedGraph<V, E> getNetwork();
+    abstract DirectedGraph<V, E> getNetwork();
 
     <VE extends VertexExtensionBase, EE extends EdgeExtensionBase>
     void init(ExtensionFactory<VE> vertexExtensionFactory, ExtensionFactory<EE> edgeExtensionFactory) {
@@ -146,7 +146,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
     }
 
 
-    /* package */ class VertexExtensionBase extends Extension.BaseExtension
+    class VertexExtensionBase extends Extension.BaseExtension
     {
         private final List<? extends EdgeExtensionBase> outgoing = new ArrayList<EdgeExtensionBase>();
 
@@ -159,7 +159,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         double excess;
     }
 
-    /* package */ class EdgeExtensionBase extends Extension.BaseExtension {
+    class EdgeExtensionBase extends Extension.BaseExtension {
 
         private VertexExtensionBase source;
         private VertexExtensionBase target;
@@ -199,7 +199,6 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
     protected void pushFlowThrough(EdgeExtensionBase ex, double f) {
         EdgeExtensionBase iex = ex.<EdgeExtensionBase>getInverse();
 
-        // _DBG
         assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
 
         if (compareFlowTo(iex.flow, f) == -1) {

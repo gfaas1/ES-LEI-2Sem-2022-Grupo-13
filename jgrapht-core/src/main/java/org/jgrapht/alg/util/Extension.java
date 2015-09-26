@@ -39,7 +39,7 @@ import java.util.Map;
 
 /**
  * Abstract extension manager allowing to extend given class-types with supplied
- * extension's class-type saving source class objects intouch
+ * extension's class-type saving source class object references
  *
  * @param <T> class-type to be extended
  * @param <E> extension concept class-type

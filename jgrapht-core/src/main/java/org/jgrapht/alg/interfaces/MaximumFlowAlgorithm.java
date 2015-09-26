@@ -48,29 +48,37 @@ import java.util.Map;
  */
 public interface MaximumFlowAlgorithm<V, E> {
 
-    class MaximumFlow<V, E> {
-
-        private Double value;
-        private Map<E, Double> flow;
-
-        public MaximumFlow(Double value, Map<E, Double> flow)
-        {
-            this.value  = value;
-            this.flow   = Collections.unmodifiableMap(flow);
-        }
-
+    interface MaximumFlow<V, E> {
         /**
          * Returns value of the maximum-flow for the given network
          * @return value of th maximum-flow
          */
-        public Double getValue() {
-            return value;
-        }
+        public Double getValue();
 
         /**
          * Returns mapping from edge to flow value through this particular edge
          * @return maximum flow
          */
+        public Map<E, Double> getFlow();
+    }
+    
+    class MaximumFlowImpl<V, E> implements MaximumFlow {
+
+        private Double value;
+        private Map<E, Double> flow;
+
+        public MaximumFlowImpl(Double value, Map<E, Double> flow)
+        {
+            this.value  = value;
+            this.flow   = Collections.unmodifiableMap(flow);
+        }
+
+        @Override
+        public Double getValue() {
+            return value;
+        }
+
+        @Override
         public Map<E, Double> getFlow() {
             return flow;
         }
