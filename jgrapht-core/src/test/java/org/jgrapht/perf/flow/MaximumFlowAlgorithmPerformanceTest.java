@@ -33,12 +33,14 @@
  * -------
  */
 
-package org.jgrapht.alg.flow;
+package org.jgrapht.perf.flow;
 
 import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.VertexFactory;
+import org.jgrapht.alg.flow.EdmondsKarpMaximumFlow;
+import org.jgrapht.alg.flow.PushRelabelMaximumFlow;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
