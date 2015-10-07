@@ -123,6 +123,22 @@ public class MaximumWeightBipartiteMatchingTest {
 		DefaultWeightedEdge e1 = graph.addEdge("s1", "t1");
 		graph.setEdgeWeight(e1, 1);
 		DefaultWeightedEdge e2 = graph.addEdge("s1", "t2");
+		graph.setEdgeWeight(e2, 1);
+		DefaultWeightedEdge e3 = graph.addEdge("s2", "t2");
+		graph.setEdgeWeight(e3, 1);
+		
+		matcher = new MaximumWeightBipartiteMatching<String, DefaultWeightedEdge>(graph, partition1, partition2);
+		Set<DefaultWeightedEdge> matchings = matcher.getMatching();
+		assertEquals(2, matchings.size());
+		assertTrue(matchings.contains(e1));
+		assertTrue(matchings.contains(e3));
+	}
+
+	@Test
+	public void maximumWeightBipartiteMatching5() {
+		DefaultWeightedEdge e1 = graph.addEdge("s1", "t1");
+		graph.setEdgeWeight(e1, 1);
+		DefaultWeightedEdge e2 = graph.addEdge("s1", "t2");
 		graph.setEdgeWeight(e2, 2);
 		DefaultWeightedEdge e3 = graph.addEdge("s2", "t2");
 		graph.setEdgeWeight(e3, 2);

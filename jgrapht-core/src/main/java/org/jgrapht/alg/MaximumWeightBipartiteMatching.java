@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -------------------------
- * MaximumWeightBipartiteMatching
+ * MaximumWeightBipartiteMatching.java
  * -------------------------
  * (C) Copyright 2015, by Graeme Ahokas and Contributors.
  *
@@ -31,18 +31,6 @@
  * -------
  * 30-Sep-2015 : Initial revision (GA);
  *
- */
-
-
-
-/* This class is finds a maximum weight matching of a simple undirected 
- * weighted bipartite graph. The algorithm runs in O(V|E|^2). The algorithm is described in
- * The LEDA Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
- * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html
- *
- * Note: the input graph must be bipartite with non-negative integer edge weights
- *
- * @author Graeme Ahokas
  */
 
 
@@ -58,7 +46,19 @@ import java.util.Set;
 
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.Graphs;
 
+
+/**
+ * This class finds a maximum weight matching of a simple undirected 
+ * weighted bipartite graph. The algorithm runs in O(V|E|^2). The algorithm is described in
+ * The LEDA Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
+ * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html
+ * 
+ * Note: the input graph must be bipartite with positive integer edge weights
+ *
+ * @author Graeme Ahokas
+ */
 public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlgorithm<V, E> {
 	
 	private final WeightedGraph<V,E> graph;
@@ -71,6 +71,15 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 	
 	private Set<E> bipartiteMatching;
 
+        /**
+         * Creates a new MaximumWeightBipartiteMatching algorithm instance.
+         * The union of vertexPartition1 and vertexParition2 should be equal to the vertex set of the graph
+         * Every edge in the graph must connect a vertex in vertexPartition1 with a vertex in vertexPartition2
+         *
+         * @param graph simple undirected weighted bipartite graph to find matching in, with positive integer edge weights
+         * @param vertexPartition1 first vertex partition of the bipartite graph, disjoint from vertexPartition2
+         * @param vertexPartition2 second vertex partition of the bipartite graph, disjoint from vertexPartition1
+         */
 	public MaximumWeightBipartiteMatching(final WeightedGraph<V,E> graph, Set<V> vertexPartition1, Set<V> vertexPartition2) {
 		this.graph = graph;
 		partition1 = vertexPartition1;
@@ -80,9 +89,9 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 		hasVertexBeenProcessed = new HashMap<V, Boolean>();
 		isEdgeMatched = new HashMap<E, Boolean>();
 		
-		initializeVerticiesAndEdges();
+		initializeVerticesAndEdges();
 	}
-	
+
 	@Override
 	public Set<E> getMatching() {
 		if (bipartiteMatching == null)
@@ -103,7 +112,7 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 		return weight;
 	}
 	
-	private void initializeVerticiesAndEdges() {
+	private void initializeVerticesAndEdges() {
 		for (V vertex : graph.vertexSet()) {
 			if (isTargetVertex(vertex)) {
 				hasVertexBeenProcessed.put(vertex, true);
@@ -149,12 +158,6 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 		return (long) (vertexWeight(graph.getEdgeSource(edge)) + vertexWeight(graph.getEdgeTarget(edge)) - graph.getEdgeWeight(edge));
 	}
 	
-	private V adjacentVertex(E edge, V vertex) {
-		if (graph.getEdgeSource(edge).equals(vertex))
-			return graph.getEdgeTarget(edge);
-		return graph.getEdgeSource(edge);
-	}
-	
 	private boolean isVertexMatched(V vertex, Set<E> matchings) {
 		for (E edge : matchings)
 			if (graph.getEdgeSource(edge).equals(vertex) || graph.getEdgeTarget(edge).equals(vertex))
@@ -188,13 +191,12 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 			if (isTargetVertex(vertex))
 				continue;
 			for (E edge : graph.edgesOf(vertex)) {
-				if (hasVertexBeenProcessed.get(adjacentVertex(edge, vertex)) && !reachableVerticies.keySet().contains(adjacentVertex(edge, vertex)) && reducedWeight(edge) < beta)
+				if (hasVertexBeenProcessed.get(Graphs.getOppositeVertex(graph, edge, vertex)) && !reachableVerticies.keySet().contains(Graphs.getOppositeVertex(graph, edge, vertex)) && reducedWeight(edge) < beta)
 					beta = reducedWeight(edge);
 			}
 		}
 		
-		if (alpha == 0 || beta == 0)
-			throw new RuntimeException("Something went wrong: invalid alpha / beta values");
+		assert (alpha > 0 && beta > 0);
 		
 		long minValue = Math.min(alpha, beta);
 		
@@ -210,17 +212,17 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 	private Map<V, List<E>> verticesReachableByTightAlternatingEdgesFromVertex(V vertex) {
 		Map<V, List<E>> pathsToVertices = new HashMap<V, List<E>>();
 		pathsToVertices.put(vertex, new ArrayList<E>());
-		_verticesReachableByTightAlternatingEdgesFromVertex(Arrays.asList(vertex), false, pathsToVertices);
+		findPathsToVerticesFromVertices(Arrays.asList(vertex), false, pathsToVertices);
 		return pathsToVertices;
 	}
 	
-	private void _verticesReachableByTightAlternatingEdgesFromVertex(List<V> verticesToProcess, boolean needMatchedEdge, Map<V, List<E>> pathsToVertices) {
+	private void findPathsToVerticesFromVertices(List<V> verticesToProcess, boolean needMatchedEdge, Map<V, List<E>> pathsToVertices) {
 		if (verticesToProcess.size() == 0)
 			return;
 		List<V> nextVerticesToProcess = new ArrayList<V>();
 		for (V vertex : verticesToProcess) {
 			for (E edge : graph.edgesOf(vertex)) {
-				V adjacentVertex = adjacentVertex(edge, vertex);
+				V adjacentVertex = Graphs.getOppositeVertex(graph, edge, vertex);
 				if (hasVertexBeenProcessed.get(adjacentVertex) && reducedWeight(edge) == 0 && !pathsToVertices.keySet().contains(adjacentVertex)) {
 					if ((needMatchedEdge && isEdgeMatched.get(edge)) || (!needMatchedEdge && ! isEdgeMatched.get(edge))) {
 						nextVerticesToProcess.add(adjacentVertex);
@@ -231,7 +233,7 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 				}
 			}
 		}
-		_verticesReachableByTightAlternatingEdgesFromVertex(nextVerticesToProcess, !needMatchedEdge, pathsToVertices);
+		findPathsToVerticesFromVertices(nextVerticesToProcess, !needMatchedEdge, pathsToVertices);
 	}
 
 	private Set<E> maximumWeightBipartiteMatching() {
