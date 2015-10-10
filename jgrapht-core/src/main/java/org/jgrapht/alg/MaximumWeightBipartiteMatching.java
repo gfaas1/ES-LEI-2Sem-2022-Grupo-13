@@ -179,19 +179,19 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 		}
 	}
 	
-	private void adjustVertexWeights(Map<V, List<E>> reachableVerticies) {
+	private void adjustVertexWeights(Map<V, List<E>> reachableVertices) {
 		long alpha = Long.MAX_VALUE;
-		for (V vertex : reachableVerticies.keySet()) {
+		for (V vertex : reachableVertices.keySet()) {
 			if (isSourceVertex(vertex) && vertexWeights.get(vertex) < alpha)
 				alpha = vertexWeights.get(vertex);
 		}
 		
 		long beta = Long.MAX_VALUE;
-		for (V vertex : reachableVerticies.keySet()) {
+		for (V vertex : reachableVertices.keySet()) {
 			if (isTargetVertex(vertex))
 				continue;
 			for (E edge : graph.edgesOf(vertex)) {
-				if (hasVertexBeenProcessed.get(Graphs.getOppositeVertex(graph, edge, vertex)) && !reachableVerticies.keySet().contains(Graphs.getOppositeVertex(graph, edge, vertex)) && reducedWeight(edge) < beta)
+				if (hasVertexBeenProcessed.get(Graphs.getOppositeVertex(graph, edge, vertex)) && !reachableVertices.keySet().contains(Graphs.getOppositeVertex(graph, edge, vertex)) && reducedWeight(edge) < beta)
 					beta = reducedWeight(edge);
 			}
 		}
@@ -200,7 +200,7 @@ public class MaximumWeightBipartiteMatching<V, E> implements WeightedMatchingAlg
 		
 		long minValue = Math.min(alpha, beta);
 		
-		for (V vertex : reachableVerticies.keySet()) {
+		for (V vertex : reachableVertices.keySet()) {
 			if (isSourceVertex(vertex))
 				vertexWeights.put(vertex, vertexWeights.get(vertex) - minValue);
 			else

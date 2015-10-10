@@ -85,6 +85,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Jon Robinson
 - Thomas Breitbart
 - Sarah Komla-Ebri
+- Graeme Ahokas
 
 (if we have missed your name on this list, please email us to get it fixed).
 
