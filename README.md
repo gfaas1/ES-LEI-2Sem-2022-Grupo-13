@@ -7,7 +7,7 @@ Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contribu
 (C) Copyright 2003-2015, by Barak Naveh and Contributors. All rights
 reserved.
 
-Please address all contributions, suggestions, and inquiries to the current project administrator [John Sichi](mailto:perfecthash@users.sf.net)
+Please address all contributions, suggestions, and inquiries to the [user mailing list](https://lists.sourceforge.net/lists/listinfo/jgrapht-users)
 
 ## Introduction ##
 
