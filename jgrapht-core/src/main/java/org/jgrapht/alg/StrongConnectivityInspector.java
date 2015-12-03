@@ -49,7 +49,7 @@ import java.util.*;
  * <p>Complements the {@link ConnectivityInspector} class with
  * the capability to compute the strongly connected components of a directed
  * graph. The algorithm is implemented after "Cormen et al: Introduction to
- * agorithms", Chapter 22.5. It has a running time of O(V + E).</p>
+ * algorithms", Chapter 22.5. It has a running time of O(V + E).</p>
  *
  * <p>Unlike {@link ConnectivityInspector}, this class does not
  * implement incremental inspection. The full algorithm is executed at the first
