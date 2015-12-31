@@ -104,7 +104,7 @@ public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgo
         stronglyConnectedSubgraphs = null;
     }
 
-    
+
 
     /**
      * Returns the graph inspected by the StrongConnectivityAlgorithm.
@@ -284,7 +284,7 @@ public class StrongConnectivityInspector<V, E> implements StrongConnectivityAlgo
         }
     }
 
-    
+
 
     /*
      * Lightweight class storing some data for every vertex.

@@ -48,7 +48,7 @@ public class DirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements DirectedGraph<V, E>
 {
-    
+
 
     public DirectedMaskSubgraph(
         DirectedGraph<V, E> base,

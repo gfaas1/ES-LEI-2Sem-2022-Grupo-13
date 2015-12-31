@@ -70,11 +70,11 @@ public class DefaultListenableGraph<V, E>
     implements ListenableGraph<V, E>,
         Cloneable
 {
-    
+
 
     private static final long serialVersionUID = 3977575900898471984L;
 
-    
+
 
     private List<GraphListener<V, E>> graphListeners =
         new ArrayList<GraphListener<V, E>>();
@@ -84,7 +84,7 @@ public class DefaultListenableGraph<V, E>
     private FlyweightVertexEvent<V> reuseableVertexEvent;
     private boolean reuseEvents;
 
-    
+
 
     /**
      * Creates a new listenable graph.
@@ -124,7 +124,7 @@ public class DefaultListenableGraph<V, E>
         }
     }
 
-    
+
 
     /**
      * If the <code>reuseEvents</code> flag is set to <code>true</code> this
@@ -431,7 +431,7 @@ public class DefaultListenableGraph<V, E>
         }
     }
 
-    
+
 
     /**
      * A reuseable edge event.

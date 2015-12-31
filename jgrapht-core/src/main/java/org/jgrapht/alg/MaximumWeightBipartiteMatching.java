@@ -50,11 +50,11 @@ import org.jgrapht.Graphs;
 
 
 /**
- * This class finds a maximum weight matching of a simple undirected 
+ * This class finds a maximum weight matching of a simple undirected
  * weighted bipartite graph. The algorithm runs in O(V|E|^2). The algorithm is described in
  * The LEDA Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
  * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html
- * 
+ *
  * Note: the input graph must be bipartite with positive integer edge weights
  *
  * @author Graeme Ahokas

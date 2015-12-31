@@ -39,13 +39,13 @@ package org.jgrapht.ext;
 public class StringEdgeNameProvider<E>
     implements EdgeNameProvider<E>
 {
-    
+
 
     public StringEdgeNameProvider()
     {
     }
 
-    
+
 
     /**
      * Returns the String representation an edge.

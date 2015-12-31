@@ -61,7 +61,7 @@ import org.jgrapht.graph.*;
  */
 public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnectivityAlgorithm<V,E>
 {
-    
+
 
     // the graph to compute the strongly connected sets for
     private final DirectedGraph<V, E> graph;
@@ -78,7 +78,7 @@ public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnecti
     // maps vertices to their VertexData object
     private Map<V, VertexData<V>> vertexToVertexData;
 
-    
+
 
     /**
      * The constructor of the StrongConnectivityAlgorithm class.
@@ -100,7 +100,7 @@ public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnecti
         stronglyConnectedSubgraphs = null;
     }
 
-    
+
 
     /**
      * Returns the graph inspected by the StrongConnectivityAlgorithm.
@@ -280,7 +280,7 @@ public class KosarajuStrongConnectivityInspector<V, E> implements StrongConnecti
         }
     }
 
-    
+
 
     /*
      * Lightweight class storing some data for every vertex.

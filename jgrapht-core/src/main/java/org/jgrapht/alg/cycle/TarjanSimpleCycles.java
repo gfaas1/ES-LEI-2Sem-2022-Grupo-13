@@ -55,7 +55,7 @@ import org.jgrapht.*;
 public class TarjanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    
+
 
     private DirectedGraph<V, E> graph;
 
@@ -66,7 +66,7 @@ public class TarjanSimpleCycles<V, E>
     private Map<V, Integer> vToI;
     private Map<V, Set<V>> removed;
 
-    
+
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -91,7 +91,7 @@ public class TarjanSimpleCycles<V, E>
         this.graph = graph;
     }
 
-    
+
 
     /**
      * {@inheritDoc}

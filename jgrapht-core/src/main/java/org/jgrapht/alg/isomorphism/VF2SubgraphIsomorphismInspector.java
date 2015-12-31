@@ -56,7 +56,7 @@ import org.jgrapht.*;
 public class VF2SubgraphIsomorphismInspector<V, E>
     extends VF2AbstractIsomorphismInspector<V, E>
 {
-    
+
 
     /**
      * This implementation of the VF2 algorithm does not support graphs with
@@ -116,7 +116,7 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             true);
     }
 
-    
+
 
     @Override public VF2SubgraphMappingIterator<V, E> getMappings()
     {

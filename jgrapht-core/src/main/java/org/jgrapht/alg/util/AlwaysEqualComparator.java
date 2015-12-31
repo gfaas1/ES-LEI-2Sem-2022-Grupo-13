@@ -45,7 +45,7 @@ import java.util.*;
 public class AlwaysEqualComparator<T>
     implements Comparator<T>
 {
-    
+
 
     @Override public int compare(T arg0, T arg1)
     {

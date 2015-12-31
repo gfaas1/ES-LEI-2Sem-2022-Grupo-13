@@ -48,7 +48,7 @@ public final class DirectedWeightedGraphBuilder<V,
     extends DirectedWeightedGraphBuilderBase<V,
         E, G, DirectedWeightedGraphBuilder<V, E, G>>
 {
-    
+
 
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
@@ -68,7 +68,7 @@ public final class DirectedWeightedGraphBuilder<V,
         super(baseGraph);
     }
 
-    
+
 
     @Override protected DirectedWeightedGraphBuilder<V, E, G> self()
     {

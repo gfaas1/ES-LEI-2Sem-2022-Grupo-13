@@ -57,14 +57,14 @@ import org.jgrapht.*;
 public class HawickJamesSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    
+
 
     private enum Operation
     {
         ENUMERATE, PRINT_ONLY, COUNT_ONLY
     }
 
-    
+
 
     // The graph
     private DirectedGraph<V, E> graph = null;
@@ -89,7 +89,7 @@ public class HawickJamesSimpleCycles<V, E>
     private V [] iToV = null;
     private Map<V, Integer> vToI = null;
 
-    
+
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -115,7 +115,7 @@ public class HawickJamesSimpleCycles<V, E>
         this.graph = graph;
     }
 
-    
+
 
     @SuppressWarnings("unchecked")
     private void initState(Operation o)

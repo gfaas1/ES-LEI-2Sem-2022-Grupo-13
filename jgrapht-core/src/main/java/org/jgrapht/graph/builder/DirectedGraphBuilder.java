@@ -46,7 +46,7 @@ import org.jgrapht.*;
 public final class DirectedGraphBuilder<V, E, G extends DirectedGraph<V, E>>
     extends DirectedGraphBuilderBase<V, E, G, DirectedGraphBuilder<V, E, G>>
 {
-    
+
 
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
@@ -66,7 +66,7 @@ public final class DirectedGraphBuilder<V, E, G extends DirectedGraph<V, E>>
         super(baseGraph);
     }
 
-    
+
 
     @Override protected DirectedGraphBuilder<V, E, G> self()
     {

@@ -52,7 +52,7 @@ import org.jgrapht.*;
 class VF2SubgraphMappingIterator<V, E>
     extends VF2MappingIterator<V, E>
 {
-    
+
 
     public VF2SubgraphMappingIterator(
         GraphOrdering<V, E> ordering1,
@@ -63,7 +63,7 @@ class VF2SubgraphMappingIterator<V, E>
         super(ordering1, ordering2, vertexComparator, edgeComparator);
     }
 
-    
+
 
     @Override protected IsomorphicGraphMapping<V, E> match()
     {

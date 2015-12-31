@@ -191,7 +191,7 @@ public class FloydWarshallShortestPathsTest
         double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
     }
-    
+
     public void testWeightedEdges() {
     	SimpleDirectedGraph<String, DefaultWeightedEdge> weighted =
     		new SimpleDirectedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);

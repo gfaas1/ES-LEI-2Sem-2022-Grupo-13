@@ -25,13 +25,13 @@ import org.jgrapht.*;
  */
 public abstract class IntArrayGraphAlgorithm<V, E>
 {
-    
+
 
     protected final List<V> _vertices;
     protected final int [][] _neighbors;
     protected final Map<V, Integer> _vertexToPos;
 
-    
+
 
     /**
      * @param g

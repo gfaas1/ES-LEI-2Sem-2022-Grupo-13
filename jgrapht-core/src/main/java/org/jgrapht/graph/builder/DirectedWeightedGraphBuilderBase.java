@@ -48,7 +48,7 @@ public abstract class DirectedWeightedGraphBuilderBase<V,
     B extends DirectedWeightedGraphBuilderBase<V, E, G, B>>
     extends DirectedGraphBuilderBase<V, E, G, B>
 {
-    
+
 
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
@@ -61,7 +61,7 @@ public abstract class DirectedWeightedGraphBuilderBase<V,
         super(baseGraph);
     }
 
-    
+
 
     /**
      * Adds an weighted edge to the graph being built. The source and target

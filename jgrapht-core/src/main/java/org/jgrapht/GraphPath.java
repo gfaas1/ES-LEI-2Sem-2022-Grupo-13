@@ -50,7 +50,7 @@ import java.util.*;
  */
 public interface GraphPath<V, E>
 {
-    
+
 
     /**
      * Returns the graph over which this path is defined. The path may also be

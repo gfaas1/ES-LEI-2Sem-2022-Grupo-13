@@ -27,11 +27,11 @@ import org.jgrapht.*;
 public abstract class WeightedGraphGeneratorAdapter<V, E, T>
     implements GraphGenerator<V, E, T>
 {
-    
+
 
     protected double [][] weights;
 
-    
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 

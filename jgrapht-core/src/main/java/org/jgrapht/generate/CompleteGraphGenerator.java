@@ -58,11 +58,11 @@ import org.jgrapht.*;
 public class CompleteGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    
+
 
     private int size;
 
-    
+
 
     /**
      * Construct a new CompleteGraphGenerator.
@@ -80,7 +80,7 @@ public class CompleteGraphGenerator<V, E>
         this.size = size;
     }
 
-    
+
 
     /**
      * {@inheritDoc}

@@ -58,7 +58,7 @@ import org.jgrapht.*;
  */
 public class KShortestPaths<V, E>
 {
-    
+
 
     /**
      * Graph on which shortest paths are searched.
@@ -71,7 +71,7 @@ public class KShortestPaths<V, E>
 
     private V startVertex;
 
-    
+
 
     /**
      * Creates an object to compute ranking shortest paths between the start
@@ -115,7 +115,7 @@ public class KShortestPaths<V, E>
         this.nMaxHops = nMaxHops;
     }
 
-    
+
 
     /**
      * Returns the k shortest simple paths in increasing order of weight.
@@ -197,7 +197,7 @@ public class KShortestPaths<V, E>
         }
     }
 
-    
+
 
     private class PathWrapper
         implements GraphPath<V, E>

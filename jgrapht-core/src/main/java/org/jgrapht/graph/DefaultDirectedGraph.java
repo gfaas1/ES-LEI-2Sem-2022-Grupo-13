@@ -54,11 +54,11 @@ public class DefaultDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 3544953246956466230L;
 
-    
+
 
     /**
      * Creates a new directed graph.
@@ -80,7 +80,7 @@ public class DefaultDirectedGraph<V, E>
         super(ef, false, true);
     }
 
-    
+
 
     public static <V, E> DirectedGraphBuilderBase<V,
         E, ? extends DefaultDirectedGraph<V, E>, ?> builder(

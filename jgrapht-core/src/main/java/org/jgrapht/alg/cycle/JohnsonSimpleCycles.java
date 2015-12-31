@@ -56,7 +56,7 @@ import org.jgrapht.graph.*;
 public class JohnsonSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    
+
 
     // The graph.
     private DirectedGraph<V, E> graph;
@@ -77,7 +77,7 @@ public class JohnsonSimpleCycles<V, E>
     private ArrayDeque<V> path = null;
     private Set<V> pathSet = null;
 
-    
+
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -102,7 +102,7 @@ public class JohnsonSimpleCycles<V, E>
         this.graph = graph;
     }
 
-    
+
 
     /**
      * {@inheritDoc}

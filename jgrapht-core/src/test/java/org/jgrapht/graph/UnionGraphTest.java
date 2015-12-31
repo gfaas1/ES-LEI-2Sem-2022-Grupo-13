@@ -68,7 +68,7 @@ public class UnionGraphTest extends TestCase {
     private DefaultEdge e5= new DefaultEdge(); //(v2,v3);
     private DefaultEdge e6= new DefaultEdge(); //(v3,v4);
     private DefaultEdge e7= new DefaultEdge(); //(v4,v1);
-    
+
     SimpleGraph<String, DefaultEdge> undirectedGraph1;
     SimpleGraph<String, DefaultEdge> undirectedGraph2;
 
@@ -77,7 +77,7 @@ public class UnionGraphTest extends TestCase {
 
 
     //~ Methods ----------------------------------------------------------------
-    
+
     @Override
     public void setUp(){
         undirectedGraph1=new SimpleWeightedGraph<String, DefaultEdge>(DefaultEdge.class);

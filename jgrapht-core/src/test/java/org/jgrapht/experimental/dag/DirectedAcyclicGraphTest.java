@@ -532,7 +532,7 @@ public class DirectedAcyclicGraphTest
         }
     }
 
-    
+
     public void testWhenVertexIsNotInGraph_Then_ThowException() {
         DirectedAcyclicGraph<Long, DefaultEdge> dag =
                 new DirectedAcyclicGraph<Long, DefaultEdge>(DefaultEdge.class);
@@ -546,7 +546,7 @@ public class DirectedAcyclicGraphTest
 		}
         fail("No exception 'IllegalArgumentException' catched");
     }
-    
+
     //~ Inner Classes ----------------------------------------------------------
 
     private static class LongVertexFactory

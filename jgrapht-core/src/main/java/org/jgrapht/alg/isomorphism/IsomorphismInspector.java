@@ -49,7 +49,7 @@ import org.jgrapht.*;
  */
 public interface IsomorphismInspector<V, E>
 {
-    
+
 
     public Iterator<GraphMapping<V, E>> getMappings();
 

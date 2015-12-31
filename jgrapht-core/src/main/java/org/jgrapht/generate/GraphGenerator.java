@@ -49,7 +49,7 @@ import org.jgrapht.*;
  */
 public interface GraphGenerator<V, E, T>
 {
-    
+
 
     /**
      * Generate a graph structure. The topology of the generated graph is

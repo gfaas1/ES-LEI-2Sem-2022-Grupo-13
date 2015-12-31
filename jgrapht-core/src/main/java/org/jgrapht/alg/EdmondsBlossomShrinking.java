@@ -51,7 +51,7 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    
+
 
     // ~ Instance fields
     // --------------------------------------------------------
@@ -64,7 +64,7 @@ public class EdmondsBlossomShrinking<V, E>
     private Map<V, V> path;
     private Map<V, V> contracted;
 
-    
+
 
     // ~ Constructors
     // ----------------------------------------------------------------
@@ -78,7 +78,7 @@ public class EdmondsBlossomShrinking<V, E>
         this.graph = G;
     }
 
-    
+
 
     // ~ Deprecated Methods
     // ----------------------------------------------------------------

@@ -86,7 +86,7 @@ public class RandomGraphGenerator<V, E>
         this.randomizer = new Random(this.randomizerSeed);
     }
 
-    
+
 
     /**
      * Should be called only once on creation. Chooses a seed which can be used
@@ -185,7 +185,7 @@ public class RandomGraphGenerator<V, E>
         return new DefaultEdgeTopologyFactory<V, E>();
     }
 
-    
+
 
     /**
      * This class is used to generate the edge topology for a graph.
@@ -229,7 +229,7 @@ public class RandomGraphGenerator<V, E>
             int numberOfEdges);
     }
 
-    
+
 
     /**
      * Default implementation of the EdgeTopologyFactory interface. randomly

@@ -51,11 +51,11 @@ public class DirectedWeightedPseudograph<V, E>
     extends DirectedPseudograph<V, E>
     implements WeightedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 8762514879586423517L;
 
-    
+
 
     /**
      * Creates a new directed weighted pseudograph.
@@ -78,7 +78,7 @@ public class DirectedWeightedPseudograph<V, E>
         super(ef);
     }
 
-    
+
 
     public static <V, E> DirectedWeightedGraphBuilderBase<V,
         E, ? extends DirectedWeightedPseudograph<V, E>, ?> builder(

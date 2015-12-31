@@ -66,7 +66,7 @@ import org.jgrapht.graph.*;
  */
 public class CliqueMinimalSeparatorDecomposition<V, E>
 {
-    
+
 
     /**
      * Source graph to operate on
@@ -110,7 +110,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private Map<Set<V>, Integer> fullComponentCount =
         new HashMap<Set<V>, Integer>();
 
-    
+
 
     /**
      * Setup a clique minimal separator decomposition on undirected graph <code>
@@ -125,7 +125,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         this.fillEdges = new HashSet<E>();
     }
 
-    
+
 
     /**
      * Compute the minimal triangulation of the graph. Implementation of

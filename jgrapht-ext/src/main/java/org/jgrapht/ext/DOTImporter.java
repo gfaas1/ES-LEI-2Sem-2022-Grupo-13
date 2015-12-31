@@ -94,7 +94,7 @@ import org.jgrapht.graph.*;
  */
 public class DOTImporter<V, E>
 {
-    
+
 
     // Constants for the state machine
     private static final int HEADER = 1;
@@ -107,13 +107,13 @@ public class DOTImporter<V, E>
     private static final int NEXT = 8;
     private static final int DONE = 32;
 
-    
+
 
     private VertexProvider<V> vertexProvider;
     private VertexUpdater<V> vertexUpdater;
     private EdgeProvider<V, E> edgeProvider;
 
-    
+
 
     /**
      * Constructs a new DOTImporter with the given providers
@@ -147,7 +147,7 @@ public class DOTImporter<V, E>
         this.edgeProvider = edgeProvider;
     }
 
-    
+
 
     /**
      * Read a dot formatted string and populate the provided graph.

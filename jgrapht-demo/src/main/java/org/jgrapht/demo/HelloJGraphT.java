@@ -50,13 +50,13 @@ import org.jgrapht.graph.*;
  */
 public final class HelloJGraphT
 {
-    
+
 
     private HelloJGraphT()
     {
     } // ensure non-instantiability.
 
-    
+
 
     /**
      * The starting point for the demo.

@@ -95,15 +95,15 @@ public class MinSourceSinkCutTest extends TestCase{
 	    Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
 	    assertEquals(partition2, mc.getSinkPartition());
-	    
+	
 	    //Test the cut weight
 	    assertEquals(7, mc.getCutWeight(),0);
-	    
+	
 	    //Test the cut edge set
 	    List<DefaultWeightedEdge> l3=Arrays.asList(new DefaultWeightedEdge[] {e03, e26, e24, e14});
 	    Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
 	    assertEquals(cutEdges, mc.getCutEdges());
-	    
+	
 	    cutEdges=mc.getCutEdges();
 	    double weight=0;
 	    for(DefaultWeightedEdge e: cutEdges)
@@ -149,15 +149,15 @@ public class MinSourceSinkCutTest extends TestCase{
 	    Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
 	    assertEquals(partition2, mc.getSinkPartition());
-	    
+	
 	    //Test the cut weight
 	    assertEquals(0.875, mc.getCutWeight(),0);
-	    
+	
 	    //Test the cut edge set
 	    List<DefaultWeightedEdge> l3=Arrays.asList(new DefaultWeightedEdge[] {e03, e02, e12, e46});
 	    Set<DefaultWeightedEdge> cutEdges=new HashSet<DefaultWeightedEdge>(l3);
 	    assertEquals(cutEdges, mc.getCutEdges());
-	    
+	
 	    cutEdges=mc.getCutEdges();
 	    double weight=0;
 	    for(DefaultWeightedEdge e: cutEdges)
@@ -188,10 +188,10 @@ public class MinSourceSinkCutTest extends TestCase{
 	    Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
 	    assertEquals(partition2, mc.getSinkPartition());
-	    
+	
 	    //Test the cut weight
 	    assertEquals(2, mc.getCutWeight(),0);
-	    
+	
 	    //Reverse the source and sink
 	    mc.computeMinCut(1, 0);
 	    assertEquals(1, mc.getCurrentSource(), 0);
@@ -224,7 +224,7 @@ public class MinSourceSinkCutTest extends TestCase{
 	    Set<Integer> partition2 = new HashSet<Integer>(l2);
 		assertEquals(partition1, mc.getSourcePartition());
 	    assertEquals(partition2, mc.getSinkPartition());
-	    
+	
 	    //Test the cut weight
 	    assertEquals(0, mc.getCutWeight(),0);
 	    assertEquals(Collections.EMPTY_SET, mc.getCutEdges());

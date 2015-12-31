@@ -48,7 +48,7 @@ package org.jgrapht.event;
 public class TraversalListenerAdapter<V, E>
     implements TraversalListener<V, E>
 {
-    
+
 
     /**
      * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)

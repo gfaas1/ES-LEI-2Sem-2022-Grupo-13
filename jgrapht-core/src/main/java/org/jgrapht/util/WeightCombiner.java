@@ -40,7 +40,7 @@ package org.jgrapht.util;
  */
 public interface WeightCombiner
 {
-    
+
 
     /**
      * Sum of weights.
@@ -108,7 +108,7 @@ public interface WeightCombiner
             }
         };
 
-    
+
 
     /**
      * Combines two weights.

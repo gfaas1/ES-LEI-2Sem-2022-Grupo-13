@@ -18,7 +18,7 @@ import org.jgrapht.*;
 public abstract class WeightedGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    
+
 
     protected Class<? extends E> edgeClass;
 
@@ -26,7 +26,7 @@ public abstract class WeightedGraphGenerator<V, E>
 
     protected double [][] weights;
 
-    
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 

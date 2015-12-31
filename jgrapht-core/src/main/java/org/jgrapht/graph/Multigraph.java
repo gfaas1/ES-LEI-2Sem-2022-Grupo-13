@@ -53,11 +53,11 @@ public class Multigraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 3257001055819871795L;
 
-    
+
 
     /**
      * Creates a new multigraph.
@@ -79,7 +79,7 @@ public class Multigraph<V, E>
         super(ef, true, false);
     }
 
-    
+
 
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Multigraph<V, E>, ?> builder(Class<? extends E> edgeClass)

@@ -80,7 +80,7 @@ public class MixedGraphUnion<V, E>
         this.directedGraph=g2;
     }
 
-    
+
 
     @Override public int inDegreeOf(V vertex)
     {

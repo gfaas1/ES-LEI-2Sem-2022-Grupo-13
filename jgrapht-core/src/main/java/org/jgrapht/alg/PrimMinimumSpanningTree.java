@@ -48,7 +48,7 @@ import org.jgrapht.alg.interfaces.*;
 public class PrimMinimumSpanningTree<V, E>
     implements MinimumSpanningTree<V, E>
 {
-    
+
 
     /**
      * Minimum Spanning-Tree/Forest edge set
@@ -60,7 +60,7 @@ public class PrimMinimumSpanningTree<V, E>
      */
     private final double minimumSpanningTreeTotalWeight;
 
-    
+
 
     public PrimMinimumSpanningTree(final Graph<V, E> g)
     {
@@ -128,7 +128,7 @@ public class PrimMinimumSpanningTree<V, E>
         this.minimumSpanningTreeTotalWeight = spanningTreeWeight;
     }
 
-    
+
 
     @Override public Set<E> getMinimumSpanningTreeEdgeSet()
     {

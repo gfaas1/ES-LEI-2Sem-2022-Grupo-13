@@ -54,11 +54,11 @@ import org.jgrapht.*;
 public class CompleteBipartiteGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-    
+
 
     private int sizeA, sizeB;
 
-    
+
 
     /**
      * Creates a new CompleteBipartiteGraphGenerator object.
@@ -75,7 +75,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
         this.sizeB = partitionTwo;
     }
 
-    
+
 
     /**
      * Construct a complete bipartite graph

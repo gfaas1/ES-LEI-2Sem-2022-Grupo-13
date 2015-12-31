@@ -44,7 +44,7 @@ import org.jgrapht.*;
 abstract class VF2MappingIterator<V, E>
     implements Iterator<GraphMapping<V, E>>
 {
-    
+
 
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;
@@ -56,7 +56,7 @@ abstract class VF2MappingIterator<V, E>
 
     protected ArrayDeque<VF2State<V, E>> stateStack;
 
-    
+
 
     public VF2MappingIterator(
         GraphOrdering<V, E> ordering1,
@@ -71,7 +71,7 @@ abstract class VF2MappingIterator<V, E>
         this.stateStack = new ArrayDeque<VF2State<V, E>>();
     }
 
-    
+
 
     /**
      * This function moves over all mappings between graph1 and graph2. It
