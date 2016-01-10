@@ -61,7 +61,7 @@ public interface MaximumFlowAlgorithm<V, E> {
          */
         public Map<E, Double> getFlow();
     }
-    
+
     class MaximumFlowImpl<V, E> implements MaximumFlow {
 
         private Double value;

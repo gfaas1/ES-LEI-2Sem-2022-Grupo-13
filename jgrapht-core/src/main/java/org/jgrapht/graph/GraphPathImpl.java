@@ -49,7 +49,7 @@ import org.jgrapht.*;
 public class GraphPathImpl<V, E>
     implements GraphPath<V, E>
 {
-    
+
 
     private Graph<V, E> graph;
 
@@ -61,7 +61,7 @@ public class GraphPathImpl<V, E>
 
     private double weight;
 
-    
+
 
     public GraphPathImpl(
         Graph<V, E> graph,
@@ -77,7 +77,7 @@ public class GraphPathImpl<V, E>
         this.weight = weight;
     }
 
-    
+
 
     // implement GraphPath
     @Override public Graph<V, E> getGraph()

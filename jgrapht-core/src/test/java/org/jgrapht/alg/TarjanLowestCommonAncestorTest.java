@@ -96,7 +96,7 @@ public class TarjanLowestCommonAncestorTest  extends TestCase{
 	Assert.assertEquals("b", new TarjanLowestCommonAncestor<String, DefaultEdge>(g).calculate("b", "h", "b"));
     }
 
-    
+
     @Test
     public void testOneNode() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);

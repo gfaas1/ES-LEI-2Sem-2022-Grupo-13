@@ -33,16 +33,16 @@ import com.mxgraph.model.mxICell;
 /**
  * Test methods for the class JGraphXAdapter.
  */
-public class JGraphXAdapterTest 
+public class JGraphXAdapterTest
 {
 
     /**
      * Test scenarios under normal conditions.
      */
     @Test
-    public void genericTest() 
+    public void genericTest()
     {
-        ListenableGraph<String, DefaultEdge> jGraphT 
+        ListenableGraph<String, DefaultEdge> jGraphT
          = new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
         // fill graph with data
@@ -64,25 +64,25 @@ public class JGraphXAdapterTest
         jGraphT.addEdge(v3, v4);
 
         // Create jgraphx graph and test it
-        JGraphXAdapter<String, DefaultEdge> graphX = 
+        JGraphXAdapter<String, DefaultEdge> graphX =
                 new JGraphXAdapter<String, DefaultEdge>(jGraphT);
         testMapping(graphX);
-        
+
         // test if all values are in the jgraphx graph
         Object[] expectedArray = {v1, v2, v3, v4};
         Arrays.sort(expectedArray);
-        
-        Object[] realArray = graphX.getCellToVertexMap().values().toArray(); 
+
+        Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         int edgesCount = graphX.getCellToEdgeMap().values().size();
         Assert.assertEquals(expectedEdges, edgesCount);
-        
+
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdges, edgesCount);
     }
@@ -92,14 +92,14 @@ public class JGraphXAdapterTest
      * Tests the correct implementation of the GraphListener interface.
      */
     @Test
-    public void listenerTest() 
+    public void listenerTest()
     {
-        ListenableGraph<String, String> jGraphT 
+        ListenableGraph<String, String> jGraphT
             = new ListenableDirectedGraph<String, String>(String.class);
-        
-        JGraphXAdapter<String, String> graphX 
+
+        JGraphXAdapter<String, String> graphX
             = new JGraphXAdapter<String, String>(jGraphT);
-        
+
         // add some data to the jgrapht graph - changes should be propagated
         // through jgraphxadapters graphlistener interface
 
@@ -118,63 +118,63 @@ public class JGraphXAdapterTest
         jGraphT.addEdge(v1, v4, "Edge 3");
         jGraphT.addEdge(v2, v3, "Edge 4");
         jGraphT.addEdge(v3, v4, "Edge 5");
-        
+
         int expectedEdges = jGraphT.edgeSet().size();
 
         testMapping(graphX);
-        
+
         // test if all values are in the jgraphx graph
         Object[] expectedArray = {v1, v2, v3, v4};
         Arrays.sort(expectedArray);
-        
-        Object[] realArray = graphX.getCellToVertexMap().values().toArray(); 
+
+        Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         int edgesCount = graphX.getCellToEdgeMap().values().size();
         Assert.assertEquals(expectedEdges, edgesCount);
-        
+
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdges, edgesCount);
-        
-        
+
+
         // remove some data from the jgraphT graph
        jGraphT.removeVertex(v4);
        jGraphT.removeVertex(v3);
-       
+
        jGraphT.removeEdge(v1, v2);
-       
+
        int expectedEdgesAfterRemove = jGraphT.edgeSet().size();
-       
+
         // test if all values are in the jgraphx graph
         expectedArray = new Object[] {v1, v2};
         Arrays.sort(expectedArray);
-        
-        realArray = graphX.getCellToVertexMap().values().toArray(); 
+
+        realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         edgesCount = graphX.getCellToEdgeMap().values().size();
         Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
-        
+
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
     }
-    
-    
+
+
     /**
      * Tests conditions if graph is initialized without a JgraphT graph.
      */
     @Test
-    public void nullInitializationTest() 
+    public void nullInitializationTest()
     {
         try {
             new JGraphXAdapter<String, String>(null);
@@ -188,17 +188,17 @@ public class JGraphXAdapterTest
         }
     }
 
-    
+
     /**
      * Tests the JGraphXAdapter with 1.000 nodes and 1.000 edges.
      */
     @Test
-    public void loadTest() 
+    public void loadTest()
     {
         final int maxVertices = 1000;
         final int maxEdges = 1000;
 
-        ListenableGraph<Integer, DefaultEdge> jGraphT 
+        ListenableGraph<Integer, DefaultEdge> jGraphT
             = new ListenableDirectedGraph<Integer, DefaultEdge>(
                         DefaultEdge.class);
 
@@ -222,14 +222,14 @@ public class JGraphXAdapterTest
         testMapping(graphX);
 
     }
-    
+
     /**
      * Tests if JGraphXAdapter works with not-listenable Graphs.
      */
     @Test
-    public void notListenableTest() 
+    public void notListenableTest()
     {
-        Graph<String, String> jGraphT 
+        Graph<String, String> jGraphT
             = new DefaultDirectedGraph<String, String>(String.class);
         // fill graph with data
         String v1 = "Vertex 1";
@@ -245,45 +245,45 @@ public class JGraphXAdapterTest
         jGraphT.addEdge(v1, v2, "Edge 1");
         jGraphT.addEdge(v1, v3, "Edge 2");
         jGraphT.addEdge(v2, v3, "Edge 3");
-        
-        JGraphXAdapter<String, String> graphX 
-            = new JGraphXAdapter<String, String>(jGraphT);        
+
+        JGraphXAdapter<String, String> graphX
+            = new JGraphXAdapter<String, String>(jGraphT);
 
         jGraphT.addVertex(v4);
         jGraphT.addEdge(v1, v4, "Edge 4");
-        jGraphT.addEdge(v3, v4, "Edge 5");        
+        jGraphT.addEdge(v3, v4, "Edge 5");
 
         testMapping(graphX);
-        
+
         // test if all values are in the jgraphx graph
         Object[] expectedArray = {v1, v2, v3};
         Arrays.sort(expectedArray);
-        
-        Object[] realArray = graphX.getCellToVertexMap().values().toArray(); 
+
+        Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         int edgesCount = graphX.getCellToEdgeMap().values().size();
         Assert.assertEquals(expectedEdges, edgesCount);
-        
+
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdges, edgesCount);
     }
-    
+
     /**
      * Test if duplicate Entries are saved only once.
      */
     @Test
-    public void duplicateEntriesTest() 
+    public void duplicateEntriesTest()
     {
-        ListenableGraph<String, DefaultEdge> jGraphT 
+        ListenableGraph<String, DefaultEdge> jGraphT
          = new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
-        
-        JGraphXAdapter<String, DefaultEdge> graphX = 
+
+        JGraphXAdapter<String, DefaultEdge> graphX =
                 new JGraphXAdapter<String, DefaultEdge>(jGraphT);
 
         // fill graph with data
@@ -316,43 +316,43 @@ public class JGraphXAdapterTest
         jGraphT.addEdge(v3, v4);
 
         testMapping(graphX);
-        
+
         // test if all values are in the jgraphx graph
         Object[] expectedArray = {v1, v2, v3, v4};
         Arrays.sort(expectedArray);
-        
-        Object[] realArray = graphX.getCellToVertexMap().values().toArray(); 
+
+        Object[] realArray = graphX.getCellToVertexMap().values().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         realArray = graphX.getVertexToCellMap().keySet().toArray();
         Arrays.sort(realArray);
         Assert.assertArrayEquals(expectedArray, realArray);
-        
+
         int edgesCount = graphX.getCellToEdgeMap().values().size();
         Assert.assertEquals(expectedEdges, edgesCount);
-        
+
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdges, edgesCount);
     }
-    
+
     // ========================Helper Methods===============================
-    
+
     /**
      * Tests the mapping of the graph for consistency. Mapping includes: -
      * getCellToEdgeMap - getEdgeToCellMap - getCellToVertexMap -
      * getVertexToCellMap
-     * 
+     *
      * @param graph
      *            The graph to be tested
-     * 
+     *
      * @param <E>
      *            The class used for the edges of the JGraphXAdapter
-     * 
+     *
      * @param <V>
      *            The class used for the vertices of the JGraphXAdapter
      */
-    private <V, E> void testMapping(JGraphXAdapter<V, E> graph) 
+    private <V, E> void testMapping(JGraphXAdapter<V, E> graph)
     {
 
         // Edges
@@ -406,19 +406,19 @@ public class JGraphXAdapterTest
 
     /**
      * Compares a collection to a set by creating a new set from
-     * the collection and using equals. 
-     * 
+     * the collection and using equals.
+     *
      * @param collection
      *            The collection that is compared
-     * 
+     *
      * @param set
      *            The set that is compared
-     * 
+     *
      * @param <T>
      *            The classtype of the set and collection.
-     * 
+     *
      * @return True, if set and collection are equivalent; False if not.
-     * 
+     *
      */
     private <T> boolean compare(Collection<T> collection, Set<T> set)
     {

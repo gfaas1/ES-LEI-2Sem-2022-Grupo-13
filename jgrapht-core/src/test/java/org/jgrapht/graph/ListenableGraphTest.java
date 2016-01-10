@@ -199,7 +199,7 @@ public class ListenableGraphTest
     public void testListenableDirectedWeightedGraph()
     {
         init();
-        
+
         ListenableDirectedWeightedGraph<Object, DefaultWeightedEdge> g =
             new ListenableDirectedWeightedGraph<Object, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
@@ -224,7 +224,7 @@ public class ListenableGraphTest
         assertEquals(e, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
     }
-    
+
     private void init()
     {
         lastAddedEdge = null;

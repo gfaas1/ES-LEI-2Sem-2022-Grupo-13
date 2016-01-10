@@ -54,14 +54,14 @@ import org.jgrapht.traverse.*;
  */
 public class CycleDetector<V, E>
 {
-    
+
 
     /**
      * Graph on which cycle detection is being performed.
      */
     DirectedGraph<V, E> graph;
 
-    
+
 
     /**
      * Creates a cycle detector for the specified graph. Currently only directed
@@ -74,7 +74,7 @@ public class CycleDetector<V, E>
         this.graph = graph;
     }
 
-    
+
 
     /**
      * Performs yes/no cycle detection on the entire graph.
@@ -176,7 +176,7 @@ public class CycleDetector<V, E>
         }
     }
 
-    
+
 
     /**
      * Exception thrown internally when a cycle is detected during a yes/no

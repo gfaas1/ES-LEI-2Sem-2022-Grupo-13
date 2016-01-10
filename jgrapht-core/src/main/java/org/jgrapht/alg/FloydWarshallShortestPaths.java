@@ -70,7 +70,7 @@ public class FloydWarshallShortestPaths<V, E>
     private int [][] backtrace = null;
     private Map<V, List<GraphPath<V, E>>> paths = null;
 
-    
+
 
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
@@ -83,7 +83,7 @@ public class FloydWarshallShortestPaths<V, E>
         }
     }
 
-    
+
 
     /**
      * @return the graph on which this algorithm operates

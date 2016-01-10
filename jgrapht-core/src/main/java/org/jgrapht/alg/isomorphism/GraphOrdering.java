@@ -51,7 +51,7 @@ import org.jgrapht.*;
 
 class GraphOrdering<V, E>
 {
-    
+
 
     private Graph<V, E> graph;
 
@@ -65,7 +65,7 @@ class GraphOrdering<V, E>
 
     private boolean cacheEdges;
 
-    
+
 
     /**
      * @param graph the graph to be ordered
@@ -114,7 +114,7 @@ class GraphOrdering<V, E>
         this(graph, false, true);
     }
 
-    
+
 
     /**
      * @return returns the number of vertices in the graph.
@@ -276,7 +276,7 @@ class GraphOrdering<V, E>
         return graph;
     }
 
-    
+
 
     private static class GeneralVertexDegreeComparator<V2>
         implements Comparator<V2>

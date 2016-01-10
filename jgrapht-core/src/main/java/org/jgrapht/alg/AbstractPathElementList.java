@@ -53,7 +53,7 @@ abstract class AbstractPathElementList<V,
     E, T extends AbstractPathElement<V, E>>
     extends AbstractList<T>
 {
-    
+
 
     protected Graph<V, E> graph;
 
@@ -72,7 +72,7 @@ abstract class AbstractPathElementList<V,
      */
     protected V vertex;
 
-    
+
 
     /**
      * Creates paths obtained by concatenating the specified edge to the
@@ -162,7 +162,7 @@ abstract class AbstractPathElementList<V,
         this.vertex = vertex;
     }
 
-    
+
 
     /**
      * Returns path <code>AbstractPathElement</code> stored at the specified

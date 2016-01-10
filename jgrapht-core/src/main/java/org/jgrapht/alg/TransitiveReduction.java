@@ -41,14 +41,14 @@ import org.jgrapht.*;
  * An implementation of Harry Hsu's
  * <a href="https://en.wikipedia.org/wiki/Transitive_reduction">transitive
  * reduction algorithm</a>.
- * 
+ *
  * <p>
  * cf.
  * <a href="http://projects.csail.mit.edu/jacm/References/hsu1975:11.html">Harry
  * Hsu. "An algorithm for finding a minimal equivalent graph of a digraph.",
  * Journal of the ACM, 22(1):11-16, January 1975.</a>
  * </p>
- * 
+ *
  * <p>
  * This is a port from a python example by Michael Clerx, posted as an answer to
  * a question about <a href=
@@ -56,7 +56,7 @@ import org.jgrapht.*;
  * transitive reduction algorithm pseudocode</a> on
  * <a href="http://stackoverflow.com">Stack Overflow</a>
  * </p>
- * 
+ *
  * @author Christophe Thiebaud
  * @since Aug 13, 2015
  */
@@ -68,7 +68,7 @@ public class TransitiveReduction {
      */
     public static final TransitiveReduction INSTANCE = new TransitiveReduction();
 
-    
+
 
     /**
      * Private Constructor.
@@ -81,15 +81,15 @@ public class TransitiveReduction {
     /**
      * The matrix passed as input parameter will be transformed into a path
      * matrix.
-     * 
+     *
      * <p>
      * This method is package visible for unit testing, but it is meant as a
      * private method.
      * </p>
-     * 
+     *
      * @param matrix
      *            the original matrix to transform into a path matrix
-     * 
+     *
      */
     static void transformToPathMatrix(BitSet[] matrix) {
         // compute path matrix
@@ -112,15 +112,15 @@ public class TransitiveReduction {
     /**
      * The path matrix passed as input parameter will be transformed into a
      * transitively reduced matrix.
-     * 
+     *
      * <p>
      * This method is package visible for unit testing, but it is meant as a
      * private method.
      * </p>
-     * 
+     *
      * @param pathMatrix
      *            the path matrix to reduce
-     * 
+     *
      */
     static void transitiveReduction(BitSet[] pathMatrix) {
         // transitively reduce
@@ -140,27 +140,27 @@ public class TransitiveReduction {
     /**
      * This method will remove all transitive edges from the graph passed as
      * input parameter.
-     * 
+     *
      * <p>
      * You may want to clone the graph before, as transitive edges will be
      * pitilessly removed.
      * <p>
-     * 
+     *
      * <p>
      * e.g.
-     * 
+     *
      * <pre>
      * {
      *     &#64;code
      *     DirectedGraph<V, T> soonToBePrunedDirectedGraph;
-     * 
+     *
      *     TransitiveReduction.INSTANCE.reduce(soonToBePrunedDirectedGraph);
-     * 
+     *
      *     // pruned !
      * }
      * </pre>
      * </p>
-     * 
+     *
      * @param directedGraph
      *            the directed graph that will be reduced transitively
      */

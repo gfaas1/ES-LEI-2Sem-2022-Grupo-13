@@ -53,11 +53,11 @@ public class DirectedSubgraph<V, E>
     extends Subgraph<V, E, DirectedGraph<V, E>>
     implements DirectedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 3616445700507054133L;
 
-    
+
 
     /**
      * Creates a new directed subgraph.
@@ -77,7 +77,7 @@ public class DirectedSubgraph<V, E>
         super(base, vertexSubset, edgeSubset);
     }
 
-    
+
 
     /**
      * @see DirectedGraph#inDegreeOf(Object)

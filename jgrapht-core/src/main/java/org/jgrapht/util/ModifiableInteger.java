@@ -63,18 +63,18 @@ public class ModifiableInteger
     extends Number
     implements Comparable<ModifiableInteger>
 {
-    
+
 
     private static final long serialVersionUID = 3618698612851422261L;
 
-    
+
 
     /**
      * The int value represented by this <code>ModifiableInteger</code>.
      */
     public int value;
 
-    
+
 
     /**
      * <b>!!! DON'T USE - Use the {@link #ModifiableInteger(int)} constructor
@@ -102,7 +102,7 @@ public class ModifiableInteger
         this.value = value;
     }
 
-    
+
 
     /**
      * Sets a new value for this modifiable integer.

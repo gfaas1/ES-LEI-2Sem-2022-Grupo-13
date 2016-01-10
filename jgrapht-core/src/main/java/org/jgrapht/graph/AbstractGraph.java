@@ -60,7 +60,7 @@ import org.jgrapht.util.*;
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
 {
-    
+
 
     /**
      * Construct a new empty graph object.
@@ -69,7 +69,7 @@ public abstract class AbstractGraph<V, E>
     {
     }
 
-    
+
 
     /**
      * @see Graph#containsEdge(Object, Object)

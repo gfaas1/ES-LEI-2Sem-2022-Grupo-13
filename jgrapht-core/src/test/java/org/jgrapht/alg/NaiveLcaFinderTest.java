@@ -68,7 +68,7 @@ public class NaiveLcaFinderTest {
 
 	Assert.assertEquals(null, finder.findLca("i", "e"));
     }
-    
+
     @Test
     public void testLoops() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
@@ -99,7 +99,7 @@ public class NaiveLcaFinderTest {
 	Assert.assertEquals("f", finder.findLca("h", "f"));
 	Assert.assertEquals(null, finder.findLca("a", "i"));
     }
-    
+
     @Test
     public void testArrivalOrder() {
 	DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);

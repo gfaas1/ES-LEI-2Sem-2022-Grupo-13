@@ -49,7 +49,7 @@ public abstract class DirectedGraphBuilderBase<V,
     B extends DirectedGraphBuilderBase<V, E, G, B>>
     extends AbstractGraphBuilder<V, E, G, B>
 {
-    
+
 
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
@@ -62,7 +62,7 @@ public abstract class DirectedGraphBuilderBase<V,
         super(baseGraph);
     }
 
-    
+
 
     @Override public UnmodifiableDirectedGraph<V, E> buildUnmodifiable()
     {

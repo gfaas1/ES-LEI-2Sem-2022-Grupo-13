@@ -43,7 +43,7 @@ package org.jgrapht.util;
  */
 public class TypeUtil<T>
 {
-    
+
 
     /**
      * Casts an object to a type.

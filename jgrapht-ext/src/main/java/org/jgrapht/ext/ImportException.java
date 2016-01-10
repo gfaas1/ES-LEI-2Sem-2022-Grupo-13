@@ -35,7 +35,7 @@ package org.jgrapht.ext;
 public class ImportException
     extends Exception
 {
-    
+
 
     public ImportException(String message)
     {

@@ -46,7 +46,7 @@ import java.util.*;
  */
 public interface ComponentAttributeProvider<T>
 {
-    
+
 
     /**
      * Returns a set of attribute key/value pairs for a vertex or edge. If order

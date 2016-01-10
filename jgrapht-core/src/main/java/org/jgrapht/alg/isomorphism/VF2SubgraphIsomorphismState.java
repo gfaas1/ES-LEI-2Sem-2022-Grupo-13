@@ -42,7 +42,7 @@ import java.util.*;
 class VF2SubgraphIsomorphismState<V, E>
     extends VF2State<V, E>
 {
-    
+
 
     public VF2SubgraphIsomorphismState(
         GraphOrdering<V, E> g1,
@@ -58,7 +58,7 @@ class VF2SubgraphIsomorphismState<V, E>
         super(s);
     }
 
-    
+
 
     /**
      * @return true, if the already matched vertices of graph1 plus the first

@@ -54,7 +54,7 @@ import java.util.*;
  */
 public class MinSourceSinkCut<V, E>
 {
-    
+
 
     EdmondsKarpMaximumFlow<V, E> ekMaxFlow;
     Set<V> minCut = null;
@@ -64,7 +64,7 @@ public class MinSourceSinkCut<V, E>
     V sink = null;
     double epsilon = EdmondsKarpMaximumFlow.DEFAULT_EPSILON;
 
-    
+
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph)
     {
@@ -79,7 +79,7 @@ public class MinSourceSinkCut<V, E>
         this.epsilon = epsilon;
     }
 
-    
+
 
     /**
      * Compute a minimum s-t cut

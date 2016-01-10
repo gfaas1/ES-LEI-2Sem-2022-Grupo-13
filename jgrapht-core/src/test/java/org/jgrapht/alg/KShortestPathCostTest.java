@@ -311,7 +311,7 @@ public class KShortestPathCostTest
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
 
-        
+
         InputStream fstream = getClass().getClassLoader().getResourceAsStream(
             "edges.txt");
         BufferedReader in = new BufferedReader(new InputStreamReader(fstream));
@@ -332,7 +332,7 @@ public class KShortestPathCostTest
 
         // Close the input stream
         in.close();
-            
+
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
         KShortestPaths<String, DefaultWeightedEdge> kPaths =

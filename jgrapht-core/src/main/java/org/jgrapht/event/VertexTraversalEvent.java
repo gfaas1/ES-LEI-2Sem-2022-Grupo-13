@@ -49,18 +49,18 @@ import java.util.*;
 public class VertexTraversalEvent<V>
     extends EventObject
 {
-    
+
 
     private static final long serialVersionUID = 3688790267213918768L;
 
-    
+
 
     /**
      * The traversed vertex.
      */
     protected V vertex;
 
-    
+
 
     /**
      * Creates a new VertexTraversalEvent.
@@ -74,7 +74,7 @@ public class VertexTraversalEvent<V>
         this.vertex = vertex;
     }
 
-    
+
 
     /**
      * Returns the traversed vertex.

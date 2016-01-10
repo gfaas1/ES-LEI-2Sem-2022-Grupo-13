@@ -58,7 +58,7 @@ import org.jgrapht.*;
  */
 abstract class AbstractPathElement<V, E>
 {
-    
+
 
     /**
      * Number of hops of the path.
@@ -80,7 +80,7 @@ abstract class AbstractPathElement<V, E>
      */
     private V vertex;
 
-    
+
 
     /**
      * Creates a path element by concatenation of an edge to a path element.
@@ -131,7 +131,7 @@ abstract class AbstractPathElement<V, E>
         this.nHops = 0;
     }
 
-    
+
 
     /**
      * Returns the path as a list of edges.

@@ -50,11 +50,11 @@ public class ListenableDirectedGraph<V, E>
     extends DefaultListenableGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 3257571698126368824L;
 
-    
+
 
     /**
      * Creates a new listenable directed graph.

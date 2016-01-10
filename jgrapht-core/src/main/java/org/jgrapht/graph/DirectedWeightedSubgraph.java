@@ -52,11 +52,11 @@ public class DirectedWeightedSubgraph<V, E>
     extends DirectedSubgraph<V, E>
     implements WeightedGraph<V, E>
 {
-    
+
 
     private static final long serialVersionUID = 3905799799168250680L;
 
-    
+
 
     /**
      * Creates a new weighted directed subgraph.

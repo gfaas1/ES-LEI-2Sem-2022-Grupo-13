@@ -55,11 +55,11 @@ import org.jgrapht.*;
 public class TiernanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    
+
 
     private DirectedGraph<V, E> graph;
 
-    
+
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -84,7 +84,7 @@ public class TiernanSimpleCycles<V, E>
         this.graph = graph;
     }
 
-    
+
 
     /**
      * {@inheritDoc}

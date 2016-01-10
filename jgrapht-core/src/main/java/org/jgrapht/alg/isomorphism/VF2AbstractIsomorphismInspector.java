@@ -45,7 +45,7 @@ import org.jgrapht.graph.*;
 public abstract class VF2AbstractIsomorphismInspector<V, E>
     implements IsomorphismInspector<V, E>
 {
-    
+
 
     protected Graph<V, E> graph1, graph2;
 
@@ -54,7 +54,7 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
 
     protected GraphOrdering<V, E> ordering1, ordering2;
 
-    
+
 
     /**
      * This implementation of the VF2 algorithm does not support graphs with
@@ -141,7 +141,7 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
             true);
     }
 
-    
+
 
     @Override public abstract Iterator<GraphMapping<V, E>> getMappings();
 

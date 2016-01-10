@@ -64,7 +64,7 @@ public class SimpleGraphPathTest
         pathVertices.add("v1");
         pathVertices.add("v2");
         pathVertices.add("v4");
-        
+
         path = new SimpleGraphPath<String, DefaultEdge>(graph, pathVertices, 1);
     }
 
@@ -75,7 +75,7 @@ public class SimpleGraphPathTest
             graph.getEdge("v2", "v4") };
         assertEquals(Arrays.asList(expectedEdges), path.getEdgeList());
     }
-    
+
     public void testInvalidVertexList() {
         List<String> invalidPath = new ArrayList<String>();
         invalidPath.add("v1");
@@ -87,7 +87,7 @@ public class SimpleGraphPathTest
             assertTrue();
         }
     }
-    
+
     public void testSingleVertexList() {
         List<String> invalidPath = new ArrayList<String>();
         invalidPath.add("v1");
@@ -97,17 +97,17 @@ public class SimpleGraphPathTest
             assertTrue();
         }
     }
-    
+
     public void testStartVertex() {
         assertTrue(path.getStartVertex().equals("v1"));
     }
-    
+
     public void testEndVertex() {
         assertTrue(path.getEndVertex().equals("v4"));
     }
-    
+
     public void testPathWeight() {
         assertEquals(1.0, path.getWeight());
     }
-    
+
 }

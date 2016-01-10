@@ -52,7 +52,7 @@ import org.jgrapht.event.*;
 public interface GraphIterator<V, E>
     extends Iterator<V>
 {
-    
+
 
     /**
      * Test whether this iterator is set to traverse the grpah across connected

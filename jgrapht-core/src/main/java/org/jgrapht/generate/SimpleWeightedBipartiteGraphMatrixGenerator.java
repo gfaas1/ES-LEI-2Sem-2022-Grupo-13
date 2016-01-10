@@ -20,13 +20,13 @@ import org.jgrapht.*;
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
 {
-    
+
 
     List<V> first;
 
     List<V> second;
 
-    
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -210,7 +210,7 @@ public class RandomGraphGeneratorTest
          */
         private Set<LabelsEdge> labelsEdgesSet;
 
-    
+
 
         /**
          * Creates a new labels graph according to the regular graph. After its
@@ -241,7 +241,7 @@ public class RandomGraphGeneratorTest
             init(regularGraph, vertexSet, edgeSet);
         }
 
-    
+
 
         private void init(Graph<V, E> g, Set<V> vertexSet, Set<E> edgeSet)
         {
@@ -321,7 +321,7 @@ public class RandomGraphGeneratorTest
             return sb.toString();
         }
 
-    
+
 
         private class LabelsEdge
         {
