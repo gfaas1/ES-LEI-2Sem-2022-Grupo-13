@@ -75,7 +75,7 @@
 							the jgraph-ext bundle in an OSGi context, we tell the maven	bundle
 							plugin to mark the JGraph dependencies as optional. Consequences:
 							When using jgrapht-ext in an OSGi context you can not use one of
-							it's classes which require packages from JGrpah (org.jgraph.*).
+							it's classes which require packages from JGraph (org.jgraph.*).
 							Otherwise you will get ClassNotFoundExceptions.
 						-->
 						<Import-Package>org.jgraph.*;resolution:=optional,*</Import-Package>
