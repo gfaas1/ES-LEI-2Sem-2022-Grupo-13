@@ -39,7 +39,7 @@ import java.util.Objects;
 
 /**
  * Generic pair.
- * <br/>
+ * <br>
  * Although the instances of this class are immutable, it is impossible
  * to ensure that the references passed to the constructor will not be
  * modified by the caller.

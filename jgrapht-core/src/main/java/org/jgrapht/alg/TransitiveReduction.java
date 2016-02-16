@@ -144,22 +144,20 @@ public class TransitiveReduction {
      * <p>
      * You may want to clone the graph before, as transitive edges will be
      * pitilessly removed.
-     * <p>
+     * </p>
      *
-     * <p>
      * e.g.
      *
      * <pre>
      * {
      *     &#64;code
-     *     DirectedGraph<V, T> soonToBePrunedDirectedGraph;
+     *     DirectedGraph&lt;V, T&gt; soonToBePrunedDirectedGraph;
      *
      *     TransitiveReduction.INSTANCE.reduce(soonToBePrunedDirectedGraph);
      *
      *     // pruned !
      * }
      * </pre>
-     * </p>
      *
      * @param directedGraph
      *            the directed graph that will be reduced transitively

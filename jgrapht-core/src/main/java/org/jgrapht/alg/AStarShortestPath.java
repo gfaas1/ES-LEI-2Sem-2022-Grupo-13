@@ -54,7 +54,7 @@ import java.util.*;
  *
  * The heuristic is implemented using a FibonacciHeap data structure to maintain the set of open nodes. However, there still exist several approaches in
  * literature to improve the performance of this heuristic which one could consider to implement.
- * Another issue to take into consideration is the following: given to candidate nodes, i, j to expand, where f(i)=f(j), g(i)>g(j), h(i)<g(j), f(i)=g(i)+h(i),
+ * Another issue to take into consideration is the following: given to candidate nodes, i, j to expand, where f(i)=f(j), g(i)&gt;g(j), h(i)&lt;g(j), f(i)=g(i)+h(i),
  * g(i) is the actual distance from the source node to i, h(i) is the estimated distance from i to the target node. Usually a depth-first search
  * is desired, so ideally we would expand node i first. Using the FibonacciHeap, this is not necessarily the case though. This could be improved in a later version.
  *
