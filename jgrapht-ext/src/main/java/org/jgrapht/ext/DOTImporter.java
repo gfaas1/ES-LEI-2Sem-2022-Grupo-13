@@ -688,11 +688,30 @@ public class DOTImporter<V, E>
         while (index < input.length()) {
             int nextEquals = input.indexOf('=', index);
             String key = input.substring(index, nextEquals).trim();
-            int firstQuote = input.indexOf('\"', nextEquals) + 1;
-            int secondQuote = findNextQuote(input, firstQuote);
-            String value = input.substring(firstQuote, secondQuote);
+            // Attribute value may be quoted or a single word.
+            // First ignore any white space before the start
+            int i = 1;
+            while(Character.isWhitespace(input.charAt(nextEquals + i))) {
+                i = i +1;
+            }
+
+            int start = nextEquals + i;
+
+            int endChar;
+            if (input.charAt(start) == '"') {
+                start = start + 1;
+                endChar = findNextQuote(input, start);
+            } else {
+                endChar = input.indexOf(" ", start);
+            }
+
+            if (endChar < 0) {
+                endChar = input.length();
+            }
+
+            String value = input.substring(start, endChar);
             result.put(key, value);
-            index = secondQuote + 1;
+            index = endChar + 1;
         }
         return result;
     }

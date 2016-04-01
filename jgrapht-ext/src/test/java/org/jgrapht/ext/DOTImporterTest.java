@@ -197,6 +197,61 @@ public class DOTImporterTest extends TestCase
 
    }
 
+   public void testAttributesWithNoQuotes() throws ImportException {
+      String input = "graph G {\n"
+              + "  1 [ label=\"bob\" foo=bar ];\n"
+              + "  2 [ label=\"fred\" ];\n"
+              // the extra label will be ignored but not cause any problems.
+              + "  1 -- 2 [ label = \"friend\" foo = wibble];\n"
+              + "}";
+
+      Multigraph<TestVertex, TestEdge> result
+              = new Multigraph<TestVertex, TestEdge>(TestEdge.class);
+      DOTImporter<TestVertex, TestEdge> importer
+              = new DOTImporter<TestVertex, TestEdge>(
+              new VertexProvider<TestVertex>() {
+                 @Override
+                 public TestVertex buildVertex(String label,
+                                               Map<String, String> attributes) {
+                    return new TestVertex(label, attributes);
+                 }
+              },
+              new EdgeProvider<TestVertex, TestEdge>() {
+                 @Override
+                 public TestEdge buildEdge(TestVertex from,
+                                              TestVertex to,
+                                              String label,
+                                              Map<String, String> attributes) {
+                    return new TestEdge(label, attributes);
+                 }
+              }
+      );
+
+
+      importer.read(input, result);
+      Assert.assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
+      Assert.assertEquals("wrong size of edgeSet", 1, result.edgeSet().size());
+
+      for(TestVertex v : result.vertexSet()) {
+         if ("bob".equals(v.getId())) {
+            Assert.assertEquals("wrong number of attributes", 2, v.getAttributes().size());
+            Assert.assertEquals("Wrong attribute values", "bar", v.getAttributes().get("foo"));
+            Assert.assertEquals("Wrong attribute values", "bob", v.getAttributes().get("label"));
+         } else {
+            Assert.assertEquals("wrong number of attributes", 1, v.getAttributes().size());
+            Assert.assertEquals("Wrong attribute values", "fred", v.getAttributes().get("label"));
+         }
+      }
+
+      for (TestEdge e : result.edgeSet()) {
+         Assert.assertEquals("wrong id", "friend", e.getId());
+         Assert.assertEquals("wrong number of attributes", 2, e.getAttributes().size());
+         Assert.assertEquals("Wrong attribute value", "wibble", e.getAttributes().get("foo"));
+         Assert.assertEquals("Wrong attribute value", "friend", e.getAttributes().get("label"));
+      }
+
+   }
+
    public void testEmptyString()
    {
       testGarbage("", "Dot string was empty");
@@ -442,6 +497,33 @@ public class DOTImporterTest extends TestCase
       Map <String, String> attributes;
 
       public TestVertex(String id, Map<String, String> attributes) {
+         this.id = id;
+         this.attributes = attributes;
+      }
+
+      public String getId() {
+         return id;
+      }
+
+      public void setId(String id) {
+         this.id = id;
+      }
+
+      public Map<String, String> getAttributes() {
+         return attributes;
+      }
+
+      public void setAttributes(Map<String, String> attributes) {
+         this.attributes = attributes;
+      }
+   }
+
+   private class TestEdge extends DefaultEdge {
+      String id;
+      Map<String, String> attributes;
+
+      public TestEdge(String id, Map<String, String> attributes) {
+         super();
          this.id = id;
          this.attributes = attributes;
       }
