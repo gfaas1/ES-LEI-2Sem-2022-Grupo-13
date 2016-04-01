@@ -47,14 +47,10 @@ import org.jgrapht.graph.*;
  */
 public class TransitiveClosure
 {
-
-
     /**
      * Singleton instance.
      */
     public static final TransitiveClosure INSTANCE = new TransitiveClosure();
-
-
 
     /**
      * Private Constructor.
@@ -62,8 +58,6 @@ public class TransitiveClosure
     private TransitiveClosure()
     {
     }
-
-
 
     /**
      * Computes the transitive closure of the given graph.

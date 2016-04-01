@@ -54,11 +54,7 @@ import org.jgrapht.*;
 public class HyperCubeGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-
-
     private int dim;
-
-
 
     /**
      * Creates a new HyperCubeGraphGenerator object.
@@ -69,8 +65,6 @@ public class HyperCubeGraphGenerator<V, E>
     {
         this.dim = dim;
     }
-
-
 
     /**
      * This will generate the hypercube graph

@@ -52,11 +52,7 @@ public class Pseudograph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = 3833183614484755253L;
-
-
 
     /**
      * Creates a new pseudograph.
@@ -77,8 +73,6 @@ public class Pseudograph<V, E>
     {
         super(ef, true, true);
     }
-
-
 
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Pseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)

@@ -34,8 +34,8 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 /**
  * Abstract extension manager allowing to extend given class-types with supplied
@@ -44,46 +44,60 @@ import java.util.Map;
  * @param <T> class-type to be extended
  * @param <E> extension concept class-type
  */
-public class Extension<T, E> {
+public class Extension<T, E>
+{
     private ExtensionFactory<E> extensionFactory;
-    private Map<T, E>           extensions = new HashMap<T, E>();
+    private Map<T, E> extensions = new HashMap<T, E>();
 
-    /**
-     * Factory capable of producing given extension objects
-     * of the given class-type
-     *
-     * @param <E> extension concept class-type
-     */
-    public interface ExtensionFactory<E> {
-        E create();
-    }
-
-    public Extension(ExtensionFactory<E> factory) {
+    public Extension(ExtensionFactory<E> factory)
+    {
         this.extensionFactory = factory;
     }
 
-    public static abstract class BaseExtension {
-        public BaseExtension() {}
-    }
-
-    public E createInstance() {
+    public E createInstance()
+    {
         return extensionFactory.create();
     }
 
     public E get(T t)
     {
-        if (extensions.containsKey(t))
+        if (extensions.containsKey(t)) {
             return extensions.get(t);
+        }
 
         E x = createInstance();
         extensions.put(t, x);
         return x;
     }
 
-    public static class ExtensionManagerInstantiationException extends RuntimeException {
+    /**
+     * Factory capable of producing given extension objects of the given
+     * class-type
+     *
+     * @param <E> extension concept class-type
+     */
+    public interface ExtensionFactory<E>
+    {
+        E create();
+    }
+
+    public static abstract class BaseExtension
+    {
+        public BaseExtension()
+        {
+        }
+    }
+
+    public static class ExtensionManagerInstantiationException
+        extends RuntimeException
+    {
         Exception exception;
-        public ExtensionManagerInstantiationException(Exception e) {
+
+        public ExtensionManagerInstantiationException(Exception e)
+        {
             exception = e;
         }
     }
 }
+
+// End Extension.java

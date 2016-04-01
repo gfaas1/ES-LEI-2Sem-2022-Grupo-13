@@ -56,8 +56,6 @@ import org.jgrapht.graph.*;
  */
 public abstract class ChromaticNumber
 {
-
-
     /**
      * Finds the number of colors required for a greedy coloring of the graph.
      *

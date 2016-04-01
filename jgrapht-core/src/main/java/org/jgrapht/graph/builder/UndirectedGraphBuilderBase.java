@@ -49,8 +49,6 @@ public abstract class UndirectedGraphBuilderBase<V,
     B extends UndirectedGraphBuilderBase<V, E, G, B>>
     extends AbstractGraphBuilder<V, E, G, B>
 {
-
-
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
      * mutable.
@@ -61,8 +59,6 @@ public abstract class UndirectedGraphBuilderBase<V,
     {
         super(baseGraph);
     }
-
-
 
     @Override public UnmodifiableUndirectedGraph<V, E> buildUnmodifiable()
     {

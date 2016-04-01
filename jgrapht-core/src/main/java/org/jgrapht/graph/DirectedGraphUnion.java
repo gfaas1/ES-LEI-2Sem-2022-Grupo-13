@@ -45,11 +45,7 @@ public class DirectedGraphUnion<V, E>
     extends GraphUnion<V, E, DirectedGraph<V, E>>
     implements DirectedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = -740199233080172450L;
-
-
 
     public DirectedGraphUnion(
         DirectedGraph<V, E> g1,
@@ -63,8 +59,6 @@ public class DirectedGraphUnion<V, E>
     {
         super(g1, g2);
     }
-
-
 
     @Override public int inDegreeOf(V vertex)
     {

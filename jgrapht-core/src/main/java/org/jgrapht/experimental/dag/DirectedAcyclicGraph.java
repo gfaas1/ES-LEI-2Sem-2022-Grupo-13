@@ -72,11 +72,7 @@ import org.jgrapht.graph.*;
 public class DirectedAcyclicGraph<V, E>
     extends SimpleDirectedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = 4522128427004938150L;
-
-
 
     private TopoComparator<V> topoComparator;
 
@@ -97,8 +93,6 @@ public class DirectedAcyclicGraph<V, E>
      * Pluggable TopoOrderMappingFactory implementation
      */
     private TopoOrderMappingFactory<V> topoOrderFactory = new TopoVertexBiMap();
-
-
 
     public DirectedAcyclicGraph(Class<? extends E> arg0)
     {
@@ -126,8 +120,6 @@ public class DirectedAcyclicGraph<V, E>
         }
         initialize();
     }
-
-
 
     /**
      * set the topoOrderMap based on the current factory, and create the
@@ -539,8 +531,6 @@ public class DirectedAcyclicGraph<V, E>
         }
     }
 
-
-
     /**
      * For performance tuning, an interface for storing the topological ordering
      *
@@ -643,8 +633,6 @@ public class DirectedAcyclicGraph<V, E>
     {
         public Visited getInstance(Region affectedRegion);
     }
-
-
 
     /**
      * Note, this is a lazy and incomplete implementation, with assumptions that

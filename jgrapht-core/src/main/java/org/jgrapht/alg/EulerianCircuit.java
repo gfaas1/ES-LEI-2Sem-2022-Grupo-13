@@ -54,8 +54,6 @@ import org.jgrapht.graph.*;
  */
 public abstract class EulerianCircuit
 {
-
-
     /**
      * This method will check whether the graph passed in is Eulerian or not.
      *

@@ -51,8 +51,6 @@ import java.util.*;
  */
 public interface EdgeSetFactory<V, E>
 {
-
-
     /**
      * Create a new edge set for a particular vertex.
      *

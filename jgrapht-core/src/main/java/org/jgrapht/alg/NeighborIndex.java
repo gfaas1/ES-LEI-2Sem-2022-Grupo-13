@@ -63,12 +63,8 @@ import org.jgrapht.util.*;
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-
-
     Map<V, Neighbors<V, E>> neighborMap = new HashMap<V, Neighbors<V, E>>();
     private Graph<V, E> graph;
-
-
 
     /**
      * Creates a neighbor index for the specified undirected graph.
@@ -80,8 +76,6 @@ public class NeighborIndex<V, E>
         // no need to distinguish directedgraphs as we don't do traversals
         graph = g;
     }
-
-
 
     /**
      * Returns the set of vertices which are adjacent to a specified vertex. The
@@ -182,8 +176,6 @@ public class NeighborIndex<V, E>
         }
         return neighbors;
     }
-
-
 
     /**
      * Stores cached neighbors for a single vertex. Includes support for live

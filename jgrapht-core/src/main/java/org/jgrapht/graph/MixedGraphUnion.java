@@ -45,42 +45,35 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.util.WeightCombiner;
+import java.util.*;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 
 public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
 {
-
     private final UndirectedGraph<V, E> undirectedGraph;
     private final DirectedGraph<V, E> directedGraph;
 
     public MixedGraphUnion(
-            UndirectedGraph<V, E> g1,
-            DirectedGraph<V, E> g2,
-            WeightCombiner operator)
+        UndirectedGraph<V, E> g1,
+        DirectedGraph<V, E> g2,
+        WeightCombiner operator)
     {
         super(g1, g2, operator);
-        this.undirectedGraph=g1;
-        this.directedGraph=g2;
+        this.undirectedGraph = g1;
+        this.directedGraph = g2;
     }
 
     public MixedGraphUnion(UndirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
     {
         super(g1, g2);
-        this.undirectedGraph=g1;
-        this.directedGraph=g2;
+        this.undirectedGraph = g1;
+        this.directedGraph = g2;
     }
-
-
 
     @Override public int inDegreeOf(V vertex)
     {

@@ -56,8 +56,6 @@ import org.jgrapht.*;
 public class VF2SubgraphIsomorphismInspector<V, E>
     extends VF2AbstractIsomorphismInspector<V, E>
 {
-
-
     /**
      * This implementation of the VF2 algorithm does not support graphs with
      * multiple edges.
@@ -115,8 +113,6 @@ public class VF2SubgraphIsomorphismInspector<V, E>
             graph2,
             true);
     }
-
-
 
     @Override public VF2SubgraphMappingIterator<V, E> getMappings()
     {

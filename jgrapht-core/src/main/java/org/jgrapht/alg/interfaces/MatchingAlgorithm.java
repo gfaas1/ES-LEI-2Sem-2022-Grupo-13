@@ -42,8 +42,6 @@ import java.util.*;
  */
 public abstract interface MatchingAlgorithm<V, E>
 {
-
-
     /**
      * Returns set of edges making up the matching
      */

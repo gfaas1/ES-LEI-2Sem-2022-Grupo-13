@@ -42,8 +42,6 @@ import java.util.*;
  */
 public interface MinimumSpanningTree<V, E>
 {
-
-
     /**
      * Returns edges set constituting the minimum spanning tree/forest
      *

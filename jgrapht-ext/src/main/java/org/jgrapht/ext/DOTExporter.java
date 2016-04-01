@@ -47,15 +47,11 @@ import org.jgrapht.*;
  */
 public class DOTExporter<V, E>
 {
-
-
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
-
-
 
     /**
      * Constructs a new DOTExporter object with an integer name provider for the
@@ -119,8 +115,6 @@ public class DOTExporter<V, E>
         this.vertexAttributeProvider = vertexAttributeProvider;
         this.edgeAttributeProvider = edgeAttributeProvider;
     }
-
-
 
     /**
      * Exports a graph into a plain text file in DOT format.

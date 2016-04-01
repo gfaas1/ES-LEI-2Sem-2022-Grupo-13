@@ -45,14 +45,10 @@ import org.jgrapht.traverse.*;
 
 public final class CompleteGraphDemo
 {
-
-
     static Graph<Object, DefaultEdge> completeGraph;
 
     //Number of vertices
     static int size = 10;
-
-
 
     public static void main(String [] args)
     {

@@ -59,8 +59,6 @@ import org.jgrapht.graph.*;
  */
 public abstract class VertexCovers
 {
-
-
     /**
      * Finds a 2-approximation for a minimal vertex cover of the specified
      * graph. The algorithm promises a cover that is at most double the size of

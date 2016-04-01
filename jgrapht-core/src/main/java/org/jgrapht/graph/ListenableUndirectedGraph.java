@@ -50,11 +50,7 @@ public class ListenableUndirectedGraph<V, E>
     extends DefaultListenableGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = 3256999969193145905L;
-
-
 
     /**
      * Creates a new listenable undirected simple graph.

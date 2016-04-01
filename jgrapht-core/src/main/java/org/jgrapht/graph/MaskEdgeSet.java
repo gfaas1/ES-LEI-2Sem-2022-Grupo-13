@@ -51,8 +51,6 @@ import org.jgrapht.util.PrefetchIterator.*;
 class MaskEdgeSet<V, E>
     extends AbstractSet<E>
 {
-
-
     private Set<E> edgeSet;
 
     private Graph<V, E> graph;
@@ -62,8 +60,6 @@ class MaskEdgeSet<V, E>
     private transient TypeUtil<E> edgeTypeDecl = null;
 
     private int size;
-
-
 
     public MaskEdgeSet(
         Graph<V, E> graph,
@@ -75,8 +71,6 @@ class MaskEdgeSet<V, E>
         this.mask = mask;
         this.size = -1;
     }
-
-
 
     /**
      * @see java.util.Collection#contains(java.lang.Object)
@@ -109,8 +103,6 @@ class MaskEdgeSet<V, E>
         }
         return this.size;
     }
-
-
 
     private class MaskEdgeSetNextElementFunctor
         implements NextElementFunctor<E>

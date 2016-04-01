@@ -75,7 +75,6 @@ public class AsUnweightedDirectedGraph<V, E>
     {
         super(g);
     }
-
 }
 
 // End AsUnweightedDirectedGraph.java

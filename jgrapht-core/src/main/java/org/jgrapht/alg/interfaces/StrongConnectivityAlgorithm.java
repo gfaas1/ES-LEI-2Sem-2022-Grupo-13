@@ -29,25 +29,24 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 
 /**
- * An interface to the StrongConnectivityInspector algorithm classes. These classes verify whether the graph is
- * strongly connected.
+ * An interface to the StrongConnectivityInspector algorithm classes. These
+ * classes verify whether the graph is strongly connected.
+ *
+ * @param <V> vertex concept type
+ * @param <E> edge concept type
  *
  * @author Sarah Komla-Ebri
  * @since September, 2013
- *
- * @param <V>   vertex concept type
- * @param <E>   edge concept type
  */
-public interface StrongConnectivityAlgorithm<V,E> {
-
+public interface StrongConnectivityAlgorithm<V, E>
+{
     /**
      * Returns the graph inspected by the StrongConnectivityAlgorithm.
      *
@@ -79,10 +78,10 @@ public interface StrongConnectivityAlgorithm<V,E> {
      * all vertices of that component. The subgraph will have an edge (u,v) iff
      * u and v are contained in the strongly connected component.</p>
      *
-     *
      * @return a list of subgraphs representing the strongly connected
      * components
      */
     public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
-
 }
+
+// End StrongConnectivityAlgorithm.java

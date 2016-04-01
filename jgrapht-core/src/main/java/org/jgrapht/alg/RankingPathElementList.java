@@ -53,8 +53,6 @@ import org.jgrapht.graph.*;
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
-
-
     /**
      * Vertex that paths of the list must not disconnect.
      */
@@ -62,8 +60,6 @@ final class RankingPathElementList<V, E>
 
     private Map<RankingPathElement<V, E>, Boolean> path2disconnect =
         new HashMap<RankingPathElement<V, E>, Boolean>();
-
-
 
     /**
      * Creates a list with an empty path. The list size is 1.
@@ -148,8 +144,6 @@ final class RankingPathElementList<V, E>
     {
         super(graph, maxSize, vertex);
     }
-
-
 
     /**
      * <p>Adds paths in the list at vertex y. Candidate paths are obtained by
@@ -393,8 +387,6 @@ final class RankingPathElementList<V, E>
 
         return true;
     }
-
-
 
     private static class PathMask<V, E>
         implements MaskFunctor<V, E>

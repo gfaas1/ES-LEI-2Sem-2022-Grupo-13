@@ -66,8 +66,6 @@ import org.jgrapht.graph.*;
  */
 public class CliqueMinimalSeparatorDecomposition<V, E>
 {
-
-
     /**
      * Source graph to operate on
      */
@@ -110,8 +108,6 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     private Map<Set<V>, Integer> fullComponentCount =
         new HashMap<Set<V>, Integer>();
 
-
-
     /**
      * Setup a clique minimal separator decomposition on undirected graph <code>
      * g</code>. Loops and multiple edges are removed, i.e. the graph is
@@ -124,8 +120,6 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         this.graph = g;
         this.fillEdges = new HashSet<E>();
     }
-
-
 
     /**
      * Compute the minimal triangulation of the graph. Implementation of

@@ -58,8 +58,6 @@ import org.jgrapht.alg.*;
 public class SzwarcfiterLauerSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-
-
     // The graph.
     private DirectedGraph<V, E> graph;
 
@@ -74,8 +72,6 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     private int [] position = null;
     private boolean [] reach = null;
     private List<V> startVertices = null;
-
-
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -99,8 +95,6 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         }
         this.graph = graph;
     }
-
-
 
     /**
      * {@inheritDoc}

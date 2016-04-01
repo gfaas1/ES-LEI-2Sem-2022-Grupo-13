@@ -55,12 +55,8 @@ import org.jgrapht.alg.util.*;
 public class KruskalMinimumSpanningTree<V, E>
     implements MinimumSpanningTree<V, E>
 {
-
-
     private double spanningTreeCost;
     private Set<E> edgeList;
-
-
 
     /**
      * Creates and executes a new KruskalMinimumSpanningTree algorithm instance.
@@ -98,8 +94,6 @@ public class KruskalMinimumSpanningTree<V, E>
             spanningTreeCost += graph.getEdgeWeight(edge);
         }
     }
-
-
 
     @Override public Set<E> getMinimumSpanningTreeEdgeSet()
     {

@@ -77,8 +77,6 @@ import java.util.*;
  */
 public interface Graph<V, E>
 {
-
-
     /**
      * Returns a set of all edges connecting source vertex to target vertex if
      * such vertices exist in this graph. If any of the vertices does not exist

@@ -26,11 +26,7 @@ import org.jgrapht.alg.util.*;
 
 public class TarjanLowestCommonAncestor<V, E>
 {
-
-
     private Graph<V, E> g;
-
-
 
     /**
      * Create an instance with a reference to the graph that we will find LCAs
@@ -40,8 +36,6 @@ public class TarjanLowestCommonAncestor<V, E>
     {
         this.g = g;
     }
-
-
 
     /**
      * Calculate the LCM between <code>a</code> and <code>b</code> treating
@@ -64,8 +58,6 @@ public class TarjanLowestCommonAncestor<V, E>
     {
         return new Worker(lrr).calculate(start);
     }
-
-
 
     /* The worker class keeps the state whilst doing calculations. */
     private class Worker

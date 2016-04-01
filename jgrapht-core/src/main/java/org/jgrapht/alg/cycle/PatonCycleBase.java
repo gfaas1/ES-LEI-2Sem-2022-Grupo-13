@@ -55,11 +55,7 @@ import org.jgrapht.*;
 public class PatonCycleBase<V, E>
     implements UndirectedCycleBase<V, E>
 {
-
-
     private UndirectedGraph<V, E> graph;
-
-
 
     /**
      * Create a cycle base finder with an unspecified graph.
@@ -83,8 +79,6 @@ public class PatonCycleBase<V, E>
         }
         this.graph = graph;
     }
-
-
 
     /**
      * {@inheritDoc}

@@ -53,11 +53,7 @@ public class SimpleGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = 3545796589454112304L;
-
-
 
     /**
      * Creates a new simple graph with the specified edge factory.
@@ -78,8 +74,6 @@ public class SimpleGraph<V, E>
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
     }
-
-
 
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends SimpleGraph<V, E>, ?> builder(Class<? extends E> edgeClass)

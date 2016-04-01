@@ -41,7 +41,7 @@ package org.jgrapht.traverse;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.*;
 import org.jgrapht.util.*;
 
 
@@ -73,12 +73,8 @@ import org.jgrapht.util.*;
 public class TopologicalOrderIterator<V, E>
     extends CrossComponentIterator<V, E, Object>
 {
-
-
     private Queue<V> queue;
     private Map<V, ModifiableInteger> inDegreeMap;
-
-
 
     /**
      * Creates a new topological order iterator over the directed graph
@@ -135,8 +131,6 @@ public class TopologicalOrderIterator<V, E>
     {
         super(dg, start);
     }
-
-
 
     /**
      * @see CrossComponentIterator#isConnectedComponentExhausted()
@@ -226,8 +220,6 @@ public class TopologicalOrderIterator<V, E>
             return queue.peek();
         }
     }
-
-
 
     // NOTE jvs 22-Dec-2006:  For JDK1.4-compatibility, we can't assume
     // that LinkedList implements Queue, since that wasn't introduced

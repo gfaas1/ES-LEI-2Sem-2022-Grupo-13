@@ -43,8 +43,6 @@ package org.jgrapht.graph;
  */
 public interface MaskFunctor<V, E>
 {
-
-
     /**
      * Returns <code>true</code> if the edge is masked, <code>false</code>
      * otherwise.

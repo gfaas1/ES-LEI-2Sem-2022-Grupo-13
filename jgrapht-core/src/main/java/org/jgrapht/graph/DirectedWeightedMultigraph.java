@@ -51,11 +51,7 @@ public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>
     implements WeightedGraph<V, E>
 {
-
-
     private static final long serialVersionUID = 4049071636005206066L;
-
-
 
     /**
      * Creates a new directed weighted multigraph.
@@ -77,8 +73,6 @@ public class DirectedWeightedMultigraph<V, E>
     {
         super(ef);
     }
-
-
 
     public static <V, E> DirectedWeightedGraphBuilderBase<V,
         E, ? extends DirectedWeightedMultigraph<V, E>, ?> builder(

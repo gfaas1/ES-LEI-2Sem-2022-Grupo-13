@@ -59,13 +59,9 @@ import org.jgrapht.event.*;
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-
-
     Map<V, Neighbors<V, E>> predecessorMap = new HashMap<V, Neighbors<V, E>>();
     Map<V, Neighbors<V, E>> successorMap = new HashMap<V, Neighbors<V, E>>();
     private DirectedGraph<V, E> graph;
-
-
 
     /**
      * Creates a neighbor index for the specified directed graph.
@@ -76,8 +72,6 @@ public class DirectedNeighborIndex<V, E>
     {
         graph = g;
     }
-
-
 
     /**
      * Returns the set of vertices which are the predecessors of a specified

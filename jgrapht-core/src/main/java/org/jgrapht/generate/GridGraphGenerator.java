@@ -56,20 +56,14 @@ import org.jgrapht.*;
 public class GridGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-
-
     /**
      * Role for the vertices at the corners.
      */
     public static final String CORNER_VERTEX = "Corner Vertex";
 
-
-
     private int rows;
 
     private int cols;
-
-
 
     /**
      * Creates a new GridGraphGenerator object with rows x cols dimension.
@@ -92,8 +86,6 @@ public class GridGraphGenerator<V, E>
         this.rows = rows;
         this.cols = cols;
     }
-
-
 
     /**
      * {@inheritDoc}

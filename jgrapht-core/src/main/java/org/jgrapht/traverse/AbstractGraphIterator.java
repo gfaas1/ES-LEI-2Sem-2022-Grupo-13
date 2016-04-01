@@ -53,8 +53,6 @@ import org.jgrapht.event.*;
 public abstract class AbstractGraphIterator<V, E>
     implements GraphIterator<V, E>
 {
-
-
     private List<TraversalListener<V, E>> traversalListeners =
         new ArrayList<TraversalListener<V, E>>();
     private boolean crossComponentTraversal = true;
@@ -64,8 +62,6 @@ public abstract class AbstractGraphIterator<V, E>
     // so that subclasses can use it as a fast check to see if
     // event firing calls can be skipped.
     protected int nListeners = 0;
-
-
 
     /**
      * Sets the cross component traversal flag - indicates whether to traverse

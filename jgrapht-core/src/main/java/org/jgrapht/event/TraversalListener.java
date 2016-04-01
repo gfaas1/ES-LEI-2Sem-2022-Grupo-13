@@ -46,8 +46,6 @@ package org.jgrapht.event;
  */
 public interface TraversalListener<V, E>
 {
-
-
     /**
      * Called to inform listeners that the traversal of the current connected
      * component has finished.

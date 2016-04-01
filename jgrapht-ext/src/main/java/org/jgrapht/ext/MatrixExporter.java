@@ -52,13 +52,9 @@ import org.jgrapht.util.*;
  */
 public class MatrixExporter<V, E>
 {
-
-
     private String delimiter = " ";
     private String prefix = "";
     private String suffix = "";
-
-
 
     /**
      * Creates a new MatrixExporter object.
@@ -66,8 +62,6 @@ public class MatrixExporter<V, E>
     public MatrixExporter()
     {
     }
-
-
 
     private void println(
         PrintWriter out,

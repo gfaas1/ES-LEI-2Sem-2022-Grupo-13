@@ -54,8 +54,6 @@ import org.jgrapht.graph.*;
  */
 public abstract class Graphs
 {
-
-
     /**
      * Creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.

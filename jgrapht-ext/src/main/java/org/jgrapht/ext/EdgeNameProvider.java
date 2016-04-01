@@ -34,8 +34,6 @@ package org.jgrapht.ext;
  */
 public interface EdgeNameProvider<E>
 {
-
-
     /**
      * Returns a unique name for an edge. This is useful when exporting a graph,
      * as it ensures that all edges are assigned simple, consistent names.

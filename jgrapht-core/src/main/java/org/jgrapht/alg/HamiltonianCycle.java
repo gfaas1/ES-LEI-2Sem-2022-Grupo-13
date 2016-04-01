@@ -51,8 +51,6 @@ import org.jgrapht.graph.*;
  */
 public class HamiltonianCycle
 {
-
-
     /**
      * This method will return an approximate minimal traveling salesman tour
      * (hamiltonian cycle). This algorithm requires that the graph be complete

@@ -75,12 +75,8 @@ import java.util.*;
  */
 public class FibonacciHeap<T>
 {
-
-
     private static final double oneOverLogPhi =
         1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
-
-
 
     /**
      * Points to the minimum node in the heap.
@@ -92,16 +88,12 @@ public class FibonacciHeap<T>
      */
     private int nNodes;
 
-
-
     /**
      * Constructs a FibonacciHeap object that contains no elements.
      */
     public FibonacciHeap()
     {
     } // FibonacciHeap
-
-
 
     /**
      * Tests if the Fibonacci heap is empty or not. Returns true if the heap is
@@ -145,7 +137,8 @@ public class FibonacciHeap<T>
     {
         if (k > x.key) {
             throw new IllegalArgumentException(
-                "decreaseKey() got larger key value. Current key: "+x.key+" new key: "+k);
+                "decreaseKey() got larger key value. Current key: " + x.key
+                + " new key: " + k);
         }
 
         x.key = k;

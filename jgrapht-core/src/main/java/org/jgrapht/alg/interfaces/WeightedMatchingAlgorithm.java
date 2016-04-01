@@ -40,8 +40,6 @@ package org.jgrapht.alg.interfaces;
 public interface WeightedMatchingAlgorithm<V, E>
     extends MatchingAlgorithm<V, E>
 {
-
-
     /**
      * Returns weight of a matching found
      *

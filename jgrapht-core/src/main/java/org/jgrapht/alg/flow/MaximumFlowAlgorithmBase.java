@@ -34,28 +34,28 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.alg.util.Extension;
-import org.jgrapht.alg.util.Extension.ExtensionFactory;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.alg.util.Extension.*;
+
 
 /**
  * Base class backing algorithms allowing to derive <a
- * href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a> from
- * the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow network</a>
+ * href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a>
+ * from the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow
+ * network</a>
  *
  * @param <V> vertex concept type
  * @param <E> edge concept type
  *
  * @author Alexey Kudinkin
  */
-public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgorithm<V, E> {
-
+public abstract class MaximumFlowAlgorithmBase<V, E>
+    implements MaximumFlowAlgorithm<V, E>
+{
     /**
      * Default tolerance.
      */
@@ -66,8 +66,10 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
 
     abstract DirectedGraph<V, E> getNetwork();
 
-    <VE extends VertexExtensionBase, EE extends EdgeExtensionBase>
-    void init(ExtensionFactory<VE> vertexExtensionFactory, ExtensionFactory<EE> edgeExtensionFactory) {
+    <VE extends VertexExtensionBase, EE extends EdgeExtensionBase> void init(
+        ExtensionFactory<VE> vertexExtensionFactory,
+        ExtensionFactory<EE> edgeExtensionFactory)
+    {
         vXs = new Extension<V, VE>(vertexExtensionFactory);
         eXs = new Extension<E, EE>(edgeExtensionFactory);
 
@@ -88,30 +90,40 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
 
                 VertexExtensionBase vx = extendedVertex(v);
 
-                EdgeExtensionBase ex    = createEdge(ux, vx, e, n.getEdgeWeight(e));
-                EdgeExtensionBase iex   = createInverse(ex, n);
+                EdgeExtensionBase ex =
+                    createEdge(ux, vx, e, n.getEdgeWeight(e));
+                EdgeExtensionBase iex = createInverse(ex, n);
 
                 ux.getOutgoing().add(ex);
 
                 // NB: Any better?
-                if (iex.prototype == null)
+                if (iex.prototype == null) {
                     vx.getOutgoing().add(iex);
+                }
             }
         }
     }
 
-    private EdgeExtensionBase createEdge(VertexExtensionBase source, VertexExtensionBase target, E e, double weight) {
+    private EdgeExtensionBase createEdge(
+        VertexExtensionBase source,
+        VertexExtensionBase target,
+        E e,
+        double weight)
+    {
         EdgeExtensionBase ex = extendedEdge(e);
 
-        ex.source    = source;
-        ex.target    = target;
-        ex.capacity  = weight;
+        ex.source = source;
+        ex.target = target;
+        ex.capacity = weight;
         ex.prototype = e;
 
         return ex;
     }
 
-    private EdgeExtensionBase createInverse(EdgeExtensionBase ex, DirectedGraph<V, E> n) {
+    private EdgeExtensionBase createInverse(
+        EdgeExtensionBase ex,
+        DirectedGraph<V, E> n)
+    {
         EdgeExtensionBase iex;
 
         if (n.containsEdge(ex.target.prototype, ex.source.prototype)) {
@@ -124,98 +136,55 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
             iex.target = ex.source;
         }
 
-        ex.inverse  = iex;
+        ex.inverse = iex;
         iex.inverse = ex;
 
         return iex;
     }
 
-    private VertexExtensionBase extendedVertex(V v) {
+    private VertexExtensionBase extendedVertex(V v)
+    {
         return this.<VertexExtensionBase>vertexExtended(v);
     }
-    private EdgeExtensionBase   extendedEdge(E e) {
+
+    private EdgeExtensionBase extendedEdge(E e)
+    {
         return this.<EdgeExtensionBase>edgeExtended(e);
     }
 
-    protected <VE extends VertexExtensionBase> VE vertexExtended(V v) {
+    protected <VE extends VertexExtensionBase> VE vertexExtended(V v)
+    {
         return (VE) vXs.get(v);
     }
 
-    protected <EE extends EdgeExtensionBase> EE edgeExtended(E e) {
+    protected <EE extends EdgeExtensionBase> EE edgeExtended(E e)
+    {
         return (EE) eXs.get(e);
     }
 
-
-    class VertexExtensionBase extends Extension.BaseExtension
+    protected void pushFlowThrough(EdgeExtensionBase ex, double f)
     {
-        private final List<? extends EdgeExtensionBase> outgoing = new ArrayList<EdgeExtensionBase>();
-
-        public <EE extends EdgeExtensionBase> List<EE> getOutgoing() {
-            return (List<EE>) outgoing;
-        }
-
-        V prototype;
-
-        double excess;
-    }
-
-    class EdgeExtensionBase extends Extension.BaseExtension {
-
-        private VertexExtensionBase source;
-        private VertexExtensionBase target;
-
-        private EdgeExtensionBase inverse;
-
-        public <VE extends VertexExtensionBase> VE getSource() {
-            return (VE) source;
-        }
-
-        public void setSource(VertexExtensionBase source) {
-            this.source = source;
-        }
-
-        public <VE extends VertexExtensionBase> VE getTarget() {
-            return (VE) target;
-        }
-
-        public void setTarget(VertexExtensionBase target) {
-            this.target = target;
-        }
-
-        public  <EE extends EdgeExtensionBase> EE getInverse() {
-            return (EE) inverse;
-        }
-
-        public void setInverse(EdgeExtensionBase inverse) {
-            this.inverse = inverse;
-        }
-
-        E prototype;
-
-        double capacity;
-        double flow;
-    }
-
-    protected void pushFlowThrough(EdgeExtensionBase ex, double f) {
         EdgeExtensionBase iex = ex.<EdgeExtensionBase>getInverse();
 
-        assert(compareFlowTo(ex.flow, 0.0) == 0 || compareFlowTo(iex.flow, 0.0) == 0);
+        assert ((compareFlowTo(ex.flow, 0.0) == 0)
+            || (compareFlowTo(iex.flow, 0.0) == 0));
 
         if (compareFlowTo(iex.flow, f) == -1) {
             double d = f - iex.flow;
 
-            ex.flow      += d;
-            ex.capacity  -= iex.flow;
+            ex.flow += d;
+            ex.capacity -= iex.flow;
 
-            iex.flow      = 0;
+            iex.flow = 0;
             iex.capacity += d;
         } else {
             ex.capacity -= f;
-            iex.flow    -= f;
+            iex.flow -= f;
         }
     }
 
-    protected Map<E, Double> composeFlow() {
+    protected Map<E, Double> composeFlow()
+    {
         Map<E, Double> maxFlow = new HashMap<E, Double>();
         for (E e : getNetwork().edgeSet()) {
             EdgeExtensionBase ex = extendedEdge(e);
@@ -225,11 +194,75 @@ public abstract class MaximumFlowAlgorithmBase<V, E> implements MaximumFlowAlgor
         return maxFlow;
     }
 
-    protected int compareFlowTo(double flow, double val) {
+    protected int compareFlowTo(double flow, double val)
+    {
         double diff = flow - val;
-        if (Math.abs(diff) < DEFAULT_EPSILON)
+        if (Math.abs(diff) < DEFAULT_EPSILON) {
             return 0;
-        else
-            return diff < 0 ? -1 : 1;
+        } else {
+            return (diff < 0) ? -1 : 1;
+        }
+    }
+
+    class VertexExtensionBase
+        extends Extension.BaseExtension
+    {
+        private final List<? extends EdgeExtensionBase> outgoing =
+            new ArrayList<EdgeExtensionBase>();
+
+        V prototype;
+
+        double excess;
+
+        public <EE extends EdgeExtensionBase> List<EE> getOutgoing()
+        {
+            return (List<EE>) outgoing;
+        }
+    }
+
+    class EdgeExtensionBase
+        extends Extension.BaseExtension
+    {
+        private VertexExtensionBase source;
+        private VertexExtensionBase target;
+
+        private EdgeExtensionBase inverse;
+
+        E prototype;
+
+        double capacity;
+        double flow;
+
+        public <VE extends VertexExtensionBase> VE getSource()
+        {
+            return (VE) source;
+        }
+
+        public void setSource(VertexExtensionBase source)
+        {
+            this.source = source;
+        }
+
+        public <VE extends VertexExtensionBase> VE getTarget()
+        {
+            return (VE) target;
+        }
+
+        public void setTarget(VertexExtensionBase target)
+        {
+            this.target = target;
+        }
+
+        public <EE extends EdgeExtensionBase> EE getInverse()
+        {
+            return (EE) inverse;
+        }
+
+        public void setInverse(EdgeExtensionBase inverse)
+        {
+            this.inverse = inverse;
+        }
     }
 }
+
+// End MaximumFlowAlgorithmBase.java

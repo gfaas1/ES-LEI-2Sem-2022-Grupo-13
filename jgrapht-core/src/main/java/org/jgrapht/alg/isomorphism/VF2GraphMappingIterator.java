@@ -51,8 +51,6 @@ import org.jgrapht.*;
 class VF2GraphMappingIterator<V, E>
     extends VF2MappingIterator<V, E>
 {
-
-
     /**
      * @param ordering1
      * @param ordering2
@@ -67,8 +65,6 @@ class VF2GraphMappingIterator<V, E>
     {
         super(ordering1, ordering2, vertexComparator, edgeComparator);
     }
-
-
 
     @Override protected IsomorphicGraphMapping<V, E> match()
     {

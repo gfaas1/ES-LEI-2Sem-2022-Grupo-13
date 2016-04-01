@@ -55,8 +55,6 @@ import java.util.*;
 public interface DirectedGraph<V, E>
     extends Graph<V, E>
 {
-
-
     /**
      * Returns the "in degree" of the specified vertex. An in degree of a vertex
      * in a directed graph is the number of inward directed edges from that

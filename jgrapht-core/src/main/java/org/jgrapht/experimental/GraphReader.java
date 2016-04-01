@@ -47,8 +47,6 @@ import org.jgrapht.generate.*;
 public class GraphReader<V, E>
     implements GraphGenerator<V, E, V>
 {
-
-
     // ~ Static fields/initializers --------------------------------------------
 
     // ~ Instance fields -------------------------------------------------------
@@ -62,8 +60,6 @@ public class GraphReader<V, E>
     private final double _defaultWeight;
 
     // ~ Constructors ----------------------------------------------------------
-
-
 
     /**
      * Construct a new GraphReader.
@@ -97,8 +93,6 @@ public class GraphReader<V, E>
     {
         this(input, true, defaultWeight);
     }
-
-
 
     // ~ Methods ---------------------------------------------------------------
 

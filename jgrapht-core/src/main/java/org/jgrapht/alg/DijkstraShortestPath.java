@@ -55,11 +55,7 @@ import org.jgrapht.traverse.*;
  */
 public final class DijkstraShortestPath<V, E>
 {
-
-
     private GraphPath<V, E> path;
-
-
 
     /**
      * Creates and executes a new DijkstraShortestPath algorithm instance. An
@@ -113,8 +109,6 @@ public final class DijkstraShortestPath<V, E>
 
         path = null;
     }
-
-
 
     /**
      * Return the edges making up the path found.

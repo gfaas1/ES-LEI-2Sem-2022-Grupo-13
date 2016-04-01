@@ -53,14 +53,10 @@ import org.jgrapht.util.*;
  */
 public class StoerWagnerMinimumCut<V, E>
 {
-
-
     final WeightedGraph<Set<V>, DefaultWeightedEdge> workingGraph;
 
     protected double bestCutWeight = Double.POSITIVE_INFINITY;
     protected Set<V> bestCut;
-
-
 
     /**
      * Will compute the minimum cut in graph.
@@ -119,8 +115,6 @@ public class StoerWagnerMinimumCut<V, E>
             minimumCutPhase(a);
         }
     }
-
-
 
     /**
      * Implements the MinimumCutPhase function of Stoer and Wagner
@@ -250,8 +244,6 @@ public class StoerWagnerMinimumCut<V, E>
         }
         return wsum;
     }
-
-
 
     /**
      * Class for weighted vertices

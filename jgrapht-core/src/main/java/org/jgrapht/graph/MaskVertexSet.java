@@ -50,8 +50,6 @@ import org.jgrapht.util.PrefetchIterator.*;
 class MaskVertexSet<V, E>
     extends AbstractSet<V>
 {
-
-
     private MaskFunctor<V, E> mask;
 
     private int size;
@@ -60,16 +58,12 @@ class MaskVertexSet<V, E>
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
-
-
     public MaskVertexSet(Set<V> vertexSet, MaskFunctor<V, E> mask)
     {
         this.vertexSet = vertexSet;
         this.mask = mask;
         this.size = -1;
     }
-
-
 
     /**
      * @see java.util.Collection#contains(java.lang.Object)
@@ -103,8 +97,6 @@ class MaskVertexSet<V, E>
         }
         return this.size;
     }
-
-
 
     private class MaskVertexSetNextElementFunctor
         implements NextElementFunctor<V>

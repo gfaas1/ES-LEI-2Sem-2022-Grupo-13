@@ -45,8 +45,6 @@ package org.jgrapht;
  */
 public interface EdgeFactory<V, E>
 {
-
-
     /**
      * Creates a new edge whose endpoints are the specified source and target
      * vertices.

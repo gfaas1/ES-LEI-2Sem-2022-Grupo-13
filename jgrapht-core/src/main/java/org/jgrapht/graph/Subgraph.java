@@ -106,15 +106,11 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
     implements Serializable
 {
-
-
     private static final long serialVersionUID = 3208313055169665387L;
     private static final String NO_SUCH_EDGE_IN_BASE =
         "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE =
         "no such vertex in base graph";
-
-
 
     //
     Set<E> edgeSet = new LinkedHashSet<E>(); // friendly to improve performance
@@ -128,8 +124,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     private G base;
     private boolean isInduced = false;
 
-
-
     /**
      * Creates a new Subgraph.
      *
@@ -137,8 +131,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * @param vertexSubset vertices to include in the subgraph. If <code>
      * null</code> then all vertices are included.
      * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph
-     * are included.
+     * null</code> then all the edges whose vertices found in the graph are
+     * included.
      */
     public Subgraph(G base, Set<V> vertexSubset, Set<E> edgeSubset)
     {
@@ -173,8 +167,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         this(base, vertexSubset, null);
     }
-
-
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -477,8 +469,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         ((WeightedGraph<V, E>) base).setEdgeWeight(e, weight);
     }
-
-
 
     /**
      * An internal listener on the base graph.

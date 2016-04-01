@@ -60,16 +60,12 @@ import org.jgrapht.util.*;
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
 {
-
-
     /**
      * Construct a new empty graph object.
      */
     protected AbstractGraph()
     {
     }
-
-
 
     /**
      * @see Graph#containsEdge(Object, Object)

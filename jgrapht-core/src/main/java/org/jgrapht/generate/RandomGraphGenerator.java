@@ -34,15 +34,10 @@
  */
 package org.jgrapht.generate;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 
 /**
@@ -86,8 +81,6 @@ public class RandomGraphGenerator<V, E>
         this.randomizer = new Random(this.randomizerSeed);
     }
 
-
-
     /**
      * Should be called only once on creation. Chooses a seed which can be used
      * later to reset the randomizer before each method call. This
@@ -110,7 +103,8 @@ public class RandomGraphGenerator<V, E>
         this.randomizer.setSeed(this.randomizerSeed);
     }
 
-    public long getRandomSeed() {
+    public long getRandomSeed()
+    {
         return this.randomizerSeed;
     }
 
@@ -185,8 +179,6 @@ public class RandomGraphGenerator<V, E>
         return new DefaultEdgeTopologyFactory<V, E>();
     }
 
-
-
     /**
      * This class is used to generate the edge topology for a graph.
      *
@@ -228,8 +220,6 @@ public class RandomGraphGenerator<V, E>
             Graph<VV, EE> targetGraph,
             int numberOfEdges);
     }
-
-
 
     /**
      * Default implementation of the EdgeTopologyFactory interface. randomly

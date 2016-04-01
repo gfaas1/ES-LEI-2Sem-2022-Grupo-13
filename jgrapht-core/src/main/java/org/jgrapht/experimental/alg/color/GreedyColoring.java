@@ -22,18 +22,12 @@ public class GreedyColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ApproximationAlgorithm<Integer, V>
 {
-
-
     public static final int BEST_ORDER = 0;
     public static final int NATURAL_ORDER = 1;
     public static final int SMALLEST_DEGREE_LAST_ORDER = 2;
     public static final int LARGEST_SATURATION_FIRST_ORDER = 3;
 
-
-
     private int _order = BEST_ORDER;
-
-
 
     /**
      * @param g
@@ -51,8 +45,6 @@ public class GreedyColoring<V, E>
         super(g);
         _order = method;
     }
-
-
 
     int color(int [] order)
     {

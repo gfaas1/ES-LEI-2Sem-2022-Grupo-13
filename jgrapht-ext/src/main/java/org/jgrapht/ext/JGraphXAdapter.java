@@ -44,8 +44,6 @@ public class JGraphXAdapter<V, E>
     extends mxGraph
     implements GraphListener<V, E>
 {
-
-
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
      */
@@ -74,8 +72,6 @@ public class JGraphXAdapter<V, E>
      * is for the opposite direction.
      */
     private HashMap<mxICell, E> cellToEdgeMap = new HashMap<mxICell, E>();
-
-
 
     /**
      * Constructs and draws a new ListenableGraph. If the graph changes through
@@ -117,8 +113,6 @@ public class JGraphXAdapter<V, E>
 
         setAutoSizeCells(true);
     }
-
-
 
     /**
      * Returns Hashmap which maps the vertices onto their visualization

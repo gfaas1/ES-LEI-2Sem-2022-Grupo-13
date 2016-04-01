@@ -19,13 +19,9 @@ import org.jgrapht.*;
 
 public final class GraphTests<V, E>
 {
-
-
     private GraphTests()
     {
     }
-
-
 
     public static <V, E> boolean isEmpty(Graph<V, E> g)
     {
