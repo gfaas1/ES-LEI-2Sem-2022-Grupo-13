@@ -113,7 +113,7 @@ public class AllDirectedPaths<V, E> {
         }
 
         if ((sourceVertices.isEmpty()) || (targetVertices.isEmpty())) {
-            return new ArrayList<>();
+            return new ArrayList();
         }
 
         // Decorate the edges with the minimum path lengths through them
@@ -143,9 +143,9 @@ public class AllDirectedPaths<V, E> {
          * vertices, marking edges and vertices with their minimum
          * distances as we go.
          */
-        Map<E, Integer> edgeMinDistances = new HashMap<>();
-        Map<V, Integer> vertexMinDistances = new HashMap<>();
-        Queue<V> verticesToProcess = new LinkedList<>();
+        Map<E, Integer> edgeMinDistances = new HashMap();
+        Map<V, Integer> vertexMinDistances = new HashMap();
+        Queue<V> verticesToProcess = new LinkedList();
 
         // Input sanity checking
         if (maxPathLength != null) {
@@ -221,8 +221,8 @@ public class AllDirectedPaths<V, E> {
          * vertices, exploring all outgoing edges whose minimum
          * distances is small enough.
          */
-        List<GraphPath<V, E>> completePaths = new ArrayList<>();
-        Deque<List<E>> incompletePaths = new LinkedList<>();
+        List<GraphPath<V, E>> completePaths = new ArrayList();
+        Deque<List<E>> incompletePaths = new LinkedList();
 
         // Input sanity checking
         if (maxPathLength != null) {
@@ -254,7 +254,7 @@ public class AllDirectedPaths<V, E> {
             E leafEdge = incompletePath.get(lengthSoFar-1);
             V leafNode = graph.getEdgeTarget(leafEdge);
 
-            Set<V> pathVertices = new HashSet<>();
+            Set<V> pathVertices = new HashSet();
             for (E pathEdge: incompletePath) {
                 pathVertices.add(graph.getEdgeSource(pathEdge));
                 pathVertices.add(graph.getEdgeTarget(pathEdge));
@@ -265,7 +265,7 @@ public class AllDirectedPaths<V, E> {
                 // is sufficiently small
                 if (edgeMinDistancesFromTargets.containsKey(outEdge) &&
                     (maxPathLength == null || edgeMinDistancesFromTargets.get(outEdge) + lengthSoFar <= maxPathLength)) {
-                    List<E> newPath = new ArrayList<>(incompletePath);
+                    List<E> newPath = new ArrayList(incompletePath);
                     newPath.add(outEdge);
 
                     // If requested, make sure this path isn't self-intersecting
