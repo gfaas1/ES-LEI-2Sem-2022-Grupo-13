@@ -686,16 +686,31 @@ public class DOTImporter<V, E>
         int index = 0;
         Map<String, String> result = new HashMap<String, String>();
         while (index < input.length()) {
-            int nextEquals = input.indexOf('=', index);
-            String key = input.substring(index, nextEquals).trim();
+            // skip any leading white space
+            int i = 0;
+            while(Character.isWhitespace(input.charAt(index + i))) {
+                i = i + 1;
+            }
+            // Now check for quotes
+            int endOfKey = index + i;
+            if (input.charAt(endOfKey) == '"') {
+                index = endOfKey + 1;
+                endOfKey = findNextQuote(input, endOfKey);
+            } else {
+                endOfKey = input.indexOf('=', endOfKey);
+
+
+            }
+            String key = input.substring(index, endOfKey).trim();
+
             // Attribute value may be quoted or a single word.
             // First ignore any white space before the start
-            int i = 1;
-            while(Character.isWhitespace(input.charAt(nextEquals + i))) {
+            i = 1;
+            while(Character.isWhitespace(input.charAt(endOfKey + i)) || input.charAt(endOfKey + i) == '=') {
                 i = i +1;
             }
 
-            int start = nextEquals + i;
+            int start = endOfKey + i;
 
             int endChar;
             if (input.charAt(start) == '"') {

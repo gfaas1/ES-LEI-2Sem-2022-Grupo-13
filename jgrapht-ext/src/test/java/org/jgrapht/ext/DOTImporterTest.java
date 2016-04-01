@@ -40,7 +40,7 @@ public class DOTImporterTest extends TestCase
 
    public void testUndirectedWithLabels() throws ImportException {
       String input = "graph G {\n"
-                     + "  1 [ label=\"abc123\" ];\n"
+                     + "  1 [ \"label\"=\"abc123\" ];\n"
                      + "  2 [ label=\"fred\" ];\n"
                      + "  1 -- 2;\n"
                      + "}";
@@ -199,10 +199,10 @@ public class DOTImporterTest extends TestCase
 
    public void testAttributesWithNoQuotes() throws ImportException {
       String input = "graph G {\n"
-              + "  1 [ label=\"bob\" foo=bar ];\n"
-              + "  2 [ label=\"fred\" ];\n"
+              + "  1 [ label = \"bob\" \"foo\"=bar ];\n"
+              + "  2 [ label = \"fred\" ];\n"
               // the extra label will be ignored but not cause any problems.
-              + "  1 -- 2 [ label = \"friend\" foo = wibble];\n"
+              + "  1 -- 2 [ label = \"friend\" \"foo\" = wibble];\n"
               + "}";
 
       Multigraph<TestVertex, TestEdge> result
