@@ -469,8 +469,7 @@ public class DOTImporter<V, E>
         int position,
         StringBuilder sectionBuffer,
         AbstractBaseGraph<V, E> graph,
-        Map<String, V> vertexes)
-    {
+        Map<String, V> vertexes) throws ImportException {
         if (isStartOfLineComment(input, position)) {
             return LINE_COMMENT;
         }
@@ -604,8 +603,7 @@ public class DOTImporter<V, E>
     private void processCompleteEdge(
         String edge,
         AbstractBaseGraph<V, E> graph,
-        Map<String, V> vertexes)
-    {
+        Map<String, V> vertexes) throws ImportException {
         Map<String, String> attributes = extractAttributes(edge);
 
         List<String> ids = extractEdgeIds(edge);
@@ -668,8 +666,7 @@ public class DOTImporter<V, E>
         return ids;
     }
 
-    private Map<String, String> extractAttributes(String line)
-    {
+    private Map<String, String> extractAttributes(String line) throws ImportException {
         Map<String, String> attributes = new HashMap<String, String>();
         int bracketIndex = line.indexOf("[");
         if (bracketIndex > 0) {
@@ -681,43 +678,35 @@ public class DOTImporter<V, E>
         return attributes;
     }
 
-    private Map<String, String> splitAttributes(String input)
-    {
+    private Map<String, String> splitAttributes(String input) throws ImportException {
         int index = 0;
         Map<String, String> result = new HashMap<String, String>();
         while (index < input.length()) {
             // skip any leading white space
-            int i = 0;
-            while(Character.isWhitespace(input.charAt(index + i))) {
-                i = i + 1;
-            }
+            index = skipWhiteSpace(input, index);
+
             // Now check for quotes
-            int endOfKey = index + i;
-            if (input.charAt(endOfKey) == '"') {
-                index = endOfKey + 1;
-                endOfKey = findNextQuote(input, endOfKey);
-            } else {
-                endOfKey = input.indexOf('=', endOfKey);
-
-
+            int endOfKey = findEndOfSection(input, index, '=');
+            if (endOfKey < 0) {
+                throw new ImportException("Invalid attributes");
             }
+            if (input.charAt(endOfKey) == '"') {
+                index = index + 1;
+            }
+
             String key = input.substring(index, endOfKey).trim();
+
+            if (endOfKey + 1 >= input.length()) {
+                throw new ImportException("Invalid attributes");
+            }
 
             // Attribute value may be quoted or a single word.
             // First ignore any white space before the start
-            i = 1;
-            while(Character.isWhitespace(input.charAt(endOfKey + i)) || input.charAt(endOfKey + i) == '=') {
-                i = i +1;
-            }
+            int start = skipWhiteSpace(input, endOfKey + 1);
 
-            int start = endOfKey + i;
-
-            int endChar;
+            int endChar = findEndOfSection(input, start, ' ');
             if (input.charAt(start) == '"') {
                 start = start + 1;
-                endChar = findNextQuote(input, start);
-            } else {
-                endChar = input.indexOf(" ", start);
             }
 
             if (endChar < 0) {
@@ -729,6 +718,26 @@ public class DOTImporter<V, E>
             index = endChar + 1;
         }
         return result;
+    }
+
+    private int skipWhiteSpace(String input, int start) throws ImportException {
+        int i = 0;
+        while(Character.isWhitespace(input.charAt(start + i)) || input.charAt(start + i) == '=') {
+            i = i + 1;
+            if (start + i >= input.length()) {
+                throw new ImportException("Invalid attributes");
+            }
+        }
+
+        return start + i;
+    }
+
+    private int findEndOfSection(String input, int start, char terminator) {
+        if (input.charAt(start) == '"') {
+            return findNextQuote(input, start);
+        } else {
+            return input.indexOf(terminator, start);
+        }
     }
 
     private int findNextQuote(String input, int start)
