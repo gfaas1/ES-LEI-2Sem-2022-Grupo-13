@@ -2,6 +2,9 @@
 
 Changes to JGraphT in each version:
 
+- **version 0.9.3** (under development):
+	- None yet
+
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
 	- Add `DOTImporter`, contributed by Wil Selwood
