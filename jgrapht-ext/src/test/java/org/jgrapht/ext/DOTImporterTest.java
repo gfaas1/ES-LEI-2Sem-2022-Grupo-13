@@ -311,6 +311,45 @@ public class DOTImporterTest extends TestCase
       testGarbageGraph(input, "input asks for undirected graph and directed graph provided.", result);
    }
 
+   public void testInvalidAttributes() {
+      String input = "graph G {\n"
+              + "  1 [ label = \"bob\" \"foo\" ];\n"
+              + "  2 [ label = \"fred\" ];\n"
+              // the extra label will be ignored but not cause any problems.
+              + "  1 -- 2 [ label = friend foo];\n"
+              + "}";
+
+      Multigraph<TestVertex, TestEdge> graph
+              = new Multigraph<TestVertex, TestEdge>(TestEdge.class);
+
+      DOTImporter<TestVertex, TestEdge> importer
+              = new DOTImporter<TestVertex, TestEdge>(
+              new VertexProvider<TestVertex>() {
+                 @Override
+                 public TestVertex buildVertex(String label,
+                                               Map<String, String> attributes) {
+                    return new TestVertex(label, attributes);
+                 }
+              },
+              new EdgeProvider<TestVertex, TestEdge>() {
+                 @Override
+                 public TestEdge buildEdge(TestVertex from,
+                                           TestVertex to,
+                                           String label,
+                                           Map<String, String> attributes) {
+                    return new TestEdge(label, attributes);
+                 }
+              }
+      );
+
+      try {
+         importer.read(input, graph);
+         Assert.fail("Should not get here");
+      } catch (ImportException e) {
+         Assert.assertEquals("Invalid attributes", e.getMessage());
+      }
+   }
+
    public void testUpdatingVertex() throws ImportException {
       String input = "graph G {\n"
                      + "a -- b;\n"
