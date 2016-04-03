@@ -469,7 +469,9 @@ public class DOTImporter<V, E>
         int position,
         StringBuilder sectionBuffer,
         AbstractBaseGraph<V, E> graph,
-        Map<String, V> vertexes) throws ImportException {
+        Map<String, V> vertexes)
+        throws ImportException
+    {
         if (isStartOfLineComment(input, position)) {
             return LINE_COMMENT;
         }
@@ -603,7 +605,9 @@ public class DOTImporter<V, E>
     private void processCompleteEdge(
         String edge,
         AbstractBaseGraph<V, E> graph,
-        Map<String, V> vertexes) throws ImportException {
+        Map<String, V> vertexes)
+        throws ImportException
+    {
         Map<String, String> attributes = extractAttributes(edge);
 
         List<String> ids = extractEdgeIds(edge);
@@ -666,7 +670,9 @@ public class DOTImporter<V, E>
         return ids;
     }
 
-    private Map<String, String> extractAttributes(String line) throws ImportException {
+    private Map<String, String> extractAttributes(String line)
+        throws ImportException
+    {
         Map<String, String> attributes = new HashMap<String, String>();
         int bracketIndex = line.indexOf("[");
         if (bracketIndex > 0) {
@@ -678,7 +684,9 @@ public class DOTImporter<V, E>
         return attributes;
     }
 
-    private Map<String, String> splitAttributes(String input) throws ImportException {
+    private Map<String, String> splitAttributes(String input)
+        throws ImportException
+    {
         int index = 0;
         Map<String, String> result = new HashMap<String, String>();
         while (index < input.length()) {
@@ -696,7 +704,7 @@ public class DOTImporter<V, E>
 
             String key = input.substring(index, endOfKey).trim();
 
-            if (endOfKey + 1 >= input.length()) {
+            if ((endOfKey + 1) >= input.length()) {
                 throw new ImportException("Invalid attributes");
             }
 
@@ -720,11 +728,16 @@ public class DOTImporter<V, E>
         return result;
     }
 
-    private int skipWhiteSpace(String input, int start) throws ImportException {
+    private int skipWhiteSpace(String input, int start)
+        throws ImportException
+    {
         int i = 0;
-        while(Character.isWhitespace(input.charAt(start + i)) || input.charAt(start + i) == '=') {
+        while (
+            Character.isWhitespace(input.charAt(start + i))
+            || (input.charAt(start + i) == '='))
+        {
             i = i + 1;
-            if (start + i >= input.length()) {
+            if ((start + i) >= input.length()) {
                 throw new ImportException("Invalid attributes");
             }
         }
@@ -732,7 +745,8 @@ public class DOTImporter<V, E>
         return start + i;
     }
 
-    private int findEndOfSection(String input, int start, char terminator) {
+    private int findEndOfSection(String input, int start, char terminator)
+    {
         if (input.charAt(start) == '"') {
             return findNextQuote(input, start);
         } else {
