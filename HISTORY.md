@@ -3,7 +3,7 @@
 Changes to JGraphT in each version:
 
 - **version 0.9.3** (under development):
-	- None yet
+	- Moved to JDK 1.8
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
