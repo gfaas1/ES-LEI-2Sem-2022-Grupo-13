@@ -52,8 +52,6 @@ class MaskVertexSet<V, E>
 {
     private MaskFunctor<V, E> mask;
 
-    private int size;
-
     private Set<V> vertexSet;
 
     private transient TypeUtil<V> vertexTypeDecl = null;
@@ -62,7 +60,6 @@ class MaskVertexSet<V, E>
     {
         this.vertexSet = vertexSet;
         this.mask = mask;
-        this.size = -1;
     }
 
     /**
@@ -70,9 +67,14 @@ class MaskVertexSet<V, E>
      */
     @Override public boolean contains(Object o)
     {
-        return
-            !this.mask.isVertexMasked(TypeUtil.uncheckedCast(o, vertexTypeDecl))
-            && this.vertexSet.contains(o);
+        // Type system shenanigans to check whether o is a vertex
+        try {
+            V v = (V) o;
+            return vertexSet.contains(v)
+                && !mask.isVertexMasked(v);
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 
     /**
@@ -88,14 +90,7 @@ class MaskVertexSet<V, E>
      */
     @Override public int size()
     {
-        if (this.size == -1) {
-            this.size = 0;
-            for (Iterator<V> iter = iterator(); iter.hasNext();) {
-                iter.next();
-                this.size++;
-            }
-        }
-        return this.size;
+        return (int) vertexSet.stream().filter(v -> contains(v)).count();
     }
 
     private class MaskVertexSetNextElementFunctor

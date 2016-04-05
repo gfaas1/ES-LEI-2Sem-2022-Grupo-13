@@ -59,8 +59,6 @@ class MaskEdgeSet<V, E>
 
     private transient TypeUtil<E> edgeTypeDecl = null;
 
-    private int size;
-
     public MaskEdgeSet(
         Graph<V, E> graph,
         Set<E> edgeSet,
@@ -69,7 +67,6 @@ class MaskEdgeSet<V, E>
         this.graph = graph;
         this.edgeSet = edgeSet;
         this.mask = mask;
-        this.size = -1;
     }
 
     /**
@@ -102,14 +99,7 @@ class MaskEdgeSet<V, E>
      */
     @Override public int size()
     {
-        if (this.size == -1) {
-            this.size = 0;
-            for (Iterator<E> iter = iterator(); iter.hasNext();) {
-                iter.next();
-                this.size++;
-            }
-        }
-        return this.size;
+        return (int) edgeSet.stream().filter(e -> contains(e)).count();
     }
 
     private class MaskEdgeSetNextElementFunctor
