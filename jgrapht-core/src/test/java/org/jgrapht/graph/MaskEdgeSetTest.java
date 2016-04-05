@@ -1,0 +1,101 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* --------------------------
+ * AsUndirectedGraphTest.java
+ * --------------------------
+ * (C) Copyright 2016-, by Andrew Gainer-Dewar and Contributors.
+ *
+ * Original Author:  Andrew Gainer-Dewar, Ph.D>
+ * Contributor(s):   -
+ *
+ * Changes
+ * -------
+ * April-2016: Initial version;
+ *
+ */
+package org.jgrapht.graph;
+
+import java.util.*;
+
+import org.jgrapht.*;
+
+
+/**
+ * Unit tests for MaskEdgeSet.
+ *
+ * @author Andrew Gainer-Dewar
+ */
+public class MaskEdgeSetTest
+    extends EnhancedTestCase
+{
+    private DirectedGraph<String, DefaultEdge> directed;
+    private String v1 = "v1";
+    private String v2 = "v2";
+    private String v3 = "v3";
+    private String v4 = "v4";
+    private DefaultEdge e1, e2, e3, loop1, loop2;
+
+    private MaskEdgeSet<String, DefaultEdge> vertexMaskedEdgeSet;
+
+    // Functor that masks vertex v1 and no edges
+    MaskFunctor<String, DefaultEdge> vertexMaskingFunctor = new MaskFunctor<String, DefaultEdge> () {
+            @Override
+            public boolean isEdgeMasked (DefaultEdge edge) {
+                return false;
+            }
+
+            @Override
+            public boolean isVertexMasked (String vertex) {
+                return (vertex == v1);
+            }
+        };
+
+    @Override
+    protected void setUp () {
+        directed =
+            new DefaultDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+
+        directed.addVertex(v1);
+        directed.addVertex(v2);
+        directed.addVertex(v3);
+        directed.addVertex(v4);
+
+        e1 = directed.addEdge(v1, v2);
+        e2 = directed.addEdge(v2, v3);
+        e3 = directed.addEdge(v2, v4);
+
+        loop1 = directed.addEdge(v1, v1);
+        loop2 = directed.addEdge(v4, v4);
+
+        vertexMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), vertexMaskingFunctor);
+    }
+
+    // TESTS
+    public void testContains () {
+        assertFalse(vertexMaskedEdgeSet.contains(e1));
+        assertTrue(vertexMaskedEdgeSet.contains(e2));
+
+        assertFalse(vertexMaskedEdgeSet.contains(loop1));
+        assertTrue(vertexMaskedEdgeSet.contains(loop2));
+    }
+}
