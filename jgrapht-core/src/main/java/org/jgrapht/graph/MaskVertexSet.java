@@ -67,16 +67,15 @@ class MaskVertexSet<V, E>
      */
     @Override public boolean contains(Object o)
     {
-        try {
-            // If o is a vertex (type V), check whether it is in the
-            // vertex set and not masked
-            V v = (V) o;
-            return vertexSet.contains(v)
-                && !mask.isVertexMasked(v);
-        } catch (ClassCastException e) {
-            // If o is not a vertex, it can't be in the set
-            return false;
-        }
+        // Force a cast to type V. This is nonsense, of course, but
+        // it's erased by the compiler anyway.
+        V v = (V) o;
+
+        // If o isn't a V, the first check will fail and
+        // short-circuit, so we never try to test the mask on
+        // non-vertex object inputs.
+        return vertexSet.contains(v)
+            && !mask.isVertexMasked(v);
     }
 
     /**
