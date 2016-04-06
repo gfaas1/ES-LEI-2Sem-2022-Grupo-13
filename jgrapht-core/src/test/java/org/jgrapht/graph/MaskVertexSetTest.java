@@ -93,6 +93,8 @@ public class MaskVertexSetTest
     public void testContains () {
         assertFalse(testMaskVertexSet.contains(v1));
         assertTrue(testMaskVertexSet.contains(v2));
+
+        assertFalse(testMaskVertexSet.contains(e1));
     }
 
     public void testSize () {

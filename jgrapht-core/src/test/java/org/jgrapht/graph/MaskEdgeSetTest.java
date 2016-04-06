@@ -97,6 +97,8 @@ public class MaskEdgeSetTest
 
         assertFalse(testMaskedEdgeSet.contains(loop1));
         assertTrue(testMaskedEdgeSet.contains(loop2));
+
+        assertFalse(testMaskedEdgeSet.contains(v1));
     }
 
     public void testSize () {
