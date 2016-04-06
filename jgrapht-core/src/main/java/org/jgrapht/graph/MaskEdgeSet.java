@@ -74,14 +74,16 @@ class MaskEdgeSet<V, E>
      */
     @Override public boolean contains(Object o)
     {
-        // Type system shenanigans to check whether o is an edge
         try {
+            // If o is an edge (type E), check whether it is in the edge set
+            // and not masked (explicitly or implicitly)
             E e = (E) o;
             return edgeSet.contains(e)
                 && !mask.isEdgeMasked(e)
                 && !mask.isVertexMasked(graph.getEdgeSource(e))
                 && !mask.isVertexMasked(graph.getEdgeTarget(e));
         } catch (ClassCastException e) {
+            // If o is not an edge, it can't be in the set
             return false;
         }
     }
