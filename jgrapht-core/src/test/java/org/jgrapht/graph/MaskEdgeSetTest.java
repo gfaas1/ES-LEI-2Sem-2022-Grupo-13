@@ -90,7 +90,6 @@ public class MaskEdgeSetTest
         testMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), mask);
     }
 
-    // TESTS
     public void testContains () {
         assertFalse(testMaskedEdgeSet.contains(e1));
         assertFalse(testMaskedEdgeSet.contains(e2));

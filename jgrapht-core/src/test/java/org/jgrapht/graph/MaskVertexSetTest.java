@@ -90,7 +90,6 @@ public class MaskVertexSetTest
         testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), mask);
     }
 
-    // TESTS
     public void testContains () {
         assertFalse(testMaskVertexSet.contains(v1));
         assertTrue(testMaskVertexSet.contains(v2));
