@@ -49,6 +49,9 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.graph.specifics.UndirectedSpecifics;
 import org.jgrapht.util.*;
 
 
@@ -81,7 +84,7 @@ public abstract class AbstractBaseGraph<V, E>
     private Map<E, IntrusiveEdge> edgeMap;
     private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
-    private Specifics specifics;
+    private Specifics<V,E> specifics;
     private boolean allowingMultipleEdges;
 
     private transient TypeUtil<V> vertexTypeDecl = null;
@@ -106,14 +109,14 @@ public abstract class AbstractBaseGraph<V, E>
             throw new NullPointerException();
         }
 
-        edgeMap = new LinkedHashMap<E, IntrusiveEdge>();
+        edgeMap = new LinkedHashMap<>();
         edgeFactory = ef;
         allowingLoops = allowLoops;
         allowingMultipleEdges = allowMultipleEdges;
 
+        this.edgeSetFactory = new ArrayListFactory<>();
         specifics = createSpecifics();
 
-        this.edgeSetFactory = new ArrayListFactory<V, E>();
     }
 
     /**
@@ -175,6 +178,16 @@ public abstract class AbstractBaseGraph<V, E>
     public void setEdgeSetFactory(EdgeSetFactory<V, E> edgeSetFactory)
     {
         this.edgeSetFactory = edgeSetFactory;
+    }
+
+    /**
+     * Returns the {@link EdgeSetFactory} used by this graph. The default is {@link
+     * java.util.ArrayList} with capacity 1.
+     * @return edgeSetFactory used by this graph
+     */
+    public EdgeSetFactory<V,E> getEdgeSetFactory()
+    {
+        return edgeSetFactory;
     }
 
     /**
@@ -318,12 +331,10 @@ public abstract class AbstractBaseGraph<V, E>
     @Override public Object clone()
     {
         try {
-            TypeUtil<AbstractBaseGraph<V, E>> typeDecl = null;
-
             AbstractBaseGraph<V, E> newGraph =
-                TypeUtil.uncheckedCast(super.clone(), typeDecl);
+                TypeUtil.uncheckedCast(super.clone(), null);
 
-            newGraph.edgeMap = new LinkedHashMap<E, IntrusiveEdge>();
+            newGraph.edgeMap = new LinkedHashMap<>();
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableEdgeSet = null;
@@ -384,6 +395,7 @@ public abstract class AbstractBaseGraph<V, E>
      */
     @Override public Set<E> edgesOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.edgesOf(vertex);
     }
 
@@ -392,6 +404,7 @@ public abstract class AbstractBaseGraph<V, E>
      */
     public int inDegreeOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.inDegreeOf(vertex);
     }
 
@@ -400,6 +413,7 @@ public abstract class AbstractBaseGraph<V, E>
      */
     public Set<E> incomingEdgesOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.incomingEdgesOf(vertex);
     }
 
@@ -408,6 +422,7 @@ public abstract class AbstractBaseGraph<V, E>
      */
     public int outDegreeOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.outDegreeOf(vertex);
     }
 
@@ -416,6 +431,7 @@ public abstract class AbstractBaseGraph<V, E>
      */
     public Set<E> outgoingEdgesOf(V vertex)
     {
+        assertVertexExist(vertex);
         return specifics.outgoingEdgesOf(vertex);
     }
 
@@ -459,7 +475,7 @@ public abstract class AbstractBaseGraph<V, E>
 
             // cannot iterate over list - will cause
             // ConcurrentModificationException
-            removeAllEdges(new ArrayList<E>(touchingEdgesList));
+            removeAllEdges(new ArrayList<>(touchingEdgesList));
 
             specifics.getVertexSet().remove(v); // remove the vertex itself
 
@@ -505,7 +521,7 @@ public abstract class AbstractBaseGraph<V, E>
         ((DefaultWeightedEdge) e).weight = weight;
     }
 
-    private Specifics createSpecifics()
+    private Specifics<V,E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
             return createDirectedSpecifics();
@@ -517,120 +533,14 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
-    protected UndirectedSpecifics createUndirectedSpecifics()
+    protected UndirectedSpecifics<V,E> createUndirectedSpecifics()
     {
-        return new UndirectedSpecifics();
+        return new UndirectedSpecifics<>(this);
     }
 
-    protected DirectedSpecifics createDirectedSpecifics()
+    protected DirectedSpecifics<V,E> createDirectedSpecifics()
     {
-        return new DirectedSpecifics();
-    }
-
-    /**
-     * .
-     *
-     * @author Barak Naveh
-     */
-    private abstract class Specifics
-        implements Serializable
-    {
-        private static final long serialVersionUID = 785196247314761183L;
-
-        public abstract void addVertex(V vertex);
-
-        public abstract Set<V> getVertexSet();
-
-        /**
-         * .
-         *
-         * @param sourceVertex
-         * @param targetVertex
-         *
-         * @return
-         */
-        public abstract Set<E> getAllEdges(V sourceVertex,
-            V targetVertex);
-
-        /**
-         * .
-         *
-         * @param sourceVertex
-         * @param targetVertex
-         *
-         * @return
-         */
-        public abstract E getEdge(V sourceVertex, V targetVertex);
-
-        /**
-         * Adds the specified edge to the edge containers of its source and
-         * target vertices.
-         *
-         * @param e
-         */
-        public abstract void addEdgeToTouchingVertices(E e);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract int degreeOf(V vertex);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract Set<E> edgesOf(V vertex);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract int inDegreeOf(V vertex);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract Set<E> incomingEdgesOf(V vertex);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract int outDegreeOf(V vertex);
-
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return
-         */
-        public abstract Set<E> outgoingEdgesOf(V vertex);
-
-        /**
-         * Removes the specified edge from the edge containers of its source and
-         * target vertices.
-         *
-         * @param e
-         */
-        public abstract void removeEdgeFromTouchingVertices(E e);
+        return new DirectedSpecifics<>(this);
     }
 
     private static class ArrayListFactory<VV, EE>
@@ -640,597 +550,16 @@ public abstract class AbstractBaseGraph<V, E>
         private static final long serialVersionUID = 5936902837403445985L;
 
         /**
-         * @see EdgeSetFactory.createEdgeSet
+         * @see EdgeSetFactory
          */
         @Override public Set<EE> createEdgeSet(VV vertex)
         {
             // NOTE:  use size 1 to keep memory usage under control
             // for the common case of vertices with low degree
-            return new ArrayUnenforcedSet<EE>(1);
+            return new ArrayUnenforcedSet<>(1);
         }
     }
 
-    /**
-     * A container for vertex edges.
-     *
-     * <p>In this edge container we use array lists to minimize memory toll.
-     * However, for high-degree vertices we replace the entire edge container
-     * with a direct access subclass (to be implemented).</p>
-     *
-     * @author Barak Naveh
-     */
-    protected static class DirectedEdgeContainer<VV, EE>
-        implements Serializable
-    {
-        private static final long serialVersionUID = 7494242245729767106L;
-        Set<EE> incoming;
-        Set<EE> outgoing;
-        private transient Set<EE> unmodifiableIncoming = null;
-        private transient Set<EE> unmodifiableOutgoing = null;
-
-        DirectedEdgeContainer(EdgeSetFactory<VV, EE> edgeSetFactory,
-            VV vertex)
-        {
-            incoming = edgeSetFactory.createEdgeSet(vertex);
-            outgoing = edgeSetFactory.createEdgeSet(vertex);
-        }
-
-        /**
-         * A lazy build of unmodifiable incoming edge set.
-         *
-         * @return
-         */
-        public Set<EE> getUnmodifiableIncomingEdges()
-        {
-            if (unmodifiableIncoming == null) {
-                unmodifiableIncoming = Collections.unmodifiableSet(incoming);
-            }
-
-            return unmodifiableIncoming;
-        }
-
-        /**
-         * A lazy build of unmodifiable outgoing edge set.
-         *
-         * @return
-         */
-        public Set<EE> getUnmodifiableOutgoingEdges()
-        {
-            if (unmodifiableOutgoing == null) {
-                unmodifiableOutgoing = Collections.unmodifiableSet(outgoing);
-            }
-
-            return unmodifiableOutgoing;
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void addIncomingEdge(EE e)
-        {
-            incoming.add(e);
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void addOutgoingEdge(EE e)
-        {
-            outgoing.add(e);
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void removeIncomingEdge(EE e)
-        {
-            incoming.remove(e);
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void removeOutgoingEdge(EE e)
-        {
-            outgoing.remove(e);
-        }
-    }
-
-    /**
-     * .
-     *
-     * @author Barak Naveh
-     */
-    protected class DirectedSpecifics
-        extends Specifics
-        implements Serializable
-    {
-        private static final long serialVersionUID = 8971725103718958232L;
-        private static final String NOT_IN_DIRECTED_GRAPH =
-            "no such operation in a directed graph";
-
-        protected Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected;
-
-        public DirectedSpecifics()
-        {
-            this(new LinkedHashMap<V, DirectedEdgeContainer<V, E>>());
-        }
-
-        public DirectedSpecifics(Map<V, DirectedEdgeContainer<V, E>> vertexMap)
-        {
-            this.vertexMapDirected = vertexMap;
-        }
-
-        @Override public void addVertex(V v)
-        {
-            // add with a lazy edge container entry
-            vertexMapDirected.put(v, null);
-        }
-
-        @Override public Set<V> getVertexSet()
-        {
-            return vertexMapDirected.keySet();
-        }
-
-        /**
-         * @see Graph#getAllEdges(Object, Object)
-         */
-        @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
-        {
-            Set<E> edges = null;
-
-            if (containsVertex(sourceVertex)
-                && containsVertex(targetVertex))
-            {
-                edges = new ArrayUnenforcedSet<E>();
-
-                DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
-
-                Iterator<E> iter = ec.outgoing.iterator();
-
-                while (iter.hasNext()) {
-                    E e = iter.next();
-
-                    if (getEdgeTarget(e).equals(targetVertex)) {
-                        edges.add(e);
-                    }
-                }
-            }
-
-            return edges;
-        }
-
-        /**
-         * @see Graph#getEdge(Object, Object)
-         */
-        @Override public E getEdge(V sourceVertex, V targetVertex)
-        {
-            if (containsVertex(sourceVertex)
-                && containsVertex(targetVertex))
-            {
-                DirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
-
-                Iterator<E> iter = ec.outgoing.iterator();
-
-                while (iter.hasNext()) {
-                    E e = iter.next();
-
-                    if (getEdgeTarget(e).equals(targetVertex)) {
-                        return e;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        @Override public void addEdgeToTouchingVertices(E e)
-        {
-            V source = getEdgeSource(e);
-            V target = getEdgeTarget(e);
-
-            getEdgeContainer(source).addOutgoingEdge(e);
-            getEdgeContainer(target).addIncomingEdge(e);
-        }
-
-        /**
-         * @see UndirectedGraph#degreeOf(Object)
-         */
-        @Override public int degreeOf(V vertex)
-        {
-            throw new UnsupportedOperationException(NOT_IN_DIRECTED_GRAPH);
-        }
-
-        /**
-         * @see Graph#edgesOf(Object)
-         */
-        @Override public Set<E> edgesOf(V vertex)
-        {
-            ArrayUnenforcedSet<E> inAndOut =
-                new ArrayUnenforcedSet<E>(getEdgeContainer(vertex).incoming);
-            inAndOut.addAll(getEdgeContainer(vertex).outgoing);
-
-            // we have two copies for each self-loop - remove one of them.
-            if (allowingLoops) {
-                Set<E> loops = getAllEdges(vertex, vertex);
-
-                for (int i = 0; i < inAndOut.size();) {
-                    Object e = inAndOut.get(i);
-
-                    if (loops.contains(e)) {
-                        inAndOut.remove(i);
-                        loops.remove(e); // so we remove it only once
-                    } else {
-                        i++;
-                    }
-                }
-            }
-
-            return Collections.unmodifiableSet(inAndOut);
-        }
-
-        /**
-         * @see DirectedGraph#inDegreeOf(Object)
-         */
-        @Override public int inDegreeOf(V vertex)
-        {
-            return getEdgeContainer(vertex).incoming.size();
-        }
-
-        /**
-         * @see DirectedGraph#incomingEdgesOf(Object)
-         */
-        @Override public Set<E> incomingEdgesOf(V vertex)
-        {
-            return getEdgeContainer(vertex).getUnmodifiableIncomingEdges();
-        }
-
-        /**
-         * @see DirectedGraph#outDegreeOf(Object)
-         */
-        @Override public int outDegreeOf(V vertex)
-        {
-            return getEdgeContainer(vertex).outgoing.size();
-        }
-
-        /**
-         * @see DirectedGraph#outgoingEdgesOf(Object)
-         */
-        @Override public Set<E> outgoingEdgesOf(V vertex)
-        {
-            return getEdgeContainer(vertex).getUnmodifiableOutgoingEdges();
-        }
-
-        @Override public void removeEdgeFromTouchingVertices(E e)
-        {
-            V source = getEdgeSource(e);
-            V target = getEdgeTarget(e);
-
-            getEdgeContainer(source).removeOutgoingEdge(e);
-            getEdgeContainer(target).removeIncomingEdge(e);
-        }
-
-        /**
-         * A lazy build of edge container for specified vertex.
-         *
-         * @param vertex a vertex in this graph.
-         *
-         * @return EdgeContainer
-         */
-        private DirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
-        {
-            assertVertexExist(vertex);
-
-            DirectedEdgeContainer<V, E> ec = vertexMapDirected.get(vertex);
-
-            if (ec == null) {
-                ec = new DirectedEdgeContainer<V, E>(edgeSetFactory, vertex);
-                vertexMapDirected.put(vertex, ec);
-            }
-
-            return ec;
-        }
-    }
-
-    /**
-     * A container of for vertex edges.
-     *
-     * <p>In this edge container we use array lists to minimize memory toll.
-     * However, for high-degree vertices we replace the entire edge container
-     * with a direct access subclass (to be implemented).</p>
-     *
-     * @author Barak Naveh
-     */
-    private static class UndirectedEdgeContainer<VV, EE>
-        implements Serializable
-    {
-        private static final long serialVersionUID = -6623207588411170010L;
-        Set<EE> vertexEdges;
-        private transient Set<EE> unmodifiableVertexEdges = null;
-
-        UndirectedEdgeContainer(
-            EdgeSetFactory<VV, EE> edgeSetFactory,
-            VV vertex)
-        {
-            vertexEdges = edgeSetFactory.createEdgeSet(vertex);
-        }
-
-        /**
-         * A lazy build of unmodifiable list of vertex edges
-         *
-         * @return
-         */
-        public Set<EE> getUnmodifiableVertexEdges()
-        {
-            if (unmodifiableVertexEdges == null) {
-                unmodifiableVertexEdges =
-                    Collections.unmodifiableSet(vertexEdges);
-            }
-
-            return unmodifiableVertexEdges;
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void addEdge(EE e)
-        {
-            vertexEdges.add(e);
-        }
-
-        /**
-         * .
-         *
-         * @return
-         */
-        public int edgeCount()
-        {
-            return vertexEdges.size();
-        }
-
-        /**
-         * .
-         *
-         * @param e
-         */
-        public void removeEdge(EE e)
-        {
-            vertexEdges.remove(e);
-        }
-    }
-
-    /**
-     * .
-     *
-     * @author Barak Naveh
-     */
-    protected class UndirectedSpecifics
-        extends Specifics
-        implements Serializable
-    {
-        private static final long serialVersionUID = 6494588405178655873L;
-        private static final String NOT_IN_UNDIRECTED_GRAPH =
-            "no such operation in an undirected graph";
-
-        private Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected;
-
-        public UndirectedSpecifics()
-        {
-            this(new LinkedHashMap<V, UndirectedEdgeContainer<V, E>>());
-        }
-
-        public UndirectedSpecifics(
-            Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
-        {
-            this.vertexMapUndirected = vertexMap;
-        }
-
-        @Override public void addVertex(V v)
-        {
-            // add with a lazy edge container entry
-            vertexMapUndirected.put(v, null);
-        }
-
-        @Override public Set<V> getVertexSet()
-        {
-            return vertexMapUndirected.keySet();
-        }
-
-        /**
-         * @see Graph#getAllEdges(Object, Object)
-         */
-        @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
-        {
-            Set<E> edges = null;
-
-            if (containsVertex(sourceVertex)
-                && containsVertex(targetVertex))
-            {
-                edges = new ArrayUnenforcedSet<E>();
-
-                Iterator<E> iter =
-                    getEdgeContainer(sourceVertex).vertexEdges.iterator();
-
-                while (iter.hasNext()) {
-                    E e = iter.next();
-
-                    boolean equal =
-                        isEqualsStraightOrInverted(
-                            sourceVertex,
-                            targetVertex,
-                            e);
-
-                    if (equal) {
-                        edges.add(e);
-                    }
-                }
-            }
-
-            return edges;
-        }
-
-        /**
-         * @see Graph#getEdge(Object, Object)
-         */
-        @Override public E getEdge(V sourceVertex, V targetVertex)
-        {
-            if (containsVertex(sourceVertex)
-                && containsVertex(targetVertex))
-            {
-                Iterator<E> iter =
-                    getEdgeContainer(sourceVertex).vertexEdges.iterator();
-
-                while (iter.hasNext()) {
-                    E e = iter.next();
-
-                    boolean equal =
-                        isEqualsStraightOrInverted(
-                            sourceVertex,
-                            targetVertex,
-                            e);
-
-                    if (equal) {
-                        return e;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        private boolean isEqualsStraightOrInverted(
-            Object sourceVertex,
-            Object targetVertex,
-            E e)
-        {
-            boolean equalStraight =
-                sourceVertex.equals(getEdgeSource(e))
-                && targetVertex.equals(getEdgeTarget(e));
-
-            boolean equalInverted =
-                sourceVertex.equals(getEdgeTarget(e))
-                && targetVertex.equals(getEdgeSource(e));
-            return equalStraight || equalInverted;
-        }
-
-        @Override public void addEdgeToTouchingVertices(E e)
-        {
-            V source = getEdgeSource(e);
-            V target = getEdgeTarget(e);
-
-            getEdgeContainer(source).addEdge(e);
-
-            if (!source.equals(target)) {
-                getEdgeContainer(target).addEdge(e);
-            }
-        }
-
-        @Override public int degreeOf(V vertex)
-        {
-            if (allowingLoops) { // then we must count, and add loops twice
-
-                int degree = 0;
-                Set<E> edges = getEdgeContainer(vertex).vertexEdges;
-
-                for (E e : edges) {
-                    if (getEdgeSource(e).equals(getEdgeTarget(e))) {
-                        degree += 2;
-                    } else {
-                        degree += 1;
-                    }
-                }
-
-                return degree;
-            } else {
-                return getEdgeContainer(vertex).edgeCount();
-            }
-        }
-
-        /**
-         * @see Graph#edgesOf(Object)
-         */
-        @Override public Set<E> edgesOf(V vertex)
-        {
-            return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
-        }
-
-        /**
-         * @see DirectedGraph#inDegreeOf(Object)
-         */
-        @Override public int inDegreeOf(V vertex)
-        {
-            throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
-        }
-
-        /**
-         * @see DirectedGraph#incomingEdgesOf(Object)
-         */
-        @Override public Set<E> incomingEdgesOf(V vertex)
-        {
-            throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
-        }
-
-        /**
-         * @see DirectedGraph#outDegreeOf(Object)
-         */
-        @Override public int outDegreeOf(V vertex)
-        {
-            throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
-        }
-
-        /**
-         * @see DirectedGraph#outgoingEdgesOf(Object)
-         */
-        @Override public Set<E> outgoingEdgesOf(V vertex)
-        {
-            throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
-        }
-
-        @Override public void removeEdgeFromTouchingVertices(E e)
-        {
-            V source = getEdgeSource(e);
-            V target = getEdgeTarget(e);
-
-            getEdgeContainer(source).removeEdge(e);
-
-            if (!source.equals(target)) {
-                getEdgeContainer(target).removeEdge(e);
-            }
-        }
-
-        /**
-         * A lazy build of edge container for specified vertex.
-         *
-         * @param vertex a vertex in this graph.
-         *
-         * @return EdgeContainer
-         */
-        private UndirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
-        {
-            assertVertexExist(vertex);
-
-            UndirectedEdgeContainer<V, E> ec = vertexMapUndirected.get(vertex);
-
-            if (ec == null) {
-                ec = new UndirectedEdgeContainer<V, E>(
-                    edgeSetFactory,
-                    vertex);
-                vertexMapUndirected.put(vertex, ec);
-            }
-
-            return ec;
-        }
-    }
 }
 
 // End AbstractBaseGraph.java

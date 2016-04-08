@@ -39,6 +39,8 @@ package org.jgrapht.graph;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.graph.specifics.DirectedEdgeContainer;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -98,7 +100,7 @@ public class SimpleIdentityDirectedGraphTest
 
         @Override
         protected DirectedSpecifics createDirectedSpecifics() {
-            return new DirectedSpecifics(new IdentityHashMap<V, AbstractBaseGraph.DirectedEdgeContainer<V, E>>());
+            return new DirectedSpecifics(this, new IdentityHashMap<V, DirectedEdgeContainer<V, E>>());
         }
     }
 
