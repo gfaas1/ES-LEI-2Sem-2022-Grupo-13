@@ -109,7 +109,7 @@ public class MaskSubgraph<V, E>
 
     @Override public boolean containsVertex(V v)
     {
-        return !this.mask.isVertexMasked(v) && this.base.containsVertex(v);
+        return vertexSet().contains(v);
     }
 
     /**
