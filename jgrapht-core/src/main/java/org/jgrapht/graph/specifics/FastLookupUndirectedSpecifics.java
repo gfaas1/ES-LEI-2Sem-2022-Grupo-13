@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * FastLookupDirectedSpecifics.java
+ * FastLookupUndirectedSpecifics.java
  * -----------------
  * (C) Copyright 2015-2015, by Joris Kinable and Contributors.
  *
@@ -43,32 +43,31 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve the performance of methods which depend
+ * Fast implementation of UndirectedSpecifics. This class uses additional data structures to improve the performance of methods which depend
  * on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V v),addEdge(V u, V v). A disadvantage is an increase in memory consumption.
  * If memory utilization is an issue, use a {@link DirectedSpecifics} instead.
  *
  * @author Joris Kinable
  */
-public class FastLookupDirectedSpecifics<V,E>
-    extends DirectedSpecifics<V,E>
+public class FastLookupUndirectedSpecifics<V,E>
+    extends UndirectedSpecifics<V,E>
     implements Serializable
 {
-    private static final long serialVersionUID = 4089085208843722263L;
+    private static final long serialVersionUID = 225772727571597846L;
 
     /* Maps a pair of vertices <u,v> to an set of edges {(u,v)}. In case of a multigraph, all edges which touch both u,v are included in the set */
     protected Map<VertexPair<V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
 
-    public FastLookupDirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
+    public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
         this(abstractBaseGraph, new LinkedHashMap<>());
     }
 
-    public FastLookupDirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
+    public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
         super(abstractBaseGraph, vertexMap);
         this.touchingVerticesToEdgeMap=new HashMap<>();
     }
-
 
     /**
      * @see Graph#getAllEdges(Object, Object)
@@ -100,31 +99,47 @@ public class FastLookupDirectedSpecifics<V,E>
         V source = abstractBaseGraph.getEdgeSource(e);
         V target = abstractBaseGraph.getEdgeTarget(e);
 
-        getEdgeContainer(source).addOutgoingEdge(e);
-        getEdgeContainer(target).addIncomingEdge(e);
+        getEdgeContainer(source).addEdge(e);
 
-        VertexPair<V> vertexPair=new VertexPair<>(source, target);
-        if(!touchingVerticesToEdgeMap.containsKey(vertexPair))
-            touchingVerticesToEdgeMap.put(vertexPair, new ArrayUnenforcedSet<>());
-        touchingVerticesToEdgeMap.get(vertexPair).add(e);
+
+        //Add edge to both touchingVerticesToEdgeMap.get(u,v) and touchingVerticesToEdgeMap.get(v,u)
+        VertexPair<V> vertexPair1=new VertexPair<>(source, target);
+        if(!touchingVerticesToEdgeMap.containsKey(vertexPair1)) {
+            ArrayUnenforcedSet<E> edges=new ArrayUnenforcedSet<>();
+            touchingVerticesToEdgeMap.put(vertexPair1, edges);
+            if (!source.equals(target)) {//If not a self loop
+                VertexPair<V> vertexPair2=new VertexPair<>(target, source);
+                touchingVerticesToEdgeMap.put(vertexPair2, edges);
+            }
+        }
+        touchingVerticesToEdgeMap.get(vertexPair1).add(e);
+
+        if (!source.equals(target)) { //If not a self loop
+            getEdgeContainer(target).addEdge(e);
+        }
     }
-
 
     @Override public void removeEdgeFromTouchingVertices(E e)
     {
         V source = abstractBaseGraph.getEdgeSource(e);
         V target = abstractBaseGraph.getEdgeTarget(e);
 
-        getEdgeContainer(source).removeOutgoingEdge(e);
-        getEdgeContainer(target).removeIncomingEdge(e);
+        getEdgeContainer(source).removeEdge(e);
+
+        if (!source.equals(target)) {
+            getEdgeContainer(target).removeEdge(e);
+        }
 
         //Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges for a pair
         //of touching vertices, remove the pair from the map.
-        VertexPair<V> vertexPair=new VertexPair<>(source, target);
-        if(touchingVerticesToEdgeMap.containsKey(vertexPair)){
-            touchingVerticesToEdgeMap.get(vertexPair).remove(e);
-            if(touchingVerticesToEdgeMap.get(vertexPair).isEmpty())
-                touchingVerticesToEdgeMap.remove(vertexPair);
+        VertexPair<V> vertexPair1=new VertexPair<>(source, target);
+        if(touchingVerticesToEdgeMap.containsKey(vertexPair1)){
+            touchingVerticesToEdgeMap.get(vertexPair1).remove(e);
+            if(touchingVerticesToEdgeMap.get(vertexPair1).isEmpty()) {
+                touchingVerticesToEdgeMap.remove(vertexPair1);
+                VertexPair<V> vertexPair2=new VertexPair<>(target, source);
+                touchingVerticesToEdgeMap.remove(vertexPair2);
+            }
         }
     }
 

@@ -50,8 +50,8 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
+import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedSpecifics;
 import org.jgrapht.util.*;
 
 
@@ -535,13 +535,12 @@ public abstract class AbstractBaseGraph<V, E>
 
     protected Specifics<V,E> createUndirectedSpecifics()
     {
-        return new UndirectedSpecifics<>(this);
+        return new FastLookupUndirectedSpecifics<>(this);
     }
 
     protected Specifics<V,E> createDirectedSpecifics()
     {
         return new FastLookupDirectedSpecifics<>(this);
-        //return new DirectedSpecifics<>(this);
     }
 
     private static class ArrayListFactory<VV, EE>

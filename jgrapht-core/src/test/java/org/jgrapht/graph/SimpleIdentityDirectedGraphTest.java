@@ -25,7 +25,7 @@
  * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * Original Author:  Barak Naveh
- * Contributor(s):   -
+ * Contributor(s):   Joris Kinable
  *
  * $Id$
  *
@@ -39,7 +39,6 @@ package org.jgrapht.graph;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
 
 import java.util.Collections;
@@ -77,9 +76,8 @@ public class SimpleIdentityDirectedGraphTest
 
             Holder holder = (Holder) o;
 
-            if (t != null ? !t.equals(holder.t) : holder.t != null) return false;
+            return !(t != null ? !t.equals(holder.t) : holder.t != null);
 
-            return true;
         }
 
         @Override
@@ -99,8 +97,8 @@ public class SimpleIdentityDirectedGraphTest
         }
 
         @Override
-        protected DirectedSpecifics createDirectedSpecifics() {
-            return new DirectedSpecifics(this, new IdentityHashMap<V, DirectedEdgeContainer<V, E>>());
+        protected DirectedSpecifics<V,E> createDirectedSpecifics() {
+            return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }
     }
 
@@ -113,10 +111,10 @@ public class SimpleIdentityDirectedGraphTest
     private DirectedGraph<Holder<String>, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<Holder<String>, DefaultEdge> eFactory;
-    private Holder<String> v1 = new Holder<String>("v1") ;
-    private Holder<String> v2 = new Holder<String>("v2");
-    private Holder<String> v3 = new Holder<String>("v3");
-    private Holder<String> v4 = new Holder<String>("v4");
+    private Holder<String> v1 = new Holder<>("v1") ;
+    private Holder<String> v2 = new Holder<>("v2");
+    private Holder<String> v3 = new Holder<>("v3");
+    private Holder<String> v4 = new Holder<>("v4");
 
     //~ Constructors -----------------------------------------------------------
 
@@ -154,7 +152,7 @@ public class SimpleIdentityDirectedGraphTest
         DefaultEdge e = eFactory.createEdge(v2, v1);
 
         try {
-            g1.addEdge(new Holder<String>("ya"), new Holder<String>("ya"), e); // no such vertex in graph
+            g1.addEdge(new Holder<>("ya"), new Holder<>("ya"), e); // no such vertex in graph
             assertFalse();
         } catch (IllegalArgumentException ile) {
             assertTrue();
@@ -344,7 +342,7 @@ public class SimpleIdentityDirectedGraphTest
         assertEquals(1, g4.inDegreeOf(v4));
 
         try {
-            g3.inDegreeOf(new Holder<String>(""));
+            g3.inDegreeOf(new Holder<>(""));
             assertFalse();
         } catch (IllegalArgumentException e) {
             assertTrue();
@@ -429,7 +427,7 @@ public class SimpleIdentityDirectedGraphTest
         assertEquals(Collections.emptySet(), g4.removeAllEdges(v3, v2));
         assertEquals(3, g4.edgeSet().size());
         // Missing vertex.
-        assertEquals(null, g4.removeAllEdges(v1, new Holder<String>("v5")));
+        assertEquals(null, g4.removeAllEdges(v1, new Holder<>("v5")));
     }
 
     /**
@@ -465,10 +463,8 @@ public class SimpleIdentityDirectedGraphTest
     {
         init();
 
-        DirectedGraph<Holder<String>, DefaultEdge> g =
-            new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(DefaultEdge.class);
-        DirectedGraph<Holder<String>, DefaultEdge> r =
-            new EdgeReversedGraph<Holder<String>, DefaultEdge>(g);
+        DirectedGraph<Holder<String>, DefaultEdge> g =new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<Holder<String>, DefaultEdge> r =new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
@@ -528,23 +524,15 @@ public class SimpleIdentityDirectedGraphTest
 
         assertSame(v2, r.getEdgeSource(e));
         assertSame(v1, r.getEdgeTarget(e));
-
-//        assertEquals("([v1, v2], [(v2,v1)])", r.toString());
     }
 
     private void init()
     {
-        gEmpty =
-            new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(
-                DefaultEdge.class);
-        g1 = new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(
-            DefaultEdge.class);
-        g2 = new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(
-            DefaultEdge.class);
-        g3 = new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(
-            DefaultEdge.class);
-        g4 = new SimpleIdentityDirectedGraph<Holder<String>, DefaultEdge>(
-            DefaultEdge.class);
+        gEmpty =new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        g1 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        g2 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        g3 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        g4 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
 
         eFactory = g1.getEdgeFactory();
         eLoop = eFactory.createEdge(v1, v1);

@@ -1,3 +1,37 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * DirectedSpecifics.java
+ * -----------------
+ * (C) Copyright 2015-2015, by Barak Naveh and Contributors.
+ *
+ * Original Author:  Barak Naveh
+ * Contributor(s): Joris Kinable
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ */
 package org.jgrapht.graph.specifics;
 
 import org.jgrapht.DirectedGraph;
@@ -12,8 +46,9 @@ import java.util.*;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of memory, at the expense of
- * slow edge retrievals. Methods which depend on edge retrievals, i.e. getEdge(V u, V v), containsEdge(V u, V v),
- * addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is high (dense graphs).
+ * slow edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V v),
+ * addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is high (dense graphs). For a fast
+ * implementation, use {@link FastLookupDirectedSpecifics}.
  *
  * @author Barak Naveh
  * @author Joris Kinable
