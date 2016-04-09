@@ -200,8 +200,7 @@ public class DirectedNeighborIndex<V, E>
         Neighbors<V> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
             neighbors =
-                    new Neighbors<>(v,
-                            Graphs.predecessorListOf(graph, v));
+                    new Neighbors<>(Graphs.predecessorListOf(graph, v));
             predecessorMap.put(v, neighbors);
         }
         return neighbors;
@@ -212,8 +211,7 @@ public class DirectedNeighborIndex<V, E>
         Neighbors<V> neighbors = successorMap.get(v);
         if (neighbors == null) {
             neighbors =
-                    new Neighbors<>(v,
-                            Graphs.successorListOf(graph, v));
+                    new Neighbors<>(Graphs.successorListOf(graph, v));
             successorMap.put(v, neighbors);
         }
         return neighbors;
