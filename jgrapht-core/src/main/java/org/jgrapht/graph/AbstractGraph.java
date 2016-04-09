@@ -173,8 +173,8 @@ public abstract class AbstractGraph<V, E>
     {
         boolean modified = false;
 
-        for (int i = 0; i < edges.length; i++) {
-            modified |= removeEdge(edges[i]);
+        for (E edge : edges) {
+            modified |= removeEdge(edge);
         }
 
         return modified;
@@ -195,9 +195,9 @@ public abstract class AbstractGraph<V, E>
         Collection<? extends E> edgeSet,
         boolean directed)
     {
-        List<String> renderedEdges = new ArrayList<String>();
+        List<String> renderedEdges = new ArrayList<>();
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (E e : edgeSet) {
             if ((e.getClass() != DefaultEdge.class)
                 && (e.getClass() != DefaultWeightedEdge.class))
@@ -282,8 +282,7 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        TypeUtil<Graph<V, E>> typeDecl = null;
-        Graph<V, E> g = TypeUtil.uncheckedCast(obj, typeDecl);
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj, null);
 
         if (!vertexSet().equals(g.vertexSet())) {
             return false;

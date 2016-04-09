@@ -62,7 +62,7 @@ public class Multigraph<V, E>
      */
     public Multigraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+        this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
     /**
@@ -78,15 +78,15 @@ public class Multigraph<V, E>
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Multigraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new UndirectedGraphBuilder<V, E, Multigraph<V, E>>(
-            new Multigraph<V, E>(edgeClass));
+        return new UndirectedGraphBuilder<>(
+                new Multigraph<>(edgeClass));
     }
 
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Multigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new UndirectedGraphBuilder<V, E, Multigraph<V, E>>(
-            new Multigraph<V, E>(ef));
+        return new UndirectedGraphBuilder<>(
+                new Multigraph<>(ef));
     }
 }
 

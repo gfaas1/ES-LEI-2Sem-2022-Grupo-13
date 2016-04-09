@@ -98,7 +98,7 @@ public class DirectedSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        Set<E> edges = new ArrayUnenforcedSet<>();
 
         for (E e : getBase().incomingEdgesOf(vertex)) {
             if (containsEdge(e)) {
@@ -134,7 +134,7 @@ public class DirectedSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<E>();
+        Set<E> edges = new ArrayUnenforcedSet<>();
 
         for (E e : getBase().outgoingEdgesOf(vertex)) {
             if (containsEdge(e)) {

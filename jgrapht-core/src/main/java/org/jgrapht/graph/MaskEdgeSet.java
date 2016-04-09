@@ -96,8 +96,7 @@ class MaskEdgeSet<V, E>
     {
         if (this.size == -1) {
             this.size = 0;
-            for (Iterator<E> iter = iterator(); iter.hasNext();) {
-                iter.next();
+            for (Iterator<E> iter = iterator(); iter.hasNext(); iter.next()) {
                 this.size++;
             }
         }

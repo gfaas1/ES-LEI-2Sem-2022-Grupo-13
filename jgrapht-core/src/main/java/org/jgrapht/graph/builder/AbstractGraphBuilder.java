@@ -222,7 +222,7 @@ public abstract class AbstractGraphBuilder<V,
      */
     public UnmodifiableGraph<V, E> buildUnmodifiable()
     {
-        return new UnmodifiableGraph<V, E>(this.graph);
+        return new UnmodifiableGraph<>(this.graph);
     }
 }
 

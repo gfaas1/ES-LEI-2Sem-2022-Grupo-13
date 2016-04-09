@@ -61,7 +61,7 @@ public class Pseudograph<V, E>
      */
     public Pseudograph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+        this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
     /**
@@ -77,15 +77,15 @@ public class Pseudograph<V, E>
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Pseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new UndirectedGraphBuilder<V, E, Pseudograph<V, E>>(
-            new Pseudograph<V, E>(edgeClass));
+        return new UndirectedGraphBuilder<>(
+                new Pseudograph<>(edgeClass));
     }
 
     public static <V, E> UndirectedGraphBuilderBase<V,
         E, ? extends Pseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new UndirectedGraphBuilder<V, E, Pseudograph<V, E>>(
-            new Pseudograph<V, E>(ef));
+        return new UndirectedGraphBuilder<>(
+                new Pseudograph<>(ef));
     }
 }
 
