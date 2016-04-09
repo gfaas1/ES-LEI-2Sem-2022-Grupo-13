@@ -97,7 +97,7 @@ public class ConnectivityInspector<V, E>
     public ConnectivityInspector(DirectedGraph<V, E> g)
     {
         init();
-        this.graph = new AsUndirectedGraph<V, E>(g);
+        this.graph = new AsUndirectedGraph<>(g);
     }
 
     /**
@@ -128,10 +128,10 @@ public class ConnectivityInspector<V, E>
         Set<V> connectedSet = vertexToConnectedSet.get(vertex);
 
         if (connectedSet == null) {
-            connectedSet = new HashSet<V>();
+            connectedSet = new HashSet<>();
 
             BreadthFirstIterator<V, E> i =
-                new BreadthFirstIterator<V, E>(graph, vertex);
+                    new BreadthFirstIterator<>(graph, vertex);
 
             while (i.hasNext()) {
                 connectedSet.add(i.next());
@@ -223,19 +223,19 @@ public class ConnectivityInspector<V, E>
     private void init()
     {
         connectedSets = null;
-        vertexToConnectedSet = new HashMap<V, Set<V>>();
+        vertexToConnectedSet = new HashMap<>();
     }
 
     private List<Set<V>> lazyFindConnectedSets()
     {
         if (connectedSets == null) {
-            connectedSets = new ArrayList<Set<V>>();
+            connectedSets = new ArrayList<>();
 
             Set<V> vertexSet = graph.vertexSet();
 
             if (vertexSet.size() > 0) {
                 BreadthFirstIterator<V, E> i =
-                    new BreadthFirstIterator<V, E>(graph, null);
+                        new BreadthFirstIterator<>(graph, null);
                 i.addTraversalListener(new MyTraversalListener());
 
                 while (i.hasNext()) {
@@ -274,7 +274,7 @@ public class ConnectivityInspector<V, E>
         @Override public void connectedComponentStarted(
             ConnectedComponentTraversalEvent e)
         {
-            currentConnectedSet = new HashSet<V>();
+            currentConnectedSet = new HashSet<>();
         }
 
         /**

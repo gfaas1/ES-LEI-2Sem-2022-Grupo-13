@@ -97,10 +97,10 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         this.graph2 = graph2;
         this.vertexComparator = vertexComparator;
         this.edgeComparator = edgeComparator;
-        this.ordering1 = new GraphOrdering<V, E>(graph1, true,
-            cacheEdges);
-        this.ordering2 = new GraphOrdering<V, E>(graph2, true,
-            cacheEdges);
+        this.ordering1 = new GraphOrdering<>(graph1, true,
+                cacheEdges);
+        this.ordering2 = new GraphOrdering<>(graph2, true,
+                cacheEdges);
     }
 
     public VF2AbstractIsomorphismInspector(

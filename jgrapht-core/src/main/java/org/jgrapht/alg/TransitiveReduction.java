@@ -150,7 +150,7 @@ public class TransitiveReduction
      */
     public <V, E> void reduce(final DirectedGraph<V, E> directedGraph)
     {
-        final List<V> vertices = new ArrayList<V>(directedGraph.vertexSet());
+        final List<V> vertices = new ArrayList<>(directedGraph.vertexSet());
 
         final int n = vertices.size();
 

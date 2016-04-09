@@ -63,7 +63,7 @@ abstract class AbstractPathElementList<V,
     /**
      * Stored paths, list of <code>AbstractPathElement</code>.
      */
-    protected ArrayList<T> pathElements = new ArrayList<T>();
+    protected ArrayList<T> pathElements = new ArrayList<>();
 
     /**
      * Target vertex of the paths.

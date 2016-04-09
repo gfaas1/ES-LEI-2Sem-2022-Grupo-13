@@ -149,7 +149,7 @@ public class IsomorphicGraphMapping<V, E>
     {
         String str = "[";
         Set<V> vertexSet = g1.getGraph().vertexSet();
-        Map<String, V> vertexMap = new TreeMap<String, V>();
+        Map<String, V> vertexMap = new TreeMap<>();
 
         for (V v : vertexSet) {
             vertexMap.put(v.toString(), v);

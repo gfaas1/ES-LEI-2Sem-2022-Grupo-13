@@ -47,7 +47,7 @@ import java.util.*;
 public class Extension<T, E>
 {
     private ExtensionFactory<E> extensionFactory;
-    private Map<T, E> extensions = new HashMap<T, E>();
+    private Map<T, E> extensions = new HashMap<>();
 
     public Extension(ExtensionFactory<E> factory)
     {

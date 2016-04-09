@@ -74,8 +74,8 @@ public class FloydWarshallShortestPaths<V, E>
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
         this.graph = graph;
-        this.vertices = new ArrayList<V>(graph.vertexSet());
-        this.vertexIndices = new HashMap<V, Integer>(this.vertices.size());
+        this.vertices = new ArrayList<>(graph.vertexSet());
+        this.vertexIndices = new HashMap<>(this.vertices.size());
         int i = 0;
         for (V vertex : vertices) {
             vertexIndices.put(vertex, i++);
@@ -225,14 +225,14 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         //Reconstruct the path
-        List<E> edges = new ArrayList<E>();
+        List<E> edges = new ArrayList<>();
         int u = v_a;
         while (u != v_b) {
             int v = backtrace[u][v_b];
             edges.add(graph.getEdge(vertices.get(u), vertices.get(v)));
             u = v;
         }
-        return new GraphPathImpl<V, E>(graph, a, b, edges, d[v_a][v_b]);
+        return new GraphPathImpl<>(graph, a, b, edges, d[v_a][v_b]);
     }
 
     public List<V> getShortestPathAsVertexList(V a, V b)
@@ -247,7 +247,7 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         //Reconstruct the path
-        List<V> pathVertexList = new ArrayList<V>();
+        List<V> pathVertexList = new ArrayList<>();
         pathVertexList.add(a);
         int u = v_a;
         while (u != v_b) {
@@ -279,7 +279,7 @@ public class FloydWarshallShortestPaths<V, E>
     public List<GraphPath<V, E>> getShortestPaths()
     {
         lazyCalculatePaths();
-        List<GraphPath<V, E>> allPaths = new ArrayList<GraphPath<V, E>>();
+        List<GraphPath<V, E>> allPaths = new ArrayList<>();
         for (List<GraphPath<V, E>> pathSubset : paths.values()) {
             allPaths.addAll(pathSubset);
         }
@@ -303,11 +303,11 @@ public class FloydWarshallShortestPaths<V, E>
 
         lazyCalculateMatrix();
 
-        paths = new LinkedHashMap<V, List<GraphPath<V, E>>>();
+        paths = new LinkedHashMap<>();
         int n = vertices.size();
         for (int i = 0; i < n; i++) {
             V v_i = vertices.get(i);
-            paths.put(v_i, new ArrayList<GraphPath<V, E>>());
+            paths.put(v_i, new ArrayList<>());
             for (int j = 0; j < n; j++) {
                 if (i == j) {
                     continue;

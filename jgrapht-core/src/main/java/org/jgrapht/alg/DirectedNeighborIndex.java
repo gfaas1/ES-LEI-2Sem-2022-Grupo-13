@@ -59,8 +59,8 @@ import org.jgrapht.event.*;
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V, E>> predecessorMap = new HashMap<V, Neighbors<V, E>>();
-    Map<V, Neighbors<V, E>> successorMap = new HashMap<V, Neighbors<V, E>>();
+    Map<V, Neighbors<V, E>> predecessorMap = new HashMap<>();
+    Map<V, Neighbors<V, E>> successorMap = new HashMap<>();
     private DirectedGraph<V, E> graph;
 
     /**
@@ -168,7 +168,6 @@ public class DirectedNeighborIndex<V, E>
      */
     @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
         if (successorMap.containsKey(source)) {
@@ -201,8 +200,8 @@ public class DirectedNeighborIndex<V, E>
         Neighbors<V, E> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
             neighbors =
-                new Neighbors<V, E>(v,
-                    Graphs.predecessorListOf(graph, v));
+                    new Neighbors<>(v,
+                            Graphs.predecessorListOf(graph, v));
             predecessorMap.put(v, neighbors);
         }
         return neighbors;
@@ -213,8 +212,8 @@ public class DirectedNeighborIndex<V, E>
         Neighbors<V, E> neighbors = successorMap.get(v);
         if (neighbors == null) {
             neighbors =
-                new Neighbors<V, E>(v,
-                    Graphs.successorListOf(graph, v));
+                    new Neighbors<>(v,
+                            Graphs.successorListOf(graph, v));
             successorMap.put(v, neighbors);
         }
         return neighbors;

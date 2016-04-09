@@ -440,7 +440,7 @@ abstract class VF2State<V, E>
 
     public IsomorphicGraphMapping<V, E> getCurrentMapping()
     {
-        return new IsomorphicGraphMapping<V, E>(g1, g2, core1, core2);
+        return new IsomorphicGraphMapping<>(g1, g2, core1, core2);
     }
 
     public void resetAddVertexes()

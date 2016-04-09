@@ -63,7 +63,7 @@ import org.jgrapht.util.*;
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V, E>> neighborMap = new HashMap<V, Neighbors<V, E>>();
+    Map<V, Neighbors<V, E>> neighborMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**
@@ -139,7 +139,6 @@ public class NeighborIndex<V, E>
      */
     @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
         if (neighborMap.containsKey(source)) {
@@ -170,8 +169,8 @@ public class NeighborIndex<V, E>
     {
         Neighbors<V, E> neighbors = neighborMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<V, E>(v,
-                Graphs.neighborListOf(graph, v));
+            neighbors = new Neighbors<>(v,
+                    Graphs.neighborListOf(graph, v));
             neighborMap.put(v, neighbors);
         }
         return neighbors;
@@ -184,7 +183,7 @@ public class NeighborIndex<V, E>
     static class Neighbors<V, E>
     {
         private Map<V, ModifiableInteger> neighborCounts =
-            new LinkedHashMap<V, ModifiableInteger>();
+                new LinkedHashMap<>();
 
         // TODO could eventually make neighborSet modifiable, resulting
         // in edge removals from the graph
