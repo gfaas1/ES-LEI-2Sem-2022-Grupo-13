@@ -58,7 +58,7 @@ import org.jgrapht.*;
 public class BreadthFirstIterator<V, E>
     extends CrossComponentIterator<V, E, Object>
 {
-    private Deque<V> queue = new ArrayDeque<V>();
+    private Deque<V> queue = new ArrayDeque<>();
 
     /**
      * Creates a new breadth-first iterator for the specified graph.

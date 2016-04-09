@@ -74,7 +74,7 @@ public class DepthFirstIterator<V, E>
     /**
      * @see #getStack
      */
-    private Deque<Object> stack = new ArrayDeque<Object>();
+    private Deque<Object> stack = new ArrayDeque<>();
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 

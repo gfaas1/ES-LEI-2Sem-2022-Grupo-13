@@ -88,7 +88,7 @@ public class TopologicalOrderIterator<V, E>
      */
     public TopologicalOrderIterator(DirectedGraph<V, E> dg)
     {
-        this(dg, new LinkedListQueue<V>());
+        this(dg, new LinkedListQueue<>());
     }
 
     /**
@@ -106,7 +106,7 @@ public class TopologicalOrderIterator<V, E>
      */
     public TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue)
     {
-        this(dg, queue, new HashMap<V, ModifiableInteger>());
+        this(dg, queue, new HashMap<>());
     }
 
     // NOTE: This is a hack to deal with the fact that CrossComponentIterator
@@ -203,9 +203,7 @@ public class TopologicalOrderIterator<V, E>
         Queue<V> queue,
         Map<V, ModifiableInteger> inDegreeMap)
     {
-        for (Iterator<V> i = dg.vertexSet().iterator(); i.hasNext();) {
-            V vertex = i.next();
-
+        for (V vertex : dg.vertexSet()) {
             int inDegree = dg.inDegreeOf(vertex);
             inDegreeMap.put(vertex, new ModifiableInteger(inDegree));
 

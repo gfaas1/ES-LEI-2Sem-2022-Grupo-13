@@ -122,7 +122,7 @@ public class PrefetchIterator<E>
      */
     @Override public E nextElement()
     {
-        E result = null;
+        E result;
         if (this.isGetNextLastResultUpToDate) {
             result = this.getNextLastResult;
         } else {
@@ -166,11 +166,7 @@ public class PrefetchIterator<E>
     public boolean isEnumerationStartedEmpty()
     {
         if (this.innerFunctorUsageCounter == 0) {
-            if (hasMoreElements()) {
-                return false;
-            } else {
-                return true;
-            }
+            return !hasMoreElements();
         } else // it is not the first time , so use the saved value
                // which was initilaizeed during a call to
                // getNextElementFromInnerFunctor
@@ -204,7 +200,7 @@ public class PrefetchIterator<E>
          * You must implement that NoSuchElementException is thrown on
          * nextElement() if it is out of bound.
          */
-        public EE nextElement()
+        EE nextElement()
             throws NoSuchElementException;
     }
 }

@@ -108,20 +108,17 @@ public class WheelGraphGenerator<V, E>
         // A little trickery to intercept the rim generation.  This is
         // necessary since target may be initially non-empty, meaning we can't
         // rely on its vertex set after the rim is generated.
-        final Collection<V> rim = new ArrayList<V>();
+        final Collection<V> rim = new ArrayList<>();
         VertexFactory<V> rimVertexFactory =
-            new VertexFactory<V>() {
-                @Override public V createVertex()
-                {
+                () -> {
                     V vertex = vertexFactory.createVertex();
                     rim.add(vertex);
 
                     return vertex;
-                }
-            };
+                };
 
         RingGraphGenerator<V, E> ringGenerator =
-            new RingGraphGenerator<V, E>(size - 1);
+                new RingGraphGenerator<>(size - 1);
         ringGenerator.generateGraph(target, rimVertexFactory, resultMap);
 
         V hubVertex = vertexFactory.createVertex();

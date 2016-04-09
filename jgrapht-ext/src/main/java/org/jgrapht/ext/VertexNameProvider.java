@@ -50,7 +50,7 @@ public interface VertexNameProvider<V>
      *
      * @return the name of the vertex
      */
-    public String getVertexName(V vertex);
+    String getVertexName(V vertex);
 }
 
 // End VertexNameProvider.java

@@ -47,7 +47,6 @@ import org.jgrapht.*;
 public class MaskEdgeSetTest
     extends EnhancedTestCase
 {
-    private DirectedGraph<String, DefaultEdge> directed;
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
@@ -59,8 +58,8 @@ public class MaskEdgeSetTest
     @Override
     protected void setUp () {
         DirectedGraph<String, DefaultEdge> directed =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+                new DefaultDirectedGraph<>(
+                        DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);

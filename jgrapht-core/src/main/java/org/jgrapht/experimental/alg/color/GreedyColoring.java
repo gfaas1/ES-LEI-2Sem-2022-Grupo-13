@@ -74,11 +74,11 @@ public class GreedyColoring<V, E>
         final int [] order = new int[_neighbors.length];
         final int [] degree = new int[_neighbors.length];
         final List<List<Integer>> buckets =
-            new ArrayList<List<Integer>>(_neighbors.length);
+                new ArrayList<>(_neighbors.length);
         int index = _neighbors.length - 1;
 
         for (int i = 0; i < _neighbors.length; i++) {
-            buckets.add(new ArrayList<Integer>());
+            buckets.add(new ArrayList<>());
             degree[i] = _neighbors[i].length;
         }
         for (int i = 0; i < _neighbors.length; i++) {
@@ -87,7 +87,7 @@ public class GreedyColoring<V, E>
         for (int i = 0; i < _neighbors.length; i++) {
             while (buckets.get(i).size() > 0) {
                 final int s = buckets.get(i).size() - 1;
-                final int vertex = (Integer) buckets.get(i).get(s);
+                final int vertex = buckets.get(i).get(s);
                 buckets.get(i).remove(s);
                 degree[vertex] = -1;
                 order[index--] = vertex;
@@ -133,7 +133,7 @@ public class GreedyColoring<V, E>
             satur[v] = -1;
             index++;
             for (int j = 0; j < _neighbors[v].length; j++) {
-                final int nb = (int) _neighbors[v][j];
+                final int nb = _neighbors[v][j];
                 final int bi = bucketIndex[nb];
                 if (satur[nb] >= 0) {
                     if (bi != (cumBucketSize[satur[nb]] - 1)) {

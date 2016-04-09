@@ -92,9 +92,7 @@ public class StarGraphGenerator<V, E>
         }
 
         //Add one edge between the center vertex and every other vertex
-        Iterator<V> iter = target.vertexSet().iterator();
-        while (iter.hasNext()) {
-            V v = iter.next();
+        for (V v : target.vertexSet()) {
             if (v != centerVertex) {
                 target.addEdge(v, centerVertex);
             }

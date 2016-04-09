@@ -95,11 +95,11 @@ public class JGraphAdapterDemo
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-            new ListenableDirectedMultigraph<String, DefaultEdge>(
-                DefaultEdge.class);
+                new ListenableDirectedMultigraph<>(
+                        DefaultEdge.class);
 
         // create a visualization using JGraph, via an adapter
-        jgAdapter = new JGraphModelAdapter<String, DefaultEdge>(g);
+        jgAdapter = new JGraphModelAdapter<>(g);
 
         JGraph jgraph = new JGraph(jgAdapter);
 
@@ -184,7 +184,7 @@ public class JGraphAdapterDemo
 
         ListenableDirectedMultigraph(Class<E> edgeClass)
         {
-            super(new DirectedMultigraph<V, E>(edgeClass));
+            super(new DirectedMultigraph<>(edgeClass));
         }
     }
 }

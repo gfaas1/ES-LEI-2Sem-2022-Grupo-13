@@ -65,9 +65,9 @@ public class GraphMLExporter<V, E>
     public GraphMLExporter()
     {
         this(
-            new IntegerNameProvider<V>(),
+                new IntegerNameProvider<>(),
             null,
-            new IntegerEdgeNameProvider<E>(),
+                new IntegerEdgeNameProvider<>(),
             null);
     }
 
