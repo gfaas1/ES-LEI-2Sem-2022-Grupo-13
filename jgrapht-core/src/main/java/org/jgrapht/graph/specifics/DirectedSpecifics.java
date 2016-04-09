@@ -11,9 +11,12 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * .
+ * Plain implementation of DirectedSpecifics. This implementation requires the least amount of memory, at the expense of
+ * slow edge retrievals. Methods which depend on edge retrievals, i.e. getEdge(V u, V v), containsEdge(V u, V v),
+ * addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is high (dense graphs).
  *
  * @author Barak Naveh
+ * @author Joris Kinable
  */
 public class DirectedSpecifics<V,E>
     extends Specifics<V,E>
@@ -23,16 +26,16 @@ public class DirectedSpecifics<V,E>
     private static final String NOT_IN_DIRECTED_GRAPH =
         "no such operation in a directed graph";
 
-    private AbstractBaseGraph<V,E> abstractBaseGraph;
+    protected AbstractBaseGraph<V,E> abstractBaseGraph;
     protected Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected;
     protected EdgeSetFactory<V, E> edgeSetFactory;
 
-    public DirectedSpecifics(AbstractBaseGraph<V,E> abstractBaseGraph)
+    public DirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
         this(abstractBaseGraph, new LinkedHashMap<>());
     }
 
-    public DirectedSpecifics(AbstractBaseGraph<V,E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
+    public DirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
     {
         this.abstractBaseGraph = abstractBaseGraph;
         this.vertexMapDirected = vertexMap;
@@ -187,7 +190,7 @@ public class DirectedSpecifics<V,E>
      *
      * @return EdgeContainer
      */
-    private DirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
+    protected DirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {
         //abstractBaseGraph.assertVertexExist(vertex); //JK: I don't think we need this here. This should have been verified upstream
 

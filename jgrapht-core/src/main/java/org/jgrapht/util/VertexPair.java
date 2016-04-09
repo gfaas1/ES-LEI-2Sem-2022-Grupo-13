@@ -35,14 +35,19 @@
  */
 package org.jgrapht.util;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if
  * Sun ever gets around to adding Pair to java.util.
  *
  * @author Soren (soren@tanesha.net)
+ * @author Joris Kinable
  */
-public class VertexPair<V>
+public class VertexPair<V> implements Serializable
 {
+    private static final long serialVersionUID = -852258620031566794L;
     private V n1;
     private V n2;
 
@@ -92,31 +97,25 @@ public class VertexPair<V>
 
     @Override public boolean equals(Object o)
     {
-        if (this == o) {
+        if (this == o)
             return true;
-        }
-        if ((o == null) || (getClass() != o.getClass())) {
+        else if(!(o instanceof VertexPair))
             return false;
-        }
 
         @SuppressWarnings("unchecked")
-        VertexPair<V> that = (VertexPair<V>) o;
+        VertexPair<V> other = (VertexPair<V>) o;
 
-        if ((n1 != null) ? (!n1.equals(that.n1)) : (that.n1 != null)) {
+        if ((n1 != null) ? (!n1.equals(other.n1)) : (other.n1 != null))
             return false;
-        }
-        if ((n2 != null) ? (!n2.equals(that.n2)) : (that.n2 != null)) {
+        else if ((n2 != null) ? (!n2.equals(other.n2)) : (other.n2 != null))
             return false;
-        }
-
-        return true;
+        else
+            return true;
     }
 
     @Override public int hashCode()
     {
-        int result = (n1 != null) ? n1.hashCode() : 0;
-        result = (31 * result) + ((n2 != null) ? n2.hashCode() : 0);
-        return result;
+        return Objects.hash(n1, n2);
     }
 }
 
