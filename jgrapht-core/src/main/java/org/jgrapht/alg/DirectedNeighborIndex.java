@@ -59,8 +59,8 @@ import org.jgrapht.event.*;
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V, E>> predecessorMap = new HashMap<>();
-    Map<V, Neighbors<V, E>> successorMap = new HashMap<>();
+    Map<V, Neighbors<V>> predecessorMap = new HashMap<>();
+    Map<V, Neighbors<V>> successorMap = new HashMap<>();
     private DirectedGraph<V, E> graph;
 
     /**
@@ -195,9 +195,9 @@ public class DirectedNeighborIndex<V, E>
         successorMap.remove(e.getVertex());
     }
 
-    private Neighbors<V, E> getPredecessors(V v)
+    private Neighbors<V> getPredecessors(V v)
     {
-        Neighbors<V, E> neighbors = predecessorMap.get(v);
+        Neighbors<V> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
             neighbors =
                     new Neighbors<>(v,
@@ -207,9 +207,9 @@ public class DirectedNeighborIndex<V, E>
         return neighbors;
     }
 
-    private Neighbors<V, E> getSuccessors(V v)
+    private Neighbors<V> getSuccessors(V v)
     {
-        Neighbors<V, E> neighbors = successorMap.get(v);
+        Neighbors<V> neighbors = successorMap.get(v);
         if (neighbors == null) {
             neighbors =
                     new Neighbors<>(v,
