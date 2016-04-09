@@ -199,7 +199,7 @@ public class CycleDetectorTest
 
         String vertexA = "A";
         String vertexB = "B";
-        String vertexC = "A";
+        String vertexC = new String("A");
 
         assertNotSame(vertexA, vertexC);
 
