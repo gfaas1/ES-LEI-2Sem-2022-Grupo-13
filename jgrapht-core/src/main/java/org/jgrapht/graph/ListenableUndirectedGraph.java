@@ -59,7 +59,7 @@ public class ListenableUndirectedGraph<V, E>
      */
     public ListenableUndirectedGraph(Class<? extends E> edgeClass)
     {
-        this(new SimpleGraph<V, E>(edgeClass));
+        this(new SimpleGraph<>(edgeClass));
     }
 
     /**

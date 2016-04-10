@@ -68,7 +68,7 @@ public class JGraphXAdapterDemo
                 DefaultEdge.class);
 
         // create a visualization using JGraph, via an adapter
-        jgxAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
+        jgxAdapter = new JGraphXAdapter<>(g);
 
         getContentPane().add(new mxGraphComponent(jgxAdapter));
         resize(DEFAULT_SIZE);

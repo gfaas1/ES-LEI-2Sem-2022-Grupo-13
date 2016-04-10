@@ -106,11 +106,11 @@ public class AStarShortestPath<V, E>
     private void initialize(AStarAdmissibleHeuristic<V> admissibleHeuristic)
     {
         this.admissibleHeuristic = admissibleHeuristic;
-        openList = new FibonacciHeap<V>();
-        vertexToHeapNodeMap = new HashMap<V, FibonacciHeapNode<V>>();
-        closedList = new HashSet<V>();
-        gScoreMap = new HashMap<V, Double>();
-        cameFrom = new HashMap<V, E>();
+        openList = new FibonacciHeap<>();
+        vertexToHeapNodeMap = new HashMap<>();
+        closedList = new HashSet<>();
+        gScoreMap = new HashMap<>();
+        cameFrom = new HashMap<>();
         numberOfExpandedNodes = 0;
     }
 
@@ -140,7 +140,7 @@ public class AStarShortestPath<V, E>
 
         this.initialize(admissibleHeuristic);
         gScoreMap.put(sourceVertex, 0.0);
-        FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<V>(sourceVertex);
+        FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(sourceVertex);
         openList.insert(heapNode, 0.0);
         vertexToHeapNodeMap.put(sourceVertex, heapNode);
 
@@ -174,7 +174,7 @@ public class AStarShortestPath<V, E>
             outgoingEdges = graph.edgesOf(currentNode.getData());
         } else if (graph instanceof DirectedGraph) {
             outgoingEdges =
-                ((DirectedGraph) graph).outgoingEdgesOf(currentNode.getData());
+                ((DirectedGraph<V,E>) graph).outgoingEdgesOf(currentNode.getData());
         }
 
         for (E edge : outgoingEdges) {
@@ -200,7 +200,7 @@ public class AStarShortestPath<V, E>
                     + admissibleHeuristic.getCostEstimate(successor, endVertex);
                 if (!vertexToHeapNodeMap.containsKey(successor)) {
                     FibonacciHeapNode<V> heapNode =
-                        new FibonacciHeapNode<V>(successor);
+                            new FibonacciHeapNode<>(successor);
                     openList.insert(heapNode, fScore);
                     vertexToHeapNodeMap.put(successor, heapNode);
                 } else {
@@ -227,12 +227,12 @@ public class AStarShortestPath<V, E>
         double pathLength)
     {
         List<E> edgeList = this.buildPath(targetVertex);
-        return new GraphPathImpl<V, E>(
-            graph,
-            startVertex,
-            targetVertex,
-            edgeList,
-            pathLength);
+        return new GraphPathImpl<>(
+                graph,
+                startVertex,
+                targetVertex,
+                edgeList,
+                pathLength);
     }
 
     /**
@@ -256,7 +256,7 @@ public class AStarShortestPath<V, E>
             path.add(cameFrom.get(currentNode));
             return path;
         } else {
-            return new ArrayList<E>();
+            return new ArrayList<>();
         }
     }
 

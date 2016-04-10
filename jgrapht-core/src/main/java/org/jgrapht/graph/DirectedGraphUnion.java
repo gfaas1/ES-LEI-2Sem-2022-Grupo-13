@@ -68,7 +68,7 @@ public class DirectedGraphUnion<V, E>
 
     @Override public Set<E> incomingEdgesOf(V vertex)
     {
-        Set<E> res = new HashSet<E>();
+        Set<E> res = new HashSet<>();
         if (getG1().containsVertex(vertex)) {
             res.addAll(getG1().incomingEdgesOf(vertex));
         }
@@ -86,7 +86,7 @@ public class DirectedGraphUnion<V, E>
 
     @Override public Set<E> outgoingEdgesOf(V vertex)
     {
-        Set<E> res = new HashSet<E>();
+        Set<E> res = new HashSet<>();
         if (getG1().containsVertex(vertex)) {
             res.addAll(getG1().outgoingEdgesOf(vertex));
         }

@@ -96,14 +96,14 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
             matching = new int[] {};
         } else {
             matching =
-                new KuhnMunkresMatrixImplementation<V, E>(G, S, T)
+                    new KuhnMunkresMatrixImplementation<>(G, S, T)
                 .buildMatching();
         }
     }
 
     @Override public Set<E> getMatching()
     {
-        Set<E> edges = new HashSet<E>();
+        Set<E> edges = new HashSet<>();
 
         for (int i = 0; i < matching.length; ++i) {
             edges.add(

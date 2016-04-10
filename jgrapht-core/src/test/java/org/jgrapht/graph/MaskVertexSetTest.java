@@ -52,15 +52,15 @@ public class MaskVertexSetTest
     private String v2 = "v2";
     private String v3 = "v3";
     private String v4 = "v4";
-    private DefaultEdge e1, e2, e3, loop1, loop2;
+    private DefaultEdge e1, e2;
 
     private MaskVertexSet<String, DefaultEdge> testMaskVertexSet;
 
     @Override
     protected void setUp () {
         directed =
-            new DefaultDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+                new DefaultDirectedGraph<>(
+                        DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);
@@ -69,10 +69,6 @@ public class MaskVertexSetTest
 
         e1 = directed.addEdge(v1, v2);
         e2 = directed.addEdge(v2, v3);
-        e3 = directed.addEdge(v2, v4);
-
-        loop1 = directed.addEdge(v1, v1);
-        loop2 = directed.addEdge(v4, v4);
 
         // Functor that masks vertex v1 and and the edge v2-v3
         MaskFunctor<String, DefaultEdge> mask =  new MaskFunctor<String, DefaultEdge> () {

@@ -313,7 +313,7 @@ public class FibonacciHeap<T>
         FibonacciHeap<T> h1,
         FibonacciHeap<T> h2)
     {
-        FibonacciHeap<T> h = new FibonacciHeap<T>();
+        FibonacciHeap<T> h = new FibonacciHeap<>();
 
         if ((h1 != null) && (h2 != null)) {
             h.minNode = h1.minNode;
@@ -353,10 +353,10 @@ public class FibonacciHeap<T>
         }
 
         // create a new stack and put root on it
-        Stack<FibonacciHeapNode<T>> stack = new Stack<FibonacciHeapNode<T>>();
+        Stack<FibonacciHeapNode<T>> stack = new Stack<>();
         stack.push(minNode);
 
-        StringBuffer buf = new StringBuffer(512);
+        StringBuilder buf = new StringBuilder(512);
         buf.append("FibonacciHeap=[");
 
         // do a simple breadth-first traversal on the tree
@@ -426,7 +426,7 @@ public class FibonacciHeap<T>
             ((int) Math.floor(Math.log(nNodes) * oneOverLogPhi)) + 1;
 
         List<FibonacciHeapNode<T>> array =
-            new ArrayList<FibonacciHeapNode<T>>(arraySize);
+                new ArrayList<>(arraySize);
 
         // Initialize degree array
         for (int i = 0; i < arraySize; i++) {

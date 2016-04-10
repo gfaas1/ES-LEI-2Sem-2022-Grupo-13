@@ -81,11 +81,10 @@ public class PartiteRandomGraphGenerator<V, E>
             throw new IllegalArgumentException("illegal number of edges");
         }
 
-        final int [] numVertices = {
+        this.numVertices = new int[]{
             numVertices1,
             numVertices2
         };
-        this.numVertices = numVertices;
         this.numEdges = numEdges;
     }
 

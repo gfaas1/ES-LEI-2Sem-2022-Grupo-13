@@ -65,7 +65,7 @@ public class ClosestFirstIterator<V, E>
      * Priority queue of fringe vertices.
      */
     private FibonacciHeap<QueueEntry<V, E>> heap =
-        new FibonacciHeap<QueueEntry<V, E>>();
+            new FibonacciHeap<>();
 
     /**
      * Maximum distance to search.
@@ -292,11 +292,11 @@ public class ClosestFirstIterator<V, E>
         V vertex,
         E edge)
     {
-        QueueEntry<V, E> entry = new QueueEntry<V, E>();
+        QueueEntry<V, E> entry = new QueueEntry<>();
         entry.vertex = vertex;
         entry.spanningTreeEdge = edge;
 
-        return new FibonacciHeapNode<QueueEntry<V, E>>(entry);
+        return new FibonacciHeapNode<>(entry);
     }
 
     /**

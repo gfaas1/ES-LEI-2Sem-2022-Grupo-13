@@ -84,8 +84,8 @@ public class RingGraphGenerator<V, E>
         }
 
         LinearGraphGenerator<V, E> linearGenerator =
-            new LinearGraphGenerator<V, E>(size);
-        Map<String, V> privateMap = new HashMap<String, V>();
+                new LinearGraphGenerator<>(size);
+        Map<String, V> privateMap = new HashMap<>();
         linearGenerator.generateGraph(target, vertexFactory, privateMap);
 
         V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);

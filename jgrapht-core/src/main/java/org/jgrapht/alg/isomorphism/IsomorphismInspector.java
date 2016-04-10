@@ -49,9 +49,9 @@ import org.jgrapht.*;
  */
 public interface IsomorphismInspector<V, E>
 {
-    public Iterator<GraphMapping<V, E>> getMappings();
+    Iterator<GraphMapping<V, E>> getMappings();
 
-    public boolean isomorphismExists();
+    boolean isomorphismExists();
 }
 
 // End IsomorphismInspector.java

@@ -62,7 +62,7 @@ public interface EdgeSetFactory<V, E>
      *
      * @return new set
      */
-    public Set<E> createEdgeSet(V vertex);
+    Set<E> createEdgeSet(V vertex);
 }
 
 // End EdgeSetFactory.java

@@ -57,26 +57,26 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @return maximum flow
      */
-    MaximumFlow<V, E> buildMaximumFlow(V source, V sink);
+    MaximumFlow<E> buildMaximumFlow(V source, V sink);
 
-    interface MaximumFlow<V, E>
+    interface MaximumFlow<E>
     {
         /**
          * Returns value of the maximum-flow for the given network
          *
          * @return value of th maximum-flow
          */
-        public Double getValue();
+        Double getValue();
 
         /**
          * Returns mapping from edge to flow value through this particular edge
          *
          * @return maximum flow
          */
-        public Map<E, Double> getFlow();
+        Map<E, Double> getFlow();
     }
 
-    class MaximumFlowImpl<V, E>
+    class MaximumFlowImpl<E>
         implements MaximumFlow
     {
         private Double value;

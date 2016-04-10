@@ -124,11 +124,11 @@ public class KShortestPaths<V, E>
         assertGetPaths(endVertex);
 
         KShortestPathsIterator<V, E> iter =
-            new KShortestPathsIterator<V, E>(
-                this.graph,
-                this.startVertex,
-                endVertex,
-                this.nPaths);
+                new KShortestPathsIterator<>(
+                        this.graph,
+                        this.startVertex,
+                        endVertex,
+                        this.nPaths);
 
         // at the i-th pass the shortest paths with less (or equal) than i edges
         // are calculated.
@@ -147,7 +147,7 @@ public class KShortestPaths<V, E>
             return null;
         }
 
-        List<GraphPath<V, E>> pathList = new ArrayList<GraphPath<V, E>>();
+        List<GraphPath<V, E>> pathList = new ArrayList<>();
 
         for (RankingPathElement<V, E> element : list) {
             pathList.add(new PathWrapper(element));

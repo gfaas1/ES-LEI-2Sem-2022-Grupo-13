@@ -290,7 +290,7 @@ public abstract class Graphs
     public static <V, E> List<V> neighborListOf(Graph<V, E> g,
         V vertex)
     {
-        List<V> neighbors = new ArrayList<V>();
+        List<V> neighbors = new ArrayList<>();
 
         for (E e : g.edgesOf(vertex)) {
             neighbors.add(getOppositeVertex(g, e, vertex));
@@ -314,7 +314,7 @@ public abstract class Graphs
         DirectedGraph<V, E> g,
         V vertex)
     {
-        List<V> predecessors = new ArrayList<V>();
+        List<V> predecessors = new ArrayList<>();
         Set<? extends E> edges = g.incomingEdgesOf(vertex);
 
         for (E e : edges) {
@@ -339,7 +339,7 @@ public abstract class Graphs
         DirectedGraph<V, E> g,
         V vertex)
     {
-        List<V> successors = new ArrayList<V>();
+        List<V> successors = new ArrayList<>();
         Set<? extends E> edges = g.outgoingEdgesOf(vertex);
 
         for (E e : edges) {
@@ -367,7 +367,7 @@ public abstract class Graphs
     public static <V, E> UndirectedGraph<V, E> undirectedGraph(Graph<V, E> g)
     {
         if (g instanceof DirectedGraph<?, ?>) {
-            return new AsUndirectedGraph<V, E>((DirectedGraph<V, E>) g);
+            return new AsUndirectedGraph<>((DirectedGraph<V, E>) g);
         } else if (g instanceof UndirectedGraph<?, ?>) {
             return (UndirectedGraph<V, E>) g;
         } else {
@@ -424,7 +424,7 @@ public abstract class Graphs
     public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
     {
         Graph<V, E> g = path.getGraph();
-        List<V> list = new ArrayList<V>();
+        List<V> list = new ArrayList<>();
         V v = path.getStartVertex();
         list.add(v);
         for (E e : path.getEdgeList()) {

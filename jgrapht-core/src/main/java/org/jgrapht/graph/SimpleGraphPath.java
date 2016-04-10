@@ -67,7 +67,7 @@ public class SimpleGraphPath<V, E>
     {
         this.graph = simpleGraph;
         this.vertices = vertices;
-        this.edges = new ArrayList<E>();
+        this.edges = new ArrayList<>();
         this.weight = weight;
 
         if (vertices.size() < 2) {
