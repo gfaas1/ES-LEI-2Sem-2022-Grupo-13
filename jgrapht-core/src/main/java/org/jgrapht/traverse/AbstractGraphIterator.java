@@ -54,7 +54,7 @@ public abstract class AbstractGraphIterator<V, E>
     implements GraphIterator<V, E>
 {
     private List<TraversalListener<V, E>> traversalListeners =
-        new ArrayList<TraversalListener<V, E>>();
+            new ArrayList<>();
     private boolean crossComponentTraversal = true;
     private boolean reuseEvents = false;
 
@@ -172,7 +172,7 @@ public abstract class AbstractGraphIterator<V, E>
      *
      * @param e the edge traversal event.
      */
-    protected void fireEdgeTraversed(EdgeTraversalEvent<V, E> e)
+    protected void fireEdgeTraversed(EdgeTraversalEvent<E> e)
     {
         for (int i = 0; i < nListeners; i++) {
             TraversalListener<V, E> l = traversalListeners.get(i);

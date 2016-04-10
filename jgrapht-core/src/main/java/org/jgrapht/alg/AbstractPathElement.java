@@ -134,7 +134,7 @@ abstract class AbstractPathElement<V, E>
      */
     public List<E> createEdgeListPath()
     {
-        List<E> path = new ArrayList<E>();
+        List<E> path = new ArrayList<>();
         AbstractPathElement<V, E> pathElement = this;
 
         // while start vertex is not reached.

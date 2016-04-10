@@ -55,6 +55,7 @@ public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
 {
+    private static final long serialVersionUID = -1961714127770731054L;
     private final UndirectedGraph<V, E> undirectedGraph;
     private final DirectedGraph<V, E> directedGraph;
 
@@ -83,7 +84,7 @@ public class MixedGraphUnion<V, E>
 
     @Override public Set<E> incomingEdgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<E>();
+        Set<E> res = new LinkedHashSet<>();
         if (directedGraph.containsVertex(vertex)) {
             res.addAll(directedGraph.incomingEdgesOf(vertex));
         }
@@ -101,7 +102,7 @@ public class MixedGraphUnion<V, E>
 
     @Override public Set<E> outgoingEdgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<E>();
+        Set<E> res = new LinkedHashSet<>();
         if (directedGraph.containsVertex(vertex)) {
             res.addAll(directedGraph.outgoingEdgesOf(vertex));
         }

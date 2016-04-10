@@ -70,6 +70,8 @@ public class AsWeightedDirectedGraph<V, E>
     extends AsWeightedGraph<V, E>
     implements DirectedGraph<V, E>
 {
+    private static final long serialVersionUID = -6264605187276749471L;
+
     /**
      * Constructor for AsWeightedGraph.
      *

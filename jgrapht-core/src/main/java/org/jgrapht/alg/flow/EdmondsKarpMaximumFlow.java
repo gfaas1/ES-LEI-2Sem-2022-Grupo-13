@@ -142,7 +142,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param source source vertex
      * @param sink sink vertex
      */
-    public MaximumFlow<V, E> buildMaximumFlow(V source, V sink)
+    public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
         super.init(vertexExtensionsFactory, edgeExtensionsFactory);
 
@@ -181,7 +181,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
             augmentFlow();
         }
 
-        return new MaximumFlowImpl<V, E>(maxFlowValue, maxFlow);
+        return new MaximumFlowImpl<E>(maxFlowValue, maxFlow);
     }
 
     protected VertexExtension extendedVertex(V v)

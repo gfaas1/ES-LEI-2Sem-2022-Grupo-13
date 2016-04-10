@@ -59,7 +59,7 @@ public class ListenableDirectedGraph<V, E>
      */
     public ListenableDirectedGraph(Class<? extends E> edgeClass)
     {
-        this(new DefaultDirectedGraph<V, E>(edgeClass));
+        this(new DefaultDirectedGraph<>(edgeClass));
     }
 
     /**

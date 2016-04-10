@@ -50,7 +50,7 @@ public interface AStarAdmissibleHeuristic<V>
      * sourceVertex, to the goal (usually denoted h(x)). This is the good guess
      * function.
      */
-    public double getCostEstimate(V sourceVertex, V targetVertex);
+    double getCostEstimate(V sourceVertex, V targetVertex);
 }
 
 // End AStarAdmissibleHeuristic.java

@@ -29,14 +29,14 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(
         List<? extends V> first)
     {
-        this.first = new ArrayList<V>(first);
+        this.first = new ArrayList<>(first);
         return this;
     }
 
     public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(
         List<? extends V> second)
     {
-        this.second = new ArrayList<V>(second);
+        this.second = new ArrayList<>(second);
         return this;
     }
 

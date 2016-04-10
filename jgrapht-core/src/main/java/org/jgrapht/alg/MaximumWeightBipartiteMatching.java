@@ -84,9 +84,9 @@ public class MaximumWeightBipartiteMatching<V, E>
         partition1 = vertexPartition1;
         partition2 = vertexPartition2;
 
-        vertexWeights = new HashMap<V, Long>();
-        hasVertexBeenProcessed = new HashMap<V, Boolean>();
-        isEdgeMatched = new HashMap<E, Boolean>();
+        vertexWeights = new HashMap<>();
+        hasVertexBeenProcessed = new HashMap<>();
+        isEdgeMatched = new HashMap<>();
 
         initializeVerticesAndEdges();
     }
@@ -123,7 +123,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                 hasVertexBeenProcessed.put(vertex, false);
                 setVertexWeight(
                     vertex,
-                    (long) maximumWeightOfEdgeIncidentToVertex(vertex));
+                        maximumWeightOfEdgeIncidentToVertex(vertex));
             }
         }
 
@@ -238,10 +238,10 @@ public class MaximumWeightBipartiteMatching<V, E>
     private Map<V, List<E>> verticesReachableByTightAlternatingEdgesFromVertex(
         V vertex)
     {
-        Map<V, List<E>> pathsToVertices = new HashMap<V, List<E>>();
-        pathsToVertices.put(vertex, new ArrayList<E>());
+        Map<V, List<E>> pathsToVertices = new HashMap<>();
+        pathsToVertices.put(vertex, new ArrayList<>());
         findPathsToVerticesFromVertices(
-            Arrays.asList(vertex),
+                Collections.singletonList(vertex),
             false,
             pathsToVertices);
         return pathsToVertices;
@@ -255,7 +255,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         if (verticesToProcess.size() == 0) {
             return;
         }
-        List<V> nextVerticesToProcess = new ArrayList<V>();
+        List<V> nextVerticesToProcess = new ArrayList<>();
         for (V vertex : verticesToProcess) {
             for (E edge : graph.edgesOf(vertex)) {
                 V adjacentVertex =
@@ -269,7 +269,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                     {
                         nextVerticesToProcess.add(adjacentVertex);
                         List<E> pathToAdjacentVertex =
-                            new ArrayList<E>(pathsToVertices.get(vertex));
+                                new ArrayList<>(pathsToVertices.get(vertex));
                         pathToAdjacentVertex.add(edge);
                         pathsToVertices.put(
                             adjacentVertex,
@@ -286,7 +286,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     private Set<E> maximumWeightBipartiteMatching()
     {
-        Set<E> matchings = new HashSet<E>();
+        Set<E> matchings = new HashSet<>();
         for (V vertex : partition1) {
             hasVertexBeenProcessed.put(vertex, true);
             while (true) {

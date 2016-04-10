@@ -89,7 +89,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        Set<E> res = new LinkedHashSet<E>();
+        Set<E> res = new LinkedHashSet<>();
         if (g1.containsVertex(sourceVertex)
             && g1.containsVertex(targetVertex))
         {
@@ -168,7 +168,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     @Override public Set<E> edgeSet()
     {
-        Set<E> res = new LinkedHashSet<E>();
+        Set<E> res = new LinkedHashSet<>();
         res.addAll(g1.edgeSet());
         res.addAll(g2.edgeSet());
         return Collections.unmodifiableSet(res);
@@ -176,7 +176,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     @Override public Set<E> edgesOf(V vertex)
     {
-        Set<E> res = new LinkedHashSet<E>();
+        Set<E> res = new LinkedHashSet<>();
         if (g1.containsVertex(vertex)) {
             res.addAll(g1.edgesOf(vertex));
         }
@@ -215,7 +215,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     @Override public Set<V> vertexSet()
     {
-        Set<V> res = new HashSet<V>();
+        Set<V> res = new HashSet<>();
         res.addAll(g1.vertexSet());
         res.addAll(g2.vertexSet());
         return Collections.unmodifiableSet(res);

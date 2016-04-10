@@ -59,7 +59,7 @@ public class DOTExporter<V, E>
      */
     public DOTExporter()
     {
-        this(new IntegerNameProvider<V>(), null, null);
+        this(new IntegerNameProvider<>(), null, null);
     }
 
     /**
@@ -185,7 +185,7 @@ public class DOTExporter<V, E>
             return;
         }
         out.print(" [ ");
-        if ((labelName == null) && (attributes != null)) {
+        if ((labelName == null)) {
             labelName = attributes.get("label");
         }
         if (labelName != null) {

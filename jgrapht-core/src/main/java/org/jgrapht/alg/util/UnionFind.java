@@ -61,8 +61,8 @@ public class UnionFind<T>
      */
     public UnionFind(Set<T> elements)
     {
-        parentMap = new HashMap<T, T>();
-        rankMap = new HashMap<T, Integer>();
+        parentMap = new HashMap<>();
+        rankMap = new HashMap<>();
         for (T element : elements) {
             parentMap.put(element, element);
             rankMap.put(element, 0);

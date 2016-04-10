@@ -168,7 +168,7 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
         }
     }
 
-    static void verify(int source, int sink, double expectedResult, DirectedGraph<Integer, DefaultWeightedEdge> network, MaximumFlowAlgorithm.MaximumFlow<Integer, DefaultWeightedEdge> maxFlow) {
+    static void verify(int source, int sink, double expectedResult, DirectedGraph<Integer, DefaultWeightedEdge> network, MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow) {
         assertEquals(
             expectedResult,
             maxFlow.getValue(),
@@ -249,19 +249,19 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
         Integer source = (Integer) vs[0];
         Integer sink = (Integer) vs[vs.length - 1];
 
-        MaximumFlow<Integer, DefaultWeightedEdge> maxFlow = createSolver(network).buildMaximumFlow(source, sink);
+        MaximumFlow<DefaultWeightedEdge> maxFlow = createSolver(network).buildMaximumFlow(source, sink);
 
         if (false) {
             check(maxFlow, source, sink, network);
         }
     }
 
-    private static void check(MaximumFlow<Integer, DefaultWeightedEdge> maxFlow, int source, int sink, DirectedGraph<Integer, DefaultWeightedEdge> network) {
+    private static void check(MaximumFlow<DefaultWeightedEdge> maxFlow, int source, int sink, DirectedGraph<Integer, DefaultWeightedEdge> network) {
         MaximumFlowAlgorithmTestBase.verify(source, sink, maxFlow.getValue(), network, maxFlow);
         dumpFlow(maxFlow);
     }
 
-    private static void dumpFlow(MaximumFlow<Integer, DefaultWeightedEdge> maxFlow) {
+    private static void dumpFlow(MaximumFlow<DefaultWeightedEdge> maxFlow) {
         System.out.println("\n=== FLOW ===\n");
         System.out.println("VALUE:  " + maxFlow.getValue());
 

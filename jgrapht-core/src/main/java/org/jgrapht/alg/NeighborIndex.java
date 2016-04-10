@@ -63,7 +63,7 @@ import org.jgrapht.util.*;
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V, E>> neighborMap = new HashMap<V, Neighbors<V, E>>();
+    Map<V, Neighbors<V>> neighborMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**
@@ -139,7 +139,6 @@ public class NeighborIndex<V, E>
      */
     @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
         if (neighborMap.containsKey(source)) {
@@ -166,12 +165,11 @@ public class NeighborIndex<V, E>
         neighborMap.remove(e.getVertex());
     }
 
-    private Neighbors<V, E> getNeighbors(V v)
+    private Neighbors<V> getNeighbors(V v)
     {
-        Neighbors<V, E> neighbors = neighborMap.get(v);
+        Neighbors<V> neighbors = neighborMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<V, E>(v,
-                Graphs.neighborListOf(graph, v));
+            neighbors = new Neighbors<>(Graphs.neighborListOf(graph, v));
             neighborMap.put(v, neighbors);
         }
         return neighbors;
@@ -181,10 +179,10 @@ public class NeighborIndex<V, E>
      * Stores cached neighbors for a single vertex. Includes support for live
      * neighbor sets and duplicate neighbors.
      */
-    static class Neighbors<V, E>
+    static class Neighbors<V>
     {
         private Map<V, ModifiableInteger> neighborCounts =
-            new LinkedHashMap<V, ModifiableInteger>();
+                new LinkedHashMap<>();
 
         // TODO could eventually make neighborSet modifiable, resulting
         // in edge removals from the graph
@@ -192,7 +190,7 @@ public class NeighborIndex<V, E>
             Collections.unmodifiableSet(
                 neighborCounts.keySet());
 
-        public Neighbors(V v, Collection<V> neighbors)
+        public Neighbors(Collection<V> neighbors)
         {
             // add all current neighbors
             for (V neighbor : neighbors) {
@@ -232,7 +230,7 @@ public class NeighborIndex<V, E>
 
         public List<V> getNeighborList()
         {
-            List<V> neighbors = new ArrayList<V>();
+            List<V> neighbors = new ArrayList<>();
             for (
                 Map.Entry<V, ModifiableInteger> entry
                 : neighborCounts.entrySet())

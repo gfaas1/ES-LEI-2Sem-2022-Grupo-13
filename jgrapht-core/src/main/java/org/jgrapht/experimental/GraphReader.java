@@ -141,7 +141,7 @@ public class GraphReader<V, E>
     {
         final int size = readNodeCount();
         if (resultMap == null) {
-            resultMap = new HashMap<String, V>();
+            resultMap = new HashMap<>();
         }
 
         for (int i = 0; i < size; i++) {

@@ -60,7 +60,7 @@ public class ListenableDirectedWeightedGraph<V, E>
      */
     public ListenableDirectedWeightedGraph(Class<? extends E> edgeClass)
     {
-        this(new DefaultDirectedWeightedGraph<V, E>(edgeClass));
+        this(new DefaultDirectedWeightedGraph<>(edgeClass));
     }
 
     /**

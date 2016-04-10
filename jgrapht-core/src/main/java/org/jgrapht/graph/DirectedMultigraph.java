@@ -60,7 +60,7 @@ public class DirectedMultigraph<V, E>
      */
     public DirectedMultigraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+        this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
     /**
@@ -77,15 +77,15 @@ public class DirectedMultigraph<V, E>
         E, ? extends DirectedMultigraph<V, E>, ?> builder(
         Class<? extends E> edgeClass)
     {
-        return new DirectedGraphBuilder<V, E, DirectedMultigraph<V, E>>(
-            new DirectedMultigraph<V, E>(edgeClass));
+        return new DirectedGraphBuilder<>(
+                new DirectedMultigraph<>(edgeClass));
     }
 
     public static <V, E> DirectedGraphBuilderBase<V,
         E, ? extends DirectedMultigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new DirectedGraphBuilder<V, E, DirectedMultigraph<V, E>>(
-            new DirectedMultigraph<V, E>(ef));
+        return new DirectedGraphBuilder<>(
+                new DirectedMultigraph<>(ef));
     }
 }
 

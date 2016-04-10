@@ -84,8 +84,8 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
 
         //Create vertices in each of the partitions
-        Set<V> a = new HashSet<V>();
-        Set<V> b = new HashSet<V>();
+        Set<V> a = new HashSet<>();
+        Set<V> b = new HashSet<>();
         for (int i = 0; i < sizeA; i++) {
             V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
@@ -98,10 +98,9 @@ public class CompleteBipartiteGraphGenerator<V, E>
         }
 
         //Add an edge for each pair of vertices in different partitions
-        for (Iterator<V> iterA = a.iterator(); iterA.hasNext();) {
-            V v = iterA.next();
-            for (Iterator<V> iterB = b.iterator(); iterB.hasNext();) {
-                target.addEdge(v, iterB.next());
+        for (V u : a) {
+            for (V v : b) {
+                target.addEdge(u, v);
             }
         }
     }

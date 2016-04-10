@@ -62,7 +62,7 @@ public abstract class UndirectedGraphBuilderBase<V,
 
     @Override public UnmodifiableUndirectedGraph<V, E> buildUnmodifiable()
     {
-        return new UnmodifiableUndirectedGraph<V, E>(this.graph);
+        return new UnmodifiableUndirectedGraph<>(this.graph);
     }
 }
 

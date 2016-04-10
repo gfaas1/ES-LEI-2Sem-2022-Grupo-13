@@ -156,7 +156,7 @@ public class DOTImporter<V, E>
             throw new ImportException("Dot string was empty");
         }
 
-        Map<String, V> vertexes = new HashMap<String, V>();
+        Map<String, V> vertexes = new HashMap<>();
 
         int state = HEADER;
         int lastState = HEADER;
@@ -633,7 +633,7 @@ public class DOTImporter<V, E>
     {
         V v = vertexes.get(id);
         if (v == null) {
-            v = vertexProvider.buildVertex(id, new HashMap<String, String>());
+            v = vertexProvider.buildVertex(id, new HashMap<>());
             graph.addVertex(v);
             vertexes.put(id, v);
         }
@@ -651,7 +651,7 @@ public class DOTImporter<V, E>
             idChunk = idChunk.substring(0, bracketIndex).trim();
         }
         int index = 0;
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         while (index < idChunk.length()) {
             int nextSpace = idChunk.indexOf(' ', index);
             String chunk;
@@ -673,7 +673,7 @@ public class DOTImporter<V, E>
     private Map<String, String> extractAttributes(String line)
         throws ImportException
     {
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         int bracketIndex = line.indexOf("[");
         if (bracketIndex > 0) {
             attributes =
@@ -688,7 +688,7 @@ public class DOTImporter<V, E>
         throws ImportException
     {
         int index = 0;
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new HashMap<>();
         while (index < input.length()) {
             // skip any leading white space
             index = skipWhiteSpace(input, index);

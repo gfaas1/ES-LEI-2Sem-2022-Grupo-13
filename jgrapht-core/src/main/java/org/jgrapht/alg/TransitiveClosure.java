@@ -68,7 +68,7 @@ public class TransitiveClosure
     {
         Set<V> vertexSet = graph.vertexSet();
 
-        Set<V> newEdgeTargets = new HashSet<V>();
+        Set<V> newEdgeTargets = new HashSet<>();
 
         // At every iteration of the outer loop, we add a path of length 1
         // between nodes that originally had a path of length 2. In the worst

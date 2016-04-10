@@ -4,6 +4,7 @@ Changes to JGraphT in each version:
 
 - **version 0.9.3** (under development):
 	- Moved to JDK 1.8
+	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill

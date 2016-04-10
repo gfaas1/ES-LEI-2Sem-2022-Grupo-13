@@ -99,9 +99,9 @@ public class GmlExporter<V, E>
     public GmlExporter()
     {
         this(
-            new IntegerNameProvider<V>(),
+                new IntegerNameProvider<>(),
             null,
-            new IntegerEdgeNameProvider<E>(),
+                new IntegerEdgeNameProvider<>(),
             null);
     }
 

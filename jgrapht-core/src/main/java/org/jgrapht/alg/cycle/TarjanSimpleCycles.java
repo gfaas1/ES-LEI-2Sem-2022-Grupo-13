@@ -145,9 +145,9 @@ public class TarjanSimpleCycles<V, E>
                 getRemoved(vertex).add(currentVertex);
             } else if (comparison == 0) {
                 foundCycle = true;
-                List<V> cycle = new ArrayList<V>();
+                List<V> cycle = new ArrayList<>();
                 Iterator<V> it = pointStack.descendingIterator();
-                V v = null;
+                V v;
                 while (it.hasNext()) {
                     v = it.next();
                     if (start.equals(v)) {
@@ -178,12 +178,12 @@ public class TarjanSimpleCycles<V, E>
 
     private void initState()
     {
-        cycles = new ArrayList<List<V>>();
-        marked = new HashSet<V>();
-        markedStack = new ArrayDeque<V>();
-        pointStack = new ArrayDeque<V>();
-        vToI = new HashMap<V, Integer>();
-        removed = new HashMap<V, Set<V>>();
+        cycles = new ArrayList<>();
+        marked = new HashSet<>();
+        markedStack = new ArrayDeque<>();
+        pointStack = new ArrayDeque<>();
+        vToI = new HashMap<>();
+        removed = new HashMap<>();
         int index = 0;
         for (V v : graph.vertexSet()) {
             vToI.put(v, index++);
@@ -210,7 +210,7 @@ public class TarjanSimpleCycles<V, E>
         // needed, so instantiate lazily.
         Set<V> result = removed.get(v);
         if (result == null) {
-            result = new HashSet<V>();
+            result = new HashSet<>();
             removed.put(v, result);
         }
         return result;

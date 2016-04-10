@@ -59,7 +59,7 @@ public class GabowStrongConnectivityInspector<V, E>
     private final DirectedGraph<V, E> graph;
 
     // stores the vertices
-    private Deque<VertexNumber<V>> stack = new ArrayDeque<VertexNumber<V>>();
+    private Deque<VertexNumber<V>> stack = new ArrayDeque<>();
 
     // the result of the computation, cached for future calls
     private List<Set<V>> stronglyConnectedSets;
@@ -71,7 +71,7 @@ public class GabowStrongConnectivityInspector<V, E>
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
 
     //store the numbers
-    private Deque<Integer> B = new ArrayDeque<Integer>();
+    private Deque<Integer> B = new ArrayDeque<>();
 
     //number of vertices
     private int c;
@@ -126,7 +126,7 @@ public class GabowStrongConnectivityInspector<V, E>
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
-            stronglyConnectedSets = new Vector<Set<V>>();
+            stronglyConnectedSets = new Vector<>();
 
             // create VertexData objects for all vertices, store them
             createVertexNumber();
@@ -164,14 +164,14 @@ public class GabowStrongConnectivityInspector<V, E>
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
             stronglyConnectedSubgraphs =
-                new Vector<DirectedSubgraph<V, E>>(sets.size());
+                    new Vector<>(sets.size());
 
             for (Set<V> set : sets) {
                 stronglyConnectedSubgraphs.add(
-                    new DirectedSubgraph<V, E>(
-                        graph,
-                        set,
-                        null));
+                        new DirectedSubgraph<>(
+                                graph,
+                                set,
+                                null));
             }
         }
 
@@ -187,16 +187,16 @@ public class GabowStrongConnectivityInspector<V, E>
     private void createVertexNumber()
     {
         c = graph.vertexSet().size();
-        vertexToVertexNumber = new HashMap<V, VertexNumber<V>>(c);
+        vertexToVertexNumber = new HashMap<>(c);
 
         for (V vertex : graph.vertexSet()) {
             vertexToVertexNumber.put(
                 vertex,
-                new VertexNumber<V>(vertex, 0));
+                    new VertexNumber<>(vertex, 0));
         }
 
-        stack = new ArrayDeque<VertexNumber<V>>(c);
-        B = new ArrayDeque<Integer>(c);
+        stack = new ArrayDeque<>(c);
+        B = new ArrayDeque<>(c);
     }
 
     /*
@@ -222,7 +222,7 @@ public class GabowStrongConnectivityInspector<V, E>
                 }
             }
         }
-        Set<V> L = new HashSet<V>();
+        Set<V> L = new HashSet<>();
         if (v.getNumber() == (B.getLast())) {
             /* number vertices of the next
                 strong component */

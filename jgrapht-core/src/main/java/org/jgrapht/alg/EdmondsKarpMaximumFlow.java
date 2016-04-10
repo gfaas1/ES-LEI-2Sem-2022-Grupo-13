@@ -52,7 +52,7 @@ import org.jgrapht.alg.interfaces.*;
     public static final double DEFAULT_EPSILON = 0.000000001;
     private org.jgrapht.alg.flow.EdmondsKarpMaximumFlow<V, E> engine;
 
-    private MaximumFlowAlgorithm.MaximumFlow<V, E> maxFlow;
+    private MaximumFlowAlgorithm.MaximumFlow<E> maxFlow;
 
     private V currentSource;
     private V currentSink;
@@ -158,7 +158,7 @@ import org.jgrapht.alg.interfaces.*;
         return currentSink;
     }
 
-    @Override public MaximumFlow<V, E> buildMaximumFlow(V source, V sink)
+    @Override public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
         currentSource = source;
         currentSink = sink;

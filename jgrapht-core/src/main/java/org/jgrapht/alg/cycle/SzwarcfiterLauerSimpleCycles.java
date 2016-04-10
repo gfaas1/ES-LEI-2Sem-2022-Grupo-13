@@ -127,7 +127,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         }
         initState();
         KosarajuStrongConnectivityInspector<V, E> inspector =
-            new KosarajuStrongConnectivityInspector<V, E>(graph);
+                new KosarajuStrongConnectivityInspector<>(graph);
         List<Set<V>> sccs = inspector.stronglyConnectedSets();
         for (Set<V> scc : sccs) {
             int maxInDegree = -1;
@@ -164,9 +164,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         }
         Set<V> avRemoved = getRemoved(vV);
         Set<E> edgeSet = graph.outgoingEdgesOf(vV);
-        Iterator<E> avIt = edgeSet.iterator();
-        while (avIt.hasNext()) {
-            E e = avIt.next();
+        for (E e : edgeSet) {
             V wV = graph.getEdgeTarget(e);
             if (avRemoved.contains(wV)) {
                 continue;
@@ -175,15 +173,15 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
             if (!marked.contains(wV)) {
                 boolean gotCycle = cycle(w, q);
                 if (gotCycle) {
-                    foundCycle = gotCycle;
+                    foundCycle = true;
                 } else {
                     noCycle(v, w);
                 }
             } else if (position[w] <= q) {
                 foundCycle = true;
-                List<V> cycle = new ArrayList<V>();
+                List<V> cycle = new ArrayList<>();
                 Iterator<V> it = stack.descendingIterator();
-                V current = null;
+                V current;
                 while (it.hasNext()) {
                     current = it.next();
                     if (wV.equals(current)) {
@@ -242,17 +240,17 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     @SuppressWarnings("unchecked")
     private void initState()
     {
-        cycles = new ArrayList<List<V>>();
+        cycles = new ArrayList<>();
         iToV = (V []) graph.vertexSet().toArray();
-        vToI = new HashMap<V, Integer>();
-        bSets = new HashMap<V, Set<V>>();
-        stack = new ArrayDeque<V>();
-        marked = new HashSet<V>();
-        removed = new HashMap<V, Set<V>>();
+        vToI = new HashMap<>();
+        bSets = new HashMap<>();
+        stack = new ArrayDeque<>();
+        marked = new HashSet<>();
+        removed = new HashMap<>();
         int size = graph.vertexSet().size();
         position = new int[size];
         reach = new boolean[size];
-        startVertices = new ArrayList<V>();
+        startVertices = new ArrayList<>();
 
         for (int i = 0; i < iToV.length; i++) {
             vToI.put(iToV[i], i);
@@ -289,7 +287,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         // needed, so instantiate lazily.
         Set<V> result = bSets.get(v);
         if (result == null) {
-            result = new HashSet<V>();
+            result = new HashSet<>();
             bSets.put(v, result);
         }
         return result;
@@ -301,7 +299,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         // needed, so instantiate lazily.
         Set<V> result = removed.get(v);
         if (result == null) {
-            result = new HashSet<V>();
+            result = new HashSet<>();
             removed.put(v, result);
         }
         return result;

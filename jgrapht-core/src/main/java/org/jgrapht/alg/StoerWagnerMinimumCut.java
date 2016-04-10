@@ -75,11 +75,11 @@ public class StoerWagnerMinimumCut<V, E>
 
         //get a version of this graph where each vertex is wrapped with a list
         workingGraph =
-            new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
-        Map<V, Set<V>> vertexMap = new HashMap<V, Set<V>>();
+                new SimpleWeightedGraph<>(
+                        DefaultWeightedEdge.class);
+        Map<V, Set<V>> vertexMap = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Set<V> list = new HashSet<V>();
+            Set<V> list = new HashSet<>();
             list.add(v);
             vertexMap.put(v, list);
             workingGraph.addVertex(list);
@@ -126,11 +126,11 @@ public class StoerWagnerMinimumCut<V, E>
 
         // queue contains vertices not in A ordered by max weight of edges to A.
         PriorityQueue<VertexAndWeight> queue =
-            new PriorityQueue<VertexAndWeight>();
+                new PriorityQueue<>();
 
         // Maps vertices to elements of queue
         Map<Set<V>, VertexAndWeight> dmap =
-            new HashMap<Set<V>, VertexAndWeight>();
+                new HashMap<>();
 
         // Initialize queue
         for (Set<V> v : workingGraph.vertexSet()) {
@@ -199,7 +199,7 @@ public class StoerWagnerMinimumCut<V, E>
     protected VertexAndWeight mergeVertices(Set<V> s, Set<V> t)
     {
         //construct the new combinedvertex
-        Set<V> set = new HashSet<V>();
+        Set<V> set = new HashSet<>();
         set.addAll(s);
         set.addAll(t);
         workingGraph.addVertex(set);

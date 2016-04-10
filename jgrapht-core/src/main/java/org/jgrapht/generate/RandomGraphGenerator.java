@@ -129,12 +129,12 @@ public class RandomGraphGenerator<V, E>
         // key = generation order (1st,2nd,3rd,...) value=vertex Object
         // will be used later
         Map<Integer, V> orderToVertexMap =
-            new HashMap<Integer, V>(this.numOfVertexes);
+                new HashMap<>(this.numOfVertexes);
 
         for (int i = 0; i < this.numOfVertexes; i++) {
             V currVertex = vertexFactory.createVertex();
             target.addVertex(currVertex);
-            orderToVertexMap.put(Integer.valueOf(i), currVertex);
+            orderToVertexMap.put(i, currVertex);
         }
 
         if (target.vertexSet().size() != numOfVertexes) {
@@ -176,7 +176,7 @@ public class RandomGraphGenerator<V, E>
         Graph<V, E> target,
         int numOfEdges)
     {
-        return new DefaultEdgeTopologyFactory<V, E>();
+        return new DefaultEdgeTopologyFactory<>();
     }
 
     /**
@@ -250,17 +250,16 @@ public class RandomGraphGenerator<V, E>
             int numberOfEdges,
             Random randomizer)
         {
-            int iterationsCounter = 0;
             int edgesCounter = 0;
             while (edgesCounter < numberOfEdges) {
                 // randomizer.nextInt(int n) return a number between zero
                 // (inclusive) and n(exclusive)
                 VV startVertex =
                     orderToVertexMap.get(
-                        Integer.valueOf(randomizer.nextInt(numOfVertexes)));
+                            randomizer.nextInt(numOfVertexes));
                 VV endVertex =
                     orderToVertexMap.get(
-                        Integer.valueOf(randomizer.nextInt(numOfVertexes)));
+                            randomizer.nextInt(numOfVertexes));
                 try {
                     EE resultEdge = targetGraph.addEdge(startVertex, endVertex);
                     if (resultEdge != null) {
@@ -270,7 +269,6 @@ public class RandomGraphGenerator<V, E>
                     // do nothing.just ignore the edge
                 }
 
-                iterationsCounter++;
             }
         }
 
@@ -347,13 +345,10 @@ public class RandomGraphGenerator<V, E>
                 infinite = true;
             }
 
-            if (true == infinite) {
+            if (infinite) {
                 result = true;
-            } else if (numberOfEdges <= maxAllowedEdges) {
-                result = true;
-            } else {
-                result = false;
-            }
+            } else
+                result = numberOfEdges <= maxAllowedEdges;
             return result;
         }
 
@@ -362,7 +357,7 @@ public class RandomGraphGenerator<V, E>
          */
         public int getMaxEdgesForVertexNum(Graph<VV, EE> targetGraph)
         {
-            int maxAllowedEdges = 0;
+            int maxAllowedEdges;
             if (targetGraph instanceof SimpleGraph<?, ?>) {
                 maxAllowedEdges = numOfVertexes * (numOfVertexes - 1) / 2;
             } else if (targetGraph instanceof SimpleDirectedGraph<?, ?>) {

@@ -110,8 +110,8 @@ public class ScaleFreeGraphGenerator<V, E>
         Map<String, V> resultMap)
     {
         random.setSeed(seed);
-        List<V> vertexList = new ArrayList<V>();
-        List<Integer> degrees = new ArrayList<Integer>();
+        List<V> vertexList = new ArrayList<>();
+        List<Integer> degrees = new ArrayList<>();
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
             V newVertex = vertexFactory.createVertex();

@@ -108,8 +108,8 @@ public class AsUndirectedGraph<V, E>
 
         Set<E> reverseList = super.getAllEdges(targetVertex, sourceVertex);
         Set<E> list =
-            new ArrayUnenforcedSet<E>(
-                forwardList.size() + reverseList.size());
+                new ArrayUnenforcedSet<>(
+                        forwardList.size() + reverseList.size());
         list.addAll(forwardList);
         list.addAll(reverseList);
 

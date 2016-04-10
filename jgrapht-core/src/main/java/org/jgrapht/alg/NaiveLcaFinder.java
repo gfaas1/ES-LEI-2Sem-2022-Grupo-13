@@ -96,8 +96,8 @@ public class NaiveLcaFinder<V, E>
         return findLca(
             Collections.singleton(a),
             Collections.singleton(b),
-            new LinkedHashSet<V>(),
-            new LinkedHashSet<V>());
+                new LinkedHashSet<>(),
+                new LinkedHashSet<>());
     }
 
     /**
@@ -168,7 +168,7 @@ public class NaiveLcaFinder<V, E>
      */
     private Set<V> allParents(Set<V> vertexSet)
     {
-        HashSet<V> result = new HashSet<V>();
+        HashSet<V> result = new HashSet<>();
         for (V e : vertexSet) {
             for (E edge : graph.incomingEdgesOf(e)) {
                 if (graph.getEdgeTarget(edge).equals(e)) {

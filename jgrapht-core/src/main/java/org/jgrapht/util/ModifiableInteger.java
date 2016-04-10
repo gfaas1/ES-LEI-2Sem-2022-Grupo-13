@@ -228,7 +228,7 @@ public class ModifiableInteger
      */
     public Integer toInteger()
     {
-        return Integer.valueOf(this.value);
+        return this.value;
     }
 
     /**

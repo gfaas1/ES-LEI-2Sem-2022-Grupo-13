@@ -64,7 +64,7 @@ abstract class VF2MappingIterator<V, E>
         this.ordering2 = ordering2;
         this.vertexComparator = vertexComparator;
         this.edgeComparator = edgeComparator;
-        this.stateStack = new ArrayDeque<VF2State<V, E>>();
+        this.stateStack = new ArrayDeque<>();
     }
 
     /**
@@ -84,13 +84,9 @@ abstract class VF2MappingIterator<V, E>
         return rel;
     }
 
-    @Override public boolean hasNext()
-    {
-        if (nextMapping != null) {
-            return true;
-        }
+    @Override public boolean hasNext() {
+        return nextMapping != null || (nextMapping = matchAndCheck()) != null;
 
-        return (nextMapping = matchAndCheck()) != null;
     }
 
     @Override public IsomorphicGraphMapping<V, E> next()

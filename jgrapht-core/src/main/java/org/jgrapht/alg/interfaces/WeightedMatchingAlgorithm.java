@@ -45,7 +45,7 @@ public interface WeightedMatchingAlgorithm<V, E>
      *
      * @return weight of a matching found
      */
-    public double getMatchingWeight();
+    double getMatchingWeight();
 }
 
 // End WeightedMatchingAlgorithm.java

@@ -62,7 +62,7 @@ public abstract class DirectedGraphBuilderBase<V,
 
     @Override public UnmodifiableDirectedGraph<V, E> buildUnmodifiable()
     {
-        return new UnmodifiableDirectedGraph<V, E>(this.graph);
+        return new UnmodifiableDirectedGraph<>(this.graph);
     }
 }
 

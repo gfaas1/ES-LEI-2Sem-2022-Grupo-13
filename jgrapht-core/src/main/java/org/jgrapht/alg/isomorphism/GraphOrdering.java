@@ -78,16 +78,16 @@ class GraphOrdering<V, E>
         this.graph = graph;
         this.cacheEdges = cacheEdges;
 
-        List<V> vertexSet = new ArrayList<V>(graph.vertexSet());
+        List<V> vertexSet = new ArrayList<>(graph.vertexSet());
         if (orderByDegree) {
             java.util.Collections.sort(
                 vertexSet,
-                new GeneralVertexDegreeComparator<V>(graph));
+                    new GeneralVertexDegreeComparator<>(graph));
         }
 
         vertexCount = vertexSet.size();
-        mapVertexToOrder = new HashMap<V, Integer>();
-        mapOrderToVertex = new ArrayList<V>(vertexCount);
+        mapVertexToOrder = new HashMap<>();
+        mapOrderToVertex = new ArrayList<>(vertexCount);
 
         if (cacheEdges) {
             outgoingEdges = new int[vertexCount][];
@@ -132,7 +132,7 @@ class GraphOrdering<V, E>
         }
 
         V v = getVertex(vertexNumber);
-        Set<E> edgeSet = null;
+        Set<E> edgeSet;
 
         if (graph instanceof DirectedGraph<?, ?>) {
             edgeSet = ((DirectedGraph<V, E>) graph).outgoingEdgesOf(v);
@@ -171,7 +171,7 @@ class GraphOrdering<V, E>
         }
 
         V v = getVertex(vertexNumber);
-        Set<E> edgeSet = null;
+        Set<E> edgeSet;
 
         if (graph instanceof DirectedGraph<?, ?>) {
             edgeSet = ((DirectedGraph<V, E>) graph).incomingEdgesOf(v);
@@ -251,7 +251,7 @@ class GraphOrdering<V, E>
 
     public int getVertexNumber(V v)
     {
-        return mapVertexToOrder.get(v).intValue();
+        return mapVertexToOrder.get(v);
     }
 
     public int [] getEdgeNumbers(E e)

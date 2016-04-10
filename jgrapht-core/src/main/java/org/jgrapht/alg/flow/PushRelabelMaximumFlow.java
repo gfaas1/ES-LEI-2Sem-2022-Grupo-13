@@ -171,7 +171,7 @@ public class PushRelabelMaximumFlow<V, E>
         }
     }
 
-    @Override public MaximumFlow<V, E> buildMaximumFlow(V source, V sink)
+    @Override public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
         init();
 
@@ -233,7 +233,7 @@ public class PushRelabelMaximumFlow<V, E>
             diagnostic.dump();
         }
 
-        return new MaximumFlowImpl<V, E>(maxFlowValue, maxFlow);
+        return new MaximumFlowImpl<E>(maxFlowValue, maxFlow);
     }
 
     private void relabel(VertexExtension vx)

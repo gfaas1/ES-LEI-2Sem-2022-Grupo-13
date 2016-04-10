@@ -65,7 +65,7 @@ public interface DirectedGraph<V, E>
      *
      * @return the degree of the specified vertex.
      */
-    public int inDegreeOf(V vertex);
+    int inDegreeOf(V vertex);
 
     /**
      * Returns a set of all edges incoming into the specified vertex.
@@ -75,7 +75,7 @@ public interface DirectedGraph<V, E>
      *
      * @return a set of all edges incoming into the specified vertex.
      */
-    public Set<E> incomingEdgesOf(V vertex);
+    Set<E> incomingEdgesOf(V vertex);
 
     /**
      * Returns the "out degree" of the specified vertex. An out degree of a
@@ -87,7 +87,7 @@ public interface DirectedGraph<V, E>
      *
      * @return the degree of the specified vertex.
      */
-    public int outDegreeOf(V vertex);
+    int outDegreeOf(V vertex);
 
     /**
      * Returns a set of all edges outgoing from the specified vertex.
@@ -97,7 +97,7 @@ public interface DirectedGraph<V, E>
      *
      * @return a set of all edges outgoing from the specified vertex.
      */
-    public Set<E> outgoingEdgesOf(V vertex);
+    Set<E> outgoingEdgesOf(V vertex);
 }
 
 // End DirectedGraph.java
