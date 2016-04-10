@@ -104,7 +104,7 @@ public class GraphPerformanceTest extends TestCase{
          * Benchmark 2: Simulate graph usage: Create a graph, perform various algorithms, partially destroy graph
          */
         @Benchmark
-        public void graphPermanceBenchmark() {
+        public void graphPerformanceBenchmark() {
             for(int i=0; i<NR_GRAPHS; i++) {
                 rgg = new RandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED + i);
                 //Create a graph
