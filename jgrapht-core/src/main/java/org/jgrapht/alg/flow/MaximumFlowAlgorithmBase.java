@@ -25,7 +25,7 @@
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
  * Original Author:  Alexey Kudinkin
- * Contributor(s):
+ * Contributor(s): Joris Kinable
  *
  * $Id$
  *
@@ -52,6 +52,7 @@ import org.jgrapht.alg.util.Extension.*;
  * @param <E> edge concept type
  *
  * @author Alexey Kudinkin
+ * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmBase<V, E>
     implements MaximumFlowAlgorithm<V, E>
@@ -60,58 +61,85 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      * Default tolerance.
      */
     public static final double DEFAULT_EPSILON = 1e-9;
+    public final double EPSILON; // tolerance (DEFAULT_EPSILON or user-defined)
 
-    private Extension<V, ? extends VertexExtensionBase> vXs;
-    private Extension<E, ? extends EdgeExtensionBase> eXs;
+    protected Graph<V, E> network; //input network
+    protected final boolean DIRECTED_GRAPH; //indicates whether the input graph is directed or not
 
-    abstract DirectedGraph<V, E> getNetwork();
 
-    <VE extends VertexExtensionBase, EE extends EdgeExtensionBase> void init(
-        ExtensionFactory<VE> vertexExtensionFactory,
-        ExtensionFactory<EE> edgeExtensionFactory)
-    {
-        vXs = new Extension<V, VE>(vertexExtensionFactory);
-        eXs = new Extension<E, EE>(edgeExtensionFactory);
+    protected Extension<V, ? extends VertexExtensionBase> vertexExtensionManager;
+    protected Extension<E, AnnotatedFlowEdge> edgeExtensionManager;
 
-        buildInternal();
+    protected double maxFlowValue=-1; //Max flow established after last invocation of the algorithm.
+    protected Map<E, Double> maxFlow=null; //Mapping of the flow on each edge.
+
+    public MaximumFlowAlgorithmBase(Graph<V,E> network, double epsilon){
+        this.network=network;
+        this.DIRECTED_GRAPH=network instanceof DirectedGraph;
+        this.EPSILON=epsilon;
     }
 
+    protected <VE extends VertexExtensionBase> void init(
+        ExtensionFactory<VE> vertexExtensionFactory,
+        ExtensionFactory<AnnotatedFlowEdge> edgeExtensionFactory)
+    {
+        vertexExtensionManager = new Extension<>(vertexExtensionFactory);
+        edgeExtensionManager = new Extension<>(edgeExtensionFactory);
+
+        buildInternal();
+        maxFlowValue=0;
+        maxFlow=null;
+    }
+
+    /**
+     * Create internal data structure
+     */
     private void buildInternal()
     {
-        DirectedGraph<V, E> n = getNetwork();
+        if(DIRECTED_GRAPH) { //Directed graph
+            DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>) network;
+            for (V u : directedGraph.vertexSet()) {
+                VertexExtensionBase ux = vertexExtensionManager.getSingletonInstance(u);
 
-        for (V u : n.vertexSet()) {
-            VertexExtensionBase ux = extendedVertex(u);
+                ux.prototype = u;
 
-            ux.prototype = u;
+                for (E e : directedGraph.outgoingEdgesOf(u)) {
+                    V v = directedGraph.getEdgeTarget(e);
+                    VertexExtensionBase vx = vertexExtensionManager.getSingletonInstance(v);
 
-            for (E e : n.outgoingEdgesOf(u)) {
-                V v = n.getEdgeTarget(e);
+                    AnnotatedFlowEdge forwardEdge = createEdge(ux, vx, e, directedGraph.getEdgeWeight(e));
+                    AnnotatedFlowEdge backwardEdge = createBackwardEdge(forwardEdge);
 
-                VertexExtensionBase vx = extendedVertex(v);
+                    ux.getOutgoing().add(forwardEdge);
 
-                EdgeExtensionBase ex =
-                    createEdge(ux, vx, e, n.getEdgeWeight(e));
-                EdgeExtensionBase iex = createInverse(ex, n);
-
-                ux.getOutgoing().add(ex);
-
-                // NB: Any better?
-                if (iex.prototype == null) {
-                    vx.getOutgoing().add(iex);
+                    if (backwardEdge.prototype == null) {
+                        vx.getOutgoing().add(backwardEdge);
+                    }
                 }
+            }
+        }else{ //Undirected graph
+            for(V v : network.vertexSet()) {
+                VertexExtensionBase vx = vertexExtensionManager.getSingletonInstance(v);
+                vx.prototype=v;
+            }
+            for(E e : network.edgeSet()){
+                VertexExtensionBase ux=vertexExtensionManager.getSingletonInstance(network.getEdgeSource(e));
+                VertexExtensionBase vx=vertexExtensionManager.getSingletonInstance(network.getEdgeTarget(e));
+                AnnotatedFlowEdge forwardEdge = createEdge(ux, vx, e, network.getEdgeWeight(e));
+                AnnotatedFlowEdge backwardEdge = createBackwardEdge(forwardEdge);
+                ux.getOutgoing().add(forwardEdge);
+                vx.getOutgoing().add(backwardEdge);
             }
         }
     }
 
-    private EdgeExtensionBase createEdge(
-        VertexExtensionBase source,
-        VertexExtensionBase target,
-        E e,
-        double weight)
+    private AnnotatedFlowEdge createEdge(
+            VertexExtensionBase source,
+            VertexExtensionBase target,
+            E e,
+            double weight)
     {
-        EdgeExtensionBase ex = extendedEdge(e);
-
+        AnnotatedFlowEdge ex = edgeExtensionManager.getSingletonInstance(e);
         ex.source = source;
         ex.target = target;
         ex.capacity = weight;
@@ -120,118 +148,111 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         return ex;
     }
 
-    private EdgeExtensionBase createInverse(
-        EdgeExtensionBase ex,
-        DirectedGraph<V, E> n)
+    private AnnotatedFlowEdge createBackwardEdge(
+            AnnotatedFlowEdge forwardEdge)
     {
-        EdgeExtensionBase iex;
+        AnnotatedFlowEdge backwardEdge;
+        E backwardPrototype = network.getEdge(forwardEdge.target.prototype, forwardEdge.source.prototype);
 
-        if (n.containsEdge(ex.target.prototype, ex.source.prototype)) {
-            E ie = n.getEdge(ex.target.prototype, ex.source.prototype);
-            iex = createEdge(ex.target, ex.source, ie, n.getEdgeWeight(ie));
+        if (DIRECTED_GRAPH && backwardPrototype != null) { //if edge exists in directed input graph
+            backwardEdge = createEdge(forwardEdge.target, forwardEdge.source, backwardPrototype, network.getEdgeWeight(backwardPrototype));
         } else {
-            iex = eXs.createInstance();
-
-            iex.source = ex.target;
-            iex.target = ex.source;
+            backwardEdge = edgeExtensionManager.getInstance();
+            backwardEdge.source = forwardEdge.target;
+            backwardEdge.target = forwardEdge.source;
+            if (!DIRECTED_GRAPH) { //undirected graph: if (u,v) exists, then so much (v,u)
+                backwardEdge.capacity= network.getEdgeWeight(backwardPrototype);
+                backwardEdge.prototype=backwardPrototype;
+            }
         }
 
-        ex.inverse = iex;
-        iex.inverse = ex;
+        forwardEdge.inverse = backwardEdge;
+        backwardEdge.inverse = forwardEdge;
 
-        return iex;
+        return backwardEdge;
     }
 
-    private VertexExtensionBase extendedVertex(V v)
+    /**
+     * Increase flow in the direction denoted by edge (u,v). Any existing flow in the reverse direction (v,u) gets reduced first. More precisely, let f2 be the existing flow
+     * in the direction (v,u), and f1 be the desired increase of flow in direction (u,v). If f1 >= f2, then the flow on (v,u) becomes 0, and the flow on (u,v) becomes f1-f2. Else, if f1<f2, the flow in the direction
+     * (v,u) is reduced, i.e. the flow on (v,u) becomes f2-f1, whereas the flow on (u,v) remains zero.
+     * @param edge desired direction in which the flow is increased
+     * @param flow increase of flow in the the direction indicated by the forwardEdge
+     */
+    protected void pushFlowThrough(AnnotatedFlowEdge edge, double flow)
     {
-        return this.<VertexExtensionBase>vertexExtended(v);
-    }
+        AnnotatedFlowEdge reverseEdge = edge.getInverse();
 
-    private EdgeExtensionBase extendedEdge(E e)
-    {
-        return this.<EdgeExtensionBase>edgeExtended(e);
-    }
+        assert ((compareFlowTo(edge.flow, 0.0) == 0) || (compareFlowTo(reverseEdge.flow, 0.0) == 0));
 
-    protected <VE extends VertexExtensionBase> VE vertexExtended(V v)
-    {
-        return (VE) vXs.get(v);
-    }
+        if (compareFlowTo(reverseEdge.flow, flow) == -1) { //If f1 >= f2
+            double flowDifference = flow - reverseEdge.flow;
 
-    protected <EE extends EdgeExtensionBase> EE edgeExtended(E e)
-    {
-        return (EE) eXs.get(e);
-    }
+            edge.flow += flowDifference;
+            edge.capacity -= reverseEdge.flow; //Capacity on edge (u,v) PLUS flow on (v,u) gives the MAXIMUM flow in the direction (u,v) i.e edge.weight in the graph 'network'.
 
-    protected void pushFlowThrough(EdgeExtensionBase ex, double f)
-    {
-        EdgeExtensionBase iex = ex.<EdgeExtensionBase>getInverse();
-
-        assert ((compareFlowTo(ex.flow, 0.0) == 0)
-            || (compareFlowTo(iex.flow, 0.0) == 0));
-
-        if (compareFlowTo(iex.flow, f) == -1) {
-            double d = f - iex.flow;
-
-            ex.flow += d;
-            ex.capacity -= iex.flow;
-
-            iex.flow = 0;
-            iex.capacity += d;
-        } else {
-            ex.capacity -= f;
-            iex.flow -= f;
+            reverseEdge.flow = 0;
+            reverseEdge.capacity += flowDifference;
+        } else { //If f1 < f2
+            edge.capacity -= flow;
+            reverseEdge.flow -= flow;
         }
     }
 
+    /**
+     * Create a map which specifies for each edge in the input map the amount of flow that flows through it
+     * @return a map which specifies for each edge in the input map the amount of flow that flows through it
+     */
     protected Map<E, Double> composeFlow()
     {
-        Map<E, Double> maxFlow = new HashMap<E, Double>();
-        for (E e : getNetwork().edgeSet()) {
-            EdgeExtensionBase ex = extendedEdge(e);
-            maxFlow.put(e, ex.flow);
+        Map<E, Double> maxFlow = new HashMap<>();
+
+        for (E e : network.edgeSet()) {
+            AnnotatedFlowEdge annotatedFlowEdge = edgeExtensionManager.getSingletonInstance(e);
+            maxFlow.put(e, DIRECTED_GRAPH ? annotatedFlowEdge.flow : Math.max(annotatedFlowEdge.flow, annotatedFlowEdge.inverse.flow));
         }
 
         return maxFlow;
     }
 
+    /**
+     * Compares flow against val. Returns 0 if they are equal, -1 if flow < val, 1 otherwise
+     * @param flow
+     * @param val
+     * @return
+     */
     protected int compareFlowTo(double flow, double val)
     {
-        double diff = flow - val;
-        if (Math.abs(diff) < DEFAULT_EPSILON) {
+        if (Math.abs(flow-val) < EPSILON) {
             return 0;
         } else {
-            return (diff < 0) ? -1 : 1;
+            return (flow < val) ? -1 : 1;
         }
     }
 
-    class VertexExtensionBase
-        extends Extension.BaseExtension
+    class VertexExtensionBase extends Extension.BaseExtension
     {
-        private final List<? extends EdgeExtensionBase> outgoing =
-            new ArrayList<EdgeExtensionBase>();
+        private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
         V prototype;
 
         double excess;
 
-        public <EE extends EdgeExtensionBase> List<EE> getOutgoing()
+        public List<AnnotatedFlowEdge> getOutgoing()
         {
-            return (List<EE>) outgoing;
+            return outgoing;
         }
     }
 
-    class EdgeExtensionBase
-        extends Extension.BaseExtension
+    class AnnotatedFlowEdge extends Extension.BaseExtension
     {
-        private VertexExtensionBase source;
-        private VertexExtensionBase target;
+        private VertexExtensionBase source; //Edge source
+        private VertexExtensionBase target; //Edge target
+        private AnnotatedFlowEdge inverse; //Inverse edge
 
-        private EdgeExtensionBase inverse;
-
-        E prototype;
-
-        double capacity;
-        double flow;
+        E prototype; //Edge
+        double capacity; //Maximum by which the flow in the direction can be increased (on top of the flow already in this direction).
+        double flow; //Flow in the direction denoted by this edge
 
         public <VE extends VertexExtensionBase> VE getSource()
         {
@@ -253,16 +274,67 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             this.target = target;
         }
 
-        public <EE extends EdgeExtensionBase> EE getInverse()
+        public AnnotatedFlowEdge getInverse()
         {
-            return (EE) inverse;
+            return inverse;
         }
 
-        public void setInverse(EdgeExtensionBase inverse)
+        public boolean hasCapacity()
         {
-            this.inverse = inverse;
+            return compareFlowTo(capacity, flow) > 0;
         }
+
+        @Override
+        public String toString(){
+            return "("+(source==null ? null : source.prototype)+","+(target==null ? null : target.prototype)+",c:"+capacity+" f: "+flow+")";
+        }
+    }
+
+    /**
+     * Returns maximum flow value, that was calculated during last <tt>
+     * calculateMaximumFlow</tt> call.
+     *
+     * @return maximum flow value
+     */
+    public double getMaximumFlowValue(){
+        return maxFlowValue;
+    }
+
+    /**
+     * Returns maximum flow, that was calculated during last <tt>
+     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
+     * calculateMaximumFlow</tt> calls.
+     *
+     * @return <i>read-only</i> mapping from edges to doubles - flow values
+     */
+    public Map<E, Double> getMaximumFlow(){
+        if(maxFlow==null) //Lazily calculate the max flow map
+            composeFlow();
+        return maxFlow;
+    }
+
+    /**
+     * Returns the direction of the flow on an edge (u,v). In case (u,v) is a directed edge (arc), this function will always
+     * return the edge target v. However, if (u,v) is an edge in an undirected graph, flow may go through the edge in either side.
+     * If the flow goes from u to v, we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
+     * @param e edge
+     * @return the vertex where the flow leaves the edge
+     */
+    public V getFlowDirection(E e){
+        if(!network.containsEdge(e)) throw new IllegalArgumentException("Cannot query the flow on an edge which does not exist in the input graph!");
+        AnnotatedFlowEdge annotatedFlowEdge = edgeExtensionManager.getSingletonInstance(e);
+
+        if(DIRECTED_GRAPH) return annotatedFlowEdge.getTarget().prototype;
+
+        AnnotatedFlowEdge reverseFlowEdge = annotatedFlowEdge.getInverse();
+        if(annotatedFlowEdge.flow > reverseFlowEdge.flow)
+            return annotatedFlowEdge.getTarget().prototype;
+        else
+            return reverseFlowEdge.getTarget().prototype;
     }
 }
 
 // End MaximumFlowAlgorithmBase.java
+
+
+

@@ -26,7 +26,7 @@
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
  * Original Author:  Ilya Razenshteyn
- * Contributor(s):   Alexey Kudinkin
+ * Contributor(s):   Alexey Kudinkin, Joris Kinable
  *
  * $Id$
  *
@@ -59,20 +59,29 @@ import org.jgrapht.alg.util.Extension.*;
  * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
  * (Lecture Notes)</i>.
  *
+ * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and undirected graphs are supported (and tested!).
+ *
+ *
+ *
  * @author Ilya Razensteyn
  */
+
+/* * JK: Issues with the current implementation:
+ * 1. The internal data structures are completed rebuild each time the algorithm is invoked. Even if the
+ * graph and edge capacities don't change, but the source/sink pair change, the data structures get recomputed.
+ * 2. The algorithm uses custom data structures to represent a flow network internally. This however could easily be
+ * replaced by a DirectedWeightedGraph. However, due to some overhead in the graphs prior to version 0.9.3, it turned out
+ * beneficial to use the custom structures instead. In the next iteration we should replace them by proper graph structures.
+ * This will improve robustness and readability significantly.*/
 public final class EdmondsKarpMaximumFlow<V, E>
     extends MaximumFlowAlgorithmBase<V, E>
 {
-    private DirectedGraph<V, E> network; // our network
-
-    private double epsilon; // tolerance (DEFAULT_EPSILON or user-defined)
 
     private VertexExtension currentSource; // current source vertex
     private VertexExtension currentSink; // current sink vertex
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
-    private final ExtensionFactory<EdgeExtension> edgeExtensionsFactory;
+    private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
     /**
      * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i>
@@ -83,7 +92,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      *
      * @param network network, where maximum flow will be calculated
      */
-    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network)
+    public EdmondsKarpMaximumFlow(Graph<V, E> network)
     {
         this(network, DEFAULT_EPSILON);
     }
@@ -97,23 +106,14 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
      */
-    public EdmondsKarpMaximumFlow(DirectedGraph<V, E> network, double epsilon)
+    public EdmondsKarpMaximumFlow(Graph<V, E> network, double epsilon)
     {
+        super(network, epsilon);
         this.vertexExtensionsFactory =
-            new ExtensionFactory<VertexExtension>() {
-                @Override public VertexExtension create()
-                {
-                    return EdmondsKarpMaximumFlow.this.new VertexExtension();
-                }
-            };
+                () -> new VertexExtension();
 
         this.edgeExtensionsFactory =
-            new ExtensionFactory<EdgeExtension>() {
-                @Override public EdgeExtension create()
-                {
-                    return EdmondsKarpMaximumFlow.this.new EdgeExtension();
-                }
-            };
+                () -> new AnnotatedFlowEdge();
 
         if (network == null) {
             throw new NullPointerException("network is null");
@@ -128,9 +128,6 @@ public final class EdmondsKarpMaximumFlow<V, E>
                     "invalid capacity (must be non-negative)");
             }
         }
-
-        this.network = network;
-        this.epsilon = epsilon;
     }
 
     /**
@@ -144,64 +141,67 @@ public final class EdmondsKarpMaximumFlow<V, E>
      */
     public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
+        this.calculateMaximumFlow(source, sink);
+        maxFlow = composeFlow();
+        return new MaximumFlowImpl<>(maxFlowValue, maxFlow);
+    }
+
+    /**
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
+     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
+     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
+     * network</tt> passed to the constructor, and they must be different.
+     * If desired, a flow map can be queried afterwards; this will not require
+     * a new invocation of the algorithm.
+     *
+     * @param source source vertex
+     * @param sink sink vertex
+     */
+    public double calculateMaximumFlow(V source,V sink){
         super.init(vertexExtensionsFactory, edgeExtensionsFactory);
 
         if (!network.containsVertex(source)) {
             throw new IllegalArgumentException(
-                "invalid source (null or not from this network)");
+                    "invalid source (null or not from this network)");
         }
         if (!network.containsVertex(sink)) {
             throw new IllegalArgumentException(
-                "invalid sink (null or not from this network)");
+                    "invalid sink (null or not from this network)");
         }
 
         if (source.equals(sink)) {
             throw new IllegalArgumentException("source is equal to sink");
         }
 
-        currentSource = extendedVertex(source);
-        currentSink = extendedVertex(sink);
-
-        Map<E, Double> maxFlow;
-
-        double maxFlowValue;
+        currentSource = getVertexExtension(source);
+        currentSink = getVertexExtension(sink);
 
         for (;;) {
             breadthFirstSearch();
 
             if (!currentSink.visited) {
-                maxFlow = composeFlow();
-                maxFlowValue = 0.0;
-                for (E e : network.incomingEdgesOf(currentSink.prototype)) {
-                    maxFlowValue += maxFlow.get(e);
-                }
                 break;
             }
 
-            augmentFlow();
+            maxFlowValue+=augmentFlow();
         }
 
-        return new MaximumFlowImpl<E>(maxFlowValue, maxFlow);
+        return maxFlowValue;
     }
 
-    protected VertexExtension extendedVertex(V v)
-    {
-        return this.vertexExtended(v);
-    }
-
-    protected EdgeExtension extendedEdge(E e)
-    {
-        return this.edgeExtended(e);
-    }
-
+    /**
+     * Method which finds a path from source to sink the in the residual graph. Note that this method tries to find multiple
+     * paths at once. Once a single path has been discovered, no new nodes are added to the queue, but nodes which are
+     * already in the queue are fully explored. As such there's a chance that multiple paths are discovered.
+     */
     private void breadthFirstSearch()
     {
         for (V v : network.vertexSet()) {
-            extendedVertex(v).visited = false;
-            extendedVertex(v).lastArcs = null;
+            getVertexExtension(v).visited = false;
+            getVertexExtension(v).lastArcs = null;
         }
 
-        Queue<VertexExtension> queue = new LinkedList<VertexExtension>();
+        Queue<VertexExtension> queue = new LinkedList<>();
         queue.offer(currentSource);
 
         currentSource.visited = true;
@@ -214,15 +214,15 @@ public final class EdmondsKarpMaximumFlow<V, E>
         while (queue.size() != 0) {
             VertexExtension ux = queue.poll();
 
-            for (EdgeExtension ex : ux.<EdgeExtension>getOutgoing()) {
-                if ((ex.flow + epsilon) < ex.capacity) {
+            for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
+                if ((ex.flow + EPSILON) < ex.capacity) {
                     VertexExtension vx = ex.getTarget();
 
                     if (vx == currentSink) {
                         vx.visited = true;
 
                         if (vx.lastArcs == null) {
-                            vx.lastArcs = new ArrayList<EdgeExtension>();
+                            vx.lastArcs = new ArrayList<>();
                         }
 
                         vx.lastArcs.add(ex);
@@ -244,11 +244,16 @@ public final class EdmondsKarpMaximumFlow<V, E>
         }
     }
 
-    private void augmentFlow()
+    /**
+     * For all paths which end in the sink. trace them back to the source and push flow through them.
+     * @return total increase in flow from source to sink
+     */
+    private double augmentFlow()
     {
-        Set<VertexExtension> seen = new HashSet<VertexExtension>();
+        double flowIncrease=0;
+        Set<VertexExtension> seen = new HashSet<>();
 
-        for (EdgeExtension ex : currentSink.lastArcs) {
+        for (AnnotatedFlowEdge ex : currentSink.lastArcs) {
             double deltaFlow =
                 Math.min(ex.getSource().excess, ex.capacity - ex.flow);
 
@@ -258,8 +263,10 @@ public final class EdmondsKarpMaximumFlow<V, E>
                     seen))
             {
                 pushFlowThrough(ex, deltaFlow);
+                flowIncrease+=deltaFlow;
             }
         }
+        return flowIncrease;
     }
 
     private boolean augmentFlowAlongInternal(
@@ -276,7 +283,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
         seen.add(node);
 
-        EdgeExtension prev = node.lastArcs.get(0);
+        AnnotatedFlowEdge prev = node.lastArcs.get(0);
         if (augmentFlowAlongInternal(
                 deltaFlow,
                 prev.<VertexExtension>getSource(),
@@ -288,6 +295,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
 
         return false;
     }
+
+    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getSingletonInstance(v);}
 
     /**
      * Returns current source vertex, or <tt>null</tt> if there was no <tt>
@@ -311,22 +320,14 @@ public final class EdmondsKarpMaximumFlow<V, E>
         return (currentSink == null) ? null : currentSink.prototype;
     }
 
-    @Override DirectedGraph<V, E> getNetwork()
-    {
-        return network;
-    }
-
-    class EdgeExtension
-        extends EdgeExtensionBase
-    {
-    }
-
-    class VertexExtension
-        extends VertexExtensionBase
+    class VertexExtension extends VertexExtensionBase
     {
         boolean visited; // this mark is used during BFS to mark visited nodes
-        List<EdgeExtension> lastArcs; // last arc(-s) in the shortest path
+        List<AnnotatedFlowEdge> lastArcs; // last arc(-s) in the shortest path used to reach this vertex
+
+
     }
 }
 
 // End EdmondsKarpMaximumFlow.java
+
