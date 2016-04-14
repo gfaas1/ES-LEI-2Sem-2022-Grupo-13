@@ -55,7 +55,7 @@ public class FastLookupDirectedSpecifics<V,E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 
-    /* Maps a pair of vertices <u,v> to an set of edges {(u,v)}. In case of a multigraph, all edges which touch both u,v are included in the set */
+    /* Maps a pair of vertices <u,v> to a set of edges {(u,v)}. In case of a multigraph, all edges which touch both u,v are included in the set */
     protected Map<VertexPair<V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
 
     public FastLookupDirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
@@ -104,9 +104,12 @@ public class FastLookupDirectedSpecifics<V,E>
         getEdgeContainer(target).addIncomingEdge(e);
 
         VertexPair<V> vertexPair=new VertexPair<>(source, target);
-        if(!touchingVerticesToEdgeMap.containsKey(vertexPair))
-            touchingVerticesToEdgeMap.put(vertexPair, new ArrayUnenforcedSet<>());
-        touchingVerticesToEdgeMap.get(vertexPair).add(e);
+        if(!touchingVerticesToEdgeMap.containsKey(vertexPair)) {
+            ArrayUnenforcedSet<E> edgeSet=new ArrayUnenforcedSet<>();
+            edgeSet.add(e);
+            touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
+        }else
+            touchingVerticesToEdgeMap.get(vertexPair).add(e);
     }
 
 
@@ -122,8 +125,9 @@ public class FastLookupDirectedSpecifics<V,E>
         //of touching vertices, remove the pair from the map.
         VertexPair<V> vertexPair=new VertexPair<>(source, target);
         if(touchingVerticesToEdgeMap.containsKey(vertexPair)){
-            touchingVerticesToEdgeMap.get(vertexPair).remove(e);
-            if(touchingVerticesToEdgeMap.get(vertexPair).isEmpty())
+            ArrayUnenforcedSet<E> edgeSet=touchingVerticesToEdgeMap.get(vertexPair);
+            edgeSet.remove(e);
+            if(edgeSet.isEmpty())
                 touchingVerticesToEdgeMap.remove(vertexPair);
         }
     }

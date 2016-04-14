@@ -41,7 +41,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * A container of for vertex edges.
+ * A container for vertex edges.
  *
  * <p>In this edge container we use array lists to minimize memory toll.
  * However, for high-degree vertices we replace the entire edge container
@@ -49,16 +49,16 @@ import java.util.Set;
  *
  * @author Barak Naveh
  */
-public class UndirectedEdgeContainer<VV, EE>
+public class UndirectedEdgeContainer<V, E>
     implements Serializable
 {
     private static final long serialVersionUID = -6623207588411170010L;
-    Set<EE> vertexEdges;
-    private transient Set<EE> unmodifiableVertexEdges = null;
+    Set<E> vertexEdges;
+    private transient Set<E> unmodifiableVertexEdges = null;
 
     UndirectedEdgeContainer(
-            EdgeSetFactory<VV, EE> edgeSetFactory,
-            VV vertex)
+            EdgeSetFactory<V, E> edgeSetFactory,
+            V vertex)
     {
         vertexEdges = edgeSetFactory.createEdgeSet(vertex);
     }
@@ -68,7 +68,7 @@ public class UndirectedEdgeContainer<VV, EE>
      *
      * @return
      */
-    public Set<EE> getUnmodifiableVertexEdges()
+    public Set<E> getUnmodifiableVertexEdges()
     {
         if (unmodifiableVertexEdges == null) {
             unmodifiableVertexEdges =Collections.unmodifiableSet(vertexEdges);
@@ -81,7 +81,7 @@ public class UndirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void addEdge(EE e)
+    public void addEdge(E e)
     {
         vertexEdges.add(e);
     }
@@ -101,7 +101,7 @@ public class UndirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void removeEdge(EE e)
+    public void removeEdge(E e)
     {
         vertexEdges.remove(e);
     }

@@ -49,17 +49,17 @@ import java.util.Set;
  *
  * @author Barak Naveh
  */
-public class DirectedEdgeContainer<VV, EE>
+public class DirectedEdgeContainer<V, E>
     implements Serializable
 {
     private static final long serialVersionUID = 7494242245729767106L;
-    Set<EE> incoming;
-    Set<EE> outgoing;
-    private transient Set<EE> unmodifiableIncoming = null;
-    private transient Set<EE> unmodifiableOutgoing = null;
+    Set<E> incoming;
+    Set<E> outgoing;
+    private transient Set<E> unmodifiableIncoming = null;
+    private transient Set<E> unmodifiableOutgoing = null;
 
-    DirectedEdgeContainer(EdgeSetFactory<VV, EE> edgeSetFactory,
-                          VV vertex)
+    DirectedEdgeContainer(EdgeSetFactory<V, E> edgeSetFactory,
+                          V vertex)
     {
         incoming = edgeSetFactory.createEdgeSet(vertex);
         outgoing = edgeSetFactory.createEdgeSet(vertex);
@@ -70,7 +70,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @return
      */
-    public Set<EE> getUnmodifiableIncomingEdges()
+    public Set<E> getUnmodifiableIncomingEdges()
     {
         if (unmodifiableIncoming == null) {
             unmodifiableIncoming = Collections.unmodifiableSet(incoming);
@@ -84,7 +84,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @return
      */
-    public Set<EE> getUnmodifiableOutgoingEdges()
+    public Set<E> getUnmodifiableOutgoingEdges()
     {
         if (unmodifiableOutgoing == null) {
             unmodifiableOutgoing = Collections.unmodifiableSet(outgoing);
@@ -98,7 +98,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void addIncomingEdge(EE e)
+    public void addIncomingEdge(E e)
     {
         incoming.add(e);
     }
@@ -108,7 +108,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void addOutgoingEdge(EE e)
+    public void addOutgoingEdge(E e)
     {
         outgoing.add(e);
     }
@@ -118,7 +118,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void removeIncomingEdge(EE e)
+    public void removeIncomingEdge(E e)
     {
         incoming.remove(e);
     }
@@ -128,7 +128,7 @@ public class DirectedEdgeContainer<VV, EE>
      *
      * @param e
      */
-    public void removeOutgoingEdge(EE e)
+    public void removeOutgoingEdge(E e)
     {
         outgoing.remove(e);
     }

@@ -48,8 +48,8 @@ import java.util.Objects;
 public class VertexPair<V> implements Serializable
 {
     private static final long serialVersionUID = -852258620031566794L;
-    private V n1;
-    private V n2;
+    protected final V n1;
+    protected final V n2;
 
     public VertexPair(V n1, V n2)
     {
@@ -92,7 +92,7 @@ public class VertexPair<V> implements Serializable
 
     @Override public String toString()
     {
-        return n1 + "," + n2;
+        return "("+n1 + "," + n2+")";
     }
 
     @Override public boolean equals(Object o)
@@ -105,12 +105,20 @@ public class VertexPair<V> implements Serializable
         @SuppressWarnings("unchecked")
         VertexPair<V> other = (VertexPair<V>) o;
 
-        if ((n1 != null) ? (!n1.equals(other.n1)) : (other.n1 != null))
-            return false;
-        else if ((n2 != null) ? (!n2.equals(other.n2)) : (other.n2 != null))
-            return false;
+        return (elementEquals(n1, other.n1) && elementEquals(n2, other.n2));
+    }
+
+    /**
+     * Compares two elements. Returns true if they are both null, or when they are equal.
+     * @param element1
+     * @param element2
+     * @return true if they are both null, or when they are equal, false otherwise.
+     */
+    protected boolean elementEquals(V element1, V element2){
+        if(element1 == null)
+            return element2 == null;
         else
-            return true;
+            return element1.equals(element2);
     }
 
     @Override public int hashCode()

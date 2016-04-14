@@ -37,6 +37,7 @@ package org.jgrapht.graph.specifics;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.util.ArrayUnenforcedSet;
+import org.jgrapht.util.UnorderedVertexPair;
 import org.jgrapht.util.VertexPair;
 
 import java.io.Serializable;
@@ -55,7 +56,7 @@ public class FastLookupUndirectedSpecifics<V,E>
 {
     private static final long serialVersionUID = 225772727571597846L;
 
-    /* Maps a pair of vertices <u,v> to an set of edges {(u,v)}. In case of a multigraph, all edges which touch both u,v are included in the set */
+    /* Maps a pair of vertices <u,v> to a set of edges {(u,v)}. In case of a multigraph, all edges which touch both u,v are included in the set */
     protected Map<VertexPair<V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
 
     public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
@@ -75,7 +76,7 @@ public class FastLookupUndirectedSpecifics<V,E>
     @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         if (abstractBaseGraph.containsVertex(sourceVertex)&& abstractBaseGraph.containsVertex(targetVertex)) {
-            Set<E> edges = touchingVerticesToEdgeMap.get(new VertexPair<>(sourceVertex, targetVertex));
+            Set<E> edges = touchingVerticesToEdgeMap.get(new UnorderedVertexPair<>(sourceVertex, targetVertex));
             return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
         }else{
             return null;
@@ -87,7 +88,7 @@ public class FastLookupUndirectedSpecifics<V,E>
      */
     @Override public E getEdge(V sourceVertex, V targetVertex)
     {
-        List<E> edges = touchingVerticesToEdgeMap.get(new VertexPair<>(sourceVertex, targetVertex));
+        List<E> edges = touchingVerticesToEdgeMap.get(new UnorderedVertexPair<>(sourceVertex, targetVertex));
         if(edges==null || edges.isEmpty())
             return null;
         else
@@ -102,17 +103,14 @@ public class FastLookupUndirectedSpecifics<V,E>
         getEdgeContainer(source).addEdge(e);
 
 
-        //Add edge to both touchingVerticesToEdgeMap.get(u,v) and touchingVerticesToEdgeMap.get(v,u)
-        VertexPair<V> vertexPair1=new VertexPair<>(source, target);
-        if(!touchingVerticesToEdgeMap.containsKey(vertexPair1)) {
-            ArrayUnenforcedSet<E> edges=new ArrayUnenforcedSet<>();
-            touchingVerticesToEdgeMap.put(vertexPair1, edges);
-            if (!source.equals(target)) {//If not a self loop
-                VertexPair<V> vertexPair2=new VertexPair<>(target, source);
-                touchingVerticesToEdgeMap.put(vertexPair2, edges);
-            }
-        }
-        touchingVerticesToEdgeMap.get(vertexPair1).add(e);
+        //Add edge to touchingVerticesToEdgeMap for the UnorderedPair {u,v}
+        VertexPair<V> vertexPair=new UnorderedVertexPair<>(source, target);
+        if(!touchingVerticesToEdgeMap.containsKey(vertexPair)) {
+            ArrayUnenforcedSet<E> edgeSet=new ArrayUnenforcedSet<>();
+            edgeSet.add(e);
+            touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
+        }else
+            touchingVerticesToEdgeMap.get(vertexPair).add(e);
 
         if (!source.equals(target)) { //If not a self loop
             getEdgeContainer(target).addEdge(e);
@@ -126,20 +124,17 @@ public class FastLookupUndirectedSpecifics<V,E>
 
         getEdgeContainer(source).removeEdge(e);
 
-        if (!source.equals(target)) {
+        if (!source.equals(target))
             getEdgeContainer(target).removeEdge(e);
-        }
 
         //Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges for a pair
         //of touching vertices, remove the pair from the map.
-        VertexPair<V> vertexPair1=new VertexPair<>(source, target);
-        if(touchingVerticesToEdgeMap.containsKey(vertexPair1)){
-            touchingVerticesToEdgeMap.get(vertexPair1).remove(e);
-            if(touchingVerticesToEdgeMap.get(vertexPair1).isEmpty()) {
-                touchingVerticesToEdgeMap.remove(vertexPair1);
-                VertexPair<V> vertexPair2=new VertexPair<>(target, source);
-                touchingVerticesToEdgeMap.remove(vertexPair2);
-            }
+        VertexPair<V> vertexPair=new UnorderedVertexPair<>(source, target);
+        if(touchingVerticesToEdgeMap.containsKey(vertexPair)){
+            ArrayUnenforcedSet<E> edgeSet=touchingVerticesToEdgeMap.get(vertexPair);
+            edgeSet.remove(e);
+            if(edgeSet.isEmpty())
+                touchingVerticesToEdgeMap.remove(vertexPair);
         }
     }
 
