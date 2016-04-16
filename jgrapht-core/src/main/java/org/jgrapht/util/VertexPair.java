@@ -35,16 +35,21 @@
  */
 package org.jgrapht.util;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if
  * Sun ever gets around to adding Pair to java.util.
  *
  * @author Soren (soren@tanesha.net)
+ * @author Joris Kinable
  */
-public class VertexPair<V>
+public class VertexPair<V> implements Serializable
 {
-    private V n1;
-    private V n2;
+    private static final long serialVersionUID = -852258620031566794L;
+    protected final V n1;
+    protected final V n2;
 
     public VertexPair(V n1, V n2)
     {
@@ -87,36 +92,38 @@ public class VertexPair<V>
 
     @Override public String toString()
     {
-        return n1 + "," + n2;
+        return "("+n1 + "," + n2+")";
     }
 
     @Override public boolean equals(Object o)
     {
-        if (this == o) {
+        if (this == o)
             return true;
-        }
-        if ((o == null) || (getClass() != o.getClass())) {
+        else if(!(o instanceof VertexPair))
             return false;
-        }
 
         @SuppressWarnings("unchecked")
-        VertexPair<V> that = (VertexPair<V>) o;
+        VertexPair<V> other = (VertexPair<V>) o;
 
-        if ((n1 != null) ? (!n1.equals(that.n1)) : (that.n1 != null)) {
-            return false;
-        }
-        if ((n2 != null) ? (!n2.equals(that.n2)) : (that.n2 != null)) {
-            return false;
-        }
+        return (elementEquals(n1, other.n1) && elementEquals(n2, other.n2));
+    }
 
-        return true;
+    /**
+     * Compares two elements. Returns true if they are both null, or when they are equal.
+     * @param element1
+     * @param element2
+     * @return true if they are both null, or when they are equal, false otherwise.
+     */
+    protected boolean elementEquals(V element1, V element2){
+        if(element1 == null)
+            return element2 == null;
+        else
+            return element1.equals(element2);
     }
 
     @Override public int hashCode()
     {
-        int result = (n1 != null) ? n1.hashCode() : 0;
-        result = (31 * result) + ((n2 != null) ? n2.hashCode() : 0);
-        return result;
+        return Objects.hash(n1, n2);
     }
 }
 
