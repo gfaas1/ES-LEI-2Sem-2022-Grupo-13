@@ -36,7 +36,7 @@ package org.jgrapht.util;
 
 /**
  * Representation of an unordered pair of vertices. For a given pair of vertices V u, V w,
- * UnorderedVertexPair(u,v) equals UnorderedVertexPair(v,u).
+ * UnorderedVertexPair(u,w) equals UnorderedVertexPair(w,u).
  *
  * @author Joris Kinable
  */
