@@ -38,7 +38,7 @@ package org.jgrapht.alg.flow;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.Extension.*;
+import org.jgrapht.alg.util.extension.ExtensionFactory;
 
 
 /**
@@ -77,8 +77,10 @@ public final class EdmondsKarpMaximumFlow<V, E>
     extends MaximumFlowAlgorithmBase<V, E>
 {
 
-    private VertexExtension currentSource; // current source vertex
-    private VertexExtension currentSink; // current sink vertex
+    /* current source vertex */
+    private VertexExtension currentSource;
+    /* current sink vertex */
+    private VertexExtension currentSink;
 
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
@@ -122,7 +124,8 @@ public final class EdmondsKarpMaximumFlow<V, E>
             throw new IllegalArgumentException(
                 "invalid epsilon (must be positive)");
         }
-        for (E e : network.edgeSet()) {
+        for (E e : network.edgeSet())
+        {
             if (network.getEdgeWeight(e) < -epsilon) {
                 throw new IllegalArgumentException(
                     "invalid capacity (must be non-negative)");
@@ -183,7 +186,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
                 break;
             }
 
-            maxFlowValue+=augmentFlow();
+            maxFlowValue += augmentFlow();
         }
 
         return maxFlowValue;
@@ -215,7 +218,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
             VertexExtension ux = queue.poll();
 
             for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
-                if ((ex.flow + EPSILON) < ex.capacity) {
+                if ((ex.flow + epsilon) < ex.capacity) {
                     VertexExtension vx = ex.getTarget();
 
                     if (vx == currentSink) {
@@ -263,7 +266,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
                     seen))
             {
                 pushFlowThrough(ex, deltaFlow);
-                flowIncrease+=deltaFlow;
+                flowIncrease += deltaFlow;
             }
         }
         return flowIncrease;
@@ -296,7 +299,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
         return false;
     }
 
-    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getSingletonInstance(v);}
+    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getExtension(v);}
 
     /**
      * Returns current source vertex, or <tt>null</tt> if there was no <tt>

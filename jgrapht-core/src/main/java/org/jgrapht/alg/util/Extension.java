@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * MaximumFlowAlgorithmBase.java
+ * Extension.java
  * -----------------
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
@@ -53,7 +53,8 @@ import java.util.Map;
  *
  * NOTE JK: This seems to be a poor name. This class is more of an ExtensionManager than an Extension by itself
  * */
-public class Extension<T, E>
+@Deprecated
+public class Extension<T, E extends Extension.BaseExtension>
 {
     /* Factory class to create new extensions */
     private ExtensionFactory<E> extensionFactory;
@@ -67,7 +68,7 @@ public class Extension<T, E>
 
     /**
      * Creates and returns an extension object.
-     * JK: Renamed this function to 'getInstance' for consistency with the getSingletonInstance function
+     * JK: Renamed this function to 'createExtension' for consistency with the getExtension function
      * @return Extension object
      */
     @Deprecated
@@ -80,7 +81,7 @@ public class Extension<T, E>
      * Creates and returns an extension object.
      * @return Extension object
      */
-    public E getInstance()
+    public E createExtension()
     {
         return extensionFactory.create();
     }
@@ -92,7 +93,7 @@ public class Extension<T, E>
      * NOTE: JK - Do we need want/this? There is no equivalent set(T t). Furthermore, it gets quite ambiguous if in some cases
      * an Extension is created without a prototype (createInstance()) and sometimes an Extension is created through the get(T t) function.
      * Only Extentions associated with a prototype t will be stored by the Manager. This leads to some very hard to track behavior. At the
-     * very least, give the function a proper name such as getSingletonInstance (as in contrast to the createInstance function above.
+     * very least, give the function a proper name such as getExtension (as in contrast to the createInstance function above.
      *
      * @param t prototype
      * @return Extension of prototype
@@ -104,21 +105,21 @@ public class Extension<T, E>
             return prototypeToExtensionMap.get(t);
         }
 
-        E x = getInstance();
+        E x = createExtension();
         prototypeToExtensionMap.put(t, x);
         return x;
     }
 
     /**
-     * Creates a new extension object for prototype t if no such object exists, returns the old one otherwise.
+     * Creates a new singleton extension object for prototype t if no such object exists, returns the old one otherwise.
      */
-    public E getSingletonInstance(T t)
+    public E getExtension(T t)
     {
         if (prototypeToExtensionMap.containsKey(t)) {
             return prototypeToExtensionMap.get(t);
         }
 
-        E x = getInstance();
+        E x = createExtension();
         prototypeToExtensionMap.put(t, x);
         return x;
     }
@@ -131,6 +132,7 @@ public class Extension<T, E>
      *
      * NOTE: JK - Why is this class a subclass of the Extension/ExtensionManager class, instead of a class on its own.
      */
+    @Deprecated
     public interface ExtensionFactory<E>
     {
         E create();
@@ -143,6 +145,7 @@ public class Extension<T, E>
      * super type. However, none of the code requires that E extends BaseExtension. Furthermore, I'm not sure why this
      * class is a subclass of the Extension/ExtensionManager class, instead of a class on its own.
      */
+    @Deprecated
     public static abstract class BaseExtension
     {
         public BaseExtension()
@@ -153,8 +156,8 @@ public class Extension<T, E>
     /**
      * Comments/Description missing
      *
-     * NOTE: JK - Do we really need this? This seems well beyond what any user would require. Better to keep the library as concise as possible.
      */
+    @Deprecated
     public static class ExtensionManagerInstantiationException
         extends RuntimeException
     {

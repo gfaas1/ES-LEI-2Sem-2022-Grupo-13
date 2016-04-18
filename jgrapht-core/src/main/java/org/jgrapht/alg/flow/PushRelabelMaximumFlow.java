@@ -38,7 +38,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.util.Extension.*;
+import org.jgrapht.alg.util.extension.ExtensionFactory;
 
 
 /**
@@ -225,8 +225,8 @@ public class PushRelabelMaximumFlow<V, E>
 
         //Calculate the max flow that reaches the sink. There may be more efficient ways to do this.
         for (E e : network.edgesOf(sink)) {
-            AnnotatedFlowEdge edge=edgeExtensionManager.getSingletonInstance(e);
-            maxFlowValue += (DIRECTED_GRAPH ?  edge.flow: edge.flow + edge.getInverse().flow);
+            AnnotatedFlowEdge edge=edgeExtensionManager.getExtension(e);
+            maxFlowValue += (directed_graph ?  edge.flow: edge.flow + edge.getInverse().flow);
         }
 
         if (DIAGNOSTIC_ENABLED) {
@@ -308,12 +308,7 @@ public class PushRelabelMaximumFlow<V, E>
     }
 
 
-    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getSingletonInstance(v);}
-
-//    private VertexExtension extendedVertex(V v)
-//    {
-//        return this.vertexExtended(v);
-//    }
+    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getExtension(v);}
 
     private class PushRelabelDiagnostic
     {
