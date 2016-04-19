@@ -126,12 +126,12 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
                 }
             }
         }else{ //Undirected graph
-            for(V v : network.vertexSet())
+            for (V v : network.vertexSet())
             {
                 VertexExtensionBase vx = vertexExtensionManager.getExtension(v);
                 vx.prototype = v;
             }
-            for(E e : network.edgeSet())
+            for (E e : network.edgeSet())
             {
                 VertexExtensionBase ux = vertexExtensionManager.getExtension(network.getEdgeSource(e));
                 VertexExtensionBase vx = vertexExtensionManager.getExtension(network.getEdgeTarget(e));
@@ -170,7 +170,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             backwardEdge = edgeExtensionManager.createExtension();
             backwardEdge.source = forwardEdge.target;
             backwardEdge.target = forwardEdge.source;
-            if (!directed_graph) { //undirected graph: if (u,v) exists, then so much (v,u)
+            if (!directed_graph) { // Undirected graph: if (u,v) exists, then so much (v,u)
                 backwardEdge.capacity = network.getEdgeWeight(backwardPrototype);
                 backwardEdge.prototype = backwardPrototype;
             }
