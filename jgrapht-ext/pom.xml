@@ -35,6 +35,19 @@
 					</execution>
 				</executions>
 				<configuration>
+					<transformers>
+						<transformer
+							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+							<manifestEntries>
+								<!--
+									Use unique OSGi bundle symbolic name for uber artifact. Otherwise
+									e.g. jgrapht-ext-1.0.0.jar and jgrapht-ext-1.0.0-uber.jar could
+									not be deployed to the same P2 repository.
+								-->
+								<Bundle-SymbolicName>org.jgrapht.ext.uber</Bundle-SymbolicName>
+							</manifestEntries>
+						</transformer>
+					</transformers>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>uber</shadedClassifierName>
                     <!--

@@ -42,7 +42,9 @@
 package org.jgrapht;
 
 import java.util.*;
+import java.util.function.Predicate;
 
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.*;
 
 
@@ -432,6 +434,228 @@ public abstract class Graphs
             list.add(v);
         }
         return list;
+    }
+
+    /**
+     * This function is implemented recursively. Therefore only graphs without
+     * any cycles are allowed.
+     *
+     * @param graph graph to look for ancestors in.
+     * @param vertex the vertex to get the ancestors of.
+     *
+     * @return {@link List} of ancestors of the vertex in the given graph.
+     */
+    public static <V, E extends DefaultEdge> List<V> determineAncestors(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex)
+    {
+
+        List<V> ancestors = new ArrayList<>();
+        ancestors = determineAncestors(graph, vertex, ancestors);
+        return ancestors;
+    }
+
+    protected static <V, E extends DefaultEdge> List<V> determineAncestors(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex,
+        List<V> ancestors)
+    {
+
+        List<V> parents = Graphs.predecessorListOf(graph, vertex);
+
+        for (V parent : parents) {
+            ancestors.add(parent);
+            determineAncestors(graph, parent, ancestors);
+        }
+
+        return ancestors;
+    }
+
+    /**
+     * This function is implemented recursively. Therefore only graphs without
+     * any cycles are allowed.
+     *
+     * @param graph graph to look for descendants in.
+     * @param vertex the vertex to get the descendants of.
+     *
+     * @return {@link List} of descendants of the vertex in the given graph.
+     */
+    public static <V, E extends DefaultEdge> List<V> determineDescendants(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex)
+    {
+
+        List<V> descendants = new ArrayList<>();
+        descendants = determineDescendants(graph, vertex, descendants);
+        return descendants;
+    }
+
+    protected static <V, E extends DefaultEdge> List<V> determineDescendants(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex,
+        List<V> descendants)
+    {
+
+        List<V> children = Graphs.successorListOf(graph, vertex);
+
+        for (V child : children) {
+            descendants.add(child);
+            determineDescendants(graph, child, descendants);
+        }
+
+        return descendants;
+    }
+
+    /**
+     * Removes the given vertex from the given graph. If the vertex to be
+     * removed has one or more parents, the parents will be connected directly
+     * to the children of the vertex to be removed.
+     *
+     * @param graph graph to be mutated.
+     * @param vertex vertex to be removed from this graph, if present.
+     *
+     * @return true if the graph contained the specified vertex; false
+     *         otherwise.
+     */
+    public static <V, E extends DefaultEdge> boolean removeVertexAndConnectParentsWithChildren(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+
+        if (!graph.containsVertex(vertex)) {
+            return false;
+        }
+
+        if (vertexHasParents(graph, vertex)) {
+            List<V> parents = Graphs.predecessorListOf(graph, vertex);
+            List<V> children = Graphs.successorListOf(graph, vertex);
+
+            for (V parent : parents) {
+                addOutgoingEdges(graph, parent, children);
+            }
+        }
+
+        graph.removeVertex(vertex);
+        return true;
+    }
+
+    /**
+     * Filters vertices from the given graph and subequently removes them. If
+     * the vertex to be removed has one or more parents, the parents will be
+     * connected directly to the children of the vertex to be removed.
+     *
+     * @param graph graph to be mutated
+     * @param predicate a non-interfering stateless predicate to apply to each
+     *        vertex to determine if it should be removed from the graph.
+     *
+     * @return true if at least one vertex has been removed; false otherwise.
+     */
+    public static <V, E extends DefaultEdge> boolean removeVerticesAndConnectParentsWithChildren(
+        DirectedGraph<V, E> graph,
+        Predicate<V> predicate)
+    {
+
+        List<V> verticesToRemove = new ArrayList<>();
+
+        for (V node : graph.vertexSet()) {
+            if (predicate.test(node)) {
+                verticesToRemove.add(node);
+            }
+        }
+
+        return removeVerticesAndConnectParentsWithChildren(
+            graph,
+            verticesToRemove);
+    }
+
+    /**
+     * Removes all the given vertices from the given graph. If the vertex to be
+     * removed has one or more parents, the parents will be connected directly
+     * to the children of the vertex to be removed.
+     *
+     * @param graph to be mutated.
+     * @param vertices vertices to be removed from this graph, if present.
+     *
+     * @return true if at least one vertex has been removed; false otherwise.
+     */
+    public static <V, E extends DefaultEdge> boolean removeVerticesAndConnectParentsWithChildren(
+        DirectedGraph<V, E> graph,
+        List<V> vertices)
+    {
+
+        boolean atLeastOneVertexHasBeenRemoved = false;
+
+        for (V vertex : vertices) {
+            if (removeVertexAndConnectParentsWithChildren(graph, vertex)) {
+                atLeastOneVertexHasBeenRemoved = true;
+            }
+        }
+
+        return atLeastOneVertexHasBeenRemoved;
+    }
+
+    /**
+     * Add edges from one source vertex to multiple target vertices. Whether
+     * duplicates are created depends on the underlying {@link DirectedGraph}
+     * implementation.
+     *
+     * @param graph graph to be mutated
+     * @param source source vertex of the new edges
+     * @param targets target vertices for the new edges
+     */
+    public static <V, E extends DefaultEdge> void addOutgoingEdges(
+        DirectedGraph<V, E> graph,
+        V source,
+        List<V> targets)
+    {
+        if (!graph.containsVertex(source)) {
+            graph.addVertex(source);
+        }
+        for (V target : targets) {
+            if (!graph.containsVertex(target)) {
+                graph.addVertex(target);
+            }
+            graph.addEdge(source, target);
+        }
+    }
+
+    /**
+     * Add edges from multiple source vertices to one target vertex. Whether
+     * duplicates are created depends on the underlying {@link DirectedGraph}
+     * implementation.
+     *
+     * @param graph graph to be mutated
+     * @param target target vertex for the new edges
+     * @param sources source vertices for the new edges
+     */
+    public static <V, E extends DefaultEdge> void addIncomingEdges(
+        DirectedGraph<V, E> graph,
+        V target,
+        List<V> sources)
+    {
+        if (!graph.containsVertex(target)) {
+            graph.addVertex(target);
+        }
+        for (V source : sources) {
+            if (!graph.containsVertex(source)) {
+                graph.addVertex(source);
+            }
+            graph.addEdge(source, target);
+        }
+    }
+
+    public static <V, E extends DefaultEdge> boolean vertexHasChildren(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+        return !Graphs.successorListOf(graph, vertex).isEmpty();
+    }
+
+    public static <V, E extends DefaultEdge> boolean vertexHasParents(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+        return !Graphs.predecessorListOf(graph, vertex).isEmpty();
     }
 }
 
