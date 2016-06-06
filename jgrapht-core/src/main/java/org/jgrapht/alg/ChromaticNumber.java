@@ -25,7 +25,6 @@
  * (C) Copyright 2008-2008, by Andrew Newell and Contributors.
  *
  * Original Author:  Andrew Newell
- * Contributor(s):   gpaschos@netscape.net, harshalv@telenav.com
  *
  * $Id$
  *
@@ -56,7 +55,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class ChromaticNumber
 {
-    
+
 
     /**
      * Finds the number of colors required for a greedy coloring of the graph.
@@ -67,18 +66,6 @@ public abstract class ChromaticNumber
      * algorithm
      */
     public static <V, E> int findGreedyChromaticNumber(UndirectedGraph<V, E> g)
-    {
-        Map<Integer, Set<V>> coloredGroups = findGreedyColoredGroups(g);
-        return coloredGroups.keySet().size();
-    }
-
-    /**
-     * Finds a greedy coloring of the graph.
-     *
-     * @param g an undirected graph for which to find the coloring
-     */
-    public static <V, E> Map<Integer, Set<V>> findGreedyColoredGroups(
-        UndirectedGraph<V, E> g)
     {
         // A copy of the graph is made, so that elements of the graph may be
         // removed to carry out the algorithm
@@ -126,7 +113,6 @@ public abstract class ChromaticNumber
                 }
                 if (flag) {
                     currentColor.add(v);
-                    iter.remove();
                 }
             }
 

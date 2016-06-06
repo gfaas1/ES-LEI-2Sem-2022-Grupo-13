@@ -54,7 +54,7 @@ import org.jgrapht.experimental.permutation.*;
 class EquivalenceIsomorphismInspector<V, E>
     extends AbstractExhaustiveIsomorphismInspector<V, E>
 {
-    
+
 
     /**
      * @param graph1
@@ -88,7 +88,7 @@ class EquivalenceIsomorphismInspector<V, E>
         super(graph1, graph2);
     }
 
-    
+
 
     /**
      * Creates the permutation iterator according to equivalance class.
@@ -248,7 +248,7 @@ class EquivalenceIsomorphismInspector<V, E>
                 while (
                     (targetEqGroup.size() == sourceSize)
                     && (targetEqGroup.hashCode() == sourceHashCode)
-                    && (currTargetIndex < (targetArray.length - 1)))
+                    && (currTargetIndex < (targetArray.length))) //should be -1
                 {
                     currTargetIndex++;
                     targetEqGroup = targetArray[currTargetIndex];
