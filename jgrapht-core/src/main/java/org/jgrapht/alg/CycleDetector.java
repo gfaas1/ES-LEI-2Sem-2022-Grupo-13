@@ -122,7 +122,7 @@ public class CycleDetector<V, E>
         // true:  (a) it is in a component whose size is greater than 1
         // or (b) it is a self-loop
 
-        Set<V> set = new HashSet<>();
+        Set<V> set = new LinkedHashSet<>();
         for (Set<V> component : components) {
             if (component.size() > 1) {
                 // cycle
@@ -155,7 +155,7 @@ public class CycleDetector<V, E>
      */
     public Set<V> findCyclesContainingVertex(V v)
     {
-        Set<V> set = new HashSet<>();
+        Set<V> set = new LinkedHashSet<>();
         execute(set, v);
 
         return set;
