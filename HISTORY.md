@@ -6,6 +6,7 @@ Changes to JGraphT in each version:
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
 	- Optimized edge lookups (contributed by Joris Kinable)
+        - Use LinkedHashSet in `CycleDetector` (contributed by Benedikt Waldvogel)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
