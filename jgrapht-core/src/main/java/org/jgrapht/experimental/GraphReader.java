@@ -43,31 +43,7 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 
-/**
- * Imports a graph specified in DIMACS format (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps).
- * In summary, graphs specified in DIMACS format adhere to the following structure:
- * <pre><code>
- *
- * DIMACS G {
- *    c <comments; ignored during parsing of the graph
- *    p edge <number of nodes> <number of edges>
- *    e <edge source 1> <edge target 1>
- *    e <edge source 2> <edge target 2>
- *    e <edge source 3> <edge target 3>
- *    e <edge source 4> <edge target 4>
- *    ...
- * }
- *
- * </code></pre>
- *
- * Note: the current implementation does not fully implement the DIMACS specifications! Special (rarely used) fields
- * specified as 'Optional Descriptors' are currently not supported.
- *
- * @author unknown
- *
- * @param <V>
- * @param <E>
- */
+
 public class GraphReader<V, E>
     implements GraphGenerator<V, E, V>
 {
