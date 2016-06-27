@@ -83,7 +83,7 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
     // ~ Constructors ----------------------------------------------------------
 
     /**
-     * Construct a new GraphReader.
+     * Construct a new DIMACSImporter.
      */
     public DIMACSImporter(Reader input, double defaultWeight)
             throws IOException
@@ -97,7 +97,7 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
     }
 
     /**
-     * Construct a new GraphReader.
+     * Construct a new DIMACSImporter.
      */
     public DIMACSImporter(Reader input)
             throws IOException
