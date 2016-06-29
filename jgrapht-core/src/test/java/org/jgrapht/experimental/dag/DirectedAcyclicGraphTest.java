@@ -583,16 +583,11 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         List<String> expectedAncestors = new ArrayList<>();
         expectedAncestors.add("B");
         expectedAncestors.add("A");
 
         List<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "C");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedAncestors);
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -632,14 +627,9 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         List<String> expectedAncestors = new ArrayList<>();
 
         List<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "A");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedAncestors);
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -676,16 +666,11 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(a, c);
 
-        // System.out.println("Input:\t\t" + graph);
-
         List<String> expectedAncestors = new ArrayList<>();
         expectedAncestors.add("B");
         expectedAncestors.add("A");
 
         List<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "C");
-
-         System.out.println("\nOutput:\t\t" + ancestors);
-         System.out.println("Expected:\t" + expectedAncestors);
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -725,16 +710,11 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         List<String> expectedDescendents = new ArrayList<>();
         expectedDescendents.add("C");
         expectedDescendents.add("D");
 
         List<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "B");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedDescendents);
 
         Assert.assertEquals(expectedDescendents, ancestors);
     }
@@ -774,14 +754,10 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
 
         List<String> expectedDescendents = new ArrayList<>();
 
         List<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "C");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedDescendents);
 
         Assert.assertEquals(expectedDescendents, ancestors);
     }
@@ -818,16 +794,11 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(b, c);
         graph.addEdge(a, c);
 
-        // System.out.println("Input:\t\t" + graph);
-
         List<String> expectedAncestors = new ArrayList<>();
         expectedAncestors.add("B");
         expectedAncestors.add("C");
 
         List<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "A");
-
-         System.out.println("\nOutput:\t\t" + ancestors);
-         System.out.println("Expected:\t" + expectedAncestors);
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }

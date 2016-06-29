@@ -41,26 +41,12 @@ import java.util.List;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 
 /**
  * @author Christoph Zauner
  */
 public class GraphsTest
 {
-
-    // @Rule
-    public TestRule watcher = new TestWatcher()
-    {
-        @Override
-        protected void starting(Description description)
-        {
-            System.out.println(
-                "\n+++ Test: " + description.getMethodName() + " +++\n");
-        }
-    };
 
     //@formatter:off
     /**
@@ -103,8 +89,6 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -119,9 +103,6 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs
             .removeVertexAndConnectParentsWithChildren(graph, x);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertFalse(vertexHasBeenRemoved);
@@ -167,8 +148,6 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -181,9 +160,6 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs
             .removeVertexAndConnectParentsWithChildren(graph, b);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -215,8 +191,6 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -224,9 +198,6 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs
             .removeVertexAndConnectParentsWithChildren(graph, a);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -258,8 +229,6 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -267,9 +236,6 @@ public class GraphsTest
 
         boolean vertexHasBeenRemoved = Graphs
             .removeVertexAndConnectParentsWithChildren(graph, b);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -305,8 +271,6 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -322,9 +286,6 @@ public class GraphsTest
         targets.add(c);
 
         Graphs.addOutgoingEdges(graph, a, targets);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
     }
@@ -359,8 +320,6 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        // System.out.println("Input:\t\t" + graph);
-
         DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
             TestEdge.class);
 
@@ -376,9 +335,6 @@ public class GraphsTest
         targets.add(c);
 
         Graphs.addIncomingEdges(graph, a, targets);
-
-        // System.out.println("\nOutput:\t\t" + graph);
-        // System.out.println("Expected:\t" + expectedGraph);
 
         Assert.assertEquals(expectedGraph, graph);
     }
