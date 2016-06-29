@@ -560,8 +560,11 @@ public class DirectedAcyclicGraph<V, E>
         List<V> parents = Graphs.predecessorListOf(graph, vertex);
 
         for (V parent : parents) {
-            ancestors.add(parent);
-            getAncestors(graph, parent, ancestors);
+            // node might already have been processed in case of an convergent forward path.
+            if (!ancestors.contains(parent)) {
+                ancestors.add(parent);
+                getAncestors(graph, parent, ancestors);
+            }
         }
 
         return ancestors;
@@ -595,8 +598,11 @@ public class DirectedAcyclicGraph<V, E>
         List<V> children = Graphs.successorListOf(graph, vertex);
 
         for (V child : children) {
-            descendants.add(child);
-            getDescendants(graph, child, descendants);
+            // node might already have been processed in case of an convergent forward path.
+            if (!descendants.contains(child)) {
+                descendants.add(child);
+                getDescendants(graph, child, descendants);
+            }
         }
 
         return descendants;
