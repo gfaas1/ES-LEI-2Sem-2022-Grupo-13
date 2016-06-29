@@ -589,7 +589,7 @@ public class DirectedAcyclicGraphTest
         expectedAncestors.add("B");
         expectedAncestors.add("A");
 
-        List<String> ancestors = DirectedAcyclicGraph.determineAncestors(graph, "C");
+        List<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "C");
 
         // System.out.println("\nOutput:\t\t" + ancestors);
         // System.out.println("Expected:\t" + expectedAncestors);
@@ -636,7 +636,7 @@ public class DirectedAcyclicGraphTest
 
         List<String> expectedAncestors = new ArrayList<>();
 
-        List<String> ancestors = DirectedAcyclicGraph.determineAncestors(graph, "A");
+        List<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "A");
 
         // System.out.println("\nOutput:\t\t" + ancestors);
         // System.out.println("Expected:\t" + expectedAncestors);
@@ -685,7 +685,7 @@ public class DirectedAcyclicGraphTest
         expectedDescendents.add("C");
         expectedDescendents.add("D");
 
-        List<String> ancestors = DirectedAcyclicGraph.determineDescendants(graph, "B");
+        List<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "B");
 
         // System.out.println("\nOutput:\t\t" + ancestors);
         // System.out.println("Expected:\t" + expectedDescendents);
@@ -732,7 +732,7 @@ public class DirectedAcyclicGraphTest
 
         List<String> expectedDescendents = new ArrayList<>();
 
-        List<String> ancestors = DirectedAcyclicGraph.determineDescendants(graph, "C");
+        List<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "C");
 
         // System.out.println("\nOutput:\t\t" + ancestors);
         // System.out.println("Expected:\t" + expectedDescendents);

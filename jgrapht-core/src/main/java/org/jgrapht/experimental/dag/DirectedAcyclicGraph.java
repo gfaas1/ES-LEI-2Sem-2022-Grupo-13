@@ -541,17 +541,17 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link List} of ancestors of the vertex in the given graph.
      */
-    public static <V, E extends DefaultEdge> List<V> determineAncestors(
+    public static <V, E extends DefaultEdge> List<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
 
         List<V> ancestors = new ArrayList<>();
-        ancestors = determineAncestors(graph, vertex, ancestors);
+        ancestors = getAncestors(graph, vertex, ancestors);
         return ancestors;
     }
 
-    protected static <V, E extends DefaultEdge> List<V> determineAncestors(
+    protected static <V, E extends DefaultEdge> List<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex,
         List<V> ancestors)
@@ -561,7 +561,7 @@ public class DirectedAcyclicGraph<V, E>
 
         for (V parent : parents) {
             ancestors.add(parent);
-            determineAncestors(graph, parent, ancestors);
+            getAncestors(graph, parent, ancestors);
         }
 
         return ancestors;
@@ -576,17 +576,17 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link List} of descendants of the vertex in the given graph.
      */
-    public static <V, E extends DefaultEdge> List<V> determineDescendants(
+    public static <V, E extends DefaultEdge> List<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
 
         List<V> descendants = new ArrayList<>();
-        descendants = determineDescendants(graph, vertex, descendants);
+        descendants = getDescendants(graph, vertex, descendants);
         return descendants;
     }
 
-    protected static <V, E extends DefaultEdge> List<V> determineDescendants(
+    protected static <V, E extends DefaultEdge> List<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex,
         List<V> descendants)
@@ -596,7 +596,7 @@ public class DirectedAcyclicGraph<V, E>
 
         for (V child : children) {
             descendants.add(child);
-            determineDescendants(graph, child, descendants);
+            getDescendants(graph, child, descendants);
         }
 
         return descendants;
