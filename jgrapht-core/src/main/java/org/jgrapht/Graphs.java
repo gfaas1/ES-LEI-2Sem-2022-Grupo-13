@@ -579,14 +579,14 @@ public abstract class Graphs
         DirectedGraph<V, E> graph,
         V vertex)
     {
-        return !Graphs.successorListOf(graph, vertex).isEmpty();
+        return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
 
     public static <V, E extends DefaultEdge> boolean vertexHasParents(
         DirectedGraph<V, E> graph,
         V vertex)
     {
-        return !Graphs.predecessorListOf(graph, vertex).isEmpty();
+        return !graph.incomingEdgesOf(vertex).isEmpty();
     }
 }
 
