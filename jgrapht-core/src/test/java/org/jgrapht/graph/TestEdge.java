@@ -32,7 +32,7 @@
  * -------
  *
  */
-package org.jgrapht;
+package org.jgrapht.graph;
 
 import org.jgrapht.graph.DefaultEdge;
 

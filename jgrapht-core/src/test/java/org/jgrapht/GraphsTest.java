@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.TestEdge;
 import org.junit.Assert;
 import org.junit.Test;
 
