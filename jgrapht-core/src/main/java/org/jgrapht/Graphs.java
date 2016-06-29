@@ -22,11 +22,12 @@
 /* ----------------
  * Graphs.java
  * ----------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
  *
  * Original Author:  Barak Naveh
  * Contributor(s):   Christian Hammer
  *                   Mikael Hansen
+ *                   Christoph Zauner
  *
  * $Id$
  *
@@ -44,7 +45,6 @@ package org.jgrapht;
 import java.util.*;
 import java.util.function.Predicate;
 
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.*;
 
 
@@ -436,75 +436,6 @@ public abstract class Graphs
         return list;
     }
 
-    /**
-     * This function is implemented recursively. Therefore only graphs without
-     * any cycles are allowed.
-     *
-     * @param graph graph to look for ancestors in.
-     * @param vertex the vertex to get the ancestors of.
-     *
-     * @return {@link List} of ancestors of the vertex in the given graph.
-     */
-    public static <V, E extends DefaultEdge> List<V> determineAncestors(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex)
-    {
-
-        List<V> ancestors = new ArrayList<>();
-        ancestors = determineAncestors(graph, vertex, ancestors);
-        return ancestors;
-    }
-
-    protected static <V, E extends DefaultEdge> List<V> determineAncestors(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex,
-        List<V> ancestors)
-    {
-
-        List<V> parents = Graphs.predecessorListOf(graph, vertex);
-
-        for (V parent : parents) {
-            ancestors.add(parent);
-            determineAncestors(graph, parent, ancestors);
-        }
-
-        return ancestors;
-    }
-
-    /**
-     * This function is implemented recursively. Therefore only graphs without
-     * any cycles are allowed.
-     *
-     * @param graph graph to look for descendants in.
-     * @param vertex the vertex to get the descendants of.
-     *
-     * @return {@link List} of descendants of the vertex in the given graph.
-     */
-    public static <V, E extends DefaultEdge> List<V> determineDescendants(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex)
-    {
-
-        List<V> descendants = new ArrayList<>();
-        descendants = determineDescendants(graph, vertex, descendants);
-        return descendants;
-    }
-
-    protected static <V, E extends DefaultEdge> List<V> determineDescendants(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex,
-        List<V> descendants)
-    {
-
-        List<V> children = Graphs.successorListOf(graph, vertex);
-
-        for (V child : children) {
-            descendants.add(child);
-            determineDescendants(graph, child, descendants);
-        }
-
-        return descendants;
-    }
 
     /**
      * Removes the given vertex from the given graph. If the vertex to be

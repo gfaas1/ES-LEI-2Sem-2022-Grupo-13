@@ -25,6 +25,7 @@
  * (C) Copyright 2003-2016, by Christoph Zauner and Contributors
  *
  * Original Author:  Christoph Zauner
+ * Contributor(s):
  *
  * $Id$
  *
@@ -37,7 +38,6 @@ package org.jgrapht;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
@@ -273,202 +273,6 @@ public class GraphsTest
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Expected output when determining ancestors of C:
-     *
-     * B, A
-     */
-    //@formatter:on
-    @Test
-    public void determineAncestors00()
-    {
-
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        // System.out.println("Input:\t\t" + graph);
-
-        List<String> expectedAncestors = new ArrayList<>();
-        expectedAncestors.add("B");
-        expectedAncestors.add("A");
-
-        List<String> ancestors = Graphs.determineAncestors(graph, "C");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedAncestors);
-
-        Assert.assertEquals(expectedAncestors, ancestors);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Expected output when determining ancestors of A:
-     *
-     * <empty list>
-     */
-    //@formatter:on
-    @Test
-    public void determineAncestors01()
-    {
-
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        // System.out.println("Input:\t\t" + graph);
-
-        List<String> expectedAncestors = new ArrayList<>();
-
-        List<String> ancestors = Graphs.determineAncestors(graph, "A");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedAncestors);
-
-        Assert.assertEquals(expectedAncestors, ancestors);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Expected output when determining descendents of B:
-     *
-     * C, D
-     */
-    //@formatter:on
-    @Test
-    public void determineDescendants00()
-    {
-
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        // System.out.println("Input:\t\t" + graph);
-
-        List<String> expectedDescendents = new ArrayList<>();
-        expectedDescendents.add("C");
-        expectedDescendents.add("D");
-
-        List<String> ancestors = Graphs.determineDescendants(graph, "B");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedDescendents);
-
-        Assert.assertEquals(expectedDescendents, ancestors);
-    }
-
-    //@formatter:off
-    /**
-     * Input:
-     *
-     *             +--> C
-     *             |
-     * A +--> B +--+
-     *             |
-     *             +--> D
-     *
-     * Expected output when determining descendents of C:
-     *
-     * <empty list>
-     */
-    //@formatter:on
-    @Test
-    public void determineDescendants01()
-    {
-
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
-
-        String a = "A";
-        String b = "B";
-        String c = "C";
-        String d = "D";
-
-        graph.addVertex(a);
-        graph.addVertex(b);
-        graph.addVertex(c);
-        graph.addVertex(d);
-
-        graph.addEdge(a, b);
-        graph.addEdge(b, c);
-        graph.addEdge(b, d);
-
-        // System.out.println("Input:\t\t" + graph);
-
-        List<String> expectedDescendents = new ArrayList<>();
-
-        List<String> ancestors = Graphs.determineDescendants(graph, "C");
-
-        // System.out.println("\nOutput:\t\t" + ancestors);
-        // System.out.println("Expected:\t" + expectedDescendents);
-
-        Assert.assertEquals(expectedDescendents, ancestors);
     }
 
     //@formatter:off
