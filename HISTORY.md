@@ -7,6 +7,8 @@ Changes to JGraphT in each version:
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
 	- Optimized edge lookups (contributed by Joris Kinable)
         - Use LinkedHashSet in `CycleDetector` (contributed by Benedikt Waldvogel)
+	- Use unique OSGi bundle symbolic name for uber artifact (contributed by Christoph Zauner)
+        - Replace experimental GraphReader with `DIMACSImporter` (contributed by Joris Kinable)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
