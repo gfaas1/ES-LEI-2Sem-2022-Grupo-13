@@ -44,6 +44,8 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.traverse.AbstractGraphIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 
 /**
@@ -533,76 +535,53 @@ public class DirectedAcyclicGraph<V, E>
     }
 
     /**
-     * This function is implemented recursively. Therefore only graphs without
-     * any cycles are allowed.
-     *
      * @param graph graph to look for ancestors in.
      * @param vertex the vertex to get the ancestors of.
      *
-     * @return {@link List} of ancestors of the vertex in the given graph.
+     * @return {@link Set} of ancestors of the vertex in the given graph.
      */
-    public static <V, E> List<V> getAncestors(
+    public static <V, E> Set<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
 
-        List<V> ancestors = new ArrayList<>();
-        ancestors = getAncestors(graph, vertex, ancestors);
-        return ancestors;
-    }
+        EdgeReversedGraph<V, E> reversedGraph = new EdgeReversedGraph<>(graph);
+        AbstractGraphIterator<V, E> iterator = new DepthFirstIterator<>(reversedGraph, vertex);
+        Set<V> ancestors = new HashSet<>();
 
-    protected static <V, E> List<V> getAncestors(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex,
-        List<V> ancestors)
-    {
+        // Do not add start vertex to result.
+        if (iterator.hasNext()) {
+            iterator.next();
+        }
 
-        List<V> parents = Graphs.predecessorListOf(graph, vertex);
-
-        for (V parent : parents) {
-            // node might already have been processed in case of an convergent forward path.
-            if (!ancestors.contains(parent)) {
-                ancestors.add(parent);
-                getAncestors(graph, parent, ancestors);
-            }
+        while (iterator.hasNext()) {
+            ancestors.add(iterator.next());
         }
 
         return ancestors;
     }
 
     /**
-     * This function is implemented recursively. Therefore only graphs without
-     * any cycles are allowed.
-     *
      * @param graph graph to look for descendants in.
      * @param vertex the vertex to get the descendants of.
      *
-     * @return {@link List} of descendants of the vertex in the given graph.
+     * @return {@link Set} of descendants of the vertex in the given graph.
      */
-    public static <V, E> List<V> getDescendants(
+    public static <V, E> Set<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
 
-        List<V> descendants = new ArrayList<>();
-        descendants = getDescendants(graph, vertex, descendants);
-        return descendants;
-    }
+        AbstractGraphIterator<V, E> iterator = new DepthFirstIterator<>(graph, vertex);
+        Set<V> descendants = new HashSet<>();
 
-    protected static <V, E> List<V> getDescendants(
-        DirectedAcyclicGraph<V, E> graph,
-        V vertex,
-        List<V> descendants)
-    {
+        // Do not add start vertex to result.
+        if (iterator.hasNext()) {
+            iterator.next();
+        }
 
-        List<V> children = Graphs.successorListOf(graph, vertex);
-
-        for (V child : children) {
-            // node might already have been processed in case of an convergent forward path.
-            if (!descendants.contains(child)) {
-                descendants.add(child);
-                getDescendants(graph, child, descendants);
-            }
+        while (iterator.hasNext()) {
+            descendants.add(iterator.next());
         }
 
         return descendants;
