@@ -37,7 +37,6 @@ package org.jgrapht.ext;
 import java.io.StringWriter;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 
 /**
  * @author Christoph Zauner
@@ -47,7 +46,7 @@ public class DOTUtils
     /**
      * @return a {@link String} represenation in DOT format of the given graph.
      */
-    public static <V, E extends DefaultEdge> String convertGraphToDotString(
+    public static <V, E> String convertGraphToDotString(
         Graph<V, E> graph)
     {
 

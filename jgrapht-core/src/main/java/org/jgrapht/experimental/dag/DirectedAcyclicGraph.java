@@ -541,7 +541,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link List} of ancestors of the vertex in the given graph.
      */
-    public static <V, E extends DefaultEdge> List<V> getAncestors(
+    public static <V, E> List<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
@@ -551,7 +551,7 @@ public class DirectedAcyclicGraph<V, E>
         return ancestors;
     }
 
-    protected static <V, E extends DefaultEdge> List<V> getAncestors(
+    protected static <V, E> List<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex,
         List<V> ancestors)
@@ -579,7 +579,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link List} of descendants of the vertex in the given graph.
      */
-    public static <V, E extends DefaultEdge> List<V> getDescendants(
+    public static <V, E> List<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
@@ -589,7 +589,7 @@ public class DirectedAcyclicGraph<V, E>
         return descendants;
     }
 
-    protected static <V, E extends DefaultEdge> List<V> getDescendants(
+    protected static <V, E> List<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex,
         List<V> descendants)

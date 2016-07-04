@@ -92,8 +92,6 @@ public class DOTUtilsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        // System.out.println("Input:\t\t" + graph);
-
         //@formatter:off
         String expectedGraphAsDotString =
                 "digraph G {"            +
@@ -109,9 +107,6 @@ public class DOTUtilsTest
 
         String graphAsDotString = DOTUtils.convertGraphToDotString(graph)
             .replaceAll("(\\r|\\n)", "");
-
-        // System.out.println("\nOutput:\t\t" + graphAsDotString);
-        // System.out.println("Expected:\t" + expectedGraphAsDotString);
 
         Assert.assertEquals(expectedGraphAsDotString, graphAsDotString);
     }

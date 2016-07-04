@@ -448,7 +448,7 @@ public abstract class Graphs
      * @return true if the graph contained the specified vertex; false
      *         otherwise.
      */
-    public static <V, E extends DefaultEdge> boolean removeVertexAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVertexAndConnectParentsWithChildren(
         DirectedGraph<V, E> graph,
         V vertex)
     {
@@ -481,7 +481,7 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E extends DefaultEdge> boolean removeVerticesAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVerticesAndConnectParentsWithChildren(
         DirectedGraph<V, E> graph,
         Predicate<V> predicate)
     {
@@ -509,7 +509,7 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E extends DefaultEdge> boolean removeVerticesAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVerticesAndConnectParentsWithChildren(
         DirectedGraph<V, E> graph,
         List<V> vertices)
     {
@@ -534,7 +534,7 @@ public abstract class Graphs
      * @param source source vertex of the new edges
      * @param targets target vertices for the new edges
      */
-    public static <V, E extends DefaultEdge> void addOutgoingEdges(
+    public static <V, E> void addOutgoingEdges(
         DirectedGraph<V, E> graph,
         V source,
         List<V> targets)
@@ -559,7 +559,7 @@ public abstract class Graphs
      * @param target target vertex for the new edges
      * @param sources source vertices for the new edges
      */
-    public static <V, E extends DefaultEdge> void addIncomingEdges(
+    public static <V, E> void addIncomingEdges(
         DirectedGraph<V, E> graph,
         V target,
         List<V> sources)
@@ -575,14 +575,14 @@ public abstract class Graphs
         }
     }
 
-    public static <V, E extends DefaultEdge> boolean vertexHasChildren(
+    public static <V, E> boolean vertexHasChildren(
         DirectedGraph<V, E> graph,
         V vertex)
     {
         return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
 
-    public static <V, E extends DefaultEdge> boolean vertexHasParents(
+    public static <V, E> boolean vertexHasParents(
         DirectedGraph<V, E> graph,
         V vertex)
     {
