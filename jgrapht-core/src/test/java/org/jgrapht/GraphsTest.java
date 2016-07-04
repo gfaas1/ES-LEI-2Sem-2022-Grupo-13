@@ -103,7 +103,7 @@ public class GraphsTest
         expectedGraph.addEdge(b, d);
 
         boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndConnectParentsWithChildren(graph, x);
+            .removeVertexAndPreserveConnectivity(graph, x);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertFalse(vertexHasBeenRemoved);
@@ -160,7 +160,7 @@ public class GraphsTest
         expectedGraph.addEdge(a, d);
 
         boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndConnectParentsWithChildren(graph, b);
+            .removeVertexAndPreserveConnectivity(graph, b);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -198,7 +198,7 @@ public class GraphsTest
         expectedGraph.addVertex(b);
 
         boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndConnectParentsWithChildren(graph, a);
+            .removeVertexAndPreserveConnectivity(graph, a);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -236,7 +236,7 @@ public class GraphsTest
         expectedGraph.addVertex(a);
 
         boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndConnectParentsWithChildren(graph, b);
+            .removeVertexAndPreserveConnectivity(graph, b);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -372,7 +372,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertTrue(Graphs.vertexHasChildren(graph, b));
+        Assert.assertTrue(Graphs.vertexHasSuccessors(graph, b));
     }
 
     //@formatter:off
@@ -407,7 +407,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertFalse(Graphs.vertexHasChildren(graph, c));
+        Assert.assertFalse(Graphs.vertexHasSuccessors(graph, c));
     }
 
     //@formatter:off
@@ -442,7 +442,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertTrue(Graphs.vertexHasParents(graph, b));
+        Assert.assertTrue(Graphs.vertexHasPredecessors(graph, b));
     }
 
     //@formatter:off
@@ -477,7 +477,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        Assert.assertFalse(Graphs.vertexHasParents(graph, a));
+        Assert.assertFalse(Graphs.vertexHasPredecessors(graph, a));
     }
 
 }

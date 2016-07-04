@@ -439,8 +439,8 @@ public abstract class Graphs
 
     /**
      * Removes the given vertex from the given graph. If the vertex to be
-     * removed has one or more parents, the parents will be connected directly
-     * to the children of the vertex to be removed.
+     * removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
      *
      * @param graph graph to be mutated.
      * @param vertex vertex to be removed from this graph, if present.
@@ -448,7 +448,7 @@ public abstract class Graphs
      * @return true if the graph contained the specified vertex; false
      *         otherwise.
      */
-    public static <V, E> boolean removeVertexAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(
         DirectedGraph<V, E> graph,
         V vertex)
     {
@@ -457,12 +457,12 @@ public abstract class Graphs
             return false;
         }
 
-        if (vertexHasParents(graph, vertex)) {
-            List<V> parents = Graphs.predecessorListOf(graph, vertex);
-            List<V> children = Graphs.successorListOf(graph, vertex);
+        if (vertexHasPredecessors(graph, vertex)) {
+            List<V> predecessors = Graphs.predecessorListOf(graph, vertex);
+            List<V> successors = Graphs.successorListOf(graph, vertex);
 
-            for (V parent : parents) {
-                addOutgoingEdges(graph, parent, children);
+            for (V predecessor : predecessors) {
+                addOutgoingEdges(graph, predecessor, successors);
             }
         }
 
@@ -472,8 +472,8 @@ public abstract class Graphs
 
     /**
      * Filters vertices from the given graph and subequently removes them. If
-     * the vertex to be removed has one or more parents, the parents will be
-     * connected directly to the children of the vertex to be removed.
+     * the vertex to be removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
      *
      * @param graph graph to be mutated
      * @param predicate a non-interfering stateless predicate to apply to each
@@ -481,7 +481,7 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E> boolean removeVerticesAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVerticesAndPreserveConnectivity(
         DirectedGraph<V, E> graph,
         Predicate<V> predicate)
     {
@@ -494,22 +494,22 @@ public abstract class Graphs
             }
         }
 
-        return removeVerticesAndConnectParentsWithChildren(
+        return removeVertexAndPreserveConnectivity(
             graph,
             verticesToRemove);
     }
 
     /**
      * Removes all the given vertices from the given graph. If the vertex to be
-     * removed has one or more parents, the parents will be connected directly
-     * to the children of the vertex to be removed.
+     * removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
      *
      * @param graph to be mutated.
      * @param vertices vertices to be removed from this graph, if present.
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E> boolean removeVerticesAndConnectParentsWithChildren(
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(
         DirectedGraph<V, E> graph,
         Iterable<V> vertices)
     {
@@ -517,7 +517,7 @@ public abstract class Graphs
         boolean atLeastOneVertexHasBeenRemoved = false;
 
         for (V vertex : vertices) {
-            if (removeVertexAndConnectParentsWithChildren(graph, vertex)) {
+            if (removeVertexAndPreserveConnectivity(graph, vertex)) {
                 atLeastOneVertexHasBeenRemoved = true;
             }
         }
@@ -575,14 +575,14 @@ public abstract class Graphs
         }
     }
 
-    public static <V, E> boolean vertexHasChildren(
+    public static <V, E> boolean vertexHasSuccessors(
         DirectedGraph<V, E> graph,
         V vertex)
     {
         return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
 
-    public static <V, E> boolean vertexHasParents(
+    public static <V, E> boolean vertexHasPredecessors(
         DirectedGraph<V, E> graph,
         V vertex)
     {
