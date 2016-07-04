@@ -511,7 +511,7 @@ public abstract class Graphs
      */
     public static <V, E> boolean removeVerticesAndConnectParentsWithChildren(
         DirectedGraph<V, E> graph,
-        List<V> vertices)
+        Iterable<V> vertices)
     {
 
         boolean atLeastOneVertexHasBeenRemoved = false;
@@ -537,7 +537,7 @@ public abstract class Graphs
     public static <V, E> void addOutgoingEdges(
         DirectedGraph<V, E> graph,
         V source,
-        List<V> targets)
+        Iterable<V> targets)
     {
         if (!graph.containsVertex(source)) {
             graph.addVertex(source);
@@ -562,7 +562,7 @@ public abstract class Graphs
     public static <V, E> void addIncomingEdges(
         DirectedGraph<V, E> graph,
         V target,
-        List<V> sources)
+        Iterable<V> sources)
     {
         if (!graph.containsVertex(target)) {
             graph.addVertex(target);
