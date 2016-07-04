@@ -588,7 +588,7 @@ public class DirectedAcyclicGraphTest
         expectedAncestors.add("B");
         expectedAncestors.add("A");
 
-        Set<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "C");
+        Set<String> ancestors = graph.getAncestors(graph, "C");
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -630,7 +630,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> expectedAncestors = new HashSet<>();
 
-        Set<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "A");
+        Set<String> ancestors = graph.getAncestors(graph, "A");
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -672,7 +672,7 @@ public class DirectedAcyclicGraphTest
         expectedAncestors.add("B");
         expectedAncestors.add("A");
 
-        Set<String> ancestors = DirectedAcyclicGraph.getAncestors(graph, "C");
+        Set<String> ancestors = graph.getAncestors(graph, "C");
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }
@@ -717,7 +717,7 @@ public class DirectedAcyclicGraphTest
         expectedDescendents.add("C");
         expectedDescendents.add("D");
 
-        Set<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "B");
+        Set<String> ancestors = graph.getDescendants(graph, "B");
 
         Assert.assertEquals(expectedDescendents, ancestors);
     }
@@ -760,7 +760,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> expectedDescendents = new HashSet<>();
 
-        Set<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "C");
+        Set<String> ancestors = graph.getDescendants(graph, "C");
 
         Assert.assertEquals(expectedDescendents, ancestors);
     }
@@ -802,7 +802,7 @@ public class DirectedAcyclicGraphTest
         expectedAncestors.add("B");
         expectedAncestors.add("C");
 
-        Set<String> ancestors = DirectedAcyclicGraph.getDescendants(graph, "A");
+        Set<String> ancestors = graph.getDescendants(graph, "A");
 
         Assert.assertEquals(expectedAncestors, ancestors);
     }

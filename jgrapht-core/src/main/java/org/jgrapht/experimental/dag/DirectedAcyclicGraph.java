@@ -540,7 +540,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link Set} of ancestors of the vertex in the given graph.
      */
-    public static <V, E> Set<V> getAncestors(
+    public Set<V> getAncestors(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
@@ -567,7 +567,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return {@link Set} of descendants of the vertex in the given graph.
      */
-    public static <V, E> Set<V> getDescendants(
+    public Set<V> getDescendants(
         DirectedAcyclicGraph<V, E> graph,
         V vertex)
     {
