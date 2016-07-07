@@ -22,11 +22,12 @@
 /* ----------------
  * Graphs.java
  * ----------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
  *
  * Original Author:  Barak Naveh
  * Contributor(s):   Christian Hammer
  *                   Mikael Hansen
+ *                   Christoph Zauner
  *
  * $Id$
  *
@@ -42,6 +43,7 @@
 package org.jgrapht;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import org.jgrapht.graph.*;
 
@@ -432,6 +434,159 @@ public abstract class Graphs
             list.add(v);
         }
         return list;
+    }
+
+
+    /**
+     * Removes the given vertex from the given graph. If the vertex to be
+     * removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
+     *
+     * @param graph graph to be mutated.
+     * @param vertex vertex to be removed from this graph, if present.
+     *
+     * @return true if the graph contained the specified vertex; false
+     *         otherwise.
+     */
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+
+        if (!graph.containsVertex(vertex)) {
+            return false;
+        }
+
+        if (vertexHasPredecessors(graph, vertex)) {
+            List<V> predecessors = Graphs.predecessorListOf(graph, vertex);
+            List<V> successors = Graphs.successorListOf(graph, vertex);
+
+            for (V predecessor : predecessors) {
+                addOutgoingEdges(graph, predecessor, successors);
+            }
+        }
+
+        graph.removeVertex(vertex);
+        return true;
+    }
+
+    /**
+     * Filters vertices from the given graph and subequently removes them. If
+     * the vertex to be removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
+     *
+     * @param graph graph to be mutated
+     * @param predicate a non-interfering stateless predicate to apply to each
+     *        vertex to determine if it should be removed from the graph.
+     *
+     * @return true if at least one vertex has been removed; false otherwise.
+     */
+    public static <V, E> boolean removeVerticesAndPreserveConnectivity(
+        DirectedGraph<V, E> graph,
+        Predicate<V> predicate)
+    {
+
+        List<V> verticesToRemove = new ArrayList<>();
+
+        for (V node : graph.vertexSet()) {
+            if (predicate.test(node)) {
+                verticesToRemove.add(node);
+            }
+        }
+
+        return removeVertexAndPreserveConnectivity(
+            graph,
+            verticesToRemove);
+    }
+
+    /**
+     * Removes all the given vertices from the given graph. If the vertex to be
+     * removed has one or more predecessors, the predecessors will be
+     * connected directly to the successors of the vertex to be removed.
+     *
+     * @param graph to be mutated.
+     * @param vertices vertices to be removed from this graph, if present.
+     *
+     * @return true if at least one vertex has been removed; false otherwise.
+     */
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(
+        DirectedGraph<V, E> graph,
+        Iterable<V> vertices)
+    {
+
+        boolean atLeastOneVertexHasBeenRemoved = false;
+
+        for (V vertex : vertices) {
+            if (removeVertexAndPreserveConnectivity(graph, vertex)) {
+                atLeastOneVertexHasBeenRemoved = true;
+            }
+        }
+
+        return atLeastOneVertexHasBeenRemoved;
+    }
+
+    /**
+     * Add edges from one source vertex to multiple target vertices. Whether
+     * duplicates are created depends on the underlying {@link DirectedGraph}
+     * implementation.
+     *
+     * @param graph graph to be mutated
+     * @param source source vertex of the new edges
+     * @param targets target vertices for the new edges
+     */
+    public static <V, E> void addOutgoingEdges(
+        DirectedGraph<V, E> graph,
+        V source,
+        Iterable<V> targets)
+    {
+        if (!graph.containsVertex(source)) {
+            graph.addVertex(source);
+        }
+        for (V target : targets) {
+            if (!graph.containsVertex(target)) {
+                graph.addVertex(target);
+            }
+            graph.addEdge(source, target);
+        }
+    }
+
+    /**
+     * Add edges from multiple source vertices to one target vertex. Whether
+     * duplicates are created depends on the underlying {@link DirectedGraph}
+     * implementation.
+     *
+     * @param graph graph to be mutated
+     * @param target target vertex for the new edges
+     * @param sources source vertices for the new edges
+     */
+    public static <V, E> void addIncomingEdges(
+        DirectedGraph<V, E> graph,
+        V target,
+        Iterable<V> sources)
+    {
+        if (!graph.containsVertex(target)) {
+            graph.addVertex(target);
+        }
+        for (V source : sources) {
+            if (!graph.containsVertex(source)) {
+                graph.addVertex(source);
+            }
+            graph.addEdge(source, target);
+        }
+    }
+
+    public static <V, E> boolean vertexHasSuccessors(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+        return !graph.outgoingEdgesOf(vertex).isEmpty();
+    }
+
+    public static <V, E> boolean vertexHasPredecessors(
+        DirectedGraph<V, E> graph,
+        V vertex)
+    {
+        return !graph.incomingEdgesOf(vertex).isEmpty();
     }
 }
 

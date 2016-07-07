@@ -547,6 +547,266 @@ public class DirectedAcyclicGraphTest
         fail("No exception 'IllegalArgumentException' catched");
     }
 
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Expected output when determining ancestors of C
+     * (order does not matter):
+     *
+     * B, A
+     */
+    //@formatter:on
+    public void testDetermineAncestors00()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Set<String> expectedAncestors = new HashSet<>();
+        expectedAncestors.add("B");
+        expectedAncestors.add("A");
+
+        Set<String> ancestors = graph.getAncestors(graph, "C");
+
+        Assert.assertEquals(expectedAncestors, ancestors);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Expected output when determining ancestors of A:
+     *
+     * <empty list>
+     */
+    //@formatter:on
+    public void testDetermineAncestors01()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Set<String> expectedAncestors = new HashSet<>();
+
+        Set<String> ancestors = graph.getAncestors(graph, "A");
+
+        Assert.assertEquals(expectedAncestors, ancestors);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     * A +--> B +--> C
+     * |             ^
+     * |             |
+     * +-------------+
+     *
+     * Expected output when determining ancestors of A
+     * (order does not matter):
+     *
+     * B, A
+     */
+    //@formatter:on
+    public void testDetermineAncestors02()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(a, c);
+
+        Set<String> expectedAncestors = new HashSet<>();
+        expectedAncestors.add("B");
+        expectedAncestors.add("A");
+
+        Set<String> ancestors = graph.getAncestors(graph, "C");
+
+        Assert.assertEquals(expectedAncestors, ancestors);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Expected output when determining descendents of B
+     * (order does not matter):
+     *
+     * C, D
+     */
+    //@formatter:on
+    public void testDetermineDescendants00()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+        Set<String> expectedDescendents = new HashSet<>();
+        expectedDescendents.add("C");
+        expectedDescendents.add("D");
+
+        Set<String> ancestors = graph.getDescendants(graph, "B");
+
+        Assert.assertEquals(expectedDescendents, ancestors);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     *             +--> C
+     *             |
+     * A +--> B +--+
+     *             |
+     *             +--> D
+     *
+     * Expected output when determining descendents of C:
+     *
+     * <empty list>
+     */
+    //@formatter:on
+    public void testDetermineDescendants01()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        String d = "D";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+        graph.addVertex(d);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(b, d);
+
+
+        Set<String> expectedDescendents = new HashSet<>();
+
+        Set<String> ancestors = graph.getDescendants(graph, "C");
+
+        Assert.assertEquals(expectedDescendents, ancestors);
+    }
+
+    //@formatter:off
+    /**
+     * Input:
+     *
+     * A +--> B +--> C
+     * |             ^
+     * |             |
+     * +-------------+
+     *
+     * Expected output when determining ancestors of A
+     * (order does not matter):
+     *
+     * B, C
+     */
+    //@formatter:on
+    public void testDetermineDescendants02()
+    {
+
+        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
+            TestEdge.class);
+
+        String a = "A";
+        String b = "B";
+        String c = "C";
+
+        graph.addVertex(a);
+        graph.addVertex(b);
+        graph.addVertex(c);
+
+        graph.addEdge(a, b);
+        graph.addEdge(b, c);
+        graph.addEdge(a, c);
+
+        Set<String> expectedAncestors = new HashSet<>();
+        expectedAncestors.add("B");
+        expectedAncestors.add("C");
+
+        Set<String> ancestors = graph.getDescendants(graph, "A");
+
+        Assert.assertEquals(expectedAncestors, ancestors);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     private static class LongVertexFactory

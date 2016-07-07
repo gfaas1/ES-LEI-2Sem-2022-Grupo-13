@@ -22,10 +22,11 @@
 /* -------------------
  * DirectedAcyclicGraph.java
  * -------------------
- * (C) Copyright 2008-2008, by Peter Giles and Contributors.
+ * (C) Copyright 2008-2016, by Peter Giles and Contributors.
  *
  * Original Author:  Peter Giles
  * Contributor(s):   John V. Sichi
+ *                   Christoph Zauner
  *
  * $Id$
  *
@@ -43,6 +44,8 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.traverse.AbstractGraphIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 
 /**
@@ -529,6 +532,59 @@ public class DirectedAcyclicGraph<V, E>
             V vertex = bigL[lIndex++]; // note the post-increment
             topoOrderMap.putVertex(topoIndex, vertex);
         }
+    }
+
+    /**
+     * @param graph graph to look for ancestors in.
+     * @param vertex the vertex to get the ancestors of.
+     *
+     * @return {@link Set} of ancestors of the vertex in the given graph.
+     */
+    public Set<V> getAncestors(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex)
+    {
+
+        EdgeReversedGraph<V, E> reversedGraph = new EdgeReversedGraph<>(graph);
+        AbstractGraphIterator<V, E> iterator = new DepthFirstIterator<>(reversedGraph, vertex);
+        Set<V> ancestors = new HashSet<>();
+
+        // Do not add start vertex to result.
+        if (iterator.hasNext()) {
+            iterator.next();
+        }
+
+        while (iterator.hasNext()) {
+            ancestors.add(iterator.next());
+        }
+
+        return ancestors;
+    }
+
+    /**
+     * @param graph graph to look for descendants in.
+     * @param vertex the vertex to get the descendants of.
+     *
+     * @return {@link Set} of descendants of the vertex in the given graph.
+     */
+    public Set<V> getDescendants(
+        DirectedAcyclicGraph<V, E> graph,
+        V vertex)
+    {
+
+        AbstractGraphIterator<V, E> iterator = new DepthFirstIterator<>(graph, vertex);
+        Set<V> descendants = new HashSet<>();
+
+        // Do not add start vertex to result.
+        if (iterator.hasNext()) {
+            iterator.next();
+        }
+
+        while (iterator.hasNext()) {
+            descendants.add(iterator.next());
+        }
+
+        return descendants;
     }
 
     /**
