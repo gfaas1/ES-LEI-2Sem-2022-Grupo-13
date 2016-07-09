@@ -25,7 +25,7 @@
  * (C) Copyright 2008-2008, by John V. Sichi and Contributors.
  *
  * Original Author:  John V. Sichi
- * Contributor(s):   -
+ * Contributor(s):   Joris Kinable
  *
  * $Id$
  *
@@ -85,7 +85,36 @@ public interface GraphPath<V, E>
      *
      * @return list of edges traversed by the path
      */
-    List<E> getEdgeList();
+    default List<E> getEdgeList(){
+        Graph<V, E> g = this.getGraph();
+        List<E> edgeList = new ArrayList<>();
+        List<V> vertexList = this.getVertexList();
+        Iterator<V> vertexIterator=vertexList.iterator();
+        V u=vertexIterator.next();
+        while (vertexIterator.hasNext()){
+            V v=vertexIterator.next();
+            edgeList.add(g.getEdge(u,v));
+            u=v;
+        }
+        return edgeList;
+    }
+
+    /**
+     * Returns the path as a sequence of vertices.
+     *
+     * @return path, denoted by a list of vertices
+     */
+    default List<V> getVertexList(){
+        Graph<V, E> g = this.getGraph();
+        List<V> list = new ArrayList<>();
+        V v = this.getStartVertex();
+        list.add(v);
+        for (E e : this.getEdgeList()) {
+            v = Graphs.getOppositeVertex(g, e, v);
+            list.add(v);
+        }
+        return list;
+    }
 
     /**
      * Returns the weight assigned to the path. Typically, this will be the sum
@@ -95,6 +124,7 @@ public interface GraphPath<V, E>
      * @return the weight of the path
      */
     double getWeight();
+
 }
 
 // End GraphPath.java
