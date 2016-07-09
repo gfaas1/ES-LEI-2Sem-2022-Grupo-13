@@ -92,6 +92,9 @@ public class GraphPathImpl<V, E>
             List<E> edgeList,
             double weight)
     {
+        if(vertexList == null && edgeList == null)
+            throw new IllegalArgumentException("Vertex list and edge list cannot both be null!");
+        
         this.graph = graph;
         this.startVertex = startVertex;
         this.endVertex = endVertex;
