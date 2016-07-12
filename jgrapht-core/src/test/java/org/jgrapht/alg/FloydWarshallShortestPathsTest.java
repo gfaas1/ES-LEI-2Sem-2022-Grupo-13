@@ -116,7 +116,7 @@ public class FloydWarshallShortestPathsTest
                     if(path != null) {
                         this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
                         List<Integer> vertexPath=Graphs.getPathVertexList(path);
-                        assertEquals(fw.getNextHop(v1, v2), vertexPath.get(1));
+                        assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
                         assertEquals(fw.getLastHop(v1, v2), vertexPath.get(vertexPath.size()-2));
                     }
 
@@ -196,7 +196,7 @@ public class FloydWarshallShortestPathsTest
                 new FloydWarshallShortestPaths<>(graph);
         double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
-        assertNull(fw.getNextHop(a, b));
+        assertNull(fw.getFirstHop(a, b));
         assertNull(fw.getLastHop(a, b));
     }
 
@@ -219,7 +219,7 @@ public class FloydWarshallShortestPathsTest
         assertEquals(weighted, path.getGraph());
         assertNull(fw.getShortestPath("b", "a"));
         List<String> vertexPath=Graphs.getPathVertexList(path);
-        assertEquals(fw.getNextHop("a", "b"), vertexPath.get(1));
+        assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));
         assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size()-2));
     }
 }

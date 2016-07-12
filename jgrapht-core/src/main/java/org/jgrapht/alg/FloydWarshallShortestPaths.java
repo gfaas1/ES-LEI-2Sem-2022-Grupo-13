@@ -289,15 +289,15 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the next hop, i.e., the second node on the shortest path from a to b. Lookup time is O(1).
+     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is O(1).
      * If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next invocation would
-     * query the next hop on the shortest path from c to b, vertex d would be returned, etc. This method is computationally
+     * query the first hop on the shortest path from c to b, vertex d would be returned, etc. This method is computationally
      * cheaper than getShortestPathAsVertexList(a,b).get(0);
      * @param a source vertex
      * @param b target vertex
      * @return next hop on the shortest path from a to b, or null when there exists no path from a to b.
      */
-    public V getNextHop(V a, V b){
+    public V getFirstHop(V a, V b){
         lazyCalculatePaths();
 
         int v_a = vertexIndices.get(a);
