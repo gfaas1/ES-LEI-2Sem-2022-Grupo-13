@@ -49,6 +49,20 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 	private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
 	private boolean sinkReached;
 	private double maxSteps;
+	
+	/**
+     * Creates a new iterator for the specified graph. Iteration will start at
+     * arbitrary vertex.
+     * Walk is un-weighted and bounded by {@code Double#POSITIVE_INFINITY} steps.
+     *
+     * @param graph the graph to be iterated.
+     *
+     * @throws IllegalArgumentException if <code>graph==null</code> or does not
+     * contain <code>startVertex</code>
+     */
+	public RandomWalkIterator(Graph<V, E> graph) {
+		this(graph, null);
+	}
 
 	/**
      * Creates a new iterator for the specified graph. Iteration will start at
@@ -59,7 +73,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * @param graph the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not
+     * @throws IllegalArgumentException if <code>graph==null</code> or does not
      * contain <code>startVertex</code>
      */
 	public RandomWalkIterator(Graph<V, E> graph, V startVertex) {
@@ -76,7 +90,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * @param startVertex the vertex iteration to be started.
      * @param isWeighted set to <code>true</code> if a weighted walk is desired.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not
+     * @throws IllegalArgumentException if <code>graph==null</code> or does not
      * contain <code>startVertex</code>
      */
 	public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted) {
@@ -94,7 +108,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * @param isWeighted set to <code>true</code> if a weighted walk is desired.
      * @param maxSteps number of steps before walk is exhausted.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not
+     * @throws IllegalArgumentException if <code>graph==null</code> or does not
      * contain <code>startVertex</code>
      */
 	public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted, double maxSteps) {		
