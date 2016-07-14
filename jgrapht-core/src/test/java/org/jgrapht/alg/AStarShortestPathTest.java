@@ -136,7 +136,7 @@ public class AStarShortestPathTest extends TestCase{
         assertNotNull(path);
         assertEquals((int)path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
-        assertEquals(Graphs.getPathVertexList(path).size(), 48);
+        assertEquals(path.getLength()+1, 48);
 
         path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new EuclideanDistance());
         assertNotNull(path);

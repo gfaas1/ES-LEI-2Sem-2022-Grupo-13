@@ -347,7 +347,7 @@ public class AllDirectedPaths<V, E>
         V source = graph.getEdgeSource(edges.get(0));
         V target = graph.getEdgeTarget(edges.get(edges.size() - 1));
         double weight = edges.size();
-        return new GraphPathImpl<>(graph, source, target, edges, weight);
+        return new GraphWalk<>(graph, source, target, edges, weight);
     }
 }
 

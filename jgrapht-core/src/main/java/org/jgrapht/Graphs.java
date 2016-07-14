@@ -422,6 +422,7 @@ public abstract class Graphs
      * @param path path of interest
      *
      * @return corresponding vertex list
+     * @deprecated This functionality is now directly provided by any GraphPath, see {@link GraphPath#getVertexList()}
      */
     public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
     {

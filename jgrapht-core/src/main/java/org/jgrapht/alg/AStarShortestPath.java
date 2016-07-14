@@ -226,38 +226,19 @@ public class AStarShortestPath<V, E>
         V targetVertex,
         double pathLength)
     {
-        List<E> edgeList = this.buildPath(targetVertex);
-        return new GraphPathImpl<>(
-                graph,
-                startVertex,
-                targetVertex,
-                edgeList,
-                pathLength);
-    }
+        List<E> edgeList=new ArrayList<>();
+        List<V> vertexList=new ArrayList<>();
+        vertexList.add(targetVertex);
 
-    /**
-     * Recursive method which traces the path from the targetVertex to the
-     * startVertex. The method traces back the path over the edges, so the
-     * method is safe to use for multi-graphs.
-     *
-     * @param currentNode node
-     *
-     * @return List of edges/arcs that constitutes the path
-     */
-    private List<E> buildPath(V currentNode)
-    {
-        if (cameFrom.containsKey(currentNode)) {
-            List<E> path =
-                buildPath(
-                    Graphs.getOppositeVertex(
-                        graph,
-                        cameFrom.get(currentNode),
-                        currentNode));
-            path.add(cameFrom.get(currentNode));
-            return path;
-        } else {
-            return new ArrayList<>();
+        V v=targetVertex;
+        while (v != startVertex){
+            edgeList.add(cameFrom.get(v));
+            v = Graphs.getOppositeVertex(graph,cameFrom.get(v),v);
+            vertexList.add(v);
         }
+        Collections.reverse(edgeList);
+        Collections.reverse(vertexList);
+        return new GraphWalk<>(graph, startVertex, targetVertex, vertexList, edgeList, pathLength);
     }
 
     /**
