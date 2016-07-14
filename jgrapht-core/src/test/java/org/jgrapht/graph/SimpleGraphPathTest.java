@@ -40,6 +40,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
+/**
+ * @deprecated The class SimpleGraphPath will be removed from jgrapht
+ */
 public class SimpleGraphPathTest
     extends EnhancedTestCase
 {

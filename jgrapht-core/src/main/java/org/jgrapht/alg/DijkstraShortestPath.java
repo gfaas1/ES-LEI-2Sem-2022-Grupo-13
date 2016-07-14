@@ -180,6 +180,8 @@ public final class DijkstraShortestPath<V, E>
         V endVertex)
     {
         List<E> edgeList = new ArrayList<>();
+        List<V> vertexList=new ArrayList<>();
+        vertexList.add(endVertex);
 
         V v = endVertex;
 
@@ -192,15 +194,18 @@ public final class DijkstraShortestPath<V, E>
 
             edgeList.add(edge);
             v = Graphs.getOppositeVertex(graph, edge, v);
+            vertexList.add(v);
         }
 
         Collections.reverse(edgeList);
+        Collections.reverse(vertexList);
         double pathLength = iter.getShortestPathLength(endVertex);
         path =
-                new GraphPathImpl<>(
+                new GraphWalk<>(
                         graph,
                         startVertex,
                         endVertex,
+                        vertexList,
                         edgeList,
                         pathLength);
     }

@@ -125,16 +125,22 @@ public class FloydWarshallShortestPathsTest
     private <V,E> void verifyPath(Graph<V,E> graph, GraphPath<V,E> path, double pathCost){
         assertEquals(pathCost, path.getWeight(), .00000001);
         double verifiedEdgeCost=0;
+        List<V> vertexList=new ArrayList<>();
+        vertexList.add(path.getStartVertex());
+
+        V v=path.getStartVertex();
         for (E e : path.getEdgeList()) {
             assertNotNull(e);
             verifiedEdgeCost+=graph.getEdgeWeight(e);
+            try {
+                v = Graphs.getOppositeVertex(graph, e, v);
+            }catch (IllegalArgumentException ex){
+                fail("Invalid path encountered: the sequence of edges does not present a valid path through the graph");
+            }
         }
         assertEquals(pathCost, verifiedEdgeCost, .00000001);
-        try{
-            Graphs.getPathVertexList(path);
-        }catch (IllegalArgumentException e){
-            fail("Invalid path encountered: the sequence of edges does not present a valid path through the graph");
-        }
+        assertEquals(path.getStartVertex(), path.getVertexList().get(0));
+        assertEquals(path.getEndVertex(), path.getVertexList().get(path.getLength()));
     }
 
     private static UndirectedGraph<String, DefaultEdge> createStringGraph()

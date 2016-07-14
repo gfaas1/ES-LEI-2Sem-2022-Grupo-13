@@ -32,6 +32,7 @@
  * Changes
  * -------
  * 03-Jul-2009 : Initial revision (JVS);
+ * 14-Jul-2016 : Redefined class to a more generic version of a walk, expressed in terms of its edges or vertices (JK)
  *
  */
 package org.jgrapht.graph;
@@ -60,16 +61,16 @@ import org.jgrapht.*;
  */
 public class GraphWalk<V, E> implements GraphPath<V, E>
 {
-    private Graph<V, E> graph;
+    protected Graph<V, E> graph;
 
-    private List<V> vertexList;
-    private List<E> edgeList;
+    protected List<V> vertexList;
+    protected List<E> edgeList;
 
-    private V startVertex;
+    protected V startVertex;
 
-    private V endVertex;
+    protected V endVertex;
 
-    private double weight;
+    protected double weight;
 
     /**
      * Creates a walk defined by a sequence of edges. A walk defined by its edges can be specified for non-simple graphs.
@@ -181,10 +182,10 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
     // implement GraphPath
     @Override public int getLength()
     {
-        if(vertexList!=null)
-            return vertexList.size();
-        else if(edgeList != null && !edgeList.isEmpty())
-            return edgeList.size()+1;
+        if(edgeList!=null)
+            return edgeList.size();
+        else if(vertexList != null && vertexList.isEmpty())
+            return vertexList.size()-1;
         else
             return 0;
     }

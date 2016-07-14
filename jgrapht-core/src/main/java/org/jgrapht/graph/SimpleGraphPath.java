@@ -45,7 +45,7 @@ import org.jgrapht.*;
  * A vertex-based representation of a simple path. The graph must be simple for
  * the vertices to uniquely determine a path. See {@link SimpleGraph}
  *
- * @deprecated This class is ambiguous. Unlike the name or the description  suggests,
+ * @deprecated This class is ambiguous. Unlike the name or the description suggests,
  * this class does NOT implement a Simple Path (a path in a graph without vertex repetition).
  * Instead it implements a walk in a SimpleGraph. This functionality is now implemented by the class
  * {@link GraphWalk}.

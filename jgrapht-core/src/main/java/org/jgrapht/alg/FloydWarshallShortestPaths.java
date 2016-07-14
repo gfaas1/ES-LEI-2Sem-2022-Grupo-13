@@ -225,14 +225,17 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         //Reconstruct the path
+        List<V> pathVertexList = new ArrayList<>();
+        pathVertexList.add(a);
         List<E> edges = new ArrayList<>();
         int u = v_a;
         while (u != v_b) {
             int v = backtrace[u][v_b];
             edges.add(graph.getEdge(vertices.get(u), vertices.get(v)));
+            pathVertexList.add(vertices.get(v));
             u = v;
         }
-        return new GraphPathImpl<>(graph, a, b, edges, d[v_a][v_b]);
+        return new GraphWalk<>(graph, a, b, pathVertexList, edges, d[v_a][v_b]);
     }
 
     public List<V> getShortestPathAsVertexList(V a, V b)

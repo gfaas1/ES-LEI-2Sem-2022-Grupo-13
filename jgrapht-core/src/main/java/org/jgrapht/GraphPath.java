@@ -77,8 +77,8 @@ public interface GraphPath<V, E>
      * incident to the start vertex. The last edge is incident to the end
      * vertex. The vertices along the path can be obtained by traversing from
      * the start vertex, finding its opposite across the first edge, and then
-     * doing the same successively across subsequent edges; {@link
-     * Graphs#getPathVertexList} provides a convenience method for this.
+     * doing the same successively across subsequent edges; {@see
+     * GraphPath#getVertexList}.
      *
      * <p>Whether or not the returned edge list is modifiable depends on the
      * path implementation.
@@ -126,11 +126,11 @@ public interface GraphPath<V, E>
     double getWeight();
 
     /**
-     * Returns the length of the path, measured in the number of vertices.
-     * @return the length of the path, measured in the number of vertices
+     * Returns the length of the path, measured in the number of edges.
+     * @return the length of the path, measured in the number of edges
      */
     default int getLength(){
-        return getVertexList().size();
+        return getEdgeList().size();
     }
 
 }

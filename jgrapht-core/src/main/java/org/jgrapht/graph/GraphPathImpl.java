@@ -46,7 +46,7 @@ import org.jgrapht.*;
  * @author John Sichi
  * @version $Id$
  *
- * @deprecated use {@link #GraphWalk} instead
+ * @deprecated use {@link GraphWalk} instead
  */
 
 public class GraphPathImpl<V, E>
