@@ -125,6 +125,14 @@ public interface GraphPath<V, E>
      */
     double getWeight();
 
+    /**
+     * Returns the length of the path, measured in the number of vertices.
+     * @return the length of the path, measured in the number of vertices
+     */
+    default int getLength(){
+        return getVertexList().size();
+    }
+
 }
 
 // End GraphPath.java

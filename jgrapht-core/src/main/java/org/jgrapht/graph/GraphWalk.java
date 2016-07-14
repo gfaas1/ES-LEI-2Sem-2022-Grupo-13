@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* ----------------
- * GraphPathImpl.java
+ * GraphWalk.java
  * ----------------
  * (C) Copyright 2009-2009, by John V. Sichi and Contributors.
  *
@@ -42,7 +42,18 @@ import org.jgrapht.*;
 
 
 /**
- * GraphPathImpl is a default implementation of {@link GraphPath}.
+ * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a vertex, in which each edge
+ * is adjacent in the sequence to its two endpoints. More precisely, a walk is a connected sequence of vertices and edges
+ * in a graph <code>v0, e0, v1, e1, v2,....vk-1, ek-1, vk</code>, such that for <code>1<=i<=k</code>, the edge <code>e_i</code>
+ * has endpoints <code>v_(i-1)</code> and <code>v_i</code>. The class makes no assumptions with respect to the shape of the walk:
+ * edges may be repeated, and the start and end point of the walk may be different.
+ * @see <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
+ *
+ * GraphWalk is the default implementation of {@link GraphPath}.
+ *
+ * This class is implemented as a light-weight data structure; this class does not verify whether the sequence of edges
+ * or the sequence of vertices provided during construction forms an actual walk. It is the responsibility of the invoking
+ * class to provide correct input data.
  *
  * @author John Sichi
  * @version $Id$
@@ -60,6 +71,16 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
 
     private double weight;
 
+    /**
+     * Creates a walk defined by a sequence of edges. A walk defined by its edges can be specified for non-simple graphs.
+     * Edge repetition is permitted, the start and end point points (v0 and vk) can be different.
+     *
+     * @param graph
+     * @param startVertex
+     * @param endVertex
+     * @param edgeList
+     * @param weight
+     */
     public GraphWalk(
             Graph<V, E> graph,
             V startVertex,
@@ -70,6 +91,13 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
         this(graph, startVertex, endVertex, null, edgeList, weight);
     }
 
+    /**
+     * Creates a walk defined by a sequence of vertices. Note that the input graph must be simple, otherwise
+     * the vertex sequence does not necessarily define a unique path. Furthermore, all vertices must be pairwise adjacent.
+     * @param graph
+     * @param vertexList
+     * @param weight
+     */
     public GraphWalk(
             Graph<V, E> graph,
             List<V> vertexList,
@@ -83,6 +111,18 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
                 weight);
     }
 
+    /**
+     * Creates a walk defined by both a sequence of edges and a sequence of vertices. Note that both the sequence of edges
+     * and the sequence of vertices must describe the same path! This is not verified during the construction of the walk.
+     * This constructor makes it possible to store both a vertex and an edge view of the same walk, thereby saving computational
+     * overhead when switching from one to the other.
+     * @param graph
+     * @param startVertex
+     * @param endVertex
+     * @param vertexList
+     * @param edgeList
+     * @param weight
+     */
     public GraphWalk(
             Graph<V, E> graph,
             V startVertex,
@@ -138,10 +178,24 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
         return weight;
     }
 
+    // implement GraphPath
+    @Override public int getLength()
+    {
+        if(vertexList!=null)
+            return vertexList.size();
+        else if(edgeList != null && !edgeList.isEmpty())
+            return edgeList.size()+1;
+        else
+            return 0;
+    }
+
     // override Object
     @Override public String toString()
     {
-        return edgeList.toString();
+        if(vertexList!=null)
+            return vertexList.toString();
+        else
+            return edgeList.toString();
     }
 }
 
