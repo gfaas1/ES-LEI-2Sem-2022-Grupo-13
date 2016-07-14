@@ -41,9 +41,9 @@ import java.util.*;
 
 /**
  * A GraphPath represents a <a href="http://mathworld.wolfram.com/Path.html">
- * path</a> in a {@link Graph}. Note that a path is defined primarily in terms
- * of edges (rather than vertices) so that multiple edges between the same pair
- * of vertices can be discriminated.
+ * path</a> in a {@link Graph}. Unlike some definitions, the path is not required
+ * to be a <a href="https://en.wikipedia.org/wiki/Simple_path>Simple Path</a>.
+ *
  *
  * @author John Sichi
  * @since Jan 1, 2008
