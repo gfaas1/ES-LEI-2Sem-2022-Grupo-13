@@ -86,9 +86,12 @@ public interface GraphPath<V, E>
      * @return list of edges traversed by the path
      */
     default List<E> getEdgeList(){
+        List<V> vertexList=this.getVertexList();
+        if(vertexList.size() < 2)
+            return Collections.emptyList();
+
         Graph<V, E> g = this.getGraph();
         List<E> edgeList = new ArrayList<>();
-        List<V> vertexList = this.getVertexList();
         Iterator<V> vertexIterator=vertexList.iterator();
         V u=vertexIterator.next();
         while (vertexIterator.hasNext()){
@@ -105,11 +108,16 @@ public interface GraphPath<V, E>
      * @return path, denoted by a list of vertices
      */
     default List<V> getVertexList(){
+        List<E> edgeList=this.getEdgeList();
+
+        if(edgeList.isEmpty())
+            return Collections.emptyList();
+
         Graph<V, E> g = this.getGraph();
         List<V> list = new ArrayList<>();
         V v = this.getStartVertex();
         list.add(v);
-        for (E e : this.getEdgeList()) {
+        for (E e : edgeList) {
             v = Graphs.getOppositeVertex(g, e, v);
             list.add(v);
         }

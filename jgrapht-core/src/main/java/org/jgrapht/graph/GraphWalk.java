@@ -184,7 +184,7 @@ public class GraphWalk<V, E> implements GraphPath<V, E>
     {
         if(edgeList!=null)
             return edgeList.size();
-        else if(vertexList != null && vertexList.isEmpty())
+        else if(vertexList != null && !vertexList.isEmpty())
             return vertexList.size()-1;
         else
             return 0;
