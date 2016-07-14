@@ -12,6 +12,7 @@ Changes to JGraphT in each version:
 	- Implement various graph utility methods (contributed by Christoph Zauner)
 	- Add getNextHop and getLastHop to `FloydWarshallShortestPaths` (contributed by Joris Kinable)
 	- Allow paths to be expressed in terms of vertices instead of edges; deprecate `GraphPathImpl` in favor of new `GraphWalk` (contributed by Joris Kinable)
+        - Weighted graph support in `GmlExporter` (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
