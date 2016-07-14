@@ -25,6 +25,7 @@
  * (C) Copyright 2009-2009, by John V. Sichi and Contributors.
  *
  * Original Author:  John V. Sichi
+ * Contributor(s):   Joris Kinable
  *
  * $Id$
  *
@@ -45,15 +46,12 @@ import org.jgrapht.*;
  *
  * @author John Sichi
  * @version $Id$
- *
- * @deprecated use {@link #GraphWalk} instead
  */
-
-public class GraphPathImpl<V, E>
-    implements GraphPath<V, E>
+public class GraphWalk<V, E> implements GraphPath<V, E>
 {
     private Graph<V, E> graph;
 
+    private List<V> vertexList;
     private List<E> edgeList;
 
     private V startVertex;
@@ -62,16 +60,44 @@ public class GraphPathImpl<V, E>
 
     private double weight;
 
-    public GraphPathImpl(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        List<E> edgeList,
-        double weight)
+    public GraphWalk(
+            Graph<V, E> graph,
+            V startVertex,
+            V endVertex,
+            List<E> edgeList,
+            double weight)
     {
+        this(graph, startVertex, endVertex, null, edgeList, weight);
+    }
+
+    public GraphWalk(
+            Graph<V, E> graph,
+            List<V> vertexList,
+            double weight)
+    {
+        this(graph,
+                (vertexList.isEmpty() ? null : vertexList.get(0)),
+                (vertexList.isEmpty() ? null : vertexList.get(vertexList.size()-1)),
+                vertexList,
+                null,
+                weight);
+    }
+
+    public GraphWalk(
+            Graph<V, E> graph,
+            V startVertex,
+            V endVertex,
+            List<V> vertexList,
+            List<E> edgeList,
+            double weight)
+    {
+        if(vertexList == null && edgeList == null)
+            throw new IllegalArgumentException("Vertex list and edge list cannot both be null!");
+
         this.graph = graph;
         this.startVertex = startVertex;
         this.endVertex = endVertex;
+        this.vertexList=vertexList;
         this.edgeList = edgeList;
         this.weight = weight;
     }
@@ -97,7 +123,13 @@ public class GraphPathImpl<V, E>
     // implement GraphPath
     @Override public List<E> getEdgeList()
     {
-        return edgeList;
+        return (edgeList != null ? edgeList : GraphPath.super.getEdgeList());
+    }
+
+    // implement GraphPath
+    @Override public List<V> getVertexList()
+    {
+        return (vertexList != null ? vertexList : GraphPath.super.getVertexList());
     }
 
     // implement GraphPath
