@@ -24,7 +24,7 @@
  * ------------------
  * (C) Copyright 2006, by Dimitrios Michail.
  *
- * Original Author:  Dimitrios Michail <dmichail@yahoo.com>
+ * Original Author:  Dimitrios Michail <dimitrios.michail@gmail.com>
  *
  * $Id$
  *
@@ -41,7 +41,7 @@ import org.jgrapht.*;
 
 
 /**
- * Exports a graph into a GML file (Graph Modelling Language).
+ * Exports a graph into a GML file (Graph Modeling Language).
  *
  * <p>For a description of the format see <a
  * href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
@@ -56,12 +56,12 @@ import org.jgrapht.*;
  */
 public class GmlExporter<V, E>
 {
-    private static final String creator = "JGraphT GML Exporter";
-    private static final String version = "1";
+    private static final String CREATOR = "JGraphT GML Exporter";
+    private static final String VERSION = "1";
 
-    private static final String delim = " ";
-    private static final String tab1 = "\t";
-    private static final String tab2 = "\t\t";
+    private static final String DELIM = " ";
+    private static final String TAB1 = "\t";
+    private static final String TAB2 = "\t\t";
 
     // TODO jvs 27-Jan-2008:  convert these to enum
 
@@ -86,6 +86,11 @@ public class GmlExporter<V, E>
     public static final Integer PRINT_VERTEX_LABELS = 4;
 
     private Integer printLabels = PRINT_NO_LABELS;
+    
+    /**
+     * Whether to print edge weights in case the graph is weighted.
+     */
+    private boolean exportEdgeWeights = false;
 
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
@@ -136,8 +141,8 @@ public class GmlExporter<V, E>
 
     private void exportHeader(PrintWriter out)
     {
-        out.println("Creator" + delim + quoted(creator));
-        out.println("Version" + delim + version);
+        out.println("Creator" + DELIM + quoted(CREATOR));
+        out.println("Version" + DELIM + VERSION);
     }
 
     private void exportVertices(
@@ -145,19 +150,19 @@ public class GmlExporter<V, E>
         Graph<V, E> g)
     {
         for (V from : g.vertexSet()) {
-            out.println(tab1 + "node");
-            out.println(tab1 + "[");
+            out.println(TAB1 + "node");
+            out.println(TAB1 + "[");
             out.println(
-                tab2 + "id" + delim + vertexIDProvider.getVertexName(from));
+                TAB2 + "id" + DELIM + vertexIDProvider.getVertexName(from));
             if ((printLabels == PRINT_VERTEX_LABELS)
                 || (printLabels == PRINT_EDGE_VERTEX_LABELS))
             {
                 String label =
                     (vertexLabelProvider == null) ? from.toString()
                     : vertexLabelProvider.getVertexName(from);
-                out.println(tab2 + "label" + delim + quoted(label));
+                out.println(TAB2 + "label" + DELIM + quoted(label));
             }
-            out.println(tab1 + "]");
+            out.println(TAB1 + "]");
         }
     }
 
@@ -166,23 +171,30 @@ public class GmlExporter<V, E>
         Graph<V, E> g)
     {
         for (E edge : g.edgeSet()) {
-            out.println(tab1 + "edge");
-            out.println(tab1 + "[");
+            out.println(TAB1 + "edge");
+            out.println(TAB1 + "[");
             String id = edgeIDProvider.getEdgeName(edge);
-            out.println(tab2 + "id" + delim + id);
+            out.println(TAB2 + "id" + DELIM + id);
             String s = vertexIDProvider.getVertexName(g.getEdgeSource(edge));
-            out.println(tab2 + "source" + delim + s);
+            out.println(TAB2 + "source" + DELIM + s);
             String t = vertexIDProvider.getVertexName(g.getEdgeTarget(edge));
-            out.println(tab2 + "target" + delim + t);
+            out.println(TAB2 + "target" + DELIM + t);
             if ((printLabels == PRINT_EDGE_LABELS)
                 || (printLabels == PRINT_EDGE_VERTEX_LABELS))
             {
                 String label =
                     (edgeLabelProvider == null) ? edge.toString()
                     : edgeLabelProvider.getEdgeName(edge);
-                out.println(tab2 + "label" + delim + quoted(label));
+                out.println(TAB2 + "label" + DELIM + quoted(label));
             }
-            out.println(tab1 + "]");
+            if (exportEdgeWeights) {
+                if (g instanceof WeightedGraph) {
+                    WeightedGraph<V, E> gw = (WeightedGraph<V, E>) g;
+                    double weight = gw.getEdgeWeight(edge);
+                    out.println(TAB2 + "weight" + DELIM + Double.toString(weight));
+                }
+            }
+            out.println(TAB1 + "]");
         }
     }
 
@@ -198,11 +210,11 @@ public class GmlExporter<V, E>
         exportHeader(out);
         out.println("graph");
         out.println("[");
-        out.println(tab1 + "label" + delim + quoted(""));
+        out.println(TAB1 + "label" + DELIM + quoted(""));
         if (directed) {
-            out.println(tab1 + "directed" + delim + "1");
+            out.println(TAB1 + "directed" + DELIM + "1");
         } else {
-            out.println(tab1 + "directed" + delim + "0");
+            out.println(TAB1 + "directed" + DELIM + "0");
         }
         exportVertices(out, g);
         exportEdges(out, g);
@@ -269,6 +281,27 @@ public class GmlExporter<V, E>
     public Integer getPrintLabels()
     {
         return printLabels;
+    }
+    
+    /**
+     * Whether the exporter will print edge weights in case the graph is edge
+     * weighted.
+     *
+     * @return {@code true} if the exporter prints edge weights, {@code false}
+     * otherwise
+     */
+    public boolean isExportEdgeWeights() {
+        return exportEdgeWeights;
+    }
+
+    /**
+     * Set whether the exporter will print edge weights in case the graph is
+     * edge weighted.
+     *
+     * @param exportEdgeWeights value to set
+     */
+    public void setExportEdgeWeights(boolean exportEdgeWeights) {
+        this.exportEdgeWeights = exportEdgeWeights;
     }
 }
 
