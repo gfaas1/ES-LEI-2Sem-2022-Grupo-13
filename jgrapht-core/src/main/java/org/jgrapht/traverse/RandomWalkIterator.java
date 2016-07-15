@@ -40,6 +40,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
@@ -58,7 +59,7 @@ import org.jgrapht.traverse.AbstractGraphIterator;
  * In case a weighted walk is desired (and in case the graph is weighted), edges are selected with
  * probability respective to its weight (out of the total weight of the edges).
  * 
- * Walk can be bounded (default {@code Double#POSITIVE_INFINITY} by number of steps. When the bound
+ * Walk can be bounded by number of steps (default {@code Long#MAX_VALUE} . When the bound
  * is reached the iterator is considered exhausted. Calling {@code next()} on exhausted iterator will
  * throw {@code NoSuchElementException}.
  * 
@@ -84,11 +85,12 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 	private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
 	private boolean sinkReached;
 	private long maxSteps;
+	private Random random;
 	
 	/**
      * Creates a new iterator for the specified graph. Iteration will start at
      * arbitrary vertex.
-     * Walk is un-weighted and bounded by {@code Double#POSITIVE_INFINITY} steps.
+     * Walk is un-weighted and bounded by {@code Long#MAX_VALUE} steps.
      *
      * @param graph the graph to be iterated.
      *
@@ -103,7 +105,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * Creates a new iterator for the specified graph. Iteration will start at
      * the specified start vertex. If the specified start vertex is <code>
      * null</code>, Iteration will start at an arbitrary graph vertex.
-     * Walk is un-weighted and bounded by {@code Double#POSITIVE_INFINITY} steps.
+     * Walk is un-weighted and bounded by {@code Long#MAX_VALUE} steps.
      *
      * @param graph the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
@@ -119,7 +121,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * Creates a new iterator for the specified graph. Iteration will start at
      * the specified start vertex. If the specified start vertex is <code>
      * null</code>, Iteration will start at an arbitrary graph vertex.
-     * Walk is bounded by {@code Double#POSITIVE_INFINITY} steps.
+     * Walk is bounded by {@code Long#MAX_VALUE} steps.
      *
      * @param graph the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
@@ -169,6 +171,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 			throw new IllegalArgumentException("graph must contain the start vertex");
 		}
 		sinkReached = false;
+		random = new Random();
 	}
 
 	/**
@@ -257,7 +260,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 		List<E> list = new ArrayList<E>(edges);
 		if (isWeighted) {
 			Iterator<E> safeIter = list.iterator();
-			double border = Math.random() * getTotalWeight(list);
+			double border = random.nextDouble() * getTotalWeight(list);
 			double d = 0;
 			drawn = -1;
 			do {
@@ -265,7 +268,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 				drawn++;
 			} while (d < border);
 		} else {
-			drawn = (int) Math.floor(Math.random() * list.size());
+			drawn = random.nextInt(list.size());
 		}
 		return list.get(drawn);
 	}
