@@ -1,3 +1,38 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* ----------------
+ * RandomWalkIterator.java
+ * ----------------
+ * (C) Copyright 2016-, by Assaf Mizrachi and Contributors.
+ *
+ * Original Author:  Assaf Mizrachi
+ * Contributor(s):   
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ *
+ */
 package org.jgrapht.traverse;
 
 import java.util.ArrayList;
@@ -219,8 +254,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 		}
 		
 		int drawn;
-		List<E> list = new ArrayList<E>(edges);		
-		//TODO check if correct
+		List<E> list = new ArrayList<E>(edges);
 		if (isWeighted) {
 			Iterator<E> safeIter = list.iterator();
 			double border = Math.random() * getTotalWeight(list);
@@ -229,7 +263,6 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 			do {
 				d += graph.getEdgeWeight(safeIter.next());
 				drawn++;
-				//TODO check if < is correct
 			} while (d < border);
 		} else {
 			drawn = (int) Math.floor(Math.random() * list.size());
