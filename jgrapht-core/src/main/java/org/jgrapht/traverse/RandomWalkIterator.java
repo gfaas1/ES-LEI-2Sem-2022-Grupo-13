@@ -83,7 +83,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 	private FlyweightVertexEvent<V> reusableVertexEvent;
 	private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
 	private boolean sinkReached;
-	private double maxSteps;
+	private long maxSteps;
 	
 	/**
      * Creates a new iterator for the specified graph. Iteration will start at
@@ -129,7 +129,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * contain <code>startVertex</code>
      */
 	public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted) {
-		this(graph, startVertex, isWeighted, Double.POSITIVE_INFINITY);
+		this(graph, startVertex, isWeighted, Long.MAX_VALUE);
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
      * @throws IllegalArgumentException if <code>graph==null</code> or does not
      * contain <code>startVertex</code>
      */
-	public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted, double maxSteps) {		
+	public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted, long maxSteps) {		
 		if (graph == null) {
             throw new IllegalArgumentException("graph must not be null");
         }
