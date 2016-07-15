@@ -38,9 +38,6 @@ package org.jgrapht.alg;
 
 import java.util.HashSet;
 import java.util.Set;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.WeightedGraph;
@@ -54,9 +51,11 @@ import org.jgrapht.graph.WeightedPseudograph;
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpannerTest
-        extends TestCase {
+    extends TestCase
+{
 
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers
+    // ---------------------------------------------
     private static final String V0 = "v0";
     private static final String V1 = "v1";
     private static final String V2 = "v2";
@@ -74,8 +73,10 @@ public class GreedyMultiplicativeSpannerTest
     private static final String V14 = "v14";
     private static final String V15 = "v15";
 
-    //~ Methods ----------------------------------------------------------------
-    public void createGraph1(UndirectedGraph<String, DefaultEdge> g) {
+    // ~ Methods
+    // ----------------------------------------------------------------
+    public void createGraph1(UndirectedGraph<String, DefaultEdge> g)
+    {
         g.addVertex(V0);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -101,7 +102,8 @@ public class GreedyMultiplicativeSpannerTest
         g.addEdge(V6, V7);
     }
 
-    public void createGraph2(UndirectedGraph<String, DefaultEdge> g) {
+    public void createGraph2(UndirectedGraph<String, DefaultEdge> g)
+    {
         g.addVertex(V0);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -144,8 +146,10 @@ public class GreedyMultiplicativeSpannerTest
         g.addEdge(V13, V15);
     }
 
-    //~ Methods ----------------------------------------------------------------
-    public void createGraph3(WeightedGraph<String, DefaultWeightedEdge> g) {
+    // ~ Methods
+    // ----------------------------------------------------------------
+    public void createGraph3(WeightedGraph<String, DefaultWeightedEdge> g)
+    {
         g.addVertex(V0);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -171,11 +175,10 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V6, V7), 5.0);
     }
 
-    private <V, E> void runTest(
-            UndirectedGraph<V, E> g,
-            int k,
-            Set<E> correct) {
-        Set<E> result = new GreedyMultiplicativeSpanner(g, k).getSpannerEdgeSet();
+    private <V, E> void runTest(UndirectedGraph<V, E> g, int k, Set<E> correct)
+    {
+        Set<E> result = new GreedyMultiplicativeSpanner<V,E>(g, k)
+            .getSpannerEdgeSet();
 
         assertEquals(correct.size(), result.size());
         for (E e : correct) {
@@ -183,10 +186,10 @@ public class GreedyMultiplicativeSpannerTest
         }
     }
 
-    public void testGraph1() {
-        UndirectedGraph<String, DefaultEdge> g
-                = new Pseudograph<>(
-                        DefaultEdge.class);
+    public void testGraph1()
+    {
+        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(
+            DefaultEdge.class);
 
         createGraph1(g);
 
@@ -233,10 +236,10 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
-    public void testGraph1WithLoops() {
-        UndirectedGraph<String, DefaultEdge> g
-                = new Pseudograph<>(
-                        DefaultEdge.class);
+    public void testGraph1WithLoops()
+    {
+        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(
+            DefaultEdge.class);
 
         createGraph1(g);
 
@@ -259,10 +262,10 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
-    public void testGraph1WithMultipleEdges() {
-        UndirectedGraph<String, DefaultEdge> g
-                = new Pseudograph<>(
-                        DefaultEdge.class);
+    public void testGraph1WithMultipleEdges()
+    {
+        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(
+            DefaultEdge.class);
 
         createGraph1(g);
 
@@ -285,10 +288,10 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
-    public void testGraph2() {
-        UndirectedGraph<String, DefaultEdge> g
-                = new Pseudograph<>(
-                        DefaultEdge.class);
+    public void testGraph2()
+    {
+        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(
+            DefaultEdge.class);
 
         createGraph2(g);
 
@@ -355,9 +358,10 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
-    public void testGraph3() {
-        WeightedPseudograph<String, DefaultWeightedEdge> g
-                = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testGraph3()
+    {
+        WeightedPseudograph<String, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+            DefaultWeightedEdge.class);
 
         createGraph3(g);
 
@@ -377,9 +381,10 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, Integer.MAX_VALUE, spanner3);
     }
 
-    public void testNegativeWeightsGraph() {
-        WeightedPseudograph<String, DefaultWeightedEdge> g
-                = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testNegativeWeightsGraph()
+    {
+        WeightedPseudograph<String, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+            DefaultWeightedEdge.class);
 
         g.addVertex(V0);
         g.addVertex(V1);
@@ -390,7 +395,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
         try {
-            new GreedyMultiplicativeSpanner(g, 2).getSpannerEdgeSet();
+            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(g, 2).getSpannerEdgeSet();
             fail("Negative edge weights not permitted.");
         } catch (IllegalArgumentException e) {
         }
