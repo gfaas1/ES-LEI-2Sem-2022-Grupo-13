@@ -43,11 +43,10 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.event.EdgeTraversalEvent;
 import org.jgrapht.event.VertexTraversalEvent;
-import org.jgrapht.traverse.AbstractGraphIterator;
 
 /**
  * 
@@ -79,10 +78,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 	
 	private V currentVertex;
 	private final Graph<V, E> graph;
-	private final boolean isDirected;
 	private final boolean isWeighted;
-	private FlyweightVertexEvent<V> reusableVertexEvent;
-	private FlyweightEdgeEvent<V, E> reusableEdgeEvent;
 	private boolean sinkReached;
 	private long maxSteps;
 	private Random random;
@@ -157,9 +153,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 		this.graph = graph;
 		this.isWeighted = isWeighted;
 		this.maxSteps = maxSteps;
-		this.isDirected = graph instanceof DirectedGraph<?, ?>;
-		reusableEdgeEvent = new FlyweightEdgeEvent<V, E>(this, null);
-        reusableVertexEvent = new FlyweightVertexEvent<V>(this, null);
+		this.specifics = createGraphSpecifics(graph);
         //select a random start vertex in case not provided.
 		if (startVertex == null) {
 			if (graph.vertexSet().size() > 0) {
@@ -170,8 +164,8 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 		} else {
 			throw new IllegalArgumentException("graph must contain the start vertex");
 		}
-		sinkReached = false;
-		random = new Random();
+		this.sinkReached = false;
+		this.random = new Random();
 	}
 
 	/**
@@ -215,22 +209,13 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 			throw new NoSuchElementException();
 		}
 		
-		Set<E> potentialEdges;
-		if (isDirected) {
-			potentialEdges = ((DirectedGraph<V, E>) graph).outgoingEdgesOf(currentVertex);
-		} else{
-			potentialEdges = graph.edgesOf(currentVertex);
-		}
+		Set<? extends E> potentialEdges = specifics.edgesOf(currentVertex);
+		
 		//randomly select an edge from the set of potential edges.
 		E nextEdge = drawEdge(potentialEdges);
 		if (nextEdge != null) {
 			V nextVertex;
-			if (isDirected) {
-				nextVertex = graph.getEdgeTarget(nextEdge);
-			} else {
-				nextVertex = graph.getEdgeTarget(nextEdge) != currentVertex ? 
-						graph.getEdgeTarget(nextEdge) : graph.getEdgeSource(nextEdge);
-			}		
+			nextVertex = Graphs.getOppositeVertex(graph, nextEdge, currentVertex);
 			encounterVertex(nextVertex, nextEdge);
 			fireEdgeTraversed(createEdgeTraversalEvent(nextEdge));
 			fireVertexTraversed(createVertexTraversalEvent(nextVertex));
@@ -251,7 +236,7 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 	 * @param edges the set to select the edge from
 	 * @return the drawn edges or null if set is empty.
 	 */
-	private E drawEdge(Set<E> edges) {
+	private E drawEdge(Set<? extends E> edges) {
 		if (edges.isEmpty()) {
 			return null;
 		}
@@ -300,59 +285,4 @@ public class RandomWalkIterator<V, E> extends AbstractGraphIterator<V, E> {
 		}
 		return total;
 	}
-	
-	/**
-     * A reusable vertex event.
-     *
-     * @author Barak Naveh
-     * @since Aug 11, 2003
-     */
-    static class FlyweightVertexEvent<VV> extends VertexTraversalEvent<VV> {
-		private static final long serialVersionUID = 3834024753848399924L;
-
-		/**
-		 * @see VertexTraversalEvent#VertexTraversalEvent(Object, Object)
-		 */
-		public FlyweightVertexEvent(Object eventSource, VV vertex) {
-			super(eventSource, vertex);
-		}
-
-		/**
-		 * Sets the vertex of this event.
-		 * 
-		 * @param vertex
-		 *            the vertex to be set.
-		 */
-		protected void setVertex(VV vertex) {
-			this.vertex = vertex;
-		}
-	}
-    
-    /**
-	 * A reusable edge event.
-	 * 
-	 * @author Barak Naveh
-	 * @since Aug 11, 2003
-	 */
-    static class FlyweightEdgeEvent<VV, localE> extends
-			EdgeTraversalEvent<localE> {
-		private static final long serialVersionUID = 4051327833765000755L;
-
-		/**
-		 * @see EdgeTraversalEvent#EdgeTraversalEvent(Object, Edge)
-		 */
-		public FlyweightEdgeEvent(Object eventSource, localE edge) {
-			super(eventSource, edge);
-		}
-
-		/**
-		 * Sets the edge of this event.
-		 * 
-		 * @param edge
-		 *            the edge to be set.
-		 */
-		protected void setEdge(localE edge) {
-			this.edge = edge;
-		}
-	}	
 }
