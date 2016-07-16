@@ -55,92 +55,92 @@ import org.jgrapht.graph.SimpleGraph;
  */
 public class RandomWalkIteratorTest extends EnhancedTestCase {
 
-	/**
-	 * Tests empty graph
-	 */
-	public void testEmptyGraph() {
-		DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-		Iterator<String> iter = new RandomWalkIterator<>(graph);
-		assertFalse(iter.hasNext());
-	}
-	
-	/**
-	 * Tests single node graph
-	 */
-	public void testSingleNode() {
-		DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);		
-		graph.addVertex("123");
-		Iterator<String> iter = new RandomWalkIterator<>(graph);
-		assertTrue(iter.hasNext());
-		assertEquals("123", iter.next());
-		assertFalse(iter.hasNext());
-	}
-	
-	/**
-	 * Tests iterator does not have more elements after reaching sink vertex.
-	 */
-	public void testSink() {
-		DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);	
-		int graphSize = 10;
-		LinearGraphGenerator<String, DefaultEdge> graphGenerator = new LinearGraphGenerator<>(graphSize);
-		graphGenerator.generateGraph(graph, new VertexFactory<String>() {
-			private int index = 1;
-			@Override
-			public String createVertex() {
-				return String.valueOf(index++);
-			}
-		}, null);
-		Iterator<String> iter = new RandomWalkIterator<>(graph);
-		for (int i = 0; i < graphSize; i++) {
-			assertTrue(iter.hasNext());
-			assertNotNull(iter.next());
-		}
-		assertFalse(iter.hasNext());
-	}	
-	
-	/**
-	 * Tests iterator is exhausted after maxSteps
-	 */
-	public void testExhausted() {
-		UndirectedGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-		RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
-		graphGenerator.generateGraph(graph, new VertexFactory<String>() {
-			private int index = 1;
-			@Override
-			public String createVertex() {
-				return String.valueOf(index++);
-			}
-		}, null);
-		
-		int maxSteps = 4;
-		Iterator<String> iter = new RandomWalkIterator<>(graph, "1", false, maxSteps);
-		for (int i = 0; i < maxSteps; i++) {
-			assertTrue(iter.hasNext());
-			assertNotNull(iter.next());
-		}
-		assertFalse(iter.hasNext());
-	}
-	
-	/**
-	 * Test deterministic walk using directed ring graph.
-	 */
-	public void testDeterministic() {
-		DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);	
-		int ringSize = 5;
-		RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
-		graphGenerator.generateGraph(graph, new VertexFactory<String>() {
-			private int index = 0;
-			@Override
-			public String createVertex() {
-				return String.valueOf(index++);
-			}
-		}, null);
-		Iterator<String> iter = new RandomWalkIterator<>(graph, "0", false, 20);
-		int step = 0;
-		while(iter.hasNext()) {
-			step++;
-			assertEquals(String.valueOf(step % ringSize), iter.next());
-		}
-	}
-	
+    /**
+     * Tests empty graph
+     */
+    public void testEmptyGraph() { 
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Iterator<String> iter = new RandomWalkIterator<>(graph);
+        assertFalse(iter.hasNext());
+    }
+    
+    /**
+     * Tests single node graph
+     */
+    public void testSingleNode() {
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);        
+        graph.addVertex("123");
+        Iterator<String> iter = new RandomWalkIterator<>(graph);
+        assertTrue(iter.hasNext());
+        assertEquals("123", iter.next());
+        assertFalse(iter.hasNext());
+    }
+    
+    /**
+     * Tests iterator does not have more elements after reaching sink vertex.
+     */
+    public void testSink() {
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);    
+        int graphSize = 10;
+        LinearGraphGenerator<String, DefaultEdge> graphGenerator = new LinearGraphGenerator<>(graphSize);
+        graphGenerator.generateGraph(graph, new VertexFactory<String>() {
+            private int index = 1;
+            @Override
+            public String createVertex() {
+                return String.valueOf(index++);
+            }
+        }, null);
+        Iterator<String> iter = new RandomWalkIterator<>(graph);
+        for (int i = 0; i < graphSize; i++) {
+            assertTrue(iter.hasNext());
+            assertNotNull(iter.next());
+        }
+        assertFalse(iter.hasNext());
+    }    
+    
+    /**
+     * Tests iterator is exhausted after maxSteps
+     */
+    public void testExhausted() {
+        UndirectedGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
+        graphGenerator.generateGraph(graph, new VertexFactory<String>() {
+            private int index = 1;
+            @Override
+            public String createVertex() {
+                return String.valueOf(index++);
+            }
+        }, null);
+        
+        int maxSteps = 4;
+        Iterator<String> iter = new RandomWalkIterator<>(graph, "1", false, maxSteps);
+        for (int i = 0; i < maxSteps; i++) {
+            assertTrue(iter.hasNext());
+            assertNotNull(iter.next());
+        }
+        assertFalse(iter.hasNext());
+    }
+    
+    /**
+     * Test deterministic walk using directed ring graph.
+     */
+    public void testDeterministic() {
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);    
+        int ringSize = 5;
+        RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
+        graphGenerator.generateGraph(graph, new VertexFactory<String>() {
+            private int index = 0;
+            @Override
+            public String createVertex() {
+                return String.valueOf(index++);
+            }
+        }, null);
+        Iterator<String> iter = new RandomWalkIterator<>(graph, "0", false, 20);
+        int step = 0;
+        while(iter.hasNext()) {
+            step++;
+            assertEquals(String.valueOf(step % ringSize), iter.next());
+        }
+    }
+    
 }
