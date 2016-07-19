@@ -37,10 +37,10 @@ package org.jgrapht.alg.util.extension;
 /**
  * Factory class which creates extension/encapsulation objects
  */
-public interface ExtensionFactory<B extends AbstractExtension> {
+public interface ExtensionFactory<B extends Extension> {
     /**
-     * Factory method which creates a new object which extends AbstractExtension
-     * @return new object which extends AbstractExtension
+     * Factory method which creates a new object which extends Extension
+     * @return new object which extends Extension
      */
     B create();
 }

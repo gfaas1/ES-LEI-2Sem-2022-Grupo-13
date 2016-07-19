@@ -38,7 +38,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.extension.AbstractExtension;
+import org.jgrapht.alg.util.extension.Extension;
 import org.jgrapht.alg.util.extension.ExtensionFactory;
 import org.jgrapht.alg.util.extension.ExtensionManager;
 
@@ -241,7 +241,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
     }
 
-    class VertexExtensionBase extends AbstractExtension
+    class VertexExtensionBase implements Extension
     {
         private final List<AnnotatedFlowEdge> outgoing = new ArrayList<>();
 
@@ -255,7 +255,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
     }
 
-    class AnnotatedFlowEdge extends AbstractExtension
+    class AnnotatedFlowEdge implements Extension
     {
         /* Edge source */
         private VertexExtensionBase source;

@@ -39,22 +39,22 @@ import java.util.Map;
 
 /**
  * Convenience class to manage extensions/encapsulations.
- * This class creates and manages object extensions and encapsulations. An object, from here on denoted as prototype,
- * can be encapsulated in or extended by another object. An example would be the relation between an edge (prototype) and an annotated edge. The
+ * This class creates and manages object extensions and encapsulations. An object, from here on denoted as 'prototype',
+ * can be encapsulated in or extended by another object. An example would be the relation between an edge (original) and an annotated edge. The
  * annotated edge encapsulates/extends an edge, thereby augmenting it with additional data.
- * In symbolic form, if b is the prototype class, than a(b) would be its extension. This concept is similar to java's extension where
- * one class is derived from (extends) another class (prototype).
+ * In symbolic form, if b is the original class, than a(b) would be its extension. This concept is similar to java's extension where
+ * one class is derived from (extends) another class (original).
  *
- * @param <T> class-type to be extended (class-type of prototype)
+ * @param <T> class-type to be extended (class-type of original)
  * @param <B> class-type of extension
  *
  * */
-public class ExtensionManager<T, B extends AbstractExtension> {
+public class ExtensionManager<T, B extends Extension> {
 
     /* Factory class to create new extensions */
     private ExtensionFactory<B> extensionFactory;
-    /* Mapping of prototypes to their extensions */
-    private Map<T, B> prototypeToExtensionMap = new HashMap<>();
+    /* Mapping of originals to their extensions */
+    private Map<T, B> originalToExtensionMap = new HashMap<>();
 
     public ExtensionManager(ExtensionFactory<B> factory){this.extensionFactory = factory;}
 
@@ -68,16 +68,16 @@ public class ExtensionManager<T, B extends AbstractExtension> {
     }
 
     /**
-     * Creates a new singleton extension object for prototype t if no such object exists, returns the old one otherwise.
+     * Creates a new singleton extension object for original t if no such object exists, returns the old one otherwise.
      */
     public B getExtension(T t)
     {
-        if (prototypeToExtensionMap.containsKey(t)) {
-            return prototypeToExtensionMap.get(t);
+        if (originalToExtensionMap.containsKey(t)) {
+            return originalToExtensionMap.get(t);
         }
 
         B extension = createExtension();
-        prototypeToExtensionMap.put(t, extension);
+        originalToExtensionMap.put(t, extension);
         return extension;
     }
 }
