@@ -242,28 +242,26 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
             }
 
             // frontier scan
-            FibonacciHeapNode<QueueEntry<V, E>> vNode = frontier.heap
+            FibonacciHeapNode<QueueEntry<V, E>> node = frontier.heap
                 .removeMin();
-            V v = vNode.getData().v;
+            V v = node.getData().v;
+            double vDistance = node.getKey();
 
             for (E e : frontier.specifics.edgesOf(v)) {
-                double vDistance = vNode.getKey();
-                V u = Graphs.getOppositeVertex(frontier.graph, e, v);
-                frontier.updateDistance(
-                    u,
-                    e,
-                    vDistance + frontier.graph.getEdgeWeight(e));
 
-                // check if u has also been found in other frontier
-                FibonacciHeapNode<QueueEntry<V, E>> uOtherNode = otherFrontier.seen
-                    .get(u);
-                if (uOtherNode != null) {
-                    double pathDistance = vDistance
-                        + frontier.graph.getEdgeWeight(e) + uOtherNode.getKey();
-                    if (pathDistance < bestPath) {
-                        bestPath = pathDistance;
-                        bestPathCommonVertex = u;
-                    }
+                V u = Graphs.getOppositeVertex(frontier.graph, e, v);
+
+                double eWeight = frontier.graph.getEdgeWeight(e);
+
+                frontier.updateDistance(u, e, vDistance + eWeight);
+
+                // check path with u's distance from the other frontier
+                double pathDistance = vDistance + eWeight
+                    + otherFrontier.getDistance(u);
+
+                if (pathDistance < bestPath) {
+                    bestPath = pathDistance;
+                    bestPathCommonVertex = u;
                 }
 
             }
@@ -294,9 +292,7 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
         // traverse forward path
         V v = commonVertex;
         while (true) {
-            FibonacciHeapNode<QueueEntry<V, E>> node = forwardFrontier.seen
-                .get(v);
-            E e = node.getData().e;
+            E e = forwardFrontier.getTreeEdge(v);
 
             if (e == null) {
                 break;
@@ -310,9 +306,7 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
         // traverse reverse path
         v = commonVertex;
         while (true) {
-            FibonacciHeapNode<QueueEntry<V, E>> node = reversedFrontier.seen
-                .get(v);
-            E e = node.getData().e;
+            E e = reversedFrontier.getTreeEdge(v);
 
             if (e == null) {
                 break;
@@ -370,6 +364,26 @@ class SearchFrontier<V, E>
                 heap.decreaseKey(node, distance);
                 node.getData().e = e;
             }
+        }
+    }
+
+    public double getDistance(V v)
+    {
+        FibonacciHeapNode<QueueEntry<V, E>> node = seen.get(v);
+        if (node == null) {
+            return Double.POSITIVE_INFINITY;
+        } else {
+            return node.getKey();
+        }
+    }
+
+    public E getTreeEdge(V v)
+    {
+        FibonacciHeapNode<QueueEntry<V, E>> node = seen.get(v);
+        if (node == null) {
+            return null;
+        } else {
+            return node.getData().e;
         }
     }
 }
