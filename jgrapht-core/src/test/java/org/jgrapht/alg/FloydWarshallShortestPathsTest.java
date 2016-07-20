@@ -26,6 +26,7 @@
  *
  * Original Author:  Tom Larkworthy
  * Contributors:  Andrea Pagani
+ *                Joris Kinable
  *
  * $Id: FloydWarshallShortestPathsTest.java 715 2010-06-13 01:25:00Z perfecthash $
  *
@@ -112,8 +113,13 @@ public class FloydWarshallShortestPathsTest
                                     v2).getPathLength();
                     assertTrue((Math.abs(dijSp - fwSp) < .01) || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
                     GraphPath<Integer, DefaultWeightedEdge> path=fw.getShortestPath(v1, v2);
-                    if(path != null)
+                    if(path != null) {
                         this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
+                        List<Integer> vertexPath=Graphs.getPathVertexList(path);
+                        assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
+                        assertEquals(fw.getLastHop(v1, v2), vertexPath.get(vertexPath.size()-2));
+                    }
+
                 }
             }
         }
@@ -125,16 +131,22 @@ public class FloydWarshallShortestPathsTest
     private <V,E> void verifyPath(Graph<V,E> graph, GraphPath<V,E> path, double pathCost){
         assertEquals(pathCost, path.getWeight(), .00000001);
         double verifiedEdgeCost=0;
+        List<V> vertexList=new ArrayList<>();
+        vertexList.add(path.getStartVertex());
+
+        V v=path.getStartVertex();
         for (E e : path.getEdgeList()) {
             assertNotNull(e);
             verifiedEdgeCost+=graph.getEdgeWeight(e);
+            try {
+                v = Graphs.getOppositeVertex(graph, e, v);
+            }catch (IllegalArgumentException ex){
+                fail("Invalid path encountered: the sequence of edges does not present a valid path through the graph");
+            }
         }
         assertEquals(pathCost, verifiedEdgeCost, .00000001);
-        try{
-            Graphs.getPathVertexList(path);
-        }catch (IllegalArgumentException e){
-            fail("Invalid path encountered: the sequence of edges does not present a valid path through the graph");
-        }
+        assertEquals(path.getStartVertex(), path.getVertexList().get(0));
+        assertEquals(path.getEndVertex(), path.getVertexList().get(path.getLength()));
     }
 
     private static UndirectedGraph<String, DefaultEdge> createStringGraph()
@@ -190,6 +202,8 @@ public class FloydWarshallShortestPathsTest
                 new FloydWarshallShortestPaths<>(graph);
         double diameter = fw.getDiameter();
         assertEquals(0.0, diameter);
+        assertNull(fw.getFirstHop(a, b));
+        assertNull(fw.getLastHop(a, b));
     }
 
     public void testWeightedEdges() {
@@ -210,6 +224,9 @@ public class FloydWarshallShortestPathsTest
         assertEquals(5.0, path.getWeight());
         assertEquals(weighted, path.getGraph());
         assertNull(fw.getShortestPath("b", "a"));
+        List<String> vertexPath=Graphs.getPathVertexList(path);
+        assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));
+        assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size()-2));
     }
 }
 

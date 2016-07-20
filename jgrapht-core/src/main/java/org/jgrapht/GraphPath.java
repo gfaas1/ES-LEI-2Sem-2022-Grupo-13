@@ -25,7 +25,7 @@
  * (C) Copyright 2008-2008, by John V. Sichi and Contributors.
  *
  * Original Author:  John V. Sichi
- * Contributor(s):   -
+ * Contributor(s):   Joris Kinable
  *
  * $Id$
  *
@@ -41,9 +41,9 @@ import java.util.*;
 
 /**
  * A GraphPath represents a <a href="http://mathworld.wolfram.com/Path.html">
- * path</a> in a {@link Graph}. Note that a path is defined primarily in terms
- * of edges (rather than vertices) so that multiple edges between the same pair
- * of vertices can be discriminated.
+ * path</a> in a {@link Graph}. Unlike some definitions, the path is not required
+ * to be a <a href="https://en.wikipedia.org/wiki/Simple_path>Simple Path</a>.
+ *
  *
  * @author John Sichi
  * @since Jan 1, 2008
@@ -77,15 +77,52 @@ public interface GraphPath<V, E>
      * incident to the start vertex. The last edge is incident to the end
      * vertex. The vertices along the path can be obtained by traversing from
      * the start vertex, finding its opposite across the first edge, and then
-     * doing the same successively across subsequent edges; {@link
-     * Graphs#getPathVertexList} provides a convenience method for this.
+     * doing the same successively across subsequent edges; {@see
+     * GraphPath#getVertexList}.
      *
      * <p>Whether or not the returned edge list is modifiable depends on the
      * path implementation.
      *
      * @return list of edges traversed by the path
      */
-    List<E> getEdgeList();
+    default List<E> getEdgeList(){
+        List<V> vertexList=this.getVertexList();
+        if(vertexList.size() < 2)
+            return Collections.emptyList();
+
+        Graph<V, E> g = this.getGraph();
+        List<E> edgeList = new ArrayList<>();
+        Iterator<V> vertexIterator=vertexList.iterator();
+        V u=vertexIterator.next();
+        while (vertexIterator.hasNext()){
+            V v=vertexIterator.next();
+            edgeList.add(g.getEdge(u,v));
+            u=v;
+        }
+        return edgeList;
+    }
+
+    /**
+     * Returns the path as a sequence of vertices.
+     *
+     * @return path, denoted by a list of vertices
+     */
+    default List<V> getVertexList(){
+        List<E> edgeList=this.getEdgeList();
+
+        if(edgeList.isEmpty())
+            return Collections.emptyList();
+
+        Graph<V, E> g = this.getGraph();
+        List<V> list = new ArrayList<>();
+        V v = this.getStartVertex();
+        list.add(v);
+        for (E e : edgeList) {
+            v = Graphs.getOppositeVertex(g, e, v);
+            list.add(v);
+        }
+        return list;
+    }
 
     /**
      * Returns the weight assigned to the path. Typically, this will be the sum
@@ -95,6 +132,15 @@ public interface GraphPath<V, E>
      * @return the weight of the path
      */
     double getWeight();
+
+    /**
+     * Returns the length of the path, measured in the number of edges.
+     * @return the length of the path, measured in the number of edges
+     */
+    default int getLength(){
+        return getEdgeList().size();
+    }
+
 }
 
 // End GraphPath.java

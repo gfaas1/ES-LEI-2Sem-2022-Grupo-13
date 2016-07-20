@@ -101,7 +101,7 @@ public class KShortestPathCostTest
                 }),
             pathElement.getEdgeList());
 
-        List vertices = Graphs.getPathVertexList(pathElement);
+        List vertices = pathElement.getVertexList();
         assertEquals(
             Arrays.asList(new Object[] { "vS", "v1", "v5" }),
             vertices);
@@ -115,7 +115,7 @@ public class KShortestPathCostTest
                 }),
             pathElement.getEdgeList());
 
-        vertices = Graphs.getPathVertexList(pathElement);
+        vertices = pathElement.getVertexList();
         assertEquals(
             Arrays.asList(new Object[] { "vS", "v2", "v5" }),
             vertices);
