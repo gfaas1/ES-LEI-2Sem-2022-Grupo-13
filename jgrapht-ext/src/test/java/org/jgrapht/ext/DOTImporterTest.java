@@ -424,6 +424,38 @@ public class DOTImporterTest extends TestCase
       Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
    }
 
+   public void testParametersWithEscapedSemicolons() throws ImportException {
+      String escapedLabel = "this \\\"label; \\\"contains an escaped semi colon";
+      String input = "graph G {\n  1 [ label=\"" + escapedLabel + "\" ];\n}\n";
+      Multigraph<TestVertex, DefaultEdge> result
+              = new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+      DOTImporter<TestVertex, DefaultEdge> importer
+              = new DOTImporter<TestVertex, DefaultEdge>(
+              new VertexProvider<TestVertex>() {
+                 @Override
+                 public TestVertex buildVertex(String label,
+                                               Map<String, String> attributes) {
+                    return new TestVertex(label, attributes);
+                 }
+              },
+              new EdgeProvider<TestVertex, DefaultEdge>() {
+                 @Override
+                 public DefaultEdge buildEdge(TestVertex from,
+                                              TestVertex to,
+                                              String label,
+                                              Map<String, String> attributes) {
+                    return new DefaultEdge();
+                 }
+              }
+      );
+
+
+      importer.read(input, result);
+      Assert.assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
+      Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
+      Assert.assertEquals("wrong parsing", escapedLabel, ((TestVertex) result.vertexSet().toArray()[0]).getId());
+   }
+
    public void testNoLineEndBetweenNodes() throws ImportException {
       String input = "graph G {\n  1 [ label=\"this label; contains a semi colon\" ];  2 [ label=\"wibble\" ] \n}\n";
       Multigraph<TestVertex, DefaultEdge> result
