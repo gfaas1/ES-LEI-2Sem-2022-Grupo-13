@@ -37,6 +37,7 @@ package org.jgrapht.alg;
 
 import java.util.Random;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.generate.RandomGraphGenerator;
@@ -352,6 +353,10 @@ public class BidirectionalDijkstraShortestPathTest
                 } else {
                     assertEquals(p1.getLength(), p2.getLength());
                     assertEquals(p1.getWeight(), p2.getWeight(), 0.0001);
+                    assertEquals(
+                        p2.getWeight(),
+                        computePathWeight(g, p2),
+                        0.0001);
                     assertEquals(p1.getStartVertex(), p2.getStartVertex());
                     assertEquals(p1.getEndVertex(), p2.getEndVertex());
                 }
@@ -403,6 +408,10 @@ public class BidirectionalDijkstraShortestPathTest
                 } else {
                     assertEquals(p1.getLength(), p2.getLength());
                     assertEquals(p1.getWeight(), p2.getWeight(), 0.0001);
+                    assertEquals(
+                        p2.getWeight(),
+                        computePathWeight(g, p2),
+                        0.0001);
                     assertEquals(p1.getStartVertex(), p2.getStartVertex());
                     assertEquals(p1.getEndVertex(), p2.getEndVertex());
                 }
@@ -453,6 +462,10 @@ public class BidirectionalDijkstraShortestPathTest
                 } else {
                     assertEquals(p1.getLength(), p2.getLength());
                     assertEquals(p1.getWeight(), p2.getWeight(), 0.0001);
+                    assertEquals(
+                        p2.getWeight(),
+                        computePathWeight(g, p2),
+                        0.0001);
                     assertEquals(p1.getStartVertex(), p2.getStartVertex());
                     assertEquals(p1.getEndVertex(), p2.getEndVertex());
                 }
@@ -506,6 +519,15 @@ public class BidirectionalDijkstraShortestPathTest
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    private <V, E> double computePathWeight(Graph<V, E> g, GraphPath<V, E> path)
+    {
+        double total = 0d;
+        for (E e : path.getEdgeList()) {
+            total += g.getEdgeWeight(e);
+        }
+        return total;
     }
 
 }
