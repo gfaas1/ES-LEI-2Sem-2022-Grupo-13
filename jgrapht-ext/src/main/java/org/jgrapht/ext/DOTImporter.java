@@ -457,7 +457,7 @@ public class DOTImporter<V, E>
         sectionBuffer.append(input.charAt(position));
 
         if (current == '"') {
-            if (input.charAt(current - 1) != '\\') {
+            if (input.charAt(position - 1) != '\\') {
                 return NODE;
             }
         }
@@ -504,7 +504,7 @@ public class DOTImporter<V, E>
         sectionBuffer.append(input.charAt(position));
 
         if (current == '"') {
-            if (input.charAt(current - 1) != '\\') {
+            if (input.charAt(position - 1) != '\\') {
                 return EDGE;
             }
         }
