@@ -20,31 +20,27 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * PushRelabelMaximumFlowTest.java
+ * ExtensionFactory.java
  * -----------------
- * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2016, by Alexey Kudinkin and Contributors.
  *
  * Original Author:  Alexey Kudinkin
- * Contributor(s):
+ * Contributor(s): Joris Kinable
  *
  * $Id$
  *
  * Changes
  * -------
  */
+package org.jgrapht.alg.util.extension;
 
-package org.jgrapht.alg.flow;
-
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-
-public class PushRelabelMaximumFlowTest extends MaximumFlowAlgorithmTestBase {
-
-    @Override
-    MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
-        return new PushRelabelMaximumFlow<>(network);
-    }
-
+/**
+ * Factory class which creates extension/encapsulation objects
+ */
+public interface ExtensionFactory<B extends Extension> {
+    /**
+     * Factory method which creates a new object which extends Extension
+     * @return new object which extends Extension
+     */
+    B create();
 }
