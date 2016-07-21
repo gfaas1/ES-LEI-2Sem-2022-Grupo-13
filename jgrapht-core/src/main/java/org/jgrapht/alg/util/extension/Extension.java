@@ -20,31 +20,26 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * PushRelabelMaximumFlowTest.java
+ * Extension.java
  * -----------------
- * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2016, by Alexey Kudinkin and Contributors.
  *
  * Original Author:  Alexey Kudinkin
- * Contributor(s):
+ * Contributor(s): Joris Kinable
  *
  * $Id$
  *
  * Changes
  * -------
  */
+package org.jgrapht.alg.util.extension;
 
-package org.jgrapht.alg.flow;
-
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-
-public class PushRelabelMaximumFlowTest extends MaximumFlowAlgorithmTestBase {
-
-    @Override
-    MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
-        return new PushRelabelMaximumFlow<>(network);
-    }
+/**
+ * Class which represents an abstract extension/encapsulation object.
+ * An object, from here on denoted as original,can be encapsulated in or extended by another object. An example would be the relation between an edge (original) and an annotated edge. The
+ * annotated edge encapsulates/extends an edge, thereby augmenting it with additional data. In symbolic form, if b is the original class, than a(b) would be its extension. This concept is similar to java's extension where
+ * one class is derived from (extends) another class (original).
+ */
+public interface Extension {
 
 }
