@@ -25,7 +25,7 @@
  * (C) Copyright 2007-2010, by France Telecom
  *
  * Original Author:  Guillaume Boulmier and Contributors.
- * Contributor(s):   John V. Sichi
+ * Contributor(s):   John V. Sichi, Assaf Mizrachi
  *
  * $Id$
  *
@@ -34,6 +34,7 @@
  * 05-Jun-2007 : Initial revision (GB);
  * 05-Jul-2007 : Added support for generics (JVS);
  * 06-Dec-2010 : Bugfixes (GB);
+ * 21-Jul-2016 : Added external path validator (AM).
  *
  */
 package org.jgrapht.alg;
@@ -84,6 +85,13 @@ class KShortestPathsIterator<V, E>
      * = <code>RankingPathElementList</code> list of calculated paths.
      */
     private Map<V, RankingPathElementList<V, E>> seenDataContainer;
+    
+    /**
+     * Performs path validations in addition to the basics
+     * (source and target are connected w/o loops)
+     * 
+     */
+    private PathValidator<V, E> pathValidator = null;
 
     /**
      * Start vertex.
@@ -96,7 +104,7 @@ class KShortestPathsIterator<V, E>
      * Stores the number of the path.
      */
     private int passNumber = 1;
-
+    
     /**
      * @param graph graph on which shortest paths are searched.
      * @param startVertex start vertex of the calculated paths.
@@ -108,6 +116,23 @@ class KShortestPathsIterator<V, E>
         V startVertex,
         V endVertex,
         int maxSize)
+    {
+        this(graph, startVertex, endVertex, maxSize, null);
+    }
+
+    /**
+     * @param graph graph on which shortest paths are searched.
+     * @param startVertex start vertex of the calculated paths.
+     * @param endVertex end vertex of the calculated paths.
+     * @param maxSize number of paths stored at end vertex of the graph.
+     * @param pathValidator the path validator to use
+     */
+    public KShortestPathsIterator(
+        Graph<V, E> graph,
+        V startVertex,
+        V endVertex,
+        int maxSize,
+        PathValidator<V, E> pathValidator)
     {
         assertKShortestPathsIterator(graph, startVertex);
 
@@ -122,6 +147,7 @@ class KShortestPathsIterator<V, E>
                 new HashMap<>();
 
         this.prevImprovedVertices = new HashSet<>();
+        this.pathValidator = null;
     }
 
     /**
@@ -261,7 +287,8 @@ class KShortestPathsIterator<V, E>
                         this.graph,
                         this.k,
                         new RankingPathElement<>(
-                                this.startVertex));
+                                this.startVertex),
+                        this.pathValidator);
 
         this.seenDataContainer.put(this.startVertex, data);
         this.prevSeenDataContainer.put(this.startVertex, data);
@@ -283,7 +310,8 @@ class KShortestPathsIterator<V, E>
                     new RankingPathElementList<>(
                             this.graph,
                             pathElementList.maxSize,
-                            vertex);
+                            vertex,
+                            this.pathValidator);
 
             for (RankingPathElement<V, E> path : pathElementList) {
                 if (path.getHopCount() == this.passNumber) {

@@ -25,7 +25,7 @@
  * (C) Copyright 2007-2010, by France Telecom
  *
  * Original Author:  Guillaume Boulmier and Contributors.
- * Contributor(s):   John V. Sichi
+ * Contributor(s):   John V. Sichi, Assaf Mizrachi
  *
  * $Id$
  *
@@ -34,6 +34,7 @@
  * 05-Jun-2007 : Initial revision (GB);
  * 05-Jul-2007 : Added support for generics (JVS);
  * 06-Dec-2010 : Bugfixes (GB);
+ * 21-Jul-2016 : Added external path validator (AM).
  *
  */
 package org.jgrapht.alg;
@@ -68,18 +69,38 @@ public class KShortestPaths<V, E>
     private int nPaths;
 
     private V startVertex;
+    
+    private PathValidator<V, E> pathValidator;
 
     /**
      * Creates an object to compute ranking shortest paths between the start
      * vertex and others vertices.
      *
-     * @param graph
-     * @param startVertex
+     * @param graph graph on which shortest paths are searched.
+     * @param startVertex start vertex of the calculated paths.
      * @param k number of paths to be computed.
      */
     public KShortestPaths(Graph<V, E> graph, V startVertex, int k)
     {
-        this(graph, startVertex, k, graph.vertexSet().size() - 1);
+        this(graph, startVertex, k, null);
+    }
+    
+    /**
+     * Creates an object to compute ranking shortest paths between the start
+     * vertex and others vertices. Providing non-null path validator may be
+     * used to accept/deny paths according to some external logic. These
+     * validations will be used is addition to the basic path validations -
+     * that the path is from start to target with no loops.
+     *
+     * @param graph graph on which shortest paths are searched.
+     * @param startVertex start vertex of the calculated paths.
+     * @param k number of paths to be computed.
+     * @param pathValidator the path validator to use
+     */
+    public KShortestPaths(Graph<V, E> graph, V startVertex, int k,
+            PathValidator<V, E> pathValidator)
+    {
+        this(graph, startVertex, k, graph.vertexSet().size() - 1, pathValidator);
     }
 
     /**
@@ -103,13 +124,45 @@ public class KShortestPaths<V, E>
         int nPaths,
         int nMaxHops)
     {
+        this(graph, startVertex, nPaths, nMaxHops, null);
+    }
+    
+    /**
+     * Creates an object to calculate ranking shortest paths between the start
+     * vertex and others vertices. Providing non-null path validator may be
+     * used to accept/deny paths according to some external logic. These
+     * validations will be used is addition to the basic path validations -
+     * that the path is from start to target with no loops.
+     *
+     * @param graph graph on which shortest paths are searched.
+     * @param startVertex start vertex of the calculated paths.
+     * @param nPaths number of ranking paths between the start vertex and an end
+     * vertex.
+     * @param nMaxHops maximum number of edges of the calculated paths.
+     * @param pathValidator the path validator to use
+     *
+     * @throws NullPointerException if the specified graph or startVertex is
+     * <code>null</code>.
+     * @throws IllegalArgumentException if nPaths is negative or 0.
+     * @throws IllegalArgumentException if nMaxHops is negative or 0.
+     * @param pathValidator the path validator to use
+     */
+    public KShortestPaths(
+        Graph<V, E> graph,
+        V startVertex,
+        int nPaths,
+        int nMaxHops,
+        PathValidator<V, E> pathValidator)
+    {        
         assertKShortestPathsFinder(graph, startVertex, nPaths, nMaxHops);
 
         this.graph = graph;
         this.startVertex = startVertex;
         this.nPaths = nPaths;
         this.nMaxHops = nMaxHops;
+        this.pathValidator = pathValidator;
     }
+
 
     /**
      * Returns the k shortest simple paths in increasing order of weight.
@@ -128,7 +181,8 @@ public class KShortestPaths<V, E>
                         this.graph,
                         this.startVertex,
                         endVertex,
-                        this.nPaths);
+                        this.nPaths,
+                        this.pathValidator);
 
         // at the i-th pass the shortest paths with less (or equal) than i edges
         // are calculated.

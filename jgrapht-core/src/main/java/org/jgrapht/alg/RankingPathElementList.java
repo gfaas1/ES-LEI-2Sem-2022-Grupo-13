@@ -5,7 +5,7 @@
  * Project Info:  http://jgrapht.sourceforge.net/
  * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
  *
- * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -25,7 +25,7 @@
  * (C) Copyright 2007-2010, by France Telecom
  *
  * Original Author:  Guillaume Boulmier and Contributors.
- * Contributor(s):   John V. Sichi
+ * Contributor(s):   John V. Sichi, Assaf Mizrachi
  *
  * $Id$
  *
@@ -34,6 +34,7 @@
  * 05-Jun-2007 : Initial revision (GB);
  * 05-Jul-2007 : Added support for generics (JVS);
  * 06-Dec-2010 : Bugfixes (GB);
+ * 21-Jul-2016 : Added external path validator (AM).
  *
  */
 package org.jgrapht.alg;
@@ -60,6 +61,13 @@ final class RankingPathElementList<V, E>
 
     private Map<RankingPathElement<V, E>, Boolean> path2disconnect =
         new HashMap<RankingPathElement<V, E>, Boolean>();
+    
+    /**
+     * To be used on top of general path validations. May invalidate the
+     * path though they pass the basic validations done internally
+     * (path is from source to target and w/o loops).
+     */
+    private PathValidator<V, E> externalPathVlidator = null;  
 
     /**
      * Creates a list with an empty path. The list size is 1.
@@ -69,9 +77,27 @@ final class RankingPathElementList<V, E>
     RankingPathElementList(
         Graph<V, E> graph,
         int maxSize,
-        RankingPathElement<V, E> pathElement)
+        RankingPathElement<V, E> pathElement)    
+    {
+        this(graph, maxSize, pathElement, null);
+    }
+    
+    /**
+     * Creates a list with an empty path. The list size is 1.
+     *
+     * @param maxSize max number of paths the list is able to store.
+     * @param pathValidator path validator to be used in addition to
+     * basic validations (path is from source to target w/o loops)
+     * 
+     */
+    RankingPathElementList(
+        Graph<V, E> graph,
+        int maxSize,
+        RankingPathElement<V, E> pathElement,
+        PathValidator<V, E> pathValidator)    
     {
         super(graph, maxSize, pathElement);
+        this.externalPathVlidator = pathValidator;
     }
 
     /**
@@ -93,7 +119,7 @@ final class RankingPathElementList<V, E>
 
         assert (!this.pathElements.isEmpty());
     }
-
+    
     /**
      * Creates paths obtained by concatenating the specified edge to the
      * specified paths.
@@ -109,6 +135,28 @@ final class RankingPathElementList<V, E>
         RankingPathElementList<V, E> elementList,
         E edge,
         V guardVertexToNotDisconnect)
+    {
+        this(graph, maxSize, elementList, edge, guardVertexToNotDisconnect, null);
+    }
+
+    /**
+     * Creates paths obtained by concatenating the specified edge to the
+     * specified paths.
+     *
+     * @param prevPathElementList paths, list of <code>
+     * RankingPathElement</code>.
+     * @param edge edge reaching the end vertex of the created paths.
+     * @param maxSize maximum number of paths the list is able to store.
+     * @param pathValidator path validator to be used in addition to
+     * basic validations (path is from source to target w/o loops)
+     */
+    RankingPathElementList(
+        Graph<V, E> graph,
+        int maxSize,
+        RankingPathElementList<V, E> elementList,
+        E edge,
+        V guardVertexToNotDisconnect,
+        PathValidator<V, E> pathValidator)
     {
         super(graph, maxSize, elementList, edge);
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
@@ -134,7 +182,7 @@ final class RankingPathElementList<V, E>
             this.pathElements.add(newPathElement);
         }
     }
-
+    
     /**
      * Creates an empty list. The list size is 0.
      *
@@ -142,7 +190,21 @@ final class RankingPathElementList<V, E>
      */
     RankingPathElementList(Graph<V, E> graph, int maxSize, V vertex)
     {
+        this(graph, maxSize, vertex, null);
+    }
+
+    /**
+     * Creates an empty list. The list size is 0.
+     *
+     * @param maxSize max number of paths the list is able to store.
+     * @param pathValidator path validator to be used in addition to
+     * basic validations (path is from source to target w/o loops)
+     */
+    RankingPathElementList(Graph<V, E> graph, int maxSize, V vertex, 
+            PathValidator<V, E> pathValidator)
+    {
         super(graph, maxSize, vertex);
+        this.externalPathVlidator = pathValidator;
     }
 
     /**
@@ -347,11 +409,21 @@ final class RankingPathElementList<V, E>
     }
 
     private boolean isNotValidPath(
-        RankingPathElement<V, E> prevPathElement,
-        E edge)
-    {
-        return !isSimplePath(prevPathElement, edge)
-            || isGuardVertexDisconnected(prevPathElement);
+            RankingPathElement<V, E> prevPathElement,
+            E edge)
+    {        
+        if (!isSimplePath(prevPathElement, edge)) {
+            return true;
+        }
+        if (isGuardVertexDisconnected(prevPathElement)) {
+            return true;
+        }
+        if (externalPathVlidator != null && externalPathVlidator.isNotValidPath(prevPathElement, edge)) {
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
     /**
