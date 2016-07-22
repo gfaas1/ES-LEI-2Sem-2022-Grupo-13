@@ -48,10 +48,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Imports a graph specified in DIMACS format (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps).
- * In summary, graphs specified in DIMACS format adhere to the following structure:
- * <pre><code>
- *
+ * Imports a graph specified in DIMACS format
+ * (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps). In summary, graphs
+ * specified in DIMACS format adhere to the following structure:
+ * 
+ * <pre>
+ * {@code
  * DIMACS G {
  *    c <comments; ignored during parsing of the graph
  *    p edge <number of nodes> <number of edges>
@@ -61,32 +63,45 @@ import java.util.Map;
  *    e <edge source 4> <edge target 4>
  *    ...
  * }
- *
- * </code></pre>
- *
- * Although not specified directly in the DIMACS format documentation, this implementation also allows for the a weighted variant:
- * <pre><code>e <edge source 1> <edge target 1> <edge_weight> </code></pre>
- *
- * Note: the current implementation does not fully implement the DIMACS specifications! Special (rarely used) fields
- * specified as 'Optional Descriptors' are currently not supported.
+ * }
+ * </pre>
+ * 
+ * Although not specified directly in the DIMACS format documentation, this
+ * implementation also allows for the a weighted variant:
+ * 
+ * <pre>
+ * {@code 
+ * e <edge source 1> <edge target 1> <edge_weight> 
+ * }
+ * </pre>
+ * 
+ * Note: the current implementation does not fully implement the DIMACS
+ * specifications! Special (rarely used) fields specified as 'Optional
+ * Descriptors' are currently not supported.
  *
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
  *
- * @param <V>
- * @param <E>
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
-public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
+public class DIMACSImporter<V, E>
+    implements GraphGenerator<V, E, V>
+{
     private final BufferedReader input;
     private final double defaultWeight;
 
     // ~ Constructors ----------------------------------------------------------
 
     /**
-     * Construct a new DIMACSImporter.
+     * Construct a new DIMACSImporter
+     * 
+     * @param input the input reader
+     * @param defaultWeight default edge weight
+     * @throws IOException in case an I/O error occurs
      */
     public DIMACSImporter(Reader input, double defaultWeight)
-            throws IOException
+        throws IOException
     {
         if (input instanceof BufferedReader) {
             this.input = (BufferedReader) input;
@@ -97,18 +112,20 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
     }
 
     /**
-     * Construct a new DIMACSImporter.
+     * Construct a new DIMACSImporter
+     * 
+     * @param input the input reader
+     * @throws IOException in case an I/O error occurs
      */
     public DIMACSImporter(Reader input)
-            throws IOException
+        throws IOException
     {
         this(input, 1);
     }
 
-
     // ~ Methods ---------------------------------------------------------------
 
-    private String [] split(final String src)
+    private String[] split(final String src)
     {
         if (src == null) {
             return null;
@@ -116,16 +133,13 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
         return src.split("\\s+");
     }
 
-    private String [] skipComments()
+    private String[] skipComments()
     {
-        String [] cols = null;
+        String[] cols = null;
         try {
             cols = split(input.readLine());
-            while (
-                    (cols != null)
-                            && ((cols.length == 0)
-                            || cols[0].equals("c")
-                            || cols[0].startsWith("%")))
+            while ((cols != null) && ((cols.length == 0) || cols[0].equals("c")
+                || cols[0].startsWith("%")))
             {
                 cols = split(input.readLine());
             }
@@ -136,7 +150,7 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
 
     private int readNodeCount()
     {
-        final String [] cols = skipComments();
+        final String[] cols = skipComments();
         if (cols[0].equals("p")) {
             return Integer.parseInt(cols[2]);
         }
@@ -146,10 +160,11 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
     /**
      * {@inheritDoc}
      */
-    @Override public void generateGraph(
-            Graph<V, E> target,
-            VertexFactory<V> vertexFactory,
-            Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target,
+        VertexFactory<V> vertexFactory,
+        Map<String, V> resultMap)
     {
         final int size = readNodeCount();
         if (resultMap == null) {
@@ -161,10 +176,11 @@ public class DIMACSImporter<V, E> implements GraphGenerator<V, E, V>{
             target.addVertex(newVertex);
             resultMap.put(Integer.toString(i + 1), newVertex);
         }
-        String [] cols = skipComments();
+        String[] cols = skipComments();
         while (cols != null) {
             if (cols[0].equals("e")) {
-                E edge = target.addEdge(resultMap.get(cols[1]), resultMap.get(cols[2]));
+                E edge = target
+                    .addEdge(resultMap.get(cols[1]), resultMap.get(cols[2]));
                 if (target instanceof WeightedGraph && (edge != null)) {
                     double weight = defaultWeight;
                     if (cols.length > 3) {
