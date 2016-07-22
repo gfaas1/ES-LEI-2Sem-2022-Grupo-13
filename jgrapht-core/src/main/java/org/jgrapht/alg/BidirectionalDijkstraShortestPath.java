@@ -36,8 +36,7 @@
 */
 package org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -174,6 +173,28 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
     }
 
+    /**
+     * Convenience method to find the shortest path via a single static method
+     * call. If you need a more advanced search (e.g. limited by radius, or
+     * computation of the path length), use the constructor instead.
+     *
+     * @param graph the graph to be searched
+     * @param startVertex the vertex at which the path should start
+     * @param endVertex the vertex at which the path should end
+     *
+     * @return List of edges, or null if no path exists
+     */
+    public static <V, E> List<E> findPathBetween(
+        Graph<V, E> graph,
+        V startVertex,
+        V endVertex)
+    {
+        return new BidirectionalDijkstraShortestPath<>(
+            graph,
+            startVertex,
+            endVertex).getPathEdgeList();
+    }
+
 }
 
 /**
@@ -182,7 +203,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
 class BidirectionalDijkstraShortestPathDetails<V, E>
 {
     private final SearchFrontier<V, E> forwardFrontier;
-    private final SearchFrontier<V, E> reversedFrontier;
+    private final SearchFrontier<V, E> backwardFrontier;
 
     private final V source;
     private final V target;
@@ -194,12 +215,12 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
         V target,
         double radius)
     {
-        this.forwardFrontier = new SearchFrontier<V, E>(graph);
+        this.forwardFrontier = new SearchFrontier<>(graph);
         if (graph instanceof DirectedGraph) {
-            this.reversedFrontier = new SearchFrontier<V, E>(
+            this.backwardFrontier = new SearchFrontier<>(
                 new EdgeReversedGraph<>(((DirectedGraph<V, E>) graph)));
         } else {
-            this.reversedFrontier = new SearchFrontier<V, E>(graph);
+            this.backwardFrontier = new SearchFrontier<>(graph);
         }
         this.source = source;
         this.target = target;
@@ -214,8 +235,8 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
                 forwardFrontier.graph,
                 source,
                 target,
-                Arrays.asList(source),
-                new ArrayList<>(),
+                Collections.singletonList(source),
+                Collections.emptyList(),
                 0d);
         }
 
@@ -223,14 +244,14 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
 
         // initialize both frontiers
         forwardFrontier.updateDistance(source, null, 0d);
-        reversedFrontier.updateDistance(target, null, 0d);
+        backwardFrontier.updateDistance(target, null, 0d);
 
         // initialize best path
         double bestPath = Double.POSITIVE_INFINITY;
         V bestPathCommonVertex = null;
 
         SearchFrontier<V, E> frontier = forwardFrontier;
-        SearchFrontier<V, E> otherFrontier = reversedFrontier;
+        SearchFrontier<V, E> otherFrontier = backwardFrontier;
 
         while (true) {
             // stopping condition
@@ -306,14 +327,14 @@ class BidirectionalDijkstraShortestPathDetails<V, E>
         // traverse reverse path
         v = commonVertex;
         while (true) {
-            E e = reversedFrontier.getTreeEdge(v);
+            E e = backwardFrontier.getTreeEdge(v);
 
             if (e == null) {
                 break;
             }
 
             edgeList.addLast(e);
-            v = Graphs.getOppositeVertex(reversedFrontier.graph, e, v);
+            v = Graphs.getOppositeVertex(backwardFrontier.graph, e, v);
             vertexList.addLast(v);
         }
 
@@ -392,7 +413,7 @@ class SearchFrontier<V, E>
  * Provides unified interface for operations that are different in directed
  * graphs and in undirected graphs.
  */
-abstract class Specifics<VV, EE>
+abstract class Specifics<V, E>
 {
 
     /**
@@ -406,33 +427,30 @@ abstract class Specifics<VV, EE>
      *         graph, and the edge touching the specified vertex in case of
      *         undirected graph.
      */
-    public abstract Set<? extends EE> edgesOf(VV vertex);
+    public abstract Set<? extends E> edgesOf(V vertex);
 }
 
 /**
  * An implementation of {@link Specifics} for a directed graph.
  */
-class DirectedSpecifics<VV, EE>
-    extends Specifics<VV, EE>
+class DirectedSpecifics<V, E>
+    extends Specifics<V, E>
 {
 
-    private DirectedGraph<VV, EE> graph;
+    private DirectedGraph<V, E> graph;
 
     /**
      * Creates a new DirectedSpecifics object.
      *
      * @param g the graph for which this specifics object to be created.
      */
-    public DirectedSpecifics(DirectedGraph<VV, EE> g)
+    public DirectedSpecifics(DirectedGraph<V, E> g)
     {
         graph = g;
     }
 
-    /**
-     * @see CrossComponentIterator.Specifics#edgesOf(Object)
-     */
     @Override
-    public Set<? extends EE> edgesOf(VV vertex)
+    public Set<? extends E> edgesOf(V vertex)
     {
         return graph.outgoingEdgesOf(vertex);
     }
@@ -442,27 +460,24 @@ class DirectedSpecifics<VV, EE>
  * An implementation of {@link Specifics} in which edge direction (if any) is
  * ignored.
  */
-class UndirectedSpecifics<VV, EE>
-    extends Specifics<VV, EE>
+class UndirectedSpecifics<V, E>
+    extends Specifics<V, E>
 {
 
-    private Graph<VV, EE> graph;
+    private Graph<V, E> graph;
 
     /**
      * Creates a new UndirectedSpecifics object.
      *
      * @param g the graph for which this specifics object to be created.
      */
-    public UndirectedSpecifics(Graph<VV, EE> g)
+    public UndirectedSpecifics(Graph<V, E> g)
     {
         graph = g;
     }
 
-    /**
-     * @see CrossComponentIterator.Specifics#edgesOf(Object)
-     */
     @Override
-    public Set<EE> edgesOf(VV vertex)
+    public Set<E> edgesOf(V vertex)
     {
         return graph.edgesOf(vertex);
     }
@@ -475,10 +490,6 @@ class QueueEntry<V, E>
 {
     E e;
     V v;
-
-    QueueEntry()
-    {
-    }
 
     public QueueEntry(E e, V v)
     {
