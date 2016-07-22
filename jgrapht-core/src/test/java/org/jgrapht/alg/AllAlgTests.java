@@ -52,6 +52,7 @@ import org.junit.runners.Suite;
     AllDirectedPathsTest.class,
     BellmanFordShortestPathTest.class,
     BiconnectivityInspectorTest.class,
+    BidirectionalDijkstraShortestPathTest.class,
     BlockCutpointGraphTest.class,
     BronKerboschCliqueFinderTest.class,
     ChromaticNumberTest.class,
@@ -78,8 +79,7 @@ import org.junit.runners.Suite;
     StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class,
-    VertexCoversTest.class
-})
+    VertexCoversTest.class })
 public final class AllAlgTests
 {
 }
