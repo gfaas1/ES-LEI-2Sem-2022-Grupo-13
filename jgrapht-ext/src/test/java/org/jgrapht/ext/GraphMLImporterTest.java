@@ -457,6 +457,133 @@ public class GraphMLImporterTest
         assertEquals(3.0, g.getEdgeWeight(g.getEdge("n1", "n2")));
     }
 
+    public void testWithAttributesCustomNamedWeightedGraphs()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
+            "<default>yellow</default>" + NL +
+            "</key>" + NL +
+            "<key id=\"d1\" for=\"edge\" attr.name=\"myvalue\" attr.type=\"double\">" + NL +
+            "<default>3.0</default>" + NL +
+            "</key>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\">" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</node>" + NL +
+            "<node id=\"n1\"/>" + NL +
+            "<node id=\"n2\">" + NL +
+            "<data key=\"d0\">blue</data>" + NL +
+            "</node>" + NL+
+            "<edge id=\"e0\" source=\"n0\" target=\"n2\">" + NL +
+            "<data key=\"d1\">2.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\">" + NL +
+            "<data key=\"d1\">1.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e2\" source=\"n1\" target=\"n2\"/>" + NL +
+            "</graph>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
+            DefaultWeightedEdge.class);
+        Map<String, Map<String, String>> vAttributes = new HashMap<String, Map<String, String>>();
+        Map<DefaultWeightedEdge, Map<String, String>> eAttributes = new HashMap<DefaultWeightedEdge, Map<String, String>>();
+
+        GraphMLImporter<String, DefaultWeightedEdge> importer = createGraphImporter(
+            g,
+            vAttributes,
+            eAttributes);
+        importer.setEdgeWeightAttributeName("myvalue");
+        importer.read(new StringReader(input), g);
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("n0"));
+        assertTrue(g.containsVertex("n1"));
+        assertTrue(g.containsVertex("n2"));
+        assertTrue(g.containsEdge("n0", "n2"));
+        assertTrue(g.containsEdge("n0", "n1"));
+        assertTrue(g.containsEdge("n1", "n2"));
+        assertEquals(2.0, g.getEdgeWeight(g.getEdge("n0", "n2")));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("n0", "n1")));
+        assertEquals(3.0, g.getEdgeWeight(g.getEdge("n1", "n2")));
+    }
+
+    public void testWithAttributesCustomNamedWeightedForAllGraphs()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL +
+            "<default>yellow</default>" + NL +
+            "</key>" + NL +
+            "<key id=\"d1\" for=\"all\" attr.name=\"myvalue\" attr.type=\"double\">" + NL +
+            "<default>3.0</default>" + NL +
+            "</key>" + NL +
+            "<key id=\"d2\" for=\"all\" attr.name=\"onemore\" attr.type=\"string\"/>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\">" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</node>" + NL +
+            "<node id=\"n1\">" + NL +
+            "<data key=\"d2\">value1</data>" + NL +
+            "</node>" + NL +
+            "<node id=\"n2\">" + NL +
+            "<data key=\"d0\">blue</data>" + NL +
+            "</node>" + NL+
+            "<edge id=\"e0\" source=\"n0\" target=\"n2\">" + NL +
+            "<data key=\"d1\">2.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\">" + NL +
+            "<data key=\"d1\">1.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e2\" source=\"n1\" target=\"n2\"/>" + NL +
+            "</graph>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
+            DefaultWeightedEdge.class);
+        Map<String, Map<String, String>> vAttributes = new HashMap<String, Map<String, String>>();
+        Map<DefaultWeightedEdge, Map<String, String>> eAttributes = new HashMap<DefaultWeightedEdge, Map<String, String>>();
+
+        GraphMLImporter<String, DefaultWeightedEdge> importer = createGraphImporter(
+            g,
+            vAttributes,
+            eAttributes);
+        importer.setEdgeWeightAttributeName("myvalue");
+        importer.read(new StringReader(input), g);
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("n0"));
+        assertTrue(g.containsVertex("n1"));
+        assertTrue(g.containsVertex("n2"));
+        assertTrue(g.containsEdge("n0", "n2"));
+        assertTrue(g.containsEdge("n0", "n1"));
+        assertTrue(g.containsEdge("n1", "n2"));
+        assertEquals(2.0, g.getEdgeWeight(g.getEdge("n0", "n2")));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("n0", "n1")));
+        assertEquals(3.0, g.getEdgeWeight(g.getEdge("n1", "n2")));
+
+        assertEquals("3.0", vAttributes.get("n0").get("myvalue"));
+        assertEquals("3.0", vAttributes.get("n1").get("myvalue"));
+        assertEquals("3.0", vAttributes.get("n2").get("myvalue"));
+    }
+
     public void testWithHyperEdges()
         throws ImportException
     {
@@ -691,38 +818,16 @@ public class GraphMLImporterTest
         EdgeProvider<String, E> ep)
         throws ImportException
     {
-        GraphMLImporter<String, E> importer = new GraphMLImporter<String, E>(
-            vp,
-            ep);
+        GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
         importer.read(new StringReader(input), g);
-
         return g;
     }
 
-    public <E> Graph<String, E> readGraph(
-        String input,
-        Class<? extends E> edgeClass,
-        boolean directed,
-        boolean weighted,
+    public <E> GraphMLImporter<String, E> createGraphImporter(
+        Graph<String, E> g,
         Map<String, Map<String, String>> vertexAttributes,
         Map<E, Map<String, String>> edgeAttributes)
-        throws ImportException
     {
-        Graph<String, E> g;
-        if (directed) {
-            if (weighted) {
-                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
-            } else {
-                g = new DirectedPseudograph<String, E>(edgeClass);
-            }
-        } else {
-            if (weighted) {
-                g = new WeightedPseudograph<String, E>(edgeClass);
-            } else {
-                g = new Pseudograph<String, E>(edgeClass);
-            }
-        }
-
         VertexProvider<String> vp = new VertexProvider<String>()
         {
             @Override
@@ -752,7 +857,51 @@ public class GraphMLImporterTest
 
         };
 
-        return readGraph(input, g, vp, ep);
+        return createGraphImporter(g, vp, ep);
+    }
+
+    public <E> GraphMLImporter<String, E> createGraphImporter(
+        Graph<String, E> g,
+        VertexProvider<String> vp,
+        EdgeProvider<String, E> ep)
+    {
+        GraphMLImporter<String, E> importer = new GraphMLImporter<String, E>(
+            vp,
+            ep);
+
+        return importer;
+    }
+
+    public <E> Graph<String, E> readGraph(
+        String input,
+        Class<? extends E> edgeClass,
+        boolean directed,
+        boolean weighted,
+        Map<String, Map<String, String>> vertexAttributes,
+        Map<E, Map<String, String>> edgeAttributes)
+        throws ImportException
+    {
+        Graph<String, E> g;
+        if (directed) {
+            if (weighted) {
+                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new DirectedPseudograph<String, E>(edgeClass);
+            }
+        } else {
+            if (weighted) {
+                g = new WeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new Pseudograph<String, E>(edgeClass);
+            }
+        }
+
+        GraphMLImporter<String, E> importer = createGraphImporter(
+            g,
+            vertexAttributes,
+            edgeAttributes);
+        importer.read(new StringReader(input), g);
+        return g;
     }
 
 }

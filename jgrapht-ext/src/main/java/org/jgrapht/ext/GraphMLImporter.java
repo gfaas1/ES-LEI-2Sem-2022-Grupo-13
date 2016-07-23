@@ -159,6 +159,10 @@ public class GraphMLImporter<V, E>
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
 
+    // special attributes
+    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
+    private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
+
     /**
      * Constructs a new importer.
      * 
@@ -230,6 +234,30 @@ public class GraphMLImporter<V, E>
     }
 
     /**
+     * Get the attribute name for edge weights
+     * 
+     * @return the attribute name
+     */
+    public String getEdgeWeightAttributeName()
+    {
+        return edgeWeightAttributeName;
+    }
+
+    /**
+     * Set the attribute name to use for edge weights.
+     * 
+     * @param edgeWeightAttributeName the attribute name
+     */
+    public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
+    {
+        if (edgeWeightAttributeName == null) {
+            throw new IllegalArgumentException(
+                "Edge weight attribute name cannot be null");
+        }
+        this.edgeWeightAttributeName = edgeWeightAttributeName;
+    }
+
+    /**
      * Import a graph.
      * 
      * <p>
@@ -293,6 +321,7 @@ public class GraphMLImporter<V, E>
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
         private static final String EDGE = "edge";
+        private static final String ALL = "all";
         private static final String EDGE_SOURCE = "source";
         private static final String EDGE_TARGET = "target";
         private static final String KEY = "key";
@@ -302,7 +331,6 @@ public class GraphMLImporter<V, E>
         private static final String DEFAULT = "default";
         private static final String DATA = "data";
         private static final String DATA_KEY = "key";
-        private static final String SPECIAL_EDGE_WEIGHT = "weight";
 
         // collect graph elements here
         private Map<String, NodeOrEdge> nodes;
@@ -367,16 +395,18 @@ public class GraphMLImporter<V, E>
             double defaultSpecialEdgeWeight = 1.0;
             if (graph instanceof WeightedGraph<?, ?>) {
                 for (Key k : edgeValidKeys.values()) {
-                    if (k.attributeName.equals(SPECIAL_EDGE_WEIGHT)) {
+                    if (k.attributeName.equals(edgeWeightAttributeName)) {
                         handleSpecialEdgeWeights = true;
                         String defaultValue = k.defaultValue;
                         try {
-                            defaultSpecialEdgeWeight = Double
-                                .parseDouble(defaultValue);
+                            if (defaultValue != null) {
+                                defaultSpecialEdgeWeight = Double
+                                    .parseDouble(defaultValue);
+                            }
                         } catch (NumberFormatException e) {
                             // ignore
                         }
-                        // first key only which maps to "weight"
+                        // first key only which maps to special edge "weight"
                         break;
                     }
                 }
@@ -424,12 +454,13 @@ public class GraphMLImporter<V, E>
 
                 // special handling for weighted graphs
                 if (handleSpecialEdgeWeights) {
-                    if (finalAttributes.containsKey(SPECIAL_EDGE_WEIGHT)) {
+                    if (finalAttributes.containsKey(edgeWeightAttributeName)) {
                         try {
                             ((WeightedGraph<V, E>) graph).setEdgeWeight(
                                 e,
                                 Double.parseDouble(
-                                    finalAttributes.get(SPECIAL_EDGE_WEIGHT)));
+                                    finalAttributes
+                                        .get(edgeWeightAttributeName)));
                         } catch (NumberFormatException nfe) {
                             ((WeightedGraph<V, E>) graph)
                                 .setEdgeWeight(e, defaultSpecialEdgeWeight);
@@ -485,6 +516,8 @@ public class GraphMLImporter<V, E>
                         currentKey.target = KeyTarget.EDGE;
                     } else if (keyFor.equals(NODE)) {
                         currentKey.target = KeyTarget.NODE;
+                    } else if (keyFor.equals(ALL)) {
+                        currentKey.target = KeyTarget.ALL;
                     }
                 }
                 break;
@@ -524,8 +557,14 @@ public class GraphMLImporter<V, E>
                     switch (currentKey.target) {
                     case NODE:
                         nodeValidKeys.put(currentKey.id, currentKey);
+                        break;
                     case EDGE:
                         edgeValidKeys.put(currentKey.id, currentKey);
+                        break;
+                    case ALL:
+                        nodeValidKeys.put(currentKey.id, currentKey);
+                        edgeValidKeys.put(currentKey.id, currentKey);
+                        break;
                     }
                 }
                 currentKey = null;
@@ -595,6 +634,7 @@ public class GraphMLImporter<V, E>
     {
         NODE,
         EDGE,
+        ALL
     }
 
     private class Key
