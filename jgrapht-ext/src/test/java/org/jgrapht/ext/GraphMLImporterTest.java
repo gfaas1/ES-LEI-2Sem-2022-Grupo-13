@@ -582,6 +582,16 @@ public class GraphMLImporterTest
         assertEquals("3.0", vAttributes.get("n0").get("myvalue"));
         assertEquals("3.0", vAttributes.get("n1").get("myvalue"));
         assertEquals("3.0", vAttributes.get("n2").get("myvalue"));
+
+        assertFalse(vAttributes.get("n0").containsKey("onemore"));
+        assertEquals("value1", vAttributes.get("n1").get("onemore"));
+        assertFalse(vAttributes.get("n2").containsKey("onemore"));
+        assertFalse(
+            eAttributes.get(g.getEdge("n0", "n2")).containsKey("onemore"));
+        assertFalse(
+            eAttributes.get(g.getEdge("n0", "n1")).containsKey("onemore"));
+        assertFalse(
+            eAttributes.get(g.getEdge("n1", "n2")).containsKey("onemore"));
     }
 
     public void testWithHyperEdges()
