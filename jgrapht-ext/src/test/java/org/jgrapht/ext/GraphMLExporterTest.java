@@ -39,6 +39,8 @@ import junit.framework.*;
 import org.custommonkey.xmlunit.*;
 
 import org.jgrapht.*;
+import org.jgrapht.ext.GraphMLExporter.AttributeCategory;
+import org.jgrapht.ext.GraphMLExporter.AttributeType;
 import org.jgrapht.graph.*;
 
 /**
@@ -105,7 +107,7 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
 				+ "<graph edgedefault=\"undirected\">" + NL
@@ -179,12 +181,13 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
 				+ "<graph edgedefault=\"undirected\">" + NL
 				+ "<node id=\"1\"/>" + NL 
-				+ "<node id=\"2\"/>" + NL + "<node id=\"3\"/>" + NL
+				+ "<node id=\"2\"/>" + NL 
+				+ "<node id=\"3\"/>" + NL
 				+ "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
 				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
 				+ "</graph>" + NL 
@@ -217,14 +220,14 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
 				+ "<graph edgedefault=\"undirected\">" + NL
 				+ "<node id=\"1\"/>" + NL 
 				+ "<node id=\"2\"/>" + NL + "<node id=\"3\"/>" + NL
 				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
-				+ "<data key=\"edge_weight\">3.0</data>" + NL
+				+ "<data key=\"edge_weight_key\">3.0</data>" + NL
 				+ "</edge>" + NL 
 				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
 				+ "</graph>" + NL
@@ -248,6 +251,78 @@ public class GraphMLExporterTest
         XMLAssert.assertXMLEqual(output, w.toString());
     }
 
+    public void testUndirectedWeightedWithCustomNameWeights()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+                + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+                + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+                + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"value\" attr.type=\"double\">" + NL
+                + "<default>1.0</default>" + NL 
+                + "</key>" + NL 
+                + "<graph edgedefault=\"undirected\">" + NL
+                + "<node id=\"1\"/>" + NL 
+                + "<node id=\"2\"/>" + NL 
+                + "<node id=\"3\"/>" + NL
+                + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+                + "<data key=\"edge_weight_key\">3.0</data>" + NL
+                + "</edge>" + NL 
+                + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+                + "</graph>" + NL
+                + "</graphml>" + NL;
+        // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.setEdgeWeightAttributeName("value");
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testNoRegisterWeightAttribute()
+        throws Exception
+    {
+        try {
+            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+            exporter.registerAttribute(
+                "weight",
+                AttributeCategory.ALL,
+                AttributeType.STRING);
+            fail("Registered reserved attribute");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    public void testRegisterWeightAttribute()
+        throws Exception
+    {
+        try {
+            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+            exporter.setEdgeWeightAttributeName("anothername");
+            exporter.registerAttribute(
+                "weight",
+                AttributeCategory.ALL,
+                AttributeType.STRING);
+        } catch (IllegalArgumentException e) {
+            fail("No!");
+        }
+    }
+
     public void testUndirectedWeightedWithWeightsAndLabels()
         throws Exception
     {
@@ -258,28 +333,28 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"vertex_label\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
-				+ "<key id=\"edge_label\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
-				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
 				+ "<graph edgedefault=\"undirected\">" + NL
 				+ "<node id=\"1\">" + NL 
-				+ "<data key=\"vertex_label\">v1</data>" + NL 
+				+ "<data key=\"vertex_label_key\">v1</data>" + NL 
 				+ "</node>" + NL
 				+ "<node id=\"2\">" + NL 
-				+ "<data key=\"vertex_label\">v2</data>" + NL 
+				+ "<data key=\"vertex_label_key\">v2</data>" + NL 
 				+ "</node>" + NL
 				+ "<node id=\"3\">" + NL 
-				+ "<data key=\"vertex_label\">v3</data>" + NL 
+				+ "<data key=\"vertex_label_key\">v3</data>" + NL 
 				+ "</node>" + NL
 				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
-				+ "<data key=\"edge_label\">(v1 : v2)</data>" + NL 
-				+ "<data key=\"edge_weight\">3.0</data>" + NL 
+				+ "<data key=\"edge_label_key\">(v1 : v2)</data>" + NL 
+				+ "<data key=\"edge_weight_key\">3.0</data>" + NL 
 				+ "</edge>" + NL
 				+ "<edge id=\"2\" source=\"3\" target=\"1\">" + NL 
-				+ "<data key=\"edge_label\">(v3 : v1)</data>"+ NL 
-				+ "<data key=\"edge_weight\">15.0</data>" + NL 
+				+ "<data key=\"edge_label_key\">(v3 : v1)</data>"+ NL 
+				+ "<data key=\"edge_weight_key\">15.0</data>" + NL 
 				+ "</edge>" + NL 
 				+ "</graph>" + NL
 				+ "</graphml>" + NL;
@@ -322,6 +397,82 @@ public class GraphMLExporterTest
         XMLAssert.assertXMLEqual(output, w.toString());
     }
 
+    public void testUndirectedWeightedWithWeightsAndLabelsAndCustomNames()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+                + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+                + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+                + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"custom_vertex_label\" attr.type=\"string\"/>" + NL
+                + "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"custom_edge_label\" attr.type=\"string\"/>" + NL
+                + "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+                + "<default>1.0</default>" + NL 
+                + "</key>" + NL 
+                + "<graph edgedefault=\"undirected\">" + NL
+                + "<node id=\"1\">" + NL 
+                + "<data key=\"vertex_label_key\">myvertex-v1</data>" + NL 
+                + "</node>" + NL
+                + "<node id=\"2\">" + NL 
+                + "<data key=\"vertex_label_key\">myvertex-v2</data>" + NL 
+                + "</node>" + NL
+                + "<node id=\"3\">" + NL 
+                + "<data key=\"vertex_label_key\">myvertex-v3</data>" + NL 
+                + "</node>" + NL
+                + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+                + "<data key=\"edge_label_key\">myedge-(v1 : v2)</data>" + NL 
+                + "<data key=\"edge_weight_key\">3.0</data>" + NL 
+                + "</edge>" + NL
+                + "<edge id=\"2\" source=\"3\" target=\"1\">" + NL 
+                + "<data key=\"edge_label_key\">myedge-(v3 : v1)</data>"+ NL 
+                + "<data key=\"edge_weight_key\">15.0</data>" + NL 
+                + "</edge>" + NL 
+                + "</graph>" + NL
+                + "</graphml>" + NL;
+            // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+        g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+        exporter.setVertexLabelProvider(new VertexNameProvider<String>()
+        {
+            @Override
+            public String getVertexName(String vertex)
+            {
+                return "myvertex-" + vertex;
+            }
+        });
+        exporter.setVertexLabelAttributeName("custom_vertex_label");
+        exporter
+            .setEdgeLabelProvider(new EdgeNameProvider<DefaultWeightedEdge>()
+            {
+                @Override
+                public String getEdgeName(DefaultWeightedEdge edge)
+                {
+                    return "myedge-" + edge.toString();
+                }
+
+            });
+        exporter.setEdgeLabelAttributeName("custom_edge_label");
+
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
     public void testUndirectedWeightedWithWeightsAndColor()
         throws Exception
     {
@@ -332,7 +483,7 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL
 				+ "<key id=\"key0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL
@@ -353,7 +504,7 @@ public class GraphMLExporterTest
 				+ "<data key=\"key1\">V3</data>" + NL
 				+ "</node>" + NL
 				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
-				+ "<data key=\"edge_weight\">3.0</data>" + NL
+				+ "<data key=\"edge_weight_key\">3.0</data>" + NL
 				+ "<data key=\"key1\">e12</data>" + NL
 				+ "</edge>" + NL 
 				+ "<edge id=\"2\" source=\"3\" target=\"1\">" + NL
@@ -427,10 +578,12 @@ public class GraphMLExporterTest
         exporter.registerAttribute(
             "color",
             GraphMLExporter.AttributeCategory.NODE,
+            GraphMLExporter.AttributeType.STRING,
             "yellow");
         exporter.registerAttribute(
             "name",
             GraphMLExporter.AttributeCategory.ALL,
+            GraphMLExporter.AttributeType.STRING,
             "johndoe");
         exporter.export(w, g);
 
