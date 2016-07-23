@@ -31,6 +31,8 @@
 package org.jgrapht.ext;
 
 import java.io.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import junit.framework.*;
 
@@ -63,20 +65,20 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<graph edgedefault=\"undirected\">" + NL
-            + "<node id=\"1\"/>" + NL
-            + "<node id=\"2\"/>" + NL
-            + "<node id=\"3\"/>" + NL
-            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<graph edgedefault=\"undirected\">" + NL 
+				+ "<node id=\"1\"/>" + NL 
+				+ "<node id=\"2\"/>" + NL
+				+ "<node id=\"3\"/>" + NL 
+				+ "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+				+ "</graph>" + NL 
+				+ "</graphml>" + NL;
+		    // @formatter:on
 
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
             DefaultEdge.class);
@@ -98,23 +100,23 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
-            + "<default>1.0</default>" + NL
-            + "</key>" + NL
-            + "<graph edgedefault=\"undirected\">" + NL
-            + "<node id=\"1\"/>" + NL
-            + "<node id=\"2\"/>" + NL
-            + "<node id=\"3\"/>" + NL
-            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<default>1.0</default>" + NL 
+				+ "</key>" + NL 
+				+ "<graph edgedefault=\"undirected\">" + NL
+				+ "<node id=\"1\"/>" + NL 
+				+ "<node id=\"2\"/>" + NL 
+				+ "<node id=\"3\"/>" + NL
+				+ "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+				+ "</graph>" + NL 
+				+ "</graphml>" + NL;
+		    // @formatter:on
 
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
             DefaultEdge.class);
@@ -137,20 +139,20 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<graph edgedefault=\"directed\">" + NL
-            + "<node id=\"1\"/>" + NL
-            + "<node id=\"2\"/>" + NL
-            + "<node id=\"3\"/>" + NL
-            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<graph edgedefault=\"directed\">" + NL 
+				+ "<node id=\"1\"/>" + NL 
+				+ "<node id=\"2\"/>" + NL
+				+ "<node id=\"3\"/>" + NL 
+				+ "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+				+ "</graph>" + NL 
+				+ "</graphml>" + NL;
+		    // @formatter:on
 
         DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<String, DefaultEdge>(
             DefaultEdge.class);
@@ -172,23 +174,22 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
-            + "<default>1.0</default>" + NL
-            + "</key>" + NL
-            + "<graph edgedefault=\"undirected\">" + NL
-            + "<node id=\"1\"/>" + NL
-            + "<node id=\"2\"/>" + NL
-            + "<node id=\"3\"/>" + NL
-            + "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<default>1.0</default>" + NL 
+				+ "</key>" + NL 
+				+ "<graph edgedefault=\"undirected\">" + NL
+				+ "<node id=\"1\"/>" + NL 
+				+ "<node id=\"2\"/>" + NL + "<node id=\"3\"/>" + NL
+				+ "<edge id=\"1\" source=\"1\" target=\"2\"/>" + NL
+				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+				+ "</graph>" + NL 
+				+ "</graphml>" + NL;
+		    // @formatter:on
 
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
             DefaultEdge.class);
@@ -211,25 +212,24 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
-            + "<default>1.0</default>" + NL
-            + "</key>" + NL
-            + "<graph edgedefault=\"undirected\">" + NL
-            + "<node id=\"1\"/>" + NL
-            + "<node id=\"2\"/>" + NL
-            + "<node id=\"3\"/>" + NL
-            + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL
-            + "<data key=\"edge_weight\">3.0</data>" + NL
-            + "</edge>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<default>1.0</default>" + NL 
+				+ "</key>" + NL 
+				+ "<graph edgedefault=\"undirected\">" + NL
+				+ "<node id=\"1\"/>" + NL 
+				+ "<node id=\"2\"/>" + NL + "<node id=\"3\"/>" + NL
+				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+				+ "<data key=\"edge_weight\">3.0</data>" + NL
+				+ "</edge>" + NL 
+				+ "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL 
+				+ "</graph>" + NL
+				+ "</graphml>" + NL;
+		// @formatter:on
 
         SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -253,37 +253,37 @@ public class GraphMLExporterTest
     {
         String output =
             // @formatter:off
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-            + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "  
-            + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "  
-            + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "  
-            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-            + "<key id=\"vertex_label\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
-            + "<key id=\"edge_label\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
-            + "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
-            + "<default>1.0</default>" + NL
-            + "</key>" + NL
-            + "<graph edgedefault=\"undirected\">" + NL
-            + "<node id=\"1\">" + NL
-            + "<data key=\"vertex_label\">v1</data>" + NL
-            + "</node>" + NL
-            + "<node id=\"2\">" + NL
-            + "<data key=\"vertex_label\">v2</data>" + NL
-            + "</node>" + NL            
-            + "<node id=\"3\">" + NL
-            + "<data key=\"vertex_label\">v3</data>" + NL
-            + "</node>" + NL            
-            + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL
-            + "<data key=\"edge_label\">(v1 : v2)</data>" + NL
-            + "<data key=\"edge_weight\">3.0</data>" + NL
-            + "</edge>" + NL
-            + "<edge id=\"2\" source=\"3\" target=\"1\">" + NL
-            + "<data key=\"edge_label\">(v3 : v1)</data>" + NL            
-            + "<data key=\"edge_weight\">15.0</data>" + NL            
-            + "</edge>" + NL
-            + "</graph>" + NL
-            + "</graphml>" + NL;
-            // @formatter:on
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<key id=\"vertex_label\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_label\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<default>1.0</default>" + NL 
+				+ "</key>" + NL 
+				+ "<graph edgedefault=\"undirected\">" + NL
+				+ "<node id=\"1\">" + NL 
+				+ "<data key=\"vertex_label\">v1</data>" + NL 
+				+ "</node>" + NL
+				+ "<node id=\"2\">" + NL 
+				+ "<data key=\"vertex_label\">v2</data>" + NL 
+				+ "</node>" + NL
+				+ "<node id=\"3\">" + NL 
+				+ "<data key=\"vertex_label\">v3</data>" + NL 
+				+ "</node>" + NL
+				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+				+ "<data key=\"edge_label\">(v1 : v2)</data>" + NL 
+				+ "<data key=\"edge_weight\">3.0</data>" + NL 
+				+ "</edge>" + NL
+				+ "<edge id=\"2\" source=\"3\" target=\"1\">" + NL 
+				+ "<data key=\"edge_label\">(v3 : v1)</data>"+ NL 
+				+ "<data key=\"edge_weight\">15.0</data>" + NL 
+				+ "</edge>" + NL 
+				+ "</graph>" + NL
+				+ "</graphml>" + NL;
+		    // @formatter:on
 
         SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -317,6 +317,121 @@ public class GraphMLExporterTest
             });
         StringWriter w = new StringWriter();
         exporter.setExportEdgeWeights(true);
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+
+    public void testUndirectedWeightedWithWeightsAndColor()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+				+ "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+				+ "<key id=\"edge_weight\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+				+ "<default>1.0</default>" + NL 
+				+ "</key>" + NL
+				+ "<key id=\"key0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL
+				+ "<default>yellow</default>" + NL 
+                + "</key>" + NL
+                + "<key id=\"key1\" for=\"all\" attr.name=\"name\" attr.type=\"string\">" + NL
+                + "<default>johndoe</default>" + NL 
+                + "</key>" + NL                        
+				+ "<graph edgedefault=\"undirected\">" + NL
+				+ "<node id=\"1\">" + NL
+				+ "<data key=\"key1\">V1</data>" + NL
+				+ "</node>" + NL
+				+ "<node id=\"2\">" + NL
+				+ "<data key=\"key0\">red</data>" + NL
+				+ "<data key=\"key1\">V2</data>" + NL
+				+ "</node>" + NL
+				+ "<node id=\"3\">" + NL
+				+ "<data key=\"key1\">V3</data>" + NL
+				+ "</node>" + NL
+				+ "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+				+ "<data key=\"edge_weight\">3.0</data>" + NL
+				+ "<data key=\"key1\">e12</data>" + NL
+				+ "</edge>" + NL 
+				+ "<edge id=\"2\" source=\"3\" target=\"1\">" + NL
+				+ "<data key=\"key1\">e31</data>" + NL
+                + "</edge>" + NL
+				+ "</graph>" + NL
+				+ "</graphml>" + NL;
+		    // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+
+        ComponentAttributeProvider<String> vertexAttributeProvider = new ComponentAttributeProvider<String>()
+        {
+            @Override
+            public Map<String, String> getComponentAttributes(String v)
+            {
+                Map<String, String> map = new LinkedHashMap<>();
+                switch (v) {
+                case V1:
+                    map.put("color", "yellow");
+                    map.put("name", "V1");
+                    break;
+                case V2:
+                    map.put("color", "red");
+                    map.put("name", "V2");
+                    break;
+                case V3:
+                    map.put("name", "V3");
+                    break;
+                default:
+                    break;
+                }
+                return map;
+            }
+        };
+
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = new ComponentAttributeProvider<DefaultWeightedEdge>()
+        {
+            @Override
+            public Map<String, String> getComponentAttributes(
+                DefaultWeightedEdge e)
+            {
+                Map<String, String> map = new LinkedHashMap<>();
+                if (e.equals(g.getEdge(V1, V2))) {
+                    map.put("color", "what?");
+                    map.put("name", "e12");
+                } else if (e.equals(g.getEdge(V3, V1))) {
+                    map.put("color", "I have no color!");
+                    map.put("name", "e31");
+                }
+                return map;
+            }
+        };
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+            new IntegerNameProvider<>(),
+            null,
+            vertexAttributeProvider,
+            new IntegerEdgeNameProvider<>(),
+            null,
+            edgeAttributeProvider);
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.registerAttribute(
+            "color",
+            GraphMLExporter.AttributeCategory.NODE,
+            "yellow");
+        exporter.registerAttribute(
+            "name",
+            GraphMLExporter.AttributeCategory.ALL,
+            "johndoe");
         exporter.export(w, g);
 
         XMLAssert.assertXMLEqual(output, w.toString());

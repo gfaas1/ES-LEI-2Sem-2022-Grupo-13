@@ -32,6 +32,10 @@ package org.jgrapht.ext;
 
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -48,8 +52,8 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  * <p>
  * For a description of the format see
- * <a href="http://en.wikipedia.org/wiki/GraphML">
- * http://en.wikipedia.org/wiki/GraphML</a>.
+ * <a href="http://en.wikipedia.org/wiki/GraphML"> http://en.wikipedia.org/wiki/
+ * GraphML</a>.
  * </p>
  *
  * @author Trevor Harmon
@@ -57,10 +61,19 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public class GraphMLExporter<V, E>
 {
+
+    // providers
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
     private EdgeNameProvider<E> edgeIDProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
+    private ComponentAttributeProvider<V> vertexAttributeProvider;
+    private ComponentAttributeProvider<E> edgeAttributeProvider;
+
+    // registered attributes
+    private Map<String, AttributeDetails> registeredAttributes = new LinkedHashMap<>();
+    private static final String ATTRIBUTE_KEY_PREFIX = "key";
+    private int totalAttributes = 0;
 
     /**
      * Whether to print edge weights in case the graph is weighted.
@@ -77,7 +90,9 @@ public class GraphMLExporter<V, E>
         this(
             new IntegerNameProvider<>(),
             null,
+            null,
             new IntegerEdgeNameProvider<>(),
+            null,
             null);
     }
 
@@ -98,18 +113,85 @@ public class GraphMLExporter<V, E>
         EdgeNameProvider<E> edgeIDProvider,
         EdgeNameProvider<E> edgeLabelProvider)
     {
+        this(
+            vertexIDProvider,
+            vertexLabelProvider,
+            null,
+            edgeIDProvider,
+            edgeLabelProvider,
+            null);
+    }
+
+    public GraphMLExporter(
+        VertexNameProvider<V> vertexIDProvider,
+        VertexNameProvider<V> vertexLabelProvider,
+        ComponentAttributeProvider<V> vertexAttributeProvider,
+        EdgeNameProvider<E> edgeIDProvider,
+        EdgeNameProvider<E> edgeLabelProvider,
+        ComponentAttributeProvider<E> edgeAttributeProvider)
+    {
         if (vertexIDProvider == null) {
             throw new IllegalArgumentException(
                 "Vertex ID provider must not be null");
         }
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
+        this.vertexAttributeProvider = vertexAttributeProvider;
         if (edgeIDProvider == null) {
             throw new IllegalArgumentException(
                 "Edge ID provider must not be null");
         }
         this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
+        this.edgeAttributeProvider = edgeAttributeProvider;
+    }
+
+    public enum AttributeCategory
+    {
+
+        GRAPH("graph"),
+        NODE("node"),
+        EDGE("edge"),
+        ALL("all");
+
+        private String name;
+
+        private AttributeCategory(String name)
+        {
+            this.name = name;
+        }
+
+        public String toString()
+        {
+            return name;
+        }
+
+    }
+
+    public void registerAttribute(String name, AttributeCategory category)
+    {
+        registerAttribute(name, category, null);
+    }
+
+    public void registerAttribute(
+        String name,
+        AttributeCategory category,
+        String defaultValue)
+    {
+        if (name == null) {
+            throw new IllegalArgumentException("Attribute name cannot be null");
+        }
+        if (name.equals("weight")) {
+            throw new IllegalArgumentException(
+                "weight attribute is reserved for edge weights");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException(
+                "Attribute category must be one of node, edge, graph or all");
+        }
+        String nextKey = ATTRIBUTE_KEY_PREFIX + (totalAttributes++);
+        registeredAttributes
+            .put(name, new AttributeDetails(nextKey, category, defaultValue));
     }
 
     /**
@@ -131,6 +213,47 @@ public class GraphMLExporter<V, E>
     public void setExportEdgeWeights(boolean exportEdgeWeights)
     {
         this.exportEdgeWeights = exportEdgeWeights;
+    }
+
+    /**
+     * Exports a graph into a plain text file in GraphML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the graph to be exported
+     * @throws ExportException in case any error occurs during export
+     */
+    public void export(Writer writer, Graph<V, E> g)
+        throws ExportException
+    {
+        try {
+            // Prepare an XML file to receive the GraphML data
+            SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory
+                .newInstance();
+            TransformerHandler handler = factory.newTransformerHandler();
+            handler.getTransformer()
+                .setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            handler.getTransformer()
+                .setOutputProperty(OutputKeys.INDENT, "yes");
+            handler.setResult(new StreamResult(new PrintWriter(writer)));
+
+            // export
+            handler.startDocument();
+
+            writeHeader(handler);
+            writeKeys(handler);
+            writeGraphStart(handler, g);
+            writeNodes(handler, g);
+            writeEdges(handler, g);
+            writeGraphEnd(handler);
+            writeFooter(handler);
+
+            handler.endDocument();
+
+            // flush
+            writer.flush();
+        } catch (Exception e) {
+            throw new ExportException("Failed to export as GraphML", e);
+        }
     }
 
     private void writeHeader(TransformerHandler handler)
@@ -206,6 +329,7 @@ public class GraphMLExporter<V, E>
             handler.startElement("", "", "key", attr);
             handler.endElement("", "", "key");
         }
+
         if (exportEdgeWeights) {
             attr.clear();
             attr.addAttribute("", "", "id", "CDATA", "edge_weight");
@@ -222,16 +346,40 @@ public class GraphMLExporter<V, E>
             handler.endElement("", "", "default");
             handler.endElement("", "", "key");
         }
+
+        for (String attributeName : registeredAttributes.keySet()) {
+            AttributeDetails details = registeredAttributes.get(attributeName);
+            attr.clear();
+            attr.addAttribute("", "", "id", "CDATA", details.key);
+            attr.addAttribute(
+                "",
+                "",
+                "for",
+                "CDATA",
+                details.category.toString());
+            attr.addAttribute("", "", "attr.name", "CDATA", attributeName);
+            attr.addAttribute("", "", "attr.type", "CDATA", "string");
+            handler.startElement("", "", "key", attr);
+            if (details.defaultValue != null) {
+                handler.startElement("", "", "default", null);
+                handler.characters(
+                    details.defaultValue.toCharArray(),
+                    0,
+                    details.defaultValue.length());
+                handler.endElement("", "", "default");
+            }
+            handler.endElement("", "", "key");
+        }
+
     }
 
     private void writeNodes(TransformerHandler handler, Graph<V, E> g)
         throws SAXException
     {
-        AttributesImpl attr = new AttributesImpl();
         // Add all the vertices as <node> elements...
         for (V v : g.vertexSet()) {
             // <node>
-            attr.clear();
+            AttributesImpl attr = new AttributesImpl();
             attr.addAttribute(
                 "",
                 "",
@@ -256,6 +404,51 @@ public class GraphMLExporter<V, E>
                 handler.endElement("", "", "data");
             }
 
+            // find vertex attributes
+            Map<String, String> vertexAttributes;
+            if (vertexAttributeProvider != null) {
+                vertexAttributes = vertexAttributeProvider
+                    .getComponentAttributes(v);
+            } else {
+                vertexAttributes = Collections.emptyMap();
+            }
+
+            // check all registered
+            for (Entry<String, AttributeDetails> e : registeredAttributes
+                .entrySet())
+            {
+                AttributeDetails details = e.getValue();
+                if (details.category.equals(AttributeCategory.NODE)
+                    || details.category.equals(AttributeCategory.ALL))
+                {
+                    String name = e.getKey();
+                    String defaultValue = details.defaultValue;
+                    if (vertexAttributes.containsKey(name)) {
+                        String value = vertexAttributes.get(name);
+                        if (defaultValue == null
+                            || !value.equals(defaultValue))
+                        {
+                            attr.clear();
+                            attr.addAttribute(
+                                "",
+                                "",
+                                "key",
+                                "CDATA",
+                                details.key);
+                            if (value != null) {
+                                handler.startElement("", "", "data", attr);
+                                handler.characters(
+                                    value.toCharArray(),
+                                    0,
+                                    value.length());
+                                handler.endElement("", "", "data");
+                            }
+                        }
+                    }
+
+                }
+            }
+
             handler.endElement("", "", "node");
         }
     }
@@ -264,10 +457,9 @@ public class GraphMLExporter<V, E>
         throws SAXException
     {
         // Add all the edges as <edge> elements...
-        AttributesImpl attr = new AttributesImpl();
         for (E e : g.edgeSet()) {
             // <edge>
-            attr.clear();
+            AttributesImpl attr = new AttributesImpl();
             attr.addAttribute(
                 "",
                 "",
@@ -300,6 +492,7 @@ public class GraphMLExporter<V, E>
                     .characters(edgeLabel.toCharArray(), 0, edgeLabel.length());
                 handler.endElement("", "", "data");
             }
+
             if (exportEdgeWeights) {
                 Double weight = g.getEdgeWeight(e);
                 if (weight != 1.0) { // not default value
@@ -318,50 +511,72 @@ public class GraphMLExporter<V, E>
                 }
             }
 
+            // find edge attributes
+            Map<String, String> edgeAttributes;
+            if (edgeAttributeProvider != null) {
+                edgeAttributes = edgeAttributeProvider
+                    .getComponentAttributes(e);
+            } else {
+                edgeAttributes = Collections.emptyMap();
+            }
+
+            // check all registered
+            for (Entry<String, AttributeDetails> entry : registeredAttributes
+                .entrySet())
+            {
+                AttributeDetails details = entry.getValue();
+                if (details.category.equals(AttributeCategory.EDGE)
+                    || details.category.equals(AttributeCategory.ALL))
+                {
+                    String name = entry.getKey();
+                    String defaultValue = details.defaultValue;
+                    if (edgeAttributes.containsKey(name)) {
+                        String value = edgeAttributes.get(name);
+                        if (defaultValue == null
+                            || !value.equals(defaultValue))
+                        {
+                            attr.clear();
+                            attr.addAttribute(
+                                "",
+                                "",
+                                "key",
+                                "CDATA",
+                                details.key);
+                            if (value != null) {
+                                handler.startElement("", "", "data", attr);
+                                handler.characters(
+                                    value.toCharArray(),
+                                    0,
+                                    value.length());
+                                handler.endElement("", "", "data");
+                            }
+                        }
+                    }
+
+                }
+            }
+
             handler.endElement("", "", "edge");
         }
     }
 
-    /**
-     * Exports a graph into a plain text file in GraphML format.
-     *
-     * @param writer the writer to which the graph to be exported
-     * @param g the graph to be exported
-     * @throws ExportException in case any error occurs during export
-     */
-    public void export(Writer writer, Graph<V, E> g)
-        throws ExportException
+    private class AttributeDetails
     {
-        try {
-            // Prepare an XML file to receive the GraphML data
-            SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory
-                .newInstance();
-            TransformerHandler handler = factory.newTransformerHandler();
-            handler.getTransformer()
-                .setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            handler.getTransformer()
-                .setOutputProperty(OutputKeys.INDENT, "yes");
-            handler.setResult(new StreamResult(new PrintWriter(writer)));
+        public String key;
+        public AttributeCategory category;
+        public String defaultValue;
 
-            // export
-            handler.startDocument();
-
-            writeHeader(handler);
-            writeKeys(handler);
-            writeGraphStart(handler, g);
-            writeNodes(handler, g);
-            writeEdges(handler, g);
-            writeGraphEnd(handler);
-            writeFooter(handler);
-
-            handler.endDocument();
-
-            // flush
-            writer.flush();
-        } catch (Exception e) {
-            throw new ExportException("Failed to export as GraphML", e);
+        public AttributeDetails(
+            String key,
+            AttributeCategory category,
+            String defaultValue)
+        {
+            this.key = key;
+            this.category = category;
+            this.defaultValue = defaultValue;
         }
     }
+
 }
 
 // End GraphMLExporter.java
