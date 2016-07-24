@@ -160,6 +160,7 @@ final class RankingPathElementList<V, E>
     {
         super(graph, maxSize, elementList, edge);
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
+        this.externalPathVlidator = pathValidator;
 
         // loop over the path elements in increasing order of weight.
         for (int i = 0; (i < elementList.size()) && (size() < maxSize); i++) {

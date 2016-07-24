@@ -147,7 +147,7 @@ class KShortestPathsIterator<V, E>
                 new HashMap<>();
 
         this.prevImprovedVertices = new HashSet<>();
-        this.pathValidator = null;
+        this.pathValidator = pathValidator;
     }
 
     /**
@@ -256,7 +256,8 @@ class KShortestPathsIterator<V, E>
                 this.k,
                 oppositeData,
                 edge,
-                this.endVertex);
+                this.endVertex,
+                this.pathValidator);
     }
 
     /**
