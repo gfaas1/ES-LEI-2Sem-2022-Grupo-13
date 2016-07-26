@@ -36,6 +36,8 @@
 package org.jgrapht.ext;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jgrapht.*;
 
@@ -44,8 +46,8 @@ import org.jgrapht.*;
  *
  * <p>
  * For a description of the format see
- * <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
- * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
+ * <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/"> http://www.
+ * infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  * </p>
  *
  * @author Dimitrios Michail
@@ -58,6 +60,16 @@ public class GmlExporter<V, E>
     private static final String DELIM = " ";
     private static final String TAB1 = "\t";
     private static final String TAB2 = "\t\t";
+
+    /**
+     * Parameters that affect the behavior of the exporter.
+     */
+    public enum Parameter
+    {
+        EXPORT_EDGE_LABELS,
+        EXPORT_VERTEX_LABELS,
+        EXPORT_EDGE_WEIGHTS
+    }
 
     /**
      * Option to export no vertex or edge labels.
@@ -83,25 +95,11 @@ public class GmlExporter<V, E>
     @Deprecated
     public static final Integer PRINT_VERTEX_LABELS = 4;
 
-    /**
-     * Whether to print edge weights in case the graph is weighted.
-     */
-    private boolean exportEdgeWeights = false;
-
-    /**
-     * Whether to print vertex labels
-     */
-    private boolean exportVertexLabels = false;
-
-    /**
-     * Whether to print edge labels
-     */
-    private boolean exportEdgeLabels = false;
-
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
     private EdgeNameProvider<E> edgeIDProvider;
     private EdgeNameProvider<E> edgeLabelProvider;
+    private final Set<Parameter> parameters;
 
     /**
      * Creates a new GmlExporter object with integer name providers for the
@@ -138,6 +136,7 @@ public class GmlExporter<V, E>
         this.vertexLabelProvider = vertexLabelProvider;
         this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
+        this.parameters = new HashSet<>();
     }
 
     private String quoted(final String s)
@@ -153,6 +152,9 @@ public class GmlExporter<V, E>
 
     private void exportVertices(PrintWriter out, Graph<V, E> g)
     {
+        boolean exportVertexLabels = parameters
+            .contains(Parameter.EXPORT_VERTEX_LABELS);
+
         for (V from : g.vertexSet()) {
             out.println(TAB1 + "node");
             out.println(TAB1 + "[");
@@ -169,6 +171,11 @@ public class GmlExporter<V, E>
 
     private void exportEdges(PrintWriter out, Graph<V, E> g)
     {
+        boolean exportEdgeWeights = parameters
+            .contains(Parameter.EXPORT_EDGE_WEIGHTS);
+        boolean exportEdgeLabels = parameters
+            .contains(Parameter.EXPORT_EDGE_LABELS);
+
         for (E edge : g.edgeSet()) {
             out.println(TAB1 + "edge");
             out.println(TAB1 + "[");
@@ -242,17 +249,17 @@ public class GmlExporter<V, E>
     public void setPrintLabels(final Integer i)
     {
         if (i == PRINT_NO_LABELS) {
-            exportVertexLabels = false;
-            exportEdgeLabels = false;
+            parameters.remove(Parameter.EXPORT_VERTEX_LABELS);
+            parameters.remove(Parameter.EXPORT_EDGE_LABELS);
         } else if (i == PRINT_EDGE_LABELS) {
-            exportVertexLabels = false;
-            exportEdgeLabels = true;
+            parameters.remove(Parameter.EXPORT_VERTEX_LABELS);
+            parameters.add(Parameter.EXPORT_EDGE_LABELS);
         } else if (i == PRINT_VERTEX_LABELS) {
-            exportVertexLabels = true;
-            exportEdgeLabels = false;
+            parameters.add(Parameter.EXPORT_VERTEX_LABELS);
+            parameters.remove(Parameter.EXPORT_EDGE_LABELS);
         } else if (i == PRINT_EDGE_VERTEX_LABELS) {
-            exportVertexLabels = true;
-            exportEdgeLabels = true;
+            parameters.add(Parameter.EXPORT_VERTEX_LABELS);
+            parameters.add(Parameter.EXPORT_EDGE_LABELS);
         } else {
             throw new IllegalArgumentException(
                 "Non-supported parameter value: " + Integer.toString(i));
@@ -269,14 +276,14 @@ public class GmlExporter<V, E>
     @Deprecated
     public Integer getPrintLabels()
     {
-        if (exportVertexLabels) {
-            if (exportEdgeLabels) {
+        if (parameters.contains(Parameter.EXPORT_VERTEX_LABELS)) {
+            if (parameters.contains(Parameter.EXPORT_EDGE_LABELS)) {
                 return PRINT_EDGE_VERTEX_LABELS;
             } else {
                 return PRINT_VERTEX_LABELS;
             }
         } else {
-            if (exportEdgeLabels) {
+            if (parameters.contains(Parameter.EXPORT_EDGE_LABELS)) {
                 return PRINT_EDGE_LABELS;
             } else {
                 return PRINT_NO_LABELS;
@@ -285,71 +292,31 @@ public class GmlExporter<V, E>
     }
 
     /**
-     * Whether the exporter will print edge weights in case the graph is edge
-     * weighted.
-     *
-     * @return {@code true} if the exporter prints edge weights, {@code false}
-     *         otherwise
-     */
-    public boolean isExportEdgeWeights()
-    {
-        return exportEdgeWeights;
-    }
-
-    /**
-     * Set whether the exporter will print edge weights in case the graph is
-     * edge weighted.
-     *
-     * @param exportEdgeWeights value to set
-     */
-    public void setExportEdgeWeights(boolean exportEdgeWeights)
-    {
-        this.exportEdgeWeights = exportEdgeWeights;
-    }
-
-    /**
-     * Whether the exporter will print vertex labels. If no vertex label
-     * provider is supplied, the toString() method of the vertex class is used.
+     * Return if a particular parameter of the exporter is enabled
      * 
-     * @return {@code true} if the exporter prints vertex labels, {@code false}
-     *         otherwise
+     * @param p the parameter
+     * @return {@code true} if the parameter is set, {@code false} otherwise
      */
-    public boolean isExportVertexLabels()
+    public boolean isParameter(Parameter p)
     {
-        return exportVertexLabels;
+        return parameters.contains(p);
     }
 
     /**
-     * Set whether the exporter will print vertex labels
-     *
-     * @param exportVertexLabels value to set
-     */
-    public void setExportVertexLabels(boolean exportVertexLabels)
-    {
-        this.exportVertexLabels = exportVertexLabels;
-    }
-
-    /**
-     * Whether the exporter will print edge labels. If no edge label provider is
-     * supplied, the toString() method of the edge class is used.
+     * Set the value of a parameter of the exporter
      * 
-     * @return {@code true} if the exporter prints edge labels, {@code false}
-     *         otherwise
+     * @param p the parameter
+     * @param value the value to set
      */
-    public boolean isExportEdgeLabels()
+    public void setParameter(Parameter p, boolean value)
     {
-        return exportEdgeLabels;
+        if (value) {
+            parameters.add(p);
+        } else {
+            parameters.remove(p);
+        }
     }
 
-    /**
-     * Set whether the exporter will print edge labels
-     *
-     * @param exportEdgeLabels value to set
-     */
-    public void setExportEdgeLabels(boolean exportEdgeLabels)
-    {
-        this.exportEdgeLabels = exportEdgeLabels;
-    }
 }
 
 // End GmlExporter.java

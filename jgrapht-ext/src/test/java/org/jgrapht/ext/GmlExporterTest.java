@@ -42,7 +42,6 @@ import junit.framework.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * .
  *
@@ -51,7 +50,8 @@ import org.jgrapht.graph.*;
 public class GmlExporterTest
     extends TestCase
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers
+    // ---------------------------------------------
 
     private static final String V1 = "v1";
     private static final String V2 = "v2";
@@ -61,40 +61,39 @@ public class GmlExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    // TODO jvs 23-Dec-2006:  externalized diff-based testing framework
-
+    // @formatter:off
     private static final String UNDIRECTED =
-        "Creator \"JGraphT GML Exporter\"" + NL
-        + "Version 1" + NL
-        + "graph" + NL
-        + "[" + NL
-        + "\tlabel \"\"" + NL
-        + "\tdirected 0" + NL
-        + "\tnode" + NL
-        + "\t[" + NL
-        + "\t\tid 1" + NL
-        + "\t]" + NL
-        + "\tnode" + NL
-        + "\t[" + NL
-        + "\t\tid 2" + NL
-        + "\t]" + NL
-        + "\tnode" + NL
-        + "\t[" + NL
-        + "\t\tid 3" + NL
-        + "\t]" + NL
-        + "\tedge" + NL
-        + "\t[" + NL
-        + "\t\tid 1" + NL
-        + "\t\tsource 1" + NL
-        + "\t\ttarget 2" + NL
-        + "\t]" + NL
-        + "\tedge" + NL
-        + "\t[" + NL
-        + "\t\tid 2" + NL
-        + "\t\tsource 3" + NL
-        + "\t\ttarget 1" + NL
-        + "\t]" + NL
-        + "]" + NL;
+            "Creator \"JGraphT GML Exporter\"" + NL
+            + "Version 1" + NL
+            + "graph" + NL
+            + "[" + NL
+            + "\tlabel \"\"" + NL
+            + "\tdirected 0" + NL
+            + "\tnode" + NL
+            + "\t[" + NL
+            + "\t\tid 1" + NL
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL
+            + "\t\tid 2" + NL
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL
+            + "\t\tid 3" + NL
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL
+            + "\t\tid 1" + NL
+            + "\t\tsource 1" + NL
+            + "\t\ttarget 2" + NL
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL
+            + "\t\tid 2" + NL
+            + "\t\tsource 3" + NL
+            + "\t\ttarget 1" + NL
+            + "\t]" + NL
+            + "]" + NL;
     
     private static final String UNDIRECTED_WEIGHTED
             = "Creator \"JGraphT GML Exporter\"" + NL
@@ -128,6 +127,79 @@ public class GmlExporterTest
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t\tweight 5.0" + NL
+            + "\t]" + NL
+            + "]" + NL;
+    
+    private static final String UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS
+            = "Creator \"JGraphT GML Exporter\"" + NL
+            + "Version 1" + NL
+            + "graph" + NL
+            + "[" + NL
+            + "\tlabel \"\"" + NL
+            + "\tdirected 0" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 1" + NL
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 2" + NL
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 3" + NL
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL            
+            + "\t\tid 1" + NL
+            + "\t\tsource 1" + NL
+            + "\t\ttarget 2" + NL
+            + "\t\tlabel \"(v1 : v2)\"" + NL
+            + "\t\tweight 2.0" + NL
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL            
+            + "\t\tid 2" + NL
+            + "\t\tsource 3" + NL
+            + "\t\ttarget 1" + NL
+            + "\t\tlabel \"(v3 : v1)\"" + NL            
+            + "\t\tweight 5.0" + NL
+            + "\t]" + NL
+            + "]" + NL;
+    
+    private static final String UNDIRECTED_WITH_VERTEX_LABELS
+            = "Creator \"JGraphT GML Exporter\"" + NL
+            + "Version 1" + NL
+            + "graph" + NL
+            + "[" + NL
+            + "\tlabel \"\"" + NL
+            + "\tdirected 0" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 1" + NL
+            + "\t\tlabel \"v1\"" + NL            
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 2" + NL
+            + "\t\tlabel \"v2\"" + NL            
+            + "\t]" + NL
+            + "\tnode" + NL
+            + "\t[" + NL            
+            + "\t\tid 3" + NL
+            + "\t\tlabel \"v3\"" + NL            
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL            
+            + "\t\tid 1" + NL
+            + "\t\tsource 1" + NL
+            + "\t\ttarget 2" + NL
+            + "\t]" + NL
+            + "\tedge" + NL
+            + "\t[" + NL            
+            + "\t\tid 2" + NL
+            + "\t\tsource 3" + NL
+            + "\t\ttarget 1" + NL
             + "\t]" + NL
             + "]" + NL;
     
@@ -189,15 +261,15 @@ public class GmlExporterTest
             + "\t\ttarget 5" + NL
             + "\t]" + NL
             + "]" + NL;
+    // @formatter:on
 
-
-
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
     public void testUndirected()
     {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
+            DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -205,16 +277,15 @@ public class GmlExporterTest
         g.addEdge(V3, V1);
 
         StringWriter w = new StringWriter();
-        GmlExporter<String, DefaultEdge> exporter
-            = new GmlExporter<String, DefaultEdge>();        
+        GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
         exporter.export(w, g);
         assertEquals(UNDIRECTED, w.toString());
     }
-    
+
     public void testUnweightedUndirected()
     {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
+            DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -222,16 +293,16 @@ public class GmlExporterTest
         g.addEdge(V3, V1);
 
         StringWriter w = new StringWriter();
-        GmlExporter<String, DefaultEdge> exporter
-            = new GmlExporter<String, DefaultEdge>();
-        exporter.setExportEdgeWeights(true);
+        GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         exporter.export(w, g);
         assertEquals(UNDIRECTED, w.toString());
     }
-    
-    public void testDirected() {
-        DirectedGraph<String, DefaultEdge> g
-                = new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
+    public void testDirected()
+    {
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<String, DefaultEdge>(
+            DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -244,15 +315,15 @@ public class GmlExporterTest
         g.addEdge(V4, V5);
 
         StringWriter w = new StringWriter();
-        GmlExporter<String, DefaultEdge> exporter
-                = new GmlExporter<String, DefaultEdge>();
+        GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
         exporter.export(w, g);
         assertEquals(DIRECTED, w.toString());
     }
 
-    public void testWeightedUndirected() {
-        SimpleGraph<String, DefaultWeightedEdge> g
-                = new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testWeightedUndirected()
+    {
+        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -263,12 +334,120 @@ public class GmlExporterTest
 
         StringWriter w = new StringWriter();
 
-           GmlExporter<String, DefaultWeightedEdge> exporter
-                = new GmlExporter<String, DefaultWeightedEdge>();
-        exporter.setExportEdgeWeights(true);
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         exporter.export(w, g);
         assertEquals(UNDIRECTED_WEIGHTED, w.toString());
     }
+
+    public void testWeightedUndirectedWithEdgeLabels()
+    {
+        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        DefaultWeightedEdge e1 = g.addEdge(V1, V2);
+        g.setEdgeWeight(e1, 2.0);
+        DefaultWeightedEdge e2 = g.addEdge(V3, V1);
+        g.setEdgeWeight(e2, 5.0);
+
+        StringWriter w = new StringWriter();
+
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
+        exporter.export(w, g);
+        assertEquals(UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS, w.toString());
+    }
+
+    public void testUndirectedWithVertexLabels()
+    {
+        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        DefaultWeightedEdge e1 = g.addEdge(V1, V2);
+        g.setEdgeWeight(e1, 2.0);
+        DefaultWeightedEdge e2 = g.addEdge(V3, V1);
+        g.setEdgeWeight(e2, 5.0);
+
+        StringWriter w = new StringWriter();
+
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
+        exporter.export(w, g);
+        assertEquals(UNDIRECTED_WITH_VERTEX_LABELS, w.toString());
+    }
+
+    public void testParameters()
+    {
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        exporter
+            .setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, false);
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, false);
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, false);
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+    }
+
+    public void testOldStyleDeprecatedParameters()
+    {
+        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+
+        exporter.setPrintLabels(GmlExporter.PRINT_NO_LABELS);
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+
+        exporter.setPrintLabels(GmlExporter.PRINT_VERTEX_LABELS);
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+
+        exporter.setPrintLabels(GmlExporter.PRINT_EDGE_LABELS);
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+
+        exporter.setPrintLabels(GmlExporter.PRINT_EDGE_VERTEX_LABELS);
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertTrue(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(
+            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+    }
+
 }
 
 // End GmlExporterTest.java
