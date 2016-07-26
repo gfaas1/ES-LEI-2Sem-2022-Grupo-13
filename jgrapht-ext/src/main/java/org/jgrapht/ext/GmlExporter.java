@@ -49,6 +49,12 @@ import org.jgrapht.*;
  * <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/"> http://www.
  * infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  * </p>
+ * 
+ * <p>
+ * The behavior of the exporter such as whether to print vertex labels, edge
+ * labels, and/or edge weights can be adjusted using the
+ * {@link #setParameter(Parameter, boolean) setParameter} method.
+ * </p>
  *
  * @author Dimitrios Michail
  */
@@ -66,8 +72,17 @@ public class GmlExporter<V, E>
      */
     public enum Parameter
     {
+        /**
+         * If set the exporter outputs edge labels
+         */
         EXPORT_EDGE_LABELS,
+        /**
+         * If set the exporter outputs vertex labels
+         */
         EXPORT_VERTEX_LABELS,
+        /**
+         * If set the exporter outputs edge weights
+         */
         EXPORT_EDGE_WEIGHTS
     }
 
