@@ -67,7 +67,7 @@ final class RankingPathElementList<V, E>
      * path though they pass the basic validations done internally
      * (path is from source to target and w/o loops).
      */
-    private PathValidator<V, E> externalPathVlidator = null;  
+    private PathValidator<V, E> externalPathValidator = null;  
 
     /**
      * Creates a list with an empty path. The list size is 1.
@@ -97,7 +97,7 @@ final class RankingPathElementList<V, E>
         PathValidator<V, E> pathValidator)    
     {
         super(graph, maxSize, pathElement);
-        this.externalPathVlidator = pathValidator;
+        this.externalPathValidator = pathValidator;
     }
 
     /**
@@ -160,7 +160,7 @@ final class RankingPathElementList<V, E>
     {
         super(graph, maxSize, elementList, edge);
         this.guardVertexToNotDisconnect = guardVertexToNotDisconnect;
-        this.externalPathVlidator = pathValidator;
+        this.externalPathValidator = pathValidator;
 
         // loop over the path elements in increasing order of weight.
         for (int i = 0; (i < elementList.size()) && (size() < maxSize); i++) {
@@ -205,7 +205,7 @@ final class RankingPathElementList<V, E>
             PathValidator<V, E> pathValidator)
     {
         super(graph, maxSize, vertex);
-        this.externalPathVlidator = pathValidator;
+        this.externalPathValidator = pathValidator;
     }
 
     /**
@@ -419,7 +419,7 @@ final class RankingPathElementList<V, E>
         if (isGuardVertexDisconnected(prevPathElement)) {
             return true;
         }
-        if (externalPathVlidator != null && ! externalPathVlidator.isValidPath(prevPathElement, edge)) {
+        if (externalPathValidator != null && ! externalPathValidator.isValidPath(prevPathElement, edge)) {
             return true;
 
         } else {
