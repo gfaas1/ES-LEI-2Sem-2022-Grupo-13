@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
 	- Add `GreedyMultiplicativeSpanner` (contributed by Dimitrios Michail)
 	- Support undirected graphs in max flow algorithms (contributed by Joris Kinable)
 	- Fix for reading escaped quotes in `DOTImporter` (contributed by Victor Mikhaylov)
+	- Add `BidirectionalDijkstraShortestPath` (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
