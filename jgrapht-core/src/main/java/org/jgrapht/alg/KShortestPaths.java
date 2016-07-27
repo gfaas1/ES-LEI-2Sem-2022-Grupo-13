@@ -89,7 +89,7 @@ public class KShortestPaths<V, E>
      * Creates an object to compute ranking shortest paths between the start
      * vertex and others vertices. Providing non-null path validator may be
      * used to accept/deny paths according to some external logic. These
-     * validations will be used is addition to the basic path validations -
+     * validations will be used in addition to the basic path validations -
      * that the path is from start to target with no loops.
      *
      * @param graph graph on which shortest paths are searched.
@@ -131,7 +131,7 @@ public class KShortestPaths<V, E>
      * Creates an object to calculate ranking shortest paths between the start
      * vertex and others vertices. Providing non-null path validator may be
      * used to accept/deny paths according to some external logic. These
-     * validations will be used is addition to the basic path validations -
+     * validations will be used in addition to the basic path validations -
      * that the path is from start to target with no loops.
      *
      * @param graph graph on which shortest paths are searched.
