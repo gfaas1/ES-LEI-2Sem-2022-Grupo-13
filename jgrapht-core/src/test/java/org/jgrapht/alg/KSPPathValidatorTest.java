@@ -67,10 +67,10 @@ public class KSPPathValidatorTest extends TestCase {
 					clique, String.valueOf(i), 1, Integer.MAX_VALUE, new PathValidator<String, DefaultEdge>() {
 
 						@Override
-						public boolean isNotValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
+						public boolean isValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
 								DefaultEdge edge) {
 							// block all paths
-							return true;
+							return false;
 						}
 					});
 			
@@ -96,10 +96,10 @@ public class KSPPathValidatorTest extends TestCase {
 					clique, String.valueOf(i), 30, Integer.MAX_VALUE, new PathValidator<String, DefaultEdge>() {
 
 						@Override
-						public boolean isNotValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
+						public boolean isValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
 								DefaultEdge edge) {
 							// block all paths
-							return false;
+							return true;
 						}
 					});
 			
@@ -125,13 +125,13 @@ public class KSPPathValidatorTest extends TestCase {
 					ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>() {
 
 						@Override
-						public boolean isNotValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
+						public boolean isValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
 								DefaultEdge edge) {
 							if (prevPathElement == null) {
-								return false;
+								return true;
 							}
 							return Math.abs(prevPathElement.getVertex() - 
-									Graphs.getOppositeVertex(ring, edge, prevPathElement.getVertex())) != 1;
+									Graphs.getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
 						}
 					});
 			
@@ -159,11 +159,12 @@ public class KSPPathValidatorTest extends TestCase {
 					graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>() {
 
 						@Override
-						public boolean isNotValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
+						public boolean isValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
 								DefaultEdge edge) {
 							//accept all requests but the one to pass through the edge connecting
 							//the two cliques.
-							return graph.getEdge(cliqueSize - 1, cliqueSize) == edge;
+							DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
+							return connectingEdge != edge;
 						}
 					});
 			

@@ -419,7 +419,7 @@ final class RankingPathElementList<V, E>
         if (isGuardVertexDisconnected(prevPathElement)) {
             return true;
         }
-        if (externalPathVlidator != null && externalPathVlidator.isNotValidPath(prevPathElement, edge)) {
+        if (externalPathVlidator != null && ! externalPathVlidator.isValidPath(prevPathElement, edge)) {
             return true;
 
         } else {
