@@ -557,7 +557,7 @@ public class GmlImporterTest
 
         StringWriter sw = new StringWriter();
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
-        exporter.setExportEdgeWeights(true);
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         exporter.export(sw, g1);
         String output = sw.toString();
 
