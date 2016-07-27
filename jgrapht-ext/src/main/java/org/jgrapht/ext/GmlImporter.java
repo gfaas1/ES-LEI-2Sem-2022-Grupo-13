@@ -215,9 +215,17 @@ public class GmlImporter<V, E>
             // update graph
             listener.updateGraph(graph);
         } catch (IOException e) {
-            throw new ImportException("Failed to import gml graph", e);
+            throw new ImportException(
+                "Failed to import gml graph: " + e.getMessage(),
+                e);
         } catch (ParseCancellationException pe) {
-            throw new ImportException("Failed to import gml graph", pe);
+            throw new ImportException(
+                "Failed to import gml graph: " + pe.getMessage(),
+                pe);
+        } catch (IllegalArgumentException iae) {
+            throw new ImportException(
+                "Failed to import gml graph: " + iae.getMessage(),
+                iae);
         }
     }
 

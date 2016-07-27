@@ -43,6 +43,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.WeightedPseudograph;
 
 import junit.framework.TestCase;
@@ -574,6 +575,52 @@ public class GmlImporterTest
         assertEquals(2.0, g2.getEdgeWeight(g2.getEdge("1", "2")));
         assertEquals(3.0, g2.getEdgeWeight(g2.getEdge("2", "3")));
         assertEquals(5.0, g2.getEdgeWeight(g2.getEdge("3", "3")));
+    }
+
+    public void testNotSupportedGraph()
+    {
+        // @formatter:off
+        String input = "graph [ node [ id 1 ] " + 
+                       "edge [ source 1 target 1 ] ]"; 
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+
+        VertexProvider<String> vp = new VertexProvider<String>()
+        {
+            @Override
+            public String buildVertex(
+                String label,
+                Map<String, String> attributes)
+            {
+                return label;
+            }
+        };
+
+        EdgeProvider<String, DefaultEdge> ep = new EdgeProvider<String, DefaultEdge>()
+        {
+
+            @Override
+            public DefaultEdge buildEdge(
+                String from,
+                String to,
+                String label,
+                Map<String, String> attributes)
+            {
+                return g.getEdgeFactory().createEdge(from, to);
+            }
+
+        };
+
+        try {
+            GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(
+                vp,
+                ep);
+            importer.read(new StringReader(input), g);
+            fail("No!");
+        } catch (ImportException e) {
+        }
+
     }
 
 }
