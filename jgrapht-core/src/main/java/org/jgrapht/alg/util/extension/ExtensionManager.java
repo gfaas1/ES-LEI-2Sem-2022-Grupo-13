@@ -39,7 +39,7 @@ import java.util.Map;
 
 /**
  * Convenience class to manage extensions/encapsulations.
- * This class creates and manages object extensions and encapsulations. An object, from here on denoted as 'prototype',
+ * This class creates and manages object extensions and encapsulations. An object, from here on denoted as 'original',
  * can be encapsulated in or extended by another object. An example would be the relation between an edge (original) and an annotated edge. The
  * annotated edge encapsulates/extends an edge, thereby augmenting it with additional data.
  * In symbolic form, if b is the original class, than a(b) would be its extension. This concept is similar to java's extension where
