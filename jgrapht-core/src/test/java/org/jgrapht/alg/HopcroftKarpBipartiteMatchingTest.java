@@ -107,4 +107,38 @@ public class HopcroftKarpBipartiteMatchingTest extends TestCase{
 		HopcroftKarpBipartiteMatching<Integer,DefaultEdge> bm= new HopcroftKarpBipartiteMatching<>(graph, new HashSet<>(partition1), new HashSet<>(partition2));
 		assertEquals(Collections.EMPTY_SET, bm.getMatching());
 	}
+	
+	/**
+	 * Issue 233 instance
+	 */
+	public void testBipartiteMatchingIssue233()
+    {
+        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<Integer, DefaultEdge>(
+            DefaultEdge.class);
+
+        Set<Integer> left = new HashSet<Integer>();
+        Set<Integer> right = new HashSet<Integer>();
+
+        g.addVertex(0);
+        left.add(0);
+        g.addVertex(1);
+        left.add(1);
+        g.addVertex(2);
+        right.add(2);
+        g.addVertex(3);
+        right.add(3);
+
+        g.addEdge(0, 2);
+        g.addEdge(0, 3);
+        g.addEdge(1, 2);
+
+        Set<DefaultEdge> m = new HopcroftKarpBipartiteMatching<Integer, DefaultEdge>(
+            g,
+            left,
+            right).getMatching();
+        assertTrue(m.contains(g.getEdge(1, 2)));
+        assertTrue(m.contains(g.getEdge(0, 3)));
+        assertEquals(2, m.size());
+    }
+	
 }
