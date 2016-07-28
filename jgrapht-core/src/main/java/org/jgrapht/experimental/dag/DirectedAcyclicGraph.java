@@ -73,7 +73,7 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * @author Peter Giles, gilesp@u.washington.edu
  */
 public class DirectedAcyclicGraph<V, E>
-    extends SimpleDirectedGraph<V, E>
+    extends SimpleDirectedGraph<V, E> implements Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
 
@@ -374,10 +374,6 @@ public class DirectedAcyclicGraph<V, E>
      * the Affected Region
      * @param visited a simple data structure that lets us know if we already
      * visited a node with a given topo index
-     * @param topoIndexMap for quick lookups, a map from vertex to topo index in
-     * the AR
-     * @param ub the topo index of the original fromVertex -- used for cycle
-     * detection
      *
      * @throws CycleFoundException if a cycle is discovered
      */
@@ -434,7 +430,6 @@ public class DirectedAcyclicGraph<V, E>
      * @param db the set we are populating with back-connected vertices in the
      * AR
      * @param visited
-     * @param topoIndexMap
      */
     private void dfsB(
         V vertex,
@@ -839,8 +834,6 @@ public class DirectedAcyclicGraph<V, E>
          * do it because we can make better use of space by only needing an
          * ArrayList of size |AR|.
          *
-         * @param unscaledIndex
-         *
          * @return the ArrayList index
          */
         private int translateIndex(int index)
@@ -936,8 +929,6 @@ public class DirectedAcyclicGraph<V, E>
          * do it because we can make better use of space by only needing an
          * ArrayList of size |AR|.
          *
-         * @param unscaledIndex
-         *
          * @return the ArrayList index
          */
         private int translateIndex(int index)
@@ -1003,8 +994,6 @@ public class DirectedAcyclicGraph<V, E>
          * do this because topological indices can be negative, and we want to
          * do it because we can make better use of space by only needing an
          * ArrayList of size |AR|.
-         *
-         * @param unscaledIndex
          *
          * @return the ArrayList index
          */
