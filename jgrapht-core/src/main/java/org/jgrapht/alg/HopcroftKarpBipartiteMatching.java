@@ -177,7 +177,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
         //The augmenting path alternatingly has an edge which is not part of the
         //matching, and an edge which is part of the matching. Edges which are
         //already part of the matching are removed, the others are added.
-        while (augmentingPath.size() > 0) {
+        while (augmentingPath.size() > 1) {
             E edge =
                 graph.getEdge(augmentingPath.poll(), augmentingPath.peek());
             if ((operation % 2) == 0) {
