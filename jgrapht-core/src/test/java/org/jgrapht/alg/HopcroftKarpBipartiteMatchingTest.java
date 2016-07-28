@@ -41,6 +41,8 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Unit test for the MaxBipartiteMatching class
@@ -116,17 +118,10 @@ public class HopcroftKarpBipartiteMatchingTest extends TestCase{
         UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<Integer, DefaultEdge>(
             DefaultEdge.class);
 
-        Set<Integer> left = new HashSet<Integer>();
-        Set<Integer> right = new HashSet<Integer>();
+        Graphs.addAllVertices(g, IntStream.rangeClosed(0,3).boxed().collect(Collectors.toList()));
 
-        g.addVertex(0);
-        left.add(0);
-        g.addVertex(1);
-        left.add(1);
-        g.addVertex(2);
-        right.add(2);
-        g.addVertex(3);
-        right.add(3);
+        Set<Integer> left = new HashSet<Integer>(Arrays.asList(0, 1));
+        Set<Integer> right = new HashSet<Integer>(Arrays.asList(2, 3));
 
         g.addEdge(0, 2);
         g.addEdge(0, 3);
