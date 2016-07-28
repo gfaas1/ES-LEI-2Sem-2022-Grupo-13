@@ -21,6 +21,9 @@ Changes to JGraphT in each version:
 	- Add external path validator for `KShortestPaths` (contributed by Assaf Mizrachi)
 	- Add `GmlImporter` (contributed by Dimitrios Michail)
 	- Fixed bug in HopcroftKarpBipartiteMatching which caused the algorithm to occasionally throw a NullPointerException (contributed by Dimitrios Michail, bug reported by Nils Olberg)
+	- Fixed `AStarShortestPath` to use Object.equals (contributed by Joris Kinable, bug reported by Zgce)
+        - Enhance `DirectedAcyclicGraph` extend Iterable (contributed by Joris Kinable, suggested by Andrew Pennebaker)
+	- Enhance `MinSourceSinkCut` to make max-flow implementation configurable (contributed by Joris Kinable, suggested by Roman Pearah)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
