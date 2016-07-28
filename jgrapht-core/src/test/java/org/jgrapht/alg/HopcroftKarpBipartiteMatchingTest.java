@@ -115,13 +115,13 @@ public class HopcroftKarpBipartiteMatchingTest extends TestCase{
 	 */
 	public void testBipartiteMatchingIssue233()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<Integer, DefaultEdge>(
+        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(
             DefaultEdge.class);
 
         Graphs.addAllVertices(g, IntStream.rangeClosed(0,3).boxed().collect(Collectors.toList()));
 
-        Set<Integer> left = new HashSet<Integer>(Arrays.asList(0, 1));
-        Set<Integer> right = new HashSet<Integer>(Arrays.asList(2, 3));
+        Set<Integer> left = new HashSet<>(Arrays.asList(0, 1));
+        Set<Integer> right = new HashSet<>(Arrays.asList(2, 3));
 
         g.addEdge(0, 2);
         g.addEdge(0, 3);
