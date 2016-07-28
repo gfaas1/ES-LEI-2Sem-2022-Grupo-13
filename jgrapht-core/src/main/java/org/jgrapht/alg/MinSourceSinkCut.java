@@ -37,7 +37,9 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.flow.EdmondsKarpMaximumFlow;
+import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
+import org.jgrapht.alg.flow.PushRelabelMaximumFlow;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
 
 
@@ -53,23 +55,28 @@ import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
  */
 public class MinSourceSinkCut<V, E>
 {
-    EdmondsKarpMaximumFlow<V, E> ekMaxFlow;
+    MaximumFlowAlgorithm<V, E> ekMaxFlow;
     Set<V> minCut = null;
     DirectedGraph<V, E> graph;
     double cutWeight;
     V source = null;
     V sink = null;
-    double epsilon = EdmondsKarpMaximumFlow.DEFAULT_EPSILON;
+    double epsilon = MaximumFlowAlgorithmBase.DEFAULT_EPSILON;
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph)
     {
-        this.ekMaxFlow = new EdmondsKarpMaximumFlow<>(graph);
+        this.ekMaxFlow = new PushRelabelMaximumFlow<>(graph);
         this.graph = graph;
     }
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph, double epsilon)
     {
-        this.ekMaxFlow = new EdmondsKarpMaximumFlow<>(graph);
+        this(graph, new PushRelabelMaximumFlow<>(graph), epsilon);
+    }
+
+    public MinSourceSinkCut(DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
+    {
+        this.ekMaxFlow = maximumFlowAlgorithm;
         this.graph = graph;
         this.epsilon = epsilon;
     }
