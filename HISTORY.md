@@ -10,7 +10,7 @@ Changes to JGraphT in each version:
 	- Use unique OSGi bundle symbolic name for uber artifact (contributed by Christoph Zauner)
         - Replace experimental GraphReader with `DIMACSImporter` (contributed by Joris Kinable)
 	- Implement various graph utility methods (contributed by Christoph Zauner)
-	- Add getNextHop and getLastHop to `FloydWarshallShortestPaths` (contributed by Joris Kinable)
+	- Add getFirstHop and getLastHop to `FloydWarshallShortestPaths` (contributed by Joris Kinable)
 	- Allow paths to be expressed in terms of vertices instead of edges; deprecate `GraphPathImpl` in favor of new `GraphWalk` (contributed by Joris Kinable)
         - Weighted graph support in `GmlExporter` (contributed by Dimitrios Michail)
 	- Add `RandomWalkIterator` (contributed by Assaf Mizrachi)
@@ -20,6 +20,7 @@ Changes to JGraphT in each version:
 	- Add `BidirectionalDijkstraShortestPath` (contributed by Dimitrios Michail)
 	- Add external path validator for `KShortestPaths` (contributed by Assaf Mizrachi)
 	- Add `GmlImporter` (contributed by Dimitrios Michail)
+	- Fixed bug in HopcroftKarpBipartiteMatching which caused the algorithm to occasionally throw a NullPointerException (contributed by Dimitrios Michail, bug reported by Nils Olberg)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
