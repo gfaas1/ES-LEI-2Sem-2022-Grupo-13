@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * ClarksonsTwoApproxWeightedVCImpl.java
+ * ClarksonTwoApproxVCImpl.java
  * -----------------
  * (C) Copyright 2016, by Joris Kinable and Contributors.
  *
@@ -47,17 +47,18 @@ import java.util.stream.Collectors;
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by
  * Clarkson, Kenneth L. "A modification of the greedy algorithm for vertex cover." Information Processing Letters 16.1 (1983): 23-25.
+ * The solution is guaranteed to be within 2 times the optimum solution. Runtime: O(|E|*log|V|)
  *
  * Note: this class supports pseudo-graphs
  *
  * @author Joris Kinable
  *
  */
-public class ClarksonsTwoApproxWeightedVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
+public class ClarksonTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
     @Override
     public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
-        Set<V> cover=new LinkedHashSet<V>();
+        Set<V> cover=new LinkedHashSet<>();
         int weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
@@ -88,7 +89,7 @@ public class ClarksonsTwoApproxWeightedVCImpl<V,E> implements MinimumWeightedVer
             cover.add(v);
             weight+=vertexWeightMap.get(v);
 
-            //Delete v, all edges incident to v, and all vertices u which became isolated
+            //Delete v, all edges incident to v, and all vertices u which became isolated (be careful of self-loops)
             copy.removeVertex(v);
             for(V u : neighbors)
                 if(u != v && copy.degreeOf(u)==0)

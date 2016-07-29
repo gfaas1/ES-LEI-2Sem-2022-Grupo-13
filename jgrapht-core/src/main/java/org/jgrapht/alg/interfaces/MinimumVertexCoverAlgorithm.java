@@ -73,5 +73,14 @@ public interface MinimumVertexCoverAlgorithm<V,E> {
         public Set<V> getVertices(){
             return cover;
         }
+
+        @Override
+        public String toString(){
+            StringBuilder builder=new StringBuilder("Cover(");
+            builder.append(this.getWeight());
+            builder.append("): ");
+            builder.append(this.getVertices().toString());
+            return builder.toString();
+        }
     }
 }

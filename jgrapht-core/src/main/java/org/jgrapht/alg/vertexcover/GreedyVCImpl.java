@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * GreedyWeightedVCImpl.java
+ * GreedyVCImpl.java
  * -----------------
  * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
  *
@@ -64,14 +64,16 @@ import java.util.stream.Collectors;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
-public class GreedyWeightedVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
+public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
     /**
      * Finds a greedy approximation for a minimal vertex cover of a specified
      * graph. At each iteration, the algorithm picks the vertex with the highest
      * degree and adds it to the cover, until all edges are covered.
      *
-     * Note: every invocation of this method will recompute the cover!
+     * Note: The worst-case approximation of this greedy algorithm can be as bad as
+     * log(n) times the optimum solution!
+     *
      *
      * <p>The algorithm works on undirected graphs, but can also work on
      * directed graphs when their edge-directions are ignored. To ignore edge
@@ -109,8 +111,7 @@ public class GreedyWeightedVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
      * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the algorithm picks
      * the vertex v with the smallest ratio {@code weight(v)/degree(v)} and adds it to the cover. Next vertex v
      * and all edges incident to it are removed. The process repeats until all vertices are covered.
-     *
-     * Note: every invocation of this method will recompute the cover!
+     * Runtime: O(|E|*log|V|)
      *
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
@@ -118,7 +119,7 @@ public class GreedyWeightedVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
      */
     @Override
     public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
-        Set<V> cover=new LinkedHashSet<V>();
+        Set<V> cover=new LinkedHashSet<>();
         int weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());

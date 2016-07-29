@@ -46,9 +46,9 @@ import junit.framework.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
-import org.jgrapht.alg.vertexcover.ClarksonsTwoApproxWeightedVCImpl;
+import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
-import org.jgrapht.alg.vertexcover.GreedyWeightedVCImpl;
+import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.graph.*;
 
 
@@ -76,9 +76,9 @@ public class VertexCoverTest
     public void testFind2ApproximationCover()
     {
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new EdgeBasedTwoApproxVCImpl<>();
-        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonsTwoApproxWeightedVCImpl<>();
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
 
             VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
@@ -95,9 +95,9 @@ public class VertexCoverTest
      */
     public void testFindGreedyCover()
     {
-        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyWeightedVCImpl<>();
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
             VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
             assertEquals(vertexCover.getWeight(), vertexCover.getVertices().size());
@@ -127,11 +127,11 @@ public class VertexCoverTest
     }
 
     /**
-     * Create a random graph of TEST_GRAPH_SIZE nodes.
+     * Create a random PSEUDO graph of TEST_GRAPH_SIZE nodes.
      *
      * @return
      */
-    protected Graph<Integer, DefaultEdge> createRandomGraph()
+    protected Graph<Integer, DefaultEdge> createRandomPseudoGraph()
     {
         // TODO: move random graph generator to be under GraphGenerator
         // framework.

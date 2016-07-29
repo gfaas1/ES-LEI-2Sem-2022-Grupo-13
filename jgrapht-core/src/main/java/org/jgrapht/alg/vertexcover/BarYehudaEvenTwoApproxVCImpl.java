@@ -1,0 +1,95 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * BarYehudaEvenTwoApproxVCImpl.java
+ * -----------------
+ * (C) Copyright 2016, by Joris Kinable and Contributors.
+ *
+ * Original Author:  Joris Kinable
+ * Contributor(s):   -
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ * 28-Jul-2016 : Initial revision (JK);
+ *
+ */
+package org.jgrapht.alg.vertexcover;
+
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
+import org.jgrapht.graph.UndirectedSubgraph;
+
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by
+ * R. Bar-Yehuda and S. Even. A linear time approximation algorithm for the weighted vertex cover problem. J. of
+ * Algorithms 2:198-203, 1981.
+ * The solution is guaranteed to be within 2 times the optimum solution. Runtime: O(|E|)
+ * An easier-to-read version of this algorithm can be found here: <a href="https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf">https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf/a>
+ *
+ * Note: this class supports pseudo-graphs
+ *
+ * @author Joris Kinable
+ *
+ */
+public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
+
+    @Override
+    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Integer> vertexWeightMap) {
+
+        Set<V> cover=new LinkedHashSet<>();
+        int weight=0;
+        UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, null, null);
+        Map<V, Double> W=new HashMap<>();
+        for(V v : graph.vertexSet())
+            W.put(v, 1.0* vertexWeightMap.get(v));
+
+        //Main loop
+        Set<E> edgeSet=copy.edgeSet();
+        while(!edgeSet.isEmpty()){
+            //Pick arbitrary edge
+            E e =edgeSet.iterator().next();
+            V p=copy.getEdgeSource(e);
+            V q=copy.getEdgeTarget(e);
+
+            if(W.get(p) <= W.get(q)){
+                W.put(q, W.get(q)-W.get(p));
+                cover.add(p);
+                weight+=vertexWeightMap.get(p);
+                copy.removeVertex(p);
+            }else{
+                W.put(p, W.get(p)-W.get(q));
+                cover.add(q);
+                weight+=vertexWeightMap.get(q);
+                copy.removeVertex(q);
+            }
+        }
+
+        return new VertexCover<>(cover, weight);
+    }
+}

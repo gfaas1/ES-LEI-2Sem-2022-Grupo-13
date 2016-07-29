@@ -38,10 +38,11 @@ package org.jgrapht.alg;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
-import org.jgrapht.alg.vertexcover.ClarksonsTwoApproxWeightedVCImpl;
-import org.jgrapht.alg.vertexcover.GreedyWeightedVCImpl;
+import org.jgrapht.alg.vertexcover.BarYehudaEvenTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.HashMap;
@@ -60,13 +61,19 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
      */
     public void testFind2ApproximationCover()
     {
-        MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new ClarksonsTwoApproxWeightedVCImpl<>();
+        MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new ClarksonTwoApproxVCImpl<>();
+        MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new BarYehudaEvenTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
             Map<Integer, Integer> vertexWeights=getRandomVertexWeights(g);
-            MinimumVertexCoverAlgorithm.VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
+
+            VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(v -> vertexWeights.get(v)).sum());
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(vertexWeights::get).sum());
+
+            VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
+            assertTrue(isCover(g, vertexCover2));
+            assertEquals(vertexCover2.getWeight(), vertexCover2.getVertices().stream().mapToInt(vertexWeights::get).sum());
         }
     }
 
@@ -75,13 +82,13 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
      */
     public void testFindGreedyCover()
     {
-        MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyWeightedVCImpl<>();
+        MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomGraph();
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
             Map<Integer, Integer> vertexWeights=getRandomVertexWeights(g);
-            MinimumVertexCoverAlgorithm.VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
+            VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(v -> vertexWeights.get(v)).sum());
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(vertexWeights::get).sum());
         }
     }
 
