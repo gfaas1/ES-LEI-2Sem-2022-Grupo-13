@@ -57,6 +57,7 @@ import org.jgrapht.graph.*;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
+@Deprecated
 public abstract class VertexCovers
 {
     /**

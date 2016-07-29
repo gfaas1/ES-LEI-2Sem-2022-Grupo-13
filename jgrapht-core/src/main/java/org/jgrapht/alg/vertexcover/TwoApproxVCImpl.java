@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * GreedyVertexCover.java
+ * TwoApproxVCImpl.java
  * -----------------
  * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
  *
@@ -38,18 +38,18 @@
  * 28-Jul-2016 : Moved to dedicated package (JK)
  *
  */
-package org.jgrapht.alg.vertexCover;
+package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.alg.util.VertexDegreeComparator;
-import org.jgrapht.graph.UndirectedSubgraph;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.graph.Subgraph;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * Greedy algorithm to find a vertex cover for a graph. A vertex cover is a set of
+ * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of
  * vertices that touches all the edges in the graph. The graph's vertex set is a
  * trivial cover. However, a <i>minimal</i> vertex set (or at least an
  * approximation for it) is usually desired. Finding a true minimal vertex cover
@@ -60,60 +60,54 @@ import java.util.*;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
-public class GreedyVertexCover<V,E> implements VertexCoverAlgorithm<V,E> {
+public class TwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorithm<V,E> {
 
-    private final UndirectedGraph<V,E> graph;
-
-    public GreedyVertexCover(UndirectedGraph<V,E> graph){
-        this.graph=graph;
-    }
 
     /**
-     * Finds a greedy approximation for a minimal vertex cover of a specified
-     * graph. At each iteration, the algorithm picks the vertex with the highest
-     * degree and adds it to the cover, until all edges are covered.
+     * Finds a 2-approximation for a minimal vertex cover of the specified
+     * graph. The algorithm promises a cover that is at most double the size of
+     * a minimal cover. The algorithm takes O(|E|) time.
      *
      * Note: every invocation of this method will recompute the cover!
      *
-     * <p>The algorithm works on undirected graphs, but can also work on
-     * directed graphs when their edge-directions are ignored. To ignore edge
-     * directions you can use {@link org.jgrapht.Graphs#undirectedGraph(Graph)}
-     * or {@link org.jgrapht.graph.AsUndirectedGraph}.</p>
-     **/
+     * <p>For more details see Jenny Walter, CMPU-240: Lecture notes for
+     * Language Theory and Computation, Fall 2002, Vassar College, <a
+     * href="http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf">
+     * http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf</a>.
+     * </p>
+     *
+     *
+     * @return a set of vertices which is a vertex cover for the specified
+     * graph.
+     */
     @Override
-    public VertexCover<V> getVertexCover() {
+    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph) {
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
-        // G' <-- G
-        UndirectedGraph<V, E> sg = new UndirectedSubgraph<>(graph, null, null);
+        // G'=(V',E') <-- G(V,E)
+        Subgraph<V, E, Graph<V, E>> sg =
+                new Subgraph<>(
+                        graph,
+                        null,
+                        null);
 
-        // compare vertices in descending order of degree
-        VertexDegreeComparator<V, E> comp = new VertexDegreeComparator<>(sg);
-
-        // while G' != {}
+        // while E' is non-empty
         while (!sg.edgeSet().isEmpty()) {
-            // v <-- vertex with maximum degree in G'
-            V v = Collections.max(sg.vertexSet(), comp);
+            // let (u,v) be an arbitrary edge of E'
+            E e = sg.edgeSet().iterator().next();
 
-            // C <-- C U {v}
+            // C <-- C U {u,v}
+            V u = graph.getEdgeSource(e);
+            V v = graph.getEdgeTarget(e);
+            cover.add(u);
             cover.add(v);
 
-            // remove from G' every edge incident on v, and v itself
+            // remove from E' every edge incident on either u or v
+            sg.removeVertex(u);
             sg.removeVertex(v);
         }
 
         return new VertexCover<>(cover, cover.size());
-
-    }
-
-    /**
-     * TODO: requires implementation. Consider Clarkson's or Bar-Yehuda and Even's Greedy algorithms, e.g.: https://www.cs.umd.edu/class/spring2011/cmsc651/vc.pdf
-     * @param vertexWeightMap
-     * @return
-     */
-    @Override
-    public VertexCover<V> getVertexCover(Map<V, Integer> vertexWeightMap) {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
