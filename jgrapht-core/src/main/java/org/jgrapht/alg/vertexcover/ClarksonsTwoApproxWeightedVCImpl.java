@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by
  * Clarkson, Kenneth L. "A modification of the greedy algorithm for vertex cover." Information Processing Letters 16.1 (1983): 23-25.
  *
+ * Note: this class supports pseudo-graphs
+ *
  * @author Joris Kinable
  *
  */
@@ -56,41 +58,43 @@ public class ClarksonsTwoApproxWeightedVCImpl<V,E> implements MinimumWeightedVer
     @Override
     public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
         Set<V> cover=new LinkedHashSet<V>();
+        int weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
         UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, vertexSubset, null);
         Map<V, Double> W=new HashMap<>();
-        for(V v : graph.vertexSet()){
+        for(V v : graph.vertexSet())
             W.put(v, 1.0* vertexWeightMap.get(v));
-        }
-        while(!copy.edgeSet().isEmpty()){ //Keep going until all edges are covered
 
-            Set<V> markedForDeletion=new HashSet<>();
+
+        while(!copy.edgeSet().isEmpty()){ //Keep going until all edges are covered
 
             //Find a vertex v for which W(v)/degree(v) is minimal
             V v=Collections.min(copy.vertexSet(),
                     (v1, v2) -> Double.compare(W.get(v1)/copy.degreeOf(v1), W.get(v2)/copy.degreeOf(v2)));
 
             //Update weights
+            Set<V> neighbors=new HashSet<>();
             double ratio=W.get(v)/copy.degreeOf(v);
             for(E e : copy.edgesOf(v)){
                 V u = Graphs.getOppositeVertex(copy, e, v);
                 W.put(u, W.get(u)-ratio);
 
-                if(copy.degreeOf(u)== 1)
-                    markedForDeletion.add(u);
+                neighbors.add(u);
             }
             W.put(v, 0.0);
 
             //Update cover
             cover.add(v);
-            markedForDeletion.add(v);
+            weight+=vertexWeightMap.get(v);
 
-            //Remove nextCandidate and all vertices with degree 0
-            copy.removeAllVertices(markedForDeletion);
+            //Delete v, all edges incident to v, and all vertices u which became isolated
+            copy.removeVertex(v);
+            for(V u : neighbors)
+                if(u != v && copy.degreeOf(u)==0)
+                    copy.removeVertex(u);
         }
 
-        int weight=cover.stream().mapToInt(vertexWeightMap::get).sum();
         return new VertexCover<>(cover, weight);
     }
 

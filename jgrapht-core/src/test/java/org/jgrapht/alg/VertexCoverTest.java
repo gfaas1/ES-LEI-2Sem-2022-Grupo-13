@@ -20,12 +20,13 @@
  * the Eclipse Foundation.
  */
 /* ---------------------
- * VertexCoversTest.java
+ * VertexCoverTest.java
  * ---------------------
  * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
  *
  * Original Author:  Linda Buisman
  * Contributor(s):   Barak Naveh
+ *                   Joris Kinable
  *
  * $Id$
  *
@@ -33,6 +34,7 @@
  * -------
  * 06-Nov-2003 : Initial revision (LB);
  * 10-Nov-2003 : Adapted to VertexCovers (BN);
+ * 29-Jul-2016 : Remodelled tests around new vertex cover interface (JK);
  *
  */
 package org.jgrapht.alg;
@@ -42,6 +44,11 @@ import java.util.*;
 import junit.framework.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
+import org.jgrapht.alg.vertexcover.ClarksonsTwoApproxWeightedVCImpl;
+import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
+import org.jgrapht.alg.vertexcover.GreedyWeightedVCImpl;
 import org.jgrapht.graph.*;
 
 
@@ -51,40 +58,49 @@ import org.jgrapht.graph.*;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
-public class VertexCoversTest
+public class VertexCoverTest
     extends TestCase
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final int TEST_GRAPH_SIZE = 200;
-    private static final int TEST_REPEATS = 20;
+    protected static final int TEST_GRAPH_SIZE = 200;
+    protected static final int TEST_REPEATS = 20;
 
-    private static final Random rnd = new Random();
+    protected final Random rnd = new Random(0);
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * .
+     * Test 2-approximation algorithms for the minimum vertex cover problem.
+     * TODO: verify whether the objective indeed is smaller than 2 times the optimum solution.
      */
     public void testFind2ApproximationCover()
     {
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new EdgeBasedTwoApproxVCImpl<>();
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonsTwoApproxWeightedVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomGraph();
-            assertTrue(
-                isCover(VertexCovers.find2ApproximationCover(g), g));
+
+            VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g));
+            assertTrue(isCover(g, vertexCover));
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().size());
+
+            VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g));
+            assertTrue(isCover(g, vertexCover2));
+            assertEquals(vertexCover2.getWeight(), vertexCover2.getVertices().size());
         }
     }
 
     /**
-     * .
+     * Test greedy algorithm for the minimum vertex cover problem.
      */
     public void testFindGreedyCover()
     {
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyWeightedVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomGraph();
-            Set<Integer> c =
-                VertexCovers.findGreedyCover(
-                    Graphs.undirectedGraph(g));
-            assertTrue(isCover(c, g));
+            VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g));
+            assertTrue(isCover(g, vertexCover));
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().size());
         }
     }
 
@@ -94,22 +110,20 @@ public class VertexCoversTest
      * vertex in vertexSet. If no edges are left, vertexSet is a vertex cover
      * for the specified graph.
      *
-     * @param vertexSet the vertices to be tested for covering the graph.
+     * @param vertexCover the vertex cover to be tested for covering the graph.
      * @param g the graph to be covered.
      *
-     * @return
+     * @return returns true if the provided vertex cover is a valid cover in the given graph
      */
-    private boolean isCover(
-        Set<Integer> vertexSet,
-        Graph<Integer, DefaultEdge> g)
+    protected boolean isCover(
+        Graph<Integer, DefaultEdge> g,
+        VertexCover<Integer> vertexCover)
     {
         Set<DefaultEdge> uncoveredEdges = new HashSet<>(g.edgeSet());
-
-        for (Integer v : vertexSet) {
+        for (Integer v : vertexCover.getVertices())
             uncoveredEdges.removeAll(g.edgesOf(v));
-        }
 
-        return uncoveredEdges.size() == 0;
+        return uncoveredEdges.isEmpty();
     }
 
     /**
@@ -117,7 +131,7 @@ public class VertexCoversTest
      *
      * @return
      */
-    private Graph<Integer, DefaultEdge> createRandomGraph()
+    protected Graph<Integer, DefaultEdge> createRandomGraph()
     {
         // TODO: move random graph generator to be under GraphGenerator
         // framework.
@@ -144,4 +158,4 @@ public class VertexCoversTest
     }
 }
 
-// End VertexCoversTest.java
+// End VertexCoverTest.java

@@ -59,6 +59,8 @@ import java.util.stream.Collectors;
  * href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
+ * Note: this class supports pseudo-graphs
+ *
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
@@ -117,24 +119,25 @@ public class GreedyWeightedVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
     @Override
     public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
         Set<V> cover=new LinkedHashSet<V>();
+        int weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
 
         UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, vertexSubset, null);
         while(!copy.edgeSet().isEmpty()) { //Keep going until all edges are covered
-            Set<V> markedForDeletion=new HashSet<>();
             V v=Collections.min(copy.vertexSet(),
                     (v1, v2) -> Double.compare(vertexWeightMap.get(v1)/copy.degreeOf(v1), vertexWeightMap.get(v2)/copy.degreeOf(v2)));
             cover.add(v);
-            for(E e : copy.edgesOf(v)){
-                V u = Graphs.getOppositeVertex(copy, e, v);
-                if(copy.degreeOf(u)== 1)
-                    markedForDeletion.add(u);
-            }
-            copy.removeAllVertices(markedForDeletion);
+            weight+=vertexWeightMap.get(v);
+
+            //Delete v, all edges incident to v, and all vertices u which became isolated
+            Set<V> neighbors=new HashSet<>(Graphs.neighborListOf(copy, v));
+            copy.removeVertex(v);
+            for(V u : neighbors)
+                if(u != v && copy.degreeOf(u)==0)
+                    copy.removeVertex(u);
         }
 
-        int weight=cover.stream().mapToInt(vertexWeightMap::get).sum();
         return new VertexCover<>(cover, weight);
     }
 }

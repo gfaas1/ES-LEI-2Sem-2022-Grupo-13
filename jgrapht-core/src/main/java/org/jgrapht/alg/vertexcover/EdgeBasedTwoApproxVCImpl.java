@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * TwoApproxVCImpl.java
+ * EdgeBasedTwoApproxVCImpl.java
  * -----------------
  * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
  *
@@ -57,10 +57,12 @@ import java.util.Set;
  * href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
+ * Note: this class supports pseudo-graphs
+ *
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
-public class TwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorithm<V,E> {
+public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorithm<V,E> {
 
 
     /**
