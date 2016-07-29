@@ -59,14 +59,14 @@ public interface MinimumVertexCoverAlgorithm<V,E> {
 
     class VertexCover<V>{
         protected Set<V> cover;
-        protected int weight;
+        protected double weight;
 
-        public VertexCover(Set<V> cover, int weight){
+        public VertexCover(Set<V> cover, double weight){
             this.cover=cover;
             this.weight=weight;
         }
 
-        public int getWeight(){
+        public double getWeight(){
             return weight;
         }
 

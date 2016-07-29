@@ -60,14 +60,14 @@ import java.util.Set;
 public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Integer> vertexWeightMap) {
+    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap) {
 
         Set<V> cover=new LinkedHashSet<>();
-        int weight=0;
+        double weight=0;
         UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, null, null);
         Map<V, Double> W=new HashMap<>();
         for(V v : graph.vertexSet())
-            W.put(v, 1.0* vertexWeightMap.get(v));
+            W.put(v, vertexWeightMap.get(v));
 
         //Main loop
         Set<E> edgeSet=copy.edgeSet();

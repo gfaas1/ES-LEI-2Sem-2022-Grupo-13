@@ -82,11 +82,11 @@ public class VertexCoverTest
 
             VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().size());
+            assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
 
             VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover2));
-            assertEquals(vertexCover2.getWeight(), vertexCover2.getVertices().size());
+            assertEquals(vertexCover2.getWeight(), 1.0*vertexCover2.getVertices().size());
         }
     }
 
@@ -100,7 +100,7 @@ public class VertexCoverTest
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
             VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().size());
+            assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
         }
     }
 

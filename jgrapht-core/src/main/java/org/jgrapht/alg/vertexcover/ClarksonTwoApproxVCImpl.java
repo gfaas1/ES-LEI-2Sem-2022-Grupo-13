@@ -57,15 +57,15 @@ import java.util.stream.Collectors;
 public class ClarksonTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
+    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap) {
         Set<V> cover=new LinkedHashSet<>();
-        int weight=0;
+        double weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
         UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, vertexSubset, null);
         Map<V, Double> W=new HashMap<>();
         for(V v : graph.vertexSet())
-            W.put(v, 1.0* vertexWeightMap.get(v));
+            W.put(v, vertexWeightMap.get(v));
 
 
         while(!copy.edgeSet().isEmpty()){ //Keep going until all edges are covered

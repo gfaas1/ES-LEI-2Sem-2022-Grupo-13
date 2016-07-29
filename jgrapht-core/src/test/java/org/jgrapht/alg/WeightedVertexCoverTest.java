@@ -65,15 +65,15 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new BarYehudaEvenTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
-            Map<Integer, Integer> vertexWeights=getRandomVertexWeights(g);
+            Map<Integer, Double> vertexWeights=getRandomVertexWeights(g);
 
             VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(vertexWeights::get).sum());
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToDouble(vertexWeights::get).sum());
 
             VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover2));
-            assertEquals(vertexCover2.getWeight(), vertexCover2.getVertices().stream().mapToInt(vertexWeights::get).sum());
+            assertEquals(vertexCover2.getWeight(), vertexCover2.getVertices().stream().mapToDouble(vertexWeights::get).sum());
         }
     }
 
@@ -85,17 +85,17 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
         MinimumWeightedVertexCoverAlgorithm<Integer, DefaultEdge> mvc=new GreedyVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
-            Map<Integer, Integer> vertexWeights=getRandomVertexWeights(g);
+            Map<Integer, Double> vertexWeights=getRandomVertexWeights(g);
             VertexCover<Integer> vertexCover=mvc.getVertexCover(Graphs.undirectedGraph(g), vertexWeights);
             assertTrue(isCover(g, vertexCover));
-            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToInt(vertexWeights::get).sum());
+            assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToDouble(vertexWeights::get).sum());
         }
     }
 
-    protected Map<Integer, Integer> getRandomVertexWeights(Graph<Integer, DefaultEdge> graph){
-        Map<Integer, Integer> vertexWeights=new HashMap<>();
+    protected Map<Integer, Double> getRandomVertexWeights(Graph<Integer, DefaultEdge> graph){
+        Map<Integer, Double> vertexWeights=new HashMap<>();
         for(Integer v : graph.vertexSet())
-            vertexWeights.put(v, rnd.nextInt(25));
+            vertexWeights.put(v, 1.0* rnd.nextInt(25));
         return vertexWeights;
     }
 }

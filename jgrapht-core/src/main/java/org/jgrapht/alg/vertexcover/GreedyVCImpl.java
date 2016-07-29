@@ -118,9 +118,9 @@ public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Integer> vertexWeightMap) {
+    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap) {
         Set<V> cover=new LinkedHashSet<>();
-        int weight=0;
+        double weight=0;
         //Filter out all vertices with degree 0 to prevent division by zero exceptions
         Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
 
