@@ -323,6 +323,21 @@ public class GraphMLExporterTest
         }
     }
 
+    public void testNoAlreadyRegisteredAttributeAsWeightName()
+        throws Exception
+    {
+        try {
+            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+            exporter.registerAttribute(
+                "length",
+                AttributeCategory.EDGE,
+                AttributeType.STRING);
+            exporter.setEdgeWeightAttributeName("length");
+            fail("Registered reserved attribute");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
     public void testUndirectedWeightedWithWeightsAndLabels()
         throws Exception
     {
@@ -563,6 +578,89 @@ public class GraphMLExporterTest
                     map.put("name", "e31");
                 }
                 return map;
+            }
+        };
+
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+            new IntegerNameProvider<>(),
+            null,
+            vertexAttributeProvider,
+            new IntegerEdgeNameProvider<>(),
+            null,
+            edgeAttributeProvider);
+        StringWriter w = new StringWriter();
+        exporter.setExportEdgeWeights(true);
+        exporter.registerAttribute(
+            "color",
+            GraphMLExporter.AttributeCategory.NODE,
+            GraphMLExporter.AttributeType.STRING,
+            "yellow");
+        exporter.registerAttribute(
+            "name",
+            GraphMLExporter.AttributeCategory.ALL,
+            GraphMLExporter.AttributeType.STRING,
+            "johndoe");
+        exporter.export(w, g);
+
+        XMLAssert.assertXMLEqual(output, w.toString());
+    }
+    
+    public void testUndirectedWeightedWithNullComponentProvider()
+        throws Exception
+    {
+        String output =
+            // @formatter:off
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+                + "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+                + "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+                + "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
+                + "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
+                + "<default>1.0</default>" + NL 
+                + "</key>" + NL
+                + "<key id=\"key0\" for=\"node\" attr.name=\"color\" attr.type=\"string\">" + NL
+                + "<default>yellow</default>" + NL 
+                + "</key>" + NL
+                + "<key id=\"key1\" for=\"all\" attr.name=\"name\" attr.type=\"string\">" + NL
+                + "<default>johndoe</default>" + NL 
+                + "</key>" + NL                        
+                + "<graph edgedefault=\"undirected\">" + NL
+                + "<node id=\"1\"/>" + NL
+                + "<node id=\"2\"/>" + NL
+                + "<node id=\"3\"/>" + NL
+                + "<edge id=\"1\" source=\"1\" target=\"2\">" + NL 
+                + "<data key=\"edge_weight_key\">3.0</data>" + NL
+                + "</edge>" + NL 
+                + "<edge id=\"2\" source=\"3\" target=\"1\"/>" + NL
+                + "</graph>" + NL
+                + "</graphml>" + NL;
+            // @formatter:on
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+        g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
+
+        ComponentAttributeProvider<String> vertexAttributeProvider = new ComponentAttributeProvider<String>()
+        {
+            @Override
+            public Map<String, String> getComponentAttributes(String v)
+            {
+                return null;
+            }
+        };
+
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = new ComponentAttributeProvider<DefaultWeightedEdge>()
+        {
+            @Override
+            public Map<String, String> getComponentAttributes(
+                DefaultWeightedEdge e)
+            {
+                return null;
             }
         };
 

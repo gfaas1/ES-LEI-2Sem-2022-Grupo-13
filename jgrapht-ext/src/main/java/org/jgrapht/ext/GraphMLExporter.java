@@ -326,6 +326,9 @@ public class GraphMLExporter<V, E>
             throw new IllegalArgumentException(
                 "Vertex label attribute name cannot be null");
         }
+        if (registeredAttributes.containsKey(vertexLabelAttributeName)) {
+            throw new IllegalArgumentException("Reserved attribute name");
+        }
         this.vertexLabelAttributeName = vertexLabelAttributeName;
     }
 
@@ -350,6 +353,9 @@ public class GraphMLExporter<V, E>
             throw new IllegalArgumentException(
                 "Edge label attribute name cannot be null");
         }
+        if (registeredAttributes.containsKey(edgeLabelAttributeName)) {
+            throw new IllegalArgumentException("Reserved attribute name");
+        }
         this.edgeLabelAttributeName = edgeLabelAttributeName;
     }
 
@@ -373,6 +379,9 @@ public class GraphMLExporter<V, E>
         if (edgeWeightAttributeName == null) {
             throw new IllegalArgumentException(
                 "Edge weight attribute name cannot be null");
+        }
+        if (registeredAttributes.containsKey(edgeWeightAttributeName)) {
+            throw new IllegalArgumentException("Reserved attribute name");
         }
         this.edgeWeightAttributeName = edgeWeightAttributeName;
     }
@@ -653,11 +662,12 @@ public class GraphMLExporter<V, E>
             }
 
             // find vertex attributes
-            Map<String, String> vertexAttributes;
+            Map<String, String> vertexAttributes = null;
             if (vertexAttributeProvider != null) {
                 vertexAttributes = vertexAttributeProvider
                     .getComponentAttributes(v);
-            } else {
+            }
+            if (vertexAttributes == null) {
                 vertexAttributes = Collections.emptyMap();
             }
 
@@ -734,11 +744,12 @@ public class GraphMLExporter<V, E>
             }
 
             // find edge attributes
-            Map<String, String> edgeAttributes;
+            Map<String, String> edgeAttributes = null;
             if (edgeAttributeProvider != null) {
                 edgeAttributes = edgeAttributeProvider
                     .getComponentAttributes(e);
-            } else {
+            }
+            if (edgeAttributes == null) {
                 edgeAttributes = Collections.emptyMap();
             }
 
