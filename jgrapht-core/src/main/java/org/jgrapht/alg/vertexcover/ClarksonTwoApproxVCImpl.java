@@ -36,13 +36,10 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumWeightedVertexCoverAlgorithm;
-import org.jgrapht.graph.UndirectedSubgraph;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by
@@ -56,47 +53,139 @@ import java.util.stream.Collectors;
  */
 public class ClarksonTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,E> {
 
+    private static int vertexCounter=0;
+
     @Override
     public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap) {
+        //Result
         Set<V> cover=new LinkedHashSet<>();
         double weight=0;
-        //Filter out all vertices with degree 0 to prevent division by zero exceptions
-        Set<V> vertexSubset=graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).collect(Collectors.toSet());
-        UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, vertexSubset, null);
-        Map<V, Double> W=new HashMap<>();
-        for(V v : graph.vertexSet())
-            W.put(v, vertexWeightMap.get(v));
 
+        //Create working graph: for every vertex, create a ComparableVertex which maintains its own list of neighbors
+        Map<V, ComparableVertex> vertexEncapsulationMap=new HashMap<>();
+        graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).forEach(v -> vertexEncapsulationMap.put(v, new ComparableVertex(v, vertexWeightMap.get(v))));
 
-        while(!copy.edgeSet().isEmpty()){ //Keep going until all edges are covered
+        for(E e : graph.edgeSet()){
+            V u=graph.getEdgeSource(e);
+            ComparableVertex ux=vertexEncapsulationMap.get(u);
+            V v=graph.getEdgeTarget(e);
+            ComparableVertex vx=vertexEncapsulationMap.get(v);
+            ux.addNeighbor(vx);
+            vx.addNeighbor(ux);
 
-            //Find a vertex v for which W(v)/degree(v) is minimal
-            V v=Collections.min(copy.vertexSet(),
-                    (v1, v2) -> Double.compare(W.get(v1)/copy.degreeOf(v1), W.get(v2)/copy.degreeOf(v2)));
+            assert(ux.neighbors.get(vx) == vx.neighbors.get(ux)): " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+        }
 
-            //Update weights
-            Set<V> neighbors=new HashSet<>();
-            double ratio=W.get(v)/copy.degreeOf(v);
-            for(E e : copy.edgesOf(v)){
-                V u = Graphs.getOppositeVertex(copy, e, v);
-                W.put(u, W.get(u)-ratio);
+        TreeSet<ComparableVertex> workingGraph=new TreeSet<>();
+        workingGraph.addAll(vertexEncapsulationMap.values());
+        assert(workingGraph.size() == graph.vertexSet().size());
 
-                neighbors.add(u);
+        while(!workingGraph.isEmpty()){ //Continue until all edges are covered
+
+            //Find a vertex vx for which W(vx)/degree(vx) is minimal
+            ComparableVertex vx=workingGraph.pollFirst();
+            assert(workingGraph.parallelStream().allMatch(ux -> vx.getRatio() <= ux.getRatio())) : "vx does not have the smallest ratio among all elements. VX: "+vx+" WorkingGraph: "+workingGraph;
+
+            //Iterate over all the neighbors ux of vx and update ux.W
+            double ratio=vx.getRatio();
+            for(ComparableVertex nx : vx.neighbors.keySet()){
+
+                if(nx ==vx) //Ignore self loops
+                    continue;
+
+                workingGraph.remove(nx);
+                nx.W-=ratio*vx.neighbors.get(nx);
+
+                //Delete vx from nx' neighbor list. Delete nx from the graph and place it back, thereby updating the ordering of the graph
+                nx.removeNeighbor(vx);
+
+                if (nx.degree > 0)
+                    workingGraph.add(nx);
+
             }
-            W.put(v, 0.0);
+
+            assert(!workingGraph.parallelStream().anyMatch(ux -> ux.ID==vx.ID)) : "vx should no longer exist in the working graph";
 
             //Update cover
-            cover.add(v);
-            weight+=vertexWeightMap.get(v);
-
-            //Delete v, all edges incident to v, and all vertices u which became isolated (be careful of self-loops)
-            copy.removeVertex(v);
-            for(V u : neighbors)
-                if(u != v && copy.degreeOf(u)==0)
-                    copy.removeVertex(u);
+            cover.add(vx.v);
+            weight+=vertexWeightMap.get(vx.v);
         }
 
         return new VertexCover<>(cover, weight);
+
     }
 
+    public class ComparableVertex implements Comparable<ComparableVertex>{
+        /** original vertex **/
+        public final V v;
+
+        /** unique id, used to guarantee that compareTo never returns 0 **/
+        public final int ID;
+
+        /** degree of this vertex **/
+        private int degree=0;
+
+        /** W as described in Clarkson, Kenneth L. "A modification of the greedy algorithm for vertex cover. **/
+        public double W;
+
+        /** Map of neighbors, and a count of the number of edges to this neighbor **/
+        public Map<ComparableVertex, Integer> neighbors;
+
+        public ComparableVertex(V v, double weight){
+            this.ID=vertexCounter++;
+            this.v=v;
+            this.W=weight;
+            neighbors=new LinkedHashMap<>();
+        }
+
+        public void addNeighbor(ComparableVertex v){
+            if(!neighbors.containsKey(v))
+                neighbors.put(v,1);
+            else
+                neighbors.put(v, neighbors.get(v) + 1);
+            degree++;
+
+            assert(neighbors.values().stream().mapToInt(Integer::intValue).sum() == degree);
+        }
+
+        public void removeNeighbor(ComparableVertex v){
+            degree-=neighbors.get(v);
+            neighbors.remove(v);
+        }
+
+        public double getRatio(){
+            return this.W/degree;
+        }
+
+        @Override
+        public int compareTo(ComparableVertex other) {
+            if(this.ID == other.ID) //Same vertex
+                return 0;
+            int result=Double.compare(this.getRatio(), other.getRatio());
+            if(result == 0 ) //If vertices have the same value, resolve tie by an ID comparison
+                return Integer.compare(this.ID, other.ID);
+            else
+                return result;
+        }
+
+        @Override
+        public int hashCode(){
+            return ID;
+        }
+
+        @Override
+        public boolean equals(Object o){
+            if(this==o)
+                return true;
+            else if(!(o instanceof ClarksonTwoApproxVCImpl.ComparableVertex))
+                return false;
+            ComparableVertex other=(ComparableVertex)o;
+            return this.ID==other.ID;
+        }
+
+        @Override
+        public String toString(){
+            return "v"+ID+"("+this.getRatio()+")";
+        }
+    }
 }
