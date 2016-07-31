@@ -104,11 +104,10 @@ public class ClarksonTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverA
 
             }
 
-            assert(!workingGraph.parallelStream().anyMatch(ux -> ux.ID==vx.ID)) : "vx should no longer exist in the working graph";
-
             //Update cover
             cover.add(vx.v);
             weight+=vertexWeightMap.get(vx.v);
+            assert(!workingGraph.parallelStream().anyMatch(ux -> ux.ID==vx.ID)) : "vx should no longer exist in the working graph";
         }
 
         return new VertexCover<>(cover, weight);

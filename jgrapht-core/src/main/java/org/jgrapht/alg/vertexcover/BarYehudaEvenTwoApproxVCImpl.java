@@ -65,6 +65,7 @@ public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexC
         Set<V> cover=new LinkedHashSet<>();
         double weight=0;
         UndirectedGraph<V,E> copy= new UndirectedSubgraph<>(graph, null, null);
+//        UndirectedGraph<V,E> copy=graph.clone();
         Map<V, Double> W=new HashMap<>();
         for(V v : graph.vertexSet())
             W.put(v, vertexWeightMap.get(v));
