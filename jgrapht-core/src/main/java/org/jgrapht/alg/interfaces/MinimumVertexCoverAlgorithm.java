@@ -57,21 +57,42 @@ public interface MinimumVertexCoverAlgorithm<V,E> {
      */
     VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph);
 
-    class VertexCover<V>{
+
+    interface VertexCover<V>{
+
+        /**
+         * Returns the weight of the vertex cover. When solving the minimum weighted vertex cover problem, the weight
+         * returned is the sum of the weights of the vertices in the cover. When solving the unweighted variant, the
+         * cardinality of the vertex cover is returned instead.
+         * @return weight of the vertex cover
+         */
+        double getWeight();
+
+        /**
+         * Set of vertices constituting the vertex cover
+         * @return vertices in the vertex cover
+         */
+        Set<V> getVertices();
+    }
+
+
+    class VertexCoverImpl<V> implements VertexCover<V>{
         protected Set<V> cover;
         protected double weight;
 
-        public VertexCover(){}
+        public VertexCoverImpl(){}
 
-        public VertexCover(Set<V> cover, double weight){
+        public VertexCoverImpl(Set<V> cover, double weight){
             this.cover=cover;
             this.weight=weight;
         }
 
+        @Override
         public double getWeight(){
             return weight;
         }
 
+        @Override
         public Set<V> getVertices(){
             return cover;
         }

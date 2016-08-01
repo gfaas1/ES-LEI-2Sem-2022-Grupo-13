@@ -143,7 +143,7 @@ public class RecursiveExactVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
         Set<V> verticesInCover=new LinkedHashSet<>();
         for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i<N; i = vertexCover.bitSetCover.nextSetBit(i+1))
             verticesInCover.add(vertices.get(i));
-        return new VertexCover<>(verticesInCover, vertexCover.weight);
+        return new VertexCoverImpl<>(verticesInCover, vertexCover.weight);
     }
 
     private BitSetCover calculateCoverRecursively(int indexNextCandidate, BitSet visited, double accumulatedWeight){

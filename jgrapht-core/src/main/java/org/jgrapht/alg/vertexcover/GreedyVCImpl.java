@@ -126,7 +126,7 @@ public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,
             assert(!workingGraph.parallelStream().anyMatch(ux -> ux.ID==vx.ID)) : "vx should no longer exist in the working graph";
         }
 
-        return new VertexCover<>(cover, weight);
+        return new VertexCoverImpl<>(cover, weight);
     }
 
 

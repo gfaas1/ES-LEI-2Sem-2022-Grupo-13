@@ -114,6 +114,6 @@ public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorith
             sg.removeVertex(v);
         }
 
-        return new VertexCover<>(cover, cover.size());
+        return new VertexCoverImpl<>(cover, cover.size());
     }
 }

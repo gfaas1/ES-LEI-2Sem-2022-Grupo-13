@@ -97,6 +97,6 @@ public class BarYehudaEvenTwoApproxVCImpl<V,E> implements MinimumWeightedVertexC
             }
         }
 
-        return new VertexCover<>(cover, weight);
+        return new VertexCoverImpl<>(cover, weight);
     }
 }
