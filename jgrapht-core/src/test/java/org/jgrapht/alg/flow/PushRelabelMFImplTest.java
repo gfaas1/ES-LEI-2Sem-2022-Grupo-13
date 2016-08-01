@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * PushRelabelMaximumFlowTest.java
+ * PushRelabelMFImplTest.java
  * -----------------
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
@@ -35,16 +35,15 @@
 
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class PushRelabelMaximumFlowTest extends MaximumFlowAlgorithmTestBase {
+public class PushRelabelMFImplTest extends MaximumFlowAlgorithmTestBase {
 
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
-        return new PushRelabelMaximumFlow<>(network);
+        return new PushRelabelMFImpl<>(network);
     }
 
 }

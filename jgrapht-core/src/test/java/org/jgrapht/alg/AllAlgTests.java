@@ -37,7 +37,7 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.alg.flow.EdmondsKarpMaximumFlowTest;
-import org.jgrapht.alg.flow.PushRelabelMaximumFlowTest;
+import org.jgrapht.alg.flow.PushRelabelMFImplTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -61,7 +61,7 @@ import org.junit.runners.Suite;
     DijkstraShortestPathTest.class,
     EdmondsBlossomShrinkingTest.class,
     EdmondsKarpMaximumFlowTest.class,
-    PushRelabelMaximumFlowTest.class,
+    PushRelabelMFImplTest.class,
     EulerianCircuitTest.class,
     FloydWarshallShortestPathsTest.class,
     HamiltonianCycleTest.class,

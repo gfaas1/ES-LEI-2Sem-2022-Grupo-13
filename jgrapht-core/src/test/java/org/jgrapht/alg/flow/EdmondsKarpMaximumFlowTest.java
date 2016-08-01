@@ -34,13 +34,10 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.Map;
 
@@ -49,7 +46,7 @@ public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
 {
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
-        return new EdmondsKarpMaximumFlow<>(network);
+        return new EdmondsKarpMFImpl<>(network);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -63,12 +60,12 @@ public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
         simple.addVertex(1);
         DefaultWeightedEdge e = simple.addEdge(0, 1);
         try {
-            new EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge>(null);
+            new EdmondsKarpMFImpl<Integer, DefaultWeightedEdge>(null);
             fail();
         } catch (NullPointerException ex) {
         }
         try {
-            new EdmondsKarpMaximumFlow<>(
+            new EdmondsKarpMFImpl<>(
                 simple,
                 -0.1);
             fail();
@@ -76,14 +73,14 @@ public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
         }
         try {
             simple.setEdgeWeight(e, -1.0);
-            new EdmondsKarpMaximumFlow<>(simple);
+            new EdmondsKarpMFImpl<>(simple);
             fail();
         } catch (IllegalArgumentException ex) {
         }
         try {
             simple.setEdgeWeight(e, 1.0);
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                new EdmondsKarpMFImpl<>(
                     simple);
             Map<DefaultWeightedEdge, Double> flow = solver.buildMaximumFlow(0, 1).getFlow();
             flow.put(e, 25.0);
@@ -91,40 +88,40 @@ public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
         } catch (UnsupportedOperationException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                new EdmondsKarpMFImpl<>(
                     simple);
             solver.buildMaximumFlow(2, 0);
             fail();
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                    new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                    new EdmondsKarpMFImpl<>(
                             simple);
             solver.buildMaximumFlow(1, 2);
             fail();
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                    new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                    new EdmondsKarpMFImpl<>(
                             simple);
             solver.buildMaximumFlow(0, 0);
             fail();
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                    new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                    new EdmondsKarpMFImpl<>(
                             simple);
             solver.buildMaximumFlow(null, 0);
             fail();
         } catch (IllegalArgumentException ex) {
         }
         try {
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> solver =
-                    new EdmondsKarpMaximumFlow<>(
+            MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver =
+                    new EdmondsKarpMFImpl<>(
                             simple);
             solver.buildMaximumFlow(0, null);
             fail();

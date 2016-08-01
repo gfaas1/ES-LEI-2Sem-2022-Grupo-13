@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * EdmondsKarpMaximumFlow.java
+ * EdmondsKarpMFImpl.java
  * -----------------
  * (C) Copyright 2008-2008, by Ilya Razenshteyn and Contributors.
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
@@ -73,7 +73,7 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * replaced by a DirectedWeightedGraph. However, due to some overhead in the graphs prior to version 0.9.3, it turned out
  * beneficial to use the custom structures instead. In the next iteration we should replace them by proper graph structures.
  * This will improve robustness and readability significantly.*/
-public final class EdmondsKarpMaximumFlow<V, E>
+public final class EdmondsKarpMFImpl<V, E>
     extends MaximumFlowAlgorithmBase<V, E>
 {
 
@@ -94,7 +94,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      *
      * @param network network, where maximum flow will be calculated
      */
-    public EdmondsKarpMaximumFlow(Graph<V, E> network)
+    public EdmondsKarpMFImpl(Graph<V, E> network)
     {
         this(network, DEFAULT_EPSILON);
     }
@@ -108,7 +108,7 @@ public final class EdmondsKarpMaximumFlow<V, E>
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
      */
-    public EdmondsKarpMaximumFlow(Graph<V, E> network, double epsilon)
+    public EdmondsKarpMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
         this.vertexExtensionsFactory =
@@ -332,5 +332,5 @@ public final class EdmondsKarpMaximumFlow<V, E>
     }
 }
 
-// End EdmondsKarpMaximumFlow.java
+// End EdmondsKarpMFImpl.java
 

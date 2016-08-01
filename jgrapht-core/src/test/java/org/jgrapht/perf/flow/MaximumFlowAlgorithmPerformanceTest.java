@@ -38,8 +38,8 @@ package org.jgrapht.perf.flow;
 import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.flow.EdmondsKarpMaximumFlow;
-import org.jgrapht.alg.flow.PushRelabelMaximumFlow;
+import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
+import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -109,14 +109,14 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
     public static class EdmondsKarpMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network) {
-            return new EdmondsKarpMaximumFlow<>(network);
+            return new EdmondsKarpMFImpl<>(network);
         }
     }
 
     public static class PushRelabelMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network) {
-            return new PushRelabelMaximumFlow<>(network);
+            return new PushRelabelMFImpl<>(network);
         }
     }
 
