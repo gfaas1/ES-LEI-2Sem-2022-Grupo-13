@@ -55,6 +55,9 @@ import java.util.Map;
  */
 public class WeightedVertexCoverTest extends VertexCoverTest{
 
+
+    // ------- Approximation algorithms ------
+
     /**
      * Test 2-approximation algorithm for the minimum vertex cover problem.
      * TODO: verify whether the objective indeed is smaller than 2 times the optimum solution.
@@ -77,6 +80,8 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
         }
     }
 
+    // ------- Greedy algorithms ------
+
     /**
      * Test greedy algorithm for the minimum weighted vertex cover problem.
      */
@@ -91,6 +96,11 @@ public class WeightedVertexCoverTest extends VertexCoverTest{
             assertEquals(vertexCover.getWeight(), vertexCover.getVertices().stream().mapToDouble(vertexWeights::get).sum());
         }
     }
+
+    // ------- Exact algorithms ------
+
+
+    // ------- Helper methods ------
 
     protected Map<Integer, Double> getRandomVertexWeights(Graph<Integer, DefaultEdge> graph){
         Map<Integer, Double> vertexWeights=new HashMap<>();

@@ -191,7 +191,7 @@ public class VertexCoverTest
     /**
      * Graph with 6 vertices in the shape >-< (Optimal=2)
      */
-    public void testWisker(){
+    public void testWhisker(){
         UndirectedGraph<Integer, DefaultEdge> g1=new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g1, Arrays.asList(0,1,2,3,4,5));
         g1.addEdge(0,2);
