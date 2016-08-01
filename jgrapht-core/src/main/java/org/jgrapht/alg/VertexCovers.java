@@ -75,7 +75,10 @@ public abstract class VertexCovers
      *
      * @return a set of vertices which is a vertex cover for the specified
      * graph.
+     *
+     * @deprecated  Use {@link org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl}, {@link org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl}, or {@link org.jgrapht.alg.vertexcover.BarYehudaEvenTwoApproxVCImpl} instead.
      */
+    @Deprecated
     public static <V, E> Set<V> find2ApproximationCover(Graph<V, E> g)
     {
         // C <-- {}
@@ -121,7 +124,10 @@ public abstract class VertexCovers
      *
      * @return a set of vertices which is a vertex cover for the specified
      * graph.
+     *
+     * @deprecated use {@link org.jgrapht.alg.vertexcover.GreedyVCImpl} instead.
      */
+    @Deprecated
     public static <V, E> Set<V> findGreedyCover(UndirectedGraph<V, E> g)
     {
         // C <-- {}

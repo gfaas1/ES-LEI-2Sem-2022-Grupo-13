@@ -53,6 +53,8 @@ import java.util.*;
  *
  * Note: this class supports pseudo-graphs
  * Runtime: O(|E|*log|V|)
+ * This class produces often, but not always, better solutions than the 2-approximation algorithms. Nevertheless, there are instances
+ * where the solution is significantly worse. In those cases, consider using {@link ClarksonTwoApproxVCImpl}.
  *
  *
  *

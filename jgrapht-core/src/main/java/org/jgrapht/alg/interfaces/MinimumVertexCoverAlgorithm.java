@@ -61,6 +61,8 @@ public interface MinimumVertexCoverAlgorithm<V,E> {
         protected Set<V> cover;
         protected double weight;
 
+        public VertexCover(){}
+
         public VertexCover(Set<V> cover, double weight){
             this.cover=cover;
             this.weight=weight;

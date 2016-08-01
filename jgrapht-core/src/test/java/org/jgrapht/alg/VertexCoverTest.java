@@ -49,6 +49,7 @@ import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
+import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 import org.jgrapht.graph.*;
 
 
@@ -63,15 +64,18 @@ public class VertexCoverTest
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    protected static final int TEST_GRAPH_SIZE = 200;
+    protected static final int TEST_GRAPH_SIZE = 140;
     protected static final int TEST_REPEATS = 20;
 
     protected final Random rnd = new Random(0);
     //~ Methods ----------------------------------------------------------------
 
+
+
+    // ------- Approximation algorithms ------
+
     /**
      * Test 2-approximation algorithms for the minimum vertex cover problem.
-     * TODO: verify whether the objective indeed is smaller than 2 times the optimum solution.
      */
     public void testFind2ApproximationCover()
     {
@@ -80,15 +84,21 @@ public class VertexCoverTest
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph();
 
+            VertexCover<Integer> optimalCover=new RecursiveExactVCImpl<Integer, DefaultEdge>().getVertexCover(Graphs.undirectedGraph(g));
+
             VertexCover<Integer> vertexCover=mvc1.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover));
             assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
+            assertTrue(vertexCover.getWeight() <= optimalCover.getWeight()*2); //Verify 2-approximation
 
             VertexCover<Integer> vertexCover2=mvc2.getVertexCover(Graphs.undirectedGraph(g));
             assertTrue(isCover(g, vertexCover2));
             assertEquals(vertexCover2.getWeight(), 1.0*vertexCover2.getVertices().size());
+            assertTrue(vertexCover2.getWeight() <= optimalCover.getWeight()*2); //Verify 2-approximation
         }
     }
+
+    // ------- Greedy algorithms ------
 
     /**
      * Test greedy algorithm for the minimum vertex cover problem.
@@ -103,6 +113,99 @@ public class VertexCoverTest
             assertEquals(vertexCover.getWeight(), 1.0*vertexCover.getVertices().size());
         }
     }
+
+    // ------- Exact algorithms ------
+
+    /**
+     * 4-cyle graph (optimal=2)
+     */
+    public void test4Cycle(){
+        UndirectedGraph<Integer, DefaultEdge> g1=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g1, Arrays.asList(0, 1, 2, 3));
+        g1.addEdge(0,1);
+        g1.addEdge(1,2);
+        g1.addEdge(2,3);
+        g1.addEdge(3,0);
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new RecursiveExactVCImpl<>();
+        VertexCover<Integer> vertexCover=mvc1.getVertexCover(g1);
+        assertTrue(isCover(g1, vertexCover));
+        assertEquals(vertexCover.getWeight(), 2.0);
+    }
+
+    /**
+     * Wheel graph W_8 (Optimal=5)
+     */
+    public void testWheel(){
+        UndirectedGraph<Integer, DefaultEdge> g1=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g1, Arrays.asList(0,1,2,3,4,5,6,7));
+        g1.addEdge(1,2);
+        g1.addEdge(2,3);
+        g1.addEdge(3,4);
+        g1.addEdge(4,5);
+        g1.addEdge(5,6);
+        g1.addEdge(6,7);
+        g1.addEdge(7,1);
+        g1.addEdge(0,1);
+        g1.addEdge(0,2);
+        g1.addEdge(0,3);
+        g1.addEdge(0,4);
+        g1.addEdge(0,5);
+        g1.addEdge(0,6);
+        g1.addEdge(0,7);
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new RecursiveExactVCImpl<>();
+        VertexCover<Integer> vertexCover=mvc1.getVertexCover(g1);
+        assertTrue(isCover(g1, vertexCover));
+        assertEquals(vertexCover.getWeight(), 5.0);
+    }
+
+    /**
+     * Cubic graph with 8 vertices (Optimal=7)
+     */
+    public void testCubic(){
+        UndirectedGraph<Integer, DefaultEdge> g1=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g1, Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,11));
+        g1.addEdge(0,1);
+        g1.addEdge(0,9);
+        g1.addEdge(0,7);
+        g1.addEdge(1, 2);
+        g1.addEdge(1,5);
+        g1.addEdge(2,3);
+        g1.addEdge(2,4);
+        g1.addEdge(3,4);
+        g1.addEdge(3,5);
+        g1.addEdge(4,11);
+        g1.addEdge(5,6);
+        g1.addEdge(6,7);
+        g1.addEdge(6,8);
+        g1.addEdge(7,8);
+        g1.addEdge(8,10);
+        g1.addEdge(9,10);
+        g1.addEdge(9,11);
+        g1.addEdge(10,11);
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new RecursiveExactVCImpl<>();
+        VertexCover<Integer> vertexCover=mvc1.getVertexCover(g1);
+        assertTrue(isCover(g1, vertexCover));
+        assertEquals(vertexCover.getWeight(), 7.0);
+    }
+
+    /**
+     * Graph with 6 vertices in the shape >-< (Optimal=2)
+     */
+    public void testWisker(){
+        UndirectedGraph<Integer, DefaultEdge> g1=new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g1, Arrays.asList(0,1,2,3,4,5));
+        g1.addEdge(0,2);
+        g1.addEdge(1,2);
+        g1.addEdge(2,3);
+        g1.addEdge(3,4);
+        g1.addEdge(3,5);
+        MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new RecursiveExactVCImpl<>();
+        VertexCover<Integer> vertexCover=mvc1.getVertexCover(g1);
+        assertTrue(isCover(g1, vertexCover));
+        assertEquals(vertexCover.getWeight(), 2.0);
+    }
+
+    // ------- Helper methods ------
 
     /**
      * Checks if the specified vertex set covers every edge of the graph. Uses

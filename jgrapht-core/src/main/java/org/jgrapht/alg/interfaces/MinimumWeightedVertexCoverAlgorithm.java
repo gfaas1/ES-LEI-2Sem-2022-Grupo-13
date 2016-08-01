@@ -55,7 +55,7 @@ public interface MinimumWeightedVertexCoverAlgorithm<V,E> extends MinimumVertexC
 
     @Override
     default VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph){
-        Map<V,Double> vertexWeightMap=graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex->Double.valueOf(1)));
+        Map<V,Double> vertexWeightMap=graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
         return getVertexCover(graph, vertexWeightMap);
     }
 

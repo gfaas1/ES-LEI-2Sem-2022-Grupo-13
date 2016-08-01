@@ -70,7 +70,11 @@ public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorith
      * graph. The algorithm promises a cover that is at most double the size of
      * a minimal cover. The algorithm takes O(|E|) time.
      *
-     * Note: every invocation of this method will recompute the cover!
+     * Note: this class supports pseudo-graphs
+     * Runtime: O(|E|)
+     *
+     * Albeit the fact that this is a 2-approximation algorithm for vertex cover, its results are often of lower quality
+     * than the results produced by {@link BarYehudaEvenTwoApproxVCImpl} or {@link ClarksonTwoApproxVCImpl}.
      *
      * <p>For more details see Jenny Walter, CMPU-240: Lecture notes for
      * Language Theory and Computation, Fall 2002, Vassar College, <a

@@ -54,6 +54,9 @@ import java.util.Set;
  *
  * Note: this class supports pseudo-graphs
  * Runtime: O(|E|)
+ * This is a fast algorithm, guaranteed to give a 2-approximation. A solution of higher quality (same approximation ratio) at the expensive of a higher runtime can be obtained using
+ * {@link BarYehudaEvenTwoApproxVCImpl}.
+ *
  *
  * TODO: Remove the UndirectedSubgraph dependency! Querying vertex degrees on these graphs is actually slow! This does affect the runtime complexity. Better would be to just work on a clone of the original graph!
  *
