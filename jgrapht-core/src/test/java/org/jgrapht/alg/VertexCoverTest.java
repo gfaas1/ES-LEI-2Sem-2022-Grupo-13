@@ -50,6 +50,8 @@ import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.*;
 
 
@@ -64,7 +66,7 @@ public class VertexCoverTest
 {
     //~ Static fields/initializers ---------------------------------------------
 
-    protected static final int TEST_GRAPH_SIZE = 140;
+    protected static final int TEST_GRAPH_SIZE = 100;
     protected static final int TEST_REPEATS = 20;
 
     protected final Random rnd = new Random(0);
@@ -232,32 +234,23 @@ public class VertexCoverTest
     /**
      * Create a random PSEUDO graph of TEST_GRAPH_SIZE nodes.
      *
-     * @return
+     * @return random pseudo graph with TEST_GRAPH_SIZE vertices and a random number of edges drawn from the domain [1, TEST_GRAPH_SIZE/2]
      */
     protected Graph<Integer, DefaultEdge> createRandomPseudoGraph()
     {
-        // TODO: move random graph generator to be under GraphGenerator
-        // framework.
-        Pseudograph<Integer, DefaultEdge> g =
-                new Pseudograph<>(DefaultEdge.class);
-
-        for (int i = 0; i < TEST_GRAPH_SIZE; i++) {
-            g.addVertex(i);
-        }
-
-        List<Integer> vertices = new ArrayList<>(g.vertexSet());
-        // join every vertex with a random number of other vertices
-        for (int source = 0; source < TEST_GRAPH_SIZE; source++) {
-            int numEdgesToCreate = rnd.nextInt(TEST_GRAPH_SIZE / 2) + 1;
-
-            for (int j = 0; j < numEdgesToCreate; j++) {
-                // find a random vertex to join to
-                int target = (int) Math.floor(Math.random() * TEST_GRAPH_SIZE);
-                g.addEdge(vertices.get(source), vertices.get(target));
-            }
-        }
-
+        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator=new RandomGraphGenerator<>(TEST_GRAPH_SIZE, rnd.nextInt(TEST_GRAPH_SIZE / 2) + 1);
+        graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
         return g;
+    }
+
+    private class IntegerVertexFactory implements VertexFactory<Integer>{
+        private int counter =0;
+
+        @Override
+        public Integer createVertex() {
+            return counter++;
+        }
     }
 }
 

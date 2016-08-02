@@ -97,7 +97,7 @@ public class GreedyVCImpl<V,E> implements MinimumWeightedVertexCoverAlgorithm<V,
 
         TreeSet<RatioVertex<V>> workingGraph=new TreeSet<>();
         workingGraph.addAll(vertexEncapsulationMap.values());
-        assert(workingGraph.size() == graph.vertexSet().size());
+        assert(workingGraph.size() == vertexEncapsulationMap.size()) : "vertices in vertexEncapsulationMap: "+graph.vertexSet().size()+"vertices in working graph: "+workingGraph.size();
 
         while(!workingGraph.isEmpty()) { //Continue until all edges are covered
 

@@ -74,12 +74,12 @@ public class ClarksonTwoApproxVCImpl<V,E> implements MinimumWeightedVertexCoverA
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert(ux.neighbors.get(vx) == vx.neighbors.get(ux)): " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert(ux.neighbors.get(vx).equals(vx.neighbors.get(ux))): " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph=new TreeSet<>();
         workingGraph.addAll(vertexEncapsulationMap.values());
-        assert(workingGraph.size() == graph.vertexSet().size());
+        assert(workingGraph.size() == vertexEncapsulationMap.size()) : "vertices in vertexEncapsulationMap: "+graph.vertexSet().size()+"vertices in working graph: "+workingGraph.size();
 
         while(!workingGraph.isEmpty()){ //Continue until all edges are covered
 
