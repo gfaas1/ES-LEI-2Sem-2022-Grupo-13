@@ -24,6 +24,7 @@ Changes to JGraphT in each version:
 	- Fixed `AStarShortestPath` to use Object.equals (contributed by Joris Kinable, bug reported by Zgce)
         - Enhance `DirectedAcyclicGraph` extend Iterable (contributed by Joris Kinable, suggested by Andrew Pennebaker)
 	- Enhance `MinSourceSinkCut` to make max-flow implementation configurable (contributed by Joris Kinable, suggested by Roman Pearah)
+        - Add new vertex cover algorithms and package (contributed by Joris Kinable and Nils Olberg)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
