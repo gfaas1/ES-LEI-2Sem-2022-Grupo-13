@@ -26,6 +26,7 @@
  *
  * Original Author:  Linda Buisman
  * Contributor(s):   Christian Hammer
+ *                   Joris Kinable
  *
  * $Id$
  *
@@ -33,11 +34,14 @@
  * -------
  * 06-Nov-2003 : Initial revision (LB);
  * 07-Jun-2005 : Made generic (CH);
+ * 31-Jul-2016 : Revised comparator and added Order enum (JK)
  *
  */
 package org.jgrapht.alg.util;
 
 import org.jgrapht.*;
+
+import java.util.Comparator;
 
 
 /**
@@ -50,8 +54,14 @@ import org.jgrapht.*;
  * @since Nov 6, 2003
  */
 public class VertexDegreeComparator<V, E>
-    implements java.util.Comparator<V>
+    implements Comparator<V>
 {
+
+    /**
+     * Order in which we sort the vertices: ascending vertex degree or descending vertex degree
+     */
+    public enum Order{ASCENDING, DESCENDING};
+
     /**
      * The graph that contains the vertices to be compared.
      */
@@ -64,6 +74,11 @@ public class VertexDegreeComparator<V, E>
     private boolean ascendingOrder;
 
     /**
+     * Order in which the vertices are sorted: ascending or descending
+     */
+    private Order order;
+
+    /**
      * Creates a comparator for comparing the degrees of vertices in the
      * specified graph. The comparator compares in ascending order of degrees
      * (lowest first).
@@ -72,7 +87,7 @@ public class VertexDegreeComparator<V, E>
      */
     public VertexDegreeComparator(UndirectedGraph<V, E> g)
     {
-        this(g, true);
+        this(g, Order.ASCENDING);
     }
 
     /**
@@ -84,12 +99,28 @@ public class VertexDegreeComparator<V, E>
      * (lowest first), false - compares in descending order of degrees (highest
      * first).
      */
+    @Deprecated
     public VertexDegreeComparator(
         UndirectedGraph<V, E> g,
         boolean ascendingOrder)
     {
         graph = g;
         this.ascendingOrder = ascendingOrder;
+    }
+
+    /**
+     * Creates a comparator for comparing the degrees of vertices in the
+     * specified graph.
+     *
+     * @param g graph with respect to which the degree is calculated.
+     * @param order order in which the vertices are sorted (ascending or descending)
+     */
+    public VertexDegreeComparator(
+            UndirectedGraph<V, E> g,
+            Order order)
+    {
+        graph = g;
+        this.order=order;
     }
 
     /**
@@ -104,21 +135,12 @@ public class VertexDegreeComparator<V, E>
      */
     @Override public int compare(V v1, V v2)
     {
-        int degree1 = graph.degreeOf(v1);
-        int degree2 = graph.degreeOf(v2);
+        int comparison=Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2));
 
-        if (((degree1 < degree2) && ascendingOrder)
-            || ((degree1 > degree2) && !ascendingOrder))
-        {
-            return -1;
-        } else if (
-            ((degree1 > degree2) && ascendingOrder)
-            || ((degree1 < degree2) && !ascendingOrder))
-        {
-            return 1;
-        } else {
-            return 0;
-        }
+        if(order==Order.ASCENDING)
+            return comparison;
+        else
+            return -1*comparison;
     }
 }
 

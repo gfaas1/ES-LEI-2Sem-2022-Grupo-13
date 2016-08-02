@@ -44,7 +44,8 @@ import org.junit.runners.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    UnionFindTest.class
+    UnionFindTest.class,
+        VertexDegreeComparatorTest.class
 })
 public final class AllAlgUtilTests
 {
