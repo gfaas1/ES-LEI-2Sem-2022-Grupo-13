@@ -38,7 +38,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
-import org.jgrapht.alg.flow.PushRelabelMaximumFlow;
+import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
 
@@ -65,13 +65,13 @@ public class MinSourceSinkCut<V, E>
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph)
     {
-        this.ekMaxFlow = new PushRelabelMaximumFlow<>(graph);
+        this.ekMaxFlow = new PushRelabelMFImpl<>(graph);
         this.graph = graph;
     }
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph, double epsilon)
     {
-        this(graph, new PushRelabelMaximumFlow<>(graph), epsilon);
+        this(graph, new PushRelabelMFImpl<>(graph), epsilon);
     }
 
     public MinSourceSinkCut(DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)

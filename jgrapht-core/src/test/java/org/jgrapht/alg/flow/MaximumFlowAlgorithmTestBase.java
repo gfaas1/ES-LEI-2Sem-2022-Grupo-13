@@ -39,12 +39,9 @@ import junit.framework.TestCase;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.Map;
@@ -90,7 +87,7 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
         assertEquals(
             expectedResult,
             flowValue,
-            EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
+            EdmondsKarpMFImpl.DEFAULT_EPSILON);
 
         //Verify that every edge is contained in the flow map
         for (DefaultWeightedEdge e : network.edgeSet()) {
@@ -101,10 +98,10 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
         for (DefaultWeightedEdge e : flow.keySet()) {
             assertTrue(network.containsEdge(e));
             assertTrue(
-                flow.get(e) >= -EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
+                flow.get(e) >= -EdmondsKarpMFImpl.DEFAULT_EPSILON);
             assertTrue(
                 flow.get(e)
-                    <= (network.getEdgeWeight(e)+ EdmondsKarpMaximumFlow.DEFAULT_EPSILON));
+                    <= (network.getEdgeWeight(e)+ EdmondsKarpMFImpl.DEFAULT_EPSILON));
         }
 
         //Verify flow preservation: amount of incoming flow must equal amount of outgoing flow (exception for the source/sink vertices)
@@ -166,10 +163,10 @@ public abstract class MaximumFlowAlgorithmTestBase extends TestCase {
         for (DefaultWeightedEdge e : flow.keySet()) {
             assertTrue(graph.containsEdge(e));
             assertTrue(
-                    flow.get(e) >= -EdmondsKarpMaximumFlow.DEFAULT_EPSILON);
+                    flow.get(e) >= -EdmondsKarpMFImpl.DEFAULT_EPSILON);
             assertTrue(
                     flow.get(e)
-                            <= (graph.getEdgeWeight(e)+ EdmondsKarpMaximumFlow.DEFAULT_EPSILON));
+                            <= (graph.getEdgeWeight(e)+ EdmondsKarpMFImpl.DEFAULT_EPSILON));
         }
 
         //Verify flow preservation: amount of incoming flow must equal amount of outgoing flow (exception for the source/sink vertices)

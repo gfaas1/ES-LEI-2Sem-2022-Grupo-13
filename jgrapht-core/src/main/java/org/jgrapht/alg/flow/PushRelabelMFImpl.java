@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * PushRelabelMaximumFlow.java
+ * PushRelabelMFImpl.java
  * -----------------
  * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
  *
@@ -54,7 +54,7 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  *
  * @author Alexey Kudinkin
  */
-public class PushRelabelMaximumFlow<V, E>
+public class PushRelabelMFImpl<V, E>
     extends MaximumFlowAlgorithmBase<V, E>
 {
     // Diagnostic
@@ -72,10 +72,10 @@ public class PushRelabelMaximumFlow<V, E>
 
     private PushRelabelDiagnostic diagnostic;
 
-    public PushRelabelMaximumFlow(Graph<V, E> network){
+    public PushRelabelMFImpl(Graph<V, E> network){
         this(network, DEFAULT_EPSILON);
     }
-    public PushRelabelMaximumFlow(Graph<V, E> network, double epsilon)
+    public PushRelabelMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
 
@@ -408,4 +408,4 @@ public class PushRelabelMaximumFlow<V, E>
     }
 }
 
-// End PushRelabelMaximumFlow.java
+// End PushRelabelMFImpl.java

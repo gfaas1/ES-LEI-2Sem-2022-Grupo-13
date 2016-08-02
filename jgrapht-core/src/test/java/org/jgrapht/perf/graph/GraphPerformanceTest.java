@@ -38,7 +38,7 @@ import junit.framework.TestCase;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.GabowStrongConnectivityInspector;
-import org.jgrapht.alg.flow.EdmondsKarpMaximumFlow;
+import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -135,7 +135,7 @@ public class GraphPerformanceTest extends TestCase{
         }
 
         private double calculateMaxFlow(SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph, Integer source, Integer sink){
-            EdmondsKarpMaximumFlow<Integer, DefaultWeightedEdge> maximumFlowAlg= new EdmondsKarpMaximumFlow<>(graph);
+            EdmondsKarpMFImpl<Integer, DefaultWeightedEdge> maximumFlowAlg= new EdmondsKarpMFImpl<>(graph);
             return maximumFlowAlg.buildMaximumFlow(source, sink).getValue();
         }
 
