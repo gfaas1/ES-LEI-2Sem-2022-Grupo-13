@@ -123,7 +123,7 @@ public class RecursiveExactVCImpl<V,E> implements MinimumWeightedVertexCoverAlgo
         neighborIndex=new NeighborIndex<>(graph);
         vertexIDDictionary=new HashMap<>();
         this.vertexWeightMap=vertexWeightMap;
-        this.weighted=vertexWeightMap == null;
+        this.weighted=vertexWeightMap != null;
 
         N=vertices.size();
         //Sort vertices based on their weight/degree ratio in ascending order
