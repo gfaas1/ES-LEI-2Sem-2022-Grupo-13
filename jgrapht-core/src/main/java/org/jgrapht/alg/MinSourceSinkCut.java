@@ -45,7 +45,7 @@ import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
 
 /**
  * Given a directed, weighted graph G(V,E). This class computes a minimum s-t
- * cut. For this, it relies on the EdmondsKarpMaximumFlow implementation. Note:
+ * cut by calculating a maximum flow between s-t. Note:
  * it is not recommended to use this class to calculate the overall minimum cut
  * in a graph by iteratively invoking this class for all source-sink pairs. This
  * is computationally expensive. Instead, use the StoerWagnerMinimumCut
