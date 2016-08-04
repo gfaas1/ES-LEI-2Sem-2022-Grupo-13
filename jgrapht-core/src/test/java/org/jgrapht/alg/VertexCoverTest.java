@@ -104,7 +104,7 @@ public class VertexCoverTest
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc1=new EdgeBasedTwoApproxVCImpl<>();
         MinimumVertexCoverAlgorithm<Integer, DefaultEdge> mvc2=new ClarksonTwoApproxVCImpl<>();
         for (int i = 0; i < TEST_REPEATS; i++) {
-            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(80);
+            Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(70);
 
             VertexCover<Integer> optimalCover=new RecursiveExactVCImpl<Integer, DefaultEdge>().getVertexCover(Graphs.undirectedGraph(g));
 
