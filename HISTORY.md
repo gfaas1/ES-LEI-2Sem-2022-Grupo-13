@@ -39,7 +39,7 @@ Changes to JGraphT in each version:
 	- More `FloydWarshallShortestPaths` optimizations, contributed by Joris Kinable
 	- Add `MixedGraphUnion` and `AsWeightedDirectedGraph`; fix UndirectedGraphUnion constructors; contributed by Joris Kinable
 	- Add `GabowStrongConnectivityInspector` and `KosarajuStrongConnectivityInspector`, contributed by Joris Kinable and Sarah Komla-Ebri
-	- Add `PushRelabelMaximumFlow`; boost `EdmondsKarpMaximumFlow`; add `MaximumFlowAlgorithm` interface; add `Pair` and `Extension` utility classes; optional seed parameter to `RandomGraphGenerator`
+	- Add `PushRelabelMaximumFlow`; boost `EdmondsKarpMaximumFlow`; add `MaximumFlowAlgorithm` interface; add `Pair` and `Extension` utility classes; optional seed parameter to `RandomGraphGenerator`, contributed by Alexey Kudinkin
 	- Add `MaximumWeightBipartiteMatching`, contributed by Graeme Ahokas
 	- Osgify jgrapht-ext, contributed by Christoph Zauner
 	- Add `AllDirectedPaths`, contributed by Andrew Gainer-Dewar
