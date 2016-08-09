@@ -54,6 +54,12 @@ import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 
+/**
+ * This class demonstrates exporting a graph with custom vertex and 
+ * edge attributes as GraphML. Vertices of the graph have an attribute
+ * called "color" and a "name" attribute. Edges have a "weight" attribute
+ * as well as a "name" attribute.
+ */
 public final class GraphMLExportDemo
 {
     // Number of vertices
@@ -99,10 +105,7 @@ public final class GraphMLExportDemo
         @Override
         public int hashCode()
         {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((id == null) ? 0 : id.hashCode());
-            return result;
+            return (id == null) ? 0 : id.hashCode();
         }
 
         @Override
@@ -116,11 +119,10 @@ public final class GraphMLExportDemo
                 return false;
             GraphVertex other = (GraphVertex) obj;
             if (id == null) {
-                if (other.id != null)
-                    return false;
-            } else if (!id.equals(other.id))
-                return false;
-            return true;
+                return other.id == null;
+            } else { 
+                return id.equals(other.id);
+            }
         }
 
         public Color getColor()
