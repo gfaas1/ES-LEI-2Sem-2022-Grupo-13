@@ -327,10 +327,11 @@ public class GraphMLExporter<V, E>
             throw new IllegalArgumentException(
                 "Vertex label attribute name cannot be null");
         }
-        if (registeredAttributes.containsKey(vertexLabelAttributeName)) {
+        String key = vertexLabelAttributeName.trim();
+        if (registeredAttributes.containsKey(key)) {
             throw new IllegalArgumentException("Reserved attribute name");
         }
-        this.vertexLabelAttributeName = vertexLabelAttributeName;
+        this.vertexLabelAttributeName = key;
     }
 
     /**
@@ -354,10 +355,11 @@ public class GraphMLExporter<V, E>
             throw new IllegalArgumentException(
                 "Edge label attribute name cannot be null");
         }
-        if (registeredAttributes.containsKey(edgeLabelAttributeName)) {
+        String key = edgeLabelAttributeName.trim();
+        if (registeredAttributes.containsKey(key)) {
             throw new IllegalArgumentException("Reserved attribute name");
         }
-        this.edgeLabelAttributeName = edgeLabelAttributeName;
+        this.edgeLabelAttributeName = key;
     }
 
     /**
@@ -381,10 +383,11 @@ public class GraphMLExporter<V, E>
             throw new IllegalArgumentException(
                 "Edge weight attribute name cannot be null");
         }
-        if (registeredAttributes.containsKey(edgeWeightAttributeName)) {
+        String key = edgeWeightAttributeName.trim();
+        if (registeredAttributes.containsKey(key)) {
             throw new IllegalArgumentException("Reserved attribute name");
         }
-        this.edgeWeightAttributeName = edgeWeightAttributeName;
+        this.edgeWeightAttributeName = key;
     }
 
     /**
