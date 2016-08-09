@@ -44,6 +44,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -591,7 +592,7 @@ public class GraphMLExporter<V, E>
                     "edge_weight_key",
                     AttributeCategory.EDGE,
                     AttributeType.DOUBLE,
-                    Double.toString(1.0)));
+                    Double.toString(WeightedGraph.DEFAULT_EDGE_WEIGHT)));
         }
 
         for (String attributeName : registeredAttributes.keySet()) {
@@ -684,7 +685,7 @@ public class GraphMLExporter<V, E>
                     if (vertexAttributes.containsKey(name)) {
                         String value = vertexAttributes.get(name);
                         if (defaultValue == null
-                            || !value.equals(defaultValue))
+                            || !defaultValue.equals(value))
                         {
                             if (value != null) {
                                 writeData(handler, details.key, value);
@@ -735,7 +736,7 @@ public class GraphMLExporter<V, E>
 
             if (exportEdgeWeights) {
                 Double weight = g.getEdgeWeight(e);
-                if (weight != 1.0) { // not default value
+                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not default value
                     writeData(
                         handler,
                         "edge_weight_key",
@@ -766,7 +767,7 @@ public class GraphMLExporter<V, E>
                     if (edgeAttributes.containsKey(name)) {
                         String value = edgeAttributes.get(name);
                         if (defaultValue == null
-                            || !value.equals(defaultValue))
+                            || !defaultValue.equals(value))
                         {
                             if (value != null) {
                                 writeData(handler, details.key, value);
