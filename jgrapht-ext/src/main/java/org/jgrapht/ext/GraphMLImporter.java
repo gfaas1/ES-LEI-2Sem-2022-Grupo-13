@@ -375,12 +375,10 @@ public class GraphMLImporter<V, E>
                         finalAttributes.put(
                             validKey.attributeName,
                             collectedAttributes.get(validId));
-                    } else {
-                        if (validKey.defaultValue != null) {
-                            finalAttributes.put(
-                                validKey.attributeName,
-                                validKey.defaultValue);
-                        }
+                    } else if (validKey.defaultValue != null) {
+                        finalAttributes.put(
+                            validKey.attributeName,
+                            validKey.defaultValue);
                     }
                 }
 
@@ -392,7 +390,7 @@ public class GraphMLImporter<V, E>
 
             // check how to handle special edge weight
             boolean handleSpecialEdgeWeights = false;
-            double defaultSpecialEdgeWeight = 1.0;
+            double defaultSpecialEdgeWeight = WeightedGraph.DEFAULT_EDGE_WEIGHT;
             if (graph instanceof WeightedGraph<?, ?>) {
                 for (Key k : edgeValidKeys.values()) {
                     if (k.attributeName.equals(edgeWeightAttributeName)) {
@@ -512,12 +510,16 @@ public class GraphMLImporter<V, E>
                 String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes);
                 currentKey = new Key(keyId, keyAttrName, null, null);
                 if (keyFor != null) {
-                    if (keyFor.equals(EDGE)) {
+                    switch(keyFor) { 
+                    case EDGE: 
                         currentKey.target = KeyTarget.EDGE;
-                    } else if (keyFor.equals(NODE)) {
+                        break;
+                    case NODE: 
                         currentKey.target = KeyTarget.NODE;
-                    } else if (keyFor.equals(ALL)) {
+                        break;
+                    case ALL: 
                         currentKey.target = KeyTarget.ALL;
+                        break;
                     }
                 }
                 break;
