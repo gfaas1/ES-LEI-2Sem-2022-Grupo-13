@@ -35,6 +35,7 @@
 package org.jgrapht.alg.flow;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -56,7 +57,7 @@ import org.jgrapht.alg.util.extension.ExtensionManager;
  * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmBase<V, E>
-    implements MaximumFlowAlgorithm<V, E>
+    implements MaximumFlowAlgorithm<V, E>, MinimumSourceSinkCutAlgorithm<V,E>
 {
     /**
      * Default tolerance.
@@ -78,6 +79,12 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     protected double maxFlowValue = -1;
     /* Mapping of the flow on each edge. */
     protected Map<E, Double> maxFlow = null;
+    /* Source parition of S-T cut */
+    protected Set<V> sourcePartition;
+    /* Sink parition of S-T cut */
+    protected Set<V> sinkPartition;
+    /* Cut edges */
+    protected Set<E> cutEdges;
 
     public MaximumFlowAlgorithmBase(Graph<V,E> network, double epsilon){
         this.network = network;
@@ -95,6 +102,9 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         buildInternal();
         maxFlowValue = 0;
         maxFlow = null;
+        sourcePartition=null;
+        sinkPartition=null;
+        cutEdges=null;
     }
 
     /**
@@ -345,6 +355,36 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             return annotatedFlowEdge.getTarget().prototype;
         else
             return inverseEdge.getTarget().prototype;
+    }
+
+
+
+    @Override
+    public double calculateMinCut(V source, V sink){
+        return this.calculateMaximumFlow(source, sink);
+    }
+    @Override
+    public double getCutCapacity(){
+        return getMaximumFlowValue();
+    }
+
+    @Override
+    public Set<E> getCutEdges(){
+        if(cutEdges != null)
+            return cutEdges;
+        cutEdges = new LinkedHashSet<>();
+
+        Set<E> cutEdges = new HashSet<>();
+        Set<V> p1=getSourcePartition();
+        if(directed_graph) {
+            DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)network;
+            for (V vertex : p1) {
+                cutEdges.addAll(directedGraph.outgoingEdgesOf(vertex).stream().filter(edge -> !p1.contains(network.getEdgeTarget(edge))).collect(Collectors.toList()));
+            }
+        }else{
+            cutEdges.addAll(network.edgeSet().stream().filter(e -> p1.contains(network.getEdgeSource(e)) ^ p1.contains(network.getEdgeTarget(e))).collect(Collectors.toList()));
+        }
+        return Collections.unmodifiableSet(cutEdges);
     }
 }
 

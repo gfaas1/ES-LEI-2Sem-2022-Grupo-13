@@ -39,7 +39,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class PushRelabelMFImplTest extends MaximumFlowAlgorithmTestBase {
+public class PushRelabelMFImplTest extends MaximumFlowAlgorithmTest {
 
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {

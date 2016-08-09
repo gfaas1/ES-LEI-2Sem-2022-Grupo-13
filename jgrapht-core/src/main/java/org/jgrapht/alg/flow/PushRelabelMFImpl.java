@@ -72,6 +72,8 @@ public class PushRelabelMFImpl<V, E>
 
     private PushRelabelDiagnostic diagnostic;
 
+    V source;
+
     public PushRelabelMFImpl(Graph<V, E> network){
         this(network, DEFAULT_EPSILON);
     }
@@ -103,6 +105,7 @@ public class PushRelabelMFImpl<V, E>
     {
         source.label = network.vertexSet().size();
         source.excess = Double.POSITIVE_INFINITY;
+        System.out.println("Setting source label: "+source.label+" source: "+source+" number of vertices: ");
 
         label(source, sink);
 
@@ -179,6 +182,7 @@ public class PushRelabelMFImpl<V, E>
         Queue<VertexExtension> active = new ArrayDeque<>();
 
         initialize(getVertexExtension(source), getVertexExtension(sink), active);
+        this.source=source;
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
@@ -406,6 +410,35 @@ public class PushRelabelMFImpl<V, E>
             return prototype.toString() + String.format(" { LBL: %d } ", label);
         }
     }
+
+
+    @Override
+    public Set<V> getSourcePartition(){
+        if(sourcePartition==null)
+            this.calculateSourceAndSinkPartition();
+        return sourcePartition;
+    }
+
+    @Override
+    public Set<V> getSinkPartition(){
+        if(sinkPartition==null)
+            this.calculateSourceAndSinkPartition();
+        return sinkPartition;
+    }
+
+    private void calculateSourceAndSinkPartition(){
+        this.sourcePartition=new LinkedHashSet<>();
+        this.sinkPartition=new LinkedHashSet<>();
+        for (V v : network.vertexSet()) {
+            VertexExtension vx = getVertexExtension(v);
+            if(vx.label >= getVertexExtension(source).label)//network.vertexSet().size())
+                sourcePartition.add(v);
+            else
+                sinkPartition.add(v);
+        }
+    }
+
+
 }
 
 // End PushRelabelMFImpl.java

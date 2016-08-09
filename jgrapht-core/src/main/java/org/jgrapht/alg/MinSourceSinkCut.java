@@ -141,6 +141,7 @@ public class MinSourceSinkCut<V, E>
     }
 
     public void processUndirectedGraph(MaximumFlow<E> maxFlow){
+//        TODO check implementation flow algorithm for undirected graphs. Seems wrong
         minCut = new LinkedHashSet<>();
         Queue<V> processQueue = new LinkedList<>();
         processQueue.add(source);
@@ -153,8 +154,10 @@ public class MinSourceSinkCut<V, E>
                 continue;
 
             minCut.add(vertex);
+            System.out.println("add vertex to mincut: "+vertex);
 
             for(E edge : graph.edgesOf(vertex)){
+                System.out.println("Edge: "+edge+" flow: "+ maxFlow.getFlow().get(edge)+" weight: "+graph.getEdgeWeight(edge));
                 double flowValue = maxFlow.getFlow().get(edge);
                 double edgeCapacity = graph.getEdgeWeight(edge);
                 if(edgeCapacity-flowValue > epsilon)

@@ -323,6 +323,82 @@ public final class EdmondsKarpMFImpl<V, E>
         return (currentSink == null) ? null : currentSink.prototype;
     }
 
+
+    @Override
+    public Set<V> getSourcePartition(){
+        if(sourcePartition==null) {
+            sourcePartition=new LinkedHashSet<>();
+            if(directed_graph)
+                this.calculateSourcePartitionDirectedGraph(this.getMaximumFlow());
+            else
+                this.calculateSourcePartitionUndirectedGraph(this.getMaximumFlow());
+        }
+        return sourcePartition;
+    }
+
+    @Override
+    public Set<V> getSinkPartition(){
+        if(sinkPartition==null){
+            sinkPartition=new LinkedHashSet<>(network.vertexSet());
+            sinkPartition.removeAll(this.getSourcePartition());
+        }
+        return sinkPartition;
+    }
+
+    private void calculateSourcePartitionDirectedGraph(Map<E, Double> valueMap){
+        DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)network;
+        Queue<V> processQueue = new LinkedList<>();
+        processQueue.add(currentSource.prototype);
+
+        while (!processQueue.isEmpty()) {
+            V vertex = processQueue.remove();
+            if (sourcePartition.contains(vertex))
+                continue;
+
+            sourcePartition.add(vertex);
+
+            //1. Get the forward edges with residual capacity
+            for (E edge : directedGraph.outgoingEdgesOf(vertex)) {
+                double edgeCapacity = directedGraph.getEdgeWeight(edge);
+                double flowValue = valueMap.get(edge);
+                if (edgeCapacity - flowValue >= epsilon) { //Has some residual capacity left
+                    processQueue.add(directedGraph.getEdgeTarget(edge));
+                }
+            }
+
+            //2. Get the backward edges with non-zero flow
+            for (E edge : directedGraph.incomingEdgesOf(vertex)) {
+                double flowValue = valueMap.get(edge);
+                if (flowValue >= epsilon) { //Has non-zero flow
+                    processQueue.add(directedGraph.getEdgeSource(edge));
+                }
+            }
+        }
+    }
+
+    private void calculateSourcePartitionUndirectedGraph(Map<E, Double> valueMap){
+        Queue<V> processQueue = new LinkedList<>();
+        processQueue.add(currentSource.prototype);
+
+        //Let G' be the graph consisting of edges with residual cost. An edge has residual cost if c(e)-f(e)>0.
+        //All vertices reachable from the source vertex in graph G' belong to the same partition
+        while (!processQueue.isEmpty()) {
+            V vertex = processQueue.remove();
+            if (sourcePartition.contains(vertex))
+                continue;
+
+            sourcePartition.add(vertex);
+
+            for(E edge : network.edgesOf(vertex)){
+                double flowValue = valueMap.get(edge);
+                double edgeCapacity = network.getEdgeWeight(edge);
+                if(edgeCapacity-flowValue > epsilon)
+                    processQueue.add(Graphs.getOppositeVertex(network, edge, vertex));
+            }
+        }
+    }
+
+
     class VertexExtension extends VertexExtensionBase
     {
         boolean visited; // this mark is used during BFS to mark visited nodes

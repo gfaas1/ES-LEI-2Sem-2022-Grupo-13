@@ -42,7 +42,7 @@ import org.jgrapht.graph.DirectedWeightedMultigraph;
 import java.util.Map;
 
 
-public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTestBase
+public class EdmondsKarpMaximumFlowTest extends MaximumFlowAlgorithmTest
 {
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
