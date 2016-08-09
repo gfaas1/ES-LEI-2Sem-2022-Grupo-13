@@ -19,6 +19,21 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
+/* -------------------
+ * ExportException.java
+ * -------------------
+ * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ *
+ * Original Author:  Dimitrios Michail
+ * Contributor(s): 
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ * 17-July-2016 : Initial revision (DM);
+ *
+ */
 package org.jgrapht.ext;
 
 /**
