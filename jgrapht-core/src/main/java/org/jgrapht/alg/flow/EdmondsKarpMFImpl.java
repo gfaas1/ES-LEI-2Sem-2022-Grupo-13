@@ -56,6 +56,10 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * significant amount of time (its upper-bound complexity is O(VE^2), where V -
  * amount of vertices, E - amount of edges in the network).
  *
+ * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
+ * minimum s-t cut, the implementation first computes a minimum s-t flow, after
+ * which a BFS is run on the residual graph.
+ *
  * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
  * (Lecture Notes)</i>.
  *

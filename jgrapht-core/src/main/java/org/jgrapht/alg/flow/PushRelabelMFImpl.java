@@ -50,6 +50,10 @@ import org.jgrapht.alg.util.extension.ExtensionFactory;
  * Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
  * eighteenth annual ACM symposium on Theory of computing</i></p>
  *
+ * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
+ * minimum s-t cut, the implementation first computes a minimum s-t flow, after
+ * which a BFS is run on the residual graph.</p>
+ *
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and undirected graphs are supported (and tested!).
  *
  * @author Alexey Kudinkin

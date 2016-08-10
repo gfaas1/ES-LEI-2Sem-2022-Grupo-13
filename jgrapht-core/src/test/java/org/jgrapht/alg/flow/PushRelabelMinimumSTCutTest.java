@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* -----------------
- * EdmondsKarpMinimumSTCutTest.java
+ * PushRelabelMinimumSTCutTest.java
  * -----------------
  * (C) Copyright 2016, by Joris Kinable and Contributors.
  *
@@ -46,10 +46,10 @@ import java.util.Set;
 /**
  * @author Joris Kinable
  */
-public class EdmondsKarpMinimumSTCutTest extends MinimumSourceSinkCutTest{
+public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
-        return new EdmondsKarpMFImpl<>(network);
+        return new PushRelabelMFImpl<>(network);
     }
 
     public void testRandomDirectedGraphs(){
@@ -58,15 +58,15 @@ public class EdmondsKarpMinimumSTCutTest extends MinimumSourceSinkCutTest{
             int source=0;
             int sink=network.vertexSet().size()-1;
 
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=this.createSolver(network);
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=new PushRelabelMFImpl<>(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
 
-            double expectedCutWeight=prSolver.calculateMinCut(source, sink);
+            double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
 
-            double cutWeight=ekSolver.calculateMinCut(source, sink);
-            Set<Integer> sourcePartition=ekSolver.getSourcePartition();
-            Set<Integer> sinkPartition=ekSolver.getSinkPartition();
-            Set<DefaultWeightedEdge> cutEdges=ekSolver.getCutEdges();
+            double cutWeight=prSolver.calculateMinCut(source, sink);
+            Set<Integer> sourcePartition=prSolver.getSourcePartition();
+            Set<Integer> sinkPartition=prSolver.getSinkPartition();
+            Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
 
             this.verifyDirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
         }
@@ -78,18 +78,17 @@ public class EdmondsKarpMinimumSTCutTest extends MinimumSourceSinkCutTest{
             int source=0;
             int sink=network.vertexSet().size()-1;
 
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=this.createSolver(network);
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=new PushRelabelMFImpl<>(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
 
-            double expectedCutWeight=prSolver.calculateMinCut(source, sink);
+            double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
 
-            double cutWeight=ekSolver.calculateMinCut(source, sink);
-            Set<Integer> sourcePartition=ekSolver.getSourcePartition();
-            Set<Integer> sinkPartition=ekSolver.getSinkPartition();
-            Set<DefaultWeightedEdge> cutEdges=ekSolver.getCutEdges();
+            double cutWeight=prSolver.calculateMinCut(source, sink);
+            Set<Integer> sourcePartition=prSolver.getSourcePartition();
+            Set<Integer> sinkPartition=prSolver.getSinkPartition();
+            Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
 
             this.verifyUndirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
         }
     }
-
 }

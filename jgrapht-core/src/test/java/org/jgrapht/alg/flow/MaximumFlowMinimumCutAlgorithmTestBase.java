@@ -203,7 +203,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
         );
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getRandomDirectedGraph(){
+    public DirectedGraph<Integer, DefaultWeightedEdge> generateDirectedGraph(){
         RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
         Random rand=new Random();
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> directedGraph=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -259,7 +259,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getRandomUndirectedGraph(){
+    public UndirectedGraph<Integer, DefaultWeightedEdge> generateUndirectedGraph(){
         RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
         Random rand=new Random();
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> undirectedGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);

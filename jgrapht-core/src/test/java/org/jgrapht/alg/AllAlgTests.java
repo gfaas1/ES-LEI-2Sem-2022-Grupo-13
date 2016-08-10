@@ -39,7 +39,7 @@ package org.jgrapht.alg;
 import org.jgrapht.alg.flow.EdmondsKarpMFImplTest;
 import org.jgrapht.alg.flow.EdmondsKarpMinimumSTCutTest;
 import org.jgrapht.alg.flow.PushRelabelMFImplTest;
-import org.jgrapht.alg.flow.PushRelabelSTCutTest;
+import org.jgrapht.alg.flow.PushRelabelMinimumSTCutTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -77,7 +77,7 @@ import org.junit.runners.Suite;
     NaiveLcaFinderTest.class,
     NeighborIndexTest.class,
     PushRelabelMFImplTest.class,
-    PushRelabelSTCutTest.class,
+    PushRelabelMinimumSTCutTest.class,
     StoerWagnerMinimumCutTest.class,
     StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class,

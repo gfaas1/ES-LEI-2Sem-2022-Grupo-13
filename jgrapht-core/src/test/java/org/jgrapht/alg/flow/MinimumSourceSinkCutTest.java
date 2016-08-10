@@ -53,25 +53,37 @@ import java.util.stream.Collectors;
  */
 public abstract class MinimumSourceSinkCutTest extends MaximumFlowMinimumCutAlgorithmTestBase{
 
+    public static final int NR_RANDOM_TESTS=20;
+
     abstract MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network);
 
 
     private void runTestDirected(DirectedGraph<Integer, DefaultWeightedEdge> network,
                                  int source,
                                  int sink,
-                                 double cutWeight)
-    {
+                                 double expectedCutWeight) {
         network.addVertex(source);
         network.addVertex(sink);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> mc = createSolver(network);
-        mc.calculateMinCut(source, sink);
-
-        assertEquals(cutWeight, mc.getCutCapacity());
-
+        double cutWeight=mc.calculateMinCut(source, sink);
         Set<Integer> sourcePartition=mc.getSourcePartition();
         Set<Integer> sinkPartition=mc.getSinkPartition();
+        Set<DefaultWeightedEdge> cutEdges=mc.getCutEdges();
 
+        this.verifyDirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+    }
+
+    void verifyDirected(DirectedGraph<Integer, DefaultWeightedEdge> network,
+                          int source,
+                          int sink,
+                          double expectedCutWeight,
+                          double cutWeight,
+                          Set<Integer> sourcePartition,
+                          Set<Integer> sinkPartition,
+                          Set<DefaultWeightedEdge> cutEdges){
+
+        assertEquals(expectedCutWeight, cutWeight);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -82,25 +94,37 @@ public abstract class MinimumSourceSinkCutTest extends MaximumFlowMinimumCutAlgo
 
         assertEquals(
                 network.edgeSet().stream().filter(e -> sourcePartition.contains(network.getEdgeSource(e)) && sinkPartition.contains(network.getEdgeTarget(e))).collect(Collectors.toSet()),
-                mc.getCutEdges()
+                cutEdges
         );
-        assertEquals(cutWeight, mc.getCutEdges().stream().mapToDouble(network::getEdgeWeight).sum());
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum());
     }
 
     private void runTestUndirected(
             UndirectedGraph<Integer, DefaultWeightedEdge> network,
             int source,
             int sink,
-            double cutWeight)
+            double expectedCutWeight)
     {
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> mc = createSolver(network);
-        mc.calculateMinCut(source, sink);
-
-        assertEquals(cutWeight, mc.getCutCapacity());
-
+        double cutWeight=mc.calculateMinCut(source, sink);
         Set<Integer> sourcePartition=mc.getSourcePartition();
         Set<Integer> sinkPartition=mc.getSinkPartition();
+        Set<DefaultWeightedEdge> cutEdges=mc.getCutEdges();
 
+        this.verifyUndirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+    }
+
+    void verifyUndirected(UndirectedGraph<Integer, DefaultWeightedEdge> network,
+                          int source,
+                          int sink,
+                          double expectedCutWeight,
+                          double cutWeight,
+                          Set<Integer> sourcePartition,
+                          Set<Integer> sinkPartition,
+                          Set<DefaultWeightedEdge> cutEdges){
+
+
+        assertEquals(expectedCutWeight, cutWeight);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -111,9 +135,10 @@ public abstract class MinimumSourceSinkCutTest extends MaximumFlowMinimumCutAlgo
 
         assertEquals(
                 network.edgeSet().stream().filter(e -> sourcePartition.contains(network.getEdgeSource(e)) ^ sourcePartition.contains(network.getEdgeTarget(e))).collect(Collectors.toSet()),
-                mc.getCutEdges()
+                cutEdges
         );
-        assertEquals(cutWeight, mc.getCutEdges().stream().mapToDouble(network::getEdgeWeight).sum());
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum());
+
     }
 
     public void testProblematicCase(){
