@@ -72,8 +72,6 @@ public class PushRelabelMFImpl<V, E>
 
     private PushRelabelDiagnostic diagnostic;
 
-    V source;
-
     public PushRelabelMFImpl(Graph<V, E> network){
         this(network, DEFAULT_EPSILON);
     }
@@ -90,9 +88,14 @@ public class PushRelabelMFImpl<V, E>
         }
     }
 
-    void init()
+    /**
+     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut algorithms
+     * @param source source
+     * @param sink sink
+     */
+    void init(V source, V sink)
     {
-        super.init(vertexExtensionsFactory, edgeExtensionsFactory);
+        super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
         this.labeling = new HashMap<>();
         this.flowBack = false;
@@ -177,15 +180,15 @@ public class PushRelabelMFImpl<V, E>
      * @param sink sink vertex
      */
     public double calculateMaximumFlow(V source,V sink){
-        init();
+        init(source, sink);
 
         Queue<VertexExtension> active = new ArrayDeque<>();
 
         initialize(getVertexExtension(source), getVertexExtension(sink), active);
-        this.source=source;
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
+            System.out.println("\nProcessing node: "+ux.prototype+" excess: "+ux.excess+" label: "+ux.label);
             for (;;) {
                 for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
                     if (isAdmissible(ex)) {
@@ -204,6 +207,7 @@ public class PushRelabelMFImpl<V, E>
 
                 if (ux.hasExcess()) {
                     relabel(ux);
+                    System.out.println("Relabeling. New label: "+ux.label);
                 } else {
                     break;
                 }
@@ -259,12 +263,22 @@ public class PushRelabelMFImpl<V, E>
         }
 
         assert (labeling.get(vx.label) > 0);
-        updateLabeling(vx, min + 1);
-
-        // Sanity
-        if (min != Integer.MAX_VALUE) {
+        //JK disables:
+//        updateLabeling(vx, min + 1);
+//
+//        // Sanity
+//        if (min != Integer.MAX_VALUE) {
+//            vx.label = min + 1;
+//        }
+        //JK replacement:
+        if(min < Integer.MAX_VALUE) {
+            updateLabeling(vx, min + 1);
             vx.label = min + 1;
+        }else {
+            updateLabeling(vx, network.vertexSet().size());
+            vx.label = network.vertexSet().size();
         }
+
     }
 
     private void updateLabeling(VertexExtension vx, int l)
@@ -290,6 +304,7 @@ public class PushRelabelMFImpl<V, E>
             diagnostic.incrementDischarges(ex);
         }
 
+        System.out.println("Pushing "+Math.min(ux.excess, ex.capacity - ex.flow)+" flow through: "+ex+" source label: "+ex.<VertexExtension>getSource().label+" target label: "+ex.<VertexExtension>getTarget().label);
         pushFlowThrough(ex, Math.min(ux.excess, ex.capacity - ex.flow));
         return !ux.hasExcess();
     }
@@ -412,31 +427,60 @@ public class PushRelabelMFImpl<V, E>
     }
 
 
-    @Override
-    public Set<V> getSourcePartition(){
-        if(sourcePartition==null)
-            this.calculateSourceAndSinkPartition();
-        return sourcePartition;
-    }
-
-    @Override
-    public Set<V> getSinkPartition(){
-        if(sinkPartition==null)
-            this.calculateSourceAndSinkPartition();
-        return sinkPartition;
-    }
-
-    private void calculateSourceAndSinkPartition(){
-        this.sourcePartition=new LinkedHashSet<>();
-        this.sinkPartition=new LinkedHashSet<>();
-        for (V v : network.vertexSet()) {
-            VertexExtension vx = getVertexExtension(v);
-            if(vx.label >= getVertexExtension(source).label)//network.vertexSet().size())
-                sourcePartition.add(v);
-            else
-                sinkPartition.add(v);
-        }
-    }
+//    @Override
+//    public Set<V> getSourcePartition(){
+//        if(sourcePartition==null) {
+////            if (directed_graph)
+//                calculateSourcePartitionDirected();
+////            else
+////                this.calculateSourceAndSinkPartition();
+//        }
+//        return sourcePartition;
+//    }
+//
+//    @Override
+//    public Set<V> getSinkPartition(){
+//        if(sinkPartition==null) {
+//            sinkPartition=new LinkedHashSet<>();
+//            sinkPartition.addAll(network.vertexSet());
+//            sinkPartition.removeAll(this.getSourcePartition());
+//        }
+//        return sinkPartition;
+//    }
+//
+//    private void calculateSourceAndSinkPartition(){
+//        this.sourcePartition=new LinkedHashSet<>();
+//        this.sinkPartition=new LinkedHashSet<>();
+//        System.out.println("Cut capacity: "+getCutCapacity());
+//        System.out.println("FlowMap: "+getMaximumFlow());
+//        for(E e : network.edgeSet())
+//            System.out.println("Edge: "+e+" weight: "+network.getEdgeWeight(e));
+//        for (V v : network.vertexSet()) {
+//            VertexExtension vx = getVertexExtension(v);
+//            System.out.println("vertex: "+vx.prototype+" label: "+vx.label);
+//            if(vx.label >= getVertexExtension(source).label)//network.vertexSet().size())
+//                sourcePartition.add(v);
+//            else
+//                sinkPartition.add(v);
+//        }
+//    }
+//
+//    //TEST:
+//    private void calculateSourcePartitionDirected(){
+//        this.sourcePartition=new LinkedHashSet<>();
+//        Queue<VertexExtension> processQueue = new LinkedList<>();
+//        processQueue.add(getVertexExtension(source));
+//        while(!processQueue.isEmpty()){
+//            VertexExtension vx=processQueue.poll();
+//            if(sourcePartition.contains(vx.prototype))
+//                continue;
+//            sourcePartition.add(vx.prototype);
+//            for (AnnotatedFlowEdge ex : vx.getOutgoing()) {
+//                if(ex.hasCapacity())
+//                    processQueue.add(ex.getTarget());
+//            }
+//        }
+//    }
 
 
 }

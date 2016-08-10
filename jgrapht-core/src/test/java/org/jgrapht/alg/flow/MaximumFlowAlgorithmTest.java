@@ -1,3 +1,38 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* -----------------
+ * MaximumFlowAlgorithmTest.java
+ * -----------------
+ * (C) Copyright 2016, by Joris Kinable and Contributors.
+ *
+ * Original Author:  Joris Kinable
+ * Contributor(s): -
+ *
+ * $Id$
+ *
+ * Changes
+ * -------
+ * Aug-2016 : Initial version (JK);
+ */
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
@@ -12,7 +47,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import java.util.Map;
 
 /**
- * Created by jkinable on 8/8/16.
+ * @author Joris Kinable
  */
 public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgorithmTestBase{
 
@@ -260,10 +295,9 @@ public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgo
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
-//    public void testUndirectedN1(){
-//        int[][] edges={{0, 1, 12}, {0, 2, 15}, {0, 3, 20}, {1, 5, 5}, {1, 6, 2}, {1, 2, 5}, {2, 6, 6}, {2, 4, 3}, {2, 3, 11}, {3, 4, 4}, {3, 7, 8}, {4, 6, 6}, {4, 7, 1}, {5, 6, 9}, {5, 8, 18}, {6, 7, 7}, {6, 8, 13}, {7, 8, 10}};
-//        runTestUndirected(edges, 0, 8, 28);
-//    }
+    public void testUndirectedN1(){
+        runTestUndirected(getUndirectedN1(), 0, 8, 28);
+    }
 
     public void testUndirectedN2(){
         runTestUndirected(getUndirectedN2(), 1, 4, 93);
@@ -291,5 +325,9 @@ public abstract class MaximumFlowAlgorithmTest extends MaximumFlowMinimumCutAlgo
 
     public void testUndirectedN8(){
         runTestUndirected(getUndirectedN8(), 1, 99, 501);
+    }
+
+    public void testUndirectedN9(){
+        runTestUndirected(getUndirectedN9(), 1, 2, 0);
     }
 }

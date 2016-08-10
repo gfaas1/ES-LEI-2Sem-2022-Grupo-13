@@ -43,6 +43,7 @@ import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
+import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 
 
 /**
@@ -56,7 +57,9 @@ import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
  * Runtime: O(E)
  *
  * @author Joris Kinable
+ * @deprecated Use {@link MinimumSTCutAlgorithm} instead
  */
+@Deprecated
 public class MinSourceSinkCut<V, E>
 {
     MaximumFlowAlgorithm<V, E> maxFlowAlg;

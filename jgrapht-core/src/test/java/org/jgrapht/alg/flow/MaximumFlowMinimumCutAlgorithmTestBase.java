@@ -207,10 +207,10 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
-//    public void testUndirectedN1(){
-//        int[][] edges={{0, 1, 12}, {0, 2, 15}, {0, 3, 20}, {1, 5, 5}, {1, 6, 2}, {1, 2, 5}, {2, 6, 6}, {2, 4, 3}, {2, 3, 11}, {3, 4, 4}, {3, 7, 8}, {4, 6, 6}, {4, 7, 1}, {5, 6, 9}, {5, 8, 18}, {6, 7, 7}, {6, 8, 13}, {7, 8, 10}};
-//        runTestUndirected(edges, 0, 8, 28);
-//    }
+    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN1(){
+        int[][] edges={{0, 1, 12}, {0, 2, 15}, {0, 3, 20}, {1, 5, 5}, {1, 6, 2}, {1, 2, 5}, {2, 6, 6}, {2, 4, 3}, {2, 3, 11}, {3, 4, 4}, {3, 7, 8}, {4, 6, 6}, {4, 7, 1}, {5, 6, 9}, {5, 8, 18}, {6, 7, 7}, {6, 8, 13}, {7, 8, 10}};
+        return constructUndirectedGraph(edges);
+    }
 
     public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN2(){
         int[][] edges={{2,1,20},{3,4,58},{1,3,39},{3,2,57},{4,2,25},{5,3,13},{5,1,51},{5,4,21}};
@@ -247,5 +247,9 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
         return constructUndirectedGraph(edges);
     }
 
+    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN9(){
+        int[][] edges={{1, 2, 0}, {2, 3, 1}, {3, 4, 0}, {4, 1, 1}, {1, 5, 1}, {4, 5, 1}, {6, 2, 1}, {3, 6, 1}};
+        return constructUndirectedGraph(edges);
+    }
 
 }
