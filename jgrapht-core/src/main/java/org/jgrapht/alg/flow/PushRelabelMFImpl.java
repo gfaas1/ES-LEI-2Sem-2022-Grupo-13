@@ -108,7 +108,6 @@ public class PushRelabelMFImpl<V, E>
     {
         source.label = network.vertexSet().size();
         source.excess = Double.POSITIVE_INFINITY;
-        System.out.println("Setting source label: "+source.label+" source: "+source+" number of vertices: ");
 
         label(source, sink);
 
@@ -188,7 +187,6 @@ public class PushRelabelMFImpl<V, E>
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
-            System.out.println("\nProcessing node: "+ux.prototype+" excess: "+ux.excess+" label: "+ux.label);
             for (;;) {
                 for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
                     if (isAdmissible(ex)) {
@@ -207,7 +205,6 @@ public class PushRelabelMFImpl<V, E>
 
                 if (ux.hasExcess()) {
                     relabel(ux);
-                    System.out.println("Relabeling. New label: "+ux.label);
                 } else {
                     break;
                 }
@@ -304,7 +301,6 @@ public class PushRelabelMFImpl<V, E>
             diagnostic.incrementDischarges(ex);
         }
 
-        System.out.println("Pushing "+Math.min(ux.excess, ex.capacity - ex.flow)+" flow through: "+ex+" source label: "+ex.<VertexExtension>getSource().label+" target label: "+ex.<VertexExtension>getTarget().label);
         pushFlowThrough(ex, Math.min(ux.excess, ex.capacity - ex.flow));
         return !ux.hasExcess();
     }

@@ -36,17 +36,16 @@
 package org.jgrapht.alg.flow;
 
 import junit.framework.TestCase;
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.Map;
+import java.util.Random;
 
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
 
@@ -204,6 +203,14 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
         );
     }
 
+    public DirectedGraph<Integer, DefaultWeightedEdge> getRandomDirectedGraph(){
+        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
+        Random rand=new Random();
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> directedGraph=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        randomGraphGenerator.generateGraph(directedGraph, new IntegerVertexFactory(), null);
+        directedGraph.edgeSet().stream().forEach(e ->directedGraph.setEdgeWeight(e, rand.nextInt(100)));
+        return directedGraph;
+    }
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
@@ -252,4 +259,22 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
         return constructUndirectedGraph(edges);
     }
 
+    public UndirectedGraph<Integer, DefaultWeightedEdge> getRandomUndirectedGraph(){
+        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
+        Random rand=new Random();
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> undirectedGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        randomGraphGenerator.generateGraph(undirectedGraph, new IntegerVertexFactory(), null);
+        undirectedGraph.edgeSet().stream().forEach(e ->undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));
+        return undirectedGraph;
+    }
+
+
+    public class IntegerVertexFactory implements VertexFactory<Integer>{
+        private int counter=0;
+
+        @Override
+        public Integer createVertex() {
+            return counter++;
+        }
+    }
 }

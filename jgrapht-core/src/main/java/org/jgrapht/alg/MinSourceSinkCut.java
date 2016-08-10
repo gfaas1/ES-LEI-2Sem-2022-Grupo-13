@@ -39,6 +39,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
@@ -48,13 +49,15 @@ import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 
 /**
  * Given a weighted graph G(V,E) (directed or undirected). This class computes a minimum s-t
- * cut. For this purpose this class relies on a Maximum Flow Algorithm. Note:
+ * cut. For this purpose this class relies on Edmonds' Karp Maximum Flow Algorithm. Note:
  * it is not recommended to use this class to calculate the overall minimum cut
  * in a graph by iteratively invoking this class for all source-sink pairs. This
  * is computationally expensive. Instead, use the StoerWagnerMinimumCut
  * implementation.
  *
  * Runtime: O(E)
+ *
+ * Warning: this implementation cannot be used with the PushRelabel max flow implementation!
  *
  * @author Joris Kinable
  * @deprecated Use {@link MinimumSTCutAlgorithm} instead
@@ -72,18 +75,12 @@ public class MinSourceSinkCut<V, E>
 
     public MinSourceSinkCut(Graph<V, E> graph)
     {
-        this.maxFlowAlg = new PushRelabelMFImpl<>(graph);
+        this.maxFlowAlg = new EdmondsKarpMFImpl<V, E>(graph);
         this.graph = graph;
     }
 
     public MinSourceSinkCut(Graph<V, E> graph, double epsilon)
     {
-        this(graph, new PushRelabelMFImpl<>(graph), epsilon);
-    }
-
-    public MinSourceSinkCut(Graph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
-    {
-        this.maxFlowAlg = maximumFlowAlgorithm;
         this.graph = graph;
         this.epsilon = epsilon;
     }
