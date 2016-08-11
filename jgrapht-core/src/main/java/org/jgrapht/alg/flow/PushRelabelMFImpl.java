@@ -264,20 +264,11 @@ public class PushRelabelMFImpl<V, E>
         }
 
         assert (labeling.get(vx.label) > 0);
-        //JK disables:
-//        updateLabeling(vx, min + 1);
-//
-//        // Sanity
-//        if (min != Integer.MAX_VALUE) {
-//            vx.label = min + 1;
-//        }
-        //JK replacement:
-        if(min < Integer.MAX_VALUE) {
-            updateLabeling(vx, min + 1);
+        updateLabeling(vx, min + 1);
+
+        // Sanity
+        if (min != Integer.MAX_VALUE) {
             vx.label = min + 1;
-        }else {
-            updateLabeling(vx, network.vertexSet().size());
-            vx.label = network.vertexSet().size();
         }
 
     }
