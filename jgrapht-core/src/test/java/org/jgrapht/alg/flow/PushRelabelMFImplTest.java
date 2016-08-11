@@ -35,11 +35,8 @@
 
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.Set;

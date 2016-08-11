@@ -389,6 +389,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
 
+    /*---------------- Minimum s-t cut related methods -------------------*/
+
 
     @Override
     public double calculateMinCut(V source, V sink){
@@ -433,6 +435,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     protected void calculateSourcePartition(){
+        //the source partition contains all vertices reachable fromt he s in the residual graph
         this.sourcePartition=new LinkedHashSet<>();
         Queue<VertexExtensionBase> processQueue = new LinkedList<>();
         processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));

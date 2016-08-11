@@ -426,63 +426,6 @@ public class PushRelabelMFImpl<V, E>
         }
     }
 
-
-//    @Override
-//    public Set<V> getSourcePartition(){
-//        if(sourcePartition==null) {
-////            if (directed_graph)
-//                calculateSourcePartitionDirected();
-////            else
-////                this.calculateSourceAndSinkPartition();
-//        }
-//        return sourcePartition;
-//    }
-//
-//    @Override
-//    public Set<V> getSinkPartition(){
-//        if(sinkPartition==null) {
-//            sinkPartition=new LinkedHashSet<>();
-//            sinkPartition.addAll(network.vertexSet());
-//            sinkPartition.removeAll(this.getSourcePartition());
-//        }
-//        return sinkPartition;
-//    }
-//
-//    private void calculateSourceAndSinkPartition(){
-//        this.sourcePartition=new LinkedHashSet<>();
-//        this.sinkPartition=new LinkedHashSet<>();
-//        System.out.println("Cut capacity: "+getCutCapacity());
-//        System.out.println("FlowMap: "+getMaximumFlow());
-//        for(E e : network.edgeSet())
-//            System.out.println("Edge: "+e+" weight: "+network.getEdgeWeight(e));
-//        for (V v : network.vertexSet()) {
-//            VertexExtension vx = getVertexExtension(v);
-//            System.out.println("vertex: "+vx.prototype+" label: "+vx.label);
-//            if(vx.label >= getVertexExtension(source).label)//network.vertexSet().size())
-//                sourcePartition.add(v);
-//            else
-//                sinkPartition.add(v);
-//        }
-//    }
-//
-//    //TEST:
-//    private void calculateSourcePartitionDirected(){
-//        this.sourcePartition=new LinkedHashSet<>();
-//        Queue<VertexExtension> processQueue = new LinkedList<>();
-//        processQueue.add(getVertexExtension(source));
-//        while(!processQueue.isEmpty()){
-//            VertexExtension vx=processQueue.poll();
-//            if(sourcePartition.contains(vx.prototype))
-//                continue;
-//            sourcePartition.add(vx.prototype);
-//            for (AnnotatedFlowEdge ex : vx.getOutgoing()) {
-//                if(ex.hasCapacity())
-//                    processQueue.add(ex.getTarget());
-//            }
-//        }
-//    }
-
-
 }
 
 // End PushRelabelMFImpl.java
