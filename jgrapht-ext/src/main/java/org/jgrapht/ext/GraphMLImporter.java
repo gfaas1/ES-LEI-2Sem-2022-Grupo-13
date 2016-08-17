@@ -27,8 +27,6 @@
  * Original Author:  Dimitrios Michail
  * Contributor(s): 
  *
- * $Id$
- *
  * Changes
  * -------
  * 17-July-2016 : Initial revision (DM);

@@ -26,8 +26,6 @@
  *
  * Original Author:  Dimitrios Michail <dimitrios.michail@gmail.com>
  *
- * $Id$
- *
  * Changes
  * -------
  * 15-Dec-2006 : Initial Version (DM);
@@ -35,11 +33,14 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).

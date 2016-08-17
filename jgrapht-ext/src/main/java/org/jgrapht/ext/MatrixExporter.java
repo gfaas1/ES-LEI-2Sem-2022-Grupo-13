@@ -26,8 +26,6 @@
  *
  * Original Author:  Charles Fry
  *
- * $Id$
- *
  * Changes
  * -------
  * 13-Dec-2005 : Initial Version (CF);
@@ -35,13 +33,18 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
-
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.ModifiableInteger;
 
 /**
  * Exports a graph to a plain text matrix format, which can be processed by

@@ -27,8 +27,6 @@
  * Original Author:  Avner Linder
  * Contributor(s):   Barak Naveh
  *
- * $Id$
- *
  * Changes
  * -------
  * 27-May-2004 : Initial Version (AL);
@@ -54,6 +52,9 @@ import java.io.PrintStream;
  * <li>Format/Line...</li>
  * <li>Line ends: End: (choose an arrow)</li>
  * </ol>
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Avner Linder
  */
