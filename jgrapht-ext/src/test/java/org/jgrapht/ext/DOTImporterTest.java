@@ -30,10 +30,13 @@
 package org.jgrapht.ext;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import junit.framework.*;
+
+import org.jgrapht.Graph;
 import org.jgrapht.graph.*;
 
 public class DOTImporterTest extends TestCase
@@ -528,6 +531,32 @@ public class DOTImporterTest extends TestCase
       }
 
    }
+   
+   public void testWithReader() throws ImportException {
+       String input = "graph G {\n"
+                      + "  1 [ \"label\"=\"abc123\" ];\n"
+                      + "  2 [ label=\"fred\" ];\n"
+                      + "  1 -- 2;\n"
+                      + "}";
+
+       Multigraph<String, DefaultEdge> expected
+             = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
+       expected.addVertex("abc123");
+       expected.addVertex("fred");
+       expected.addEdge("abc123", "fred");
+
+       DOTImporter<String, DefaultEdge> importer = buildImporter();
+
+       Graph<String, DefaultEdge> result
+             = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
+       importer.read(new StringReader(input), result);
+
+       Assert.assertEquals(expected.toString(), result.toString());
+
+       Assert.assertEquals(2, result.vertexSet().size());
+       Assert.assertEquals(1, result.edgeSet().size());
+
+    }
 
    private void testGarbage(String input, String expected) {
       DirectedMultigraph<String, DefaultEdge> result

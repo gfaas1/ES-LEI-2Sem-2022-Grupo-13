@@ -39,7 +39,10 @@ import org.jgrapht.WeightedGraph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +86,7 @@ import java.util.Map;
  * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
@@ -179,6 +183,30 @@ public class DIMACSImporter<V, E>
         }
         this.edgeProvider = edgeProvider;
     }
+    
+    /**
+     * Import a graph.
+     * 
+     * <p>
+     * The provided graph must be able to support the features of the graph that
+     * is read. For example if the file contains self-loops then the graph
+     * provided must also support self-loops. The same for multiple edges.
+     * 
+     * <p>
+     * If the provided graph is a weighted graph, the importer also reads edge
+     * weights. Otherwise edge weights are ignored.
+     * 
+     * @param input the input stream
+     * @param graph the output graph
+     * @throws ImportException in case an error occurs, such as I/O or parse
+     *         error
+     */
+    @Override
+    public void read(InputStream input, Graph<V, E> graph)
+        throws ImportException
+    {
+        read(new InputStreamReader(input, StandardCharsets.UTF_8), graph);
+    }
 
     /**
      * Import a graph.
@@ -197,6 +225,7 @@ public class DIMACSImporter<V, E>
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
+    @Override
     public void read(Reader input, Graph<V, E> graph)
         throws ImportException
     {

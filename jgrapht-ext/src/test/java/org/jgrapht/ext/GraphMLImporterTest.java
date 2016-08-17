@@ -35,8 +35,11 @@
  */
 package org.jgrapht.ext;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +86,43 @@ public class GraphMLImporterTest
 
         Graph<String, DefaultEdge> g = readGraph(
             input,
+            DefaultEdge.class,
+            false,
+            false);
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("2", "3"));
+        assertTrue(g.containsEdge("3", "1"));
+    }
+
+    public void testUndirectedUnweightedFromInputStream()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = 
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+            "<node id=\"1\"/>" + NL +
+            "<node id=\"2\"/>" + NL + 
+            "<node id=\"3\"/>" + NL +  
+            "<edge source=\"1\" target=\"2\"/>" + NL + 
+            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "<edge source=\"3\" target=\"1\"/>"+ NL + 
+            "</graph>" + NL + 
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(
+            new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
             DefaultEdge.class,
             false,
             false);
@@ -728,7 +768,7 @@ public class GraphMLImporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.export(os, g1);
         String output = new String(os.toByteArray(), "UTF-8");
-        
+
         Graph<String, DefaultEdge> g2 = readGraph(
             output,
             DefaultEdge.class,
@@ -822,6 +862,22 @@ public class GraphMLImporterTest
     }
 
     public <E> Graph<String, E> readGraph(
+        InputStream input,
+        Class<? extends E> edgeClass,
+        boolean directed,
+        boolean weighted)
+        throws ImportException
+    {
+        return readGraph(
+            input,
+            edgeClass,
+            directed,
+            weighted,
+            new HashMap<String, Map<String, String>>(),
+            new HashMap<E, Map<String, String>>());
+    }
+
+    public <E> Graph<String, E> readGraph(
         String input,
         Graph<String, E> g,
         VertexProvider<String> vp,
@@ -830,6 +886,18 @@ public class GraphMLImporterTest
     {
         GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
         importer.read(new StringReader(input), g);
+        return g;
+    }
+
+    public <E> Graph<String, E> readGraph(
+        InputStream input,
+        Graph<String, E> g,
+        VertexProvider<String> vp,
+        EdgeProvider<String, E> ep)
+        throws ImportException
+    {
+        GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
+        importer.read(input, g);
         return g;
     }
 
@@ -911,6 +979,38 @@ public class GraphMLImporterTest
             vertexAttributes,
             edgeAttributes);
         importer.read(new StringReader(input), g);
+        return g;
+    }
+
+    public <E> Graph<String, E> readGraph(
+        InputStream input,
+        Class<? extends E> edgeClass,
+        boolean directed,
+        boolean weighted,
+        Map<String, Map<String, String>> vertexAttributes,
+        Map<E, Map<String, String>> edgeAttributes)
+        throws ImportException
+    {
+        Graph<String, E> g;
+        if (directed) {
+            if (weighted) {
+                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new DirectedPseudograph<String, E>(edgeClass);
+            }
+        } else {
+            if (weighted) {
+                g = new WeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new Pseudograph<String, E>(edgeClass);
+            }
+        }
+
+        GraphMLImporter<String, E> importer = createGraphImporter(
+            g,
+            vertexAttributes,
+            edgeAttributes);
+        importer.read(input, g);
         return g;
     }
 

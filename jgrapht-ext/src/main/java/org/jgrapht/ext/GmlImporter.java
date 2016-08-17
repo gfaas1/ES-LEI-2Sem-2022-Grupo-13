@@ -46,7 +46,10 @@ import org.jgrapht.WeightedGraph;
 import org.jgrapht.ext.GmlParser.GmlContext;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,6 +100,7 @@ import java.util.Set;
  * @param <E> the edge type
  */
 public class GmlImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
@@ -188,6 +192,31 @@ public class GmlImporter<V, E>
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
+    @Override
+    public void read(InputStream input, Graph<V, E> graph)
+        throws ImportException
+    {
+        read(new InputStreamReader(input, StandardCharsets.UTF_8), graph);
+    }
+
+    /**
+     * Import a graph.
+     * 
+     * <p>
+     * The provided graph must be able to support the features of the graph that
+     * is read. For example if the gml file contains self-loops then the graph
+     * provided must also support self-loops. The same for multiple edges.
+     * 
+     * <p>
+     * If the provided graph is a weighted graph, the importer also reads edge
+     * weights. Otherwise edge weights are ignored.
+     * 
+     * @param input the input reader
+     * @param graph the output graph
+     * @throws ImportException in case an error occurs, such as I/O or parse
+     *         error
+     */
+    @Override
     public void read(Reader input, Graph<V, E> graph)
         throws ImportException
     {
