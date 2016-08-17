@@ -33,8 +33,11 @@
  */
 package org.jgrapht.ext;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,6 +63,7 @@ import org.jgrapht.WeightedGraph;
  * @author Dimitrios Michail
  */
 public class GmlExporter<V, E>
+    implements GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT GML Exporter";
     private static final String VERSION = "1";
@@ -213,6 +217,18 @@ public class GmlExporter<V, E>
             }
             out.println(TAB1 + "]");
         }
+    }
+
+    /**
+     * Exports an graph into a plain text GML format.
+     *
+     * @param out output stream to export the graph
+     * @param g the graph
+     */
+    @Override
+    public void export(OutputStream out, Graph<V, E> g)
+    {
+        export(new OutputStreamWriter(out, StandardCharsets.UTF_8), g);
     }
 
     /**

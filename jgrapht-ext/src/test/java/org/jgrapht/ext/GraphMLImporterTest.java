@@ -35,8 +35,8 @@
  */
 package org.jgrapht.ext;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -724,11 +724,11 @@ public class GraphMLImporterTest
         g1.addEdge("2", "3");
         g1.addEdge("3", "3");
 
-        StringWriter sw = new StringWriter();
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        exporter.export(sw, g1);
-        String output = sw.toString();
-
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.export(os, g1);
+        String output = new String(os.toByteArray(), "UTF-8");
+        
         Graph<String, DefaultEdge> g2 = readGraph(
             output,
             DefaultEdge.class,

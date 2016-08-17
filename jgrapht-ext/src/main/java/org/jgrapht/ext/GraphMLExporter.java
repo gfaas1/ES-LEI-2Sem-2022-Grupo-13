@@ -30,8 +30,11 @@
  */
 package org.jgrapht.ext;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,6 +64,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
+    implements GraphExporter<V, E>
 {
     // providers
     private VertexNameProvider<V> vertexIDProvider;
@@ -476,6 +480,20 @@ public class GraphMLExporter<V, E>
     /**
      * Exports a graph in GraphML format.
      *
+     * @param out output stream to export the graph
+     * @param g the graph
+     * @throws ExportException in case any error occurs during export
+     */
+    @Override
+    public void export(OutputStream out, Graph<V, E> g)
+        throws ExportException
+    {
+        export(new OutputStreamWriter(out, StandardCharsets.UTF_8), g);
+    }
+
+    /**
+     * Exports a graph in GraphML format.
+     *
      * @param writer the writer to export the graph
      * @param g the graph
      * @throws ExportException in case any error occurs during export
@@ -739,7 +757,9 @@ public class GraphMLExporter<V, E>
 
             if (exportEdgeWeights) {
                 Double weight = g.getEdgeWeight(e);
-                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not default value
+                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not
+                                                                         // default
+                                                                         // value
                     writeData(
                         handler,
                         "edge_weight_key",

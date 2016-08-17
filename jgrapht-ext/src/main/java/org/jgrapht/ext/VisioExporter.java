@@ -59,6 +59,7 @@ import java.io.PrintStream;
  * @author Avner Linder
  */
 public class VisioExporter<V, E>
+    implements GraphExporter<V, E>
 {
     private VertexNameProvider<V> vertexNameProvider;
 
@@ -87,6 +88,7 @@ public class VisioExporter<V, E>
      * @param output the print stream to which the graph to be exported.
      * @param g the graph to be exported.
      */
+    @Override
     public void export(OutputStream output, Graph<V, E> g)
     {
         PrintStream out = new PrintStream(output);

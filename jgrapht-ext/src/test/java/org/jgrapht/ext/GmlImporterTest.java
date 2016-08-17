@@ -33,8 +33,9 @@
  */
 package org.jgrapht.ext;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -544,7 +545,7 @@ public class GmlImporterTest
     }
 
     public void testExportImport()
-        throws ImportException
+        throws ImportException, UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -555,11 +556,11 @@ public class GmlImporterTest
         g1.setEdgeWeight(g1.addEdge("2", "3"), 3.0);
         g1.setEdgeWeight(g1.addEdge("3", "3"), 5.0);
 
-        StringWriter sw = new StringWriter();
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
-        exporter.export(sw, g1);
-        String output = sw.toString();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.export(os, g1);
+        String output = new String(os.toByteArray(), "UTF-8");
 
         Graph<String, DefaultWeightedEdge> g2 = readGraph(
             output,

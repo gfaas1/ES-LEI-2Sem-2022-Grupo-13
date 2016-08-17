@@ -20,38 +20,39 @@
  * the Eclipse Foundation.
  */
 /* ------------------
- * ComponentAttributeProvider.java
+ * GraphExporter.java
  * ------------------
- * (C) Copyright 2010-2010, by John Sichi and Contributors.
+ * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
  *
- * Original Author:  John Sichi
+ * Original Author:  Dimitrios Michail
  *
  * Changes
  * -------
- * 12-Jun-2010 : Initial Version (JVS);
+ * 17-Aug-2016 : Initial Version (DM);
  *
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.io.OutputStream;
+
+import org.jgrapht.Graph;
 
 /**
- * Provides display attributes for vertices and/or edges in a graph.
- *
- * @author John Sichi
+ * Interface for graph exporters
  */
-public interface ComponentAttributeProvider<T>
+public interface GraphExporter<V, E>
 {
+
     /**
-     * Returns a set of attribute key/value pairs for a vertex or edge. If order
-     * is important in the output, be sure to use an order-deterministic map
-     * implementation.
-     *
-     * @param component vertex or edge for which attributes are to be obtained
-     *
-     * @return key/value pairs, or null if no attributes should be supplied
+     * Export a graph
+     * 
+     * @param out the output stream
+     * @param g the graph to export
+     * @throws ExportException in case any error occurs
      */
-    public Map<String, String> getComponentAttributes(T component);
+    void export(OutputStream out, Graph<V, E> g)
+        throws ExportException;
+
 }
 
-// End ComponentAttributeProvider.java
+// End GraphExporter.java

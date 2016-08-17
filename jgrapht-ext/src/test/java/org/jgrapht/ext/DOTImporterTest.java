@@ -29,7 +29,8 @@
  */
 package org.jgrapht.ext;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import junit.framework.*;
@@ -124,7 +125,8 @@ public class DOTImporterTest extends TestCase
       Assert.assertEquals(2, result.edgeSet().size());
    }
 
-   public void testExportImportLoop() throws ImportException {
+   public void testExportImportLoop() 
+       throws ImportException, UnsupportedEncodingException {
       DirectedMultigraph<String, DefaultEdge> start
             = new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
       start.addVertex("a");
@@ -144,14 +146,15 @@ public class DOTImporterTest extends TestCase
       }, null, new IntegerEdgeNameProvider<DefaultEdge>());
 
       DOTImporter<String, DefaultEdge> importer = buildImporter();
-      StringWriter writer = new StringWriter();
 
-      exporter.export(writer, start);
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      exporter.export(os, start);
+      String output = new String(os.toByteArray(), "UTF-8");
 
       DirectedMultigraph<String, DefaultEdge> result
             = new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
 
-      importer.read(writer.toString(), result);
+      importer.read(output, result);
 
       Assert.assertEquals(start.toString(), result.toString());
 
