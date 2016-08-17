@@ -125,7 +125,6 @@ public class DOTExporter<V, E>
      *
      * @param out output stream to export the graph
      * @param g the graph
-     * @throws ExportException in case any error occurs during export
      */
     @Override
     public void export(OutputStream out, Graph<V, E> g)
