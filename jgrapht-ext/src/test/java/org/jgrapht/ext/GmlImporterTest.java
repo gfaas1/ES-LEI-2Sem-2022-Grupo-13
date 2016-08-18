@@ -50,7 +50,7 @@ import org.jgrapht.graph.WeightedPseudograph;
 import junit.framework.TestCase;
 
 /**
- * 
+ * .
  * @author Dimitrios Michail
  */
 public class GmlImporterTest
@@ -106,7 +106,7 @@ public class GmlImporterTest
         };
 
         GmlImporter<String, E> importer = new GmlImporter<String, E>(vp, ep);
-        importer.read(new StringReader(input), g);
+        importer.read(g, new StringReader(input));
 
         return g;
     }
@@ -545,7 +545,7 @@ public class GmlImporterTest
     }
 
     public void testExportImport()
-        throws ImportException, UnsupportedEncodingException
+        throws ImportException, ExportException, UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -559,7 +559,7 @@ public class GmlImporterTest
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g1);
+        exporter.export(g1, os);
         String output = new String(os.toByteArray(), "UTF-8");
 
         Graph<String, DefaultWeightedEdge> g2 = readGraph(
@@ -617,7 +617,7 @@ public class GmlImporterTest
             GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(
                 vp,
                 ep);
-            importer.read(new StringReader(input), g);
+            importer.read(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
         }

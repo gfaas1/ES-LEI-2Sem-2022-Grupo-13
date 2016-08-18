@@ -39,10 +39,8 @@ import org.jgrapht.WeightedGraph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -196,37 +194,13 @@ public class DIMACSImporter<V, E>
      * If the provided graph is a weighted graph, the importer also reads edge
      * weights. Otherwise edge weights are ignored.
      * 
-     * @param input the input stream
      * @param graph the output graph
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
-     */
-    @Override
-    public void read(InputStream input, Graph<V, E> graph)
-        throws ImportException
-    {
-        read(new InputStreamReader(input, StandardCharsets.UTF_8), graph);
-    }
-
-    /**
-     * Import a graph.
-     * 
-     * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the file contains self-loops then the graph
-     * provided must also support self-loops. The same for multiple edges.
-     * 
-     * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights. Otherwise edge weights are ignored.
-     * 
      * @param input the input reader
-     * @param graph the output graph
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
     @Override
-    public void read(Reader input, Graph<V, E> graph)
+    public void read(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         // convert to buffered
@@ -253,7 +227,8 @@ public class DIMACSImporter<V, E>
         while (cols != null) {
             if (cols[0].equals("e")) {
                 if (cols.length < 3) {
-                    throw new ImportException("Failed to parse edge");
+                    throw new ImportException(
+                        "Failed to parse edge:" + Arrays.toString(cols));
                 }
                 Integer source;
                 try {

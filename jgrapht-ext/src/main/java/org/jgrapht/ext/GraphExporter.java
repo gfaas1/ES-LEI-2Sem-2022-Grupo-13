@@ -33,7 +33,13 @@
  */
 package org.jgrapht.ext;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import org.jgrapht.Graph;
 
@@ -46,12 +52,42 @@ public interface GraphExporter<V, E>
     /**
      * Export a graph
      * 
-     * @param out the output stream
      * @param g the graph to export
+     * @param out the output stream
      * @throws ExportException in case any error occurs
      */
-    void export(OutputStream out, Graph<V, E> g)
+    default void export(Graph<V, E> g, OutputStream out)
+        throws ExportException
+    {
+        export(g, new OutputStreamWriter(out, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Export a graph
+     * 
+     * @param g the graph to export
+     * @param writer the output writer
+     * @throws ExportException in case any error occurs
+     */
+    void export(Graph<V, E> g, Writer writer)
         throws ExportException;
+
+    /**
+     * Export a graph
+     * 
+     * @param g the graph to export
+     * @param file the file to write to
+     * @throws ExportException in case any error occurs
+     */
+    default void export(Graph<V, E> g, File file)
+        throws ExportException
+    {
+        try {
+            export(g, new FileWriter(file));
+        } catch (IOException e) {
+            throw new ExportException(e);
+        }
+    }
 
 }
 

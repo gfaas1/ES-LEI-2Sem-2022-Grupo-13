@@ -34,7 +34,9 @@
 package org.jgrapht.ext;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 import org.jgrapht.Graph;
 
@@ -47,21 +49,26 @@ public interface GraphImporter<V, E>
     /**
      * Import a graph
      * 
-     * @param in the input stream
      * @param g the graph
-     * @throws ImportException in case any error occurs
+     * @param in the input stream
+     * @throws ImportException in case any error occurs, such as I/O or parse
+     *         error
      */
-    void read(InputStream in, Graph<V, E> g)
-        throws ImportException;
+    default void read(Graph<V, E> g, InputStream in)
+        throws ImportException
+    {
+        read(g, new InputStreamReader(in, StandardCharsets.UTF_8));
+    }
 
     /**
      * Import a graph
      * 
-     * @param in the input reader
      * @param g the graph
-     * @throws ImportException in case any error occurs
+     * @param in the input reader
+     * @throws ImportException in case any error occurs, such as I/O or parse
+     *         error
      */
-    void read(Reader in, Graph<V, E> g)
+    void read(Graph<V, E> g, Reader in)
         throws ImportException;
 
 }

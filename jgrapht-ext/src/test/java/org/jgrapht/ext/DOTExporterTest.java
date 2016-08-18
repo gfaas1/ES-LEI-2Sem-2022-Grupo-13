@@ -68,8 +68,8 @@ public class DOTExporterTest
 
     //~ Methods ----------------------------------------------------------------
 
-    public void testUndirected() 
-        throws UnsupportedEncodingException
+    public void testUndirected()
+        throws UnsupportedEncodingException, ExportException
     {
         UndirectedGraph<String, DefaultEdge> g =
                 new SimpleGraph<>(DefaultEdge.class);
@@ -109,12 +109,13 @@ public class DOTExporterTest
                 vertexAttributeProvider,
                 null);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED, res);
     }
 
     public void testValidNodeIDs()
+        throws ExportException
     {
         DOTExporter<String, DefaultEdge> exporter =
             new DOTExporter<>(
@@ -136,7 +137,7 @@ public class DOTExporterTest
                     new DefaultDirectedGraph<>(
                             DefaultEdge.class);
             graph.addVertex(vertex);
-            exporter.export(new ByteArrayOutputStream(), graph);
+            exporter.export(graph, new ByteArrayOutputStream());
         }
 
         List<String> invalidVertices =
@@ -148,7 +149,7 @@ public class DOTExporterTest
             graph.addVertex(vertex);
 
             try {
-                exporter.export(new ByteArrayOutputStream(), graph);
+                exporter.export(graph, new ByteArrayOutputStream());
                 Assert.fail(vertex);
             } catch (RuntimeException re) {
                 // this is a negative test so exception is expected

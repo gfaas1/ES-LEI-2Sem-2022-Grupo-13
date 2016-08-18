@@ -542,7 +542,7 @@ public class GraphMLImporterTest
             vAttributes,
             eAttributes);
         importer.setEdgeWeightAttributeName("myvalue");
-        importer.read(new StringReader(input), g);
+        importer.read(g, new StringReader(input));
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -605,7 +605,7 @@ public class GraphMLImporterTest
             vAttributes,
             eAttributes);
         importer.setEdgeWeightAttributeName("myvalue");
-        importer.read(new StringReader(input), g);
+        importer.read(g, new StringReader(input));
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -766,7 +766,7 @@ public class GraphMLImporterTest
 
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g1);
+        exporter.export(g1, os);
         String output = new String(os.toByteArray(), "UTF-8");
 
         Graph<String, DefaultEdge> g2 = readGraph(
@@ -838,7 +838,7 @@ public class GraphMLImporterTest
             GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String, DefaultEdge>(
                 vp,
                 ep);
-            importer.read(new StringReader(input), g);
+            importer.read(g, new StringReader(input));
             fail("No!");
         } catch (Exception e) {
             // nothing
@@ -885,7 +885,7 @@ public class GraphMLImporterTest
         throws ImportException
     {
         GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
-        importer.read(new StringReader(input), g);
+        importer.read(g, new StringReader(input));
         return g;
     }
 
@@ -897,7 +897,7 @@ public class GraphMLImporterTest
         throws ImportException
     {
         GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
-        importer.read(input, g);
+        importer.read(g, input);
         return g;
     }
 
@@ -978,7 +978,7 @@ public class GraphMLImporterTest
             g,
             vertexAttributes,
             edgeAttributes);
-        importer.read(new StringReader(input), g);
+        importer.read(g, new StringReader(input));
         return g;
     }
 
@@ -1010,7 +1010,7 @@ public class GraphMLImporterTest
             g,
             vertexAttributes,
             edgeAttributes);
-        importer.read(input, g);
+        importer.read(g, input);
         return g;
     }
 

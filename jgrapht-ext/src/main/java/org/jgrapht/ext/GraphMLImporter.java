@@ -35,7 +35,6 @@
 package org.jgrapht.ext;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayDeque;
@@ -273,53 +272,13 @@ public class GraphMLImporter<V, E>
      * GraphML-Attributes Values are read as string key-value pairs and passed
      * on to the {@link VertexProvider} and {@link EdgeProvider} respectively.
      * 
+     * @param graph the output graph
      * @param input the input reader
-     * @param graph the output graph
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
     @Override
-    public void read(Reader input, Graph<V, E> graph)
-        throws ImportException
-    {
-        try {
-            // parse
-            XMLReader xmlReader = createXMLReader();
-            GraphMLHandler handler = new GraphMLHandler();
-            xmlReader.setContentHandler(handler);
-            xmlReader.setErrorHandler(handler);
-            xmlReader.parse(new InputSource(input));
-
-            // read result
-            handler.updateGraph(graph);
-        } catch (Exception se) {
-            throw new ImportException("Failed to parse GraphML", se);
-        }
-    }
-    
-    /**
-     * Import a graph.
-     * 
-     * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the GraphML file contains self-loops then the
-     * graph provided must also support self-loops. The same for multiple edges.
-     * 
-     * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights.
-     * 
-     * <p>
-     * GraphML-Attributes Values are read as string key-value pairs and passed
-     * on to the {@link VertexProvider} and {@link EdgeProvider} respectively.
-     * 
-     * @param input the input stream
-     * @param graph the output graph
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
-     */
-    @Override
-    public void read(InputStream input, Graph<V, E> graph)
+    public void read(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         try {

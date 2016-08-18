@@ -30,17 +30,15 @@
  */
 package org.jgrapht.ext;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
@@ -478,27 +476,31 @@ public class GraphMLExporter<V, E>
     }
 
     /**
-     * Exports a graph in GraphML format.
+     * Exports a graph into a plain text file in GraphML format.
      *
-     * @param out output stream to export the graph
-     * @param g the graph
-     * @throws ExportException in case any error occurs during export
+     * @param writer the writer to which the graph to be exported
+     * @param g the graph to be exported
      */
-    @Override
-    public void export(OutputStream out, Graph<V, E> g)
-        throws ExportException
+    @Deprecated
+    public void export(Writer writer, Graph<V, E> g)
+        throws SAXException, TransformerConfigurationException
     {
-        export(new OutputStreamWriter(out, StandardCharsets.UTF_8), g);
+        try {
+            export(g, writer);
+        } catch (ExportException e) {
+            throw new SAXException(e);
+        }
     }
-
+    
     /**
      * Exports a graph in GraphML format.
      *
-     * @param writer the writer to export the graph
      * @param g the graph
+     * @param writer the writer to export the graph
      * @throws ExportException in case any error occurs during export
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Override
+    public void export(Graph<V, E> g, Writer writer)
         throws ExportException
     {
         try {

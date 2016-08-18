@@ -271,7 +271,7 @@ public class GmlExporterTest
     // ----------------------------------------------------------------
 
     public void testUndirected()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
             DefaultEdge.class);
@@ -283,13 +283,13 @@ public class GmlExporterTest
 
         GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED, res);
     }
 
     public void testUnweightedUndirected()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(
             DefaultEdge.class);
@@ -302,13 +302,13 @@ public class GmlExporterTest
         GmlExporter<String, DefaultEdge> exporter = new GmlExporter<>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED, res);
     }
 
     public void testDirected()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(
             DefaultEdge.class);
@@ -325,13 +325,13 @@ public class GmlExporterTest
 
         GmlExporter<String, DefaultEdge> exporter = new GmlExporter<>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(DIRECTED, res);
     }
 
     public void testWeightedUndirected()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
             DefaultWeightedEdge.class);
@@ -346,13 +346,13 @@ public class GmlExporterTest
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED_WEIGHTED, res);
     }
 
     public void testWeightedUndirectedWithEdgeLabels()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
             DefaultWeightedEdge.class);
@@ -368,13 +368,13 @@ public class GmlExporterTest
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS, res);
     }
 
     public void testUndirectedWithVertexLabels()
-        throws UnsupportedEncodingException
+        throws UnsupportedEncodingException, ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
             DefaultWeightedEdge.class);
@@ -389,7 +389,7 @@ public class GmlExporterTest
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED_WITH_VERTEX_LABELS, res);
     }

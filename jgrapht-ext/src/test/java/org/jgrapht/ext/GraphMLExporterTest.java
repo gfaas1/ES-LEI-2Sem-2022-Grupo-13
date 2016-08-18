@@ -96,7 +96,7 @@ public class GraphMLExporterTest
 
         GraphExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
 
@@ -136,7 +136,7 @@ public class GraphMLExporterTest
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -171,7 +171,7 @@ public class GraphMLExporterTest
 
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -210,7 +210,7 @@ public class GraphMLExporterTest
         GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -251,7 +251,7 @@ public class GraphMLExporterTest
         GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -294,7 +294,7 @@ public class GraphMLExporterTest
         exporter.setExportEdgeWeights(true);
         exporter.setEdgeWeightAttributeName("value");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -412,7 +412,7 @@ public class GraphMLExporterTest
             });
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -487,7 +487,7 @@ public class GraphMLExporterTest
         exporter.setEdgeLabelAttributeName("custom_edge_label");
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
 
@@ -605,7 +605,7 @@ public class GraphMLExporterTest
             GraphMLExporter.AttributeType.STRING,
             "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }
@@ -688,7 +688,7 @@ public class GraphMLExporterTest
             GraphMLExporter.AttributeType.STRING,
             "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(os, g);
+        exporter.export(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         XMLAssert.assertXMLEqual(output, res);
     }

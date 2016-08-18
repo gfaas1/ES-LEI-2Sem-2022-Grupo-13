@@ -33,16 +33,14 @@
  */
 package org.jgrapht.ext;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.WeightedGraph;
 
 /**
@@ -220,24 +218,37 @@ public class GmlExporter<V, E>
     }
 
     /**
-     * Exports an graph into a plain text GML format.
+     * Exports an undirected graph into a plain text file in GML format.
      *
-     * @param out output stream to export the graph
-     * @param g the graph
+     * @param writer the writer to which the graph to be exported
+     * @param g the undirected graph to be exported
      */
-    @Override
-    public void export(OutputStream out, Graph<V, E> g)
+    @Deprecated
+    public void export(Writer writer, UndirectedGraph<V, E> g)
     {
-        export(new OutputStreamWriter(out, StandardCharsets.UTF_8), g);
+        export(g, writer);
     }
 
+    /**
+     * Exports a directed graph into a plain text file in GML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the directed graph to be exported
+     */
+    @Deprecated
+    public void export(Writer writer, DirectedGraph<V, E> g)
+    {
+        export(g, writer);
+    }
+    
     /**
      * Exports an graph into a plain text GML format.
      *
      * @param writer the writer
      * @param g the graph
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Override
+    public void export(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 

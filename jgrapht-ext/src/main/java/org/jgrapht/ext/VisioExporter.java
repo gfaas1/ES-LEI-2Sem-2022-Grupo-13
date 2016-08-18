@@ -22,10 +22,10 @@
 /* ------------------
  * VisioExporter.java
  * ------------------
- * (C) Copyright 2003-2008, by Avner Linder and Contributors.
+ * (C) Copyright 2003-2016, by Avner Linder and Contributors.
  *
  * Original Author:  Avner Linder
- * Contributor(s):   Barak Naveh
+ * Contributor(s):   Barak Naveh, Dimitrios Michail
  *
  * Changes
  * -------
@@ -37,11 +37,12 @@ package org.jgrapht.ext;
 import org.jgrapht.Graph;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 
 /**
- * Exports a graph to a csv format that can be imported into MS Visio.
+ * Exports a graph to a CSV format that can be imported into MS Visio.
  *
  * <p><b>Tip:</b> By default, the exported graph doesn't show link directions.
  * To show link directions:<br>
@@ -64,7 +65,7 @@ public class VisioExporter<V, E>
     private VertexNameProvider<V> vertexNameProvider;
 
     /**
-     * Creates a new VisioExporter object with the specified naming policy.
+     * Creates a new VisioExporter with the specified naming policy.
      *
      * @param vertexNameProvider the vertex name provider to be used for naming
      * the Visio shapes.
@@ -75,7 +76,7 @@ public class VisioExporter<V, E>
     }
 
     /**
-     * Creates a new VisioExporter object.
+     * Creates a new VisioExporter.
      */
     public VisioExporter()
     {
@@ -83,16 +84,32 @@ public class VisioExporter<V, E>
     }
 
     /**
-     * Exports the specified graph into a Visio csv file format.
+     * Exports the specified graph into a Visio CSV file format.
      *
      * @param output the print stream to which the graph to be exported.
      * @param g the graph to be exported.
      */
-    @Override
+    @Deprecated
     public void export(OutputStream output, Graph<V, E> g)
     {
-        PrintStream out = new PrintStream(output);
-
+        try {
+            export(g, output);
+        } catch (ExportException e) {
+            // ignore
+        }
+    }
+    
+    /**
+     * Exports the specified graph into a Visio CSV file format.
+     *
+     * @param g the graph to be exported.
+     * @param writer the writer to which the graph to be exported.
+     */
+    @Override
+    public void export(Graph<V, E> g, Writer writer)
+    {
+        PrintWriter out = new PrintWriter(writer);
+        
         for (V v : g.vertexSet()) {
             exportVertex(out, v);
         }
@@ -104,7 +121,7 @@ public class VisioExporter<V, E>
         out.flush();
     }
 
-    private void exportEdge(PrintStream out, E edge, Graph<V, E> g)
+    private void exportEdge(PrintWriter out, E edge, Graph<V, E> g)
     {
         String sourceName =
             vertexNameProvider.getVertexName(g.getEdgeSource(edge));
@@ -126,7 +143,7 @@ public class VisioExporter<V, E>
         out.print("\n");
     }
 
-    private void exportVertex(PrintStream out, V vertex)
+    private void exportVertex(PrintWriter out, V vertex)
     {
         String name = vertexNameProvider.getVertexName(vertex);
 

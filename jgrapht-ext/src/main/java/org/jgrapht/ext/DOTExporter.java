@@ -29,11 +29,8 @@
  */
 package org.jgrapht.ext;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.jgrapht.DirectedGraph;
@@ -121,24 +118,24 @@ public class DOTExporter<V, E>
     }
 
     /**
-     * Exports an graph into a plain text in DOT format.
-     *
-     * @param out output stream to export the graph
-     * @param g the graph
-     */
-    @Override
-    public void export(OutputStream out, Graph<V, E> g)
-    {
-        export(new OutputStreamWriter(out, StandardCharsets.UTF_8), g);
-    }
-    
-    /**
      * Exports a graph into a plain text file in DOT format.
      *
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Deprecated
+    public void export(Writer writer, Graph<V, E> g) { 
+        export(g, writer);
+    }
+    
+    /**
+     * Exports a graph into a plain text file in DOT format.
+     *
+     * @param g the graph to be exported
+     * @param writer the writer to which the graph to be exported
+     */
+    @Override
+    public void export(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
         String indent = "  ";

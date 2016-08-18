@@ -31,10 +31,7 @@
 package org.jgrapht.ext;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,31 +155,13 @@ public class DOTImporter<V, E>
      * The current implementation reads the whole input as a string and then
      * parses the graph.
      *
-     * @param input the input stream
      * @param graph the graph to update
-     *
-     * @throws ImportException if there is a problem parsing the file.
-     */
-    @Override
-    public void read(InputStream input, Graph<V, E> graph)
-        throws ImportException
-    {
-        read(new InputStreamReader(input, StandardCharsets.UTF_8), graph);
-    }
-    
-    /**
-     * Read a dot formatted input and populate the provided graph.
-     * 
-     * The current implementation reads the whole input as a string and then
-     * parses the graph.
-     *
      * @param input the input reader
-     * @param graph the graph to update
      *
      * @throws ImportException if there is a problem parsing the file.
      */
     @Override
-    public void read(Reader input, Graph<V, E> graph)
+    public void read(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         BufferedReader br;
@@ -197,8 +176,8 @@ public class DOTImporter<V, E>
     /**
      * Read a dot formatted string and populate the provided graph.
      *
-     * @param input the content of a dot file.
-     * @param graph the graph to update.
+     * @param input the content of a dot file as a string
+     * @param graph the graph to update
      *
      * @throws ImportException if there is a problem parsing the file.
      */
@@ -217,7 +196,7 @@ public class DOTImporter<V, E>
      *
      * @throws ImportException if there is a problem parsing the file.
      */
-    public void read(String input, Graph<V, E> graph)
+    private void read(String input, Graph<V, E> graph)
         throws ImportException
     {
         if ((input == null) || input.isEmpty()) {
