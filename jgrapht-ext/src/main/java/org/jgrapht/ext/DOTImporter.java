@@ -580,14 +580,9 @@ public class DOTImporter<V, E>
             id = node.substring(0, node.indexOf('[')).trim();
         }
 
-        String label = attributes.get("label");
-        if (label == null) {
-            label = id;
-        }
-
         V existing = vertexes.get(id);
         if (existing == null) {
-            V vertex = vertexProvider.buildVertex(label, attributes);
+            V vertex = vertexProvider.buildVertex(id, attributes);
             graph.addVertex(vertex);
             vertexes.put(id, vertex);
         } else {
@@ -596,7 +591,7 @@ public class DOTImporter<V, E>
             } else {
                 throw new ImportException(
                     "Update required for vertex "
-                    + label
+                    + id
                     + " but no vertexUpdater provided");
             }
         }
