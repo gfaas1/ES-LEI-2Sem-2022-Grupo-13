@@ -480,6 +480,10 @@ public class GraphMLExporter<V, E>
      *
      * @param writer the writer to which the graph to be exported
      * @param g the graph to be exported
+     * 
+     * @throws SAXException in case of a SAX error
+     * @throws TransformerConfigurationException in case of a configuration
+     *         error
      */
     @Deprecated
     public void export(Writer writer, Graph<V, E> g)
