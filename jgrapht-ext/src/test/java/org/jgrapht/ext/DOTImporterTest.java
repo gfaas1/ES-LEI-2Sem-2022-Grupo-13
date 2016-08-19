@@ -156,9 +156,6 @@ public class DOTImporterTest extends TestCase
        importer.read(input, result);
 
        Assert.assertEquals(expected.toString(), result.toString());
-
-       Assert.assertEquals(3, result.vertexSet().size());
-       Assert.assertEquals(2, result.edgeSet().size());
     }
 
    public void testMultiLinksUndirected() throws ImportException {
