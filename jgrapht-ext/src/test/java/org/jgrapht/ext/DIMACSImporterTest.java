@@ -96,7 +96,7 @@ public class DIMACSImporterTest
 
         DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(vp, ep);
         try {
-            importer.read(g, new InputStreamReader(in, "UTF-8"));
+            importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             // cannot happen
         }

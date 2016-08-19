@@ -226,7 +226,7 @@ public class GmlExporter<V, E>
     @Deprecated
     public void export(Writer writer, UndirectedGraph<V, E> g)
     {
-        export(g, writer);
+        exportGraph(g, writer);
     }
 
     /**
@@ -238,7 +238,7 @@ public class GmlExporter<V, E>
     @Deprecated
     public void export(Writer writer, DirectedGraph<V, E> g)
     {
-        export(g, writer);
+        exportGraph(g, writer);
     }
     
     /**
@@ -248,7 +248,7 @@ public class GmlExporter<V, E>
      * @param g the graph
      */
     @Override
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 

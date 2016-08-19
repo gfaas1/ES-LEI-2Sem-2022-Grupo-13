@@ -93,7 +93,7 @@ public class VisioExporter<V, E>
     public void export(OutputStream output, Graph<V, E> g)
     {
         try {
-            export(g, output);
+            exportGraph(g, output);
         } catch (ExportException e) {
             // ignore
         }
@@ -106,7 +106,7 @@ public class VisioExporter<V, E>
      * @param writer the writer to which the graph to be exported.
      */
     @Override
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
         

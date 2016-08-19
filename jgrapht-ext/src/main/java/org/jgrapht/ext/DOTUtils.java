@@ -59,7 +59,7 @@ public class DOTUtils
             // vertex name provider
             new StringNameProvider<V>(),
             // edge label provider
-            null).export(graph, outputWriter);
+            null).exportGraph(graph, outputWriter);
 
         return outputWriter.toString();
     }

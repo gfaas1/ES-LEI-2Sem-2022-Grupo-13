@@ -60,7 +60,7 @@ public class DOTImporterTest extends TestCase
 
       Multigraph<String, DefaultEdge> result
             = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
 
       Assert.assertEquals(expected.toString(), result.toString());
 
@@ -90,7 +90,7 @@ public class DOTImporterTest extends TestCase
 
       DirectedMultigraph<String, DefaultEdge> result
             = new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
 
       Assert.assertEquals(expected.toString(), result.toString());
 
@@ -120,7 +120,7 @@ public class DOTImporterTest extends TestCase
 
       Multigraph<String, DefaultEdge> result
             = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
 
       Assert.assertEquals(expected.toString(), result.toString());
 
@@ -151,13 +151,13 @@ public class DOTImporterTest extends TestCase
       DOTImporter<String, DefaultEdge> importer = buildImporter();
 
       ByteArrayOutputStream os = new ByteArrayOutputStream();
-      exporter.export(start, os);
+      exporter.exportGraph(start, os);
       String output = new String(os.toByteArray(), "UTF-8");
 
       DirectedMultigraph<String, DefaultEdge> result
             = new DirectedMultigraph<String, DefaultEdge>(DefaultEdge.class);
 
-      importer.read(result, new StringReader(output));
+      importer.importGraph(result, new StringReader(output));
 
       Assert.assertEquals(start.toString(), result.toString());
 
@@ -196,7 +196,7 @@ public class DOTImporterTest extends TestCase
             }
       );
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
 
       Assert.assertEquals(1, result.vertexSet().size());
       Assert.assertTrue(result.vertexSet().contains("------this------contains-------dashes------"));
@@ -234,7 +234,7 @@ public class DOTImporterTest extends TestCase
       );
 
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
       Assert.assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
       Assert.assertEquals("wrong size of edgeSet", 1, result.edgeSet().size());
 
@@ -349,7 +349,7 @@ public class DOTImporterTest extends TestCase
       );
 
       try {
-         importer.read(graph, new StringReader(input));
+         importer.importGraph(graph, new StringReader(input));
          Assert.fail("Should not get here");
       } catch (ImportException e) {
          Assert.assertEquals("Invalid attributes", e.getMessage());
@@ -386,7 +386,7 @@ public class DOTImporterTest extends TestCase
             }
       );
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
 
       Assert.assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
       Assert.assertEquals("wrong size of edgeSet", 1, result.edgeSet().size());
@@ -425,7 +425,7 @@ public class DOTImporterTest extends TestCase
       );
 
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
       Assert.assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
       Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
    }
@@ -456,7 +456,7 @@ public class DOTImporterTest extends TestCase
       );
 
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
       Assert.assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
       Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
       Assert.assertEquals("wrong parsing", escapedLabel, ((TestVertex) result.vertexSet().toArray()[0]).getId());
@@ -487,7 +487,7 @@ public class DOTImporterTest extends TestCase
       );
 
 
-      importer.read(result, new StringReader(input));
+      importer.importGraph(result, new StringReader(input));
       Assert.assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
       Assert.assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
    }
@@ -520,7 +520,7 @@ public class DOTImporterTest extends TestCase
       );
 
       try {
-         importer.read(result, new StringReader(input));
+         importer.importGraph(result, new StringReader(input));
          Assert.fail("should not get here");
       } catch (ImportException e) {
          Assert.assertEquals(
@@ -549,7 +549,7 @@ public class DOTImporterTest extends TestCase
 
        Graph<String, DefaultEdge> result
              = new Multigraph<String, DefaultEdge>(DefaultEdge.class);
-       importer.read(result, new StringReader(input));
+       importer.importGraph(result, new StringReader(input));
 
        Assert.assertEquals(expected.toString(), result.toString());
 
@@ -567,7 +567,7 @@ public class DOTImporterTest extends TestCase
    private void testGarbageGraph(String input, String expected, AbstractBaseGraph<String, DefaultEdge> graph) {
       DOTImporter<String, DefaultEdge> importer = buildImporter();
       try {
-         importer.read(graph, new StringReader(input));
+         importer.importGraph(graph, new StringReader(input));
          Assert.fail("Should not get here");
       } catch (ImportException e) {
          Assert.assertEquals(expected, e.getMessage());

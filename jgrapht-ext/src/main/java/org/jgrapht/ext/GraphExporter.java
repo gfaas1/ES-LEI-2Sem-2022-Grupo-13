@@ -56,10 +56,10 @@ public interface GraphExporter<V, E>
      * @param out the output stream
      * @throws ExportException in case any error occurs
      */
-    default void export(Graph<V, E> g, OutputStream out)
+    default void exportGraph(Graph<V, E> g, OutputStream out)
         throws ExportException
     {
-        export(g, new OutputStreamWriter(out, StandardCharsets.UTF_8));
+        exportGraph(g, new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
     /**
@@ -69,7 +69,7 @@ public interface GraphExporter<V, E>
      * @param writer the output writer
      * @throws ExportException in case any error occurs
      */
-    void export(Graph<V, E> g, Writer writer)
+    void exportGraph(Graph<V, E> g, Writer writer)
         throws ExportException;
 
     /**
@@ -79,11 +79,11 @@ public interface GraphExporter<V, E>
      * @param file the file to write to
      * @throws ExportException in case any error occurs
      */
-    default void export(Graph<V, E> g, File file)
+    default void exportGraph(Graph<V, E> g, File file)
         throws ExportException
     {
         try {
-            export(g, new FileWriter(file));
+            exportGraph(g, new FileWriter(file));
         } catch (IOException e) {
             throw new ExportException(e);
         }

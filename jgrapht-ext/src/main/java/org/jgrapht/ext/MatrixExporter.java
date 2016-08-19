@@ -154,7 +154,7 @@ public class MatrixExporter<V, E>
     }
 
     @Override
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
         throws ExportException
     {
         switch (format) {

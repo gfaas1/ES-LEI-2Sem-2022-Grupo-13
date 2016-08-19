@@ -106,7 +106,7 @@ public class GmlImporterTest
         };
 
         GmlImporter<String, E> importer = new GmlImporter<String, E>(vp, ep);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         return g;
     }
@@ -559,7 +559,7 @@ public class GmlImporterTest
         GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(g1, os);
+        exporter.exportGraph(g1, os);
         String output = new String(os.toByteArray(), "UTF-8");
 
         Graph<String, DefaultWeightedEdge> g2 = readGraph(
@@ -617,7 +617,7 @@ public class GmlImporterTest
             GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(
                 vp,
                 ep);
-            importer.read(g, new StringReader(input));
+            importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
         }

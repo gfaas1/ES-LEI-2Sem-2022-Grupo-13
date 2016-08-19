@@ -250,7 +250,7 @@ public final class GraphMLExportDemo
         try {
             Writer writer = new BufferedWriter(
                 new OutputStreamWriter(System.out));
-            exporter.export(g, writer);
+            exporter.exportGraph(g, writer);
             writer.flush();
         } catch (ExportException | IOException e) {
             System.err.println("Error: " + e.getMessage());

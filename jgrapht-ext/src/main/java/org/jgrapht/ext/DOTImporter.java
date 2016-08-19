@@ -161,7 +161,7 @@ public class DOTImporter<V, E>
      * @throws ImportException if there is a problem parsing the file.
      */
     @Override
-    public void read(Graph<V, E> graph, Reader input)
+    public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         BufferedReader br;

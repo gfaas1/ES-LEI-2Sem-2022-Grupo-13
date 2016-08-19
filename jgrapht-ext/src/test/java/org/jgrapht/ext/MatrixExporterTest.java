@@ -106,13 +106,13 @@ public class MatrixExporterTest
         GraphExporter<String, DefaultEdge> exporter1 = new MatrixExporter<>(
             MatrixExporter.Format.SPARSE_LAPLACIAN_MATRIX);
         StringWriter w1 = new StringWriter();
-        exporter1.export(g, w1);
+        exporter1.exportGraph(g, w1);
         assertEquals(LAPLACIAN, w1.toString());
 
         GraphExporter<String, DefaultEdge> exporter2 = new MatrixExporter<>(
             MatrixExporter.Format.SPARSE_NORMALIZED_LAPLACIAN_MATRIX);
         StringWriter w2 = new StringWriter();
-        exporter2.export(g, w2);
+        exporter2.exportGraph(g, w2);
         assertEquals(NORMALIZED_LAPLACIAN, w2.toString());
     }
 
@@ -130,7 +130,7 @@ public class MatrixExporterTest
         
         GraphExporter<String, DefaultEdge> exporter = new MatrixExporter<>();
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_ADJACENCY, w.toString());
     }
 
@@ -148,7 +148,7 @@ public class MatrixExporterTest
         
         GraphExporter<String, DefaultEdge> exporter = new MatrixExporter<>();
         Writer w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY, w.toString());
     }
 }

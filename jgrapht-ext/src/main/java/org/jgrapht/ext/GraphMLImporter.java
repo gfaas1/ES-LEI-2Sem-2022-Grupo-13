@@ -278,7 +278,7 @@ public class GraphMLImporter<V, E>
      *         error
      */
     @Override
-    public void read(Graph<V, E> graph, Reader input)
+    public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         try {

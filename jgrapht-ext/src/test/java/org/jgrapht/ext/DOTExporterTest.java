@@ -109,7 +109,7 @@ public class DOTExporterTest
                 vertexAttributeProvider,
                 null);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        exporter.export(g, os);
+        exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(UNDIRECTED, res);
     }
@@ -137,7 +137,7 @@ public class DOTExporterTest
                     new DefaultDirectedGraph<>(
                             DefaultEdge.class);
             graph.addVertex(vertex);
-            exporter.export(graph, new ByteArrayOutputStream());
+            exporter.exportGraph(graph, new ByteArrayOutputStream());
         }
 
         List<String> invalidVertices =
@@ -149,7 +149,7 @@ public class DOTExporterTest
             graph.addVertex(vertex);
 
             try {
-                exporter.export(graph, new ByteArrayOutputStream());
+                exporter.exportGraph(graph, new ByteArrayOutputStream());
                 Assert.fail(vertex);
             } catch (RuntimeException re) {
                 // this is a negative test so exception is expected

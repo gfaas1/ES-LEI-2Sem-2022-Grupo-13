@@ -125,7 +125,7 @@ public class DOTExporter<V, E>
      */
     @Deprecated
     public void export(Writer writer, Graph<V, E> g) { 
-        export(g, writer);
+        exportGraph(g, writer);
     }
     
     /**
@@ -135,7 +135,7 @@ public class DOTExporter<V, E>
      * @param writer the writer to which the graph to be exported
      */
     @Override
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
         String indent = "  ";

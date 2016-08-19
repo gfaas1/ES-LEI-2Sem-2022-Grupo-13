@@ -490,7 +490,7 @@ public class GraphMLExporter<V, E>
         throws SAXException, TransformerConfigurationException
     {
         try {
-            export(g, writer);
+            exportGraph(g, writer);
         } catch (ExportException e) {
             throw new SAXException(e);
         }
@@ -504,7 +504,7 @@ public class GraphMLExporter<V, E>
      * @throws ExportException in case any error occurs during export
      */
     @Override
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
         throws ExportException
     {
         try {
