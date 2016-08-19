@@ -168,7 +168,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.EDGE_LIST,
-            ";");
+            ';');
         StringWriter w = new StringWriter();
         exporter.export(g, w);
         assertEquals(UNDIRECTED_EDGE_LIST, w.toString());
@@ -193,7 +193,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.EDGE_LIST,
-            ";");
+            ';');
         StringWriter w = new StringWriter();
         exporter.export(g, w);
         assertEquals(DIRECTED_EDGE_LIST, w.toString());
@@ -223,7 +223,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.ADJACENCY_LIST,
-            ";");
+            ';');
         StringWriter w = new StringWriter();
         exporter.export(g, w);
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
@@ -253,7 +253,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.ADJACENCY_LIST,
-            ";");
+            ';');
         StringWriter w = new StringWriter();
         exporter.export(g, w);
         assertEquals(UNDIRECTED_ADJACENCY_LIST, w.toString());
@@ -282,7 +282,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_NODEID,
             true);
@@ -314,7 +314,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         StringWriter w = new StringWriter();
         exporter.export(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID, w.toString());
@@ -343,7 +343,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_NODEID,
             true);
@@ -378,7 +378,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);        
@@ -413,7 +413,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
@@ -451,7 +451,7 @@ public class CSVExporterTest
         CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
             nameProvider,
             CSVExporter.Format.MATRIX,
-            ";");
+            ';');
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true); 

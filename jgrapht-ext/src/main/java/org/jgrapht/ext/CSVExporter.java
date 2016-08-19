@@ -62,7 +62,7 @@ import org.jgrapht.Graphs;
  */
 public class CSVExporter<V, E>
 {
-    private static final String DEFAULT_DELIMITER = ";";
+    private static final Character DEFAULT_DELIMITER = ';';
 
     /**
      * Formats of the exporter.
@@ -110,7 +110,7 @@ public class CSVExporter<V, E>
     private final VertexNameProvider<V> vertexIDProvider;
     private final Set<Parameter> parameters;
     private Format format;
-    private final String delimiter;
+    private final Character delimiter;
 
     /**
      * Creates a new CSVExporter with {@link Format#ADJACENCY_LIST} format and
@@ -140,7 +140,7 @@ public class CSVExporter<V, E>
      * @param format the format to use
      * @param delimiter delimiter to use
      */
-    public CSVExporter(Format format, String delimiter)
+    public CSVExporter(Format format, Character delimiter)
     {
         this(new IntegerNameProvider<>(), format, delimiter);
     }
@@ -155,7 +155,7 @@ public class CSVExporter<V, E>
     public CSVExporter(
         VertexNameProvider<V> vertexIDProvider,
         Format format,
-        String delimiter)
+        Character delimiter)
     {
         if (vertexIDProvider == null) {
             throw new IllegalArgumentException(
