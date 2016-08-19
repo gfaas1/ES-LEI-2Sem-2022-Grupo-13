@@ -284,7 +284,7 @@ public class CSVExporterTest
             CSVExporter.Format.MATRIX,
             ";");
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EXPORT_NODEID,
+            CSVExporter.Parameter.MATRIX_FORMAT_NODEID,
             true);
         StringWriter w = new StringWriter();
         exporter.export(g, w);
@@ -345,7 +345,7 @@ public class CSVExporterTest
             CSVExporter.Format.MATRIX,
             ";");
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EXPORT_NODEID,
+            CSVExporter.Parameter.MATRIX_FORMAT_NODEID,
             true);
         exporter.setParameter(
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
@@ -418,7 +418,7 @@ public class CSVExporterTest
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EXPORT_EDGE_WEIGHTS,
+            CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true);
         StringWriter w = new StringWriter();
         exporter.export(g, w);
@@ -453,7 +453,7 @@ public class CSVExporterTest
             CSVExporter.Format.MATRIX,
             ";");
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EXPORT_EDGE_WEIGHTS,
+            CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true); 
         StringWriter w = new StringWriter();
         exporter.export(g, w);

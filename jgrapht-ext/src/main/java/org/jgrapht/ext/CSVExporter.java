@@ -94,12 +94,12 @@ public class CSVExporter<V, E>
          * Whether to export node ids. Only valid for the {@link Format#MATRIX
          * MATRIX} format.
          */
-        MATRIX_FORMAT_EXPORT_NODEID,
+        MATRIX_FORMAT_NODEID,
         /**
          * Whether to export edge weights. Only valid for the
          * {@link Format#MATRIX MATRIX} format.
          */
-        MATRIX_FORMAT_EXPORT_EDGE_WEIGHTS,
+        MATRIX_FORMAT_EDGE_WEIGHTS,
         /**
          * Whether to export zero as edge weights for missing edges. Only valid
          * for the {@link Format#MATRIX MATRIX} format.
@@ -273,9 +273,9 @@ public class CSVExporter<V, E>
     private void exportAsMatrix(Graph<V, E> g, PrintWriter out)
     {
         boolean exportNodeId = parameters
-            .contains(Parameter.MATRIX_FORMAT_EXPORT_NODEID);
+            .contains(Parameter.MATRIX_FORMAT_NODEID);
         boolean exportEdgeWeights = parameters
-            .contains(Parameter.MATRIX_FORMAT_EXPORT_EDGE_WEIGHTS);
+            .contains(Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
         boolean zeroWhenNoEdge = parameters
             .contains(Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
