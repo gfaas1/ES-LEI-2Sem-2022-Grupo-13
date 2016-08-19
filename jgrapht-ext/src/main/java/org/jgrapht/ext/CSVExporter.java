@@ -239,8 +239,12 @@ public class CSVExporter<V, E>
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
         for (E e : g.edgeSet()) {
-            String s = vertexIDProvider.getVertexName(g.getEdgeSource(e));
-            String t = vertexIDProvider.getVertexName(g.getEdgeTarget(e));
+            String s = CSVUtils.escapeCSV(
+                vertexIDProvider.getVertexName(g.getEdgeSource(e)),
+                delimiter);
+            String t = CSVUtils.escapeCSV(
+                vertexIDProvider.getVertexName(g.getEdgeTarget(e)),
+                delimiter);
             out.println(s + delimiter + t);
         }
     }
@@ -253,17 +257,26 @@ public class CSVExporter<V, E>
                 for (E e : ((DirectedGraph<V, E>) g).outgoingEdgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    out.print(vertexIDProvider.getVertexName(w));
+                    out.print(
+                        CSVUtils.escapeCSV(
+                            vertexIDProvider.getVertexName(w),
+                            delimiter));
                 }
                 out.println();
             }
         } else {
             for (V v : g.vertexSet()) {
-                out.print(vertexIDProvider.getVertexName(v));
+                out.print(
+                    CSVUtils.escapeCSV(
+                        vertexIDProvider.getVertexName(v),
+                        delimiter));
                 for (E e : g.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    out.print(vertexIDProvider.getVertexName(w));
+                    out.print(
+                        CSVUtils.escapeCSV(
+                            vertexIDProvider.getVertexName(w),
+                            delimiter));
                 }
                 out.println();
             }
@@ -282,14 +295,20 @@ public class CSVExporter<V, E>
         if (exportNodeId) {
             for (V v : g.vertexSet()) {
                 out.print(delimiter);
-                out.print(vertexIDProvider.getVertexName(v));
+                out.print(
+                    CSVUtils.escapeCSV(
+                        vertexIDProvider.getVertexName(v),
+                        delimiter));
             }
             out.println();
         }
         int n = g.vertexSet().size();
         for (V v : g.vertexSet()) {
             if (exportNodeId) {
-                out.print(vertexIDProvider.getVertexName(v));
+                out.print(
+                    CSVUtils.escapeCSV(
+                        vertexIDProvider.getVertexName(v),
+                        delimiter));
                 out.print(delimiter);
             }
             int i = 0;

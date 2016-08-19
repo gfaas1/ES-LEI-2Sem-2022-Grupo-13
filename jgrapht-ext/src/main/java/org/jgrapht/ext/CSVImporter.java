@@ -284,9 +284,7 @@ public class CSVImporter<V, E>
         @Override
         public void exitStringField(CSVParser.StringFieldContext ctx)
         {
-            String s = ctx.STRING().getText();
-            // FIXME: unescape CSV
-            row.add(s);
+            row.add(CSVUtils.unescapeCSV(ctx.STRING().getText(), delimiter));
         }
 
         @Override
