@@ -22,9 +22,15 @@
 /* ------------------
  * DOTImporter.java
  * ------------------
- * (C) Copyright 2015, by  Wil Selwood.
+ * (C) Copyright 2015-2016, by  Wil Selwood and Contributors.
  *
  * Original Author:  Wil Selwood <wselwood@ijento.com>
+ * Contributor(s): Dimitrios Michail
+ * 
+ * Changes
+ * -------
+ * 2015 : Initial revision (WS);
+ * 19-Aug-2016: Always provide id to vertex providers (DM);
  *
  */
 package org.jgrapht.ext;
