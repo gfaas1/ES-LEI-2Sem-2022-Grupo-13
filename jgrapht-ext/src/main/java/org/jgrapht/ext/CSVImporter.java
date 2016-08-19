@@ -31,7 +31,8 @@ public class CSVImporter<V, E>
     public enum Format
     {
         /**
-         * Edge list
+         * Edge list. Behaves the same as
+         * {@link CSVImporter.Format#ADJACENCY_LIST}.
          */
         EDGE_LIST,
 
@@ -137,16 +138,15 @@ public class CSVImporter<V, E>
     {
         switch (format) {
         case EDGE_LIST:
-            parseEdgeList(graph, input);
-            break;
         case ADJACENCY_LIST:
+            read(graph, input, new EdgeListCSVListener(graph));
             break;
         case MATRIX:
             break;
         }
     }
 
-    private void parseEdgeList(Graph<V, E> graph, Reader input)
+    private void read(Graph<V, E> graph, Reader input, CSVBaseListener listener)
         throws ImportException
     {
         try {
@@ -168,7 +168,6 @@ public class CSVImporter<V, E>
 
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
-            EdgeListCSVListener listener = new EdgeListCSVListener(graph);
             walker.walk(listener, graphContext);
         } catch (IOException e) {
             throw new ImportException(
@@ -204,7 +203,7 @@ public class CSVImporter<V, E>
         }
     }
 
-    // listener for the edge list format and ; as separator
+    // listener for the edge list format
     private class EdgeListCSVListener
         extends CSVBaseListener
     {
@@ -226,16 +225,11 @@ public class CSVImporter<V, E>
         @Override
         public void exitRecord(CSVParser.RecordContext ctx)
         {
-            System.out.print("row:");
-            for (String s : row) {
-                System.out.print("|" + s);
-            }
-            System.out.println();
-            if (row.size() < 2) {
-                throw new ParseCancellationException(
-                    "Row contains less than two values");
+            if (row.isEmpty()) {
+                throw new ParseCancellationException("Empty CSV record");
             }
 
+            // first is source
             String sourceKey = row.get(0);
             if (sourceKey.isEmpty()) {
                 throw new ParseCancellationException(
@@ -247,32 +241,38 @@ public class CSVImporter<V, E>
                 vertices.put(sourceKey, source);
                 graph.addVertex(source);
             }
+            row.remove(0);
 
-            String targetKey = row.get(1);
-            if (targetKey.isEmpty()) {
-                throw new ParseCancellationException(
-                    "Target vertex cannot be empty");
-            }
-            V target = vertices.get(targetKey);
-            if (target == null) {
-                target = vertexProvider.buildVertex(targetKey, new HashMap<>());
-                vertices.put(targetKey, target);
-                graph.addVertex(target);
+            // remaining are targets
+            for (String key : row) {
+                if (key.isEmpty()) {
+                    throw new ParseCancellationException(
+                        "Target vertex cannot be empty");
+                }
+                V target = vertices.get(key);
+
+                if (target == null) {
+                    target = vertexProvider.buildVertex(key, new HashMap<>());
+                    vertices.put(key, target);
+                    graph.addVertex(target);
+                }
+
+                try {
+                    String label = "e_" + source + "_" + target;
+                    E e = edgeProvider.buildEdge(
+                        source,
+                        target,
+                        label,
+                        new HashMap<String, String>());
+                    graph.addEdge(source, target, e);
+                } catch (IllegalArgumentException e) {
+                    throw new ParseCancellationException(
+                        "Provided graph does not support input: "
+                            + e.getMessage(),
+                        e);
+                }
             }
 
-            try {
-                String label = "e_" + source + "_" + target;
-                E e = edgeProvider.buildEdge(
-                    source,
-                    target,
-                    label,
-                    new HashMap<String, String>());
-                graph.addEdge(source, target, e);
-            } catch (IllegalArgumentException e) {
-                throw new ParseCancellationException(
-                    "Provided graph does not support input: " + e.getMessage(),
-                    e);
-            }
         }
 
         @Override

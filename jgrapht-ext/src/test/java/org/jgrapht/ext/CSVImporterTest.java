@@ -173,4 +173,42 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
     }
 
+    public void testAdjacencyListDirectedUnweightedWithSemicolon()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "1;2;3;4\n"
+                     + "2;3\n"
+                     + "3;4;5;6\n"
+                     + "4;1;5;6\n";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(
+            input,
+            CSVImporter.Format.ADJACENCY_LIST,
+            ';',
+            DefaultEdge.class,
+            true,
+            false);
+
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsVertex("5"));
+        assertTrue(g.containsVertex("6"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("1", "3"));
+        assertTrue(g.containsEdge("1", "4"));
+        assertTrue(g.containsEdge("2", "3"));
+        assertTrue(g.containsEdge("3", "4"));
+        assertTrue(g.containsEdge("3", "5"));
+        assertTrue(g.containsEdge("3", "6"));
+        assertTrue(g.containsEdge("4", "1"));
+        assertTrue(g.containsEdge("4", "5"));
+        assertTrue(g.containsEdge("4", "6"));
+    }
+
 }
