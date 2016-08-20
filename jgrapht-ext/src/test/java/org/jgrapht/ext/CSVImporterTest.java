@@ -210,5 +210,35 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "5"));
         assertTrue(g.containsEdge("4", "6"));
     }
+    
+    public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "'john doe';fred\n"
+                     + "fred;\"fred\n\"\"21\"\"\"\n"
+                     + "\"fred\n\"\"21\"\"\";\"who;;\"\n"
+                     + "\"who;;\";'john doe'\n";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(
+            input,
+            CSVImporter.Format.EDGE_LIST,
+            ';',
+            DefaultEdge.class,
+            true,
+            false);
+
+        assertEquals(4, g.vertexSet().size());
+        assertEquals(4, g.edgeSet().size());
+        assertTrue(g.containsVertex("'john doe'"));
+        assertTrue(g.containsVertex("fred"));
+        assertTrue(g.containsVertex("fred\n\"21\""));
+        assertTrue(g.containsVertex("who;;"));
+        assertTrue(g.containsEdge("'john doe'", "fred"));
+        assertTrue(g.containsEdge("fred", "fred\n\"21\""));
+        assertTrue(g.containsEdge("fred\n\"21\"", "who;;"));
+        assertTrue(g.containsEdge("who;;", "'john doe'"));
+    }
 
 }
