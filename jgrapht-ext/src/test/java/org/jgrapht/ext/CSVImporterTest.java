@@ -38,6 +38,7 @@ import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.Pseudograph;
@@ -52,31 +53,13 @@ import junit.framework.TestCase;
 public class CSVImporterTest
     extends TestCase
 {
+    private static final String NL = System.getProperty("line.separator");
 
-    public <E> Graph<String, E> readGraph(
-        String input,
+    public <E> CSVImporter<String, E> createImporter(
+        Graph<String, E> g,
         CSVImporter.Format format,
-        Character delimiter,
-        Class<? extends E> edgeClass,
-        boolean directed,
-        boolean weighted)
-        throws ImportException
+        Character delimiter)
     {
-        Graph<String, E> g;
-        if (directed) {
-            if (weighted) {
-                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
-            } else {
-                g = new DirectedPseudograph<String, E>(edgeClass);
-            }
-        } else {
-            if (weighted) {
-                g = new WeightedPseudograph<String, E>(edgeClass);
-            } else {
-                g = new Pseudograph<String, E>(edgeClass);
-            }
-        }
-
         VertexProvider<String> vp = new VertexProvider<String>()
         {
             @Override
@@ -108,6 +91,35 @@ public class CSVImporterTest
             delimiter,
             vp,
             ep);
+
+        return importer;
+    }
+
+    public <E> Graph<String, E> readGraph(
+        String input,
+        CSVImporter.Format format,
+        Character delimiter,
+        Class<? extends E> edgeClass,
+        boolean directed,
+        boolean weighted)
+        throws ImportException
+    {
+        Graph<String, E> g;
+        if (directed) {
+            if (weighted) {
+                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new DirectedPseudograph<String, E>(edgeClass);
+            }
+        } else {
+            if (weighted) {
+                g = new WeightedPseudograph<String, E>(edgeClass);
+            } else {
+                g = new Pseudograph<String, E>(edgeClass);
+            }
+        }
+
+        CSVImporter<String, E> importer = createImporter(g, format, delimiter);
         importer.read(g, new StringReader(input));
 
         return g;
@@ -210,7 +222,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "5"));
         assertTrue(g.containsEdge("4", "6"));
     }
-    
+
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -239,6 +251,62 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("fred", "fred\n\"21\""));
         assertTrue(g.containsEdge("fred\n\"21\"", "who;;"));
         assertTrue(g.containsEdge("who;;", "'john doe'"));
+    }
+
+    public void testDirectedMatrixNoNodeIdZeroNoEdgeWeighted()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "0;1.0;13.0;0;0" + NL
+          + "0;0;0;0;0" + NL
+          + "1.0;0;0;1.0;0" + NL
+          + "0;0;0;0;1.0" + NL
+          + "1.0;1.0;53.0;1.0;1.0" + NL;
+        // @formatter:on
+
+        Graph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(
+            DefaultWeightedEdge.class);
+
+        CSVImporter<String, DefaultWeightedEdge> importer = createImporter(
+            g,
+            CSVImporter.Format.MATRIX,
+            ';');
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
+            true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            true);
+        importer.read(g, new StringReader(input));
+
+        assertEquals(5, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsVertex("4"));
+        assertTrue(g.containsVertex("5"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("1", "2")), 0.0001);
+        assertTrue(g.containsEdge("1", "3"));
+        assertEquals(13.0, g.getEdgeWeight(g.getEdge("1", "3")), 0.0001);
+        assertTrue(g.containsEdge("3", "1"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("3", "1")), 0.0001);
+        assertTrue(g.containsEdge("3", "4"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("3", "4")), 0.0001);
+        assertTrue(g.containsEdge("4", "5"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("4", "5")), 0.0001);
+        assertTrue(g.containsEdge("5", "1"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "1")), 0.0001);
+        assertTrue(g.containsEdge("5", "2"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "2")), 0.0001);
+        assertTrue(g.containsEdge("5", "3"));
+        assertEquals(53.0, g.getEdgeWeight(g.getEdge("5", "3")), 0.0001);
+        assertTrue(g.containsEdge("5", "4"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "4")), 0.0001);
+        assertTrue(g.containsEdge("5", "5"));
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "5")), 0.0001);
     }
 
 }
