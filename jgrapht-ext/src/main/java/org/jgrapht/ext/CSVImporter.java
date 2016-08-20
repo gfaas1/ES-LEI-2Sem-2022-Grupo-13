@@ -303,6 +303,8 @@ public class CSVImporter<V, E>
         private boolean assumeZeroWhenNoEdge;
         private int verticesCount;
         private int currentVertex;
+        private String currentVertexName;
+        private Map<Integer, String> columnIndex;
 
         public MatrixCSVListener(Graph<V, E> graph)
         {
@@ -315,13 +317,20 @@ public class CSVImporter<V, E>
                 .contains(Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;
             this.currentVertex = 1;
+            this.currentVertexName = null;
+            this.columnIndex = new HashMap<>();
         }
 
         @Override
         protected void handleRow()
         {
             if (assumeNodeIds) {
+                if (!header) {
+                    currentVertexName = row.get(0);
+                }
                 row.remove(0);
+            } else {
+                currentVertexName = String.valueOf(currentVertex);
             }
 
             if (header) {
@@ -346,11 +355,14 @@ public class CSVImporter<V, E>
                 throw new ParseCancellationException(
                     "Failed to parse header with nodes");
             }
-            int key = 1;
-            for (String id : row) {
-                V vertex = vertexProvider.buildVertex(id, new HashMap<>());
-                vertices.put(String.valueOf(key), vertex);
+            int v = 1;
+            for (String vertexName : row) {
+                V vertex = vertexProvider
+                    .buildVertex(vertexName, new HashMap<>());
+                vertices.put(vertexName, vertex);
                 graph.addVertex(vertex);
+                columnIndex.put(v, vertexName);
+                v++;
             }
         }
 
@@ -362,12 +374,14 @@ public class CSVImporter<V, E>
                 throw new ParseCancellationException(
                     "Failed to parse header with nodes");
             }
-            int key = 1;
-            for (key = 1; key <= verticesCount; key++) {
+            int v = 1;
+            for (v = 1; v <= verticesCount; v++) {
+                String vertexName = String.valueOf(v);
                 V vertex = vertexProvider
-                    .buildVertex(String.valueOf(key), new HashMap<>());
-                vertices.put(String.valueOf(key), vertex);
+                    .buildVertex(vertexName, new HashMap<>());
+                vertices.put(vertexName, vertex);
                 graph.addVertex(vertex);
+                columnIndex.put(v, vertexName);
             }
         }
 
@@ -385,16 +399,22 @@ public class CSVImporter<V, E>
                     Integer entryAsInteger = Integer.parseInt(entry);
                     if (entryAsInteger == 0) {
                         if (!assumeZeroWhenNoEdge && assumeEdgeWeights) {
-                            createEdge(currentVertex, target, 0d);
+                            createEdge(
+                                currentVertexName,
+                                columnIndex.get(target),
+                                0d);
                         }
                     } else {
                         if (assumeEdgeWeights) {
                             createEdge(
-                                currentVertex,
-                                target,
+                                currentVertexName,
+                                columnIndex.get(target),
                                 Double.valueOf(entryAsInteger));
                         } else {
-                            createEdge(currentVertex, target, null);
+                            createEdge(
+                                currentVertexName,
+                                columnIndex.get(target),
+                                null);
                         }
 
                     }
@@ -408,7 +428,10 @@ public class CSVImporter<V, E>
                 try {
                     Double entryAsDouble = Double.parseDouble(entry);
                     if (assumeEdgeWeights) {
-                        createEdge(currentVertex, target, entryAsDouble);
+                        createEdge(
+                            currentVertexName,
+                            columnIndex.get(target),
+                            entryAsDouble);
                     } else {
                         throw new ParseCancellationException(
                             "Double entry found when expecting no weights");
@@ -421,11 +444,14 @@ public class CSVImporter<V, E>
             }
         }
 
-        private void createEdge(int s, int t, Double weight)
+        private void createEdge(
+            String sourceName,
+            String targetName,
+            Double weight)
         {
             try {
-                V source = vertices.get(String.valueOf(s));
-                V target = vertices.get(String.valueOf(t));
+                V source = vertices.get(sourceName);
+                V target = vertices.get(targetName);
 
                 String label = "e_" + source + "_" + target;
                 E e = edgeProvider.buildEdge(
