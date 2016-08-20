@@ -20,18 +20,16 @@
  * the Eclipse Foundation.
  */
 /* ------------------
- * GmlExporter.java
+ * CSVExporter.java
  * ------------------
  * (C) Copyright 2016, by Dimitrios Michail and Contributors.
  *
  * Original Author:  Dimitrios Michail
  * Contributors: -
  *
- * $Id$
- *
  * Changes
  * -------
- * 18-Aug-2016 : Initial Version (DM);
+ * 20-Aug-2016 : Initial Version (DM);
  *
  */
 package org.jgrapht.ext;
@@ -46,7 +44,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
 /**
- * Exports a graph into a CSV Format.
+ * Exports a graph into a CSV Format or any other Delimiter-separated value
+ * format.
  * 
  * <p>
  * The exporter supports three different formats which can be adjusted using the
@@ -56,13 +55,22 @@ import org.jgrapht.Graphs;
  * </a>. For some of the formats, the behavior of the exporter can be adjusted
  * using the {@link #setParameter(Parameter, boolean) setParameter} method.
  * </p>
+ * 
+ * <p>
+ * The default output respects
+ * <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
+ * also adjust the separator to something like semicolon or pipe instead of
+ * comma. In such a case, all fields are escaped using the new separator. See
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
+ * separated values</a> for more information.
+ * </p>
  *
  * @author Dimitrios Michail
  * @since August 2016
  */
 public class CSVExporter<V, E>
 {
-    private static final Character DEFAULT_DELIMITER = ';';
+    private static final char DEFAULT_DELIMITER = ',';
 
     /**
      * Formats of the exporter.
@@ -110,7 +118,7 @@ public class CSVExporter<V, E>
     private final VertexNameProvider<V> vertexIDProvider;
     private final Set<Parameter> parameters;
     private Format format;
-    private final Character delimiter;
+    private char delimiter;
 
     /**
      * Creates a new CSVExporter with {@link Format#ADJACENCY_LIST} format and
@@ -140,7 +148,7 @@ public class CSVExporter<V, E>
      * @param format the format to use
      * @param delimiter delimiter to use
      */
-    public CSVExporter(Format format, Character delimiter)
+    public CSVExporter(Format format, char delimiter)
     {
         this(new IntegerNameProvider<>(), format, delimiter);
     }
@@ -155,7 +163,7 @@ public class CSVExporter<V, E>
     public CSVExporter(
         VertexNameProvider<V> vertexIDProvider,
         Format format,
-        Character delimiter)
+        char delimiter)
     {
         if (vertexIDProvider == null) {
             throw new IllegalArgumentException(
@@ -163,6 +171,10 @@ public class CSVExporter<V, E>
         }
         this.vertexIDProvider = vertexIDProvider;
         this.format = format;
+        if (!DSVUtils.isValidDelimiter(delimiter)) {
+            throw new IllegalArgumentException(
+                "Character cannot be used as a delimiter");
+        }
         this.delimiter = delimiter;
         this.parameters = new HashSet<>();
     }
@@ -173,7 +185,7 @@ public class CSVExporter<V, E>
      * @param g the graph
      * @param writer the writer
      */
-    public void export(Graph<V, E> g, Writer writer)
+    public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
         switch (format) {
@@ -236,13 +248,37 @@ public class CSVExporter<V, E>
         this.format = format;
     }
 
+    /**
+     * Get the delimiter (comma, semicolon, pipe, etc).
+     * 
+     * @return the delimiter
+     */
+    public char getDelimiter()
+    {
+        return delimiter;
+    }
+
+    /**
+     * Set the delimiter (comma, semicolon, pipe, etc).
+     * 
+     * @param delimiter the delimiter to use
+     */
+    public void setDelimiter(char delimiter)
+    {
+        if (!DSVUtils.isValidDelimiter(delimiter)) {
+            throw new IllegalArgumentException(
+                "Character cannot be used as a delimiter");
+        }
+        this.delimiter = delimiter;
+    }
+
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
         for (E e : g.edgeSet()) {
-            String s = CSVUtils.escapeCSV(
+            String s = DSVUtils.escapeDSV(
                 vertexIDProvider.getVertexName(g.getEdgeSource(e)),
                 delimiter);
-            String t = CSVUtils.escapeCSV(
+            String t = DSVUtils.escapeDSV(
                 vertexIDProvider.getVertexName(g.getEdgeTarget(e)),
                 delimiter);
             out.println(s + delimiter + t);
@@ -258,7 +294,7 @@ public class CSVExporter<V, E>
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
                     out.print(
-                        CSVUtils.escapeCSV(
+                        DSVUtils.escapeDSV(
                             vertexIDProvider.getVertexName(w),
                             delimiter));
                 }
@@ -267,14 +303,14 @@ public class CSVExporter<V, E>
         } else {
             for (V v : g.vertexSet()) {
                 out.print(
-                    CSVUtils.escapeCSV(
+                    DSVUtils.escapeDSV(
                         vertexIDProvider.getVertexName(v),
                         delimiter));
                 for (E e : g.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
                     out.print(
-                        CSVUtils.escapeCSV(
+                        DSVUtils.escapeDSV(
                             vertexIDProvider.getVertexName(w),
                             delimiter));
                 }
@@ -296,7 +332,7 @@ public class CSVExporter<V, E>
             for (V v : g.vertexSet()) {
                 out.print(delimiter);
                 out.print(
-                    CSVUtils.escapeCSV(
+                    DSVUtils.escapeDSV(
                         vertexIDProvider.getVertexName(v),
                         delimiter));
             }
@@ -306,7 +342,7 @@ public class CSVExporter<V, E>
         for (V v : g.vertexSet()) {
             if (exportNodeId) {
                 out.print(
-                    CSVUtils.escapeCSV(
+                    DSVUtils.escapeDSV(
                         vertexIDProvider.getVertexName(v),
                         delimiter));
                 out.print(delimiter);

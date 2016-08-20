@@ -37,7 +37,6 @@ package org.jgrapht.ext;
 import java.io.StringWriter;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -186,7 +185,7 @@ public class CSVExporterTest
             CSVExporter.Format.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_EDGE_LIST, w.toString());
     }
 
@@ -211,7 +210,7 @@ public class CSVExporterTest
             CSVExporter.Format.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_EDGE_LIST, w.toString());
     }
 
@@ -241,7 +240,7 @@ public class CSVExporterTest
             CSVExporter.Format.ADJACENCY_LIST,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
     }
 
@@ -271,7 +270,7 @@ public class CSVExporterTest
             CSVExporter.Format.ADJACENCY_LIST,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_ADJACENCY_LIST, w.toString());
     }
 
@@ -301,7 +300,7 @@ public class CSVExporterTest
             ';');
         exporter.setParameter(CSVExporter.Parameter.MATRIX_FORMAT_NODEID, true);
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NODEID, w.toString());
     }
 
@@ -330,7 +329,7 @@ public class CSVExporterTest
             CSVExporter.Format.MATRIX,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID, w.toString());
     }
 
@@ -363,7 +362,7 @@ public class CSVExporterTest
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NODEID_ZERO_NO_EDGE, w.toString());
     }
 
@@ -395,7 +394,7 @@ public class CSVExporterTest
             CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE, w.toString());
     }
 
@@ -433,7 +432,7 @@ public class CSVExporterTest
             CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true);
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(
             DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE_WEIGHTED,
             w.toString());
@@ -470,7 +469,7 @@ public class CSVExporterTest
             CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true);
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_WEIGHTED, w.toString());
     }
 
@@ -493,7 +492,7 @@ public class CSVExporterTest
             CSVExporter.Format.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
-        exporter.export(g, w);
+        exporter.exportGraph(g, w);
         assertEquals(DIRECTED_EDGE_LIST_ESCAPE, w.toString());
     }
 

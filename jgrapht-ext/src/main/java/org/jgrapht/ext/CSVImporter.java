@@ -1,3 +1,37 @@
+/* ==========================================
+ * JGraphT : a free Java graph-theory library
+ * ==========================================
+ *
+ * Project Info:  http://jgrapht.sourceforge.net/
+ * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
+ *
+ * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+/* ------------------
+ * CSVImporter.java
+ * ------------------
+ * (C) Copyright 2016, by Dimitrios Michail and Contributors.
+ *
+ * Original Author:  Dimitrios Michail
+ * Contributors: -
+ *
+ * Changes
+ * -------
+ * 20-Aug-2016 : Initial Version (DM);
+ *
+ */
 package org.jgrapht.ext;
 
 import java.io.IOException;
@@ -19,14 +53,42 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jgrapht.Graph;
 import org.jgrapht.WeightedGraph;
 
+/**
+ * Imports a graph from a CSV Format or any other Delimiter-separated value
+ * format.
+ * 
+ * <p>
+ * The importer supports three different formats which can be adjusted using the
+ * {@link #setFormat(Format) setFormat} method. The supported formats are the
+ * same CSV formats used by
+ * <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi
+ * </a>. For some of the formats, the behavior of the importer can be adjusted
+ * using the {@link #setParameter(Parameter, boolean) setParameter} method.
+ * </p>
+ * 
+ * <p>
+ * The importer respects
+ * <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
+ * also adjust the separator to something like semicolon or pipe instead of
+ * comma. In such a case, all fields are unescaped using the new separator. See
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
+ * separated values</a> for more information.
+ * </p>
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
+ * @author Dimitrios Michail
+ * @since August 2016
+ */
 public class CSVImporter<V, E>
 {
-    private static final Character DEFAULT_DELIMITER = ';';
+    private static final char DEFAULT_DELIMITER = ',';
 
     private Format format;
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
-    private Character delimiter;
+    private char delimiter;
     private final Set<Parameter> parameters;
 
     /**
@@ -74,7 +136,8 @@ public class CSVImporter<V, E>
     }
 
     /**
-     * Constructs a new importer.
+     * Constructs a new importer using the {@link Format#ADJACENCY_LIST} format
+     * as default.
      * 
      * @param vertexProvider provider for the generation of vertices. Must not
      *        be null.
@@ -82,12 +145,49 @@ public class CSVImporter<V, E>
      *        null.
      */
     public CSVImporter(
-        Format format,
-        Character delimiter,
         VertexProvider<V> vertexProvider,
         EdgeProvider<V, E> edgeProvider)
     {
-        this.format = format;
+        this(
+            vertexProvider,
+            edgeProvider,
+            Format.ADJACENCY_LIST,
+            DEFAULT_DELIMITER);
+    }
+
+    /**
+     * Constructs a new importer.
+     * 
+     * @param vertexProvider provider for the generation of vertices. Must not
+     *        be null.
+     * @param edgeProvider provider for the generation of edges. Must not be
+     *        null.
+     * @param format format to use out of the supported ones
+     */
+    public CSVImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider,
+        Format format)
+    {
+        this(vertexProvider, edgeProvider, format, DEFAULT_DELIMITER);
+    }
+
+    /**
+     * Constructs a new importer.
+     * 
+     * @param vertexProvider provider for the generation of vertices. Must not
+     *        be null.
+     * @param edgeProvider provider for the generation of edges. Must not be
+     *        null.
+     * @param format format to use out of the supported ones
+     * @param delimiter delimiter to use (comma, semicolon, pipe, etc.)
+     */
+    public CSVImporter(
+        VertexProvider<V> vertexProvider,
+        EdgeProvider<V, E> edgeProvider,
+        Format format,
+        char delimiter)
+    {
         if (vertexProvider == null) {
             throw new IllegalArgumentException(
                 "Vertex provider cannot be null");
@@ -97,6 +197,11 @@ public class CSVImporter<V, E>
             throw new IllegalArgumentException("Edge provider cannot be null");
         }
         this.edgeProvider = edgeProvider;
+        this.format = format;
+        if (!DSVUtils.isValidDelimiter(delimiter)) {
+            throw new IllegalArgumentException(
+                "Character cannot be used as a delimiter");
+        }
         this.delimiter = delimiter;
         this.parameters = new HashSet<>();
     }
@@ -119,6 +224,30 @@ public class CSVImporter<V, E>
     public void setFormat(Format format)
     {
         this.format = format;
+    }
+
+    /**
+     * Get the delimiter (comma, semicolon, pipe, etc).
+     * 
+     * @return the delimiter
+     */
+    public char getDelimiter()
+    {
+        return delimiter;
+    }
+
+    /**
+     * Set the delimiter (comma, semicolon, pipe, etc).
+     * 
+     * @param delimiter the delimiter to use
+     */
+    public void setDelimiter(char delimiter)
+    {
+        if (!DSVUtils.isValidDelimiter(delimiter)) {
+            throw new IllegalArgumentException(
+                "Character cannot be used as a delimiter");
+        }
+        this.delimiter = delimiter;
     }
 
     /**
@@ -164,7 +293,7 @@ public class CSVImporter<V, E>
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
-    public void read(Graph<V, E> graph, Reader input)
+    public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
         switch (format) {
@@ -353,10 +482,14 @@ public class CSVImporter<V, E>
             verticesCount = row.size();
             if (verticesCount < 1) {
                 throw new ParseCancellationException(
-                    "Failed to parse header with nodes");
+                    "Failed to parse header with vertices");
             }
             int v = 1;
             for (String vertexName : row) {
+                if (vertexName.trim().isEmpty()) {
+                    throw new ParseCancellationException(
+                        "Failed to parse header with vertices (empty name)");
+                }
                 V vertex = vertexProvider
                     .buildVertex(vertexName, new HashMap<>());
                 vertices.put(vertexName, vertex);
@@ -372,7 +505,7 @@ public class CSVImporter<V, E>
             verticesCount = row.size();
             if (verticesCount < 1) {
                 throw new ParseCancellationException(
-                    "Failed to parse header with nodes");
+                    "Failed to parse header with vertices");
             }
             int v = 1;
             for (v = 1; v <= verticesCount; v++) {
@@ -529,7 +662,7 @@ public class CSVImporter<V, E>
         @Override
         public void exitStringField(CSVParser.StringFieldContext ctx)
         {
-            row.add(CSVUtils.unescapeCSV(ctx.STRING().getText(), delimiter));
+            row.add(DSVUtils.unescapeDSV(ctx.STRING().getText(), delimiter));
         }
 
         @Override
@@ -543,3 +676,5 @@ public class CSVImporter<V, E>
     }
 
 }
+
+//End CSVImporter.java

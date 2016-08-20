@@ -20,7 +20,7 @@
  * the Eclipse Foundation.
  */
 /* ------------------------------
- * CSVUtilsTest.java
+ * DSVUtilsTest.java
  * ------------------------------
  * (C) Copyright 2016, by Dimitrios Michail and Contributors.
  *
@@ -41,52 +41,52 @@ import junit.framework.TestCase;
  * 
  * @author Dimitrios Michail
  */
-public class CSVUtilsTest
+public class DSVUtilsTest
     extends TestCase
 {
 
     public void testEscape()
     {
         String input1 = "nothing special in here";
-        assertEquals(input1, CSVUtils.escapeCSV(input1, ';'));
-        assertEquals(input1, CSVUtils.escapeCSV(input1, ','));
+        assertEquals(input1, DSVUtils.escapeDSV(input1, ';'));
+        assertEquals(input1, DSVUtils.escapeDSV(input1, ','));
 
         String input2 = "foo;;;";
-        assertEquals(input2, CSVUtils.escapeCSV(input2, ','));
-        assertEquals("\"foo;;;\"", CSVUtils.escapeCSV(input2, ';'));
+        assertEquals(input2, DSVUtils.escapeDSV(input2, ','));
+        assertEquals("\"foo;;;\"", DSVUtils.escapeDSV(input2, ';'));
 
         String input3 = "foo\n";
-        assertEquals("\"foo\n\"", CSVUtils.escapeCSV(input3, ';'));
+        assertEquals("\"foo\n\"", DSVUtils.escapeDSV(input3, ';'));
 
         String input4 = "foo\rfoo";
-        assertEquals("\"foo\rfoo\"", CSVUtils.escapeCSV(input4, ';'));
+        assertEquals("\"foo\rfoo\"", DSVUtils.escapeDSV(input4, ';'));
 
         String input5 = "\"foo\"\n\"foo\"";
         assertEquals(
             "\"\"\"foo\"\"\n\"\"foo\"\"\"",
-            CSVUtils.escapeCSV(input5, ';'));
+            DSVUtils.escapeDSV(input5, ';'));
     }
 
     public void testUnescape()
     {
         String input1 = "nothing special in here";
-        assertEquals(input1, CSVUtils.unescapeCSV(input1, ';'));
-        assertEquals(input1, CSVUtils.unescapeCSV(input1, ','));
+        assertEquals(input1, DSVUtils.unescapeDSV(input1, ';'));
+        assertEquals(input1, DSVUtils.unescapeDSV(input1, ','));
 
         String input2 = "\"foo;;;\"";
-        assertEquals("foo;;;", CSVUtils.unescapeCSV(input2, ';'));
-        assertEquals("\"foo;;;\"", CSVUtils.unescapeCSV(input2, ','));
+        assertEquals("foo;;;", DSVUtils.unescapeDSV(input2, ';'));
+        assertEquals("\"foo;;;\"", DSVUtils.unescapeDSV(input2, ','));
 
         String input3 = "\"foo\n\"";
-        assertEquals("foo\n", CSVUtils.unescapeCSV(input3, ';'));
+        assertEquals("foo\n", DSVUtils.unescapeDSV(input3, ';'));
 
         String input4 = "\"foo\rfoo\"";
-        assertEquals("foo\rfoo", CSVUtils.unescapeCSV(input4, ';'));
+        assertEquals("foo\rfoo", DSVUtils.unescapeDSV(input4, ';'));
 
         String input5 = "\"\"\"foo\"\"\n\"\"foo\"\"\"";
-        assertEquals("\"foo\"\n\"foo\"", CSVUtils.unescapeCSV(input5, ';'));
+        assertEquals("\"foo\"\n\"foo\"", DSVUtils.unescapeDSV(input5, ';'));
     }
 
 }
 
-// End CSVUtilsTest.java
+// End DSVUtilsTest.java

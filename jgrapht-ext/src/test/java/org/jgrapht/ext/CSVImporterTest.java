@@ -87,10 +87,10 @@ public class CSVImporterTest
         };
 
         CSVImporter<String, E> importer = new CSVImporter<>(
-            format,
-            delimiter,
             vp,
-            ep);
+            ep,
+            format,
+            delimiter);
 
         return importer;
     }
@@ -120,7 +120,7 @@ public class CSVImporterTest
         }
 
         CSVImporter<String, E> importer = createImporter(g, format, delimiter);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         return g;
     }
@@ -278,7 +278,7 @@ public class CSVImporterTest
         importer.setParameter(
             CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -331,7 +331,7 @@ public class CSVImporterTest
         importer.setParameter(
             CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
             true);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -384,7 +384,7 @@ public class CSVImporterTest
         importer.setParameter(
             CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -424,7 +424,7 @@ public class CSVImporterTest
             g,
             CSVImporter.Format.MATRIX,
             ';');
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -470,7 +470,7 @@ public class CSVImporterTest
         importer.setParameter(
             CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -491,7 +491,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "E"));
 
     }
-    
+
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffled()
         throws ImportException
     {
@@ -516,7 +516,7 @@ public class CSVImporterTest
         importer.setParameter(
             CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        importer.read(g, new StringReader(input));
+        importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
         assertEquals(10, g.edgeSet().size());
@@ -535,7 +535,120 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "C"));
         assertTrue(g.containsEdge("E", "D"));
         assertTrue(g.containsEdge("E", "E"));
+    }
 
+    public void testDirectedMatrixNodeIdZeroNoEdgeWeightedShuffledZeroWeightsAsDouble()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+              ";A;B;C;D;E" + NL
+            + "C;1;0;0;1;0" + NL
+            + "D;0;0;0.0;0;1" + NL
+            + "B;0;0;0;0;0" + NL
+            + "A;0;1;1;0;0" + NL
+            + "E;1;1;0;1;1" + NL;
+        // @formatter:on
+
+        Graph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
+            DefaultWeightedEdge.class);
+
+        CSVImporter<String, DefaultWeightedEdge> importer = createImporter(
+            g,
+            CSVImporter.Format.MATRIX,
+            ';');
+        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
+            true);
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(5, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+        assertTrue(g.containsVertex("A"));
+        assertTrue(g.containsVertex("B"));
+        assertTrue(g.containsVertex("C"));
+        assertTrue(g.containsVertex("D"));
+        assertTrue(g.containsVertex("E"));
+        assertTrue(g.containsEdge("A", "B"));
+        assertTrue(g.containsEdge("A", "C"));
+        assertTrue(g.containsEdge("C", "A"));
+        assertTrue(g.containsEdge("C", "D"));
+        assertTrue(g.containsEdge("D", "C"));
+        assertEquals(0d, g.getEdgeWeight(g.getEdge("D", "C")), 0.0001);
+        assertTrue(g.containsEdge("D", "E"));
+        assertEquals(1d, g.getEdgeWeight(g.getEdge("D", "E")), 0.0001);
+        assertTrue(g.containsEdge("E", "A"));
+        assertTrue(g.containsEdge("E", "B"));
+        assertTrue(g.containsEdge("E", "D"));
+        assertTrue(g.containsEdge("E", "E"));
+    }
+
+    public void testDoubleOnUnweighted()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+              ";A;B;C;D;E" + NL
+            + "C;1;0;0;1;0" + NL
+            + "D;0;0;0.0;0;1" + NL
+            + "B;0;0;0;0;0" + NL
+            + "A;0;1;1;0;0" + NL
+            + "E;1;1;0;1;1" + NL;
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(
+            DefaultEdge.class);
+
+        CSVImporter<String, DefaultEdge> importer = createImporter(
+            g,
+            CSVImporter.Format.MATRIX,
+            ';');
+        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            true);
+        try {
+            importer.importGraph(g, new StringReader(input));
+            fail("No!");
+        } catch (ImportException e) {
+            // nothing
+        }
+    }
+
+    public void testWrongHeaderNodeIds()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+              ";A;B;  ;D;E" + NL
+            + "C;1;0;0;1;0" + NL
+            + "D;0;0;0.0;0;1" + NL
+            + "B;0;0;0;0;0" + NL
+            + "A;0;1;1;0;0" + NL
+            + "E;1;1;0;1;1" + NL;
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(
+            DefaultEdge.class);
+
+        CSVImporter<String, DefaultEdge> importer = createImporter(
+            g,
+            CSVImporter.Format.MATRIX,
+            ';');
+        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            true);
+        try {
+            importer.importGraph(g, new StringReader(input));
+            fail("No!");
+        } catch (ImportException e) {
+            // nothing
+        }
     }
 
     public void testDirectedMatrixNoNodeIdMissingEntries()
@@ -558,11 +671,56 @@ public class CSVImporterTest
             CSVImporter.Format.MATRIX,
             ';');
         try {
-            importer.read(g, new StringReader(input));
+            importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {
             // nothing
         }
+    }
+
+    public void testDirectedMatrixNodeIdZeroNoEdgeShuffledAndTabDelimiter()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+              "\tA\tB\t\"C\tC\"\tD\tE" + NL
+            + "\"C\tC\"\t1\t0\t0\t1\t0" + NL
+            + "D\t0\t0\t0\t0\t1" + NL
+            + "B\t0\t0\t0\t0\t0" + NL
+            + "A\t0\t1\t1\t0\t0" + NL
+            + "E\t1\t1\t1\t1\t1" + NL;
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<String, DefaultEdge>(
+            DefaultEdge.class);
+
+        CSVImporter<String, DefaultEdge> importer = createImporter(
+            g,
+            CSVImporter.Format.MATRIX,
+            '\t');
+        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(
+            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            true);
+        importer.importGraph(g, new StringReader(input));
+
+        assertEquals(5, g.vertexSet().size());
+        assertEquals(10, g.edgeSet().size());
+        assertTrue(g.containsVertex("A"));
+        assertTrue(g.containsVertex("B"));
+        assertTrue(g.containsVertex("C\tC"));
+        assertTrue(g.containsVertex("D"));
+        assertTrue(g.containsVertex("E"));
+        assertTrue(g.containsEdge("A", "B"));
+        assertTrue(g.containsEdge("A", "C\tC"));
+        assertTrue(g.containsEdge("C\tC", "A"));
+        assertTrue(g.containsEdge("C\tC", "D"));
+        assertTrue(g.containsEdge("D", "E"));
+        assertTrue(g.containsEdge("E", "A"));
+        assertTrue(g.containsEdge("E", "B"));
+        assertTrue(g.containsEdge("E", "C\tC"));
+        assertTrue(g.containsEdge("E", "D"));
+        assertTrue(g.containsEdge("E", "E"));
     }
 
 }
