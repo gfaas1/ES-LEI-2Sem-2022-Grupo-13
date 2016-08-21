@@ -49,11 +49,12 @@ import org.jgrapht.Graphs;
  * 
  * <p>
  * The exporter supports three different formats which can be adjusted using the
- * {@link #setFormat(Format) setFormat} method. The supported formats are the
+ * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the
  * same CSV formats used by
  * <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi
  * </a>. For some of the formats, the behavior of the exporter can be adjusted
- * using the {@link #setParameter(Parameter, boolean) setParameter} method.
+ * using the {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean)
+ * setParameter} method. See {@link CSVFormat} for a description of the formats.
  * </p>
  * 
  * <p>
@@ -64,7 +65,9 @@ import org.jgrapht.Graphs;
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
  * separated values</a> for more information.
  * </p>
- *
+ * 
+ * @see CSVFormat
+ * 
  * @author Dimitrios Michail
  * @since August 2016
  */
@@ -72,63 +75,20 @@ public class CSVExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
-    /**
-     * Formats of the exporter.
-     */
-    public enum Format
-    {
-        /**
-         * If set the exporter outputs the graph as an edge list
-         */
-        EDGE_LIST,
-
-        /**
-         * If set the exporter outputs the graph as an adjacency list
-         */
-        ADJACENCY_LIST,
-
-        /**
-         * If set the exporter outputs the graph as a matrix
-         */
-        MATRIX,
-    }
-
-    /**
-     * Parameters that affect the behavior of the exporter.
-     */
-    public enum Parameter
-    {
-        /**
-         * Whether to export node ids. Only valid for the {@link Format#MATRIX
-         * MATRIX} format.
-         */
-        MATRIX_FORMAT_NODEID,
-        /**
-         * Whether to export edge weights. Only valid for the
-         * {@link Format#MATRIX MATRIX} format.
-         */
-        MATRIX_FORMAT_EDGE_WEIGHTS,
-        /**
-         * Whether to export zero as edge weights for missing edges. Only valid
-         * for the {@link Format#MATRIX MATRIX} format.
-         */
-        MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-    }
-
     private final VertexNameProvider<V> vertexIDProvider;
-    private final Set<Parameter> parameters;
-    private Format format;
+    private final Set<CSVFormat.Parameter> parameters;
+    private CSVFormat format;
     private char delimiter;
 
     /**
-     * Creates a new CSVExporter with {@link Format#ADJACENCY_LIST} format and
-     * integer name provider for the vertices.
+     * Creates a new CSVExporter with {@link CSVFormat#ADJACENCY_LIST} format
+     * and integer name provider for the vertices.
      */
     public CSVExporter()
     {
         this(
             new IntegerNameProvider<>(),
-            Format.ADJACENCY_LIST,
+            CSVFormat.ADJACENCY_LIST,
             DEFAULT_DELIMITER);
     }
 
@@ -137,7 +97,7 @@ public class CSVExporter<V, E>
      * 
      * @param format the format to use
      */
-    public CSVExporter(Format format)
+    public CSVExporter(CSVFormat format)
     {
         this(new IntegerNameProvider<>(), format, DEFAULT_DELIMITER);
     }
@@ -148,7 +108,7 @@ public class CSVExporter<V, E>
      * @param format the format to use
      * @param delimiter delimiter to use
      */
-    public CSVExporter(Format format, char delimiter)
+    public CSVExporter(CSVFormat format, char delimiter)
     {
         this(new IntegerNameProvider<>(), format, delimiter);
     }
@@ -162,7 +122,7 @@ public class CSVExporter<V, E>
      */
     public CSVExporter(
         VertexNameProvider<V> vertexIDProvider,
-        Format format,
+        CSVFormat format,
         char delimiter)
     {
         if (vertexIDProvider == null) {
@@ -208,7 +168,7 @@ public class CSVExporter<V, E>
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
-    public boolean isParameter(Parameter p)
+    public boolean isParameter(CSVFormat.Parameter p)
     {
         return parameters.contains(p);
     }
@@ -219,7 +179,7 @@ public class CSVExporter<V, E>
      * @param p the parameter
      * @param value the value to set
      */
-    public void setParameter(Parameter p, boolean value)
+    public void setParameter(CSVFormat.Parameter p, boolean value)
     {
         if (value) {
             parameters.add(p);
@@ -233,7 +193,7 @@ public class CSVExporter<V, E>
      * 
      * @return the format of the exporter
      */
-    public Format getFormat()
+    public CSVFormat getFormat()
     {
         return format;
     }
@@ -243,7 +203,7 @@ public class CSVExporter<V, E>
      * 
      * @param format the format to use
      */
-    public void setFormat(Format format)
+    public void setFormat(CSVFormat format)
     {
         this.format = format;
     }
@@ -322,11 +282,11 @@ public class CSVExporter<V, E>
     private void exportAsMatrix(Graph<V, E> g, PrintWriter out)
     {
         boolean exportNodeId = parameters
-            .contains(Parameter.MATRIX_FORMAT_NODEID);
+            .contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
         boolean exportEdgeWeights = parameters
-            .contains(Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+            .contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
         boolean zeroWhenNoEdge = parameters
-            .contains(Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
+            .contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
         if (exportNodeId) {
             for (V v : g.vertexSet()) {

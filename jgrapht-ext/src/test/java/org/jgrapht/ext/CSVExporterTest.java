@@ -182,7 +182,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -207,7 +207,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -237,7 +237,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.ADJACENCY_LIST,
+            CSVFormat.ADJACENCY_LIST,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -267,7 +267,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.ADJACENCY_LIST,
+            CSVFormat.ADJACENCY_LIST,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -296,9 +296,9 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        exporter.setParameter(CSVExporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NODEID, w.toString());
@@ -326,7 +326,7 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -355,11 +355,11 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        exporter.setParameter(CSVExporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -388,10 +388,10 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -423,14 +423,13 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
-            true);
+        exporter
+            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(
@@ -463,11 +462,10 @@ public class CSVExporterTest
 
         CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
             nameProvider,
-            CSVExporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        exporter.setParameter(
-            CSVExporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
-            true);
+        exporter
+            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_WEIGHTED, w.toString());
@@ -489,7 +487,7 @@ public class CSVExporterTest
 
         CSVExporter<String, DefaultEdge> exporter = new CSVExporter<>(
             stringNameProvider,
-            CSVExporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);

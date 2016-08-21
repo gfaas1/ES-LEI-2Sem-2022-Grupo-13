@@ -57,7 +57,7 @@ public class CSVImporterTest
 
     public <E> CSVImporter<String, E> createImporter(
         Graph<String, E> g,
-        CSVImporter.Format format,
+        CSVFormat format,
         Character delimiter)
     {
         VertexProvider<String> vp = new VertexProvider<String>()
@@ -97,7 +97,7 @@ public class CSVImporterTest
 
     public <E> Graph<String, E> readGraph(
         String input,
-        CSVImporter.Format format,
+        CSVFormat format,
         Character delimiter,
         Class<? extends E> edgeClass,
         boolean directed,
@@ -137,7 +137,7 @@ public class CSVImporterTest
 
         Graph<String, DefaultEdge> g = readGraph(
             input,
-            CSVImporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ',',
             DefaultEdge.class,
             true,
@@ -167,7 +167,7 @@ public class CSVImporterTest
 
         Graph<String, DefaultEdge> g = readGraph(
             input,
-            CSVImporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ';',
             DefaultEdge.class,
             true,
@@ -197,7 +197,7 @@ public class CSVImporterTest
 
         Graph<String, DefaultEdge> g = readGraph(
             input,
-            CSVImporter.Format.ADJACENCY_LIST,
+            CSVFormat.ADJACENCY_LIST,
             ';',
             DefaultEdge.class,
             true,
@@ -235,7 +235,7 @@ public class CSVImporterTest
 
         Graph<String, DefaultEdge> g = readGraph(
             input,
-            CSVImporter.Format.EDGE_LIST,
+            CSVFormat.EDGE_LIST,
             ';',
             DefaultEdge.class,
             true,
@@ -270,13 +270,12 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultWeightedEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
+        importer
+            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
-            true);
-        importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         importer.importGraph(g, new StringReader(input));
 
@@ -326,11 +325,10 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultWeightedEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ',');
-        importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
-            true);
+        importer
+            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
@@ -379,10 +377,10 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         importer.importGraph(g, new StringReader(input));
 
@@ -422,7 +420,7 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         importer.importGraph(g, new StringReader(input));
 
@@ -464,11 +462,11 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         importer.importGraph(g, new StringReader(input));
 
@@ -510,11 +508,11 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         importer.importGraph(g, new StringReader(input));
 
@@ -555,15 +553,14 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultWeightedEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
-        importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS,
-            true);
+        importer
+            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         importer.importGraph(g, new StringReader(input));
 
         assertEquals(5, g.vertexSet().size());
@@ -605,11 +602,11 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         try {
             importer.importGraph(g, new StringReader(input));
@@ -637,11 +634,11 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         try {
             importer.importGraph(g, new StringReader(input));
@@ -668,7 +665,7 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             ';');
         try {
             importer.importGraph(g, new StringReader(input));
@@ -696,11 +693,11 @@ public class CSVImporterTest
 
         CSVImporter<String, DefaultEdge> importer = createImporter(
             g,
-            CSVImporter.Format.MATRIX,
+            CSVFormat.MATRIX,
             '\t');
-        importer.setParameter(CSVImporter.Parameter.MATRIX_FORMAT_NODEID, true);
+        importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         importer.setParameter(
-            CSVImporter.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
+            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
             true);
         importer.importGraph(g, new StringReader(input));
 

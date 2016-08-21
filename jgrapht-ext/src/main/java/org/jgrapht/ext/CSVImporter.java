@@ -58,12 +58,13 @@ import org.jgrapht.WeightedGraph;
  * format.
  * 
  * <p>
- * The importer supports three different formats which can be adjusted using the
- * {@link #setFormat(Format) setFormat} method. The supported formats are the
- * same CSV formats used by
+ * The importer supports various different formats which can be adjusted using
+ * the {@link #setFormat(CSVFormat) setFormat} method. The supported formats are
+ * the same CSV formats used by
  * <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi
  * </a>. For some of the formats, the behavior of the importer can be adjusted
- * using the {@link #setParameter(Parameter, boolean) setParameter} method.
+ * using the {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean)
+ * setParameter} method. See {@link CSVFormat} for a description of the formats.
  * </p>
  * 
  * <p>
@@ -74,6 +75,14 @@ import org.jgrapht.WeightedGraph;
  * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
  * separated values</a> for more information.
  * </p>
+ * 
+ * <p>
+ * This importer does not distinguish between {@link CSVFormat#EDGE_LIST} and
+ * {@link CSVFormat#ADJACENCY_LIST}. In both cases it assumes the format is
+ * {@link CSVFormat#ADJACENCY_LIST}.
+ * </p>
+ * 
+ * @see CSVFormat
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -85,59 +94,15 @@ public class CSVImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
-    private Format format;
+    private CSVFormat format;
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
     private char delimiter;
-    private final Set<Parameter> parameters;
+    private final Set<CSVFormat.Parameter> parameters;
 
     /**
-     * Formats of the importer.
-     */
-    public enum Format
-    {
-        /**
-         * Edge list. Behaves the same as
-         * {@link CSVImporter.Format#ADJACENCY_LIST}.
-         */
-        EDGE_LIST,
-
-        /**
-         * Adjacency list
-         */
-        ADJACENCY_LIST,
-
-        /**
-         * Matrix
-         */
-        MATRIX,
-    }
-
-    /**
-     * Parameters that affect the behavior of the importer.
-     */
-    public enum Parameter
-    {
-        /**
-         * Whether the input contains node ids. Only valid for the
-         * {@link Format#MATRIX MATRIX} format.
-         */
-        MATRIX_FORMAT_NODEID,
-        /**
-         * Whether to input contains edge weights. Only valid for the
-         * {@link Format#MATRIX MATRIX} format.
-         */
-        MATRIX_FORMAT_EDGE_WEIGHTS,
-        /**
-         * Whether the input contains zero as edge weight for missing edges.
-         * Only valid for the {@link Format#MATRIX MATRIX} format.
-         */
-        MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-    }
-
-    /**
-     * Constructs a new importer using the {@link Format#ADJACENCY_LIST} format
-     * as default.
+     * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST}
+     * format as default.
      * 
      * @param vertexProvider provider for the generation of vertices. Must not
      *        be null.
@@ -151,7 +116,7 @@ public class CSVImporter<V, E>
         this(
             vertexProvider,
             edgeProvider,
-            Format.ADJACENCY_LIST,
+            CSVFormat.ADJACENCY_LIST,
             DEFAULT_DELIMITER);
     }
 
@@ -167,7 +132,7 @@ public class CSVImporter<V, E>
     public CSVImporter(
         VertexProvider<V> vertexProvider,
         EdgeProvider<V, E> edgeProvider,
-        Format format)
+        CSVFormat format)
     {
         this(vertexProvider, edgeProvider, format, DEFAULT_DELIMITER);
     }
@@ -185,7 +150,7 @@ public class CSVImporter<V, E>
     public CSVImporter(
         VertexProvider<V> vertexProvider,
         EdgeProvider<V, E> edgeProvider,
-        Format format,
+        CSVFormat format,
         char delimiter)
     {
         if (vertexProvider == null) {
@@ -211,7 +176,7 @@ public class CSVImporter<V, E>
      * 
      * @return the input format
      */
-    public Format getFormat()
+    public CSVFormat getFormat()
     {
         return format;
     }
@@ -221,7 +186,7 @@ public class CSVImporter<V, E>
      * 
      * @param format the format to use
      */
-    public void setFormat(Format format)
+    public void setFormat(CSVFormat format)
     {
         this.format = format;
     }
@@ -256,7 +221,7 @@ public class CSVImporter<V, E>
      * @param p the parameter
      * @return {@code true} if the parameter is set, {@code false} otherwise
      */
-    public boolean isParameter(Parameter p)
+    public boolean isParameter(CSVFormat.Parameter p)
     {
         return parameters.contains(p);
     }
@@ -267,7 +232,7 @@ public class CSVImporter<V, E>
      * @param p the parameter
      * @param value the value to set
      */
-    public void setParameter(Parameter p, boolean value)
+    public void setParameter(CSVFormat.Parameter p, boolean value)
     {
         if (value) {
             parameters.add(p);
@@ -439,11 +404,11 @@ public class CSVImporter<V, E>
         {
             super(graph);
             this.assumeNodeIds = parameters
-                .contains(Parameter.MATRIX_FORMAT_NODEID);
+                .contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
             this.assumeEdgeWeights = parameters
-                .contains(Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+                .contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
             this.assumeZeroWhenNoEdge = parameters
-                .contains(Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
+                .contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;
             this.currentVertex = 1;
             this.currentVertexName = null;
@@ -677,4 +642,4 @@ public class CSVImporter<V, E>
 
 }
 
-//End CSVImporter.java
+// End CSVImporter.java
