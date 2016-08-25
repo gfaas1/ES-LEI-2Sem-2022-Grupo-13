@@ -235,13 +235,14 @@ public class CSVExporter<V, E>
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
         for (E e : g.edgeSet()) {
-            String s = DSVUtils.escapeDSV(
-                vertexIDProvider.getVertexName(g.getEdgeSource(e)),
-                delimiter);
-            String t = DSVUtils.escapeDSV(
-                vertexIDProvider.getVertexName(g.getEdgeTarget(e)),
-                delimiter);
-            out.println(s + delimiter + t);
+            exportEscapedField(
+                out,
+                vertexIDProvider.getVertexName(g.getEdgeSource(e)));
+            out.print(delimiter);
+            exportEscapedField(
+                out,
+                vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+            out.println();
         }
     }
 
@@ -249,30 +250,21 @@ public class CSVExporter<V, E>
     {
         if (g instanceof DirectedGraph<?, ?>) {
             for (V v : g.vertexSet()) {
-                out.print(vertexIDProvider.getVertexName(v));
+                exportEscapedField(out, vertexIDProvider.getVertexName(v));
                 for (E e : ((DirectedGraph<V, E>) g).outgoingEdgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    out.print(
-                        DSVUtils.escapeDSV(
-                            vertexIDProvider.getVertexName(w),
-                            delimiter));
+                    exportEscapedField(out, vertexIDProvider.getVertexName(w));
                 }
                 out.println();
             }
         } else {
             for (V v : g.vertexSet()) {
-                out.print(
-                    DSVUtils.escapeDSV(
-                        vertexIDProvider.getVertexName(v),
-                        delimiter));
+                exportEscapedField(out, vertexIDProvider.getVertexName(v));
                 for (E e : g.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    out.print(
-                        DSVUtils.escapeDSV(
-                            vertexIDProvider.getVertexName(w),
-                            delimiter));
+                    exportEscapedField(out, vertexIDProvider.getVertexName(w));
                 }
                 out.println();
             }
@@ -291,20 +283,14 @@ public class CSVExporter<V, E>
         if (exportNodeId) {
             for (V v : g.vertexSet()) {
                 out.print(delimiter);
-                out.print(
-                    DSVUtils.escapeDSV(
-                        vertexIDProvider.getVertexName(v),
-                        delimiter));
+                exportEscapedField(out, vertexIDProvider.getVertexName(v));
             }
             out.println();
         }
         int n = g.vertexSet().size();
         for (V v : g.vertexSet()) {
             if (exportNodeId) {
-                out.print(
-                    DSVUtils.escapeDSV(
-                        vertexIDProvider.getVertexName(v),
-                        delimiter));
+                exportEscapedField(out, vertexIDProvider.getVertexName(v));
                 out.print(delimiter);
             }
             int i = 0;
@@ -312,13 +298,15 @@ public class CSVExporter<V, E>
                 E e = g.getEdge(v, u);
                 if (e == null) {
                     if (zeroWhenNoEdge) {
-                        out.print("0");
+                        exportEscapedField(out, "0");
                     }
                 } else {
                     if (exportEdgeWeights) {
-                        out.print(g.getEdgeWeight(e));
+                        exportEscapedField(
+                            out,
+                            String.valueOf(g.getEdgeWeight(e)));
                     } else {
-                        out.print("1");
+                        exportEscapedField(out, "1");
                     }
                 }
                 if (i++ < n - 1) {
@@ -327,6 +315,11 @@ public class CSVExporter<V, E>
             }
             out.println();
         }
+    }
+
+    private void exportEscapedField(PrintWriter out, String field)
+    {
+        out.print(DSVUtils.escapeDSV(field, delimiter));
     }
 
 }

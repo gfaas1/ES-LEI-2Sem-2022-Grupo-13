@@ -181,7 +181,7 @@ public enum CSVFormat
     MATRIX;
 
     /**
-     * Parameters that affect the behavior of importers/exporters.
+     * Parameters that affect the behavior of CVS importers/exporters.
      */
     public enum Parameter
     {

@@ -35,7 +35,12 @@
 package org.jgrapht.ext;
 
 /**
- * Helper utilities for Delimiter-separated values.
+ * Helper utilities for escaping and unescaping Delimiter-separated values.
+ * 
+ * Used in {@link CSVExporter} and {@link CSVImporter}.
+ * 
+ * @see CSVImporter
+ * @see CSVExporter
  * 
  * @author Dimitrios Michail
  * @since August 2016
@@ -135,4 +140,4 @@ class DSVUtils
     }
 }
 
-//End DSVUtils.java
+// End DSVUtils.java
