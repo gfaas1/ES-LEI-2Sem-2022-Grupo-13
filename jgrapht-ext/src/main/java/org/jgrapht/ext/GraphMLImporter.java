@@ -27,8 +27,6 @@
  * Original Author:  Dimitrios Michail
  * Contributor(s): 
  *
- * $Id$
- *
  * Changes
  * -------
  * 17-July-2016 : Initial revision (DM);
@@ -153,6 +151,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @since July 2016
  */
 public class GraphMLImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
 
@@ -273,12 +272,31 @@ public class GraphMLImporter<V, E>
      * GraphML-Attributes Values are read as string key-value pairs and passed
      * on to the {@link VertexProvider} and {@link EdgeProvider} respectively.
      * 
-     * @param input the input stream
      * @param graph the output graph
+     * @param input the input reader
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
-    public void read(Reader input, Graph<V, E> graph)
+    @Override
+    public void importGraph(Graph<V, E> graph, Reader input)
+        throws ImportException
+    {
+        try {
+            // parse
+            XMLReader xmlReader = createXMLReader();
+            GraphMLHandler handler = new GraphMLHandler();
+            xmlReader.setContentHandler(handler);
+            xmlReader.setErrorHandler(handler);
+            xmlReader.parse(new InputSource(input));
+
+            // read result
+            handler.updateGraph(graph);
+        } catch (Exception se) {
+            throw new ImportException("Failed to parse GraphML", se);
+        }
+    }
+
+    private XMLReader createXMLReader()
         throws ImportException
     {
         try {
@@ -300,15 +318,8 @@ public class GraphMLImporter<V, E>
             spf.setSchema(schema);
             SAXParser saxParser = spf.newSAXParser();
 
-            // parse
-            XMLReader xmlReader = saxParser.getXMLReader();
-            GraphMLHandler handler = new GraphMLHandler();
-            xmlReader.setContentHandler(handler);
-            xmlReader.setErrorHandler(handler);
-            xmlReader.parse(new InputSource(input));
-
-            // read result
-            handler.updateGraph(graph);
+            // create reader
+            return saxParser.getXMLReader();
         } catch (Exception se) {
             throw new ImportException("Failed to parse GraphML", se);
         }
@@ -376,9 +387,8 @@ public class GraphMLImporter<V, E>
                             validKey.attributeName,
                             collectedAttributes.get(validId));
                     } else if (validKey.defaultValue != null) {
-                        finalAttributes.put(
-                            validKey.attributeName,
-                            validKey.defaultValue);
+                        finalAttributes
+                            .put(validKey.attributeName, validKey.defaultValue);
                     }
                 }
 
@@ -510,14 +520,14 @@ public class GraphMLImporter<V, E>
                 String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes);
                 currentKey = new Key(keyId, keyAttrName, null, null);
                 if (keyFor != null) {
-                    switch(keyFor) { 
-                    case EDGE: 
+                    switch (keyFor) {
+                    case EDGE:
                         currentKey.target = KeyTarget.EDGE;
                         break;
-                    case NODE: 
+                    case NODE:
                         currentKey.target = KeyTarget.NODE;
                         break;
-                    case ALL: 
+                    case ALL:
                         currentKey.target = KeyTarget.ALL;
                         break;
                     }
