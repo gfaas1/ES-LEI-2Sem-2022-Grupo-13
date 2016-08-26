@@ -117,4 +117,4 @@ With regards from
 
 [John Sichi](mailto:perfecthash@users.sourceforge.net), JGraphT Project Administrator
 
-[Joris Kinable](https://github.com/jkinable), JGraphtT Project Committer
+[Joris Kinable](https://github.com/jkinable), JGraphtT Project Reviewer/Committer
