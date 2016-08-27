@@ -91,6 +91,7 @@ import org.jgrapht.WeightedGraph;
  * @since August 2016
  */
 public class CSVImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -258,6 +259,7 @@ public class CSVImporter<V, E>
      * @throws ImportException in case an error occurs, such as I/O or parse
      *         error
      */
+    @Override
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {

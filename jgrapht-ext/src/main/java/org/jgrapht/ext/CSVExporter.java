@@ -72,6 +72,7 @@ import org.jgrapht.Graphs;
  * @since August 2016
  */
 public class CSVExporter<V, E>
+    implements GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -145,6 +146,7 @@ public class CSVExporter<V, E>
      * @param g the graph
      * @param writer the writer
      */
+    @Override
     public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
