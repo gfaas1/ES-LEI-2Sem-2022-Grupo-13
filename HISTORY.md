@@ -27,6 +27,7 @@ Changes to JGraphT in each version:
 	- Add new vertex cover algorithms and package (contributed by Joris Kinable and Nils Olberg)
 	- Improved GraphML support (contributed by Dimitrios Michail)
 	- Add common `GraphExporter` and `GraphImporter` interfaces (contributed by Dimitrios Michail)
+	- DOT importer id fix (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
