@@ -30,18 +30,22 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import junit.framework.*;
-
-import org.custommonkey.xmlunit.*;
-
-import org.jgrapht.*;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.ext.GraphMLExporter.AttributeCategory;
 import org.jgrapht.ext.GraphMLExporter.AttributeType;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+
+import junit.framework.TestCase;
 
 /**
  * @author Trevor Harmon
@@ -90,11 +94,12 @@ public class GraphMLExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        StringWriter w = new StringWriter();
-        exporter.export(w, g);
+        GraphExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
 
-        XMLAssert.assertXMLEqual(output, w.toString());
     }
 
     public void testUndirectedWeighted()
@@ -128,12 +133,12 @@ public class GraphMLExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        StringWriter w = new StringWriter();
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testDirected()
@@ -164,11 +169,11 @@ public class GraphMLExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        StringWriter w = new StringWriter();
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testUndirectedUnweightedWithWeights()
@@ -202,12 +207,12 @@ public class GraphMLExporterTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        StringWriter w = new StringWriter();
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testUndirectedWeightedWithWeights()
@@ -243,12 +248,12 @@ public class GraphMLExporterTest
         g.addEdge(V3, V1);
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
-        StringWriter w = new StringWriter();
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testUndirectedWeightedWithCustomNameWeights()
@@ -285,13 +290,13 @@ public class GraphMLExporterTest
         g.addEdge(V3, V1);
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
-        StringWriter w = new StringWriter();
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>();
         exporter.setExportEdgeWeights(true);
         exporter.setEdgeWeightAttributeName("value");
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testNoRegisterWeightAttribute()
@@ -385,7 +390,7 @@ public class GraphMLExporterTest
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
         g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
             new IntegerNameProvider<String>(),
             new VertexNameProvider<String>()
             {
@@ -405,11 +410,11 @@ public class GraphMLExporterTest
                 }
 
             });
-        StringWriter w = new StringWriter();
         exporter.setExportEdgeWeights(true);
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
     public void testUndirectedWeightedWithWeightsAndLabelsAndCustomNames()
@@ -449,7 +454,7 @@ public class GraphMLExporterTest
                 + "</graphml>" + NL;
             // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
             DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -459,7 +464,7 @@ public class GraphMLExporterTest
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
         g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>();
         exporter.setVertexLabelProvider(new VertexNameProvider<String>()
         {
             @Override
@@ -480,12 +485,12 @@ public class GraphMLExporterTest
 
             });
         exporter.setEdgeLabelAttributeName("custom_edge_label");
-
-        StringWriter w = new StringWriter();
         exporter.setExportEdgeWeights(true);
-        exporter.export(w, g);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
 
-        XMLAssert.assertXMLEqual(output, w.toString());
     }
 
     public void testUndirectedWeightedWithWeightsAndColor()
@@ -529,7 +534,7 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
             DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -581,14 +586,13 @@ public class GraphMLExporterTest
             }
         };
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
             new IntegerNameProvider<>(),
             null,
             vertexAttributeProvider,
             new IntegerEdgeNameProvider<>(),
             null,
             edgeAttributeProvider);
-        StringWriter w = new StringWriter();
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
             "color",
@@ -600,11 +604,12 @@ public class GraphMLExporterTest
             GraphMLExporter.AttributeCategory.ALL,
             GraphMLExporter.AttributeType.STRING,
             "johndoe");
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
-    
+
     public void testUndirectedWeightedWithNullComponentProvider()
         throws Exception
     {
@@ -636,7 +641,7 @@ public class GraphMLExporterTest
                 + "</graphml>" + NL;
             // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
             DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -664,14 +669,13 @@ public class GraphMLExporterTest
             }
         };
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>(
+        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
             new IntegerNameProvider<>(),
             null,
             vertexAttributeProvider,
             new IntegerEdgeNameProvider<>(),
             null,
             edgeAttributeProvider);
-        StringWriter w = new StringWriter();
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
             "color",
@@ -683,9 +687,10 @@ public class GraphMLExporterTest
             GraphMLExporter.AttributeCategory.ALL,
             GraphMLExporter.AttributeType.STRING,
             "johndoe");
-        exporter.export(w, g);
-
-        XMLAssert.assertXMLEqual(output, w.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        XMLAssert.assertXMLEqual(output, res);
     }
 
 }
