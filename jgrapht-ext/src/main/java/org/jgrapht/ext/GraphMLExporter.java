@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
@@ -61,6 +62,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
+    implements GraphExporter<V, E>
 {
     // providers
     private VertexNameProvider<V> vertexIDProvider;
@@ -474,13 +476,35 @@ public class GraphMLExporter<V, E>
     }
 
     /**
+     * Exports a graph into a plain text file in GraphML format.
+     *
+     * @param writer the writer to which the graph to be exported
+     * @param g the graph to be exported
+     * 
+     * @throws SAXException in case of a SAX error
+     * @throws TransformerConfigurationException in case of a configuration
+     *         error
+     */
+    @Deprecated
+    public void export(Writer writer, Graph<V, E> g)
+        throws SAXException, TransformerConfigurationException
+    {
+        try {
+            exportGraph(g, writer);
+        } catch (ExportException e) {
+            throw new SAXException(e);
+        }
+    }
+    
+    /**
      * Exports a graph in GraphML format.
      *
-     * @param writer the writer to export the graph
      * @param g the graph
+     * @param writer the writer to export the graph
      * @throws ExportException in case any error occurs during export
      */
-    public void export(Writer writer, Graph<V, E> g)
+    @Override
+    public void exportGraph(Graph<V, E> g, Writer writer)
         throws ExportException
     {
         try {
@@ -739,7 +763,9 @@ public class GraphMLExporter<V, E>
 
             if (exportEdgeWeights) {
                 Double weight = g.getEdgeWeight(e);
-                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not default value
+                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not
+                                                                         // default
+                                                                         // value
                     writeData(
                         handler,
                         "edge_weight_key",
