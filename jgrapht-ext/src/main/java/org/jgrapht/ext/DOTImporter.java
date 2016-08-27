@@ -25,12 +25,7 @@
  * (C) Copyright 2015-2016, by  Wil Selwood and Contributors.
  *
  * Original Author:  Wil Selwood <wselwood@ijento.com>
- * Contributor(s): Dimitrios Michail
- * 
- * Changes
- * -------
- * 2015 : Initial revision (WS);
- * 19-Aug-2016: Always provide id to vertex providers (DM);
+ * Contributors: Dimitrios Michail
  *
  */
 package org.jgrapht.ext;
@@ -633,9 +628,14 @@ public class DOTImporter<V, E>
             id = node.substring(0, node.indexOf('[')).trim();
         }
 
+        String label = attributes.get("label");
+        if (label == null) {
+            label = id;
+        }
+
         V existing = vertexes.get(id);
         if (existing == null) {
-            V vertex = vertexProvider.buildVertex(id, attributes);
+            V vertex = vertexProvider.buildVertex(label, attributes);
             graph.addVertex(vertex);
             vertexes.put(id, vertex);
         } else {
@@ -644,7 +644,7 @@ public class DOTImporter<V, E>
             } else {
                 throw new ImportException(
                     "Update required for vertex "
-                    + id
+                    + label
                     + " but no vertexUpdater provided");
             }
         }
