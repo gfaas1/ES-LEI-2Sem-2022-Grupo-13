@@ -65,32 +65,37 @@ import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 @Deprecated
 public class MinSourceSinkCut<V, E>
 {
-    MaximumFlowAlgorithm<V, E> maxFlowAlg;
+    MaximumFlowAlgorithm<V, E> ekMaxFlow;
     Set<V> minCut = null;
-    Graph<V, E> graph;
+    DirectedGraph<V, E> graph;
     double cutWeight;
     V source = null;
     V sink = null;
     double epsilon = MaximumFlowAlgorithmBase.DEFAULT_EPSILON;
 
-    public MinSourceSinkCut(Graph<V, E> graph)
+    public MinSourceSinkCut(DirectedGraph<V, E> graph)
     {
-        this.maxFlowAlg = new EdmondsKarpMFImpl<V, E>(graph);
+        this.ekMaxFlow = new PushRelabelMFImpl<>(graph);
         this.graph = graph;
     }
 
-    public MinSourceSinkCut(Graph<V, E> graph, double epsilon)
+    public MinSourceSinkCut(DirectedGraph<V, E> graph, double epsilon)
     {
+        this(graph, new PushRelabelMFImpl<>(graph), epsilon);
+    }
+
+    public MinSourceSinkCut(DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
+    {
+        this.ekMaxFlow = maximumFlowAlgorithm;
         this.graph = graph;
         this.epsilon = epsilon;
     }
 
     /**
      * Compute a minimum s-t cut
-     * Runtime: O(E)
      *
-     * @param source s
-     * @param sink t
+     * @param source
+     * @param sink
      */
     public void computeMinCut(V source, V sink)
     {
@@ -98,74 +103,52 @@ public class MinSourceSinkCut<V, E>
         this.sink = sink;
         minCut = new HashSet<>();
 
-        //Compute a maxFlow from source to sink
-        MaximumFlow<E> maxFlow = maxFlowAlg.buildMaximumFlow(source, sink);
+        //First compute a maxFlow from source to sink
+        MaximumFlow<E> maxFlow = ekMaxFlow.buildMaximumFlow(source, sink);
+
         this.cutWeight = maxFlow.getValue();
 
-        if(graph instanceof DirectedGraph)
-            processDirectedGraph(maxFlow);
-        else
-            processUndirectedGraph(maxFlow);
-    }
-
-    private void processDirectedGraph( MaximumFlow<E> maxFlow){
-        minCut=new LinkedHashSet<>();
-        DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)graph;
         Queue<V> processQueue = new LinkedList<>();
         processQueue.add(source);
 
         while (!processQueue.isEmpty()) {
             V vertex = processQueue.remove();
-            if (minCut.contains(vertex))
+            if (minCut.contains(vertex)) {
                 continue;
-
-            minCut.add(vertex);
+            } else {
+                minCut.add(vertex);
+            }
 
             //1. Get the forward edges with residual capacity
-            for (E edge : directedGraph.outgoingEdgesOf(vertex)) {
-                double edgeCapacity = directedGraph.getEdgeWeight(edge);
+            Set<E> outEdges = new HashSet<>(graph.outgoingEdgesOf(vertex));
+            for (Iterator<E> it = outEdges.iterator(); it.hasNext();) {
+                E edge = it.next();
+                double edgeCapacity = graph.getEdgeWeight(edge);
                 double flowValue = maxFlow.getFlow().get(edge);
-                if (edgeCapacity - flowValue >= epsilon) { //Has some residual capacity left
-                    processQueue.add(directedGraph.getEdgeTarget(edge));
+                if (Math.abs(edgeCapacity - flowValue) <= epsilon) { //No residual capacity on the edge
+                    it.remove();
                 }
+            }
+            for (E edge : outEdges) {
+                processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
             }
 
             //2. Get the backward edges with non-zero flow
-            for (E edge : directedGraph.incomingEdgesOf(vertex)) {
+            Set<E> inEdges = new HashSet<>(graph.incomingEdgesOf(vertex));
+            for (Iterator<E> it = inEdges.iterator(); it.hasNext();) {
+                E edge = it.next();
+
+                //double edgeCapacity=graph.getEdgeWeight(edge);
                 double flowValue = maxFlow.getFlow().get(edge);
-                if (flowValue >= epsilon) { //Has non-zero flow
-                    processQueue.add(directedGraph.getEdgeSource(edge));
+                if (flowValue <= epsilon) { //There is no flow on this edge
+                    it.remove();
                 }
             }
-        }
-    }
-
-    public void processUndirectedGraph(MaximumFlow<E> maxFlow){
-//        TODO check implementation flow algorithm for undirected graphs. Seems wrong
-        minCut = new LinkedHashSet<>();
-        Queue<V> processQueue = new LinkedList<>();
-        processQueue.add(source);
-
-        //Let G' be the graph consisting of edges with residual cost. An edge has residual cost if c(e)-f(e)>0.
-        //All vertices reachable from the source vertex in graph G' belong to the same partition
-        while (!processQueue.isEmpty()) {
-            V vertex = processQueue.remove();
-            if (minCut.contains(vertex))
-                continue;
-
-            minCut.add(vertex);
-            System.out.println("add vertex to mincut: "+vertex);
-
-            for(E edge : graph.edgesOf(vertex)){
-                System.out.println("Edge: "+edge+" flow: "+ maxFlow.getFlow().get(edge)+" weight: "+graph.getEdgeWeight(edge));
-                double flowValue = maxFlow.getFlow().get(edge);
-                double edgeCapacity = graph.getEdgeWeight(edge);
-                if(edgeCapacity-flowValue > epsilon)
-                    processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
+            for (E edge : inEdges) {
+                processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
             }
         }
     }
-
 
     /**
      * @return Returns the min cut partition containing the source, or null if
@@ -212,17 +195,18 @@ public class MinSourceSinkCut<V, E>
      */
     public Set<E> getCutEdges()
     {
-        if (minCut == null)
+        if (minCut == null) {
             return null;
-
+        }
         Set<E> cutEdges = new HashSet<>();
-        if(graph instanceof DirectedGraph) {
-            DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>)graph;
-            for (V vertex : minCut) {
-                cutEdges.addAll(directedGraph.outgoingEdgesOf(vertex).stream().filter(edge -> !minCut.contains(graph.getEdgeTarget(edge))).collect(Collectors.toList()));
+        for (V vertex : minCut) {
+            for (E edge : graph.outgoingEdgesOf(vertex)) {
+                if (!minCut.contains(
+                        Graphs.getOppositeVertex(graph, edge, vertex)))
+                {
+                    cutEdges.add(edge);
+                }
             }
-        }else{
-            cutEdges.addAll(graph.edgeSet().stream().filter(e -> minCut.contains(graph.getEdgeSource(e)) ^ minCut.contains(graph.getEdgeTarget(e))).collect(Collectors.toList()));
         }
         return Collections.unmodifiableSet(cutEdges);
     }
