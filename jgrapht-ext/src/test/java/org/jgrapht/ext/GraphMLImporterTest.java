@@ -57,7 +57,6 @@ import junit.framework.TestCase;
 /**
  * @author Dimitrios Michail
  */
-@org.junit.Ignore("flaky due to http xsd unavailability")
 public class GraphMLImporterTest
     extends TestCase
 {
