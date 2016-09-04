@@ -31,6 +31,7 @@ Changes to JGraphT in each version:
 	- Add `CSVExporter` and `CSVImporter` (contributed by Dimitrios Michail)
 	- Add `MinimumSTCutAlgorithm` (contributed by Joris Kinable)
 	- Capture trivial paths in `AllDirectedPaths` (contributed by Andrew Gainer-Dewar)
+	- Switch from Jalopy source code formatter to Eclipse, since Jalopy does not support java 8 (contributed by John Sichi)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
