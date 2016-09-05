@@ -22,15 +22,14 @@
 /* -----------------
  * RandomGraphGeneratorTest.java
  * -----------------
- * (C) Copyright 2005-2008, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2016, by Assaf Lehr and Contributors.
  *
  * Original Author:  Assaf Lehr
- * Contributor(s):   -
- *
- * $Id$
+ * Contributor(s):   Dimitrios Michail
  *
  * Changes
  * -------
+ * 5-Sep-2016: Added test for overflow issues (DM)
  */
 package org.jgrapht.generate;
 
@@ -64,10 +63,80 @@ public class RandomGraphGeneratorTest
         generateGraphs(graphArray, 11, 100);
 
         assertTrue(
-            EdgeTopologyCompare.compare(graphArray.get(0), graphArray.get(1)));
+            new EdgeTopologyCompare<Integer, DefaultEdge>().compare(graphArray.get(0), graphArray.get(1)));
         // cannot assert false , cause it may be true once in a while (random)
         // but it generally should work.
         // assertFalse(EdgeTopologyCompare.compare(graphArray.get(1),graphArray.get(2)));
+    }
+    
+    public void testSimpleDirectedGraphOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        int numV = 50000;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(Integer.MAX_VALUE, maxEdges);
+    }
+    
+    public void testSimpleDirectedGraphNoOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        int numV = 46341;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(2147441940, maxEdges);
+    }
+    
+    public void testSimpleDirectedGraphOverflow2() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        int numV = 46342;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(Integer.MAX_VALUE, maxEdges);
+    }
+    
+    public void testSimpleGraphOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        int numV = 65537;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(Integer.MAX_VALUE, maxEdges);
+    }
+    
+    public void testSimpleGraphNoOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        int numV = 65536;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(2147450880, maxEdges);
+    }
+    
+    public void testDefaultDirectedGraphOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        int numV = 46341;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(Integer.MAX_VALUE, maxEdges);
+    }
+    
+    public void testDefaultDirectedGraphNoOverflow() {
+        // see github issue #60
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        int numV = 46340;
+        int numE = 150000;
+        RandomGraphGenerator<Integer, DefaultEdge> gen = new RandomGraphGenerator<>(numV, numE);
+        int maxEdges = gen.new DefaultEdgeTopologyFactory<Integer, DefaultEdge>().getMaxEdgesForVertexNum(graph);
+        assertEquals(2147395600, maxEdges);
     }
 
     public void testGenerateListenableUndirectedGraph()
@@ -83,7 +152,7 @@ public class RandomGraphGeneratorTest
         generateGraphs(graphArray, 11, 50);
 
         assertTrue(
-            EdgeTopologyCompare.compare(graphArray.get(0), graphArray.get(1)));
+            new EdgeTopologyCompare<Integer, DefaultEdge>().compare(graphArray.get(0), graphArray.get(1)));
     }
 
     public void testBadVertexFactory()
@@ -147,7 +216,7 @@ public class RandomGraphGeneratorTest
             null);
     }
 
-    static class EdgeTopologyCompare
+    static class EdgeTopologyCompare<V,E>
     {
         /**
          * Compare topology of the two graphs. It does not compare the contents of
@@ -156,12 +225,11 @@ public class RandomGraphGeneratorTest
          * @param g1
          * @param g2
          */
-        @SuppressWarnings("unchecked")
-        public static boolean compare(Graph g1, Graph g2)
+        public boolean compare(Graph<V, E> g1, Graph<V, E> g2)
         {
             boolean result;
-            VertexOrdering lg1 = new VertexOrdering(g1);
-            VertexOrdering lg2 = new VertexOrdering(g2);
+            VertexOrdering<V, E> lg1 = new VertexOrdering<>(g1);
+            VertexOrdering<V, E> lg2 = new VertexOrdering<>(g2);
             result = lg1.equalsByEdgeOrder(lg2);
 
             return result;
@@ -283,7 +351,7 @@ public class RandomGraphGeneratorTest
         /**
          * Tests equality by order of edges
          */
-        public boolean equalsByEdgeOrder(VertexOrdering otherGraph)
+        public boolean equalsByEdgeOrder(VertexOrdering<V, E> otherGraph)
         {
 
             return this.getLabelsEdgesSet().equals(otherGraph.getLabelsEdgesSet());
