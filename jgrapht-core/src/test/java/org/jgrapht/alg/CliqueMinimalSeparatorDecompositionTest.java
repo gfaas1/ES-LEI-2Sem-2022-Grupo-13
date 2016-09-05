@@ -21,7 +21,8 @@ package org.jgrapht.alg;
 import junit.framework.TestCase;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
@@ -584,13 +585,13 @@ public class CliqueMinimalSeparatorDecompositionTest
                 * (n * (n - 1) / 2));
 
             // generate a connected random graph with n vertices and m edges
-            RandomGraphGenerator<Integer, DefaultEdge> generator;
+            GraphGenerator<Integer, DefaultEdge, Integer> generator;
             SimpleGraph<Integer, DefaultEdge> g;
             ConnectivityInspector<Integer, DefaultEdge> inspector;
             do {
                 g = new SimpleGraph<>(DefaultEdge.class);
                 generator =
-                        new RandomGraphGenerator<>(n, m);
+                        new GnmRandomGraphGenerator<>(n, m);
                 generator.generateGraph(g, new VertexFactory<Integer>()
                 {
                     int i;

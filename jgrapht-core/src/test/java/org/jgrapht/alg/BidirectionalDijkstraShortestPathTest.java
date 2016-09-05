@@ -22,7 +22,8 @@ import java.util.Random;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
@@ -299,7 +300,7 @@ public class BidirectionalDijkstraShortestPathTest
     public void testRandomGraphsDirected()
     {
 
-        RandomGraphGenerator<String, DefaultEdge> gen = new RandomGraphGenerator<>(
+        GraphGenerator<String, DefaultEdge, String> gen = new GnmRandomGraphGenerator<>(
             20,
             100,
             1);
@@ -349,7 +350,7 @@ public class BidirectionalDijkstraShortestPathTest
 
     public void testRandomGraphsWeightedUndirected()
     {
-        RandomGraphGenerator<String, DefaultWeightedEdge> gen = new RandomGraphGenerator<>(
+        GraphGenerator<String, DefaultWeightedEdge, String> gen = new GnmRandomGraphGenerator<>(
             20,
             100,
             1);
@@ -404,7 +405,7 @@ public class BidirectionalDijkstraShortestPathTest
 
     public void testRandomGraphsDirectedWithRadius()
     {
-        RandomGraphGenerator<String, DefaultEdge> gen = new RandomGraphGenerator<>(
+        GraphGenerator<String, DefaultEdge, String> gen = new GnmRandomGraphGenerator<>(
             20,
             100,
             1);

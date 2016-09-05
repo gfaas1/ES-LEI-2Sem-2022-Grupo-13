@@ -23,7 +23,8 @@ import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.openjdk.jmh.annotations.*;
@@ -54,8 +55,8 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
 
         @Setup
         public void setup() {
-            RandomGraphGenerator<Integer, DefaultWeightedEdge> rgg
-                = new RandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
+            GraphGenerator<Integer, DefaultWeightedEdge, Integer> rgg
+                = new GnmRandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network
                 = new SimpleDirectedWeightedGraph<>((sourceVertex, targetVertex) -> {

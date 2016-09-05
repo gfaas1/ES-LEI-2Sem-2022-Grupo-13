@@ -28,7 +28,8 @@ import org.junit.runners.*;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     GraphGeneratorTest.class,
-    RandomGraphGeneratorTest.class
+    GnmRandomGraphGeneratorTest.class,
+    GnpRandomGraphGeneratorTest.class
 })
 public final class AllGenerateTests
 {

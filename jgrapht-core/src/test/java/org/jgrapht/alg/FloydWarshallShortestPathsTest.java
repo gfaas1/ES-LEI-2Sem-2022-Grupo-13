@@ -37,8 +37,8 @@ public class FloydWarshallShortestPathsTest
 
     public void testCompareWithDijkstra()
     {
-        RandomGraphGenerator<Integer, DefaultWeightedEdge> gen =
-                new RandomGraphGenerator<>(
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
+                new GnmRandomGraphGenerator<>(
                         10,
                         15);
         VertexFactory<Integer> f =

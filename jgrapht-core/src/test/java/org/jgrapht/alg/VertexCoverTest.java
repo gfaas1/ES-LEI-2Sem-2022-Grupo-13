@@ -28,6 +28,7 @@ import org.jgrapht.alg.vertexcover.ClarksonTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.*;
@@ -441,7 +442,7 @@ public class VertexCoverTest
     protected Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
     {
         Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator=new RandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
+        GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator=new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
         graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
         return g;
     }

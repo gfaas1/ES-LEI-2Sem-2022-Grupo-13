@@ -23,7 +23,7 @@ import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.GabowStrongConnectivityInspector;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
@@ -55,7 +55,7 @@ public class GraphPerformanceTest extends TestCase{
     private static abstract class DirectedGraphBenchmarkBase {
 
         private Blackhole blackhole;
-        protected RandomGraphGenerator<Integer, DefaultWeightedEdge> rgg;
+        protected GnmRandomGraphGenerator<Integer, DefaultWeightedEdge> rgg;
         private SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph;
 
 
@@ -76,7 +76,7 @@ public class GraphPerformanceTest extends TestCase{
         @Benchmark
         public void generateGraphBenchmark(){
             for(int i=0; i<NR_GRAPHS; i++) {
-                rgg= new RandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED+i);
+                rgg= new GnmRandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED+i);
                 //Create a graph
                 graph = constructGraph();
 
@@ -89,7 +89,7 @@ public class GraphPerformanceTest extends TestCase{
         @Benchmark
         public void graphPerformanceBenchmark() {
             for(int i=0; i<NR_GRAPHS; i++) {
-                rgg = new RandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED + i);
+                rgg = new GnmRandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED + i);
                 //Create a graph
                 graph = constructGraph();
 
