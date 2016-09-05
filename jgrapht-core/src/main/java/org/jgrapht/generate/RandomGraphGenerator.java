@@ -228,7 +228,7 @@ public class RandomGraphGenerator<V, E>
      *
      * <ol>
      * <li>when the number of possible edges becomes slim , this class will have
-     * a very poor performance , cause it will not use gready methods to choose
+     * a very poor performance , cause it will not use greedy methods to choose
      * them. for example : In simple graph , if #V = N (#x = number Of x) and we
      * want full mesh #edges= N*(N-1)/2 , the first added edges will do so
      * quickly (O(1) , the last will take O(N^2). So , do not use it in this
@@ -357,8 +357,8 @@ public class RandomGraphGenerator<V, E>
         public int getMaxEdgesForVertexNum(Graph<VV, EE> targetGraph)
         {
             int maxAllowedEdges;
-            if (targetGraph instanceof SimpleGraph<?, ?>) {
-                try {
+            try {
+                if (targetGraph instanceof SimpleGraph<?, ?>) {
                     if (numOfVertexes % 2 == 0) {
                         maxAllowedEdges = Math.multiplyExact(
                             numOfVertexes / 2,
@@ -368,28 +368,20 @@ public class RandomGraphGenerator<V, E>
                             numOfVertexes,
                             (numOfVertexes - 1) / 2);
                     }
-                } catch (ArithmeticException e) {
-                    maxAllowedEdges = Integer.MAX_VALUE;
-                }
-            } else if (targetGraph instanceof SimpleDirectedGraph<?, ?>) {
-                try {
+                } else if (targetGraph instanceof SimpleDirectedGraph<?, ?>) {
                     maxAllowedEdges = Math
                         .multiplyExact(numOfVertexes, (numOfVertexes - 1));
-                } catch (ArithmeticException e) {
-                    maxAllowedEdges = Integer.MAX_VALUE;
-                }
-            } else if (targetGraph instanceof DefaultDirectedGraph<?, ?>) {
-                try {
+                } else if (targetGraph instanceof DefaultDirectedGraph<?, ?>) {
                     maxAllowedEdges = Math
                         .multiplyExact(numOfVertexes, numOfVertexes);
-                } catch (ArithmeticException e) {
-                    maxAllowedEdges = Integer.MAX_VALUE;
+                } else {
+                    // This may be overly liberal in the case of something
+                    // like a simple graph which has been wrapped with
+                    // a graph adapter or view.
+                    maxAllowedEdges = -1; // infinite
                 }
-            } else {
-                // This may be overly liberal in the case of something
-                // like a simple graph which has been wrapped with
-                // a graph adapter or view.
-                maxAllowedEdges = -1; // infinite
+            } catch (ArithmeticException e) {
+                maxAllowedEdges = Integer.MAX_VALUE;
             }
             return maxAllowedEdges;
         }
