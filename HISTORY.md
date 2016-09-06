@@ -33,6 +33,7 @@ Changes to JGraphT in each version:
 	- Capture trivial paths in `AllDirectedPaths` (contributed by Andrew Gainer-Dewar)
 	- Switch from Jalopy source code formatter to Eclipse, since Jalopy does not support java 8 (contributed by John Sichi)
 	- Fixed a bug in `RandomGraphGenerator`, reported by (@ckapop), which could cause an overflow when calculating the maximum number of edges allowed in a graph (contributed by Dimitrios Michail)
+	- Added generics to code in test package (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
