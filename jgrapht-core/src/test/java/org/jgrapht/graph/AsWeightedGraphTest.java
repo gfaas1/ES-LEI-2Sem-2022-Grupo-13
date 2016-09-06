@@ -164,7 +164,7 @@ public class AsWeightedGraphTest
         assertEquals(graph.getEdgeWeight(e2), 5.0);
 
         try {
-            double d = graphView.getEdgeWeight(null);
+            graphView.getEdgeWeight(null);
             // should not get here
             assertFalse();
         } catch (NullPointerException ex) {

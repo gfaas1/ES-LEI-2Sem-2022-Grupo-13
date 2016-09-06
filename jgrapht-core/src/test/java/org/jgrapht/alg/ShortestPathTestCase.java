@@ -76,7 +76,7 @@ public abstract class ShortestPathTestCase
      */
     public void testPathBetween()
     {
-        List path;
+        List<DefaultWeightedEdge> path;
         Graph<String, DefaultWeightedEdge> g = create();
 
         path = findPathBetween(g, V1, V2);
@@ -106,7 +106,7 @@ public abstract class ShortestPathTestCase
                 }), path);
     }
 
-    protected abstract List findPathBetween(
+    protected abstract List<DefaultWeightedEdge> findPathBetween(
         Graph<String, DefaultWeightedEdge> g,
         String src,
         String dest);

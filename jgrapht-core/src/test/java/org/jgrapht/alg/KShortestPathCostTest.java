@@ -49,7 +49,6 @@ import org.jgrapht.graph.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class KShortestPathCostTest
     extends TestCase
 {
@@ -61,8 +60,9 @@ public class KShortestPathCostTest
 
         KShortestPathCompleteGraph4 graph = new KShortestPathCompleteGraph4();
 
-        KShortestPaths pathFinder = new KShortestPaths(graph, "vS", nbPaths);
-        List pathElements = pathFinder.getPaths("v3");
+        KShortestPaths<String, DefaultWeightedEdge> pathFinder =
+            new KShortestPaths<>(graph, "vS", nbPaths);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("v3");
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -71,7 +71,7 @@ public class KShortestPathCostTest
             pathElements.toString());
 
         assertEquals(5, pathElements.size(), 0);
-        GraphPath pathElement = (GraphPath) pathElements.get(0);
+        GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(2, pathElement.getWeight(), 0);
 
         assertEquals(
@@ -85,14 +85,14 @@ public class KShortestPathCostTest
 
         int maxSize = 10;
 
-        KShortestPaths pathFinder =
-            new KShortestPaths(picture1Graph, "vS",
+        KShortestPaths<String, DefaultWeightedEdge> pathFinder =
+            new KShortestPaths<>(picture1Graph, "vS",
                 maxSize);
 
         //      assertEquals(2, pathFinder.getPaths("v5").size());
 
-        List pathElements = pathFinder.getPaths("v5");
-        GraphPath pathElement = (GraphPath) pathElements.get(0);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("v5");
+        GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
             Arrays.asList(
                 new Object[] {
@@ -101,12 +101,12 @@ public class KShortestPathCostTest
                 }),
             pathElement.getEdgeList());
 
-        List vertices = pathElement.getVertexList();
+        List<String> vertices = pathElement.getVertexList();
         assertEquals(
             Arrays.asList(new Object[] { "vS", "v1", "v5" }),
             vertices);
 
-        pathElement = (GraphPath) pathElements.get(1);
+        pathElement = pathElements.get(1);
         assertEquals(
             Arrays.asList(
                 new Object[] {
@@ -121,10 +121,10 @@ public class KShortestPathCostTest
             vertices);
 
         pathElements = pathFinder.getPaths("v7");
-        pathElement = (GraphPath) pathElements.get(0);
+        pathElement = pathElements.get(0);
         double lastCost = pathElement.getWeight();
         for (int i = 0; i < pathElements.size(); i++) {
-            pathElement = (GraphPath) pathElements.get(i);
+            pathElement = pathElements.get(i);
             double cost = pathElement.getWeight();
 
             assertTrue(lastCost <= cost);
@@ -186,27 +186,28 @@ public class KShortestPathCostTest
         verifyShortestPathsWeightsWithMaxSizeIncreases(picture1Graph);
     }
 
-    private void verifyShortestPathsInIncreasingOrderOfWeight(Graph graph)
+    private <E extends DefaultEdge> void verifyShortestPathsInIncreasingOrderOfWeight(
+        Graph<String, E> graph)
     {
         int maxSize = 20;
 
-        for (Object sourceVertex : graph.vertexSet()) {
-            for (Object targetVertex : graph.vertexSet()) {
+        for (String sourceVertex : graph.vertexSet()) {
+            for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestPaths pathFinder =
-                            new KShortestPaths(graph,
+                    KShortestPaths<String, E> pathFinder =
+                            new KShortestPaths<>(graph,
                                     sourceVertex, maxSize);
 
-                    List pathElements = pathFinder.getPaths(targetVertex);
+                    List<GraphPath<String, E>> pathElements = pathFinder.getPaths(targetVertex);
                     if (pathElements == null) {
                         // no path exists between the start vertex and the end
                         // vertex
                         continue;
                     }
-                    GraphPath pathElement = (GraphPath) pathElements.get(0);
+                    GraphPath<String, E> pathElement = pathElements.get(0);
                     double lastWeight = pathElement.getWeight();
                     for (int i = 0; i < pathElements.size(); i++) {
-                        pathElement = (GraphPath) pathElements.get(i);
+                        pathElement = pathElements.get(i);
                         double weight = pathElement.getWeight();
                         assertTrue(lastWeight <= weight);
                         lastWeight = weight;
@@ -217,17 +218,18 @@ public class KShortestPathCostTest
         }
     }
 
-    private void verifyShortestPathsWeightsWithMaxSizeIncreases(Graph graph)
+    private <E extends DefaultEdge> void verifyShortestPathsWeightsWithMaxSizeIncreases(
+        Graph<String, E> graph)
     {
         int maxSizeLimit = 10;
 
-        for (Object sourceVertex : graph.vertexSet()) {
-            for (Object targetVertex : graph.vertexSet()) {
+        for (String sourceVertex : graph.vertexSet()) {
+            for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestPaths pathFinder =
-                            new KShortestPaths(graph,
+                    KShortestPaths<String, E> pathFinder =
+                            new KShortestPaths<>(graph,
                                     sourceVertex, 1);
-                    List<GraphPath> prevPathElementsResults =
+                    List<GraphPath<String, E>> prevPathElementsResults =
                             pathFinder.getPaths(targetVertex);
 
                     if (prevPathElementsResults == null) {
@@ -238,9 +240,9 @@ public class KShortestPathCostTest
 
                     for (int maxSize = 2; maxSize < maxSizeLimit; maxSize++) {
                         pathFinder =
-                                new KShortestPaths(graph, sourceVertex,
+                                new KShortestPaths<>(graph, sourceVertex,
                                         maxSize);
-                        List<GraphPath> pathElementsResults =
+                        List<GraphPath<String, E>> pathElementsResults =
                                 pathFinder.getPaths(targetVertex);
 
                         verifyWeightsConsistency(
@@ -261,14 +263,14 @@ public class KShortestPathCostTest
      * @param pathElementsResults results obtained with a max-size argument
      * equal to <code>k+1</code>
      */
-    private void verifyWeightsConsistency(
-        List<GraphPath> prevPathElementsResults,
-        List<GraphPath> pathElementsResults)
+    private <E> void verifyWeightsConsistency(
+        List<GraphPath<String, E>> prevPathElementsResults,
+        List<GraphPath<String, E>> pathElementsResults)
     {
         for (int i = 0; i < prevPathElementsResults.size(); i++) {
-            GraphPath pathElementResult =
+            GraphPath<String, E> pathElementResult =
                     pathElementsResults.get(i);
-            GraphPath prevPathElementResult =
+            GraphPath<String, E> prevPathElementResult =
                     prevPathElementsResults.get(i);
             assertTrue(
                 pathElementResult.getWeight()

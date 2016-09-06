@@ -115,7 +115,7 @@ public class FloydWarshallShortestPathsTest
                     GraphPath<Integer, DefaultWeightedEdge> path=fw.getShortestPath(v1, v2);
                     if(path != null) {
                         this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
-                        List<Integer> vertexPath=Graphs.getPathVertexList(path);
+                        List<Integer> vertexPath= path.getVertexList();
                         assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
                         assertEquals(fw.getLastHop(v1, v2), vertexPath.get(vertexPath.size()-2));
                     }
@@ -224,7 +224,7 @@ public class FloydWarshallShortestPathsTest
         assertEquals(5.0, path.getWeight());
         assertEquals(weighted, path.getGraph());
         assertNull(fw.getShortestPath("b", "a"));
-        List<String> vertexPath=Graphs.getPathVertexList(path);
+        List<String> vertexPath=path.getVertexList();
         assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));
         assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size()-2));
     }

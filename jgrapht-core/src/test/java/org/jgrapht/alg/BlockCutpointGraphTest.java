@@ -47,7 +47,6 @@ import org.jgrapht.graph.SimpleGraph;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class BlockCutpointGraphTest
     extends TestCase
 {
@@ -57,7 +56,8 @@ public class BlockCutpointGraphTest
     {
         BiconnectedGraph graph = new BiconnectedGraph();
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        BlockCutpointGraph<String, DefaultEdge> blockCutpointGraph =
+            new BlockCutpointGraph<>(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(0, blockCutpointGraph.getCutpoints().size());
@@ -67,22 +67,19 @@ public class BlockCutpointGraphTest
         assertEquals(1, nbBiconnectedComponents);
     }
 
-    public void testGetBlock(BlockCutpointGraph blockCutpointGraph)
+    public <V> void testGetBlock(BlockCutpointGraph<V, DefaultEdge> blockCutpointGraph)
     {
-        for (Object o : blockCutpointGraph.vertexSet()) {
-            UndirectedGraph component = (UndirectedGraph) o;
+        for (UndirectedGraph<V, DefaultEdge> component : blockCutpointGraph.vertexSet()) {
             if (!component.edgeSet().isEmpty()) {
-                for (Object vertex : component.vertexSet()) {
+                for (V vertex : component.vertexSet()) {
                     if (!blockCutpointGraph.getCutpoints().contains(vertex)) {
-                        assertEquals(
-                                component,
-                                blockCutpointGraph.getBlock(vertex));
+                        assertEquals(component, blockCutpointGraph.getBlock(vertex));
                     }
                 }
             } else {
                 assertTrue(
-                        blockCutpointGraph.getCutpoints().contains(
-                                component.vertexSet().iterator().next()));
+                    blockCutpointGraph
+                        .getCutpoints().contains(component.vertexSet().iterator().next()));
             }
         }
     }
@@ -95,16 +92,17 @@ public class BlockCutpointGraphTest
 
     public void testLinearGraph(int nbVertices)
     {
-        UndirectedGraph graph = new SimpleGraph(DefaultEdge.class);
+        UndirectedGraph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        LinearGraphGenerator generator = new LinearGraphGenerator(nbVertices);
+        LinearGraphGenerator<Object, DefaultEdge> generator =
+            new LinearGraphGenerator<>(nbVertices);
         generator.generateGraph(
             graph,
                 new ClassBasedVertexFactory<>(
                         Object.class),
             null);
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        BlockCutpointGraph<Object, DefaultEdge> blockCutpointGraph = new BlockCutpointGraph<>(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(nbVertices - 2, blockCutpointGraph.getCutpoints().size());
@@ -116,9 +114,10 @@ public class BlockCutpointGraphTest
 
     public void testNotBiconnected()
     {
-        UndirectedGraph graph = new NotBiconnectedGraph();
+        UndirectedGraph<String, DefaultEdge> graph = new NotBiconnectedGraph();
 
-        BlockCutpointGraph blockCutpointGraph = new BlockCutpointGraph(graph);
+        BlockCutpointGraph<String, DefaultEdge> blockCutpointGraph =
+            new BlockCutpointGraph<>(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(2, blockCutpointGraph.getCutpoints().size());

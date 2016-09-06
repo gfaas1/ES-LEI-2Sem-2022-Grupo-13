@@ -41,9 +41,8 @@ import org.jgrapht.graph.*;
 /**
  * <img src="./KSPExample.png">
  */
-@SuppressWarnings("unchecked")
 public class KSPExampleGraph
-    extends SimpleWeightedGraph
+    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -53,21 +52,21 @@ public class KSPExampleGraph
 
     //~ Instance fields --------------------------------------------------------
 
-    public Object edgeAD;
+    public DefaultWeightedEdge edgeAD;
 
-    public Object edgeBT;
+    public DefaultWeightedEdge edgeBT;
 
-    public Object edgeCB;
+    public DefaultWeightedEdge edgeCB;
 
-    public Object edgeCT;
+    public DefaultWeightedEdge edgeCT;
 
-    public Object edgeDE;
+    public DefaultWeightedEdge edgeDE;
 
-    public Object edgeEC;
+    public DefaultWeightedEdge edgeEC;
 
-    public Object edgeSA;
+    public DefaultWeightedEdge edgeSA;
 
-    public Object edgeST;
+    public DefaultWeightedEdge edgeST;
 
     //~ Constructors -----------------------------------------------------------
 

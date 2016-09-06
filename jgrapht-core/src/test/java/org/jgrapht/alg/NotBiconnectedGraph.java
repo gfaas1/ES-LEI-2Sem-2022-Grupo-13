@@ -42,9 +42,8 @@ import org.jgrapht.graph.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class NotBiconnectedGraph
-    extends SimpleGraph
+    extends SimpleGraph<String, DefaultEdge>
 {
     //~ Static fields/initializers ---------------------------------------------
 

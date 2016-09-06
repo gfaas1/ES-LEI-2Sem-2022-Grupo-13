@@ -174,7 +174,7 @@ public class CycleDetectorTest
         CycleDetector<String, DefaultEdge> detector =
                 new CycleDetector<>(g);
 
-        Set emptySet = Collections.EMPTY_SET;
+        Set<String> emptySet = Collections.emptySet();
 
         assertEquals(!cyclicSet.isEmpty(), detector.detectCycles());
 
