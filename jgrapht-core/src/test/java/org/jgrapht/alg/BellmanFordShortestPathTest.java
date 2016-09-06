@@ -100,7 +100,7 @@ public class BellmanFordShortestPathTest
     }
 
     @Override
-    protected List findPathBetween(
+    protected List<DefaultWeightedEdge> findPathBetween(
         Graph<String, DefaultWeightedEdge> g,
         String src,
         String dest)
@@ -112,7 +112,7 @@ public class BellmanFordShortestPathTest
     {
         Graph<String, DefaultWeightedEdge> g = createWithBias(true);
 
-        List path;
+        List<DefaultWeightedEdge> path;
 
         path = findPathBetween(g, V1, V4);
         assertEquals(Arrays.asList(

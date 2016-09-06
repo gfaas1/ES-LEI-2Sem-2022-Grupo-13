@@ -46,10 +46,10 @@ public class PrefetchIteratorTest
 
     public void testIteratorInterface()
     {
-        Iterator iterator = new IterateFrom1To99();
+        Iterator<Integer> iterator = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertEquals(true, iterator.hasNext());
-            assertEquals(i, iterator.next());
+            assertEquals(i, iterator.next().intValue());
         }
         assertEquals(false, iterator.hasNext());
         Exception exceptionThrown = null;
@@ -63,10 +63,10 @@ public class PrefetchIteratorTest
 
     public void testEnumInterface()
     {
-        Enumeration enumuration = new IterateFrom1To99();
+        Enumeration<Integer> enumuration = new IterateFrom1To99();
         for (int i = 1; i < 100; i++) {
             assertEquals(true, enumuration.hasMoreElements());
-            assertEquals(i, enumuration.nextElement());
+            assertEquals(i, enumuration.nextElement().intValue());
         }
         assertEquals(false, enumuration.hasMoreElements());
         Exception exceptionThrown = null;
@@ -82,11 +82,11 @@ public class PrefetchIteratorTest
 
     // This test class supplies enumeration of integer from 1 till 100.
     public static class IterateFrom1To99
-        implements Enumeration,
-            Iterator
+        implements Enumeration<Integer>,
+            Iterator<Integer>
     {
         private int counter = 0;
-        private PrefetchIterator nextSupplier;
+        private PrefetchIterator<Integer> nextSupplier;
 
         public IterateFrom1To99()
         {
@@ -111,13 +111,13 @@ public class PrefetchIteratorTest
 
         // forwarding to nextSupplier and return its returned value
         @Override
-        public Object nextElement()
+        public Integer nextElement()
         {
             return this.nextSupplier.nextElement();
         }
 
         @Override
-        public Object next()
+        public Integer next()
         {
             return this.nextSupplier.next();
         }

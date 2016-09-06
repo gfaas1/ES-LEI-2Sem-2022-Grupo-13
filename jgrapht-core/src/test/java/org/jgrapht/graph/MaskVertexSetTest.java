@@ -34,8 +34,6 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
 

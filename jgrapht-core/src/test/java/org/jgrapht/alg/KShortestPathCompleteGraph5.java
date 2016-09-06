@@ -42,9 +42,8 @@ import org.jgrapht.graph.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class KShortestPathCompleteGraph5
-    extends SimpleWeightedGraph
+    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,25 +53,25 @@ public class KShortestPathCompleteGraph5
 
     //~ Instance fields --------------------------------------------------------
 
-    public Object e12;
+    public DefaultWeightedEdge e12;
 
-    public Object e13;
+    public DefaultWeightedEdge e13;
 
-    public Object e14;
+    public DefaultWeightedEdge e14;
 
-    public Object e23;
+    public DefaultWeightedEdge e23;
 
-    public Object e24;
+    public DefaultWeightedEdge e24;
 
-    public Object e34;
+    public DefaultWeightedEdge e34;
 
-    public Object eS1;
+    public DefaultWeightedEdge eS1;
 
-    public Object eS2;
+    public DefaultWeightedEdge eS2;
 
-    public Object eS3;
+    public DefaultWeightedEdge eS3;
 
-    public Object eS4;
+    public DefaultWeightedEdge eS4;
 
     //~ Constructors -----------------------------------------------------------
 

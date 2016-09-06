@@ -73,11 +73,11 @@ public class StrongConnectivityAlgorithmTest
 
     //
     public void testStrongConnectivityClasses(){
-        Class[] strongConnectivityAlgorithmClasses= {
+        Class<?>[] strongConnectivityAlgorithmClasses= {
                 GabowStrongConnectivityInspector.class,
                 KosarajuStrongConnectivityInspector.class
         };
-        for(Class strongConnectivityAlgorithm : strongConnectivityAlgorithmClasses){
+        for(Class<?> strongConnectivityAlgorithm : strongConnectivityAlgorithmClasses){
             this.testStronglyConnected1(strongConnectivityAlgorithm);
             this.testStronglyConnected2(strongConnectivityAlgorithm);
             this.testStronglyConnected3(strongConnectivityAlgorithm);
@@ -88,7 +88,7 @@ public class StrongConnectivityAlgorithmTest
     /**
      * .
      */
-    public void testStronglyConnected1(Class strongConnectivityAlgorithm)
+    public void testStronglyConnected1(Class<?> strongConnectivityAlgorithm)
     {
         DirectedGraph<String, DefaultEdge> g =
                 new DefaultDirectedGraph<>(
@@ -141,7 +141,7 @@ public class StrongConnectivityAlgorithmTest
     /**
      * .
      */
-    public void testStronglyConnected2(Class strongConnectivityAlgorithm)
+    public void testStronglyConnected2(Class<?> strongConnectivityAlgorithm)
     {
         DirectedGraph<String, DefaultEdge> g =
                 new DefaultDirectedGraph<>(
@@ -195,7 +195,7 @@ public class StrongConnectivityAlgorithmTest
     /**
      * .
      */
-    public void testStronglyConnected3(Class strongConnectivityAlgorithm)
+    public void testStronglyConnected3(Class<?> strongConnectivityAlgorithm)
     {
         DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -244,7 +244,7 @@ public class StrongConnectivityAlgorithmTest
         assertEquals(expectedSets, actualSets);
     }
 
-    public void testStronglyConnected4(Class strongConnectivityAlgorithm)
+    public void testStronglyConnected4(Class<?> strongConnectivityAlgorithm)
     {
         DefaultDirectedGraph<Integer, String> graph =
                 new DefaultDirectedGraph<>(
@@ -271,7 +271,7 @@ public class StrongConnectivityAlgorithmTest
         assertEquals(expected, new HashSet<>(sc.stronglyConnectedSets()));
     }
 
-    private <V,E> StrongConnectivityAlgorithm<V,E> getStrongConnectivityInspector(DirectedGraph<V,E> graph, Class strongConnectivityAlgorithm){
+    private <V,E> StrongConnectivityAlgorithm<V,E> getStrongConnectivityInspector(DirectedGraph<V,E> graph, Class<?> strongConnectivityAlgorithm){
         if(strongConnectivityAlgorithm==GabowStrongConnectivityInspector.class)
             return new GabowStrongConnectivityInspector<>(graph);
         else if(strongConnectivityAlgorithm==KosarajuStrongConnectivityInspector.class)

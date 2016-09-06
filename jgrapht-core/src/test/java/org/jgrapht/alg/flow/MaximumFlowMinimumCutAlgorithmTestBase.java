@@ -37,14 +37,12 @@ package org.jgrapht.alg.flow;
 
 import junit.framework.TestCase;
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import java.util.Map;
 import java.util.Random;
 
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {

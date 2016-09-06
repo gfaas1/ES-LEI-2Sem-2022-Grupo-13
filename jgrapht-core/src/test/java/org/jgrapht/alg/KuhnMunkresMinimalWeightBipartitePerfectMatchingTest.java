@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-@SuppressWarnings("unchecked")
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest extends TestCase {
 
     interface V {}

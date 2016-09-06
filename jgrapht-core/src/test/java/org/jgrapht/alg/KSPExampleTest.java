@@ -40,7 +40,6 @@ import junit.framework.*;
 import org.jgrapht.graph.*;
 
 
-@SuppressWarnings("unchecked")
 public class KSPExampleTest
     extends TestCase
 {
@@ -48,36 +47,39 @@ public class KSPExampleTest
 
     public void testFourReturnedPathsJGraphT()
     {
-        SimpleWeightedGraph graph = new KSPExampleGraph();
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
-        Object sourceVertex = "S";
-        KShortestPaths ksp = new KShortestPaths(graph, sourceVertex, 4);
+        String sourceVertex = "S";
+        KShortestPaths<String, DefaultWeightedEdge> ksp =
+            new KShortestPaths<>(graph, sourceVertex, 4);
 
-        Object targetVertex = "T";
+        String targetVertex = "T";
         assertEquals(3, ksp.getPaths(targetVertex).size());
     }
 
     public void testThreeReturnedPathsJGraphT()
     {
-        SimpleWeightedGraph graph = new KSPExampleGraph();
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
-        Object sourceVertex = "S";
+        String sourceVertex = "S";
         int nbPaths = 3;
-        KShortestPaths ksp = new KShortestPaths(graph, sourceVertex, nbPaths);
+        KShortestPaths<String, DefaultWeightedEdge> ksp =
+            new KShortestPaths<>(graph, sourceVertex, nbPaths);
 
-        Object targetVertex = "T";
+        String targetVertex = "T";
         assertEquals(nbPaths, ksp.getPaths(targetVertex).size());
     }
 
     public void testTwoReturnedPathsJGraphT()
     {
-        SimpleWeightedGraph graph = new KSPExampleGraph();
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
-        Object sourceVertex = "S";
+        String sourceVertex = "S";
         int nbPaths = 2;
-        KShortestPaths ksp = new KShortestPaths(graph, sourceVertex, nbPaths);
+        KShortestPaths<String, DefaultWeightedEdge> ksp =
+            new KShortestPaths<>(graph, sourceVertex, nbPaths);
 
-        Object targetVertex = "T";
+        String targetVertex = "T";
         assertEquals(nbPaths, ksp.getPaths(targetVertex).size());
     }
 }

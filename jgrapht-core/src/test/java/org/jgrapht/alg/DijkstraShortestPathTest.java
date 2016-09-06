@@ -88,7 +88,7 @@ public class DijkstraShortestPathTest
     }
 
     @Override
-    protected List findPathBetween(
+    protected List<DefaultWeightedEdge> findPathBetween(
         Graph<String, DefaultWeightedEdge> g,
         String src,
         String dest)

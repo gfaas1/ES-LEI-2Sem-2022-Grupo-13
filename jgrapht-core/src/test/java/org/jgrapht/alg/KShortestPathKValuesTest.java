@@ -38,6 +38,7 @@ package org.jgrapht.alg;
 
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.util.MathUtil;
 
 
@@ -45,7 +46,6 @@ import org.jgrapht.util.MathUtil;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class KShortestPathKValuesTest
     extends TestCase
 {
@@ -75,7 +75,8 @@ public class KShortestPathKValuesTest
             maxSize <= calculateNbElementaryPathsForCompleteGraph(6);
             maxSize++)
         {
-            KShortestPaths finder = new KShortestPaths(graph, "vS", maxSize);
+            KShortestPaths<String, DefaultWeightedEdge> finder =
+                new KShortestPaths<>(graph, "vS", maxSize);
 
             assertEquals(finder.getPaths("v1").size(), maxSize);
             assertEquals(finder.getPaths("v2").size(), maxSize);
@@ -117,18 +118,18 @@ public class KShortestPathKValuesTest
         return nbPaths;
     }
 
-    private void verifyNbPathsForAllPairsOfVertices(Graph graph)
+    private void verifyNbPathsForAllPairsOfVertices(Graph<String, DefaultWeightedEdge> graph)
     {
         long nbPaths =
             calculateNbElementaryPathsForCompleteGraph(
                 graph.vertexSet().size());
         int maxSize = Integer.MAX_VALUE;
 
-        for (Object sourceVertex : graph.vertexSet()) {
-            KShortestPaths finder =
-                    new KShortestPaths(graph, sourceVertex,
+        for (String sourceVertex : graph.vertexSet()) {
+            KShortestPaths<String, DefaultWeightedEdge> finder =
+                    new KShortestPaths<>(graph, sourceVertex,
                             maxSize);
-            for (Object targetVertex : graph.vertexSet()) {
+            for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
                     assertEquals(finder.getPaths(targetVertex).size(), nbPaths);
                 }

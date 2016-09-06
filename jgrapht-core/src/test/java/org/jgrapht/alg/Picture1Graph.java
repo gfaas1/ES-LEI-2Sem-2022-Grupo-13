@@ -44,9 +44,8 @@ import org.jgrapht.graph.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-@SuppressWarnings("unchecked")
 public class Picture1Graph
-    extends SimpleDirectedWeightedGraph
+    extends SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
 {
     //~ Static fields/initializers ---------------------------------------------
 
@@ -56,31 +55,31 @@ public class Picture1Graph
 
     //~ Instance fields --------------------------------------------------------
 
-    public Object e15;
+    public DefaultWeightedEdge e15;
 
-    public Object e25;
+    public DefaultWeightedEdge e25;
 
-    public Object e27;
+    public DefaultWeightedEdge e27;
 
-    public Object e37;
+    public DefaultWeightedEdge e37;
 
-    public Object e47;
+    public DefaultWeightedEdge e47;
 
-    public Object e56;
+    public DefaultWeightedEdge e56;
 
-    public Object e57;
+    public DefaultWeightedEdge e57;
 
-    public Object e67;
+    public DefaultWeightedEdge e67;
 
-    public Object eS1;
+    public DefaultWeightedEdge eS1;
 
-    public Object eS2;
+    public DefaultWeightedEdge eS2;
 
-    public Object eS3;
+    public DefaultWeightedEdge eS3;
 
-    public Object eS4;
+    public DefaultWeightedEdge eS4;
 
-    public Object eS7;
+    public DefaultWeightedEdge eS7;
 
     //~ Constructors -----------------------------------------------------------
 

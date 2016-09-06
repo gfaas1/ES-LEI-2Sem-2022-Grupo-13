@@ -63,11 +63,8 @@ public class MinimumSpanningTreeTest
 
     private DefaultWeightedEdge AB;
     private DefaultWeightedEdge AC;
-    private DefaultWeightedEdge AE;
     private DefaultWeightedEdge BD;
-    private DefaultWeightedEdge CD;
     private DefaultWeightedEdge DE;
-    private DefaultWeightedEdge EF;
     private DefaultWeightedEdge EG;
     private DefaultWeightedEdge GH;
     private DefaultWeightedEdge FH;
@@ -129,8 +126,8 @@ public class MinimumSpanningTreeTest
             final Collection<E> edgeSet,
             final double weight) {
 
-        assertEquals(weight, mst.getSpanningTreeCost());
-        assertTrue(mst.getEdgeSet().containsAll(edgeSet));
+        assertEquals(weight, mst.getMinimumSpanningTreeTotalWeight());
+        assertTrue(mst.getMinimumSpanningTreeEdgeSet().containsAll(edgeSet));
 
     }
 
@@ -155,14 +152,14 @@ public class MinimumSpanningTreeTest
         AB = Graphs.addEdge(g, A, B, 5);
         AC = Graphs.addEdge(g, A, C, 10);
         BD = Graphs.addEdge(g, B, D, 15);
-        CD = Graphs.addEdge(g, C, D, 20);
+        Graphs.addEdge(g, C, D, 20);
 
         g.addVertex(E);
         g.addVertex(F);
         g.addVertex(G);
         g.addVertex(H);
 
-        EF = Graphs.addEdge(g, E, F, 20);
+        Graphs.addEdge(g, E, F, 20);
         EG = Graphs.addEdge(g, E, G, 15);
         GH = Graphs.addEdge(g, G, H, 10);
         FH = Graphs.addEdge(g, F, H, 5);
@@ -186,9 +183,9 @@ public class MinimumSpanningTreeTest
         AB = Graphs.addEdge(g, A, B, bias * 2);
         AC = Graphs.addEdge(g, A, C, bias * 3);
         BD = Graphs.addEdge(g, B, D, bias * 5);
-        CD = Graphs.addEdge(g, C, D, bias * 20);
+        Graphs.addEdge(g, C, D, bias * 20);
         DE = Graphs.addEdge(g, D, E, bias * 5);
-        AE = Graphs.addEdge(g, A, E, bias * 100);
+        Graphs.addEdge(g, A, E, bias * 100);
 
         return g;
     }

@@ -40,7 +40,6 @@ import junit.framework.*;
 import org.jgrapht.graph.*;
 
 
-@SuppressWarnings("unchecked")
 public class KSPDiscardsValidPathsTest
     extends TestCase
 {

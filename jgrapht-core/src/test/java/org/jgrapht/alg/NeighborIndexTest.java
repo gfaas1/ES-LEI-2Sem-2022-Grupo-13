@@ -75,7 +75,7 @@ public class NeighborIndexTest
                 new NeighborIndex<>(g);
         g.addGraphListener(index);
 
-        Set neighbors1 = index.neighborsOf(V1);
+        Set<String> neighbors1 = index.neighborsOf(V1);
 
         assertEquals(1, neighbors1.size());
         assertEquals(true, neighbors1.contains(V2));
@@ -83,7 +83,7 @@ public class NeighborIndexTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        Set neighbors3 = index.neighborsOf(V3);
+        Set<String> neighbors3 = index.neighborsOf(V3);
 
         assertEquals(2, neighbors1.size());
         assertEquals(true, neighbors1.contains(V3));
@@ -117,8 +117,8 @@ public class NeighborIndexTest
                 new DirectedNeighborIndex<>(g);
         g.addGraphListener(index);
 
-        Set p = index.predecessorsOf(V1);
-        Set s = index.successorsOf(V1);
+        Set<String> p = index.predecessorsOf(V1);
+        Set<String> s = index.successorsOf(V1);
 
         assertEquals(0, p.size());
         assertEquals(1, s.size());
@@ -127,7 +127,7 @@ public class NeighborIndexTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        Set q = index.successorsOf(V3);
+        Set<String> q = index.successorsOf(V3);
 
         assertEquals(1, p.size());
         assertEquals(1, s.size());
