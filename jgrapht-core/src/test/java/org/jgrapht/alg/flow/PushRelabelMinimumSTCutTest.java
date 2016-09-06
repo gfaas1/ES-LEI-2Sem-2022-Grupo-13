@@ -39,8 +39,11 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
+import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -52,6 +55,34 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         return new PushRelabelMFImpl<>(network);
     }
 
+    public void testSmall() { 
+        int n = 6;
+        int m = 10;
+        int seed = 4;
+        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator = new RandomGraphGenerator<>(n, m, seed);
+        Random rand = new Random(seed);
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        randomGraphGenerator.generateGraph(network, new IntegerVertexFactory(), null);
+        network
+            .edgeSet().stream().forEach(e -> network.setEdgeWeight(e, rand.nextInt(100)));
+        
+        int source=0;
+        int sink=5;
+
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
+
+        double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
+
+        double cutWeight=prSolver.calculateMinCut(source, sink);
+        Set<Integer> sourcePartition=prSolver.getSourcePartition();
+        Set<Integer> sinkPartition=prSolver.getSinkPartition();
+        Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
+
+        this.verifyDirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+    }
+    
     public void testRandomDirectedGraphs(){
         for(int test=0; test<NR_RANDOM_TESTS; test++){
             DirectedGraph<Integer, DefaultWeightedEdge> network=generateDirectedGraph();
