@@ -55,32 +55,30 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         return new PushRelabelMFImpl<>(network);
     }
 
-    public void testSmall() { 
-        int n = 6;
-        int m = 10;
-        int seed = 4;
-        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator = new RandomGraphGenerator<>(n, m, seed);
-        Random rand = new Random(seed);
+    public void testSmall()
+    {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
             new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        randomGraphGenerator.generateGraph(network, new IntegerVertexFactory(), null);
-        network
-            .edgeSet().stream().forEach(e -> network.setEdgeWeight(e, rand.nextInt(100)));
-        
-        int source=0;
-        int sink=5;
+        network.addVertex(0);
+        network.addVertex(1);
+        network.addVertex(2);
+        network.addVertex(3);
+        network.addVertex(4);
+        network.addVertex(5);
+        network.setEdgeWeight(network.addEdge(2, 4), 62.0);
+        network.setEdgeWeight(network.addEdge(3, 4), 52.0);
+        network.setEdgeWeight(network.addEdge(1, 4), 3.0);
+        network.setEdgeWeight(network.addEdge(0, 1), 58.0);
+        network.setEdgeWeight(network.addEdge(2, 0), 67.0);
+        network.setEdgeWeight(network.addEdge(1, 0), 5.0);
+        network.setEdgeWeight(network.addEdge(4, 0), 11.0);
+        network.setEdgeWeight(network.addEdge(4, 1), 46.0);
+        network.setEdgeWeight(network.addEdge(1, 3), 62.0);
+        network.setEdgeWeight(network.addEdge(4, 3), 27.0);
 
-        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
-        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
-
-        double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
-
-        double cutWeight=prSolver.calculateMinCut(source, sink);
-        Set<Integer> sourcePartition=prSolver.getSourcePartition();
-        Set<Integer> sinkPartition=prSolver.getSinkPartition();
-        Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
-
-        this.verifyDirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
+        double cutWeight = prSolver.calculateMinCut(0, 5);
+        assertEquals(0d, cutWeight);
     }
     
     public void testRandomDirectedGraphs(){
