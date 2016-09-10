@@ -139,6 +139,9 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
                 {
                     V v = directedGraph.getEdgeTarget(e);
                     VertexExtensionBase vx = vertexExtensionManager.getExtension(v);
+                    if (vx.prototype == null) { 
+                        vx.prototype = v;
+                    }
 
                     AnnotatedFlowEdge forwardEdge = createEdge(ux, vx, e, directedGraph.getEdgeWeight(e));
                     AnnotatedFlowEdge backwardEdge = createBackwardEdge(forwardEdge);
