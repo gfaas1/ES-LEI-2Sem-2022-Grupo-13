@@ -129,11 +129,14 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         if(directed_graph) { //Directed graph
             DirectedGraph<V,E> directedGraph=(DirectedGraph<V,E>) network;
+            for (V v : directedGraph.vertexSet())
+            {
+                VertexExtensionBase vx = vertexExtensionManager.getExtension(v);
+                vx.prototype = v;
+            }
             for (V u : directedGraph.vertexSet())
             {
                 VertexExtensionBase ux = vertexExtensionManager.getExtension(u);
-
-                ux.prototype = u;
 
                 for (E e : directedGraph.outgoingEdgesOf(u))
                 {
