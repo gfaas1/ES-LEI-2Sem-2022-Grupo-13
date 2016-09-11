@@ -81,6 +81,20 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         assertEquals(0d, cutWeight);
     }
     
+    public void testDisconnected()
+    {
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        network.addVertex(0);
+        network.addVertex(1);
+        network.addVertex(2);
+        network.setEdgeWeight(network.addEdge(0, 1), 1.0);
+
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
+        double cutWeight = prSolver.calculateMinCut(0, 2);
+        assertEquals(0d, cutWeight);
+    }
+    
     public void testRandomDirectedGraphs(){
         for(int test=0; test<NR_RANDOM_TESTS; test++){
             DirectedGraph<Integer, DefaultWeightedEdge> network=generateDirectedGraph();
