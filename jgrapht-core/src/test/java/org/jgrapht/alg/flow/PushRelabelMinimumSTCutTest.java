@@ -37,13 +37,13 @@ package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.generate.RandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import java.util.Random;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -55,40 +55,33 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         return new PushRelabelMFImpl<>(network);
     }
 
-    public void testSmall()
+    public void testDisconnected1()
     {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
             new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        network.addVertex(0);
-        network.addVertex(1);
-        network.addVertex(2);
-        network.addVertex(3);
-        network.addVertex(4);
-        network.addVertex(5);
-        network.setEdgeWeight(network.addEdge(2, 4), 62.0);
-        network.setEdgeWeight(network.addEdge(3, 4), 52.0);
-        network.setEdgeWeight(network.addEdge(1, 4), 3.0);
-        network.setEdgeWeight(network.addEdge(0, 1), 58.0);
-        network.setEdgeWeight(network.addEdge(2, 0), 67.0);
-        network.setEdgeWeight(network.addEdge(1, 0), 5.0);
-        network.setEdgeWeight(network.addEdge(4, 0), 11.0);
-        network.setEdgeWeight(network.addEdge(4, 1), 46.0);
-        network.setEdgeWeight(network.addEdge(1, 3), 62.0);
-        network.setEdgeWeight(network.addEdge(4, 3), 27.0);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2, 3, 4, 5));
+        network.addEdge(2, 4);
+        network.addEdge(3, 4);
+        network.addEdge(1, 4);
+        network.addEdge(0, 1);
+        network.addEdge(2, 0);
+        network.addEdge(1, 0);
+        network.addEdge(4, 0);
+        network.addEdge(4, 1);
+        network.addEdge(1, 3);
+        network.addEdge(4, 3);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 5);
         assertEquals(0d, cutWeight);
     }
     
-    public void testDisconnected()
+    public void testDisconnected2()
     {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
             new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        network.addVertex(0);
-        network.addVertex(1);
-        network.addVertex(2);
-        network.setEdgeWeight(network.addEdge(0, 1), 1.0);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2));
+        network.addEdge(0, 1);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 2);
