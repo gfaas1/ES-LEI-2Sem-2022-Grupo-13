@@ -37,9 +37,8 @@ package org.jgrapht.alg.flow;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase.VertexExtensionBase;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.alg.util.extension.*;
 
 
 /**
