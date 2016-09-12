@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2004-2016, by Christian Hammer and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (barak_naveh@users.sourceforge.net)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ----------------
- * DirectedPseudograph.java
- * ----------------
- * (C) Copyright 2004-2008, by Christian Hammer and Contributors.
- *
- * Original Author:  Christian Hammer
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
- * 11-Mar-2004 : Initial revision: generic (CH);
- * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- *
  */
 package org.jgrapht.graph;
 

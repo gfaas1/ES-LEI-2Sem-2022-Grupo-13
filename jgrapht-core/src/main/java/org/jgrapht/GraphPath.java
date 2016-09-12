@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2008-2016, by John V Sichi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,21 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ----------
- * Graph.java
- * ----------
- * (C) Copyright 2008-2008, by John V. Sichi and Contributors.
- *
- * Original Author:  John V. Sichi
- * Contributor(s):   Joris Kinable
- *
- * $Id$
- *
- * Changes
- * -------
- * 1-Jan-2008 : Initial revision (JVS);
- *
  */
 package org.jgrapht;
 

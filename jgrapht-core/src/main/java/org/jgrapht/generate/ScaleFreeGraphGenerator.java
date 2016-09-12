@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2008-2016, by Ilya Razenshteyn and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -----------------
- * ScaleFreeGraphGenerator.java
- * -----------------
- * (C) Copyright 2008-2008, by Ilya Razenshteyn and Contributors.
- *
- * Original Author:  Ilya Razenshteyn
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
  */
 package org.jgrapht.generate;
 

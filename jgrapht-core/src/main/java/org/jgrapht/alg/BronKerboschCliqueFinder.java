@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2005-2016, by Ewgenij Proschak and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------
- * BronKerboschCliqueFinder.java
- * -------------------
- * (C) Copyright 2005-2008, by Ewgenij Proschak and Contributors.
- *
- * Original Author:  Ewgenij Proschak
- * Contributor(s):   John V. Sichi
- *
- * $Id$
- *
- * Changes
- * -------
- * 21-Jul-2005 : Initial revision (EP);
- * 26-Jul-2005 : Cleaned up and checked in (JVS);
- *
  */
 package org.jgrapht.alg;
 

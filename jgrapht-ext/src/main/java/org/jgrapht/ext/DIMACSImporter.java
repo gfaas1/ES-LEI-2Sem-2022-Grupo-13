@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2010-2016, by Michael Behrisch and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------
- * DIMACSImporter.java
- * -------------------
- * (C) Copyright 2010-2010, by Michael Behrisch and Contributors.
- *
- * Original Author:  Michael Behrisch
- * Contributor(s): Joris Kinable, Dimitrios Michail
- *
- * Changes
- * -------
- * 24-Dec-2008 : Initial revision (AN);
- *
  */
 package org.jgrapht.ext;
 

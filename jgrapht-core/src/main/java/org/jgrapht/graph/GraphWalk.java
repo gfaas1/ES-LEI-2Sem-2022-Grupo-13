@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2009-2016, by John V Sichi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ----------------
- * GraphWalk.java
- * ----------------
- * (C) Copyright 2009-2009, by John V. Sichi and Contributors.
- *
- * Original Author:  John V. Sichi
- * Contributor(s):   Joris Kinable
- *
- * $Id$
- *
- * Changes
- * -------
- * 03-Jul-2009 : Initial revision (JVS);
- * 14-Jul-2016 : Redefined class to a more generic version of a walk, expressed in terms of its edges or vertices (JK)
- *
  */
 package org.jgrapht.graph;
 

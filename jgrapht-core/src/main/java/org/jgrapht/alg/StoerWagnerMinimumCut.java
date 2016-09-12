@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2011-2016, by Robby McKilliam and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2011, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,20 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ----------------
- * StoerWagnerMinimumCut.java
- * ----------------
- * (C) Copyright 2011-2011, by Robby McKilliam and Contributors.
- *
- * Original Author:  Robby McKilliam
- * Contributor(s):   Ernst de Ridder
- *
- * $Id: StoerWagnerMinimumCut.java $
- *
- * Changes
- * -------
- *
  */
 package org.jgrapht.alg;
 

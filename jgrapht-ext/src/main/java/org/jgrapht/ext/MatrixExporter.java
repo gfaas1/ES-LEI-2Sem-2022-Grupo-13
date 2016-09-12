@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2005-2016, by Charles Fry and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,20 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ------------------
- * MatrixExporter.java
- * ------------------
- * (C) Copyright 2005-2016, by Charles Fry and Contributors.
- *
- * Original Author:  Charles Fry
- * Contributor(s): Dimitrios Michail
- *
- * Changes
- * -------
- * 13-Dec-2005 : Initial Version (CF);
- * 19-Aug-2016 : Common interface with all other exporters (DM)
- *
  */
 package org.jgrapht.ext;
 

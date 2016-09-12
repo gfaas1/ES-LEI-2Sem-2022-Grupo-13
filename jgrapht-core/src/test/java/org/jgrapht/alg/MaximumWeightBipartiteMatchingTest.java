@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2015-2016, by Graeme Ahokas and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,20 +15,6 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------------
- * MaximumWeightBipartiteMatchingTest
- * -------------------------
- * (C) Copyright 2015, by Graeme Ahokas and Contributors.
- *
- * Original Author:  Graeme Ahokas
- * Contributor(s):
- *
- * Changes
- * -------
- * 30-Sep-2015 : Initial revision (GA);
- *
- */
-
 package org.jgrapht.alg;
 
 import org.jgrapht.graph.DefaultWeightedEdge;

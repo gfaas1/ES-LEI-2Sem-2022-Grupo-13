@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2012-2016, by Joris Kinable and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * HopcroftKarpBipartiteMatching.java
- * -------------------------
- * (C) Copyright 2012-2012, by Joris Kinable and Contributors.
- *
- * Original Author:  Joris Kinable
- * Contributor(s):
- *
- * Changes
- * -------
- * 26-Nov-2012 : Initial revision (JK);
- *
  */
 package org.jgrapht.alg;
 

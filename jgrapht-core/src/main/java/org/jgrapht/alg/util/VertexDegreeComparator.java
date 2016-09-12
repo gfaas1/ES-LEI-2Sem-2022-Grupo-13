@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2016, by Linda Buisman and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,24 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ---------------------------
- * VertexDegreeComparator.java
- * ---------------------------
- * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
- *
- * Original Author:  Linda Buisman
- * Contributor(s):   Christian Hammer
- *                   Joris Kinable
- *
- * $Id$
- *
- * Changes
- * -------
- * 06-Nov-2003 : Initial revision (LB);
- * 07-Jun-2005 : Made generic (CH);
- * 31-Jul-2016 : Revised comparator and added Order enum (JK)
- *
  */
 package org.jgrapht.alg.util;
 

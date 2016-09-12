@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2006-2016, by Trevor Harmon and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,15 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ------------------------------
- * GraphMLExporterTest.java
- * ------------------------------
- * (C) Copyright 2006-2016, by Trevor Harmon and Contributors.
- *
- * Original Author:  Trevor Harmon
- * Contributors: Dimitrios Michail
- *
  */
 package org.jgrapht.ext;
 

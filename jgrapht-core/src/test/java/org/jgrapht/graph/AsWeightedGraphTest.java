@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2007-2016, by Lucas J Scharenbroich and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* --------------------------
- * AsWeightedGraphTest.java
- * --------------------------
- * (C) Copyright 2007, by Lucas J. Scharenbroich and Contributors.
- *
- * Original Author:  Lucas J. Scharenbroich
- * Contributor(s):   John V. Sichi, Joris Kinable
- *
- * $Id$
- *
- * Changes
- * -------
- * 22-Sep-2007 : Initial revision (JVS);
- * 24-Aug-2015: Added tests for AsWeightedDirectedGraphTest
- *
  */
 package org.jgrapht.graph;
 
