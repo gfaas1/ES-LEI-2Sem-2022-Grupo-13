@@ -81,10 +81,10 @@ with open(inputFile, 'r+') as f:
       firstHeader=p.group(1)
       
       #search for author in data
-      p=re.compile('\@author\s*(Original)?(\:)?\s*(.*?)')
+      p=re.compile('\@author\s*(Original)?(\:)?\s+(.*)')
       p = p.search(data)
       if p:
-	author=p.group(3)
+	authors=p.group(3)
       else:
 	warnings.warn('Cannot find author in data: '+inputFile+"; using default author\n")
 	
