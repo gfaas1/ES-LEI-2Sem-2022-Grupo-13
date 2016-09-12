@@ -22,7 +22,7 @@
 /* -----------------
  * MaximumFlowAlgorithmBase.java
  * -----------------
- * (C) Copyright 2015-2015, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2015, by Alexey Kudinkin, Joris Kinable and Contributors.
  *
  * Original Author:  Alexey Kudinkin
  * Contributor(s): Joris Kinable

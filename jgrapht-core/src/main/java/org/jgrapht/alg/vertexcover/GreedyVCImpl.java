@@ -22,7 +22,7 @@
 /* -----------------
  * GreedyVCImpl.java
  * -----------------
- * (C) Copyright 2003-2008, by Linda Buisman and Contributors.
+ * (C) Copyright 2016-2016, by Joris Kinable and Contributors.
  *
  * Original Author:  Joris Kinable
  * Contributor(s):   -

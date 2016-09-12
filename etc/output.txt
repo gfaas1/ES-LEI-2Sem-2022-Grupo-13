@@ -1,0 +1,431 @@
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/DSVUtilsTest.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/GmlExporterTest.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/DIMACSImporterTest.java
+(C) Copyright 2006-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/GraphMLExporterTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/MatrixExporterTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/CSVImporterTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/GmlImporterTest.java
+(C) Copyright 2003-2016, by Christoph Zauner, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/DOTUtilsTest.java
+Cannot find author in data: ../jgrapht-ext/src/test/java/org/jgrapht/ext/JGraphXAdapterTest.java; using default author
+
+Cannot find year in data: ../jgrapht-ext/src/test/java/org/jgrapht/ext/JGraphXAdapterTest.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/JGraphXAdapterTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/CSVExporterTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/DOTExporterTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/GraphMLImporterTest.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/test/java/org/jgrapht/ext/DOTImporterTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GraphExporter.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/ImportException.java
+(C) Copyright 2006-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GmlExporter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/CSVImporter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GraphImporter.java
+(C) Copyright 2005-2016, by Charles Fry, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/IntegerNameProvider.java
+(C) Copyright 2013-2016, by Barak Naveh, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/JGraphXAdapter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GmlImporter.java
+(C) Copyright 2005-2016, by Charles Fry, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/StringNameProvider.java
+(C) Copyright 2003-2016, by Christoph Zauner, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/DOTUtils.java
+(C) Copyright 2005-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/IntegerEdgeNameProvider.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/DOTImporter.java
+(C) Copyright 2006-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GraphMLExporter.java
+(C) Copyright 2005-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/StringEdgeNameProvider.java
+(C) Copyright 2003-2016, by Avner Linder, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/VisioExporter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/ExportException.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/EdgeProvider.java
+(C) Copyright 2010-2016, by John Sichi, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/ComponentAttributeProvider.java
+(C) Copyright 2006-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/DOTExporter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/DSVUtils.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/CSVExporter.java
+(C) Copyright 2005-2016, by Trevor Harmon, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/EdgeNameProvider.java
+(C) Copyright 2005-2016, by Avner Linder, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/VertexNameProvider.java
+(C) Copyright 2010-2016, by Michael Behrisch, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/DIMACSImporter.java
+(C) Copyright 2005-2016, by Charles Fry, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/MatrixExporter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/GraphMLImporter.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/VertexProvider.java
+(C) Copyright 2015-2016, by Wil Selwood, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/VertexUpdater.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/JGraphModelAdapter.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-ext/src/main/java/org/jgrapht/ext/CSVFormat.java
+(C) Copyright 2008-2016, by Peter Giles, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/experimental/dag/DirectedAcyclicGraphTest.java
+(C) Copyright 2010-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/experimental/alg/ColoringTest.java
+(C) Copyright 2003-2016, by Liviu Rau, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/DepthFirstIteratorTest.java
+(C) Copyright 2003-2016, by Liviu Rau, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/AbstractGraphIteratorTest.java
+(C) Copyright 2005-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/TopologicalOrderIteratorTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/IgnoreDirectionTest.java
+(C) Copyright 2016-2016, by Assaf Mizrachi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/RandomWalkIteratorTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/AllTraverseTests.java
+(C) Copyright 2003-2016, by Liviu Rau, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/BreadthFirstIteratorTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/traverse/ClosestFirstIteratorTest.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/perf/flow/MaximumFlowAlgorithmPerformanceTest.java
+(C) Copyright 2015-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/perf/graph/GraphPerformanceTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KShortestPathCompleteGraph4.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/NotBiconnectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/NeighborIndexTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/AllAlgTests.java
+Cannot find author in data: ../jgrapht-core/src/test/java/org/jgrapht/alg/TarjanLowestCommonAncestorTest.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/test/java/org/jgrapht/alg/TarjanLowestCommonAncestorTest.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/TarjanLowestCommonAncestorTest.java
+(C) Copyright 2012-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/HopcroftKarpBipartiteMatchingTest.java
+(C) Copyright 2015-2016, by Christophe Thiebaud, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/TransitiveReductionTest.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/PushRelabelMFImplTest.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/MaximumFlowAlgorithmTest.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/EdmondsKarpMinimumSTCutTest.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/PushRelabelMinimumSTCutTest.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/MaximumFlowMinimumCutAlgorithmTestBase.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/MinimumSourceSinkCutTest.java
+(C) Copyright 2008-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/flow/EdmondsKarpMFImplTest.java
+(C) Copyright 2003-2016, by Sarah Komla-Ebri, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/StrongConnectivityAlgorithmTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/DijkstraShortestPathTest.java
+(C) Copyright 2011-2016, by Robby McKilliam, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/StoerWagnerMinimumCutTest.java
+(C) Copyright 2016-2016, by Vera-Licona Research Group, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/AllDirectedPathsTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KShortestPathCompleteGraph6.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BidirectionalDijkstraShortestPathTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BiconnectedGraph.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/WeightedVertexCoverTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KSPExampleGraph.java
+(C) Copyright 2007-2016, by Vinayak R Borkar, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/TransitiveClosureTest.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/EulerianCircuitTest.java
+Did not find any headers: ../jgrapht-core/src/test/java/org/jgrapht/alg/NaiveLcaFinderTest.java
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/NaiveLcaFinderTest.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/GreedyMultiplicativeSpannerTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/ConnectivityInspectorTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/Picture1Graph.java
+(C) Copyright 2010-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KSPDiscardsValidPathsTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BiconnectivityInspectorTest.java
+(C) Copyright 2003-2016, by Linda Buisman, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/VertexCoverTest.java
+Cannot find author in data: ../jgrapht-core/src/test/java/org/jgrapht/alg/KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/test/java/org/jgrapht/alg/KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KuhnMunkresMinimalWeightBipartitePerfectMatchingTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/CycleDetectorTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KShortestPathCompleteGraph5.java
+(C) Copyright 2015-2016, by Florian Buenzli, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/CliqueMinimalSeparatorDecompositionTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/ShortestPathTestCase.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/ChromaticNumberTest.java
+(C) Copyright 2009-2016, by Tom Larkworthy, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/FloydWarshallShortestPathsTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KShortestPathCostTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BlockCutpointGraphTest.java
+(C) Copyright 2010-2016, by Tom Conerly, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/util/UnionFindTest.java
+(C) Copyright 2010-2016, by Tom Conerly, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/util/AllAlgUtilTests.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/util/VertexDegreeComparatorTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KSPExampleTest.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/isomorphism/GraphOrderingTest.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/isomorphism/VF2SubgraphIsomorphismInspectorTest.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/isomorphism/SubgraphIsomorphismTestUtils.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/isomorphism/VF2GraphIsomorphismInspectorTest.java
+(C) Copyright 2016-2016, by Assaf Mizrachi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KSPPathValidatorTest.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BellmanFordShortestPathTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/HamiltonianCycleTest.java
+(C) Copyright 2015-2016, by Joris Kinable, Jon Robison, Thomas Breitbart, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/AStarShortestPathTest.java
+(C) Copyright 2005-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/BronKerboschCliqueFinderTest.java
+(C) Copyright 2012-2016, by Alejandro Ramon Lopez del Huerto, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/EdmondsBlossomShrinkingTest.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/cycle/UndirectedCycleBaseTest.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/cycle/DirectedSimpleCyclesTest.java
+(C) Copyright 2010-2016, by Tom Conerly, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/MinimumSpanningTreeTest.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/KShortestPathKValuesTest.java
+(C) Copyright 2015-2016, by Graeme Ahokas, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/alg/MaximumWeightBipartiteMatchingTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/EnhancedTestCase.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/generate/GraphGeneratorTest.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/generate/RandomGraphGeneratorTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/generate/AllGenerateTests.java
+(C) Copyright 2003-2016, by Christoph Zauner, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/GraphsTest.java
+(C) Copyright 2003-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/UnionGraphTest.java
+(C) Copyright 2012-2016, by Vladimir Kostyukov, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/EqualsAndHashCodeTest.java
+(C) Copyright 2003-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/SubgraphTest.java
+(C) Copyright 2007-2016, by Lucas J Scharenbroich, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/AsWeightedGraphTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/SimpleDirectedGraphTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/SimpleGraphPathTest.java
+(C) Copyright 2006-2016, by HartmutBenz, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/GenericGraphsTest.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/GraphBuilderTest.java
+(C) Copyright 2016-2016, by Andrew Gainer-Dewar, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/MaskVertexSetTest.java
+(C) Copyright 2007-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/AsUnweightedGraphTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/CloneTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/SimpleIdentityDirectedGraphTest.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/AsUndirectedGraphTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/ListenableGraphTest.java
+(C) Copyright 2016-2016, by Andrew Gainer-Dewar, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/MaskEdgeSetTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/AllGraphTests.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/SerializationTest.java
+(C) Copyright 2003-2016, by Christoph Zauner, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/TestEdge.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/DefaultDirectedGraphTest.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/graph/GraphWalkTest.java
+(C) Copyright 2008-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/util/FibonacciHeapTest.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/util/PrefetchIteratorTest.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/util/StopWatch.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/util/AllUtilTests.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/test/java/org/jgrapht/AllTests.java
+(C) Copyright 2004-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/GraphSquare.java
+(C) Copyright 2008-2016, by Peter Giles, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/dag/DirectedAcyclicGraph.java
+(C) Copyright 2003-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/UniformRandomGraphGenerator.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/GraphTests.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/GraphTests.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/GraphTests.java
+(C) Copyright 2003-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/PartiteRandomGraphGenerator.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ApproximationAlgorithm.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ApproximationAlgorithm.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ApproximationAlgorithm.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ExactAlgorithm.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ExactAlgorithm.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/ExactAlgorithm.java
+Cannot find Initial version in 2nd header: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/color/BrownBacktrackColoring.java; using default year
+
+(C) Copyright 2016-2016, by , and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/color/BrownBacktrackColoring.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/color/GreedyColoring.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/color/GreedyColoring.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/color/GreedyColoring.java
+Cannot find Initial version in 2nd header: ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/IntArrayGraphAlgorithm.java; using default year
+
+(C) Copyright 2016-2016, by , and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/alg/IntArrayGraphAlgorithm.java
+(C) Copyright 2003-2016, by Michael Behrisch, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/experimental/RandomGraphHelper.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/VertexFactory.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/GraphIterator.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/AbstractGraphIterator.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/BreadthFirstIterator.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/ClosestFirstIterator.java
+(C) Copyright 2003-2016, by Liviu Rau, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/DepthFirstIterator.java
+(C) Copyright 2016-2016, by Assaf Mizrachi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/RandomWalkIterator.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/CrossComponentIterator.java
+(C) Copyright 2004-2016, by Marden Neubert, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/traverse/TopologicalOrderIterator.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/EdgeFactory.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/GraphHelper.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/Graphs.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/ListenableGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/EdgeTraversalEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/GraphEdgeChangeEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/VertexSetListener.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/GraphChangeEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/TraversalListenerAdapter.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/ConnectedComponentTraversalEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/GraphListener.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/VertexTraversalEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/GraphVertexChangeEvent.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/event/TraversalListener.java
+(C) Copyright 2005-2016, by Charles Fry, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/NeighborIndex.java
+(C) Copyright 2012-2016, by Alejandro Ramon Lopez del Huerto, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/EdmondsBlossomShrinking.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BlockCutpointGraph.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/AbstractPathElementList.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/RankingPathElementList.java
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/alg/TarjanLowestCommonAncestor.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/TarjanLowestCommonAncestor.java
+(C) Copyright 2005-2016, by Ewgenij Proschak, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BronKerboschCliqueFinder.java
+(C) Copyright 2008-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/flow/EdmondsKarpMFImpl.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/flow/MaximumFlowAlgorithmBase.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/flow/PushRelabelMFImpl.java
+(C) Copyright 2005-2016, by Charles Fry, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/DirectedNeighborIndex.java
+(C) Copyright 2006-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/AbstractPathElement.java
+(C) Copyright 2011-2016, by Robby McKilliam, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/StoerWagnerMinimumCut.java
+(C) Copyright 2013-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/PrimMinimumSpanningTree.java
+(C) Copyright 2005-2016, by Christian Soltenborn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/KosarajuStrongConnectivityInspector.java
+(C) Copyright 2013-2016, by Sarah Komla-Ebri, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/GabowStrongConnectivityInspector.java
+(C) Copyright 2009-2016, by Tom Larkworthy, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/FloydWarshallShortestPaths.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/HamiltonianCycle.java
+(C) Copyright 2005-2016, by Christian Soltenborn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/StrongConnectivityInspector.java
+(C) Copyright 2015-2016, by Christophe Thiebaud, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/TransitiveReduction.java
+(C) Copyright 2003-2016, by Linda Buisman, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/VertexCovers.java
+(C) Copyright 2003-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/RecursiveExactVCImpl.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/ClarksonTwoApproxVCImpl.java
+(C) Copyright 2003-2016, by Linda Buisman, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/GreedyVCImpl.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/util/RatioVertex.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/BarYehudaEvenTwoApproxVCImpl.java
+(C) Copyright 2003-2016, by Linda Buisman, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/vertexcover/EdgeBasedTwoApproxVCImpl.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/EulerianCircuit.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/KShortestPaths.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/ChromaticNumber.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/DijkstraShortestPath.java
+(C) Copyright 2012-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/HopcroftKarpBipartiteMatching.java
+(C) Copyright 2016-2016, by Assaf Mizrachi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/PathValidator.java
+(C) Copyright 2013-2016, by Leo Crawford, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/NaiveLcaFinder.java
+(C) Copyright 2015-2016, by Graeme Ahokas, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/MaximumWeightBipartiteMatching.java
+(C) Copyright 2012-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/MinSourceSinkCut.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/ConnectivityInspector.java
+(C) Copyright 2006-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BellmanFordIterator.java
+(C) Copyright 2006-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BellmanFordShortestPath.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/RankingPathElement.java
+(C) Copyright 2010-2016, by Tom Conerly, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/UnionFind.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/Pair.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/AlwaysEqualComparator.java
+(C) Copyright 2003-2016, by Linda Buisman, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/VertexDegreeComparator.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/extension/ExtensionFactory.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/extension/Extension.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/util/extension/ExtensionManager.java
+(C) Copyright 2015-2016, by Joris Kinable, Jon Robison, Thomas Breitbart, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/AStarShortestPath.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BiconnectivityInspector.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2MappingIterator.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2SubgraphIsomorphismInspector.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2GraphMappingIterator.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2State.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2GraphIsomorphismState.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2SubgraphIsomorphismState.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/GraphOrdering.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2GraphIsomorphismInspector.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/IsomorphicGraphMapping.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2AbstractIsomorphismInspector.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/VF2SubgraphMappingIterator.java
+(C) Copyright 2015-2016, by Fabian Späh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/isomorphism/IsomorphismInspector.java
+(C) Copyright 2007-2016, by Vinayak R Borkar, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/TransitiveClosure.java
+(C) Copyright 2013-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/KuhnMunkresMinimalWeightBipartitePerfectMatching.java
+(C) Copyright 2010-2016, by Tom Conerly, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/KruskalMinimumSpanningTree.java
+(C) Copyright 2015-2016, by Vera-Licona Research Group, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/AllDirectedPaths.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/KShortestPathsIterator.java
+(C) Copyright 2013-2016, by Sarah Komla-Ebri, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/StrongConnectivityAlgorithm.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MinimumVertexCoverAlgorithm.java
+(C) Copyright 2015-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MaximumFlowAlgorithm.java
+(C) Copyright 2015-2016, by Joris Kinable, Jon Robison, Thomas Breitbart, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/AStarAdmissibleHeuristic.java
+(C) Copyright 2013-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/WeightedMatchingAlgorithm.java
+(C) Copyright 2013-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MinimumSpanningTree.java
+(C) Copyright 2013-2016, by Alexey Kudinkin, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MatchingAlgorithm.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MinimumWeightedVertexCoverAlgorithm.java
+(C) Copyright 2016-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/interfaces/MinimumSTCutAlgorithm.java
+(C) Copyright 2014-2016, by Luiz Kill, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/HawickJamesSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/UndirectedCycleBase.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/DirectedSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/JohnsonSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/SzwarcfiterLauerSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/TarjanSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/TiernanSimpleCycles.java
+(C) Copyright 2013-2016, by Nikolay Ognyanov, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/cycle/PatonCycleBase.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BidirectionalDijkstraShortestPath.java
+(C) Copyright 2004-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/CycleDetector.java
+(C) Copyright 2015-2016, by Florian Buenzli, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/CliqueMinimalSeparatorDecomposition.java
+(C) Copyright 2006-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/BellmanFordPathElement.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/alg/GreedyMultiplicativeSpanner.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/Graph.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/GraphMapping.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/LinearGraphGenerator.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/RandomGraphGenerator.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/StarGraphGenerator.java
+(C) Copyright 2011-2016, by Assaf Mizrachi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/GridGraphGenerator.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/HyperCubeGraphGenerator.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/EmptyGraphGenerator.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/GraphGenerator.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedGraphMatrixGenerator.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedGraphMatrixGenerator.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedGraphMatrixGenerator.java
+(C) Copyright 2008-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/ScaleFreeGraphGenerator.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/RingGraphGenerator.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/WheelGraphGenerator.java
+(C) Copyright 2008-2016, by Andrew Newell, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/CompleteBipartiteGraphGenerator.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedBipartiteGraphMatrixGenerator.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedBipartiteGraphMatrixGenerator.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/SimpleWeightedBipartiteGraphMatrixGenerator.java
+Cannot find author in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/WeightedGraphGenerator.java; using default author
+
+Cannot find year in data: ../jgrapht-core/src/main/java/org/jgrapht/generate/WeightedGraphGenerator.java; using default year
+
+(C) Copyright 2016-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/WeightedGraphGenerator.java
+(C) Copyright 2013-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/WeightedGraphGeneratorAdapter.java
+(C) Copyright 2003-2016, by Tim Shearouse, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/generate/CompleteGraphGenerator.java
+(C) Copyright 2015-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/Specifics.java
+(C) Copyright 2015-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/UndirectedSpecifics.java
+(C) Copyright 2015-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/FastLookupDirectedSpecifics.java
+(C) Copyright 2015-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/FastLookupUndirectedSpecifics.java
+(C) Copyright 2015-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/DirectedSpecifics.java
+(C) Copyright 2015-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/DirectedEdgeContainer.java
+(C) Copyright 2015-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/specifics/UndirectedEdgeContainer.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/MaskFunctor.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ClassBasedVertexFactory.java
+(C) Copyright 2009-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UndirectedGraphUnion.java
+(C) Copyright 2007-2016, by Lucas J Scharenbroich, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AsUnweightedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ListenableUndirectedWeightedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/Pseudograph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedWeightedMultigraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/SimpleDirectedGraph.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UndirectedMaskSubgraph.java
+(C) Copyright 2005-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/EdgeSetFactory.java
+(C) Copyright 2009-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/GraphUnion.java
+(C) Copyright 2015-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AsWeightedDirectedGraph.java
+(C) Copyright 2007-2016, by Lucas J Scharenbroich, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AsWeightedGraph.java
+(C) Copyright 2009-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/GraphWalk.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AbstractGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/SimpleGraphPath.java
+(C) Copyright 2004-2016, by Christian Hammer, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedPseudograph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/SimpleDirectedWeightedGraph.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedMaskSubgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedWeightedSubgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UnmodifiableGraph.java
+(C) Copyright 2007-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ParanoidGraph.java
+(C) Copyright 2015-2016, by Joris Kinable., and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/MixedGraphUnion.java
+(C) Copyright 2009-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedGraphUnion.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultGraphMapping.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultListenableGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/SimpleWeightedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/SimpleGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ClassBasedEdgeFactory.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ListenableUndirectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedSubgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultEdge.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ListenableDirectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedMultigraph.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultWeightedEdge.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/Multigraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AbstractBaseGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UndirectedWeightedSubgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultDirectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DefaultDirectedWeightedGraph.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/MaskVertexSet.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/IntrusiveEdge.java
+(C) Copyright 2009-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/GraphPathImpl.java
+(C) Copyright 2007-2016, by Lucas J Scharenbroich, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AsUnweightedDirectedGraph.java
+(C) Copyright 2003-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/AsUndirectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/ListenableDirectedWeightedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/GraphDelegator.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/MaskEdgeSet.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UndirectedSubgraph.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/EdgeReversedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UnmodifiableUndirectedGraph.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/UndirectedWeightedGraphBuilder.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/DirectedGraphBuilderBase.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/DirectedGraphBuilder.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/UndirectedGraphBuilder.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/UndirectedGraphBuilderBase.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/DirectedWeightedGraphBuilderBase.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/DirectedWeightedGraphBuilder.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/AbstractGraphBuilder.java
+(C) Copyright 2015-2016, by Andrew Chen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/builder/UndirectedWeightedGraphBuilderBase.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/Subgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/WeightedMultigraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/DirectedWeightedPseudograph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/UnmodifiableDirectedGraph.java
+(C) Copyright 2007-2016, by France Telecom, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/MaskSubgraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/graph/WeightedPseudograph.java
+(C) Copyright 1999-2016, by Nathan Fiedler, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/FibonacciHeap.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/ArrayUnenforcedSet.java
+(C) Copyright 2002-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/ModifiableInteger.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/PrefetchIterator.java
+(C) Copyright 2009-2016, by Ilya Razenshteyn, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/WeightCombiner.java
+(C) Copyright 1999-2016, by Nathan Fiedler, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/FibonacciHeapNode.java
+(C) Copyright 2005-2016, by Assaf Lehr, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/MathUtil.java
+(C) Copyright 2006-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/TypeUtil.java
+(C) Copyright 2003-2016, by Joris Kinable, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/UnorderedVertexPair.java
+(C) Copyright 2009-2016, by Soren Davidsen, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/util/VertexPair.java
+(C) Copyright 2008-2016, by John V Sichi, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/GraphPath.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/UndirectedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/WeightedGraph.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-core/src/main/java/org/jgrapht/DirectedGraph.java
+(C) Copyright 2006-2016, by Carl Anderson, and Contributors. ../jgrapht-touchgraph/src/main/java/org/jgrapht/experimental/touchgraph/TouchgraphConverter.java
+(C) Copyright 2006-2016, by Carl Anderson, and Contributors. ../jgrapht-touchgraph/src/main/java/org/jgrapht/experimental/touchgraph/SimpleTouchgraphApplet.java
+(C) Copyright 2006-2016, by Carl Anderson, and Contributors. ../jgrapht-touchgraph/src/main/java/org/jgrapht/experimental/touchgraph/TouchgraphPanel.java
+Cannot find author in data: ../jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java; using default author
+
+(C) Copyright 2013-2016, by Barak Naveh, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/PerformanceDemo.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/HelloJGraphT.java
+(C) Copyright 2003-2016, by Tim Shearouse, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/CompleteGraphDemo.java
+(C) Copyright 2016-2016, by Dimitrios Michail, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/GraphMLExportDemo.java
+(C) Copyright 2003-2016, by Barak Naveh, and Contributors. ../jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphAdapterDemo.java
