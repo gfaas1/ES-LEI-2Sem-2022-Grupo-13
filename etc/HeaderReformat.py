@@ -1,26 +1,27 @@
+#Reformats all headers to give them one homogeneous look
 #Execute:
 #find ../ -name *.java -not -path "*/generated-sources/*" -not -path "*/generated-test-sources/*" -exec python HeaderReformat.py {} \;
 
-import re, mmap, sys, warnings
+import re, mmap, sys, warnings, os
 
 def _warning(
     message,
     category = UserWarning,
-    filename = '',
+    inputFile = '',
     lineno = -1):
     print(message)
 warnings.showwarning = _warning
 
-filename = sys.argv[1]
+inputFile = sys.argv[1]
 authors="Barak Naveh"
 year="2016"
+data =""
 
-with open(filename, 'r+') as f:
+with open(inputFile, 'r+') as f:
   data = mmap.mmap(f.fileno(), 0)
   
    
   #try parsing double header
-  #p= re.compile('/\*(.*?)\*/\n/\*(.*?)\*/', re.DOTALL)
   p= re.compile('/\*(.*?)\*/\r?\n\n?/\*(.*?)\*/', re.DOTALL)
   p = p.search(data)
   
@@ -37,7 +38,7 @@ with open(filename, 'r+') as f:
       p=re.compile('\(C\)\s*Copyright\s*(\d+)\-?(\d+)?,\s*(by)?\s*(.*)?')
       p=p.search(secondHeader)
       if not p:
-	raise Exception('Cannot parse copyright statement in 2nd header: '+filename+"\n"+secondHeader)
+	raise Exception('Cannot parse copyright statement in 2nd header: '+inputFile+"\n"+secondHeader)
       year=p.group(1)
       authors=p.group(4)
       #strip off "and Contributors" and variations thereof
@@ -58,7 +59,7 @@ with open(filename, 'r+') as f:
       elif p2:
 	authors=p2.group(3)
       else:
-	warnings.warn('Cannot find original author in 2nd header: '+filename+"; using default author\n")
+	warnings.warn('Cannot find original author in 2nd header: '+inputFile+"; using default author\n")
       
       #Search for "Initial version" to extract year April-2016: Initial version;
       p=re.compile('(.*)?([0-9]{4,4})(.*)?Initial')
@@ -69,7 +70,7 @@ with open(filename, 'r+') as f:
 	p=re.compile('\(C\).*?[0-9]{4,4}-([0-9]{4,4})')
 	p=p.search(firstHeader)
 	if not p:
-	  warnings.warn('Cannot find Initial version in 2nd header: '+filename+"; using default year\n")
+	  warnings.warn('Cannot find Initial version in 2nd header: '+inputFile+"; using default year\n")
 	else:
 	  year=p.group(1)
   else:
@@ -85,7 +86,7 @@ with open(filename, 'r+') as f:
       if p:
 	author=p.group(3)
       else:
-	warnings.warn('Cannot find author in data: '+filename+"; using default author\n")
+	warnings.warn('Cannot find author in data: '+inputFile+"; using default author\n")
 	
       #search for year in data
       p=re.compile('\@since(.*?)([0-9]{4,4})')
@@ -93,24 +94,31 @@ with open(filename, 'r+') as f:
       if p:
 	year=p.group(2)
       else:
-	warnings.warn('Cannot find year in data: '+filename+"; using default year\n")
+	warnings.warn('Cannot find year in data: '+inputFile+"; using default year\n")
       
     else:
-      warnings.warn('Did not find any headers: '+filename+"\n")
+      warnings.warn('Did not find any headers: '+inputFile+"\n")
 
-print("(C) Copyright "+year+"-2016, by "+authors+", and Contributors."+" "+filename)
-    
+print("(C) Copyright "+year+"-2016, by "+authors+", and Contributors."+" "+inputFile)
 
-    
-'''    
-/* ==========================================
+#strip away double header
+p= re.compile('/\*(.*?)\*/\r?\n\n?/\*(.*?)\*/\n*', re.DOTALL)
+data=p.sub('', data)
+#strip away single header
+p= re.compile('/\*\s*This\sprogram(.*?)\*/\n*', re.DOTALL)
+data=p.sub('', data)
+#print("result:")
+#print(data)
+
+newHeader= """line %d
+	    line %d
+	    line %d""" % (1, 2, 3)
+	    
+	    
+newHeader= """/*
+ * (C) Copyright %s-2016, by %s and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -123,22 +131,13 @@ print("(C) Copyright "+year+"-2016, by "+authors+", and Contributors."+" "+filen
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ------------------
- * DirectedGraph.java
- * ------------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
- *
- * Original Author:  Barak Naveh
- * Contributor(s):   Christian Hammer
- *
- * $Id$
- *
- * Changes
- * -------
- * 24-Jul-2003 : Initial revision (BN);
- * 11-Mar-2004 : Made generic (CH);
- * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
- *
- */
- '''
+ */\n""" % (year, authors)
+ 
+#print(newHeader)
+
+outputFile = inputFile + ".tmp"
+out = open(outputFile, "w")
+out.write(newHeader)
+out.write(data)
+out.close()
+os.rename(outputFile, inputFile)
