@@ -37,10 +37,13 @@ package org.jgrapht.alg.flow;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -52,6 +55,39 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         return new PushRelabelMFImpl<>(network);
     }
 
+    public void testDisconnected1()
+    {
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2, 3, 4, 5));
+        network.addEdge(2, 4);
+        network.addEdge(3, 4);
+        network.addEdge(1, 4);
+        network.addEdge(0, 1);
+        network.addEdge(2, 0);
+        network.addEdge(1, 0);
+        network.addEdge(4, 0);
+        network.addEdge(4, 1);
+        network.addEdge(1, 3);
+        network.addEdge(4, 3);
+
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
+        double cutWeight = prSolver.calculateMinCut(0, 5);
+        assertEquals(0d, cutWeight);
+    }
+    
+    public void testDisconnected2()
+    {
+        SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2));
+        network.addEdge(0, 1);
+
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
+        double cutWeight = prSolver.calculateMinCut(0, 2);
+        assertEquals(0d, cutWeight);
+    }
+    
     public void testRandomDirectedGraphs(){
         for(int test=0; test<NR_RANDOM_TESTS; test++){
             DirectedGraph<Integer, DefaultWeightedEdge> network=generateDirectedGraph();

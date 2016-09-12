@@ -38,7 +38,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.alg.util.extension.*;
 
 
 /**
@@ -145,19 +145,24 @@ public class PushRelabelMFImpl<V, E>
 
                     vx.label = ux.label + 1;
                     q.add(vx);
-
-                    // NOTA BENE:
-                    //  This is part of label-pruning mechanic which
-                    //  targets to diminish all 'useless' relabels during
-                    //  "flow-back" phase of the algorithm pushing excess
-                    //  flow back to the source
-
-                    if (!labeling.containsKey(vx.label)) {
-                        labeling.put(vx.label, 1);
-                    } else {
-                        labeling.put(vx.label, labeling.get(vx.label) + 1);
-                    }
                 }
+            }
+        }
+        
+        // NOTA BENE:
+        //  count label frequencies
+        //
+        //  This is part of label-pruning mechanic which
+        //  targets to diminish all 'useless' relabels during
+        //  "flow-back" phase of the algorithm pushing excess
+        //  flow back to the source
+        for (V v : network.vertexSet())
+        {
+            VertexExtension vx = getVertexExtension(v);
+            if (!labeling.containsKey(vx.label)) {
+                labeling.put(vx.label, 1);
+            } else {
+                labeling.put(vx.label, labeling.get(vx.label) + 1);
             }
         }
 
