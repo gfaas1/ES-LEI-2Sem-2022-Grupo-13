@@ -36,6 +36,7 @@ Changes to JGraphT in each version:
 	- Added generics to code in test package (contributed by Dimitrios Michail)
 	- Fixed a bug in `PushRelabelMFImpl`, reported by Joris Kinable, which caused a NullPointerException whenever the network contained multiple components (contributed by Dimitrios Michail)
 	- Fixed a bug in `MaximumFlowAlgorithmBase`: some vertices ended up with a null prototype vertex (contributed by Dimitrios Michail)
+	- Use equals for compare to fix bug in `EdmondsBlossomShrinking`, contributed by Szabolcs Besenyei
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
