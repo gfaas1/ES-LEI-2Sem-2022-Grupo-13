@@ -29,6 +29,11 @@ public interface WeightedMatchingAlgorithm<V, E>
     extends MatchingAlgorithm<V, E>
 {
     /**
+     * Default tolerance used by the algorithm.
+     */
+    double DEFAULT_EPSILON = 1e-9;
+
+    /**
      * Returns weight of a matching found
      *
      * @return weight of a matching found

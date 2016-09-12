@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.matching;
 
 import java.util.*;
 
@@ -32,9 +32,7 @@ import org.jgrapht.util.*;
  *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
- * @deprecated Use {@link org.jgrapht.alg.matching.EdmondsBlossomShrinking} instead.
  */
-@Deprecated
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {

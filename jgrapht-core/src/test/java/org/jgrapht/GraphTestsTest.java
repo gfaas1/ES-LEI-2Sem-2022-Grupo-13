@@ -17,7 +17,11 @@
  */
 package org.jgrapht;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import org.jgrapht.generate.CompleteGraphGenerator;
@@ -327,6 +331,45 @@ public class GraphTestsTest
             Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
             generator.generateGraph(g, new IntegerVertexFactory(), null);
             Assert.assertTrue(GraphTests.isBipartite(g));
+        }
+    }
+
+    @Test
+    public void testIsBipartitePartition()
+    {
+        List<Graph<Integer, DefaultEdge>> gList = new ArrayList<>();
+        gList.add(new Pseudograph<>(DefaultEdge.class));
+        gList.add(new DirectedPseudograph<>(DefaultEdge.class));
+
+        for (Graph<Integer, DefaultEdge> g : gList) {
+            Set<Integer> a = new HashSet<>();
+            Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+            a.addAll(Arrays.asList(1, 2));
+            Set<Integer> b = new HashSet<>();
+            b.addAll(Arrays.asList(3, 4));
+            Assert.assertTrue(GraphTests.isBipartitePartition(g, a, b));
+            g.addEdge(1, 3);
+            g.addEdge(1, 4);
+            g.addEdge(1, 3);
+            g.addEdge(2, 3);
+            g.addEdge(2, 4);
+            g.addEdge(4, 1);
+            g.addEdge(3, 1);
+            Assert.assertTrue(GraphTests.isBipartitePartition(g, a, b));
+            a.remove(1);
+            Assert.assertFalse(GraphTests.isBipartitePartition(g, a, b));
+            a.add(1);
+            Assert.assertTrue(GraphTests.isBipartitePartition(g, a, b));
+            DefaultEdge e11 = g.addEdge(1, 1);
+            Assert.assertFalse(GraphTests.isBipartitePartition(g, a, b));
+            g.removeEdge(e11);
+            Assert.assertTrue(GraphTests.isBipartitePartition(g, a, b));
+            DefaultEdge e44 = g.addEdge(4, 4);
+            Assert.assertFalse(GraphTests.isBipartitePartition(g, a, b));
+            g.removeEdge(e44);
+            Assert.assertTrue(GraphTests.isBipartitePartition(g, a, b));
+            g.addEdge(4, 3);
+            Assert.assertFalse(GraphTests.isBipartitePartition(g, a, b));
         }
     }
 

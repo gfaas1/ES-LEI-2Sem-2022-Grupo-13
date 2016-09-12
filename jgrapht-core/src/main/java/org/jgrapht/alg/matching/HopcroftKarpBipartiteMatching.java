@@ -15,13 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.matching;
 
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 
 /**
  * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
@@ -37,9 +36,8 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- * @deprecated Use {@link org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching} instead.
  */
-@Deprecated
+
 public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
@@ -81,28 +79,14 @@ public class HopcroftKarpBipartiteMatching<V, E>
      */
     private boolean checkInputData()
     {
-        if (graph instanceof Multigraph) {
-            throw new IllegalArgumentException(
-                "Multi graphs are not allowed as input, only simple graphs!");
+        if (!GraphTests.isSimple(graph)) {
+            throw new IllegalArgumentException("Only simple graphs allowed as input!");
         }
 
-        // Test the bipartite-ness
-        Set<V> neighborsSet1 = new HashSet<>();
-        for (V v : partition1) {
-            neighborsSet1.addAll(Graphs.neighborListOf(graph, v));
+        if (!GraphTests.isBipartitePartition(graph, partition1, partition2)) {
+            throw new IllegalArgumentException("Not a valid bipartite partition of the vertices");
         }
-        if (interSectionNotEmpty(partition1, neighborsSet1)) {
-            throw new IllegalArgumentException(
-                "There are edges within partition 1, i.e. not a bipartite graph");
-        }
-        Set<V> neighborsSet2 = new HashSet<>();
-        for (V v : partition2) {
-            neighborsSet2.addAll(Graphs.neighborListOf(graph, v));
-        }
-        if (interSectionNotEmpty(partition2, neighborsSet2)) {
-            throw new IllegalArgumentException(
-                "There are edges within partition 2, i.e. not a bipartite graph");
-        }
+
         return true;
     }
 

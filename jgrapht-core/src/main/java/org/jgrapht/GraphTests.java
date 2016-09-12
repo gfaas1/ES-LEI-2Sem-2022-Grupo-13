@@ -242,6 +242,49 @@ public abstract class GraphTests
     }
 
     /**
+     * Test whether a partition of the vertices into two sets is a bipartite partition.
+     * 
+     * @param graph the input graph
+     * @param firstPartition the first vertices partition
+     * @param secondPartition the second vertices partition
+     * @return true if the partition is a bipartite partition, false otherwise
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static <V, E> boolean isBipartitePartition(
+        Graph<V, E> graph, Set<V> firstPartition, Set<V> secondPartition)
+    {
+        Objects.requireNonNull(graph, "Graph cannot be null");
+        Objects.requireNonNull(firstPartition, "First partition cannot be null");
+        Objects.requireNonNull(secondPartition, "Second partition cannot be null");
+
+        if (graph.vertexSet().size() != firstPartition.size() + secondPartition.size()) {
+            return false;
+        }
+
+        for (V v : graph.vertexSet()) {
+            Set<V> otherPartition;
+            if (firstPartition.contains(v)) {
+                otherPartition = secondPartition;
+            } else if (secondPartition.contains(v)) {
+                otherPartition = firstPartition;
+            } else {
+                // v does not belong to any of the two partitions
+                return false;
+            }
+
+            for (E e : graph.edgesOf(v)) {
+                V other = Graphs.getOppositeVertex(graph, e, v);
+                if (!otherPartition.contains(other)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
      * vertex has an even degree. A directed graph is Eulerian if it is strongly connected and each
      * vertex has the same incoming and outgoing degree.

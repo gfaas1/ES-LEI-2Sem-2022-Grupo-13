@@ -194,7 +194,7 @@ public final class EdmondsKarpMFImpl<V, E>
             VertexExtension ux = queue.poll();
 
             for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
-                if ((ex.flow + epsilon) < ex.capacity) {
+                if (comparator.compare(ex.flow, ex.capacity) < 0) {
                     VertexExtension vx = ex.getTarget();
 
                     if (vx == currentSink) {
