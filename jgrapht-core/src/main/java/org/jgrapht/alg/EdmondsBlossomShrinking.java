@@ -159,16 +159,13 @@ public class EdmondsBlossomShrinking<V, E>
 
                     Set<V> blossom = new HashSet<>();
 
-                    // ?
                     markPath(v, to, stem, blossom);
                     markPath(to, v, stem, blossom);
 
-                    // ???
                     graph.vertexSet().stream().filter(
                         i -> contracted.containsKey(i) && blossom.contains(contracted.get(i)))
                         .forEach(i -> {
                             contracted.put(i, stem);
-                            // ???
                             if (!used.contains(i)) {
                                 used.add(i);
                                 q.add(i);
