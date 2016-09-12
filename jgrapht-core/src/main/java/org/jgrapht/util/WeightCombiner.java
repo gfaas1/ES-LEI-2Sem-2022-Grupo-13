@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2009-2016, by Ilya Razenshteyn and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,20 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * WeightCombiner.java
- * -------------------------
- * (C) Copyright 2009-2009, by Ilya Razenshteyn
- *
- * Original Author:  Ilya Razenshteyn and Contributors.
- *
- * $Id$
- *
- * Changes
- * -------
- * 02-Feb-2009 : Initial revision (IR);
- *
  */
 package org.jgrapht.util;
 

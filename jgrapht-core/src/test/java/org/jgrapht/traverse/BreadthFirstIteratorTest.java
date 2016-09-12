@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2016, by Liviu Rau and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -----------------------------
- * BreadthFirstIteratorTest.java
- * -----------------------------
- * (C) Copyright 2003-2008, by Liviu Rau and Contributors.
- *
- * Original Author:  Liviu Rau
- * Contributor(s):   Barak Naveh
- *
- * $Id$
- *
- * Changes
- * -------
- * 30-Jul-2003 : Initial revision (LR);
- * 06-Aug-2003 : Test traversal listener & extract a shared superclass (BN);
- *
  */
 package org.jgrapht.traverse;
 

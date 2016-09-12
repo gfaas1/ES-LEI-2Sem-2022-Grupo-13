@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2015-2016, by Wil Selwood and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,20 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ------------------
- * DOTImporter.java
- * ------------------
- * (C) Copyright 2015-2016, by  Wil Selwood and Contributors.
- *
- * Original Author:  Wil Selwood <wselwood@ijento.com>
- * Contributor(s): Dimitrios Michail
- * 
- * Changes
- * -------
- * 2015 : Initial revision (WS);
- * 19-Aug-2016: Always provide id to vertex providers (DM);
- *
  */
 package org.jgrapht.ext;
 

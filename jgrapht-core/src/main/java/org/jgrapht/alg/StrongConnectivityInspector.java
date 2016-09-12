@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2005-2016, by Christian Soltenborn and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* --------------------------
- * StrongConnectivityInspector.java
- * --------------------------
- * (C) Copyright 2005-2008, by Christian Soltenborn and Contributors.
- *
- * Original Author:  Christian Soltenborn
- *
- * $Id$
- *
- * Changes
- * -------
- * 2-Feb-2005 : Initial revision (CS);
- * 5-Feb-2007 : fixed NullPointerException (CS);
- * 1-Apr-2008 : Reduced memory consumption (CS);
- *
  */
 package org.jgrapht.alg;
 

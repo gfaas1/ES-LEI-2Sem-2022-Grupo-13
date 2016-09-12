@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2015-2016, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * AStarAdmissibleHeuristic.java
- * -------------------------
- * (C) Copyright 2015-2015, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
- *
- * Original Author:  Joris Kinable
- * Contributor(s):
- *
- * Changes
- * -------
- * Aug-2015 : Initial version;
- *
  */
 package org.jgrapht.alg.interfaces;
 

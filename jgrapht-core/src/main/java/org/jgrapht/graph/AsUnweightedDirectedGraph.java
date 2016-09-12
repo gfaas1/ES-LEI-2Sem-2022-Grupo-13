@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2007-2016, by Lucas J Scharenbroich and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,21 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/*  ----------------------
- * AsUnweightedGraph.java
- * ----------------------
- * (C) Copyright 2007-2008, by Lucas J. Scharenbroich and Contributors.
- *
- * Original Author:  Lucas J. Scharenbroich
- * Contributor(s):   John V. Sichi
- *
- * $Id$
- *
- * Changes
- * -------
- * 7-Sep-2007 : Initial revision (LJS);
- *
  */
 package org.jgrapht.graph;
 

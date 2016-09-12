@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,24 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * RankingPathElementList.java
- * -------------------------
- * (C) Copyright 2007-2010, by France Telecom
- *
- * Original Author:  Guillaume Boulmier and Contributors.
- * Contributor(s):   John V. Sichi, Assaf Mizrachi
- *
- * $Id$
- *
- * Changes
- * -------
- * 05-Jun-2007 : Initial revision (GB);
- * 05-Jul-2007 : Added support for generics (JVS);
- * 06-Dec-2010 : Bugfixes (GB);
- * 21-Jul-2016 : Added external path validator (AM).
- *
  */
 package org.jgrapht.alg;
 

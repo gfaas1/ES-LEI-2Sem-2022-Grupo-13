@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2013-2016, by Nikolay Ognyanov and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,21 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------------
- * DirectedSimpleCyclesTest.java
- * -------------------------
- * (C) Copyright 2013, by Nikolay Ognyanov
- *
- * Original Author: Nikolay Ognyanov
- * Contributor(s) :
- *
- * $Id$
- *
- * Changes
- * -------
- * 06-Sep-2013 : Initial revision (NO);
- * 18-Jun-2014 : Hawick and James test;
- */
+
 package org.jgrapht.alg.cycle;
 
 import static org.junit.Assert.assertTrue;

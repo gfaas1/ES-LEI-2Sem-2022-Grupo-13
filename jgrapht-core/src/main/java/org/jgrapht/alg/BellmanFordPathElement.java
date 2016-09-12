@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2006-2016, by France Telecom and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * BellmanFordPathElement.java
- * -------------------------
- * (C) Copyright 2006-2008, by France Telecom and Contributors.
- *
- * Original Author:  Guillaume Boulmier and Contributors.
- * Contributor(s):   John V. Sichi
- *
- * $Id$
- *
- * Changes
- * -------
- * 05-Jan-2006 : Initial revision (GB);
- * 14-Jan-2006 : Added support for generics (JVS);
- *
  */
 package org.jgrapht.alg;
 

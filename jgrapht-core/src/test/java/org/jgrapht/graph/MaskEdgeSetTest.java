@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2016-2016, by Andrew Gainer-Dewar and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* --------------------------
- * MaxEdgeSetTest.java
- * --------------------------
- * (C) Copyright 2016-, by Andrew Gainer-Dewar and Contributors.
- *
- * Original Author:  Andrew Gainer-Dewar, Ph.D>
- * Contributor(s):   -
- *
- * Changes
- * -------
- * April-2016: Initial version;
- *
  */
 package org.jgrapht.graph;
 

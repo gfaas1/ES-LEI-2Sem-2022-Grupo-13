@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2010-2016, by Tom Conerly and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://org.org.jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2010, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,19 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* ------------------------------
- * MinimumSpanningTreeTest.java
- * ------------------------------
- * (C) Copyright 2010-2010, by Tom Conerly and Contributors.
- *
- * Original Author:  Tom Conerly
- * Contributor(s):   -
- *
- * Changes
- * -------
- * 02-Feb-2010 : Initial revision (TC);
- *
  */
 package org.jgrapht.alg;
 

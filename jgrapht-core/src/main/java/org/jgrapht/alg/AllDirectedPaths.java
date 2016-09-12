@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2015-2016, by Vera-Licona Research Group and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2012, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,20 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-
-/* -------------------------
- * AllDirectedPaths.java
- * -------------------------
- * (C) Copyright 2015-2016, Vera-Licona Research Group and Contributors.
- *
- * Original Author:  Andrew Gainer-Dewar, Ph.D. (Vera-Licona Research Group)
- * Contributor(s):
- *
- * Changes
- * -------
- * Feb-2016 : Initial version;
- *
  */
 package org.jgrapht.alg;
 

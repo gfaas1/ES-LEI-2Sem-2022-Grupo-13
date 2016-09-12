@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2011-2016, by Assaf Mizrachi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2011, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,21 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------
- * StarGraphGenerator.java
- * -------------------
- * (C) Copyright 2011-2011, by Assaf Mizrachi and Contributors.
- *
- * Original Author:  Assaf Mizrachi
- * Contributor(s):   -
- *
- * $Id: StarGraphGenerator.java 651 2008-12-24 21:13:41Z perfecthash $
- *
- * Changes
- * -------
- * 3-Jan-2011 : Initial revision (AM);
- *
  */
 package org.jgrapht.generate;
 

@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,28 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -----------------------
- * JGraphModelAdapter.java
- * -----------------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
- *
- * Original Author:  Barak Naveh
- * Contributor(s):   Erik Postma
- *
- * $Id$
- *
- * Changes
- * -------
- * 02-Aug-2003 : Initial revision (BN);
- * 10-Aug-2003 : Adaptation to new event model (BN);
- * 06-Nov-2003 : Allowed non-listenable underlying JGraphT graph (BN);
- * 12-Dec-2003 : Added CellFactory support (BN);
- * 27-Jan-2004 : Added support for JGraph->JGraphT change propagation (EP);
- * 29-Jan-2005 : Added support for JGraph dangling edges (BN);
- * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
- * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- *
  */
 package org.jgrapht.ext;
 
@@ -68,42 +42,6 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 
 
-/**
- * An adapter that reflects a JGraphT graph as a JGraph graph. This adapter is
- * useful when using JGraph in order to visualize JGraphT graphs. For more about
- * JGraph see <a href="http://jgraph.sourceforge.net">
- * http://jgraph.sourceforge.net</a>
- *
- * <p>Modifications made to the underlying JGraphT graph are reflected to this
- * JGraph model if and only if the underlying JGraphT graph is a {@link
- * org.jgrapht.ListenableGraph}. If the underlying JGraphT graph is <i>not</i>
- * ListenableGraph, then this JGraph model represent a snapshot if the graph at
- * the time of its creation.</p>
- *
- * <p>Changes made to this JGraph model are also reflected back to the
- * underlying JGraphT graph. To avoid confusion, variables are prefixed
- * according to the JGraph/JGraphT object(s) they are referring to.</p>
- *
- * <p><b>KNOWN BUGS:</b> There is a small issue to be aware of. JGraph allows
- * 'dangling edges' incident with just one vertex; JGraphT doesn't. Such a
- * configuration can arise when adding an edge or removing a vertex. The code
- * handles this by removing the newly-added dangling edge or removing all edges
- * incident with the vertex before actually removing the vertex, respectively.
- * This works very well, only it doesn't play all that nicely with the
- * undo-manager in the JGraph: for the second situation where you remove a
- * vertex incident with some edges, if you undo the removal, the vertex is
- * 'unremoved' but the edges aren't.</p>
- *
- * @author Barak Naveh
- * @since Aug 2, 2003
- */
-
-/*
- * FUTURE WORK: Now that the adapter supports JGraph dangling edges, it is
- * possible, with a little effort, to eliminate the "known bugs" above. Some
- * todo and fixme marks in the code indicate where the possible improvements
- * could be made to realize that.
- */
 public class JGraphModelAdapter<V, E>
     extends DefaultGraphModel
 {

@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2015-2016, by Alexey Kudinkin, Joris Kinable and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,21 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -----------------
- * MaximumFlowAlgorithmBase.java
- * -----------------
- * (C) Copyright 2015-2015, by Alexey Kudinkin, Joris Kinable and Contributors.
- *
- * Original Author:  Alexey Kudinkin
- * Contributor(s): Joris Kinable
- *
- * $Id$
- *
- * Changes
- * -------
- * 2015 : Initial version (AK)(JK);
- * Aug-2016: Added Minimum Cut functionality (JK)
  */
 package org.jgrapht.alg.flow;
 

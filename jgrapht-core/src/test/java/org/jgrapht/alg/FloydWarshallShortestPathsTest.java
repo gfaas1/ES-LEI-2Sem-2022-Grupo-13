@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2009-2016, by Tom Larkworthy and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -18,22 +14,6 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- */
-/* -------------------------
- * FloydWarshallShortestPathsTest.java
- * -------------------------
- * (C) Copyright 2009-2009, by Tom Larkworthy and Contributors
- *
- * Original Author:  Tom Larkworthy
- * Contributors:  Andrea Pagani
- *                Joris Kinable
- *
- * $Id: FloydWarshallShortestPathsTest.java 715 2010-06-13 01:25:00Z perfecthash $
- *
- * Changes
- * -------
- * 29-Jun-2009 : Initial revision (TL);
- *
  */
 package org.jgrapht.alg;
 
