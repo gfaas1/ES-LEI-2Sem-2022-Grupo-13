@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2016, by Trevor Harmon and Contributors.
+ * (C) Copyright 2006-2016, by Trevor Harmon, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
