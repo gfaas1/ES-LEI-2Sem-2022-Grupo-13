@@ -42,7 +42,7 @@ import org.jgrapht.event.*;
  * @param <V> Vertex
  * @param <E> Edge
  *
- * @author Original: JeanYves Tinevez
+ * @author JeanYves Tinevez
  * @since 09 July, 2013
  */
 public class JGraphXAdapter<V, E>
