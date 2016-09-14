@@ -39,7 +39,7 @@ public class DirectedAcyclicGraphTest
 {
     //~ Instance fields --------------------------------------------------------
 
-    private RandomGraphGenerator<Long, DefaultEdge> randomGraphGenerator = null;
+    private GraphGenerator<Long, DefaultEdge, Long> randomGraphGenerator = null;
     private Graph<Long, DefaultEdge> sourceGraph = null;
 
     //~ Methods ----------------------------------------------------------------
@@ -805,15 +805,20 @@ public class DirectedAcyclicGraphTest
     // it is nice for tests to be easily repeatable, so we use a graph generator
     // that we can seed for specific configurations
     private static class RepeatableRandomGraphGenerator<V, E>
-        extends RandomGraphGenerator<V, E>
+        implements GraphGenerator<V, E, V>
     {
+        private Random randomizer;
+        private int numOfVertexes;
+        private int numOfEdges;
+        
         public RepeatableRandomGraphGenerator(
             int vertices,
             int edges,
             long seed)
         {
-            super(vertices, edges);
-            randomizer = new Random(seed);
+            this.numOfVertexes = vertices;
+            this.numOfEdges = edges;
+            this.randomizer = new Random(seed);
         }
 
         @Override public void generateGraph(

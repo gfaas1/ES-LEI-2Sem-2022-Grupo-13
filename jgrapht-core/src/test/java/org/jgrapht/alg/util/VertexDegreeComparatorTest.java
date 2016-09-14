@@ -20,7 +20,8 @@ package org.jgrapht.alg.util;
 import junit.framework.TestCase;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -38,10 +39,10 @@ public class VertexDegreeComparatorTest extends TestCase {
 
     protected static final int TEST_REPEATS = 20;
 
-    private RandomGraphGenerator<Integer, DefaultEdge> randomGraphGenerator;
+    private GraphGenerator<Integer, DefaultEdge, Integer> randomGraphGenerator;
 
     public VertexDegreeComparatorTest(){
-        randomGraphGenerator=new RandomGraphGenerator<>(100, 1000, 0);
+        randomGraphGenerator = new GnmRandomGraphGenerator<>(100, 1000, 0);
     }
 
     public void testVertexDegreeComparator(){

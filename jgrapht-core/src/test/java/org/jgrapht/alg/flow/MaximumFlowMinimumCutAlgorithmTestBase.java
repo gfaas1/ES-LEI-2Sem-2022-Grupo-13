@@ -19,7 +19,8 @@ package org.jgrapht.alg.flow;
 
 import junit.framework.TestCase;
 import org.jgrapht.*;
-import org.jgrapht.generate.RandomGraphGenerator;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -184,7 +185,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
     }
 
     public DirectedGraph<Integer, DefaultWeightedEdge> generateDirectedGraph(){
-        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> randomGraphGenerator=new GnmRandomGraphGenerator<>(100, 500);
         Random rand=new Random();
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> directedGraph=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         randomGraphGenerator.generateGraph(directedGraph, new IntegerVertexFactory(), null);
@@ -240,7 +241,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase extends TestCase {
     }
 
     public UndirectedGraph<Integer, DefaultWeightedEdge> generateUndirectedGraph(){
-        RandomGraphGenerator<Integer, DefaultWeightedEdge> randomGraphGenerator=new RandomGraphGenerator<>(100, 500);
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> randomGraphGenerator=new GnmRandomGraphGenerator<>(100, 500);
         Random rand=new Random();
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> undirectedGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         randomGraphGenerator.generateGraph(undirectedGraph, new IntegerVertexFactory(), null);
