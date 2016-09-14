@@ -17,14 +17,15 @@
  */
 package org.jgrapht.experimental.dag;
 
-import java.io.*;
-
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.AbstractGraphIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
+
+import java.io.Serializable;
+import java.util.*;
 
 
 /**
@@ -332,16 +333,7 @@ public class DirectedAcyclicGraph<V, E>
 
     @Override public boolean removeAllVertices(Collection<? extends V> arg0)
     {
-        boolean removed = super.removeAllVertices(arg0);
-
-        topoOrderMap.removeAllVertices();
-
-        maxTopoIndex = 0;
-        minTopoIndex = 0;
-
-        ++topologyUpdateCount;
-
-        return removed;
+        return super.removeAllVertices(arg0);
     }
 
     /**
