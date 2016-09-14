@@ -17,17 +17,24 @@
  */
 package org.jgrapht.experimental.dag;
 
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
+import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.generate.LinearGraphGenerator;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.TestEdge;
+import org.jgrapht.traverse.TopologicalOrderIterator;
+
 import java.util.*;
 
-import junit.framework.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.*;
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
-
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.
@@ -786,6 +793,27 @@ public class DirectedAcyclicGraphTest
         Set<String> ancestors = graph.getDescendants(graph, "A");
 
         Assert.assertEquals(expectedAncestors, ancestors);
+    }
+
+    public void testRemoveAllVerticesShouldNotDeleteTopologyIfTheGraphHasVerticesLeft() {
+        //Given
+        DirectedAcyclicGraph<String, TestEdge> dag =
+            new DirectedAcyclicGraph<>(TestEdge.class);
+
+        List<String> vertices = Arrays.asList("a", "b", "c", "d", "e");
+
+        vertices.forEach(dag::addVertex);
+
+        dag.addEdge("e", "a");
+        dag.addEdge("e", "b");
+        dag.addEdge("a", "d");
+        dag.addEdge("b", "c");
+
+        //When
+        dag.removeAllVertices(vertices.subList(0, vertices.size() - 2));
+
+        //Then
+        assertThat(dag.iterator().hasNext(), is(true));
     }
 
     //~ Inner Classes ----------------------------------------------------------
