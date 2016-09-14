@@ -31,6 +31,8 @@ import java.util.*;
  *
  * @param <V> vertex concept type
  * @param <E> edge concept type
+ *
+ * @TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
 public interface MaximumFlowAlgorithm<V, E>
 {
@@ -82,8 +84,23 @@ public interface MaximumFlowAlgorithm<V, E>
      * enforced in teh next version.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
+     * @deprecated Use {@link #getFlowMap()} instead
      */
     default Map<E, Double> getMaximumFlow(){
+        return getFlowMap();
+    }
+
+    /**
+     * Returns maximum flow, that was calculated during last <tt>
+     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
+     * calculateMaximumFlow</tt> calls.
+     *
+     * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
+     * enforced in teh next version.
+     *
+     * @return <i>read-only</i> mapping from edges to doubles - flow values
+     */
+    default Map<E, Double> getFlowMap(){
         throw new UnsupportedOperationException("Function not implemented");
     }
 
