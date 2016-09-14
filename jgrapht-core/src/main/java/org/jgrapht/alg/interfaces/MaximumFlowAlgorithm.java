@@ -67,7 +67,7 @@ public interface MaximumFlowAlgorithm<V, E>
      * calculateMaximumFlow</tt> call.
      *
      * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in teh next version.
+     * enforced in the next version.
      *
      * @return maximum flow value
      */
@@ -81,7 +81,7 @@ public interface MaximumFlowAlgorithm<V, E>
      * calculateMaximumFlow</tt> calls.
      *
      * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in teh next version.
+     * enforced in the next version.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      * @deprecated Use {@link #getFlowMap()} instead
@@ -96,7 +96,7 @@ public interface MaximumFlowAlgorithm<V, E>
      * calculateMaximumFlow</tt> calls.
      *
      * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in teh next version.
+     * enforced in the next version.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
@@ -111,7 +111,7 @@ public interface MaximumFlowAlgorithm<V, E>
      * If the flow goes from u to v, we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
      *
      * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in teh next version.
+     * enforced in the next version.
      *
      * @param e edge
      * @return the vertex where the flow leaves the edge
