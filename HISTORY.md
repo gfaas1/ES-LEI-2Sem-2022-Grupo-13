@@ -39,6 +39,7 @@ Changes to JGraphT in each version:
 	- Use equals for compare to fix bug in `EdmondsBlossomShrinking` (contributed by Szabolcs Besenyei)
 	- Reformat all file headers (contributed by Joris Kinable)
 	- Refactor and enhance random graph generators (contributed by Dimitrios Michail)
+	- Fix DirectedAcyclicGraph.removeAllVertices (contributed by Szabolcs Besenyei)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
