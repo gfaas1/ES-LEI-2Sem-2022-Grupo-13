@@ -29,7 +29,7 @@ import java.util.*;
  * @param <V> vertex concept type
  * @param <E> edge concept type
  *
- * @TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
+ * TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
 public interface MaximumFlowAlgorithm<V, E>
 {

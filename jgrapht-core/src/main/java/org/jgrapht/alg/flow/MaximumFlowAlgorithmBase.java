@@ -187,8 +187,8 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     /**
      * Increase flow in the direction denoted by edge (u,v). Any existing flow in the reverse
      * direction (v,u) gets reduced first. More precisely, let f2 be the existing flow in the
-     * direction (v,u), and f1 be the desired increase of flow in direction (u,v). If f1 >= f2, then
-     * the flow on (v,u) becomes 0, and the flow on (u,v) becomes f1-f2. Else, if f1<f2, the flow in
+     * direction (v,u), and f1 be the desired increase of flow in direction (u,v). If {@literal f1 >= f2}, then
+     * the flow on (v,u) becomes 0, and the flow on (u,v) becomes f1-f2. Else, if {@literal f1<f2}, the flow in
      * the direction (v,u) is reduced, i.e. the flow on (v,u) becomes f2-f1, whereas the flow on
      * (u,v) remains zero.
      * 
@@ -240,11 +240,11 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Compares flow against val. Returns 0 if they are equal, -1 if flow < val, 1 otherwise
+     * Compares flow against val. Returns 0 if they are equal, -1 if {@literal flow < val}, 1 otherwise
      * 
      * @param flow flow
      * @param val value
-     * @return 0 if they are equal, -1 if flow < val, 1 otherwise
+     * @return 0 if they are equal, -1 if {@literal flow < val}, 1 otherwise
      */
     protected int compareFlowTo(double flow, double val)
     {
@@ -443,17 +443,17 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
                 cutEdges.addAll(
                     directedGraph
                         .outgoingEdgesOf(vertex).stream()
-                        .filter(edge -> !p1.contains(network.getEdgeTarget(edge)))
-                        .collect(Collectors.toList()));
+                            .filter(edge -> !p1.contains(network.getEdgeTarget(edge)))
+                            .collect(Collectors.toList()));
             }
         } else {
             cutEdges.addAll(
                 network
-                    .edgeSet().stream()
-                    .filter(
-                        e -> p1.contains(network.getEdgeSource(e))
-                            ^ p1.contains(network.getEdgeTarget(e)))
-                    .collect(Collectors.toList()));
+                        .edgeSet().stream()
+                        .filter(
+                                e -> p1.contains(network.getEdgeSource(e))
+                                        ^ p1.contains(network.getEdgeTarget(e)))
+                        .collect(Collectors.toList()));
         }
         return cutEdges;
     }

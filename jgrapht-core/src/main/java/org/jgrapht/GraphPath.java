@@ -21,8 +21,8 @@ import java.util.*;
 
 /**
  * A GraphPath represents a <a href="http://mathworld.wolfram.com/Path.html"> path</a> in a
- * {@link Graph}. Unlike some definitions, the path is not required to be a <a
- * href="https://en.wikipedia.org/wiki/Simple_path>Simple Path</a>.
+ * {@link Graph}. Unlike some definitions, the path is not required to be a
+ * <a href="https://en.wikipedia.org/wiki/Simple_path">Simple Path</a>.
  *
  *
  * @author John Sichi
@@ -56,7 +56,7 @@ public interface GraphPath<V, E>
      * Returns the edges making up the path. The first edge in this path is incident to the start
      * vertex. The last edge is incident to the end vertex. The vertices along the path can be
      * obtained by traversing from the start vertex, finding its opposite across the first edge, and
-     * then doing the same successively across subsequent edges; {@see GraphPath#getVertexList}.
+     * then doing the same successively across subsequent edges; see {@link #getVertexList()}.
      *
      * <p>
      * Whether or not the returned edge list is modifiable depends on the path implementation.

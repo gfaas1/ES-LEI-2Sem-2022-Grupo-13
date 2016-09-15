@@ -25,8 +25,8 @@ import org.jgrapht.*;
  * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a
  * vertex, in which each edge is adjacent in the sequence to its two endpoints. More precisely, a
  * walk is a connected sequence of vertices and edges in a graph
- * <code>v0, e0, v1, e1, v2,....vk-1, ek-1, vk</code>, such that for <code>1<=i<=k</code>, the edge
- * <code>e_i</code> has endpoints <code>v_(i-1)</code> and <code>v_i</code>. The class makes no
+ * {@code v0, e0, v1, e1, v2,....vk-1, ek-1, vk}, such that for {@code 1<=i<=k<}, the edge
+ * {@code e_i} has endpoints {@code v_(i-1)} and {@code v_i}. The class makes no
  * assumptions with respect to the shape of the walk: edges may be repeated, and the start and end
  * point of the walk may be different.
  * 
