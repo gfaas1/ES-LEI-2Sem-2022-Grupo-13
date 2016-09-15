@@ -20,7 +20,6 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Tests for ClosestFirstIterator.
  *
@@ -30,7 +29,7 @@ import org.jgrapht.graph.*;
 public class ClosestFirstIteratorTest
     extends AbstractGraphIteratorTest
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -41,10 +40,9 @@ public class ClosestFirstIteratorTest
 
         DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
-        // NOTE:  pick 301 as the radius because it discriminates
+        // NOTE: pick 301 as the radius because it discriminates
         // the boundary case edge between v7 and v9
-        AbstractGraphIterator<String, ?> iterator =
-                new ClosestFirstIterator<>(graph, "1", 301);
+        AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph, "1", 301);
 
         while (iterator.hasNext()) {
             result.append(iterator.next());
@@ -66,8 +64,7 @@ public class ClosestFirstIteratorTest
 
         DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, ?> iterator =
-                new ClosestFirstIterator<>(graph);
+        AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph);
 
         while (iterator.hasNext()) {
             result.append(iterator.next());
@@ -80,7 +77,7 @@ public class ClosestFirstIteratorTest
         assertEquals("1,2,3,5,6,7,9,4,8,orphan", result.toString());
     }
 
-    // NOTE:  the edge weights make the result deterministic
+    // NOTE: the edge weights make the result deterministic
     @Override
     String getExpectedStr1()
     {
@@ -95,11 +92,9 @@ public class ClosestFirstIteratorTest
 
     @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        DirectedGraph<String, DefaultEdge> g, String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i =
-                new ClosestFirstIterator<>(g, vertex);
+        AbstractGraphIterator<String, DefaultEdge> i = new ClosestFirstIterator<>(g, vertex);
         i.setCrossComponentTraversal(true);
 
         return i;

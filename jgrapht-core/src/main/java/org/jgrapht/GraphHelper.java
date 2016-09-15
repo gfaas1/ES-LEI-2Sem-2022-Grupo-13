@@ -24,7 +24,8 @@ package org.jgrapht;
  * @since Jul 31, 2003
  * @deprecated Use {@link Graphs} instead.
  */
-@Deprecated public abstract class GraphHelper
+@Deprecated
+public abstract class GraphHelper
     extends Graphs
 {
 }

@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A directed graph that cannot be modified.
  *
@@ -32,11 +31,9 @@ public class UnmodifiableDirectedGraph<V, E>
     private static final long serialVersionUID = 3978701783725913906L;
 
     /**
-     * Creates a new unmodifiable directed graph based on the specified backing
-     * graph.
+     * Creates a new unmodifiable directed graph based on the specified backing graph.
      *
-     * @param g the backing graph on which an unmodifiable graph is to be
-     * created.
+     * @param g the backing graph on which an unmodifiable graph is to be created.
      */
     public UnmodifiableDirectedGraph(DirectedGraph<V, E> g)
     {

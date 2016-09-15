@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.TestCase;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * @author Guillaume Boulmier
@@ -32,7 +30,7 @@ import org.jgrapht.graph.SimpleGraph;
 public class BlockCutpointGraphTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testBiconnected()
     {
@@ -44,8 +42,7 @@ public class BlockCutpointGraphTest
 
         assertEquals(0, blockCutpointGraph.getCutpoints().size());
         int nbBiconnectedComponents =
-            blockCutpointGraph.vertexSet().size()
-            - blockCutpointGraph.getCutpoints().size();
+            blockCutpointGraph.vertexSet().size() - blockCutpointGraph.getCutpoints().size();
         assertEquals(1, nbBiconnectedComponents);
     }
 
@@ -78,19 +75,15 @@ public class BlockCutpointGraphTest
 
         LinearGraphGenerator<Object, DefaultEdge> generator =
             new LinearGraphGenerator<>(nbVertices);
-        generator.generateGraph(
-            graph,
-                new ClassBasedVertexFactory<>(
-                        Object.class),
-            null);
+        generator.generateGraph(graph, new ClassBasedVertexFactory<>(Object.class), null);
 
-        BlockCutpointGraph<Object, DefaultEdge> blockCutpointGraph = new BlockCutpointGraph<>(graph);
+        BlockCutpointGraph<Object, DefaultEdge> blockCutpointGraph =
+            new BlockCutpointGraph<>(graph);
         testGetBlock(blockCutpointGraph);
 
         assertEquals(nbVertices - 2, blockCutpointGraph.getCutpoints().size());
         int nbBiconnectedComponents =
-            blockCutpointGraph.vertexSet().size()
-            - blockCutpointGraph.getCutpoints().size();
+            blockCutpointGraph.vertexSet().size() - blockCutpointGraph.getCutpoints().size();
         assertEquals(nbVertices - 1, nbBiconnectedComponents);
     }
 
@@ -104,8 +97,7 @@ public class BlockCutpointGraphTest
 
         assertEquals(2, blockCutpointGraph.getCutpoints().size());
         int nbBiconnectedComponents =
-            blockCutpointGraph.vertexSet().size()
-            - blockCutpointGraph.getCutpoints().size();
+            blockCutpointGraph.vertexSet().size() - blockCutpointGraph.getCutpoints().size();
         assertEquals(3, nbBiconnectedComponents);
     }
 }

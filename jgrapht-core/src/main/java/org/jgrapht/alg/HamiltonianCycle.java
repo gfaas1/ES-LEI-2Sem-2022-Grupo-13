@@ -21,26 +21,23 @@ import java.util.*;
 
 import org.jgrapht.graph.*;
 
-
 /**
- * This class will deal with finding the optimal or approximately optimal
- * minimum tour (hamiltonian cycle) or commonly known as the <a
- * href="http://mathworld.wolfram.com/TravelingSalesmanProblem.html">Traveling
- * Salesman Problem</a>.
+ * This class will deal with finding the optimal or approximately optimal minimum tour (hamiltonian
+ * cycle) or commonly known as the
+ * <a href="http://mathworld.wolfram.com/TravelingSalesmanProblem.html">Traveling Salesman
+ * Problem</a>.
  *
  * @author Andrew Newell
  */
 public class HamiltonianCycle
 {
     /**
-     * This method will return an approximate minimal traveling salesman tour
-     * (hamiltonian cycle). This algorithm requires that the graph be complete
-     * and the triangle inequality exists (if x,y,z are vertices then
-     * d(x,y)+d(y,z) &lt; d(x,z) for all x,y,z) then this algorithm will
-     * guarantee a hamiltonian cycle such that the total weight of the cycle is
-     * less than or equal to double the total weight of the optimal hamiltonian
-     * cycle. The optimal solution is NP-complete, so this is a decent
-     * approximation that runs in polynomial time.
+     * This method will return an approximate minimal traveling salesman tour (hamiltonian cycle).
+     * This algorithm requires that the graph be complete and the triangle inequality exists (if
+     * x,y,z are vertices then d(x,y)+d(y,z) &lt; d(x,z) for all x,y,z) then this algorithm will
+     * guarantee a hamiltonian cycle such that the total weight of the cycle is less than or equal
+     * to double the total weight of the optimal hamiltonian cycle. The optimal solution is
+     * NP-complete, so this is a decent approximation that runs in polynomial time.
      *
      * @param <V>
      * @param <E>
@@ -48,16 +45,13 @@ public class HamiltonianCycle
      *
      * @return The optimal tour as a list of vertices.
      */
-    public static <V, E> List<V> getApproximateOptimalForCompleteGraph(
-        SimpleWeightedGraph<V, E> g)
+    public static <V, E> List<V> getApproximateOptimalForCompleteGraph(SimpleWeightedGraph<V, E> g)
     {
         List<V> vertices = new LinkedList<>(g.vertexSet());
 
         // If the graph is not complete then return null since this algorithm
         // requires the graph be complete
-        if ((vertices.size() * (vertices.size() - 1) / 2)
-            != g.edgeSet().size())
-        {
+        if ((vertices.size() * (vertices.size() - 1) / 2) != g.edgeSet().size()) {
             return null;
         }
 
@@ -76,8 +70,7 @@ public class HamiltonianCycle
             for (int i = 0; i < tour.size(); i++) {
                 V v = tour.get(i);
                 for (int j = 0; j < vertices.size(); j++) {
-                    double weight =
-                        g.getEdgeWeight(g.getEdge(v, vertices.get(j)));
+                    double weight = g.getEdgeWeight(g.getEdge(v, vertices.get(j)));
                     if (firstEdge || (weight < minEdgeValue)) {
                         firstEdge = false;
                         minEdgeValue = weight;

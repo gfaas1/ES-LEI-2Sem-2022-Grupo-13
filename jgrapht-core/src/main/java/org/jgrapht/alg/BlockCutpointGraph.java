@@ -22,25 +22,22 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * Definition of a <a href="http://mathworld.wolfram.com/Block.html">block of a
- * graph</a> in MathWorld.<br>
- * Definition and lemma taken from the article <a
- * href="http://www.albany.edu/~goel/publications/rosencrantz2005.pdf">
- * Structure-Based Resilience Metrics for Service-Oriented Networks</a>:
+ * Definition of a <a href="http://mathworld.wolfram.com/Block.html">block of a graph</a> in
+ * MathWorld.<br>
+ * Definition and lemma taken from the article
+ * <a href="http://www.albany.edu/~goel/publications/rosencrantz2005.pdf"> Structure-Based
+ * Resilience Metrics for Service-Oriented Networks</a>:
  *
  * <ul>
- * <li><b>Definition 4.5</b> Let G(V; E) be a connected undirected graph. The
- * block-cut point graph (BC graph) of G, denoted by GB(VB; EB), is the
- * bipartite graph defined as follows. (a) VB has one node corresponding to each
- * block and one node corresponding to each cut point of G. (b) Each edge fx; yg
- * in EB joins a block node x to a cut point y if the block corresponding to x
- * contains the cut point node corresponding to y.</li>
- * <li><b>Lemma 4.4</b> Let G(V; E) be a connected undirected graph. (a) Each
- * pair of blocks of G share at most one node, and that node is a cutpoint. (b)
- * The BC graph of G is a tree in which each leaf node corresponds to a block of
- * G.</li>
+ * <li><b>Definition 4.5</b> Let G(V; E) be a connected undirected graph. The block-cut point graph
+ * (BC graph) of G, denoted by GB(VB; EB), is the bipartite graph defined as follows. (a) VB has one
+ * node corresponding to each block and one node corresponding to each cut point of G. (b) Each edge
+ * fx; yg in EB joins a block node x to a cut point y if the block corresponding to x contains the
+ * cut point node corresponding to y.</li>
+ * <li><b>Lemma 4.4</b> Let G(V; E) be a connected undirected graph. (a) Each pair of blocks of G
+ * share at most one node, and that node is a cutpoint. (b) The BC graph of G is a tree in which
+ * each leaf node corresponds to a block of G.</li>
  * </ul>
  *
  * @author Guillaume Boulmier
@@ -66,11 +63,9 @@ public class BlockCutpointGraph<V, E>
 
     private Deque<BCGEdge> stack = new ArrayDeque<>();
 
-    private Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs =
-            new HashMap<>();
+    private Map<V, Set<UndirectedGraph<V, E>>> vertex2biconnectedSubgraphs = new HashMap<>();
 
-    private Map<V, UndirectedGraph<V, E>> vertex2block =
-            new HashMap<>();
+    private Map<V, UndirectedGraph<V, E>> vertex2block = new HashMap<>();
 
     private Map<V, Integer> vertex2numOrder = new HashMap<>();
 
@@ -82,9 +77,7 @@ public class BlockCutpointGraph<V, E>
         super(DefaultEdge.class);
         this.graph = graph;
 
-        this.dfsTree =
-                new SimpleDirectedGraph<>(
-                        DefaultEdge.class);
+        this.dfsTree = new SimpleDirectedGraph<>(DefaultEdge.class);
         V s = graph.vertexSet().iterator().next();
         this.dfsTree.addVertex(s);
         dfsVisit(s, s);
@@ -96,13 +89,11 @@ public class BlockCutpointGraph<V, E>
         }
 
         for (V cutpoint : this.cutpoints) {
-            UndirectedGraph<V, E> subgraph =
-                    new SimpleGraph<>(this.graph.getEdgeFactory());
+            UndirectedGraph<V, E> subgraph = new SimpleGraph<>(this.graph.getEdgeFactory());
             subgraph.addVertex(cutpoint);
             this.vertex2block.put(cutpoint, subgraph);
             addVertex(subgraph);
-            Set<UndirectedGraph<V, E>> biconnectedSubgraphs =
-                    getBiconnectedSubgraphs(cutpoint);
+            Set<UndirectedGraph<V, E>> biconnectedSubgraphs = getBiconnectedSubgraphs(cutpoint);
             for (UndirectedGraph<V, E> biconnectedSubgraph : biconnectedSubgraphs) {
                 assert (vertexSet().contains(biconnectedSubgraph));
                 addEdge(subgraph, biconnectedSubgraph);
@@ -111,8 +102,8 @@ public class BlockCutpointGraph<V, E>
     }
 
     /**
-     * Returns the vertex if vertex is a cutpoint, and otherwise returns the
-     * block (biconnected component) containing the vertex.
+     * Returns the vertex if vertex is a cutpoint, and otherwise returns the block (biconnected
+     * component) containing the vertex.
      *
      * @param vertex vertex in the initial graph.
      */
@@ -134,8 +125,7 @@ public class BlockCutpointGraph<V, E>
     }
 
     /**
-     * Returns <code>true</code> if the vertex is a cutpoint, <code>false</code>
-     * otherwise.
+     * Returns <code>true</code> if the vertex is a cutpoint, <code>false</code> otherwise.
      *
      * @param vertex vertex in the initial graph.
      */
@@ -155,10 +145,7 @@ public class BlockCutpointGraph<V, E>
         Set<V> vertexComponent = new HashSet<>();
         Set<BCGEdge> edgeComponent = new HashSet<>();
         BCGEdge edge = this.stack.removeLast();
-        while (
-            (getNumOrder(edge.getSource()) >= getNumOrder(n))
-            && !this.stack.isEmpty())
-        {
+        while ((getNumOrder(edge.getSource()) >= getNumOrder(n)) && !this.stack.isEmpty()) {
             edgeComponent.add(edge);
 
             vertexComponent.add(edge.getSource());
@@ -173,12 +160,8 @@ public class BlockCutpointGraph<V, E>
         vertexComponent.add(edge.getTarget());
 
         VertexComponentForbiddenFunction mask =
-            new VertexComponentForbiddenFunction(
-                vertexComponent);
-        UndirectedGraph<V, E> biconnectedSubgraph =
-                new UndirectedMaskSubgraph<>(
-                        this.graph,
-                        mask);
+            new VertexComponentForbiddenFunction(vertexComponent);
+        UndirectedGraph<V, E> biconnectedSubgraph = new UndirectedMaskSubgraph<>(this.graph, mask);
         for (V vertex : vertexComponent) {
             this.vertex2block.put(vertex, biconnectedSubgraph);
             getBiconnectedSubgraphs(vertex).add(biconnectedSubgraph);
@@ -225,9 +208,8 @@ public class BlockCutpointGraph<V, E>
     }
 
     /**
-     * Returns the biconnected components containing the vertex. A vertex which
-     * is not a cutpoint is contained in exactly one component. A cutpoint is
-     * contained is at least 2 components.
+     * Returns the biconnected components containing the vertex. A vertex which is not a cutpoint is
+     * contained in exactly one component. A cutpoint is contained is at least 2 components.
      *
      * @param vertex vertex in the initial graph.
      */
@@ -280,12 +262,14 @@ public class BlockCutpointGraph<V, E>
             this.target = target;
         }
 
-        @Override public V getSource()
+        @Override
+        public V getSource()
         {
             return this.source;
         }
 
-        @Override public V getTarget()
+        @Override
+        public V getTarget()
         {
             return this.target;
         }
@@ -301,12 +285,14 @@ public class BlockCutpointGraph<V, E>
             this.vertexComponent = vertexComponent;
         }
 
-        @Override public boolean isEdgeMasked(E edge)
+        @Override
+        public boolean isEdgeMasked(E edge)
         {
             return false;
         }
 
-        @Override public boolean isVertexMasked(V vertex)
+        @Override
+        public boolean isVertexMasked(V vertex)
         {
             return !this.vertexComponent.contains(vertex);
         }

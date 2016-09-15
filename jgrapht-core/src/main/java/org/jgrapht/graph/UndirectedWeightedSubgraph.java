@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * An undirected weighted graph that is a subgraph on other graph.
  *
@@ -40,13 +39,10 @@ public class UndirectedWeightedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>
      * null</code> then all vertices are included.
      * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are
-     * included.
+     * null</code> then all the edges whose vertices found in the graph are included.
      */
     public UndirectedWeightedSubgraph(
-        WeightedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+        WeightedGraph<V, E> base, Set<V> vertexSubset, Set<E> edgeSubset)
     {
         super((UndirectedGraph<V, E>) base, vertexSubset, edgeSubset);
     }

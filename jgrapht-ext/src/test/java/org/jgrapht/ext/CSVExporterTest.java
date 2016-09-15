@@ -17,19 +17,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.StringWriter;
+import java.io.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * .
@@ -149,8 +142,7 @@ public class CSVExporterTest
 
     public void testUndirectedEdgeList()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(
-            DefaultEdge.class);
+        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -163,10 +155,8 @@ public class CSVExporterTest
         g.addEdge(4, 5);
         g.addEdge(5, 1);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.EDGE_LIST,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.EDGE_LIST, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_EDGE_LIST, w.toString());
@@ -174,8 +164,7 @@ public class CSVExporterTest
 
     public void testDirectedEdgeList()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -188,10 +177,8 @@ public class CSVExporterTest
         g.addEdge(4, 5);
         g.addEdge(5, 1);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.EDGE_LIST,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.EDGE_LIST, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_EDGE_LIST, w.toString());
@@ -199,8 +186,7 @@ public class CSVExporterTest
 
     public void testDirectedAdjacencyList()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -218,10 +204,8 @@ public class CSVExporterTest
         g.addEdge(5, 5);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.ADJACENCY_LIST,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.ADJACENCY_LIST, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
@@ -229,8 +213,7 @@ public class CSVExporterTest
 
     public void testUndirectedAdjacencyList()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(
-            DefaultEdge.class);
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -248,10 +231,8 @@ public class CSVExporterTest
         g.addEdge(5, 5);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.ADJACENCY_LIST,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.ADJACENCY_LIST, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(UNDIRECTED_ADJACENCY_LIST, w.toString());
@@ -259,8 +240,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNodeId()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -277,10 +257,8 @@ public class CSVExporterTest
         g.addEdge(5, 4);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
         exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
@@ -289,8 +267,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNoNodeId()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -307,10 +284,8 @@ public class CSVExporterTest
         g.addEdge(5, 4);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID, w.toString());
@@ -318,8 +293,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNodeIdZeroMissingEdges()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -336,14 +310,10 @@ public class CSVExporterTest
         g.addEdge(5, 4);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
         exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, true);
-        exporter.setParameter(
-            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-            true);
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NODEID_ZERO_NO_EDGE, w.toString());
@@ -351,8 +321,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNoNodeIdZeroMissingEdges()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -369,13 +338,9 @@ public class CSVExporterTest
         g.addEdge(5, 4);
         g.addEdge(5, 5);
 
-        CSVExporter<Integer, DefaultEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
-        exporter.setParameter(
-            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-            true);
+        CSVExporter<Integer, DefaultEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE, w.toString());
@@ -383,8 +348,8 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNoNodeIdZeroMissingEdgesWeighted()
     {
-        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
-            DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -404,26 +369,19 @@ public class CSVExporterTest
         g.setEdgeWeight(g.getEdge(1, 3), 13);
         g.setEdgeWeight(g.getEdge(5, 3), 53);
 
-        CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
-        exporter.setParameter(
-            CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE,
-            true);
-        exporter
-            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
+        CSVExporter<Integer, DefaultWeightedEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, true);
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
-        assertEquals(
-            DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE_WEIGHTED,
-            w.toString());
+        assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE_WEIGHTED, w.toString());
     }
 
     public void testDirectedMatrixNoNodeIdWeighted()
     {
-        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
-            DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -443,12 +401,9 @@ public class CSVExporterTest
         g.setEdgeWeight(g.getEdge(1, 3), 13);
         g.setEdgeWeight(g.getEdge(5, 3), 53);
 
-        CSVExporter<Integer, DefaultWeightedEdge> exporter = new CSVExporter<>(
-            nameProvider,
-            CSVFormat.MATRIX,
-            ';');
-        exporter
-            .setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
+        CSVExporter<Integer, DefaultWeightedEdge> exporter =
+            new CSVExporter<>(nameProvider, CSVFormat.MATRIX, ';');
+        exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, true);
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_MATRIX_NO_NODEID_WEIGHTED, w.toString());
@@ -457,8 +412,8 @@ public class CSVExporterTest
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultWeightedEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g =
+            new DirectedPseudograph<>(DefaultWeightedEdge.class);
         g.addVertex("'john doe'");
         g.addVertex("fred");
         g.addVertex("fred\n\"21\"");
@@ -468,10 +423,8 @@ public class CSVExporterTest
         g.addEdge("fred\n\"21\"", "who;;");
         g.addEdge("who;;", "'john doe'");
 
-        CSVExporter<String, DefaultEdge> exporter = new CSVExporter<>(
-            stringNameProvider,
-            CSVFormat.EDGE_LIST,
-            ';');
+        CSVExporter<String, DefaultEdge> exporter =
+            new CSVExporter<>(stringNameProvider, CSVFormat.EDGE_LIST, ';');
         StringWriter w = new StringWriter();
         exporter.exportGraph(g, w);
         assertEquals(DIRECTED_EDGE_LIST_ESCAPE, w.toString());

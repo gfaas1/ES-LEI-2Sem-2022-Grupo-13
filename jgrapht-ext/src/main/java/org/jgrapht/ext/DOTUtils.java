@@ -17,9 +17,9 @@
  */
 package org.jgrapht.ext;
 
-import java.io.StringWriter;
+import java.io.*;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * @author Christoph Zauner
@@ -28,19 +28,17 @@ public class DOTUtils
 {
     /**
      * Convert a graph into a String in DOT format.
-     *  
+     * 
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a {@link String} representation in DOT format of the given graph.
      */
-    public static <V, E> String convertGraphToDotString(
-        Graph<V, E> graph)
+    public static <V, E> String convertGraphToDotString(Graph<V, E> graph)
     {
 
         StringWriter outputWriter = new StringWriter();
-        new DOTExporter<V, E>(
-            new IntegerNameProvider<V>(),
+        new DOTExporter<V, E>(new IntegerNameProvider<V>(),
             // vertex name provider
             new StringNameProvider<V>(),
             // edge label provider

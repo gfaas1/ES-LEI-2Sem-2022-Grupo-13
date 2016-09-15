@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
-
 public class DirectedGraphUnion<V, E>
     extends GraphUnion<V, E, DirectedGraph<V, E>>
     implements DirectedGraph<V, E>
@@ -30,9 +29,7 @@ public class DirectedGraphUnion<V, E>
     private static final long serialVersionUID = -740199233080172450L;
 
     public DirectedGraphUnion(
-        DirectedGraph<V, E> g1,
-        DirectedGraph<V, E> g2,
-        WeightCombiner operator)
+        DirectedGraph<V, E> g1, DirectedGraph<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
@@ -42,13 +39,15 @@ public class DirectedGraphUnion<V, E>
         super(g1, g2);
     }
 
-    @Override public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
         Set<E> res = incomingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
     {
         Set<E> res = new HashSet<>();
         if (getG1().containsVertex(vertex)) {
@@ -60,13 +59,15 @@ public class DirectedGraphUnion<V, E>
         return Collections.unmodifiableSet(res);
     }
 
-    @Override public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(V vertex)
     {
         Set<E> res = outgoingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
     {
         Set<E> res = new HashSet<>();
         if (getG1().containsVertex(vertex)) {

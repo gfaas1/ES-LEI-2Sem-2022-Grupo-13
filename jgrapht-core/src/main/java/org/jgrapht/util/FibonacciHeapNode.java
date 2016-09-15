@@ -18,9 +18,9 @@
 package org.jgrapht.util;
 
 /**
- * Implements a node of the Fibonacci heap. It holds the information necessary
- * for maintaining the structure of the heap. It also holds the reference to the
- * key value (which is used to determine the heap structure).
+ * Implements a node of the Fibonacci heap. It holds the information necessary for maintaining the
+ * structure of the heap. It also holds the reference to the key value (which is used to determine
+ * the heap structure).
  *
  * @author Nathan Fiedler
  */
@@ -52,8 +52,7 @@ public class FibonacciHeapNode<T>
     FibonacciHeapNode<T> right;
 
     /**
-     * true if this node has had a child removed since this node was added to
-     * its parent
+     * true if this node has had a child removed since this node was added to its parent
      */
     boolean mark;
 
@@ -68,8 +67,8 @@ public class FibonacciHeapNode<T>
     int degree;
 
     /**
-     * Default constructor. Initializes the right and left pointers, making this
-     * a circular doubly-linked list.
+     * Default constructor. Initializes the right and left pointers, making this a circular
+     * doubly-linked list.
      *
      * @param data data for this node
      */
@@ -103,7 +102,8 @@ public class FibonacciHeapNode<T>
      *
      * @return string representing this object
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return Double.toString(key);
     }

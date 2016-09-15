@@ -17,33 +17,21 @@
  */
 package org.jgrapht.ext;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.ext.GmlParser.GmlContext;
+import java.io.*;
+import java.util.*;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
+import org.jgrapht.*;
+import org.jgrapht.ext.GmlParser.*;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
  * 
  * <p>
- * For a description of the format see
- * <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/"> http://www.
- * infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
+ * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
+ * http://www. infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
  * <p>
  * Below is small example of a graph in GML format.
@@ -73,8 +61,8 @@ import java.util.Set;
  * </pre>
  * 
  * <p>
- * In case the graph is an instance of {@link org.jgrapht.WeightedGraph} then
- * the importer also reads edge weights. Otherwise edge weights are ignored.
+ * In case the graph is an instance of {@link org.jgrapht.WeightedGraph} then the importer also
+ * reads edge weights. Otherwise edge weights are ignored.
  *
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -88,18 +76,13 @@ public class GmlImporter<V, E>
     /**
      * Constructs a new importer.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public GmlImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider)
+    public GmlImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
         if (edgeProvider == null) {
@@ -126,8 +109,7 @@ public class GmlImporter<V, E>
     public void setVertexProvider(VertexProvider<V> vertexProvider)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
     }
@@ -159,18 +141,17 @@ public class GmlImporter<V, E>
      * Import a graph.
      * 
      * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the gml file contains self-loops then the graph
-     * provided must also support self-loops. The same for multiple edges.
+     * The provided graph must be able to support the features of the graph that is read. For
+     * example if the gml file contains self-loops then the graph provided must also support
+     * self-loops. The same for multiple edges.
      * 
      * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights. Otherwise edge weights are ignored.
+     * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
+     * edge weights are ignored.
      * 
      * @param graph the output graph
      * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case an error occurs, such as I/O or parse error
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
@@ -200,17 +181,11 @@ public class GmlImporter<V, E>
             // update graph
             listener.updateGraph(graph);
         } catch (IOException e) {
-            throw new ImportException(
-                "Failed to import gml graph: " + e.getMessage(),
-                e);
+            throw new ImportException("Failed to import gml graph: " + e.getMessage(), e);
         } catch (ParseCancellationException pe) {
-            throw new ImportException(
-                "Failed to import gml graph: " + pe.getMessage(),
-                pe);
+            throw new ImportException("Failed to import gml graph: " + pe.getMessage(), pe);
         } catch (IllegalArgumentException iae) {
-            throw new ImportException(
-                "Failed to import gml graph: " + iae.getMessage(),
-                iae);
+            throw new ImportException("Failed to import gml graph: " + iae.getMessage(), iae);
         }
     }
 
@@ -220,12 +195,8 @@ public class GmlImporter<V, E>
 
         @Override
         public void syntaxError(
-            Recognizer<?, ?> recognizer,
-            Object offendingSymbol,
-            int line,
-            int charPositionInLine,
-            String msg,
-            RecognitionException e)
+            Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+            String msg, RecognitionException e)
             throws ParseCancellationException
         {
             throw new ParseCancellationException(
@@ -268,9 +239,8 @@ public class GmlImporter<V, E>
                 Map<Integer, V> map = new HashMap<Integer, V>();
                 for (Integer id : nodes) {
                     maxV = Math.max(maxV, id);
-                    V vertex = vertexProvider.buildVertex(
-                        id.toString(),
-                        new HashMap<String, String>());
+                    V vertex =
+                        vertexProvider.buildVertex(id.toString(), new HashMap<String, String>());
                     map.put(id, vertex);
                     graph.addVertex(vertex);
                 }
@@ -279,8 +249,7 @@ public class GmlImporter<V, E>
                 for (int i = 0; i < singletons; i++) {
                     String label = String.valueOf(maxV + 1 + i);
                     graph.addVertex(
-                        vertexProvider
-                            .buildVertex(label, new HashMap<String, String>()));
+                        vertexProvider.buildVertex(label, new HashMap<String, String>()));
                 }
 
                 // add edges
@@ -288,24 +257,17 @@ public class GmlImporter<V, E>
                     String label = "e_" + pe.source + "_" + pe.target;
                     V from = map.get(pe.source);
                     if (from == null) {
-                        throw new ImportException(
-                            "Node " + pe.source + " does not exist");
+                        throw new ImportException("Node " + pe.source + " does not exist");
                     }
                     V to = map.get(pe.target);
                     if (to == null) {
-                        throw new ImportException(
-                            "Node " + pe.target + " does not exist");
+                        throw new ImportException("Node " + pe.target + " does not exist");
                     }
-                    E e = edgeProvider.buildEdge(
-                        from,
-                        to,
-                        label,
-                        new HashMap<String, String>());
+                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
                     graph.addEdge(from, to, e);
                     if (pe.weight != null) {
                         if (graph instanceof WeightedGraph<?, ?>) {
-                            ((WeightedGraph<V, E>) graph)
-                                .setEdgeWeight(e, pe.weight);
+                            ((WeightedGraph<V, E>) graph).setEdgeWeight(e, pe.weight);
                         }
                     }
                 }

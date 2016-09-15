@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * .
  *
@@ -31,7 +30,7 @@ import org.jgrapht.graph.*;
 public class DijkstraShortestPathTest
     extends ShortestPathTestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -41,37 +40,18 @@ public class DijkstraShortestPathTest
         DijkstraShortestPath<String, DefaultWeightedEdge> path;
         Graph<String, DefaultWeightedEdge> g = create();
 
-        path =
-                new DijkstraShortestPath<>(
-                        g,
-                        V3,
-                        V4,
-                        Double.POSITIVE_INFINITY);
-        assertEquals(
-            Arrays.asList(
-                new DefaultEdge[] {
-                    e13,
-                    e12,
-                    e24
-                }),
-            path.getPathEdgeList());
+        path = new DijkstraShortestPath<>(g, V3, V4, Double.POSITIVE_INFINITY);
+        assertEquals(Arrays.asList(new DefaultEdge[] { e13, e12, e24 }), path.getPathEdgeList());
         assertEquals(10.0, path.getPathLength(), 0);
 
-        path =
-                new DijkstraShortestPath<>(
-                        g,
-                        V3,
-                        V4,
-                        7);
+        path = new DijkstraShortestPath<>(g, V3, V4, 7);
         assertNull(path.getPathEdgeList());
         assertEquals(Double.POSITIVE_INFINITY, path.getPathLength(), 0);
     }
 
     @Override
     protected List<DefaultWeightedEdge> findPathBetween(
-        Graph<String, DefaultWeightedEdge> g,
-        String src,
-        String dest)
+        Graph<String, DefaultWeightedEdge> g, String src, String dest)
     {
         return DijkstraShortestPath.findPathBetween(g, src, dest);
     }

@@ -21,13 +21,11 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel
- * graph</a> of any size. Reminding a bicycle wheel, a wheel graph has a hub
- * vertex in the center and a rim of vertices around it that are connected to
- * each other (as a ring). The rim vertices are also connected to the hub with
- * edges that are called "spokes".
+ * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.
+ * Reminding a bicycle wheel, a wheel graph has a hub vertex in the center and a rim of vertices
+ * around it that are connected to each other (as a ring). The rim vertices are also connected to
+ * the hub with edges that are called "spokes".
  *
  * @author John V. Sichi
  * @since Sep 16, 2003
@@ -44,9 +42,9 @@ public class WheelGraphGenerator<V, E>
     private int size;
 
     /**
-     * Creates a new WheelGraphGenerator object. This constructor is more
-     * suitable for undirected graphs, where spokes' direction is meaningless.
-     * In the directed case, spokes will be oriented from rim to hub.
+     * Creates a new WheelGraphGenerator object. This constructor is more suitable for undirected
+     * graphs, where spokes' direction is meaningless. In the directed case, spokes will be oriented
+     * from rim to hub.
      *
      * @param size number of vertices to be generated.
      */
@@ -59,8 +57,8 @@ public class WheelGraphGenerator<V, E>
      * Construct a new WheelGraphGenerator.
      *
      * @param size number of vertices to be generated.
-     * @param inwardSpokes if <code>true</code> and graph is directed, spokes
-     * are oriented from rim to hub; else from hub to rim.
+     * @param inwardSpokes if <code>true</code> and graph is directed, spokes are oriented from rim
+     *        to hub; else from hub to rim.
      *
      * @throws IllegalArgumentException
      */
@@ -77,29 +75,26 @@ public class WheelGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
         }
 
-        // A little trickery to intercept the rim generation.  This is
+        // A little trickery to intercept the rim generation. This is
         // necessary since target may be initially non-empty, meaning we can't
         // rely on its vertex set after the rim is generated.
         final Collection<V> rim = new ArrayList<>();
-        VertexFactory<V> rimVertexFactory =
-                () -> {
-                    V vertex = vertexFactory.createVertex();
-                    rim.add(vertex);
+        VertexFactory<V> rimVertexFactory = () -> {
+            V vertex = vertexFactory.createVertex();
+            rim.add(vertex);
 
-                    return vertex;
-                };
+            return vertex;
+        };
 
-        RingGraphGenerator<V, E> ringGenerator =
-                new RingGraphGenerator<>(size - 1);
+        RingGraphGenerator<V, E> ringGenerator = new RingGraphGenerator<>(size - 1);
         ringGenerator.generateGraph(target, rimVertexFactory, resultMap);
 
         V hubVertex = vertexFactory.createVertex();

@@ -17,54 +17,57 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.CompleteGraphGenerator;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
 
 /**
  * .
  *
  * @author Joris Kinable
  */
-public class GraphWalkTest extends EnhancedTestCase {
+public class GraphWalkTest
+    extends EnhancedTestCase
+{
 
     private Graph<Integer, DefaultEdge> completeGraph;
 
-    public void setUp(){
-        VertexFactory<Integer> vertexFactory=new IntegerVertexFactory();
-        CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator=new CompleteGraphGenerator<>(5);
-        completeGraph=new SimpleGraph<>(DefaultEdge.class);
+    public void setUp()
+    {
+        VertexFactory<Integer> vertexFactory = new IntegerVertexFactory();
+        CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
+            new CompleteGraphGenerator<>(5);
+        completeGraph = new SimpleGraph<>(DefaultEdge.class);
         completeGraphGenerator.generateGraph(completeGraph, vertexFactory, new HashMap<>());
     }
 
-    public void testEmptyPath(){
-        List<GraphPath<Integer, DefaultEdge>> paths=new ArrayList<>();
+    public void testEmptyPath()
+    {
+        List<GraphPath<Integer, DefaultEdge>> paths = new ArrayList<>();
         paths.add(new GraphWalk<>(completeGraph, null, null, Collections.emptyList(), 0));
         paths.add(new GraphWalk<>(completeGraph, Collections.emptyList(), 0));
-        for(GraphPath<Integer, DefaultEdge> path : paths) {
+        for (GraphPath<Integer, DefaultEdge> path : paths) {
             assertEquals(0, path.getLength());
             assertEquals(Collections.emptyList(), path.getVertexList());
             assertEquals(Collections.emptyList(), path.getEdgeList());
         }
     }
 
-    public void testNonSimplePath(){
-        List<Integer> vertexList= Arrays.asList(0,1,2,3,2,3,4);
-        List<DefaultEdge> edgeList=new ArrayList<>();
-        for(int i=0; i<vertexList.size()-1; i++)
-            edgeList.add(completeGraph.getEdge(vertexList.get(i), vertexList.get(i+1)));
-        GraphPath<Integer, DefaultEdge> p1=new GraphWalk<>(completeGraph, 0, 4, edgeList, 10);
+    public void testNonSimplePath()
+    {
+        List<Integer> vertexList = Arrays.asList(0, 1, 2, 3, 2, 3, 4);
+        List<DefaultEdge> edgeList = new ArrayList<>();
+        for (int i = 0; i < vertexList.size() - 1; i++)
+            edgeList.add(completeGraph.getEdge(vertexList.get(i), vertexList.get(i + 1)));
+        GraphPath<Integer, DefaultEdge> p1 = new GraphWalk<>(completeGraph, 0, 4, edgeList, 10);
         assertEquals(0, p1.getStartVertex().intValue());
         assertEquals(4, p1.getEndVertex().intValue());
         assertEquals(vertexList, p1.getVertexList());
         assertEquals(edgeList.size(), p1.getLength());
         assertEquals(10.0, p1.getWeight());
 
-        GraphPath<Integer, DefaultEdge> p2=new GraphWalk<>(completeGraph, vertexList, 10);
+        GraphPath<Integer, DefaultEdge> p2 = new GraphWalk<>(completeGraph, vertexList, 10);
         assertEquals(0, p2.getStartVertex().intValue());
         assertEquals(4, p2.getEndVertex().intValue());
         assertEquals(edgeList, p2.getEdgeList());
@@ -72,11 +75,14 @@ public class GraphWalkTest extends EnhancedTestCase {
         assertEquals(10.0, p2.getWeight());
     }
 
-    private class IntegerVertexFactory implements VertexFactory<Integer>{
+    private class IntegerVertexFactory
+        implements VertexFactory<Integer>
+    {
         int count;
 
         @Override
-        public Integer createVertex() {
+        public Integer createVertex()
+        {
             return count++;
         }
     }

@@ -19,34 +19,32 @@ package org.jgrapht.util;
 
 import java.util.*;
 
-
 /**
- * This class implements a Fibonacci heap data structure. Much of the code in
- * this class is based on the algorithms in the "Introduction to Algorithms"by
- * Cormen, Leiserson, and Rivest in Chapter 21. The amortized running time of
- * most of these methods is O(1), making it a very fast data structure. Several
- * have an actual running time of O(1). removeMin() and delete() have O(log n)
- * amortized running times because they do the heap consolidation. If you
- * attempt to store nodes in this heap with key values of -Infinity
- * (Double.NEGATIVE_INFINITY) the <code>delete()</code> operation may fail to
- * remove the correct element.
+ * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
+ * the algorithms in the "Introduction to Algorithms"by Cormen, Leiserson, and Rivest in Chapter 21.
+ * The amortized running time of most of these methods is O(1), making it a very fast data
+ * structure. Several have an actual running time of O(1). removeMin() and delete() have O(log n)
+ * amortized running times because they do the heap consolidation. If you attempt to store nodes in
+ * this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
+ * operation may fail to remove the correct element.
  *
- * <p><b>Note that this implementation is not synchronized.</b> If multiple
- * threads access a set concurrently, and at least one of the threads modifies
- * the set, it <i>must</i> be synchronized externally. This is typically
- * accomplished by synchronizing on some object that naturally encapsulates the
- * set.</p>
+ * <p>
+ * <b>Note that this implementation is not synchronized.</b> If multiple threads access a set
+ * concurrently, and at least one of the threads modifies the set, it <i>must</i> be synchronized
+ * externally. This is typically accomplished by synchronizing on some object that naturally
+ * encapsulates the set.
+ * </p>
  *
- * <p>This class was originally developed by Nathan Fiedler for the GraphMaker
- * project. It was imported to JGraphT with permission, courtesy of Nathan
- * Fiedler.</p>
+ * <p>
+ * This class was originally developed by Nathan Fiedler for the GraphMaker project. It was imported
+ * to JGraphT with permission, courtesy of Nathan Fiedler.
+ * </p>
  *
  * @author Nathan Fiedler
  */
 public class FibonacciHeap<T>
 {
-    private static final double oneOverLogPhi =
-        1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
+    private static final double oneOverLogPhi = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
 
     /**
      * Points to the minimum node in the heap.
@@ -66,10 +64,12 @@ public class FibonacciHeap<T>
     } // FibonacciHeap
 
     /**
-     * Tests if the Fibonacci heap is empty or not. Returns true if the heap is
-     * empty, false otherwise.
+     * Tests if the Fibonacci heap is empty or not. Returns true if the heap is empty, false
+     * otherwise.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @return true if the heap is empty, false otherwise
      */
@@ -92,23 +92,23 @@ public class FibonacciHeap<T>
     // clear
 
     /**
-     * Decreases the key value for a heap node, given the new value to take on.
-     * The structure of the heap may be changed and will not be consolidated.
+     * Decreases the key value for a heap node, given the new value to take on. The structure of the
+     * heap may be changed and will not be consolidated.
      *
-     * <p>Running time: O(1) amortized</p>
+     * <p>
+     * Running time: O(1) amortized
+     * </p>
      *
      * @param x node to decrease the key of
      * @param k new key value for node x
      *
-     * @exception IllegalArgumentException Thrown if k is larger than x.key
-     * value.
+     * @exception IllegalArgumentException Thrown if k is larger than x.key value.
      */
     public void decreaseKey(FibonacciHeapNode<T> x, double k)
     {
         if (k > x.key) {
             throw new IllegalArgumentException(
-                "decreaseKey() got larger key value. Current key: " + x.key
-                + " new key: " + k);
+                "decreaseKey() got larger key value. Current key: " + x.key + " new key: " + k);
         }
 
         x.key = k;
@@ -128,12 +128,13 @@ public class FibonacciHeap<T>
     // decreaseKey
 
     /**
-     * Deletes a node from the heap given the reference to the node. The trees
-     * in the heap will be consolidated, if necessary. This operation may fail
-     * to remove the correct element if there are nodes with key value
-     * -Infinity.
+     * Deletes a node from the heap given the reference to the node. The trees in the heap will be
+     * consolidated, if necessary. This operation may fail to remove the correct element if there
+     * are nodes with key value -Infinity.
      *
-     * <p>Running time: O(log n) amortized</p>
+     * <p>
+     * Running time: O(log n) amortized
+     * </p>
      *
      * @param x node to remove from heap
      */
@@ -149,11 +150,12 @@ public class FibonacciHeap<T>
     // delete
 
     /**
-     * Inserts a new data element into the heap. No heap consolidation is
-     * performed at this time, the new node is simply inserted into the root
-     * list of this heap.
+     * Inserts a new data element into the heap. No heap consolidation is performed at this time,
+     * the new node is simply inserted into the root list of this heap.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @param node new node to insert into heap
      * @param key key value associated with data object
@@ -182,10 +184,12 @@ public class FibonacciHeap<T>
     // insert
 
     /**
-     * Returns the smallest element in the heap. This smallest element is the
-     * one with the minimum key value.
+     * Returns the smallest element in the heap. This smallest element is the one with the minimum
+     * key value.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @return heap node with the smallest key
      */
@@ -197,10 +201,12 @@ public class FibonacciHeap<T>
     // min
 
     /**
-     * Removes the smallest element from the heap. This will cause the trees in
-     * the heap to be consolidated, if necessary.
+     * Removes the smallest element from the heap. This will cause the trees in the heap to be
+     * consolidated, if necessary.
      *
-     * <p>Running time: O(log n) amortized</p>
+     * <p>
+     * Running time: O(log n) amortized
+     * </p>
      *
      * @return node with the smallest key
      */
@@ -254,10 +260,12 @@ public class FibonacciHeap<T>
     // removeMin
 
     /**
-     * Returns the size of the heap which is measured in the number of elements
-     * contained in the heap.
+     * Returns the size of the heap which is measured in the number of elements contained in the
+     * heap.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @return number of elements in the heap
      */
@@ -269,19 +277,19 @@ public class FibonacciHeap<T>
     // size
 
     /**
-     * Joins two Fibonacci heaps into a new one. No heap consolidation is
-     * performed at this time. The two root lists are simply joined together.
+     * Joins two Fibonacci heaps into a new one. No heap consolidation is performed at this time.
+     * The two root lists are simply joined together.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @param h1 first heap
      * @param h2 second heap
      *
      * @return new heap containing h1 and h2
      */
-    public static <T> FibonacciHeap<T> union(
-        FibonacciHeap<T> h1,
-        FibonacciHeap<T> h2)
+    public static <T> FibonacciHeap<T> union(FibonacciHeap<T> h1, FibonacciHeap<T> h2)
     {
         FibonacciHeap<T> h = new FibonacciHeap<>();
 
@@ -316,7 +324,8 @@ public class FibonacciHeap<T>
      *
      * @return String of this.
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         if (minNode == null) {
             return "FibonacciHeap=[]";
@@ -362,10 +371,12 @@ public class FibonacciHeap<T>
     // toString
 
     /**
-     * Performs a cascading cut operation. This cuts y from its parent and then
-     * does the same for its parent, and so on up the tree.
+     * Performs a cascading cut operation. This cuts y from its parent and then does the same for
+     * its parent, and so on up the tree.
      *
-     * <p>Running time: O(log n); O(1) excluding the recursion</p>
+     * <p>
+     * Running time: O(log n); O(1) excluding the recursion
+     * </p>
      *
      * @param y node to perform cascading cut on
      */
@@ -392,11 +403,9 @@ public class FibonacciHeap<T>
 
     protected void consolidate()
     {
-        int arraySize =
-            ((int) Math.floor(Math.log(nNodes) * oneOverLogPhi)) + 1;
+        int arraySize = ((int) Math.floor(Math.log(nNodes) * oneOverLogPhi)) + 1;
 
-        List<FibonacciHeapNode<T>> array =
-                new ArrayList<>(arraySize);
+        List<FibonacciHeapNode<T>> array = new ArrayList<>(arraySize);
 
         // Initialize degree array
         for (int i = 0; i < arraySize; i++) {
@@ -491,10 +500,12 @@ public class FibonacciHeap<T>
     // consolidate
 
     /**
-     * The reverse of the link operation: removes x from the child list of y.
-     * This method assumes that min is non-null.
+     * The reverse of the link operation: removes x from the child list of y. This method assumes
+     * that min is non-null.
      *
-     * <p>Running time: O(1)</p>
+     * <p>
+     * Running time: O(1)
+     * </p>
      *
      * @param x child of y to be removed from y's child list
      * @param y parent of x about to lose a child
@@ -533,7 +544,9 @@ public class FibonacciHeap<T>
     /**
      * Make node y a child of node x.
      *
-     * <p>Running time: O(1) actual</p>
+     * <p>
+     * Running time: O(1) actual
+     * </p>
      *
      * @param y node to become child
      * @param x node to become parent

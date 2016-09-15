@@ -21,17 +21,14 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a complete graph of any size. A complete graph is a graph where
- * every vertex shares an edge with every other vertex. If it is a directed
- * graph, then edges must always exist in both directions. On a side note, a
- * complete graph is the least efficient possible graph in terms of memory and
- * cpu usage. Note: This contructor was designed for a simple undirected or
- * directed graph. It will act strangely when used with certain graph types,
- * such as undirected multigraphs. Note, though, that a complete undirected
- * multigraph is rather senseless -- you can keep adding edges and the graph is
- * never truly complete.
+ * Generates a complete graph of any size. A complete graph is a graph where every vertex shares an
+ * edge with every other vertex. If it is a directed graph, then edges must always exist in both
+ * directions. On a side note, a complete graph is the least efficient possible graph in terms of
+ * memory and cpu usage. Note: This contructor was designed for a simple undirected or directed
+ * graph. It will act strangely when used with certain graph types, such as undirected multigraphs.
+ * Note, though, that a complete undirected multigraph is rather senseless -- you can keep adding
+ * edges and the graph is never truly complete.
  *
  * @author Tim Shearouse
  * @since Nov 02, 2008
@@ -60,44 +57,42 @@ public class CompleteGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
         }
 
-        //Add all the vertices to the set
+        // Add all the vertices to the set
         for (int i = 0; i < size; i++) {
             V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
         }
 
         /*
-         * We want two iterators over the vertex set, one fast and one slow.
-         * The slow one will move through the set once. For each vertex,
-         * the fast iterator moves through the set, adding an edge to all
-         * vertices we haven't connected to yet.
+         * We want two iterators over the vertex set, one fast and one slow. The slow one will move
+         * through the set once. For each vertex, the fast iterator moves through the set, adding an
+         * edge to all vertices we haven't connected to yet.
          *
-         * If we have an undirected graph, the second addEdge call will return
-         * nothing; it will not add a second edge.
+         * If we have an undirected graph, the second addEdge call will return nothing; it will not
+         * add a second edge.
          */
         Iterator<V> slowI = target.vertexSet().iterator();
         Iterator<V> fastI;
 
-        while (slowI.hasNext()) { //While there are more vertices in the set
+        while (slowI.hasNext()) { // While there are more vertices in the set
 
             V latestVertex = slowI.next();
             fastI = target.vertexSet().iterator();
 
-            //Jump to the first vertex *past* latestVertex
+            // Jump to the first vertex *past* latestVertex
             while (fastI.next() != latestVertex) {
                 ;
             }
 
-            //And, add edges to all remaining vertices
+            // And, add edges to all remaining vertices
             V temp;
             while (fastI.hasNext()) {
                 temp = fastI.next();

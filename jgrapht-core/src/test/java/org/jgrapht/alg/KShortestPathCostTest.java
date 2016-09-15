@@ -20,11 +20,10 @@ package org.jgrapht.alg;
 import java.io.*;
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * @author Guillaume Boulmier
@@ -33,7 +32,7 @@ import org.jgrapht.graph.*;
 public class KShortestPathCostTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testKShortestPathCompleteGraph4()
     {
@@ -47,8 +46,8 @@ public class KShortestPathCostTest
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
-            + " [(vS : v2), (v1 : v2), (v1 : v3)], "
-            + "[(vS : v1), (v1 : v2), (v2 : v3)], " + "[(vS : v3)]]",
+                + " [(vS : v2), (v1 : v2), (v1 : v3)], " + "[(vS : v1), (v1 : v2), (v2 : v3)], "
+                + "[(vS : v3)]]",
             pathElements.toString());
 
         assertEquals(5, pathElements.size(), 0);
@@ -56,8 +55,7 @@ public class KShortestPathCostTest
         assertEquals(2, pathElement.getWeight(), 0);
 
         assertEquals(
-            Arrays.asList(new Object[] { graph.eS1, graph.e13 }),
-            pathElement.getEdgeList());
+            Arrays.asList(new Object[] { graph.eS1, graph.e13 }), pathElement.getEdgeList());
     }
 
     public void testPicture1Graph()
@@ -67,39 +65,26 @@ public class KShortestPathCostTest
         int maxSize = 10;
 
         KShortestPaths<String, DefaultWeightedEdge> pathFinder =
-            new KShortestPaths<>(picture1Graph, "vS",
-                maxSize);
+            new KShortestPaths<>(picture1Graph, "vS", maxSize);
 
-        //      assertEquals(2, pathFinder.getPaths("v5").size());
+        // assertEquals(2, pathFinder.getPaths("v5").size());
 
         List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("v5");
         GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
-            Arrays.asList(
-                new Object[] {
-                    picture1Graph.eS1,
-                    picture1Graph.e15
-                }),
+            Arrays.asList(new Object[] { picture1Graph.eS1, picture1Graph.e15 }),
             pathElement.getEdgeList());
 
         List<String> vertices = pathElement.getVertexList();
-        assertEquals(
-            Arrays.asList(new Object[] { "vS", "v1", "v5" }),
-            vertices);
+        assertEquals(Arrays.asList(new Object[] { "vS", "v1", "v5" }), vertices);
 
         pathElement = pathElements.get(1);
         assertEquals(
-            Arrays.asList(
-                new Object[] {
-                    picture1Graph.eS2,
-                    picture1Graph.e25
-                }),
+            Arrays.asList(new Object[] { picture1Graph.eS2, picture1Graph.e25 }),
             pathElement.getEdgeList());
 
         vertices = pathElement.getVertexList();
-        assertEquals(
-            Arrays.asList(new Object[] { "vS", "v2", "v5" }),
-            vertices);
+        assertEquals(Arrays.asList(new Object[] { "vS", "v2", "v5" }), vertices);
 
         pathElements = pathFinder.getPaths("v7");
         pathElement = pathElements.get(0);
@@ -118,16 +103,13 @@ public class KShortestPathCostTest
         BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
         verifyShortestPathsInIncreasingOrderOfWeight(biconnectedGraph);
 
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
-            new KShortestPathCompleteGraph4();
+        KShortestPathCompleteGraph4 kSPCompleteGraph4 = new KShortestPathCompleteGraph4();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
-            new KShortestPathCompleteGraph5();
+        KShortestPathCompleteGraph5 kSPCompleteGraph5 = new KShortestPathCompleteGraph5();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
-            new KShortestPathCompleteGraph6();
+        KShortestPathCompleteGraph6 kSPCompleteGraph6 = new KShortestPathCompleteGraph6();
         verifyShortestPathsInIncreasingOrderOfWeight(kSPCompleteGraph6);
 
         KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
@@ -145,16 +127,13 @@ public class KShortestPathCostTest
         BiconnectedGraph biconnectedGraph = new BiconnectedGraph();
         verifyShortestPathsWeightsWithMaxSizeIncreases(biconnectedGraph);
 
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
-            new KShortestPathCompleteGraph4();
+        KShortestPathCompleteGraph4 kSPCompleteGraph4 = new KShortestPathCompleteGraph4();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
-            new KShortestPathCompleteGraph5();
+        KShortestPathCompleteGraph5 kSPCompleteGraph5 = new KShortestPathCompleteGraph5();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
-            new KShortestPathCompleteGraph6();
+        KShortestPathCompleteGraph6 kSPCompleteGraph6 = new KShortestPathCompleteGraph6();
         verifyShortestPathsWeightsWithMaxSizeIncreases(kSPCompleteGraph6);
 
         KSPExampleGraph kSPExampleGraph = new KSPExampleGraph();
@@ -176,8 +155,7 @@ public class KShortestPathCostTest
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
                     KShortestPaths<String, E> pathFinder =
-                            new KShortestPaths<>(graph,
-                                    sourceVertex, maxSize);
+                        new KShortestPaths<>(graph, sourceVertex, maxSize);
 
                     List<GraphPath<String, E>> pathElements = pathFinder.getPaths(targetVertex);
                     if (pathElements == null) {
@@ -208,10 +186,9 @@ public class KShortestPathCostTest
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
                     KShortestPaths<String, E> pathFinder =
-                            new KShortestPaths<>(graph,
-                                    sourceVertex, 1);
+                        new KShortestPaths<>(graph, sourceVertex, 1);
                     List<GraphPath<String, E>> prevPathElementsResults =
-                            pathFinder.getPaths(targetVertex);
+                        pathFinder.getPaths(targetVertex);
 
                     if (prevPathElementsResults == null) {
                         // no path exists between the start vertex and the
@@ -220,15 +197,11 @@ public class KShortestPathCostTest
                     }
 
                     for (int maxSize = 2; maxSize < maxSizeLimit; maxSize++) {
-                        pathFinder =
-                                new KShortestPaths<>(graph, sourceVertex,
-                                        maxSize);
+                        pathFinder = new KShortestPaths<>(graph, sourceVertex, maxSize);
                         List<GraphPath<String, E>> pathElementsResults =
-                                pathFinder.getPaths(targetVertex);
+                            pathFinder.getPaths(targetVertex);
 
-                        verifyWeightsConsistency(
-                                prevPathElementsResults,
-                                pathElementsResults);
+                        verifyWeightsConsistency(prevPathElementsResults, pathElementsResults);
                     }
                 }
             }
@@ -236,47 +209,39 @@ public class KShortestPathCostTest
     }
 
     /**
-     * Verify weights consistency between the results when the max-size argument
-     * increases.
+     * Verify weights consistency between the results when the max-size argument increases.
      *
-     * @param prevPathElementsResults results obtained with a max-size argument
-     * equal to <code>k</code>
-     * @param pathElementsResults results obtained with a max-size argument
-     * equal to <code>k+1</code>
+     * @param prevPathElementsResults results obtained with a max-size argument equal to
+     *        <code>k</code>
+     * @param pathElementsResults results obtained with a max-size argument equal to
+     *        <code>k+1</code>
      */
     private <E> void verifyWeightsConsistency(
         List<GraphPath<String, E>> prevPathElementsResults,
         List<GraphPath<String, E>> pathElementsResults)
     {
         for (int i = 0; i < prevPathElementsResults.size(); i++) {
-            GraphPath<String, E> pathElementResult =
-                    pathElementsResults.get(i);
-            GraphPath<String, E> prevPathElementResult =
-                    prevPathElementsResults.get(i);
-            assertTrue(
-                pathElementResult.getWeight()
-                == prevPathElementResult.getWeight());
+            GraphPath<String, E> pathElementResult = pathElementsResults.get(i);
+            GraphPath<String, E> prevPathElementResult = prevPathElementsResults.get(i);
+            assertTrue(pathElementResult.getWeight() == prevPathElementResult.getWeight());
         }
     }
 
     /**
-     * Currently disabled since it takes more than a few seconds to run.
-     * Also need to actually check the output instead of printing.
+     * Currently disabled since it takes more than a few seconds to run. Also need to actually check
+     * the output instead of printing.
      *
-     * @see <a
-     * href="http://jgrapht-users.107614.n3.nabble.com/quot-graph-must-contain-the-start-vertex-quot-when-running-KShortestPaths-td4024797.html">bug
-     * description</a>.
+     * @see <a href=
+     *      "http://jgrapht-users.107614.n3.nabble.com/quot-graph-must-contain-the-start-vertex-quot-when-running-KShortestPaths-td4024797.html">bug
+     *      description</a>.
      */
     public void _testIllegalArgumentExceptionGraphNotThrown()
         throws Exception
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph =
-                new SimpleWeightedGraph<>(
-                        DefaultWeightedEdge.class);
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-
-        InputStream fstream = getClass().getClassLoader().getResourceAsStream(
-            "edges.txt");
+        InputStream fstream = getClass().getClassLoader().getResourceAsStream("edges.txt");
         BufferedReader in = new BufferedReader(new InputStreamReader(fstream));
 
         String[] edgeText;
@@ -299,16 +264,16 @@ public class KShortestPathCostTest
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
         KShortestPaths<String, DefaultWeightedEdge> kPaths =
-                new KShortestPaths<>(
-                        graph, graph.getEdgeSource(src), 5);
+            new KShortestPaths<>(graph, graph.getEdgeSource(src), 5);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {
             paths = kPaths.getPaths(graph.getEdgeTarget(src));
             for (GraphPath<String, DefaultWeightedEdge> path : paths) {
                 for (DefaultWeightedEdge edge : path.getEdgeList()) {
-                    System.out.print("<" + graph.getEdgeSource(edge) + "\t"
-                        + graph.getEdgeTarget(edge) + "\t" + edge + ">\t");
+                    System.out.print(
+                        "<" + graph.getEdgeSource(edge) + "\t" + graph.getEdgeTarget(edge) + "\t"
+                            + edge + ">\t");
                 }
                 System.out.println(": " + path.getWeight());
             }

@@ -21,11 +21,10 @@ import java.util.*;
 
 import junit.framework.*;
 
-
 public class PrefetchIteratorTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testIteratorInterface()
     {
@@ -61,28 +60,25 @@ public class PrefetchIteratorTest
         assertTrue(exceptionThrown instanceof NoSuchElementException);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     // This test class supplies enumeration of integer from 1 till 100.
     public static class IterateFrom1To99
-        implements Enumeration<Integer>,
-            Iterator<Integer>
+        implements Enumeration<Integer>, Iterator<Integer>
     {
         private int counter = 0;
         private PrefetchIterator<Integer> nextSupplier;
 
         public IterateFrom1To99()
         {
-            nextSupplier =
-                    new PrefetchIterator<>(
-                            () -> {
-                                counter++;
-                                if (counter >= 100) {
-                                    throw new NoSuchElementException();
-                                } else {
-                                    return counter;
-                                }
-                            });
+            nextSupplier = new PrefetchIterator<>(() -> {
+                counter++;
+                if (counter >= 100) {
+                    throw new NoSuchElementException();
+                } else {
+                    return counter;
+                }
+            });
         }
 
         // forwarding to nextSupplier and return its returned value

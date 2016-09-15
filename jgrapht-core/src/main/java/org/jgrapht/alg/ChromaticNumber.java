@@ -23,13 +23,11 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * Allows the <a href="http://mathworld.wolfram.com/ChromaticNumber.html">
- * chromatic number</a> of a graph to be calculated. This is the minimal number
- * of colors needed to color each vertex such that no two adjacent vertices
- * share the same color. This algorithm will not find the true chromatic number,
- * since this is an NP-complete problem. So, a greedy algorithm will find an
+ * Allows the <a href="http://mathworld.wolfram.com/ChromaticNumber.html"> chromatic number</a> of a
+ * graph to be calculated. This is the minimal number of colors needed to color each vertex such
+ * that no two adjacent vertices share the same color. This algorithm will not find the true
+ * chromatic number, since this is an NP-complete problem. So, a greedy algorithm will find an
  * approximate chromatic number.
  *
  * @author Andrew Newell
@@ -42,8 +40,7 @@ public abstract class ChromaticNumber
      *
      * @param g an undirected graph to find the chromatic number of
      *
-     * @return integer the approximate chromatic number from the greedy
-     * algorithm
+     * @return integer the approximate chromatic number from the greedy algorithm
      */
     public static <V, E> int findGreedyChromaticNumber(UndirectedGraph<V, E> g)
     {
@@ -56,8 +53,7 @@ public abstract class ChromaticNumber
      *
      * @param g an undirected graph for which to find the coloring
      */
-    public static <V, E> Map<Integer, Set<V>> findGreedyColoredGroups(
-        UndirectedGraph<V, E> g)
+    public static <V, E> Map<Integer, Set<V>> findGreedyColoredGroups(UndirectedGraph<V, E> g)
     {
         // A copy of the graph is made, so that elements of the graph may be
         // removed to carry out the algorithm
@@ -65,8 +61,7 @@ public abstract class ChromaticNumber
 
         // The Vertices will be sorted in decreasing order by degree, so that
         // higher degree vertices have priority to be colored first
-        VertexDegreeComparator<V, E> comp =
-                new VertexDegreeComparator<>(sg);
+        VertexDegreeComparator<V, E> comp = new VertexDegreeComparator<>(sg);
         List<V> sortedVertices = new LinkedList<>(sg.vertexSet());
         Collections.sort(sortedVertices, comp);
         Collections.reverse(sortedVertices);
@@ -83,10 +78,7 @@ public abstract class ChromaticNumber
             // This set will contain vertices that are colored with the
             // current color of this iteration
             Set<V> currentColor = new HashSet<>();
-            for (
-                Iterator<V> iter = sortedVertices.iterator();
-                iter.hasNext();)
-            {
+            for (Iterator<V> iter = sortedVertices.iterator(); iter.hasNext();) {
                 V v = iter.next();
 
                 // Add new vertices to be colored as long as they are not

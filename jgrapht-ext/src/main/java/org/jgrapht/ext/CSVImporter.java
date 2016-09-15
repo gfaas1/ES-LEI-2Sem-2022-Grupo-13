@@ -17,46 +17,32 @@
  */
 package org.jgrapht.ext;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
+import org.jgrapht.*;
 
 /**
- * Imports a graph from a CSV Format or any other Delimiter-separated value
- * format.
+ * Imports a graph from a CSV Format or any other Delimiter-separated value format.
  * 
  * <p>
- * The importer supports various different formats which can be adjusted using
- * the {@link #setFormat(CSVFormat) setFormat} method. The supported formats are
- * the same CSV formats used by
- * <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi
- * </a>. For some of the formats, the behavior of the importer can be adjusted
- * using the {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean)
- * setParameter} method. See {@link CSVFormat} for a description of the formats.
+ * The importer supports various different formats which can be adjusted using the
+ * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
+ * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi </a>. For some
+ * of the formats, the behavior of the importer can be adjusted using the
+ * {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean) setParameter} method. See
+ * {@link CSVFormat} for a description of the formats.
  * </p>
  * 
  * <p>
- * The importer respects
- * <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
- * also adjust the separator to something like semicolon or pipe instead of
- * comma. In such a case, all fields are unescaped using the new separator. See
- * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
- * separated values</a> for more information.
+ * The importer respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
+ * also adjust the separator to something like semicolon or pipe instead of comma. In such a case,
+ * all fields are unescaped using the new separator. See
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
+ * values</a> for more information.
  * </p>
  * 
  * <p>
@@ -85,38 +71,25 @@ public class CSVImporter<V, E>
     private final Set<CSVFormat.Parameter> parameters;
 
     /**
-     * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST}
-     * format as default.
+     * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST} format as default.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public CSVImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider)
+    public CSVImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
-        this(
-            vertexProvider,
-            edgeProvider,
-            CSVFormat.ADJACENCY_LIST,
-            DEFAULT_DELIMITER);
+        this(vertexProvider, edgeProvider, CSVFormat.ADJACENCY_LIST, DEFAULT_DELIMITER);
     }
 
     /**
      * Constructs a new importer.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      * @param format format to use out of the supported ones
      */
     public CSVImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider,
-        CSVFormat format)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, CSVFormat format)
     {
         this(vertexProvider, edgeProvider, format, DEFAULT_DELIMITER);
     }
@@ -124,22 +97,17 @@ public class CSVImporter<V, E>
     /**
      * Constructs a new importer.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      * @param format format to use out of the supported ones
      * @param delimiter delimiter to use (comma, semicolon, pipe, etc.)
      */
     public CSVImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider,
-        CSVFormat format,
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, CSVFormat format,
         char delimiter)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
         if (edgeProvider == null) {
@@ -148,8 +116,7 @@ public class CSVImporter<V, E>
         this.edgeProvider = edgeProvider;
         this.format = format;
         if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException(
-                "Character cannot be used as a delimiter");
+            throw new IllegalArgumentException("Character cannot be used as a delimiter");
         }
         this.delimiter = delimiter;
         this.parameters = new HashSet<>();
@@ -193,8 +160,7 @@ public class CSVImporter<V, E>
     public void setDelimiter(char delimiter)
     {
         if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException(
-                "Character cannot be used as a delimiter");
+            throw new IllegalArgumentException("Character cannot be used as a delimiter");
         }
         this.delimiter = delimiter;
     }
@@ -229,18 +195,16 @@ public class CSVImporter<V, E>
      * Import a graph.
      * 
      * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the input contains self-loops then the graph
-     * provided must also support self-loops. The same for multiple edges.
+     * The provided graph must be able to support the features of the graph that is read. For
+     * example if the input contains self-loops then the graph provided must also support
+     * self-loops. The same for multiple edges.
      * 
      * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights.
+     * If the provided graph is a weighted graph, the importer also reads edge weights.
      * 
      * @param graph the graph
      * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case an error occurs, such as I/O or parse error
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
@@ -281,17 +245,11 @@ public class CSVImporter<V, E>
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(listener, graphContext);
         } catch (IOException e) {
-            throw new ImportException(
-                "Failed to import CSV graph: " + e.getMessage(),
-                e);
+            throw new ImportException("Failed to import CSV graph: " + e.getMessage(), e);
         } catch (ParseCancellationException pe) {
-            throw new ImportException(
-                "Failed to import CSV graph: " + pe.getMessage(),
-                pe);
+            throw new ImportException("Failed to import CSV graph: " + pe.getMessage(), pe);
         } catch (IllegalArgumentException iae) {
-            throw new ImportException(
-                "Failed to import CSV graph: " + iae.getMessage(),
-                iae);
+            throw new ImportException("Failed to import CSV graph: " + iae.getMessage(), iae);
         }
     }
 
@@ -301,12 +259,8 @@ public class CSVImporter<V, E>
 
         @Override
         public void syntaxError(
-            Recognizer<?, ?> recognizer,
-            Object offendingSymbol,
-            int line,
-            int charPositionInLine,
-            String msg,
-            RecognitionException e)
+            Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+            String msg, RecognitionException e)
             throws ParseCancellationException
         {
             throw new ParseCancellationException(
@@ -329,8 +283,7 @@ public class CSVImporter<V, E>
             // first is source
             String sourceKey = row.get(0);
             if (sourceKey.isEmpty()) {
-                throw new ParseCancellationException(
-                    "Source vertex cannot be empty");
+                throw new ParseCancellationException("Source vertex cannot be empty");
             }
             V source = vertices.get(sourceKey);
             if (source == null) {
@@ -343,8 +296,7 @@ public class CSVImporter<V, E>
             // remaining are targets
             for (String key : row) {
                 if (key.isEmpty()) {
-                    throw new ParseCancellationException(
-                        "Target vertex cannot be empty");
+                    throw new ParseCancellationException("Target vertex cannot be empty");
                 }
                 V target = vertices.get(key);
 
@@ -356,17 +308,12 @@ public class CSVImporter<V, E>
 
                 try {
                     String label = "e_" + source + "_" + target;
-                    E e = edgeProvider.buildEdge(
-                        source,
-                        target,
-                        label,
-                        new HashMap<String, String>());
+                    E e = edgeProvider
+                        .buildEdge(source, target, label, new HashMap<String, String>());
                     graph.addEdge(source, target, e);
                 } catch (IllegalArgumentException e) {
                     throw new ParseCancellationException(
-                        "Provided graph does not support input: "
-                            + e.getMessage(),
-                        e);
+                        "Provided graph does not support input: " + e.getMessage(), e);
                 }
             }
         }
@@ -388,12 +335,11 @@ public class CSVImporter<V, E>
         public MatrixCSVListener(Graph<V, E> graph)
         {
             super(graph);
-            this.assumeNodeIds = parameters
-                .contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-            this.assumeEdgeWeights = parameters
-                .contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
-            this.assumeZeroWhenNoEdge = parameters
-                .contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
+            this.assumeNodeIds = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
+            this.assumeEdgeWeights =
+                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+            this.assumeZeroWhenNoEdge =
+                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
             this.verticesCount = 0;
             this.currentVertex = 1;
             this.currentVertexName = null;
@@ -431,8 +377,7 @@ public class CSVImporter<V, E>
             // header line contains nodes
             verticesCount = row.size();
             if (verticesCount < 1) {
-                throw new ParseCancellationException(
-                    "Failed to parse header with vertices");
+                throw new ParseCancellationException("Failed to parse header with vertices");
             }
             int v = 1;
             for (String vertexName : row) {
@@ -440,8 +385,7 @@ public class CSVImporter<V, E>
                     throw new ParseCancellationException(
                         "Failed to parse header with vertices (empty name)");
                 }
-                V vertex = vertexProvider
-                    .buildVertex(vertexName, new HashMap<>());
+                V vertex = vertexProvider.buildVertex(vertexName, new HashMap<>());
                 vertices.put(vertexName, vertex);
                 graph.addVertex(vertex);
                 columnIndex.put(v, vertexName);
@@ -454,14 +398,12 @@ public class CSVImporter<V, E>
             // header line contains nodes
             verticesCount = row.size();
             if (verticesCount < 1) {
-                throw new ParseCancellationException(
-                    "Failed to parse header with vertices");
+                throw new ParseCancellationException("Failed to parse header with vertices");
             }
             int v = 1;
             for (v = 1; v <= verticesCount; v++) {
                 String vertexName = String.valueOf(v);
-                V vertex = vertexProvider
-                    .buildVertex(vertexName, new HashMap<>());
+                V vertex = vertexProvider.buildVertex(vertexName, new HashMap<>());
                 vertices.put(vertexName, vertex);
                 graph.addVertex(vertex);
                 columnIndex.put(v, vertexName);
@@ -482,22 +424,15 @@ public class CSVImporter<V, E>
                     Integer entryAsInteger = Integer.parseInt(entry);
                     if (entryAsInteger == 0) {
                         if (!assumeZeroWhenNoEdge && assumeEdgeWeights) {
-                            createEdge(
-                                currentVertexName,
-                                columnIndex.get(target),
-                                0d);
+                            createEdge(currentVertexName, columnIndex.get(target), 0d);
                         }
                     } else {
                         if (assumeEdgeWeights) {
                             createEdge(
-                                currentVertexName,
-                                columnIndex.get(target),
+                                currentVertexName, columnIndex.get(target),
                                 Double.valueOf(entryAsInteger));
                         } else {
-                            createEdge(
-                                currentVertexName,
-                                columnIndex.get(target),
-                                null);
+                            createEdge(currentVertexName, columnIndex.get(target), null);
                         }
 
                     }
@@ -511,10 +446,7 @@ public class CSVImporter<V, E>
                 try {
                     Double entryAsDouble = Double.parseDouble(entry);
                     if (assumeEdgeWeights) {
-                        createEdge(
-                            currentVertexName,
-                            columnIndex.get(target),
-                            entryAsDouble);
+                        createEdge(currentVertexName, columnIndex.get(target), entryAsDouble);
                     } else {
                         throw new ParseCancellationException(
                             "Double entry found when expecting no weights");
@@ -527,21 +459,14 @@ public class CSVImporter<V, E>
             }
         }
 
-        private void createEdge(
-            String sourceName,
-            String targetName,
-            Double weight)
+        private void createEdge(String sourceName, String targetName, Double weight)
         {
             try {
                 V source = vertices.get(sourceName);
                 V target = vertices.get(targetName);
 
                 String label = "e_" + source + "_" + target;
-                E e = edgeProvider.buildEdge(
-                    source,
-                    target,
-                    label,
-                    new HashMap<String, String>());
+                E e = edgeProvider.buildEdge(source, target, label, new HashMap<String, String>());
                 graph.addEdge(source, target, e);
 
                 if (weight != null) {
@@ -551,8 +476,7 @@ public class CSVImporter<V, E>
                 }
             } catch (IllegalArgumentException e) {
                 throw new ParseCancellationException(
-                    "Provided graph does not support input: " + e.getMessage(),
-                    e);
+                    "Provided graph does not support input: " + e.getMessage(), e);
             }
         }
 

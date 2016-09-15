@@ -19,11 +19,10 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * .
@@ -33,7 +32,7 @@ import org.jgrapht.graph.*;
 public class CycleDetectorTest
     extends TestCase
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     private static final String V1 = "v1";
     private static final String V2 = "v2";
@@ -43,7 +42,7 @@ public class CycleDetectorTest
     private static final String V6 = "v6";
     private static final String V7 = "v7";
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -78,9 +77,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
 
         Set<String> cyclicSet = new HashSet<>();
@@ -102,11 +99,9 @@ public class CycleDetectorTest
      */
     public void testDirectedWithDoubledCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
-        // build the graph:  vertex order is chosen specifically
+        // build the graph: vertex order is chosen specifically
         // to exercise old bug-cases in CycleDetector
         g.addVertex(V2);
         g.addVertex(V1);
@@ -133,9 +128,7 @@ public class CycleDetectorTest
     @SuppressWarnings("unchecked")
     public void testDirectedWithoutCycle()
     {
-        DirectedGraph<String, DefaultEdge> g =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
         g.removeVertex(V2);
 
@@ -148,12 +141,9 @@ public class CycleDetectorTest
     }
 
     private void runTest(
-        DirectedGraph<String, DefaultEdge> g,
-        Set<String> cyclicSet,
-        Set<String> acyclicSet)
+        DirectedGraph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
-        CycleDetector<String, DefaultEdge> detector =
-                new CycleDetector<>(g);
+        CycleDetector<String, DefaultEdge> detector = new CycleDetector<>(g);
 
         Set<String> emptySet = Collections.emptySet();
 
@@ -175,7 +165,7 @@ public class CycleDetectorTest
     public void testVertexEquals()
     {
         DefaultDirectedGraph<String, DefaultEdge> graph =
-                new DefaultDirectedGraph<>(DefaultEdge.class);
+            new DefaultDirectedGraph<>(DefaultEdge.class);
         assertEquals(0, graph.edgeSet().size());
 
         String vertexA = "A";
@@ -193,16 +183,13 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        CycleDetector<String, DefaultEdge> cycleDetector =
-                new CycleDetector<>(graph);
+        CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(graph);
         Set<String> cycleVertices = cycleDetector.findCycles();
 
-        boolean foundCycle =
-            cycleDetector.detectCyclesContainingVertex(vertexA);
+        boolean foundCycle = cycleDetector.detectCyclesContainingVertex(vertexA);
         boolean foundVertex = graph.containsVertex(vertexA);
 
-        Set<String> subCycle =
-            cycleDetector.findCyclesContainingVertex(vertexA);
+        Set<String> subCycle = cycleDetector.findCyclesContainingVertex(vertexA);
 
         assertEquals(2, cycleVertices.size());
         assertEquals(2, subCycle.size()); // fails with zero items

@@ -20,12 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A multigraph. A multigraph is a non-simple undirected graph in which no loops
- * are permitted, but multiple edges between any two vertices are. If you're
- * unsure about multigraphs, see: <a
- * href="http://mathworld.wolfram.com/Multigraph.html">
+ * A multigraph. A multigraph is a non-simple undirected graph in which no loops are permitted, but
+ * multiple edges between any two vertices are. If you're unsure about multigraphs, see:
+ * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
  */
 public class Multigraph<V, E>
@@ -54,18 +52,16 @@ public class Multigraph<V, E>
         super(ef, true, false);
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends Multigraph<V, E>, ?> builder(Class<? extends E> edgeClass)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Multigraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
     {
-        return new UndirectedGraphBuilder<>(
-                new Multigraph<>(edgeClass));
+        return new UndirectedGraphBuilder<>(new Multigraph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends Multigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Multigraph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
     {
-        return new UndirectedGraphBuilder<>(
-                new Multigraph<>(ef));
+        return new UndirectedGraphBuilder<>(new Multigraph<>(ef));
     }
 }
 

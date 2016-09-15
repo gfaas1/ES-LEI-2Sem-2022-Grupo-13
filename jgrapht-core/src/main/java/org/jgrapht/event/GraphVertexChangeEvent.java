@@ -18,11 +18,10 @@
 package org.jgrapht.event;
 
 /**
- * An event which indicates that a graph vertex has changed, or is about to
- * change. The event can be used either as an indication <i>after</i> the vertex
- * has been added or removed, or <i>before</i> it is added. The type of the
- * event can be tested using the {@link
- * org.jgrapht.event.GraphChangeEvent#getType()} method.
+ * An event which indicates that a graph vertex has changed, or is about to change. The event can be
+ * used either as an indication <i>after</i> the vertex has been added or removed, or <i>before</i>
+ * it is added. The type of the event can be tested using the
+ * {@link org.jgrapht.event.GraphChangeEvent#getType()} method.
  *
  * @author Barak Naveh
  * @since Aug 10, 2003
@@ -33,26 +32,22 @@ public class GraphVertexChangeEvent<V>
     private static final long serialVersionUID = 3690189962679104053L;
 
     /**
-     * Before vertex added event. This event is fired before a vertex is added
-     * to a graph.
+     * Before vertex added event. This event is fired before a vertex is added to a graph.
      */
     public static final int BEFORE_VERTEX_ADDED = 11;
 
     /**
-     * Before vertex removed event. This event is fired before a vertex is
-     * removed from a graph.
+     * Before vertex removed event. This event is fired before a vertex is removed from a graph.
      */
     public static final int BEFORE_VERTEX_REMOVED = 12;
 
     /**
-     * Vertex added event. This event is fired after a vertex is added to a
-     * graph.
+     * Vertex added event. This event is fired after a vertex is added to a graph.
      */
     public static final int VERTEX_ADDED = 13;
 
     /**
-     * Vertex removed event. This event is fired after a vertex is removed from
-     * a graph.
+     * Vertex removed event. This event is fired after a vertex is removed from a graph.
      */
     public static final int VERTEX_REMOVED = 14;
 

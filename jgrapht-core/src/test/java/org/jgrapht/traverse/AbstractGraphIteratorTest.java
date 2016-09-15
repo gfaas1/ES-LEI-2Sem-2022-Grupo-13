@@ -21,7 +21,6 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
  * {@link org.jgrapht.traverse.DepthFirstIterator} classes.
@@ -32,11 +31,11 @@ import org.jgrapht.graph.*;
 public abstract class AbstractGraphIteratorTest
     extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     StringBuffer result;
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -47,8 +46,7 @@ public abstract class AbstractGraphIteratorTest
 
         DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, DefaultEdge> iterator =
-            createIterator(graph, "1");
+        AbstractGraphIterator<String, DefaultEdge> iterator = createIterator(graph, "1");
         MyTraversalListener listener = new MyTraversalListener();
         iterator.addTraversalListener(listener);
 
@@ -77,8 +75,7 @@ public abstract class AbstractGraphIteratorTest
     DirectedGraph<String, DefaultEdge> createDirectedGraph()
     {
         DirectedGraph<String, DefaultEdge> graph =
-                new DefaultDirectedWeightedGraph<>(
-                        DefaultWeightedEdge.class);
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         //
         String v1 = "1";
@@ -103,9 +100,9 @@ public abstract class AbstractGraphIteratorTest
 
         graph.addVertex("orphan");
 
-        // NOTE:  set weights on some of the edges to test traversals like
-        // ClosestFirstIterator where it matters.  For other traversals, it
-        // will be ignored.  Rely on the default edge weight being 1.
+        // NOTE: set weights on some of the edges to test traversals like
+        // ClosestFirstIterator where it matters. For other traversals, it
+        // will be ignored. Rely on the default edge weight being 1.
         graph.addEdge(v1, v2);
         Graphs.addEdge(graph, v1, v3, 100);
         Graphs.addEdge(graph, v2, v4, 1000);
@@ -123,10 +120,9 @@ public abstract class AbstractGraphIteratorTest
     }
 
     abstract AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String startVertex);
+        DirectedGraph<String, DefaultEdge> g, String startVertex);
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     /**
      * Internal traversal listener.
@@ -145,8 +141,7 @@ public abstract class AbstractGraphIteratorTest
          * @see TraversalListener#connectedComponentFinished(ConnectedComponentTraversalEvent)
          */
         @Override
-        public void connectedComponentFinished(
-            ConnectedComponentTraversalEvent e)
+        public void connectedComponentFinished(ConnectedComponentTraversalEvent e)
         {
             switch (componentNumber) {
             case 1:
@@ -174,8 +169,7 @@ public abstract class AbstractGraphIteratorTest
          * @see TraversalListener#connectedComponentStarted(ConnectedComponentTraversalEvent)
          */
         @Override
-        public void connectedComponentStarted(
-            ConnectedComponentTraversalEvent e)
+        public void connectedComponentStarted(ConnectedComponentTraversalEvent e)
         {
             componentNumber++;
         }

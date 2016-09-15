@@ -20,19 +20,15 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Base class for {@link DirectedGraphBuilder} for extending.
  */
-public abstract class DirectedGraphBuilderBase<V,
-    E,
-    G extends DirectedGraph<V, E>,
+public abstract class DirectedGraphBuilderBase<V, E, G extends DirectedGraph<V, E>,
     B extends DirectedGraphBuilderBase<V, E, G, B>>
     extends AbstractGraphBuilder<V, E, G, B>
 {
     /**
-     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
-     * mutable.
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * @param baseGraph the graph object to base building on
      */
@@ -41,7 +37,8 @@ public abstract class DirectedGraphBuilderBase<V,
         super(baseGraph);
     }
 
-    @Override public UnmodifiableDirectedGraph<V, E> buildUnmodifiable()
+    @Override
+    public UnmodifiableDirectedGraph<V, E> buildUnmodifiable()
     {
         return new UnmodifiableDirectedGraph<>(this.graph);
     }

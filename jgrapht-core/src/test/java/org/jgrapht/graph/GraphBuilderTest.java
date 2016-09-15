@@ -23,9 +23,9 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 public class GraphBuilderTest
-        extends EnhancedTestCase
+    extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     private String v1 = "v1";
     private String v2 = "v2";
@@ -36,29 +36,28 @@ public class GraphBuilderTest
     private String v7 = "v7";
     private String v8 = "v8";
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
-    public void testAddVertex() {
-        Graph<String, DefaultEdge> g =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addVertex(v1)
-                .addVertices(v2, v3)
-                .build();
+    public void testAddVertex()
+    {
+        Graph<String,
+            DefaultEdge> g = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addVertex(v1).addVertices(v2, v3).build();
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
         assertTrue(g.vertexSet().containsAll(Arrays.asList(v1, v2, v3)));
     }
 
-    public void testAddEdge() {
-        UnmodifiableGraph<String, DefaultWeightedEdge> g =
-                new DirectedWeightedGraphBuilder<>
-                        (new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class))
-                .addEdge(v1, v2)
-                .addEdgeChain(v3, v4, v5, v6)
-                .addEdge(v7, v8, 10.0)
-                .buildUnmodifiable();
+    public void testAddEdge()
+    {
+        UnmodifiableGraph<String,
+            DefaultWeightedEdge> g = new DirectedWeightedGraphBuilder<>(
+                new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
+                    DefaultWeightedEdge.class))
+                        .addEdge(v1, v2).addEdgeChain(v3, v4, v5, v6).addEdge(v7, v8, 10.0)
+                        .buildUnmodifiable();
 
         assertEquals(8, g.vertexSet().size());
         assertEquals(5, g.edgeSet().size());
@@ -71,19 +70,17 @@ public class GraphBuilderTest
         assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)));
     }
 
-    public void testAddGraph() {
-        Graph<String, DefaultEdge> g1 =
-                DefaultDirectedGraph.<String, DefaultEdge>builder(DefaultEdge.class)
-                .addVertex(v1)
-                .addEdge(v2, v3)
+    public void testAddGraph()
+    {
+        Graph<String,
+            DefaultEdge> g1 = DefaultDirectedGraph
+                .<String, DefaultEdge> builder(DefaultEdge.class).addVertex(v1).addEdge(v2, v3)
                 .buildUnmodifiable();
 
-        Graph<String, DefaultEdge> g2 =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addGraph(g1)
-                .addEdge(v1, v4)
-                .build();
+        Graph<String,
+            DefaultEdge> g2 = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addGraph(g1).addEdge(v1, v4).build();
 
         assertEquals(4, g2.vertexSet().size());
         assertEquals(2, g2.edgeSet().size());
@@ -92,21 +89,17 @@ public class GraphBuilderTest
         assertTrue(g2.containsEdge(v1, v4));
     }
 
-    public void testRemoveVertex() {
-        Graph<String, DefaultEdge> g1 =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addEdge(v1, v3)
-                .addEdgeChain(v2, v3, v4, v5)
-                .buildUnmodifiable();
+    public void testRemoveVertex()
+    {
+        Graph<String,
+            DefaultEdge> g1 = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addEdge(v1, v3).addEdgeChain(v2, v3, v4, v5).buildUnmodifiable();
 
-        Graph<String, DefaultEdge> g2 =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addGraph(g1)
-                .removeVertex(v2)
-                .removeVertices(v4, v5)
-                .build();
+        Graph<String,
+            DefaultEdge> g2 = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addGraph(g1).removeVertex(v2).removeVertices(v4, v5).build();
 
         assertEquals(2, g2.vertexSet().size());
         assertEquals(1, g2.edgeSet().size());
@@ -114,19 +107,17 @@ public class GraphBuilderTest
         assertTrue(g2.containsEdge(v1, v3));
     }
 
-    public void testRemoveEdge() {
-        Graph<String, DefaultEdge> g1 =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addEdgeChain(v1, v2, v3, v4)
-                .buildUnmodifiable();
+    public void testRemoveEdge()
+    {
+        Graph<String,
+            DefaultEdge> g1 = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addEdgeChain(v1, v2, v3, v4).buildUnmodifiable();
 
-        Graph<String, DefaultEdge> g2 =
-                new DirectedGraphBuilder<>
-                        (new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                .addGraph(g1)
-                .removeEdge(v2, v3)
-                .build();
+        Graph<String,
+            DefaultEdge> g2 = new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
+                    .addGraph(g1).removeEdge(v2, v3).build();
 
         assertEquals(4, g2.vertexSet().size());
         assertEquals(2, g2.edgeSet().size());

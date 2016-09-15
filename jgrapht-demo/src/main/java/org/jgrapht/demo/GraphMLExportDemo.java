@@ -17,31 +17,19 @@
  */
 package org.jgrapht.demo;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.VertexFactory;
-import org.jgrapht.ext.ComponentAttributeProvider;
-import org.jgrapht.ext.ExportException;
-import org.jgrapht.ext.GraphMLExporter;
-import org.jgrapht.ext.VertexNameProvider;
-import org.jgrapht.ext.GraphMLExporter.AttributeCategory;
-import org.jgrapht.ext.GraphMLExporter.AttributeType;
-import org.jgrapht.ext.IntegerEdgeNameProvider;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.*;
+import org.jgrapht.ext.*;
+import org.jgrapht.ext.GraphMLExporter.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
 /**
- * This class demonstrates exporting a graph with custom vertex and 
- * edge attributes as GraphML. Vertices of the graph have an attribute
- * called "color" and a "name" attribute. Edges have a "weight" attribute
- * as well as a "name" attribute.
+ * This class demonstrates exporting a graph with custom vertex and edge attributes as GraphML.
+ * Vertices of the graph have an attribute called "color" and a "name" attribute. Edges have a
+ * "weight" attribute as well as a "name" attribute.
  */
 public final class GraphMLExportDemo
 {
@@ -103,7 +91,7 @@ public final class GraphMLExportDemo
             GraphVertex other = (GraphVertex) obj;
             if (id == null) {
                 return other.id == null;
-            } else { 
+            } else {
                 return id.equals(other.id);
             }
         }
@@ -142,10 +130,10 @@ public final class GraphMLExportDemo
          * 
          * Vertices have random colors and edges have random edge weights.
          */
-        DirectedPseudograph<GraphVertex, DefaultWeightedEdge> g = new DirectedPseudograph<>(
-            DefaultWeightedEdge.class);
-        CompleteGraphGenerator<GraphVertex, DefaultWeightedEdge> completeGenerator = new CompleteGraphGenerator<>(
-            size);
+        DirectedPseudograph<GraphVertex, DefaultWeightedEdge> g =
+            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        CompleteGraphGenerator<GraphVertex, DefaultWeightedEdge> completeGenerator =
+            new CompleteGraphGenerator<>(size);
         VertexFactory<GraphVertex> vFactory = new VertexFactory<GraphVertex>()
         {
             private int id = 0;
@@ -171,68 +159,59 @@ public final class GraphMLExportDemo
         }
 
         // create GraphML exporter
-        GraphMLExporter<GraphVertex, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-            new VertexNameProvider<GraphVertex>()
+        GraphMLExporter<GraphVertex, DefaultWeightedEdge> exporter =
+            new GraphMLExporter<>(new VertexNameProvider<GraphVertex>()
             {
                 @Override
                 public String getVertexName(GraphVertex v)
                 {
                     return v.id;
                 }
-            },
-            null,
-            new IntegerEdgeNameProvider<>(),
-            null);
+            }, null, new IntegerEdgeNameProvider<>(), null);
 
         // set to export the internal edge weights
         exporter.setExportEdgeWeights(true);
 
         // register additional color attribute for vertices
-        exporter.registerAttribute(
-            "color",
-            AttributeCategory.NODE,
-            AttributeType.STRING);
+        exporter.registerAttribute("color", AttributeCategory.NODE, AttributeType.STRING);
 
         // register additional name attribute for vertices and edges
-        exporter.registerAttribute(
-            "name",
-            AttributeCategory.ALL,
-            AttributeType.STRING);
+        exporter.registerAttribute("name", AttributeCategory.ALL, AttributeType.STRING);
 
         // create provider of vertex attributes
-        ComponentAttributeProvider<GraphVertex> vertexAttributeProvider = new ComponentAttributeProvider<GraphVertex>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(GraphVertex v)
+        ComponentAttributeProvider<GraphVertex> vertexAttributeProvider =
+            new ComponentAttributeProvider<GraphVertex>()
             {
-                Map<String, String> m = new HashMap<String, String>();
-                if (v.getColor() != null) {
-                    m.put("color", v.getColor().toString());
+                @Override
+                public Map<String, String> getComponentAttributes(GraphVertex v)
+                {
+                    Map<String, String> m = new HashMap<String, String>();
+                    if (v.getColor() != null) {
+                        m.put("color", v.getColor().toString());
+                    }
+                    m.put("name", "node-" + v.id);
+                    return m;
                 }
-                m.put("name", "node-" + v.id);
-                return m;
-            }
-        };
+            };
         exporter.setVertexAttributeProvider(vertexAttributeProvider);
 
         // create provider of edge attributes
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = new ComponentAttributeProvider<DefaultWeightedEdge>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(
-                DefaultWeightedEdge e)
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
+            new ComponentAttributeProvider<DefaultWeightedEdge>()
             {
-                Map<String, String> m = new HashMap<String, String>();
-                m.put("name", e.toString());
-                return m;
-            }
-        };
+                @Override
+                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
+                {
+                    Map<String, String> m = new HashMap<String, String>();
+                    m.put("name", e.toString());
+                    return m;
+                }
+            };
         exporter.setEdgeAttributeProvider(edgeAttributeProvider);
 
         // export
         try {
-            Writer writer = new BufferedWriter(
-                new OutputStreamWriter(System.out));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(System.out));
             exporter.exportGraph(g, writer);
             writer.flush();
         } catch (ExportException | IOException e) {

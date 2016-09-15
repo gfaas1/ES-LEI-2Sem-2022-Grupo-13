@@ -20,11 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A directed weighted graph. A directed weighted graph is a non-simple directed
- * graph in which multiple edges between any two vertices are <i>not</i>
- * permitted, but loops are. The graph has weights on its edges.
+ * A directed weighted graph. A directed weighted graph is a non-simple directed graph in which
+ * multiple edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
+ * weights on its edges.
  *
  * @see DefaultDirectedGraph
  */
@@ -54,20 +53,16 @@ public class DefaultDirectedWeightedGraph<V, E>
         super(ef);
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DefaultDirectedWeightedGraph<>(edgeClass));
+        return new DirectedWeightedGraphBuilder<>(new DefaultDirectedWeightedGraph<>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(
-        EdgeFactory<V, E> ef)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DefaultDirectedWeightedGraph<>(ef));
+        return new DirectedWeightedGraphBuilder<>(new DefaultDirectedWeightedGraph<>(ef));
     }
 }
 

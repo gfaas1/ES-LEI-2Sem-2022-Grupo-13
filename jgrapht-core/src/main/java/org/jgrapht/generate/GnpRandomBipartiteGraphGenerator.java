@@ -17,13 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
+import org.jgrapht.*;
 
 /**
  * Create a random bipartite graph based on the G(n, p) Erdős–Rényi model. See the Wikipedia article

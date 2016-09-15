@@ -19,11 +19,10 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * .
@@ -33,7 +32,7 @@ import org.jgrapht.graph.*;
 public class BronKerboschCliqueFinderTest
     extends TestCase
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     private static final String V1 = "v1";
     private static final String V2 = "v2";
@@ -44,7 +43,7 @@ public class BronKerboschCliqueFinderTest
     private static final String V7 = "v7";
     private static final String V8 = "v8";
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -62,7 +61,7 @@ public class BronKerboschCliqueFinderTest
         g.addVertex(V7);
         g.addVertex(V8);
 
-        // biggest clique:  { V1, V2, V3, V4 }
+        // biggest clique: { V1, V2, V3, V4 }
         g.addEdge(V1, V2);
         g.addEdge(V1, V3);
         g.addEdge(V1, V4);
@@ -70,7 +69,7 @@ public class BronKerboschCliqueFinderTest
         g.addEdge(V2, V4);
         g.addEdge(V3, V4);
 
-        // smaller clique:  { V5, V6, V7 }
+        // smaller clique: { V5, V6, V7 }
         g.addEdge(V5, V6);
         g.addEdge(V5, V7);
         g.addEdge(V6, V7);
@@ -85,12 +84,10 @@ public class BronKerboschCliqueFinderTest
 
     public void testFindBiggest()
     {
-        SimpleGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
-                new BronKerboschCliqueFinder<>(g);
+        BronKerboschCliqueFinder<String, DefaultEdge> finder = new BronKerboschCliqueFinder<>(g);
 
         Collection<Set<String>> cliques = finder.getBiggestMaximalCliques();
 
@@ -109,12 +106,10 @@ public class BronKerboschCliqueFinderTest
 
     public void testFindAll()
     {
-        SimpleGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         createGraph(g);
 
-        BronKerboschCliqueFinder<String, DefaultEdge> finder =
-                new BronKerboschCliqueFinder<>(g);
+        BronKerboschCliqueFinder<String, DefaultEdge> finder = new BronKerboschCliqueFinder<>(g);
 
         Collection<Set<String>> cliques = finder.getAllMaximalCliques();
 

@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A {@link VertexFactory} for producing vertices by using a class as a factory.
  *
@@ -39,7 +38,8 @@ public class ClassBasedVertexFactory<V>
     /**
      * @see VertexFactory#createVertex()
      */
-    @Override public V createVertex()
+    @Override
+    public V createVertex()
     {
         try {
             return this.vertexClass.newInstance();

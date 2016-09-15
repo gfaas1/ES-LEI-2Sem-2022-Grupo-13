@@ -19,7 +19,6 @@ package org.jgrapht;
 
 import junit.framework.*;
 
-
 /**
  * A little extension to JUnit's TestCase.
  *
@@ -29,7 +28,7 @@ import junit.framework.*;
 public abstract class EnhancedTestCase
     extends TestCase
 {
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see TestCase#TestCase()
@@ -47,7 +46,7 @@ public abstract class EnhancedTestCase
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * It means: it's wrong that we got here.

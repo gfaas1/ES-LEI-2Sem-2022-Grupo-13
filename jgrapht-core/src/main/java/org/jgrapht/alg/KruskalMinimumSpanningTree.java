@@ -23,14 +23,11 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 
-
 /**
- * An implementation of <a
- * href="http://en.wikipedia.org/wiki/Kruskal's_algorithm">Kruskal's minimum
- * spanning tree algorithm</a>. If the given graph is connected it computes the
- * minimum spanning tree, otherwise it computes the minimum spanning forest. The
- * algorithm runs in time O(E log E). This implementation uses the hashCode and
- * equals method of the vertices.
+ * An implementation of <a href="http://en.wikipedia.org/wiki/Kruskal's_algorithm">Kruskal's minimum
+ * spanning tree algorithm</a>. If the given graph is connected it computes the minimum spanning
+ * tree, otherwise it computes the minimum spanning forest. The algorithm runs in time O(E log E).
+ * This implementation uses the hashCode and equals method of the vertices.
  *
  * @author Tom Conerly
  * @since Feb 10, 2010
@@ -42,9 +39,9 @@ public class KruskalMinimumSpanningTree<V, E>
     private Set<E> edgeList;
 
     /**
-     * Creates and executes a new KruskalMinimumSpanningTree algorithm instance.
-     * An instance is only good for a single spanning tree; after construction,
-     * it can be accessed to retrieve information about the spanning tree found.
+     * Creates and executes a new KruskalMinimumSpanningTree algorithm instance. An instance is only
+     * good for a single spanning tree; after construction, it can be accessed to retrieve
+     * information about the spanning tree found.
      *
      * @param graph the graph to be searched
      */
@@ -53,9 +50,8 @@ public class KruskalMinimumSpanningTree<V, E>
         UnionFind<V> forest = new UnionFind<>(graph.vertexSet());
         ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
         Collections.sort(
-            allEdges,
-                (edge1, edge2) -> Double.valueOf(graph.getEdgeWeight(edge1)).compareTo(
-                    graph.getEdgeWeight(edge2)));
+            allEdges, (edge1, edge2) -> Double
+                .valueOf(graph.getEdgeWeight(edge1)).compareTo(graph.getEdgeWeight(edge2)));
 
         spanningTreeCost = 0;
         edgeList = new HashSet<>();
@@ -73,12 +69,14 @@ public class KruskalMinimumSpanningTree<V, E>
         }
     }
 
-    @Override public Set<E> getMinimumSpanningTreeEdgeSet()
+    @Override
+    public Set<E> getMinimumSpanningTreeEdgeSet()
     {
         return edgeList;
     }
 
-    @Override public double getMinimumSpanningTreeTotalWeight()
+    @Override
+    public double getMinimumSpanningTreeTotalWeight()
     {
         return spanningTreeCost;
     }
@@ -88,7 +86,8 @@ public class KruskalMinimumSpanningTree<V, E>
      *
      * @return minimum spanning-tree edges set
      */
-    @Deprecated public Set<E> getEdgeSet()
+    @Deprecated
+    public Set<E> getEdgeSet()
     {
         return getMinimumSpanningTreeEdgeSet();
     }
@@ -98,7 +97,8 @@ public class KruskalMinimumSpanningTree<V, E>
      *
      * @return minimum spanning-tree total weight
      */
-    @Deprecated public double getSpanningTreeCost()
+    @Deprecated
+    public double getSpanningTreeCost()
     {
         return getMinimumSpanningTreeTotalWeight();
     }

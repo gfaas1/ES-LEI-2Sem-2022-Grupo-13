@@ -26,11 +26,8 @@ import org.junit.runners.*;
  * @author Barak Naveh
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    GraphGeneratorTest.class,
-    GnmRandomGraphGeneratorTest.class,
-    GnpRandomGraphGeneratorTest.class
-})
+@Suite.SuiteClasses({ GraphGeneratorTest.class, GnmRandomGraphGeneratorTest.class,
+    GnpRandomGraphGeneratorTest.class })
 public final class AllGenerateTests
 {
 }

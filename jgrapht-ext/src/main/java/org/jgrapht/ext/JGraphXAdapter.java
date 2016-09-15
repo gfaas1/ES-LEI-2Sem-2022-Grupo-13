@@ -17,27 +17,31 @@
  */
 package org.jgrapht.ext;
 
-import com.mxgraph.model.*;
-import com.mxgraph.view.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
+import com.mxgraph.model.*;
+import com.mxgraph.view.*;
 
 /**
- * <P>Adapter to draw a JGraphT graph with the JGraphX drawing library.</P>
+ * <P>
+ * Adapter to draw a JGraphT graph with the JGraphX drawing library.
+ * </P>
  *
- * <P>This adapter will not convert JGraphX to JGraphT - this should be handled
- * in another class entirely.</P>
+ * <P>
+ * This adapter will not convert JGraphX to JGraphT - this should be handled in another class
+ * entirely.
+ * </P>
  *
- * <P>Known Bugs: If this class is used with String-Edges, please note that
- * there is a bug with the method JgraphT.addEdge(vertex1, vertex2); The edge
- * will be created with an empty String "" as value and saved (in JGraphT as
- * well as in this class), which results in the edge not saving correctly. So,
- * if you're using Strings as Edgeclass please use the method addEdge(vertex1,
- * vertex2, "Edgename"); with a unique edgename.</P>
+ * <P>
+ * Known Bugs: If this class is used with String-Edges, please note that there is a bug with the
+ * method JgraphT.addEdge(vertex1, vertex2); The edge will be created with an empty String "" as
+ * value and saved (in JGraphT as well as in this class), which results in the edge not saving
+ * correctly. So, if you're using Strings as Edgeclass please use the method addEdge(vertex1,
+ * vertex2, "Edgename"); with a unique edgename.
+ * </P>
  *
  * @param <V> Vertex
  * @param <E> Edge
@@ -55,34 +59,33 @@ public class JGraphXAdapter<V, E>
     private Graph<V, E> graphT;
 
     /**
-     * Maps the JGraphT-Vertices onto JGraphX-mxICells. {@link #cellToVertexMap}
-     * is for the opposite direction.
+     * Maps the JGraphT-Vertices onto JGraphX-mxICells. {@link #cellToVertexMap} is for the opposite
+     * direction.
      */
     private HashMap<V, mxICell> vertexToCellMap = new HashMap<>();
 
     /**
-     * Maps the JGraphT-Edges onto JGraphX-mxICells. {@link #cellToEdgeMap} is
-     * for the opposite direction.
+     * Maps the JGraphT-Edges onto JGraphX-mxICells. {@link #cellToEdgeMap} is for the opposite
+     * direction.
      */
     private HashMap<E, mxICell> edgeToCellMap = new HashMap<>();
 
     /**
-     * Maps the JGraphX-mxICells onto JGraphT-Edges. {@link #edgeToCellMap} is
-     * for the opposite direction.
+     * Maps the JGraphX-mxICells onto JGraphT-Edges. {@link #edgeToCellMap} is for the opposite
+     * direction.
      */
     private HashMap<mxICell, V> cellToVertexMap = new HashMap<>();
 
     /**
-     * Maps the JGraphX-mxICells onto JGraphT-Vertices. {@link #vertexToCellMap}
-     * is for the opposite direction.
+     * Maps the JGraphX-mxICells onto JGraphT-Vertices. {@link #vertexToCellMap} is for the opposite
+     * direction.
      */
     private HashMap<mxICell, E> cellToEdgeMap = new HashMap<>();
 
     /**
-     * Constructs and draws a new ListenableGraph. If the graph changes through
-     * as ListenableGraph, the JGraphXAdapter will automatically add/remove the
-     * new edge/vertex as it implements the GraphListener interface. Throws a
-     * IllegalArgumentException if the graph is null.
+     * Constructs and draws a new ListenableGraph. If the graph changes through as ListenableGraph,
+     * the JGraphXAdapter will automatically add/remove the new edge/vertex as it implements the
+     * GraphListener interface. Throws a IllegalArgumentException if the graph is null.
      *
      * @param graph casted to graph
      */
@@ -95,10 +98,10 @@ public class JGraphXAdapter<V, E>
     }
 
     /**
-     * Constructs and draws a new mxGraph from a jGraphT graph. Changes on the
-     * jgraphT graph will not edit this mxGraph any further; use the constructor
-     * with the ListenableGraph parameter instead or use this graph as a normal
-     * mxGraph. Throws an IllegalArgumentException if the parameter is null.
+     * Constructs and draws a new mxGraph from a jGraphT graph. Changes on the jgraphT graph will
+     * not edit this mxGraph any further; use the constructor with the ListenableGraph parameter
+     * instead or use this graph as a normal mxGraph. Throws an IllegalArgumentException if the
+     * parameter is null.
      *
      * @param graph is a graph
      */
@@ -120,8 +123,7 @@ public class JGraphXAdapter<V, E>
     }
 
     /**
-     * Returns Hashmap which maps the vertices onto their visualization
-     * mxICells.
+     * Returns Hashmap which maps the vertices onto their visualization mxICells.
      *
      * @return {@link #vertexToCellMap}
      */
@@ -151,8 +153,7 @@ public class JGraphXAdapter<V, E>
     }
 
     /**
-     * Returns Hashmap which maps the visualization mxICells onto their
-     * vertices.
+     * Returns Hashmap which maps the visualization mxICells onto their vertices.
      *
      * @return {@link #cellToVertexMap}
      */
@@ -161,12 +162,14 @@ public class JGraphXAdapter<V, E>
         return cellToVertexMap;
     }
 
-    @Override public void vertexAdded(GraphVertexChangeEvent<V> e)
+    @Override
+    public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
         addJGraphTVertex(e.getVertex());
     }
 
-    @Override public void vertexRemoved(GraphVertexChangeEvent<V> e)
+    @Override
+    public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
         mxICell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell });
@@ -195,19 +198,20 @@ public class JGraphXAdapter<V, E>
         }
     }
 
-    @Override public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+    @Override
+    public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
         addJGraphTEdge(e.getEdge());
     }
 
-    @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+    @Override
+    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         removeEdge(e.getEdge());
     }
 
     /**
-     * Removes a jgrapht edge and its visual representation from this graph
-     * completely.
+     * Removes a jgrapht edge and its visual representation from this graph completely.
      *
      * @param edge The edge that will be removed
      */
@@ -232,9 +236,7 @@ public class JGraphXAdapter<V, E>
 
         try {
             // create a new JGraphX vertex at position 0
-            mxICell cell =
-                (mxICell) insertVertex(defaultParent, null, vertex,
-                    0, 0, 0, 0);
+            mxICell cell = (mxICell) insertVertex(defaultParent, null, vertex, 0, 0, 0, 0);
 
             // update cell size so cell isn't "above" graph
             updateCellSize(cell);
@@ -250,8 +252,7 @@ public class JGraphXAdapter<V, E>
     /**
      * Draws a new egde into the graph.
      *
-     * @param edge edge to be added to the graph. Source and target vertices are
-     * needed.
+     * @param edge edge to be added to the graph. Source and target vertices are needed.
      */
     private void addJGraphTEdge(E edge)
     {
@@ -264,7 +265,7 @@ public class JGraphXAdapter<V, E>
 
             // if the one of the vertices is not drawn, don't draw the edge
             if (!(vertexToCellMap.containsKey(sourceVertex)
-                    && vertexToCellMap.containsKey(targetVertex)))
+                && vertexToCellMap.containsKey(targetVertex)))
             {
                 return;
             }
@@ -274,13 +275,7 @@ public class JGraphXAdapter<V, E>
             Object targetCell = vertexToCellMap.get(targetVertex);
 
             // add edge between mxICells
-            mxICell cell =
-                (mxICell) insertEdge(
-                    defaultParent,
-                    null,
-                    edge,
-                    sourceCell,
-                    targetCell);
+            mxICell cell = (mxICell) insertEdge(defaultParent, null, edge, sourceCell, targetCell);
 
             // update cell size so cell isn't "above" graph
             updateCellSize(cell);
@@ -310,4 +305,4 @@ public class JGraphXAdapter<V, E>
     }
 }
 
-//End JGraphXAdapter.java
+// End JGraphXAdapter.java

@@ -23,35 +23,40 @@ package org.jgrapht.util;
  *
  * @author Joris Kinable
  */
-public class UnorderedVertexPair<V> extends VertexPair<V>{
+public class UnorderedVertexPair<V>
+    extends VertexPair<V>
+{
 
-    public UnorderedVertexPair(V n1, V n2) {
+    public UnorderedVertexPair(V n1, V n2)
+    {
         super(n1, n2);
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
-        return "{"+n1 + "," + n2+"}";
+        return "{" + n1 + "," + n2 + "}";
     }
 
-    @Override public boolean equals(Object o)
+    @Override
+    public boolean equals(Object o)
     {
         if (this == o)
             return true;
-        else if(!(o instanceof UnorderedVertexPair))
+        else if (!(o instanceof UnorderedVertexPair))
             return false;
 
-        @SuppressWarnings("unchecked")
-        UnorderedVertexPair<V> other = (UnorderedVertexPair<V>) o;
+        @SuppressWarnings("unchecked") UnorderedVertexPair<V> other = (UnorderedVertexPair<V>) o;
 
-        return (elementEquals(n1, other.n1) && elementEquals(n2, other.n2)) ||
-                (elementEquals(n1, other.n2) && elementEquals(n2, other.n1));
+        return (elementEquals(n1, other.n1) && elementEquals(n2, other.n2))
+            || (elementEquals(n1, other.n2) && elementEquals(n2, other.n1));
     }
 
-    @Override public int hashCode()
+    @Override
+    public int hashCode()
     {
-        int hash1=n1.hashCode();
-        int hash2=n2.hashCode();
-        return hash1 > hash2 ? hash1*31+hash2 : hash2*31+hash1;
+        int hash1 = n1.hashCode();
+        int hash2 = n2.hashCode();
+        return hash1 > hash2 ? hash1 * 31 + hash2 : hash2 * 31 + hash1;
     }
 }

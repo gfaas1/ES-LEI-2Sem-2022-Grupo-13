@@ -21,10 +21,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * This class represents the order on the graph vertices. There are also some
- * helper-functions for receiving outgoing/incoming edges, etc.
+ * This class represents the order on the graph vertices. There are also some helper-functions for
+ * receiving outgoing/incoming edges, etc.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
@@ -38,32 +37,27 @@ class GraphOrdering<V, E>
     private ArrayList<V> mapOrderToVertex;
     private int vertexCount;
 
-    private int [][] outgoingEdges;
-    private int [][] incomingEdges;
-    private Boolean [][] adjMatrix;
+    private int[][] outgoingEdges;
+    private int[][] incomingEdges;
+    private Boolean[][] adjMatrix;
 
     private boolean cacheEdges;
 
     /**
      * @param graph the graph to be ordered
-     * @param orderByDegree should the vertices be ordered by their degree. This
-     * speeds up the VF2 algorithm.
-     * @param cacheEdges if true, the class creates a adjacency matrix and two
-     * arrays for incoming and outgoing edges for fast access.
+     * @param orderByDegree should the vertices be ordered by their degree. This speeds up the VF2
+     *        algorithm.
+     * @param cacheEdges if true, the class creates a adjacency matrix and two arrays for incoming
+     *        and outgoing edges for fast access.
      */
-    public GraphOrdering(
-        Graph<V, E> graph,
-        boolean orderByDegree,
-        boolean cacheEdges)
+    public GraphOrdering(Graph<V, E> graph, boolean orderByDegree, boolean cacheEdges)
     {
         this.graph = graph;
         this.cacheEdges = cacheEdges;
 
         List<V> vertexSet = new ArrayList<>(graph.vertexSet());
         if (orderByDegree) {
-            java.util.Collections.sort(
-                vertexSet,
-                    new GeneralVertexDegreeComparator<>(graph));
+            java.util.Collections.sort(vertexSet, new GeneralVertexDegreeComparator<>(graph));
         }
 
         vertexCount = vertexSet.size();
@@ -100,13 +94,12 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param vertexNumber the number which identifies the vertex v in this
-     * order.
+     * @param vertexNumber the number which identifies the vertex v in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to v
-     * by an edge outgoing from v.
+     * @return the identifying numbers of all vertices which are connected to v by an edge outgoing
+     *         from v.
      */
-    public int [] getOutEdges(int vertexNumber)
+    public int[] getOutEdges(int vertexNumber)
     {
         if (cacheEdges && (outgoingEdges[vertexNumber] != null)) {
             return outgoingEdges[vertexNumber];
@@ -121,14 +114,12 @@ class GraphOrdering<V, E>
             edgeSet = graph.edgesOf(v);
         }
 
-        int [] vertexArray = new int[edgeSet.size()];
+        int[] vertexArray = new int[edgeSet.size()];
         int i = 0;
 
         for (E edge : edgeSet) {
-            V source = graph.getEdgeSource(edge),
-                target = graph.getEdgeTarget(edge);
-            vertexArray[i++] =
-                mapVertexToOrder.get(source.equals(v) ? target : source);
+            V source = graph.getEdgeSource(edge), target = graph.getEdgeTarget(edge);
+            vertexArray[i++] = mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
         if (cacheEdges) {
@@ -139,13 +130,12 @@ class GraphOrdering<V, E>
     }
 
     /**
-     * @param vertexNumber the number which identifies the vertex v in this
-     * order.
+     * @param vertexNumber the number which identifies the vertex v in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to v
-     * by an edge incoming to v.
+     * @return the identifying numbers of all vertices which are connected to v by an edge incoming
+     *         to v.
      */
-    public int [] getInEdges(int vertexNumber)
+    public int[] getInEdges(int vertexNumber)
     {
         if (cacheEdges && (incomingEdges[vertexNumber] != null)) {
             return incomingEdges[vertexNumber];
@@ -160,14 +150,12 @@ class GraphOrdering<V, E>
             edgeSet = graph.edgesOf(v);
         }
 
-        int [] vertexArray = new int[edgeSet.size()];
+        int[] vertexArray = new int[edgeSet.size()];
         int i = 0;
 
         for (E edge : edgeSet) {
-            V source = graph.getEdgeSource(edge),
-                target = graph.getEdgeTarget(edge);
-            vertexArray[i++] =
-                mapVertexToOrder.get(source.equals(v) ? target : source);
+            V source = graph.getEdgeSource(edge), target = graph.getEdgeTarget(edge);
+            vertexArray[i++] = mapVertexToOrder.get(source.equals(v) ? target : source);
         }
 
         if (cacheEdges) {
@@ -235,11 +223,11 @@ class GraphOrdering<V, E>
         return mapVertexToOrder.get(v);
     }
 
-    public int [] getEdgeNumbers(E e)
+    public int[] getEdgeNumbers(E e)
     {
         V v1 = graph.getEdgeSource(e), v2 = graph.getEdgeTarget(e);
 
-        int [] edge = new int[2];
+        int[] edge = new int[2];
         edge[0] = mapVertexToOrder.get(v1);
         edge[1] = mapVertexToOrder.get(v2);
 
@@ -261,7 +249,8 @@ class GraphOrdering<V, E>
             this.graph = graph;
         }
 
-        @Override public int compare(V2 v1, V2 v2)
+        @Override
+        public int compare(V2 v1, V2 v2)
         {
             return graph.edgesOf(v1).size() - graph.edgesOf(v2).size();
         }

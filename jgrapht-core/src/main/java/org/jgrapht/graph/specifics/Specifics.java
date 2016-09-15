@@ -17,8 +17,8 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * .
@@ -42,8 +42,7 @@ public abstract class Specifics<V, E>
      *
      * @return
      */
-    public abstract Set<E> getAllEdges(V sourceVertex,
-        V targetVertex);
+    public abstract Set<E> getAllEdges(V sourceVertex, V targetVertex);
 
     /**
      * .
@@ -56,8 +55,7 @@ public abstract class Specifics<V, E>
     public abstract E getEdge(V sourceVertex, V targetVertex);
 
     /**
-     * Adds the specified edge to the edge containers of its source and
-     * target vertices.
+     * Adds the specified edge to the edge containers of its source and target vertices.
      *
      * @param e
      */
@@ -118,8 +116,7 @@ public abstract class Specifics<V, E>
     public abstract Set<E> outgoingEdgesOf(V vertex);
 
     /**
-     * Removes the specified edge from the edge containers of its source and
-     * target vertices.
+     * Removes the specified edge from the edge containers of its source and target vertices.
      *
      * @param e
      */

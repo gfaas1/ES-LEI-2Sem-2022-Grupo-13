@@ -20,8 +20,10 @@ package org.jgrapht.event;
 /**
  * A listener that is notified when the graph changes.
  *
- * <p>If only notifications on vertex set changes are required it is more
- * efficient to use the VertexSetListener.</p>
+ * <p>
+ * If only notifications on vertex set changes are required it is more efficient to use the
+ * VertexSetListener.
+ * </p>
  *
  * @author Barak Naveh
  * @see VertexSetListener

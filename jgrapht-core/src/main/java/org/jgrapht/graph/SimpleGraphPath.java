@@ -21,15 +21,14 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * A vertex-based representation of a simple path. The graph must be simple for
- * the vertices to uniquely determine a path. See {@link SimpleGraph}
+ * A vertex-based representation of a simple path. The graph must be simple for the vertices to
+ * uniquely determine a path. See {@link SimpleGraph}
  *
- * @deprecated This class is ambiguous. Unlike the name or the description suggests,
- * this class does NOT implement a Simple Path (a path in a graph without vertex repetition).
- * Instead it implements a walk in a SimpleGraph. This functionality is now implemented by the class
- * {@link GraphWalk}.
+ * @deprecated This class is ambiguous. Unlike the name or the description suggests, this class does
+ *             NOT implement a Simple Path (a path in a graph without vertex repetition). Instead it
+ *             implements a walk in a SimpleGraph. This functionality is now implemented by the
+ *             class {@link GraphWalk}.
  */
 public class SimpleGraphPath<V, E>
     implements GraphPath<V, E>
@@ -43,13 +42,10 @@ public class SimpleGraphPath<V, E>
      * @param simpleGraph The simple graph where the path is.
      * @param vertices A list of vertices that make up the path.
      *
-     * @throws IllegalArgumentException if the vertices are not in the path or
-     * if they do not define a path in the graph.
+     * @throws IllegalArgumentException if the vertices are not in the path or if they do not define
+     *         a path in the graph.
      */
-    public SimpleGraphPath(
-        SimpleGraph<V, E> simpleGraph,
-        List<V> vertices,
-        double weight)
+    public SimpleGraphPath(SimpleGraph<V, E> simpleGraph, List<V> vertices, double weight)
     {
         this.graph = simpleGraph;
         this.vertices = vertices;
@@ -57,40 +53,39 @@ public class SimpleGraphPath<V, E>
         this.weight = weight;
 
         if (vertices.size() < 2) {
-            throw new IllegalArgumentException(
-                "At least two vertices are required to form a path");
+            throw new IllegalArgumentException("At least two vertices are required to form a path");
         }
 
         for (int i = 0; i < (getVertexList().size() - 1); i++) {
-            E currentEdge =
-                getGraph().getEdge(
-                    getVertexList().get(i),
-                    getVertexList().get(i + 1));
+            E currentEdge = getGraph().getEdge(getVertexList().get(i), getVertexList().get(i + 1));
             if (currentEdge != null) {
                 edges.add(currentEdge);
             } else {
-                throw new IllegalArgumentException(
-                    "The specified vertices do not form a path");
+                throw new IllegalArgumentException("The specified vertices do not form a path");
             }
         }
     }
 
-    @Override public SimpleGraph<V, E> getGraph()
+    @Override
+    public SimpleGraph<V, E> getGraph()
     {
         return this.graph;
     }
 
-    @Override public V getStartVertex()
+    @Override
+    public V getStartVertex()
     {
         return this.getVertexList().get(0);
     }
 
-    @Override public V getEndVertex()
+    @Override
+    public V getEndVertex()
     {
         return this.getVertexList().get(getVertexList().size() - 1);
     }
 
-    @Override public List<E> getEdgeList()
+    @Override
+    public List<E> getEdgeList()
     {
         return this.edges;
     }
@@ -103,7 +98,8 @@ public class SimpleGraphPath<V, E>
         return this.vertices;
     }
 
-    @Override public double getWeight()
+    @Override
+    public double getWeight()
     {
         return weight;
     }

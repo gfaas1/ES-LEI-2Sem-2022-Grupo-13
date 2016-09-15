@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A directed weighted graph which is also {@link org.jgrapht.ListenableGraph}.
  *

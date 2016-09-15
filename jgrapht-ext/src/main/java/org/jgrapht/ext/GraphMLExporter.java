@@ -17,32 +17,24 @@
  */
 package org.jgrapht.ext;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.*;
+import javax.xml.transform.stream.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+import org.jgrapht.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 /**
  * Exports a graph as GraphML.
  *
  * <p>
- * For a description of the format see
- * <a href="http://en.wikipedia.org/wiki/GraphML"> http://en.wikipedia.org/wiki/
- * GraphML</a>.
+ * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
+ * http://en.wikipedia.org/wiki/ GraphML</a>.
  * </p>
  *
  * @author Trevor Harmon
@@ -79,79 +71,58 @@ public class GraphMLExporter<V, E>
     private boolean exportEdgeWeights = false;
 
     /**
-     * Constructs a new GraphMLExporter with integer name providers for the
-     * vertex and edge identifiers.
+     * Constructs a new GraphMLExporter with integer name providers for the vertex and edge
+     * identifiers.
      */
     public GraphMLExporter()
     {
-        this(
-            new IntegerNameProvider<>(),
-            null,
-            null,
-            new IntegerEdgeNameProvider<>(),
-            null,
-            null);
+        this(new IntegerNameProvider<>(), null, null, new IntegerEdgeNameProvider<>(), null, null);
     }
 
     /**
      * Constructs a new GraphMLExporter.
      *
-     * @param vertexIDProvider for generating vertex identifiers. Must not be
-     *        null.
-     * @param vertexLabelProvider for generating vertex labels. If null, vertex
-     *        labels will not exported.
+     * @param vertexIDProvider for generating vertex identifiers. Must not be null.
+     * @param vertexLabelProvider for generating vertex labels. If null, vertex labels will not
+     *        exported.
      * @param edgeIDProvider for generating edge identifiers. Must not be null.
-     * @param edgeLabelProvider for generating edge labels. If null, edge labels
-     *        will not be exported.
+     * @param edgeLabelProvider for generating edge labels. If null, edge labels will not be
+     *        exported.
      */
     public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
+        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
+        EdgeNameProvider<E> edgeIDProvider, EdgeNameProvider<E> edgeLabelProvider)
     {
-        this(
-            vertexIDProvider,
-            vertexLabelProvider,
-            null,
-            edgeIDProvider,
-            edgeLabelProvider,
-            null);
+        this(vertexIDProvider, vertexLabelProvider, null, edgeIDProvider, edgeLabelProvider, null);
     }
 
     /**
      * Constructs a new GraphMLExporter.
      *
-     * @param vertexIDProvider for generating vertex identifiers. Must not be
-     *        null.
-     * @param vertexLabelProvider for generating vertex labels. If null, vertex
-     *        labels will not exported.
-     * @param vertexAttributeProvider for generating vertex attributes. If null,
-     *        no additional attributes will be exported.
+     * @param vertexIDProvider for generating vertex identifiers. Must not be null.
+     * @param vertexLabelProvider for generating vertex labels. If null, vertex labels will not
+     *        exported.
+     * @param vertexAttributeProvider for generating vertex attributes. If null, no additional
+     *        attributes will be exported.
      * @param edgeIDProvider for generating edge identifiers. Must not be null.
-     * @param edgeLabelProvider for generating edge labels. If null, edge labels
-     *        will not be exported.
-     * @param edgeAttributeProvider for generating edge attributes. If null, no
-     *        additional attributes will be exported.
+     * @param edgeLabelProvider for generating edge labels. If null, edge labels will not be
+     *        exported.
+     * @param edgeAttributeProvider for generating edge attributes. If null, no additional
+     *        attributes will be exported.
      */
     public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        VertexNameProvider<V> vertexLabelProvider,
-        ComponentAttributeProvider<V> vertexAttributeProvider,
-        EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider,
-        ComponentAttributeProvider<E> edgeAttributeProvider)
+        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
+        ComponentAttributeProvider<V> vertexAttributeProvider, EdgeNameProvider<E> edgeIDProvider,
+        EdgeNameProvider<E> edgeLabelProvider, ComponentAttributeProvider<E> edgeAttributeProvider)
     {
         if (vertexIDProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex ID provider must not be null");
+            throw new IllegalArgumentException("Vertex ID provider must not be null");
         }
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
         this.vertexAttributeProvider = vertexAttributeProvider;
         if (edgeIDProvider == null) {
-            throw new IllegalArgumentException(
-                "Edge ID provider must not be null");
+            throw new IllegalArgumentException("Edge ID provider must not be null");
         }
         this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
@@ -214,10 +185,7 @@ public class GraphMLExporter<V, E>
      * @param category the attribute category
      * @param type the attribute type
      */
-    public void registerAttribute(
-        String name,
-        AttributeCategory category,
-        AttributeType type)
+    public void registerAttribute(String name, AttributeCategory category, AttributeType type)
     {
         registerAttribute(name, category, type, null);
     }
@@ -231,16 +199,12 @@ public class GraphMLExporter<V, E>
      * @param defaultValue default value
      */
     public void registerAttribute(
-        String name,
-        AttributeCategory category,
-        AttributeType type,
-        String defaultValue)
+        String name, AttributeCategory category, AttributeType type, String defaultValue)
     {
         if (name == null) {
             throw new IllegalArgumentException("Attribute name cannot be null");
         }
-        if (name.equals(vertexLabelAttributeName)
-            || name.equals(edgeWeightAttributeName)
+        if (name.equals(vertexLabelAttributeName) || name.equals(edgeWeightAttributeName)
             || name.equals(edgeLabelAttributeName))
         {
             throw new IllegalArgumentException("Reserved attribute name");
@@ -250,9 +214,7 @@ public class GraphMLExporter<V, E>
                 "Attribute category must be one of node, edge, graph or all");
         }
         String nextKey = ATTRIBUTE_KEY_PREFIX + (totalAttributes++);
-        registeredAttributes.put(
-            name,
-            new AttributeDetails(nextKey, category, type, defaultValue));
+        registeredAttributes.put(name, new AttributeDetails(nextKey, category, type, defaultValue));
     }
 
     /**
@@ -265,8 +227,7 @@ public class GraphMLExporter<V, E>
         if (name == null) {
             throw new IllegalArgumentException("Attribute name cannot be null");
         }
-        if (name.equals(vertexLabelAttributeName)
-            || name.equals(edgeWeightAttributeName)
+        if (name.equals(vertexLabelAttributeName) || name.equals(edgeWeightAttributeName)
             || name.equals(edgeLabelAttributeName))
         {
             throw new IllegalArgumentException("Reserved attribute name");
@@ -277,8 +238,7 @@ public class GraphMLExporter<V, E>
     /**
      * Whether the exporter will print edge weights.
      *
-     * @return {@code true} if the exporter prints edge weights, {@code false}
-     *         otherwise
+     * @return {@code true} if the exporter prints edge weights, {@code false} otherwise
      */
     public boolean isExportEdgeWeights()
     {
@@ -313,8 +273,7 @@ public class GraphMLExporter<V, E>
     public void setVertexLabelAttributeName(String vertexLabelAttributeName)
     {
         if (vertexLabelAttributeName == null) {
-            throw new IllegalArgumentException(
-                "Vertex label attribute name cannot be null");
+            throw new IllegalArgumentException("Vertex label attribute name cannot be null");
         }
         String key = vertexLabelAttributeName.trim();
         if (registeredAttributes.containsKey(key)) {
@@ -341,8 +300,7 @@ public class GraphMLExporter<V, E>
     public void setEdgeLabelAttributeName(String edgeLabelAttributeName)
     {
         if (edgeLabelAttributeName == null) {
-            throw new IllegalArgumentException(
-                "Edge label attribute name cannot be null");
+            throw new IllegalArgumentException("Edge label attribute name cannot be null");
         }
         String key = edgeLabelAttributeName.trim();
         if (registeredAttributes.containsKey(key)) {
@@ -369,8 +327,7 @@ public class GraphMLExporter<V, E>
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
     {
         if (edgeWeightAttributeName == null) {
-            throw new IllegalArgumentException(
-                "Edge weight attribute name cannot be null");
+            throw new IllegalArgumentException("Edge weight attribute name cannot be null");
         }
         String key = edgeWeightAttributeName.trim();
         if (registeredAttributes.containsKey(key)) {
@@ -394,8 +351,7 @@ public class GraphMLExporter<V, E>
      * 
      * @param vertexLabelProvider the vertex label provider to set
      */
-    public void setVertexLabelProvider(
-        VertexNameProvider<V> vertexLabelProvider)
+    public void setVertexLabelProvider(VertexNameProvider<V> vertexLabelProvider)
     {
         this.vertexLabelProvider = vertexLabelProvider;
     }
@@ -435,8 +391,7 @@ public class GraphMLExporter<V, E>
      * 
      * @param vertexAttributeProvider the vertex attribute provider to set
      */
-    public void setVertexAttributeProvider(
-        ComponentAttributeProvider<V> vertexAttributeProvider)
+    public void setVertexAttributeProvider(ComponentAttributeProvider<V> vertexAttributeProvider)
     {
         this.vertexAttributeProvider = vertexAttributeProvider;
     }
@@ -456,8 +411,7 @@ public class GraphMLExporter<V, E>
      * 
      * @param edgeAttributeProvider the edge attribute provider to set
      */
-    public void setEdgeAttributeProvider(
-        ComponentAttributeProvider<E> edgeAttributeProvider)
+    public void setEdgeAttributeProvider(ComponentAttributeProvider<E> edgeAttributeProvider)
     {
         this.edgeAttributeProvider = edgeAttributeProvider;
     }
@@ -469,8 +423,7 @@ public class GraphMLExporter<V, E>
      * @param g the graph to be exported
      * 
      * @throws SAXException in case of a SAX error
-     * @throws TransformerConfigurationException in case of a configuration
-     *         error
+     * @throws TransformerConfigurationException in case of a configuration error
      */
     @Deprecated
     public void export(Writer writer, Graph<V, E> g)
@@ -482,7 +435,7 @@ public class GraphMLExporter<V, E>
             throw new SAXException(e);
         }
     }
-    
+
     /**
      * Exports a graph in GraphML format.
      *
@@ -496,13 +449,11 @@ public class GraphMLExporter<V, E>
     {
         try {
             // Prepare an XML file to receive the GraphML data
-            SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory
-                .newInstance();
+            SAXTransformerFactory factory =
+                (SAXTransformerFactory) SAXTransformerFactory.newInstance();
             TransformerHandler handler = factory.newTransformerHandler();
-            handler.getTransformer()
-                .setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            handler.getTransformer()
-                .setOutputProperty(OutputKeys.INDENT, "yes");
+            handler.getTransformer().setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            handler.getTransformer().setOutputProperty(OutputKeys.INDENT, "yes");
             handler.setResult(new StreamResult(new PrintWriter(writer)));
 
             // export
@@ -528,23 +479,14 @@ public class GraphMLExporter<V, E>
     private void writeHeader(TransformerHandler handler)
         throws SAXException
     {
-        handler.startPrefixMapping(
-            "xsi",
-            "http://www.w3.org/2001/XMLSchema-instance");
+        handler.startPrefixMapping("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         handler.endPrefixMapping("xsi");
 
         AttributesImpl attr = new AttributesImpl();
         attr.addAttribute(
-            "",
-            "",
-            "xsi:schemaLocation",
-            "CDATA",
+            "", "", "xsi:schemaLocation", "CDATA",
             "http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd");
-        handler.startElement(
-            "http://graphml.graphdrawing.org/xmlns",
-            "",
-            "graphml",
-            attr);
+        handler.startElement("http://graphml.graphdrawing.org/xmlns", "", "graphml", attr);
     }
 
     private void writeGraphStart(TransformerHandler handler, Graph<V, E> g)
@@ -553,10 +495,7 @@ public class GraphMLExporter<V, E>
         // <graph>
         AttributesImpl attr = new AttributesImpl();
         attr.addAttribute(
-            "",
-            "",
-            "edgedefault",
-            "CDATA",
+            "", "", "edgedefault", "CDATA",
             (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
         handler.startElement("", "", "graph", attr);
     }
@@ -578,34 +517,21 @@ public class GraphMLExporter<V, E>
     {
         if (vertexLabelProvider != null) {
             writeAttribute(
-                handler,
-                vertexLabelAttributeName,
-                new AttributeDetails(
-                    "vertex_label_key",
-                    AttributeCategory.NODE,
-                    AttributeType.STRING,
-                    null));
+                handler, vertexLabelAttributeName, new AttributeDetails(
+                    "vertex_label_key", AttributeCategory.NODE, AttributeType.STRING, null));
         }
 
         if (edgeLabelProvider != null) {
             writeAttribute(
-                handler,
-                edgeLabelAttributeName,
-                new AttributeDetails(
-                    "edge_label_key",
-                    AttributeCategory.EDGE,
-                    AttributeType.STRING,
-                    null));
+                handler, edgeLabelAttributeName, new AttributeDetails(
+                    "edge_label_key", AttributeCategory.EDGE, AttributeType.STRING, null));
         }
 
         if (exportEdgeWeights) {
             writeAttribute(
-                handler,
-                edgeWeightAttributeName,
+                handler, edgeWeightAttributeName,
                 new AttributeDetails(
-                    "edge_weight_key",
-                    AttributeCategory.EDGE,
-                    AttributeType.DOUBLE,
+                    "edge_weight_key", AttributeCategory.EDGE, AttributeType.DOUBLE,
                     Double.toString(WeightedGraph.DEFAULT_EDGE_WEIGHT)));
         }
 
@@ -626,29 +552,19 @@ public class GraphMLExporter<V, E>
         handler.endElement("", "", "data");
     }
 
-    private void writeAttribute(
-        TransformerHandler handler,
-        String name,
-        AttributeDetails details)
+    private void writeAttribute(TransformerHandler handler, String name, AttributeDetails details)
         throws SAXException
     {
         AttributesImpl attr = new AttributesImpl();
         attr.addAttribute("", "", "id", "CDATA", details.key);
         attr.addAttribute("", "", "for", "CDATA", details.category.toString());
         attr.addAttribute("", "", "attr.name", "CDATA", name);
-        attr.addAttribute(
-            "",
-            "",
-            "attr.type",
-            "CDATA",
-            details.type.toString());
+        attr.addAttribute("", "", "attr.type", "CDATA", details.type.toString());
         handler.startElement("", "", "key", attr);
         if (details.defaultValue != null) {
             handler.startElement("", "", "default", null);
-            handler.characters(
-                details.defaultValue.toCharArray(),
-                0,
-                details.defaultValue.length());
+            handler
+                .characters(details.defaultValue.toCharArray(), 0, details.defaultValue.length());
             handler.endElement("", "", "default");
         }
         handler.endElement("", "", "key");
@@ -661,12 +577,7 @@ public class GraphMLExporter<V, E>
         for (V v : g.vertexSet()) {
             // <node>
             AttributesImpl attr = new AttributesImpl();
-            attr.addAttribute(
-                "",
-                "",
-                "id",
-                "CDATA",
-                vertexIDProvider.getVertexName(v));
+            attr.addAttribute("", "", "id", "CDATA", vertexIDProvider.getVertexName(v));
             handler.startElement("", "", "node", attr);
 
             if (vertexLabelProvider != null) {
@@ -679,17 +590,14 @@ public class GraphMLExporter<V, E>
             // find vertex attributes
             Map<String, String> vertexAttributes = null;
             if (vertexAttributeProvider != null) {
-                vertexAttributes = vertexAttributeProvider
-                    .getComponentAttributes(v);
+                vertexAttributes = vertexAttributeProvider.getComponentAttributes(v);
             }
             if (vertexAttributes == null) {
                 vertexAttributes = Collections.emptyMap();
             }
 
             // check all registered
-            for (Entry<String, AttributeDetails> e : registeredAttributes
-                .entrySet())
-            {
+            for (Entry<String, AttributeDetails> e : registeredAttributes.entrySet()) {
                 AttributeDetails details = e.getValue();
                 if (details.category.equals(AttributeCategory.NODE)
                     || details.category.equals(AttributeCategory.ALL))
@@ -698,9 +606,7 @@ public class GraphMLExporter<V, E>
                     String defaultValue = details.defaultValue;
                     if (vertexAttributes.containsKey(name)) {
                         String value = vertexAttributes.get(name);
-                        if (defaultValue == null
-                            || !defaultValue.equals(value))
-                        {
+                        if (defaultValue == null || !defaultValue.equals(value)) {
                             if (value != null) {
                                 writeData(handler, details.key, value);
                             }
@@ -721,24 +627,11 @@ public class GraphMLExporter<V, E>
         for (E e : g.edgeSet()) {
             // <edge>
             AttributesImpl attr = new AttributesImpl();
+            attr.addAttribute("", "", "id", "CDATA", edgeIDProvider.getEdgeName(e));
             attr.addAttribute(
-                "",
-                "",
-                "id",
-                "CDATA",
-                edgeIDProvider.getEdgeName(e));
+                "", "", "source", "CDATA", vertexIDProvider.getVertexName(g.getEdgeSource(e)));
             attr.addAttribute(
-                "",
-                "",
-                "source",
-                "CDATA",
-                vertexIDProvider.getVertexName(g.getEdgeSource(e)));
-            attr.addAttribute(
-                "",
-                "",
-                "target",
-                "CDATA",
-                vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+                "", "", "target", "CDATA", vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
             handler.startElement("", "", "edge", attr);
 
             if (edgeLabelProvider != null) {
@@ -753,27 +646,21 @@ public class GraphMLExporter<V, E>
                 if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not
                                                                          // default
                                                                          // value
-                    writeData(
-                        handler,
-                        "edge_weight_key",
-                        String.valueOf(weight));
+                    writeData(handler, "edge_weight_key", String.valueOf(weight));
                 }
             }
 
             // find edge attributes
             Map<String, String> edgeAttributes = null;
             if (edgeAttributeProvider != null) {
-                edgeAttributes = edgeAttributeProvider
-                    .getComponentAttributes(e);
+                edgeAttributes = edgeAttributeProvider.getComponentAttributes(e);
             }
             if (edgeAttributes == null) {
                 edgeAttributes = Collections.emptyMap();
             }
 
             // check all registered
-            for (Entry<String, AttributeDetails> entry : registeredAttributes
-                .entrySet())
-            {
+            for (Entry<String, AttributeDetails> entry : registeredAttributes.entrySet()) {
                 AttributeDetails details = entry.getValue();
                 if (details.category.equals(AttributeCategory.EDGE)
                     || details.category.equals(AttributeCategory.ALL))
@@ -782,9 +669,7 @@ public class GraphMLExporter<V, E>
                     String defaultValue = details.defaultValue;
                     if (edgeAttributes.containsKey(name)) {
                         String value = edgeAttributes.get(name);
-                        if (defaultValue == null
-                            || !defaultValue.equals(value))
-                        {
+                        if (defaultValue == null || !defaultValue.equals(value)) {
                             if (value != null) {
                                 writeData(handler, details.key, value);
                             }
@@ -806,10 +691,7 @@ public class GraphMLExporter<V, E>
         public String defaultValue;
 
         public AttributeDetails(
-            String key,
-            AttributeCategory category,
-            AttributeType type,
-            String defaultValue)
+            String key, AttributeCategory category, AttributeType type, String defaultValue)
         {
             this.key = key;
             this.category = category;

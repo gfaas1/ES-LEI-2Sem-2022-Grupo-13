@@ -20,11 +20,9 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A directed weighted pseudograph. A directed weighted pseudograph is a
- * non-simple directed graph in which both graph loops and multiple edges are
- * permitted, and edges have weights.
+ * A directed weighted pseudograph. A directed weighted pseudograph is a non-simple directed graph
+ * in which both graph loops and multiple edges are permitted, and edges have weights.
  */
 public class DirectedWeightedPseudograph<V, E>
     extends DirectedPseudograph<V, E>
@@ -43,8 +41,7 @@ public class DirectedWeightedPseudograph<V, E>
     }
 
     /**
-     * Creates a new directed weighted pseudograph with the specified edge
-     * factory.
+     * Creates a new directed weighted pseudograph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      */
@@ -53,20 +50,16 @@ public class DirectedWeightedPseudograph<V, E>
         super(ef);
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DirectedWeightedPseudograph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DirectedWeightedPseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DirectedWeightedPseudograph<>(edgeClass));
+        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedPseudograph<>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DirectedWeightedPseudograph<V, E>, ?> builder(
-        EdgeFactory<V, E> ef)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DirectedWeightedPseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DirectedWeightedPseudograph<>(ef));
+        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedPseudograph<>(ef));
     }
 }
 

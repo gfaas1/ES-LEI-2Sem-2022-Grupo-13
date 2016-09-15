@@ -19,10 +19,9 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * .
@@ -32,29 +31,26 @@ import org.jgrapht.graph.*;
 public class NeighborIndexTest
     extends TestCase
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     private static final String V1 = "v1";
     private static final String V2 = "v2";
     private static final String V3 = "v3";
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testNeighborSet()
     {
         // We use Object instead of DefaultEdge for the edge type
         // in order to cover the case in
         // https://sourceforge.net/tracker/index.php?func=detail&aid=3486775&group_id=86459&atid=579687
-        ListenableUndirectedGraph<String, Object> g =
-                new ListenableUndirectedGraph<>(
-                        Object.class);
+        ListenableUndirectedGraph<String, Object> g = new ListenableUndirectedGraph<>(Object.class);
         g.addVertex(V1);
         g.addVertex(V2);
 
         g.addEdge(V1, V2);
 
-        NeighborIndex<String, Object> index =
-                new NeighborIndex<>(g);
+        NeighborIndex<String, Object> index = new NeighborIndex<>(g);
         g.addGraphListener(index);
 
         Set<String> neighbors1 = index.neighborsOf(V1);
@@ -87,16 +83,13 @@ public class NeighborIndexTest
 
     public void testDirectedNeighborSet()
     {
-        ListenableDirectedGraph<String, Object> g =
-                new ListenableDirectedGraph<>(
-                        Object.class);
+        ListenableDirectedGraph<String, Object> g = new ListenableDirectedGraph<>(Object.class);
         g.addVertex(V1);
         g.addVertex(V2);
 
         g.addEdge(V1, V2);
 
-        DirectedNeighborIndex<String, Object> index =
-                new DirectedNeighborIndex<>(g);
+        DirectedNeighborIndex<String, Object> index = new DirectedNeighborIndex<>(g);
         g.addGraphListener(index);
 
         Set<String> p = index.predecessorsOf(V1);

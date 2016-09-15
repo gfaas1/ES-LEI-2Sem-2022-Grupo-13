@@ -18,15 +18,14 @@
 package org.jgrapht.generate;
 
 /**
- * This Generator creates a random-topology graph of a specified number of
- * vertexes and edges. An instance of this generator will always return the same
- * graph-topology in calls to generateGraph(). The vertexes can be different
- * (depends on the VertexFactory implementation)
+ * This Generator creates a random-topology graph of a specified number of vertexes and edges. An
+ * instance of this generator will always return the same graph-topology in calls to
+ * generateGraph(). The vertexes can be different (depends on the VertexFactory implementation)
  *
- * <p>However, two instances which use the same constructor parameters will
- * produce two different random graphs (note: as with any random generator,
- * there is always a small possibility that two instances will create the same
- * results).
+ * <p>
+ * However, two instances which use the same constructor parameters will produce two different
+ * random graphs (note: as with any random generator, there is always a small possibility that two
+ * instances will create the same results).
  *
  * @author Assaf Lehr
  * @since Aug 6, 2005
@@ -44,6 +43,6 @@ public class RandomGraphGenerator<V, E>
     {
         super(aNumOfVertexes, aNumOfEdges, seed);
     }
-}    
+}
 
 // End RandomGraphGenerator.java

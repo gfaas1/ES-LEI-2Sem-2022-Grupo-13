@@ -21,13 +21,13 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * Find a cycle base of an undirected graph using the Paton's algorithm.
  *
- * <p>See:<br>
- * K. Paton, An algorithm for finding a fundamental set of cycles for an
- * undirected linear graph, Comm. ACM 12 (1969), pp. 514-518.
+ * <p>
+ * See:<br>
+ * K. Paton, An algorithm for finding a fundamental set of cycles for an undirected linear graph,
+ * Comm. ACM 12 (1969), pp. 514-518.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -65,7 +65,8 @@ public class PatonCycleBase<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public UndirectedGraph<V, E> getGraph()
+    @Override
+    public UndirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -73,7 +74,8 @@ public class PatonCycleBase<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void setGraph(UndirectedGraph<V, E> graph)
+    @Override
+    public void setGraph(UndirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -84,7 +86,8 @@ public class PatonCycleBase<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public List<List<V>> findCycleBase()
+    @Override
+    public List<List<V>> findCycleBase()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

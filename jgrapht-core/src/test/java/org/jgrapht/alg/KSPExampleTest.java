@@ -17,15 +17,14 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 public class KSPExampleTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testFourReturnedPathsJGraphT()
     {

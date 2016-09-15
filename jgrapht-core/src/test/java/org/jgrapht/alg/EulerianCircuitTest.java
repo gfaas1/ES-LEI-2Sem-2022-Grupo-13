@@ -17,12 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * .
@@ -32,47 +31,34 @@ import org.jgrapht.graph.*;
 public class EulerianCircuitTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
     public void testEulerianCircuit()
     {
-        UndirectedGraph<Object, DefaultEdge> completeGraph1 =
-                new SimpleGraph<>(
-                        DefaultEdge.class);
+        UndirectedGraph<Object, DefaultEdge> completeGraph1 = new SimpleGraph<>(DefaultEdge.class);
         CompleteGraphGenerator<Object, DefaultEdge> completeGenerator1 =
-                new CompleteGraphGenerator<>(
-                        6);
-        completeGenerator1.generateGraph(
-            completeGraph1,
-                new ClassBasedVertexFactory<>(Object.class),
-            null);
+            new CompleteGraphGenerator<>(6);
+        completeGenerator1
+            .generateGraph(completeGraph1, new ClassBasedVertexFactory<>(Object.class), null);
 
         // A complete graph of order 6 will have all vertices with degree 5
         // which is odd, therefore this graph is not Eulerian
         assertFalse(EulerianCircuit.isEulerian(completeGraph1));
-        assertTrue(
-            EulerianCircuit.getEulerianCircuitVertices(completeGraph1) == null);
+        assertTrue(EulerianCircuit.getEulerianCircuitVertices(completeGraph1) == null);
 
-        UndirectedGraph<Object, DefaultEdge> completeGraph2 =
-                new SimpleGraph<>(
-                        DefaultEdge.class);
+        UndirectedGraph<Object, DefaultEdge> completeGraph2 = new SimpleGraph<>(DefaultEdge.class);
         CompleteGraphGenerator<Object, DefaultEdge> completeGenerator2 =
-                new CompleteGraphGenerator<>(
-                        5);
-        completeGenerator2.generateGraph(
-            completeGraph2,
-                new ClassBasedVertexFactory<>(Object.class),
-            null);
+            new CompleteGraphGenerator<>(5);
+        completeGenerator2
+            .generateGraph(completeGraph2, new ClassBasedVertexFactory<>(Object.class), null);
         assertTrue(EulerianCircuit.isEulerian(completeGraph2));
 
         // There are 10 edges total in this graph, so an Eulerian circuit
         // labeled by vertices should have 11 vertices
-        assertEquals(
-            11,
-            EulerianCircuit.getEulerianCircuitVertices(completeGraph2).size());
+        assertEquals(11, EulerianCircuit.getEulerianCircuitVertices(completeGraph2).size());
     }
 }
 

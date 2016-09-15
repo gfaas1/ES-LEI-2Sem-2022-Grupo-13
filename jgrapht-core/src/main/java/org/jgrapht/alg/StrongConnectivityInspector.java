@@ -23,24 +23,27 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * <p>Complements the {@link ConnectivityInspector} class with the capability to
- * compute the strongly connected components of a directed graph. The algorithm
- * is implemented after "Cormen et al: Introduction to algorithms", Chapter
- * 22.5. It has a running time of O(V + E).</p>
+ * <p>
+ * Complements the {@link ConnectivityInspector} class with the capability to compute the strongly
+ * connected components of a directed graph. The algorithm is implemented after "Cormen et al:
+ * Introduction to algorithms", Chapter 22.5. It has a running time of O(V + E).
+ * </p>
  *
- * <p>Unlike {@link ConnectivityInspector}, this class does not implement
- * incremental inspection. The full algorithm is executed at the first call of
- * {@link StrongConnectivityInspector#stronglyConnectedSets()} or {@link
- * StrongConnectivityInspector#isStronglyConnected()}.</p>
+ * <p>
+ * Unlike {@link ConnectivityInspector}, this class does not implement incremental inspection. The
+ * full algorithm is executed at the first call of
+ * {@link StrongConnectivityInspector#stronglyConnectedSets()} or
+ * {@link StrongConnectivityInspector#isStronglyConnected()}.
+ * </p>
  *
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
  * @deprecated Use {@link KosarajuStrongConnectivityInspector} instead.
  */
-@Deprecated public class StrongConnectivityInspector<V, E>
+@Deprecated
+public class StrongConnectivityInspector<V, E>
     implements StrongConnectivityAlgorithm<V, E>
 {
     // the graph to compute the strongly connected sets for
@@ -100,12 +103,10 @@ import org.jgrapht.graph.*;
     }
 
     /**
-     * Computes a {@link List} of {@link Set}s, where each set contains vertices
-     * which together form a strongly connected component within the given
-     * graph.
+     * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
+     * a strongly connected component within the given graph.
      *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly
-     * connected components
+     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
      */
     public List<Set<V>> stronglyConnectedSets()
     {
@@ -125,8 +126,7 @@ import org.jgrapht.graph.*;
             }
 
             // 'create' inverse graph (i.e. every edge is reversed)
-            DirectedGraph<V, E> inverseGraph =
-                new EdgeReversedGraph<V, E>(graph);
+            DirectedGraph<V, E> inverseGraph = new EdgeReversedGraph<V, E>(graph);
 
             // get ready for next dfs round
             resetVertexData();
@@ -152,31 +152,28 @@ import org.jgrapht.graph.*;
     }
 
     /**
-     * <p>Computes a list of {@link DirectedSubgraph}s of the given graph. Each
-     * subgraph will represent a strongly connected component and will contain
-     * all vertices of that component. The subgraph will have an edge (u,v) iff
-     * u and v are contained in the strongly connected component.</p>
+     * <p>
+     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
+     * a strongly connected component and will contain all vertices of that component. The subgraph
+     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
+     * </p>
      *
-     * <p>NOTE: Calling this method will first execute {@link
-     * StrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
-     * subgraphs, use that method.</p>
+     * <p>
+     * NOTE: Calling this method will first execute
+     * {@link StrongConnectivityInspector#stronglyConnectedSets()}. If you don't need subgraphs, use
+     * that method.
+     * </p>
      *
-     * @return a list of subgraphs representing the strongly connected
-     * components
+     * @return a list of subgraphs representing the strongly connected components
      */
     public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
     {
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
-            stronglyConnectedSubgraphs =
-                new Vector<DirectedSubgraph<V, E>>(sets.size());
+            stronglyConnectedSubgraphs = new Vector<DirectedSubgraph<V, E>>(sets.size());
 
             for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(
-                    new DirectedSubgraph<V, E>(
-                        graph,
-                        set,
-                        null));
+                stronglyConnectedSubgraphs.add(new DirectedSubgraph<V, E>(graph, set, null));
             }
         }
 
@@ -184,32 +181,24 @@ import org.jgrapht.graph.*;
     }
 
     /*
-     * Creates a VertexData object for every vertex in the graph and stores
-     * them
-     * in a HashMap.
+     * Creates a VertexData object for every vertex in the graph and stores them in a HashMap.
      */
     private void createVertexData()
     {
-        vertexToVertexData =
-            new HashMap<V, VertexData<V>>(graph.vertexSet().size());
+        vertexToVertexData = new HashMap<V, VertexData<V>>(graph.vertexSet().size());
 
         for (V vertex : graph.vertexSet()) {
-            vertexToVertexData.put(
-                vertex,
-                new VertexData2<V>(vertex, false, false));
+            vertexToVertexData.put(vertex, new VertexData2<V>(vertex, false, false));
         }
     }
 
     /*
-     * The subroutine of DFS. NOTE: the set is used to distinguish between 1st
-     * and 2nd round of DFS. set == null: finished vertices are stored (1st
-     * round). set != null: all vertices found will be saved in the set (2nd
-     * round)
+     * The subroutine of DFS. NOTE: the set is used to distinguish between 1st and 2nd round of DFS.
+     * set == null: finished vertices are stored (1st round). set != null: all vertices found will
+     * be saved in the set (2nd round)
      */
     private void dfsVisit(
-        DirectedGraph<V, E> visitedGraph,
-        VertexData<V> vertexData,
-        Set<V> vertices)
+        DirectedGraph<V, E> visitedGraph, VertexData<V> vertexData, Set<V> vertices)
     {
         Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
         stack.add(vertexData);
@@ -229,8 +218,7 @@ import org.jgrapht.graph.*;
                 // follow all edges
                 for (E edge : visitedGraph.outgoingEdgesOf(data.getVertex())) {
                     VertexData<V> targetData =
-                        vertexToVertexData.get(
-                            visitedGraph.getEdgeTarget(edge));
+                        vertexToVertexData.get(visitedGraph.getEdgeTarget(edge));
 
                     if (!targetData.isDiscovered()) {
                         // the "recursion"
@@ -263,9 +251,7 @@ import org.jgrapht.graph.*;
     {
         private byte bitfield;
 
-        private VertexData(
-            boolean discovered,
-            boolean finished)
+        private VertexData(boolean discovered, boolean finished)
         {
             this.bitfield = 0;
             setDiscovered(discovered);
@@ -310,21 +296,20 @@ import org.jgrapht.graph.*;
     {
         private final VertexData<V> finishedData;
 
-        private VertexData1(
-            VertexData<V> finishedData,
-            boolean discovered,
-            boolean finished)
+        private VertexData1(VertexData<V> finishedData, boolean discovered, boolean finished)
         {
             super(discovered, finished);
             this.finishedData = finishedData;
         }
 
-        @Override VertexData<V> getFinishedData()
+        @Override
+        VertexData<V> getFinishedData()
         {
             return finishedData;
         }
 
-        @Override V getVertex()
+        @Override
+        V getVertex()
         {
             return null;
         }
@@ -335,21 +320,20 @@ import org.jgrapht.graph.*;
     {
         private final V vertex;
 
-        private VertexData2(
-            V vertex,
-            boolean discovered,
-            boolean finished)
+        private VertexData2(V vertex, boolean discovered, boolean finished)
         {
             super(discovered, finished);
             this.vertex = vertex;
         }
 
-        @Override VertexData<V> getFinishedData()
+        @Override
+        VertexData<V> getFinishedData()
         {
             return null;
         }
 
-        @Override V getVertex()
+        @Override
+        V getVertex()
         {
             return vertex;
         }

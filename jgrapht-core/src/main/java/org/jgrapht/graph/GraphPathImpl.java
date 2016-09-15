@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * GraphPathImpl is a default implementation of {@link GraphPath}.
  *
@@ -45,11 +44,7 @@ public class GraphPathImpl<V, E>
     private double weight;
 
     public GraphPathImpl(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        List<E> edgeList,
-        double weight)
+        Graph<V, E> graph, V startVertex, V endVertex, List<E> edgeList, double weight)
     {
         this.graph = graph;
         this.startVertex = startVertex;
@@ -59,37 +54,43 @@ public class GraphPathImpl<V, E>
     }
 
     // implement GraphPath
-    @Override public Graph<V, E> getGraph()
+    @Override
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     // implement GraphPath
-    @Override public V getStartVertex()
+    @Override
+    public V getStartVertex()
     {
         return startVertex;
     }
 
     // implement GraphPath
-    @Override public V getEndVertex()
+    @Override
+    public V getEndVertex()
     {
         return endVertex;
     }
 
     // implement GraphPath
-    @Override public List<E> getEdgeList()
+    @Override
+    public List<E> getEdgeList()
     {
         return edgeList;
     }
 
     // implement GraphPath
-    @Override public double getWeight()
+    @Override
+    public double getWeight()
     {
         return weight;
     }
 
     // override Object
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return edgeList.toString();
     }

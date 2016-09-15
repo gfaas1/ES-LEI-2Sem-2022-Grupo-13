@@ -17,12 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * @author Guillaume Boulmier
@@ -31,7 +30,7 @@ import org.jgrapht.graph.*;
 public class BiconnectivityInspectorTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testBiconnected()
     {
@@ -57,19 +56,13 @@ public class BiconnectivityInspectorTest
 
         LinearGraphGenerator<Object, DefaultEdge> generator =
             new LinearGraphGenerator<>(nbVertices);
-        generator.generateGraph(
-            graph,
-                new ClassBasedVertexFactory<>(
-                        Object.class),
-            null);
+        generator.generateGraph(graph, new ClassBasedVertexFactory<>(Object.class), null);
 
         BiconnectivityInspector<Object, DefaultEdge> inspector =
             new BiconnectivityInspector<>(graph);
 
         assertEquals(nbVertices - 2, inspector.getCutpoints().size());
-        assertEquals(
-            nbVertices - 1,
-            inspector.getBiconnectedVertexComponents().size());
+        assertEquals(nbVertices - 1, inspector.getBiconnectedVertexComponents().size());
     }
 
     public void testNotBiconnected()

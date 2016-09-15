@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A unit test for a cloning bug, adapted from a forum entry from Linda Buisman.
  *
@@ -29,7 +28,7 @@ import org.jgrapht.*;
 public class CloneTest
     extends EnhancedTestCase
 {
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see junit.framework.TestCase#TestCase(java.lang.String)
@@ -39,7 +38,7 @@ public class CloneTest
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * Test graph cloning.
@@ -47,8 +46,7 @@ public class CloneTest
     @SuppressWarnings("unchecked")
     public void testCloneSpecificsBug()
     {
-        SimpleGraph<String, DefaultEdge> g1 =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
         String one = "1";
         String two = "2";
         String three = "3";
@@ -58,10 +56,11 @@ public class CloneTest
         g1.addEdge(one, two);
         g1.addEdge(two, three);
 
-        SimpleGraph<String, DefaultEdge> g2 =
-            (SimpleGraph<String, DefaultEdge>) g1.clone(); // Type-safty
-                                                           // warning OK with
-                                                           // clone
+        SimpleGraph<String, DefaultEdge> g2 = (SimpleGraph<String, DefaultEdge>) g1.clone(); // Type-safty
+                                                                                             // warning
+                                                                                             // OK
+                                                                                             // with
+                                                                                             // clone
         assertEquals(2, g2.edgeSet().size());
         assertNotNull(g2.getEdge(one, two));
         assertTrue(g2.removeEdge(g2.getEdge(one, two)));
@@ -70,8 +69,7 @@ public class CloneTest
     }
 
     /**
-     * Tests usage of {@link ParanoidGraph} for detecting broken vertex
-     * implementations.
+     * Tests usage of {@link ParanoidGraph} for detecting broken vertex implementations.
      */
     public void testParanoidGraph()
     {
@@ -79,10 +77,8 @@ public class CloneTest
         BrokenVertex v2 = new BrokenVertex(2);
         BrokenVertex v3 = new BrokenVertex(1);
 
-        SimpleGraph<BrokenVertex, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
-        ParanoidGraph<BrokenVertex, DefaultEdge> pg =
-                new ParanoidGraph<>(g);
+        SimpleGraph<BrokenVertex, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        ParanoidGraph<BrokenVertex, DefaultEdge> pg = new ParanoidGraph<>(g);
         pg.addVertex(v1);
         pg.addVertex(v2);
         try {
@@ -95,7 +91,7 @@ public class CloneTest
         }
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     private class BrokenVertex
     {
@@ -107,7 +103,8 @@ public class CloneTest
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(Object other)
+        {
             return other instanceof BrokenVertex && x == ((BrokenVertex) other).x;
         }
     }

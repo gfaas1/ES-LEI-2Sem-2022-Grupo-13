@@ -18,41 +18,43 @@
 package org.jgrapht.graph;
 
 import java.io.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * <p>A weighted view of the backing graph specified in the constructor. This
- * graph allows modules to apply algorithms designed for weighted graphs to an
- * unweighted graph by providing an explicit edge weight mapping. The
- * implementation also allows for "masking" weights for a subset of the edges in
- * an existing weighted graph.</p>
+ * <p>
+ * A weighted view of the backing graph specified in the constructor. This graph allows modules to
+ * apply algorithms designed for weighted graphs to an unweighted graph by providing an explicit
+ * edge weight mapping. The implementation also allows for "masking" weights for a subset of the
+ * edges in an existing weighted graph.
+ * </p>
  *
- * <p>Query operations on this graph "read through" to the backing graph. Vertex
- * addition/removal and edge addition/removal are all supported (and immediately
- * reflected in the backing graph). Setting an edge weight will pass the
- * operation to the backing graph as well if the backing graph implements the
- * WeightedGraph interface. Setting an edge weight will modify the weight map in
- * order to maintain a consistent graph.</p>
+ * <p>
+ * Query operations on this graph "read through" to the backing graph. Vertex addition/removal and
+ * edge addition/removal are all supported (and immediately reflected in the backing graph). Setting
+ * an edge weight will pass the operation to the backing graph as well if the backing graph
+ * implements the WeightedGraph interface. Setting an edge weight will modify the weight map in
+ * order to maintain a consistent graph.
+ * </p>
  *
- * <p>Note that edges returned by this graph's accessors are really just the
- * edges of the underlying directed graph.</p>
+ * <p>
+ * Note that edges returned by this graph's accessors are really just the edges of the underlying
+ * directed graph.
+ * </p>
  *
- * <p>This graph does <i>not</i> pass the hashCode and equals operations through
- * to the backing graph, but relies on <tt>Object</tt>'s <tt>equals</tt> and
- * <tt>hashCode</tt> methods. This graph will be serializable if the backing
- * graph is serializable.</p>
+ * <p>
+ * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
+ * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
+ * serializable if the backing graph is serializable.
+ * </p>
  *
  * @author Lucas J. Scharenbroich
  * @since Sep 10, 2007
  */
 public class AsWeightedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable,
-        WeightedGraph<V, E>
+    implements Serializable, WeightedGraph<V, E>
 {
     /**
      */
@@ -65,11 +67,10 @@ public class AsWeightedGraph<V, E>
      * Constructor for AsWeightedGraph.
      *
      * @param g the backing graph over which a weighted view is to be created.
-     * @param weightMap A mapping of edges to weights. If an edge is not present
-     * in the weight map, the edge weight for the underlying graph is returned.
-     * Note that a live reference to this map is retained, so if the caller
-     * changes the map after construction, the changes will affect the
-     * AsWeightedGraph instance as well.
+     * @param weightMap A mapping of edges to weights. If an edge is not present in the weight map,
+     *        the edge weight for the underlying graph is returned. Note that a live reference to
+     *        this map is retained, so if the caller changes the map after construction, the changes
+     *        will affect the AsWeightedGraph instance as well.
      */
     public AsWeightedGraph(Graph<V, E> g, Map<E, Double> weightMap)
     {
@@ -85,13 +86,14 @@ public class AsWeightedGraph<V, E>
     /**
      * @see WeightedGraph#setEdgeWeight
      */
-    @Override public void setEdgeWeight(E e, double weight)
+    @Override
+    public void setEdgeWeight(E e, double weight)
     {
         if (isWeightedGraph) {
             super.setEdgeWeight(e, weight);
         }
 
-        // Always modify the weight map.  It would be a terrible violation
+        // Always modify the weight map. It would be a terrible violation
         // of the use contract to silently ignore changes to the weights.
         weightMap.put(e, weight);
     }
@@ -99,7 +101,8 @@ public class AsWeightedGraph<V, E>
     /**
      * @see Graph#getEdgeWeight
      */
-    @Override public double getEdgeWeight(E e)
+    @Override
+    public double getEdgeWeight(E e)
     {
         double weight;
 

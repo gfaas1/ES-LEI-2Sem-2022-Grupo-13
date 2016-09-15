@@ -19,10 +19,8 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
- * An undirected weighted graph which is also {@link
- * org.jgrapht.ListenableGraph}.
+ * An undirected weighted graph which is also {@link org.jgrapht.ListenableGraph}.
  *
  * @see DefaultListenableGraph
  */

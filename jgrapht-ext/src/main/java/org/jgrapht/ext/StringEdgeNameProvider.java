@@ -18,9 +18,8 @@
 package org.jgrapht.ext;
 
 /**
- * Generates edge names by invoking {@link #toString()} on them. This assumes
- * that the edge's {@link #toString()} method returns a unique String
- * representation for each edge.
+ * Generates edge names by invoking {@link #toString()} on them. This assumes that the edge's
+ * {@link #toString()} method returns a unique String representation for each edge.
  *
  * @author Trevor Harmon
  */
@@ -34,7 +33,8 @@ public class StringEdgeNameProvider<E>
      * @param edge the edge to be named
      * @return a unique String edge representation
      */
-    @Override public String getEdgeName(E edge)
+    @Override
+    public String getEdgeName(E edge)
     {
         return edge.toString();
     }

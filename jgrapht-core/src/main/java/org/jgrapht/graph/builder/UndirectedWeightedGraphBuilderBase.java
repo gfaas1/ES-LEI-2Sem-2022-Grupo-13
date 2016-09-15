@@ -19,19 +19,16 @@ package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
 
-
 /**
  * Base class for {@link UndirectedWeightedGraphBuilder} for extending.
  */
-public abstract class UndirectedWeightedGraphBuilderBase<V,
-    E,
+public abstract class UndirectedWeightedGraphBuilderBase<V, E,
     G extends UndirectedGraph<V, E> & WeightedGraph<V, E>,
     B extends UndirectedWeightedGraphBuilderBase<V, E, G, B>>
     extends UndirectedGraphBuilderBase<V, E, G, B>
 {
     /**
-     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
-     * mutable.
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * @param baseGraph the graph object to base building on
      */
@@ -41,8 +38,8 @@ public abstract class UndirectedWeightedGraphBuilderBase<V,
     }
 
     /**
-     * Adds an weighted edge to the graph being built. The source and target
-     * vertices are added to the graph, if not already included.
+     * Adds an weighted edge to the graph being built. The source and target vertices are added to
+     * the graph, if not already included.
      *
      * @param source source vertex of the edge.
      * @param target target vertex of the edge.

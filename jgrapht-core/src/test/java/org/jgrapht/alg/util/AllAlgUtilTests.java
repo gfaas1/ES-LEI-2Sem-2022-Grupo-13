@@ -26,10 +26,7 @@ import org.junit.runners.*;
  * @author Tom Conerly
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    UnionFindTest.class,
-        VertexDegreeComparatorTest.class
-})
+@Suite.SuiteClasses({ UnionFindTest.class, VertexDegreeComparatorTest.class })
 public final class AllAlgUtilTests
 {
 }

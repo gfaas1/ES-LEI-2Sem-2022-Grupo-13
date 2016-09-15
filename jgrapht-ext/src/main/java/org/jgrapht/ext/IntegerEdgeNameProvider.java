@@ -17,14 +17,13 @@
  */
 package org.jgrapht.ext;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Assigns a unique integer to represent each edge. Each instance of
- * IntegerEdgeNameProvider maintains an internal map between every edge it has
- * ever seen and the unique integer representing that edge. As a result it is
- * probably desirable to have a separate instance for each distinct graph.
+ * Assigns a unique integer to represent each edge. Each instance of IntegerEdgeNameProvider
+ * maintains an internal map between every edge it has ever seen and the unique integer representing
+ * that edge. As a result it is probably desirable to have a separate instance for each distinct
+ * graph.
  *
  * @author Trevor Harmon
  */
@@ -48,7 +47,8 @@ public class IntegerEdgeNameProvider<E>
      *
      * @param edge the edge to be named
      */
-    @Override public String getEdgeName(E edge)
+    @Override
+    public String getEdgeName(E edge)
     {
         Integer id = idMap.get(edge);
         if (id == null) {

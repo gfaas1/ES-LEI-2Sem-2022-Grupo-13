@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.jgrapht</groupId>
@@ -54,10 +55,9 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<!-- These dependencies are not available in any known maven
-				repository, and have been placed in the source tree directly.
-				This makes this module (jgrapht-touchgraph) unsuitable for
-				submission to central. -->
+			<!-- These dependencies are not available in any known maven repository, 
+				and have been placed in the source tree directly. This makes this module 
+				(jgrapht-touchgraph) unsuitable for submission to central. -->
 			<id>3rd-party-dependencies</id>
 			<url>file:${basedir}/3rdparty</url>
 		</repository>

@@ -17,16 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
+import java.util.*;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Set;
-
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
 /**
  * A unit test for simple directed graph when the backing map is an IdentityHashMap
@@ -35,25 +29,32 @@ import java.util.Set;
 public class SimpleIdentityDirectedGraphTest
     extends EnhancedTestCase
 {
-    public static class Holder<T>  {
+    public static class Holder<T>
+    {
         T t;
 
-        public Holder(T t) {
+        public Holder(T t)
+        {
             this.t = t;
         }
 
-        public T getT() {
+        public T getT()
+        {
             return t;
         }
 
-        public void setT(T t) {
+        public void setT(T t)
+        {
             this.t = t;
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+        public boolean equals(Object o)
+        {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
 
             Holder holder = (Holder) o;
 
@@ -62,28 +63,34 @@ public class SimpleIdentityDirectedGraphTest
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             return t != null ? t.hashCode() : 0;
         }
     }
 
-    public static class SimpleIdentityDirectedGraph<V,E> extends SimpleDirectedGraph<V,E> {
+    public static class SimpleIdentityDirectedGraph<V, E>
+        extends SimpleDirectedGraph<V, E>
+    {
 
-        public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass) {
+        public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass)
+        {
             super(edgeClass);
         }
 
-        public SimpleIdentityDirectedGraph(EdgeFactory<V, E> ef) {
+        public SimpleIdentityDirectedGraph(EdgeFactory<V, E> ef)
+        {
             super(ef);
         }
 
         @Override
-        protected DirectedSpecifics<V,E> createDirectedSpecifics() {
+        protected DirectedSpecifics<V, E> createDirectedSpecifics()
+        {
             return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }
     }
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     DirectedGraph<Holder<String>, DefaultEdge> gEmpty;
     private DirectedGraph<Holder<String>, DefaultEdge> g1;
@@ -92,12 +99,12 @@ public class SimpleIdentityDirectedGraphTest
     private DirectedGraph<Holder<String>, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<Holder<String>, DefaultEdge> eFactory;
-    private Holder<String> v1 = new Holder<>("v1") ;
+    private Holder<String> v1 = new Holder<>("v1");
     private Holder<String> v2 = new Holder<>("v2");
     private Holder<String> v3 = new Holder<>("v3");
     private Holder<String> v4 = new Holder<>("v4");
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see junit.framework.TestCase#TestCase(String)
@@ -107,7 +114,7 @@ public class SimpleIdentityDirectedGraphTest
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * Class to test for boolean addEdge(V, V, E)
@@ -444,8 +451,9 @@ public class SimpleIdentityDirectedGraphTest
     {
         init();
 
-        DirectedGraph<Holder<String>, DefaultEdge> g =new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
-        DirectedGraph<Holder<String>, DefaultEdge> r =new EdgeReversedGraph<>(g);
+        DirectedGraph<Holder<String>, DefaultEdge> g =
+            new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<Holder<String>, DefaultEdge> r = new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
@@ -471,8 +479,7 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     private void verifyReversal(
-        DirectedGraph<Holder<String>, DefaultEdge> g,
-        DirectedGraph<Holder<String>, DefaultEdge> r,
+        DirectedGraph<Holder<String>, DefaultEdge> g, DirectedGraph<Holder<String>, DefaultEdge> r,
         DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));
@@ -509,7 +516,7 @@ public class SimpleIdentityDirectedGraphTest
 
     private void init()
     {
-        gEmpty =new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        gEmpty = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         g1 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         g2 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         g3 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);

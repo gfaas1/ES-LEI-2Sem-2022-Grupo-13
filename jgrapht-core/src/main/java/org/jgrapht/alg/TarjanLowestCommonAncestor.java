@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 
-
 /**
  * Used to calculate Tarjan's Lowest Common Ancestors Algorithm
  *
@@ -34,8 +33,7 @@ public class TarjanLowestCommonAncestor<V, E>
     private Graph<V, E> g;
 
     /**
-     * Create an instance with a reference to the graph that we will find LCAs
-     * for
+     * Create an instance with a reference to the graph that we will find LCAs for
      */
     public TarjanLowestCommonAncestor(Graph<V, E> g)
     {
@@ -43,21 +41,20 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 
     /**
-     * Calculate the LCM between <code>a</code> and <code>b</code> treating
-     * <code>start</code> as the root we want to search from.
+     * Calculate the LCM between <code>a</code> and <code>b</code> treating <code>start</code> as
+     * the root we want to search from.
      */
     public V calculate(V start, V a, V b)
     {
-        List<LcaRequestResponse<V>> list =
-                new LinkedList<>();
+        List<LcaRequestResponse<V>> list = new LinkedList<>();
         list.add(new LcaRequestResponse<>(a, b));
         return calculate(start, list).get(0);
     }
 
     /**
      * Calculate the LCMs between a set of pairs (<code>a</code> and <code>
-     * b</code>) treating <code>start</code> as the root we want to search from,
-     * and setting the LCA of each pair in its LCA field
+     * b</code>) treating <code>start</code> as the root we want to search from, and setting the LCA
+     * of each pair in its LCA field
      */
     public List<V> calculate(V start, List<LcaRequestResponse<V>> lrr)
     {
@@ -73,7 +70,7 @@ public class TarjanLowestCommonAncestor<V, E>
         // representative of the set containing u, and Union(u,v) merges the set
         // containing u with the set containing v. </block>
         // (http://en.wikipedia.org/wiki/Tarjan's_off-line_lowest_common_ancestors_algorithm)
-        private UnionFind<V> uf = new UnionFind<>(Collections.<V>emptySet());
+        private UnionFind<V> uf = new UnionFind<>(Collections.<V> emptySet());
 
         // the ancestors. instead of <code>u.ancestor = x</code> we do
         // <code>ancestors.put(u,x)</code>

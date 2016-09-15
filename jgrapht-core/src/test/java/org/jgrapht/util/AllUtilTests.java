@@ -21,10 +21,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    FibonacciHeapTest.class,
-    PrefetchIteratorTest.class
-})
+@Suite.SuiteClasses({ FibonacciHeapTest.class, PrefetchIteratorTest.class })
 public class AllUtilTests
 {
 }

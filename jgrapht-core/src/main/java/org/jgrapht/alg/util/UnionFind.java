@@ -19,16 +19,13 @@ package org.jgrapht.alg.util;
 
 import java.util.*;
 
-
 /**
- * An implementation of <a
- * href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure">Union
- * Find</a> data structure. Union Find is a disjoint-set data structure. It
- * supports two operations: finding the set a specific element is in, and
- * merging two sets. The implementation uses union by rank and path compression
- * to achieve an amortized cost of O(a(n)) per operation where a is the inverse
- * Ackermann function. UnionFind uses the hashCode and equals method of the
- * elements it operates on.
+ * An implementation of <a href="http://en.wikipedia.org/wiki/Disjoint-set_data_structure">Union
+ * Find</a> data structure. Union Find is a disjoint-set data structure. It supports two operations:
+ * finding the set a specific element is in, and merging two sets. The implementation uses union by
+ * rank and path compression to achieve an amortized cost of O(a(n)) per operation where a is the
+ * inverse Ackermann function. UnionFind uses the hashCode and equals method of the elements it
+ * operates on.
  *
  * @author Tom Conerly
  * @since Feb 10, 2010
@@ -39,8 +36,7 @@ public class UnionFind<T>
     private Map<T, Integer> rankMap;
 
     /**
-     * Creates a UnionFind instance with all of the elements of elements in
-     * seperate sets.
+     * Creates a UnionFind instance with all of the elements of elements in seperate sets.
      */
     public UnionFind(Set<T> elements)
     {
@@ -89,8 +85,7 @@ public class UnionFind<T>
     public T find(T element)
     {
         if (!parentMap.containsKey(element)) {
-            throw new IllegalArgumentException(
-                "elements must be contained in given set");
+            throw new IllegalArgumentException("elements must be contained in given set");
         }
 
         T parent = parentMap.get(element);
@@ -111,17 +106,14 @@ public class UnionFind<T>
      */
     public void union(T element1, T element2)
     {
-        if (!parentMap.containsKey(element1)
-            || !parentMap.containsKey(element2))
-        {
-            throw new IllegalArgumentException(
-                "elements must be contained in given set");
+        if (!parentMap.containsKey(element1) || !parentMap.containsKey(element2)) {
+            throw new IllegalArgumentException("elements must be contained in given set");
         }
 
         T parent1 = find(element1);
         T parent2 = find(element2);
 
-        //check if the elements are already in the same set
+        // check if the elements are already in the same set
         if (parent1.equals(parent2)) {
             return;
         }

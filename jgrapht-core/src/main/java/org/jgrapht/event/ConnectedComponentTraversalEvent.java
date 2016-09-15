@@ -19,7 +19,6 @@ package org.jgrapht.event;
 
 import java.util.*;
 
-
 /**
  * A traversal event with respect to a connected component.
  *

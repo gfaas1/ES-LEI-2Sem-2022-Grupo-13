@@ -17,29 +17,25 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 public class KSPDiscardsValidPathsTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
-     * Example with a biconnected graph but not 3-connected. With a graph not
-     * 3-connected, the start vertex and the end vertex can be disconnected by 2
-     * paths.
+     * Example with a biconnected graph but not 3-connected. With a graph not 3-connected, the start
+     * vertex and the end vertex can be disconnected by 2 paths.
      */
     public void testNot3connectedGraph()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
         KShortestPaths<String, DefaultWeightedEdge> paths;
 
-        graph =
-                new WeightedMultigraph<>(
-                        DefaultWeightedEdge.class);
+        graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("S");
         graph.addVertex("T");
         graph.addVertex("A");
@@ -81,18 +77,16 @@ public class KSPDiscardsValidPathsTest
     }
 
     /**
-     * JUnit test for the bug reported by Bruno Maoili. Example with a connected
-     * graph but not 2-connected. With a graph not 2-connected, the start vertex
-     * and the end vertex can be disconnected by 1 path.
+     * JUnit test for the bug reported by Bruno Maoili. Example with a connected graph but not
+     * 2-connected. With a graph not 2-connected, the start vertex and the end vertex can be
+     * disconnected by 1 path.
      */
     public void testBrunoMaoili()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
         KShortestPaths<String, DefaultWeightedEdge> paths;
 
-        graph =
-                new WeightedMultigraph<>(
-                        DefaultWeightedEdge.class);
+        graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -118,10 +112,8 @@ public class KSPDiscardsValidPathsTest
     }
 
     private void addGraphEdge(
-        WeightedMultigraph<String, DefaultWeightedEdge> graph,
-        String sourceVertex,
-        String targetVertex,
-        double weight)
+        WeightedMultigraph<String, DefaultWeightedEdge> graph, String sourceVertex,
+        String targetVertex, double weight)
     {
         DefaultWeightedEdge edge = new DefaultWeightedEdge();
 

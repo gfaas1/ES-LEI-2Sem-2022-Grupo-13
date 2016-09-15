@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Tests for TopologicalOrderIterator.
  *
@@ -32,18 +31,16 @@ import org.jgrapht.graph.*;
 public class TopologicalOrderIteratorTest
     extends EnhancedTestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
     public void testRecipe()
     {
-        DirectedGraph<String, DefaultEdge> graph =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
-        String [] v = new String[9];
+        String[] v = new String[9];
 
         v[0] = "preheat oven";
         v[1] = "sift dry ingredients";
@@ -79,8 +76,7 @@ public class TopologicalOrderIteratorTest
         graph.addEdge(v[7], v[8]);
         graph.addEdge(v[6], v[8]);
 
-        Iterator<String> iter =
-                new TopologicalOrderIterator<>(graph);
+        Iterator<String> iter = new TopologicalOrderIterator<>(graph);
         int i = 0;
 
         while (iter.hasNext()) {
@@ -89,8 +85,7 @@ public class TopologicalOrderIteratorTest
         }
 
         // Test with a reversed view
-        DirectedGraph<String, DefaultEdge> reversed =
-                new EdgeReversedGraph<>(graph);
+        DirectedGraph<String, DefaultEdge> reversed = new EdgeReversedGraph<>(graph);
 
         iter = new TopologicalOrderIterator<>(reversed);
         i = v.length - 1;
@@ -106,11 +101,8 @@ public class TopologicalOrderIteratorTest
      */
     public void testEmptyGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
-        Iterator<String> iter =
-                new TopologicalOrderIterator<>(graph);
+        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Iterator<String> iter = new TopologicalOrderIterator<>(graph);
         assertFalse(iter.hasNext());
     }
 }

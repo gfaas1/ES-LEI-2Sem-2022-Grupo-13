@@ -22,17 +22,14 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm">
- * Floyd-Warshall algorithm</a> finds all shortest paths (all n^2 of them) in
- * O(n^3) time. It can also calculate the graph diameter. Note that during
- * construction time, no computations are performed! All computations are
- * performed the first time one of the member methods of this class is invoked.
- * The results are stored, so all subsequent calls to the same method are
- * computationally efficient. Warning: This code has not been tested (and
- * probably doesn't work) on multi-graphs. Code should be updated to work
- * properly on multi-graphs.
+ * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
+ * finds all shortest paths (all n^2 of them) in O(n^3) time. It can also calculate the graph
+ * diameter. Note that during construction time, no computations are performed! All computations are
+ * performed the first time one of the member methods of this class is invoked. The results are
+ * stored, so all subsequent calls to the same method are computationally efficient. Warning: This
+ * code has not been tested (and probably doesn't work) on multi-graphs. Code should be updated to
+ * work properly on multi-graphs.
  *
  * @author Tom Larkworthy
  * @author Soren Davidsen (soren@tanesha.net)
@@ -46,9 +43,9 @@ public class FloydWarshallShortestPaths<V, E>
 
     private int nShortestPaths = 0;
     private double diameter = Double.NaN;
-    private double [][] d = null;
-    private int [][] backtrace = null;
-    private int[][] lastHopMatrix=null;
+    private double[][] d = null;
+    private int[][] backtrace = null;
+    private int[][] lastHopMatrix = null;
     private Map<V, List<GraphPath<V, E>>> paths = null;
 
     public FloydWarshallShortestPaths(Graph<V, E> graph)
@@ -80,8 +77,7 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Calculates the matrix of all shortest paths, but does not populate the
-     * paths map.
+     * Calculates the matrix of all shortest paths, but does not populate the paths map.
      */
     private void lazyCalculateMatrix()
     {
@@ -118,17 +114,15 @@ public class FloydWarshallShortestPaths<V, E>
                 backtrace[v_1][v_2] = v_2;
                 backtrace[v_2][v_1] = v_1;
             }
-        } else { //This works for both Directed and Mixed graphs! Iterating over
-                 //the arcs and querying source/sink does not suffice for graphs
-                 //which contain both edges and arcs
+        } else { // This works for both Directed and Mixed graphs! Iterating over
+                 // the arcs and querying source/sink does not suffice for graphs
+                 // which contain both edges and arcs
             DirectedGraph<V, E> directedGraph = (DirectedGraph<V, E>) graph;
             for (V v1 : directedGraph.vertexSet()) {
                 int v_1 = vertexIndices.get(v1);
                 for (V v2 : Graphs.successorListOf(directedGraph, v1)) {
                     int v_2 = vertexIndices.get(v2);
-                    d[v_1][v_2] =
-                        directedGraph.getEdgeWeight(
-                            directedGraph.getEdge(v1, v2));
+                    d[v_1][v_2] = directedGraph.getEdgeWeight(directedGraph.getEdge(v1, v2));
                     backtrace[v_1][v_2] = v_2;
                 }
             }
@@ -164,8 +158,8 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * @return the diameter (longest of all the shortest paths) computed for the
-     * graph. If the graph is vertexless, return 0.0.
+     * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
+     *         is vertexless, return 0.0.
      */
     public double getDiameter()
     {
@@ -200,11 +194,11 @@ public class FloydWarshallShortestPaths<V, E>
         int v_a = vertexIndices.get(a);
         int v_b = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == -1) { //No path exists
+        if (backtrace[v_a][v_b] == -1) { // No path exists
             return null;
         }
 
-        //Reconstruct the path
+        // Reconstruct the path
         List<V> pathVertexList = new ArrayList<>();
         pathVertexList.add(a);
         List<E> edges = new ArrayList<>();
@@ -225,11 +219,11 @@ public class FloydWarshallShortestPaths<V, E>
         int v_a = vertexIndices.get(a);
         int v_b = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == -1) { //No path exists
+        if (backtrace[v_a][v_b] == -1) { // No path exists
             return null;
         }
 
-        //Reconstruct the path
+        // Reconstruct the path
         List<V> pathVertexList = new ArrayList<>();
         pathVertexList.add(a);
         int u = v_a;
@@ -271,43 +265,51 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is O(1).
-     * If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next invocation would
-     * query the first hop on the shortest path from c to b, vertex d would be returned, etc. This method is computationally
-     * cheaper than getShortestPathAsVertexList(a,b).get(0);
+     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is
+     * O(1). If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next
+     * invocation would query the first hop on the shortest path from c to b, vertex d would be
+     * returned, etc. This method is computationally cheaper than
+     * getShortestPathAsVertexList(a,b).get(0);
+     * 
      * @param a source vertex
      * @param b target vertex
-     * @return next hop on the shortest path from a to b, or null when there exists no path from a to b.
+     * @return next hop on the shortest path from a to b, or null when there exists no path from a
+     *         to b.
      */
-    public V getFirstHop(V a, V b){
+    public V getFirstHop(V a, V b)
+    {
         lazyCalculatePaths();
 
         int v_a = vertexIndices.get(a);
         int v_b = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == -1) //No path exists
+        if (backtrace[v_a][v_b] == -1) // No path exists
             return null;
         else
             return vertices.get(backtrace[v_a][v_b]);
     }
 
     /**
-     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup time is O(1).
-     * If the shortest path from a to b is a,c,d,e,b, this method returns e. If the next invocation would
-     * query the next hop on the shortest path from c to e, vertex d would be returned, etc. This method is computationally
-     * cheaper than getShortestPathAsVertexList(a,b).get(shortestPathListSize-1);. The first invocation of this method
-     * populates a last hop matrix.
+     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup
+     * time is O(1). If the shortest path from a to b is a,c,d,e,b, this method returns e. If the
+     * next invocation would query the next hop on the shortest path from c to e, vertex d would be
+     * returned, etc. This method is computationally cheaper than
+     * getShortestPathAsVertexList(a,b).get(shortestPathListSize-1);. The first invocation of this
+     * method populates a last hop matrix.
+     * 
      * @param a source vertex
      * @param b target vertex
-     * @return last hop on the shortest path from a to b, or null when there exists no path from a to b.
+     * @return last hop on the shortest path from a to b, or null when there exists no path from a
+     *         to b.
      */
-    public V getLastHop(V a, V b){
+    public V getLastHop(V a, V b)
+    {
         lazyCalculatePaths();
 
         int v_a = vertexIndices.get(a);
         int v_b = vertexIndices.get(b);
 
-        if (backtrace[v_a][v_b] == -1) //No path exists
+        if (backtrace[v_a][v_b] == -1) // No path exists
             return null;
         else {
             this.populateLastHopMatrix();
@@ -318,45 +320,47 @@ public class FloydWarshallShortestPaths<V, E>
     /**
      * Populate the last hop matrix, using the earlier computed backtrace matrix.
      */
-    private void populateLastHopMatrix(){
-        if(lastHopMatrix != null)
+    private void populateLastHopMatrix()
+    {
+        if (lastHopMatrix != null)
             return;
 
-        //Initialize matrix
-        lastHopMatrix=new int[vertices.size()][vertices.size()];
+        // Initialize matrix
+        lastHopMatrix = new int[vertices.size()][vertices.size()];
         for (int i = 0; i < vertices.size(); i++)
             Arrays.fill(lastHopMatrix[i], -1);
 
-        //Populate matrix
-        for(int i=0; i<vertices.size(); i++){
-            for(int j=0; j<vertices.size(); j++){
-                if(i==j || lastHopMatrix[i][j] != -1 || backtrace[i][j]==-1) continue;
+        // Populate matrix
+        for (int i = 0; i < vertices.size(); i++) {
+            for (int j = 0; j < vertices.size(); j++) {
+                if (i == j || lastHopMatrix[i][j] != -1 || backtrace[i][j] == -1)
+                    continue;
 
-                //Reconstruct the path from i to j
+                // Reconstruct the path from i to j
                 List<Integer> pathIndexList = new ArrayList<>();
                 pathIndexList.add(i);
-                int u = i,v;
+                int u = i, v;
                 while (u != j) {
                     v = backtrace[u][j];
                     pathIndexList.add(v);
                     u = v;
                 }
-                //Iterate over the path, setting the lastHopMatrix from i to path[v] equal to path[v-1], for all v=1...pathLength.
-                for(int w=0; w<pathIndexList.size()-1; w++){
-                    u=pathIndexList.get(w);
-                    v=pathIndexList.get(w+1);
-                    lastHopMatrix[i][v]=u;
+                // Iterate over the path, setting the lastHopMatrix from i to path[v] equal to
+                // path[v-1], for all v=1...pathLength.
+                for (int w = 0; w < pathIndexList.size() - 1; w++) {
+                    u = pathIndexList.get(w);
+                    v = pathIndexList.get(w + 1);
+                    lastHopMatrix[i][v] = u;
                 }
             }
         }
     }
 
     /**
-     * Calculate the shortest paths (not done per default) TODO: This method can
-     * be optimized. Instead of calculating each path individidually, use a
-     * constructive method. TODO: I.e. if we have a shortest path from i to j:
-     * [i,....j] and we know that the shortest path from j to k, we can simply
-     * glue the paths together to obtain the shortest path from i to k
+     * Calculate the shortest paths (not done per default) TODO: This method can be optimized.
+     * Instead of calculating each path individidually, use a constructive method. TODO: I.e. if we
+     * have a shortest path from i to j: [i,....j] and we know that the shortest path from j to k,
+     * we can simply glue the paths together to obtain the shortest path from i to k
      */
     private void lazyCalculatePaths()
     {

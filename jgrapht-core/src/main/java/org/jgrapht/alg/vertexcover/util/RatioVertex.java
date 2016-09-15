@@ -17,15 +17,17 @@
  */
 package org.jgrapht.alg.vertexcover.util;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a unique ordering.
+ * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a
+ * unique ordering.
  *
  * @author Joris Kinable
  */
-public class RatioVertex<V> implements Comparable<RatioVertex>{
+public class RatioVertex<V>
+    implements Comparable<RatioVertex>
+{
     /** original vertex **/
     public final V v;
 
@@ -36,77 +38,88 @@ public class RatioVertex<V> implements Comparable<RatioVertex>{
     public final int ID;
 
     /** degree of this vertex **/
-    protected int degree=0;
+    protected int degree = 0;
 
     /** Map of neighbors, and a count of the number of edges to this neighbor **/
     public final Map<RatioVertex<V>, Integer> neighbors;
 
-    public RatioVertex(int ID, V v, double weight){
-        this.ID=ID;
-        this.v=v;
-        this.weight=weight;
-        neighbors=new LinkedHashMap<>();
+    public RatioVertex(int ID, V v, double weight)
+    {
+        this.ID = ID;
+        this.v = v;
+        this.weight = weight;
+        neighbors = new LinkedHashMap<>();
     }
 
-    public void addNeighbor(RatioVertex<V> v){
-        if(!neighbors.containsKey(v))
-            neighbors.put(v,1);
+    public void addNeighbor(RatioVertex<V> v)
+    {
+        if (!neighbors.containsKey(v))
+            neighbors.put(v, 1);
         else
             neighbors.put(v, neighbors.get(v) + 1);
         degree++;
 
-        assert(neighbors.values().stream().mapToInt(Integer::intValue).sum() == degree);
+        assert (neighbors.values().stream().mapToInt(Integer::intValue).sum() == degree);
     }
 
-    public void removeNeighbor(RatioVertex<V> v){
-        degree-=neighbors.get(v);
+    public void removeNeighbor(RatioVertex<V> v)
+    {
+        degree -= neighbors.get(v);
         neighbors.remove(v);
     }
 
     /**
      * Returns the degree of the vertex
+     * 
      * @return degree of the vertex
      */
-    public int getDegree(){
+    public int getDegree()
+    {
         return degree;
     }
 
     /**
      * Returns the ratio between the vertex' weight and its degree
+     * 
      * @return the ratio between the vertex' weight and its degree
      */
-    public double getRatio(){
-        return weight/degree;
+    public double getRatio()
+    {
+        return weight / degree;
     }
 
     @Override
-    public int compareTo(RatioVertex other) {
-        if(this.ID == other.ID) //Same vertex
+    public int compareTo(RatioVertex other)
+    {
+        if (this.ID == other.ID) // Same vertex
             return 0;
-        int result=Double.compare(this.getRatio(), other.getRatio());
-        if(result == 0 ) //If vertices have the same value, resolve tie by an ID comparison
+        int result = Double.compare(this.getRatio(), other.getRatio());
+        if (result == 0) // If vertices have the same value, resolve tie by an ID comparison
             return Integer.compare(this.ID, other.ID);
         else
             return result;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode()
+    {
         return ID;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this==o)
+    public boolean equals(Object o)
+    {
+        if (this == o)
             return true;
-        else if(!(o instanceof RatioVertex))
+        else if (!(o instanceof RatioVertex))
             return false;
-        RatioVertex<V> other=(RatioVertex<V>)o;
-        return this.ID==other.ID;
+        RatioVertex<V> other = (RatioVertex<V>) o;
+        return this.ID == other.ID;
     }
 
     @Override
-    public String toString(){
-        return "v"+ID+"("+degree+")";
+    public String toString()
+    {
+        return "v" + ID + "(" + degree + ")";
     }
 }
