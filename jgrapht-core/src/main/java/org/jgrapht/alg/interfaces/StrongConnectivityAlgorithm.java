@@ -22,10 +22,9 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * An interface to the StrongConnectivityInspector algorithm classes. These
- * classes verify whether the graph is strongly connected.
+ * An interface to the StrongConnectivityInspector algorithm classes. These classes verify whether
+ * the graph is strongly connected.
  *
  * @param <V> vertex concept type
  * @param <E> edge concept type
@@ -51,23 +50,21 @@ public interface StrongConnectivityAlgorithm<V, E>
     boolean isStronglyConnected();
 
     /**
-     * Computes a {@link List} of {@link Set}s, where each set contains vertices
-     * which together form a strongly connected component within the given
-     * graph.
+     * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
+     * a strongly connected component within the given graph.
      *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly
-     * connected components
+     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
      */
     List<Set<V>> stronglyConnectedSets();
 
     /**
-     * <p>Computes a list of {@link DirectedSubgraph}s of the given graph. Each
-     * subgraph will represent a strongly connected component and will contain
-     * all vertices of that component. The subgraph will have an edge (u,v) iff
-     * u and v are contained in the strongly connected component.</p>
+     * <p>
+     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
+     * a strongly connected component and will contain all vertices of that component. The subgraph
+     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
+     * </p>
      *
-     * @return a list of subgraphs representing the strongly connected
-     * components
+     * @return a list of subgraphs representing the strongly connected components
      */
     List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
 }

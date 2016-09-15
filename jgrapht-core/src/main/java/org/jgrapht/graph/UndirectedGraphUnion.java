@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
-
 public class UndirectedGraphUnion<V, E>
     extends GraphUnion<V, E, UndirectedGraph<V, E>>
     implements UndirectedGraph<V, E>
@@ -30,9 +29,7 @@ public class UndirectedGraphUnion<V, E>
     private static final long serialVersionUID = -740199233080172450L;
 
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraph<V, E> g2,
-        WeightCombiner operator)
+        UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
@@ -44,22 +41,19 @@ public class UndirectedGraphUnion<V, E>
 
     @Deprecated
     UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2,
-        WeightCombiner operator)
+        UndirectedGraph<V, E> g1, UndirectedGraphUnion<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
     @Deprecated
-    UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        UndirectedGraphUnion<V, E> g2)
+    UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraphUnion<V, E> g2)
     {
         super(g1, g2);
     }
 
-    @Override public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(V vertex)
     {
         Set<E> res = edgesOf(vertex);
         return res.size();

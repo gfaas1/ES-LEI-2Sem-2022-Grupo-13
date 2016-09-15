@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A unit test for graph generic vertex/edge parameters.
  *
@@ -28,13 +27,13 @@ import org.jgrapht.*;
 public class GenericGraphsTest
     extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     Graph<Object, ? extends DefaultEdge> objectGraph;
     Graph<FooVertex, FooEdge> fooFooGraph;
     Graph<BarVertex, BarEdge> barBarGraph;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see junit.framework.TestCase#TestCase(java.lang.String)
@@ -44,7 +43,7 @@ public class GenericGraphsTest
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     // ~ Methods ---------------------------------------------------------------
 
@@ -101,8 +100,7 @@ public class GenericGraphsTest
 
     public void testAlissaHacker()
     {
-        DirectedGraph<String, CustomEdge> g =
-                new DefaultDirectedGraph<>(CustomEdge.class);
+        DirectedGraph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addEdge("a", "b");
@@ -129,14 +127,12 @@ public class GenericGraphsTest
     @Override
     protected void setUp()
     {
-        objectGraph =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+        objectGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
         fooFooGraph = new SimpleGraph<>(FooEdge.class);
         barBarGraph = new SimpleGraph<>(BarEdge.class);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     public static class CustomEdge
         extends DefaultEdge
@@ -146,8 +142,7 @@ public class GenericGraphsTest
         @Override
         public String toString()
         {
-            return "Alissa P. Hacker approves the edge from " + getSource()
-                + " to " + getTarget();
+            return "Alissa P. Hacker approves the edge from " + getSource() + " to " + getTarget();
         }
     }
 
@@ -176,11 +171,7 @@ public class GenericGraphsTest
 
         public EquivGraph()
         {
-            super(
-                    new ClassBasedEdgeFactory<>(
-                            DefaultEdge.class),
-                true,
-                true);
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), true, true);
         }
     }
 

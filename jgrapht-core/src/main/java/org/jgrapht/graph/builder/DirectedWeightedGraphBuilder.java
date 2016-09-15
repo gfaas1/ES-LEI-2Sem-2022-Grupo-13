@@ -19,26 +19,24 @@ package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
 
-
 /**
- * A builder class for directed weighted graphs}. If you want to extend this
- * class, see {@link DirectedWeightedGraphBuilderBase}.
+ * A builder class for directed weighted graphs}. If you want to extend this class, see
+ * {@link DirectedWeightedGraphBuilderBase}.
  */
-public final class DirectedWeightedGraphBuilder<V,
-    E, G extends DirectedGraph<V, E> & WeightedGraph<V, E>>
-    extends DirectedWeightedGraphBuilderBase<V,
-        E, G, DirectedWeightedGraphBuilder<V, E, G>>
+public final class DirectedWeightedGraphBuilder<V, E,
+    G extends DirectedGraph<V, E> & WeightedGraph<V, E>>
+    extends DirectedWeightedGraphBuilderBase<V, E, G, DirectedWeightedGraphBuilder<V, E, G>>
 {
     /**
-     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
-     * mutable.
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
-     * <p>The recomended way to use this constructor is: {@code new
+     * <p>
+     * The recomended way to use this constructor is: {@code new
      * DirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
      *
-     * <p>NOTE: {@code baseGraph} should not be an existing graph. If you want
-     * to add an existing graph to the graph being built, you should use the
-     * {@link #addVertex(Object)} method.
+     * <p>
+     * NOTE: {@code baseGraph} should not be an existing graph. If you want to add an existing graph
+     * to the graph being built, you should use the {@link #addVertex(Object)} method.
      *
      * @param baseGraph the graph object to base building on
      */
@@ -47,7 +45,8 @@ public final class DirectedWeightedGraphBuilder<V,
         super(baseGraph);
     }
 
-    @Override protected DirectedWeightedGraphBuilder<V, E, G> self()
+    @Override
+    protected DirectedWeightedGraphBuilder<V, E, G> self()
     {
         return this;
     }

@@ -18,18 +18,13 @@
 
 package org.jgrapht.alg;
 
-import junit.framework.TestCase;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
+import java.util.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * Tests for the Clique Minimal Separator Decomposition.
@@ -48,8 +43,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      */
     public void testSimpleGraph1()
     {
-        SimpleGraph<Integer, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -64,7 +58,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(5, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(4, cmsd.getMinimalTriangulation().vertexSet().size());
         assertEquals(5, cmsd.getMinimalTriangulation().edgeSet().size());
@@ -72,13 +66,9 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{1, 2, 3}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new Integer[] { 1, 2, 3 })))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{2, 3, 4}))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new Integer[] { 2, 3, 4 })))) {
                 atom2found = true;
             }
         }
@@ -89,15 +79,14 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false;
         for (Set<Integer> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{2, 3}))))
-            {
+            if (separator.equals(new HashSet<>(Arrays.asList(new Integer[] { 2, 3 })))) {
                 separator1found = true;
             }
         }
         assertEquals(1, cmsd.getSeparators().size());
         assertTrue(separator1found);
     }
+
     /**
      * Test pseudo graph based on:<br>
      * <code>o-o<br>
@@ -106,8 +95,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      */
     public void testPseudograph1()
     {
-        Pseudograph<Integer, DefaultEdge> g =
-                new Pseudograph<>(DefaultEdge.class);
+        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -127,7 +115,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(10, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(4, cmsd.getMinimalTriangulation().vertexSet().size());
         assertEquals(5, cmsd.getMinimalTriangulation().edgeSet().size());
@@ -135,13 +123,9 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false, atom2found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{1, 2, 3}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new Integer[] { 1, 2, 3 })))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{2, 3, 4}))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new Integer[] { 2, 3, 4 })))) {
                 atom2found = true;
             }
         }
@@ -152,9 +136,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check seprators
         boolean separator1found = false;
         for (Set<Integer> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{2, 3}))))
-            {
+            if (separator.equals(new HashSet<>(Arrays.asList(new Integer[] { 2, 3 })))) {
                 separator1found = true;
             }
         }
@@ -170,8 +152,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      */
     public void testSimpleGraph2()
     {
-        SimpleGraph<Integer, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -185,7 +166,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(4, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(4, cmsd.getMinimalTriangulation().vertexSet().size());
         assertEquals(5, cmsd.getMinimalTriangulation().edgeSet().size());
@@ -193,9 +174,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         // check atoms
         boolean atom1found = false;
         for (Set<Integer> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new Integer[]{1, 2, 3, 4}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new Integer[] { 1, 2, 3, 4 })))) {
                 atom1found = true;
             }
         }
@@ -207,15 +186,13 @@ public class CliqueMinimalSeparatorDecompositionTest
     }
 
     /**
-     * Test graph: An Introduction to Clique Minimal Separator Decomposition,
-     * Berry et al. 2010, Figure 1, DOI:10.3390/a3020197
-     * <a href="http://www.mdpi.com/1999-4893/3/2/197">
+     * Test graph: An Introduction to Clique Minimal Separator Decomposition, Berry et al. 2010,
+     * Figure 1, DOI:10.3390/a3020197 <a href="http://www.mdpi.com/1999-4893/3/2/197">
      * http://www.mdpi.com/1999-4893/3/2/197</a>
      */
     public void testBerry2010()
     {
-        SimpleGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addVertex("c");
@@ -252,29 +229,26 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(20, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<String, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(11, cmsd.getMinimalTriangulation().vertexSet().size());
         assertEquals(20 + 3, cmsd.getMinimalTriangulation().edgeSet().size());
 
         // check atoms
-        boolean atom1found = false, atom2found = false, 
-            atom3found = false, atom4found = false;
+        boolean atom1found = false, atom2found = false, atom3found = false, atom4found = false;
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"a", "b", "c", "k"}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "a", "b", "c", "k" })))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "d", "j", "k"}))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "c", "d", "j", "k" }))))
             {
                 atom2found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"h", "i", "j", "k"}))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "h", "i", "j", "k" }))))
             {
                 atom3found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"d", "e", "f", "g", "j", "k"}))))
+            } else if (atom.equals(
+                new HashSet<>(Arrays.asList(new String[] { "d", "e", "f", "g", "j", "k" }))))
             {
                 atom4found = true;
             }
@@ -286,19 +260,14 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertTrue(atom4found);
 
         // check seprators
-        boolean separator1found = false, separator2found = false, 
-            separator3found = false;
+        boolean separator1found = false, separator2found = false, separator3found = false;
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "k"}))))
-            {
+            if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "c", "k" })))) {
                 separator1found = true;
-            } else if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"j", "k"}))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "j", "k" })))) {
                 separator2found = true;
-            } else if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"d", "j", "k"}))))
+            } else if (separator
+                .equals(new HashSet<>(Arrays.asList(new String[] { "d", "j", "k" }))))
             {
                 separator3found = true;
             }
@@ -310,15 +279,14 @@ public class CliqueMinimalSeparatorDecompositionTest
     }
 
     /**
-     * Test graph: Decomposition by clique separators, Tarjan, 1985, Figure 1,
-     * DOI: 10.1016/0012-365X(85)90051-2
+     * Test graph: Decomposition by clique separators, Tarjan, 1985, Figure 1, DOI:
+     * 10.1016/0012-365X(85)90051-2
      * <a href="http://www.sciencedirect.com/science/article/pii/0012365X85900512">
      * http://www.sciencedirect.com/science/article/pii/0012365X85900512</a>
      */
     public void testTarjan1985()
     {
-        SimpleGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addVertex("c");
@@ -352,33 +320,30 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(17, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<String, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(11, cmsd.getMinimalTriangulation().vertexSet().size());
 
-        // disabled:  this currently returns 23 instead of 21
+        // disabled: this currently returns 23 instead of 21
         /*
-        assertEquals(17 + 4, cmsd.getMinimalTriangulation().edgeSet().size());
-        */
+         * assertEquals(17 + 4, cmsd.getMinimalTriangulation().edgeSet().size());
+         */
 
         // check atoms
-        boolean atom1found = false, atom2found = false, 
-            atom3found = false, atom4found = false;
+        boolean atom1found = false, atom2found = false, atom3found = false, atom4found = false;
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"a", "c", "d", "f"}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "a", "c", "d", "f" })))) {
                 atom1found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"b", "c", "g", "h"}))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "b", "c", "g", "h" }))))
             {
                 atom2found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"d", "e", "i", "j"}))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "d", "e", "i", "j" }))))
             {
                 atom3found = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "d", "f", "h", "i", "k"}))))
+            } else if (atom.equals(
+                new HashSet<>(Arrays.asList(new String[] { "c", "d", "f", "h", "i", "k" }))))
             {
                 atom4found = true;
             }
@@ -390,20 +355,13 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertTrue(atom4found);
 
         // check seprators
-        boolean separator1found = false, separator2found = false, 
-            separator3found = false;
+        boolean separator1found = false, separator2found = false, separator3found = false;
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "d", "f"}))))
-            {
+            if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "c", "d", "f" })))) {
                 separator1found = true;
-            } else if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "h"}))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "c", "h" })))) {
                 separator2found = true;
-            } else if (separator.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"d", "i"}))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "d", "i" })))) {
                 separator3found = true;
             }
         }
@@ -420,8 +378,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      */
     public void testGraph1()
     {
-        SimpleGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addVertex("c");
@@ -461,7 +418,7 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(20, g.edgeSet().size());
 
         CliqueMinimalSeparatorDecomposition<String, DefaultEdge> cmsd =
-                new CliqueMinimalSeparatorDecomposition<>(g);
+            new CliqueMinimalSeparatorDecomposition<>(g);
         // check triangulation
         assertEquals(14, cmsd.getMinimalTriangulation().vertexSet().size());
         assertEquals(20 + 3, cmsd.getMinimalTriangulation().edgeSet().size());
@@ -470,41 +427,27 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(9, cmsd.getAtoms().size());
         boolean[] atomsFound = new boolean[cmsd.getAtoms().size()];
         for (Set<String> atom : cmsd.getAtoms()) {
-            if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"a", "b", "d", "e"}))))
-            {
+            if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "a", "b", "d", "e" })))) {
                 atomsFound[0] = true;
-            } else if (atom.equals(new HashSet<>(
-                    Arrays.asList(new String[]{"c", "e"}))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "c", "e" })))) {
                 atomsFound[1] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "d", "g", "i" }))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "d", "g", "i" })))) {
                 atomsFound[2] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "d", "h", "i" }))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "d", "h", "i" })))) {
                 atomsFound[3] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "d", "e", "i", "j" }))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "d", "e", "i", "j" }))))
             {
                 atomsFound[4] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "e", "f", "j", "k" }))))
+            } else if (atom
+                .equals(new HashSet<>(Arrays.asList(new String[] { "e", "f", "j", "k" }))))
             {
                 atomsFound[5] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "i", "l" }))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "i", "l" })))) {
                 atomsFound[6] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "i", "j", "m" }))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "i", "j", "m" })))) {
                 atomsFound[7] = true;
-            } else if (atom.equals(new HashSet<>(
-                Arrays.asList(new String[] { "i", "j", "n" }))))
-            {
+            } else if (atom.equals(new HashSet<>(Arrays.asList(new String[] { "i", "j", "n" })))) {
                 atomsFound[8] = true;
             }
         }
@@ -515,74 +458,65 @@ public class CliqueMinimalSeparatorDecompositionTest
         assertEquals(6, cmsd.getSeparators().size());
         boolean[] separatorsFound = new boolean[cmsd.getSeparators().size()];
         for (Set<String> separator : cmsd.getSeparators()) {
-            if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "d", "e" }))))
-            {
+            if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "d", "e" })))) {
                 separatorsFound[0] = true;
-            } else if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "e" }))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "e" })))) {
                 separatorsFound[1] = true;
-            } else if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "d", "i" }))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "d", "i" })))) {
                 separatorsFound[2] = true;
-            } else if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "i" }))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "i" })))) {
                 separatorsFound[3] = true;
-            } else if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "e", "j" }))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "e", "j" })))) {
                 separatorsFound[4] = true;
-            } else if (separator.equals(new HashSet<>(
-                Arrays.asList(new String[] { "i", "j" }))))
-            {
+            } else if (separator.equals(new HashSet<>(Arrays.asList(new String[] { "i", "j" })))) {
                 separatorsFound[5] = true;
             }
         }
         for (int i = 0; i < separatorsFound.length; ++i)
             assertTrue("separator " + i, separatorsFound[i]);
 
-
         // check component counts
         assertEquals(6, cmsd.getFullComponentCount().size());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "d", "e" }))).intValue());
+        assertEquals(2, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "d", "e" })))
+            .intValue());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "e" }))).intValue());
+        assertEquals(2, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "e" })))
+            .intValue());
 
-        assertEquals(3, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "d", "i" }))).intValue());
+        assertEquals(3, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "d", "i" })))
+            .intValue());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "i" }))).intValue());
+        assertEquals(2, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "i" })))
+            .intValue());
 
-        assertEquals(2, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "e", "j" }))).intValue());
+        assertEquals(2, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "e", "j" })))
+            .intValue());
 
-        assertEquals(3, cmsd.getFullComponentCount().get(new HashSet<>(
-                Arrays.asList(new String[] { "i", "j" }))).intValue());
+        assertEquals(3, cmsd
+            .getFullComponentCount().get(new HashSet<>(Arrays.asList(new String[] { "i", "j" })))
+            .intValue());
     }
 
     /**
-     * Test random graphs.
-     * You may change the number of vertices and edges.
+     * Test random graphs. You may change the number of vertices and edges.
      */
     public void testRandomGraphs()
     {
         int rounds = 42;
-        while (rounds --> 0) {
+        while (rounds-- > 0) {
 
             // number of vertices
             final int n = 80 + rounds;
 
-            // number of edges, sparse but enough to get a connected graph, 
+            // number of edges, sparse but enough to get a connected graph,
             // 10% more than phase transition from disconnected to conntected.
-            final int m = (int) Math.ceil(1.1 * Math.log(n) / n
-                * (n * (n - 1) / 2));
+            final int m = (int) Math.ceil(1.1 * Math.log(n) / n * (n * (n - 1) / 2));
 
             // generate a connected random graph with n vertices and m edges
             GraphGenerator<Integer, DefaultEdge, Integer> generator;
@@ -590,11 +524,11 @@ public class CliqueMinimalSeparatorDecompositionTest
             ConnectivityInspector<Integer, DefaultEdge> inspector;
             do {
                 g = new SimpleGraph<>(DefaultEdge.class);
-                generator =
-                        new GnmRandomGraphGenerator<>(n, m);
+                generator = new GnmRandomGraphGenerator<>(n, m);
                 generator.generateGraph(g, new VertexFactory<Integer>()
                 {
                     int i;
+
                     public Integer createVertex()
                     {
                         return ++i;
@@ -606,10 +540,11 @@ public class CliqueMinimalSeparatorDecompositionTest
 
             // decompose graph
             CliqueMinimalSeparatorDecomposition<Integer, DefaultEdge> cmsd =
-                    new CliqueMinimalSeparatorDecomposition<>(g);
+                new CliqueMinimalSeparatorDecomposition<>(g);
 
             // check triangulation
-            assertEquals(cmsd.getMinimalTriangulation().edgeSet().size(), 
+            assertEquals(
+                cmsd.getMinimalTriangulation().edgeSet().size(),
                 g.edgeSet().size() + cmsd.getFillEdges().size());
 
             // check seprators
@@ -620,8 +555,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             assertTrue(cmsd.getSeparators().size() < cmsd.getAtoms().size());
 
             // check component count
-            assertEquals(cmsd.getSeparators().size(), 
-                cmsd.getFullComponentCount().size());
+            assertEquals(cmsd.getSeparators().size(), cmsd.getFullComponentCount().size());
 
             for (Set<Integer> separator : cmsd.getSeparators()) {
                 assertTrue(cmsd.getFullComponentCount().get(separator) >= 2);
@@ -630,16 +564,14 @@ public class CliqueMinimalSeparatorDecompositionTest
     }
 
     /**
-     * Check whether the subgraph of <code>graph</code> induced by the given
-     * <code>vertices</code> is complete, i.e. a clique.
+     * Check whether the subgraph of <code>graph</code> induced by the given <code>vertices</code>
+     * is complete, i.e. a clique.
      * 
      * @param graph the graph.
      * @param vertices the vertices to induce the subgraph from.
      * @return true if the induced subgraph is a clique.
      */
-    private static <V, E> boolean isClique(
-        UndirectedGraph<V, E> graph,
-        Set<V> vertices)
+    private static <V, E> boolean isClique(UndirectedGraph<V, E> graph, Set<V> vertices)
     {
         for (V v1 : vertices) {
             for (V v2 : vertices) {

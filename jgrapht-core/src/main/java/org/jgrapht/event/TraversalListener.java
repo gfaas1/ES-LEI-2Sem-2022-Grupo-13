@@ -26,45 +26,40 @@ package org.jgrapht.event;
 public interface TraversalListener<V, E>
 {
     /**
-     * Called to inform listeners that the traversal of the current connected
-     * component has finished.
+     * Called to inform listeners that the traversal of the current connected component has
+     * finished.
      *
      * @param e the traversal event.
      */
-    void connectedComponentFinished(
-        ConnectedComponentTraversalEvent e);
+    void connectedComponentFinished(ConnectedComponentTraversalEvent e);
 
     /**
-     * Called to inform listeners that a traversal of a new connected component
-     * has started.
+     * Called to inform listeners that a traversal of a new connected component has started.
      *
      * @param e the traversal event.
      */
     void connectedComponentStarted(ConnectedComponentTraversalEvent e);
 
     /**
-     * Called to inform the listener that the specified edge have been visited
-     * during the graph traversal. Depending on the traversal algorithm, edge
-     * might be visited more than once.
+     * Called to inform the listener that the specified edge have been visited during the graph
+     * traversal. Depending on the traversal algorithm, edge might be visited more than once.
      *
      * @param e the edge traversal event.
      */
     void edgeTraversed(EdgeTraversalEvent<E> e);
 
     /**
-     * Called to inform the listener that the specified vertex have been visited
-     * during the graph traversal. Depending on the traversal algorithm, vertex
-     * might be visited more than once.
+     * Called to inform the listener that the specified vertex have been visited during the graph
+     * traversal. Depending on the traversal algorithm, vertex might be visited more than once.
      *
      * @param e the vertex traversal event.
      */
     void vertexTraversed(VertexTraversalEvent<V> e);
 
     /**
-     * Called to inform the listener that the specified vertex have been
-     * finished during the graph traversal. Exact meaning of "finish" is
-     * algorithm-dependent; e.g. for DFS, it means that all vertices reachable
-     * via the vertex have been visited as well.
+     * Called to inform the listener that the specified vertex have been finished during the graph
+     * traversal. Exact meaning of "finish" is algorithm-dependent; e.g. for DFS, it means that all
+     * vertices reachable via the vertex have been visited as well.
      *
      * @param e the vertex traversal event.
      */

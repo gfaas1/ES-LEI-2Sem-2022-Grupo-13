@@ -19,7 +19,6 @@ package org.jgrapht.alg;
 
 import org.jgrapht.graph.*;
 
-
 /**
  * <img src="./Picture1.jpg">
  *
@@ -29,13 +28,13 @@ import org.jgrapht.graph.*;
 public class Picture1Graph
     extends SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = 5587737522611531029L;
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     public DefaultWeightedEdge e15;
 
@@ -63,7 +62,7 @@ public class Picture1Graph
 
     public DefaultWeightedEdge eS7;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * <img src="./Picture1.jpg">
@@ -76,7 +75,7 @@ public class Picture1Graph
         addEdges();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     private void addEdges()
     {

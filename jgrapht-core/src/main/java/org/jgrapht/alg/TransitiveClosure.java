@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.graph.*;
 
-
 /**
  * Constructs the transitive closure of the input graph.
  *

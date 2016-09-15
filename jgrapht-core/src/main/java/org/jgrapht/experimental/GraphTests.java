@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 public final class GraphTests<V, E>
 {
     private GraphTests()
@@ -36,8 +35,7 @@ public final class GraphTests<V, E>
     public static <V, E> boolean isComplete(Graph<V, E> g)
     {
         int n = g.vertexSet().size();
-        return g.edgeSet().size()
-            == (n * (n - 1) / 2);
+        return g.edgeSet().size() == (n * (n - 1) / 2);
     }
 
     public static <V, E> boolean isConnected(Graph<V, E> g)
@@ -48,9 +46,7 @@ public final class GraphTests<V, E>
         if (numEdges < (numVertices - 1)) {
             return false;
         }
-        if ((numVertices < 2)
-            || (numEdges > ((numVertices - 1) * (numVertices - 2) / 2)))
-        {
+        if ((numVertices < 2) || (numEdges > ((numVertices - 1) * (numVertices - 2) / 2))) {
             return true;
         }
 
@@ -76,15 +72,12 @@ public final class GraphTests<V, E>
 
     public static <V, E> boolean isTree(Graph<V, E> g)
     {
-        return isConnected(g)
-            && (g.edgeSet().size() == (g.vertexSet().size() - 1));
+        return isConnected(g) && (g.edgeSet().size() == (g.vertexSet().size() - 1));
     }
 
     public static <V, E> boolean isBipartite(Graph<V, E> g)
     {
-        if ((4 * g.edgeSet().size())
-            > (g.vertexSet().size() * g.vertexSet().size()))
-        {
+        if ((4 * g.edgeSet().size()) > (g.vertexSet().size() * g.vertexSet().size())) {
             return false;
         }
         if (isEmpty(g)) {

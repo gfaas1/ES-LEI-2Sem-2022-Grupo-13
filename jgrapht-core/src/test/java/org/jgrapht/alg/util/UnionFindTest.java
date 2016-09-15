@@ -21,7 +21,6 @@ import java.util.*;
 
 import junit.framework.*;
 
-
 /**
  * .
  *
@@ -30,7 +29,7 @@ import junit.framework.*;
 public class UnionFindTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
@@ -38,7 +37,7 @@ public class UnionFindTest
     public void testUnionFind()
     {
         TreeSet<String> set = new TreeSet<String>();
-        String [] strs = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        String[] strs = { "aaa", "bbb", "ccc", "ddd", "eee" };
         ArrayList<ArrayList<String>> sets = new ArrayList<ArrayList<String>>();
         for (String str : strs) {
             set.add(str);
@@ -100,9 +99,7 @@ public class UnionFindTest
     }
 
     private void testIdentical(
-        String [] universe,
-        ArrayList<ArrayList<String>> sets,
-        UnionFind<String> uf)
+        String[] universe, ArrayList<ArrayList<String>> sets, UnionFind<String> uf)
     {
         for (String a : universe) {
             for (String b : universe) {

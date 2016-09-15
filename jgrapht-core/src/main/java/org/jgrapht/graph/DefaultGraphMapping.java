@@ -21,12 +21,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * Implementation of the GraphMapping interface. The performance of <code>
- * getVertex/EdgeCorrespondence</code> is based on the performance of the
- * concrete Map class which is passed in the constructor. For example, using
- * hashmaps will provide O(1) performence.
+ * getVertex/EdgeCorrespondence</code> is based on the performance of the concrete Map class which
+ * is passed in the constructor. For example, using hashmaps will provide O(1) performence.
  *
  * @author Assaf
  * @since Jul 30, 2005
@@ -41,20 +39,15 @@ public class DefaultGraphMapping<V, E>
     private Graph<V, E> graph2;
 
     /**
-     * The maps themselves are used. There is no defensive-copy. Assumption: The
-     * key and value in the mappings are of valid graph objects. It is not
-     * checked.
+     * The maps themselves are used. There is no defensive-copy. Assumption: The key and value in
+     * the mappings are of valid graph objects. It is not checked.
      *
      * @param g1ToG2
      * @param g2ToG1
      * @param g1
      * @param g2
      */
-    public DefaultGraphMapping(
-        Map<V, V> g1ToG2,
-        Map<V, V> g2ToG1,
-        Graph<V, E> g1,
-        Graph<V, E> g2)
+    public DefaultGraphMapping(Map<V, V> g1ToG2, Map<V, V> g2ToG1, Graph<V, E> g1, Graph<V, E> g2)
     {
         this.graph1 = g1;
         this.graph2 = g2;
@@ -62,7 +55,8 @@ public class DefaultGraphMapping<V, E>
         this.graphMappingReverse = g2ToG1;
     }
 
-    @Override public E getEdgeCorrespondence(E currEdge, boolean forward)
+    @Override
+    public E getEdgeCorrespondence(E currEdge, boolean forward)
     {
         Graph<V, E> sourceGraph, targetGraph;
 
@@ -75,25 +69,18 @@ public class DefaultGraphMapping<V, E>
         }
 
         V mappedSourceVertex =
-            getVertexCorrespondence(
-                sourceGraph.getEdgeSource(currEdge),
-                forward);
+            getVertexCorrespondence(sourceGraph.getEdgeSource(currEdge), forward);
         V mappedTargetVertex =
-            getVertexCorrespondence(
-                sourceGraph.getEdgeTarget(currEdge),
-                forward);
+            getVertexCorrespondence(sourceGraph.getEdgeTarget(currEdge), forward);
         if ((mappedSourceVertex == null) || (mappedTargetVertex == null)) {
             return null;
         } else {
-            return targetGraph.getEdge(
-                mappedSourceVertex,
-                mappedTargetVertex);
+            return targetGraph.getEdge(mappedSourceVertex, mappedTargetVertex);
         }
     }
 
-    @Override public V getVertexCorrespondence(
-        V keyVertex,
-        boolean forward)
+    @Override
+    public V getVertexCorrespondence(V keyVertex, boolean forward)
     {
         Map<V, V> graphMapping;
         if (forward) {

@@ -25,38 +25,32 @@ public interface WeightCombiner
     /**
      * Sum of weights.
      */
-    WeightCombiner SUM =
-            (a, b) -> a + b;
+    WeightCombiner SUM = (a, b) -> a + b;
 
     /**
      * Multiplication of weights.
      */
-    WeightCombiner MULT =
-            (a, b) -> a * b;
+    WeightCombiner MULT = (a, b) -> a * b;
 
     /**
      * Minimum weight.
      */
-    WeightCombiner MIN =
-            (a, b) -> Math.min(a, b);
+    WeightCombiner MIN = (a, b) -> Math.min(a, b);
 
     /**
      * Maximum weight.
      */
-    WeightCombiner MAX =
-            (a, b) -> Math.max(a, b);
+    WeightCombiner MAX = (a, b) -> Math.max(a, b);
 
     /**
      * First weight.
      */
-    WeightCombiner FIRST =
-            (a, b) -> a;
+    WeightCombiner FIRST = (a, b) -> a;
 
     /**
      * Second weight.
      */
-    WeightCombiner SECOND =
-            (a, b) -> b;
+    WeightCombiner SECOND = (a, b) -> b;
 
     /**
      * Combines two weights.

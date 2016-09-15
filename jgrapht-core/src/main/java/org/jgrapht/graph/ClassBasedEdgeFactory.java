@@ -21,7 +21,6 @@ import java.io.*;
 
 import org.jgrapht.*;
 
-
 /**
  * An {@link EdgeFactory} for producing edges by using a class as a factory.
  *
@@ -29,8 +28,7 @@ import org.jgrapht.*;
  * @since Jul 14, 2003
  */
 public class ClassBasedEdgeFactory<V, E>
-    implements EdgeFactory<V, E>,
-        Serializable
+    implements EdgeFactory<V, E>, Serializable
 {
     private static final long serialVersionUID = 3618135658586388792L;
 
@@ -44,7 +42,8 @@ public class ClassBasedEdgeFactory<V, E>
     /**
      * @see EdgeFactory#createEdge(Object, Object)
      */
-    @Override public E createEdge(V source, V target)
+    @Override
+    public E createEdge(V source, V target)
     {
         try {
             return edgeClass.newInstance();

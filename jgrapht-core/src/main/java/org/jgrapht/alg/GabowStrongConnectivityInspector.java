@@ -23,12 +23,10 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
-
 /**
- * Allows obtaining the strongly connected components of a directed graph. The
- * implemented algorithm follows Cheriyan-Mehlhorn/Gabow's algorithm Presented
- * in Path-based depth-first search for strong and biconnected components by
- * Gabow (2000). The running time is order of O(|V|+|E|)
+ * Allows obtaining the strongly connected components of a directed graph. The implemented algorithm
+ * follows Cheriyan-Mehlhorn/Gabow's algorithm Presented in Path-based depth-first search for strong
+ * and biconnected components by Gabow (2000). The running time is order of O(|V|+|E|)
  *
  * @author Sarah Komla-Ebri
  * @since September, 2013
@@ -52,10 +50,10 @@ public class GabowStrongConnectivityInspector<V, E>
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
 
-    //store the numbers
+    // store the numbers
     private Deque<Integer> B = new ArrayDeque<>();
 
-    //number of vertices
+    // number of vertices
     private int c;
 
     /**
@@ -98,12 +96,10 @@ public class GabowStrongConnectivityInspector<V, E>
     }
 
     /**
-     * Computes a {@link List} of {@link Set}s, where each set contains vertices
-     * which together form a strongly connected component within the given
-     * graph.
+     * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
+     * a strongly connected component within the given graph.
      *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly
-     * connected components
+     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
      */
     public List<Set<V>> stronglyConnectedSets()
     {
@@ -113,7 +109,7 @@ public class GabowStrongConnectivityInspector<V, E>
             // create VertexData objects for all vertices, store them
             createVertexNumber();
 
-            // perform  DFS
+            // perform DFS
             for (VertexNumber<V> data : vertexToVertexNumber.values()) {
                 if (data.getNumber() == 0) {
                     dfsVisit(graph, data);
@@ -129,31 +125,28 @@ public class GabowStrongConnectivityInspector<V, E>
     }
 
     /**
-     * <p>Computes a list of {@link DirectedSubgraph}s of the given graph. Each
-     * subgraph will represent a strongly connected component and will contain
-     * all vertices of that component. The subgraph will have an edge (u,v) iff
-     * u and v are contained in the strongly connected component.</p>
+     * <p>
+     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
+     * a strongly connected component and will contain all vertices of that component. The subgraph
+     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
+     * </p>
      *
-     * <p>NOTE: Calling this method will first execute {@link
-     * GabowStrongConnectivityInspector#stronglyConnectedSets()}. If you don't
-     * need subgraphs, use that method.</p>
+     * <p>
+     * NOTE: Calling this method will first execute
+     * {@link GabowStrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
+     * subgraphs, use that method.
+     * </p>
      *
-     * @return a list of subgraphs representing the strongly connected
-     * components
+     * @return a list of subgraphs representing the strongly connected components
      */
     public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
     {
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
-            stronglyConnectedSubgraphs =
-                    new Vector<>(sets.size());
+            stronglyConnectedSubgraphs = new Vector<>(sets.size());
 
             for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(
-                        new DirectedSubgraph<>(
-                                graph,
-                                set,
-                                null));
+                stronglyConnectedSubgraphs.add(new DirectedSubgraph<>(graph, set, null));
             }
         }
 
@@ -161,9 +154,7 @@ public class GabowStrongConnectivityInspector<V, E>
     }
 
     /*
-     * Creates a VertexNumber object for every vertex in the graph and stores
-     * them
-     * in a HashMap.
+     * Creates a VertexNumber object for every vertex in the graph and stores them in a HashMap.
      */
 
     private void createVertexNumber()
@@ -172,9 +163,7 @@ public class GabowStrongConnectivityInspector<V, E>
         vertexToVertexNumber = new HashMap<>(c);
 
         for (V vertex : graph.vertexSet()) {
-            vertexToVertexNumber.put(
-                vertex,
-                    new VertexNumber<>(vertex, 0));
+            vertexToVertexNumber.put(vertex, new VertexNumber<>(vertex, 0));
         }
 
         stack = new ArrayDeque<>(c);
@@ -193,12 +182,11 @@ public class GabowStrongConnectivityInspector<V, E>
         // follow all edges
 
         for (E edge : visitedGraph.outgoingEdgesOf(v.getVertex())) {
-            w = vertexToVertexNumber.get(
-                visitedGraph.getEdgeTarget(edge));
+            w = vertexToVertexNumber.get(visitedGraph.getEdgeTarget(edge));
 
             if (w.getNumber() == 0) {
                 dfsVisit(graph, w);
-            } else { /*contract if necessary*/
+            } else { /* contract if necessary */
                 while (w.getNumber() < B.getLast()) {
                     B.removeLast();
                 }
@@ -206,8 +194,9 @@ public class GabowStrongConnectivityInspector<V, E>
         }
         Set<V> L = new HashSet<>();
         if (v.getNumber() == (B.getLast())) {
-            /* number vertices of the next
-                strong component */
+            /*
+             * number vertices of the next strong component
+             */
             B.removeLast();
 
             c++;
@@ -225,9 +214,7 @@ public class GabowStrongConnectivityInspector<V, E>
         V vertex;
         int number = 0;
 
-        private VertexNumber(
-            V vertex,
-            int number)
+        private VertexNumber(V vertex, int number)
         {
             this.vertex = vertex;
             this.number = number;

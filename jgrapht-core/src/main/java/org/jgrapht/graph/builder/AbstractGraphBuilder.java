@@ -20,21 +20,19 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Base class for builders of {@link Graph}
  *
  * @see DirectedGraphBuilderBase
  * @see UndirectedGraphBuilderBase
  */
-public abstract class AbstractGraphBuilder<V,
-    E, G extends Graph<V, E>, B extends AbstractGraphBuilder<V, E, G, B>>
+public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
+    B extends AbstractGraphBuilder<V, E, G, B>>
 {
     protected final G graph;
 
     /**
-     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be
-     * mutable.
+     * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * @param baseGraph the graph object to base building on
      */
@@ -72,7 +70,7 @@ public abstract class AbstractGraphBuilder<V,
      *
      * @see #addVertex(Object)
      */
-    public B addVertices(V ... vertices)
+    public B addVertices(V... vertices)
     {
         for (V vertex : vertices) {
             this.addVertex(vertex);
@@ -81,8 +79,8 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Adds an edge to the graph being built. The source and target vertices are
-     * added to the graph, if not already included.
+     * Adds an edge to the graph being built. The source and target vertices are added to the graph,
+     * if not already included.
      *
      * @param source source vertex of the edge.
      * @param target target vertex of the edge.
@@ -98,14 +96,14 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Adds a chain of edges to the graph being built. The vertices are added to
-     * the graph, if not already included.
+     * Adds a chain of edges to the graph being built. The vertices are added to the graph, if not
+     * already included.
      *
      * @return this builder object
      *
      * @see #addEdge(Object, Object)
      */
-    public B addEdgeChain(V first, V second, V ... rest)
+    public B addEdgeChain(V first, V second, V... rest)
     {
         this.addEdge(first, second);
         V last = second;
@@ -117,8 +115,7 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Adds all the vertices and all the edges of the {@code sourceGraph} to the
-     * graph being built.
+     * Adds all the vertices and all the edges of the {@code sourceGraph} to the graph being built.
      *
      * @return this builder object
      *
@@ -131,8 +128,7 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Removes {@code vertex} from the graph being built, if such vertex exist
-     * in graph.
+     * Removes {@code vertex} from the graph being built, if such vertex exist in graph.
      *
      * @param vertex the vertex to remove
      *
@@ -147,8 +143,8 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Removes each vertex of {@code vertices} from the graph being built, if
-     * such vertices exist in graph.
+     * Removes each vertex of {@code vertices} from the graph being built, if such vertices exist in
+     * graph.
      *
      * @param vertices the vertices to remove
      *
@@ -156,7 +152,7 @@ public abstract class AbstractGraphBuilder<V,
      *
      * @see #removeVertex(Object)
      */
-    public B removeVertices(V ... vertices)
+    public B removeVertices(V... vertices)
     {
         for (V vertex : vertices) {
             this.removeVertex(vertex);
@@ -165,8 +161,8 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Removes an edge going from source vertex to target vertex from the graph
-     * being built, if such vertices and such edge exist in the graph.
+     * Removes an edge going from source vertex to target vertex from the graph being built, if such
+     * vertices and such edge exist in the graph.
      *
      * @param source source vertex of the edge.
      * @param target target vertex of the edge.
@@ -182,8 +178,8 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Build the graph. Calling any method (including this method) on this
-     * builder object after calling this method is undefined behaviour.
+     * Build the graph. Calling any method (including this method) on this builder object after
+     * calling this method is undefined behaviour.
      *
      * @return the built graph.
      */
@@ -193,9 +189,8 @@ public abstract class AbstractGraphBuilder<V,
     }
 
     /**
-     * Build an unmodifiable version graph. Calling any method (including this
-     * method) on this builder object after calling this method is undefined
-     * behaviour.
+     * Build an unmodifiable version graph. Calling any method (including this method) on this
+     * builder object after calling this method is undefined behaviour.
      *
      * @return the built unmodifiable graph.
      *

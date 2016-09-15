@@ -18,10 +18,9 @@
 package org.jgrapht;
 
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.jgrapht.graph.*;
-
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -45,11 +44,7 @@ public abstract class Graphs
      *
      * @see Graph#addEdge(Object, Object)
      */
-    public static <V, E> E addEdge(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex,
-        double weight)
+    public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
         EdgeFactory<V, E> ef = g.getEdgeFactory();
         E e = ef.createEdge(sourceVertex, targetVertex);
@@ -64,9 +59,9 @@ public abstract class Graphs
     }
 
     /**
-     * Adds the specified source and target vertices to the graph, if not
-     * already included, and creates a new edge and adds it to the specified
-     * graph similarly to the {@link Graph#addEdge(Object, Object)} method.
+     * Adds the specified source and target vertices to the graph, if not already included, and
+     * creates a new edge and adds it to the specified graph similarly to the
+     * {@link Graph#addEdge(Object, Object)} method.
      *
      * @param g the graph for which the specified edge to be added.
      * @param sourceVertex source vertex of the edge.
@@ -75,10 +70,7 @@ public abstract class Graphs
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
      */
-    public static <V, E> E addEdgeWithVertices(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex)
+    public static <V, E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex)
     {
         g.addVertex(sourceVertex);
         g.addVertex(targetVertex);
@@ -87,21 +79,16 @@ public abstract class Graphs
     }
 
     /**
-     * Adds the specified edge to the graph, including its vertices if not
-     * already included.
+     * Adds the specified edge to the graph, including its vertices if not already included.
      *
      * @param targetGraph the graph for which the specified edge to be added.
-     * @param sourceGraph the graph in which the specified edge is already
-     * present
+     * @param sourceGraph the graph in which the specified edge is already present
      * @param edge edge to add
      *
-     * @return <tt>true</tt> if the target graph did not already contain the
-     * specified edge.
+     * @return <tt>true</tt> if the target graph did not already contain the specified edge.
      */
-    public static <V, E> boolean addEdgeWithVertices(
-        Graph<V, E> targetGraph,
-        Graph<V, E> sourceGraph,
-        E edge)
+    public static <V,
+        E> boolean addEdgeWithVertices(Graph<V, E> targetGraph, Graph<V, E> sourceGraph, E edge)
     {
         V sourceVertex = sourceGraph.getEdgeSource(edge);
         V targetVertex = sourceGraph.getEdgeTarget(edge);
@@ -113,10 +100,9 @@ public abstract class Graphs
     }
 
     /**
-     * Adds the specified source and target vertices to the graph, if not
-     * already included, and creates a new weighted edge and adds it to the
-     * specified graph similarly to the {@link Graph#addEdge(Object, Object)}
-     * method.
+     * Adds the specified source and target vertices to the graph, if not already included, and
+     * creates a new weighted edge and adds it to the specified graph similarly to the
+     * {@link Graph#addEdge(Object, Object)} method.
      *
      * @param g the graph for which the specified edge to be added.
      * @param sourceVertex source vertex of the edge.
@@ -126,11 +112,8 @@ public abstract class Graphs
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
      */
-    public static <V, E> E addEdgeWithVertices(
-        Graph<V, E> g,
-        V sourceVertex,
-        V targetVertex,
-        double weight)
+    public static <V,
+        E> E addEdgeWithVertices(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
         g.addVertex(sourceVertex);
         g.addVertex(targetVertex);
@@ -139,25 +122,25 @@ public abstract class Graphs
     }
 
     /**
-     * Adds all the vertices and all the edges of the specified source graph to
-     * the specified destination graph. First all vertices of the source graph
-     * are added to the destination graph. Then every edge of the source graph
-     * is added to the destination graph. This method returns <code>true</code>
-     * if the destination graph has been modified as a result of this operation,
+     * Adds all the vertices and all the edges of the specified source graph to the specified
+     * destination graph. First all vertices of the source graph are added to the destination graph.
+     * Then every edge of the source graph is added to the destination graph. This method returns
+     * <code>true</code> if the destination graph has been modified as a result of this operation,
      * otherwise it returns <code>false</code>.
      *
-     * <p>The behavior of this operation is undefined if any of the specified
-     * graphs is modified while operation is in progress.</p>
+     * <p>
+     * The behavior of this operation is undefined if any of the specified graphs is modified while
+     * operation is in progress.
+     * </p>
      *
      * @param destination the graph to which vertices and edges are added.
      * @param source the graph used as source for vertices and edges to add.
      *
-     * @return <code>true</code> if and only if the destination graph has been
-     * changed as a result of this operation.
+     * @return <code>true</code> if and only if the destination graph has been changed as a result
+     *         of this operation.
      */
-    public static <V, E> boolean addGraph(
-        Graph<? super V, ? super E> destination,
-        Graph<V, E> source)
+    public static <V,
+        E> boolean addGraph(Graph<? super V, ? super E> destination, Graph<V, E> source)
     {
         boolean modified = addAllVertices(destination, source.vertexSet());
         modified |= addAllEdges(destination, source, source.edgeSet());
@@ -166,13 +149,15 @@ public abstract class Graphs
     }
 
     /**
-     * Adds all the vertices and all the edges of the specified source digraph
-     * to the specified destination digraph, reversing all of the edges. If you
-     * want to do this as a linked view of the source graph (rather than by
-     * copying to a destination graph), use {@link EdgeReversedGraph} instead.
+     * Adds all the vertices and all the edges of the specified source digraph to the specified
+     * destination digraph, reversing all of the edges. If you want to do this as a linked view of
+     * the source graph (rather than by copying to a destination graph), use
+     * {@link EdgeReversedGraph} instead.
      *
-     * <p>The behavior of this operation is undefined if any of the specified
-     * graphs is modified while operation is in progress.</p>
+     * <p>
+     * The behavior of this operation is undefined if any of the specified graphs is modified while
+     * operation is in progress.
+     * </p>
      *
      * @param destination the graph to which vertices and edges are added.
      * @param source the graph used as source for vertices and edges to add.
@@ -180,24 +165,20 @@ public abstract class Graphs
      * @see EdgeReversedGraph
      */
     public static <V, E> void addGraphReversed(
-        DirectedGraph<? super V, ? super E> destination,
-        DirectedGraph<V, E> source)
+        DirectedGraph<? super V, ? super E> destination, DirectedGraph<V, E> source)
     {
         addAllVertices(destination, source.vertexSet());
 
         for (E edge : source.edgeSet()) {
-            destination.addEdge(
-                source.getEdgeTarget(edge),
-                source.getEdgeSource(edge));
+            destination.addEdge(source.getEdgeTarget(edge), source.getEdgeSource(edge));
         }
     }
 
     /**
-     * Adds a subset of the edges of the specified source graph to the specified
-     * destination graph. The behavior of this operation is undefined if either
-     * of the graphs is modified while the operation is in progress. {@link
-     * #addEdgeWithVertices} is used for the transfer, so source vertexes will
-     * be added automatically to the target graph.
+     * Adds a subset of the edges of the specified source graph to the specified destination graph.
+     * The behavior of this operation is undefined if either of the graphs is modified while the
+     * operation is in progress. {@link #addEdgeWithVertices} is used for the transfer, so source
+     * vertexes will be added automatically to the target graph.
      *
      * @param destination the graph to which edges are to be added
      * @param source the graph used as a source for edges to add
@@ -206,9 +187,7 @@ public abstract class Graphs
      * @return <tt>true</tt> if this graph changed as a result of the call
      */
     public static <V, E> boolean addAllEdges(
-        Graph<? super V, ? super E> destination,
-        Graph<V, E> source,
-        Collection<? extends E> edges)
+        Graph<? super V, ? super E> destination, Graph<V, E> source, Collection<? extends E> edges)
     {
         boolean modified = false;
 
@@ -224,25 +203,23 @@ public abstract class Graphs
     }
 
     /**
-     * Adds all of the specified vertices to the destination graph. The behavior
-     * of this operation is undefined if the specified vertex collection is
-     * modified while the operation is in progress. This method will invoke the
-     * {@link Graph#addVertex(Object)} method.
+     * Adds all of the specified vertices to the destination graph. The behavior of this operation
+     * is undefined if the specified vertex collection is modified while the operation is in
+     * progress. This method will invoke the {@link Graph#addVertex(Object)} method.
      *
      * @param destination the graph to which edges are to be added
      * @param vertices the vertices to be added to the graph.
      *
      * @return <tt>true</tt> if graph changed as a result of the call
      *
-     * @throws NullPointerException if the specified vertices contains one or
-     * more null vertices, or if the specified vertex collection is <tt>
+     * @throws NullPointerException if the specified vertices contains one or more null vertices, or
+     *         if the specified vertex collection is <tt>
      * null</tt>.
      *
      * @see Graph#addVertex(Object)
      */
     public static <V, E> boolean addAllVertices(
-        Graph<? super V, ? super E> destination,
-        Collection<? extends V> vertices)
+        Graph<? super V, ? super E> destination, Collection<? extends V> vertices)
     {
         boolean modified = false;
 
@@ -254,18 +231,15 @@ public abstract class Graphs
     }
 
     /**
-     * Returns a list of vertices that are the neighbors of a specified vertex.
-     * If the graph is a multigraph vertices may appear more than once in the
-     * returned list.
+     * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
+     * multigraph vertices may appear more than once in the returned list.
      *
      * @param g the graph to look for neighbors in.
      * @param vertex the vertex to get the neighbors of.
      *
-     * @return a list of the vertices that are the neighbors of the specified
-     * vertex.
+     * @return a list of the vertices that are the neighbors of the specified vertex.
      */
-    public static <V, E> List<V> neighborListOf(Graph<V, E> g,
-        V vertex)
+    public static <V, E> List<V> neighborListOf(Graph<V, E> g, V vertex)
     {
         List<V> neighbors = new ArrayList<>();
 
@@ -277,19 +251,15 @@ public abstract class Graphs
     }
 
     /**
-     * Returns a list of vertices that are the direct predecessors of a
-     * specified vertex. If the graph is a multigraph, vertices may appear more
-     * than once in the returned list.
+     * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
+     * graph is a multigraph, vertices may appear more than once in the returned list.
      *
      * @param g the graph to look for predecessors in.
      * @param vertex the vertex to get the predecessors of.
      *
-     * @return a list of the vertices that are the direct predecessors of the
-     * specified vertex.
+     * @return a list of the vertices that are the direct predecessors of the specified vertex.
      */
-    public static <V, E> List<V> predecessorListOf(
-        DirectedGraph<V, E> g,
-        V vertex)
+    public static <V, E> List<V> predecessorListOf(DirectedGraph<V, E> g, V vertex)
     {
         List<V> predecessors = new ArrayList<>();
         Set<? extends E> edges = g.incomingEdgesOf(vertex);
@@ -302,19 +272,15 @@ public abstract class Graphs
     }
 
     /**
-     * Returns a list of vertices that are the direct successors of a specified
-     * vertex. If the graph is a multigraph vertices may appear more than once
-     * in the returned list.
+     * Returns a list of vertices that are the direct successors of a specified vertex. If the graph
+     * is a multigraph vertices may appear more than once in the returned list.
      *
      * @param g the graph to look for successors in.
      * @param vertex the vertex to get the successors of.
      *
-     * @return a list of the vertices that are the direct successors of the
-     * specified vertex.
+     * @return a list of the vertices that are the direct successors of the specified vertex.
      */
-    public static <V, E> List<V> successorListOf(
-        DirectedGraph<V, E> g,
-        V vertex)
+    public static <V, E> List<V> successorListOf(DirectedGraph<V, E> g, V vertex)
     {
         List<V> successors = new ArrayList<>();
         Set<? extends E> edges = g.outgoingEdgesOf(vertex);
@@ -327,17 +293,16 @@ public abstract class Graphs
     }
 
     /**
-     * Returns an undirected view of the specified graph. If the specified graph
-     * is directed, returns an undirected view of it. If the specified graph is
-     * already undirected, just returns it.
+     * Returns an undirected view of the specified graph. If the specified graph is directed,
+     * returns an undirected view of it. If the specified graph is already undirected, just returns
+     * it.
      *
      * @param g the graph for which an undirected view is to be returned.
      *
-     * @return an undirected view of the specified graph, if it is directed, or
-     * or the specified graph itself if it is already undirected.
+     * @return an undirected view of the specified graph, if it is directed, or or the specified
+     *         graph itself if it is already undirected.
      *
-     * @throws IllegalArgumentException if the graph is neither DirectedGraph
-     * nor UndirectedGraph.
+     * @throws IllegalArgumentException if the graph is neither DirectedGraph nor UndirectedGraph.
      *
      * @see AsUndirectedGraph
      */
@@ -364,8 +329,7 @@ public abstract class Graphs
      */
     public static <V, E> boolean testIncidence(Graph<V, E> g, E e, V v)
     {
-        return (g.getEdgeSource(e).equals(v))
-            || (g.getEdgeTarget(e).equals(v));
+        return (g.getEdgeSource(e).equals(v)) || (g.getEdgeTarget(e).equals(v));
     }
 
     /**
@@ -386,8 +350,7 @@ public abstract class Graphs
         } else if (v.equals(target)) {
             return source;
         } else {
-            throw new IllegalArgumentException(
-                "no such vertex: " + v.toString());
+            throw new IllegalArgumentException("no such vertex: " + v.toString());
         }
     }
 
@@ -397,7 +360,8 @@ public abstract class Graphs
      * @param path path of interest
      *
      * @return corresponding vertex list
-     * @deprecated This functionality is now directly provided by any GraphPath, see {@link GraphPath#getVertexList()}
+     * @deprecated This functionality is now directly provided by any GraphPath, see
+     *             {@link GraphPath#getVertexList()}
      */
     public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
     {
@@ -412,21 +376,18 @@ public abstract class Graphs
         return list;
     }
 
-
     /**
-     * Removes the given vertex from the given graph. If the vertex to be
-     * removed has one or more predecessors, the predecessors will be
-     * connected directly to the successors of the vertex to be removed.
+     * Removes the given vertex from the given graph. If the vertex to be removed has one or more
+     * predecessors, the predecessors will be connected directly to the successors of the vertex to
+     * be removed.
      *
      * @param graph graph to be mutated.
      * @param vertex vertex to be removed from this graph, if present.
      *
-     * @return true if the graph contained the specified vertex; false
-     *         otherwise.
+     * @return true if the graph contained the specified vertex; false otherwise.
      */
-    public static <V, E> boolean removeVertexAndPreserveConnectivity(
-        DirectedGraph<V, E> graph,
-        V vertex)
+    public static <V,
+        E> boolean removeVertexAndPreserveConnectivity(DirectedGraph<V, E> graph, V vertex)
     {
 
         if (!graph.containsVertex(vertex)) {
@@ -447,19 +408,18 @@ public abstract class Graphs
     }
 
     /**
-     * Filters vertices from the given graph and subequently removes them. If
-     * the vertex to be removed has one or more predecessors, the predecessors will be
-     * connected directly to the successors of the vertex to be removed.
+     * Filters vertices from the given graph and subequently removes them. If the vertex to be
+     * removed has one or more predecessors, the predecessors will be connected directly to the
+     * successors of the vertex to be removed.
      *
      * @param graph graph to be mutated
-     * @param predicate a non-interfering stateless predicate to apply to each
-     *        vertex to determine if it should be removed from the graph.
+     * @param predicate a non-interfering stateless predicate to apply to each vertex to determine
+     *        if it should be removed from the graph.
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
     public static <V, E> boolean removeVerticesAndPreserveConnectivity(
-        DirectedGraph<V, E> graph,
-        Predicate<V> predicate)
+        DirectedGraph<V, E> graph, Predicate<V> predicate)
     {
 
         List<V> verticesToRemove = new ArrayList<>();
@@ -470,15 +430,13 @@ public abstract class Graphs
             }
         }
 
-        return removeVertexAndPreserveConnectivity(
-            graph,
-            verticesToRemove);
+        return removeVertexAndPreserveConnectivity(graph, verticesToRemove);
     }
 
     /**
-     * Removes all the given vertices from the given graph. If the vertex to be
-     * removed has one or more predecessors, the predecessors will be
-     * connected directly to the successors of the vertex to be removed.
+     * Removes all the given vertices from the given graph. If the vertex to be removed has one or
+     * more predecessors, the predecessors will be connected directly to the successors of the
+     * vertex to be removed.
      *
      * @param graph to be mutated.
      * @param vertices vertices to be removed from this graph, if present.
@@ -486,8 +444,7 @@ public abstract class Graphs
      * @return true if at least one vertex has been removed; false otherwise.
      */
     public static <V, E> boolean removeVertexAndPreserveConnectivity(
-        DirectedGraph<V, E> graph,
-        Iterable<V> vertices)
+        DirectedGraph<V, E> graph, Iterable<V> vertices)
     {
 
         boolean atLeastOneVertexHasBeenRemoved = false;
@@ -502,18 +459,15 @@ public abstract class Graphs
     }
 
     /**
-     * Add edges from one source vertex to multiple target vertices. Whether
-     * duplicates are created depends on the underlying {@link DirectedGraph}
-     * implementation.
+     * Add edges from one source vertex to multiple target vertices. Whether duplicates are created
+     * depends on the underlying {@link DirectedGraph} implementation.
      *
      * @param graph graph to be mutated
      * @param source source vertex of the new edges
      * @param targets target vertices for the new edges
      */
-    public static <V, E> void addOutgoingEdges(
-        DirectedGraph<V, E> graph,
-        V source,
-        Iterable<V> targets)
+    public static <V,
+        E> void addOutgoingEdges(DirectedGraph<V, E> graph, V source, Iterable<V> targets)
     {
         if (!graph.containsVertex(source)) {
             graph.addVertex(source);
@@ -527,18 +481,15 @@ public abstract class Graphs
     }
 
     /**
-     * Add edges from multiple source vertices to one target vertex. Whether
-     * duplicates are created depends on the underlying {@link DirectedGraph}
-     * implementation.
+     * Add edges from multiple source vertices to one target vertex. Whether duplicates are created
+     * depends on the underlying {@link DirectedGraph} implementation.
      *
      * @param graph graph to be mutated
      * @param target target vertex for the new edges
      * @param sources source vertices for the new edges
      */
-    public static <V, E> void addIncomingEdges(
-        DirectedGraph<V, E> graph,
-        V target,
-        Iterable<V> sources)
+    public static <V,
+        E> void addIncomingEdges(DirectedGraph<V, E> graph, V target, Iterable<V> sources)
     {
         if (!graph.containsVertex(target)) {
             graph.addVertex(target);
@@ -551,16 +502,12 @@ public abstract class Graphs
         }
     }
 
-    public static <V, E> boolean vertexHasSuccessors(
-        DirectedGraph<V, E> graph,
-        V vertex)
+    public static <V, E> boolean vertexHasSuccessors(DirectedGraph<V, E> graph, V vertex)
     {
         return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
 
-    public static <V, E> boolean vertexHasPredecessors(
-        DirectedGraph<V, E> graph,
-        V vertex)
+    public static <V, E> boolean vertexHasPredecessors(DirectedGraph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
     }

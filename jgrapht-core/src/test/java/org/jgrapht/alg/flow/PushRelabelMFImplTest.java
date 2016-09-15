@@ -17,16 +17,18 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import java.util.Set;
-
-public class PushRelabelMFImplTest extends MaximumFlowAlgorithmTest {
+public class PushRelabelMFImplTest
+    extends MaximumFlowAlgorithmTest
+{
 
     @Override
-    MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
+    MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+        Graph<Integer, DefaultWeightedEdge> network)
+    {
         return new PushRelabelMFImpl<>(network);
     }
 }

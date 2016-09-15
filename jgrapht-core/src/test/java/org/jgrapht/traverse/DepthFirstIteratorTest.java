@@ -22,13 +22,13 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
  *
- * <p>NOTE: This test uses hard-coded expected ordering isn't really guaranteed
- * by the specification of the algorithm. This could cause false failures if the
- * traversal implementation changes.</p>
+ * <p>
+ * NOTE: This test uses hard-coded expected ordering isn't really guaranteed by the specification of
+ * the algorithm. This could cause false failures if the traversal implementation changes.
+ * </p>
  *
  * @author Liviu Rau
  * @since Jul 30, 2003
@@ -36,7 +36,7 @@ import org.jgrapht.graph.*;
 public class DepthFirstIteratorTest
     extends AbstractGraphIteratorTest
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     @Override
     String getExpectedStr1()
@@ -58,24 +58,20 @@ public class DepthFirstIteratorTest
 
     @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        DirectedGraph<String, DefaultEdge> g, String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i =
-                new DepthFirstIterator<>(g, vertex);
+        AbstractGraphIterator<String, DefaultEdge> i = new DepthFirstIterator<>(g, vertex);
         i.setCrossComponentTraversal(true);
 
         return i;
     }
 
     /**
-     * See <a href="http://sf.net/projects/jgrapht">Sourceforge bug 1169182</a>
-     * for details.
+     * See <a href="http://sf.net/projects/jgrapht">Sourceforge bug 1169182</a> for details.
      */
     public void testBug1169182()
     {
-        DirectedGraph<String, DefaultEdge> dg =
-                new DefaultDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         String a = "A";
         String b = "B";

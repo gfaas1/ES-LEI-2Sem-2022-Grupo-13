@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * A unit test for directed multigraph.
  *
@@ -31,22 +30,20 @@ import org.jgrapht.*;
 public class DefaultDirectedGraphTest
     extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
     public void testEdgeSetFactory()
     {
-        DirectedMultigraph<String, DefaultEdge> g =
-                new DirectedMultigraph<>(
-                        DefaultEdge.class);
+        DirectedMultigraph<String, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
         g.setEdgeSetFactory(new LinkedHashSetFactory<>());
         initMultiTriangle(g);
     }
@@ -56,9 +53,7 @@ public class DefaultDirectedGraphTest
      */
     public void testEdgeOrderDeterminism()
     {
-        DirectedGraph<String, DefaultEdge> g =
-                new DirectedMultigraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
@@ -79,9 +74,7 @@ public class DefaultDirectedGraphTest
         assertEquals(v2, Graphs.getOppositeVertex(g, e1, v1));
         assertEquals(v1, Graphs.getOppositeVertex(g, e1, v2));
 
-        assertEquals(
-            "([v1, v2, v3], [(v1,v2), (v2,v3), (v3,v1)])",
-            g.toString());
+        assertEquals("([v1, v2, v3], [(v1,v2), (v2,v3), (v3,v1)])", g.toString());
     }
 
     /**
@@ -89,8 +82,7 @@ public class DefaultDirectedGraphTest
      */
     public void testEdgesOf()
     {
-        DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangle();
+        DirectedGraph<String, DefaultEdge> g = createMultiTriangle();
 
         assertEquals(3, g.edgesOf(v1).size());
         assertEquals(3, g.edgesOf(v2).size());
@@ -102,8 +94,7 @@ public class DefaultDirectedGraphTest
      */
     public void testInDegreeOf()
     {
-        DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangle();
+        DirectedGraph<String, DefaultEdge> g = createMultiTriangle();
 
         assertEquals(2, g.inDegreeOf(v1));
         assertEquals(1, g.inDegreeOf(v2));
@@ -115,8 +106,7 @@ public class DefaultDirectedGraphTest
      */
     public void testOutDegreeOf()
     {
-        DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangle();
+        DirectedGraph<String, DefaultEdge> g = createMultiTriangle();
 
         assertEquals(1, g.outDegreeOf(v1));
         assertEquals(2, g.outDegreeOf(v2));
@@ -128,27 +118,22 @@ public class DefaultDirectedGraphTest
      */
     public void testVertexOrderDeterminism()
     {
-        DirectedGraph<String, DefaultEdge> g =
-            createMultiTriangle();
+        DirectedGraph<String, DefaultEdge> g = createMultiTriangle();
         Iterator<String> iter = g.vertexSet().iterator();
         assertEquals(v1, iter.next());
         assertEquals(v2, iter.next());
         assertEquals(v3, iter.next());
     }
 
-    private DirectedGraph<String, DefaultEdge>
-    createMultiTriangle()
+    private DirectedGraph<String, DefaultEdge> createMultiTriangle()
     {
-        DirectedGraph<String, DefaultEdge> g =
-                new DirectedMultigraph<>(
-                        DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
         initMultiTriangle(g);
 
         return g;
     }
 
-    private void initMultiTriangle(
-        DirectedGraph<String, DefaultEdge> g)
+    private void initMultiTriangle(DirectedGraph<String, DefaultEdge> g)
     {
         g.addVertex(v1);
         g.addVertex(v2);
@@ -160,7 +145,7 @@ public class DefaultDirectedGraphTest
         g.addEdge(v3, v1);
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     private static class LinkedHashSetFactory<V, E>
         implements EdgeSetFactory<V, E>

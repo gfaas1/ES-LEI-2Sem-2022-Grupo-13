@@ -1,5 +1,6 @@
 /*
- * (C) Copyright 2013-2016, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2016, by Nikolay Ognyanov
+ and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,32 +21,25 @@ package org.jgrapht.alg.cycle;
 
 import static org.junit.Assert.assertTrue;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 public class DirectedSimpleCyclesTest
 {
-    private static int   MAX_SIZE = 9;
-    private static int[] RESULTS  =
-                                  { 0, 1, 3, 8, 24, 89, 415, 2372, 16072,
-                                  125673 };
+    private static int MAX_SIZE = 9;
+    private static int[] RESULTS = { 0, 1, 3, 8, 24, 89, 415, 2372, 16072, 125673 };
 
     @Test
     public void test()
     {
-        TiernanSimpleCycles<Integer, DefaultEdge> tiernanFinder =
-                new TiernanSimpleCycles<>();
-        TarjanSimpleCycles<Integer, DefaultEdge> tarjanFinder =
-                new TarjanSimpleCycles<>();
-        JohnsonSimpleCycles<Integer, DefaultEdge> johnsonFinder =
-                new JohnsonSimpleCycles<>();
+        TiernanSimpleCycles<Integer, DefaultEdge> tiernanFinder = new TiernanSimpleCycles<>();
+        TarjanSimpleCycles<Integer, DefaultEdge> tarjanFinder = new TarjanSimpleCycles<>();
+        JohnsonSimpleCycles<Integer, DefaultEdge> johnsonFinder = new JohnsonSimpleCycles<>();
         SzwarcfiterLauerSimpleCycles<Integer, DefaultEdge> szwarcfiterLauerFinder =
-                new SzwarcfiterLauerSimpleCycles<>();
+            new SzwarcfiterLauerSimpleCycles<>();
         HawickJamesSimpleCycles<Integer, DefaultEdge> hawickJamesFinder =
-                new HawickJamesSimpleCycles<>();
+            new HawickJamesSimpleCycles<>();
 
         testAlgorithm(tiernanFinder);
         testAlgorithm(tarjanFinder);
@@ -54,17 +48,10 @@ public class DirectedSimpleCyclesTest
         testAlgorithm(hawickJamesFinder);
     }
 
-    private void testAlgorithm(
-                               DirectedSimpleCycles<Integer, DefaultEdge>
-                               finder)
+    private void testAlgorithm(DirectedSimpleCycles<Integer, DefaultEdge> finder)
     {
-        DirectedGraph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>
-                (
-                        new ClassBasedEdgeFactory<>
-                                (
-                                        DefaultEdge.class
-                                )
-                );
+        DirectedGraph<Integer, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -84,13 +71,7 @@ public class DirectedSimpleCyclesTest
         checkResult(finder, 5);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new DefaultDirectedGraph<>
-                    (
-                            new ClassBasedEdgeFactory<>
-                                    (
-                                            DefaultEdge.class
-                                    )
-                    );
+            graph = new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }
@@ -104,9 +85,7 @@ public class DirectedSimpleCyclesTest
         }
     }
 
-    private void checkResult(DirectedSimpleCycles
-                             <Integer, DefaultEdge> finder,
-                             int size)
+    private void checkResult(DirectedSimpleCycles<Integer, DefaultEdge> finder, int size)
     {
         assertTrue(finder.findSimpleCycles().size() == size);
     }

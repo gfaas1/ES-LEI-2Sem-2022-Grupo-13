@@ -18,11 +18,10 @@
 package org.jgrapht;
 
 /**
- * GraphMapping represents a bidirectional mapping between two graphs (called
- * graph1 and graph2), which allows the caller to obtain the matching vertex or
- * edge in either direction, from graph1 to graph2, or from graph2 to graph1. It
- * does not have to always be a complete bidirectional mapping (it could return
- * null for some lookups).
+ * GraphMapping represents a bidirectional mapping between two graphs (called graph1 and graph2),
+ * which allows the caller to obtain the matching vertex or edge in either direction, from graph1 to
+ * graph2, or from graph2 to graph1. It does not have to always be a complete bidirectional mapping
+ * (it could return null for some lookups).
  *
  * @author Assaf Lehr
  * @since Jul 30, 2005
@@ -33,8 +32,8 @@ public interface GraphMapping<V, E>
      * Gets the mapped value where the key is <code>vertex</code>
      *
      * @param vertex vertex in one of the graphs
-     * @param forward if true, uses mapping from graph1 to graph2; if false, use
-     * mapping from graph2 to graph1
+     * @param forward if true, uses mapping from graph1 to graph2; if false, use mapping from graph2
+     *        to graph1
      *
      * @return corresponding vertex in other graph, or null if none
      */
@@ -44,8 +43,8 @@ public interface GraphMapping<V, E>
      * Gets the mapped value where the key is <code>edge</code>
      *
      * @param edge edge in one of the graphs
-     * @param forward if true, uses mapping from graph1 to graph2; if false, use
-     * mapping from graph2 to graph1
+     * @param forward if true, uses mapping from graph1 to graph2; if false, use mapping from graph2
+     *        to graph1
      *
      * @return corresponding edge in other graph, or null if none
      */

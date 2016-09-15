@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * .
@@ -45,9 +45,7 @@ public class DSVUtilsTest
         assertEquals("\"foo\rfoo\"", DSVUtils.escapeDSV(input4, ';'));
 
         String input5 = "\"foo\"\n\"foo\"";
-        assertEquals(
-            "\"\"\"foo\"\"\n\"\"foo\"\"\"",
-            DSVUtils.escapeDSV(input5, ';'));
+        assertEquals("\"\"\"foo\"\"\n\"\"foo\"\"\"", DSVUtils.escapeDSV(input5, ';'));
     }
 
     public void testUnescape()

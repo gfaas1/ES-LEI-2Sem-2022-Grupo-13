@@ -22,15 +22,14 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 
-
 /**
- * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's
- * algorithm.
+ * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's algorithm.
  *
- * <p>See:<br>
- * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed
- * graph in O(n + m) per cycle, Technical Report Series, #60, May 1974, Univ. of
- * Newcastle upon Tyne, Newcastle upon Tyne, England.
+ * <p>
+ * See:<br>
+ * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed graph in O(n + m) per
+ * cycle, Technical Report Series, #60, May 1974, Univ. of Newcastle upon Tyne, Newcastle upon Tyne,
+ * England.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -45,14 +44,14 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
 
     // The state of the algorithm.
     private List<List<V>> cycles = null;
-    private V [] iToV = null;
+    private V[] iToV = null;
     private Map<V, Integer> vToI = null;
     private Map<V, Set<V>> bSets = null;
     private ArrayDeque<V> stack = null;
     private Set<V> marked = null;
     private Map<V, Set<V>> removed = null;
-    private int [] position = null;
-    private boolean [] reach = null;
+    private int[] position = null;
+    private boolean[] reach = null;
     private List<V> startVertices = null;
 
     /**
@@ -81,7 +80,8 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public DirectedGraph<V, E> getGraph()
+    @Override
+    public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -89,7 +89,8 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void setGraph(DirectedGraph<V, E> graph)
+    @Override
+    public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -100,7 +101,8 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public List<List<V>> findSimpleCycles()
+    @Override
+    public List<List<V>> findSimpleCycles()
     {
         // Just a straightforward implementation of
         // the algorithm.
@@ -109,7 +111,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
         }
         initState();
         KosarajuStrongConnectivityInspector<V, E> inspector =
-                new KosarajuStrongConnectivityInspector<>(graph);
+            new KosarajuStrongConnectivityInspector<>(graph);
         List<Set<V>> sccs = inspector.stronglyConnectedSets();
         for (Set<V> scc : sccs) {
             int maxInDegree = -1;
@@ -223,7 +225,7 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     private void initState()
     {
         cycles = new ArrayList<>();
-        iToV = (V []) graph.vertexSet().toArray();
+        iToV = (V[]) graph.vertexSet().toArray();
         vToI = new HashMap<>();
         bSets = new HashMap<>();
         stack = new ArrayDeque<>();

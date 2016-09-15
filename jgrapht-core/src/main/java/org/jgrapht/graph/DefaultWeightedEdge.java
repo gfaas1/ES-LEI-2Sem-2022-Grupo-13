@@ -19,11 +19,10 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
- * A default implementation for edges in a {@link WeightedGraph}. All access to
- * the weight of an edge must go through the graph interface, which is why this
- * class doesn't expose any public methods.
+ * A default implementation for edges in a {@link WeightedGraph}. All access to the weight of an
+ * edge must go through the graph interface, which is why this class doesn't expose any public
+ * methods.
  *
  * @author John V. Sichi
  */
@@ -35,8 +34,8 @@ public class DefaultWeightedEdge
     double weight = WeightedGraph.DEFAULT_EDGE_WEIGHT;
 
     /**
-     * Retrieves the weight of this edge. This is protected, for use by
-     * subclasses only (e.g. for implementing toString).
+     * Retrieves the weight of this edge. This is protected, for use by subclasses only (e.g. for
+     * implementing toString).
      *
      * @return weight of this edge
      */

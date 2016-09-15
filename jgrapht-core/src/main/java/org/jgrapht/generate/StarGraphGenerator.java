@@ -21,11 +21,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star
- * graph</a> of any size. This is a graph where every vertex has exactly one
- * edge with a center vertex.
+ * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star graph</a> of any size.
+ * This is a graph where every vertex has exactly one edge with a center vertex.
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
@@ -50,29 +48,28 @@ public class StarGraphGenerator<V, E>
     /**
      * Generates a star graph with the designated order from the constructor
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (order < 1) {
             return;
         }
 
-        //Create center vertex
+        // Create center vertex
         V centerVertex = vertexFactory.createVertex();
         target.addVertex(centerVertex);
         if (resultMap != null) {
             resultMap.put(CENTER_VERTEX, centerVertex);
         }
 
-        //Create other vertices
+        // Create other vertices
         for (int i = 0; i < (order - 1); i++) {
             V newVertex = vertexFactory.createVertex();
             target.addVertex(newVertex);
         }
 
-        //Add one edge between the center vertex and every other vertex
+        // Add one edge between the center vertex and every other vertex
         for (V v : target.vertexSet()) {
             if (v != centerVertex) {
                 target.addEdge(v, centerVertex);

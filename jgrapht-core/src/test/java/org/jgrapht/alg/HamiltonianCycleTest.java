@@ -19,11 +19,10 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  * .
@@ -33,7 +32,7 @@ import org.jgrapht.graph.*;
 public class HamiltonianCycleTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -44,29 +43,19 @@ public class HamiltonianCycleTest
     public void testHamiltonianCycle()
     {
         SimpleWeightedGraph<Object, DefaultWeightedEdge> completeGraph =
-                new SimpleWeightedGraph<>(
-                        DefaultWeightedEdge.class);
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         CompleteGraphGenerator<Object, DefaultWeightedEdge> completeGraphGenerator =
-                new CompleteGraphGenerator<>(
-                        6);
-        completeGraphGenerator.generateGraph(
-            completeGraph,
-                new ClassBasedVertexFactory<>(Object.class),
-            null);
+            new CompleteGraphGenerator<>(6);
+        completeGraphGenerator
+            .generateGraph(completeGraph, new ClassBasedVertexFactory<>(Object.class), null);
 
         assertTrue(
-            HamiltonianCycle.getApproximateOptimalForCompleteGraph(
-                completeGraph).size() == 6);
+            HamiltonianCycle.getApproximateOptimalForCompleteGraph(completeGraph).size() == 6);
 
-        List<Object> vertices =
-                new LinkedList<>(completeGraph.vertexSet());
-        completeGraph.removeEdge(
-            completeGraph.getEdge(vertices.get(0),
-                vertices.get(1)));
+        List<Object> vertices = new LinkedList<>(completeGraph.vertexSet());
+        completeGraph.removeEdge(completeGraph.getEdge(vertices.get(0), vertices.get(1)));
 
-        assertTrue(
-            HamiltonianCycle.getApproximateOptimalForCompleteGraph(
-                completeGraph) == null);
+        assertTrue(HamiltonianCycle.getApproximateOptimalForCompleteGraph(completeGraph) == null);
     }
 }
 

@@ -20,13 +20,14 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Tests for the ignoreDirection parameter to XXFirstIterator.
  *
- * <p>NOTE: This test uses hard-coded expected ordering which isn't really
- * guaranteed by the specification of the algorithm. This could cause spurious
- * failures if the traversal implementation changes.</p>
+ * <p>
+ * NOTE: This test uses hard-coded expected ordering which isn't really guaranteed by the
+ * specification of the algorithm. This could cause spurious failures if the traversal
+ * implementation changes.
+ * </p>
  *
  * @author John V. Sichi
  * @since Aug 8, 2003
@@ -34,7 +35,7 @@ import org.jgrapht.graph.*;
 public class IgnoreDirectionTest
     extends AbstractGraphIteratorTest
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     @Override
     String getExpectedStr1()
@@ -56,15 +57,13 @@ public class IgnoreDirectionTest
 
     @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        DirectedGraph<String, DefaultEdge> g, String vertex)
     {
         // ignore the passed in vertex and always start from v4, since that's
         // the only vertex without out-edges
-        UndirectedGraph<String, DefaultEdge> undirectedView =
-                new AsUndirectedGraph<>(g);
+        UndirectedGraph<String, DefaultEdge> undirectedView = new AsUndirectedGraph<>(g);
         AbstractGraphIterator<String, DefaultEdge> i =
-                new DepthFirstIterator<>(undirectedView, "4");
+            new DepthFirstIterator<>(undirectedView, "4");
         i.setCrossComponentTraversal(true);
 
         return i;

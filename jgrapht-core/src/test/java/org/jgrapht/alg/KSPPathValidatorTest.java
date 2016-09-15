@@ -18,17 +18,13 @@
 
 package org.jgrapht.alg;
 
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.generate.RingGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * Tests for the {@link KShortestPaths} class using {@link PathValidator}.
@@ -36,27 +32,34 @@ import junit.framework.TestCase;
  * @author Assaf Mizrachi
  *
  */
-public class KSPPathValidatorTest extends TestCase {
+public class KSPPathValidatorTest
+    extends TestCase
+{
 
     /**
-     * Testing that using path validator that denies all requests
-     * finds no paths.
+     * Testing that using path validator that denies all requests finds no paths.
      */
-    public void testBlockAll() {
+    public void testBlockAll()
+    {
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                    clique, String.valueOf(i), 1, Integer.MAX_VALUE, new PathValidator<String, DefaultEdge>() {
+            KShortestPaths<String,
+                DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
+                    clique, String.valueOf(i), 1, Integer.MAX_VALUE,
+                    new PathValidator<String, DefaultEdge>()
+                    {
 
                         @Override
-                        public boolean isValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
-                                DefaultEdge edge) {
+                        public boolean isValidPath(
+                            AbstractPathElement<String, DefaultEdge> prevPathElement,
+                            DefaultEdge edge)
+                        {
                             // block all paths
                             return false;
                         }
                     });
-            
+
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
@@ -66,26 +69,31 @@ public class KSPPathValidatorTest extends TestCase {
             }
         }
     }
-    
+
     /**
-     * Testing that using path validator that accepts all requests
-     * finds full paths.
+     * Testing that using path validator that accepts all requests finds full paths.
      */
-    public void testAllowAll() {
-        int size = 5;        
+    public void testAllowAll()
+    {
+        int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                    clique, String.valueOf(i), 30, Integer.MAX_VALUE, new PathValidator<String, DefaultEdge>() {
+            KShortestPaths<String,
+                DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
+                    clique, String.valueOf(i), 30, Integer.MAX_VALUE,
+                    new PathValidator<String, DefaultEdge>()
+                    {
 
                         @Override
-                        public boolean isValidPath(AbstractPathElement<String, DefaultEdge> prevPathElement,
-                                DefaultEdge edge) {
+                        public boolean isValidPath(
+                            AbstractPathElement<String, DefaultEdge> prevPathElement,
+                            DefaultEdge edge)
+                        {
                             // block all paths
                             return true;
                         }
                     });
-            
+
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
@@ -96,28 +104,32 @@ public class KSPPathValidatorTest extends TestCase {
             }
         }
     }
-    
+
     /**
      * Testing a ring with only single path allowed between two vertices.
      */
-    public void testRing() {
-        int size = 10;        
+    public void testRing()
+    {
+        int size = 10;
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                    ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>() {
+                ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                {
 
-                        @Override
-                        public boolean isValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
-                                DefaultEdge edge) {
-                            if (prevPathElement == null) {
-                                return true;
-                            }
-                            return Math.abs(prevPathElement.getVertex() - 
-                                    Graphs.getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
+                    @Override
+                    public boolean isValidPath(
+                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                    {
+                        if (prevPathElement == null) {
+                            return true;
                         }
-                    });
-            
+                        return Math.abs(
+                            prevPathElement.getVertex() - Graphs
+                                .getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
+                    }
+                });
+
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
@@ -128,103 +140,118 @@ public class KSPPathValidatorTest extends TestCase {
             }
         }
     }
-    
+
     /**
-     * Testing a graph where the validator denies the request to go
-     * on an edge which cutting it makes the graph disconnected
+     * Testing a graph where the validator denies the request to go on an edge which cutting it
+     * makes the graph disconnected
      */
-    public void testDisconnected() {
-        int cliqueSize = 5;        
-        //generate graph of two cliques connected by single edge
+    public void testDisconnected()
+    {
+        int cliqueSize = 5;
+        // generate graph of two cliques connected by single edge
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                    graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>() {
+                graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+                {
 
-                        @Override
-                        public boolean isValidPath(AbstractPathElement<Integer, DefaultEdge> prevPathElement,
-                                DefaultEdge edge) {
-                            //accept all requests but the one to pass through the edge connecting
-                            //the two cliques.
-                            DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
-                            return connectingEdge != edge;
-                        }
-                    });
-            
+                    @Override
+                    public boolean isValidPath(
+                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
+                    {
+                        // accept all requests but the one to pass through the edge connecting
+                        // the two cliques.
+                        DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
+                        return connectingEdge != edge;
+                    }
+                });
+
             for (int j = 0; j < graph.vertexSet().size(); j++) {
                 if (j == i) {
                     continue;
                 }
                 List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
                 if ((i < cliqueSize && j < cliqueSize) || (i >= cliqueSize && j >= cliqueSize)) {
-                    //within the clique - path should exist
+                    // within the clique - path should exist
                     assertNotNull(paths);
                     assertTrue(paths.size() > 0);
                 } else {
-                    //else - should not
+                    // else - should not
                     assertNull(paths);
                 }
-                
+
             }
         }
     }
 
-    private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size) {
+    private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size)
+    {
         SimpleGraph<String, DefaultEdge> clique = new SimpleGraph<>(DefaultEdge.class);
-        CompleteGraphGenerator<String, DefaultEdge> graphGenerator = new CompleteGraphGenerator<>(size);
-        graphGenerator.generateGraph(clique, 
-                new VertexFactory<String>() {
+        CompleteGraphGenerator<String, DefaultEdge> graphGenerator =
+            new CompleteGraphGenerator<>(size);
+        graphGenerator.generateGraph(clique, new VertexFactory<String>()
+        {
 
             private int index = 0;
+
             @Override
-            public String createVertex() {
+            public String createVertex()
+            {
                 return String.valueOf(index++);
             }
         }, null);
-        
+
         return clique;
     }
-    
-    private SimpleGraph<Integer, DefaultEdge> buildGraphForTestDisconnected(int size) {
-        VertexFactory<Integer> vertexFactory = new VertexFactory<Integer>() {
-            
+
+    private SimpleGraph<Integer, DefaultEdge> buildGraphForTestDisconnected(int size)
+    {
+        VertexFactory<Integer> vertexFactory = new VertexFactory<Integer>()
+        {
+
             private int index = 0;
+
             @Override
-            public Integer createVertex() {
+            public Integer createVertex()
+            {
                 return index++;
             }
         };
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        
-        CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator = new CompleteGraphGenerator<>(size);
-        //two complete graphs
-        SimpleGraph<Integer, DefaultEdge> east = new SimpleGraph<>(DefaultEdge.class);        
+
+        CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
+            new CompleteGraphGenerator<>(size);
+        // two complete graphs
+        SimpleGraph<Integer, DefaultEdge> east = new SimpleGraph<>(DefaultEdge.class);
         completeGraphGenerator.generateGraph(east, vertexFactory, null);
-        
-        SimpleGraph<Integer, DefaultEdge> west = new SimpleGraph<>(DefaultEdge.class);        
+
+        SimpleGraph<Integer, DefaultEdge> west = new SimpleGraph<>(DefaultEdge.class);
         completeGraphGenerator.generateGraph(west, vertexFactory, null);
-        
+
         Graphs.addGraph(graph, east);
         Graphs.addGraph(graph, west);
-        //connected by single edge
+        // connected by single edge
         graph.addEdge(size - 1, size);
-        
+
         return graph;
     }
-    
-    private SimpleGraph<Integer, DefaultEdge> buildRingGraph(int size) {
+
+    private SimpleGraph<Integer, DefaultEdge> buildRingGraph(int size)
+    {
         SimpleGraph<Integer, DefaultEdge> clique = new SimpleGraph<>(DefaultEdge.class);
         RingGraphGenerator<Integer, DefaultEdge> graphGenerator = new RingGraphGenerator<>(size);
-        graphGenerator.generateGraph(clique, 
-                new VertexFactory<Integer>() {
+        graphGenerator.generateGraph(clique, new VertexFactory<Integer>()
+        {
 
             private int index = 0;
+
             @Override
-            public Integer createVertex() {
+            public Integer createVertex()
+            {
                 return index++;
             }
         }, null);
-        
+
         return clique;
     }
 }

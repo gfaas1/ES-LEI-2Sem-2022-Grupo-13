@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 abstract class VF2MappingIterator<V, E>
     implements Iterator<GraphMapping<V, E>>
 {
@@ -36,10 +35,8 @@ abstract class VF2MappingIterator<V, E>
     protected ArrayDeque<VF2State<V, E>> stateStack;
 
     public VF2MappingIterator(
-        GraphOrdering<V, E> ordering1,
-        GraphOrdering<V, E> ordering2,
-        Comparator<V> vertexComparator,
-        Comparator<E> edgeComparator)
+        GraphOrdering<V, E> ordering1, GraphOrdering<V, E> ordering2,
+        Comparator<V> vertexComparator, Comparator<E> edgeComparator)
     {
         this.ordering1 = ordering1;
         this.ordering2 = ordering2;
@@ -49,8 +46,8 @@ abstract class VF2MappingIterator<V, E>
     }
 
     /**
-     * This function moves over all mappings between graph1 and graph2. It
-     * changes the state of the whole iterator.
+     * This function moves over all mappings between graph1 and graph2. It changes the state of the
+     * whole iterator.
      *
      * @return null or one matching between graph1 and graph2
      */
@@ -65,12 +62,15 @@ abstract class VF2MappingIterator<V, E>
         return rel;
     }
 
-    @Override public boolean hasNext() {
+    @Override
+    public boolean hasNext()
+    {
         return nextMapping != null || (nextMapping = matchAndCheck()) != null;
 
     }
 
-    @Override public IsomorphicGraphMapping<V, E> next()
+    @Override
+    public IsomorphicGraphMapping<V, E> next()
     {
         if (nextMapping != null) {
             IsomorphicGraphMapping<V, E> tmp = nextMapping;
@@ -85,7 +85,8 @@ abstract class VF2MappingIterator<V, E>
         return rel;
     }
 
-    @Override public void remove()
+    @Override
+    public void remove()
     {
         throw new UnsupportedOperationException();
     }

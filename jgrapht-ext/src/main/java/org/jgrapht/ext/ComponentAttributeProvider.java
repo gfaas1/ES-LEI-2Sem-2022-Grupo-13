@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Provides display attributes for vertices and/or edges in a graph.
@@ -27,9 +27,8 @@ import java.util.Map;
 public interface ComponentAttributeProvider<T>
 {
     /**
-     * Returns a set of attribute key/value pairs for a vertex or edge. If order
-     * is important in the output, be sure to use an order-deterministic map
-     * implementation.
+     * Returns a set of attribute key/value pairs for a vertex or edge. If order is important in the
+     * output, be sure to use an order-deterministic map implementation.
      *
      * @param component vertex or edge for which attributes are to be obtained
      *

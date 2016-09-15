@@ -21,13 +21,13 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.
  *
- * <p>See:<br>
- * J.C.Tiernan An Efficient Search Algorithm Find the Elementary Circuits of a
- * Graph., Communications of the ACM, vol.13, 12, (1970), pp. 722 - 726.
+ * <p>
+ * See:<br>
+ * J.C.Tiernan An Efficient Search Algorithm Find the Elementary Circuits of a Graph.,
+ * Communications of the ACM, vol.13, 12, (1970), pp. 722 - 726.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -65,7 +65,8 @@ public class TiernanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public DirectedGraph<V, E> getGraph()
+    @Override
+    public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -73,7 +74,8 @@ public class TiernanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void setGraph(DirectedGraph<V, E> graph)
+    @Override
+    public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -84,7 +86,8 @@ public class TiernanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public List<List<V>> findSimpleCycles()
+    @Override
+    public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");
@@ -126,12 +129,8 @@ public class TiernanSimpleCycles<V, E>
                 extensionFound = false;
                 for (E e : graph.outgoingEdgesOf(endOfPath)) {
                     V n = graph.getEdgeTarget(e);
-                    int cmp =
-                        indices.get(n).compareTo(indices.get(path.get(0)));
-                    if ((cmp > 0)
-                        && !pathSet.contains(n)
-                        && !blocked.get(endOfPath).contains(n))
-                    {
+                    int cmp = indices.get(n).compareTo(indices.get(path.get(0)));
+                    if ((cmp > 0) && !pathSet.contains(n) && !blocked.get(endOfPath).contains(n)) {
                         path.add(n);
                         pathSet.add(n);
                         endOfPath = n;

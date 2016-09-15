@@ -22,10 +22,8 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
-
 /**
- * Provides a cross-connected-component traversal functionality for iterator
- * subclasses.
+ * Provides a cross-connected-component traversal functionality for iterator subclasses.
  *
  * @param <V> vertex type
  * @param <E> edge type
@@ -52,14 +50,12 @@ public abstract class CrossComponentIterator<V, E, D>
         WHITE,
 
         /**
-         * Vertex has been returned via iterator, but we're not done with all of
-         * its out-edges yet.
+         * Vertex has been returned via iterator, but we're not done with all of its out-edges yet.
          */
         GRAY,
 
         /**
-         * Vertex has been returned via iterator, and we're done with all of its
-         * out-edges.
+         * Vertex has been returned via iterator, and we're done with all of its out-edges.
          */
         BLACK
     }
@@ -67,18 +63,16 @@ public abstract class CrossComponentIterator<V, E, D>
     //
     private final ConnectedComponentTraversalEvent ccFinishedEvent =
         new ConnectedComponentTraversalEvent(
-            this,
-            ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_FINISHED);
+            this, ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_FINISHED);
     private final ConnectedComponentTraversalEvent ccStartedEvent =
         new ConnectedComponentTraversalEvent(
-            this,
-            ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_STARTED);
+            this, ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_STARTED);
 
     private Iterator<V> vertexIterator = null;
 
     /**
-     * Stores the vertices that have been seen during iteration and (optionally)
-     * some additional traversal info regarding each vertex.
+     * Stores the vertices that have been seen during iteration and (optionally) some additional
+     * traversal info regarding each vertex.
      */
     private Map<V, D> seen = new HashMap<>();
     private V startVertex;
@@ -91,15 +85,15 @@ public abstract class CrossComponentIterator<V, E, D>
     private int state = CCS_BEFORE_COMPONENT;
 
     /**
-     * Creates a new iterator for the specified graph. Iteration will start at
-     * the specified start vertex. If the specified start vertex is <code>
+     * Creates a new iterator for the specified graph. Iteration will start at the specified start
+     * vertex. If the specified start vertex is <code>
      * null</code>, Iteration will start at an arbitrary graph vertex.
      *
      * @param g the graph to be iterated.
      * @param startVertex the vertex iteration to be started.
      *
-     * @throws IllegalArgumentException if <code>g==null</code> or does not
-     * contain <code>startVertex</code>
+     * @throws IllegalArgumentException if <code>g==null</code> or does not contain
+     *         <code>startVertex</code>
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
@@ -127,8 +121,7 @@ public abstract class CrossComponentIterator<V, E, D>
         } else if (g.containsVertex(startVertex)) {
             this.startVertex = startVertex;
         } else {
-            throw new IllegalArgumentException(
-                "graph must contain the start vertex");
+            throw new IllegalArgumentException("graph must contain the start vertex");
         }
     }
 
@@ -143,7 +136,8 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * @see java.util.Iterator#hasNext()
      */
-    @Override public boolean hasNext()
+    @Override
+    public boolean hasNext()
     {
         if (startVertex != null) {
             encounterStartVertex();
@@ -181,7 +175,8 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * @see java.util.Iterator#next()
      */
-    @Override public V next()
+    @Override
+    public V next()
     {
         if (startVertex != null) {
             encounterStartVertex();
@@ -209,11 +204,11 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Returns <tt>true</tt> if there are no more uniterated vertices in the
-     * currently iterated connected component; <tt>false</tt> otherwise.
+     * Returns <tt>true</tt> if there are no more uniterated vertices in the currently iterated
+     * connected component; <tt>false</tt> otherwise.
      *
-     * @return <tt>true</tt> if there are no more uniterated vertices in the
-     * currently iterated connected component; <tt>false</tt> otherwise.
+     * @return <tt>true</tt> if there are no more uniterated vertices in the currently iterated
+     *         connected component; <tt>false</tt> otherwise.
      */
     protected abstract boolean isConnectedComponentExhausted();
 
@@ -221,14 +216,14 @@ public abstract class CrossComponentIterator<V, E, D>
      * Update data structures the first time we see a vertex.
      *
      * @param vertex the vertex encountered
-     * @param edge the edge via which the vertex was encountered, or null if the
-     * vertex is a starting point
+     * @param edge the edge via which the vertex was encountered, or null if the vertex is a
+     *        starting point
      */
     protected abstract void encounterVertex(V vertex, E edge);
 
     /**
-     * Returns the vertex to be returned in the following call to the iterator
-     * <code>next</code> method.
+     * Returns the vertex to be returned in the following call to the iterator <code>next</code>
+     * method.
      *
      * @return the next vertex to be returned by this iterator.
      */
@@ -239,9 +234,9 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @param vertex a vertex which has already been seen.
      *
-     * @return data associated with the seen vertex or <code>null</code> if no
-     * data was associated with the vertex. A <code>null</code> return can also
-     * indicate that the vertex was explicitly associated with <code>
+     * @return data associated with the seen vertex or <code>null</code> if no data was associated
+     *         with the vertex. A <code>null</code> return can also indicate that the vertex was
+     *         explicitly associated with <code>
      * null</code>.
      */
     protected D getSeenData(V vertex)
@@ -262,8 +257,7 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Called whenever we re-encounter a vertex. The default implementation does
-     * nothing.
+     * Called whenever we re-encounter a vertex. The default implementation does nothing.
      *
      * @param vertex the vertex re-encountered
      * @param edge the edge via which the vertex was re-encountered
@@ -278,8 +272,8 @@ public abstract class CrossComponentIterator<V, E, D>
      *
      * @return previous value associated with specified vertex or <code>
      * null</code> if no data was associated with the vertex. A <code>
-     * null</code> return can also indicate that the vertex was explicitly
-     * associated with <code>null</code>.
+     * null</code> return can also indicate that the vertex was explicitly associated with
+     *         <code>null</code>.
      */
     protected D putSeenData(V vertex, D data)
     {
@@ -287,8 +281,8 @@ public abstract class CrossComponentIterator<V, E, D>
     }
 
     /**
-     * Called when a vertex has been finished (meaning is dependent on traversal
-     * represented by subclass).
+     * Called when a vertex has been finished (meaning is dependent on traversal represented by
+     * subclass).
      *
      * @param vertex vertex which has been finished
      */
@@ -297,7 +291,7 @@ public abstract class CrossComponentIterator<V, E, D>
         if (nListeners != 0) {
             fireVertexFinished(createVertexTraversalEvent(vertex));
         }
-    }    
+    }
 
     private void addUnseenChildrenOf(V vertex)
     {
@@ -367,7 +361,7 @@ public abstract class CrossComponentIterator<V, E, D>
          */
         public T remove();
     }
-    
+
 }
 
 // End CrossComponentIterator.java

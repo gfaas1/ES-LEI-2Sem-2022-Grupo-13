@@ -19,7 +19,6 @@ package org.jgrapht.alg;
 
 import org.jgrapht.graph.*;
 
-
 /**
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -27,13 +26,13 @@ import org.jgrapht.graph.*;
 public class NotBiconnectedGraph
     extends SimpleGraph<String, DefaultEdge>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = 6518961051694377584L;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     public NotBiconnectedGraph()
     {
@@ -43,7 +42,7 @@ public class NotBiconnectedGraph
         addEdges();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     private void addEdges()
     {

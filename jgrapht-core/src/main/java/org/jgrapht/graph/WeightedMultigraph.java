@@ -20,12 +20,11 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A weighted multigraph. A weighted multigraph is a non-simple undirected graph
- * in which no loops are permitted, but multiple edges between any two vertices
- * are. The edges of a weighted multigraph have weights. If you're unsure about
- * multigraphs, see: <a href="http://mathworld.wolfram.com/Multigraph.html">
+ * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
+ * are permitted, but multiple edges between any two vertices are. The edges of a weighted
+ * multigraph have weights. If you're unsure about multigraphs, see:
+ * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
  */
 public class WeightedMultigraph<V, E>
@@ -54,19 +53,18 @@ public class WeightedMultigraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends WeightedMultigraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>, ?> builder(
+            Class<? extends E> edgeClass)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new WeightedMultigraph<>(edgeClass));
+        return new UndirectedWeightedGraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends WeightedMultigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>, ?> builder(
+            EdgeFactory<V, E> ef)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new WeightedMultigraph<>(ef));
+        return new UndirectedWeightedGraphBuilder<>(new WeightedMultigraph<>(ef));
     }
 }
 

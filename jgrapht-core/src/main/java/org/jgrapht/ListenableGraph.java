@@ -19,7 +19,6 @@ package org.jgrapht;
 
 import org.jgrapht.event.*;
 
-
 /**
  * A graph that supports listeners on structural change events.
  *
@@ -39,8 +38,7 @@ public interface ListenableGraph<V, E>
     public void addGraphListener(GraphListener<V, E> l);
 
     /**
-     * Adds the specified vertex set listener to this graph, if not already
-     * present.
+     * Adds the specified vertex set listener to this graph, if not already present.
      *
      * @param l the listener to be added.
      */

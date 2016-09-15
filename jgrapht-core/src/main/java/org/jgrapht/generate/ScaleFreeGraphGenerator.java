@@ -21,13 +21,12 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates directed or undirected <a href =
- * "http://mathworld.wolfram.com/Scale-FreeNetwork.html">scale-free network</a>
- * of any size. Scale-free network is a connected graph, where degrees of
- * vertices are distributed in unusual way. There are many vertices with small
- * degrees and only small amount of vertices with big degrees.
+ * Generates directed or undirected
+ * <a href = "http://mathworld.wolfram.com/Scale-FreeNetwork.html">scale-free network</a> of any
+ * size. Scale-free network is a connected graph, where degrees of vertices are distributed in
+ * unusual way. There are many vertices with small degrees and only small amount of vertices with
+ * big degrees.
  *
  * @author Ilya Razenshteyn
  */
@@ -43,12 +42,10 @@ public class ScaleFreeGraphGenerator<V, E>
      *
      * @param size number of vertices to be generated
      */
-    public ScaleFreeGraphGenerator(
-        int size)
+    public ScaleFreeGraphGenerator(int size)
     {
         if (size < 0) {
-            throw new IllegalArgumentException(
-                "invalid size: " + size + " (must be non-negative)");
+            throw new IllegalArgumentException("invalid size: " + size + " (must be non-negative)");
         }
         this.size = size;
         random = new Random();
@@ -62,13 +59,10 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param size number of vertices to be generated
      * @param seed initial seed for the random generator
      */
-    public ScaleFreeGraphGenerator(
-        int size,
-        long seed)
+    public ScaleFreeGraphGenerator(int size, long seed)
     {
         if (size < 0) {
-            throw new IllegalArgumentException(
-                "invalid size: " + size + " (must be non-negative)");
+            throw new IllegalArgumentException("invalid size: " + size + " (must be non-negative)");
         }
         this.size = size;
         random = new Random();
@@ -76,21 +70,19 @@ public class ScaleFreeGraphGenerator<V, E>
     }
 
     /**
-     * Generates scale-free network with <tt>size</tt> passed to the
-     * constructor. Each call of this method produces identical output (but if
-     * <tt>target</tt> is an undirected graph, the directions of edges will be
-     * lost).
+     * Generates scale-free network with <tt>size</tt> passed to the constructor. Each call of this
+     * method produces identical output (but if <tt>target</tt> is an undirected graph, the
+     * directions of edges will be lost).
      *
-     * @param target receives the generated edges and vertices; if this is
-     * non-empty on entry, the result will be a disconnected graph since
-     * generated elements will not be connected to existing elements
+     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
+     *        result will be a disconnected graph since generated elements will not be connected to
+     *        existing elements
      * @param vertexFactory called to produce new vertices
      * @param resultMap unused parameter
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         random.setSeed(seed);
         List<V> vertexList = new ArrayList<>();
@@ -105,9 +97,7 @@ public class ScaleFreeGraphGenerator<V, E>
 
             {
                 for (int j = 0; j < vertexList.size(); j++) {
-                    if ((degreeSum == 0)
-                        || (random.nextInt(degreeSum) < degrees.get(j)))
-                    {
+                    if ((degreeSum == 0) || (random.nextInt(degreeSum) < degrees.get(j))) {
                         degrees.set(j, degrees.get(j) + 1);
                         newDegree++;
                         degreeSum += 2;

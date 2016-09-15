@@ -20,13 +20,13 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * Tests for the {@link BreadthFirstIterator} class.
  *
- * <p>NOTE: This test uses hard-coded expected ordering isn't really guaranteed
- * by the specification of the algorithm. This could cause false failures if the
- * traversal implementation changes.</p>
+ * <p>
+ * NOTE: This test uses hard-coded expected ordering isn't really guaranteed by the specification of
+ * the algorithm. This could cause false failures if the traversal implementation changes.
+ * </p>
  *
  * @author Liviu Rau
  * @since Jul 30, 2003
@@ -34,7 +34,7 @@ import org.jgrapht.graph.*;
 public class BreadthFirstIteratorTest
     extends AbstractGraphIteratorTest
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     @Override
     String getExpectedStr1()
@@ -50,11 +50,9 @@ public class BreadthFirstIteratorTest
 
     @Override
     AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g,
-        String vertex)
+        DirectedGraph<String, DefaultEdge> g, String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i =
-                new BreadthFirstIterator<>(g, vertex);
+        AbstractGraphIterator<String, DefaultEdge> i = new BreadthFirstIterator<>(g, vertex);
         i.setCrossComponentTraversal(true);
 
         return i;

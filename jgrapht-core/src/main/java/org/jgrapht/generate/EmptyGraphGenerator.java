@@ -21,10 +21,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty
- * graph</a> of any size. An empty graph is a graph that has no edges.
+ * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty graph</a> of any size.
+ * An empty graph is a graph that has no edges.
  *
  * @author John V. Sichi
  * @since Sep 16, 2003
@@ -53,10 +52,9 @@ public class EmptyGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         for (int i = 0; i < size; ++i) {
             target.addVertex(vertexFactory.createVertex());

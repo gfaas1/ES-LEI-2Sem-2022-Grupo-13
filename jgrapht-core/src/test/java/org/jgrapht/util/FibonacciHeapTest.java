@@ -21,11 +21,10 @@ import java.util.*;
 
 import junit.framework.*;
 
-
 public class FibonacciHeapTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     // in honor of sf.net bug #1845376
     public void testAddRemoveOne()

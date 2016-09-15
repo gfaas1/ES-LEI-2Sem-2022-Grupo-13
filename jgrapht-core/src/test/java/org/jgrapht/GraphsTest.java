@@ -17,13 +17,10 @@
  */
 package org.jgrapht;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.TestEdge;
-import org.junit.Assert;
-import org.junit.Test;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * @author Christoph Zauner
@@ -54,8 +51,8 @@ public class GraphsTest
     public void removeVertex_vertexNotFound()
     {
 
-        DirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -72,8 +69,8 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
         expectedGraph.addVertex(b);
@@ -84,8 +81,7 @@ public class GraphsTest
         expectedGraph.addEdge(b, c);
         expectedGraph.addEdge(b, d);
 
-        boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndPreserveConnectivity(graph, x);
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, x);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertFalse(vertexHasBeenRemoved);
@@ -114,8 +110,8 @@ public class GraphsTest
     public void removeVertex00()
     {
 
-        DirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -131,8 +127,8 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
         expectedGraph.addVertex(c);
@@ -141,8 +137,7 @@ public class GraphsTest
         expectedGraph.addEdge(a, c);
         expectedGraph.addEdge(a, d);
 
-        boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndPreserveConnectivity(graph, b);
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -163,8 +158,8 @@ public class GraphsTest
     public void removeVertex01()
     {
 
-        DirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -174,13 +169,12 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(b);
 
-        boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndPreserveConnectivity(graph, a);
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, a);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -201,8 +195,8 @@ public class GraphsTest
     public void removeVertex02()
     {
 
-        DirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -212,13 +206,12 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
 
-        boolean vertexHasBeenRemoved = Graphs
-            .removeVertexAndPreserveConnectivity(graph, b);
+        boolean vertexHasBeenRemoved = Graphs.removeVertexAndPreserveConnectivity(graph, b);
 
         Assert.assertEquals(expectedGraph, graph);
         Assert.assertTrue(vertexHasBeenRemoved);
@@ -245,8 +238,8 @@ public class GraphsTest
     public void addOutgoingEdges()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -254,8 +247,8 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
         expectedGraph.addVertex(b);
@@ -294,8 +287,8 @@ public class GraphsTest
     public void addIncomingEdges()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -303,8 +296,8 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        DirectedGraph<String, TestEdge> expectedGraph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedGraph<String, TestEdge> expectedGraph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
         expectedGraph.addVertex(b);
@@ -337,8 +330,8 @@ public class GraphsTest
     public void vertexHasChildren_B()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -372,8 +365,8 @@ public class GraphsTest
     public void vertexHasChildren_C()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -407,8 +400,8 @@ public class GraphsTest
     public void vertexHasParents_B()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -442,8 +435,8 @@ public class GraphsTest
     public void vertexHasParents_A()
     {
 
-        DefaultDirectedGraph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(
-            TestEdge.class);
+        DefaultDirectedGraph<String, TestEdge> graph =
+            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";

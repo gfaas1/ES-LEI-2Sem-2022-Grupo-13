@@ -17,16 +17,17 @@
  */
 package org.jgrapht.alg.util;
 
+import java.util.*;
+
 import org.jgrapht.*;
-
-import java.util.Comparator;
-
 
 /**
  * Compares two vertices based on their degree.
  *
- * <p>Used by greedy algorithms that need to sort vertices by their degree. Two
- * vertices are considered equal if their degrees are equal.</p>
+ * <p>
+ * Used by greedy algorithms that need to sort vertices by their degree. Two vertices are considered
+ * equal if their degrees are equal.
+ * </p>
  *
  * @author Linda Buisman
  * @since Nov 6, 2003
@@ -38,7 +39,11 @@ public class VertexDegreeComparator<V, E>
     /**
      * Order in which we sort the vertices: ascending vertex degree or descending vertex degree
      */
-    public enum Order{ASCENDING, DESCENDING};
+    public enum Order
+    {
+        ASCENDING,
+        DESCENDING
+    };
 
     /**
      * The graph that contains the vertices to be compared.
@@ -46,8 +51,8 @@ public class VertexDegreeComparator<V, E>
     private UndirectedGraph<V, E> graph;
 
     /**
-     * The sort order for vertex degree. <code>true</code> for ascending degree
-     * order (smaller degrees first), <code>false</code> for descending.
+     * The sort order for vertex degree. <code>true</code> for ascending degree order (smaller
+     * degrees first), <code>false</code> for descending.
      */
     private boolean ascendingOrder;
 
@@ -57,9 +62,8 @@ public class VertexDegreeComparator<V, E>
     private Order order;
 
     /**
-     * Creates a comparator for comparing the degrees of vertices in the
-     * specified graph. The comparator compares in ascending order of degrees
-     * (lowest first).
+     * Creates a comparator for comparing the degrees of vertices in the specified graph. The
+     * comparator compares in ascending order of degrees (lowest first).
      *
      * @param g graph with respect to which the degree is calculated.
      */
@@ -69,41 +73,34 @@ public class VertexDegreeComparator<V, E>
     }
 
     /**
-     * Creates a comparator for comparing the degrees of vertices in the
-     * specified graph.
+     * Creates a comparator for comparing the degrees of vertices in the specified graph.
      *
      * @param g graph with respect to which the degree is calculated.
-     * @param ascendingOrder true - compares in ascending order of degrees
-     * (lowest first), false - compares in descending order of degrees (highest
-     * first).
+     * @param ascendingOrder true - compares in ascending order of degrees (lowest first), false -
+     *        compares in descending order of degrees (highest first).
      */
     @Deprecated
-    public VertexDegreeComparator(
-        UndirectedGraph<V, E> g,
-        boolean ascendingOrder)
+    public VertexDegreeComparator(UndirectedGraph<V, E> g, boolean ascendingOrder)
     {
         graph = g;
         this.ascendingOrder = ascendingOrder;
     }
 
     /**
-     * Creates a comparator for comparing the degrees of vertices in the
-     * specified graph.
+     * Creates a comparator for comparing the degrees of vertices in the specified graph.
      *
      * @param g graph with respect to which the degree is calculated.
      * @param order order in which the vertices are sorted (ascending or descending)
      */
-    public VertexDegreeComparator(
-            UndirectedGraph<V, E> g,
-            Order order)
+    public VertexDegreeComparator(UndirectedGraph<V, E> g, Order order)
     {
         graph = g;
-        this.order=order;
+        this.order = order;
     }
 
     /**
-     * Compare the degrees of <code>v1</code> and <code>v2</code>, taking into
-     * account whether ascending or descending order is used.
+     * Compare the degrees of <code>v1</code> and <code>v2</code>, taking into account whether
+     * ascending or descending order is used.
      *
      * @param v1 the first vertex to be compared.
      * @param v2 the second vertex to be compared.
@@ -111,14 +108,15 @@ public class VertexDegreeComparator<V, E>
      * @return -1 if <code>v1</code> comes before <code>v2</code>, +1 if <code>
      * v1</code> comes after <code>v2</code>, 0 if equal.
      */
-    @Override public int compare(V v1, V v2)
+    @Override
+    public int compare(V v1, V v2)
     {
-        int comparison=Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2));
+        int comparison = Integer.compare(graph.degreeOf(v1), graph.degreeOf(v2));
 
-        if(order==Order.ASCENDING)
+        if (order == Order.ASCENDING)
             return comparison;
         else
-            return -1*comparison;
+            return -1 * comparison;
     }
 }
 

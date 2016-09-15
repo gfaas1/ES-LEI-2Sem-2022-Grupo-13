@@ -21,15 +21,13 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Find all simple cycles of a directed graph using the algorithm described by
- * Hawick and James.
+ * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
  *
- * <p>See:<br>
- * K. A. Hawick, H. A. James. Enumerating Circuits and Loops in Graphs with
- * Self-Arcs and Multiple-Arcs. Computational Science Technical Note CSTN-013,
- * 2008
+ * <p>
+ * See:<br>
+ * K. A. Hawick, H. A. James. Enumerating Circuits and Loops in Graphs with Self-Arcs and
+ * Multiple-Arcs. Computational Science Technical Note CSTN-013, 2008
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -41,7 +39,9 @@ public class HawickJamesSimpleCycles<V, E>
 {
     private enum Operation
     {
-        ENUMERATE, PRINT_ONLY, COUNT_ONLY
+        ENUMERATE,
+        PRINT_ONLY,
+        COUNT_ONLY
     }
 
     // The graph
@@ -58,13 +58,13 @@ public class HawickJamesSimpleCycles<V, E>
 
     // The main state of the algorithm
     private Integer start = 0;
-    private List<Integer> [] Ak = null;
-    private List<Integer> [] B = null;
-    private boolean [] blocked = null;
+    private List<Integer>[] Ak = null;
+    private List<Integer>[] B = null;
+    private boolean[] blocked = null;
     private ArrayDeque<Integer> stack = null;
 
     // Giving an index to every V
-    private V [] iToV = null;
+    private V[] iToV = null;
     private Map<V, Integer> vToI = null;
 
     /**
@@ -104,11 +104,11 @@ public class HawickJamesSimpleCycles<V, E>
 
         B = new ArrayList[nVertices];
         for (int i = 0; i < nVertices; i++) {
-            //B[i] = new ArrayList<Integer>(nVertices);
+            // B[i] = new ArrayList<Integer>(nVertices);
             B[i] = new ArrayList<>();
         }
 
-        iToV = (V []) graph.vertexSet().toArray();
+        iToV = (V[]) graph.vertexSet().toArray();
         vToI = new HashMap<>();
         for (int i = 0; i < iToV.length; i++) {
             vToI.put(iToV[i], i);
@@ -120,10 +120,9 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     @SuppressWarnings("unchecked")
-    private List<Integer> [] buildAdjacencyList()
+    private List<Integer>[] buildAdjacencyList()
     {
-        @SuppressWarnings("rawtypes")
-        List [] Ak = new ArrayList[nVertices];
+        @SuppressWarnings("rawtypes") List[] Ak = new ArrayList[nVertices];
         for (int j = 0; j < nVertices; j++) {
             V v = iToV[j];
             List<V> s = Graphs.successorListOf(graph, v);
@@ -250,7 +249,8 @@ public class HawickJamesSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public DirectedGraph<V, E> getGraph()
+    @Override
+    public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -258,7 +258,8 @@ public class HawickJamesSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void setGraph(DirectedGraph<V, E> graph)
+    @Override
+    public void setGraph(DirectedGraph<V, E> graph)
         throws IllegalArgumentException
     {
         if (graph == null) {
@@ -270,7 +271,8 @@ public class HawickJamesSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public List<List<V>> findSimpleCycles()
+    @Override
+    public List<List<V>> findSimpleCycles()
         throws IllegalArgumentException
     {
         if (graph == null) {
@@ -295,9 +297,8 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     /**
-     * Print to the standard output all simple cycles without building a list to
-     * keep them, thus avoiding high memory consumption when investigating large
-     * and much connected graphs.
+     * Print to the standard output all simple cycles without building a list to keep them, thus
+     * avoiding high memory consumption when investigating large and much connected graphs.
      */
     public void printSimpleCycles()
     {
@@ -321,8 +322,7 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     /**
-     * Count the number of simple cycles. It can count up to Long.MAX cycles in
-     * a graph.
+     * Count the number of simple cycles. It can count up to Long.MAX cycles in a graph.
      */
     public long countSimpleCycles()
     {

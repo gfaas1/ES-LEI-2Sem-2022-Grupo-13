@@ -20,11 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A directed weighted multigraph. A directed weighted multigraph is a
- * non-simple directed graph in which no loops are permitted, but multiple edges
- * between any two vertices are permitted, and edges have weights.
+ * A directed weighted multigraph. A directed weighted multigraph is a non-simple directed graph in
+ * which no loops are permitted, but multiple edges between any two vertices are permitted, and
+ * edges have weights.
  */
 public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>
@@ -43,8 +42,7 @@ public class DirectedWeightedMultigraph<V, E>
     }
 
     /**
-     * Creates a new directed weighted multigraph with the specified edge
-     * factory.
+     * Creates a new directed weighted multigraph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      */
@@ -53,20 +51,16 @@ public class DirectedWeightedMultigraph<V, E>
         super(ef);
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DirectedWeightedMultigraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DirectedWeightedMultigraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DirectedWeightedMultigraph<>(edgeClass));
+        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedMultigraph<>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends DirectedWeightedMultigraph<V, E>, ?> builder(
-        EdgeFactory<V, E> ef)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends DirectedWeightedMultigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new DirectedWeightedMultigraph<>(ef));
+        return new DirectedWeightedGraphBuilder<>(new DirectedWeightedMultigraph<>(ef));
     }
 }
 

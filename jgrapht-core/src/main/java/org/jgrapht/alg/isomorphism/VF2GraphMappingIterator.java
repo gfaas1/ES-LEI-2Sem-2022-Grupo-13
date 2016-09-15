@@ -21,10 +21,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * This class is used to iterate over all existing (isomorphic) mappings between
- * to graphs. It is used by the {@link VF2GraphIsomorphismInspector}.
+ * This class is used to iterate over all existing (isomorphic) mappings between to graphs. It is
+ * used by the {@link VF2GraphIsomorphismInspector}.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
@@ -39,15 +38,14 @@ class VF2GraphMappingIterator<V, E>
      * @param edgeComparator
      */
     public VF2GraphMappingIterator(
-        GraphOrdering<V, E> ordering1,
-        GraphOrdering<V, E> ordering2,
-        Comparator<V> vertexComparator,
-        Comparator<E> edgeComparator)
+        GraphOrdering<V, E> ordering1, GraphOrdering<V, E> ordering2,
+        Comparator<V> vertexComparator, Comparator<E> edgeComparator)
     {
         super(ordering1, ordering2, vertexComparator, edgeComparator);
     }
 
-    @Override protected IsomorphicGraphMapping<V, E> match()
+    @Override
+    protected IsomorphicGraphMapping<V, E> match()
     {
         VF2State<V, E> s;
 
@@ -61,10 +59,7 @@ class VF2GraphMappingIterator<V, E>
             }
 
             s = new VF2GraphIsomorphismState<>(
-                    ordering1,
-                    ordering2,
-                    vertexComparator,
-                    edgeComparator);
+                ordering1, ordering2, vertexComparator, edgeComparator);
 
             if (g2.vertexSet().isEmpty()) {
                 return (hadOneMapping != null) ? null : s.getCurrentMapping();

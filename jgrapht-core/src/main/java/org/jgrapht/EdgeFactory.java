@@ -26,14 +26,12 @@ package org.jgrapht;
 public interface EdgeFactory<V, E>
 {
     /**
-     * Creates a new edge whose endpoints are the specified source and target
-     * vertices.
+     * Creates a new edge whose endpoints are the specified source and target vertices.
      *
      * @param sourceVertex the source vertex.
      * @param targetVertex the target vertex.
      *
-     * @return a new edge whose endpoints are the specified source and target
-     * vertices.
+     * @return a new edge whose endpoints are the specified source and target vertices.
      */
     E createEdge(V sourceVertex, V targetVertex);
 }

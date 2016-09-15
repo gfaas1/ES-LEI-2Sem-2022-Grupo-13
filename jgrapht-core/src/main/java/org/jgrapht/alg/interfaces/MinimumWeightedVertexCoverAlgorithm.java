@@ -17,33 +17,41 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.UndirectedGraph;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
 
 /**
- * Computes a weighted vertex cover in an undirected graph. A vertex cover of a graph is a set of vertices such that each edge of
- * the graph is incident to at least one vertex in the set. A minimum vertex cover is a vertex cover having the smallest
- * possible number of vertices for a given graph. The size of a minimum vertex cover of a graph G is known as the vertex
- * cover number. A vertex cover of minimum weight is a vertex cover where the sum of weights assigned to the individual
- * vertices in the cover has been minimized. The minimum vertex cover problem is a special case of the minimum weighted
- * vertex cover problem where all vertices have equal weight. Consequently, any algorithm designed for the weighted version
- * of the problem can also solve instances of the unweighted version.
+ * Computes a weighted vertex cover in an undirected graph. A vertex cover of a graph is a set of
+ * vertices such that each edge of the graph is incident to at least one vertex in the set. A
+ * minimum vertex cover is a vertex cover having the smallest possible number of vertices for a
+ * given graph. The size of a minimum vertex cover of a graph G is known as the vertex cover number.
+ * A vertex cover of minimum weight is a vertex cover where the sum of weights assigned to the
+ * individual vertices in the cover has been minimized. The minimum vertex cover problem is a
+ * special case of the minimum weighted vertex cover problem where all vertices have equal weight.
+ * Consequently, any algorithm designed for the weighted version of the problem can also solve
+ * instances of the unweighted version.
  */
-public interface MinimumWeightedVertexCoverAlgorithm<V,E> extends MinimumVertexCoverAlgorithm<V,E> {
+public interface MinimumWeightedVertexCoverAlgorithm<V, E>
+    extends MinimumVertexCoverAlgorithm<V, E>
+{
 
     @Override
-    default VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph){
-        Map<V,Double> vertexWeightMap=graph.vertexSet().stream().collect(Collectors.toMap(Function.identity() , vertex-> 1.0));
+    default VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
+    {
+        Map<V, Double> vertexWeightMap = graph
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
         return getVertexCover(graph, vertexWeightMap);
     }
 
     /**
-     * Computes a vertex cover; the weight of each vertex is provided in the {@param vertexWeightMap}.
+     * Computes a vertex cover; the weight of each vertex is provided in the
+     * {@param vertexWeightMap}.
+     * 
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a vertex cover
      */
-    VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph, Map<V, Double> vertexWeightMap);
+    VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap);
 }

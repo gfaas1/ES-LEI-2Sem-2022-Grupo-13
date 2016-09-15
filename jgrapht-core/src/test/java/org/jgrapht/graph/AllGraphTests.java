@@ -27,24 +27,12 @@ import org.junit.runners.*;
  * @since Aug 3, 2003
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    AsUndirectedGraphTest.class,
-    AsUnweightedGraphTest.class,
-    AsWeightedGraphTest.class,
-    CloneTest.class,
-    DefaultDirectedGraphTest.class,
-    EqualsAndHashCodeTest.class,
-    GenericGraphsTest.class,
-    ListenableGraphTest.class,
-    MaskEdgeSetTest.class,
-    MaskVertexSetTest.class,
-    SerializationTest.class,
-    SimpleDirectedGraphTest.class,
-    GraphWalkTest.class,
-    SubgraphTest.class,
-    SimpleIdentityDirectedGraphTest.class,
-    UnionGraphTest.class
-})
+@Suite.SuiteClasses({ AsUndirectedGraphTest.class, AsUnweightedGraphTest.class,
+    AsWeightedGraphTest.class, CloneTest.class, DefaultDirectedGraphTest.class,
+    EqualsAndHashCodeTest.class, GenericGraphsTest.class, ListenableGraphTest.class,
+    MaskEdgeSetTest.class, MaskVertexSetTest.class, SerializationTest.class,
+    SimpleDirectedGraphTest.class, GraphWalkTest.class, SubgraphTest.class,
+    SimpleIdentityDirectedGraphTest.class, UnionGraphTest.class })
 public final class AllGraphTests
 {
 }

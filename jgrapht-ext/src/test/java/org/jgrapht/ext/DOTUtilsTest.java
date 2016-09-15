@@ -17,14 +17,11 @@
  */
 package org.jgrapht.ext;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+import org.junit.rules.*;
+import org.junit.runner.*;
 
 /**
  * @author Christoph Zauner
@@ -38,8 +35,7 @@ public class DOTUtilsTest
         @Override
         protected void starting(Description description)
         {
-            System.out.println(
-                "\n+++ Test: " + description.getMethodName() + " +++\n");
+            System.out.println("\n+++ Test: " + description.getMethodName() + " +++\n");
         }
     };
 
@@ -58,8 +54,8 @@ public class DOTUtilsTest
     public void testConvertGraphToDotString()
     {
 
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
         String a = "A";
         String b = "B";
@@ -88,8 +84,8 @@ public class DOTUtilsTest
                 "}";
         //@formatter:on
 
-        String graphAsDotString = DOTUtils.convertGraphToDotString(graph)
-            .replaceAll("(\\r|\\n)", "");
+        String graphAsDotString =
+            DOTUtils.convertGraphToDotString(graph).replaceAll("(\\r|\\n)", "");
 
         Assert.assertEquals(expectedGraphAsDotString, graphAsDotString);
     }

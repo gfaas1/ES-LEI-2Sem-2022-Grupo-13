@@ -19,15 +19,15 @@ package org.jgrapht.util;
 
 import java.util.*;
 
-
 /**
- * Helper for efficiently representing small sets whose elements are known to be
- * unique by construction, implying we don't need to enforce the uniqueness
- * property in the data structure itself. Use with caution.
+ * Helper for efficiently representing small sets whose elements are known to be unique by
+ * construction, implying we don't need to enforce the uniqueness property in the data structure
+ * itself. Use with caution.
  *
- * <p>Note that for equals/hashCode, the class implements the Set behavior
- * (unordered), not the list behavior (ordered); the fact that it subclasses
- * ArrayList should be considered an implementation detail.
+ * <p>
+ * Note that for equals/hashCode, the class implements the Set behavior (unordered), not the list
+ * behavior (ordered); the fact that it subclasses ArrayList should be considered an implementation
+ * detail.
  *
  * @author John V. Sichi
  */
@@ -52,12 +52,14 @@ public class ArrayUnenforcedSet<E>
         super(n);
     }
 
-    @Override public boolean equals(Object o)
+    @Override
+    public boolean equals(Object o)
     {
         return new SetForEquality().equals(o);
     }
 
-    @Override public int hashCode()
+    @Override
+    public int hashCode()
     {
         return new SetForEquality().hashCode();
     }
@@ -68,12 +70,14 @@ public class ArrayUnenforcedSet<E>
     private class SetForEquality
         extends AbstractSet<E>
     {
-        @Override public Iterator<E> iterator()
+        @Override
+        public Iterator<E> iterator()
         {
             return ArrayUnenforcedSet.this.iterator();
         }
 
-        @Override public int size()
+        @Override
+        public int size()
         {
             return ArrayUnenforcedSet.this.size();
         }

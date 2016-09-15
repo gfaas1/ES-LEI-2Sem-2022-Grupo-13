@@ -18,33 +18,29 @@
 package org.jgrapht.graph;
 
 import java.io.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
 
-
 /**
- * The most general implementation of the {@link org.jgrapht.Graph} interface.
- * Its subclasses add various restrictions to get more specific graphs. The
- * decision whether it is directed or undirected is decided at construction time
- * and cannot be later modified (see constructor for details).
+ * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add
+ * various restrictions to get more specific graphs. The decision whether it is directed or
+ * undirected is decided at construction time and cannot be later modified (see constructor for
+ * details).
  *
- * <p>This graph implementation guarantees deterministic vertex and edge set
- * ordering (via {@link LinkedHashMap} and {@link LinkedHashSet}).</p>
+ * <p>
+ * This graph implementation guarantees deterministic vertex and edge set ordering (via
+ * {@link LinkedHashMap} and {@link LinkedHashSet}).
+ * </p>
  *
  * @author Barak Naveh
  * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
     extends AbstractGraph<V, E>
-    implements Graph<V, E>,
-        Cloneable,
-        Serializable
+    implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -1263088497616142427L;
 
@@ -57,14 +53,14 @@ public abstract class AbstractBaseGraph<V, E>
     private Map<E, IntrusiveEdge> edgeMap;
     private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
-    private Specifics<V,E> specifics;
+    private Specifics<V, E> specifics;
     private boolean allowingMultipleEdges;
 
     private transient TypeUtil<V> vertexTypeDecl = null;
 
     /**
-     * Construct a new graph. The graph can either be directed or undirected,
-     * depending on the specified edge factory.
+     * Construct a new graph. The graph can either be directed or undirected, depending on the
+     * specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      * @param allowMultipleEdges whether to allow multiple edges or not.
@@ -74,9 +70,7 @@ public abstract class AbstractBaseGraph<V, E>
      * null</code>.
      */
     protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef,
-        boolean allowMultipleEdges,
-        boolean allowLoops)
+        EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
     {
         if (ef == null) {
             throw new NullPointerException();
@@ -95,15 +89,15 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
-    @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return specifics.getAllEdges(sourceVertex, targetVertex);
     }
 
     /**
-     * Returns <code>true</code> if and only if self-loops are allowed in this
-     * graph. A self loop is an edge that its source and target vertices are the
-     * same.
+     * Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
+     * an edge that its source and target vertices are the same.
      *
      * @return <code>true</code> if and only if graph loops are allowed.
      */
@@ -113,9 +107,8 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns <code>true</code> if and only if multiple edges are allowed in
-     * this graph. The meaning of multiple edges is that there can be many edges
-     * going from vertex v1 to vertex v2.
+     * Returns <code>true</code> if and only if multiple edges are allowed in this graph. The
+     * meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.
      *
      * @return <code>true</code> if and only if multiple edges are allowed.
      */
@@ -127,7 +120,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
-    @Override public E getEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E getEdge(V sourceVertex, V targetVertex)
     {
         return specifics.getEdge(sourceVertex, targetVertex);
     }
@@ -135,18 +129,18 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#getEdgeFactory()
      */
-    @Override public EdgeFactory<V, E> getEdgeFactory()
+    @Override
+    public EdgeFactory<V, E> getEdgeFactory()
     {
         return edgeFactory;
     }
 
     /**
-     * Set the {@link EdgeSetFactory} to use for this graph. Initially, a graph
-     * is created with a default implementation which always supplies an {@link
-     * java.util.ArrayList} with capacity 1.
+     * Set the {@link EdgeSetFactory} to use for this graph. Initially, a graph is created with a
+     * default implementation which always supplies an {@link java.util.ArrayList} with capacity 1.
      *
-     * @param edgeSetFactory factory to use for subsequently created edge sets
-     * (this call has no effect on existing edge sets)
+     * @param edgeSetFactory factory to use for subsequently created edge sets (this call has no
+     *        effect on existing edge sets)
      */
     public void setEdgeSetFactory(EdgeSetFactory<V, E> edgeSetFactory)
     {
@@ -154,11 +148,12 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the {@link EdgeSetFactory} used by this graph. The default is {@link
-     * java.util.ArrayList} with capacity 1.
+     * Returns the {@link EdgeSetFactory} used by this graph. The default is
+     * {@link java.util.ArrayList} with capacity 1.
+     * 
      * @return edgeSetFactory used by this graph
      */
-    public EdgeSetFactory<V,E> getEdgeSetFactory()
+    public EdgeSetFactory<V, E> getEdgeSetFactory()
     {
         return edgeSetFactory;
     }
@@ -166,14 +161,13 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    @Override public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(V sourceVertex, V targetVertex)
     {
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!allowingMultipleEdges
-            && containsEdge(sourceVertex, targetVertex))
-        {
+        if (!allowingMultipleEdges && containsEdge(sourceVertex, targetVertex)) {
             return null;
         }
 
@@ -187,8 +181,7 @@ public abstract class AbstractBaseGraph<V, E>
 
             return null;
         } else {
-            IntrusiveEdge intrusiveEdge =
-                createIntrusiveEdge(e, sourceVertex, targetVertex);
+            IntrusiveEdge intrusiveEdge = createIntrusiveEdge(e, sourceVertex, targetVertex);
 
             edgeMap.put(e, intrusiveEdge);
             specifics.addEdgeToTouchingVertices(e);
@@ -200,7 +193,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    @Override public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         if (e == null) {
             throw new NullPointerException();
@@ -211,9 +205,7 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!allowingMultipleEdges
-            && containsEdge(sourceVertex, targetVertex))
-        {
+        if (!allowingMultipleEdges && containsEdge(sourceVertex, targetVertex)) {
             return false;
         }
 
@@ -221,8 +213,7 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        IntrusiveEdge intrusiveEdge =
-            createIntrusiveEdge(e, sourceVertex, targetVertex);
+        IntrusiveEdge intrusiveEdge = createIntrusiveEdge(e, sourceVertex, targetVertex);
 
         edgeMap.put(e, intrusiveEdge);
         specifics.addEdgeToTouchingVertices(e);
@@ -230,10 +221,7 @@ public abstract class AbstractBaseGraph<V, E>
         return true;
     }
 
-    private IntrusiveEdge createIntrusiveEdge(
-        E e,
-        V sourceVertex,
-        V targetVertex)
+    private IntrusiveEdge createIntrusiveEdge(E e, V sourceVertex, V targetVertex)
     {
         IntrusiveEdge intrusiveEdge;
         if (e instanceof IntrusiveEdge) {
@@ -249,7 +237,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
-    @Override public boolean addVertex(V v)
+    @Override
+    public boolean addVertex(V v)
     {
         if (v == null) {
             throw new NullPointerException();
@@ -265,21 +254,19 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#getEdgeSource(Object)
      */
-    @Override public V getEdgeSource(E e)
+    @Override
+    public V getEdgeSource(E e)
     {
-        return TypeUtil.uncheckedCast(
-            getIntrusiveEdge(e).source,
-            vertexTypeDecl);
+        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).source, vertexTypeDecl);
     }
 
     /**
      * @see Graph#getEdgeTarget(Object)
      */
-    @Override public V getEdgeTarget(E e)
+    @Override
+    public V getEdgeTarget(E e)
     {
-        return TypeUtil.uncheckedCast(
-            getIntrusiveEdge(e).target,
-            vertexTypeDecl);
+        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).target, vertexTypeDecl);
     }
 
     private IntrusiveEdge getIntrusiveEdge(E e)
@@ -292,8 +279,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns a shallow copy of this graph instance. Neither edges nor vertices
-     * are cloned.
+     * Returns a shallow copy of this graph instance. Neither edges nor vertices are cloned.
      *
      * @return a shallow copy of this set.
      *
@@ -301,11 +287,11 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @see java.lang.Object#clone()
      */
-    @Override public Object clone()
+    @Override
+    public Object clone()
     {
         try {
-            AbstractBaseGraph<V, E> newGraph =
-                TypeUtil.uncheckedCast(super.clone(), null);
+            AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
 
             newGraph.edgeMap = new LinkedHashMap<>();
 
@@ -313,7 +299,7 @@ public abstract class AbstractBaseGraph<V, E>
             newGraph.unmodifiableEdgeSet = null;
             newGraph.unmodifiableVertexSet = null;
 
-            // NOTE:  it's important for this to happen in an object
+            // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
             newGraph.specifics = newGraph.createSpecifics();
@@ -330,7 +316,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#containsEdge(Object)
      */
-    @Override public boolean containsEdge(E e)
+    @Override
+    public boolean containsEdge(E e)
     {
         return edgeMap.containsKey(e);
     }
@@ -338,7 +325,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#containsVertex(Object)
      */
-    @Override public boolean containsVertex(V v)
+    @Override
+    public boolean containsVertex(V v)
     {
         return specifics.getVertexSet().contains(v);
     }
@@ -354,7 +342,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#edgeSet()
      */
-    @Override public Set<E> edgeSet()
+    @Override
+    public Set<E> edgeSet()
     {
         if (unmodifiableEdgeSet == null) {
             unmodifiableEdgeSet = Collections.unmodifiableSet(edgeMap.keySet());
@@ -366,7 +355,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#edgesOf(Object)
      */
-    @Override public Set<E> edgesOf(V vertex)
+    @Override
+    public Set<E> edgesOf(V vertex)
     {
         assertVertexExist(vertex);
         return specifics.edgesOf(vertex);
@@ -411,7 +401,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
-    @Override public E removeEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E removeEdge(V sourceVertex, V targetVertex)
     {
         E e = getEdge(sourceVertex, targetVertex);
 
@@ -426,7 +417,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#removeEdge(Object)
      */
-    @Override public boolean removeEdge(E e)
+    @Override
+    public boolean removeEdge(E e)
     {
         if (containsEdge(e)) {
             specifics.removeEdgeFromTouchingVertices(e);
@@ -441,7 +433,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#removeVertex(Object)
      */
-    @Override public boolean removeVertex(V v)
+    @Override
+    public boolean removeVertex(V v)
     {
         if (containsVertex(v)) {
             Set<E> touchingEdgesList = edgesOf(v);
@@ -461,11 +454,11 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#vertexSet()
      */
-    @Override public Set<V> vertexSet()
+    @Override
+    public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {
-            unmodifiableVertexSet =
-                Collections.unmodifiableSet(specifics.getVertexSet());
+            unmodifiableVertexSet = Collections.unmodifiableSet(specifics.getVertexSet());
         }
 
         return unmodifiableVertexSet;
@@ -474,7 +467,8 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * @see Graph#getEdgeWeight(Object)
      */
-    @Override public double getEdgeWeight(E e)
+    @Override
+    public double getEdgeWeight(E e)
     {
         if (e instanceof DefaultWeightedEdge) {
             return ((DefaultWeightedEdge) e).getWeight();
@@ -494,7 +488,7 @@ public abstract class AbstractBaseGraph<V, E>
         ((DefaultWeightedEdge) e).weight = weight;
     }
 
-    private Specifics<V,E> createSpecifics()
+    private Specifics<V, E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
             return createDirectedSpecifics();
@@ -506,28 +500,28 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
-    protected Specifics<V,E> createUndirectedSpecifics()
+    protected Specifics<V, E> createUndirectedSpecifics()
     {
         return new FastLookupUndirectedSpecifics<>(this);
     }
 
-    protected Specifics<V,E> createDirectedSpecifics()
+    protected Specifics<V, E> createDirectedSpecifics()
     {
         return new FastLookupDirectedSpecifics<>(this);
     }
 
     private static class ArrayListFactory<VV, EE>
-        implements EdgeSetFactory<VV, EE>,
-            Serializable
+        implements EdgeSetFactory<VV, EE>, Serializable
     {
         private static final long serialVersionUID = 5936902837403445985L;
 
         /**
          * @see EdgeSetFactory
          */
-        @Override public Set<EE> createEdgeSet(VV vertex)
+        @Override
+        public Set<EE> createEdgeSet(VV vertex)
         {
-            // NOTE:  use size 1 to keep memory usage under control
+            // NOTE: use size 1 to keep memory usage under control
             // for the common case of vertices with low degree
             return new ArrayUnenforcedSet<>(1);
         }

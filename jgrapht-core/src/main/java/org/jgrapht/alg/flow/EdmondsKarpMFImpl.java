@@ -20,32 +20,31 @@ package org.jgrapht.alg.flow;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
-
+import org.jgrapht.alg.util.extension.*;
 
 /**
- * A <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> is a
- * directed graph where each edge has a capacity and each edge receives a flow.
- * The amount of flow on an edge can not exceed the capacity of the edge (note,
- * that all capacities must be non-negative). A flow must satisfy the
- * restriction that the amount of flow into a vertex equals the amount of flow
- * out of it, except when it is a source, which "produces" flow, or sink, which
- * "consumes" flow.
+ * A <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> is a directed graph
+ * where each edge has a capacity and each edge receives a flow. The amount of flow on an edge can
+ * not exceed the capacity of the edge (note, that all capacities must be non-negative). A flow must
+ * satisfy the restriction that the amount of flow into a vertex equals the amount of flow out of
+ * it, except when it is a source, which "produces" flow, or sink, which "consumes" flow.
  *
- * <p>This class computes maximum flow in a network using <a href =
- * "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp
- * algorithm</a>. Be careful: for large networks this algorithm may consume
- * significant amount of time (its upper-bound complexity is O(VE^2), where V -
- * amount of vertices, E - amount of edges in the network).
+ * <p>
+ * This class computes maximum flow in a network using
+ * <a href = "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp algorithm</a>. Be
+ * careful: for large networks this algorithm may consume significant amount of time (its
+ * upper-bound complexity is O(VE^2), where V - amount of vertices, E - amount of edges in the
+ * network).
  *
- * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
- * minimum s-t cut, the implementation first computes a minimum s-t flow, after
- * which a BFS is run on the residual graph.
+ * <p>
+ * This class can also computes minimum s-t cuts. Effectively, to compute a minimum s-t cut, the
+ * implementation first computes a minimum s-t flow, after which a BFS is run on the residual graph.
  *
- * <p>For more details see Andrew V. Goldberg's <i>Combinatorial Optimization
- * (Lecture Notes)</i>.
+ * <p>
+ * For more details see Andrew V. Goldberg's <i>Combinatorial Optimization (Lecture Notes)</i>.
  *
- * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and undirected graphs are supported (and tested!).
+ * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
+ * undirected graphs are supported (and tested!).
  *
  *
  *
@@ -65,10 +64,10 @@ public final class EdmondsKarpMFImpl<V, E>
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
     /**
-     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i>
-     * <tt>network</tt>. Current source and sink are set to <tt>null</tt>. If
-     * <tt>network</tt> is weighted, then capacities are weights, otherwise all
-     * capacities are equal to one. Doubles are compared using <tt>
+     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i> <tt>network</tt>.
+     * Current source and sink are set to <tt>null</tt>. If <tt>network</tt> is weighted, then
+     * capacities are weights, otherwise all capacities are equal to one. Doubles are compared using
+     * <tt>
      * DEFAULT_EPSILON</tt> tolerance.
      *
      * @param network network, where maximum flow will be calculated
@@ -79,10 +78,9 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i>
-     * <tt>network</tt>. Current source and sink are set to <tt>null</tt>. If
-     * <tt>network</tt> is weighted, then capacities are weights, otherwise all
-     * capacities are equal to one.
+     * Constructs <tt>MaximumFlow</tt> instance to work with <i>a copy of</i> <tt>network</tt>.
+     * Current source and sink are set to <tt>null</tt>. If <tt>network</tt> is weighted, then
+     * capacities are weights, otherwise all capacities are equal to one.
      *
      * @param network network, where maximum flow will be calculated
      * @param epsilon tolerance for comparing doubles
@@ -90,32 +88,27 @@ public final class EdmondsKarpMFImpl<V, E>
     public EdmondsKarpMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
-        this.vertexExtensionsFactory =
-                () -> new VertexExtension();
+        this.vertexExtensionsFactory = () -> new VertexExtension();
 
-        this.edgeExtensionsFactory =
-                () -> new AnnotatedFlowEdge();
+        this.edgeExtensionsFactory = () -> new AnnotatedFlowEdge();
 
         if (network == null) {
             throw new NullPointerException("network is null");
         }
         if (epsilon <= 0) {
-            throw new IllegalArgumentException(
-                "invalid epsilon (must be positive)");
+            throw new IllegalArgumentException("invalid epsilon (must be positive)");
         }
-        for (E e : network.edgeSet())
-        {
+        for (E e : network.edgeSet()) {
             if (network.getEdgeWeight(e) < -epsilon) {
-                throw new IllegalArgumentException(
-                    "invalid capacity (must be non-negative)");
+                throw new IllegalArgumentException("invalid capacity (must be non-negative)");
             }
         }
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
-     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
+     * <tt>sink</tt> must be vertices of the <tt>
      * network</tt> passed to the constructor, and they must be different.
      *
      * @param source source vertex
@@ -129,26 +122,24 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
-     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
-     * network</tt> passed to the constructor, and they must be different.
-     * If desired, a flow map can be queried afterwards; this will not require
-     * a new invocation of the algorithm.
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
+     * <tt>sink</tt> must be vertices of the <tt>
+     * network</tt> passed to the constructor, and they must be different. If desired, a flow map
+     * can be queried afterwards; this will not require a new invocation of the algorithm.
      *
      * @param source source vertex
      * @param sink sink vertex
      */
-    public double calculateMaximumFlow(V source,V sink){
+    public double calculateMaximumFlow(V source, V sink)
+    {
         super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
         if (!network.containsVertex(source)) {
-            throw new IllegalArgumentException(
-                    "invalid source (null or not from this network)");
+            throw new IllegalArgumentException("invalid source (null or not from this network)");
         }
         if (!network.containsVertex(sink)) {
-            throw new IllegalArgumentException(
-                    "invalid sink (null or not from this network)");
+            throw new IllegalArgumentException("invalid sink (null or not from this network)");
         }
 
         if (source.equals(sink)) {
@@ -172,9 +163,10 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * Method which finds a path from source to sink the in the residual graph. Note that this method tries to find multiple
-     * paths at once. Once a single path has been discovered, no new nodes are added to the queue, but nodes which are
-     * already in the queue are fully explored. As such there's a chance that multiple paths are discovered.
+     * Method which finds a path from source to sink the in the residual graph. Note that this
+     * method tries to find multiple paths at once. Once a single path has been discovered, no new
+     * nodes are added to the queue, but nodes which are already in the queue are fully explored. As
+     * such there's a chance that multiple paths are discovered.
      */
     private void breadthFirstSearch()
     {
@@ -227,23 +219,20 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     /**
-     * For all paths which end in the sink. trace them back to the source and push flow through them.
+     * For all paths which end in the sink. trace them back to the source and push flow through
+     * them.
+     * 
      * @return total increase in flow from source to sink
      */
     private double augmentFlow()
     {
-        double flowIncrease=0;
+        double flowIncrease = 0;
         Set<VertexExtension> seen = new HashSet<>();
 
         for (AnnotatedFlowEdge ex : currentSink.lastArcs) {
-            double deltaFlow =
-                Math.min(ex.getSource().excess, ex.capacity - ex.flow);
+            double deltaFlow = Math.min(ex.getSource().excess, ex.capacity - ex.flow);
 
-            if (augmentFlowAlongInternal(
-                    deltaFlow,
-                    ex.<VertexExtension>getSource(),
-                    seen))
-            {
+            if (augmentFlowAlongInternal(deltaFlow, ex.<VertexExtension> getSource(), seen)) {
                 pushFlowThrough(ex, deltaFlow);
                 flowIncrease += deltaFlow;
             }
@@ -252,9 +241,7 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     private boolean augmentFlowAlongInternal(
-        double deltaFlow,
-        VertexExtension node,
-        Set<VertexExtension> seen)
+        double deltaFlow, VertexExtension node, Set<VertexExtension> seen)
     {
         if (node == currentSource) {
             return true;
@@ -266,11 +253,7 @@ public final class EdmondsKarpMFImpl<V, E>
         seen.add(node);
 
         AnnotatedFlowEdge prev = node.lastArcs.get(0);
-        if (augmentFlowAlongInternal(
-                deltaFlow,
-                prev.<VertexExtension>getSource(),
-                seen))
-        {
+        if (augmentFlowAlongInternal(deltaFlow, prev.<VertexExtension> getSource(), seen)) {
             pushFlowThrough(prev, deltaFlow);
             return true;
         }
@@ -278,17 +261,19 @@ public final class EdmondsKarpMFImpl<V, E>
         return false;
     }
 
-    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getExtension(v);}
+    private VertexExtension getVertexExtension(V v)
+    {
+        return (VertexExtension) vertexExtensionManager.getExtension(v);
+    }
 
-
-    class VertexExtension extends VertexExtensionBase
+    class VertexExtension
+        extends VertexExtensionBase
     {
         boolean visited; // this mark is used during BFS to mark visited nodes
-        List<AnnotatedFlowEdge> lastArcs; // last arc(-s) in the shortest path used to reach this vertex
-
+        List<AnnotatedFlowEdge> lastArcs; // last arc(-s) in the shortest path used to reach this
+                                          // vertex
 
     }
 }
 
 // End EdmondsKarpMFImpl.java
-

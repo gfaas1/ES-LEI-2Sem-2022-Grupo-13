@@ -18,55 +18,58 @@
 package org.jgrapht.graph;
 
 import java.io.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.util.*;
 
-
 /**
- * A subgraph is a graph that has a subset of vertices and a subset of edges
- * with respect to some base graph. More formally, a subgraph G(V,E) that is
- * based on a base graph Gb(Vb,Eb) satisfies the following <b><i>subgraph
- * property</i></b>: V is a subset of Vb and E is a subset of Eb. Other than
- * this property, a subgraph is a graph with any respect and fully complies with
- * the <code>Graph</code> interface.
+ * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some
+ * base graph. More formally, a subgraph G(V,E) that is based on a base graph Gb(Vb,Eb) satisfies
+ * the following <b><i>subgraph property</i></b>: V is a subset of Vb and E is a subset of Eb. Other
+ * than this property, a subgraph is a graph with any respect and fully complies with the
+ * <code>Graph</code> interface.
  *
- * <p>If the base graph is a {@link org.jgrapht.ListenableGraph}, the subgraph
- * listens on the base graph and guarantees the subgraph property. If an edge or
- * a vertex is removed from the base graph, it is automatically removed from the
- * subgraph. Subgraph listeners are informed on such removal only if it results
- * in a cascaded removal from the subgraph. If the subgraph has been created as
- * an induced subgraph it also keeps track of edges being added to its vertices.
- * If vertices are added to the base graph, the subgraph remains unaffected.</p>
+ * <p>
+ * If the base graph is a {@link org.jgrapht.ListenableGraph}, the subgraph listens on the base
+ * graph and guarantees the subgraph property. If an edge or a vertex is removed from the base
+ * graph, it is automatically removed from the subgraph. Subgraph listeners are informed on such
+ * removal only if it results in a cascaded removal from the subgraph. If the subgraph has been
+ * created as an induced subgraph it also keeps track of edges being added to its vertices. If
+ * vertices are added to the base graph, the subgraph remains unaffected.
+ * </p>
  *
- * <p>If the base graph is <i>not</i> a ListenableGraph, then the subgraph
- * property cannot be guaranteed. If edges or vertices are removed from the base
- * graph, they are <i>not</i> removed from the subgraph.</p>
+ * <p>
+ * If the base graph is <i>not</i> a ListenableGraph, then the subgraph property cannot be
+ * guaranteed. If edges or vertices are removed from the base graph, they are <i>not</i> removed
+ * from the subgraph.
+ * </p>
  *
- * <p>Modifications to Subgraph are allowed as long as the subgraph property is
- * maintained. Addition of vertices or edges are allowed as long as they also
- * exist in the base graph. Removal of vertices or edges is always allowed. The
- * base graph is <i>never</i> affected by any modification made to the
- * subgraph.</p>
+ * <p>
+ * Modifications to Subgraph are allowed as long as the subgraph property is maintained. Addition of
+ * vertices or edges are allowed as long as they also exist in the base graph. Removal of vertices
+ * or edges is always allowed. The base graph is <i>never</i> affected by any modification made to
+ * the subgraph.
+ * </p>
  *
- * <p>A subgraph may provide a "live-window" on a base graph, so that changes
- * made to its vertices or edges are immediately reflected in the base graph,
- * and vice versa. For that to happen, vertices and edges added to the subgraph
- * must be <i>identical</i> (that is, reference-equal and not only value-equal)
- * to their respective ones in the base graph. Previous versions of this class
- * enforced such identity, at a severe performance cost. Currently it is no
- * longer enforced. If you want to achieve a "live-window"functionality, your
- * safest tactics would be to NOT override the <code>equals()</code> methods of
- * your vertices and edges. If you use a class that has already overridden the
- * <code>equals()</code> method, such as <code>String</code>, than you can use a
- * wrapper around it, or else use it directly but exercise a great care to avoid
- * having different-but-equal instances in the subgraph and the base graph.</p>
+ * <p>
+ * A subgraph may provide a "live-window" on a base graph, so that changes made to its vertices or
+ * edges are immediately reflected in the base graph, and vice versa. For that to happen, vertices
+ * and edges added to the subgraph must be <i>identical</i> (that is, reference-equal and not only
+ * value-equal) to their respective ones in the base graph. Previous versions of this class enforced
+ * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
+ * achieve a "live-window"functionality, your safest tactics would be to NOT override the
+ * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
+ * overridden the <code>equals()</code> method, such as <code>String</code>, than you can use a
+ * wrapper around it, or else use it directly but exercise a great care to avoid having
+ * different-but-equal instances in the subgraph and the base graph.
+ * </p>
  *
- * <p>This graph implementation guarantees deterministic vertex and edge set
- * ordering (via {@link LinkedHashSet}).</p>
+ * <p>
+ * This graph implementation guarantees deterministic vertex and edge set ordering (via
+ * {@link LinkedHashSet}).
+ * </p>
  *
  * @author Barak Naveh
  * @see Graph
@@ -78,10 +81,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     implements Serializable
 {
     private static final long serialVersionUID = 3208313055169665387L;
-    private static final String NO_SUCH_EDGE_IN_BASE =
-        "no such edge in base graph";
-    private static final String NO_SUCH_VERTEX_IN_BASE =
-        "no such vertex in base graph";
+    private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
+    private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
 
     //
     Set<E> edgeSet = new LinkedHashSet<>(); // friendly to improve performance
@@ -102,8 +103,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * @param vertexSubset vertices to include in the subgraph. If <code>
      * null</code> then all vertices are included.
      * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are
-     * included.
+     * null</code> then all the edges whose vertices found in the graph are included.
      */
     public Subgraph(G base, Set<V> vertexSubset, Set<E> edgeSubset)
     {
@@ -116,8 +116,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         }
 
         if (base instanceof ListenableGraph<?, ?>) {
-            ((ListenableGraph<V, E>) base).addGraphListener(
-                new BaseGraphListener());
+            ((ListenableGraph<V, E>) base).addGraphListener(new BaseGraphListener());
         }
 
         addVerticesUsingFilter(base.vertexSet(), vertexSubset);
@@ -125,10 +124,9 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * Creates a new induced Subgraph. The subgraph will keep track of edges
-     * being added to its vertex subset as well as deletion of edges and
-     * vertices. If base it not listenable, this is identical to the call
-     * Subgraph(base, vertexSubset, null) .
+     * Creates a new induced Subgraph. The subgraph will keep track of edges being added to its
+     * vertex subset as well as deletion of edges and vertices. If base it not listenable, this is
+     * identical to the call Subgraph(base, vertexSubset, null) .
      *
      * @param base the base (backing) graph on which the subgraph will be based.
      * @param vertexSubset vertices to include in the subgraph. If <code>
@@ -142,7 +140,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
-    @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> edges = null;
 
@@ -165,7 +164,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdge(Object, Object)
      */
-    @Override public E getEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E getEdge(V sourceVertex, V targetVertex)
     {
         Set<E> edges = getAllEdges(sourceVertex, targetVertex);
 
@@ -179,7 +179,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeFactory()
      */
-    @Override public EdgeFactory<V, E> getEdgeFactory()
+    @Override
+    public EdgeFactory<V, E> getEdgeFactory()
     {
         return base.getEdgeFactory();
     }
@@ -187,7 +188,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    @Override public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(V sourceVertex, V targetVertex)
     {
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
@@ -212,7 +214,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    @Override public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         if (e == null) {
             throw new NullPointerException();
@@ -251,7 +254,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * @see Subgraph
      * @see Graph#addVertex(Object)
      */
-    @Override public boolean addVertex(V v)
+    @Override
+    public boolean addVertex(V v)
     {
         if (v == null) {
             throw new NullPointerException();
@@ -273,7 +277,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#containsEdge(Object)
      */
-    @Override public boolean containsEdge(E e)
+    @Override
+    public boolean containsEdge(E e)
     {
         return edgeSet.contains(e);
     }
@@ -281,7 +286,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#containsVertex(Object)
      */
-    @Override public boolean containsVertex(V v)
+    @Override
+    public boolean containsVertex(V v)
     {
         return vertexSet.contains(v);
     }
@@ -289,7 +295,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#edgeSet()
      */
-    @Override public Set<E> edgeSet()
+    @Override
+    public Set<E> edgeSet()
     {
         if (unmodifiableEdgeSet == null) {
             unmodifiableEdgeSet = Collections.unmodifiableSet(edgeSet);
@@ -301,7 +308,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#edgesOf(Object)
      */
-    @Override public Set<E> edgesOf(V vertex)
+    @Override
+    public Set<E> edgesOf(V vertex)
     {
         assertVertexExist(vertex);
 
@@ -320,7 +328,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeEdge(Object)
      */
-    @Override public boolean removeEdge(E e)
+    @Override
+    public boolean removeEdge(E e)
     {
         return edgeSet.remove(e);
     }
@@ -328,7 +337,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
-    @Override public E removeEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E removeEdge(V sourceVertex, V targetVertex)
     {
         E e = getEdge(sourceVertex, targetVertex);
 
@@ -338,7 +348,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#removeVertex(Object)
      */
-    @Override public boolean removeVertex(V v)
+    @Override
+    public boolean removeVertex(V v)
     {
         // If the base graph does NOT contain v it means we are here in
         // response to removal of v from the base. In such case we don't need
@@ -353,7 +364,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#vertexSet()
      */
-    @Override public Set<V> vertexSet()
+    @Override
+    public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {
             unmodifiableVertexSet = Collections.unmodifiableSet(vertexSet);
@@ -365,7 +377,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeSource(Object)
      */
-    @Override public V getEdgeSource(E e)
+    @Override
+    public V getEdgeSource(E e)
     {
         return base.getEdgeSource(e);
     }
@@ -373,7 +386,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeTarget(Object)
      */
-    @Override public V getEdgeTarget(E e)
+    @Override
+    public V getEdgeTarget(E e)
     {
         return base.getEdgeTarget(e);
     }
@@ -389,9 +403,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
 
             V sourceVertex = base.getEdgeSource(e);
             V targetVertex = base.getEdgeTarget(e);
-            containsVertices =
-                    containsVertex(sourceVertex)
-                            && containsVertex(targetVertex);
+            containsVertices = containsVertex(sourceVertex) && containsVertex(targetVertex);
 
             // note the use of short circuit evaluation
             edgeIncluded = (filter == null) || filter.contains(e);
@@ -420,7 +432,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     /**
      * @see Graph#getEdgeWeight(Object)
      */
-    @Override public double getEdgeWeight(E e)
+    @Override
+    public double getEdgeWeight(E e)
     {
         return base.getEdgeWeight(e);
     }
@@ -440,25 +453,22 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * @since Jul 20, 2003
      */
     private class BaseGraphListener
-        implements GraphListener<V, E>,
-            Serializable
+        implements GraphListener<V, E>, Serializable
     {
         private static final long serialVersionUID = 4343535244243546391L;
 
         /**
          * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
          */
-        @Override public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
+        @Override
+        public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
         {
             if (isInduced) {
                 E edge = e.getEdge();
                 V source = e.getEdgeSource();
                 V target = e.getEdgeTarget();
                 if (containsVertex(source) && containsVertex(target)) {
-                    addEdge(
-                        source,
-                        target,
-                        edge);
+                    addEdge(source, target, edge);
                 }
             }
         }
@@ -466,7 +476,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
          */
-        @Override public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
+        @Override
+        public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
         {
             E edge = e.getEdge();
 
@@ -476,7 +487,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
          */
-        @Override public void vertexAdded(GraphVertexChangeEvent<V> e)
+        @Override
+        public void vertexAdded(GraphVertexChangeEvent<V> e)
         {
             // we don't care
         }
@@ -484,7 +496,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         /**
          * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
          */
-        @Override public void vertexRemoved(GraphVertexChangeEvent<V> e)
+        @Override
+        public void vertexRemoved(GraphVertexChangeEvent<V> e)
         {
             V vertex = e.getVertex();
 

@@ -17,11 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
+import junit.framework.*;
 
 /**
  * Unit test for {@link ListenableGraph} class.
@@ -32,14 +31,14 @@ import org.jgrapht.event.*;
 public class ListenableGraphTest
     extends TestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     DefaultEdge lastAddedEdge;
     DefaultEdge lastRemovedEdge;
     Object lastAddedVertex;
     Object lastRemovedVertex;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see junit.framework.TestCase#TestCase(java.lang.String)
@@ -49,7 +48,7 @@ public class ListenableGraphTest
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * Tests GraphListener listener.
@@ -58,11 +57,8 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g =
-                new ListenableUndirectedGraph<>(
-                        DefaultEdge.class);
-        GraphListener<Object, DefaultEdge> listener =
-                new MyGraphListner<>();
+        ListenableGraph<Object, DefaultEdge> g = new ListenableUndirectedGraph<>(DefaultEdge.class);
+        GraphListener<Object, DefaultEdge> listener = new MyGraphListner<>();
         g.addGraphListener(listener);
 
         String v1 = "v1";
@@ -119,11 +115,8 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g =
-                new ListenableUndirectedGraph<>(
-                        DefaultEdge.class);
-        VertexSetListener<Object> listener =
-                new MyGraphListner<>();
+        ListenableGraph<Object, DefaultEdge> g = new ListenableUndirectedGraph<>(DefaultEdge.class);
+        VertexSetListener<Object> listener = new MyGraphListner<>();
         g.addVertexSetListener(listener);
 
         String v1 = "v1";
@@ -181,10 +174,8 @@ public class ListenableGraphTest
         init();
 
         ListenableDirectedWeightedGraph<Object, DefaultWeightedEdge> g =
-                new ListenableDirectedWeightedGraph<>(
-                        DefaultWeightedEdge.class);
-        GraphListener<Object, DefaultWeightedEdge> listener =
-                new MyGraphListner<>();
+            new ListenableDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        GraphListener<Object, DefaultWeightedEdge> listener = new MyGraphListner<>();
         g.addGraphListener(listener);
 
         String v1 = "v1";
@@ -213,7 +204,7 @@ public class ListenableGraphTest
         lastRemovedVertex = null;
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     /**
      * A listener on the tested graph.

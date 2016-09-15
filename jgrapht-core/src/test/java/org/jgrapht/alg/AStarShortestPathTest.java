@@ -17,14 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.TestCase;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.graph.WeightedMultigraph;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * .Test class for AStarShortestPath implementation
@@ -32,79 +29,80 @@ import org.jgrapht.graph.WeightedMultigraph;
  * @author Joris Kinable
  * @since Aug 21, 2015
  */
-public class AStarShortestPathTest extends TestCase{
-    private final String[] labyrinth1={
-                ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                ". . . ####. . . . . . . . . . . . . . . . ####. . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . ####T . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-                ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-                ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-                ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-                "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ."
-    };
+public class AStarShortestPathTest
+    extends TestCase
+{
+    private final String[] labyrinth1 =
+        { ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . ####. . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ####T . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+            "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ." };
 
-    private final String[] labyrinth2={ //Target node is unreachable
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . ####. . . . . . . . . . . . . . . . ####### . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ####T## . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-            "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ."
-    };
+    private final String[] labyrinth2 = { // Target node is unreachable
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . ####. . . . . . . . . . . . . . . . ####### . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ####T## . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+        "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ." };
 
     private WeightedGraph<Node, DefaultWeightedEdge> graph;
     private Node sourceNode;
     private Node targetNode;
 
-    private void readLabyrinth(String[] labyrinth){
-        graph= new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private void readLabyrinth(String[] labyrinth)
+    {
+        graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-        //Create the nodes
-        Node[][] nodes=new Node[labyrinth.length][labyrinth[0].length()];
-        for(int i=0; i<labyrinth.length; i++){
-            for(int j=0; j<labyrinth[0].length(); j++){
-                if(labyrinth[i].charAt(j)=='#' || labyrinth[i].charAt(j)==' ')
+        // Create the nodes
+        Node[][] nodes = new Node[labyrinth.length][labyrinth[0].length()];
+        for (int i = 0; i < labyrinth.length; i++) {
+            for (int j = 0; j < labyrinth[0].length(); j++) {
+                if (labyrinth[i].charAt(j) == '#' || labyrinth[i].charAt(j) == ' ')
                     continue;
-                nodes[i][j]=new Node(i,j);
+                nodes[i][j] = new Node(i, j);
                 graph.addVertex(nodes[i][j]);
-                if(labyrinth[i].charAt(j)=='S')
-                    sourceNode=nodes[i][j];
-                else if(labyrinth[i].charAt(j)=='T')
-                    targetNode=nodes[i][j];
+                if (labyrinth[i].charAt(j) == 'S')
+                    sourceNode = nodes[i][j];
+                else if (labyrinth[i].charAt(j) == 'T')
+                    targetNode = nodes[i][j];
             }
         }
-        //Create the edges
-        //a. Horizontal edges
-        for(int i=0; i<labyrinth.length; i++) {
-            for (int j = 0; j < labyrinth[0].length()-2; j++) {
-                if(nodes[i][j] == null || nodes[i][j+2]==null)
+        // Create the edges
+        // a. Horizontal edges
+        for (int i = 0; i < labyrinth.length; i++) {
+            for (int j = 0; j < labyrinth[0].length() - 2; j++) {
+                if (nodes[i][j] == null || nodes[i][j + 2] == null)
                     continue;
                 Graphs.addEdge(graph, nodes[i][j], nodes[i][j + 2], 1);
             }
         }
-        //b. Vertical edges
-        for(int i=0; i<labyrinth.length-1; i++) {
+        // b. Vertical edges
+        for (int i = 0; i < labyrinth.length - 1; i++) {
             for (int j = 0; j < labyrinth[0].length(); j++) {
-                if(nodes[i][j] == null || nodes[i+1][j]==null)
+                if (nodes[i][j] == null || nodes[i + 1][j] == null)
                     continue;
-                Graphs.addEdge(graph, nodes[i][j], nodes[i+1][j], 1);
+                Graphs.addEdge(graph, nodes[i][j], nodes[i + 1][j], 1);
             }
         }
     }
@@ -112,83 +110,106 @@ public class AStarShortestPathTest extends TestCase{
     /**
      * Test on a graph with a path from the source node to the target node.
      */
-    public void testLabyrinth1(){
+    public void testLabyrinth1()
+    {
         this.readLabyrinth(labyrinth1);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath= new AStarShortestPath<>(graph);
-        GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
+            new AStarShortestPath<>(graph);
+        GraphPath<Node, DefaultWeightedEdge> path =
+            aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNotNull(path);
-        assertEquals((int)path.getWeight(), 47);
+        assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
-        assertEquals(path.getLength()+1, 48);
+        assertEquals(path.getLength() + 1, 48);
 
-        path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new EuclideanDistance());
+        path = aStarShortestPath.getShortestPath(sourceNode, targetNode, new EuclideanDistance());
         assertNotNull(path);
-        assertEquals((int)path.getWeight(), 47);
+        assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
     }
 
     /**
      * Test on a graph where there is no path from the source node to the target node.
      */
-    public void testLabyrinth2(){
+    public void testLabyrinth2()
+    {
         this.readLabyrinth(labyrinth2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath= new AStarShortestPath<>(graph);
-        GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
+            new AStarShortestPath<>(graph);
+        GraphPath<Node, DefaultWeightedEdge> path =
+            aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNull(path);
     }
 
     /**
-     * This test verifies whether multigraphs are processed correctly. In a multigraph, there are multiple edges between the same vertex pair.
-     * Each of these edges can have a different cost. Here we create a simple multigraph A-B-C with multiple edges between (A,B) and (B,C) and
-     * query the shortest path, which is simply the cheapest edge between (A,B) plus the cheapest edge between (B,C). The admissible heuristic
-     * in this test is not important.
+     * This test verifies whether multigraphs are processed correctly. In a multigraph, there are
+     * multiple edges between the same vertex pair. Each of these edges can have a different cost.
+     * Here we create a simple multigraph A-B-C with multiple edges between (A,B) and (B,C) and
+     * query the shortest path, which is simply the cheapest edge between (A,B) plus the cheapest
+     * edge between (B,C). The admissible heuristic in this test is not important.
      */
-    public void testMultiGraph(){
-        WeightedMultigraph<Node, DefaultWeightedEdge> multigraph= new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        Node n1=new Node(0,0);
+    public void testMultiGraph()
+    {
+        WeightedMultigraph<Node, DefaultWeightedEdge> multigraph =
+            new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        Node n1 = new Node(0, 0);
         multigraph.addVertex(n1);
-        Node n2=new Node(1,0);
+        Node n2 = new Node(1, 0);
         multigraph.addVertex(n2);
-        Node n3=new Node(2,0);
+        Node n3 = new Node(2, 0);
         multigraph.addVertex(n3);
-        Graphs.addEdge(multigraph,n1,n2, 5.0);
-        Graphs.addEdge(multigraph,n1,n2, 4.0);
-        Graphs.addEdge(multigraph,n1,n2, 8.0);
-        Graphs.addEdge(multigraph,n2,n3, 7.0);
-        Graphs.addEdge(multigraph,n2,n3, 9);
-        Graphs.addEdge(multigraph,n2,n3, 2);
-        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath= new AStarShortestPath<>(multigraph);
-        GraphPath<Node, DefaultWeightedEdge> path=aStarShortestPath.getShortestPath(n1, n3, new ManhattanDistance());
+        Graphs.addEdge(multigraph, n1, n2, 5.0);
+        Graphs.addEdge(multigraph, n1, n2, 4.0);
+        Graphs.addEdge(multigraph, n1, n2, 8.0);
+        Graphs.addEdge(multigraph, n2, n3, 7.0);
+        Graphs.addEdge(multigraph, n2, n3, 9);
+        Graphs.addEdge(multigraph, n2, n3, 2);
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
+            new AStarShortestPath<>(multigraph);
+        GraphPath<Node, DefaultWeightedEdge> path =
+            aStarShortestPath.getShortestPath(n1, n3, new ManhattanDistance());
         assertNotNull(path);
-        assertEquals((int)path.getWeight(), 6);
+        assertEquals((int) path.getWeight(), 6);
         assertEquals(path.getEdgeList().size(), 2);
     }
 
-    private class ManhattanDistance implements AStarAdmissibleHeuristic<Node> {
+    private class ManhattanDistance
+        implements AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
-            return Math.abs(sourceVertex.x- targetVertex.x)+Math.abs(sourceVertex.y- targetVertex.y);
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
+            return Math.abs(sourceVertex.x - targetVertex.x)
+                + Math.abs(sourceVertex.y - targetVertex.y);
         }
     }
 
-    private class EuclideanDistance implements AStarAdmissibleHeuristic<Node> {
+    private class EuclideanDistance
+        implements AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
-            return Math.sqrt(Math.pow(sourceVertex.x- targetVertex.x,2)+Math.pow(sourceVertex.y- targetVertex.y,2));
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
+            return Math.sqrt(
+                Math.pow(sourceVertex.x - targetVertex.x, 2)
+                    + Math.pow(sourceVertex.y - targetVertex.y, 2));
         }
     }
 
-    private class Node{
+    private class Node
+    {
         public final int x;
         public final int y;
 
-        private Node(int x, int y) {
+        private Node(int x, int y)
+        {
             this.x = x;
             this.y = y;
         }
 
-        public String toString(){
-            return "("+x+","+y+")";
+        public String toString()
+        {
+            return "(" + x + "," + y + ")";
         }
     }
 }

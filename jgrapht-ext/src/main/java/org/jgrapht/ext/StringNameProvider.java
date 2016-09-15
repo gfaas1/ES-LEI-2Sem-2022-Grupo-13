@@ -18,9 +18,8 @@
 package org.jgrapht.ext;
 
 /**
- * Generates vertex names by invoking {@link #toString()} on them. This assumes
- * that the vertex's {@link #toString()} method returns a unique String
- * representation for each vertex.
+ * Generates vertex names by invoking {@link #toString()} on them. This assumes that the vertex's
+ * {@link #toString()} method returns a unique String representation for each vertex.
  *
  * @author Charles Fry
  */
@@ -32,14 +31,14 @@ public class StringNameProvider<V>
     }
 
     /**
-     * Returns the String representation of the unique integer representing a
-     * vertex.
+     * Returns the String representation of the unique integer representing a vertex.
      *
      * @param vertex the vertex to be named
      *
      * @return the name of
      */
-    @Override public String getVertexName(V vertex)
+    @Override
+    public String getVertexName(V vertex)
     {
         return vertex.toString();
     }

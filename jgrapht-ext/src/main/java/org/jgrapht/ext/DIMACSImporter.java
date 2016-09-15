@@ -18,20 +18,14 @@
  */
 package org.jgrapht.ext;
 
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
 
 /**
- * Imports a graph specified in DIMACS format
- * (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps). In summary, graphs
- * specified in DIMACS format adhere to the following structure:
+ * Imports a graph specified in DIMACS format (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps).
+ * In summary, graphs specified in DIMACS format adhere to the following structure:
  * 
  * <pre>
  * {@code
@@ -47,8 +41,8 @@ import java.util.Map;
  * }
  * </pre>
  * 
- * Although not specified directly in the DIMACS format documentation, this
- * implementation also allows for the a weighted variant:
+ * Although not specified directly in the DIMACS format documentation, this implementation also
+ * allows for the a weighted variant:
  * 
  * <pre>
  * {@code 
@@ -56,9 +50,8 @@ import java.util.Map;
  * }
  * </pre>
  * 
- * Note: the current implementation does not fully implement the DIMACS
- * specifications! Special (rarely used) fields specified as 'Optional
- * Descriptors' are currently not supported.
+ * Note: the current implementation does not fully implement the DIMACS specifications! Special
+ * (rarely used) fields specified as 'Optional Descriptors' are currently not supported.
  *
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
@@ -79,20 +72,15 @@ public class DIMACSImporter<V, E>
     /**
      * Construct a new DIMACSImporter
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      * @param defaultWeight default edge weight
      */
     public DIMACSImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider,
-        double defaultWeight)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, double defaultWeight)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
         if (edgeProvider == null) {
@@ -105,14 +93,10 @@ public class DIMACSImporter<V, E>
     /**
      * Construct a new DIMACSImporter
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public DIMACSImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider)
+    public DIMACSImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
         this(vertexProvider, edgeProvider, WeightedGraph.DEFAULT_EDGE_WEIGHT);
     }
@@ -137,8 +121,7 @@ public class DIMACSImporter<V, E>
     public void setVertexProvider(VertexProvider<V> vertexProvider)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
     }
@@ -165,23 +148,22 @@ public class DIMACSImporter<V, E>
         }
         this.edgeProvider = edgeProvider;
     }
-    
+
     /**
      * Import a graph.
      * 
      * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the file contains self-loops then the graph
-     * provided must also support self-loops. The same for multiple edges.
+     * The provided graph must be able to support the features of the graph that is read. For
+     * example if the file contains self-loops then the graph provided must also support self-loops.
+     * The same for multiple edges.
      * 
      * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights. Otherwise edge weights are ignored.
+     * If the provided graph is a weighted graph, the importer also reads edge weights. Otherwise
+     * edge weights are ignored.
      * 
      * @param graph the output graph
      * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case an error occurs, such as I/O or parse error
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
@@ -200,8 +182,7 @@ public class DIMACSImporter<V, E>
         Map<Integer, V> map = new HashMap<Integer, V>();
         for (int i = 0; i < size; i++) {
             Integer id = Integer.valueOf(i + 1);
-            V vertex = vertexProvider
-                .buildVertex(id.toString(), new HashMap<String, String>());
+            V vertex = vertexProvider.buildVertex(id.toString(), new HashMap<String, String>());
             map.put(id, vertex);
             graph.addVertex(vertex);
         }
@@ -211,45 +192,36 @@ public class DIMACSImporter<V, E>
         while (cols != null) {
             if (cols[0].equals("e")) {
                 if (cols.length < 3) {
-                    throw new ImportException(
-                        "Failed to parse edge:" + Arrays.toString(cols));
+                    throw new ImportException("Failed to parse edge:" + Arrays.toString(cols));
                 }
                 Integer source;
                 try {
                     source = Integer.parseInt(cols[1]);
                 } catch (NumberFormatException e) {
                     throw new ImportException(
-                        "Failed to parse edge source node:" + e.getMessage(),
-                        e);
+                        "Failed to parse edge source node:" + e.getMessage(), e);
                 }
                 Integer target;
                 try {
                     target = Integer.parseInt(cols[2]);
                 } catch (NumberFormatException e) {
                     throw new ImportException(
-                        "Failed to parse edge target node:" + e.getMessage(),
-                        e);
+                        "Failed to parse edge target node:" + e.getMessage(), e);
                 }
 
                 String label = "e_" + source + "_" + target;
                 V from = map.get(source);
                 if (from == null) {
-                    throw new ImportException(
-                        "Node " + source + " does not exist");
+                    throw new ImportException("Node " + source + " does not exist");
                 }
                 V to = map.get(target);
                 if (to == null) {
-                    throw new ImportException(
-                        "Node " + target + " does not exist");
+                    throw new ImportException("Node " + target + " does not exist");
                 }
 
                 try {
 
-                    E e = edgeProvider.buildEdge(
-                        from,
-                        to,
-                        label,
-                        new HashMap<String, String>());
+                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
                     graph.addEdge(from, to, e);
 
                     if (graph instanceof WeightedGraph<?, ?>) {
@@ -260,9 +232,7 @@ public class DIMACSImporter<V, E>
                         ((WeightedGraph<V, E>) graph).setEdgeWeight(e, weight);
                     }
                 } catch (IllegalArgumentException e) {
-                    throw new ImportException(
-                        "Failed to import DIMACS graph:" + e.getMessage(),
-                        e);
+                    throw new ImportException("Failed to import DIMACS graph:" + e.getMessage(), e);
                 }
             }
             cols = skipComments(in);
@@ -283,8 +253,8 @@ public class DIMACSImporter<V, E>
         String[] cols = null;
         try {
             cols = split(input.readLine());
-            while ((cols != null) && ((cols.length == 0) || cols[0].equals("c")
-                || cols[0].startsWith("%")))
+            while ((cols != null)
+                && ((cols.length == 0) || cols[0].equals("c") || cols[0].startsWith("%")))
             {
                 cols = split(input.readLine());
             }

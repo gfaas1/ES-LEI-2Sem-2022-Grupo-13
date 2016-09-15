@@ -17,12 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.graph.DefaultEdge;
-
 /**
- * {@link org.jgrapht.graph.DefaultEdge} does not implement hashCode() or
- * equals(). Therefore comparing two graphs does not work as expected out of the
- * box.
+ * {@link org.jgrapht.graph.DefaultEdge} does not implement hashCode() or equals(). Therefore
+ * comparing two graphs does not work as expected out of the box.
  *
  * @author Christoph Zauner
  */
@@ -42,10 +39,8 @@ public class TestEdge
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-            + ((getSource() == null) ? 0 : getSource().hashCode());
-        result = prime * result
-            + ((getTarget() == null) ? 0 : getTarget().hashCode());
+        result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
+        result = prime * result + ((getTarget() == null) ? 0 : getTarget().hashCode());
         return result;
     }
 
@@ -74,4 +69,4 @@ public class TestEdge
 
 }
 
-//End TestEdge.java
+// End TestEdge.java

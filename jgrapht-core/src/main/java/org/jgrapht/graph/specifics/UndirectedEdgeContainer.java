@@ -17,18 +17,18 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.graph.EdgeSetFactory;
+import java.io.*;
+import java.util.*;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Set;
+import org.jgrapht.graph.*;
 
 /**
  * A container for vertex edges.
  *
- * <p>In this edge container we use array lists to minimize memory toll.
- * However, for high-degree vertices we replace the entire edge container
- * with a direct access subclass (to be implemented).</p>
+ * <p>
+ * In this edge container we use array lists to minimize memory toll. However, for high-degree
+ * vertices we replace the entire edge container with a direct access subclass (to be implemented).
+ * </p>
  *
  * @author Barak Naveh
  */
@@ -39,9 +39,7 @@ public class UndirectedEdgeContainer<V, E>
     Set<E> vertexEdges;
     private transient Set<E> unmodifiableVertexEdges = null;
 
-    UndirectedEdgeContainer(
-            EdgeSetFactory<V, E> edgeSetFactory,
-            V vertex)
+    UndirectedEdgeContainer(EdgeSetFactory<V, E> edgeSetFactory, V vertex)
     {
         vertexEdges = edgeSetFactory.createEdgeSet(vertex);
     }
@@ -54,7 +52,7 @@ public class UndirectedEdgeContainer<V, E>
     public Set<E> getUnmodifiableVertexEdges()
     {
         if (unmodifiableVertexEdges == null) {
-            unmodifiableVertexEdges =Collections.unmodifiableSet(vertexEdges);
+            unmodifiableVertexEdges = Collections.unmodifiableSet(vertexEdges);
         }
         return unmodifiableVertexEdges;
     }

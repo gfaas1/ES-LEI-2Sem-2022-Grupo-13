@@ -17,21 +17,18 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm;
-import org.jgrapht.graph.Subgraph;
+import java.util.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
- * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of
- * vertices that touches all the edges in the graph. The graph's vertex set is a
- * trivial cover. However, a <i>minimal</i> vertex set (or at least an
- * approximation for it) is usually desired. Finding a true minimal vertex cover
- * is an NP-Complete problem. For more on the vertex cover problem, see <a
- * href="http://mathworld.wolfram.com/VertexCover.html">
+ * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of vertices that
+ * touches all the edges in the graph. The graph's vertex set is a trivial cover. However, a
+ * <i>minimal</i> vertex set (or at least an approximation for it) is usually desired. Finding a
+ * true minimal vertex cover is an NP-Complete problem. For more on the vertex cover problem, see
+ * <a href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
  * Note: this class supports pseudo-graphs
@@ -39,41 +36,39 @@ import java.util.Set;
  * @author Linda Buisman
  * @since Nov 6, 2003
  */
-public class EdgeBasedTwoApproxVCImpl<V,E> implements MinimumVertexCoverAlgorithm<V,E> {
-
+public class EdgeBasedTwoApproxVCImpl<V, E>
+    implements MinimumVertexCoverAlgorithm<V, E>
+{
 
     /**
-     * Finds a 2-approximation for a minimal vertex cover of the specified
-     * graph. The algorithm promises a cover that is at most double the size of
-     * a minimal cover. The algorithm takes O(|E|) time.
+     * Finds a 2-approximation for a minimal vertex cover of the specified graph. The algorithm
+     * promises a cover that is at most double the size of a minimal cover. The algorithm takes
+     * O(|E|) time.
      *
-     * Note: this class supports pseudo-graphs
-     * Runtime: O(|E|)
+     * Note: this class supports pseudo-graphs Runtime: O(|E|)
      *
-     * Albeit the fact that this is a 2-approximation algorithm for vertex cover, its results are often of lower quality
-     * than the results produced by {@link BarYehudaEvenTwoApproxVCImpl} or {@link ClarksonTwoApproxVCImpl}.
+     * Albeit the fact that this is a 2-approximation algorithm for vertex cover, its results are
+     * often of lower quality than the results produced by {@link BarYehudaEvenTwoApproxVCImpl} or
+     * {@link ClarksonTwoApproxVCImpl}.
      *
-     * <p>For more details see Jenny Walter, CMPU-240: Lecture notes for
-     * Language Theory and Computation, Fall 2002, Vassar College, <a
-     * href="http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf">
+     * <p>
+     * For more details see Jenny Walter, CMPU-240: Lecture notes for Language Theory and
+     * Computation, Fall 2002, Vassar College,
+     * <a href="http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf">
      * http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf</a>.
      * </p>
      *
      *
-     * @return a set of vertices which is a vertex cover for the specified
-     * graph.
+     * @return a set of vertices which is a vertex cover for the specified graph.
      */
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V,E> graph) {
+    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
+    {
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
         // G'=(V',E') <-- G(V,E)
-        Subgraph<V, E, Graph<V, E>> sg =
-                new Subgraph<>(
-                        graph,
-                        null,
-                        null);
+        Subgraph<V, E, Graph<V, E>> sg = new Subgraph<>(graph, null, null);
 
         // while E' is non-empty
         while (!sg.edgeSet().isEmpty()) {

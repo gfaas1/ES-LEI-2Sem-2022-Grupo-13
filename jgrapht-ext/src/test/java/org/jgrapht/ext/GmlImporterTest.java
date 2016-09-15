@@ -17,24 +17,17 @@
  */
 package org.jgrapht.ext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.WeightedPseudograph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * .
+ * 
  * @author Dimitrios Michail
  */
 public class GmlImporterTest
@@ -42,10 +35,7 @@ public class GmlImporterTest
 {
 
     public <E> Graph<String, E> readGraph(
-        String input,
-        Class<? extends E> edgeClass,
-        boolean directed,
-        boolean weighted)
+        String input, Class<? extends E> edgeClass, boolean directed, boolean weighted)
         throws ImportException
     {
         Graph<String, E> g;
@@ -66,9 +56,7 @@ public class GmlImporterTest
         VertexProvider<String> vp = new VertexProvider<String>()
         {
             @Override
-            public String buildVertex(
-                String label,
-                Map<String, String> attributes)
+            public String buildVertex(String label, Map<String, String> attributes)
             {
                 return label;
             }
@@ -78,11 +66,7 @@ public class GmlImporterTest
         {
 
             @Override
-            public E buildEdge(
-                String from,
-                String to,
-                String label,
-                Map<String, String> attributes)
+            public E buildEdge(String from, String to, String label, Map<String, String> attributes)
             {
                 return g.getEdgeFactory().createEdge(from, to);
             }
@@ -128,11 +112,7 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = readGraph(
-            input,
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
 
         assertEquals(4, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -174,11 +154,7 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = readGraph(
-            input,
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
 
         assertEquals(2, g.vertexSet().size());
         assertEquals(1, g.edgeSet().size());
@@ -195,20 +171,13 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g1 = readGraph(
-            input,
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g1 = readGraph(input, DefaultEdge.class, false, false);
 
         assertEquals(0, g1.vertexSet().size());
         assertEquals(0, g1.edgeSet().size());
 
-        Graph<String, DefaultEdge> g2 = readGraph(
-            input.toLowerCase(),
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g2 =
+            readGraph(input.toLowerCase(), DefaultEdge.class, false, false);
 
         assertEquals(0, g2.vertexSet().size());
         assertEquals(0, g2.edgeSet().size());
@@ -265,11 +234,7 @@ public class GmlImporterTest
                      ;
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = readGraph(
-            input,
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
 
         assertEquals(4, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -315,11 +280,7 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = readGraph(
-            input,
-            DefaultEdge.class,
-            false,
-            false);
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
 
         assertEquals(4, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
@@ -381,11 +342,7 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultEdge> g = readGraph(
-            input,
-            DefaultEdge.class,
-            true,
-            false);
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, true, false);
 
         assertEquals(4, g.vertexSet().size());
         assertEquals(7, g.edgeSet().size());
@@ -420,11 +377,8 @@ public class GmlImporterTest
                      + "]";
         // @formatter:on
 
-        Graph<String, DefaultWeightedEdge> g = readGraph(
-            input,
-            DefaultWeightedEdge.class,
-            true,
-            true);
+        Graph<String, DefaultWeightedEdge> g =
+            readGraph(input, DefaultWeightedEdge.class, true, true);
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(2, g.edgeSet().size());
@@ -465,11 +419,8 @@ public class GmlImporterTest
                          + "]";
             // @formatter:on
 
-        Graph<String, DefaultWeightedEdge> g = readGraph(
-            input,
-            DefaultWeightedEdge.class,
-            true,
-            true);
+        Graph<String, DefaultWeightedEdge> g =
+            readGraph(input, DefaultWeightedEdge.class, true, true);
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(2, g.edgeSet().size());
@@ -488,11 +439,8 @@ public class GmlImporterTest
                        "edge [ source 3 target 1 weight 3.0 ] ]"; 
         // @formatter:on
 
-        Graph<String, DefaultWeightedEdge> g = readGraph(
-            input,
-            DefaultWeightedEdge.class,
-            true,
-            true);
+        Graph<String, DefaultWeightedEdge> g =
+            readGraph(input, DefaultWeightedEdge.class, true, true);
 
         assertEquals(3, g.vertexSet().size());
         assertEquals(2, g.edgeSet().size());
@@ -531,8 +479,8 @@ public class GmlImporterTest
     public void testExportImport()
         throws ImportException, ExportException, UnsupportedEncodingException
     {
-        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(
-            DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 =
+            new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         g1.addVertex("1");
         g1.addVertex("2");
         g1.addVertex("3");
@@ -540,17 +488,15 @@ public class GmlImporterTest
         g1.setEdgeWeight(g1.addEdge("2", "3"), 3.0);
         g1.setEdgeWeight(g1.addEdge("3", "3"), 5.0);
 
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        GmlExporter<String, DefaultWeightedEdge> exporter =
+            new GmlExporter<String, DefaultWeightedEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g1, os);
         String output = new String(os.toByteArray(), "UTF-8");
 
-        Graph<String, DefaultWeightedEdge> g2 = readGraph(
-            output,
-            DefaultWeightedEdge.class,
-            true,
-            true);
+        Graph<String, DefaultWeightedEdge> g2 =
+            readGraph(output, DefaultWeightedEdge.class, true, true);
 
         assertEquals(3, g2.vertexSet().size());
         assertEquals(3, g2.edgeSet().size());
@@ -574,9 +520,7 @@ public class GmlImporterTest
         VertexProvider<String> vp = new VertexProvider<String>()
         {
             @Override
-            public String buildVertex(
-                String label,
-                Map<String, String> attributes)
+            public String buildVertex(String label, Map<String, String> attributes)
             {
                 return label;
             }
@@ -587,10 +531,7 @@ public class GmlImporterTest
 
             @Override
             public DefaultEdge buildEdge(
-                String from,
-                String to,
-                String label,
-                Map<String, String> attributes)
+                String from, String to, String label, Map<String, String> attributes)
             {
                 return g.getEdgeFactory().createEdge(from, to);
             }
@@ -598,9 +539,8 @@ public class GmlImporterTest
         };
 
         try {
-            GmlImporter<String, DefaultEdge> importer = new GmlImporter<String, DefaultEdge>(
-                vp,
-                ep);
+            GmlImporter<String, DefaultEdge> importer =
+                new GmlImporter<String, DefaultEdge>(vp, ep);
             importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (ImportException e) {

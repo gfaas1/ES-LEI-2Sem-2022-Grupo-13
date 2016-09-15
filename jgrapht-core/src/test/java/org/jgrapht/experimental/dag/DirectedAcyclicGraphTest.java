@@ -17,24 +17,19 @@
  */
 package org.jgrapht.experimental.dag;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.TestEdge;
-import org.jgrapht.traverse.TopologicalOrderIterator;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
+
+import junit.framework.*;
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.
@@ -44,14 +39,15 @@ import static org.junit.Assert.assertThat;
 public class DirectedAcyclicGraphTest
     extends TestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     private GraphGenerator<Long, DefaultEdge, Long> randomGraphGenerator = null;
     private Graph<Long, DefaultEdge> sourceGraph = null;
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
-    @Override protected void setUp()
+    @Override
+    protected void setUp()
         throws Exception
     {
         super.setUp();
@@ -61,23 +57,14 @@ public class DirectedAcyclicGraphTest
 
     private void setUpWithSeed(int vertices, int edges, long seed)
     {
-        randomGraphGenerator =
-                new RepeatableRandomGraphGenerator<>(
-                        vertices,
-                        edges,
-                        seed);
-        sourceGraph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
-        randomGraphGenerator.generateGraph(
-            sourceGraph,
-            new LongVertexFactory(),
-            null);
+        randomGraphGenerator = new RepeatableRandomGraphGenerator<>(vertices, edges, seed);
+        sourceGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        randomGraphGenerator.generateGraph(sourceGraph, new LongVertexFactory(), null);
     }
 
     /**
-     * Tests the cycle detection capabilities of DirectedAcyclicGraph by
-     * building a parallel SimpleDirectedGraph and using a CycleDetector to
-     * check for cycles, and comparing the results.
+     * Tests the cycle detection capabilities of DirectedAcyclicGraph by building a parallel
+     * SimpleDirectedGraph and using a CycleDetector to check for cycles, and comparing the results.
      */
     public void testCycleDetectionInRandomGraphBuild()
     {
@@ -86,9 +73,9 @@ public class DirectedAcyclicGraphTest
             setUpWithSeed(20, 200, i);
 
             DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                    new DirectedAcyclicGraph<>(DefaultEdge.class);
+                new DirectedAcyclicGraph<>(DefaultEdge.class);
             SimpleDirectedGraph<Long, DefaultEdge> compareGraph =
-                    new SimpleDirectedGraph<>(DefaultEdge.class);
+                new SimpleDirectedGraph<>(DefaultEdge.class);
 
             for (Long vertex : sourceGraph.vertexSet()) {
                 dag.addVertex(vertex);
@@ -107,10 +94,8 @@ public class DirectedAcyclicGraphTest
                     dagRejectedEdge = true;
                 }
 
-                DefaultEdge compareEdge =
-                    compareGraph.addEdge(edgeSource, edgeTarget);
-                CycleDetector<Long, DefaultEdge> cycleDetector =
-                        new CycleDetector<>(compareGraph);
+                DefaultEdge compareEdge = compareGraph.addEdge(edgeSource, edgeTarget);
+                CycleDetector<Long, DefaultEdge> cycleDetector = new CycleDetector<>(compareGraph);
 
                 boolean cycleDetected = cycleDetector.detectCycles();
 
@@ -129,12 +114,8 @@ public class DirectedAcyclicGraphTest
             // for some reason comparing vertex sets doesn't work, so doing it
             // the hard way:
             for (Long sourceVertex : compareGraph.vertexSet()) {
-                for (
-                    DefaultEdge outgoingEdge
-                    : compareGraph.outgoingEdgesOf(sourceVertex))
-                {
-                    Long targetVertex =
-                        compareGraph.getEdgeTarget(outgoingEdge);
+                for (DefaultEdge outgoingEdge : compareGraph.outgoingEdgesOf(sourceVertex)) {
+                    Long targetVertex = compareGraph.getEdgeTarget(outgoingEdge);
                     assertTrue(dag.containsEdge(sourceVertex, targetVertex));
                 }
             }
@@ -146,15 +127,13 @@ public class DirectedAcyclicGraphTest
      */
     public void testTopoIterationOrderLinearGraph()
     {
-        DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                new DirectedAcyclicGraph<>(DefaultEdge.class);
-        LinearGraphGenerator<Long, DefaultEdge> graphGen =
-                new LinearGraphGenerator<>(100);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        LinearGraphGenerator<Long, DefaultEdge> graphGen = new LinearGraphGenerator<>(100);
         graphGen.generateGraph(dag, new LongVertexFactory(), null);
 
         Iterator<Long> internalTopoIter = dag.iterator();
         TopologicalOrderIterator<Long, DefaultEdge> comparTopoIter =
-                new TopologicalOrderIterator<>(dag);
+            new TopologicalOrderIterator<>(dag);
 
         while (comparTopoIter.hasNext()) {
             Long compareNext = comparTopoIter.next();
@@ -170,24 +149,21 @@ public class DirectedAcyclicGraphTest
     }
 
     /**
-     * more rigorous test of topological iteration order, by assuring that each
-     * visited vertex adheres to the definition of topological order, that is
-     * that it doesn't have a path leading to any of its predecessors.
+     * more rigorous test of topological iteration order, by assuring that each visited vertex
+     * adheres to the definition of topological order, that is that it doesn't have a path leading
+     * to any of its predecessors.
      */
     public void testTopoIterationOrderComplexGraph()
     {
         for (int seed = 0; seed < 20; seed++) {
             DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                    new DirectedAcyclicGraph<>(DefaultEdge.class);
+                new DirectedAcyclicGraph<>(DefaultEdge.class);
             RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
-                    new RepeatableRandomGraphGenerator<>(
-                            100,
-                            500,
-                            seed);
+                new RepeatableRandomGraphGenerator<>(100, 500, seed);
             graphGen.generateGraph(dag, new LongVertexFactory(), null);
 
             ConnectivityInspector<Long, DefaultEdge> connectivityInspector =
-                    new ConnectivityInspector<>(dag);
+                new ConnectivityInspector<>(dag);
 
             Iterator<Long> internalTopoIter = dag.iterator();
 
@@ -209,13 +185,9 @@ public class DirectedAcyclicGraphTest
     {
         int vertexCount = 100;
 
-        DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
         RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
-                new RepeatableRandomGraphGenerator<>(
-                        vertexCount,
-                        500,
-                        2);
+            new RepeatableRandomGraphGenerator<>(vertexCount, 500, 2);
         graphGen.generateGraph(dag, new LongVertexFactory(), null);
 
         Iterator<Long> dagIter = dag.iterator();
@@ -280,9 +252,9 @@ public class DirectedAcyclicGraphTest
     // default JUnit runs).
 
     /**
-     * A somewhat frivolous test of the performance difference between doing a
-     * full cycle detection (non-dynamic algorithm) for each edge added versus
-     * the dynamic algorithm used by DirectedAcyclicGraph.
+     * A somewhat frivolous test of the performance difference between doing a full cycle detection
+     * (non-dynamic algorithm) for each edge added versus the dynamic algorithm used by
+     * DirectedAcyclicGraph.
      */
     public void _testPerformanceVersusStaticChecking()
     {
@@ -290,29 +262,19 @@ public class DirectedAcyclicGraphTest
         int maxVertices = 1024;
         int maxConnectednessFactor = 4;
 
-        for (
-            int numVertices = 1024;
-            numVertices <= maxVertices;
-            numVertices *= 2)
-        {
-            for (
-                int connectednessFactor = 1;
-                (connectednessFactor <= maxConnectednessFactor)
-                && (connectednessFactor < (numVertices - 1));
-                connectednessFactor *= 2)
+        for (int numVertices = 1024; numVertices <= maxVertices; numVertices *= 2) {
+            for (int connectednessFactor = 1; (connectednessFactor <= maxConnectednessFactor)
+                && (connectednessFactor < (numVertices - 1)); connectednessFactor *= 2)
             {
                 long dynamicDagTime = 0;
                 long staticDagTime = 0;
 
-                for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random graph configurations
-                    setUpWithSeed(
-                        numVertices,
-                        numVertices * connectednessFactor,
-                        seed);
+                for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
+                                                                            // graph configurations
+                    setUpWithSeed(numVertices, numVertices * connectednessFactor, seed);
 
                     DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                            new DirectedAcyclicGraph<>(
-                                    DefaultEdge.class);
+                        new DirectedAcyclicGraph<>(DefaultEdge.class);
 
                     long dynamicOpStart = System.nanoTime();
 
@@ -330,8 +292,7 @@ public class DirectedAcyclicGraphTest
                     dynamicDagTime += System.nanoTime() - dynamicOpStart;
 
                     SimpleDirectedGraph<Long, DefaultEdge> compareGraph =
-                            new SimpleDirectedGraph<>(
-                                    DefaultEdge.class);
+                        new SimpleDirectedGraph<>(DefaultEdge.class);
 
                     long staticOpStart = System.nanoTime();
 
@@ -343,10 +304,9 @@ public class DirectedAcyclicGraphTest
                         Long edgeSource = sourceGraph.getEdgeSource(edge);
                         Long edgeTarget = sourceGraph.getEdgeTarget(edge);
 
-                        DefaultEdge compareEdge =
-                            compareGraph.addEdge(edgeSource, edgeTarget);
+                        DefaultEdge compareEdge = compareGraph.addEdge(edgeSource, edgeTarget);
                         CycleDetector<Long, DefaultEdge> cycleDetector =
-                                new CycleDetector<>(compareGraph);
+                            new CycleDetector<>(compareGraph);
 
                         boolean cycleDetected = cycleDetector.detectCycles();
 
@@ -360,22 +320,19 @@ public class DirectedAcyclicGraphTest
                 }
 
                 System.out.println(
-                    "vertices = " + numVertices + "  connectednessFactor = "
-                    + connectednessFactor + "  trialsPerConfiguration = "
-                    + trialsPerConfiguration);
-                System.out.println(
-                    "total static DAG time   =  " + staticDagTime + " ns");
-                System.out.println(
-                    "total dynamic DAG time  =  " + dynamicDagTime + " ns");
+                    "vertices = " + numVertices + "  connectednessFactor = " + connectednessFactor
+                        + "  trialsPerConfiguration = " + trialsPerConfiguration);
+                System.out.println("total static DAG time   =  " + staticDagTime + " ns");
+                System.out.println("total dynamic DAG time  =  " + dynamicDagTime + " ns");
                 System.out.println();
             }
         }
     }
 
     /**
-     * A somewhat frivolous test of the performance difference between doing a
-     * full cycle detection (non-dynamic algorithm) for each edge added versus
-     * the dynamic algorithm used by DirectedAcyclicGraph.
+     * A somewhat frivolous test of the performance difference between doing a full cycle detection
+     * (non-dynamic algorithm) for each edge added versus the dynamic algorithm used by
+     * DirectedAcyclicGraph.
      */
     public void _testVisitedImplementationPerformance()
     {
@@ -383,48 +340,29 @@ public class DirectedAcyclicGraphTest
         int maxVertices = 1024;
         int maxConnectednessFactor = 4;
 
-        for (
-            int numVertices = 64;
-            numVertices <= maxVertices;
-            numVertices *= 2)
-        {
-            for (
-                int connectednessFactor = 1;
-                (connectednessFactor <= maxConnectednessFactor)
-                && (connectednessFactor < (numVertices - 1));
-                connectednessFactor *= 2)
+        for (int numVertices = 64; numVertices <= maxVertices; numVertices *= 2) {
+            for (int connectednessFactor = 1; (connectednessFactor <= maxConnectednessFactor)
+                && (connectednessFactor < (numVertices - 1)); connectednessFactor *= 2)
             {
                 long arrayDagTime = 0;
                 long arrayListDagTime = 0;
                 long hashSetDagTime = 0;
                 long bitSetDagTime = 0;
 
-                for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random graph configurations
-                    setUpWithSeed(
-                        numVertices,
-                        numVertices * connectednessFactor,
-                        seed);
+                for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
+                                                                            // graph configurations
+                    setUpWithSeed(numVertices, numVertices * connectednessFactor, seed);
 
-                    DirectedAcyclicGraph<Long, DefaultEdge> arrayDag =
-                            new DirectedAcyclicGraph<>(
-                                    DefaultEdge.class,
-                                    new DirectedAcyclicGraph.VisitedArrayImpl(),
-                                    null);
-                    DirectedAcyclicGraph<Long, DefaultEdge> arrayListDag =
-                            new DirectedAcyclicGraph<>(
-                                    DefaultEdge.class,
-                                    new DirectedAcyclicGraph.VisitedArrayListImpl(),
-                                    null);
-                    DirectedAcyclicGraph<Long, DefaultEdge> hashSetDag =
-                            new DirectedAcyclicGraph<>(
-                                    DefaultEdge.class,
-                                    new DirectedAcyclicGraph.VisitedHashSetImpl(),
-                                    null);
-                    DirectedAcyclicGraph<Long, DefaultEdge> bitSetDag =
-                            new DirectedAcyclicGraph<>(
-                                    DefaultEdge.class,
-                                    new DirectedAcyclicGraph.VisitedBitSetImpl(),
-                                    null);
+                    DirectedAcyclicGraph<Long, DefaultEdge> arrayDag = new DirectedAcyclicGraph<>(
+                        DefaultEdge.class, new DirectedAcyclicGraph.VisitedArrayImpl(), null);
+                    DirectedAcyclicGraph<Long,
+                        DefaultEdge> arrayListDag = new DirectedAcyclicGraph<>(
+                            DefaultEdge.class, new DirectedAcyclicGraph.VisitedArrayListImpl(),
+                            null);
+                    DirectedAcyclicGraph<Long, DefaultEdge> hashSetDag = new DirectedAcyclicGraph<>(
+                        DefaultEdge.class, new DirectedAcyclicGraph.VisitedHashSetImpl(), null);
+                    DirectedAcyclicGraph<Long, DefaultEdge> bitSetDag = new DirectedAcyclicGraph<>(
+                        DefaultEdge.class, new DirectedAcyclicGraph.VisitedBitSetImpl(), null);
 
                     long arrayStart = System.nanoTime();
 
@@ -504,37 +442,30 @@ public class DirectedAcyclicGraphTest
                 }
 
                 System.out.println(
-                    "vertices = " + numVertices + "  connectednessFactor = "
-                    + connectednessFactor + "  trialsPerConfiguration = "
-                    + trialsPerConfiguration);
-                System.out.println(
-                    "total array time       =  " + arrayDagTime + " ns");
-                System.out.println(
-                    "total ArrayList time   =  " + arrayListDagTime + " ns");
-                System.out.println(
-                    "total HashSet time     =  " + hashSetDagTime + " ns");
-                System.out.println(
-                    "total BitSet time     =  " + bitSetDagTime + " ns");
+                    "vertices = " + numVertices + "  connectednessFactor = " + connectednessFactor
+                        + "  trialsPerConfiguration = " + trialsPerConfiguration);
+                System.out.println("total array time       =  " + arrayDagTime + " ns");
+                System.out.println("total ArrayList time   =  " + arrayListDagTime + " ns");
+                System.out.println("total HashSet time     =  " + hashSetDagTime + " ns");
+                System.out.println("total BitSet time     =  " + bitSetDagTime + " ns");
                 System.out.println();
             }
         }
     }
 
-
-    public void testWhenVertexIsNotInGraph_Then_ThowException() {
-        DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                new DirectedAcyclicGraph<>(DefaultEdge.class);
+    public void testWhenVertexIsNotInGraph_Then_ThowException()
+    {
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(DefaultEdge.class);
         try {
-        	dag.addDagEdge(1l, 2l);
-        } catch(IllegalArgumentException e) {
-        	return;
+            dag.addDagEdge(1l, 2l);
+        } catch (IllegalArgumentException e) {
+            return;
         } catch (CycleFoundException e) {
-			e.printStackTrace();
-			fail("Unexpected 'CycleFoundException' catched");
-		}
+            e.printStackTrace();
+            fail("Unexpected 'CycleFoundException' catched");
+        }
         fail("No exception 'IllegalArgumentException' catched");
     }
-
 
     //@formatter:off
     /**
@@ -555,8 +486,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineAncestors00()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -599,8 +530,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineAncestors01()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -641,8 +572,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineAncestors02()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -684,8 +615,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineDescendants00()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -728,8 +659,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineDescendants01()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -744,7 +675,6 @@ public class DirectedAcyclicGraphTest
         graph.addEdge(a, b);
         graph.addEdge(b, c);
         graph.addEdge(b, d);
-
 
         Set<String> expectedDescendents = new HashSet<>();
 
@@ -771,8 +701,8 @@ public class DirectedAcyclicGraphTest
     public void testDetermineDescendants02()
     {
 
-        DirectedAcyclicGraph<String, TestEdge> graph = new DirectedAcyclicGraph<String, TestEdge>(
-            TestEdge.class);
+        DirectedAcyclicGraph<String, TestEdge> graph =
+            new DirectedAcyclicGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -795,10 +725,10 @@ public class DirectedAcyclicGraphTest
         Assert.assertEquals(expectedAncestors, ancestors);
     }
 
-    public void testRemoveAllVerticesShouldNotDeleteTopologyIfTheGraphHasVerticesLeft() {
-        //Given
-        DirectedAcyclicGraph<String, TestEdge> dag =
-            new DirectedAcyclicGraph<>(TestEdge.class);
+    public void testRemoveAllVerticesShouldNotDeleteTopologyIfTheGraphHasVerticesLeft()
+    {
+        // Given
+        DirectedAcyclicGraph<String, TestEdge> dag = new DirectedAcyclicGraph<>(TestEdge.class);
 
         List<String> vertices = Arrays.asList("a", "b", "c", "d", "e");
 
@@ -809,14 +739,14 @@ public class DirectedAcyclicGraphTest
         dag.addEdge("a", "d");
         dag.addEdge("b", "c");
 
-        //When
+        // When
         dag.removeAllVertices(vertices.subList(0, vertices.size() - 2));
 
-        //Then
+        // Then
         assertThat(dag.iterator().hasNext(), is(true));
     }
 
-    //~ Inner Classes ----------------------------------------------------------
+    // ~ Inner Classes ----------------------------------------------------------
 
     private static class LongVertexFactory
         implements VertexFactory<Long>
@@ -838,21 +768,17 @@ public class DirectedAcyclicGraphTest
         private Random randomizer;
         private int numOfVertexes;
         private int numOfEdges;
-        
-        public RepeatableRandomGraphGenerator(
-            int vertices,
-            int edges,
-            long seed)
+
+        public RepeatableRandomGraphGenerator(int vertices, int edges, long seed)
         {
             this.numOfVertexes = vertices;
             this.numOfEdges = edges;
             this.randomizer = new Random(seed);
         }
 
-        @Override public void generateGraph(
-            Graph<V, E> graph,
-            VertexFactory<V> vertexFactory,
-            Map<String, V> namedVerticesMap)
+        @Override
+        public void generateGraph(
+            Graph<V, E> graph, VertexFactory<V> vertexFactory, Map<String, V> namedVerticesMap)
         {
             List<V> vertices = new ArrayList<>(numOfVertexes);
             Set<Integer> edgeGeneratorIds = new HashSet<>();
@@ -866,8 +792,7 @@ public class DirectedAcyclicGraphTest
             for (int i = 0; i < numOfEdges; i++) {
                 Integer edgeGeneratorId;
                 do {
-                    edgeGeneratorId =
-                        randomizer.nextInt(numOfVertexes * (numOfVertexes - 1));
+                    edgeGeneratorId = randomizer.nextInt(numOfVertexes * (numOfVertexes - 1));
                 } while (edgeGeneratorIds.contains(edgeGeneratorId));
 
                 int fromVertexId = edgeGeneratorId / numOfVertexes;
@@ -877,9 +802,7 @@ public class DirectedAcyclicGraphTest
                 }
 
                 try {
-                    graph.addEdge(
-                        vertices.get(fromVertexId),
-                        vertices.get(toVertexId));
+                    graph.addEdge(vertices.get(fromVertexId), vertices.get(toVertexId));
                 } catch (IllegalArgumentException e) {
                     // okay, that's fine; omit cycle
                 }

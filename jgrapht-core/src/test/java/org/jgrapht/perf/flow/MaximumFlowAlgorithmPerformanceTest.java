@@ -17,32 +17,29 @@
  */
 package org.jgrapht.perf.flow;
 
-import junit.framework.TestCase;
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
-import org.jgrapht.alg.flow.PushRelabelMFImpl;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import java.util.concurrent.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.flow.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.TimeValue;
+import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.options.*;
 
-import java.util.concurrent.TimeUnit;
+import junit.framework.*;
 
-public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
+public class MaximumFlowAlgorithmPerformanceTest
+    extends TestCase
+{
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT   = 1000;
-    public static final int PERF_BENCHMARK_EDGES_COUNT      = 100000;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
+    public static final int PERF_BENCHMARK_EDGES_COUNT = 100000;
 
     @State(Scope.Benchmark)
-    private static abstract class RandomGraphBenchmarkBase {
+    private static abstract class RandomGraphBenchmarkBase
+    {
 
         public static final long SEED = 1446523573696201013l;
 
@@ -51,73 +48,79 @@ public class MaximumFlowAlgorithmPerformanceTest extends TestCase {
         private Integer source;
         private Integer sink;
 
-        abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network);
+        abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            DirectedGraph<Integer, DefaultWeightedEdge> network);
 
         @Setup
-        public void setup() {
-            GraphGenerator<Integer, DefaultWeightedEdge, Integer> rgg
-                = new GnmRandomGraphGenerator<>(PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
+        public void setup()
+        {
+            GraphGenerator<Integer, DefaultWeightedEdge, Integer> rgg =
+                new GnmRandomGraphGenerator<>(
+                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network
-                = new SimpleDirectedWeightedGraph<>((sourceVertex, targetVertex) -> {
-                return new DefaultWeightedEdge();
-            });
+            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
+                new SimpleDirectedWeightedGraph<>((sourceVertex, targetVertex) -> {
+                    return new DefaultWeightedEdge();
+                });
 
-            rgg.generateGraph(
-                network,
-                new VertexFactory<Integer>() {
-                    int i;
-                    @Override
-                    public Integer createVertex() {
-                        return ++i;
-                    }
-                },
-                null
-            );
+            rgg.generateGraph(network, new VertexFactory<Integer>()
+            {
+                int i;
+
+                @Override
+                public Integer createVertex()
+                {
+                    return ++i;
+                }
+            }, null);
 
             solver = createSolver(network);
 
             Object[] vs = network.vertexSet().toArray();
 
-            source  = (Integer) vs[0];
-            sink    = (Integer) vs[vs.length - 1];
+            source = (Integer) vs[0];
+            sink = (Integer) vs[vs.length - 1];
         }
 
         @Benchmark
-        public void run() {
+        public void run()
+        {
             solver.buildMaximumFlow(source, sink);
         }
     }
 
-    public static class EdmondsKarpMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase {
+    public static class EdmondsKarpMaximumFlowRandomGraphBenchmark
+        extends RandomGraphBenchmarkBase
+    {
         @Override
-        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network) {
+        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            DirectedGraph<Integer, DefaultWeightedEdge> network)
+        {
             return new EdmondsKarpMFImpl<>(network);
         }
     }
 
-    public static class PushRelabelMaximumFlowRandomGraphBenchmark extends RandomGraphBenchmarkBase {
+    public static class PushRelabelMaximumFlowRandomGraphBenchmark
+        extends RandomGraphBenchmarkBase
+    {
         @Override
-        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(DirectedGraph<Integer, DefaultWeightedEdge> network) {
+        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            DirectedGraph<Integer, DefaultWeightedEdge> network)
+        {
             return new PushRelabelMFImpl<>(network);
         }
     }
 
-    public void testRandomGraphBenchmark() throws RunnerException {
+    public void testRandomGraphBenchmark()
+        throws RunnerException
+    {
         Options opt = new OptionsBuilder()
             .include(".*" + EdmondsKarpMaximumFlowRandomGraphBenchmark.class.getSimpleName() + ".*")
             .include(".*" + PushRelabelMaximumFlowRandomGraphBenchmark.class.getSimpleName() + ".*")
 
-            .mode(Mode.AverageTime)
-            .timeUnit(TimeUnit.NANOSECONDS)
-            .warmupTime(TimeValue.seconds(1))
-            .warmupIterations(3)
-            .measurementTime(TimeValue.seconds(1))
-            .measurementIterations(5)
-            .forks(1)
-            .shouldFailOnError(true)
-            .shouldDoGC(true)
-            .build();
+            .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
+            .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)
+            .forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 
         new Runner(opt).run();
     }

@@ -20,10 +20,9 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A simple weighted graph. A simple weighted graph is a simple graph for which
- * edges are assigned weights.
+ * A simple weighted graph. A simple weighted graph is a simple graph for which edges are assigned
+ * weights.
  */
 public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
@@ -51,19 +50,18 @@ public class SimpleWeightedGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
+            Class<? extends E> edgeClass)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new SimpleWeightedGraph<>(edgeClass));
+        return new UndirectedWeightedGraphBuilder<>(new SimpleWeightedGraph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends SimpleWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
+            EdgeFactory<V, E> ef)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new SimpleWeightedGraph<>(ef));
+        return new UndirectedWeightedGraphBuilder<>(new SimpleWeightedGraph<>(ef));
     }
 }
 

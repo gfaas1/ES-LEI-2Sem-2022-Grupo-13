@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * Unit tests for MaskEdgeSet.
  *
@@ -37,10 +36,9 @@ public class MaskEdgeSetTest
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
 
     @Override
-    protected void setUp () {
-        DirectedGraph<String, DefaultEdge> directed =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+    protected void setUp()
+    {
+        DirectedGraph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);
@@ -55,22 +53,26 @@ public class MaskEdgeSetTest
         loop2 = directed.addEdge(v4, v4);
 
         // Functor that masks vertex v1 and and the edge v2-v3
-        MaskFunctor<String, DefaultEdge> mask = new MaskFunctor<String, DefaultEdge> () {
-                @Override
-                public boolean isEdgeMasked (DefaultEdge edge) {
-                    return (edge == e2);
-                }
+        MaskFunctor<String, DefaultEdge> mask = new MaskFunctor<String, DefaultEdge>()
+        {
+            @Override
+            public boolean isEdgeMasked(DefaultEdge edge)
+            {
+                return (edge == e2);
+            }
 
-                @Override
-                public boolean isVertexMasked (String vertex) {
-                    return (vertex == v1);
-                }
-            };
+            @Override
+            public boolean isVertexMasked(String vertex)
+            {
+                return (vertex == v1);
+            }
+        };
 
         testMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), mask);
     }
 
-    public void testContains () {
+    public void testContains()
+    {
         assertFalse(testMaskedEdgeSet.contains(e1));
         assertFalse(testMaskedEdgeSet.contains(e2));
         assertTrue(testMaskedEdgeSet.contains(e3));
@@ -81,7 +83,8 @@ public class MaskEdgeSetTest
         assertFalse(testMaskedEdgeSet.contains(v1));
     }
 
-    public void testSize () {
+    public void testSize()
+    {
         assertEquals(2, testMaskedEdgeSet.size());
     }
 }

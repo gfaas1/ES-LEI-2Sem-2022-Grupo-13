@@ -17,30 +17,27 @@
  */
 package org.jgrapht.ext;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 /**
  * Imports a graph from a DOT file.
  *
- * <p>For a description of the format see <a
- * href="http://en.wikipedia.org/wiki/DOT_language">
- * http://en.wikipedia.org/wiki/DOT_language</a> and <a
- * href="http://www.graphviz.org/doc/info/lang.html">
- * http://www.graphviz.org/doc/info/lang.html</a></p>
+ * <p>
+ * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
+ * http://en.wikipedia.org/wiki/DOT_language</a> and
+ * <a href="http://www.graphviz.org/doc/info/lang.html">
+ * http://www.graphviz.org/doc/info/lang.html</a>
+ * </p>
  *
  * state machine description (In dot format naturally):
  *
- * <pre><code>
+ * <pre>
+ * <code>
  *
  * digraph G {
  *    1 [label="start" description="Entry point"];
@@ -82,7 +79,8 @@ import org.jgrapht.graph.AbstractBaseGraph;
  *    9 -&gt; 6;
  * }
  *
- * </code></pre>
+ * </code>
+ * </pre>
  *
  * @author Wil Selwood
  */
@@ -110,9 +108,7 @@ public class DOTImporter<V, E>
      * @param vertexProvider Provider to create a vertex
      * @param edgeProvider Provider to create an edge
      */
-    public DOTImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider)
+    public DOTImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
         this.vertexProvider = vertexProvider;
         this.vertexUpdater = null;
@@ -127,9 +123,7 @@ public class DOTImporter<V, E>
      * @param updater Method used to update an existing Vertex
      */
     public DOTImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider,
-        VertexUpdater<V> updater)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, VertexUpdater<V> updater)
     {
         this.vertexProvider = vertexProvider;
         this.vertexUpdater = updater;
@@ -139,8 +133,7 @@ public class DOTImporter<V, E>
     /**
      * Read a dot formatted input and populate the provided graph.
      * 
-     * The current implementation reads the whole input as a string and then
-     * parses the graph.
+     * The current implementation reads the whole input as a string and then parses the graph.
      *
      * @param graph the graph to update
      * @param input the input reader
@@ -172,9 +165,9 @@ public class DOTImporter<V, E>
     public void read(String input, AbstractBaseGraph<V, E> graph)
         throws ImportException
     {
-        read(input, (Graph<V,E>) graph);
+        read(input, (Graph<V, E>) graph);
     }
-    
+
     /**
      * Read a dot formatted string and populate the provided graph.
      *
@@ -205,30 +198,13 @@ public class DOTImporter<V, E>
                 state = processHeader(input, position, sectionBuffer, graph);
                 break;
             case NODE:
-                state =
-                    processNode(
-                        input,
-                        position,
-                        sectionBuffer,
-                        graph,
-                        vertexes);
+                state = processNode(input, position, sectionBuffer, graph, vertexes);
                 break;
             case EDGE:
-                state =
-                    processEdge(
-                        input,
-                        position,
-                        sectionBuffer,
-                        graph,
-                        vertexes);
+                state = processEdge(input, position, sectionBuffer, graph, vertexes);
                 break;
             case LINE_COMMENT:
-                state =
-                    processLineComment(
-                        input,
-                        position,
-                        sectionBuffer,
-                        lastState);
+                state = processLineComment(input, position, sectionBuffer, lastState);
                 if (state == lastState) {
                     // when we leave a line comment we need the new line to
                     // still appear in the old block
@@ -245,19 +221,12 @@ public class DOTImporter<V, E>
                 state = processEdgeQuotes(input, position, sectionBuffer);
                 break;
             case NEXT:
-                state =
-                    processNext(
-                        input,
-                        position,
-                        sectionBuffer,
-                        graph,
-                        vertexes);
+                state = processNext(input, position, sectionBuffer, graph, vertexes);
                 break;
 
             // DONE not included here as we can't get to it with the while loop.
             default:
-                throw new ImportException(
-                    "Error importing escaped state machine");
+                throw new ImportException("Error importing escaped state machine");
             }
 
             position = position + 1;
@@ -287,10 +256,7 @@ public class DOTImporter<V, E>
      * @throws ImportException if there is a problem with the header section.
      */
     private int processHeader(
-        String input,
-        int position,
-        StringBuilder sectionBuffer,
-        Graph<V, E> graph)
+        String input, int position, StringBuilder sectionBuffer, Graph<V, E> graph)
         throws ImportException
     {
         if (isStartOfLineComment(input, position)) {
@@ -306,7 +272,7 @@ public class DOTImporter<V, E>
         if (current == '{') {
             // reached the end of the header. Validate it.
 
-            String [] headerParts = sectionBuffer.toString().split(" ", 4);
+            String[] headerParts = sectionBuffer.toString().split(" ", 4);
             if (headerParts.length < 3) {
                 throw new ImportException("Not enough parts in header");
             }
@@ -316,57 +282,43 @@ public class DOTImporter<V, E>
                 && ((AbstractBaseGraph<V, E>) graph).isAllowingMultipleEdges()
                 && headerParts[i].equals("strict"))
             {
-                throw new ImportException(
-                    "graph defines strict but Multigraph given.");
+                throw new ImportException("graph defines strict but Multigraph given.");
             } else if (headerParts[i].equals("strict")) {
                 i = i + 1;
             }
 
-            if ((graph instanceof DirectedGraph)
-                && headerParts[i].equals("graph"))
-            {
+            if ((graph instanceof DirectedGraph) && headerParts[i].equals("graph")) {
                 throw new ImportException(
                     "input asks for undirected graph and directed graph provided.");
-            } else if (
-                !(graph instanceof DirectedGraph)
-                && headerParts[i].equals("digraph"))
-            {
+            } else if (!(graph instanceof DirectedGraph) && headerParts[i].equals("digraph")) {
                 throw new ImportException(
                     "input asks for directed graph but undirected graph provided.");
-            } else if (
-                !headerParts[i].equals("graph")
-                && !headerParts[i].equals("digraph"))
-            {
+            } else if (!headerParts[i].equals("graph") && !headerParts[i].equals("digraph")) {
                 throw new ImportException("unknown graph type");
             }
 
-            sectionBuffer.setLength(0); //reset the buffer.
+            sectionBuffer.setLength(0); // reset the buffer.
             return NEXT;
         }
         return HEADER;
     }
 
     /**
-     * When we start a new section of the graph we don't know what it is going
-     * to be. We work in here until we can work out what type of section this
-     * is.
+     * When we start a new section of the graph we don't know what it is going to be. We work in
+     * here until we can work out what type of section this is.
      *
      * @param input the input string to read from.
      * @param position how far into the string we have got.
      * @param sectionBuffer the current section.
      * @param graph the graph we are creating.
-     * @param vertexes the existing set of vertexes that have been created so
-     * far.
+     * @param vertexes the existing set of vertexes that have been created so far.
      *
      * @return the next state.
      *
      * @throws ImportException if there is a problem with creating a node.
      */
     private int processNext(
-        String input,
-        int position,
-        StringBuilder sectionBuffer,
-        Graph<V, E> graph,
+        String input, int position, StringBuilder sectionBuffer, Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -387,9 +339,7 @@ public class DOTImporter<V, E>
         }
 
         // if the buffer is currently empty skip spaces too.
-        if ((sectionBuffer.length() == 0)
-            && ((current == ' ') || (current == ';')))
-        {
+        if ((sectionBuffer.length() == 0) && ((current == ' ') || (current == ';'))) {
             return NEXT;
         }
 
@@ -407,11 +357,9 @@ public class DOTImporter<V, E>
             char next = input.charAt(position + 1);
             if (current == '-') {
                 if ((next == '-') && (graph instanceof DirectedGraph)) {
-                    throw new ImportException(
-                        "graph is directed but undirected edge found");
+                    throw new ImportException("graph is directed but undirected edge found");
                 } else if ((next == '>') && !(graph instanceof DirectedGraph)) {
-                    throw new ImportException(
-                        "graph is undirected but directed edge found");
+                    throw new ImportException("graph is undirected but directed edge found");
                 } else if ((next == '-') || (next == '>')) {
                     return EDGE;
                 }
@@ -419,34 +367,29 @@ public class DOTImporter<V, E>
         }
 
         if (current == '[') {
-            return
-                NODE; // if this was an edge we should have found a dash before
-                      // here.
+            return NODE; // if this was an edge we should have found a dash before
+                         // here.
         }
 
         return NEXT;
     }
 
     /**
-     * Process a node entry. When we detect that we are at the end of the node
-     * create it in the graph.
+     * Process a node entry. When we detect that we are at the end of the node create it in the
+     * graph.
      *
      * @param input the input string to read from.
      * @param position how far into the string we have got.
      * @param sectionBuffer the current section.
      * @param graph the graph we are creating.
-     * @param vertexes the existing set of vertexes that have been created so
-     * far.
+     * @param vertexes the existing set of vertexes that have been created so far.
      *
      * @return the next state.
      *
      * @throws ImportException if there is a problem with creating a node.
      */
     private int processNode(
-        String input,
-        int position,
-        StringBuilder sectionBuffer,
-        Graph<V, E> graph,
+        String input, int position, StringBuilder sectionBuffer, Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -473,9 +416,8 @@ public class DOTImporter<V, E>
     }
 
     /**
-     * Process a quoted section of a node entry. This skips most of the exit
-     * conditions so quoted strings can contain comments, semi colons, dashes,
-     * newlines and so on.
+     * Process a quoted section of a node entry. This skips most of the exit conditions so quoted
+     * strings can contain comments, semi colons, dashes, newlines and so on.
      *
      * @param input the input string to read from.
      * @param position how far into the string we have got.
@@ -483,10 +425,7 @@ public class DOTImporter<V, E>
      *
      * @return the state for the next character.
      */
-    private int processNodeQuotes(
-        String input,
-        int position,
-        StringBuilder sectionBuffer)
+    private int processNodeQuotes(String input, int position, StringBuilder sectionBuffer)
     {
         char current = input.charAt(position);
         sectionBuffer.append(input.charAt(position));
@@ -500,10 +439,7 @@ public class DOTImporter<V, E>
     }
 
     private int processEdge(
-        String input,
-        int position,
-        StringBuilder sectionBuffer,
-        Graph<V, E> graph,
+        String input, int position, StringBuilder sectionBuffer, Graph<V, E> graph,
         Map<String, V> vertexes)
         throws ImportException
     {
@@ -530,10 +466,7 @@ public class DOTImporter<V, E>
         return EDGE;
     }
 
-    private int processEdgeQuotes(
-        String input,
-        int position,
-        StringBuilder sectionBuffer)
+    private int processEdgeQuotes(String input, int position, StringBuilder sectionBuffer)
     {
         char current = input.charAt(position);
         sectionBuffer.append(input.charAt(position));
@@ -547,10 +480,7 @@ public class DOTImporter<V, E>
     }
 
     private int processLineComment(
-        String input,
-        int position,
-        StringBuilder sectionBuffer,
-        int returnState)
+        String input, int position, StringBuilder sectionBuffer, int returnState)
     {
         char current = input.charAt(position);
         if ((current == '\r') || (current == '\n')) {
@@ -601,10 +531,7 @@ public class DOTImporter<V, E>
         return false;
     }
 
-    private void processCompleteNode(
-        String node,
-        Graph<V, E> graph,
-        Map<String, V> vertexes)
+    private void processCompleteNode(String node, Graph<V, E> graph, Map<String, V> vertexes)
         throws ImportException
     {
         Map<String, String> attributes = extractAttributes(node);
@@ -625,17 +552,12 @@ public class DOTImporter<V, E>
                 vertexUpdater.updateVertex(existing, attributes);
             } else {
                 throw new ImportException(
-                    "Update required for vertex "
-                    + id
-                    + " but no vertexUpdater provided");
+                    "Update required for vertex " + id + " but no vertexUpdater provided");
             }
         }
     }
 
-    private void processCompleteEdge(
-        String edge,
-        Graph<V, E> graph,
-        Map<String, V> vertexes)
+    private void processCompleteEdge(String edge, Graph<V, E> graph, Map<String, V> vertexes)
         throws ImportException
     {
         Map<String, String> attributes = extractAttributes(edge);
@@ -647,12 +569,7 @@ public class DOTImporter<V, E>
             V v1 = getVertex(ids.get(i), vertexes, graph);
             V v2 = getVertex(ids.get(i + 1), vertexes, graph);
 
-            E resultEdge =
-                edgeProvider.buildEdge(
-                    v1,
-                    v2,
-                    attributes.get("label"),
-                    attributes);
+            E resultEdge = edgeProvider.buildEdge(v1, v2, attributes.get("label"), attributes);
             graph.addEdge(v1, v2, resultEdge);
         }
     }
@@ -707,9 +624,7 @@ public class DOTImporter<V, E>
         int bracketIndex = line.indexOf("[");
         if (bracketIndex > 0) {
             attributes =
-                splitAttributes(
-                    line.substring(bracketIndex + 1, line.lastIndexOf(']'))
-                        .trim());
+                splitAttributes(line.substring(bracketIndex + 1, line.lastIndexOf(']')).trim());
         }
         return attributes;
     }
@@ -762,8 +677,7 @@ public class DOTImporter<V, E>
         throws ImportException
     {
         int i = 0;
-        while (
-            Character.isWhitespace(input.charAt(start + i))
+        while (Character.isWhitespace(input.charAt(start + i))
             || (input.charAt(start + i) == '='))
         {
             i = i + 1;
@@ -790,10 +704,10 @@ public class DOTImporter<V, E>
         do {
             result = input.indexOf('\"', result + 1);
             // if the previous character is an escape then keep going
-        } while (
-            (input.charAt(result - 1) == '\\')
-            && !((input.charAt(result - 1) == '\\')
-                && (input.charAt(result - 2) == '\\'))); // unless its escaped
+        } while ((input.charAt(result - 1) == '\\')
+            && !((input.charAt(result - 1) == '\\') && (input.charAt(result - 2) == '\\'))); // unless
+                                                                                             // its
+                                                                                             // escaped
         return result;
     }
 }

@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * A directed graph that is a {@link MaskSubgraph} on another graph.
  *
@@ -30,9 +29,7 @@ public class DirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements DirectedGraph<V, E>
 {
-    public DirectedMaskSubgraph(
-        DirectedGraph<V, E> base,
-        MaskFunctor<V, E> mask)
+    public DirectedMaskSubgraph(DirectedGraph<V, E> base, MaskFunctor<V, E> mask)
     {
         super(base, mask);
     }

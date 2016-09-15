@@ -17,32 +17,21 @@
  */
 package org.jgrapht.alg;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 /**
  * A bidirectional version of Dijkstra's algorithm.
  * 
  * <p>
  * See the Wikipedia article for details and references about
- * <a href="https://en.wikipedia.org/wiki/Bidirectional_search">bidirectional
- * search</a>. This technique does not change the worst-case behavior of the
- * algorithm but reduces, in some cases, the number of visited vertices in
- * practice. This implementation alternatively constructs forward and reverse
- * paths from the source and target vertices respectively.
+ * <a href="https://en.wikipedia.org/wiki/Bidirectional_search">bidirectional search</a>. This
+ * technique does not change the worst-case behavior of the algorithm but reduces, in some cases,
+ * the number of visited vertices in practice. This implementation alternatively constructs forward
+ * and reverse paths from the source and target vertices respectively.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -59,58 +48,46 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     private final GraphPath<V, E> path;
 
     /**
-     * Creates the instance and executes the bidirectional Dijkstra shortest
-     * path algorithm. An instance is only good for a single search; after
-     * construction, it can be accessed to retrieve information about the found
-     * path.
+     * Creates the instance and executes the bidirectional Dijkstra shortest path algorithm. An
+     * instance is only good for a single search; after construction, it can be accessed to retrieve
+     * information about the found path.
      *
      * @param graph the input graph
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
      */
-    public BidirectionalDijkstraShortestPath(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+    public BidirectionalDijkstraShortestPath(Graph<V, E> graph, V startVertex, V endVertex)
     {
         this(graph, startVertex, endVertex, Double.POSITIVE_INFINITY);
     }
 
     /**
-     * Creates the instance and executes the bidirectional Dijkstra shortest
-     * path algorithm. An instance is only good for a single search; after
-     * construction, it can be accessed to retrieve information about the found
-     * path.
+     * Creates the instance and executes the bidirectional Dijkstra shortest path algorithm. An
+     * instance is only good for a single search; after construction, it can be accessed to retrieve
+     * information about the found path.
      *
      * @param graph the input graph
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY
-     *        for unbounded search
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded search
      */
     public BidirectionalDijkstraShortestPath(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        double radius)
+        Graph<V, E> graph, V startVertex, V endVertex, double radius)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
         }
         if (startVertex == null || !graph.containsVertex(startVertex)) {
-            throw new IllegalArgumentException(
-                "Invalid graph vertex as source");
+            throw new IllegalArgumentException("Invalid graph vertex as source");
         }
         if (endVertex == null || !graph.containsVertex(endVertex)) {
-            throw new IllegalArgumentException(
-                "Invalid graph vertex as target");
+            throw new IllegalArgumentException("Invalid graph vertex as target");
         }
         if (radius < 0.0) {
             throw new IllegalArgumentException("Radius must be non-negative");
         }
 
-        this.path = new AlgorithmDetails(graph, startVertex, endVertex, radius)
-            .run();
+        this.path = new AlgorithmDetails(graph, startVertex, endVertex, radius).run();
     }
 
     /**
@@ -152,9 +129,9 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     }
 
     /**
-     * Convenience method to find the shortest path via a single static method
-     * call. If you need a more advanced search (e.g. limited by radius, or
-     * computation of the path length), use the constructor instead.
+     * Convenience method to find the shortest path via a single static method call. If you need a
+     * more advanced search (e.g. limited by radius, or computation of the path length), use the
+     * constructor instead.
      *
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
@@ -165,15 +142,10 @@ public final class BidirectionalDijkstraShortestPath<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static <V, E> List<E> findPathBetween(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+    public static <V, E> List<E> findPathBetween(Graph<V, E> graph, V startVertex, V endVertex)
     {
-        return new BidirectionalDijkstraShortestPath<>(
-            graph,
-            startVertex,
-            endVertex).getPathEdgeList();
+        return new BidirectionalDijkstraShortestPath<>(graph, startVertex, endVertex)
+            .getPathEdgeList();
     }
 
     /**
@@ -189,16 +161,12 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         private final V target;
         private final double radius;
 
-        public AlgorithmDetails(
-            Graph<V, E> graph,
-            V source,
-            V target,
-            double radius)
+        public AlgorithmDetails(Graph<V, E> graph, V source, V target, double radius)
         {
             this.forwardFrontier = new SearchFrontier(graph);
             if (graph instanceof DirectedGraph) {
-                this.backwardFrontier = new SearchFrontier(
-                    new EdgeReversedGraph<>(((DirectedGraph<V, E>) graph)));
+                this.backwardFrontier =
+                    new SearchFrontier(new EdgeReversedGraph<>(((DirectedGraph<V, E>) graph)));
             } else {
                 this.backwardFrontier = new SearchFrontier(graph);
             }
@@ -212,12 +180,8 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             // handle special case if source equals target
             if (source.equals(target)) {
                 return new GraphWalk<>(
-                    forwardFrontier.graph,
-                    source,
-                    target,
-                    Collections.singletonList(source),
-                    Collections.emptyList(),
-                    0d);
+                    forwardFrontier.graph, source, target, Collections.singletonList(source),
+                    Collections.emptyList(), 0d);
             }
 
             assert !source.equals(target);
@@ -256,8 +220,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
                     frontier.updateDistance(u, e, vDistance + eWeight);
 
                     // check path with u's distance from the other frontier
-                    double pathDistance = vDistance + eWeight
-                        + otherFrontier.getDistance(u);
+                    double pathDistance = vDistance + eWeight + otherFrontier.getDistance(u);
 
                     if (pathDistance < bestPath) {
                         bestPath = pathDistance;
@@ -318,12 +281,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
 
             return new GraphWalk<>(
-                forwardFrontier.graph,
-                source,
-                target,
-                vertexList,
-                edgeList,
-                weight);
+                forwardFrontier.graph, source, target, vertexList, edgeList, weight);
         }
 
         /**
@@ -341,8 +299,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             {
                 this.graph = graph;
                 if (graph instanceof DirectedGraph) {
-                    this.specifics = new DirectedSpecifics(
-                        (DirectedGraph<V, E>) graph);
+                    this.specifics = new DirectedSpecifics((DirectedGraph<V, E>) graph);
                 } else {
                     this.specifics = new UndirectedSpecifics(graph);
                 }

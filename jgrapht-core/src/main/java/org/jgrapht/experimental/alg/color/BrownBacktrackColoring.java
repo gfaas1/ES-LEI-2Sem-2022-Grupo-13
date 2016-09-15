@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.experimental.alg.*;
 
-
 /**
  * @author micha
  */
@@ -30,9 +29,9 @@ public class BrownBacktrackColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ExactAlgorithm<Integer, V>
 {
-    private int [] _color;
-    private int [] _colorCount;
-    private BitSet [] _allowedColors;
+    private int[] _color;
+    private int[] _colorCount;
+    private BitSet[] _allowedColors;
     private int _chi;
 
     /**
@@ -53,12 +52,7 @@ public class BrownBacktrackColoring<V, E>
                 _allowedColors[pos].clear(_color[nb]);
             }
         }
-        for (
-            int i = 1;
-            (i <= _colorCount[pos])
-            && (_colorCount[pos] < _chi);
-            i++)
-        {
+        for (int i = 1; (i <= _colorCount[pos]) && (_colorCount[pos] < _chi); i++) {
             if (_allowedColors[pos].get(i)) {
                 _color[pos] = i;
                 if (pos < (_neighbors.length - 1)) {
@@ -80,10 +74,13 @@ public class BrownBacktrackColoring<V, E>
         _color[pos] = 0;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.jgrapht.experimental.alg.ExactAlgorithm#getResult()
      */
-    @Override public Integer getResult(Map<V, Object> additionalData)
+    @Override
+    public Integer getResult(Map<V, Object> additionalData)
     {
         _chi = _neighbors.length;
         _color = new int[_neighbors.length];

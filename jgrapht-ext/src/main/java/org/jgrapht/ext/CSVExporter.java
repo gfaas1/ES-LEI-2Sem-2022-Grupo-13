@@ -17,36 +17,29 @@
  */
 package org.jgrapht.ext;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
 /**
- * Exports a graph into a CSV Format or any other Delimiter-separated value
- * format.
+ * Exports a graph into a CSV Format or any other Delimiter-separated value format.
  * 
  * <p>
  * The exporter supports three different formats which can be adjusted using the
- * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the
- * same CSV formats used by
- * <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi
- * </a>. For some of the formats, the behavior of the exporter can be adjusted
- * using the {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean)
- * setParameter} method. See {@link CSVFormat} for a description of the formats.
+ * {@link #setFormat(CSVFormat) setFormat} method. The supported formats are the same CSV formats
+ * used by <a href="https://gephi.org/users/supported-graph-formats/csv-format">Gephi </a>. For some
+ * of the formats, the behavior of the exporter can be adjusted using the
+ * {@link #setParameter(org.jgrapht.ext.CSVFormat.Parameter, boolean) setParameter} method. See
+ * {@link CSVFormat} for a description of the formats.
  * </p>
  * 
  * <p>
- * The default output respects
- * <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller can
- * also adjust the separator to something like semicolon or pipe instead of
- * comma. In such a case, all fields are escaped using the new separator. See
- * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter-
- * separated values</a> for more information.
+ * The default output respects <a href="http://www.ietf.org/rfc/rfc4180.txt">rfc4180</a>. The caller
+ * can also adjust the separator to something like semicolon or pipe instead of comma. In such a
+ * case, all fields are escaped using the new separator. See
+ * <a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">Delimiter- separated
+ * values</a> for more information.
  * </p>
  * 
  * @see CSVFormat
@@ -65,15 +58,12 @@ public class CSVExporter<V, E>
     private char delimiter;
 
     /**
-     * Creates a new CSVExporter with {@link CSVFormat#ADJACENCY_LIST} format
-     * and integer name provider for the vertices.
+     * Creates a new CSVExporter with {@link CSVFormat#ADJACENCY_LIST} format and integer name
+     * provider for the vertices.
      */
     public CSVExporter()
     {
-        this(
-            new IntegerNameProvider<>(),
-            CSVFormat.ADJACENCY_LIST,
-            DEFAULT_DELIMITER);
+        this(new IntegerNameProvider<>(), CSVFormat.ADJACENCY_LIST, DEFAULT_DELIMITER);
     }
 
     /**
@@ -104,20 +94,15 @@ public class CSVExporter<V, E>
      * @param format the format to use
      * @param delimiter delimiter to use
      */
-    public CSVExporter(
-        VertexNameProvider<V> vertexIDProvider,
-        CSVFormat format,
-        char delimiter)
+    public CSVExporter(VertexNameProvider<V> vertexIDProvider, CSVFormat format, char delimiter)
     {
         if (vertexIDProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex id provider cannot be null");
+            throw new IllegalArgumentException("Vertex id provider cannot be null");
         }
         this.vertexIDProvider = vertexIDProvider;
         this.format = format;
         if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException(
-                "Character cannot be used as a delimiter");
+            throw new IllegalArgumentException("Character cannot be used as a delimiter");
         }
         this.delimiter = delimiter;
         this.parameters = new HashSet<>();
@@ -211,8 +196,7 @@ public class CSVExporter<V, E>
     public void setDelimiter(char delimiter)
     {
         if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException(
-                "Character cannot be used as a delimiter");
+            throw new IllegalArgumentException("Character cannot be used as a delimiter");
         }
         this.delimiter = delimiter;
     }
@@ -220,13 +204,9 @@ public class CSVExporter<V, E>
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
         for (E e : g.edgeSet()) {
-            exportEscapedField(
-                out,
-                vertexIDProvider.getVertexName(g.getEdgeSource(e)));
+            exportEscapedField(out, vertexIDProvider.getVertexName(g.getEdgeSource(e)));
             out.print(delimiter);
-            exportEscapedField(
-                out,
-                vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+            exportEscapedField(out, vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
             out.println();
         }
     }
@@ -258,12 +238,11 @@ public class CSVExporter<V, E>
 
     private void exportAsMatrix(Graph<V, E> g, PrintWriter out)
     {
-        boolean exportNodeId = parameters
-            .contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-        boolean exportEdgeWeights = parameters
-            .contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
-        boolean zeroWhenNoEdge = parameters
-            .contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
+        boolean exportNodeId = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
+        boolean exportEdgeWeights =
+            parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+        boolean zeroWhenNoEdge =
+            parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
 
         if (exportNodeId) {
             for (V v : g.vertexSet()) {
@@ -287,9 +266,7 @@ public class CSVExporter<V, E>
                     }
                 } else {
                     if (exportEdgeWeights) {
-                        exportEscapedField(
-                            out,
-                            String.valueOf(g.getEdgeWeight(e)));
+                        exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
                     } else {
                         exportEscapedField(out, "1");
                     }

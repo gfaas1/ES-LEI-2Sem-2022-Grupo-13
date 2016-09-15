@@ -29,9 +29,8 @@ package org.jgrapht.alg.interfaces;
 public interface AStarAdmissibleHeuristic<V>
 {
     /**
-     * An admissible "heuristic estimate" of the distance from x, the
-     * sourceVertex, to the goal (usually denoted h(x)). This is the good guess
-     * function.
+     * An admissible "heuristic estimate" of the distance from x, the sourceVertex, to the goal
+     * (usually denoted h(x)). This is the good guess function.
      */
     double getCostEstimate(V sourceVertex, V targetVertex);
 }

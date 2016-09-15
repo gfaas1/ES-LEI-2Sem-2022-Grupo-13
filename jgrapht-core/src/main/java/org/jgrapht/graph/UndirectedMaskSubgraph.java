@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * An undirected graph that is a {@link MaskSubgraph} on another graph.
  *
@@ -30,9 +29,7 @@ public class UndirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    public UndirectedMaskSubgraph(
-        UndirectedGraph<V, E> base,
-        MaskFunctor<V, E> mask)
+    public UndirectedMaskSubgraph(UndirectedGraph<V, E> base, MaskFunctor<V, E> mask)
     {
         super(base, mask);
     }

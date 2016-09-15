@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * A unit test for simple directed graph.
  *
@@ -31,7 +30,7 @@ import org.jgrapht.*;
 public class SimpleDirectedGraphTest
     extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     DirectedGraph<String, DefaultEdge> gEmpty;
     private DirectedGraph<String, DefaultEdge> g1;
@@ -45,7 +44,7 @@ public class SimpleDirectedGraphTest
     private String v3 = "v3";
     private String v4 = "v4";
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * @see junit.framework.TestCase#TestCase(java.lang.String)
@@ -55,7 +54,7 @@ public class SimpleDirectedGraphTest
         super(name);
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * Class to test for boolean addEdge(V, V, E)
@@ -388,10 +387,8 @@ public class SimpleDirectedGraphTest
     {
         init();
 
-        DirectedGraph<String, DefaultEdge> g =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
-        DirectedGraph<String, DefaultEdge> r =
-                new EdgeReversedGraph<>(g);
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> r = new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
@@ -417,9 +414,7 @@ public class SimpleDirectedGraphTest
     }
 
     private void verifyReversal(
-        DirectedGraph<String, DefaultEdge> g,
-        DirectedGraph<String, DefaultEdge> r,
-        DefaultEdge e)
+        DirectedGraph<String, DefaultEdge> g, DirectedGraph<String, DefaultEdge> r, DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));
         assertTrue(r.containsVertex(v2));
@@ -457,17 +452,11 @@ public class SimpleDirectedGraphTest
 
     private void init()
     {
-        gEmpty =
-                new SimpleDirectedGraph<>(
-                        DefaultEdge.class);
-        g1 = new SimpleDirectedGraph<>(
-                DefaultEdge.class);
-        g2 = new SimpleDirectedGraph<>(
-                DefaultEdge.class);
-        g3 = new SimpleDirectedGraph<>(
-                DefaultEdge.class);
-        g4 = new SimpleDirectedGraph<>(
-                DefaultEdge.class);
+        gEmpty = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g1 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g2 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g3 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g4 = new SimpleDirectedGraph<>(DefaultEdge.class);
 
         eFactory = g1.getEdgeFactory();
         eLoop = eFactory.createEdge(v1, v1);

@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.util.*;
 import org.jgrapht.util.PrefetchIterator.*;
 
-
 /**
  * Helper for {@link MaskSubgraph}.
  *
@@ -47,7 +46,8 @@ class MaskVertexSet<V, E>
     /**
      * @see java.util.Collection#contains(java.lang.Object)
      */
-    @Override public boolean contains(Object o)
+    @Override
+    public boolean contains(Object o)
     {
         // Force a cast to type V. This is nonsense, of course, but
         // it's erased by the compiler anyway.
@@ -56,14 +56,14 @@ class MaskVertexSet<V, E>
         // If o isn't a V, the first check will fail and
         // short-circuit, so we never try to test the mask on
         // non-vertex object inputs.
-        return vertexSet.contains(v)
-            && !mask.isVertexMasked(v);
+        return vertexSet.contains(v) && !mask.isVertexMasked(v);
     }
 
     /**
      * @see java.util.Set#iterator()
      */
-    @Override public Iterator<V> iterator()
+    @Override
+    public Iterator<V> iterator()
     {
         return new PrefetchIterator<V>(new MaskVertexSetNextElementFunctor());
     }
@@ -71,7 +71,8 @@ class MaskVertexSet<V, E>
     /**
      * @see java.util.Set#size()
      */
-    @Override public int size()
+    @Override
+    public int size()
     {
         return (int) vertexSet.stream().filter(v -> contains(v)).count();
     }
@@ -86,7 +87,8 @@ class MaskVertexSet<V, E>
             this.iter = MaskVertexSet.this.vertexSet.iterator();
         }
 
-        @Override public V nextElement()
+        @Override
+        public V nextElement()
             throws NoSuchElementException
         {
             V element = this.iter.next();
