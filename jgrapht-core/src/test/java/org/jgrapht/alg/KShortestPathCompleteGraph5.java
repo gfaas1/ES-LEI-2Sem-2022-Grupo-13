@@ -19,7 +19,6 @@ package org.jgrapht.alg;
 
 import org.jgrapht.graph.*;
 
-
 /**
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -27,13 +26,13 @@ import org.jgrapht.graph.*;
 public class KShortestPathCompleteGraph5
     extends SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = -3289497257289559394L;
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     public DefaultWeightedEdge e12;
 
@@ -55,7 +54,7 @@ public class KShortestPathCompleteGraph5
 
     public DefaultWeightedEdge eS4;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     public KShortestPathCompleteGraph5()
     {
@@ -65,7 +64,7 @@ public class KShortestPathCompleteGraph5
         addEdges();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     private void addEdges()
     {

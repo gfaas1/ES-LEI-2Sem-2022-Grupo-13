@@ -17,15 +17,15 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.util.ArrayUnenforcedSet;
-
 import java.util.*;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
+
 /**
- * An implementation of Edmonds Blossom Shrinking algorithm for constructing
- * maximum matchings on graphs. The algorithm runs in time O(V^4).
+ * An implementation of Edmonds Blossom Shrinking algorithm for constructing maximum matchings on
+ * graphs. The algorithm runs in time O(V^4).
  *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
@@ -42,7 +42,8 @@ public class EdmondsBlossomShrinking<V, E>
     private Map<V, V> path;
     private Map<V, V> contracted;
 
-    @Deprecated public EdmondsBlossomShrinking()
+    @Deprecated
+    public EdmondsBlossomShrinking()
     {
     }
 
@@ -54,12 +55,14 @@ public class EdmondsBlossomShrinking<V, E>
     /**
      * See {@link #getMatching()} as preferred alternative to this one.
      */
-    @Deprecated public Set<E> findMatch(final UndirectedGraph<V, E> g)
+    @Deprecated
+    public Set<E> findMatch(final UndirectedGraph<V, E> g)
     {
         return new EdmondsBlossomShrinking<>(g).getMatching();
     }
 
-    @Override public Set<E> getMatching()
+    @Override
+    public Set<E> getMatching()
     {
         if (matching == null) {
             matching = findMatch();
@@ -96,8 +99,8 @@ public class EdmondsBlossomShrinking<V, E>
         }
 
         Set<V> seen = new HashSet<>();
-        graph.vertexSet().stream().filter(v -> !seen.contains(v) && match.containsKey(v))
-            .forEach(v -> {
+        graph.vertexSet().stream().filter(v -> !seen.contains(v) && match.containsKey(v)).forEach(
+            v -> {
                 seen.add(v);
                 seen.add(match.get(v));
                 result.add(graph.getEdge(v, match.get(v)));
@@ -111,7 +114,7 @@ public class EdmondsBlossomShrinking<V, E>
         Set<V> used = new HashSet<>();
         Queue<V> q = new ArrayDeque<>();
 
-        //Expand graph back from its contracted state
+        // Expand graph back from its contracted state
         path.clear();
         contracted.clear();
 
@@ -135,8 +138,8 @@ public class EdmondsBlossomShrinking<V, E>
                 }
 
                 // Check whether we've hit a 'blossom'
-                if ((to.equals(root)) || ((match.containsKey(to)) && (path
-                    .containsKey(match.get(to)))))
+                if ((to.equals(root))
+                    || ((match.containsKey(to)) && (path.containsKey(match.get(to)))))
                 {
                     V stem = lowestCommonAncestor(v, to);
 
@@ -145,8 +148,10 @@ public class EdmondsBlossomShrinking<V, E>
                     markPath(v, to, stem, blossom);
                     markPath(to, v, stem, blossom);
 
-                    graph.vertexSet().stream().filter(
-                        i -> contracted.containsKey(i) && blossom.contains(contracted.get(i)))
+                    graph
+                        .vertexSet().stream()
+                        .filter(
+                            i -> contracted.containsKey(i) && blossom.contains(contracted.get(i)))
                         .forEach(i -> {
                             contracted.put(i, stem);
                             if (!used.contains(i)) {
@@ -187,7 +192,7 @@ public class EdmondsBlossomShrinking<V, E>
     private V lowestCommonAncestor(V a, V b)
     {
         Set<V> seen = new HashSet<>();
-        for (; ; ) {
+        for (;;) {
             a = contracted.get(a);
             seen.add(a);
             if (!match.containsKey(a)) {
@@ -195,7 +200,7 @@ public class EdmondsBlossomShrinking<V, E>
             }
             a = path.get(match.get(a));
         }
-        for (; ; ) {
+        for (;;) {
             b = contracted.get(b);
             if (seen.contains(b)) {
                 return b;

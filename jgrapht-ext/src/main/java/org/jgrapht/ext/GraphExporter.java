@@ -17,15 +17,10 @@
  */
 package org.jgrapht.ext;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.charset.*;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * Interface for graph exporters

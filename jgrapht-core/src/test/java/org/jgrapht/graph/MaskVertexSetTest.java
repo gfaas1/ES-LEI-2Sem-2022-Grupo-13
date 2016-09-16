@@ -19,7 +19,6 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
  * Unit tests for MaskVertexSet.
  *
@@ -38,10 +37,9 @@ public class MaskVertexSetTest
     private MaskVertexSet<String, DefaultEdge> testMaskVertexSet;
 
     @Override
-    protected void setUp () {
-        directed =
-                new DefaultDirectedGraph<>(
-                        DefaultEdge.class);
+    protected void setUp()
+    {
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);
@@ -52,29 +50,34 @@ public class MaskVertexSetTest
         e2 = directed.addEdge(v2, v3);
 
         // Functor that masks vertex v1 and and the edge v2-v3
-        MaskFunctor<String, DefaultEdge> mask =  new MaskFunctor<String, DefaultEdge> () {
-                @Override
-                public boolean isEdgeMasked (DefaultEdge edge) {
-                    return (edge == e2);
-                }
+        MaskFunctor<String, DefaultEdge> mask = new MaskFunctor<String, DefaultEdge>()
+        {
+            @Override
+            public boolean isEdgeMasked(DefaultEdge edge)
+            {
+                return (edge == e2);
+            }
 
-                @Override
-                public boolean isVertexMasked (String vertex) {
-                    return (vertex == v1);
-                }
-            };
+            @Override
+            public boolean isVertexMasked(String vertex)
+            {
+                return (vertex == v1);
+            }
+        };
 
         testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), mask);
     }
 
-    public void testContains () {
+    public void testContains()
+    {
         assertFalse(testMaskVertexSet.contains(v1));
         assertTrue(testMaskVertexSet.contains(v2));
 
         assertFalse(testMaskVertexSet.contains(e1));
     }
 
-    public void testSize () {
+    public void testSize()
+    {
         assertEquals(3, testMaskVertexSet.size());
     }
 }

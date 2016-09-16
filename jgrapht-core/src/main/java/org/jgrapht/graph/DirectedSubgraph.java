@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
-
 /**
  * A directed graph that is a subgraph on other graph.
  *
@@ -41,13 +40,9 @@ public class DirectedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>
      * null</code> then all vertices are included.
      * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are
-     * included.
+     * null</code> then all the edges whose vertices found in the graph are included.
      */
-    public DirectedSubgraph(
-        DirectedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+    public DirectedSubgraph(DirectedGraph<V, E> base, Set<V> vertexSubset, Set<E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -55,7 +50,8 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
-    @Override public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
 
@@ -73,7 +69,8 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
-    @Override public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
 
@@ -91,7 +88,8 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
-    @Override public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
 
@@ -109,7 +107,8 @@ public class DirectedSubgraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
-    @Override public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
 

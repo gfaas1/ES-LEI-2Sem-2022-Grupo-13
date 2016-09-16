@@ -22,13 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 
-
 /**
- * This class finds a maximum weight matching of a simple undirected weighted
- * bipartite graph. The algorithm runs in O(V|E|^2). The algorithm is described
- * in The LEDA Platform of Combinatorial and Geometric Computing, Cambridge
- * University Press, 1999. https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html
- * Note: the input graph must be bipartite with positive integer edge weights
+ * This class finds a maximum weight matching of a simple undirected weighted bipartite graph. The
+ * algorithm runs in O(V|E|^2). The algorithm is described in The LEDA Platform of Combinatorial and
+ * Geometric Computing, Cambridge University Press, 1999.
+ * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html Note: the input graph must be bipartite
+ * with positive integer edge weights
  *
  * @author Graeme Ahokas
  */
@@ -46,22 +45,19 @@ public class MaximumWeightBipartiteMatching<V, E>
     private Set<E> bipartiteMatching;
 
     /**
-     * Creates a new MaximumWeightBipartiteMatching algorithm instance. The
-     * union of vertexPartition1 and vertexParition2 should be equal to the
-     * vertex set of the graph Every edge in the graph must connect a vertex in
-     * vertexPartition1 with a vertex in vertexPartition2
+     * Creates a new MaximumWeightBipartiteMatching algorithm instance. The union of
+     * vertexPartition1 and vertexParition2 should be equal to the vertex set of the graph Every
+     * edge in the graph must connect a vertex in vertexPartition1 with a vertex in vertexPartition2
      *
-     * @param graph simple undirected weighted bipartite graph to find matching
-     * in, with positive integer edge weights
-     * @param vertexPartition1 first vertex partition of the bipartite graph,
-     * disjoint from vertexPartition2
-     * @param vertexPartition2 second vertex partition of the bipartite graph,
-     * disjoint from vertexPartition1
+     * @param graph simple undirected weighted bipartite graph to find matching in, with positive
+     *        integer edge weights
+     * @param vertexPartition1 first vertex partition of the bipartite graph, disjoint from
+     *        vertexPartition2
+     * @param vertexPartition2 second vertex partition of the bipartite graph, disjoint from
+     *        vertexPartition1
      */
     public MaximumWeightBipartiteMatching(
-        final WeightedGraph<V, E> graph,
-        Set<V> vertexPartition1,
-        Set<V> vertexPartition2)
+        final WeightedGraph<V, E> graph, Set<V> vertexPartition1, Set<V> vertexPartition2)
     {
         this.graph = graph;
         partition1 = vertexPartition1;
@@ -74,7 +70,8 @@ public class MaximumWeightBipartiteMatching<V, E>
         initializeVerticesAndEdges();
     }
 
-    @Override public Set<E> getMatching()
+    @Override
+    public Set<E> getMatching()
     {
         if (bipartiteMatching == null) {
             bipartiteMatching = maximumWeightBipartiteMatching();
@@ -82,7 +79,8 @@ public class MaximumWeightBipartiteMatching<V, E>
         return bipartiteMatching;
     }
 
-    @Override public double getMatchingWeight()
+    @Override
+    public double getMatchingWeight()
     {
         if (bipartiteMatching == null) {
             getMatching();
@@ -104,9 +102,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                 setVertexWeight(vertex, (long) 0);
             } else {
                 hasVertexBeenProcessed.put(vertex, false);
-                setVertexWeight(
-                    vertex,
-                        maximumWeightOfEdgeIncidentToVertex(vertex));
+                setVertexWeight(vertex, maximumWeightOfEdgeIncidentToVertex(vertex));
             }
         }
 
@@ -149,8 +145,7 @@ public class MaximumWeightBipartiteMatching<V, E>
     private long reducedWeight(E edge)
     {
         return (long) (vertexWeight(graph.getEdgeSource(edge))
-            + vertexWeight(graph.getEdgeTarget(edge))
-            - graph.getEdgeWeight(edge));
+            + vertexWeight(graph.getEdgeTarget(edge)) - graph.getEdgeWeight(edge));
     }
 
     private boolean isVertexMatched(V vertex, Set<E> matchings)
@@ -194,10 +189,9 @@ public class MaximumWeightBipartiteMatching<V, E>
                 continue;
             }
             for (E edge : graph.edgesOf(vertex)) {
-                if (hasVertexBeenProcessed.get(
-                        Graphs.getOppositeVertex(graph, edge, vertex))
-                    && !reachableVertices.keySet().contains(
-                        Graphs.getOppositeVertex(graph, edge, vertex))
+                if (hasVertexBeenProcessed.get(Graphs.getOppositeVertex(graph, edge, vertex))
+                    && !reachableVertices
+                        .keySet().contains(Graphs.getOppositeVertex(graph, edge, vertex))
                     && (reducedWeight(edge) < beta))
                 {
                     beta = reducedWeight(edge);
@@ -218,22 +212,16 @@ public class MaximumWeightBipartiteMatching<V, E>
         }
     }
 
-    private Map<V, List<E>> verticesReachableByTightAlternatingEdgesFromVertex(
-        V vertex)
+    private Map<V, List<E>> verticesReachableByTightAlternatingEdgesFromVertex(V vertex)
     {
         Map<V, List<E>> pathsToVertices = new HashMap<>();
         pathsToVertices.put(vertex, new ArrayList<>());
-        findPathsToVerticesFromVertices(
-                Collections.singletonList(vertex),
-            false,
-            pathsToVertices);
+        findPathsToVerticesFromVertices(Collections.singletonList(vertex), false, pathsToVertices);
         return pathsToVertices;
     }
 
     private void findPathsToVerticesFromVertices(
-        List<V> verticesToProcess,
-        boolean needMatchedEdge,
-        Map<V, List<E>> pathsToVertices)
+        List<V> verticesToProcess, boolean needMatchedEdge, Map<V, List<E>> pathsToVertices)
     {
         if (verticesToProcess.size() == 0) {
             return;
@@ -241,30 +229,22 @@ public class MaximumWeightBipartiteMatching<V, E>
         List<V> nextVerticesToProcess = new ArrayList<>();
         for (V vertex : verticesToProcess) {
             for (E edge : graph.edgesOf(vertex)) {
-                V adjacentVertex =
-                    Graphs.getOppositeVertex(graph, edge, vertex);
-                if (hasVertexBeenProcessed.get(adjacentVertex)
-                    && (reducedWeight(edge) == 0)
+                V adjacentVertex = Graphs.getOppositeVertex(graph, edge, vertex);
+                if (hasVertexBeenProcessed.get(adjacentVertex) && (reducedWeight(edge) == 0)
                     && !pathsToVertices.keySet().contains(adjacentVertex))
                 {
                     if ((needMatchedEdge && isEdgeMatched.get(edge))
                         || (!needMatchedEdge && !isEdgeMatched.get(edge)))
                     {
                         nextVerticesToProcess.add(adjacentVertex);
-                        List<E> pathToAdjacentVertex =
-                                new ArrayList<>(pathsToVertices.get(vertex));
+                        List<E> pathToAdjacentVertex = new ArrayList<>(pathsToVertices.get(vertex));
                         pathToAdjacentVertex.add(edge);
-                        pathsToVertices.put(
-                            adjacentVertex,
-                            pathToAdjacentVertex);
+                        pathsToVertices.put(adjacentVertex, pathToAdjacentVertex);
                     }
                 }
             }
         }
-        findPathsToVerticesFromVertices(
-            nextVerticesToProcess,
-            !needMatchedEdge,
-            pathsToVertices);
+        findPathsToVerticesFromVertices(nextVerticesToProcess, !needMatchedEdge, pathsToVertices);
     }
 
     private Set<E> maximumWeightBipartiteMatching()
@@ -277,21 +257,15 @@ public class MaximumWeightBipartiteMatching<V, E>
                     verticesReachableByTightAlternatingEdgesFromVertex(vertex);
                 boolean successful = false;
                 for (V reachableVertex : reachableVertices.keySet()) {
-                    if (isSourceVertex(reachableVertex)
-                        && (vertexWeight(reachableVertex) == 0))
-                    {
-                        addPathToMatchings(
-                            reachableVertices.get(reachableVertex),
-                            matchings);
+                    if (isSourceVertex(reachableVertex) && (vertexWeight(reachableVertex) == 0)) {
+                        addPathToMatchings(reachableVertices.get(reachableVertex), matchings);
                         successful = true;
                         break;
                     }
                     if (isTargetVertex(reachableVertex)
                         && !isVertexMatched(reachableVertex, matchings))
                     {
-                        addPathToMatchings(
-                            reachableVertices.get(reachableVertex),
-                            matchings);
+                        addPathToMatchings(reachableVertices.get(reachableVertex), matchings);
                         successful = true;
                         break;
                     }

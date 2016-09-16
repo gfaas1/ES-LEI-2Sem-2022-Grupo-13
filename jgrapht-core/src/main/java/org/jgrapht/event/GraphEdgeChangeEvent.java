@@ -18,11 +18,10 @@
 package org.jgrapht.event;
 
 /**
- * An event which indicates that a graph edge has changed, or is about to
- * change. The event can be used either as an indication <i>after</i> the edge
- * has been added or removed, or <i>before</i> it is added. The type of the
- * event can be tested using the {@link
- * org.jgrapht.event.GraphChangeEvent#getType()} method.
+ * An event which indicates that a graph edge has changed, or is about to change. The event can be
+ * used either as an indication <i>after</i> the edge has been added or removed, or <i>before</i> it
+ * is added. The type of the event can be tested using the
+ * {@link org.jgrapht.event.GraphChangeEvent#getType()} method.
  *
  * @author Barak Naveh
  * @since Aug 10, 2003
@@ -33,14 +32,12 @@ public class GraphEdgeChangeEvent<V, E>
     private static final long serialVersionUID = 3618134563335844662L;
 
     /**
-     * Before edge added event. This event is fired before an edge is added to a
-     * graph.
+     * Before edge added event. This event is fired before an edge is added to a graph.
      */
     public static final int BEFORE_EDGE_ADDED = 21;
 
     /**
-     * Before edge removed event. This event is fired before an edge is removed
-     * from a graph.
+     * Before edge removed event. This event is fired before an edge is removed from a graph.
      */
     public static final int BEFORE_EDGE_REMOVED = 22;
 
@@ -50,8 +47,7 @@ public class GraphEdgeChangeEvent<V, E>
     public static final int EDGE_ADDED = 23;
 
     /**
-     * Edge removed event. This event is fired after an edge is removed from a
-     * graph.
+     * Edge removed event. This event is fired after an edge is removed from a graph.
      */
     public static final int EDGE_REMOVED = 24;
 
@@ -79,10 +75,8 @@ public class GraphEdgeChangeEvent<V, E>
      *
      * @deprecated Use new constructor which takes vertex parameters.
      */
-    @Deprecated public GraphEdgeChangeEvent(
-        Object eventSource,
-        int type,
-        E edge)
+    @Deprecated
+    public GraphEdgeChangeEvent(Object eventSource, int type, E edge)
     {
         this(eventSource, type, edge, null, null);
     }
@@ -96,12 +90,7 @@ public class GraphEdgeChangeEvent<V, E>
      * @param edgeSource edge source vertex
      * @param edgeTarget edge target vertex
      */
-    public GraphEdgeChangeEvent(
-        Object eventSource,
-        int type,
-        E edge,
-        V edgeSource,
-        V edgeTarget)
+    public GraphEdgeChangeEvent(Object eventSource, int type, E edge, V edgeSource, V edgeTarget)
     {
         super(eventSource, type);
         this.edge = edge;

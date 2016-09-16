@@ -21,13 +21,13 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * Find all simple cycles of a directed graph using the Tarjan's algorithm.
  *
- * <p>See:<br>
- * R. Tarjan, Enumeration of the elementary circuits of a directed graph, SIAM
- * J. Comput., 2 (1973), pp. 211-216.
+ * <p>
+ * See:<br>
+ * R. Tarjan, Enumeration of the elementary circuits of a directed graph, SIAM J. Comput., 2 (1973),
+ * pp. 211-216.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -72,7 +72,8 @@ public class TarjanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public DirectedGraph<V, E> getGraph()
+    @Override
+    public DirectedGraph<V, E> getGraph()
     {
         return graph;
     }
@@ -80,7 +81,8 @@ public class TarjanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void setGraph(DirectedGraph<V, E> graph)
+    @Override
+    public void setGraph(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph argument.");
@@ -91,7 +93,8 @@ public class TarjanSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public List<List<V>> findSimpleCycles()
+    @Override
+    public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
             throw new IllegalArgumentException("Null graph.");

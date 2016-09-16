@@ -22,13 +22,11 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * This algorithm will check whether a graph is Eulerian (hence it contains an
- * <a href="http://mathworld.wolfram.com/EulerianCircuit.html">Eulerian
- * circuit</a>). Also, if a graph is Eulerian, the caller can obtain a list of
- * vertices making up the Eulerian circuit. An Eulerian circuit is a circuit
- * which traverses each edge exactly once.
+ * <a href="http://mathworld.wolfram.com/EulerianCircuit.html">Eulerian circuit</a>). Also, if a
+ * graph is Eulerian, the caller can obtain a list of vertices making up the Eulerian circuit. An
+ * Eulerian circuit is a circuit which traverses each edge exactly once.
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
@@ -60,16 +58,15 @@ public abstract class EulerianCircuit
     }
 
     /**
-     * This method will return a list of vertices which represents the Eulerian
-     * circuit of the graph.
+     * This method will return a list of vertices which represents the Eulerian circuit of the
+     * graph.
      *
      * @param g The graph to find an Eulerian circuit
      *
-     * @return null if no Eulerian circuit exists, or a list of vertices
-     * representing the Eulerian circuit if one does exist
+     * @return null if no Eulerian circuit exists, or a list of vertices representing the Eulerian
+     *         circuit if one does exist
      */
-    public static <V, E> List<V> getEulerianCircuitVertices(
-        UndirectedGraph<V, E> g)
+    public static <V, E> List<V> getEulerianCircuitVertices(UndirectedGraph<V, E> g)
     {
         // If the graph is not Eulerian then just return a null since no
         // Eulerian circuit exists

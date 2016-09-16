@@ -17,7 +17,10 @@
  */
 package org.jgrapht.alg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
@@ -25,7 +28,8 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-public class TransitiveReductionTest {
+public class TransitiveReductionTest
+{
 
     // @formatter:off
     static final int[][] matrix = new int[][] {
@@ -46,7 +50,8 @@ public class TransitiveReductionTest {
     // @formatter:on
 
     @Test
-    public void testInternals() {
+    public void testInternals()
+    {
 
         // @formatter:off
         final int[][] expected_path_matrix = new int[][] {
@@ -69,11 +74,9 @@ public class TransitiveReductionTest {
             {
                 System.arraycopy(matrix, 0, path_matrix, 0, matrix.length);
 
-                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(
-                        path_matrix);
+                final BitSet[] pathMatrixAsBitSetArray = asBitSetArray(path_matrix);
 
-                TransitiveReduction
-                        .transformToPathMatrix(pathMatrixAsBitSetArray);
+                TransitiveReduction.transformToPathMatrix(pathMatrixAsBitSetArray);
 
                 path_matrix = asIntArray(pathMatrixAsBitSetArray);
             }
@@ -87,28 +90,27 @@ public class TransitiveReductionTest {
         {
             int[][] transitively_reduced_matrix = new int[n][n];
             {
-                System.arraycopy(path_matrix, 0, transitively_reduced_matrix, 0,
-                        path_matrix.length);
+                System
+                    .arraycopy(path_matrix, 0, transitively_reduced_matrix, 0, path_matrix.length);
 
-                final BitSet[] transitivelyReducedMatrixAsBitSetArray = asBitSetArray(
-                        transitively_reduced_matrix);
+                final BitSet[] transitivelyReducedMatrixAsBitSetArray =
+                    asBitSetArray(transitively_reduced_matrix);
 
-                TransitiveReduction.transitiveReduction(
-                        transitivelyReducedMatrixAsBitSetArray);
+                TransitiveReduction.transitiveReduction(transitivelyReducedMatrixAsBitSetArray);
 
-                transitively_reduced_matrix = asIntArray(
-                        transitivelyReducedMatrixAsBitSetArray);
+                transitively_reduced_matrix = asIntArray(transitivelyReducedMatrixAsBitSetArray);
             }
 
             // System.out.println(Arrays.deepToString(transitively_reduced_matrix)
             // + " transitive reduction");
 
-            Assert.assertArrayEquals(expected_transitively_reduced_matrix,
-                    transitively_reduced_matrix);
+            Assert.assertArrayEquals(
+                expected_transitively_reduced_matrix, transitively_reduced_matrix);
         }
     }
 
-    static private BitSet[] asBitSetArray(final int[][] intArray) {
+    static private BitSet[] asBitSetArray(final int[][] intArray)
+    {
         final BitSet[] ret = new BitSet[intArray.length];
         for (int i = 0; i < ret.length; i++) {
             ret[i] = new BitSet(intArray[i].length);
@@ -119,7 +121,8 @@ public class TransitiveReductionTest {
         return ret;
     }
 
-    static private int[][] asIntArray(final BitSet[] bitsetArray) {
+    static private int[][] asIntArray(final BitSet[] bitsetArray)
+    {
         final int[][] ret = new int[bitsetArray.length][bitsetArray.length];
         for (int i = 0; i < ret.length; i++) {
             for (int j = 0; j < ret.length; j++) {
@@ -130,24 +133,27 @@ public class TransitiveReductionTest {
 
     }
 
-    @Test(expected=NullPointerException.class)
-    public void testReduceNull() {
+    @Test(expected = NullPointerException.class)
+    public void testReduceNull()
+    {
         TransitiveReduction.INSTANCE.reduce(null);
     }
 
     @Test
-    public void testReduceNoVertexNoEdge() {
+    public void testReduceNoVertexNoEdge()
+    {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         TransitiveReduction.INSTANCE.reduce(graph);
         assertEquals(graph.vertexSet().size(), 0);
         assertEquals(graph.edgeSet().size(), 0);
     }
 
     @Test
-    public void testReduceSomeVerticesNoEdge() {
+    public void testReduceSomeVerticesNoEdge()
+    {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("x");
         graph.addVertex("y");
         graph.addVertex("z");
@@ -157,9 +163,10 @@ public class TransitiveReductionTest {
     }
 
     @Test
-    public void testReduceAlreadyReduced() {
+    public void testReduceAlreadyReduced()
+    {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("x");
         graph.addVertex("y");
         graph.addVertex("z");
@@ -181,9 +188,10 @@ public class TransitiveReductionTest {
     }
 
     @Test
-    public void testReduceBasic() {
+    public void testReduceBasic()
+    {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("x");
         graph.addVertex("y");
         graph.addVertex("z");
@@ -206,9 +214,10 @@ public class TransitiveReductionTest {
     }
 
     @Test
-    public void testReduceFarAway() {
+    public void testReduceFarAway()
+    {
         SimpleDirectedGraph<String, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("a");
         graph.addVertex("b");
         graph.addVertex("c");
@@ -240,7 +249,8 @@ public class TransitiveReductionTest {
     }
 
     @Test
-    public void testReduceCanonicalGraph() {
+    public void testReduceCanonicalGraph()
+    {
         DirectedGraph<Integer, DefaultEdge> graph = fromMatrixToDirectedGraph(matrix);
 
         // a few spot tests to verify the graph looks like it should
@@ -269,9 +279,11 @@ public class TransitiveReductionTest {
         assertArrayEquals(expected_transitively_reduced_matrix, actual_transitively_reduced_matrix);
     }
 
-    static private DirectedGraph<Integer, DefaultEdge> fromMatrixToDirectedGraph(final int[][] matrix) {
+    static private DirectedGraph<Integer, DefaultEdge> fromMatrixToDirectedGraph(
+        final int[][] matrix)
+    {
         final SimpleDirectedGraph<Integer, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         for (int i = 0; i < matrix.length; i++) {
             graph.addVertex(i);
         }
@@ -286,7 +298,9 @@ public class TransitiveReductionTest {
         return graph;
     }
 
-    private int[][] fromDirectedGraphToMatrix( final DirectedGraph<Integer, DefaultEdge> directedGraph) {
+    private int[][] fromDirectedGraphToMatrix(
+        final DirectedGraph<Integer, DefaultEdge> directedGraph)
+    {
         final List<Integer> vertices = new ArrayList<>(directedGraph.vertexSet());
         final int n = vertices.size();
         final int[][] matrix = new int[n][n];

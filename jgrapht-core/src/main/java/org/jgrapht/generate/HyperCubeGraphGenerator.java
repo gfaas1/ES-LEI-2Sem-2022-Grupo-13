@@ -21,13 +21,11 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a <a href="http://mathworld.wolfram.com/HypercubeGraph.html">hyper
- * cube graph</a> of any size. This is a graph that can be represented by bit
- * strings, so for an n-dimensial hypercube each vertex resembles an n-length
- * bit string. Then, two vertices are adjacent if and only if their bitstring
- * differ by exactly one element.
+ * Generates a <a href="http://mathworld.wolfram.com/HypercubeGraph.html">hyper cube graph</a> of
+ * any size. This is a graph that can be represented by bit strings, so for an n-dimensial hypercube
+ * each vertex resembles an n-length bit string. Then, two vertices are adjacent if and only if
+ * their bitstring differ by exactly one element.
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
@@ -50,13 +48,12 @@ public class HyperCubeGraphGenerator<V, E>
     /**
      * This will generate the hypercube graph
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
-        //Vertices are created, and they are included in the resultmap as their
-        //bitstring representation
+        // Vertices are created, and they are included in the resultmap as their
+        // bitstring representation
         int order = (int) Math.pow(2, dim);
         LinkedList<V> vertices = new LinkedList<>();
         for (int i = 0; i < order; i++) {
@@ -72,8 +69,8 @@ public class HyperCubeGraphGenerator<V, E>
             }
         }
 
-        //Two vertices will have an edge if their bitstrings differ by exactly
-        //1 element
+        // Two vertices will have an edge if their bitstrings differ by exactly
+        // 1 element
         for (int i = 0; i < order; i++) {
             for (int j = i + 1; j < order; j++) {
                 for (int z = 0; z < dim; z++) {

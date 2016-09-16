@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * This is a general interface for graph and subgraph isomorphism.
  *

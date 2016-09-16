@@ -19,7 +19,6 @@ package org.jgrapht.alg;
 
 import org.jgrapht.*;
 
-
 /**
  * Helper class for {@link KShortestPaths}.
  *
@@ -42,10 +41,7 @@ final class RankingPathElement<V, E>
      * @param weight total cost of the created path element.
      */
     RankingPathElement(
-        Graph<V, E> graph,
-        RankingPathElement<V, E> pathElement,
-        E edge,
-        double weight)
+        Graph<V, E> graph, RankingPathElement<V, E> pathElement, E edge, double weight)
     {
         super(graph, pathElement, edge);
         this.weight = weight;
@@ -77,7 +73,8 @@ final class RankingPathElement<V, E>
      *
      * @return <code>null</code> is the path is empty.
      */
-    @Override public RankingPathElement<V, E> getPrevPathElement()
+    @Override
+    public RankingPathElement<V, E> getPrevPathElement()
     {
         return (RankingPathElement<V, E>) super.getPrevPathElement();
     }

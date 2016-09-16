@@ -20,12 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A directed pseudograph. A directed pseudograph is a non-simple directed graph
- * in which both graph loops and multiple edges are permitted. If you're unsure
- * about pseudographs, see: <a
- * href="http://mathworld.wolfram.com/Pseudograph.html">
+ * A directed pseudograph. A directed pseudograph is a non-simple directed graph in which both graph
+ * loops and multiple edges are permitted. If you're unsure about pseudographs, see:
+ * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
  */
 public class DirectedPseudograph<V, E>
@@ -50,19 +48,18 @@ public class DirectedPseudograph<V, E>
         super(ef, true, true);
     }
 
-    public static <V, E> DirectedGraphBuilderBase<V,
-        E, ? extends DirectedPseudograph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
+            Class<? extends E> edgeClass)
     {
-        return new DirectedGraphBuilder<>(
-                new DirectedPseudograph<>(edgeClass));
+        return new DirectedGraphBuilder<>(new DirectedPseudograph<>(edgeClass));
     }
 
-    public static <V, E> DirectedGraphBuilderBase<V,
-        E, ? extends DirectedPseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V,
+        E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
+            EdgeFactory<V, E> ef)
     {
-        return new DirectedGraphBuilder<>(
-                new DirectedPseudograph<>(ef));
+        return new DirectedGraphBuilder<>(new DirectedPseudograph<>(ef));
     }
 }
 

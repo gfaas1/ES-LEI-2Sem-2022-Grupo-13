@@ -20,12 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A simple graph. A simple graph is an undirected graph for which at most one
- * edge connects any two vertices, and loops are not permitted. If you're unsure
- * about simple graphs, see: <a
- * href="http://mathworld.wolfram.com/SimpleGraph.html">
+ * A simple graph. A simple graph is an undirected graph for which at most one edge connects any two
+ * vertices, and loops are not permitted. If you're unsure about simple graphs, see:
+ * <a href="http://mathworld.wolfram.com/SimpleGraph.html">
  * http://mathworld.wolfram.com/SimpleGraph.html</a>.
  */
 public class SimpleGraph<V, E>
@@ -54,18 +52,16 @@ public class SimpleGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends SimpleGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends SimpleGraph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
     {
-        return new UndirectedGraphBuilder<>(
-                new SimpleGraph<>(edgeClass));
+        return new UndirectedGraphBuilder<>(new SimpleGraph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends SimpleGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends SimpleGraph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
     {
-        return new UndirectedGraphBuilder<>(
-                new SimpleGraph<>(ef));
+        return new UndirectedGraphBuilder<>(new SimpleGraph<>(ef));
     }
 }
 

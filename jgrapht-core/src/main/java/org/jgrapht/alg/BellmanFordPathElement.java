@@ -19,10 +19,8 @@ package org.jgrapht.alg;
 
 import org.jgrapht.*;
 
-
 /**
- * Helper class for {@link BellmanFordShortestPath}; not intended for general
- * use.
+ * Helper class for {@link BellmanFordShortestPath}; not intended for general use.
  */
 final class BellmanFordPathElement<V, E>
     extends AbstractPathElement<V, E>
@@ -39,10 +37,7 @@ final class BellmanFordPathElement<V, E>
      * @param epsilon tolerance factor.
      */
     protected BellmanFordPathElement(
-        Graph<V, E> graph,
-        BellmanFordPathElement<V, E> pathElement,
-        E edge,
-        double cost,
+        Graph<V, E> graph, BellmanFordPathElement<V, E> pathElement, E edge, double cost,
         double epsilon)
     {
         super(graph, pathElement, edge);
@@ -89,9 +84,9 @@ final class BellmanFordPathElement<V, E>
 
     /**
      * Returns <code>true</code> if the path has been improved, <code>
-     * false</code> otherwise. We use an "epsilon" precision to check whether
-     * the cost has been improved (because of many roundings, a formula equal to
-     * 0 could unfortunately be evaluated to 10^-14).
+     * false</code> otherwise. We use an "epsilon" precision to check whether the cost has been
+     * improved (because of many roundings, a formula equal to 0 could unfortunately be evaluated to
+     * 10^-14).
      *
      * @param candidatePrevPathElement
      * @param candidateEdge
@@ -100,8 +95,7 @@ final class BellmanFordPathElement<V, E>
      * @return .
      */
     protected boolean improve(
-        BellmanFordPathElement<V, E> candidatePrevPathElement,
-        E candidateEdge,
+        BellmanFordPathElement<V, E> candidatePrevPathElement, E candidateEdge,
         double candidateCost)
     {
         // to avoid improvement only due to rounding errors.

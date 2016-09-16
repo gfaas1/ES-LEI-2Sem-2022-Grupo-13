@@ -17,22 +17,15 @@
  */
 package org.jgrapht.ext;
 
-import java.io.ByteArrayOutputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.custommonkey.xmlunit.XMLAssert;
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.ext.GraphMLExporter.AttributeCategory;
-import org.jgrapht.ext.GraphMLExporter.AttributeType;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import org.custommonkey.xmlunit.*;
+import org.jgrapht.*;
+import org.jgrapht.ext.GraphMLExporter.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * @author Trevor Harmon
@@ -73,8 +66,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g =
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -112,8 +105,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g =
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -148,8 +141,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g =
+            new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -186,8 +179,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g =
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -226,8 +219,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		// @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -268,8 +261,8 @@ public class GraphMLExporterTest
                 + "</graphml>" + NL;
         // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -290,11 +283,9 @@ public class GraphMLExporterTest
         throws Exception
     {
         try {
-            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
-            exporter.registerAttribute(
-                "weight",
-                AttributeCategory.ALL,
-                AttributeType.STRING);
+            GraphMLExporter<String, DefaultWeightedEdge> exporter =
+                new GraphMLExporter<String, DefaultWeightedEdge>();
+            exporter.registerAttribute("weight", AttributeCategory.ALL, AttributeType.STRING);
             fail("Registered reserved attribute");
         } catch (IllegalArgumentException e) {
         }
@@ -304,12 +295,10 @@ public class GraphMLExporterTest
         throws Exception
     {
         try {
-            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
+            GraphMLExporter<String, DefaultWeightedEdge> exporter =
+                new GraphMLExporter<String, DefaultWeightedEdge>();
             exporter.setEdgeWeightAttributeName("anothername");
-            exporter.registerAttribute(
-                "weight",
-                AttributeCategory.ALL,
-                AttributeType.STRING);
+            exporter.registerAttribute("weight", AttributeCategory.ALL, AttributeType.STRING);
         } catch (IllegalArgumentException e) {
             fail("No!");
         }
@@ -319,11 +308,9 @@ public class GraphMLExporterTest
         throws Exception
     {
         try {
-            GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<String, DefaultWeightedEdge>();
-            exporter.registerAttribute(
-                "length",
-                AttributeCategory.EDGE,
-                AttributeType.STRING);
+            GraphMLExporter<String, DefaultWeightedEdge> exporter =
+                new GraphMLExporter<String, DefaultWeightedEdge>();
+            exporter.registerAttribute("length", AttributeCategory.EDGE, AttributeType.STRING);
             exporter.setEdgeWeightAttributeName("length");
             fail("Registered reserved attribute");
         } catch (IllegalArgumentException e) {
@@ -367,8 +354,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -378,16 +365,14 @@ public class GraphMLExporterTest
         g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
 
         GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-            new IntegerNameProvider<String>(),
-            new VertexNameProvider<String>()
+            new IntegerNameProvider<String>(), new VertexNameProvider<String>()
             {
                 @Override
                 public String getVertexName(String vertex)
                 {
                     return vertex;
                 }
-            },
-            new IntegerEdgeNameProvider<DefaultWeightedEdge>(),
+            }, new IntegerEdgeNameProvider<DefaultWeightedEdge>(),
             new EdgeNameProvider<DefaultWeightedEdge>()
             {
                 @Override
@@ -441,8 +426,8 @@ public class GraphMLExporterTest
                 + "</graphml>" + NL;
             // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -461,16 +446,15 @@ public class GraphMLExporterTest
             }
         });
         exporter.setVertexLabelAttributeName("custom_vertex_label");
-        exporter
-            .setEdgeLabelProvider(new EdgeNameProvider<DefaultWeightedEdge>()
+        exporter.setEdgeLabelProvider(new EdgeNameProvider<DefaultWeightedEdge>()
+        {
+            @Override
+            public String getEdgeName(DefaultWeightedEdge edge)
             {
-                @Override
-                public String getEdgeName(DefaultWeightedEdge edge)
-                {
-                    return "myedge-" + edge.toString();
-                }
+                return "myedge-" + edge.toString();
+            }
 
-            });
+        });
         exporter.setEdgeLabelAttributeName("custom_edge_label");
         exporter.setExportEdgeWeights(true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -521,8 +505,8 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -530,66 +514,60 @@ public class GraphMLExporterTest
         g.addEdge(V3, V1);
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
 
-        ComponentAttributeProvider<String> vertexAttributeProvider = new ComponentAttributeProvider<String>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(String v)
+        ComponentAttributeProvider<String> vertexAttributeProvider =
+            new ComponentAttributeProvider<String>()
             {
-                Map<String, String> map = new LinkedHashMap<>();
-                switch (v) {
-                case V1:
-                    map.put("color", "yellow");
-                    map.put("name", "V1");
-                    break;
-                case V2:
-                    map.put("color", "red");
-                    map.put("name", "V2");
-                    break;
-                case V3:
-                    map.put("name", "V3");
-                    break;
-                default:
-                    break;
+                @Override
+                public Map<String, String> getComponentAttributes(String v)
+                {
+                    Map<String, String> map = new LinkedHashMap<>();
+                    switch (v) {
+                    case V1:
+                        map.put("color", "yellow");
+                        map.put("name", "V1");
+                        break;
+                    case V2:
+                        map.put("color", "red");
+                        map.put("name", "V2");
+                        break;
+                    case V3:
+                        map.put("name", "V3");
+                        break;
+                    default:
+                        break;
+                    }
+                    return map;
                 }
-                return map;
-            }
-        };
+            };
 
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = new ComponentAttributeProvider<DefaultWeightedEdge>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(
-                DefaultWeightedEdge e)
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
+            new ComponentAttributeProvider<DefaultWeightedEdge>()
             {
-                Map<String, String> map = new LinkedHashMap<>();
-                if (e.equals(g.getEdge(V1, V2))) {
-                    map.put("color", "what?");
-                    map.put("name", "e12");
-                } else if (e.equals(g.getEdge(V3, V1))) {
-                    map.put("color", "I have no color!");
-                    map.put("name", "e31");
+                @Override
+                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
+                {
+                    Map<String, String> map = new LinkedHashMap<>();
+                    if (e.equals(g.getEdge(V1, V2))) {
+                        map.put("color", "what?");
+                        map.put("name", "e12");
+                    } else if (e.equals(g.getEdge(V3, V1))) {
+                        map.put("color", "I have no color!");
+                        map.put("name", "e31");
+                    }
+                    return map;
                 }
-                return map;
-            }
-        };
+            };
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-            new IntegerNameProvider<>(),
-            null,
-            vertexAttributeProvider,
-            new IntegerEdgeNameProvider<>(),
-            null,
-            edgeAttributeProvider);
+        GraphMLExporter<String,
+            DefaultWeightedEdge> exporter = new GraphMLExporter<>(
+                new IntegerNameProvider<>(), null, vertexAttributeProvider,
+                new IntegerEdgeNameProvider<>(), null, edgeAttributeProvider);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
-            "color",
-            GraphMLExporter.AttributeCategory.NODE,
-            GraphMLExporter.AttributeType.STRING,
+            "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,
             "yellow");
         exporter.registerAttribute(
-            "name",
-            GraphMLExporter.AttributeCategory.ALL,
-            GraphMLExporter.AttributeType.STRING,
+            "name", GraphMLExporter.AttributeCategory.ALL, GraphMLExporter.AttributeType.STRING,
             "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
@@ -628,8 +606,8 @@ public class GraphMLExporterTest
                 + "</graphml>" + NL;
             // @formatter:on
 
-        SimpleWeightedGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
-            DefaultWeightedEdge.class);
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -637,42 +615,36 @@ public class GraphMLExporterTest
         g.addEdge(V3, V1);
         g.setEdgeWeight(g.getEdge(V1, V2), 3.0);
 
-        ComponentAttributeProvider<String> vertexAttributeProvider = new ComponentAttributeProvider<String>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(String v)
+        ComponentAttributeProvider<String> vertexAttributeProvider =
+            new ComponentAttributeProvider<String>()
             {
-                return null;
-            }
-        };
+                @Override
+                public Map<String, String> getComponentAttributes(String v)
+                {
+                    return null;
+                }
+            };
 
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider = new ComponentAttributeProvider<DefaultWeightedEdge>()
-        {
-            @Override
-            public Map<String, String> getComponentAttributes(
-                DefaultWeightedEdge e)
+        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
+            new ComponentAttributeProvider<DefaultWeightedEdge>()
             {
-                return null;
-            }
-        };
+                @Override
+                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
+                {
+                    return null;
+                }
+            };
 
-        GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-            new IntegerNameProvider<>(),
-            null,
-            vertexAttributeProvider,
-            new IntegerEdgeNameProvider<>(),
-            null,
-            edgeAttributeProvider);
+        GraphMLExporter<String,
+            DefaultWeightedEdge> exporter = new GraphMLExporter<>(
+                new IntegerNameProvider<>(), null, vertexAttributeProvider,
+                new IntegerEdgeNameProvider<>(), null, edgeAttributeProvider);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
-            "color",
-            GraphMLExporter.AttributeCategory.NODE,
-            GraphMLExporter.AttributeType.STRING,
+            "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,
             "yellow");
         exporter.registerAttribute(
-            "name",
-            GraphMLExporter.AttributeCategory.ALL,
-            GraphMLExporter.AttributeType.STRING,
+            "name", GraphMLExporter.AttributeCategory.ALL, GraphMLExporter.AttributeType.STRING,
             "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);

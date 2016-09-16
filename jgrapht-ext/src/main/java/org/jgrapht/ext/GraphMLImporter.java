@@ -17,41 +17,26 @@
  */
 package org.jgrapht.ext;
 
-import java.io.File;
-import java.io.Reader;
-import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.Map.*;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.*;
+import javax.xml.parsers.*;
+import javax.xml.validation.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
+import org.jgrapht.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 /**
  * Imports a graph from a GraphML data source.
  * 
  * <p>
- * For a description of the format see
- * <a href="http://en.wikipedia.org/wiki/GraphML"> http://en.wikipedia.org/wiki/
- * GraphML</a> or the
- * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML
- * Primer</a>.
+ * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
+ * http://en.wikipedia.org/wiki/ GraphML</a> or the
+ * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
  * 
  * <p>
@@ -104,28 +89,26 @@ import org.xml.sax.helpers.DefaultHandler;
  * </pre>
  * 
  * <p>
- * The importer reads the input into a graph which is provided by the user. In
- * case the graph is an instance of {@link org.jgrapht.WeightedGraph} and the
- * corresponding edge key with attr.name="weight" is defined, the importer also
- * reads edge weights. Otherwise edge weights are ignored.
+ * The importer reads the input into a graph which is provided by the user. In case the graph is an
+ * instance of {@link org.jgrapht.WeightedGraph} and the corresponding edge key with
+ * attr.name="weight" is defined, the importer also reads edge weights. Otherwise edge weights are
+ * ignored.
  * 
  * <p>
- * GraphML-Attributes Values are read as string key-value pairs and passed on to
- * the {@link VertexProvider} and {@link EdgeProvider} respectively.
+ * GraphML-Attributes Values are read as string key-value pairs and passed on to the
+ * {@link VertexProvider} and {@link EdgeProvider} respectively.
  * 
  * <p>
- * The provided graph object, where the imported graph will be stored, must be
- * able to support the features of the graph that is read. For example if the
- * GraphML file contains self-loops then the graph provided must also support
- * self-loops. The same for multiple edges. Moreover, the parser completely
- * ignores the attribute "edgedefault" which denotes whether an edge is directed
- * or not. Whether edges are directed or not depends on the underlying
- * implementation of the user provided graph object.
+ * The provided graph object, where the imported graph will be stored, must be able to support the
+ * features of the graph that is read. For example if the GraphML file contains self-loops then the
+ * graph provided must also support self-loops. The same for multiple edges. Moreover, the parser
+ * completely ignores the attribute "edgedefault" which denotes whether an edge is directed or not.
+ * Whether edges are directed or not depends on the underlying implementation of the user provided
+ * graph object.
  * 
  * <p>
  * The importer validates the input using the 1.0
- * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML
- * Schema</a>.
+ * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -148,18 +131,13 @@ public class GraphMLImporter<V, E>
     /**
      * Constructs a new importer.
      * 
-     * @param vertexProvider provider for the generation of vertices. Must not
-     *        be null.
-     * @param edgeProvider provider for the generation of edges. Must not be
-     *        null.
+     * @param vertexProvider provider for the generation of vertices. Must not be null.
+     * @param edgeProvider provider for the generation of edges. Must not be null.
      */
-    public GraphMLImporter(
-        VertexProvider<V> vertexProvider,
-        EdgeProvider<V, E> edgeProvider)
+    public GraphMLImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
         if (edgeProvider == null) {
@@ -186,8 +164,7 @@ public class GraphMLImporter<V, E>
     public void setVertexProvider(VertexProvider<V> vertexProvider)
     {
         if (vertexProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex provider cannot be null");
+            throw new IllegalArgumentException("Vertex provider cannot be null");
         }
         this.vertexProvider = vertexProvider;
     }
@@ -233,8 +210,7 @@ public class GraphMLImporter<V, E>
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
     {
         if (edgeWeightAttributeName == null) {
-            throw new IllegalArgumentException(
-                "Edge weight attribute name cannot be null");
+            throw new IllegalArgumentException("Edge weight attribute name cannot be null");
         }
         this.edgeWeightAttributeName = edgeWeightAttributeName;
     }
@@ -243,22 +219,20 @@ public class GraphMLImporter<V, E>
      * Import a graph.
      * 
      * <p>
-     * The provided graph must be able to support the features of the graph that
-     * is read. For example if the GraphML file contains self-loops then the
-     * graph provided must also support self-loops. The same for multiple edges.
+     * The provided graph must be able to support the features of the graph that is read. For
+     * example if the GraphML file contains self-loops then the graph provided must also support
+     * self-loops. The same for multiple edges.
      * 
      * <p>
-     * If the provided graph is a weighted graph, the importer also reads edge
-     * weights.
+     * If the provided graph is a weighted graph, the importer also reads edge weights.
      * 
      * <p>
-     * GraphML-Attributes Values are read as string key-value pairs and passed
-     * on to the {@link VertexProvider} and {@link EdgeProvider} respectively.
+     * GraphML-Attributes Values are read as string key-value pairs and passed on to the
+     * {@link VertexProvider} and {@link EdgeProvider} respectively.
      * 
      * @param graph the output graph
      * @param input the input reader
-     * @throws ImportException in case an error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case an error occurs, such as I/O or parse error
      */
     @Override
     public void importGraph(Graph<V, E> graph, Reader input)
@@ -283,13 +257,12 @@ public class GraphMLImporter<V, E>
         throws ImportException
     {
         try {
-            SchemaFactory schemaFactory = SchemaFactory
-                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            SchemaFactory schemaFactory =
+                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
             // load schema
-            URL xsd = Thread.currentThread()
-                .getContextClassLoader()
-                .getResource(GRAPHML_SCHEMA_FILENAME);
+            URL xsd =
+                Thread.currentThread().getContextClassLoader().getResource(GRAPHML_SCHEMA_FILENAME);
             if (xsd == null) {
                 throw new ImportException("Failed to locate GraphML xsd");
             }
@@ -359,19 +332,16 @@ public class GraphMLImporter<V, E>
                 String nodeId = en.getKey();
 
                 // create attributes
-                Map<String, String> collectedAttributes = en
-                    .getValue().attributes;
+                Map<String, String> collectedAttributes = en.getValue().attributes;
                 Map<String, String> finalAttributes = new HashMap<String, String>();
 
                 for (Key validKey : nodeValidKeys.values()) {
                     String validId = validKey.id;
                     if (collectedAttributes.containsKey(validId)) {
-                        finalAttributes.put(
-                            validKey.attributeName,
-                            collectedAttributes.get(validId));
-                    } else if (validKey.defaultValue != null) {
                         finalAttributes
-                            .put(validKey.attributeName, validKey.defaultValue);
+                            .put(validKey.attributeName, collectedAttributes.get(validId));
+                    } else if (validKey.defaultValue != null) {
+                        finalAttributes.put(validKey.attributeName, validKey.defaultValue);
                     }
                 }
 
@@ -391,8 +361,7 @@ public class GraphMLImporter<V, E>
                         String defaultValue = k.defaultValue;
                         try {
                             if (defaultValue != null) {
-                                defaultSpecialEdgeWeight = Double
-                                    .parseDouble(defaultValue);
+                                defaultSpecialEdgeWeight = Double.parseDouble(defaultValue);
                             }
                         } catch (NumberFormatException e) {
                             // ignore
@@ -408,13 +377,11 @@ public class GraphMLImporter<V, E>
             for (NodeOrEdge p : edges) {
                 V from = graphNodes.get(p.id1);
                 if (from == null) {
-                    throw new ImportException(
-                        "Source vertex " + p.id1 + " not found");
+                    throw new ImportException("Source vertex " + p.id1 + " not found");
                 }
                 V to = graphNodes.get(p.id2);
                 if (to == null) {
-                    throw new ImportException(
-                        "Target vertex " + p.id2 + " not found");
+                    throw new ImportException("Target vertex " + p.id2 + " not found");
                 }
 
                 // create attributes
@@ -424,23 +391,16 @@ public class GraphMLImporter<V, E>
                 for (Key validKey : edgeValidKeys.values()) {
                     String validId = validKey.id;
                     if (collectedAttributes.containsKey(validId)) {
-                        finalAttributes.put(
-                            validKey.attributeName,
-                            collectedAttributes.get(validId));
+                        finalAttributes
+                            .put(validKey.attributeName, collectedAttributes.get(validId));
                     } else {
                         if (validKey.defaultValue != null) {
-                            finalAttributes.put(
-                                validKey.attributeName,
-                                validKey.defaultValue);
+                            finalAttributes.put(validKey.attributeName, validKey.defaultValue);
                         }
                     }
                 }
 
-                E e = edgeProvider.buildEdge(
-                    from,
-                    to,
-                    "e_" + from + "_" + to,
-                    finalAttributes);
+                E e = edgeProvider.buildEdge(from, to, "e_" + from + "_" + to, finalAttributes);
                 graph.addEdge(from, to, e);
 
                 // special handling for weighted graphs
@@ -449,9 +409,7 @@ public class GraphMLImporter<V, E>
                         try {
                             ((WeightedGraph<V, E>) graph).setEdgeWeight(
                                 e,
-                                Double.parseDouble(
-                                    finalAttributes
-                                        .get(edgeWeightAttributeName)));
+                                Double.parseDouble(finalAttributes.get(edgeWeightAttributeName)));
                         } catch (NumberFormatException nfe) {
                             ((WeightedGraph<V, E>) graph)
                                 .setEdgeWeight(e, defaultSpecialEdgeWeight);
@@ -479,17 +437,12 @@ public class GraphMLImporter<V, E>
         }
 
         @Override
-        public void startElement(
-            String uri,
-            String localName,
-            String qName,
-            Attributes attributes)
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException
         {
             switch (localName) {
             case NODE:
-                currentNodeOrEdge
-                    .push(new NodeOrEdge(findAttribute(NODE_ID, attributes)));
+                currentNodeOrEdge.push(new NodeOrEdge(findAttribute(NODE_ID, attributes)));
                 break;
             case EDGE:
                 currentNodeOrEdge.push(
@@ -521,9 +474,7 @@ public class GraphMLImporter<V, E>
                 break;
             case DATA:
                 insideData = true;
-                currentData = new Data(
-                    findAttribute(DATA_KEY, attributes),
-                    null);
+                currentData = new Data(findAttribute(DATA_KEY, attributes), null);
                 break;
             default:
                 break;
@@ -538,8 +489,7 @@ public class GraphMLImporter<V, E>
             case NODE:
                 NodeOrEdge currentNode = currentNodeOrEdge.pop();
                 if (nodes.containsKey(currentNode.id1)) {
-                    throw new SAXException(
-                        "Node with id " + currentNode.id1 + " already exists");
+                    throw new SAXException("Node with id " + currentNode.id1 + " already exists");
                 }
                 nodes.put(currentNode.id1, currentNode);
                 break;
@@ -569,8 +519,7 @@ public class GraphMLImporter<V, E>
                 break;
             case DATA:
                 if (currentData.isValid()) {
-                    currentNodeOrEdge.peek().attributes
-                        .put(currentData.key, currentData.value);
+                    currentNodeOrEdge.peek().attributes.put(currentData.key, currentData.value);
                 }
                 insideData = false;
                 currentData = null;
@@ -639,11 +588,7 @@ public class GraphMLImporter<V, E>
         String defaultValue;
         KeyTarget target;
 
-        public Key(
-            String id,
-            String attributeName,
-            String defaultValue,
-            KeyTarget target)
+        public Key(String id, String attributeName, String defaultValue, KeyTarget target)
         {
             this.id = id;
             this.attributeName = attributeName;

@@ -21,14 +21,13 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * @author micha
  */
 public abstract class IntArrayGraphAlgorithm<V, E>
 {
     protected final List<V> _vertices;
-    protected final int [][] _neighbors;
+    protected final int[][] _neighbors;
     protected final Map<V, Integer> _vertexToPos;
 
     /**
@@ -49,8 +48,7 @@ public abstract class IntArrayGraphAlgorithm<V, E>
             int nbIndex = 0;
             final V vertex = _vertices.get(i);
             for (E e : g.edgesOf(vertex)) {
-                _neighbors[i][nbIndex++] =
-                    _vertexToPos.get(Graphs.getOppositeVertex(g, e, vertex));
+                _neighbors[i][nbIndex++] = _vertexToPos.get(Graphs.getOppositeVertex(g, e, vertex));
             }
         }
     }

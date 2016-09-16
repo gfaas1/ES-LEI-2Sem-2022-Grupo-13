@@ -21,11 +21,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Inspects a graph for the biconnectivity property. See {@link
- * BlockCutpointGraph} for more information. A biconnected graph has only one
- * block (i.e. no cutpoints).
+ * Inspects a graph for the biconnectivity property. See {@link BlockCutpointGraph} for more
+ * information. A biconnected graph has only one block (i.e. no cutpoints).
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -59,10 +57,9 @@ public class BiconnectivityInspector<V, E>
     }
 
     /**
-     * Returns the biconnected vertex-components containing the vertex. A
-     * biconnected vertex-component contains all the vertices in the component.
-     * A vertex which is not a cutpoint is contained in exactly one component. A
-     * cutpoint is contained is at least 2 components.
+     * Returns the biconnected vertex-components containing the vertex. A biconnected
+     * vertex-component contains all the vertices in the component. A vertex which is not a cutpoint
+     * is contained in exactly one component. A cutpoint is contained is at least 2 components.
      *
      * @param vertex
      *
@@ -88,8 +85,8 @@ public class BiconnectivityInspector<V, E>
     }
 
     /**
-     * Returns <code>true</code> if the graph is biconnected (no cutpoint),
-     * <code>false</code> otherwise.
+     * Returns <code>true</code> if the graph is biconnected (no cutpoint), <code>false</code>
+     * otherwise.
      */
     public boolean isBiconnected()
     {

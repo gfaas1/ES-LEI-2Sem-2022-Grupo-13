@@ -17,16 +17,14 @@
  */
 package org.jgrapht.ext;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import java.nio.charset.*;
+import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * .
@@ -39,9 +37,7 @@ public class DIMACSImporterTest
 {
 
     public <E> Graph<Integer, E> readGraph(
-        InputStream in,
-        Class<? extends E> edgeClass,
-        boolean weighted)
+        InputStream in, Class<? extends E> edgeClass, boolean weighted)
         throws ImportException
     {
         Graph<Integer, E> g;
@@ -54,9 +50,7 @@ public class DIMACSImporterTest
         VertexProvider<Integer> vp = new VertexProvider<Integer>()
         {
             @Override
-            public Integer buildVertex(
-                String label,
-                Map<String, String> attributes)
+            public Integer buildVertex(String label, Map<String, String> attributes)
             {
                 return Integer.parseInt(label);
             }
@@ -67,10 +61,7 @@ public class DIMACSImporterTest
 
             @Override
             public E buildEdge(
-                Integer from,
-                Integer to,
-                String label,
-                Map<String, String> attributes)
+                Integer from, Integer to, String label, Map<String, String> attributes)
             {
                 return g.getEdgeFactory().createEdge(from, to);
             }
@@ -93,37 +84,15 @@ public class DIMACSImporterTest
     public void testReadDIMACSInstance()
         throws ImportException
     {
-        InputStream fstream = getClass().getClassLoader()
-            .getResourceAsStream("myciel3.col");
-        Graph<Integer, DefaultEdge> graph = readGraph(
-            fstream,
-            DefaultEdge.class,
-            false);
+        InputStream fstream = getClass().getClassLoader().getResourceAsStream("myciel3.col");
+        Graph<Integer, DefaultEdge> graph = readGraph(fstream, DefaultEdge.class, false);
 
         assertEquals(graph.vertexSet().size(), 11);
         assertEquals(graph.edgeSet().size(), 20);
 
-        int[][] edges = {
-            { 1, 2 },
-            { 1, 4 },
-            { 1, 7 },
-            { 1, 9 },
-            { 2, 3 },
-            { 2, 6 },
-            { 2, 8 },
-            { 3, 5 },
-            { 3, 7 },
-            { 3, 10 },
-            { 4, 5 },
-            { 4, 6 },
-            { 4, 10 },
-            { 5, 8 },
-            { 5, 9 },
-            { 6, 11 },
-            { 7, 11 },
-            { 8, 11 },
-            { 9, 11 },
-            { 10, 11 } };
+        int[][] edges = { { 1, 2 }, { 1, 4 }, { 1, 7 }, { 1, 9 }, { 2, 3 }, { 2, 6 }, { 2, 8 },
+            { 3, 5 }, { 3, 7 }, { 3, 10 }, { 4, 5 }, { 4, 6 }, { 4, 10 }, { 5, 8 }, { 5, 9 },
+            { 6, 11 }, { 7, 11 }, { 8, 11 }, { 9, 11 }, { 10, 11 } };
         for (int[] edge : edges)
             assertTrue(graph.containsEdge(edge[0], edge[1]));
     }
@@ -134,37 +103,18 @@ public class DIMACSImporterTest
     public void testReadWeightedDIMACSInstance()
         throws ImportException
     {
-        InputStream fstream = getClass().getClassLoader()
-            .getResourceAsStream("myciel3_weighted.col");
-        Graph<Integer, DefaultWeightedEdge> graph = readGraph(
-            fstream,
-            DefaultWeightedEdge.class,
-            true);
+        InputStream fstream =
+            getClass().getClassLoader().getResourceAsStream("myciel3_weighted.col");
+        Graph<Integer, DefaultWeightedEdge> graph =
+            readGraph(fstream, DefaultWeightedEdge.class, true);
 
         assertEquals(graph.vertexSet().size(), 11);
         assertEquals(graph.edgeSet().size(), 20);
 
-        int[][] edges = {
-            { 1, 2, 1 },
-            { 1, 4, 2 },
-            { 1, 7, 3 },
-            { 1, 9, 4 },
-            { 2, 3, 5 },
-            { 2, 6, 6 },
-            { 2, 8, 7 },
-            { 3, 5, 8 },
-            { 3, 7, 9 },
-            { 3, 10, 10 },
-            { 4, 5, 11 },
-            { 4, 6, 12 },
-            { 4, 10, 13 },
-            { 5, 8, 14 },
-            { 5, 9, 15 },
-            { 6, 11, 16 },
-            { 7, 11, 17 },
-            { 8, 11, 18 },
-            { 9, 11, 19 },
-            { 10, 11, 20 } };
+        int[][] edges = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 7, 3 }, { 1, 9, 4 }, { 2, 3, 5 },
+            { 2, 6, 6 }, { 2, 8, 7 }, { 3, 5, 8 }, { 3, 7, 9 }, { 3, 10, 10 }, { 4, 5, 11 },
+            { 4, 6, 12 }, { 4, 10, 13 }, { 5, 8, 14 }, { 5, 9, 15 }, { 6, 11, 16 }, { 7, 11, 17 },
+            { 8, 11, 18 }, { 9, 11, 19 }, { 10, 11, 20 } };
 
         for (int[] edge : edges) {
             assertTrue(graph.containsEdge(edge[0], edge[1]));
@@ -184,9 +134,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(
-                    input.getBytes(StandardCharsets.UTF_8)),
-                DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -204,9 +152,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(
-                    input.getBytes(StandardCharsets.UTF_8)),
-                DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -224,9 +170,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(
-                    input.getBytes(StandardCharsets.UTF_8)),
-                DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {
@@ -244,9 +188,7 @@ public class DIMACSImporterTest
 
         try {
             readGraph(
-                new ByteArrayInputStream(
-                    input.getBytes(StandardCharsets.UTF_8)),
-                DefaultEdge.class,
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), DefaultEdge.class,
                 false);
             fail("No!");
         } catch (ImportException e) {

@@ -23,9 +23,8 @@ package org.jgrapht.ext;
 public interface VertexNameProvider<V>
 {
     /**
-     * Returns a unique name for a vertex. This is useful when exporting a a
-     * graph, as it ensures that all vertices are assigned simple, consistent
-     * names.
+     * Returns a unique name for a vertex. This is useful when exporting a a graph, as it ensures
+     * that all vertices are assigned simple, consistent names.
      *
      * @param vertex the vertex to be named
      *

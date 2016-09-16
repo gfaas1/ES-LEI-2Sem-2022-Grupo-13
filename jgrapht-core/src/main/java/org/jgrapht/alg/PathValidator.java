@@ -18,15 +18,16 @@
 package org.jgrapht.alg;
 
 /**
- * May be used  to provide external path validations in addition to the basic
- * validations done by {@link KShortestPaths} - that the path is from source
- * to target and that it does not contain loops.
+ * May be used to provide external path validations in addition to the basic validations done by
+ * {@link KShortestPaths} - that the path is from source to target and that it does not contain
+ * loops.
  * 
  * @author Assaf Mizrachi
  * @since July, 21, 2016
  *
  */
-public interface PathValidator<V, E> {
+public interface PathValidator<V, E>
+{
 
     /**
      * Checks if an edge can be added to a previous path element.

@@ -17,17 +17,18 @@
  */
 package org.jgrapht.util;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
 /**
- * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if
- * Sun ever gets around to adding Pair to java.util.
+ * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if Sun ever gets around
+ * to adding Pair to java.util.
  *
  * @author Soren (soren@tanesha.net)
  * @author Joris Kinable
  */
-public class VertexPair<V> implements Serializable
+public class VertexPair<V>
+    implements Serializable
 {
     private static final long serialVersionUID = -852258620031566794L;
     protected final V n1;
@@ -72,38 +73,42 @@ public class VertexPair<V> implements Serializable
         }
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
-        return "("+n1 + "," + n2+")";
+        return "(" + n1 + "," + n2 + ")";
     }
 
-    @Override public boolean equals(Object o)
+    @Override
+    public boolean equals(Object o)
     {
         if (this == o)
             return true;
-        else if(!(o instanceof VertexPair))
+        else if (!(o instanceof VertexPair))
             return false;
 
-        @SuppressWarnings("unchecked")
-        VertexPair<V> other = (VertexPair<V>) o;
+        @SuppressWarnings("unchecked") VertexPair<V> other = (VertexPair<V>) o;
 
         return (elementEquals(n1, other.n1) && elementEquals(n2, other.n2));
     }
 
     /**
      * Compares two elements. Returns true if they are both null, or when they are equal.
+     * 
      * @param element1
      * @param element2
      * @return true if they are both null, or when they are equal, false otherwise.
      */
-    protected boolean elementEquals(V element1, V element2){
-        if(element1 == null)
+    protected boolean elementEquals(V element1, V element2)
+    {
+        if (element1 == null)
             return element2 == null;
         else
             return element1.equals(element2);
     }
 
-    @Override public int hashCode()
+    @Override
+    public int hashCode()
     {
         return Objects.hash(n1, n2);
     }

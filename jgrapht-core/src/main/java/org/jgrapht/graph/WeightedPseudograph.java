@@ -20,12 +20,11 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A weighted pseudograph. A weighted pseudograph is a non-simple undirected
- * graph in which both graph loops and multiple edges are permitted. The edges
- * of a weighted pseudograph have weights. If you're unsure about pseudographs,
- * see: <a href="http://mathworld.wolfram.com/Pseudograph.html">
+ * A weighted pseudograph. A weighted pseudograph is a non-simple undirected graph in which both
+ * graph loops and multiple edges are permitted. The edges of a weighted pseudograph have weights.
+ * If you're unsure about pseudographs, see:
+ * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
  */
 public class WeightedPseudograph<V, E>
@@ -54,19 +53,18 @@ public class WeightedPseudograph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends WeightedPseudograph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>, ?> builder(
+            Class<? extends E> edgeClass)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new WeightedPseudograph<>(edgeClass));
+        return new UndirectedWeightedGraphBuilder<>(new WeightedPseudograph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedWeightedGraphBuilderBase<V,
-        E, ? extends WeightedPseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V,
+        E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>, ?> builder(
+            EdgeFactory<V, E> ef)
     {
-        return new UndirectedWeightedGraphBuilder<>(
-                new WeightedPseudograph<>(ef));
+        return new UndirectedWeightedGraphBuilder<>(new WeightedPseudograph<>(ef));
     }
 }
 

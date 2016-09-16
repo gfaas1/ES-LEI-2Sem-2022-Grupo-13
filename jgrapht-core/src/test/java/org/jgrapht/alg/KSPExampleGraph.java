@@ -19,20 +19,19 @@ package org.jgrapht.alg;
 
 import org.jgrapht.graph.*;
 
-
 /**
  * <img src="./KSPExample.png">
  */
 public class KSPExampleGraph
     extends SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = -1850978181764235655L;
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     public DefaultWeightedEdge edgeAD;
 
@@ -50,7 +49,7 @@ public class KSPExampleGraph
 
     public DefaultWeightedEdge edgeST;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
     /**
      * <img src="./Picture1.jpg">
@@ -63,7 +62,7 @@ public class KSPExampleGraph
         addEdges();
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     private void addEdges()
     {

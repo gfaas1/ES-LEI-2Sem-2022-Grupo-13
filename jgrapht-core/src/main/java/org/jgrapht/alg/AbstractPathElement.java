@@ -21,17 +21,15 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * A new path is created from a path concatenated to an edge. It's like a linked
- * list.<br>
+ * A new path is created from a path concatenated to an edge. It's like a linked list.<br>
  * The empty path is composed only of one vertex.<br>
  * In this case the path has no previous path element.<br>
  * .
  *
- * <p>NOTE jvs 1-Jan-2008: This is an internal data structure for use in
- * algorithms. For returning paths to callers, use the public {@link GraphPath}
- * interface instead.
+ * <p>
+ * NOTE jvs 1-Jan-2008: This is an internal data structure for use in algorithms. For returning
+ * paths to callers, use the public {@link GraphPath} interface instead.
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -64,16 +62,9 @@ abstract class AbstractPathElement<V, E>
      * @param pathElement
      * @param edge edge reaching the end vertex of the path element created.
      */
-    protected AbstractPathElement(
-        Graph<V, E> graph,
-        AbstractPathElement<V, E> pathElement,
-        E edge)
+    protected AbstractPathElement(Graph<V, E> graph, AbstractPathElement<V, E> pathElement, E edge)
     {
-        this.vertex =
-            Graphs.getOppositeVertex(
-                graph,
-                edge,
-                pathElement.getVertex());
+        this.vertex = Graphs.getOppositeVertex(graph, edge, pathElement.getVertex());
         this.prevEdge = edge;
         this.prevPathElement = pathElement;
 

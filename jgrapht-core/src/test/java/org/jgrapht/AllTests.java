@@ -32,14 +32,8 @@ import org.junit.runners.*;
  * @author Barak Naveh
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    AllAlgTests.class,
-    AllAlgUtilTests.class,
-    AllGenerateTests.class,
-    AllGraphTests.class,
-    AllTraverseTests.class,
-    AllUtilTests.class
-})
+@Suite.SuiteClasses({ AllAlgTests.class, AllAlgUtilTests.class, AllGenerateTests.class,
+    AllGraphTests.class, AllTraverseTests.class, AllUtilTests.class })
 public final class AllTests
 {
 }

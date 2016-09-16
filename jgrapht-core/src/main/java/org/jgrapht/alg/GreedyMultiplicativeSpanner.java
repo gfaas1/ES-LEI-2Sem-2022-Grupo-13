@@ -17,48 +17,34 @@
  */
 package org.jgrapht.alg;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
+import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 /**
- * Greedy algorithm for (2k-1)-multiplicative spanner construction (for any
- * integer k >= 1).
+ * Greedy algorithm for (2k-1)-multiplicative spanner construction (for any integer {@literal k >= 1}).
  *
  * <p>
- * The spanner is guaranteed to contain O(n^{1+1/k}) edges and the shortest path
- * distance between any two vertices in the spanner is at most 2k-1 times the
- * corresponding shortest path distance in the original graph. Here n denotes
- * the number of vertices of the graph.
+ * The spanner is guaranteed to contain O(n^{1+1/k}) edges and the shortest path distance between
+ * any two vertices in the spanner is at most 2k-1 times the corresponding shortest path distance in
+ * the original graph. Here n denotes the number of vertices of the graph.
  *
  * <p>
  * The algorithm is described in: Althoefer, Das, Dobkin, Joseph, Soares.
- * <a href="https://doi.org/10.1007/BF02189308">On Sparse Spanners of Weighted
- * Graphs</a>. Discrete Computational Geometry 9(1):81-100, 1993.
+ * <a href="https://doi.org/10.1007/BF02189308">On Sparse Spanners of Weighted Graphs</a>. Discrete
+ * Computational Geometry 9(1):81-100, 1993.
  *
  * <p>
- * If the graph is unweighted the algorithm runs in O(m n^{1+1/k}) time. Setting
- * k to infinity will result in a slow version of Kruskal's algorithm where
- * cycle detection is performed by a BFS computation. In such a case use the
- * implementation of Kruskal with union-find. Here n and m are the number of
- * vertices and edges of the graph respectively.
+ * If the graph is unweighted the algorithm runs in O(m n^{1+1/k}) time. Setting k to infinity will
+ * result in a slow version of Kruskal's algorithm where cycle detection is performed by a BFS
+ * computation. In such a case use the implementation of Kruskal with union-find. Here n and m are
+ * the number of vertices and edges of the graph respectively.
  *
  * <p>
- * If the graph is weighted the algorithm runs in O(m (n^{1+1/k} + nlogn)) time
- * by using Dijkstra's algorithm. Edge weights must be non-negative.
+ * If the graph is weighted the algorithm runs in O(m (n^{1+1/k} + nlogn)) time by using Dijkstra's
+ * algorithm. Edge weights must be non-negative.
  *
  * @author Dimitrios Michail
  * @since July 15, 2016
@@ -115,15 +101,13 @@ public class GreedyMultiplicativeSpanner<V, E>
             // sort edges
             ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
             Collections.sort(
-                allEdges,
-                (e1, e2) -> Double.valueOf(graph.getEdgeWeight(e1))
-                    .compareTo(graph.getEdgeWeight(e2)));
+                allEdges, (e1, e2) -> Double
+                    .valueOf(graph.getEdgeWeight(e1)).compareTo(graph.getEdgeWeight(e2)));
 
             // check precondition
             double minWeight = graph.getEdgeWeight(allEdges.get(0));
             if (minWeight < 0.0) {
-                throw new IllegalArgumentException(
-                    "Illegal edge weight: negative");
+                throw new IllegalArgumentException("Illegal edge weight: negative");
             }
 
             // run main loop
@@ -171,11 +155,11 @@ public class GreedyMultiplicativeSpanner<V, E>
         }
 
         /**
-         * Check if two vertices are reachable by a BFS in the spanner graph
-         * using only a certain number of hops.
+         * Check if two vertices are reachable by a BFS in the spanner graph using only a certain
+         * number of hops.
          *
-         * We execute this procedure repeatedly, therefore we need to keep track
-         * of what it touches and only clean those before the next execution.
+         * We execute this procedure repeatedly, therefore we need to keep track of what it touches
+         * and only clean those before the next execution.
          */
         @Override
         public boolean isSpannerReachable(V s, V t, double hops)
@@ -229,8 +213,7 @@ public class GreedyMultiplicativeSpanner<V, E>
 
         public WeightedSpannerAlgorithm()
         {
-            this.spanner = new SimpleWeightedGraph<V, E>(
-                graph.getEdgeFactory());
+            this.spanner = new SimpleWeightedGraph<V, E>(graph.getEdgeFactory());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
             }

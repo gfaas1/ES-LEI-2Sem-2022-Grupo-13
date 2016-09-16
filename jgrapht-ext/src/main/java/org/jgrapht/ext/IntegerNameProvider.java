@@ -17,17 +17,14 @@
  */
 package org.jgrapht.ext;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.*;
 
 /**
- * Assigns a unique integer to represent each vertex. Each instance of
- * IntegerNameProvider maintains an internal map between every vertex it has
- * ever seen and the unique integer representing that vertex. As a result it is
- * probably desirable to have a separate instance for each distinct graph.
+ * Assigns a unique integer to represent each vertex. Each instance of IntegerNameProvider maintains
+ * an internal map between every vertex it has ever seen and the unique integer representing that
+ * vertex. As a result it is probably desirable to have a separate instance for each distinct graph.
  *
  * @author Charles Fry
  */
@@ -47,8 +44,7 @@ public class IntegerNameProvider<V>
     }
 
     /**
-     * Returns the String representation of the unique integer representing a
-     * vertex.
+     * Returns the String representation of the unique integer representing a vertex.
      *
      * @param vertex the vertex to be named
      *
@@ -56,7 +52,8 @@ public class IntegerNameProvider<V>
      *
      * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
      */
-    @Override public String getVertexName(V vertex)
+    @Override
+    public String getVertexName(V vertex)
     {
         Integer id = idMap.get(vertex);
         if (id == null) {

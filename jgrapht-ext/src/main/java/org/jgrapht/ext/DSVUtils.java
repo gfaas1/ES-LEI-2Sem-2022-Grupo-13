@@ -36,17 +36,14 @@ class DSVUtils
     private static final String DSV_QUOTE_AS_STRING = String.valueOf(DSV_QUOTE);
 
     /**
-     * Test if a character can be used as a delimiter in a Delimiter-separated
-     * values file.
+     * Test if a character can be used as a delimiter in a Delimiter-separated values file.
      * 
      * @param delimiter the character to test
-     * @return {@code true} if the character can be used as a delimiter,
-     *         {@code} false otherwise
+     * @return {@code true} if the character can be used as a delimiter, {@code} false otherwise
      */
     public static boolean isValidDelimiter(char delimiter)
     {
-        return delimiter != DSV_LF && delimiter != DSV_CR
-            && delimiter != DSV_QUOTE;
+        return delimiter != DSV_LF && delimiter != DSV_CR && delimiter != DSV_QUOTE;
     }
 
     /**
@@ -58,11 +55,7 @@ class DSVUtils
      */
     public static String escapeDSV(String input, char delimiter)
     {
-        char[] specialChars = new char[] {
-            delimiter,
-            DSV_QUOTE,
-            DSV_LF,
-            DSV_CR };
+        char[] specialChars = new char[] { delimiter, DSV_QUOTE, DSV_LF, DSV_CR };
 
         boolean containsSpecial = false;
         for (int i = 0; i < specialChars.length; i++) {
@@ -73,9 +66,8 @@ class DSVUtils
         }
 
         if (containsSpecial) {
-            return DSV_QUOTE_AS_STRING + input.replaceAll(
-                DSV_QUOTE_AS_STRING,
-                DSV_QUOTE_AS_STRING + DSV_QUOTE_AS_STRING)
+            return DSV_QUOTE_AS_STRING
+                + input.replaceAll(DSV_QUOTE_AS_STRING, DSV_QUOTE_AS_STRING + DSV_QUOTE_AS_STRING)
                 + DSV_QUOTE_AS_STRING;
         }
 
@@ -91,15 +83,9 @@ class DSVUtils
      */
     public static String unescapeDSV(String input, char delimiter)
     {
-        char[] specialChars = new char[] {
-            delimiter,
-            DSV_QUOTE,
-            DSV_LF,
-            DSV_CR };
+        char[] specialChars = new char[] { delimiter, DSV_QUOTE, DSV_LF, DSV_CR };
 
-        if (input.charAt(0) != DSV_QUOTE
-            || input.charAt(input.length() - 1) != DSV_QUOTE)
-        {
+        if (input.charAt(0) != DSV_QUOTE || input.charAt(input.length() - 1) != DSV_QUOTE) {
             return input;
         }
 
@@ -114,9 +100,8 @@ class DSVUtils
         }
 
         if (containsSpecial) {
-            return noQuotes.replaceAll(
-                DSV_QUOTE_AS_STRING + DSV_QUOTE_AS_STRING,
-                DSV_QUOTE_AS_STRING);
+            return noQuotes
+                .replaceAll(DSV_QUOTE_AS_STRING + DSV_QUOTE_AS_STRING, DSV_QUOTE_AS_STRING);
         }
 
         return input;

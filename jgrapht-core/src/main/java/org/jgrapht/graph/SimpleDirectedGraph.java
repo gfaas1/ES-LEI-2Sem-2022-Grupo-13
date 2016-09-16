@@ -20,10 +20,9 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A simple directed graph. A simple directed graph is a directed graph in which
- * neither multiple edges between any two vertices nor loops are permitted.
+ * A simple directed graph. A simple directed graph is a directed graph in which neither multiple
+ * edges between any two vertices nor loops are permitted.
  */
 public class SimpleDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -51,19 +50,18 @@ public class SimpleDirectedGraph<V, E>
         super(ef, false, false);
     }
 
-    public static <V, E> DirectedGraphBuilderBase<V,
-        E, ? extends SimpleDirectedGraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> DirectedGraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>, ?> builder(
+            Class<? extends E> edgeClass)
     {
-        return new DirectedGraphBuilder<>(
-                new SimpleDirectedGraph<>(edgeClass));
+        return new DirectedGraphBuilder<>(new SimpleDirectedGraph<>(edgeClass));
     }
 
-    public static <V, E> DirectedGraphBuilderBase<V,
-        E, ? extends SimpleDirectedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V,
+        E> DirectedGraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>, ?> builder(
+            EdgeFactory<V, E> ef)
     {
-        return new DirectedGraphBuilder<>(
-                new SimpleDirectedGraph<>(ef));
+        return new DirectedGraphBuilder<>(new SimpleDirectedGraph<>(ef));
     }
 }
 

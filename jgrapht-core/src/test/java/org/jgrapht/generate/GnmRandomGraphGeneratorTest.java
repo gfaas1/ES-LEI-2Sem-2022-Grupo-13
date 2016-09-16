@@ -19,10 +19,10 @@ package org.jgrapht.generate;
 
 import java.util.*;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * .

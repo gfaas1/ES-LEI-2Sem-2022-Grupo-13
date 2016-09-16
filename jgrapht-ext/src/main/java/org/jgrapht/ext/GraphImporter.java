@@ -17,15 +17,10 @@
  */
 package org.jgrapht.ext;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.charset.*;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * Interface for graph importers
@@ -38,8 +33,7 @@ public interface GraphImporter<V, E>
      * 
      * @param g the graph
      * @param in the input stream
-     * @throws ImportException in case any error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     default void importGraph(Graph<V, E> g, InputStream in)
         throws ImportException
@@ -52,8 +46,7 @@ public interface GraphImporter<V, E>
      * 
      * @param g the graph
      * @param in the input reader
-     * @throws ImportException in case any error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     void importGraph(Graph<V, E> g, Reader in)
         throws ImportException;
@@ -63,18 +56,14 @@ public interface GraphImporter<V, E>
      * 
      * @param g the graph
      * @param file the file to read from
-     * @throws ImportException in case any error occurs, such as I/O or parse
-     *         error
+     * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     default void importGraph(Graph<V, E> g, File file)
         throws ImportException
     {
         try {
             importGraph(
-                g,
-                new InputStreamReader(
-                    new FileInputStream(file),
-                    StandardCharsets.UTF_8));
+                g, new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new ImportException(e);
         }

@@ -17,18 +17,16 @@
  */
 package org.jgrapht.ext;
 
-import org.jgrapht.Graph;
+import java.io.*;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
-
+import org.jgrapht.*;
 
 /**
  * Exports a graph to a CSV format that can be imported into MS Visio.
  *
- * <p><b>Tip:</b> By default, the exported graph doesn't show link directions.
- * To show link directions:<br>
+ * <p>
+ * <b>Tip:</b> By default, the exported graph doesn't show link directions. To show link
+ * directions:<br>
  *
  * <ol>
  * <li>Select All (Ctrl-A)</li>
@@ -50,8 +48,7 @@ public class VisioExporter<V, E>
     /**
      * Creates a new VisioExporter with the specified naming policy.
      *
-     * @param vertexNameProvider the vertex name provider to be used for naming
-     * the Visio shapes.
+     * @param vertexNameProvider the vertex name provider to be used for naming the Visio shapes.
      */
     public VisioExporter(VertexNameProvider<V> vertexNameProvider)
     {
@@ -81,7 +78,7 @@ public class VisioExporter<V, E>
             // ignore
         }
     }
-    
+
     /**
      * Exports the specified graph into a Visio CSV file format.
      *
@@ -92,7 +89,7 @@ public class VisioExporter<V, E>
     public void exportGraph(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
-        
+
         for (V v : g.vertexSet()) {
             exportVertex(out, v);
         }
@@ -106,10 +103,8 @@ public class VisioExporter<V, E>
 
     private void exportEdge(PrintWriter out, E edge, Graph<V, E> g)
     {
-        String sourceName =
-            vertexNameProvider.getVertexName(g.getEdgeSource(edge));
-        String targetName =
-            vertexNameProvider.getVertexName(g.getEdgeTarget(edge));
+        String sourceName = vertexNameProvider.getVertexName(g.getEdgeSource(edge));
+        String targetName = vertexNameProvider.getVertexName(g.getEdgeTarget(edge));
 
         out.print("Link,");
 

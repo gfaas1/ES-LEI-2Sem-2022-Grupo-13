@@ -21,12 +21,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a ring graph of any size. A ring graph is a graph that contains a
- * single cycle that passes through all its vertices exactly once. For a
- * directed graph, the generated edges are oriented consistently around the
- * ring.
+ * Generates a ring graph of any size. A ring graph is a graph that contains a single cycle that
+ * passes through all its vertices exactly once. For a directed graph, the generated edges are
+ * oriented consistently around the ring.
  *
  * @author John V. Sichi
  * @since Sep 16, 2003
@@ -55,17 +53,15 @@ public class RingGraphGenerator<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
         }
 
-        LinearGraphGenerator<V, E> linearGenerator =
-                new LinearGraphGenerator<>(size);
+        LinearGraphGenerator<V, E> linearGenerator = new LinearGraphGenerator<>(size);
         Map<String, V> privateMap = new HashMap<>();
         linearGenerator.generateGraph(target, vertexFactory, privateMap);
 

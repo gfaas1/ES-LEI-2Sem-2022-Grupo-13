@@ -20,10 +20,9 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A simple directed weighted graph. A simple directed weighted graph is a
- * simple directed graph for which edges are assigned weights.
+ * A simple directed weighted graph. A simple directed weighted graph is a simple directed graph for
+ * which edges are assigned weights.
  */
 public class SimpleDirectedWeightedGraph<V, E>
     extends SimpleDirectedGraph<V, E>
@@ -32,8 +31,7 @@ public class SimpleDirectedWeightedGraph<V, E>
     private static final long serialVersionUID = 3904960841681220919L;
 
     /**
-     * Creates a new simple directed weighted graph with the specified edge
-     * factory.
+     * Creates a new simple directed weighted graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      */
@@ -52,20 +50,16 @@ public class SimpleDirectedWeightedGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(
-        Class<? extends E> edgeClass)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new SimpleDirectedWeightedGraph<>(edgeClass));
+        return new DirectedWeightedGraphBuilder<>(new SimpleDirectedWeightedGraph<>(edgeClass));
     }
 
-    public static <V, E> DirectedWeightedGraphBuilderBase<V,
-        E, ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(
-        EdgeFactory<V, E> ef)
+    public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
+        ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
-        return new DirectedWeightedGraphBuilder<>(
-                new SimpleDirectedWeightedGraph<>(ef));
+        return new DirectedWeightedGraphBuilder<>(new SimpleDirectedWeightedGraph<>(ef));
     }
 }
 

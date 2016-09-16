@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
  * An undirected graph that is a subgraph on other graph.
  *
@@ -40,13 +39,9 @@ public class UndirectedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>
      * null</code> then all vertices are included.
      * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are
-     * included.
+     * null</code> then all the edges whose vertices found in the graph are included.
      */
-    public UndirectedSubgraph(
-        UndirectedGraph<V, E> base,
-        Set<V> vertexSubset,
-        Set<E> edgeSubset)
+    public UndirectedSubgraph(UndirectedGraph<V, E> base, Set<V> vertexSubset, Set<E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -54,7 +49,8 @@ public class UndirectedSubgraph<V, E>
     /**
      * @see UndirectedGraph#degreeOf(Object)
      */
-    @Override public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(V vertex)
     {
         assertVertexExist(vertex);
 

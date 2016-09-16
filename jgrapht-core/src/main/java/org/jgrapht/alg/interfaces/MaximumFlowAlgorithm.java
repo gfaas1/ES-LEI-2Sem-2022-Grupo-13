@@ -19,12 +19,9 @@ package org.jgrapht.alg.interfaces;
 
 import java.util.*;
 
-
 /**
- * Allows to derive <a
- * href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a>
- * from the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow
- * network</a>
+ * Allows to derive <a href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a>
+ * from the supplied <a href="https://en.wikipedia.org/wiki/Flow_network">flow network</a>
  *
  * @author Alexey Kudinkin
  * @author Joris Kinable
@@ -32,14 +29,14 @@ import java.util.*;
  * @param <V> vertex concept type
  * @param <E> edge concept type
  *
- * @TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
+ * TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
 public interface MaximumFlowAlgorithm<V, E>
 {
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>.
-     * Returns an object containing detailed information about the flow.
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Returns an object containing detailed
+     * information about the flow.
      *
      * @param source source of the flow inside the network
      * @param sink sink of the flow inside the network
@@ -49,29 +46,30 @@ public interface MaximumFlowAlgorithm<V, E>
     MaximumFlow<E> buildMaximumFlow(V source, V sink);
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
-     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
+     * <tt>sink</tt> must be vertices of the <tt>
      * network</tt> passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
      */
-    default double calculateMaximumFlow(V source,V sink){
+    default double calculateMaximumFlow(V source, V sink)
+    {
         return buildMaximumFlow(source, sink).getValue();
     }
-
 
     /**
      * Returns maximum flow value, that was calculated during last <tt>
      * calculateMaximumFlow</tt> call.
      *
-     * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in the next version.
+     * NOTE: this function currently has a default implementation to guarantee backwards
+     * compatibility. This function should be enforced in the next version.
      *
      * @return maximum flow value
      */
-    default double getMaximumFlowValue(){
+    default double getMaximumFlowValue()
+    {
         throw new UnsupportedOperationException("Function not implemented");
     }
 
@@ -80,13 +78,14 @@ public interface MaximumFlowAlgorithm<V, E>
      * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
      * calculateMaximumFlow</tt> calls.
      *
-     * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in the next version.
+     * NOTE: this function currently has a default implementation to guarantee backwards
+     * compatibility. This function should be enforced in the next version.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      * @deprecated Use {@link #getFlowMap()} instead
      */
-    default Map<E, Double> getMaximumFlow(){
+    default Map<E, Double> getMaximumFlow()
+    {
         return getFlowMap();
     }
 
@@ -95,31 +94,32 @@ public interface MaximumFlowAlgorithm<V, E>
      * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
      * calculateMaximumFlow</tt> calls.
      *
-     * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in the next version.
+     * NOTE: this function currently has a default implementation to guarantee backwards
+     * compatibility. This function should be enforced in the next version.
      *
      * @return <i>read-only</i> mapping from edges to doubles - flow values
      */
-    default Map<E, Double> getFlowMap(){
+    default Map<E, Double> getFlowMap()
+    {
         throw new UnsupportedOperationException("Function not implemented");
     }
 
-
     /**
-     * Returns the direction of the flow on an edge (u,v). In case (u,v) is a directed edge (arc), this function will always
-     * return the edge target v. However, if (u,v) is an edge in an undirected graph, flow may go through the edge in either side.
-     * If the flow goes from u to v, we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
+     * Returns the direction of the flow on an edge (u,v). In case (u,v) is a directed edge (arc),
+     * this function will always return the edge target v. However, if (u,v) is an edge in an
+     * undirected graph, flow may go through the edge in either side. If the flow goes from u to v,
+     * we return v, otherwise u. If the flow on an edge equals 0, the returned value has no meaning.
      *
-     * NOTE: this function currently has a default implementation to guarantee backwards compatibility. This function should be
-     * enforced in the next version.
+     * NOTE: this function currently has a default implementation to guarantee backwards
+     * compatibility. This function should be enforced in the next version.
      *
      * @param e edge
      * @return the vertex where the flow leaves the edge
      */
-    default V getFlowDirection(E e){
+    default V getFlowDirection(E e)
+    {
         throw new UnsupportedOperationException("Function not implemented");
     }
-
 
     interface MaximumFlow<E>
     {
@@ -150,19 +150,22 @@ public interface MaximumFlowAlgorithm<V, E>
             this.flow = Collections.unmodifiableMap(flow);
         }
 
-        @Override public Double getValue()
+        @Override
+        public Double getValue()
         {
             return value;
         }
 
-        @Override public Map<E, Double> getFlow()
+        @Override
+        public Map<E, Double> getFlow()
         {
             return flow;
         }
 
         @Override
-        public String toString(){
-            return "Flow Value: "+value+"\nFlow map:\n"+flow;
+        public String toString()
+        {
+            return "Flow Value: " + value + "\nFlow map:\n" + flow;
         }
     }
 }

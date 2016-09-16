@@ -21,13 +21,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Generates a <a
- * href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete
- * bipartite graph</a> of any size. This is a graph with two partitions; two
- * vertices will contain an edge if and only if they belong to different
- * partitions.
+ * Generates a <a href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete bipartite
+ * graph</a> of any size. This is a graph with two partitions; two vertices will contain an edge if
+ * and only if they belong to different partitions.
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
@@ -55,16 +52,15 @@ public class CompleteBipartiteGraphGenerator<V, E>
     /**
      * Construct a complete bipartite graph
      */
-    @Override public void generateGraph(
-        Graph<V, E> target,
-        final VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if ((sizeA < 1) && (sizeB < 1)) {
             return;
         }
 
-        //Create vertices in each of the partitions
+        // Create vertices in each of the partitions
         Set<V> a = new HashSet<>();
         Set<V> b = new HashSet<>();
         for (int i = 0; i < sizeA; i++) {
@@ -78,7 +74,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
             b.add(newVertex);
         }
 
-        //Add an edge for each pair of vertices in different partitions
+        // Add an edge for each pair of vertices in different partitions
         for (V u : a) {
             for (V v : b) {
                 target.addEdge(u, v);

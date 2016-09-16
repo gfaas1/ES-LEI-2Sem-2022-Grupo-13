@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.util.MathUtil;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
+import junit.framework.*;
 
 /**
  * @author Guillaume Boulmier
@@ -30,7 +30,7 @@ import org.jgrapht.util.MathUtil;
 public class KShortestPathKValuesTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
      * @param k
@@ -51,11 +51,7 @@ public class KShortestPathKValuesTest
     {
         KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
 
-        for (
-            int maxSize = 1;
-            maxSize <= calculateNbElementaryPathsForCompleteGraph(6);
-            maxSize++)
-        {
+        for (int maxSize = 1; maxSize <= calculateNbElementaryPathsForCompleteGraph(6); maxSize++) {
             KShortestPaths<String, DefaultWeightedEdge> finder =
                 new KShortestPaths<>(graph, "vS", maxSize);
 
@@ -69,22 +65,19 @@ public class KShortestPathKValuesTest
 
     public void testNbReturnedPaths()
     {
-        KShortestPathCompleteGraph4 kSPCompleteGraph4 =
-            new KShortestPathCompleteGraph4();
+        KShortestPathCompleteGraph4 kSPCompleteGraph4 = new KShortestPathCompleteGraph4();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph4);
 
-        KShortestPathCompleteGraph5 kSPCompleteGraph5 =
-            new KShortestPathCompleteGraph5();
+        KShortestPathCompleteGraph5 kSPCompleteGraph5 = new KShortestPathCompleteGraph5();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph5);
 
-        KShortestPathCompleteGraph6 kSPCompleteGraph6 =
-            new KShortestPathCompleteGraph6();
+        KShortestPathCompleteGraph6 kSPCompleteGraph6 = new KShortestPathCompleteGraph6();
         verifyNbPathsForAllPairsOfVertices(kSPCompleteGraph6);
     }
 
     /**
-     * Compute the total number of paths between every pair of vertices in a
-     * complete graph with <code>n</code> vertices.
+     * Compute the total number of paths between every pair of vertices in a complete graph with
+     * <code>n</code> vertices.
      *
      * @param n
      *
@@ -101,15 +94,12 @@ public class KShortestPathKValuesTest
 
     private void verifyNbPathsForAllPairsOfVertices(Graph<String, DefaultWeightedEdge> graph)
     {
-        long nbPaths =
-            calculateNbElementaryPathsForCompleteGraph(
-                graph.vertexSet().size());
+        long nbPaths = calculateNbElementaryPathsForCompleteGraph(graph.vertexSet().size());
         int maxSize = Integer.MAX_VALUE;
 
         for (String sourceVertex : graph.vertexSet()) {
             KShortestPaths<String, DefaultWeightedEdge> finder =
-                    new KShortestPaths<>(graph, sourceVertex,
-                            maxSize);
+                new KShortestPaths<>(graph, sourceVertex, maxSize);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
                     assertEquals(finder.getPaths(targetVertex).size(), nbPaths);

@@ -23,10 +23,8 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 
-
 /**
- * An implementation of <a
- * href="http://mathworld.wolfram.com/DijkstrasAlgorithm.html">Dijkstra's
+ * An implementation of <a href="http://mathworld.wolfram.com/DijkstrasAlgorithm.html">Dijkstra's
  * shortest path algorithm</a> using <code>ClosestFirstIterator</code>.
  *
  * @author John V. Sichi
@@ -37,45 +35,36 @@ public final class DijkstraShortestPath<V, E>
     private GraphPath<V, E> path;
 
     /**
-     * Creates and executes a new DijkstraShortestPath algorithm instance. An
-     * instance is only good for a single search; after construction, it can be
-     * accessed to retrieve information about the path found.
+     * Creates and executes a new DijkstraShortestPath algorithm instance. An instance is only good
+     * for a single search; after construction, it can be accessed to retrieve information about the
+     * path found.
      *
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
      */
-    public DijkstraShortestPath(Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+    public DijkstraShortestPath(Graph<V, E> graph, V startVertex, V endVertex)
     {
         this(graph, startVertex, endVertex, Double.POSITIVE_INFINITY);
     }
 
     /**
-     * Creates and executes a new DijkstraShortestPath algorithm instance. An
-     * instance is only good for a single search; after construction, it can be
-     * accessed to retrieve information about the path found.
+     * Creates and executes a new DijkstraShortestPath algorithm instance. An instance is only good
+     * for a single search; after construction, it can be accessed to retrieve information about the
+     * path found.
      *
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
-     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY
-     * for unbounded search
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded search
      */
-    public DijkstraShortestPath(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex,
-        double radius)
+    public DijkstraShortestPath(Graph<V, E> graph, V startVertex, V endVertex, double radius)
     {
         if (!graph.containsVertex(endVertex)) {
-            throw new IllegalArgumentException(
-                "graph must contain the end vertex");
+            throw new IllegalArgumentException("graph must contain the end vertex");
         }
 
-        ClosestFirstIterator<V, E> iter =
-                new ClosestFirstIterator<>(graph, startVertex, radius);
+        ClosestFirstIterator<V, E> iter = new ClosestFirstIterator<>(graph, startVertex, radius);
 
         while (iter.hasNext()) {
             V vertex = iter.next();
@@ -128,9 +117,9 @@ public final class DijkstraShortestPath<V, E>
     }
 
     /**
-     * Convenience method to find the shortest path via a single static method
-     * call. If you need a more advanced search (e.g. limited by radius, or
-     * computation of the path length), use the constructor instead.
+     * Convenience method to find the shortest path via a single static method call. If you need a
+     * more advanced search (e.g. limited by radius, or computation of the path length), use the
+     * constructor instead.
      *
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
@@ -138,28 +127,18 @@ public final class DijkstraShortestPath<V, E>
      *
      * @return List of Edges, or null if no path exists
      */
-    public static <V, E> List<E> findPathBetween(
-        Graph<V, E> graph,
-        V startVertex,
-        V endVertex)
+    public static <V, E> List<E> findPathBetween(Graph<V, E> graph, V startVertex, V endVertex)
     {
-        DijkstraShortestPath<V, E> alg =
-                new DijkstraShortestPath<>(
-                        graph,
-                        startVertex,
-                        endVertex);
+        DijkstraShortestPath<V, E> alg = new DijkstraShortestPath<>(graph, startVertex, endVertex);
 
         return alg.getPathEdgeList();
     }
 
     private void createEdgeList(
-        Graph<V, E> graph,
-        ClosestFirstIterator<V, E> iter,
-        V startVertex,
-        V endVertex)
+        Graph<V, E> graph, ClosestFirstIterator<V, E> iter, V startVertex, V endVertex)
     {
         List<E> edgeList = new ArrayList<>();
-        List<V> vertexList=new ArrayList<>();
+        List<V> vertexList = new ArrayList<>();
         vertexList.add(endVertex);
 
         V v = endVertex;
@@ -179,14 +158,7 @@ public final class DijkstraShortestPath<V, E>
         Collections.reverse(edgeList);
         Collections.reverse(vertexList);
         double pathLength = iter.getShortestPathLength(endVertex);
-        path =
-                new GraphWalk<>(
-                        graph,
-                        startVertex,
-                        endVertex,
-                        vertexList,
-                        edgeList,
-                        pathLength);
+        path = new GraphWalk<>(graph, startVertex, endVertex, vertexList, edgeList, pathLength);
     }
 }
 

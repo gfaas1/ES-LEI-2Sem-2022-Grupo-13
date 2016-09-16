@@ -54,13 +54,12 @@ public class SimpleGraphPathTest
 
     public void testEdgeList()
     {
-        DefaultEdge[] expectedEdges = {
-            graph.getEdge("v1", "v2"),
-            graph.getEdge("v2", "v4") };
+        DefaultEdge[] expectedEdges = { graph.getEdge("v1", "v2"), graph.getEdge("v2", "v4") };
         assertEquals(Arrays.asList(expectedEdges), path.getEdgeList());
     }
 
-    public void testInvalidVertexList() {
+    public void testInvalidVertexList()
+    {
         List<String> invalidPath = new ArrayList<>();
         invalidPath.add("v1");
         invalidPath.add("v2");
@@ -72,7 +71,8 @@ public class SimpleGraphPathTest
         }
     }
 
-    public void testSingleVertexList() {
+    public void testSingleVertexList()
+    {
         List<String> invalidPath = new ArrayList<>();
         invalidPath.add("v1");
         try {
@@ -82,15 +82,18 @@ public class SimpleGraphPathTest
         }
     }
 
-    public void testStartVertex() {
+    public void testStartVertex()
+    {
         assertTrue(path.getStartVertex().equals("v1"));
     }
 
-    public void testEndVertex() {
+    public void testEndVertex()
+    {
         assertTrue(path.getEndVertex().equals("v4"));
     }
 
-    public void testPathWeight() {
+    public void testPathWeight()
+    {
         assertEquals(1.0, path.getWeight());
     }
 

@@ -23,7 +23,6 @@ import org.jgrapht.*;
 import org.jgrapht.util.*;
 import org.jgrapht.util.PrefetchIterator.*;
 
-
 /**
  * Helper for {@link MaskSubgraph}.
  *
@@ -41,10 +40,7 @@ class MaskEdgeSet<V, E>
 
     private transient TypeUtil<E> edgeTypeDecl = null;
 
-    public MaskEdgeSet(
-        Graph<V, E> graph,
-        Set<E> edgeSet,
-        MaskFunctor<V, E> mask)
+    public MaskEdgeSet(Graph<V, E> graph, Set<E> edgeSet, MaskFunctor<V, E> mask)
     {
         this.graph = graph;
         this.edgeSet = edgeSet;
@@ -54,7 +50,8 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Collection#contains(java.lang.Object)
      */
-    @Override public boolean contains(Object o)
+    @Override
+    public boolean contains(Object o)
     {
         // Force a cast to type E. This is nonsense, of course, but
         // it's erased by the compiler anyway.
@@ -63,8 +60,7 @@ class MaskEdgeSet<V, E>
         // If o isn't an E, the first check will fail and
         // short-circuit, so we never try to test the mask on non-edge
         // object inputs.
-        return edgeSet.contains(e)
-            && !mask.isEdgeMasked(e)
+        return edgeSet.contains(e) && !mask.isEdgeMasked(e)
             && !mask.isVertexMasked(graph.getEdgeSource(e))
             && !mask.isVertexMasked(graph.getEdgeTarget(e));
     }
@@ -72,7 +68,8 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Set#iterator()
      */
-    @Override public Iterator<E> iterator()
+    @Override
+    public Iterator<E> iterator()
     {
         return new PrefetchIterator<E>(new MaskEdgeSetNextElementFunctor());
     }
@@ -80,7 +77,8 @@ class MaskEdgeSet<V, E>
     /**
      * @see java.util.Set#size()
      */
-    @Override public int size()
+    @Override
+    public int size()
     {
         return (int) edgeSet.stream().filter(e -> contains(e)).count();
     }
@@ -95,7 +93,8 @@ class MaskEdgeSet<V, E>
             this.iter = MaskEdgeSet.this.edgeSet.iterator();
         }
 
-        @Override public E nextElement()
+        @Override
+        public E nextElement()
             throws NoSuchElementException
         {
             E edge = this.iter.next();
@@ -108,10 +107,8 @@ class MaskEdgeSet<V, E>
         private boolean isMasked(E edge)
         {
             return MaskEdgeSet.this.mask.isEdgeMasked(edge)
-                || MaskEdgeSet.this.mask.isVertexMasked(
-                    MaskEdgeSet.this.graph.getEdgeSource(edge))
-                || MaskEdgeSet.this.mask.isVertexMasked(
-                    MaskEdgeSet.this.graph.getEdgeTarget(edge));
+                || MaskEdgeSet.this.mask.isVertexMasked(MaskEdgeSet.this.graph.getEdgeSource(edge))
+                || MaskEdgeSet.this.mask.isVertexMasked(MaskEdgeSet.this.graph.getEdgeTarget(edge));
         }
     }
 }

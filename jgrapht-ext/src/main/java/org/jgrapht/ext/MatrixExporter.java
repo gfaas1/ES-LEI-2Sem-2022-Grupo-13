@@ -17,24 +17,15 @@
  */
 package org.jgrapht.ext;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.util.ModifiableInteger;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 /**
- * Exports a graph to a plain text matrix format, which can be processed by
- * matrix manipulation software, such as
- * <a href="http://rs.cipr.uib.no/mtj/"> MTJ</a> or
+ * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation
+ * software, such as <a href="http://rs.cipr.uib.no/mtj/"> MTJ</a> or
  * <a href="http://www.mathworks.com/products/matlab/">MATLAB</a>.
  * 
  * <p>
@@ -59,12 +50,11 @@ public class MatrixExporter<V, E>
     public enum Format
     {
         /**
-         * A sparse representation of the adjacency matrix. This is the default.
-         * Exports the specified graph into a plain text file format containing
-         * a sparse representation of the graph's adjacency matrix. The value
-         * stored in each position of the matrix indicates the number of edges
-         * between two vertices. With an undirected graph, the adjacency matrix
-         * is symmetric.
+         * A sparse representation of the adjacency matrix. This is the default. Exports the
+         * specified graph into a plain text file format containing a sparse representation of the
+         * graph's adjacency matrix. The value stored in each position of the matrix indicates the
+         * number of edges between two vertices. With an undirected graph, the adjacency matrix is
+         * symmetric.
          */
         SPARSE_ADJACENCY_MATRIX,
         /**
@@ -78,9 +68,8 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Creates a new MatrixExporter with integer name provider for the vertex
-     * identifiers and {@link Format#SPARSE_ADJACENCY_MATRIX} as the default
-     * format.
+     * Creates a new MatrixExporter with integer name provider for the vertex identifiers and
+     * {@link Format#SPARSE_ADJACENCY_MATRIX} as the default format.
      */
     public MatrixExporter()
     {
@@ -88,8 +77,7 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Creates a new MatrixExporter with integer name provider for the vertex
-     * identifiers.
+     * Creates a new MatrixExporter with integer name provider for the vertex identifiers.
      * 
      * @param format format to use
      */
@@ -102,15 +90,13 @@ public class MatrixExporter<V, E>
      * Creates a new MatrixExporter.
      * 
      * @param format format to use
-     * @param vertexIDProvider for generating vertex identifiers. Must not be
-     *        null.
+     * @param vertexIDProvider for generating vertex identifiers. Must not be null.
      */
     public MatrixExporter(Format format, VertexNameProvider<V> vertexIDProvider)
     {
         this.format = format;
         if (vertexIDProvider == null) {
-            throw new IllegalArgumentException(
-                "Vertex ID provider must not be null");
+            throw new IllegalArgumentException("Vertex ID provider must not be null");
         }
         this.vertexIDProvider = vertexIDProvider;
     }
@@ -153,9 +139,7 @@ public class MatrixExporter<V, E>
             break;
         case SPARSE_NORMALIZED_LAPLACIAN_MATRIX:
             if (g instanceof UndirectedGraph<?, ?>) {
-                exportNormalizedLaplacianMatrix(
-                    (UndirectedGraph<V, E>) g,
-                    writer);
+                exportNormalizedLaplacianMatrix((UndirectedGraph<V, E>) g, writer);
             } else {
                 throw new ExportException(
                     "Exporter can only export undirected graphs in this format");
@@ -165,10 +149,10 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Exports the specified graph into a plain text file format containing a
-     * sparse representation of the graph's adjacency matrix. The value stored
-     * in each position of the matrix indicates the number of edges between two
-     * vertices. With an undirected graph, the adjacency matrix is symmetric.
+     * Exports the specified graph into a plain text file format containing a sparse representation
+     * of the graph's adjacency matrix. The value stored in each position of the matrix indicates
+     * the number of edges between two vertices. With an undirected graph, the adjacency matrix is
+     * symmetric.
      *
      * @param output the writer to which the graph to be exported.
      * @param g the graph to be exported.
@@ -180,10 +164,9 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Exports the specified graph into a plain text file format containing a
-     * sparse representation of the graph's adjacency matrix. The value stored
-     * in each position of the matrix indicates the number of directed edges
-     * going from one vertex to another.
+     * Exports the specified graph into a plain text file format containing a sparse representation
+     * of the graph's adjacency matrix. The value stored in each position of the matrix indicates
+     * the number of directed edges going from one vertex to another.
      *
      * @param output the writer to which the graph to be exported.
      * @param g the graph to be exported.
@@ -195,11 +178,10 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Exports the specified graph into a plain text file format containing a
-     * sparse representation of the graph's Laplacian matrix. Laplacian matrices
-     * are only defined for simple graphs, so edge direction, multiple edges,
-     * loops, and weights are all ignored when creating the Laplacian matrix. If
-     * you're unsure about Laplacian matrices, see:
+     * Exports the specified graph into a plain text file format containing a sparse representation
+     * of the graph's Laplacian matrix. Laplacian matrices are only defined for simple graphs, so
+     * edge direction, multiple edges, loops, and weights are all ignored when creating the
+     * Laplacian matrix. If you're unsure about Laplacian matrices, see:
      * <a href="http://mathworld.wolfram.com/LaplacianMatrix.html"> http://
      * mathworld.wolfram.com/LaplacianMatrix.html</a>.
      *
@@ -213,21 +195,18 @@ public class MatrixExporter<V, E>
     }
 
     /**
-     * Exports the specified graph into a plain text file format containing a
-     * sparse representation of the graph's normalized Laplacian matrix.
-     * Laplacian matrices are only defined for simple graphs, so edge direction,
-     * multiple edges, loops, and weights are all ignored when creating the
-     * Laplacian matrix. If you're unsure about normalized Laplacian matrices,
-     * see: <a href="http://mathworld.wolfram.com/LaplacianMatrix.html"> http://
+     * Exports the specified graph into a plain text file format containing a sparse representation
+     * of the graph's normalized Laplacian matrix. Laplacian matrices are only defined for simple
+     * graphs, so edge direction, multiple edges, loops, and weights are all ignored when creating
+     * the Laplacian matrix. If you're unsure about normalized Laplacian matrices, see:
+     * <a href="http://mathworld.wolfram.com/LaplacianMatrix.html"> http://
      * mathworld.wolfram.com/LaplacianMatrix.html</a>.
      *
      * @param output the writer to which the graph is to be exported.
      * @param g the graph to be exported.
      */
     @Deprecated
-    public void exportNormalizedLaplacianMatrix(
-        Writer output,
-        UndirectedGraph<V, E> g)
+    public void exportNormalizedLaplacianMatrix(Writer output, UndirectedGraph<V, E> g)
     {
         exportNormalizedLaplacianMatrix(g, output);
     }
@@ -244,26 +223,18 @@ public class MatrixExporter<V, E>
         if (g instanceof DirectedGraph<?, ?>) {
             for (V from : g.vertexSet()) {
                 exportAdjacencyMatrixVertex(
-                    out,
-                    from,
-                    Graphs.successorListOf((DirectedGraph<V, E>) g, from));
+                    out, from, Graphs.successorListOf((DirectedGraph<V, E>) g, from));
             }
         } else {
             for (V from : g.vertexSet()) {
-                exportAdjacencyMatrixVertex(
-                    out,
-                    from,
-                    Graphs.neighborListOf(g, from));
+                exportAdjacencyMatrixVertex(out, from, Graphs.neighborListOf(g, from));
             }
         }
 
         out.flush();
     }
 
-    private void exportAdjacencyMatrixVertex(
-        PrintWriter writer,
-        V from,
-        List<V> neighbors)
+    private void exportAdjacencyMatrixVertex(PrintWriter writer, V from, List<V> neighbors)
     {
         String fromName = vertexIDProvider.getVertexName(from);
         Map<String, ModifiableInteger> counts = new LinkedHashMap<>();
@@ -288,11 +259,7 @@ public class MatrixExporter<V, E>
         }
     }
 
-    private void exportEntry(
-        PrintWriter writer,
-        String from,
-        String to,
-        String value)
+    private void exportEntry(PrintWriter writer, String from, String to, String value)
     {
         writer.println(from + delimiter + to + delimiter + value);
     }
@@ -311,11 +278,7 @@ public class MatrixExporter<V, E>
             String fromName = nameProvider.getVertexName(from);
 
             List<V> neighbors = Graphs.neighborListOf(g, from);
-            exportEntry(
-                out,
-                fromName,
-                fromName,
-                Integer.toString(neighbors.size()));
+            exportEntry(out, fromName, fromName, Integer.toString(neighbors.size()));
             for (V to : neighbors) {
                 String toName = nameProvider.getVertexName(to);
                 exportEntry(out, fromName, toName, "-1");
@@ -325,9 +288,7 @@ public class MatrixExporter<V, E>
         out.flush();
     }
 
-    private void exportNormalizedLaplacianMatrix(
-        UndirectedGraph<V, E> g,
-        Writer writer)
+    private void exportNormalizedLaplacianMatrix(UndirectedGraph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 
@@ -339,8 +300,7 @@ public class MatrixExporter<V, E>
 
         for (V from : g.vertexSet()) {
             String fromName = nameProvider.getVertexName(from);
-            Set<V> neighbors = new LinkedHashSet<>(
-                Graphs.neighborListOf(g, from));
+            Set<V> neighbors = new LinkedHashSet<>(Graphs.neighborListOf(g, from));
             if (neighbors.isEmpty()) {
                 exportEntry(out, fromName, fromName, "0");
             } else {
@@ -348,8 +308,7 @@ public class MatrixExporter<V, E>
 
                 for (V to : neighbors) {
                     String toName = nameProvider.getVertexName(to);
-                    double value = -1
-                        / Math.sqrt(g.degreeOf(from) * g.degreeOf(to));
+                    double value = -1 / Math.sqrt(g.degreeOf(from) * g.degreeOf(to));
                     exportEntry(out, fromName, toName, Double.toString(value));
                 }
             }

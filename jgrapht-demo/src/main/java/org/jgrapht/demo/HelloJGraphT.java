@@ -22,7 +22,6 @@ import java.net.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-
 /**
  * A simple introduction to using JGraphT.
  *
@@ -40,7 +39,7 @@ public final class HelloJGraphT
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
 
@@ -55,15 +54,13 @@ public final class HelloJGraphT
     }
 
     /**
-     * Creates a toy directed graph based on URL objects that represents link
-     * structure.
+     * Creates a toy directed graph based on URL objects that represents link structure.
      *
      * @return a graph based on URL objects.
      */
     private static DirectedGraph<URL, DefaultEdge> createHrefGraph()
     {
-        DirectedGraph<URL, DefaultEdge> g =
-                new DefaultDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         try {
             URL amazon = new URL("http://www.amazon.com");
@@ -92,8 +89,7 @@ public final class HelloJGraphT
      */
     private static UndirectedGraph<String, DefaultEdge> createStringGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";

@@ -26,13 +26,8 @@ import org.junit.runners.*;
  * @author Barak Naveh
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    BreadthFirstIteratorTest.class,
-    ClosestFirstIteratorTest.class,
-    DepthFirstIteratorTest.class,
-    IgnoreDirectionTest.class,
-    TopologicalOrderIteratorTest.class
-})
+@Suite.SuiteClasses({ BreadthFirstIteratorTest.class, ClosestFirstIteratorTest.class,
+    DepthFirstIteratorTest.class, IgnoreDirectionTest.class, TopologicalOrderIteratorTest.class })
 public final class AllTraverseTests
 {
 }

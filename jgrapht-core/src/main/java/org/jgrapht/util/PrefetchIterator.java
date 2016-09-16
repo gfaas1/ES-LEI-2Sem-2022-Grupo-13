@@ -19,22 +19,22 @@ package org.jgrapht.util;
 
 import java.util.*;
 
-
 /**
- * Utility class to help implement an iterator/enumerator in which the hasNext()
- * method needs to calculate the next elements ahead of time.
+ * Utility class to help implement an iterator/enumerator in which the hasNext() method needs to
+ * calculate the next elements ahead of time.
  *
- * <p>Many classes which implement an iterator face a common problem: if there
- * is no easy way to calculate hasNext() other than to call getNext(), then they
- * save the result for fetching in the next call to getNext(). This utility
- * helps in doing just that.
+ * <p>
+ * Many classes which implement an iterator face a common problem: if there is no easy way to
+ * calculate hasNext() other than to call getNext(), then they save the result for fetching in the
+ * next call to getNext(). This utility helps in doing just that.
  *
- * <p><b>Usage:</b> The new iterator class will hold this class as a member
- * variable and forward the hasNext() and next() to it. When creating an
- * instance of this class, you supply it with a functor that is doing the real
- * job of calculating the next element.
+ * <p>
+ * <b>Usage:</b> The new iterator class will hold this class as a member variable and forward the
+ * hasNext() and next() to it. When creating an instance of this class, you supply it with a functor
+ * that is doing the real job of calculating the next element.
  *
- * <pre><code>
+ * <pre>
+ * <code>
     //This class supllies enumeration of integer till 100.
     public class IteratorExample implements Enumeration{
     private int counter=0;
@@ -68,8 +68,7 @@ import java.util.*;
  * @author Assaf_Lehr
  */
 public class PrefetchIterator<E>
-    implements Iterator<E>,
-        Enumeration<E>
+    implements Iterator<E>, Enumeration<E>
 {
     private NextElementFunctor<E> innerEnum;
     private E getNextLastResult;
@@ -84,8 +83,8 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * Serves as one contact place to the functor; all must use it and not
-     * directly the NextElementFunctor.
+     * Serves as one contact place to the functor; all must use it and not directly the
+     * NextElementFunctor.
      */
     private E getNextElementFromInnerFunctor()
     {
@@ -99,11 +98,12 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * 1. Retrieves the saved value or calculates it if it does not exist 2.
-     * Changes isGetNextLastResultUpToDate to false. (Because it does not save
-     * the NEXT element now; it saves the current one!)
+     * 1. Retrieves the saved value or calculates it if it does not exist 2. Changes
+     * isGetNextLastResultUpToDate to false. (Because it does not save the NEXT element now; it
+     * saves the current one!)
      */
-    @Override public E nextElement()
+    @Override
+    public E nextElement()
     {
         E result;
         if (this.isGetNextLastResultUpToDate) {
@@ -117,10 +117,11 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates
-     * getNext() and saves it 2. sets isGetNextLastResultUpToDate to true.
+     * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates getNext() and saves it
+     * 2. sets isGetNextLastResultUpToDate to true.
      */
-    @Override public boolean hasMoreElements()
+    @Override
+    public boolean hasMoreElements()
     {
         if (endOfEnumerationReached) {
             return false;
@@ -141,10 +142,10 @@ public class PrefetchIterator<E>
     } // method
 
     /**
-     * Tests whether the enumeration started as an empty one. It does not matter
-     * if it hasMoreElements() now, only at initialization time. Efficiency: if
-     * nextElements(), hasMoreElements() were never used, it activates the
-     * hasMoreElements() once. Else it is immediately(O(1))
+     * Tests whether the enumeration started as an empty one. It does not matter if it
+     * hasMoreElements() now, only at initialization time. Efficiency: if nextElements(),
+     * hasMoreElements() were never used, it activates the hasMoreElements() once. Else it is
+     * immediately(O(1))
      */
     public boolean isEnumerationStartedEmpty()
     {
@@ -158,12 +159,14 @@ public class PrefetchIterator<E>
         }
     }
 
-    @Override public boolean hasNext()
+    @Override
+    public boolean hasNext()
     {
         return this.hasMoreElements();
     }
 
-    @Override public E next()
+    @Override
+    public E next()
     {
         return this.nextElement();
     }
@@ -171,7 +174,8 @@ public class PrefetchIterator<E>
     /**
      * Always throws UnsupportedOperationException.
      */
-    @Override public void remove()
+    @Override
+    public void remove()
         throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException();
@@ -180,8 +184,8 @@ public class PrefetchIterator<E>
     public interface NextElementFunctor<EE>
     {
         /**
-         * You must implement that NoSuchElementException is thrown on
-         * nextElement() if it is out of bound.
+         * You must implement that NoSuchElementException is thrown on nextElement() if it is out of
+         * bound.
          */
         EE nextElement()
             throws NoSuchElementException;

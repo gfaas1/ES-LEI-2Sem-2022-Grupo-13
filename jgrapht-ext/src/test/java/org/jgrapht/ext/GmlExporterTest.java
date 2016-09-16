@@ -17,18 +17,12 @@
  */
 package org.jgrapht.ext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * @author John V. Sichi
@@ -256,8 +250,8 @@ public class GmlExporterTest
     public void testUndirected()
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(
-            DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g =
+            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -274,8 +268,7 @@ public class GmlExporterTest
     public void testUnweightedUndirected()
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(
-            DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -293,8 +286,7 @@ public class GmlExporterTest
     public void testDirected()
         throws UnsupportedEncodingException, ExportException
     {
-        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(
-            DefaultEdge.class);
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -316,8 +308,8 @@ public class GmlExporterTest
     public void testWeightedUndirected()
         throws UnsupportedEncodingException, ExportException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<String, DefaultWeightedEdge>(
-            DefaultWeightedEdge.class);
+        SimpleGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -337,8 +329,8 @@ public class GmlExporterTest
     public void testWeightedUndirectedWithEdgeLabels()
         throws UnsupportedEncodingException, ExportException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
-            DefaultWeightedEdge.class);
+        SimpleGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -359,8 +351,8 @@ public class GmlExporterTest
     public void testUndirectedWithVertexLabels()
         throws UnsupportedEncodingException, ExportException
     {
-        SimpleGraph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(
-            DefaultWeightedEdge.class);
+        SimpleGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -379,69 +371,49 @@ public class GmlExporterTest
 
     public void testParameters()
     {
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        GmlExporter<String, DefaultWeightedEdge> exporter =
+            new GmlExporter<String, DefaultWeightedEdge>();
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
         exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        exporter
-            .setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, false);
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, false);
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, false);
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
         exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, false);
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
     }
 
     public void testOldStyleDeprecatedParameters()
     {
-        GmlExporter<String, DefaultWeightedEdge> exporter = new GmlExporter<String, DefaultWeightedEdge>();
+        GmlExporter<String, DefaultWeightedEdge> exporter =
+            new GmlExporter<String, DefaultWeightedEdge>();
 
         exporter.setPrintLabels(GmlExporter.PRINT_NO_LABELS);
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
 
         exporter.setPrintLabels(GmlExporter.PRINT_VERTEX_LABELS);
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
 
         exporter.setPrintLabels(GmlExporter.PRINT_EDGE_LABELS);
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
 
         exporter.setPrintLabels(GmlExporter.PRINT_EDGE_VERTEX_LABELS);
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertTrue(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(
-            exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
+        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
+        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
     }
 
 }

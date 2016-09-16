@@ -19,22 +19,23 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 
-
 /**
- * An unweighted view of the backing weighted graph specified in the
- * constructor. This graph allows modules to apply algorithms designed for
- * unweighted graphs to a weighted graph by simply ignoring edge weights. Query
- * operations on this graph "read through" to the backing graph. Vertex
- * addition/removal and edge addition/removal are all supported (and immediately
- * reflected in the backing graph).
+ * An unweighted view of the backing weighted graph specified in the constructor. This graph allows
+ * modules to apply algorithms designed for unweighted graphs to a weighted graph by simply ignoring
+ * edge weights. Query operations on this graph "read through" to the backing graph. Vertex
+ * addition/removal and edge addition/removal are all supported (and immediately reflected in the
+ * backing graph).
  *
- * <p>Note that edges returned by this graph's accessors are really just the
- * edges of the underlying directed graph.</p>
+ * <p>
+ * Note that edges returned by this graph's accessors are really just the edges of the underlying
+ * directed graph.
+ * </p>
  *
- * <p>This graph does <i>not</i> pass the hashCode and equals operations through
- * to the backing graph, but relies on <tt>Object</tt>'s <tt>equals</tt> and
- * <tt>hashCode</tt> methods. This graph will be serializable if the backing
- * graph is serializable.</p>
+ * <p>
+ * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
+ * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
+ * serializable if the backing graph is serializable.
+ * </p>
  *
  * @author Lucas J. Scharenbroich
  * @author Joris Kinable
@@ -47,8 +48,7 @@ public class AsUnweightedDirectedGraph<V, E>
     /**
      * Constructor for AsUnweightedGraph.
      *
-     * @param g the backing graph over which an unweighted view is to be
-     * created.
+     * @param g the backing graph over which an unweighted view is to be created.
      */
     public AsUnweightedDirectedGraph(DirectedGraph<V, E> g)
     {

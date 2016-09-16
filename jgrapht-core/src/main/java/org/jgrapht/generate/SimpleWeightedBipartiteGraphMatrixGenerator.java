@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
 {
@@ -31,24 +30,21 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(
-        List<? extends V> first)
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(List<? extends V> first)
     {
         this.first = new ArrayList<>(first);
         return this;
     }
 
-    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(
-        List<? extends V> second)
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(List<? extends V> second)
     {
         this.second = new ArrayList<>(second);
         return this;
     }
 
-    @Override public void generateGraph(
-        WeightedGraph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -74,9 +70,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
             assert first.size() == weights[i].length;
 
             for (int j = 0; j < second.size(); ++j) {
-                target.setEdgeWeight(
-                    target.addEdge(first.get(i), second.get(j)),
-                    weights[i][j]);
+                target.setEdgeWeight(target.addEdge(first.get(i), second.get(j)), weights[i][j]);
             }
         }
     }

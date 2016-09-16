@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 public class SimpleWeightedGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
 {
@@ -29,9 +28,9 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static int [] range(final int from, final int to)
+    public static int[] range(final int from, final int to)
     {
-        int [] range = new int[to - from];
+        int[] range = new int[to - from];
         for (int i = from; i < to; ++i) {
             range[i - from] = i;
         }
@@ -46,10 +45,9 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
         return this;
     }
 
-    @Override public void generateGraph(
-        WeightedGraph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    @Override
+    public void generateGraph(
+        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -73,8 +71,7 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
             for (int j = 0; j < vertices.size(); ++j) {
                 if (i != j) {
                     target.setEdgeWeight(
-                        target.addEdge(vertices.get(i), vertices.get(j)),
-                        weights[i][j]);
+                        target.addEdge(vertices.get(i), vertices.get(j)), weights[i][j]);
                 }
             }
         }

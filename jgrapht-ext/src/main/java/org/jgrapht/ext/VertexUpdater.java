@@ -17,11 +17,11 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
- * Type to handle updates to a vertex when an import gets more information about
- * a vertex after it has been created.
+ * Type to handle updates to a vertex when an import gets more information about a vertex after it
+ * has been created.
  *
  * @param <V> the vertex type
  */

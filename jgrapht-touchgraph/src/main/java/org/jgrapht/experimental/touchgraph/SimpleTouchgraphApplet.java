@@ -18,14 +18,12 @@
 package org.jgrapht.experimental.touchgraph;
 
 import java.applet.*;
-
 import java.awt.*;
 
 import javax.swing.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-
 
 /**
  * SimpleTouchgraphApplet
@@ -35,22 +33,20 @@ import org.jgrapht.graph.*;
 public class SimpleTouchgraphApplet
     extends Applet
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = 6213379835360007840L;
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
-     * create a graph: code taken from non-visible
-     * org._3pq.jgrapht.demo.createStringGraph()
+     * create a graph: code taken from non-visible org._3pq.jgrapht.demo.createStringGraph()
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
-                new SimpleGraph<>(DefaultEdge.class);
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";
@@ -82,19 +78,16 @@ public class SimpleTouchgraphApplet
 
         setLayout(new BorderLayout());
         setSize(800, 600);
-        add(
-                new TouchgraphPanel<>(g, selfReferencesAllowed),
-            BorderLayout.CENTER);
+        add(new TouchgraphPanel<>(g, selfReferencesAllowed), BorderLayout.CENTER);
     }
 
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         Graph<String, DefaultEdge> g = createSamplegraph();
         boolean selfReferencesAllowed = false;
 
         JFrame frame = new JFrame();
-        frame.getContentPane().add(
-                new TouchgraphPanel<>(g, selfReferencesAllowed));
+        frame.getContentPane().add(new TouchgraphPanel<>(g, selfReferencesAllowed));
         frame.setPreferredSize(new Dimension(800, 800));
         frame.setTitle("JGraphT to Touchgraph Converter Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

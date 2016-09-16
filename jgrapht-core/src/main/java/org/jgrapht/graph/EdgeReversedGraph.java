@@ -21,18 +21,16 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * Provides an edge-reversed view g' of a directed graph g. The vertex sets for
- * the two graphs are the same, but g' contains an edge (v2, v1) iff g contains
- * an edge (v1, v2). g' is backed by g, so changes to g are reflected in g', and
- * vice versa.
+ * Provides an edge-reversed view g' of a directed graph g. The vertex sets for the two graphs are
+ * the same, but g' contains an edge (v2, v1) iff g contains an edge (v1, v2). g' is backed by g, so
+ * changes to g are reflected in g', and vice versa.
  *
- * <p>This class allows you to use a directed graph algorithm in reverse. For
- * example, suppose you have a directed graph representing a tree, with edges
- * from parent to child, and you want to find all of the parents of a node. To
- * do this, simply create an edge-reversed graph and pass that as input to
- * {@link org.jgrapht.traverse.DepthFirstIterator}.
+ * <p>
+ * This class allows you to use a directed graph algorithm in reverse. For example, suppose you have
+ * a directed graph representing a tree, with edges from parent to child, and you want to find all
+ * of the parents of a node. To do this, simply create an edge-reversed graph and pass that as input
+ * to {@link org.jgrapht.traverse.DepthFirstIterator}.
  *
  * @author John V. Sichi
  * @see AsUndirectedGraph
@@ -48,8 +46,7 @@ public class EdgeReversedGraph<V, E>
     /**
      * Creates a new EdgeReversedGraph.
      *
-     * @param g the base (backing) graph on which the edge-reversed view will be
-     * based.
+     * @param g the base (backing) graph on which the edge-reversed view will be based.
      */
     public EdgeReversedGraph(DirectedGraph<V, E> g)
     {
@@ -59,7 +56,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
-    @Override public E getEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E getEdge(V sourceVertex, V targetVertex)
     {
         return super.getEdge(targetVertex, sourceVertex);
     }
@@ -67,7 +65,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
-    @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return super.getAllEdges(targetVertex, sourceVertex);
     }
@@ -75,7 +74,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    @Override public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(V sourceVertex, V targetVertex)
     {
         return super.addEdge(targetVertex, sourceVertex);
     }
@@ -83,7 +83,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    @Override public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         return super.addEdge(targetVertex, sourceVertex, e);
     }
@@ -91,7 +92,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
-    @Override public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
         return super.outDegreeOf(vertex);
     }
@@ -99,7 +101,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
-    @Override public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(V vertex)
     {
         return super.inDegreeOf(vertex);
     }
@@ -107,7 +110,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
-    @Override public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
     {
         return super.outgoingEdgesOf(vertex);
     }
@@ -115,7 +119,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
-    @Override public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
     {
         return super.incomingEdgesOf(vertex);
     }
@@ -123,7 +128,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
-    @Override public E removeEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E removeEdge(V sourceVertex, V targetVertex)
     {
         return super.removeEdge(targetVertex, sourceVertex);
     }
@@ -131,7 +137,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#getEdgeSource(Object)
      */
-    @Override public V getEdgeSource(E e)
+    @Override
+    public V getEdgeSource(E e)
     {
         return super.getEdgeTarget(e);
     }
@@ -139,7 +146,8 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see Graph#getEdgeTarget(Object)
      */
-    @Override public V getEdgeTarget(E e)
+    @Override
+    public V getEdgeTarget(E e)
     {
         return super.getEdgeSource(e);
     }
@@ -147,12 +155,10 @@ public class EdgeReversedGraph<V, E>
     /**
      * @see java.lang.Object#toString()
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
-        return toStringFromSets(
-            vertexSet(),
-            edgeSet(),
-            true);
+        return toStringFromSets(vertexSet(), edgeSet(), true);
     }
 }
 

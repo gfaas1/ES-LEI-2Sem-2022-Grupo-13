@@ -17,49 +17,44 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
+import junit.framework.*;
 
 /**
  */
 public class TransitiveClosureTest
     extends TestCase
 {
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     public void testLinearGraph()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
 
         int N = 10;
-        LinearGraphGenerator<Integer, DefaultEdge> gen =
-                new LinearGraphGenerator<>(N);
+        LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(N);
 
-        VertexFactory<Integer> vf =
-            new VertexFactory<Integer>() {
-                private int m_index = 0;
+        VertexFactory<Integer> vf = new VertexFactory<Integer>()
+        {
+            private int m_index = 0;
 
-                @Override
-                public Integer createVertex()
-                {
-                    return m_index++;
-                }
-            };
+            @Override
+            public Integer createVertex()
+            {
+                return m_index++;
+            }
+        };
         gen.generateGraph(graph, vf, null);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
         assertEquals(true, graph.edgeSet().size() == ((N * (N - 1)) / 2));
         for (int i = 0; i < N; ++i) {
             for (int j = i + 1; j < N; ++j) {
-                assertEquals(
-                    true,
-                    graph.getEdge(i, j)
-                    != null);
+                assertEquals(true, graph.getEdge(i, j) != null);
             }
         }
     }
@@ -67,33 +62,28 @@ public class TransitiveClosureTest
     public void testRingGraph()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> graph =
-                new SimpleDirectedGraph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
 
         int N = 10;
-        RingGraphGenerator<Integer, DefaultEdge> gen =
-                new RingGraphGenerator<>(N);
+        RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(N);
 
-        VertexFactory<Integer> vf =
-            new VertexFactory<Integer>() {
-                private int m_index = 0;
+        VertexFactory<Integer> vf = new VertexFactory<Integer>()
+        {
+            private int m_index = 0;
 
-                @Override
-                public Integer createVertex()
-                {
-                    return m_index++;
-                }
-            };
+            @Override
+            public Integer createVertex()
+            {
+                return m_index++;
+            }
+        };
         gen.generateGraph(graph, vf, null);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
         assertEquals(true, graph.edgeSet().size() == (N * (N - 1)));
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
-                assertEquals(
-                    true,
-                    (i == j)
-                    || (graph.getEdge(i, j)
-                        != null));
+                assertEquals(true, (i == j) || (graph.getEdge(i, j) != null));
             }
         }
     }

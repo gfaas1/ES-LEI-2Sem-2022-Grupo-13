@@ -17,58 +17,57 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.graph.EdgeSetFactory;
-import org.jgrapht.util.ArrayUnenforcedSet;
+import java.io.*;
+import java.util.*;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 /**
- * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of memory, at the expense of
- * slow edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V u, V v),
- * addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is high (dense graphs). For a fast
- * implementation, use {@link FastLookupUndirectedSpecifics}.
+ * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of
+ * memory, at the expense of slow edge retrievals. Methods which depend on edge retrievals, e.g.
+ * getEdge(V u, V v), containsEdge(V u, V v), addEdge(V u, V v), etc may be relatively slow when the
+ * average degree of a vertex is high (dense graphs). For a fast implementation, use
+ * {@link FastLookupUndirectedSpecifics}.
  *
  * @author Barak Naveh
  * @author Joris Kinable
  */
-public class UndirectedSpecifics<V,E>
-    extends Specifics<V,E>
+public class UndirectedSpecifics<V, E>
+    extends Specifics<V, E>
     implements Serializable
 {
     private static final long serialVersionUID = 6494588405178655873L;
     private static final String NOT_IN_UNDIRECTED_GRAPH =
         "no such operation in an undirected graph";
 
-    protected AbstractBaseGraph<V,E> abstractBaseGraph;
+    protected AbstractBaseGraph<V, E> abstractBaseGraph;
     protected Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected;
     protected EdgeSetFactory<V, E> edgeSetFactory;
 
-    public UndirectedSpecifics(AbstractBaseGraph<V,E> abstractBaseGraph)
+    public UndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
         this(abstractBaseGraph, new LinkedHashMap<>());
     }
 
-    public UndirectedSpecifics(AbstractBaseGraph<V,E> abstractBaseGraph,
-                               Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+    public UndirectedSpecifics(
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
         this.abstractBaseGraph = abstractBaseGraph;
         this.vertexMapUndirected = vertexMap;
-        this.edgeSetFactory=abstractBaseGraph.getEdgeSetFactory();
+        this.edgeSetFactory = abstractBaseGraph.getEdgeSetFactory();
     }
 
-    @Override public void addVertex(V v)
+    @Override
+    public void addVertex(V v)
     {
         // add with a lazy edge container entry
         vertexMapUndirected.put(v, null);
     }
 
-    @Override public Set<V> getVertexSet()
+    @Override
+    public Set<V> getVertexSet()
     {
         return vertexMapUndirected.keySet();
     }
@@ -76,7 +75,8 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see Graph#getAllEdges(Object, Object)
      */
-    @Override public Set<E> getAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> edges = null;
 
@@ -86,11 +86,7 @@ public class UndirectedSpecifics<V,E>
             edges = new ArrayUnenforcedSet<>();
 
             for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
-                boolean equal =
-                        isEqualsStraightOrInverted(
-                                sourceVertex,
-                                targetVertex,
-                                e);
+                boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
                 if (equal) {
                     edges.add(e);
@@ -104,18 +100,15 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see Graph#getEdge(Object, Object)
      */
-    @Override public E getEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E getEdge(V sourceVertex, V targetVertex)
     {
         if (abstractBaseGraph.containsVertex(sourceVertex)
             && abstractBaseGraph.containsVertex(targetVertex))
         {
 
             for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
-                boolean equal =
-                        isEqualsStraightOrInverted(
-                                sourceVertex,
-                                targetVertex,
-                                e);
+                boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
 
                 if (equal) {
                     return e;
@@ -126,22 +119,18 @@ public class UndirectedSpecifics<V,E>
         return null;
     }
 
-    private boolean isEqualsStraightOrInverted(
-        Object sourceVertex,
-        Object targetVertex,
-        E e)
+    private boolean isEqualsStraightOrInverted(Object sourceVertex, Object targetVertex, E e)
     {
-        boolean equalStraight =
-            sourceVertex.equals(abstractBaseGraph.getEdgeSource(e))
+        boolean equalStraight = sourceVertex.equals(abstractBaseGraph.getEdgeSource(e))
             && targetVertex.equals(abstractBaseGraph.getEdgeTarget(e));
 
-        boolean equalInverted =
-            sourceVertex.equals(abstractBaseGraph.getEdgeTarget(e))
+        boolean equalInverted = sourceVertex.equals(abstractBaseGraph.getEdgeTarget(e))
             && targetVertex.equals(abstractBaseGraph.getEdgeSource(e));
         return equalStraight || equalInverted;
     }
 
-    @Override public void addEdgeToTouchingVertices(E e)
+    @Override
+    public void addEdgeToTouchingVertices(E e)
     {
         V source = abstractBaseGraph.getEdgeSource(e);
         V target = abstractBaseGraph.getEdgeTarget(e);
@@ -153,7 +142,8 @@ public class UndirectedSpecifics<V,E>
         }
     }
 
-    @Override public int degreeOf(V vertex)
+    @Override
+    public int degreeOf(V vertex)
     {
         if (abstractBaseGraph.isAllowingLoops()) { // then we must count, and add loops twice
 
@@ -177,7 +167,8 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see Graph#edgesOf(Object)
      */
-    @Override public Set<E> edgesOf(V vertex)
+    @Override
+    public Set<E> edgesOf(V vertex)
     {
         return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
     }
@@ -185,7 +176,8 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see DirectedGraph#inDegreeOf(Object)
      */
-    @Override public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
         throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
     }
@@ -193,7 +185,8 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
-    @Override public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
     {
         throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
     }
@@ -201,7 +194,8 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see DirectedGraph#outDegreeOf(Object)
      */
-    @Override public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(V vertex)
     {
         throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
     }
@@ -209,12 +203,14 @@ public class UndirectedSpecifics<V,E>
     /**
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
-    @Override public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
     {
         throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
     }
 
-    @Override public void removeEdgeFromTouchingVertices(E e)
+    @Override
+    public void removeEdgeFromTouchingVertices(E e)
     {
         V source = abstractBaseGraph.getEdgeSource(e);
         V target = abstractBaseGraph.getEdgeTarget(e);
@@ -235,14 +231,13 @@ public class UndirectedSpecifics<V,E>
      */
     protected UndirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {
-        //abstractBaseGraph.assertVertexExist(vertex); //JK: I don't think we need this here. This should have been verified upstream
+        // abstractBaseGraph.assertVertexExist(vertex); //JK: I don't think we need this here. This
+        // should have been verified upstream
 
         UndirectedEdgeContainer<V, E> ec = vertexMapUndirected.get(vertex);
 
         if (ec == null) {
-            ec = new UndirectedEdgeContainer<>(
-                    edgeSetFactory,
-                    vertex);
+            ec = new UndirectedEdgeContainer<>(edgeSetFactory, vertex);
             vertexMapUndirected.put(vertex, ec);
         }
 

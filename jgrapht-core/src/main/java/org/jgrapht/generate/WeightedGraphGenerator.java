@@ -19,7 +19,6 @@ package org.jgrapht.generate;
 
 import org.jgrapht.*;
 
-
 public abstract class WeightedGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
@@ -27,12 +26,11 @@ public abstract class WeightedGraphGenerator<V, E>
 
     protected EdgeFactory<V, E> edgeFactory;
 
-    protected double [][] weights;
+    protected double[][] weights;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    public WeightedGraphGenerator<V, E> edgeFactory(
-        EdgeFactory<V, E> edgeFactory)
+    public WeightedGraphGenerator<V, E> edgeFactory(EdgeFactory<V, E> edgeFactory)
     {
         this.edgeFactory = edgeFactory;
         return this;
@@ -44,7 +42,7 @@ public abstract class WeightedGraphGenerator<V, E>
         return this;
     }
 
-    public WeightedGraphGenerator<V, E> weights(double [][] weights)
+    public WeightedGraphGenerator<V, E> weights(double[][] weights)
     {
         this.weights = weights;
         return this;

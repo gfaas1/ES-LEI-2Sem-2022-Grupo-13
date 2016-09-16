@@ -22,7 +22,6 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
-
 public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
@@ -32,9 +31,7 @@ public class MixedGraphUnion<V, E>
     private final DirectedGraph<V, E> directedGraph;
 
     public MixedGraphUnion(
-        UndirectedGraph<V, E> g1,
-        DirectedGraph<V, E> g2,
-        WeightCombiner operator)
+        UndirectedGraph<V, E> g1, DirectedGraph<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
         this.undirectedGraph = g1;
@@ -48,13 +45,15 @@ public class MixedGraphUnion<V, E>
         this.directedGraph = g2;
     }
 
-    @Override public int inDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
         Set<E> res = incomingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override public Set<E> incomingEdgesOf(V vertex)
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
     {
         Set<E> res = new LinkedHashSet<>();
         if (directedGraph.containsVertex(vertex)) {
@@ -66,13 +65,15 @@ public class MixedGraphUnion<V, E>
         return Collections.unmodifiableSet(res);
     }
 
-    @Override public int outDegreeOf(V vertex)
+    @Override
+    public int outDegreeOf(V vertex)
     {
         Set<E> res = outgoingEdgesOf(vertex);
         return res.size();
     }
 
-    @Override public Set<E> outgoingEdgesOf(V vertex)
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
     {
         Set<E> res = new LinkedHashSet<>();
         if (directedGraph.containsVertex(vertex)) {

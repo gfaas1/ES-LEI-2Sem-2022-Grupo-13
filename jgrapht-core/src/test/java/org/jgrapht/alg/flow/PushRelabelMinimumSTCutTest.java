@@ -17,23 +17,22 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import java.util.*;
 
-import java.util.Arrays;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
  * @author Joris Kinable
  */
-public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
+public class PushRelabelMinimumSTCutTest
+    extends MinimumSourceSinkCutTest
+{
     @Override
-    MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
+    MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+        Graph<Integer, DefaultWeightedEdge> network)
+    {
         return new PushRelabelMFImpl<>(network);
     }
 
@@ -57,7 +56,7 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         double cutWeight = prSolver.calculateMinCut(0, 5);
         assertEquals(0d, cutWeight);
     }
-    
+
     public void testDisconnected2()
     {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -69,44 +68,54 @@ public class PushRelabelMinimumSTCutTest extends MinimumSourceSinkCutTest{
         double cutWeight = prSolver.calculateMinCut(0, 2);
         assertEquals(0d, cutWeight);
     }
-    
-    public void testRandomDirectedGraphs(){
-        for(int test=0; test<NR_RANDOM_TESTS; test++){
-            DirectedGraph<Integer, DefaultWeightedEdge> network=generateDirectedGraph();
-            int source=0;
-            int sink=network.vertexSet().size()-1;
 
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
+    public void testRandomDirectedGraphs()
+    {
+        for (int test = 0; test < NR_RANDOM_TESTS; test++) {
+            DirectedGraph<Integer, DefaultWeightedEdge> network = generateDirectedGraph();
+            int source = 0;
+            int sink = network.vertexSet().size() - 1;
 
-            double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver =
+                this.createSolver(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver =
+                new EdmondsKarpMFImpl<>(network);
 
-            double cutWeight=prSolver.calculateMinCut(source, sink);
-            Set<Integer> sourcePartition=prSolver.getSourcePartition();
-            Set<Integer> sinkPartition=prSolver.getSinkPartition();
-            Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
+            double expectedCutWeight = ekSolver.calculateMinCut(source, sink);
 
-            this.verifyDirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+            double cutWeight = prSolver.calculateMinCut(source, sink);
+            Set<Integer> sourcePartition = prSolver.getSourcePartition();
+            Set<Integer> sinkPartition = prSolver.getSinkPartition();
+            Set<DefaultWeightedEdge> cutEdges = prSolver.getCutEdges();
+
+            this.verifyDirected(
+                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
+                cutEdges);
         }
     }
 
-    public void testRandomUndirectedGraphs(){
-        for(int test=0; test<NR_RANDOM_TESTS; test++){
-            UndirectedGraph<Integer, DefaultWeightedEdge> network=generateUndirectedGraph();
-            int source=0;
-            int sink=network.vertexSet().size()-1;
+    public void testRandomUndirectedGraphs()
+    {
+        for (int test = 0; test < NR_RANDOM_TESTS; test++) {
+            UndirectedGraph<Integer, DefaultWeightedEdge> network = generateUndirectedGraph();
+            int source = 0;
+            int sink = network.vertexSet().size() - 1;
 
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver=this.createSolver(network);
-            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver=new EdmondsKarpMFImpl<>(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver =
+                this.createSolver(network);
+            MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> ekSolver =
+                new EdmondsKarpMFImpl<>(network);
 
-            double expectedCutWeight=ekSolver.calculateMinCut(source, sink);
+            double expectedCutWeight = ekSolver.calculateMinCut(source, sink);
 
-            double cutWeight=prSolver.calculateMinCut(source, sink);
-            Set<Integer> sourcePartition=prSolver.getSourcePartition();
-            Set<Integer> sinkPartition=prSolver.getSinkPartition();
-            Set<DefaultWeightedEdge> cutEdges=prSolver.getCutEdges();
+            double cutWeight = prSolver.calculateMinCut(source, sink);
+            Set<Integer> sourcePartition = prSolver.getSourcePartition();
+            Set<Integer> sinkPartition = prSolver.getSinkPartition();
+            Set<DefaultWeightedEdge> cutEdges = prSolver.getCutEdges();
 
-            this.verifyUndirected(network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition, cutEdges);
+            this.verifyUndirected(
+                network, source, sink, expectedCutWeight, cutWeight, sourcePartition, sinkPartition,
+                cutEdges);
         }
     }
 }

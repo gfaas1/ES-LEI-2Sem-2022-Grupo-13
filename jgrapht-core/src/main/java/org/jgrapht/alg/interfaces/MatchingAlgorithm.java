@@ -19,10 +19,8 @@ package org.jgrapht.alg.interfaces;
 
 import java.util.*;
 
-
 /**
- * Allows to derive <a
- * href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> from
+ * Allows to derive <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> from
  * given graph
  *
  * @param <V> vertex concept type

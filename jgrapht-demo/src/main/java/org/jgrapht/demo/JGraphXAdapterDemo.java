@@ -17,9 +17,6 @@
  */
 package org.jgrapht.demo;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
-
 import java.awt.*;
 
 import javax.swing.*;
@@ -28,10 +25,12 @@ import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 
 /**
- * A demo applet that shows how to use JGraphX to visualize JGraphT graphs.
- * Applet based on JGraphAdapterDemo.
+ * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
+ * JGraphAdapterDemo.
  *
  * @since July 9, 2013
  */
@@ -44,12 +43,12 @@ public class JGraphXAdapterDemo
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
 
     /**
-     * An alternative starting point for this demo, to also allow running this
-     * applet as an application.
+     * An alternative starting point for this demo, to also allow running this applet as an
+     * application.
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         JGraphAdapterDemo applet = new JGraphAdapterDemo();
         applet.init();
@@ -69,8 +68,7 @@ public class JGraphXAdapterDemo
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-            new ListenableDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+            new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
         // create a visualization using JGraph, via an adapter
         jgxAdapter = new JGraphXAdapter<>(g);
@@ -102,4 +100,4 @@ public class JGraphXAdapterDemo
     }
 }
 
-//End JGraphXAdapterDemo.java
+// End JGraphXAdapterDemo.java

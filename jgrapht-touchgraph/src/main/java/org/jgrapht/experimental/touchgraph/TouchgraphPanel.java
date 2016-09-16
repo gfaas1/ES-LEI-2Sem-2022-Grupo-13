@@ -17,37 +17,33 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
-import com.touchgraph.graphlayout.interaction.*;
-
 import java.awt.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 
+import com.touchgraph.graphlayout.*;
+import com.touchgraph.graphlayout.interaction.*;
 
 /**
- * The Touchgraph panel that displays our graph
- * http://sourceforge.net/projects/touchgraph
+ * The Touchgraph panel that displays our graph http://sourceforge.net/projects/touchgraph
  *
  * @author canderson
  */
 public class TouchgraphPanel<V, E>
     extends GLPanel
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = -7441058429719746032L;
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     private Color defaultBackColor = new Color(0x01, 0x11, 0x44);
     private Color defaultBorderBackColor = new Color(0x02, 0x35, 0x81);
-    private Color defaultForeColor =
-        new Color((float) 0.95, (float) 0.85, (float) 0.55);
+    private Color defaultForeColor = new Color((float) 0.95, (float) 0.85, (float) 0.55);
 
     /**
      * the JGraphT graph we are displaying
@@ -55,39 +51,36 @@ public class TouchgraphPanel<V, E>
     Graph<V, E> graph;
 
     /**
-     * are self-references allowed? They will not show up in TouchGraph unless
-     * you override Touchgraph's Node or Edge class to do so
+     * are self-references allowed? They will not show up in TouchGraph unless you override
+     * Touchgraph's Node or Edge class to do so
      */
     boolean selfReferencesAllowed = true;
 
     // =================
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors -----------------------------------------------------------
 
-    /**constructor*/
+    /** constructor */
     public TouchgraphPanel(Graph<V, E> graph, boolean selfReferencesAllowed)
     {
         this.graph = graph;
         this.selfReferencesAllowed = selfReferencesAllowed;
 
         /*
-         * The code that was in the super's constructor. As it also called
-         * super's initialize()
-         *  it is impossible to subclass and insert our own graph into the
-         * initialization process
+         * The code that was in the super's constructor. As it also called super's initialize() it
+         * is impossible to subclass and insert our own graph into the initialization process
          */
         preinitialize();
 
         initialize(); // now we can insert our own graph into this method
     }
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
-     * get everything setup: this is the code that was in the super's
-     * constructor but which was followed by an initialize() call. Hence, it was
-     * impossible to subclass the superclass and insert our own graph
-     * initialization code without breaking it out as here.
+     * get everything setup: this is the code that was in the super's constructor but which was
+     * followed by an initialize() call. Hence, it was impossible to subclass the superclass and
+     * insert our own graph initialization code without breaking it out as here.
      */
     public void preinitialize()
     {
@@ -123,13 +116,9 @@ public class TouchgraphPanel<V, E>
                 /*
                  * Add users graph
                  */
-                TouchgraphConverter<V, E> converter =
-                        new TouchgraphConverter<>();
+                TouchgraphConverter<V, E> converter = new TouchgraphConverter<>();
                 Node n =
-                        converter.convertToTouchGraph(
-                            this.graph,
-                            tgPanel,
-                            this.selfReferencesAllowed);
+                    converter.convertToTouchGraph(this.graph, tgPanel, this.selfReferencesAllowed);
                 getHVScroll().slowScrollToCenter(n);
                 tgPanel.setLocale(n, Integer.MAX_VALUE);
             }

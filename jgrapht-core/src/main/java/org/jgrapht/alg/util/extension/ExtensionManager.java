@@ -17,32 +17,37 @@
  */
 package org.jgrapht.alg.util.extension;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Convenience class to manage extensions/encapsulations.
- * This class creates and manages object extensions and encapsulations. An object, from here on denoted as 'original',
- * can be encapsulated in or extended by another object. An example would be the relation between an edge (original) and an annotated edge. The
- * annotated edge encapsulates/extends an edge, thereby augmenting it with additional data.
- * In symbolic form, if b is the original class, than a(b) would be its extension. This concept is similar to java's extension where
- * one class is derived from (extends) another class (original).
+ * Convenience class to manage extensions/encapsulations. This class creates and manages object
+ * extensions and encapsulations. An object, from here on denoted as 'original', can be encapsulated
+ * in or extended by another object. An example would be the relation between an edge (original) and
+ * an annotated edge. The annotated edge encapsulates/extends an edge, thereby augmenting it with
+ * additional data. In symbolic form, if b is the original class, than a(b) would be its extension.
+ * This concept is similar to java's extension where one class is derived from (extends) another
+ * class (original).
  *
  * @param <T> class-type to be extended (class-type of original)
  * @param <B> class-type of extension
  *
- * */
-public class ExtensionManager<T, B extends Extension> {
+ */
+public class ExtensionManager<T, B extends Extension>
+{
 
     /* Factory class to create new extensions */
     private ExtensionFactory<B> extensionFactory;
     /* Mapping of originals to their extensions */
     private Map<T, B> originalToExtensionMap = new HashMap<>();
 
-    public ExtensionManager(ExtensionFactory<B> factory){this.extensionFactory = factory;}
+    public ExtensionManager(ExtensionFactory<B> factory)
+    {
+        this.extensionFactory = factory;
+    }
 
     /**
      * Creates and returns an extension object.
+     * 
      * @return Extension object
      */
     public B createExtension()
@@ -51,7 +56,8 @@ public class ExtensionManager<T, B extends Extension> {
     }
 
     /**
-     * Creates a new singleton extension object for original t if no such object exists, returns the old one otherwise.
+     * Creates a new singleton extension object for original t if no such object exists, returns the
+     * old one otherwise.
      */
     public B getExtension(T t)
     {

@@ -20,11 +20,10 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
-
 /**
- * A pseudograph. A pseudograph is a non-simple undirected graph in which both
- * graph loops and multiple edges are permitted. If you're unsure about
- * pseudographs, see: <a href="http://mathworld.wolfram.com/Pseudograph.html">
+ * A pseudograph. A pseudograph is a non-simple undirected graph in which both graph loops and
+ * multiple edges are permitted. If you're unsure about pseudographs, see:
+ * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
  */
 public class Pseudograph<V, E>
@@ -53,18 +52,16 @@ public class Pseudograph<V, E>
         super(ef, true, true);
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends Pseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
+        Class<? extends E> edgeClass)
     {
-        return new UndirectedGraphBuilder<>(
-                new Pseudograph<>(edgeClass));
+        return new UndirectedGraphBuilder<>(new Pseudograph<>(edgeClass));
     }
 
-    public static <V, E> UndirectedGraphBuilderBase<V,
-        E, ? extends Pseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
+    public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
+        EdgeFactory<V, E> ef)
     {
-        return new UndirectedGraphBuilder<>(
-                new Pseudograph<>(ef));
+        return new UndirectedGraphBuilder<>(new Pseudograph<>(ef));
     }
 }
 

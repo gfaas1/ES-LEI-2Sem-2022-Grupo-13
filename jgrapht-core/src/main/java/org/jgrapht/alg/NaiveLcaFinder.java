@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 public class NaiveLcaFinder<V, E>
 {
     private DirectedGraph<V, E> graph;
@@ -29,13 +28,12 @@ public class NaiveLcaFinder<V, E>
     /**
      * Find the Lowest Common Ancestor of a directed graph.
      *
-     * <p>Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V
-     * . Let G x,y be the subgraph of G induced by the set of all common
-     * ancestors of x and y. Define SLCA (x, y) to be the set of out-degree 0
-     * nodes (leafs) in G x,y . The lowest common ancestors of x and y are the
-     * elements of SLCA (x, y). This naive algorithm simply starts at a and b,
-     * recursing upwards to the root(s) of the DAG. Wherever the recursion paths
-     * cross we have found our LCA.</i> from
+     * <p>
+     * Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V . Let G x,y be the
+     * subgraph of G induced by the set of all common ancestors of x and y. Define SLCA (x, y) to be
+     * the set of out-degree 0 nodes (leafs) in G x,y . The lowest common ancestors of x and y are
+     * the elements of SLCA (x, y). This naive algorithm simply starts at a and b, recursing upwards
+     * to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
      * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
      *
      * <pre>
@@ -47,23 +45,23 @@ public class NaiveLcaFinder<V, E>
      * 5. If there are no more parents to descend to then there is no LCA
      * </pre>
      *
-     * The rationale for this working is that in each iteration of the loop we
-     * are considering all the ancestors of a that have a path of length n back
-     * to a, where n is the depth of the recursion. The same is true of b.
+     * The rationale for this working is that in each iteration of the loop we are considering all
+     * the ancestors of a that have a path of length n back to a, where n is the depth of the
+     * recursion. The same is true of b.
      *
-     * <p>We start by checking if a == b.<br>
-     * if not we look to see if there is any intersection between parents(a) and
-     * (parents(b) union b) (and the same with a and b swapped)<br>
-     * if not we look to see if there is any intersection between
-     * parents(parents(a)) and (parents(parents(b)) union parents(b) union b)
-     * (and the same with a and b swapped)<br>
+     * <p>
+     * We start by checking if a == b.<br>
+     * if not we look to see if there is any intersection between parents(a) and (parents(b) union
+     * b) (and the same with a and b swapped)<br>
+     * if not we look to see if there is any intersection between parents(parents(a)) and
+     * (parents(parents(b)) union parents(b) union b) (and the same with a and b swapped)<br>
      * continues
      *
-     * <p>This means at the end of recursion n, we know if there is an LCA that
-     * has a path of &lt;=n to a and b. Of course we may have to wait longer if
-     * the path to a is of length n, but the path to b&gt;n. at the first loop
-     * we have a path of 0 length from the nodes we are considering as LCA to
-     * their respective children which we wish to find the LCA for.
+     * <p>
+     * This means at the end of recursion n, we know if there is an LCA that has a path of &lt;=n to
+     * a and b. Of course we may have to wait longer if the path to a is of length n, but the path
+     * to b&gt;n. at the first loop we have a path of 0 length from the nodes we are considering as
+     * LCA to their respective children which we wish to find the LCA for.
      */
     public NaiveLcaFinder(DirectedGraph<V, E> graph)
     {
@@ -81,10 +79,8 @@ public class NaiveLcaFinder<V, E>
     public V findLca(V a, V b)
     {
         return findLca(
-            Collections.singleton(a),
-            Collections.singleton(b),
-                new LinkedHashSet<>(),
-                new LinkedHashSet<>());
+            Collections.singleton(a), Collections.singleton(b), new LinkedHashSet<>(),
+            new LinkedHashSet<>());
     }
 
     /**
@@ -97,20 +93,16 @@ public class NaiveLcaFinder<V, E>
      */
     public Set<V> findLcas(V a, V b)
     {
-        throw new UnsupportedOperationException(
-            "findLcas has not yet been implemented");
+        throw new UnsupportedOperationException("findLcas has not yet been implemented");
     }
 
     /**
-     * Recurse through the descendants of aSet and bSet looking for the LCA of a
-     * and b, which are members of sets aSeenSet and bSeenSet respectively,
-     * along with all elements on the paths from every member of aSet and bSet
+     * Recurse through the descendants of aSet and bSet looking for the LCA of a and b, which are
+     * members of sets aSeenSet and bSeenSet respectively, along with all elements on the paths from
+     * every member of aSet and bSet
      */
     private V findLca(
-        Set<V> aSet,
-        Set<V> bSet,
-        LinkedHashSet<V> aSeenSet,
-        LinkedHashSet<V> bSeenSet)
+        Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
     {
         // if there is no LCA...
         if ((aSet.size() == 0) && (bSet.size() == 0)) {
@@ -146,8 +138,8 @@ public class NaiveLcaFinder<V, E>
     }
 
     /**
-     * Find the immediate parents of every item in the given set, and return a
-     * set containing all those parents
+     * Find the immediate parents of every item in the given set, and return a set containing all
+     * those parents
      *
      * @param vertexSet the set of vertex to find parents of
      *
@@ -167,17 +159,14 @@ public class NaiveLcaFinder<V, E>
     }
 
     /**
-     * Return a single vertex that is both in x and y. If there is more than one
-     * then select the first element from the iterator returned from y, after
-     * all the elements of x have been removed. this allows an orderedSet to be
-     * passed in to give predictable results.
+     * Return a single vertex that is both in x and y. If there is more than one then select the
+     * first element from the iterator returned from y, after all the elements of x have been
+     * removed. this allows an orderedSet to be passed in to give predictable results.
      *
      * @param x set containing vertex
-     * @param y set containing vertex, which may be ordered to give predictable
-     * results
+     * @param y set containing vertex, which may be ordered to give predictable results
      *
-     * @return the first element of y that is also in x, or null if no such
-     * element
+     * @return the first element of y that is also in x, or null if no such element
      */
     private V overlappingMember(Set<V> x, Set<V> y)
     {

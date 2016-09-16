@@ -21,12 +21,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * This class implements Bron-Kerbosch clique detection algorithm as it is
- * described in [Samudrala R.,Moult J.:A Graph-theoretic Algorithm for
- * comparative Modeling of Protein Structure; J.Mol. Biol. (1998); vol 279; pp.
- * 287-302]
+ * This class implements Bron-Kerbosch clique detection algorithm as it is described in [Samudrala
+ * R.,Moult J.:A Graph-theoretic Algorithm for comparative Modeling of Protein Structure; J.Mol.
+ * Biol. (1998); vol 279; pp. 287-302]
  *
  * @author Ewgenij Proschak
  */
@@ -39,8 +37,7 @@ public class BronKerboschCliqueFinder<V, E>
     /**
      * Creates a new clique finder.
      *
-     * @param graph the graph in which cliques are to be found; graph must be
-     * simple
+     * @param graph the graph in which cliques are to be found; graph must be simple
      */
     public BronKerboschCliqueFinder(Graph<V, E> graph)
     {
@@ -48,16 +45,15 @@ public class BronKerboschCliqueFinder<V, E>
     }
 
     /**
-     * Finds all maximal cliques of the graph. A clique is maximal if it is
-     * impossible to enlarge it by adding another vertex from the graph. Note
-     * that a maximal clique is not necessarily the biggest clique in the graph.
+     * Finds all maximal cliques of the graph. A clique is maximal if it is impossible to enlarge it
+     * by adding another vertex from the graph. Note that a maximal clique is not necessarily the
+     * biggest clique in the graph.
      *
-     * @return Collection of cliques (each of which is represented as a Set of
-     * vertices)
+     * @return Collection of cliques (each of which is represented as a Set of vertices)
      */
     public Collection<Set<V>> getAllMaximalCliques()
     {
-        // TODO jvs 26-July-2005:  assert that graph is simple
+        // TODO jvs 26-July-2005: assert that graph is simple
 
         cliques = new ArrayList<>();
         List<V> potential_clique = new ArrayList<>();
@@ -71,8 +67,7 @@ public class BronKerboschCliqueFinder<V, E>
     /**
      * Finds the biggest maximal cliques of the graph.
      *
-     * @return Collection of cliques (each of which is represented as a Set of
-     * vertices)
+     * @return Collection of cliques (each of which is represented as a Set of vertices)
      */
     public Collection<Set<V>> getBiggestMaximalCliques()
     {
@@ -94,10 +89,7 @@ public class BronKerboschCliqueFinder<V, E>
         return biggest_cliques;
     }
 
-    private void findCliques(
-        List<V> potential_clique,
-        List<V> candidates,
-        List<V> already_found)
+    private void findCliques(List<V> potential_clique, List<V> candidates, List<V> already_found)
     {
         List<V> candidates_array = new ArrayList<>(candidates);
         if (!end(candidates, already_found)) {
@@ -133,10 +125,7 @@ public class BronKerboschCliqueFinder<V, E>
                 } // of if
                 else {
                     // recursive call
-                    findCliques(
-                        potential_clique,
-                        new_candidates,
-                        new_already_found);
+                    findCliques(potential_clique, new_candidates, new_already_found);
                 } // of else
 
                 // move candidate_node from potential_clique to already_found;

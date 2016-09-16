@@ -18,23 +18,21 @@
 package org.jgrapht.graph;
 
 import java.io.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 
-
 /**
- * An unmodifiable view of the backing graph specified in the constructor. This
- * graph allows modules to provide users with "read-only" access to internal
- * graphs. Query operations on this graph "read through" to the backing graph,
- * and attempts to modify this graph result in an <code>
+ * An unmodifiable view of the backing graph specified in the constructor. This graph allows modules
+ * to provide users with "read-only" access to internal graphs. Query operations on this graph "read
+ * through" to the backing graph, and attempts to modify this graph result in an <code>
  * UnsupportedOperationException</code>.
  *
- * <p>This graph does <i>not</i> pass the hashCode and equals operations through
- * to the backing graph, but relies on <tt>Object</tt>'s <tt>equals</tt> and
- * <tt>hashCode</tt> methods. This graph will be serializable if the backing
- * graph is serializable.</p>
+ * <p>
+ * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
+ * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
+ * serializable if the backing graph is serializable.
+ * </p>
  *
  * @author Barak Naveh
  * @since Jul 24, 2003
@@ -49,8 +47,7 @@ public class UnmodifiableGraph<V, E>
     /**
      * Creates a new unmodifiable graph based on the specified backing graph.
      *
-     * @param g the backing graph on which an unmodifiable graph is to be
-     * created.
+     * @param g the backing graph on which an unmodifiable graph is to be created.
      */
     public UnmodifiableGraph(Graph<V, E> g)
     {
@@ -60,7 +57,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object)
      */
-    @Override public E addEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -68,7 +66,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#addEdge(Object, Object, Object)
      */
-    @Override public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    @Override
+    public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -76,7 +75,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#addVertex(Object)
      */
-    @Override public boolean addVertex(V v)
+    @Override
+    public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -84,7 +84,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Collection)
      */
-    @Override public boolean removeAllEdges(Collection<? extends E> edges)
+    @Override
+    public boolean removeAllEdges(Collection<? extends E> edges)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -92,7 +93,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeAllEdges(Object, Object)
      */
-    @Override public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    @Override
+    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -100,7 +102,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeAllVertices(Collection)
      */
-    @Override public boolean removeAllVertices(Collection<? extends V> vertices)
+    @Override
+    public boolean removeAllVertices(Collection<? extends V> vertices)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -108,7 +111,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeEdge(Object)
      */
-    @Override public boolean removeEdge(E e)
+    @Override
+    public boolean removeEdge(E e)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -116,7 +120,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeEdge(Object, Object)
      */
-    @Override public E removeEdge(V sourceVertex, V targetVertex)
+    @Override
+    public E removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
@@ -124,7 +129,8 @@ public class UnmodifiableGraph<V, E>
     /**
      * @see Graph#removeVertex(Object)
      */
-    @Override public boolean removeVertex(V v)
+    @Override
+    public boolean removeVertex(V v)
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }

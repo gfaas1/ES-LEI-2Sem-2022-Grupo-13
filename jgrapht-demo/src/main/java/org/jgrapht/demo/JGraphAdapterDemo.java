@@ -24,14 +24,11 @@ import javax.swing.*;
 
 import org.jgraph.*;
 import org.jgraph.graph.*;
-
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
-
 // resolve ambiguity
 import org.jgrapht.graph.DefaultEdge;
-
 
 /**
  * A demo applet that shows how to use JGraph to visualize JGraphT graphs.
@@ -50,12 +47,12 @@ public class JGraphAdapterDemo
     private JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
     /**
-     * An alternative starting point for this demo, to also allow running this
-     * applet as an application.
+     * An alternative starting point for this demo, to also allow running this applet as an
+     * application.
      *
      * @param args ignored.
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
         JGraphAdapterDemo applet = new JGraphAdapterDemo();
         applet.init();
@@ -75,8 +72,7 @@ public class JGraphAdapterDemo
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-                new ListenableDirectedMultigraph<>(
-                        DefaultEdge.class);
+            new ListenableDirectedMultigraph<>(DefaultEdge.class);
 
         // create a visualization using JGraph, via an adapter
         jgAdapter = new JGraphModelAdapter<>(g);
@@ -138,12 +134,7 @@ public class JGraphAdapterDemo
         AttributeMap attr = cell.getAttributes();
         Rectangle2D bounds = GraphConstants.getBounds(attr);
 
-        Rectangle2D newBounds =
-            new Rectangle2D.Double(
-                x,
-                y,
-                bounds.getWidth(),
-                bounds.getHeight());
+        Rectangle2D newBounds = new Rectangle2D.Double(x, y, bounds.getWidth(), bounds.getHeight());
 
         GraphConstants.setBounds(attr, newBounds);
 

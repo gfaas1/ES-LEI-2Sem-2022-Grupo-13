@@ -18,24 +18,18 @@
 package org.jgrapht.alg;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
-import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
-import org.jgrapht.alg.flow.PushRelabelMFImpl;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.alg.flow.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-
 
 /**
- * Given a weighted graph G(V,E) (directed or undirected). This class computes a minimum s-t
- * cut. For this purpose this class relies on Edmonds' Karp Maximum Flow Algorithm. Note:
- * it is not recommended to use this class to calculate the overall minimum cut
- * in a graph by iteratively invoking this class for all source-sink pairs. This
- * is computationally expensive. Instead, use the StoerWagnerMinimumCut
- * implementation.
+ * Given a weighted graph G(V,E) (directed or undirected). This class computes a minimum s-t cut.
+ * For this purpose this class relies on Edmonds' Karp Maximum Flow Algorithm. Note: it is not
+ * recommended to use this class to calculate the overall minimum cut in a graph by iteratively
+ * invoking this class for all source-sink pairs. This is computationally expensive. Instead, use
+ * the StoerWagnerMinimumCut implementation.
  *
  * Runtime: O(E)
  *
@@ -66,7 +60,8 @@ public class MinSourceSinkCut<V, E>
         this(graph, new PushRelabelMFImpl<>(graph), epsilon);
     }
 
-    public MinSourceSinkCut(DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
+    public MinSourceSinkCut(
+        DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
     {
         this.ekMaxFlow = maximumFlowAlgorithm;
         this.graph = graph;
@@ -85,7 +80,7 @@ public class MinSourceSinkCut<V, E>
         this.sink = sink;
         minCut = new HashSet<>();
 
-        //First compute a maxFlow from source to sink
+        // First compute a maxFlow from source to sink
         MaximumFlow<E> maxFlow = ekMaxFlow.buildMaximumFlow(source, sink);
 
         this.cutWeight = maxFlow.getValue();
@@ -101,13 +96,14 @@ public class MinSourceSinkCut<V, E>
                 minCut.add(vertex);
             }
 
-            //1. Get the forward edges with residual capacity
+            // 1. Get the forward edges with residual capacity
             Set<E> outEdges = new HashSet<>(graph.outgoingEdgesOf(vertex));
             for (Iterator<E> it = outEdges.iterator(); it.hasNext();) {
                 E edge = it.next();
                 double edgeCapacity = graph.getEdgeWeight(edge);
                 double flowValue = maxFlow.getFlow().get(edge);
-                if (Math.abs(edgeCapacity - flowValue) <= epsilon) { //No residual capacity on the edge
+                if (Math.abs(edgeCapacity - flowValue) <= epsilon) { // No residual capacity on the
+                                                                     // edge
                     it.remove();
                 }
             }
@@ -115,14 +111,14 @@ public class MinSourceSinkCut<V, E>
                 processQueue.add(Graphs.getOppositeVertex(graph, edge, vertex));
             }
 
-            //2. Get the backward edges with non-zero flow
+            // 2. Get the backward edges with non-zero flow
             Set<E> inEdges = new HashSet<>(graph.incomingEdgesOf(vertex));
             for (Iterator<E> it = inEdges.iterator(); it.hasNext();) {
                 E edge = it.next();
 
-                //double edgeCapacity=graph.getEdgeWeight(edge);
+                // double edgeCapacity=graph.getEdgeWeight(edge);
                 double flowValue = maxFlow.getFlow().get(edge);
-                if (flowValue <= epsilon) { //There is no flow on this edge
+                if (flowValue <= epsilon) { // There is no flow on this edge
                     it.remove();
                 }
             }
@@ -133,8 +129,8 @@ public class MinSourceSinkCut<V, E>
     }
 
     /**
-     * @return Returns the min cut partition containing the source, or null if
-     * there was no call to computeMinCut(V source, V sink)
+     * @return Returns the min cut partition containing the source, or null if there was no call to
+     *         computeMinCut(V source, V sink)
      */
     public Set<V> getSourcePartition()
     {
@@ -167,13 +163,11 @@ public class MinSourceSinkCut<V, E>
     }
 
     /**
-     * Let S be the set containing the source, and T be the set containing the
-     * sink, i.e. T=V\S. This method returns the edges which have their tail in
-     * S, and their head in T
+     * Let S be the set containing the source, and T be the set containing the sink, i.e. T=V\S.
+     * This method returns the edges which have their tail in S, and their head in T
      *
-     * @return all edges which have their tail in S, and their head in T. If
-     * computeMinCut(V source, V sink) has not been invoked, this method returns
-     * null.
+     * @return all edges which have their tail in S, and their head in T. If computeMinCut(V source,
+     *         V sink) has not been invoked, this method returns null.
      */
     public Set<E> getCutEdges()
     {
@@ -183,9 +177,7 @@ public class MinSourceSinkCut<V, E>
         Set<E> cutEdges = new HashSet<>();
         for (V vertex : minCut) {
             for (E edge : graph.outgoingEdgesOf(vertex)) {
-                if (!minCut.contains(
-                        Graphs.getOppositeVertex(graph, edge, vertex)))
-                {
+                if (!minCut.contains(Graphs.getOppositeVertex(graph, edge, vertex))) {
                     cutEdges.add(edge);
                 }
             }

@@ -23,21 +23,22 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
 
-
 /**
- * <p><a
- * href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm">
- * Push-relabel maximum flow</a> algorithm designed by Andrew V. Goldberg and
- * Robert Tarjan. Current implementation complexity upper-bound is O(V^3). For
- * more details see: <i>"A new approach to the maximum flow problem"</i> by
- * Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
- * eighteenth annual ACM symposium on Theory of computing</i></p>
+ * <p>
+ * <a href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm"> Push-relabel
+ * maximum flow</a> algorithm designed by Andrew V. Goldberg and Robert Tarjan. Current
+ * implementation complexity upper-bound is O(V^3). For more details see: <i>"A new approach to the
+ * maximum flow problem"</i> by Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
+ * eighteenth annual ACM symposium on Theory of computing</i>
+ * </p>
  *
- * <p>This class can also computes minimum s-t cuts. Effectively, to compute a
- * minimum s-t cut, the implementation first computes a minimum s-t flow, after
- * which a BFS is run on the residual graph.</p>
+ * <p>
+ * This class can also computes minimum s-t cuts. Effectively, to compute a minimum s-t cut, the
+ * implementation first computes a minimum s-t flow, after which a BFS is run on the residual graph.
+ * </p>
  *
- * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and undirected graphs are supported (and tested!).
+ * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
+ * undirected graphs are supported (and tested!).
  *
  * @author Alexey Kudinkin
  */
@@ -59,16 +60,18 @@ public class PushRelabelMFImpl<V, E>
 
     private PushRelabelDiagnostic diagnostic;
 
-    public PushRelabelMFImpl(Graph<V, E> network){
+    public PushRelabelMFImpl(Graph<V, E> network)
+    {
         this(network, DEFAULT_EPSILON);
     }
+
     public PushRelabelMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
 
-        this.vertexExtensionsFactory =() -> new VertexExtension();
+        this.vertexExtensionsFactory = () -> new VertexExtension();
 
-        this.edgeExtensionsFactory =() -> new AnnotatedFlowEdge();
+        this.edgeExtensionsFactory = () -> new AnnotatedFlowEdge();
 
         if (DIAGNOSTIC_ENABLED) {
             this.diagnostic = new PushRelabelDiagnostic();
@@ -76,7 +79,9 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut algorithms
+     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut
+     * algorithms
+     * 
      * @param source source
      * @param sink sink
      */
@@ -89,9 +94,7 @@ public class PushRelabelMFImpl<V, E>
     }
 
     public void initialize(
-        VertexExtension source,
-        VertexExtension sink,
-        Queue<VertexExtension> active)
+        VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
     {
         source.label = network.vertexSet().size();
         source.excess = Double.POSITIVE_INFINITY;
@@ -102,7 +105,7 @@ public class PushRelabelMFImpl<V, E>
             pushFlowThrough(ex, ex.capacity);
 
             if (ex.getTarget().prototype != sink.prototype) {
-                active.offer(ex.<VertexExtension>getTarget());
+                active.offer(ex.<VertexExtension> getTarget());
             }
         }
     }
@@ -131,16 +134,15 @@ public class PushRelabelMFImpl<V, E>
                 }
             }
         }
-        
+
         // NOTA BENE:
-        //  count label frequencies
+        // count label frequencies
         //
-        //  This is part of label-pruning mechanic which
-        //  targets to diminish all 'useless' relabels during
-        //  "flow-back" phase of the algorithm pushing excess
-        //  flow back to the source
-        for (V v : network.vertexSet())
-        {
+        // This is part of label-pruning mechanic which
+        // targets to diminish all 'useless' relabels during
+        // "flow-back" phase of the algorithm pushing excess
+        // flow back to the source
+        for (V v : network.vertexSet()) {
             VertexExtension vx = getVertexExtension(v);
             if (!labeling.containsKey(vx.label)) {
                 labeling.put(vx.label, 1);
@@ -154,7 +156,8 @@ public class PushRelabelMFImpl<V, E>
         }
     }
 
-    @Override public MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    @Override
+    public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
         this.calculateMaximumFlow(source, sink);
         maxFlow = composeFlow();
@@ -162,15 +165,16 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>,
-     * then calculates maximum flow from <tt>source</tt> to <tt>sink</tt>. Note,
-     * that <tt>source</tt> and <tt>sink</tt> must be vertices of the <tt>
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Note, that <tt>source</tt> and
+     * <tt>sink</tt> must be vertices of the <tt>
      * network</tt> passed to the constructor, and they must be different.
      *
      * @param source source vertex
      * @param sink sink vertex
      */
-    public double calculateMaximumFlow(V source,V sink){
+    public double calculateMaximumFlow(V source, V sink)
+    {
         init(source, sink);
 
         Queue<VertexExtension> active = new ArrayDeque<>();
@@ -183,7 +187,7 @@ public class PushRelabelMFImpl<V, E>
                 for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
                     if (isAdmissible(ex)) {
                         if ((ex.getTarget().prototype != sink)
-                                && (ex.getTarget().prototype != source))
+                            && (ex.getTarget().prototype != source))
                         {
                             active.offer(ex.getTarget());
                         }
@@ -202,10 +206,7 @@ public class PushRelabelMFImpl<V, E>
                 }
 
                 // Check whether we still have any vertices with the label '1'
-                if (!flowBack
-                        && !labeling.containsKey(0)
-                        && !labeling.containsKey(1))
-                {
+                if (!flowBack && !labeling.containsKey(0) && !labeling.containsKey(1)) {
                     // This supposed to drastically improve performance cutting
                     // off the necessity to drive labels of all vertices up to
                     // value 'N' one-by-one not entailing eny effective
@@ -213,17 +214,17 @@ public class PushRelabelMFImpl<V, E>
                     // label <= 1 in the network & therefore no
                     // 'discharging-path' to the _sink_ also signalling that
                     // we're in the flow-back stage of the algorithm
-                    getVertexExtension(source).label =
-                            Collections.max(labeling.keySet()) + 1;
+                    getVertexExtension(source).label = Collections.max(labeling.keySet()) + 1;
                     flowBack = true;
                 }
             }
         }
 
-        //Calculate the max flow that reaches the sink. There may be more efficient ways to do this.
+        // Calculate the max flow that reaches the sink. There may be more efficient ways to do
+        // this.
         for (E e : network.edgesOf(sink)) {
-            AnnotatedFlowEdge edge=edgeExtensionManager.getExtension(e);
-            maxFlowValue += (directed_graph ?  edge.flow: edge.flow + edge.getInverse().flow);
+            AnnotatedFlowEdge edge = edgeExtensionManager.getExtension(e);
+            maxFlowValue += (directed_graph ? edge.flow : edge.flow + edge.getInverse().flow);
         }
 
         if (DIAGNOSTIC_ENABLED) {
@@ -300,30 +301,28 @@ public class PushRelabelMFImpl<V, E>
 
     private boolean isAdmissible(AnnotatedFlowEdge e)
     {
-        return e.hasCapacity()
-            && (e.<VertexExtension>getSource().label
-                == (e.<VertexExtension>getTarget().label + 1));
+        return e.hasCapacity() && (e
+            .<VertexExtension> getSource().label == (e.<VertexExtension> getTarget().label + 1));
     }
 
-
-    private VertexExtension getVertexExtension(V v){ return (VertexExtension)vertexExtensionManager.getExtension(v);}
+    private VertexExtension getVertexExtension(V v)
+    {
+        return (VertexExtension) vertexExtensionManager.getExtension(v);
+    }
 
     private class PushRelabelDiagnostic
     {
         // Discharges
-        Map<Pair<V, V>, Integer> discharges =
-            new HashMap<>();
+        Map<Pair<V, V>, Integer> discharges = new HashMap<>();
         long dischargesCounter = 0;
 
         // Relabels
-        Map<Pair<Integer, Integer>, Integer> relabels =
-            new HashMap<>();
+        Map<Pair<Integer, Integer>, Integer> relabels = new HashMap<>();
         long relabelsCounter = 0;
 
         private void incrementDischarges(AnnotatedFlowEdge ex)
         {
-            Pair<V, V> p =
-                Pair.of(ex.getSource().prototype, ex.getTarget().prototype);
+            Pair<V, V> p = Pair.of(ex.getSource().prototype, ex.getTarget().prototype);
             if (!discharges.containsKey(p)) {
                 discharges.put(p, 0);
             }
@@ -362,12 +361,9 @@ public class PushRelabelMFImpl<V, E>
             System.out.println(labels);
 
             List<Map.Entry<Pair<Integer, Integer>, Integer>> relabelsSorted =
-                new ArrayList<>(
-                    relabels.entrySet());
+                new ArrayList<>(relabels.entrySet());
 
-            Collections.sort(
-                relabelsSorted,
-                    (o1, o2) -> -(o1.getValue() - o2.getValue()));
+            Collections.sort(relabelsSorted, (o1, o2) -> -(o1.getValue() - o2.getValue()));
 
             System.out.println("RELABELS    ");
             System.out.println("--------    ");
@@ -375,12 +371,10 @@ public class PushRelabelMFImpl<V, E>
             System.out.println("            " + relabelsSorted);
 
             List<Map.Entry<Pair<V, V>, Integer>> dischargesSorted =
-                new ArrayList<>(
-                    discharges.entrySet());
+                new ArrayList<>(discharges.entrySet());
 
-            Collections.sort(
-                dischargesSorted,
-                    (one, other) -> -(one.getValue() - other.getValue()));
+            Collections
+                .sort(dischargesSorted, (one, other) -> -(one.getValue() - other.getValue()));
 
             System.out.println("DISCHARGES  ");
             System.out.println("----------  ");
@@ -399,7 +393,8 @@ public class PushRelabelMFImpl<V, E>
             return excess > 0;
         }
 
-        @Override public String toString()
+        @Override
+        public String toString()
         {
             return prototype.toString() + String.format(" { LBL: %d } ", label);
         }
