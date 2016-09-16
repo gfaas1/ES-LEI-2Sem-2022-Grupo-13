@@ -22,7 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author micha
+ * 
  */
 public abstract class IntArrayGraphAlgorithm<V, E>
 {
@@ -31,7 +36,9 @@ public abstract class IntArrayGraphAlgorithm<V, E>
     protected final Map<V, Integer> _vertexToPos;
 
     /**
-     * @param g
+     * Create a new instance. 
+     *  
+     * @param g the input graph
      */
     public IntArrayGraphAlgorithm(final Graph<V, E> g)
     {

@@ -29,6 +29,9 @@ import org.jgrapht.*;
  * equal if their degrees are equal.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Linda Buisman
  * @since Nov 6, 2003
  */

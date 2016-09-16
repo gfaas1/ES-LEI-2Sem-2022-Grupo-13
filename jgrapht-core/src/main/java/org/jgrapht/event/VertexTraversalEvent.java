@@ -22,6 +22,8 @@ import java.util.*;
 /**
  * A traversal event for a graph vertex.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Barak Naveh
  * @since Aug 11, 2003
  */

@@ -35,6 +35,9 @@ import org.jgrapht.event.*;
  * undefined.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Charles Fry
  * @since Dec 13, 2005
  */

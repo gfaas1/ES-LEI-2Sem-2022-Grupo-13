@@ -36,6 +36,8 @@ public class IsomorphicGraphMapping<V, E>
     int[] core1, core2;
 
     /**
+     * Construct a new isomorphic graph mapping
+     * 
      * @param g1 the first graph
      * @param g2 the second graph which is a possible subgraph of g1
      * @param core1 the mapping as array (forwards)
@@ -104,6 +106,7 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks if a vertex v from the first graph has a corresponding vertex in the second graph
      *
+     * @param v the vertex
      * @return is there a corresponding vertex to v in the subgraph
      */
     public boolean hasVertexCorrespondence(V v)
@@ -114,6 +117,7 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks if a edge e from the first graph has a corresponding edge in the second graph
      *
+     * @param e the edge 
      * @return is there a corresponding edge to e in the subgraph
      */
     public boolean hasEdgeCorrespondence(E e)

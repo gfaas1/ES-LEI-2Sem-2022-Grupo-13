@@ -37,6 +37,9 @@ import org.jgrapht.graph.*;
  * {@link StrongConnectivityInspector#isStronglyConnected()}.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
@@ -66,7 +69,7 @@ public class StrongConnectivityInspector<V, E>
      *
      * @param directedGraph the graph to inspect
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the input graph is null
      */
     public StrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
     {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011-2016, by Robby McKilliam and Contributors.
+ * (C) Copyright 2011-2016, by Robby McKilliam, Ernst de Ridder and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,7 +28,11 @@ import org.jgrapht.graph.*;
  * implementation uses Java's PriorityQueue and requires O(|V||E|log|E|) time. M. Stoer and F.
  * Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591, 1997.
  *
- * @author Robby McKilliam, Ernst de Ridder
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Robby McKilliam
+ * @author Ernst de Ridder
  */
 public class StoerWagnerMinimumCut<V, E>
 {
@@ -91,7 +95,9 @@ public class StoerWagnerMinimumCut<V, E>
     }
 
     /**
-     * Implements the MinimumCutPhase function of Stoer and Wagner
+     * Implements the MinimumCutPhase function of Stoer and Wagner.
+     * 
+     * @param a the vertex 
      */
     protected void minimumCutPhase(Set<V> a)
     {
@@ -150,6 +156,8 @@ public class StoerWagnerMinimumCut<V, E>
 
     /**
      * Return the weight of the minimum cut
+     * 
+     * @return the weight of the minimum cut
      */
     public double minCutWeight()
     {
@@ -158,6 +166,8 @@ public class StoerWagnerMinimumCut<V, E>
 
     /**
      * Return a set of vertices on one side of the cut
+     * 
+     * @return a set of vertices on one side of the cut
      */
     public Set<V> minCut()
     {
@@ -167,6 +177,11 @@ public class StoerWagnerMinimumCut<V, E>
     /**
      * Merges vertex t into vertex s, summing the weights as required. Returns the merged vertex and
      * the sum of its weights
+     * 
+     * @param s the first vertex
+     * @param t the second vertex
+     * 
+     * @return the merged vertex and its weight
      */
     protected VertexAndWeight mergeVertices(Set<V> s, Set<V> t)
     {
@@ -205,6 +220,9 @@ public class StoerWagnerMinimumCut<V, E>
 
     /**
      * Compute the sum of the weights entering a vertex
+     * 
+     * @param v the vertex
+     * @return the sum of the weights entering a vertex
      */
     public double vertexWeight(Set<V> v)
     {
@@ -225,6 +243,13 @@ public class StoerWagnerMinimumCut<V, E>
         public Double weight;
         public boolean active; // active == neighbour in A
 
+        /**
+         * Construct a new weighted vertex.
+         * 
+         * @param v the vertex
+         * @param w the weight of the vertex
+         * @param active whether it is active
+         */
         public VertexAndWeight(Set<V> v, double w, boolean active)
         {
             this.vertex = v;

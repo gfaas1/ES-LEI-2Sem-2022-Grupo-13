@@ -23,6 +23,8 @@ import java.util.*;
 /**
  * Representation of a pair of vertices; to be replaced by Pair&lt;V,V&gt; if Sun ever gets around
  * to adding Pair to java.util.
+ * 
+ * @param <V> the graph vertex type
  *
  * @author Soren (soren@tanesha.net)
  * @author Joris Kinable
@@ -31,20 +33,37 @@ public class VertexPair<V>
     implements Serializable
 {
     private static final long serialVersionUID = -852258620031566794L;
+    
     protected final V n1;
     protected final V n2;
 
+    /**
+     * Create a new vertex pair
+     * 
+     * @param n1 the first vertex
+     * @param n2 the second vertex
+     */
     public VertexPair(V n1, V n2)
     {
         this.n1 = n1;
         this.n2 = n2;
     }
 
+    /**
+     * Get the first vertex of the pair
+     * 
+     * @return the first vertex of the pair
+     */
     public V getFirst()
     {
         return n1;
     }
 
+    /**
+     * Get the second vertex of the pair
+     * 
+     * @return the second vertex of the pair
+     */
     public V getSecond()
     {
         return n2;
@@ -62,6 +81,12 @@ public class VertexPair<V>
         return v.equals(n1) || v.equals(n2);
     }
 
+    /**
+     * Given on of the vertices of the pair, get the other.
+     * 
+     * @param one one of the vertices
+     * @return the other vertex of the pair
+     */
     public V getOther(V one)
     {
         if (one.equals(n1)) {
@@ -95,8 +120,8 @@ public class VertexPair<V>
     /**
      * Compares two elements. Returns true if they are both null, or when they are equal.
      * 
-     * @param element1
-     * @param element2
+     * @param element1 the first element
+     * @param element2 the second element
      * @return true if they are both null, or when they are equal, false otherwise.
      */
     protected boolean elementEquals(V element1, V element2)

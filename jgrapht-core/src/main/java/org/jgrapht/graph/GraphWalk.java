@@ -26,21 +26,22 @@ import org.jgrapht.*;
  * vertex, in which each edge is adjacent in the sequence to its two endpoints. More precisely, a
  * walk is a connected sequence of vertices and edges in a graph
  * {@code v0, e0, v1, e1, v2,....vk-1, ek-1, vk}, such that for {@code 1<=i<=k<}, the edge
- * {@code e_i} has endpoints {@code v_(i-1)} and {@code v_i}. The class makes no
- * assumptions with respect to the shape of the walk: edges may be repeated, and the start and end
- * point of the walk may be different.
+ * {@code e_i} has endpoints {@code v_(i-1)} and {@code v_i}. The class makes no assumptions with
+ * respect to the shape of the walk: edges may be repeated, and the start and end point of the walk
+ * may be different.
  * 
- * @see <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
+ * See <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
+ * GraphWalk is the default implementation of {@link GraphPath}.
  *
- *      GraphWalk is the default implementation of {@link GraphPath}.
+ * This class is implemented as a light-weight data structure; this class does not verify whether
+ * the sequence of edges or the sequence of vertices provided during construction forms an actual
+ * walk. It is the responsibility of the invoking class to provide correct input data.
  *
- *      This class is implemented as a light-weight data structure; this class does not verify
- *      whether the sequence of edges or the sequence of vertices provided during construction forms
- *      an actual walk. It is the responsibility of the invoking class to provide correct input
- *      data.
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author John Sichi
- * @version $Id$
+ * 
  */
 public class GraphWalk<V, E>
     implements GraphPath<V, E>
@@ -61,11 +62,11 @@ public class GraphWalk<V, E>
      * for non-simple graphs. Edge repetition is permitted, the start and end point points (v0 and
      * vk) can be different.
      *
-     * @param graph
-     * @param startVertex
-     * @param endVertex
-     * @param edgeList
-     * @param weight
+     * @param graph the graph
+     * @param startVertex the starting vertex
+     * @param endVertex the last vertex of the path
+     * @param edgeList the list of edges of the path
+     * @param weight the total weight of the path
      */
     public GraphWalk(Graph<V, E> graph, V startVertex, V endVertex, List<E> edgeList, double weight)
     {
@@ -77,9 +78,9 @@ public class GraphWalk<V, E>
      * otherwise the vertex sequence does not necessarily define a unique path. Furthermore, all
      * vertices must be pairwise adjacent.
      * 
-     * @param graph
-     * @param vertexList
-     * @param weight
+     * @param graph the graph
+     * @param vertexList the list of vertices of the path
+     * @param weight the total weight of the path     * 
      */
     public GraphWalk(Graph<V, E> graph, List<V> vertexList, double weight)
     {
@@ -95,13 +96,13 @@ public class GraphWalk<V, E>
      * verified during the construction of the walk. This constructor makes it possible to store
      * both a vertex and an edge view of the same walk, thereby saving computational overhead when
      * switching from one to the other.
-     * 
-     * @param graph
-     * @param startVertex
-     * @param endVertex
-     * @param vertexList
-     * @param edgeList
-     * @param weight
+     *
+     * @param graph the graph
+     * @param startVertex the starting vertex
+     * @param endVertex the last vertex of the path
+     * @param vertexList the list of vertices of the path 
+     * @param edgeList the list of edges of the path
+     * @param weight the total weight of the path
      */
     public GraphWalk(
         Graph<V, E> graph, V startVertex, V endVertex, List<V> vertexList, List<E> edgeList,
@@ -118,49 +119,42 @@ public class GraphWalk<V, E>
         this.weight = weight;
     }
 
-    // implement GraphPath
     @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
-    // implement GraphPath
     @Override
     public V getStartVertex()
     {
         return startVertex;
     }
 
-    // implement GraphPath
     @Override
     public V getEndVertex()
     {
         return endVertex;
     }
 
-    // implement GraphPath
     @Override
     public List<E> getEdgeList()
     {
         return (edgeList != null ? edgeList : GraphPath.super.getEdgeList());
     }
 
-    // implement GraphPath
     @Override
     public List<V> getVertexList()
     {
         return (vertexList != null ? vertexList : GraphPath.super.getVertexList());
     }
 
-    // implement GraphPath
     @Override
     public double getWeight()
     {
         return weight;
     }
 
-    // implement GraphPath
     @Override
     public int getLength()
     {
@@ -172,7 +166,6 @@ public class GraphWalk<V, E>
             return 0;
     }
 
-    // override Object
     @Override
     public String toString()
     {

@@ -82,6 +82,9 @@ import org.jgrapht.graph.*;
  * </code>
  * </pre>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Wil Selwood
  */
 public class DOTImporter<V, E>

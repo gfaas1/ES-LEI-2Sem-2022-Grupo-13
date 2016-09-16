@@ -22,7 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * GraphGenerator defines an interface for generating new graph structures.
+ * An interface for generating new graph structures.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <T> type for returning implementation-specific mappings from String roles to graph
+ *        elements
  *
  * @author John V. Sichi
  * @since Sep 16, 2003

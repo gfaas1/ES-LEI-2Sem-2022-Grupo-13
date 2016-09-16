@@ -25,6 +25,10 @@ import org.jgrapht.graph.builder.*;
  * multiple edges are permitted. If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  */
 public class Pseudograph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -52,12 +56,28 @@ public class Pseudograph<V, E>
         super(ef, true, true);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
         Class<? extends E> edgeClass)
     {
         return new UndirectedGraphBuilder<>(new Pseudograph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
         EdgeFactory<V, E> ef)
     {

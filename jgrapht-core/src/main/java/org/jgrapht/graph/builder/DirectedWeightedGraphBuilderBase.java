@@ -21,6 +21,11 @@ import org.jgrapht.*;
 
 /**
  * Base class for {@link DirectedWeightedGraphBuilder} for extending.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * @param <B> type of this builder
  */
 public abstract class DirectedWeightedGraphBuilderBase<V, E,
     G extends DirectedGraph<V, E> & WeightedGraph<V, E>,

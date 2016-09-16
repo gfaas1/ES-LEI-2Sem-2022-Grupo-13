@@ -39,6 +39,9 @@ import org.jgrapht.graph.*;
  * share at most one node, and that node is a cutpoint. (b) The BC graph of G is a tree in which
  * each leaf node corresponds to a block of G.</li>
  * </ul>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -46,8 +49,6 @@ import org.jgrapht.graph.*;
 public class BlockCutpointGraph<V, E>
     extends SimpleGraph<UndirectedGraph<V, E>, DefaultEdge>
 {
-    /**
-     */
     private static final long serialVersionUID = -9101341117013163934L;
 
     private Set<V> cutpoints = new HashSet<>();
@@ -71,6 +72,8 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Running time = O(m) where m is the number of edges.
+     * 
+     * @param graph the input graph
      */
     public BlockCutpointGraph(UndirectedGraph<V, E> graph)
     {
@@ -106,6 +109,7 @@ public class BlockCutpointGraph<V, E>
      * component) containing the vertex.
      *
      * @param vertex vertex in the initial graph.
+     * @return the biconnected component containing the vertex
      */
     public UndirectedGraph<V, E> getBlock(V vertex)
     {
@@ -118,6 +122,8 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Returns the cutpoints of the initial graph.
+     * 
+     * @return the cutpoints of the initial graph
      */
     public Set<V> getCutpoints()
     {
@@ -128,6 +134,7 @@ public class BlockCutpointGraph<V, E>
      * Returns <code>true</code> if the vertex is a cutpoint, <code>false</code> otherwise.
      *
      * @param vertex vertex in the initial graph.
+     * @return <code>true</code> if the vertex is a cutpoint, <code>false</code> otherwise.
      */
     public boolean isCutpoint(V vertex)
     {

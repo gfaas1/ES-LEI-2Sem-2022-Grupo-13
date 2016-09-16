@@ -22,6 +22,12 @@ import org.jgrapht.graph.*;
 
 /**
  * Base class for {@link DirectedGraphBuilder} for extending.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * @param <B> type of this builder
+ * 
  */
 public abstract class DirectedGraphBuilderBase<V, E, G extends DirectedGraph<V, E>,
     B extends DirectedGraphBuilderBase<V, E, G, B>>
@@ -37,6 +43,9 @@ public abstract class DirectedGraphBuilderBase<V, E, G extends DirectedGraph<V, 
         super(baseGraph);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UnmodifiableDirectedGraph<V, E> buildUnmodifiable()
     {

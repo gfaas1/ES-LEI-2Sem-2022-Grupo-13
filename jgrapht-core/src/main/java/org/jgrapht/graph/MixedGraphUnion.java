@@ -22,14 +22,29 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
+/**
+ * Read-only union of an undirected and a directed graph.
+ 
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ * 
+ */
 public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1961714127770731054L;
+    
     private final UndirectedGraph<V, E> undirectedGraph;
     private final DirectedGraph<V, E> directedGraph;
 
+    /**
+     * Construct a new graph union.
+     * 
+     * @param g1 the undirected graph
+     * @param g2 the directed graph
+     * @param operator the weight combiner (policy for edge weight calculation)
+     */
     public MixedGraphUnion(
         UndirectedGraph<V, E> g1, DirectedGraph<V, E> g2, WeightCombiner operator)
     {
@@ -38,6 +53,13 @@ public class MixedGraphUnion<V, E>
         this.directedGraph = g2;
     }
 
+    /**
+     * Construct a new graph union. The union will use the {@link WeightCombiner#SUM} weight
+     * combiner.
+     * 
+     * @param g1 the undirected graph
+     * @param g2 the directed graph
+     */
     public MixedGraphUnion(UndirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
     {
         super(g1, g2);

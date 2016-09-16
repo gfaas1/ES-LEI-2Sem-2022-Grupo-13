@@ -34,6 +34,9 @@ import org.jgrapht.util.*;
  * 
  * @see Format
  * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author Charles Fry
  * @author Dimitrios Michail
  */

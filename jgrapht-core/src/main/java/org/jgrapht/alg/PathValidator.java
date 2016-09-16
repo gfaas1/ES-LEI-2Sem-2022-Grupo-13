@@ -22,6 +22,9 @@ package org.jgrapht.alg;
  * {@link KShortestPaths} - that the path is from source to target and that it does not contain
  * loops.
  * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author Assaf Mizrachi
  * @since July, 21, 2016
  *

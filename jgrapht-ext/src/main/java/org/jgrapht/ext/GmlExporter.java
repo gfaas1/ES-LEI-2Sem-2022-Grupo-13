@@ -34,6 +34,9 @@ import org.jgrapht.*;
  * The behavior of the exporter such as whether to print vertex labels, edge labels, and/or edge
  * weights can be adjusted using the {@link #setParameter(Parameter, boolean) setParameter} method.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
  */

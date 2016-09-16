@@ -20,7 +20,6 @@ package org.jgrapht.graph.specifics;
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -30,6 +29,9 @@ import org.jgrapht.util.*;
  * getEdge(V u, V v), containsEdge(V u, V v), addEdge(V u, V v), etc may be relatively slow when the
  * average degree of a vertex is high (dense graphs). For a fast implementation, use
  * {@link FastLookupUndirectedSpecifics}.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @author Joris Kinable
@@ -46,11 +48,22 @@ public class UndirectedSpecifics<V, E>
     protected Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected;
     protected EdgeSetFactory<V, E> edgeSetFactory;
 
+    /**
+     * Construct a new undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     */
     public UndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
         this(abstractBaseGraph, new LinkedHashMap<>());
     }
 
+    /**
+     * Construct a new undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap a container to use for the edges
+     */
     public UndirectedSpecifics(
         AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
@@ -59,6 +72,9 @@ public class UndirectedSpecifics<V, E>
         this.edgeSetFactory = abstractBaseGraph.getEdgeSetFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addVertex(V v)
     {
@@ -66,6 +82,9 @@ public class UndirectedSpecifics<V, E>
         vertexMapUndirected.put(v, null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<V> getVertexSet()
     {
@@ -73,7 +92,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
@@ -98,7 +117,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
@@ -129,6 +148,9 @@ public class UndirectedSpecifics<V, E>
         return equalStraight || equalInverted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addEdgeToTouchingVertices(E e)
     {
@@ -142,6 +164,9 @@ public class UndirectedSpecifics<V, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int degreeOf(V vertex)
     {
@@ -165,7 +190,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see Graph#edgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -174,7 +199,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public int inDegreeOf(V vertex)
@@ -183,7 +208,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
@@ -192,7 +217,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public int outDegreeOf(V vertex)
@@ -201,7 +226,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
@@ -209,6 +234,9 @@ public class UndirectedSpecifics<V, E>
         throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeEdgeFromTouchingVertices(E e)
     {
@@ -225,9 +253,9 @@ public class UndirectedSpecifics<V, E>
     /**
      * A lazy build of edge container for specified vertex.
      *
-     * @param vertex a vertex in this graph.
+     * @param vertex a vertex in this graph
      *
-     * @return EdgeContainer
+     * @return an edge container
      */
     protected UndirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {

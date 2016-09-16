@@ -37,6 +37,9 @@ import org.xml.sax.helpers.*;
  * http://en.wikipedia.org/wiki/ GraphML</a>.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
@@ -146,6 +149,11 @@ public class GraphMLExporter<V, E>
             this.name = name;
         }
 
+        /**
+         * Get a string representation of the attribute category
+         * 
+         * @return the string representation of the attribute category
+         */
         public String toString()
         {
             return name;
@@ -171,6 +179,11 @@ public class GraphMLExporter<V, E>
             this.name = name;
         }
 
+        /**
+         * Get a string representation of the attribute type
+         * 
+         * @return the string representation of the attribute type
+         */        
         public String toString()
         {
             return name;

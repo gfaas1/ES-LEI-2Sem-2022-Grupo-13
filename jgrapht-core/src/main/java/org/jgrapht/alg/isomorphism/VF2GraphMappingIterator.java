@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * This class is used to iterate over all existing (isomorphic) mappings between to graphs. It is
+ * This class is used to iterate over all existing (isomorphic) mappings between two graphs. It is
  * used by the {@link VF2GraphIsomorphismInspector}.
  *
  * @param <V> the type of the vertices

@@ -24,7 +24,10 @@ import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 
 /**
- * DOCUMENT ME!
+ * A unmodifiable graph which is the squared graph of another.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Michael Behrisch
  * @since Sep 14, 2004
@@ -39,7 +42,7 @@ public class GraphSquare<V, E>
      * Constructor for GraphSquare.
      *
      * @param g the graph of which a square is to be created.
-     * @param createLoops
+     * @param createLoops whether to create self loops
      */
     public GraphSquare(final Graph<V, E> g, final boolean createLoops)
     {
@@ -62,7 +65,7 @@ public class GraphSquare<V, E>
 
                 @Override
                 public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
-                { // this is not a very performant implementation
+                { // this is not a very efficient implementation
                     GraphSquare.super.removeAllEdges(edgeSet());
                     addSquareEdges(g, createLoops);
                 }
@@ -81,7 +84,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -90,7 +93,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -99,7 +102,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -108,7 +111,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
@@ -117,7 +120,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -126,7 +129,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
@@ -135,7 +138,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -144,7 +147,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -153,7 +156,7 @@ public class GraphSquare<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)

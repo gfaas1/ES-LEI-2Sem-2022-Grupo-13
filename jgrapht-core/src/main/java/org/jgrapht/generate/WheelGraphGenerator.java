@@ -27,6 +27,9 @@ import org.jgrapht.*;
  * around it that are connected to each other (as a ring). The rim vertices are also connected to
  * the hub with edges that are called "spokes".
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @since Sep 16, 2003
  */
@@ -60,7 +63,7 @@ public class WheelGraphGenerator<V, E>
      * @param inwardSpokes if <code>true</code> and graph is directed, spokes are oriented from rim
      *        to hub; else from hub to rim.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException in case the number of vertices is negative
      */
     public WheelGraphGenerator(int size, boolean inwardSpokes)
     {

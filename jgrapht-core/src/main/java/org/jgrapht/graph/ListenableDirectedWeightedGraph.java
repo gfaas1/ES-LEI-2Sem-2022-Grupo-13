@@ -22,6 +22,9 @@ import org.jgrapht.*;
 /**
  * A directed weighted graph which is also {@link org.jgrapht.ListenableGraph}.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @see DefaultListenableGraph
  */
 public class ListenableDirectedWeightedGraph<V, E>

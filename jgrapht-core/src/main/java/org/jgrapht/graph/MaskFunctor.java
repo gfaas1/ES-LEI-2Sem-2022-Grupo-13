@@ -20,6 +20,9 @@ package org.jgrapht.graph;
 /**
  * A functor interface for masking out vertices and edges of a graph.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
@@ -28,18 +31,18 @@ public interface MaskFunctor<V, E>
     /**
      * Returns <code>true</code> if the edge is masked, <code>false</code> otherwise.
      *
-     * @param edge edge.
+     * @param edge an edge
      *
-     * @return .
+     * @return <code>true</code> if the edge is masked, <code>false</code> otherwise
      */
     boolean isEdgeMasked(E edge);
 
     /**
      * Returns <code>true</code> if the vertex is masked, <code>false</code> otherwise.
      *
-     * @param vertex vertex.
+     * @param vertex a vertex
      *
-     * @return .
+     * @return <code>true</code> if the vertex is masked, <code>false</code> otherwise
      */
     boolean isVertexMasked(V vertex);
 }

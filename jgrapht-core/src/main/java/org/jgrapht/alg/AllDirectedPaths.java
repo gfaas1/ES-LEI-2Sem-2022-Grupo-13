@@ -26,14 +26,21 @@ import org.jgrapht.graph.*;
  * A Dijkstra-like algorithm to find all paths between two sets of nodes in a directed graph, with
  * options to search only simple paths and to limit the path length.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Andrew Gainer-Dewar
  * @since Feb, 2016
  */
-
 public class AllDirectedPaths<V, E>
 {
     private final DirectedGraph<V, E> graph;
 
+    /**
+     * Create a new instance
+     * 
+     * @param graph the input graph
+     */
     public AllDirectedPaths(DirectedGraph<V, E> graph)
     {
         if (graph == null) {
@@ -51,6 +58,7 @@ public class AllDirectedPaths<V, E>
      * @param simplePathsOnly if true, only search simple (non-self-intersecting) paths
      * @param maxPathLength maximum number of edges to allow in a path (if null, all paths are
      *        considered, which may be very slow due to potentially huge output)
+     * @return all paths from the source vertex to the target vertex
      */
     public List<GraphPath<V, E>> getAllPaths(
         V sourceVertex, V targetVertex, boolean simplePathsOnly, Integer maxPathLength)

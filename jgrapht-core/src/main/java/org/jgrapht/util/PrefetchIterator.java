@@ -35,37 +35,41 @@ import java.util.*;
  *
  * <pre>
  * <code>
-    //This class supllies enumeration of integer till 100.
-    public class IteratorExample implements Enumeration{
-    private int counter=0;
-    private PrefetchIterator nextSupplier;
-
-        IteratorExample()
-        {
-            nextSupplier = new PrefetchIterator(new PrefetchIterator.NextElementFunctor(){
-
-                public Object nextElement() throws NoSuchElementException {
-                    counter++;
-                    if (counter &lt;= 100)
-                        throw new NoSuchElementException();
-                    else
-                        return new Integer(counter);
-                }
-
-            });
-        }
-        //forwarding to nextSupplier and return its returned value
-        public boolean hasMoreElements() {
-            return this.nextSupplier.hasMoreElements();
-        }
-    //  forwarding to nextSupplier and return its returned value
-        public Object nextElement() {
-            return this.nextSupplier.nextElement();
-        }
-  }</code>
- * </pre>
+ *  //This class supplies enumeration of integer till 100.
+ *  public class IteratorExample implements Enumeration{
+ *  private int counter=0;
+ *  private PrefetchIterator nextSupplier;
  *
- * @author Assaf_Lehr
+ *      IteratorExample()
+ *      {
+ *          nextSupplier = new PrefetchIterator(new PrefetchIterator.NextElementFunctor(){
+ *
+ *              public Object nextElement() throws NoSuchElementException {
+ *                  counter++;
+ *                  if (counter &lt;= 100)
+ *                      throw new NoSuchElementException();
+ *                  else
+ *                      return new Integer(counter);
+ *              }
+ *
+ *          });
+ *      }
+ *      
+ *      // forwarding to nextSupplier and return its returned value
+ *      public boolean hasMoreElements() {
+ *          return this.nextSupplier.hasMoreElements();
+ *      }
+ *      
+ *      // forwarding to nextSupplier and return its returned value
+ *      public Object nextElement() {
+ *          return this.nextSupplier.nextElement();
+ *      }
+ *  }</code>
+ * </pre>
+ * 
+ * @param <E> the element type
+ *
+ * @author Assaf Lehr
  */
 public class PrefetchIterator<E>
     implements Iterator<E>, Enumeration<E>
@@ -77,6 +81,11 @@ public class PrefetchIterator<E>
     private boolean flagIsEnumerationStartedEmpty = true;
     private int innerFunctorUsageCounter = 0;
 
+    /**
+     * Construct a new prefetch iterator.
+     * 
+     * @param aEnum the next element functor
+     */
     public PrefetchIterator(NextElementFunctor<E> aEnum)
     {
         innerEnum = aEnum;
@@ -98,13 +107,16 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * 1. Retrieves the saved value or calculates it if it does not exist 2. Changes
-     * isGetNextLastResultUpToDate to false. (Because it does not save the NEXT element now; it
-     * saves the current one!)
+     * {@inheritDoc}
      */
     @Override
     public E nextElement()
     {
+        /*
+         * 1. Retrieves the saved value or calculates it if it does not exist 2. Changes
+         * isGetNextLastResultUpToDate to false. (Because it does not save the NEXT element now; it
+         * saves the current one!)
+         */
         E result;
         if (this.isGetNextLastResultUpToDate) {
             result = this.getNextLastResult;
@@ -117,12 +129,15 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates getNext() and saves it
-     * 2. sets isGetNextLastResultUpToDate to true.
+     * {@inheritDoc}
      */
     @Override
     public boolean hasMoreElements()
     {
+        /*
+         * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates getNext() and saves it
+         * 2. sets isGetNextLastResultUpToDate to true.
+         */
         if (endOfEnumerationReached) {
             return false;
         }
@@ -146,6 +161,8 @@ public class PrefetchIterator<E>
      * hasMoreElements() now, only at initialization time. Efficiency: if nextElements(),
      * hasMoreElements() were never used, it activates the hasMoreElements() once. Else it is
      * immediately(O(1))
+     * 
+     * @return true if the enumeration started as an empty one, false otherwise.
      */
     public boolean isEnumerationStartedEmpty()
     {
@@ -159,12 +176,18 @@ public class PrefetchIterator<E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext()
     {
         return this.hasMoreElements();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E next()
     {
@@ -172,7 +195,7 @@ public class PrefetchIterator<E>
     }
 
     /**
-     * Always throws UnsupportedOperationException.
+     * {@inheritDoc}
      */
     @Override
     public void remove()
@@ -181,11 +204,19 @@ public class PrefetchIterator<E>
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * A functor for the calculation of the next element.
+     * 
+     * @param <EE> the element type
+     */
     public interface NextElementFunctor<EE>
     {
         /**
-         * You must implement that NoSuchElementException is thrown on nextElement() if it is out of
-         * bound.
+         * Return the next element or throw a {@link NoSuchElementException} if there are no 
+         * more elements.
+         * 
+         * @return the next element
+         * @throws NoSuchElementException in case there is no next element
          */
         EE nextElement()
             throws NoSuchElementException;

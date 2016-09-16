@@ -27,6 +27,8 @@ import java.util.*;
  * inverse Ackermann function. UnionFind uses the hashCode and equals method of the elements it
  * operates on.
  *
+ * @param <T> element type
+ *
  * @author Tom Conerly
  * @since Feb 10, 2010
  */
@@ -36,7 +38,9 @@ public class UnionFind<T>
     private Map<T, Integer> rankMap;
 
     /**
-     * Creates a UnionFind instance with all of the elements of elements in seperate sets.
+     * Creates a UnionFind instance with all the elements in separate sets.
+     * 
+     * @param elements the initial elements to include (each element in a singleton set). 
      */
     public UnionFind(Set<T> elements)
     {

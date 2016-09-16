@@ -43,6 +43,9 @@ import org.jgrapht.traverse.*;
  * is added as listener to a graph other than the one it inspects, results are undefined.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @author John V. Sichi
  * @since Aug 6, 2003

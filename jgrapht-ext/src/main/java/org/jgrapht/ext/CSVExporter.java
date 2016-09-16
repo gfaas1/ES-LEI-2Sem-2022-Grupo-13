@@ -44,6 +44,9 @@ import org.jgrapht.*;
  * 
  * @see CSVFormat
  * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author Dimitrios Michail
  * @since August 2016
  */

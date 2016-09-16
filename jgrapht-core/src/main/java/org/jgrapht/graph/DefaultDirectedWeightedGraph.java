@@ -25,6 +25,9 @@ import org.jgrapht.graph.builder.*;
  * multiple edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
  * weights on its edges.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @see DefaultDirectedGraph
  */
 public class DefaultDirectedWeightedGraph<V, E>
@@ -53,12 +56,28 @@ public class DefaultDirectedWeightedGraph<V, E>
         super(ef);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
         return new DirectedWeightedGraphBuilder<>(new DefaultDirectedWeightedGraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {

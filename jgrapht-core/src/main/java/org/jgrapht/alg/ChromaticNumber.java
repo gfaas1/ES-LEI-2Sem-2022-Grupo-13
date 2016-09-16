@@ -39,6 +39,8 @@ public abstract class ChromaticNumber
      * Finds the number of colors required for a greedy coloring of the graph.
      *
      * @param g an undirected graph to find the chromatic number of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return integer the approximate chromatic number from the greedy algorithm
      */
@@ -50,8 +52,12 @@ public abstract class ChromaticNumber
 
     /**
      * Finds a greedy coloring of the graph.
-     *
+     * 
      * @param g an undirected graph for which to find the coloring
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * 
+     * @return a greedy coloring
      */
     public static <V, E> Map<Integer, Set<V>> findGreedyColoredGroups(UndirectedGraph<V, E> g)
     {

@@ -24,6 +24,9 @@ import java.util.*;
  * {@link java.util.Set} implementation used internally by the graph to maintain sets of edges. This
  * provides control over performance tradeoffs between memory and CPU usage.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  */
 public interface EdgeSetFactory<V, E>

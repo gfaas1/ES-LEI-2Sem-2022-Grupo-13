@@ -24,6 +24,9 @@ import org.jgrapht.*;
 /**
  * An {@link EdgeFactory} for producing edges by using a class as a factory.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 14, 2003
  */
@@ -34,6 +37,11 @@ public class ClassBasedEdgeFactory<V, E>
 
     private final Class<? extends E> edgeClass;
 
+    /**
+     * Create a new class based edge factory.
+     * 
+     * @param edgeClass the edge class
+     */
     public ClassBasedEdgeFactory(Class<? extends E> edgeClass)
     {
         this.edgeClass = edgeClass;

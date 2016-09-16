@@ -26,6 +26,9 @@ import org.jgrapht.*;
  * graph</a> of any size. This is a graph with two partitions; two vertices will contain an edge if
  * and only if they belong to different partitions.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Andrew Newell
  * @since Dec 21, 2008
  */

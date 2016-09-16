@@ -22,6 +22,11 @@ import org.jgrapht.*;
 /**
  * A builder class for undirected weighted graphs. If you want to extend this class, see
  * {@link UndirectedWeightedGraphBuilderBase}.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * 
  */
 public final class UndirectedWeightedGraphBuilder<V, E,
     G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>

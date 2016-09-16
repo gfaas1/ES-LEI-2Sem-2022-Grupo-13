@@ -31,6 +31,9 @@ import org.jgrapht.alg.vertexcover.util.*;
  *
  * Note: this class supports pseudo-graphs
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  *
  */

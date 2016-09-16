@@ -21,23 +21,51 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-public final class GraphTests<V, E>
+/**
+ * Various graph tests 
+ *
+ */
+public final class GraphTests
 {
     private GraphTests()
     {
     }
 
+    /**
+     * Test whether a graph is empty.
+     * 
+     * @param g the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is empty, false otherwise
+     */
     public static <V, E> boolean isEmpty(Graph<V, E> g)
     {
         return g.edgeSet().isEmpty();
     }
 
+    /**
+     * Test whether a graph is complete.
+     * 
+     * @param g the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is complete, false otherwise
+     */
     public static <V, E> boolean isComplete(Graph<V, E> g)
     {
         int n = g.vertexSet().size();
         return g.edgeSet().size() == (n * (n - 1) / 2);
     }
 
+    /**
+     * Test whether a graph is connected.
+     * 
+     * @param g the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is connected, false otherwise
+     */
     public static <V, E> boolean isConnected(Graph<V, E> g)
     {
         int numVertices = g.vertexSet().size();
@@ -70,11 +98,27 @@ public final class GraphTests<V, E>
         return known.size() == numVertices;
     }
 
+    /**
+     * Test whether a graph is a tree.
+     * 
+     * @param g the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is tree, false otherwise
+     */
     public static <V, E> boolean isTree(Graph<V, E> g)
     {
         return isConnected(g) && (g.edgeSet().size() == (g.vertexSet().size() - 1));
     }
 
+    /**
+     * Test whether a graph is bipartite.
+     * 
+     * @param g the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is bipartite, false otherwise
+     */
     public static <V, E> boolean isBipartite(Graph<V, E> g)
     {
         if ((4 * g.edgeSet().size()) > (g.vertexSet().size() * g.vertexSet().size())) {

@@ -25,11 +25,15 @@ import org.jgrapht.*;
  * A vertex-based representation of a simple path. The graph must be simple for the vertices to
  * uniquely determine a path. See {@link SimpleGraph}
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @deprecated This class is ambiguous. Unlike the name or the description suggests, this class does
  *             NOT implement a Simple Path (a path in a graph without vertex repetition). Instead it
  *             implements a walk in a SimpleGraph. This functionality is now implemented by the
  *             class {@link GraphWalk}.
  */
+@Deprecated
 public class SimpleGraphPath<V, E>
     implements GraphPath<V, E>
 {
@@ -41,6 +45,7 @@ public class SimpleGraphPath<V, E>
     /**
      * @param simpleGraph The simple graph where the path is.
      * @param vertices A list of vertices that make up the path.
+     * @param weight The weight of the path.
      *
      * @throws IllegalArgumentException if the vertices are not in the path or if they do not define
      *         a path in the graph.

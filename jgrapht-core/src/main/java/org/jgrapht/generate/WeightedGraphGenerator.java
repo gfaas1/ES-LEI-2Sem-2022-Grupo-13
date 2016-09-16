@@ -19,29 +19,46 @@ package org.jgrapht.generate;
 
 import org.jgrapht.*;
 
+/**
+ * A base implementation of a weighted graph generator.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public abstract class WeightedGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
     protected Class<? extends E> edgeClass;
-
     protected EdgeFactory<V, E> edgeFactory;
-
     protected double[][] weights;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set the edge factory of the generator
+     * @param edgeFactory the edge factory
+     * @return the generator
+     */
     public WeightedGraphGenerator<V, E> edgeFactory(EdgeFactory<V, E> edgeFactory)
     {
         this.edgeFactory = edgeFactory;
         return this;
     }
 
+    /**
+     * Set the edge class of the generator
+     * @param edgeClass the edge class
+     * @return the generator
+     */
     public WeightedGraphGenerator<V, E> edgeClass(Class<? extends E> edgeClass)
     {
         this.edgeClass = edgeClass;
         return this;
     }
 
+    /**
+     * Set the weights of the generator
+     * @param weights of the generator
+     * @return the generator
+     */
     public WeightedGraphGenerator<V, E> weights(double[][] weights)
     {
         this.weights = weights;

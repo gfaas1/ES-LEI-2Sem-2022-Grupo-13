@@ -22,6 +22,12 @@ import org.jgrapht.graph.*;
 
 /**
  * Base class for {@link UndirectedGraphBuilder} for extending.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * @param <B> type of this builder
+ * 
  */
 public abstract class UndirectedGraphBuilderBase<V, E, G extends UndirectedGraph<V, E>,
     B extends UndirectedGraphBuilderBase<V, E, G, B>>

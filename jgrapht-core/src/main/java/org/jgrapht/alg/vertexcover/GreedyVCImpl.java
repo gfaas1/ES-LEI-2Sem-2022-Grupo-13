@@ -37,6 +37,8 @@ import org.jgrapht.alg.vertexcover.util.*;
  * {@link ClarksonTwoApproxVCImpl}.
  *
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Joris Kinable
  * @since Nov 6, 2003

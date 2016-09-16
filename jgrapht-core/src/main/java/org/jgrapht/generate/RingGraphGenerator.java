@@ -26,6 +26,9 @@ import org.jgrapht.*;
  * passes through all its vertices exactly once. For a directed graph, the generated edges are
  * oriented consistently around the ring.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @since Sep 16, 2003
  */

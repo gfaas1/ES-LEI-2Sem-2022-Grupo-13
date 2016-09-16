@@ -21,6 +21,8 @@ package org.jgrapht.ext;
  * Generates edge names by invoking {@link #toString()} on them. This assumes that the edge's
  * {@link #toString()} method returns a unique String representation for each edge.
  *
+ * @param <E> the graph edge type
+ *
  * @author Trevor Harmon
  */
 public class StringEdgeNameProvider<E>

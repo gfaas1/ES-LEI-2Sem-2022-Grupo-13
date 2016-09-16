@@ -22,6 +22,8 @@ import java.util.*;
 /**
  * Provides display attributes for vertices and/or edges in a graph.
  *
+ * @param <T> the type for which attributes are provided for
+ *
  * @author John Sichi
  */
 public interface ComponentAttributeProvider<T>

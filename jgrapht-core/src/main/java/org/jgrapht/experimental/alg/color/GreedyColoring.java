@@ -22,6 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.experimental.alg.*;
 
+/**
+ * Compute greedy graph colorings. 
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class GreedyColoring<V, E>
     extends IntArrayGraphAlgorithm<V, E>
     implements ApproximationAlgorithm<Integer, V>
@@ -34,7 +40,9 @@ public class GreedyColoring<V, E>
     private int _order = BEST_ORDER;
 
     /**
-     * @param g
+     * Create a new greedy coloring algorithm
+     * 
+     * @param g the graph
      */
     public GreedyColoring(final Graph<V, E> g)
     {
@@ -42,7 +50,10 @@ public class GreedyColoring<V, E>
     }
 
     /**
-     * @param g
+     * Create a new greedy coloring algorithm
+     * 
+     * @param g the graph
+     * @param method the method to use
      */
     public GreedyColoring(final Graph<V, E> g, final int method)
     {

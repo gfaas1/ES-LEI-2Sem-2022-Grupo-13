@@ -33,6 +33,9 @@ import org.jgrapht.graph.*;
  * undefined when the input isn't a bipartite graph, i.e. when there are edges within a single
  * partition!
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  */
 
@@ -48,6 +51,14 @@ public class HopcroftKarpBipartiteMatching<V, E>
                                              // vertices in partition 1
     private final Set<V> unmatchedVertices2;
 
+    /**
+     * Create a new instance of the Hopcroft-Karp algorithm for the computation of maximum matchings
+     * in bipartite graphs.
+     * 
+     * @param graph the input graph
+     * @param partition1 vertex set of one of the partitions of the bipartite graph
+     * @param partition2 vertex set of the other partition of the bipartite graph
+     */
     public HopcroftKarpBipartiteMatching(
         UndirectedGraph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {

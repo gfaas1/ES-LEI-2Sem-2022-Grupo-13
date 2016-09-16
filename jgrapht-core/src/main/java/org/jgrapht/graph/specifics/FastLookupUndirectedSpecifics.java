@@ -20,7 +20,6 @@ package org.jgrapht.graph.specifics;
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -29,6 +28,9 @@ import org.jgrapht.util.*;
  * the performance of methods which depend on edge retrievals, e.g. getEdge(V u, V v),
  * containsEdge(V u, V v),addEdge(V u, V v). A disadvantage is an increase in memory consumption. If
  * memory utilization is an issue, use a {@link DirectedSpecifics} instead.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Joris Kinable
  */
@@ -44,11 +46,22 @@ public class FastLookupUndirectedSpecifics<V, E>
      */
     protected Map<VertexPair<V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
 
+    /**
+     * Construct a new fast lookup undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     */
     public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
         this(abstractBaseGraph, new LinkedHashMap<>());
     }
 
+    /**
+     * Construct a new fast lookup undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap a container to use for the edges
+     */
     public FastLookupUndirectedSpecifics(
         AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
@@ -57,7 +70,7 @@ public class FastLookupUndirectedSpecifics<V, E>
     }
 
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
@@ -74,7 +87,7 @@ public class FastLookupUndirectedSpecifics<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
@@ -87,6 +100,9 @@ public class FastLookupUndirectedSpecifics<V, E>
             return edges.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addEdgeToTouchingVertices(E e)
     {
@@ -109,6 +125,9 @@ public class FastLookupUndirectedSpecifics<V, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeEdgeFromTouchingVertices(E e)
     {

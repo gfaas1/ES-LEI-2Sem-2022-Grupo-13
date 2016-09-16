@@ -22,6 +22,11 @@ import org.jgrapht.*;
 /**
  * A builder class for {@link Graph}. If you want to extend this class, see
  * {@link UndirectedGraphBuilderBase}.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * 
  */
 public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
     extends UndirectedGraphBuilderBase<V, E, G, UndirectedGraphBuilder<V, E, G>>
@@ -30,7 +35,7 @@ public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * <p>
-     * The recomended way to use this constructor is: {@code new
+     * The recommended way to use this constructor is: {@code new
      * UndirectedGraphBuilder<...>(new YourGraph<...>(...))}.
      *
      * <p>

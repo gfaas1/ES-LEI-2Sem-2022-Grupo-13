@@ -29,14 +29,18 @@ import org.jgrapht.*;
  * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
+ * <p>
+ * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+ *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
 public class VF2SubgraphIsomorphismInspector<V, E>
     extends VF2AbstractIsomorphismInspector<V, E>
 {
+
     /**
-     * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+     * Construct a new VF2 isomorphism inspector.
      *
      * @param graph1 the first graph
      * @param graph2 the second graph (possible subgraph of graph1)
@@ -51,6 +55,14 @@ public class VF2SubgraphIsomorphismInspector<V, E>
         super(graph1, graph2, vertexComparator, edgeComparator, cacheEdges);
     }
 
+    /**
+     * Construct a new VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param vertexComparator comparator for semantic equivalence of vertices
+     * @param edgeComparator comparator for semantic equivalence of edges
+     */
     public VF2SubgraphIsomorphismInspector(
         Graph<V, E> graph1, Graph<V, E> graph2, Comparator<V> vertexComparator,
         Comparator<E> edgeComparator)
@@ -58,12 +70,25 @@ public class VF2SubgraphIsomorphismInspector<V, E>
         super(graph1, graph2, vertexComparator, edgeComparator, true);
     }
 
+    /**
+     * Construct a new VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph (possible subgraph of graph1)
+     * @param cacheEdges if true, edges get cached for faster access
+     */
     public VF2SubgraphIsomorphismInspector(
         Graph<V, E> graph1, Graph<V, E> graph2, boolean cacheEdges)
     {
         super(graph1, graph2, null, null, cacheEdges);
     }
 
+    /**
+     * Construct a new VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph (possible subgraph of graph1)
+     */
     public VF2SubgraphIsomorphismInspector(Graph<V, E> graph1, Graph<V, E> graph2)
     {
         super(graph1, graph2, true);

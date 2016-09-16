@@ -19,6 +19,8 @@ package org.jgrapht.alg.util.extension;
 
 /**
  * Factory class which creates extension/encapsulation objects
+ * 
+ * @param <B> class-type of extension
  */
 public interface ExtensionFactory<B extends Extension>
 {

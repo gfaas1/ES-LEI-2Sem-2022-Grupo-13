@@ -25,6 +25,9 @@ import org.jgrapht.*;
  * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty graph</a> of any size.
  * An empty graph is a graph that has no edges.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @since Sep 16, 2003
  */

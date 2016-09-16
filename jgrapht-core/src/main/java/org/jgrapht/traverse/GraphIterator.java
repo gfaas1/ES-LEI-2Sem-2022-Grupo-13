@@ -24,6 +24,9 @@ import org.jgrapht.event.*;
 /**
  * A graph iterator.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 31, 2003
  */
@@ -68,8 +71,6 @@ public interface GraphIterator<V, E>
 
     /**
      * Unsupported.
-     *
-     * @throws UnsupportedOperationException
      */
     @Override
     void remove();

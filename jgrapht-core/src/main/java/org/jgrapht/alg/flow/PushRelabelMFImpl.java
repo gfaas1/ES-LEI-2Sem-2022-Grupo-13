@@ -40,6 +40,9 @@ import org.jgrapht.alg.util.extension.*;
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
  * undirected graphs are supported (and tested!).
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Alexey Kudinkin
  */
 public class PushRelabelMFImpl<V, E>
@@ -60,11 +63,22 @@ public class PushRelabelMFImpl<V, E>
 
     private PushRelabelDiagnostic diagnostic;
 
+    /**
+     * Construct a new push-relabel algorithm.
+     * 
+     * @param network the network
+     */
     public PushRelabelMFImpl(Graph<V, E> network)
     {
         this(network, DEFAULT_EPSILON);
     }
 
+    /**
+     * Construct a new push-relabel algorithm.
+     * 
+     * @param network the network
+     * @param epsilon tolerance used when comparing floating-point values
+     */
     public PushRelabelMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
@@ -79,7 +93,7 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut
+     * Prepares all data structures to start a new invocation of the Maximum Flow or Minimum Cut
      * algorithms
      * 
      * @param source source
@@ -93,6 +107,13 @@ public class PushRelabelMFImpl<V, E>
         this.flowBack = false;
     }
 
+    /**
+     * Initialization
+     * 
+     * @param source the source
+     * @param sink the sink
+     * @param active resulting queue with all active vertices
+     */
     public void initialize(
         VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
     {
@@ -172,6 +193,7 @@ public class PushRelabelMFImpl<V, E>
      *
      * @param source source vertex
      * @param sink sink vertex
+     * @return the value of the maximum flow
      */
     public double calculateMaximumFlow(V source, V sink)
     {
@@ -289,6 +311,12 @@ public class PushRelabelMFImpl<V, E>
         return !ux.hasExcess();
     }
 
+    /**
+     * Push flow through an edge. 
+     * 
+     * @param ex the edge
+     * @param f the amount of flow to push through 
+     */
     protected void pushFlowThrough(AnnotatedFlowEdge ex, double f)
     {
         ex.getSource().excess -= f;
@@ -383,6 +411,10 @@ public class PushRelabelMFImpl<V, E>
         }
     }
 
+    /**
+     * Vertex extension for the push-relabel algorithm, which contains
+     * an additional label.
+     */
     public class VertexExtension
         extends VertexExtensionBase
     {

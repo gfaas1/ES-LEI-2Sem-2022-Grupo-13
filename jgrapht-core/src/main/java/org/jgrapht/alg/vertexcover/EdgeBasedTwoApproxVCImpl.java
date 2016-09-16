@@ -33,6 +33,9 @@ import org.jgrapht.graph.*;
  *
  * Note: this class supports pseudo-graphs
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Linda Buisman
  * @since Nov 6, 2003
  */

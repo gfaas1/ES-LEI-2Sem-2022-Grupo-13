@@ -27,6 +27,9 @@ import org.jgrapht.util.*;
  * implement graph interfaces. This implementation is applicable to both: directed graphs and
  * undirected graphs.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @see Graph
  * @see DirectedGraph

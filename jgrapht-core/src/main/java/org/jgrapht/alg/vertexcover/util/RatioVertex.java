@@ -23,10 +23,12 @@ import java.util.*;
  * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a
  * unique ordering.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Joris Kinable
  */
 public class RatioVertex<V>
-    implements Comparable<RatioVertex>
+    implements Comparable<RatioVertex<V>>
 {
     /** original vertex **/
     public final V v;
@@ -43,6 +45,13 @@ public class RatioVertex<V>
     /** Map of neighbors, and a count of the number of edges to this neighbor **/
     public final Map<RatioVertex<V>, Integer> neighbors;
 
+    /**
+     * Create a new ratio vertex
+     * 
+     * @param ID unique id
+     * @param v the vertex
+     * @param weight the vertex weight
+     */
     public RatioVertex(int ID, V v, double weight)
     {
         this.ID = ID;
@@ -51,6 +60,11 @@ public class RatioVertex<V>
         neighbors = new LinkedHashMap<>();
     }
 
+    /**
+     * Add a neighbor.
+     * 
+     * @param v the neighbor
+     */
     public void addNeighbor(RatioVertex<V> v)
     {
         if (!neighbors.containsKey(v))
@@ -62,6 +76,11 @@ public class RatioVertex<V>
         assert (neighbors.values().stream().mapToInt(Integer::intValue).sum() == degree);
     }
 
+    /**
+     * Remove a neighbor.
+     * 
+     * @param v the neighbor to remove
+     */
     public void removeNeighbor(RatioVertex<V> v)
     {
         degree -= neighbors.get(v);
@@ -89,7 +108,7 @@ public class RatioVertex<V>
     }
 
     @Override
-    public int compareTo(RatioVertex other)
+    public int compareTo(RatioVertex<V> other)
     {
         if (this.ID == other.ID) // Same vertex
             return 0;

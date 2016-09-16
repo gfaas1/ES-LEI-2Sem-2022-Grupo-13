@@ -30,6 +30,9 @@ import org.jgrapht.*;
  * Note, though, that a complete undirected multigraph is rather senseless -- you can keep adding
  * edges and the graph is never truly complete.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Tim Shearouse
  * @since Nov 02, 2008
  */

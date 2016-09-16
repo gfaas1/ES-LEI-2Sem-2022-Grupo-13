@@ -29,17 +29,27 @@ import org.jgrapht.*;
  * of minimum weight is a vertex cover where the sum of weights assigned to the individual vertices
  * in the cover has been minimized. The minimum vertex cover problem is a special case of the
  * minimum weighted vertex cover problem where all vertices have equal weight.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public interface MinimumVertexCoverAlgorithm<V, E>
 {
 
     /**
      * Computes a vertex cover; all vertices are considered to have equal weight.
-     * 
+     *
+     * @param graph the graph
      * @return a vertex cover
      */
     VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph);
 
+    /**
+     * A vertex cover
+     *
+     * @param <V> the vertex type
+     */
     interface VertexCover<V>
     {
 
@@ -60,15 +70,16 @@ public interface MinimumVertexCoverAlgorithm<V, E>
         Set<V> getVertices();
     }
 
+    /**
+     * Default implementation of a vertex cover
+     *
+     * @param <V> the vertex type
+     */
     class VertexCoverImpl<V>
         implements VertexCover<V>
     {
         protected Set<V> cover;
         protected double weight;
-
-        public VertexCoverImpl()
-        {
-        }
 
         public VertexCoverImpl(Set<V> cover, double weight)
         {

@@ -26,6 +26,10 @@ import org.jgrapht.graph.builder.*;
  * If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class WeightedPseudograph<V, E>
     extends Pseudograph<V, E>
@@ -53,6 +57,14 @@ public class WeightedPseudograph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -60,6 +72,14 @@ public class WeightedPseudograph<V, E>
         return new UndirectedWeightedGraphBuilder<>(new WeightedPseudograph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

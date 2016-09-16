@@ -29,8 +29,8 @@ import org.jgrapht.alg.util.extension.*;
  * <a href="https://en.wikipedia.org/wiki/Maximum_flow_problem">maximum-flow</a> from the supplied
  * <a href="https://en.wikipedia.org/wiki/Flow_network">flow network</a>
  *
- * @param <V> vertex concept type
- * @param <E> edge concept type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Alexey Kudinkin
  * @author Joris Kinable
@@ -68,6 +68,12 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     /* Cut edges */
     protected Set<E> cutEdges;
 
+    /**
+     * Construct a new maximum flow 
+     * 
+     * @param network the network
+     * @param epsilon the tolerance for the comparison of floating point values
+     */
     public MaximumFlowAlgorithmBase(Graph<V, E> network, double epsilon)
     {
         this.network = network;
@@ -76,11 +82,14 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     }
 
     /**
-     * Prepares all datastructures to start a new invocation of the Maximimum Flow or Minimum Cut
+     * Prepares all data structures to start a new invocation of the Maximum Flow or Minimum Cut
      * algorithms
      * 
      * @param source source
      * @param sink sink
+     * @param vertexExtensionFactory vertex extension factory
+     * @param edgeExtensionFactory edge extension factory
+     * @param <VE> vertex extension type 
      */
     protected <VE extends VertexExtensionBase> void init(
         V source, V sink, ExtensionFactory<VE> vertexExtensionFactory,
@@ -458,9 +467,12 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         return cutEdges;
     }
 
+    /**
+     * Calculate the set of reachable vertices from s in the residual graph.
+     */
     protected void calculateSourcePartition()
     {
-        // the source partition contains all vertices reachable fromt he s in the residual graph
+        // the source partition contains all vertices reachable from s in the residual graph
         this.sourcePartition = new LinkedHashSet<>();
         Queue<VertexExtensionBase> processQueue = new LinkedList<>();
         processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));

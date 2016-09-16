@@ -28,7 +28,7 @@ import org.jgrapht.graph.*;
 /**
  * SimpleTouchgraphApplet
  *
- * @author canderson
+ * @author Carl Anderson
  */
 public class SimpleTouchgraphApplet
     extends Applet
@@ -42,7 +42,9 @@ public class SimpleTouchgraphApplet
     // ~ Methods ----------------------------------------------------------------
 
     /**
-     * create a graph: code taken from non-visible org._3pq.jgrapht.demo.createStringGraph()
+     * Create a sample graph: code taken from non-visible org._3pq.jgrapht.demo.createStringGraph()
+     * 
+     * @return return a sample graph
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
@@ -69,7 +71,7 @@ public class SimpleTouchgraphApplet
     }
 
     /**
-     * initialize the applet
+     * Initialize the applet.
      */
     public void init()
     {
@@ -81,6 +83,11 @@ public class SimpleTouchgraphApplet
         add(new TouchgraphPanel<>(g, selfReferencesAllowed), BorderLayout.CENTER);
     }
 
+    /**
+     * Main entry point.
+     * 
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
         Graph<String, DefaultEdge> g = createSamplegraph();

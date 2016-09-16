@@ -22,6 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
+/**
+ * An undirected version of the read-only union of two graphs.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class UndirectedGraphUnion<V, E>
     extends GraphUnion<V, E, UndirectedGraph<V, E>>
     implements UndirectedGraph<V, E>

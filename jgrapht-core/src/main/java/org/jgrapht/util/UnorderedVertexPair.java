@@ -21,12 +21,21 @@ package org.jgrapht.util;
  * Representation of an unordered pair of vertices. For a given pair of vertices V u, V w,
  * UnorderedVertexPair(u,w) equals UnorderedVertexPair(w,u).
  *
+ * @param <V> the graph vertex type
+ *
  * @author Joris Kinable
  */
 public class UnorderedVertexPair<V>
     extends VertexPair<V>
 {
+    private static final long serialVersionUID = -959200511994439665L;
 
+    /**
+     * Create a unordered new vertex pair
+     * 
+     * @param n1 the first vertex
+     * @param n2 the second vertex
+     */
     public UnorderedVertexPair(V n1, V n2)
     {
         super(n1, n2);

@@ -26,7 +26,10 @@ import com.touchgraph.graphlayout.*;
 /**
  * A Converter class that converts a JGraphT graph to that used in the TouchGraph library.
  *
- * @author canderson
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Carl Anderson
  */
 public class TouchgraphConverter<V, E>
 {
@@ -34,7 +37,7 @@ public class TouchgraphConverter<V, E>
 
     /**
      * Convert a JGraphT graph to the representation used in the TouchGraph library.
-     * http://sourceforge.net/projects/touchgraph TouchGraph doesn't have a sensible, extensible
+     * http://sourceforge.net/projects/touchgraph. TouchGraph doesn't have a sensible, extensible
      * graph object class and so one has to add them to a TGPanel which will store the graph
      * components (the set of nodes and edges) in its own way. The closest Touchgraph has to a graph
      * object is a GraphEltSet but Touchgraph does not provide the visibility to use it easily and
@@ -43,15 +46,15 @@ public class TouchgraphConverter<V, E>
      * TouchGraph edges are always directed. Having said that, if you want a nice way to visualize
      * and explore a graph, especially large complex graphs, TouchGraph is very nice
      *
-     * @param graph: the JGraphT graph
-     * @param tgPanel: the TouchGraph TGPanel
-     * @param selfReferencesAllowed: do you want to include self-referenctial edges, ie an edge from
+     * @param graph the JGraphT graph
+     * @param tgPanel the TouchGraph TGPanel
+     * @param selfReferencesAllowed do you want to include self-loop edges, i.e. an edge from
      *        a node to itself? Self-referential loops do not show up in the TG visualization but
      *        you may want to subclass TG's Node class to show them
      *
      * @return first node of the TouchGraph graph
      *
-     * @throws TGException
+     * @throws TGException in case of an error
      */
     public Node convertToTouchGraph(
         Graph<V, E> graph, TGPanel tgPanel, boolean selfReferencesAllowed)

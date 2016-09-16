@@ -28,7 +28,9 @@ import org.jgrapht.graph.*;
  * <p>
  * In this edge container we use array lists to minimize memory toll. However, for high-degree
  * vertices we replace the entire edge container with a direct access subclass (to be implemented).
- * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
@@ -50,7 +52,7 @@ public class DirectedEdgeContainer<V, E>
     /**
      * A lazy build of unmodifiable incoming edge set.
      *
-     * @return
+     * @return an unmodifiable version of the incoming edge set
      */
     public Set<E> getUnmodifiableIncomingEdges()
     {
@@ -64,7 +66,7 @@ public class DirectedEdgeContainer<V, E>
     /**
      * A lazy build of unmodifiable outgoing edge set.
      *
-     * @return
+     * @return an unmodifiable version of the outgoing edge set
      */
     public Set<E> getUnmodifiableOutgoingEdges()
     {
@@ -76,9 +78,9 @@ public class DirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Add an incoming edge.
      *
-     * @param e
+     * @param e the edge to add
      */
     public void addIncomingEdge(E e)
     {
@@ -86,9 +88,9 @@ public class DirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Add an outgoing edge.
      *
-     * @param e
+     * @param e the edge to add
      */
     public void addOutgoingEdge(E e)
     {
@@ -96,9 +98,9 @@ public class DirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Remove an incoming edge.
      *
-     * @param e
+     * @param e the edge to remove
      */
     public void removeIncomingEdge(E e)
     {
@@ -106,9 +108,9 @@ public class DirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Remove an outgoing edge.
      *
-     * @param e
+     * @param e the edge to remove
      */
     public void removeOutgoingEdge(E e)
     {

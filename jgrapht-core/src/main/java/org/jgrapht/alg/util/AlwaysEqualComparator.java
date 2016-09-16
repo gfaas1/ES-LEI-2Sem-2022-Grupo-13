@@ -21,6 +21,9 @@ import java.util.*;
 
 /**
  * A default implementation for a check on equality (that always holds)
+ * 
+ * @param <T> type of elements to be compared
+ * 
  */
 public class AlwaysEqualComparator<T>
     implements Comparator<T>

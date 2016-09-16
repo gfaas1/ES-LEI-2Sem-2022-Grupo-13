@@ -18,21 +18,24 @@
 package org.jgrapht.util;
 
 /**
- * Math Utilities. Currently contains the following:
- *
- * <ol>
- * <li>factorial(int N) - caclulate the factorial of N (aka N!)</li>
- * </ol>
- *
- * @author Assaf
+ * Math Utilities. 
+ * 
+ * @author Assaf Lehr
  * @since May 30, 2005
  */
 public class MathUtil
 {
-    public static long factorial(int N)
+    
+    /**
+     * Calculate the factorial of n.
+     * 
+     * @param n the input number 
+     * @return the factorial
+     */
+    public static long factorial(int n)
     {
         long multi = 1;
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= n; i++) {
             multi = multi * i;
         }
         return multi;

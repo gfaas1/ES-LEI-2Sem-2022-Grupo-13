@@ -23,6 +23,11 @@ import org.jgrapht.*;
 import org.jgrapht.experimental.alg.*;
 
 /**
+ * Brown graph coloring algorithm.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author micha
  */
 public class BrownBacktrackColoring<V, E>
@@ -35,7 +40,9 @@ public class BrownBacktrackColoring<V, E>
     private int _chi;
 
     /**
-     * @param g
+     * Construct a new Brown backtracking algorithm.
+     * 
+     * @param g the input graph
      */
     public BrownBacktrackColoring(final Graph<V, E> g)
     {
@@ -74,10 +81,8 @@ public class BrownBacktrackColoring<V, E>
         _color[pos] = 0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jgrapht.experimental.alg.ExactAlgorithm#getResult()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Integer getResult(Map<V, Object> additionalData)

@@ -27,6 +27,9 @@ import java.util.*;
  * http://mathworld.wolfram.com/DirectedGraph.html</a> for more on directed graphs.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 14, 2003
  */

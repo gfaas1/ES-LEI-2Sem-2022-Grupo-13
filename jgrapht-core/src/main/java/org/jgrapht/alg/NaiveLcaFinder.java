@@ -21,47 +21,56 @@ import java.util.*;
 
 import org.jgrapht.*;
 
+/**
+ * Find the Lowest Common Ancestor of a directed graph.
+ *
+ * <p>
+ * Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V . Let G x,y be the
+ * subgraph of G induced by the set of all common ancestors of x and y. Define SLCA (x, y) to be
+ * the set of out-degree 0 nodes (leafs) in G x,y . The lowest common ancestors of x and y are
+ * the elements of SLCA (x, y). This naive algorithm simply starts at a and b, recursing upwards
+ * to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
+ * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
+ *
+ * <pre>
+ * 1. Start at each of nodes you wish to find the lca for (a and b)
+ * 2. Create sets aSet containing a, and bSet containing b
+ * 3. If either set intersects with the union of the other sets previous values (i.e. the set of notes visited) then
+ *    that intersection is LCA. if there are multiple intersections then the earliest one added is the LCA.
+ * 4. Repeat from step 3, with aSet now the parents of everything in aSet, and bSet the parents of everything in bSet
+ * 5. If there are no more parents to descend to then there is no LCA
+ * </pre>
+ *
+ * The rationale for this working is that in each iteration of the loop we are considering all
+ * the ancestors of a that have a path of length n back to a, where n is the depth of the
+ * recursion. The same is true of b.
+ *
+ * <p>
+ * We start by checking if a == b.<br>
+ * if not we look to see if there is any intersection between parents(a) and (parents(b) union
+ * b) (and the same with a and b swapped)<br>
+ * if not we look to see if there is any intersection between parents(parents(a)) and
+ * (parents(parents(b)) union parents(b) union b) (and the same with a and b swapped)<br>
+ * continues
+ *
+ * <p>
+ * This means at the end of recursion n, we know if there is an LCA that has a path of &lt;=n to
+ * a and b. Of course we may have to wait longer if the path to a is of length n, but the path
+ * to b&gt;n. at the first loop we have a path of 0 length from the nodes we are considering as
+ * LCA to their respective children which we wish to find the LCA for.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
+ */
 public class NaiveLcaFinder<V, E>
 {
     private DirectedGraph<V, E> graph;
 
     /**
-     * Find the Lowest Common Ancestor of a directed graph.
-     *
-     * <p>
-     * Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V . Let G x,y be the
-     * subgraph of G induced by the set of all common ancestors of x and y. Define SLCA (x, y) to be
-     * the set of out-degree 0 nodes (leafs) in G x,y . The lowest common ancestors of x and y are
-     * the elements of SLCA (x, y). This naive algorithm simply starts at a and b, recursing upwards
-     * to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
-     * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
-     *
-     * <pre>
-     * 1. Start at each of nodes you wish to find the lca for (a and b)
-     * 2. Create sets aSet containing a, and bSet containing b
-     * 3. If either set intersects with the union of the other sets previous values (i.e. the set of notes visited) then
-     *    that intersection is LCA. if there are multiple intersections then the earliest one added is the LCA.
-     * 4. Repeat from step 3, with aSet now the parents of everything in aSet, and bSet the parents of everything in bSet
-     * 5. If there are no more parents to descend to then there is no LCA
-     * </pre>
-     *
-     * The rationale for this working is that in each iteration of the loop we are considering all
-     * the ancestors of a that have a path of length n back to a, where n is the depth of the
-     * recursion. The same is true of b.
-     *
-     * <p>
-     * We start by checking if a == b.<br>
-     * if not we look to see if there is any intersection between parents(a) and (parents(b) union
-     * b) (and the same with a and b swapped)<br>
-     * if not we look to see if there is any intersection between parents(parents(a)) and
-     * (parents(parents(b)) union parents(b) union b) (and the same with a and b swapped)<br>
-     * continues
-     *
-     * <p>
-     * This means at the end of recursion n, we know if there is an LCA that has a path of &lt;=n to
-     * a and b. Of course we may have to wait longer if the path to a is of length n, but the path
-     * to b&gt;n. at the first loop we have a path of 0 length from the nodes we are considering as
-     * LCA to their respective children which we wish to find the LCA for.
+     * Create a new instance of the native LCA finder.
+     * 
+     * @param graph the input graph
      */
     public NaiveLcaFinder(DirectedGraph<V, E> graph)
     {

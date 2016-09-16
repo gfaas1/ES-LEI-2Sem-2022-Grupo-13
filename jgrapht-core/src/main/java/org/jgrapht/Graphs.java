@@ -34,10 +34,12 @@ public abstract class Graphs
      * Creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.
      *
-     * @param g the graph for which the edge to be added.
-     * @param sourceVertex source vertex of the edge.
-     * @param targetVertex target vertex of the edge.
-     * @param weight weight of the edge.
+     * @param g the graph for which the edge to be added
+     * @param sourceVertex source vertex of the edge
+     * @param targetVertex target vertex of the edge
+     * @param weight weight of the edge
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
@@ -63,9 +65,11 @@ public abstract class Graphs
      * creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.
      *
-     * @param g the graph for which the specified edge to be added.
-     * @param sourceVertex source vertex of the edge.
-     * @param targetVertex target vertex of the edge.
+     * @param g the graph for which the specified edge to be added
+     * @param sourceVertex source vertex of the edge
+     * @param targetVertex target vertex of the edge
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
@@ -81,9 +85,11 @@ public abstract class Graphs
     /**
      * Adds the specified edge to the graph, including its vertices if not already included.
      *
-     * @param targetGraph the graph for which the specified edge to be added.
+     * @param targetGraph the graph for which the specified edge to be added
      * @param sourceGraph the graph in which the specified edge is already present
      * @param edge edge to add
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return <tt>true</tt> if the target graph did not already contain the specified edge.
      */
@@ -104,10 +110,12 @@ public abstract class Graphs
      * creates a new weighted edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.
      *
-     * @param g the graph for which the specified edge to be added.
-     * @param sourceVertex source vertex of the edge.
-     * @param targetVertex target vertex of the edge.
-     * @param weight weight of the edge.
+     * @param g the graph for which the specified edge to be added
+     * @param sourceVertex source vertex of the edge
+     * @param targetVertex target vertex of the edge
+     * @param weight weight of the edge
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
@@ -133,8 +141,10 @@ public abstract class Graphs
      * operation is in progress.
      * </p>
      *
-     * @param destination the graph to which vertices and edges are added.
-     * @param source the graph used as source for vertices and edges to add.
+     * @param destination the graph to which vertices and edges are added
+     * @param source the graph used as source for vertices and edges to add
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return <code>true</code> if and only if the destination graph has been changed as a result
      *         of this operation.
@@ -159,8 +169,10 @@ public abstract class Graphs
      * operation is in progress.
      * </p>
      *
-     * @param destination the graph to which vertices and edges are added.
-     * @param source the graph used as source for vertices and edges to add.
+     * @param destination the graph to which vertices and edges are added
+     * @param source the graph used as source for vertices and edges to add
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @see EdgeReversedGraph
      */
@@ -183,6 +195,8 @@ public abstract class Graphs
      * @param destination the graph to which edges are to be added
      * @param source the graph used as a source for edges to add
      * @param edges the edges to be added
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return <tt>true</tt> if this graph changed as a result of the call
      */
@@ -208,7 +222,9 @@ public abstract class Graphs
      * progress. This method will invoke the {@link Graph#addVertex(Object)} method.
      *
      * @param destination the graph to which edges are to be added
-     * @param vertices the vertices to be added to the graph.
+     * @param vertices the vertices to be added to the graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return <tt>true</tt> if graph changed as a result of the call
      *
@@ -234,8 +250,10 @@ public abstract class Graphs
      * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
      * multigraph vertices may appear more than once in the returned list.
      *
-     * @param g the graph to look for neighbors in.
-     * @param vertex the vertex to get the neighbors of.
+     * @param g the graph to look for neighbors in
+     * @param vertex the vertex to get the neighbors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return a list of the vertices that are the neighbors of the specified vertex.
      */
@@ -254,8 +272,10 @@ public abstract class Graphs
      * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
      * graph is a multigraph, vertices may appear more than once in the returned list.
      *
-     * @param g the graph to look for predecessors in.
-     * @param vertex the vertex to get the predecessors of.
+     * @param g the graph to look for predecessors in
+     * @param vertex the vertex to get the predecessors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return a list of the vertices that are the direct predecessors of the specified vertex.
      */
@@ -275,8 +295,10 @@ public abstract class Graphs
      * Returns a list of vertices that are the direct successors of a specified vertex. If the graph
      * is a multigraph vertices may appear more than once in the returned list.
      *
-     * @param g the graph to look for successors in.
-     * @param vertex the vertex to get the successors of.
+     * @param g the graph to look for successors in
+     * @param vertex the vertex to get the successors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return a list of the vertices that are the direct successors of the specified vertex.
      */
@@ -297,7 +319,9 @@ public abstract class Graphs
      * returns an undirected view of it. If the specified graph is already undirected, just returns
      * it.
      *
-     * @param g the graph for which an undirected view is to be returned.
+     * @param g the graph for which an undirected view is to be returned
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return an undirected view of the specified graph, if it is directed, or or the specified
      *         graph itself if it is already undirected.
@@ -324,6 +348,8 @@ public abstract class Graphs
      * @param g graph containing e and v
      * @param e edge in g
      * @param v vertex in g
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return true iff e is incident on v
      */
@@ -338,6 +364,8 @@ public abstract class Graphs
      * @param g graph containing e and v
      * @param e edge in g
      * @param v vertex in g
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return vertex opposite to v across e
      */
@@ -358,11 +386,14 @@ public abstract class Graphs
      * Gets the list of vertices visited by a path.
      *
      * @param path path of interest
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return corresponding vertex list
      * @deprecated This functionality is now directly provided by any GraphPath, see
      *             {@link GraphPath#getVertexList()}
      */
+    @Deprecated
     public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
     {
         Graph<V, E> g = path.getGraph();
@@ -381,8 +412,10 @@ public abstract class Graphs
      * predecessors, the predecessors will be connected directly to the successors of the vertex to
      * be removed.
      *
-     * @param graph graph to be mutated.
-     * @param vertex vertex to be removed from this graph, if present.
+     * @param graph graph to be mutated
+     * @param vertex vertex to be removed from this graph, if present
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return true if the graph contained the specified vertex; false otherwise.
      */
@@ -408,13 +441,15 @@ public abstract class Graphs
     }
 
     /**
-     * Filters vertices from the given graph and subequently removes them. If the vertex to be
+     * Filters vertices from the given graph and subsequently removes them. If the vertex to be
      * removed has one or more predecessors, the predecessors will be connected directly to the
      * successors of the vertex to be removed.
      *
      * @param graph graph to be mutated
      * @param predicate a non-interfering stateless predicate to apply to each vertex to determine
-     *        if it should be removed from the graph.
+     *        if it should be removed from the graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type       
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
@@ -438,8 +473,10 @@ public abstract class Graphs
      * more predecessors, the predecessors will be connected directly to the successors of the
      * vertex to be removed.
      *
-     * @param graph to be mutated.
-     * @param vertices vertices to be removed from this graph, if present.
+     * @param graph to be mutated
+     * @param vertices vertices to be removed from this graph, if present
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
@@ -465,6 +502,8 @@ public abstract class Graphs
      * @param graph graph to be mutated
      * @param source source vertex of the new edges
      * @param targets target vertices for the new edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public static <V,
         E> void addOutgoingEdges(DirectedGraph<V, E> graph, V source, Iterable<V> targets)
@@ -487,6 +526,8 @@ public abstract class Graphs
      * @param graph graph to be mutated
      * @param target target vertex for the new edges
      * @param sources source vertices for the new edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public static <V,
         E> void addIncomingEdges(DirectedGraph<V, E> graph, V target, Iterable<V> sources)
@@ -502,11 +543,31 @@ public abstract class Graphs
         }
     }
 
+    /**
+     * Check if a vertex has any direct successors. 
+     *
+     * @param graph the graph to look for successors
+     * @param vertex the vertex to look for successors 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
+     *
+     * @return true if the vertex has any successors, false otherwise
+     */
     public static <V, E> boolean vertexHasSuccessors(DirectedGraph<V, E> graph, V vertex)
     {
         return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
 
+    /**
+     * Check if a vertex has any direct predecessors. 
+     *
+     * @param graph the graph to look for predecessors
+     * @param vertex the vertex to look for predecessors 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
+     *
+     * @return true if the vertex has any predecessors, false otherwise
+     */
     public static <V, E> boolean vertexHasPredecessors(DirectedGraph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();

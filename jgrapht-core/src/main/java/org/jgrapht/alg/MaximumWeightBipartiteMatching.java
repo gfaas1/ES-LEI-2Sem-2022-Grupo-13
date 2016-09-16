@@ -29,6 +29,9 @@ import org.jgrapht.alg.interfaces.*;
  * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html Note: the input graph must be bipartite
  * with positive integer edge weights
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Graeme Ahokas
  */
 public class MaximumWeightBipartiteMatching<V, E>

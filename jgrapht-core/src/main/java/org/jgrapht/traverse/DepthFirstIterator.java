@@ -27,6 +27,9 @@ import org.jgrapht.util.*;
  * correctly the graph must not be modified during iteration. Currently there are no means to ensure
  * that, nor to fail-fast. The results of such modifications are undefined.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Liviu Rau
  * @author Barak Naveh
  * @since Jul 29, 2003

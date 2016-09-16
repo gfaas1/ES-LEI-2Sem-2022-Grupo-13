@@ -20,6 +20,9 @@ package org.jgrapht;
 /**
  * An edge factory used by graphs for creating new edges.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 14, 2003
  */

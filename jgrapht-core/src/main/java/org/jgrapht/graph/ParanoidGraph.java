@@ -26,23 +26,28 @@ import org.jgrapht.*;
  * equals/hashCode contract. It can be used to wrap an underlying graph to be verified. Note that
  * the verification is very expensive, so ParanoidGraph should only be used during debugging.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John Sichi
- * @version $Id$
  */
 public class ParanoidGraph<V, E>
     extends GraphDelegator<V, E>
 {
-    /**
-     */
     private static final long serialVersionUID = 5075284167422166539L;
 
+    /**
+     * Create a new paranoid graph.
+     * 
+     * @param g the underlying wrapped graph
+     */
     public ParanoidGraph(Graph<V, E> g)
     {
         super(g);
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -52,7 +57,7 @@ public class ParanoidGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)

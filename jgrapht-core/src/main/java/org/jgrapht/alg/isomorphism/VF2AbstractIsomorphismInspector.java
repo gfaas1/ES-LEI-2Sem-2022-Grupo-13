@@ -22,6 +22,20 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+/**
+ * Base implementation of the VF2 algorithm using its feature of detecting
+ * <a href="http://mathworld.wolfram.com/GraphIsomorphism.html">isomorphism between two graphs</a>
+ * as described in Cordella et al. A (sub)graph isomorphism algorithm for matching large graphs
+ * (2004), DOI:10.1109/TPAMI.2004.75,
+ * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
+ * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
+ *
+ * <p>
+ * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+ *
+ * @param <V> the type of the vertices
+ * @param <E> the type of the edges
+ */
 public abstract class VF2AbstractIsomorphismInspector<V, E>
     implements IsomorphismInspector<V, E>
 {
@@ -33,7 +47,7 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
     protected GraphOrdering<V, E> ordering1, ordering2;
 
     /**
-     * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+     * Construct a new base implementation of the VF2 isomorphism inspector.
      *
      * @param graph1 the first graph
      * @param graph2 the second graph
@@ -69,6 +83,14 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         this.ordering2 = new GraphOrdering<>(graph2, true, cacheEdges);
     }
 
+    /**
+     * Construct a new base implementation of the VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     * @param vertexComparator comparator for semantic equivalence of vertices
+     * @param edgeComparator comparator for semantic equivalence of edges
+     */
     public VF2AbstractIsomorphismInspector(
         Graph<V, E> graph1, Graph<V, E> graph2, Comparator<V> vertexComparator,
         Comparator<E> edgeComparator)
@@ -76,12 +98,25 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         this(graph1, graph2, vertexComparator, edgeComparator, true);
     }
 
+    /**
+     * Construct a new base implementation of the VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     * @param cacheEdges if true, edges get cached for faster access
+     */
     public VF2AbstractIsomorphismInspector(
         Graph<V, E> graph1, Graph<V, E> graph2, boolean cacheEdges)
     {
         this(graph1, graph2, null, null, cacheEdges);
     }
 
+    /**
+     * Construct a new base implementation of the VF2 isomorphism inspector.
+     *
+     * @param graph1 the first graph
+     * @param graph2 the second graph
+     */
     public VF2AbstractIsomorphismInspector(Graph<V, E> graph1, Graph<V, E> graph2)
     {
         this(graph1, graph2, true);

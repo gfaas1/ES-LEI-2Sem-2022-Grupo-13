@@ -25,6 +25,9 @@ import org.jgrapht.*;
  * This class implements Bron-Kerbosch clique detection algorithm as it is described in [Samudrala
  * R.,Moult J.:A Graph-theoretic Algorithm for comparative Modeling of Protein Structure; J.Mol.
  * Biol. (1998); vol 279; pp. 287-302]
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Ewgenij Proschak
  */

@@ -22,6 +22,9 @@ import org.jgrapht.*;
 /**
  * A directed graph that cannot be modified.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @see UnmodifiableGraph
  */
 public class UnmodifiableDirectedGraph<V, E>

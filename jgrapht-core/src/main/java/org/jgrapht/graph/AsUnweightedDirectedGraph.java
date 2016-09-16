@@ -37,6 +37,9 @@ import org.jgrapht.*;
  * serializable if the backing graph is serializable.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Lucas J. Scharenbroich
  * @author Joris Kinable
  * @since Sep 7, 2007

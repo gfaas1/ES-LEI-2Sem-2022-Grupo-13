@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * Creates a Vertex of type V
  *
- * @param <V> Vertex type
+ * @param <V> the vertex type
  */
 public interface VertexProvider<V>
 {

@@ -28,6 +28,9 @@ import org.jgrapht.graph.*;
  * follows Cheriyan-Mehlhorn/Gabow's algorithm Presented in Path-based depth-first search for strong
  * and biconnected components by Gabow (2000). The running time is order of O(|V|+|E|)
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Sarah Komla-Ebri
  * @since September, 2013
  */
@@ -61,7 +64,7 @@ public class GabowStrongConnectivityInspector<V, E>
      *
      * @param directedGraph the graph to inspect
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException in case the graph is null
      */
     public GabowStrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
     {

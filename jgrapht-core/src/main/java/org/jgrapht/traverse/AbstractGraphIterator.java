@@ -26,6 +26,9 @@ import org.jgrapht.event.*;
  * An empty implementation of a graph iterator to minimize the effort required to implement graph
  * iterators.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 19, 2003
  */
@@ -102,9 +105,7 @@ public abstract class AbstractGraphIterator<V, E>
     }
 
     /**
-     * Unsupported.
-     *
-     * @throws UnsupportedOperationException
+     * {@inheritDoc}
      */
     @Override
     public void remove()

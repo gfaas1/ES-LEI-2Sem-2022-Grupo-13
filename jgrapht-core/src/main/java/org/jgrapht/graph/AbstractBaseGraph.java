@@ -35,6 +35,9 @@ import org.jgrapht.util.*;
  * {@link LinkedHashMap} and {@link LinkedHashSet}).
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 24, 2003
  */
@@ -87,7 +90,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
@@ -118,7 +121,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
@@ -127,7 +130,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeFactory()
+     * {@inheritDoc}
      */
     @Override
     public EdgeFactory<V, E> getEdgeFactory()
@@ -159,7 +162,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -191,7 +194,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -235,7 +238,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -252,7 +255,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeSource(Object)
+     * {@inheritDoc}
      */
     @Override
     public V getEdgeSource(E e)
@@ -261,7 +264,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeTarget(Object)
+     * {@inheritDoc}
      */
     @Override
     public V getEdgeTarget(E e)
@@ -283,7 +286,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @return a shallow copy of this set.
      *
-     * @throws RuntimeException
+     * @throws RuntimeException in case the clone is not supported
      *
      * @see java.lang.Object#clone()
      */
@@ -314,7 +317,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#containsEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsEdge(E e)
@@ -323,7 +326,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#containsVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsVertex(V v)
@@ -332,6 +335,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Returns the degree of the specified vertex. 
+     *
+     * @param vertex vertex whose degree is to be calculated.
+     * @return the degree of the specified vertex.
      * @see UndirectedGraph#degreeOf(Object)
      */
     public int degreeOf(V vertex)
@@ -340,7 +347,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#edgeSet()
+     * {@inheritDoc}
      */
     @Override
     public Set<E> edgeSet()
@@ -353,7 +360,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#edgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -363,6 +370,11 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Returns the "in degree" of the specified vertex.  
+     *
+     * @param vertex vertex whose in degree is to be calculated.
+     * @return the in degree of the specified vertex.
+     * 
      * @see DirectedGraph#inDegreeOf(Object)
      */
     public int inDegreeOf(V vertex)
@@ -372,6 +384,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Returns a set of all edges incoming into the specified vertex.
+     *
+     * @param vertex the vertex for which the list of incoming edges to be returned
+     * @return a set of all edges incoming into the specified vertex
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
     public Set<E> incomingEdgesOf(V vertex)
@@ -381,6 +397,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Returns the "out degree" of the specified vertex. 
+     *
+     * @param vertex vertex whose out degree is to be calculated
+     * @return the out degree of the specified vertex
      * @see DirectedGraph#outDegreeOf(Object)
      */
     public int outDegreeOf(V vertex)
@@ -390,6 +410,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Returns a set of all edges outgoing from the specified vertex.
+     *
+     * @param vertex the vertex for which the list of outgoing edges to be returned
+     * @return a set of all edges outgoing from the specified vertex
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
     public Set<E> outgoingEdgesOf(V vertex)
@@ -399,7 +423,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -415,7 +439,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -431,7 +455,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)
@@ -452,7 +476,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#vertexSet()
+     * {@inheritDoc}
      */
     @Override
     public Set<V> vertexSet()
@@ -465,7 +489,7 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeWeight(Object)
+     * {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -480,6 +504,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
+     * Assigns a weight to an edge.
+     *
+     * @param e edge on which to set weight
+     * @param weight new weight for edge
      * @see WeightedGraph#setEdgeWeight(Object, double)
      */
     public void setEdgeWeight(E e, double weight)
@@ -500,11 +528,21 @@ public abstract class AbstractBaseGraph<V, E>
         }
     }
 
+    /**
+     * Create undirected specifics for the graph
+     * 
+     * @return undirected specifics for the graph
+     */
     protected Specifics<V, E> createUndirectedSpecifics()
     {
         return new FastLookupUndirectedSpecifics<>(this);
     }
 
+    /**
+     * Create directed specifics for the graph
+     * 
+     * @return directed specifics for the graph
+     */
     protected Specifics<V, E> createDirectedSpecifics()
     {
         return new FastLookupDirectedSpecifics<>(this);
@@ -516,7 +554,7 @@ public abstract class AbstractBaseGraph<V, E>
         private static final long serialVersionUID = 5936902837403445985L;
 
         /**
-         * @see EdgeSetFactory
+         * {@inheritDoc}
          */
         @Override
         public Set<EE> createEdgeSet(VV vertex)

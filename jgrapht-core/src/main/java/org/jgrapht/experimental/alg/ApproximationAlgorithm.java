@@ -19,12 +19,35 @@ package org.jgrapht.experimental.alg;
 
 import java.util.*;
 
+/**
+ * An interface for an approximation algorithm. 
+ *
+ * @param <ResultType> type of the result
+ * @param <V> type of the input
+ */
 public interface ApproximationAlgorithm<ResultType, V>
 {
+    /**
+     * Get the result.
+     * 
+     * @param optionalData optional data
+     * @return the result
+     */
     ResultType getUpperBound(Map<V, Object> optionalData);
 
+    /**
+     * Get the result.
+     * 
+     * @param optionalData optional data
+     * @return the result
+     */
     ResultType getLowerBound(Map<V, Object> optionalData);
 
+    /**
+     * Checks if the algorithm is an exact algorithm.
+     *  
+     * @return true if the algorithm is exact, false otherwise
+     */
     boolean isExact();
 }
 

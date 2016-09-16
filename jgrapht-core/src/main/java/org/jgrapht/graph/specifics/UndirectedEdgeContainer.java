@@ -29,6 +29,9 @@ import org.jgrapht.graph.*;
  * In this edge container we use array lists to minimize memory toll. However, for high-degree
  * vertices we replace the entire edge container with a direct access subclass (to be implemented).
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  */
@@ -47,7 +50,7 @@ public class UndirectedEdgeContainer<V, E>
     /**
      * A lazy build of unmodifiable list of vertex edges
      *
-     * @return
+     * @return an unmodifiable set of vertex edges
      */
     public Set<E> getUnmodifiableVertexEdges()
     {
@@ -58,9 +61,9 @@ public class UndirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Add a vertex edge
      *
-     * @param e
+     * @param e the edge to add
      */
     public void addEdge(E e)
     {
@@ -68,9 +71,9 @@ public class UndirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Get number of vertex edges
      *
-     * @return
+     * @return the number of vertex edges
      */
     public int edgeCount()
     {
@@ -78,9 +81,9 @@ public class UndirectedEdgeContainer<V, E>
     }
 
     /**
-     * .
+     * Remove a vertex edge
      *
-     * @param e
+     * @param e the edge to remove
      */
     public void removeEdge(E e)
     {

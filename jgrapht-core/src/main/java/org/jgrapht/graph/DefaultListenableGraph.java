@@ -34,6 +34,9 @@ import org.jgrapht.util.*;
  * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @see GraphListener
  * @see VertexSetListener

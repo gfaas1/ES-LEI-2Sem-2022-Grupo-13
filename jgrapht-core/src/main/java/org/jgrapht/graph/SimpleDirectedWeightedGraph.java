@@ -23,6 +23,10 @@ import org.jgrapht.graph.builder.*;
 /**
  * A simple directed weighted graph. A simple directed weighted graph is a simple directed graph for
  * which edges are assigned weights.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  */
 public class SimpleDirectedWeightedGraph<V, E>
     extends SimpleDirectedGraph<V, E>
@@ -50,12 +54,28 @@ public class SimpleDirectedWeightedGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
         return new DirectedWeightedGraphBuilder<>(new SimpleDirectedWeightedGraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends SimpleDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {
