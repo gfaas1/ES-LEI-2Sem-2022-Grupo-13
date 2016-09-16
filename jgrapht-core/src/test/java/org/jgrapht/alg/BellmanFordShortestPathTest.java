@@ -45,7 +45,7 @@ public class BellmanFordShortestPathTest
         // find best path with no constraint on number of hops
         assertEquals(
             Arrays.asList(new DefaultEdge[] { e13, e12, e24, e45 }), path.getPathEdgeList(V5));
-        assertEquals(16.0, path.getCost(V5), 0);
+        assertEquals(15.0, path.getCost(V5), 0);
 
         // find best path within 2 hops (less than optimal)
         path = new BellmanFordShortestPath<>(g, V3, 2);
