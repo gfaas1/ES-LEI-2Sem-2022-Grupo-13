@@ -29,6 +29,103 @@ public class DOTImporterTest
     extends TestCase
 {
 
+    private static class GraphWithID extends AbstractBaseGraph<String,DefaultEdge> implements UndirectedGraph<String,DefaultEdge> {
+
+        String id = null;
+
+        protected GraphWithID() {
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
+        }
+
+    }
+
+    private static DOTImporter<String, DefaultEdge> idGraphImporter = new DOTImporter<String, DefaultEdge>(null, null,
+            null, (component, attributes) -> {
+        if (component instanceof GraphWithID) {
+            ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
+        }
+    });
+
+    public void testImportID()
+        throws ImportException
+    {
+        String id = "MyGraph";
+
+        String input = "strict graph " + id + " {\n}\n";
+
+        GraphWithID expected = new GraphWithID();
+        expected.id = id;
+
+        GraphWithID result = new GraphWithID();
+        Assert.assertNull(result.id);
+
+        idGraphImporter.importGraph(result, new StringReader(input));
+        Assert.assertEquals(expected.toString(), result.toString());
+        Assert.assertEquals(expected.id, id);
+
+    }
+
+    public void testImportWrongID()
+            throws ImportException
+    {
+        String invalidID = "2test";
+        String input = "graph " + invalidID + " {\n}\n";
+
+        GraphWithID result = new GraphWithID();
+
+        try {
+            idGraphImporter.importGraph(result, new StringReader(input));
+            Assert.fail("Should not get here");
+        } catch (ImportException e) {
+           Assert.assertEquals(e.getMessage(), "ID in the graph is not formatted correctly: '"
+               + invalidID + "'");
+        }
+    }
+
+    public void testInvalidHeader()
+            throws ImportException
+    {
+        // testing all cases of missing keywords or wrong order
+        for (String invalidInput: new String[]{
+                " {}",
+                "strict {}",
+                "id {}",
+                "strict id {}",
+                "id strict {}",
+                "id strict graph {}",
+                "graph strict id {}"}) {
+
+            GraphWithID result = new GraphWithID();
+
+            try {
+                idGraphImporter.importGraph(result, new StringReader(invalidInput));
+                Assert.fail("Correctly loaded incorrect graph: " + invalidInput);
+            } catch (ImportException e) {
+                // this is the expected exception
+            } catch (Exception e) {
+                Assert.fail("Expected ImportException but found " + e.getClass().getSimpleName());
+            }
+        }
+    }
+
+    public void testImportOnlyGraphKeyword()
+            throws ImportException
+    {
+        String input = "graph {\n}\n";
+        GraphWithID result = new GraphWithID();
+        idGraphImporter.importGraph(result, new StringReader(input));
+        Assert.assertNull(result.id);
+    }
+
+    public void testImportNoID()
+            throws ImportException
+    {
+        String input = "strict graph {\n}\n";
+        GraphWithID result = new GraphWithID();
+        idGraphImporter.importGraph(result, new StringReader(input));
+        Assert.assertNull(result.id);
+    }
+
     public void testUndirectedWithLabels()
         throws ImportException
     {

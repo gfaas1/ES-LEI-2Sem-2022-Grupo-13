@@ -73,7 +73,7 @@ public class DOTUtilsTest
 
         //@formatter:off
         String expectedGraphAsDotString =
-                "digraph G {"            +
+                  "strict digraph G {" +
                   "  1 [ label=\"A\" ];" +
                   "  2 [ label=\"B\" ];" +
                   "  3 [ label=\"C\" ];" +
