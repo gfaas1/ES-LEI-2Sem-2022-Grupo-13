@@ -80,7 +80,7 @@ public class GraphWalk<V, E>
      * 
      * @param graph the graph
      * @param vertexList the list of vertices of the path
-     * @param weight the total weight of the path *
+     * @param weight the total weight of the path 
      */
     public GraphWalk(Graph<V, E> graph, List<V> vertexList, double weight)
     {
