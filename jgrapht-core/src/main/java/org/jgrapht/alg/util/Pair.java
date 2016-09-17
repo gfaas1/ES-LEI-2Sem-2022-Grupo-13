@@ -17,30 +17,53 @@
  */
 package org.jgrapht.alg.util;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
- * Generic pair.<br>
- * Although the instances of this class are immutable, it is impossible to ensure that the
+ * Generic pair.
+ * 
+ * <p>Although the instances of this class are immutable, it is impossible to ensure that the
  * references passed to the constructor will not be modified by the caller.
+ * 
+ * @param <A> the first element type
+ * @param <B> the second element type
+ * 
  */
-public class Pair<A, B>
+public class Pair<A, B> implements Serializable
 {
+    private static final long serialVersionUID = 8176288675989092842L;
+
+    /**
+     * The first pair element
+     */
     public A first;
+    
+    /**
+     * The second pair element
+     */
     public B second;
 
+    /**
+     * Create a new pair
+     * 
+     * @param a the first element
+     * @param b the second element
+     */
     public Pair(A a, B b)
     {
         this.first = a;
         this.second = b;
     }
 
+    @Override
     public boolean equals(Object other)
     {
-        return (other instanceof Pair) && Objects.equals(this.first, ((Pair) other).first)
-            && Objects.equals(this.second, ((Pair) other).second);
+        return (other instanceof Pair) && Objects.equals(this.first, ((Pair<A, B>) other).first)
+            && Objects.equals(this.second, ((Pair<A, B>) other).second);
     }
 
+    @Override
     public int hashCode()
     {
         return (this.first == null) ? ((this.second == null) ? 0 : (this.second.hashCode() + 1))
@@ -54,7 +77,8 @@ public class Pair<A, B>
      *
      * @param a first element
      * @param b second element
-     *
+     * @param <A> the first element type
+     * @param <B> the second element type
      * @return new pair
      */
     public static <A, B> Pair<A, B> of(A a, B b)

@@ -27,6 +27,9 @@ package org.jgrapht.generate;
  * random graphs (note: as with any random generator, there is always a small possibility that two
  * instances will create the same results).
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Assaf Lehr
  * @since Aug 6, 2005
  */
@@ -34,11 +37,24 @@ package org.jgrapht.generate;
 public class RandomGraphGenerator<V, E>
     extends GnmRandomGraphGenerator<V, E>
 {
+    /**
+     * Create a new random graph generator
+     * 
+     * @param aNumOfVertexes number of vertices
+     * @param aNumOfEdges number of edges
+     */
     public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges)
     {
         super(aNumOfVertexes, aNumOfEdges);
     }
 
+    /**
+     * Create a new random graph generator
+     * 
+     * @param aNumOfVertexes number of vertices
+     * @param aNumOfEdges number of edges
+     * @param seed seed for the random number generator
+     */
     public RandomGraphGenerator(int aNumOfVertexes, int aNumOfEdges, long seed)
     {
         super(aNumOfVertexes, aNumOfEdges, seed);

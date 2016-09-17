@@ -323,6 +323,8 @@ public class HawickJamesSimpleCycles<V, E>
 
     /**
      * Count the number of simple cycles. It can count up to Long.MAX cycles in a graph.
+     * 
+     * @return the number of simple cycles
      */
     public long countSimpleCycles()
     {

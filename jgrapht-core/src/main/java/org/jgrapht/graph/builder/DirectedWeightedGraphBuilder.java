@@ -22,6 +22,11 @@ import org.jgrapht.*;
 /**
  * A builder class for directed weighted graphs}. If you want to extend this class, see
  * {@link DirectedWeightedGraphBuilderBase}.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * 
  */
 public final class DirectedWeightedGraphBuilder<V, E,
     G extends DirectedGraph<V, E> & WeightedGraph<V, E>>
@@ -31,7 +36,7 @@ public final class DirectedWeightedGraphBuilder<V, E,
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * <p>
-     * The recomended way to use this constructor is: {@code new
+     * The recommended way to use this constructor is: {@code new
      * DirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
      *
      * <p>
@@ -45,6 +50,9 @@ public final class DirectedWeightedGraphBuilder<V, E,
         super(baseGraph);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected DirectedWeightedGraphBuilder<V, E, G> self()
     {

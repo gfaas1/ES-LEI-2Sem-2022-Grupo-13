@@ -52,7 +52,8 @@ import org.jgrapht.alg.interfaces.*;
  * TODO JK: determine runtime complexity and add it to class description. TODO JK: run this class
  * through a performance profiler
  *
- *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Joris Kinable
  */
@@ -267,30 +268,57 @@ public class RecursiveExactVCImpl<V, E>
         protected BitSet bitSetCover;
         protected double weight;
 
+        /**
+         * Construct a new empty vertex cover as a BitSet.
+         * 
+         * @param size initial capacity of the BitSet
+         * @param initialWeight the initial weight
+         */
         protected BitSetCover(int size, int initialWeight)
         {
             bitSetCover = new BitSet(size);
             this.weight = initialWeight;
         }
 
-        // Copy constructor
+        /**
+         * Copy constructor
+         * 
+         * @param vertexCover the input vertex cover to copy 
+         */
         protected BitSetCover(BitSetCover vertexCover)
         {
             this.bitSetCover = (BitSet) vertexCover.bitSetCover.clone();
             this.weight = vertexCover.weight;
         }
 
+        /**
+         * Copy a vertex cover.
+         * 
+         * @return a copy of the vertex cover
+         */
         protected BitSetCover copy()
         {
             return new BitSetCover(this);
         }
 
+        /**
+         * Add a vertex in the vertex cover.
+         * 
+         * @param vertexIndex the index of the vertex 
+         * @param weight the weight of the vertex
+         */
         protected void addVertex(int vertexIndex, double weight)
         {
             bitSetCover.set(vertexIndex);
             this.weight += weight;
         }
 
+        /**
+         * Add multiple vertices in the vertex cover.
+         * 
+         * @param vertexIndices the index of the vertices
+         * @param totalWeight the total weight of the vertices
+         */
         protected void addAllVertices(List<Integer> vertexIndices, double totalWeight)
         {
             vertexIndices.forEach(bitSetCover::set);

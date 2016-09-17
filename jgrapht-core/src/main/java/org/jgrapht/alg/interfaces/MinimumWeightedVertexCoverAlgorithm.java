@@ -33,11 +33,18 @@ import org.jgrapht.*;
  * special case of the minimum weighted vertex cover problem where all vertices have equal weight.
  * Consequently, any algorithm designed for the weighted version of the problem can also solve
  * instances of the unweighted version.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public interface MinimumWeightedVertexCoverAlgorithm<V, E>
     extends MinimumVertexCoverAlgorithm<V, E>
 {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
     {
@@ -50,6 +57,7 @@ public interface MinimumWeightedVertexCoverAlgorithm<V, E>
      * Computes a vertex cover; the weight of each vertex is provided in the
      * in the {@code vertexWeightMap}.
      * 
+     * @param graph the input graph
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a vertex cover
      */

@@ -31,6 +31,11 @@ public interface AStarAdmissibleHeuristic<V>
     /**
      * An admissible "heuristic estimate" of the distance from x, the sourceVertex, to the goal
      * (usually denoted h(x)). This is the good guess function.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * 
+     * @return an estimate of the distance from the source to the target vertex
      */
     double getCostEstimate(V sourceVertex, V targetVertex);
 }

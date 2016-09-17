@@ -25,6 +25,10 @@ import org.jgrapht.graph.builder.*;
  * multiple edges between any two vertices are. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  */
 public class Multigraph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -52,12 +56,28 @@ public class Multigraph<V, E>
         super(ef, true, false);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Multigraph<V, E>, ?> builder(
         Class<? extends E> edgeClass)
     {
         return new UndirectedGraphBuilder<>(new Multigraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Multigraph<V, E>, ?> builder(
         EdgeFactory<V, E> ef)
     {

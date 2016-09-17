@@ -21,24 +21,23 @@ import java.util.*;
 
 import org.jgrapht.*;
 
+/**
+ * A simple weighted graph matrix generator.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class SimpleWeightedGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
 {
     protected List<V> vertices;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static int[] range(final int from, final int to)
-    {
-        int[] range = new int[to - from];
-        for (int i = from; i < to; ++i) {
-            range[i - from] = i;
-        }
-        return range;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set the generator vertices.
+     * 
+     * @param vertices the graph vertices
+     * @return the generator
+     */
     public SimpleWeightedGraphMatrixGenerator<V, E> vertices(List<V> vertices)
     {
         this.vertices = vertices;

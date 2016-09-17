@@ -24,6 +24,9 @@ import org.jgrapht.*;
 /**
  * An undirected graph that is a subgraph on other graph.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @see Subgraph
  */
 public class UndirectedSubgraph<V, E>

@@ -34,6 +34,9 @@ import org.jgrapht.graph.*;
  * produced by the separation. At the end we have a set of atoms. The CMS decomposition is unique
  * and yields the set of the atoms independent of the order of the decomposition.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Florian Buenzli (fbuenzli@student.ethz.ch)
  * @author Thomas Tschager (thomas.tschager@inf.ethz.ch)
  * @author Tomas Hruz (tomas.hruz@inf.ethz.ch)

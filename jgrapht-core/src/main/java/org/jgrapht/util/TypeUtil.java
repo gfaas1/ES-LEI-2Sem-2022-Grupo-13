@@ -21,6 +21,8 @@ package org.jgrapht.util;
  * TypeUtil isolates type-unsafety so that code which uses it for legitimate reasons can stay
  * warning-free.
  *
+ * @param <T> the type of the result
+ *
  * @author John V. Sichi
  */
 public class TypeUtil<T>
@@ -31,6 +33,7 @@ public class TypeUtil<T>
      * @param o object to be cast
      * @param typeDecl conveys the target type information; the actual value is unused and can be
      *        null since this is all just stupid compiler tricks
+     * @param <T> the type of the result
      *
      * @return the result of the cast
      */

@@ -24,6 +24,9 @@ package org.jgrapht.event;
  * If only notifications on vertex set changes are required it is more efficient to use the
  * VertexSetListener.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @see VertexSetListener

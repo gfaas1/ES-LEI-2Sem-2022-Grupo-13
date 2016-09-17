@@ -29,6 +29,9 @@ import org.jgrapht.*;
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a>.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Trevor Harmon
  */

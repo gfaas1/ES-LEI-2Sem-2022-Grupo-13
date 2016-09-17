@@ -27,6 +27,9 @@ import org.jgrapht.traverse.*;
  * An implementation of <a href="http://mathworld.wolfram.com/DijkstrasAlgorithm.html">Dijkstra's
  * shortest path algorithm</a> using <code>ClosestFirstIterator</code>.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @since Sep 2, 2003
  */
@@ -124,6 +127,9 @@ public final class DijkstraShortestPath<V, E>
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return List of Edges, or null if no path exists
      */

@@ -23,6 +23,9 @@ package org.jgrapht;
  * graph2, or from graph2 to graph1. It does not have to always be a complete bidirectional mapping
  * (it could return null for some lookups).
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Assaf Lehr
  * @since Jul 30, 2005
  */

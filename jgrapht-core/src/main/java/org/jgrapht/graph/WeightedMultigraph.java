@@ -26,6 +26,10 @@ import org.jgrapht.graph.builder.*;
  * multigraph have weights. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class WeightedMultigraph<V, E>
     extends Multigraph<V, E>
@@ -53,6 +57,14 @@ public class WeightedMultigraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -60,6 +72,14 @@ public class WeightedMultigraph<V, E>
         return new UndirectedWeightedGraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

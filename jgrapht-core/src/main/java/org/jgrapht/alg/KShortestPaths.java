@@ -31,6 +31,9 @@ import org.jgrapht.*;
  * path it stores the "k" best paths at each pass, yielding a complexity of O(k*n*(m^2)) where m is
  * the number of edges and n is the number of vertices.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
@@ -112,7 +115,6 @@ public class KShortestPaths<V, E>
      * @throws NullPointerException if the specified graph or startVertex is <code>null</code>.
      * @throws IllegalArgumentException if nPaths is negative or 0.
      * @throws IllegalArgumentException if nMaxHops is negative or 0.
-     * @param pathValidator the path validator to use
      */
     public KShortestPaths(
         Graph<V, E> graph, V startVertex, int nPaths, int nMaxHops,

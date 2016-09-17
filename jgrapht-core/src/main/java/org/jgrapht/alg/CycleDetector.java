@@ -27,6 +27,9 @@ import org.jgrapht.traverse.*;
  * Performs cycle detection on a graph. The <i>inspected graph</i> is specified at construction time
  * and cannot be modified. Currently, the detector supports only directed graphs.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @since Sept 16, 2004
  */

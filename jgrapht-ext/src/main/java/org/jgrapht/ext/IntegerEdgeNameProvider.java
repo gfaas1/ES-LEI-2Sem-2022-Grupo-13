@@ -24,6 +24,8 @@ import java.util.*;
  * maintains an internal map between every edge it has ever seen and the unique integer representing
  * that edge. As a result it is probably desirable to have a separate instance for each distinct
  * graph.
+ * 
+ * @param <E> the graph edge type
  *
  * @author Trevor Harmon
  */

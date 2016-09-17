@@ -39,9 +39,9 @@ public class HamiltonianCycle
      * to double the total weight of the optimal hamiltonian cycle. The optimal solution is
      * NP-complete, so this is a decent approximation that runs in polynomial time.
      *
-     * @param <V>
-     * @param <E>
      * @param g is the graph to find the optimal tour for.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return The optimal tour as a list of vertices.
      */

@@ -23,6 +23,10 @@ import org.jgrapht.graph.builder.*;
 /**
  * A simple weighted graph. A simple weighted graph is a simple graph for which edges are assigned
  * weights.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
@@ -50,6 +54,14 @@ public class SimpleWeightedGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -57,6 +69,14 @@ public class SimpleWeightedGraph<V, E>
         return new UndirectedWeightedGraphBuilder<>(new SimpleWeightedGraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

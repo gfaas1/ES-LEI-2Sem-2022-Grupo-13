@@ -20,6 +20,9 @@ package org.jgrapht;
 /**
  * An interface for a graph whose edges have non-uniform weights.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 23, 2003
  */

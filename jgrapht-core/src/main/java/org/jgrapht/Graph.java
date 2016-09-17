@@ -50,6 +50,9 @@ import java.util.*;
  * For guidelines on vertex and edge classes, see
  * <a href="https://github.com/jgrapht/jgrapht/wiki/EqualsAndHashCode">this wiki page</a>.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 14, 2003
  */

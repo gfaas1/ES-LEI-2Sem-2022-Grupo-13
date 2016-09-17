@@ -24,9 +24,13 @@ import org.jgrapht.*;
 /**
  * Implementation of the GraphMapping interface. The performance of <code>
  * getVertex/EdgeCorrespondence</code> is based on the performance of the concrete Map class which
- * is passed in the constructor. For example, using hashmaps will provide O(1) performence.
+ * is passed in the constructor. For example, using {@link HashMap} will provide expected O(1)
+ * performance.
  *
- * @author Assaf
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Assaf Lehr
  * @since Jul 30, 2005
  */
 public class DefaultGraphMapping<V, E>
@@ -42,10 +46,10 @@ public class DefaultGraphMapping<V, E>
      * The maps themselves are used. There is no defensive-copy. Assumption: The key and value in
      * the mappings are of valid graph objects. It is not checked.
      *
-     * @param g1ToG2
-     * @param g2ToG1
-     * @param g1
-     * @param g2
+     * @param g1ToG2 vertex mapping from the first graph to the second
+     * @param g2ToG1 vertex mapping from the second graph to the first
+     * @param g1 the first graph
+     * @param g2 the second graph
      */
     public DefaultGraphMapping(Map<V, V> g1ToG2, Map<V, V> g2ToG1, Graph<V, E> g1, Graph<V, E> g2)
     {

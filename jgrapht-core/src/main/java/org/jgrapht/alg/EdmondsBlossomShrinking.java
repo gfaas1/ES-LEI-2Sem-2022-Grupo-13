@@ -27,6 +27,9 @@ import org.jgrapht.util.*;
  * An implementation of Edmonds Blossom Shrinking algorithm for constructing maximum matchings on
  * graphs. The algorithm runs in time O(V^4).
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
  */
@@ -42,18 +45,30 @@ public class EdmondsBlossomShrinking<V, E>
     private Map<V, V> path;
     private Map<V, V> contracted;
 
+    /**
+     * Construct an instance of the Edmonds blossom shrinking algorithm.
+     */
     @Deprecated
     public EdmondsBlossomShrinking()
     {
     }
 
+    /**
+     * Construct an instance of the Edmonds blossom shrinking algorithm.
+     * 
+     * @param G the input graph
+     */
     public EdmondsBlossomShrinking(final UndirectedGraph<V, E> G)
     {
         this.graph = G;
     }
 
     /**
-     * See {@link #getMatching()} as preferred alternative to this one.
+     * Find the matching.
+     * 
+     * @param g the input graph
+     * @deprecated See {@link #getMatching()} as preferred alternative to this one.
+     * @return a matching
      */
     @Deprecated
     public Set<E> findMatch(final UndirectedGraph<V, E> g)
@@ -61,6 +76,9 @@ public class EdmondsBlossomShrinking<V, E>
         return new EdmondsBlossomShrinking<>(g).getMatching();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<E> getMatching()
     {

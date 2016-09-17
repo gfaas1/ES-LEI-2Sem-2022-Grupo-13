@@ -23,13 +23,16 @@ import java.util.*;
  * Allows to derive <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> from
  * given graph
  *
- * @param <V> vertex concept type
- * @param <E> edge concept type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public interface MatchingAlgorithm<V, E>
 {
     /**
      * Returns set of edges making up the matching
+     * 
+     * @return a matching
      */
     Set<E> getMatching();
 }

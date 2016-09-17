@@ -28,6 +28,9 @@ import org.jgrapht.*;
  * the range 1,...m, and two vertices are connected by an edge whenever the corresponding points are
  * at distance 1. Vertices are created from left to right and from top to bottom.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Assaf Mizrachi
  * @since Dec 29, 2010
  */

@@ -24,6 +24,10 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 
+/**
+ * Demonstrates how to create a complete graph and perform a depth first search on it.
+ *
+ */
 public final class CompleteGraphDemo
 {
     static Graph<Object, DefaultEdge> completeGraph;
@@ -31,6 +35,11 @@ public final class CompleteGraphDemo
     // Number of vertices
     static int size = 10;
 
+    /**
+     * Main demo entry point.
+     * 
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
         // Create the graph object; it is null at this point
@@ -67,7 +76,7 @@ public final class CompleteGraphDemo
         }
     }
 
-    public static boolean replaceVertex(Object oldVertex, Object newVertex)
+    private static boolean replaceVertex(Object oldVertex, Object newVertex)
     {
         if ((oldVertex == null) || (newVertex == null)) {
             return false;

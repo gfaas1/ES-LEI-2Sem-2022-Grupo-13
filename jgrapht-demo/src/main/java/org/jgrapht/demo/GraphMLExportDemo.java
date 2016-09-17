@@ -34,7 +34,7 @@ import org.jgrapht.graph.*;
 public final class GraphMLExportDemo
 {
     // Number of vertices
-    private static final int size = 6;
+    private static final int SIZE = 6;
 
     private static Random generator = new Random(17);
 
@@ -123,6 +123,11 @@ public final class GraphMLExportDemo
         }
     }
 
+    /**
+     * Main demo method 
+     * 
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
         /*
@@ -133,7 +138,7 @@ public final class GraphMLExportDemo
         DirectedPseudograph<GraphVertex, DefaultWeightedEdge> g =
             new DirectedPseudograph<>(DefaultWeightedEdge.class);
         CompleteGraphGenerator<GraphVertex, DefaultWeightedEdge> completeGenerator =
-            new CompleteGraphGenerator<>(size);
+            new CompleteGraphGenerator<>(SIZE);
         VertexFactory<GraphVertex> vFactory = new VertexFactory<GraphVertex>()
         {
             private int id = 0;

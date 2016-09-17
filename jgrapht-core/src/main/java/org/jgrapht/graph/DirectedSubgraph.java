@@ -25,6 +25,9 @@ import org.jgrapht.util.*;
 /**
  * A directed graph that is a subgraph on other graph.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @see Subgraph
  */
 public class DirectedSubgraph<V, E>

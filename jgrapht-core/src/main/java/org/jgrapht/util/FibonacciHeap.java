@@ -39,12 +39,14 @@ import java.util.*;
  * This class was originally developed by Nathan Fiedler for the GraphMaker project. It was imported
  * to JGraphT with permission, courtesy of Nathan Fiedler.
  * </p>
+ * 
+ * @param <T> node data type
  *
  * @author Nathan Fiedler
  */
 public class FibonacciHeap<T>
 {
-    private static final double oneOverLogPhi = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
+    private static final double ONEOVERLOGPHI = 1.0 / Math.log((1.0 + Math.sqrt(5.0)) / 2.0);
 
     /**
      * Points to the minimum node in the heap.
@@ -286,6 +288,7 @@ public class FibonacciHeap<T>
      *
      * @param h1 first heap
      * @param h2 second heap
+     * @param <T> type of data stored in the heap 
      *
      * @return new heap containing h1 and h2
      */
@@ -401,9 +404,12 @@ public class FibonacciHeap<T>
 
     // cascadingCut
 
+    /**
+     * Consolidate trees
+     */
     protected void consolidate()
     {
-        int arraySize = ((int) Math.floor(Math.log(nNodes) * oneOverLogPhi)) + 1;
+        int arraySize = ((int) Math.floor(Math.log(nNodes) * ONEOVERLOGPHI)) + 1;
 
         List<FibonacciHeapNode<T>> array = new ArrayList<>(arraySize);
 

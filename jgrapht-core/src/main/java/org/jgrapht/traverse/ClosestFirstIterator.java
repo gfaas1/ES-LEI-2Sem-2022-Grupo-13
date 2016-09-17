@@ -30,6 +30,9 @@ import org.jgrapht.util.*;
  * Graph.getEdgeWeight(Edge) is summed to calculate path length. Negative edge weights will result
  * in an IllegalArgumentException. Optionally, path length may be bounded by a finite radius.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author John V. Sichi
  * @since Sep 2, 2003

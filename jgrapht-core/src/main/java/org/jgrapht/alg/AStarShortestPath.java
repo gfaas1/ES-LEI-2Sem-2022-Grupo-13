@@ -39,6 +39,9 @@ import org.jgrapht.util.*;
  * depth-first search is desired, so ideally we would expand node i first. Using the FibonacciHeap,
  * this is not necessarily the case though. This could be improved in a later version.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  * @author Jon Robison
  * @author Thomas Breitbart
@@ -68,6 +71,11 @@ public class AStarShortestPath<V, E>
     // Counter which keeps track of the number of expanded nodes
     protected int numberOfExpandedNodes;
 
+    /**
+     * Create a new instance of the A* shortest path algorithm.
+     * 
+     * @param graph the input graph
+     */
     public AStarShortestPath(Graph<V, E> graph)
     {
         if (graph == null) {

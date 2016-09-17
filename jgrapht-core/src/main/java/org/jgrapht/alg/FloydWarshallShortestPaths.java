@@ -31,6 +31,9 @@ import org.jgrapht.graph.*;
  * code has not been tested (and probably doesn't work) on multi-graphs. Code should be updated to
  * work properly on multi-graphs.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Tom Larkworthy
  * @author Soren Davidsen (soren@tanesha.net)
  * @author Joris Kinable
@@ -48,6 +51,11 @@ public class FloydWarshallShortestPaths<V, E>
     private int[][] lastHopMatrix = null;
     private Map<V, List<GraphPath<V, E>>> paths = null;
 
+    /**
+     * Create a new instance of the Floyd-Warshall all-pairs shortest path algorithm.
+     * 
+     * @param graph the input graph
+     */
     public FloydWarshallShortestPaths(Graph<V, E> graph)
     {
         this.graph = graph;
@@ -182,8 +190,8 @@ public class FloydWarshallShortestPaths<V, E>
     /**
      * Get the shortest path between two vertices.
      *
-     * @param a From vertice
-     * @param b To vertice
+     * @param a from vertex
+     * @param b to vertex
      *
      * @return the path, or null if none found
      */
@@ -212,6 +220,13 @@ public class FloydWarshallShortestPaths<V, E>
         return new GraphWalk<>(graph, a, b, pathVertexList, edges, d[v_a][v_b]);
     }
 
+    /**
+     * Get the shortest path between two vertices as a list of vertices.
+     * 
+     * @param a from vertex
+     * @param b to vertex
+     * @return the path, or null if none found
+     */
     public List<V> getShortestPathAsVertexList(V a, V b)
     {
         lazyCalculateMatrix();

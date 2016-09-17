@@ -21,6 +21,12 @@ import java.util.*;
 
 import org.jgrapht.*;
 
+/**
+ * A simple weighted bipartite graph matrix generator.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
 {
@@ -28,20 +34,33 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
 
     List<V> second;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set the first partition of the generator.
+     * 
+     * @param first the first partition
+     * @return the generator
+     */
     public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(List<? extends V> first)
     {
         this.first = new ArrayList<>(first);
         return this;
     }
 
+    /**
+     * Set the second partition of the generator.
+     * 
+     * @param second the second partition
+     * @return the generator
+     */
     public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(List<? extends V> second)
     {
         this.second = new ArrayList<>(second);
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void generateGraph(
         WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)

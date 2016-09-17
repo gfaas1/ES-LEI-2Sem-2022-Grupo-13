@@ -25,6 +25,10 @@ import org.jgrapht.graph.builder.*;
  * loops and multiple edges are permitted. If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  */
 public class DirectedPseudograph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -33,7 +37,9 @@ public class DirectedPseudograph<V, E>
     private static final long serialVersionUID = -8300409752893486415L;
 
     /**
-     * @see AbstractBaseGraph
+     * Creates a new directed pseudograph.
+     *
+     * @param edgeClass class on which to base factory for edges
      */
     public DirectedPseudograph(Class<? extends E> edgeClass)
     {
@@ -41,13 +47,23 @@ public class DirectedPseudograph<V, E>
     }
 
     /**
-     * @see AbstractBaseGraph
+     * Creates a new directed pseudograph with the specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
      */
     public DirectedPseudograph(EdgeFactory<V, E> ef)
     {
         super(ef, true, true);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -55,6 +71,14 @@ public class DirectedPseudograph<V, E>
         return new DirectedGraphBuilder<>(new DirectedPseudograph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

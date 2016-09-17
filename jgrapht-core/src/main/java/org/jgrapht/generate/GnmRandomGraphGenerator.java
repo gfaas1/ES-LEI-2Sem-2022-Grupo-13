@@ -56,8 +56,8 @@ import org.jgrapht.graph.*;
  * @author Assaf Lehr
  * @author Dimitrios Michail
  * 
- * @param V the graph vertex type
- * @param E the graph edge type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  * 
  * @see GnpRandomGraphGenerator
  */

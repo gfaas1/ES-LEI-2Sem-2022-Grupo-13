@@ -23,6 +23,11 @@ import org.jgrapht.graph.*;
 /**
  * Base class for builders of {@link Graph}
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @param <G> type of the resulting graph
+ * @param <B> type of this builder
+ *
  * @see DirectedGraphBuilderBase
  * @see UndirectedGraphBuilderBase
  */
@@ -99,6 +104,9 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      * Adds a chain of edges to the graph being built. The vertices are added to the graph, if not
      * already included.
      *
+     * @param first the first vertex
+     * @param second the second vertex
+     * @param rest the remaining vertices
      * @return this builder object
      *
      * @see #addEdge(Object, Object)
@@ -117,6 +125,7 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     /**
      * Adds all the vertices and all the edges of the {@code sourceGraph} to the graph being built.
      *
+     * @param sourceGraph the source graph   
      * @return this builder object
      *
      * @see Graphs#addGraph(Graph, Graph)

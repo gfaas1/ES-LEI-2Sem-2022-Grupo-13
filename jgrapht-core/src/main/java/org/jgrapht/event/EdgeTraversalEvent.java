@@ -22,6 +22,8 @@ import java.util.*;
 /**
  * A traversal event for a graph edge.
  *
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Aug 11, 2003
  */

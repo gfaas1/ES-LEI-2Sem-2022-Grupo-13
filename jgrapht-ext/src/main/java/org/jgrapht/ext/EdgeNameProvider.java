@@ -19,6 +19,8 @@ package org.jgrapht.ext;
 
 /**
  * Assigns a display name for each of the graph edges.
+ * 
+ * @param <E> the graph edge type
  */
 public interface EdgeNameProvider<E>
 {

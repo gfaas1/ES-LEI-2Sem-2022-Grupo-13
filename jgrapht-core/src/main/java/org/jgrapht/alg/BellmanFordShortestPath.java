@@ -24,6 +24,9 @@ import org.jgrapht.*;
 /**
  * <a href="http://www.nist.gov/dads/HTML/bellmanford.html">Bellman-Ford algorithm</a>: weights
  * could be negative, paths could be constrained by a maximum number of edges.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
 public class BellmanFordShortestPath<V, E>
 {
@@ -54,8 +57,8 @@ public class BellmanFordShortestPath<V, E>
      * Creates an object to calculate shortest paths between the start vertex and others vertices
      * using the Bellman-Ford algorithm.
      *
-     * @param graph
-     * @param startVertex
+     * @param graph the graph
+     * @param startVertex the start vertex  
      */
     public BellmanFordShortestPath(Graph<V, E> graph, V startVertex)
     {
@@ -66,9 +69,9 @@ public class BellmanFordShortestPath<V, E>
      * Creates an object to calculate shortest paths between the start vertex and others vertices
      * using the Bellman-Ford algorithm.
      *
-     * @param graph
-     * @param startVertex
-     * @param nMaxHops maximum number of edges of the calculated paths.
+     * @param graph the graph
+     * @param startVertex the start vertex
+     * @param nMaxHops maximum number of edges of the calculated paths
      */
     public BellmanFordShortestPath(Graph<V, E> graph, V startVertex, int nMaxHops)
     {
@@ -79,10 +82,10 @@ public class BellmanFordShortestPath<V, E>
      * Creates an object to calculate shortest paths between the start vertex and others vertices
      * using the Bellman-Ford algorithm.
      *
-     * @param graph
-     * @param startVertex
+     * @param graph the graph
+     * @param startVertex the start vertex
      * @param nMaxHops maximum number of edges of the calculated paths.
-     * @param epsilon tolerance factor.
+     * @param epsilon tolerance factor when comparing floating point values
      */
     public BellmanFordShortestPath(Graph<V, E> graph, V startVertex, int nMaxHops, double epsilon)
     {
@@ -94,8 +97,9 @@ public class BellmanFordShortestPath<V, E>
     }
 
     /**
-     * @param endVertex end vertex.
-     *
+     * Get the cost of the shortest path to a vertex.
+     *  
+     * @param endVertex the end vertex 
      * @return the cost of the shortest path between the start vertex and the end vertex.
      */
     public double getCost(V endVertex)
@@ -114,10 +118,11 @@ public class BellmanFordShortestPath<V, E>
     }
 
     /**
-     * @param endVertex end vertex.
-     *
-     * @return list of <code>Edge</code>, or null if no path exists between the start vertex and the
-     *         end vertex.
+     * Get the shortest path to a vertex.
+     *  
+     * @param endVertex the end vertex
+     * @return list of edges, or null if no path exists between the start vertex and the
+     *         end vertex
      */
     public List<E> getPathEdgeList(V endVertex)
     {
@@ -166,6 +171,8 @@ public class BellmanFordShortestPath<V, E>
      * @param graph the graph to be searched
      * @param startVertex the vertex at which the path should start
      * @param endVertex the vertex at which the path should end
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return List of Edges, or null if no path exists
      */

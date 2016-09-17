@@ -28,7 +28,10 @@ import com.touchgraph.graphlayout.interaction.*;
 /**
  * The Touchgraph panel that displays our graph http://sourceforge.net/projects/touchgraph
  *
- * @author canderson
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Carl Anderson
  */
 public class TouchgraphPanel<V, E>
     extends GLPanel
@@ -60,7 +63,12 @@ public class TouchgraphPanel<V, E>
 
     // ~ Constructors -----------------------------------------------------------
 
-    /** constructor */
+    /**
+     * Construct a new touchgraph panel.
+     * 
+     * @param graph the graph
+     * @param selfReferencesAllowed whether to all self loops
+     */
     public TouchgraphPanel(Graph<V, E> graph, boolean selfReferencesAllowed)
     {
         this.graph = graph;
@@ -78,7 +86,7 @@ public class TouchgraphPanel<V, E>
     // ~ Methods ----------------------------------------------------------------
 
     /**
-     * get everything setup: this is the code that was in the super's constructor but which was
+     * Get everything setup: this is the code that was in the super's constructor but which was
      * followed by an initialize() call. Hence, it was impossible to subclass the superclass and
      * insert our own graph initialization code without breaking it out as here.
      */
@@ -86,7 +94,7 @@ public class TouchgraphPanel<V, E>
     {
         this.setBackground(defaultBorderBackColor);
         this.setForeground(defaultForeColor);
-        scrollBarHash = new Hashtable();
+        scrollBarHash = new Hashtable<>();
         tgLensSet = new TGLensSet();
         tgPanel = new TGPanel();
         tgPanel.setBackColor(defaultBackColor);

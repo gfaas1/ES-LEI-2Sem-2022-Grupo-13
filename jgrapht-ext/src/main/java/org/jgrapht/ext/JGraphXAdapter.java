@@ -43,8 +43,8 @@ import com.mxgraph.view.*;
  * vertex2, "Edgename"); with a unique edgename.
  * </P>
  *
- * @param <V> Vertex
- * @param <E> Edge
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author JeanYves Tinevez
  * @since 09 July, 2013

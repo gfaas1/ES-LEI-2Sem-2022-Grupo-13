@@ -37,6 +37,8 @@ public abstract class EulerianCircuit
      * This method will check whether the graph passed in is Eulerian or not.
      *
      * @param g The graph to be checked
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return true for Eulerian and false for non-Eulerian
      */
@@ -62,6 +64,8 @@ public abstract class EulerianCircuit
      * graph.
      *
      * @param g The graph to find an Eulerian circuit
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type 
      *
      * @return null if no Eulerian circuit exists, or a list of vertices representing the Eulerian
      *         circuit if one does exist

@@ -130,6 +130,8 @@ public class TransitiveReduction
      * </pre>
      *
      * @param directedGraph the directed graph that will be reduced transitively
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public <V, E> void reduce(final DirectedGraph<V, E> directedGraph)
     {

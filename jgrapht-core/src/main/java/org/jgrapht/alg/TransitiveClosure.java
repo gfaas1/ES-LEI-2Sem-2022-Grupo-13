@@ -45,6 +45,8 @@ public class TransitiveClosure
      * Computes the transitive closure of the given graph.
      *
      * @param graph - Graph to compute transitive closure for.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public <V, E> void closeSimpleDirectedGraph(SimpleDirectedGraph<V, E> graph)
     {

@@ -27,6 +27,10 @@ import org.jgrapht.graph.builder.*;
  * <p>
  * prefixed 'Default' to avoid name collision with the DirectedGraph interface.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class DefaultDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -54,6 +58,14 @@ public class DefaultDirectedGraph<V, E>
         super(ef, false, true);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -61,6 +73,14 @@ public class DefaultDirectedGraph<V, E>
         return new DirectedGraphBuilder<>(new DefaultDirectedGraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

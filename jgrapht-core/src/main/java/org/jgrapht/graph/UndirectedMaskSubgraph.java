@@ -22,6 +22,9 @@ import org.jgrapht.*;
 /**
  * An undirected graph that is a {@link MaskSubgraph} on another graph.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
@@ -29,6 +32,13 @@ public class UndirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements UndirectedGraph<V, E>
 {
+    /**
+     * Create a new undirected {@link MaskSubgraph} of another graph.
+     * 
+     * @param base the base graph
+     * @param mask vertices and edges to exclude in the subgraph. If a vertex/edge is masked, it is
+     *        as if it is not in the subgraph.
+     */
     public UndirectedMaskSubgraph(UndirectedGraph<V, E> base, MaskFunctor<V, E> mask)
     {
         super(base, mask);

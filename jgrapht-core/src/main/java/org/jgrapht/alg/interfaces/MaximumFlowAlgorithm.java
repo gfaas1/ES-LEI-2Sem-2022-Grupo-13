@@ -26,8 +26,8 @@ import java.util.*;
  * @author Alexey Kudinkin
  * @author Joris Kinable
  *
- * @param <V> vertex concept type
- * @param <E> edge concept type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
@@ -53,6 +53,7 @@ public interface MaximumFlowAlgorithm<V, E>
      *
      * @param source source vertex
      * @param sink sink vertex
+     * @return the value of the maximum flow
      */
     default double calculateMaximumFlow(V source, V sink)
     {
@@ -121,12 +122,17 @@ public interface MaximumFlowAlgorithm<V, E>
         throw new UnsupportedOperationException("Function not implemented");
     }
 
+    /**
+     * A maximum flow
+     *
+     * @param <E> the graph edge type
+     */
     interface MaximumFlow<E>
     {
         /**
          * Returns value of the maximum-flow for the given network
          *
-         * @return value of th maximum-flow
+         * @return value of the maximum-flow
          */
         Double getValue();
 
@@ -138,12 +144,23 @@ public interface MaximumFlowAlgorithm<V, E>
         Map<E, Double> getFlow();
     }
 
+    /**
+     * Default implementation of the maximum flow
+     *
+     * @param <E> the graph edge type
+     */
     class MaximumFlowImpl<E>
         implements MaximumFlow<E>
     {
         private Double value;
         private Map<E, Double> flow;
 
+        /**
+         * Create a new maximum flow 
+         * 
+         * @param value the flow value
+         * @param flow the flow map
+         */
         public MaximumFlowImpl(Double value, Map<E, Double> flow)
         {
             this.value = value;

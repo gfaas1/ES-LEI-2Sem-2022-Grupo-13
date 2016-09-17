@@ -20,6 +20,9 @@ package org.jgrapht.event;
 /**
  * An empty do-nothing implementation of the {@link TraversalListener} interface used for
  * subclasses.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @since Aug 6, 2003

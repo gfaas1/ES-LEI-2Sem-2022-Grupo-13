@@ -19,6 +19,9 @@ package org.jgrapht.ext;
 
 /**
  * Assigns a display name for each of the graph vertices.
+ * 
+ * @param <V> the graph vertex type
+ * 
  */
 public interface VertexNameProvider<V>
 {

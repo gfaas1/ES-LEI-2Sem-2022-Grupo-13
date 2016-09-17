@@ -35,6 +35,9 @@ import org.jgrapht.*;
  * <p>
  * This class is mostly used as a base for extending subclasses.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @since Jul 20, 2003
@@ -54,7 +57,6 @@ public class GraphDelegator<V, E>
      * Constructor for GraphDelegator.
      *
      * @param g the backing graph (the delegate).
-     *
      * @throws IllegalArgumentException iff <code>g==null</code>
      */
     public GraphDelegator(Graph<V, E> g)
@@ -69,7 +71,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
@@ -78,7 +80,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
@@ -87,7 +89,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getEdgeFactory()
+     * {@inheritDoc}
      */
     @Override
     public EdgeFactory<V, E> getEdgeFactory()
@@ -96,7 +98,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -105,7 +107,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -114,7 +116,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -123,7 +125,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#containsEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsEdge(E e)
@@ -132,7 +134,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#containsVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsVertex(V v)
@@ -141,6 +143,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Returns the degree of the specified vertex.
+     *
+     * @param vertex vertex whose degree is to be calculated
+     * @return the degree of the specified vertex
      * @see UndirectedGraph#degreeOf(Object)
      */
     public int degreeOf(V vertex)
@@ -149,7 +155,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#edgeSet()
+     * {@inheritDoc}
      */
     @Override
     public Set<E> edgeSet()
@@ -158,7 +164,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#edgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> edgesOf(V vertex)
@@ -167,6 +173,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Returns the "in degree" of the specified vertex. 
+     *
+     * @param vertex vertex whose in degree is to be calculated
+     * @return the in degree of the specified vertex
      * @see DirectedGraph#inDegreeOf(Object)
      */
     public int inDegreeOf(V vertex)
@@ -175,6 +185,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Returns a set of all edges incoming into the specified vertex.
+     *
+     * @param vertex the vertex for which the list of incoming edges to be returned
+     * @return a set of all edges incoming into the specified vertex
      * @see DirectedGraph#incomingEdgesOf(Object)
      */
     public Set<E> incomingEdgesOf(V vertex)
@@ -183,6 +197,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Returns the "out degree" of the specified vertex. 
+     *
+     * @param vertex vertex whose out degree is to be calculated
+     * @return the out degree of the specified vertex
      * @see DirectedGraph#outDegreeOf(Object)
      */
     public int outDegreeOf(V vertex)
@@ -191,6 +209,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
+     * Returns a set of all edges outgoing from the specified vertex.
+     *
+     * @param vertex the vertex for which the list of outgoing edges to be returned
+     * @return a set of all edges outgoing from the specified vertex
      * @see DirectedGraph#outgoingEdgesOf(Object)
      */
     public Set<E> outgoingEdgesOf(V vertex)
@@ -199,7 +221,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -208,7 +230,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -217,7 +239,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)
@@ -226,7 +248,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString()
@@ -235,7 +257,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#vertexSet()
+     * {@inheritDoc}
      */
     @Override
     public Set<V> vertexSet()
@@ -244,7 +266,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getEdgeSource(Object)
+     * {@inheritDoc}
      */
     @Override
     public V getEdgeSource(E e)
@@ -253,7 +275,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getEdgeTarget(Object)
+     * {@inheritDoc}
      */
     @Override
     public V getEdgeTarget(E e)
@@ -262,7 +284,7 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see Graph#getEdgeWeight(Object)
+     * {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -271,7 +293,10 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * @see WeightedGraph#setEdgeWeight(Object, double)
+     * Assigns a weight to an edge.
+     *
+     * @param e edge on which to set weight
+     * @param weight new weight for edge
      */
     public void setEdgeWeight(E e, double weight)
     {

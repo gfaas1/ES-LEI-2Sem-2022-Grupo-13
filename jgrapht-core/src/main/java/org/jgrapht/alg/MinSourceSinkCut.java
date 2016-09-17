@@ -35,6 +35,9 @@ import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.*;
  *
  * Warning: this implementation cannot be used with the PushRelabel max flow implementation!
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  * @deprecated Use {@link MinimumSTCutAlgorithm} instead
  */
@@ -49,17 +52,35 @@ public class MinSourceSinkCut<V, E>
     V sink = null;
     double epsilon = MaximumFlowAlgorithmBase.DEFAULT_EPSILON;
 
+    /**
+     * Create a new minimum s-t cut algorithm.
+     * 
+     * @param graph the input graph
+     */
     public MinSourceSinkCut(DirectedGraph<V, E> graph)
     {
         this.ekMaxFlow = new PushRelabelMFImpl<>(graph);
         this.graph = graph;
     }
 
+    /**
+     * Create a new minimum s-t cut algorithm.
+     * 
+     * @param graph the input graph
+     * @param epsilon tolerance used when comparing floating point values
+     */
     public MinSourceSinkCut(DirectedGraph<V, E> graph, double epsilon)
     {
         this(graph, new PushRelabelMFImpl<>(graph), epsilon);
     }
 
+    /**
+     * Create a new minimum s-t cut algorithm.
+     * 
+     * @param graph the input graph
+     * @param maximumFlowAlgorithm the maximum flow algorithm to use
+     * @param epsilon tolerance used when comparing floating point values
+     */
     public MinSourceSinkCut(
         DirectedGraph<V, E> graph, MaximumFlowAlgorithm<V, E> maximumFlowAlgorithm, double epsilon)
     {
@@ -71,8 +92,8 @@ public class MinSourceSinkCut<V, E>
     /**
      * Compute a minimum s-t cut
      *
-     * @param source
-     * @param sink
+     * @param source the source
+     * @param sink the sink
      */
     public void computeMinCut(V source, V sink)
     {
@@ -129,7 +150,9 @@ public class MinSourceSinkCut<V, E>
     }
 
     /**
-     * @return Returns the min cut partition containing the source, or null if there was no call to
+     * Get the minimum cut partition containing the source.
+     *         
+     * @return Returns the minimum cut partition containing the source, or null if there was no call to
      *         computeMinCut(V source, V sink)
      */
     public Set<V> getSourcePartition()
@@ -138,9 +161,9 @@ public class MinSourceSinkCut<V, E>
     }
 
     /**
-     * Returns the min cut partition containing the sink
+     * Returns the minimum cut partition containing the sink
      *
-     * @return returns the min cut partition containing the sink
+     * @return returns the minimum cut partition containing the sink
      */
     public Set<V> getSinkPartition()
     {

@@ -29,6 +29,9 @@ import org.jgrapht.alg.util.*;
  * tree, otherwise it computes the minimum spanning forest. The algorithm runs in time O(E log E).
  * This implementation uses the hashCode and equals method of the vertices.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Tom Conerly
  * @since Feb 10, 2010
  */

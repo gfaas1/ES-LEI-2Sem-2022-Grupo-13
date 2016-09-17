@@ -32,6 +32,9 @@ import org.jgrapht.*;
  * of the parents of a node. To do this, simply create an edge-reversed graph and pass that as input
  * to {@link org.jgrapht.traverse.DepthFirstIterator}.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author John V. Sichi
  * @see AsUndirectedGraph
  */

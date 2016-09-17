@@ -46,7 +46,8 @@ import org.jgrapht.alg.util.extension.*;
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
  * undirected graphs are supported (and tested!).
  *
- *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Ilya Razensteyn
  */
@@ -113,6 +114,8 @@ public final class EdmondsKarpMFImpl<V, E>
      *
      * @param source source vertex
      * @param sink sink vertex
+     * 
+     * @return a maximum flow
      */
     public MaximumFlow<E> buildMaximumFlow(V source, V sink)
     {
@@ -130,6 +133,8 @@ public final class EdmondsKarpMFImpl<V, E>
      *
      * @param source source vertex
      * @param sink sink vertex
+     * 
+     * @return the value of the maximum flow
      */
     public double calculateMaximumFlow(V source, V sink)
     {

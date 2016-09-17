@@ -19,19 +19,17 @@ package org.jgrapht.ext;
 
 /**
  * Generates vertex names by invoking {@link #toString()} on them. This assumes that the vertex's
- * {@link #toString()} method returns a unique String representation for each vertex.
+ * {@link #toString()} method returns a unique representation for each vertex.
+ *
+ * @param <V> the graph vertex type
  *
  * @author Charles Fry
  */
 public class StringNameProvider<V>
     implements VertexNameProvider<V>
 {
-    public StringNameProvider()
-    {
-    }
-
     /**
-     * Returns the String representation of the unique integer representing a vertex.
+     * Returns the string representation of a vertex.
      *
      * @param vertex the vertex to be named
      *

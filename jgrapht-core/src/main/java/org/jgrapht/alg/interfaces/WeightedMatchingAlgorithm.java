@@ -20,8 +20,8 @@ package org.jgrapht.alg.interfaces;
 /**
  * Allows to derive weighted matching from <i>general</i> graph
  *
- * @param <V>
- * @param <E>
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @see MatchingAlgorithm
  */

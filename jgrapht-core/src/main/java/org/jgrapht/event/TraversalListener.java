@@ -20,6 +20,9 @@ package org.jgrapht.event;
 /**
  * A listener on graph iterator or on a graph traverser.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Barak Naveh
  * @since Jul 19, 2003
  */

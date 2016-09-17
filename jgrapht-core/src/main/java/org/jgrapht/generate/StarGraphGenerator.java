@@ -25,6 +25,9 @@ import org.jgrapht.*;
  * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star graph</a> of any size.
  * This is a graph where every vertex has exactly one edge with a center vertex.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Andrew Newell
  * @since Dec 21, 2008
  */

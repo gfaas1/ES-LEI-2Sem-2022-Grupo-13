@@ -23,6 +23,8 @@ package org.jgrapht.event;
  * it is added. The type of the event can be tested using the
  * {@link org.jgrapht.event.GraphChangeEvent#getType()} method.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Barak Naveh
  * @since Aug 10, 2003
  */

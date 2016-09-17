@@ -45,6 +45,9 @@ import org.jgrapht.util.*;
  * {@link KosarajuStrongConnectivityInspector}.
  * </p>
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Marden Neubert
  * @since Dec 18, 2004
  */

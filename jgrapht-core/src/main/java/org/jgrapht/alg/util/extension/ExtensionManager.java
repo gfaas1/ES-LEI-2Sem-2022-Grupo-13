@@ -40,6 +40,11 @@ public class ExtensionManager<T, B extends Extension>
     /* Mapping of originals to their extensions */
     private Map<T, B> originalToExtensionMap = new HashMap<>();
 
+    /**
+     * Create a new extension manager. 
+     * 
+     * @param factory the extension factory to use
+     */
     public ExtensionManager(ExtensionFactory<B> factory)
     {
         this.extensionFactory = factory;
@@ -58,6 +63,9 @@ public class ExtensionManager<T, B extends Extension>
     /**
      * Creates a new singleton extension object for original t if no such object exists, returns the
      * old one otherwise.
+     * 
+     * @param t the original object
+     * @return the extension object 
      */
     public B getExtension(T t)
     {

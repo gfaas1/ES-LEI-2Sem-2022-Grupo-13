@@ -22,15 +22,25 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * This is a general interface for graph and subgraph isomorphism.
+ * General interface for graph and subgraph isomorphism.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
 public interface IsomorphismInspector<V, E>
 {
+    /**
+     * Get an iterator over all existing (isomorphic) mappings between two graphs.
+     * 
+     * @return an iterator over all existing (isomorphic) mappings between two graphs
+     */
     Iterator<GraphMapping<V, E>> getMappings();
 
+    /**
+     * Check if an isomorphism exists.
+     * 
+     * @return true if there is an isomorphism, false otherwise
+     */
     boolean isomorphismExists();
 }
 

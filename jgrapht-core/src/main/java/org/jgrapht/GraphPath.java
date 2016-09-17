@@ -24,6 +24,8 @@ import java.util.*;
  * {@link Graph}. Unlike some definitions, the path is not required to be a
  * <a href="https://en.wikipedia.org/wiki/Simple_path">Simple Path</a>.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author John Sichi
  * @since Jan 1, 2008

@@ -25,6 +25,10 @@ import org.jgrapht.graph.builder.*;
  * vertices, and loops are not permitted. If you're unsure about simple graphs, see:
  * <a href="http://mathworld.wolfram.com/SimpleGraph.html">
  * http://mathworld.wolfram.com/SimpleGraph.html</a>.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class SimpleGraph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -52,12 +56,28 @@ public class SimpleGraph<V, E>
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends SimpleGraph<V, E>, ?> builder(
         Class<? extends E> edgeClass)
     {
         return new UndirectedGraphBuilder<>(new SimpleGraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends SimpleGraph<V, E>, ?> builder(
         EdgeFactory<V, E> ef)
     {

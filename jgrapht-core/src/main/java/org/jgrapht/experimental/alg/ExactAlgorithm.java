@@ -19,8 +19,20 @@ package org.jgrapht.experimental.alg;
 
 import java.util.*;
 
+/**
+ * An interface for an exact algorithm. 
+ *
+ * @param <ResultType> type of the result
+ * @param <V> type of the input
+ */
 public interface ExactAlgorithm<ResultType, V>
 {
+    /**
+     * Get the result.
+     * 
+     * @param optionalData optional data
+     * @return the result
+     */
     ResultType getResult(Map<V, Object> optionalData);
 }
 

@@ -25,6 +25,8 @@ import java.util.*;
  * of interest better use <code>
  * GraphListener</code>.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Barak Naveh
  * @see GraphListener
  * @since Jul 18, 2003

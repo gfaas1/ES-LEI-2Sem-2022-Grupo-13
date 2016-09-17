@@ -23,6 +23,10 @@ import org.jgrapht.graph.builder.*;
 /**
  * A directed multigraph. A directed multigraph is a non-simple directed graph in which no loops are
  * permitted, but multiple edges between any two vertices are.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  */
 public class DirectedMultigraph<V, E>
     extends AbstractBaseGraph<V, E>
@@ -50,6 +54,14 @@ public class DirectedMultigraph<V, E>
         super(ef, true, false);
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -57,6 +69,14 @@ public class DirectedMultigraph<V, E>
         return new DirectedGraphBuilder<>(new DirectedMultigraph<>(edgeClass));
     }
 
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

@@ -26,6 +26,8 @@ import org.jgrapht.event.*;
  * an internal map between every vertex it has ever seen and the unique integer representing that
  * vertex. As a result it is probably desirable to have a separate instance for each distinct graph.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Charles Fry
  */
 public class IntegerNameProvider<V>

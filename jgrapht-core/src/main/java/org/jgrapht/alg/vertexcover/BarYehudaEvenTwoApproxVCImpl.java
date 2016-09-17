@@ -39,6 +39,9 @@ import org.jgrapht.graph.*;
  * actually slow! This does affect the runtime complexity. Better would be to just work on a clone
  * of the original graph!
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  *
  */

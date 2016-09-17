@@ -46,6 +46,9 @@ import org.jgrapht.util.*;
  * If the graph is weighted the algorithm runs in O(m (n^{1+1/k} + nlogn)) time by using Dijkstra's
  * algorithm. Edge weights must be non-negative.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Dimitrios Michail
  * @since July 15, 2016
  */

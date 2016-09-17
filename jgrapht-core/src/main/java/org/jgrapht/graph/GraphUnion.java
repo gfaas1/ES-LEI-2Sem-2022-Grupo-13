@@ -35,6 +35,11 @@ import org.jgrapht.util.*;
  * <tt>GraphUnion</tt> implements <tt>Graph</tt> interface. <tt>
  * GraphUnion</tt> uses <tt>WeightCombiner</tt> to choose policy for calculating edge weight.
  * </p>
+ * 
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ * @param <G> the graph type of the two graphs that are combined
+ * 
  */
 public class GraphUnion<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
@@ -48,6 +53,13 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     private G g2;
     private WeightCombiner operator;
 
+    /**
+     * Construct a new graph union.
+     * 
+     * @param g1 the first graph
+     * @param g2 the second graph
+     * @param operator the weight combiner (policy for edge weight calculation)
+     */
     public GraphUnion(G g1, G g2, WeightCombiner operator)
     {
         if (g1 == null) {
@@ -64,6 +76,13 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         this.operator = operator;
     }
 
+    /**
+     * Construct a new graph union. The union will use the {@link WeightCombiner#SUM} weight
+     * combiner.
+     * 
+     * @param g1 the first graph
+     * @param g2 the second graph
+     */
     public GraphUnion(G g1, G g2)
     {
         this(g1, g2, WeightCombiner.SUM);
@@ -247,7 +266,9 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         throw new IllegalArgumentException("no such edge in the union");
     }
 
-    /**
+    /** 
+     * Return G<sub>1</sub>
+     * 
      * @return G<sub>1</sub>
      */
     public G getG1()
@@ -256,6 +277,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
+     * Return G<sub>2</sub>
+     * 
      * @return G<sub>2</sub>
      */
     public G getG2()

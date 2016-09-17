@@ -22,6 +22,8 @@ import org.jgrapht.*;
 /**
  * A {@link VertexFactory} for producing vertices by using a class as a factory.
  *
+ * @param <V> the graph vertex type
+ *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
@@ -30,6 +32,11 @@ public class ClassBasedVertexFactory<V>
 {
     private final Class<? extends V> vertexClass;
 
+    /**
+     * Create a new class based vertex factory.
+     * 
+     * @param vertexClass the vertex class
+     */
     public ClassBasedVertexFactory(Class<? extends V> vertexClass)
     {
         this.vertexClass = vertexClass;

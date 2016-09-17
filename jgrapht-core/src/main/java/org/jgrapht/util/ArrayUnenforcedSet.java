@@ -28,6 +28,8 @@ import java.util.*;
  * Note that for equals/hashCode, the class implements the Set behavior (unordered), not the list
  * behavior (ordered); the fact that it subclasses ArrayList should be considered an implementation
  * detail.
+ * 
+ * @param <E> the element type
  *
  * @author John V. Sichi
  */
@@ -37,16 +39,33 @@ public class ArrayUnenforcedSet<E>
 {
     private static final long serialVersionUID = -7413250161201811238L;
 
+    /**
+     * Constructs a new empty set
+     */
     public ArrayUnenforcedSet()
     {
         super();
     }
 
+    /**
+     * Constructs a set containing the elements of the specified
+     * collection.
+     *
+     * @param c the collection whose elements are to be placed into this set
+     * @throws NullPointerException if the specified collection is null
+     */
     public ArrayUnenforcedSet(Collection<? extends E> c)
     {
         super(c);
     }
 
+    /**
+     * Constructs an empty set with the specified initial capacity.
+     *
+     * @param  n  the initial capacity of the set
+     * @throws IllegalArgumentException if the specified initial capacity
+     *         is negative
+     */
     public ArrayUnenforcedSet(int n)
     {
         super(n);

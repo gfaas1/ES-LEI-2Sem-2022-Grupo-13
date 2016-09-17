@@ -27,9 +27,12 @@ import org.jgrapht.*;
  * @author John Sichi
  * @version $Id$
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @deprecated use {@link GraphWalk} instead
  */
-
+@Deprecated
 public class GraphPathImpl<V, E>
     implements GraphPath<V, E>
 {
@@ -43,6 +46,15 @@ public class GraphPathImpl<V, E>
 
     private double weight;
 
+    /**
+     * Create a new graph path
+     * 
+     * @param graph the graph
+     * @param startVertex the start vertex
+     * @param endVertex the end vertex
+     * @param edgeList the edge list of the path
+     * @param weight the total weight of the path
+     */
     public GraphPathImpl(
         Graph<V, E> graph, V startVertex, V endVertex, List<E> edgeList, double weight)
     {

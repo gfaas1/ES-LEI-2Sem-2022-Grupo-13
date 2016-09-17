@@ -22,6 +22,8 @@ package org.jgrapht;
  * constructed by user code and added to a graph explicitly, but algorithms which generate new
  * vertices require a factory.
  *
+ * @param <V> the graph vertex type
+ *
  * @author John V. Sichi
  * @since Sep 16, 2003
  */

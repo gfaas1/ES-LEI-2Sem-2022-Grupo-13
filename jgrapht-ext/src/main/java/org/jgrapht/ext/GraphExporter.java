@@ -24,6 +24,9 @@ import org.jgrapht.*;
 
 /**
  * Interface for graph exporters
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  */
 public interface GraphExporter<V, E>
 {

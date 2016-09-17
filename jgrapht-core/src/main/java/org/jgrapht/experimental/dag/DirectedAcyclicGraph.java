@@ -49,6 +49,9 @@ import org.jgrapht.traverse.*;
  * This class makes no claims to thread safety, and concurrent usage from multiple threads will
  * produce undefined results.
  * </p>
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Peter Giles, gilesp@u.washington.edu
  */
@@ -78,12 +81,22 @@ public class DirectedAcyclicGraph<V, E>
      */
     private TopoOrderMappingFactory<V> topoOrderFactory = new TopoVertexBiMap();
 
-    public DirectedAcyclicGraph(Class<? extends E> arg0)
+    /**
+     * Construct a directed acyclic graph.
+     * 
+     * @param edgeClass the edge class
+     */
+    public DirectedAcyclicGraph(Class<? extends E> edgeClass)
     {
-        super(arg0);
+        super(edgeClass);
         initialize();
     }
 
+    /**
+     * Construct a directed acyclic graph.
+     * 
+     * @param ef the edge factory
+     */
     public DirectedAcyclicGraph(EdgeFactory<V, E> ef)
     {
         super(ef);
@@ -126,8 +139,10 @@ public class DirectedAcyclicGraph<V, E>
     }
 
     /**
-     * adds the vertex if it wasn't already in the graph, and puts it at the top of the internal
-     * topological vertex ordering
+     * Adds the vertex if it wasn't already in the graph, and puts it at the top of the internal
+     * topological vertex ordering.
+     * 
+     * @param v the vertex to add
      */
     @Override
     public boolean addVertex(V v)
@@ -146,12 +161,13 @@ public class DirectedAcyclicGraph<V, E>
     }
 
     /**
-     * adds the vertex if it wasn't already in the graph, and puts it either at the top or the
+     * Adds the vertex if it wasn't already in the graph, and puts it either at the top or the
      * bottom of the topological ordering, depending on the value of addToTop. This may provide
      * useful optimizations for merging DirectedAcyclicGraphs that become connected.
      *
-     * @param v
-     * @param addToTop
+     * @param v the vertex to add
+     * @param addToTop if true the vertex is added at the top of the topological ordering, if false
+     *        at the bottom
      *
      * @return whether new vertex was added
      */
@@ -184,6 +200,8 @@ public class DirectedAcyclicGraph<V, E>
      * <li>the edge does not induce a cycle in the graph
      * </ul>
      *
+     * @param fromVertex from vertex
+     * @param toVertex to vertex
      * @return null if the edge is already in the graph, else the created edge is returned
      *
      * @throws IllegalArgumentException If either fromVertex or toVertex is not a member of the
@@ -226,6 +244,9 @@ public class DirectedAcyclicGraph<V, E>
      * <li>the edge does not induce a cycle in the graph
      * </ul>
      *
+     * @param fromVertex the from vertex
+     * @param toVertex the to vertex
+     * @param e the edge
      * @return true if the edge was added to the graph
      *
      * @throws CycleFoundException if adding an edge (fromVertex, toVertex) to the graph would
@@ -531,83 +552,93 @@ public class DirectedAcyclicGraph<V, E>
     /**
      * For performance tuning, an interface for storing the topological ordering
      *
-     * @author gilesp
+     * @param <V> the graph vertex type
+     * 
+     * @author Peter Giles
      */
     public interface TopoOrderMapping<V>
         extends Serializable
     {
         /**
-         * add a vertex at the given topological index.
+         * Add a vertex at the given topological index.
          *
-         * @param index
-         * @param vertex
+         * @param index the topological index
+         * @param vertex the vertex
          */
         void putVertex(Integer index, V vertex);
 
         /**
-         * get the vertex at the given topological index.
+         * Get the vertex at the given topological index.
          *
-         * @param index
-         *
-         * @return vertex
+         * @param index the topological index
+         * @return vertex the vertex
          */
         V getVertex(Integer index);
 
         /**
-         * get the topological index of the given vertex.
+         * Get the topological index of the given vertex.
          *
-         * @param vertex
-         *
+         * @param vertex the vertex
          * @return the index that the vertex is at, or null if the vertex isn't in the topological
          *         ordering
          */
         Integer getTopologicalIndex(V vertex);
 
         /**
-         * remove the given vertex from the topological ordering
+         * Remove the given vertex from the topological ordering
          *
-         * @param vertex
-         *
+         * @param vertex the vertex
          * @return the index that the vertex was at, or null if the vertex wasn't in the topological
          *         ordering
          */
         Integer removeVertex(V vertex);
 
         /**
-         * remove all vertices from the topological ordering
+         * Remove all vertices from the topological ordering
          */
         void removeAllVertices();
     }
 
+    /**
+     * A factory for {@link TopoOrderMapping}.
+     *
+     * @param <V> the graph vertex type
+     */
     public interface TopoOrderMappingFactory<V>
     {
+        /**
+         * Create a new instance of a {@link TopoOrderMapping}.
+         * 
+         * @return a new instance of a {@link TopoOrderMapping}
+         */
         TopoOrderMapping<V> getTopoOrderMapping();
     }
 
     /**
-     * this interface allows specification of a strategy for marking vertices as visited (based on
+     * This interface allows specification of a strategy for marking vertices as visited (based on
      * their topological index, so the vertex type isn't part of the interface).
      */
     public interface Visited
     {
         /**
-         * mark the given topological index as visited
+         * Mark the given topological index as visited
          *
          * @param index the topological index
          */
         void setVisited(int index);
 
         /**
-         * has the given topological index been visited?
+         * Has the given topological index been visited?
          *
          * @param index the topological index
+         * @return true if the given topological index been visited, false otherwise
          */
         boolean getVisited(int index);
 
         /**
          * Clear the visited state of the given topological index
          *
-         * @param index
+         * @param index the index
          *
          * @throws UnsupportedOperationException if the implementation doesn't support (or doesn't
          *         need) clearance. For example, if the factory vends a new instance every time, it
@@ -619,13 +650,19 @@ public class DirectedAcyclicGraph<V, E>
     }
 
     /**
-     * interface for a factory that vends Visited implementations
+     * Interface for a factory that vends visited implementations
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public interface VisitedFactory
         extends Serializable
     {
+        /**
+         * Create a new instance of {@link Visited}.
+         * 
+         * @param affectedRegion the affected region
+         * @return a new instance of {@link Visited} for the affected region
+         */
         Visited getInstance(Region affectedRegion);
     }
 
@@ -633,9 +670,9 @@ public class DirectedAcyclicGraph<V, E>
      * Note, this is a lazy and incomplete implementation, with assumptions that inputs are in the
      * given topoIndexMap
      *
-     * @param <V>
+     * @param <V> the graph vertex type
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     private static class TopoComparator<V>
         implements Comparator<V>, Serializable
@@ -662,7 +699,7 @@ public class DirectedAcyclicGraph<V, E>
     /**
      * a dual HashMap implementation
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     private class TopoVertexBiMap
         implements TopoOrderMapping<V>, TopoOrderMappingFactory<V>
@@ -721,7 +758,7 @@ public class DirectedAcyclicGraph<V, E>
      * For performance and flexibility uses an ArrayList for topological index to vertex mapping,
      * and a HashMap for vertex to topological index mapping.
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public class TopoVertexMap
         implements TopoOrderMapping<V>, TopoOrderMappingFactory<V>
@@ -802,18 +839,22 @@ public class DirectedAcyclicGraph<V, E>
      * Region is an *inclusive* range of indices. Esthetically displeasing, but convenient for our
      * purposes.
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public static class Region
         implements Serializable
     {
-        /**
-         */
         private static final long serialVersionUID = 1L;
 
         public final int start;
         public final int finish;
 
+        /**
+         * Construct a new region.
+         * 
+         * @param start the start of the region
+         * @param finish the end of the region (inclusive)
+         */
         public Region(int start, int finish)
         {
             if (start > finish) {
@@ -823,11 +864,22 @@ public class DirectedAcyclicGraph<V, E>
             this.finish = finish;
         }
 
+        /**
+         * Get the size of the region.
+         * 
+         * @return the size of the region
+         */
         public int getSize()
         {
             return (finish - start) + 1;
         }
 
+        /**
+         * Check if index is in the region.
+         * 
+         * @param index the index to check
+         * @return true if the index is in the region, false otherwise
+         */
         public boolean isIn(int index)
         {
             return (index >= start) && (index <= finish);
@@ -838,7 +890,7 @@ public class DirectedAcyclicGraph<V, E>
      * This implementation is close to the performance of VisitedArrayListImpl, with 1/8 the memory
      * usage.
      *
-     * @author perfecthash
+     * @author John Sichi
      */
     public static class VisitedBitSetImpl
         implements Visited, VisitedFactory
@@ -897,7 +949,7 @@ public class DirectedAcyclicGraph<V, E>
      * HashSet implementation, and unlike the Array implementation, it will hold on to that memory
      * (it expands, but never contracts).
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public static class VisitedArrayListImpl
         implements Visited, VisitedFactory
@@ -963,7 +1015,7 @@ public class DirectedAcyclicGraph<V, E>
      * it should shine (lots and lots of vertices). It also should have the lowest memory footprint
      * as it only uses storage for indices that have been visited.
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public static class VisitedHashSetImpl
         implements Visited, VisitedFactory
@@ -1005,13 +1057,11 @@ public class DirectedAcyclicGraph<V, E>
      * This implementation, somewhat to my surprise, is slower than the ArrayList version, probably
      * due to its reallocation of the underlying array for every topology reorder that is required.
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public static class VisitedArrayImpl
         implements Visited, VisitedFactory
     {
-        /**
-         */
         private static final long serialVersionUID = 1L;
 
         private final boolean[] visited;
@@ -1019,13 +1069,18 @@ public class DirectedAcyclicGraph<V, E>
         private final Region region;
 
         /**
-         * Constructs empty factory instance
+         * Constructs empty instance
          */
         public VisitedArrayImpl()
         {
             this(null);
         }
 
+        /**
+         * Construct an empty instance for a region.
+         * 
+         * @param region the region
+         */
         public VisitedArrayImpl(Region region)
         {
             if (region == null) { // make empty instance
@@ -1068,7 +1123,7 @@ public class DirectedAcyclicGraph<V, E>
     /**
      * Exception used in dfsF when a cycle is found
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     public static class CycleFoundException
         extends Exception
@@ -1079,7 +1134,7 @@ public class DirectedAcyclicGraph<V, E>
     /**
      * iterator which follows topological order
      *
-     * @author gilesp
+     * @author Peter Giles
      */
     private class TopoIterator
         implements Iterator<V>

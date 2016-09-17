@@ -50,6 +50,8 @@ public abstract class VertexCovers
      * </p>
      *
      * @param g the graph for which vertex cover approximation is to be found.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return a set of vertices which is a vertex cover for the specified graph.
      *
@@ -98,6 +100,8 @@ public abstract class VertexCovers
      * </p>
      *
      * @param g the graph for which vertex cover approximation is to be found.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      *
      * @return a set of vertices which is a vertex cover for the specified graph.
      *

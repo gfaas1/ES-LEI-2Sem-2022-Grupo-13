@@ -27,6 +27,9 @@ import org.jgrapht.*;
  * iterating over the vertices/edges, it will iterate over the vertices/edges of the base graph and
  * discard vertices/edges that are masked (an edge with a masked extremity vertex is discarded as
  * well).
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -62,7 +65,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -70,6 +73,9 @@ public class MaskSubgraph<V, E>
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E edge)
     {
@@ -77,7 +83,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean addVertex(V v)
@@ -85,12 +91,18 @@ public class MaskSubgraph<V, E>
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsEdge(E e)
     {
         return edgeSet().contains(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsVertex(V v)
     {
@@ -98,7 +110,10 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see UndirectedGraph#degreeOf(Object)
+     * Returns the degree of the specified vertex. 
+     *
+     * @param vertex vertex whose degree is to be calculated
+     * @return the degree of the specified vertex.
      */
     public int degreeOf(V vertex)
     {
@@ -172,7 +187,10 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * Returns a set of all edges incoming into the specified vertex.
+     *
+     * @param vertex the vertex for which the list of incoming edges to be returned
+     * @return a set of all edges incoming into the specified vertex
      */
     public Set<E> incomingEdgesOf(V vertex)
     {
@@ -183,7 +201,10 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
+     * Returns the "in degree" of the specified vertex. 
+     *
+     * @param vertex vertex whose in degree is to be calculated
+     * @return the in degree of the specified vertex.
      */
     public int inDegreeOf(V vertex)
     {
@@ -191,7 +212,10 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * Returns the "out degree" of the specified vertex. 
+     *
+     * @param vertex vertex whose out degree is to be calculated
+     * @return the out degree of the specified vertex.
      */
     public int outDegreeOf(V vertex)
     {
@@ -199,7 +223,10 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * Returns a set of all edges outgoing from the specified vertex.
+     *
+     * @param vertex the vertex for which the list of outgoing edges to be returned
+     * @return a set of all edges outgoing from the specified vertex
      */
     public Set<E> outgoingEdgesOf(V vertex)
     {
@@ -210,7 +237,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Collection)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
@@ -219,7 +246,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
@@ -228,7 +255,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeAllVertices(Collection)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
@@ -237,7 +264,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)
@@ -246,7 +273,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -255,7 +282,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * @see Graph#removeVertex(Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean removeVertex(V v)
@@ -263,6 +290,9 @@ public class MaskSubgraph<V, E>
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<V> vertexSet()
     {

@@ -28,6 +28,9 @@ import org.jgrapht.alg.interfaces.*;
  * weighted undirected graph. The algorithm was developed by Czech mathematician V. Jarník and later
  * independently by computer scientist Robert C. Prim and rediscovered by E. Dijkstra.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Alexey Kudinkin
  * @since Mar 5, 2013
  */
@@ -44,6 +47,11 @@ public class PrimMinimumSpanningTree<V, E>
      */
     private final double minimumSpanningTreeTotalWeight;
 
+    /**
+     * Create and execute a new instance of Prim's algorithm.
+     *  
+     * @param g the input graph
+     */
     public PrimMinimumSpanningTree(final Graph<V, E> g)
     {
         this.minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());

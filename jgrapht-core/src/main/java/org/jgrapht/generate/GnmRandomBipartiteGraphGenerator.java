@@ -35,8 +35,8 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  * @since Sep 13, 2004
  * 
- * @param V the graph vertex type
- * @param E the graph edge type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  * 
  * @see GnpRandomBipartiteGraphGenerator
  */

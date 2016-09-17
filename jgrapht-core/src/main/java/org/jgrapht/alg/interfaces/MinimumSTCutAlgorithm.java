@@ -33,6 +33,9 @@ import java.util.*;
  * iteratively invoking this class for all source-sink pairs. This is computationally expensive.
  * Instead, use the StoerWagnerMinimumCut implementation.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  */
 public interface MinimumSTCutAlgorithm<V, E>

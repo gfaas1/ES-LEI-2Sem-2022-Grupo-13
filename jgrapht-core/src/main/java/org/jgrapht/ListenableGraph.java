@@ -22,9 +22,13 @@ import org.jgrapht.event.*;
 /**
  * A graph that supports listeners on structural change events.
  *
- * @author Barak Naveh
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @see GraphListener
  * @see VertexSetListener
+ *
+ * @author Barak Naveh
  * @since Jul 20, 2003
  */
 public interface ListenableGraph<V, E>

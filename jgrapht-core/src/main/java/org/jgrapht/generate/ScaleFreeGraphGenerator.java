@@ -27,6 +27,9 @@ import org.jgrapht.*;
  * size. Scale-free network is a connected graph, where degrees of vertices are distributed in
  * unusual way. There are many vertices with small degrees and only small amount of vertices with
  * big degrees.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Ilya Razenshteyn
  */

@@ -31,6 +31,12 @@ import org.jgraph.graph.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
+/**
+ * A JGraph model adapter. 
+ *   
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class JGraphModelAdapter<V, E>
     extends DefaultGraphModel
 {
@@ -674,6 +680,9 @@ public class JGraphModelAdapter<V, E>
 
     /**
      * Creates the JGraph cells that reflect the respective JGraphT elements.
+     * 
+     * @param <VV> the graph vertex type
+     * @param <EE> the graph edge type
      *
      * @author Barak Naveh
      * @since Dec 12, 2003
@@ -701,6 +710,9 @@ public class JGraphModelAdapter<V, E>
 
     /**
      * A simple default cell factory.
+     * 
+     * @param <VV> the graph vertex type
+     * @param <EE> the graph edge type
      *
      * @author Barak Naveh
      * @since Dec 12, 2003
