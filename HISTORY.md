@@ -41,6 +41,7 @@ Changes to JGraphT in each version:
 	- Refactor and enhance random graph generators (contributed by Dimitrios Michail)
 	- Fix DirectedAcyclicGraph.removeAllVertices (contributed by Szabolcs Besenyei)
 	- Use Travis to enforce Javadoc correctness (contributed by Joris Kinable)
+	- Corrected all javadoc warnings (contributed by Dimitrios Michail)
 
 - **version 0.9.2** (3-Apr-2016): 
 	- Add `HawickJamesSimpleCycles`, contributed by Luiz Kill
