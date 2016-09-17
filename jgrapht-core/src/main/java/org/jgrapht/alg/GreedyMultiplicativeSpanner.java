@@ -24,7 +24,8 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 /**
- * Greedy algorithm for (2k-1)-multiplicative spanner construction (for any integer {@literal k >= 1}).
+ * Greedy algorithm for (2k-1)-multiplicative spanner construction (for any integer
+ * {@literal k >= 1}).
  *
  * <p>
  * The spanner is guaranteed to contain O(n^{1+1/k}) edges and the shortest path distance between

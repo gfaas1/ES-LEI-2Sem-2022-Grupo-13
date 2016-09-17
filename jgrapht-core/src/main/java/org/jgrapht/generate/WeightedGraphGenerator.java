@@ -34,6 +34,7 @@ public abstract class WeightedGraphGenerator<V, E>
 
     /**
      * Set the edge factory of the generator
+     * 
      * @param edgeFactory the edge factory
      * @return the generator
      */
@@ -45,6 +46,7 @@ public abstract class WeightedGraphGenerator<V, E>
 
     /**
      * Set the edge class of the generator
+     * 
      * @param edgeClass the edge class
      * @return the generator
      */
@@ -56,6 +58,7 @@ public abstract class WeightedGraphGenerator<V, E>
 
     /**
      * Set the weights of the generator
+     * 
      * @param weights of the generator
      * @return the generator
      */

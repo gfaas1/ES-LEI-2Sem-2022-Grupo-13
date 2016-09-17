@@ -117,7 +117,7 @@ public class IsomorphicGraphMapping<V, E>
     /**
      * Checks if a edge e from the first graph has a corresponding edge in the second graph
      *
-     * @param e the edge 
+     * @param e the edge
      * @return is there a corresponding edge to e in the subgraph
      */
     public boolean hasEdgeCorrespondence(E e)

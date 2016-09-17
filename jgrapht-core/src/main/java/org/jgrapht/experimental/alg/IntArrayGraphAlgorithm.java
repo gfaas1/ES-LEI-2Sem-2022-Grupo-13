@@ -36,8 +36,8 @@ public abstract class IntArrayGraphAlgorithm<V, E>
     protected final Map<V, Integer> _vertexToPos;
 
     /**
-     * Create a new instance. 
-     *  
+     * Create a new instance.
+     * 
      * @param g the input graph
      */
     public IntArrayGraphAlgorithm(final Graph<V, E> g)

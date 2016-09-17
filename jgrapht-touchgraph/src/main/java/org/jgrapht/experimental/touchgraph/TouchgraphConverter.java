@@ -48,9 +48,9 @@ public class TouchgraphConverter<V, E>
      *
      * @param graph the JGraphT graph
      * @param tgPanel the TouchGraph TGPanel
-     * @param selfReferencesAllowed do you want to include self-loop edges, i.e. an edge from
-     *        a node to itself? Self-referential loops do not show up in the TG visualization but
-     *        you may want to subclass TG's Node class to show them
+     * @param selfReferencesAllowed do you want to include self-loop edges, i.e. an edge from a node
+     *        to itself? Self-referential loops do not show up in the TG visualization but you may
+     *        want to subclass TG's Node class to show them
      *
      * @return first node of the TouchGraph graph
      *

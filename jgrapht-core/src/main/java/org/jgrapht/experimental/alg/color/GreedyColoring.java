@@ -23,7 +23,7 @@ import org.jgrapht.*;
 import org.jgrapht.experimental.alg.*;
 
 /**
- * Compute greedy graph colorings. 
+ * Compute greedy graph colorings.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

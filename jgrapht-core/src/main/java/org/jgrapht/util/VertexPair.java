@@ -33,7 +33,7 @@ public class VertexPair<V>
     implements Serializable
 {
     private static final long serialVersionUID = -852258620031566794L;
-    
+
     protected final V n1;
     protected final V n2;
 

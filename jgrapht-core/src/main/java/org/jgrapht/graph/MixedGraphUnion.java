@@ -24,7 +24,7 @@ import org.jgrapht.util.*;
 
 /**
  * Read-only union of an undirected and a directed graph.
- 
+ * 
  * @param <V> the vertex type
  * @param <E> the edge type
  * 
@@ -34,7 +34,7 @@ public class MixedGraphUnion<V, E>
     implements DirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1961714127770731054L;
-    
+
     private final UndirectedGraph<V, E> undirectedGraph;
     private final DirectedGraph<V, E> directedGraph;
 

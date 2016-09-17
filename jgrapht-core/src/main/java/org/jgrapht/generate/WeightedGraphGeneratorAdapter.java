@@ -55,7 +55,6 @@ public abstract class WeightedGraphGeneratorAdapter<V, E, T>
     public abstract void generateGraph(
         WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap);
 
-
     /**
      * Set the weights of the generator.
      * 

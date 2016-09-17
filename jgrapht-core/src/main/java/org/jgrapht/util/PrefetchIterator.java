@@ -135,8 +135,8 @@ public class PrefetchIterator<E>
     public boolean hasMoreElements()
     {
         /*
-         * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates getNext() and saves it
-         * 2. sets isGetNextLastResultUpToDate to true.
+         * If (isGetNextLastResultUpToDate==true) returns true else 1. calculates getNext() and
+         * saves it 2. sets isGetNextLastResultUpToDate to true.
          */
         if (endOfEnumerationReached) {
             return false;
@@ -212,8 +212,8 @@ public class PrefetchIterator<E>
     public interface NextElementFunctor<EE>
     {
         /**
-         * Return the next element or throw a {@link NoSuchElementException} if there are no 
-         * more elements.
+         * Return the next element or throw a {@link NoSuchElementException} if there are no more
+         * elements.
          * 
          * @return the next element
          * @throws NoSuchElementException in case there is no next element

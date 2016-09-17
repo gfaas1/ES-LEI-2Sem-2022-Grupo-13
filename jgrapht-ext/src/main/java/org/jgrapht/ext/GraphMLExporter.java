@@ -183,7 +183,7 @@ public class GraphMLExporter<V, E>
          * Get a string representation of the attribute type
          * 
          * @return the string representation of the attribute type
-         */        
+         */
         public String toString()
         {
             return name;

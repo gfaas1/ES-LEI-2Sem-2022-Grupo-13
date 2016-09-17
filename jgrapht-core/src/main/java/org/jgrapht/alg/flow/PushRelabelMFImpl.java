@@ -312,10 +312,10 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Push flow through an edge. 
+     * Push flow through an edge.
      * 
      * @param ex the edge
-     * @param f the amount of flow to push through 
+     * @param f the amount of flow to push through
      */
     protected void pushFlowThrough(AnnotatedFlowEdge ex, double f)
     {
@@ -412,8 +412,7 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Vertex extension for the push-relabel algorithm, which contains
-     * an additional label.
+     * Vertex extension for the push-relabel algorithm, which contains an additional label.
      */
     public class VertexExtension
         extends VertexExtensionBase

@@ -40,7 +40,7 @@ public class UnionFind<T>
     /**
      * Creates a UnionFind instance with all the elements in separate sets.
      * 
-     * @param elements the initial elements to include (each element in a singleton set). 
+     * @param elements the initial elements to include (each element in a singleton set).
      */
     public UnionFind(Set<T> elements)
     {

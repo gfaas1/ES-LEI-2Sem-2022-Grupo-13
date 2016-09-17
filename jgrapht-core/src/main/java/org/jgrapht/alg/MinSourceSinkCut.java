@@ -151,9 +151,9 @@ public class MinSourceSinkCut<V, E>
 
     /**
      * Get the minimum cut partition containing the source.
-     *         
-     * @return Returns the minimum cut partition containing the source, or null if there was no call to
-     *         computeMinCut(V source, V sink)
+     * 
+     * @return Returns the minimum cut partition containing the source, or null if there was no call
+     *         to computeMinCut(V source, V sink)
      */
     public Set<V> getSourcePartition()
     {

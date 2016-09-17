@@ -23,7 +23,7 @@ import org.jgrapht.*;
 import org.jgrapht.util.*;
 
 /**
- * A union of  directed graphs.
+ * A union of directed graphs.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

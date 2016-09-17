@@ -20,7 +20,7 @@ package org.jgrapht.experimental.alg;
 import java.util.*;
 
 /**
- * An interface for an exact algorithm. 
+ * An interface for an exact algorithm.
  *
  * @param <ResultType> type of the result
  * @param <V> type of the input

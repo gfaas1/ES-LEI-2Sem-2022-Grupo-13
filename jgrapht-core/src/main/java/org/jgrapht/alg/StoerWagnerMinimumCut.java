@@ -97,7 +97,7 @@ public class StoerWagnerMinimumCut<V, E>
     /**
      * Implements the MinimumCutPhase function of Stoer and Wagner.
      * 
-     * @param a the vertex 
+     * @param a the vertex
      */
     protected void minimumCutPhase(Set<V> a)
     {

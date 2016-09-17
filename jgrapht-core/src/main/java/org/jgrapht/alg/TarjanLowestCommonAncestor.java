@@ -161,7 +161,7 @@ public class TarjanLowestCommonAncestor<V, E>
     }
 
     /**
-     * Data transfer object for LCA request and response. 
+     * Data transfer object for LCA request and response.
      *
      * @param <V> the graph vertex type
      */
@@ -195,7 +195,7 @@ public class TarjanLowestCommonAncestor<V, E>
          * Get the second vertex of the request
          * 
          * @return the second vertex of the request
-         */        
+         */
         public V getB()
         {
             return b;

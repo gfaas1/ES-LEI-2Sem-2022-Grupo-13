@@ -115,7 +115,7 @@ public abstract class Graphs
      * @param targetVertex target vertex of the edge
      * @param weight weight of the edge
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
@@ -144,7 +144,7 @@ public abstract class Graphs
      * @param destination the graph to which vertices and edges are added
      * @param source the graph used as source for vertices and edges to add
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return <code>true</code> if and only if the destination graph has been changed as a result
      *         of this operation.
@@ -172,7 +172,7 @@ public abstract class Graphs
      * @param destination the graph to which vertices and edges are added
      * @param source the graph used as source for vertices and edges to add
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @see EdgeReversedGraph
      */
@@ -196,7 +196,7 @@ public abstract class Graphs
      * @param source the graph used as a source for edges to add
      * @param edges the edges to be added
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return <tt>true</tt> if this graph changed as a result of the call
      */
@@ -224,7 +224,7 @@ public abstract class Graphs
      * @param destination the graph to which edges are to be added
      * @param vertices the vertices to be added to the graph
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return <tt>true</tt> if graph changed as a result of the call
      *
@@ -253,7 +253,7 @@ public abstract class Graphs
      * @param g the graph to look for neighbors in
      * @param vertex the vertex to get the neighbors of
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return a list of the vertices that are the neighbors of the specified vertex.
      */
@@ -275,7 +275,7 @@ public abstract class Graphs
      * @param g the graph to look for predecessors in
      * @param vertex the vertex to get the predecessors of
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return a list of the vertices that are the direct predecessors of the specified vertex.
      */
@@ -298,7 +298,7 @@ public abstract class Graphs
      * @param g the graph to look for successors in
      * @param vertex the vertex to get the successors of
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return a list of the vertices that are the direct successors of the specified vertex.
      */
@@ -321,7 +321,7 @@ public abstract class Graphs
      *
      * @param g the graph for which an undirected view is to be returned
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return an undirected view of the specified graph, if it is directed, or or the specified
      *         graph itself if it is already undirected.
@@ -349,7 +349,7 @@ public abstract class Graphs
      * @param e edge in g
      * @param v vertex in g
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return true iff e is incident on v
      */
@@ -449,7 +449,7 @@ public abstract class Graphs
      * @param predicate a non-interfering stateless predicate to apply to each vertex to determine
      *        if it should be removed from the graph
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type       
+     * @param <E> the graph edge type
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
@@ -476,7 +476,7 @@ public abstract class Graphs
      * @param graph to be mutated
      * @param vertices vertices to be removed from this graph, if present
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
@@ -544,12 +544,12 @@ public abstract class Graphs
     }
 
     /**
-     * Check if a vertex has any direct successors. 
+     * Check if a vertex has any direct successors.
      *
      * @param graph the graph to look for successors
-     * @param vertex the vertex to look for successors 
+     * @param vertex the vertex to look for successors
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return true if the vertex has any successors, false otherwise
      */
@@ -559,12 +559,12 @@ public abstract class Graphs
     }
 
     /**
-     * Check if a vertex has any direct predecessors. 
+     * Check if a vertex has any direct predecessors.
      *
      * @param graph the graph to look for predecessors
-     * @param vertex the vertex to look for predecessors 
+     * @param vertex the vertex to look for predecessors
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return true if the vertex has any predecessors, false otherwise
      */
