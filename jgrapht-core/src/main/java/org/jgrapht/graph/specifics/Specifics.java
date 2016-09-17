@@ -21,8 +21,8 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A base class encapsulating the basic graph operations. Different implementations 
- * have different space-time tradeoffs.   
+ * A base class encapsulating the basic graph operations. Different implementations have different
+ * space-time tradeoffs.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -104,7 +104,7 @@ public abstract class Specifics<V, E>
     public abstract Set<E> edgesOf(V vertex);
 
     /**
-     * Returns the "in degree" of the specified vertex.  
+     * Returns the "in degree" of the specified vertex.
      *
      * @param vertex vertex whose in degree is to be calculated.
      * @return the in degree of the specified vertex.
@@ -120,7 +120,7 @@ public abstract class Specifics<V, E>
     public abstract Set<E> incomingEdgesOf(V vertex);
 
     /**
-     * Returns the "out degree" of the specified vertex.  
+     * Returns the "out degree" of the specified vertex.
      *
      * @param vertex vertex whose out degree is to be calculated.
      * @return the out degree of the specified vertex.

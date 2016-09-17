@@ -41,7 +41,7 @@ public class ExtensionManager<T, B extends Extension>
     private Map<T, B> originalToExtensionMap = new HashMap<>();
 
     /**
-     * Create a new extension manager. 
+     * Create a new extension manager.
      * 
      * @param factory the extension factory to use
      */
@@ -65,7 +65,7 @@ public class ExtensionManager<T, B extends Extension>
      * old one otherwise.
      * 
      * @param t the original object
-     * @return the extension object 
+     * @return the extension object
      */
     public B getExtension(T t)
     {

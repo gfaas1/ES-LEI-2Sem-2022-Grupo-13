@@ -110,7 +110,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * Returns the degree of the specified vertex. 
+     * Returns the degree of the specified vertex.
      *
      * @param vertex vertex whose degree is to be calculated
      * @return the degree of the specified vertex.
@@ -201,7 +201,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * Returns the "in degree" of the specified vertex. 
+     * Returns the "in degree" of the specified vertex.
      *
      * @param vertex vertex whose in degree is to be calculated
      * @return the in degree of the specified vertex.
@@ -212,7 +212,7 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * Returns the "out degree" of the specified vertex. 
+     * Returns the "out degree" of the specified vertex.
      *
      * @param vertex vertex whose out degree is to be calculated
      * @return the out degree of the specified vertex.

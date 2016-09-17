@@ -29,7 +29,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
+ *        TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
 public interface MaximumFlowAlgorithm<V, E>
 {
@@ -156,7 +156,7 @@ public interface MaximumFlowAlgorithm<V, E>
         private Map<E, Double> flow;
 
         /**
-         * Create a new maximum flow 
+         * Create a new maximum flow
          * 
          * @param value the flow value
          * @param flow the flow map

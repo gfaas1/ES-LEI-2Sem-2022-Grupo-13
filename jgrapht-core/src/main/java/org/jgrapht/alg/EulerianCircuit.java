@@ -65,7 +65,7 @@ public abstract class EulerianCircuit
      *
      * @param g The graph to find an Eulerian circuit
      * @param <V> the graph vertex type
-     * @param <E> the graph edge type 
+     * @param <E> the graph edge type
      *
      * @return null if no Eulerian circuit exists, or a list of vertices representing the Eulerian
      *         circuit if one does exist

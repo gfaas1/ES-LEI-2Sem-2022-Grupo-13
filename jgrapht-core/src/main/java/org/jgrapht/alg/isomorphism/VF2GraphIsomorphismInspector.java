@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
- * <p>This implementation of the VF2 algorithm does not support graphs with multiple edges.
+ * <p>
+ * This implementation of the VF2 algorithm does not support graphs with multiple edges.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
@@ -73,7 +74,7 @@ public class VF2GraphIsomorphismInspector<V, E>
      *
      * @param graph1 the first graph
      * @param graph2 the second graph
-     * @param cacheEdges if true, edges get cached for faster access 
+     * @param cacheEdges if true, edges get cached for faster access
      */
     public VF2GraphIsomorphismInspector(Graph<V, E> graph1, Graph<V, E> graph2, boolean cacheEdges)
     {

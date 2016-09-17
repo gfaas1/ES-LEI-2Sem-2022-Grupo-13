@@ -125,7 +125,7 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     /**
      * Adds all the vertices and all the edges of the {@code sourceGraph} to the graph being built.
      *
-     * @param sourceGraph the source graph   
+     * @param sourceGraph the source graph
      * @return this builder object
      *
      * @see Graphs#addGraph(Graph, Graph)

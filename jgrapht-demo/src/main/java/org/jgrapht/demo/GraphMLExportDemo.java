@@ -124,7 +124,7 @@ public final class GraphMLExportDemo
     }
 
     /**
-     * Main demo method 
+     * Main demo method
      * 
      * @param args command line arguments
      */

@@ -288,7 +288,7 @@ public class FibonacciHeap<T>
      *
      * @param h1 first heap
      * @param h2 second heap
-     * @param <T> type of data stored in the heap 
+     * @param <T> type of data stored in the heap
      *
      * @return new heap containing h1 and h2
      */

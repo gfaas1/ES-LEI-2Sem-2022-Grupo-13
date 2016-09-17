@@ -266,7 +266,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         throw new IllegalArgumentException("no such edge in the union");
     }
 
-    /** 
+    /**
      * Return G<sub>1</sub>
      * 
      * @return G<sub>1</sub>

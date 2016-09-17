@@ -54,8 +54,8 @@ public interface MinimumWeightedVertexCoverAlgorithm<V, E>
     }
 
     /**
-     * Computes a vertex cover; the weight of each vertex is provided in the
-     * in the {@code vertexWeightMap}.
+     * Computes a vertex cover; the weight of each vertex is provided in the in the
+     * {@code vertexWeightMap}.
      * 
      * @param graph the input graph
      * @param vertexWeightMap map containing non-negative weights for each vertex

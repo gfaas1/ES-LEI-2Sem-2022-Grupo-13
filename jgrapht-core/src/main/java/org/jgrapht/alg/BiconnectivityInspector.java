@@ -38,7 +38,7 @@ public class BiconnectivityInspector<V, E>
     /**
      * Running time = O(m) where m is the number of edges.
      * 
-     * @param graph the input graph 
+     * @param graph the input graph
      */
     public BiconnectivityInspector(UndirectedGraph<V, E> graph)
     {

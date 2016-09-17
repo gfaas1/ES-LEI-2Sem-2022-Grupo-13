@@ -32,8 +32,8 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 
 /**
- * A JGraph model adapter. 
- *   
+ * A JGraph model adapter.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */

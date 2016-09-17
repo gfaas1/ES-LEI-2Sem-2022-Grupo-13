@@ -23,14 +23,16 @@ import java.util.*;
 /**
  * Generic pair.
  * 
- * <p>Although the instances of this class are immutable, it is impossible to ensure that the
+ * <p>
+ * Although the instances of this class are immutable, it is impossible to ensure that the
  * references passed to the constructor will not be modified by the caller.
  * 
  * @param <A> the first element type
  * @param <B> the second element type
  * 
  */
-public class Pair<A, B> implements Serializable
+public class Pair<A, B>
+    implements Serializable
 {
     private static final long serialVersionUID = 8176288675989092842L;
 
@@ -38,7 +40,7 @@ public class Pair<A, B> implements Serializable
      * The first pair element
      */
     public A first;
-    
+
     /**
      * The second pair element
      */

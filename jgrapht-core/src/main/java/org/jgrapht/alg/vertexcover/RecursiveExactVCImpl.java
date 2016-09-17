@@ -283,7 +283,7 @@ public class RecursiveExactVCImpl<V, E>
         /**
          * Copy constructor
          * 
-         * @param vertexCover the input vertex cover to copy 
+         * @param vertexCover the input vertex cover to copy
          */
         protected BitSetCover(BitSetCover vertexCover)
         {
@@ -304,7 +304,7 @@ public class RecursiveExactVCImpl<V, E>
         /**
          * Add a vertex in the vertex cover.
          * 
-         * @param vertexIndex the index of the vertex 
+         * @param vertexIndex the index of the vertex
          * @param weight the weight of the vertex
          */
         protected void addVertex(int vertexIndex, double weight)

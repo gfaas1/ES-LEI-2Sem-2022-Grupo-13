@@ -58,7 +58,7 @@ public class BellmanFordShortestPath<V, E>
      * using the Bellman-Ford algorithm.
      *
      * @param graph the graph
-     * @param startVertex the start vertex  
+     * @param startVertex the start vertex
      */
     public BellmanFordShortestPath(Graph<V, E> graph, V startVertex)
     {
@@ -98,8 +98,8 @@ public class BellmanFordShortestPath<V, E>
 
     /**
      * Get the cost of the shortest path to a vertex.
-     *  
-     * @param endVertex the end vertex 
+     * 
+     * @param endVertex the end vertex
      * @return the cost of the shortest path between the start vertex and the end vertex.
      */
     public double getCost(V endVertex)
@@ -119,10 +119,9 @@ public class BellmanFordShortestPath<V, E>
 
     /**
      * Get the shortest path to a vertex.
-     *  
+     * 
      * @param endVertex the end vertex
-     * @return list of edges, or null if no path exists between the start vertex and the
-     *         end vertex
+     * @return list of edges, or null if no path exists between the start vertex and the end vertex
      */
     public List<E> getPathEdgeList(V endVertex)
     {

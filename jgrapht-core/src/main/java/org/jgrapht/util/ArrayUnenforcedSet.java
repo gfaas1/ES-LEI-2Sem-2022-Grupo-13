@@ -48,8 +48,7 @@ public class ArrayUnenforcedSet<E>
     }
 
     /**
-     * Constructs a set containing the elements of the specified
-     * collection.
+     * Constructs a set containing the elements of the specified collection.
      *
      * @param c the collection whose elements are to be placed into this set
      * @throws NullPointerException if the specified collection is null
@@ -62,9 +61,8 @@ public class ArrayUnenforcedSet<E>
     /**
      * Constructs an empty set with the specified initial capacity.
      *
-     * @param  n  the initial capacity of the set
-     * @throws IllegalArgumentException if the specified initial capacity
-     *         is negative
+     * @param n the initial capacity of the set
+     * @throws IllegalArgumentException if the specified initial capacity is negative
      */
     public ArrayUnenforcedSet(int n)
     {

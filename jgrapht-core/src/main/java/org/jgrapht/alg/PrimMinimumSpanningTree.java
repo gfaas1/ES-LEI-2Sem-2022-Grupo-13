@@ -49,7 +49,7 @@ public class PrimMinimumSpanningTree<V, E>
 
     /**
      * Create and execute a new instance of Prim's algorithm.
-     *  
+     * 
      * @param g the input graph
      */
     public PrimMinimumSpanningTree(final Graph<V, E> g)

@@ -18,18 +18,18 @@
 package org.jgrapht.util;
 
 /**
- * Math Utilities. 
+ * Math Utilities.
  * 
  * @author Assaf Lehr
  * @since May 30, 2005
  */
 public class MathUtil
 {
-    
+
     /**
      * Calculate the factorial of n.
      * 
-     * @param n the input number 
+     * @param n the input number
      * @return the factorial
      */
     public static long factorial(int n)

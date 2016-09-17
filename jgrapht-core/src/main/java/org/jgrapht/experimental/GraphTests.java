@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Various graph tests 
+ * Various graph tests
  *
  */
 public final class GraphTests
