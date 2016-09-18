@@ -38,9 +38,15 @@ import org.jgrapht.*;
 public class DOTExporter<V, E>
     implements GraphExporter<V, E>
 {
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
+    /**
+     * Default graph id used by the exporter.
+     */
+    public static final String DEFAULT_GRAPH_ID = "G";
+    
+    private ComponentNameProvider<Graph<V, E>> graphIDProvider;
+    private ComponentNameProvider<V> vertexIDProvider;
+    private ComponentNameProvider<V> vertexLabelProvider;
+    private ComponentNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
 
@@ -50,7 +56,7 @@ public class DOTExporter<V, E>
      */
     public DOTExporter()
     {
-        this(new IntegerNameProvider<>(), null, null);
+        this(new IntegerComponentNameProvider<>(), null, null, null, null, null);
     }
 
     /**
@@ -63,10 +69,10 @@ public class DOTExporter<V, E>
      *        to the file.
      */
     public DOTExporter(
-        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeLabelProvider)
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeLabelProvider)
     {
-        this(vertexIDProvider, vertexLabelProvider, edgeLabelProvider, null, null);
+        this(vertexIDProvider, vertexLabelProvider, edgeLabelProvider, null, null, null);
     }
 
     /**
@@ -86,16 +92,48 @@ public class DOTExporter<V, E>
      *        not be written to the file.
      */
     public DOTExporter(
-        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeLabelProvider,
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeLabelProvider,
         ComponentAttributeProvider<V> vertexAttributeProvider,
         ComponentAttributeProvider<E> edgeAttributeProvider)
+    {
+        this(
+            vertexIDProvider, vertexLabelProvider, edgeLabelProvider, vertexAttributeProvider,
+            edgeAttributeProvider, null);
+    }
+
+    /**
+     * Constructs a new DOTExporter object with the given ID, label, attribute, and graph id
+     * providers. Note that if a label provider conflicts with a label-supplying attribute provider,
+     * the label provider is given precedence.
+     *
+     * @param vertexIDProvider for generating vertex IDs. Must not be null.
+     * @param vertexLabelProvider for generating vertex labels. If null, vertex labels will not be
+     *        written to the file (unless an attribute provider is supplied which also supplies
+     *        labels).
+     * @param edgeLabelProvider for generating edge labels. If null, edge labels will not be written
+     *        to the file.
+     * @param vertexAttributeProvider for generating vertex attributes. If null, vertex attributes
+     *        will not be written to the file.
+     * @param edgeAttributeProvider for generating edge attributes. If null, edge attributes will
+     *        not be written to the file.
+     * @param graphIDProvider for generating the graph ID. If null the graph is named
+     *        {@link #DEFAULT_GRAPH_ID}.
+     */
+    public DOTExporter(
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeLabelProvider,
+        ComponentAttributeProvider<V> vertexAttributeProvider,
+        ComponentAttributeProvider<E> edgeAttributeProvider,
+        ComponentNameProvider<Graph<V, E>> graphIDProvider)
     {
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
         this.edgeLabelProvider = edgeLabelProvider;
         this.vertexAttributeProvider = vertexAttributeProvider;
         this.edgeAttributeProvider = edgeAttributeProvider;
+        this.graphIDProvider =
+            (graphIDProvider == null) ? any -> DEFAULT_GRAPH_ID : graphIDProvider;
     }
 
     /**
@@ -111,11 +149,16 @@ public class DOTExporter<V, E>
         String indent = "  ";
         String connector;
 
+        String graphId = graphIDProvider.getName(g);
+        if (graphId == null || graphId.trim().isEmpty()) {
+            graphId = DEFAULT_GRAPH_ID;
+        }
+        
         if (g instanceof DirectedGraph<?, ?>) {
-            out.println("digraph G {");
+            out.println("digraph " + graphId + " {");
             connector = " -> ";
         } else {
-            out.println("graph G {");
+            out.println("graph " + graphId + " {");
             connector = " -- ";
         }
 
@@ -124,7 +167,7 @@ public class DOTExporter<V, E>
 
             String labelName = null;
             if (vertexLabelProvider != null) {
-                labelName = vertexLabelProvider.getVertexName(v);
+                labelName = vertexLabelProvider.getName(v);
             }
             Map<String, String> attributes = null;
             if (vertexAttributeProvider != null) {
@@ -143,7 +186,7 @@ public class DOTExporter<V, E>
 
             String labelName = null;
             if (edgeLabelProvider != null) {
-                labelName = edgeLabelProvider.getEdgeName(e);
+                labelName = edgeLabelProvider.getName(e);
             }
             Map<String, String> attributes = null;
             if (edgeAttributeProvider != null) {
@@ -206,7 +249,7 @@ public class DOTExporter<V, E>
         // (b) compile regex patterns
 
         // use the associated id provider for an ID of the given vertex
-        String idCandidate = vertexIDProvider.getVertexName(v);
+        String idCandidate = vertexIDProvider.getName(v);
 
         // now test that this is a valid ID
         boolean isAlphaDig = idCandidate.matches("[a-zA-Z]+([\\w_]*)?");
@@ -222,6 +265,7 @@ public class DOTExporter<V, E>
             "Generated id '" + idCandidate + "'for vertex '" + v
                 + "' is not valid with respect to the .dot language");
     }
+
 }
 
 // End DOTExporter.java

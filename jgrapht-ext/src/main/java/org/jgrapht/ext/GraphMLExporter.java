@@ -47,10 +47,10 @@ public class GraphMLExporter<V, E>
     implements GraphExporter<V, E>
 {
     // providers
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeIDProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
+    private ComponentNameProvider<V> vertexIDProvider;
+    private ComponentNameProvider<V> vertexLabelProvider;
+    private ComponentNameProvider<E> edgeIDProvider;
+    private ComponentNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
 
@@ -79,7 +79,9 @@ public class GraphMLExporter<V, E>
      */
     public GraphMLExporter()
     {
-        this(new IntegerNameProvider<>(), null, null, new IntegerEdgeNameProvider<>(), null, null);
+        this(
+            new IntegerComponentNameProvider<>(), null, null, new IntegerComponentNameProvider<>(),
+            null, null);
     }
 
     /**
@@ -93,8 +95,8 @@ public class GraphMLExporter<V, E>
      *        exported.
      */
     public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider, EdgeNameProvider<E> edgeLabelProvider)
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider)
     {
         this(vertexIDProvider, vertexLabelProvider, null, edgeIDProvider, edgeLabelProvider, null);
     }
@@ -114,9 +116,10 @@ public class GraphMLExporter<V, E>
      *        attributes will be exported.
      */
     public GraphMLExporter(
-        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
-        ComponentAttributeProvider<V> vertexAttributeProvider, EdgeNameProvider<E> edgeIDProvider,
-        EdgeNameProvider<E> edgeLabelProvider, ComponentAttributeProvider<E> edgeAttributeProvider)
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentAttributeProvider<V> vertexAttributeProvider,
+        ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider,
+        ComponentAttributeProvider<E> edgeAttributeProvider)
     {
         if (vertexIDProvider == null) {
             throw new IllegalArgumentException("Vertex ID provider must not be null");
@@ -354,7 +357,7 @@ public class GraphMLExporter<V, E>
      * 
      * @return the vertex label provider
      */
-    public VertexNameProvider<V> getVertexLabelProvider()
+    public ComponentNameProvider<V> getVertexLabelProvider()
     {
         return vertexLabelProvider;
     }
@@ -364,7 +367,7 @@ public class GraphMLExporter<V, E>
      * 
      * @param vertexLabelProvider the vertex label provider to set
      */
-    public void setVertexLabelProvider(VertexNameProvider<V> vertexLabelProvider)
+    public void setVertexLabelProvider(ComponentNameProvider<V> vertexLabelProvider)
     {
         this.vertexLabelProvider = vertexLabelProvider;
     }
@@ -374,7 +377,7 @@ public class GraphMLExporter<V, E>
      * 
      * @return the edge label provider
      */
-    public EdgeNameProvider<E> getEdgeLabelProvider()
+    public ComponentNameProvider<E> getEdgeLabelProvider()
     {
         return edgeLabelProvider;
     }
@@ -384,7 +387,7 @@ public class GraphMLExporter<V, E>
      * 
      * @param edgeLabelProvider the edge label provider to set
      */
-    public void setEdgeLabelProvider(EdgeNameProvider<E> edgeLabelProvider)
+    public void setEdgeLabelProvider(ComponentNameProvider<E> edgeLabelProvider)
     {
         this.edgeLabelProvider = edgeLabelProvider;
     }
@@ -570,11 +573,11 @@ public class GraphMLExporter<V, E>
         for (V v : g.vertexSet()) {
             // <node>
             AttributesImpl attr = new AttributesImpl();
-            attr.addAttribute("", "", "id", "CDATA", vertexIDProvider.getVertexName(v));
+            attr.addAttribute("", "", "id", "CDATA", vertexIDProvider.getName(v));
             handler.startElement("", "", "node", attr);
 
             if (vertexLabelProvider != null) {
-                String vertexLabel = vertexLabelProvider.getVertexName(v);
+                String vertexLabel = vertexLabelProvider.getName(v);
                 if (vertexLabel != null) {
                     writeData(handler, "vertex_label_key", vertexLabel);
                 }
@@ -620,15 +623,15 @@ public class GraphMLExporter<V, E>
         for (E e : g.edgeSet()) {
             // <edge>
             AttributesImpl attr = new AttributesImpl();
-            attr.addAttribute("", "", "id", "CDATA", edgeIDProvider.getEdgeName(e));
+            attr.addAttribute("", "", "id", "CDATA", edgeIDProvider.getName(e));
             attr.addAttribute(
-                "", "", "source", "CDATA", vertexIDProvider.getVertexName(g.getEdgeSource(e)));
+                "", "", "source", "CDATA", vertexIDProvider.getName(g.getEdgeSource(e)));
             attr.addAttribute(
-                "", "", "target", "CDATA", vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+                "", "", "target", "CDATA", vertexIDProvider.getName(g.getEdgeTarget(e)));
             handler.startElement("", "", "edge", attr);
 
             if (edgeLabelProvider != null) {
-                String edgeLabel = edgeLabelProvider.getEdgeName(e);
+                String edgeLabel = edgeLabelProvider.getName(e);
                 if (edgeLabel != null) {
                     writeData(handler, "edge_label_key", edgeLabel);
                 }

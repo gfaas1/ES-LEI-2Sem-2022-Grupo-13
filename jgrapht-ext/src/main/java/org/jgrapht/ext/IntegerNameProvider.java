@@ -17,10 +17,6 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
-import org.jgrapht.event.*;
-
 /**
  * Assigns a unique integer to represent each vertex. Each instance of IntegerNameProvider maintains
  * an internal map between every vertex it has ever seen and the unique integer representing that
@@ -29,42 +25,13 @@ import org.jgrapht.event.*;
  * @param <V> the graph vertex type
  *
  * @author Charles Fry
+ * 
+ * @deprecated in favor of {@link IntegerComponentNameProvider}
  */
+@Deprecated
 public class IntegerNameProvider<V>
-    implements VertexNameProvider<V>
+    extends IntegerComponentNameProvider<V>
 {
-    private int nextID = 1;
-    private final Map<V, Integer> idMap = new HashMap<>();
-
-    /**
-     * Clears all cached identifiers, and resets the unique identifier counter.
-     */
-    public void clear()
-    {
-        nextID = 1;
-        idMap.clear();
-    }
-
-    /**
-     * Returns the String representation of the unique integer representing a vertex.
-     *
-     * @param vertex the vertex to be named
-     *
-     * @return the name of
-     *
-     * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
-     */
-    @Override
-    public String getVertexName(V vertex)
-    {
-        Integer id = idMap.get(vertex);
-        if (id == null) {
-            id = nextID++;
-            idMap.put(vertex, id);
-        }
-
-        return id.toString();
-    }
 }
 
 // End IntegerNameProvider.java

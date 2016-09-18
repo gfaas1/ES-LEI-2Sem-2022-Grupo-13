@@ -43,14 +43,14 @@ import org.jgrapht.*;
 public class VisioExporter<V, E>
     implements GraphExporter<V, E>
 {
-    private VertexNameProvider<V> vertexNameProvider;
+    private ComponentNameProvider<V> vertexNameProvider;
 
     /**
      * Creates a new VisioExporter with the specified naming policy.
      *
      * @param vertexNameProvider the vertex name provider to be used for naming the Visio shapes.
      */
-    public VisioExporter(VertexNameProvider<V> vertexNameProvider)
+    public VisioExporter(ComponentNameProvider<V> vertexNameProvider)
     {
         this.vertexNameProvider = vertexNameProvider;
     }
@@ -60,7 +60,7 @@ public class VisioExporter<V, E>
      */
     public VisioExporter()
     {
-        this(new StringNameProvider<>());
+        this(new StringComponentNameProvider<>());
     }
 
     /**
@@ -87,8 +87,8 @@ public class VisioExporter<V, E>
 
     private void exportEdge(PrintWriter out, E edge, Graph<V, E> g)
     {
-        String sourceName = vertexNameProvider.getVertexName(g.getEdgeSource(edge));
-        String targetName = vertexNameProvider.getVertexName(g.getEdgeTarget(edge));
+        String sourceName = vertexNameProvider.getName(g.getEdgeSource(edge));
+        String targetName = vertexNameProvider.getName(g.getEdgeTarget(edge));
 
         out.print("Link,");
 
@@ -107,7 +107,7 @@ public class VisioExporter<V, E>
 
     private void exportVertex(PrintWriter out, V vertex)
     {
-        String name = vertexNameProvider.getVertexName(vertex);
+        String name = vertexNameProvider.getName(vertex);
 
         out.print("Shape,");
         out.print(name);

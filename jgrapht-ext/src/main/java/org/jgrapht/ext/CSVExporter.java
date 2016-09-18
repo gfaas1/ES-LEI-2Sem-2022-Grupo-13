@@ -55,7 +55,7 @@ public class CSVExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
-    private final VertexNameProvider<V> vertexIDProvider;
+    private final ComponentNameProvider<V> vertexIDProvider;
     private final Set<CSVFormat.Parameter> parameters;
     private CSVFormat format;
     private char delimiter;
@@ -66,7 +66,7 @@ public class CSVExporter<V, E>
      */
     public CSVExporter()
     {
-        this(new IntegerNameProvider<>(), CSVFormat.ADJACENCY_LIST, DEFAULT_DELIMITER);
+        this(new IntegerComponentNameProvider<>(), CSVFormat.ADJACENCY_LIST, DEFAULT_DELIMITER);
     }
 
     /**
@@ -76,7 +76,7 @@ public class CSVExporter<V, E>
      */
     public CSVExporter(CSVFormat format)
     {
-        this(new IntegerNameProvider<>(), format, DEFAULT_DELIMITER);
+        this(new IntegerComponentNameProvider<>(), format, DEFAULT_DELIMITER);
     }
 
     /**
@@ -87,7 +87,7 @@ public class CSVExporter<V, E>
      */
     public CSVExporter(CSVFormat format, char delimiter)
     {
-        this(new IntegerNameProvider<>(), format, delimiter);
+        this(new IntegerComponentNameProvider<>(), format, delimiter);
     }
 
     /**
@@ -97,7 +97,7 @@ public class CSVExporter<V, E>
      * @param format the format to use
      * @param delimiter delimiter to use
      */
-    public CSVExporter(VertexNameProvider<V> vertexIDProvider, CSVFormat format, char delimiter)
+    public CSVExporter(ComponentNameProvider<V> vertexIDProvider, CSVFormat format, char delimiter)
     {
         if (vertexIDProvider == null) {
             throw new IllegalArgumentException("Vertex id provider cannot be null");
@@ -207,9 +207,9 @@ public class CSVExporter<V, E>
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
         for (E e : g.edgeSet()) {
-            exportEscapedField(out, vertexIDProvider.getVertexName(g.getEdgeSource(e)));
+            exportEscapedField(out, vertexIDProvider.getName(g.getEdgeSource(e)));
             out.print(delimiter);
-            exportEscapedField(out, vertexIDProvider.getVertexName(g.getEdgeTarget(e)));
+            exportEscapedField(out, vertexIDProvider.getName(g.getEdgeTarget(e)));
             out.println();
         }
     }
@@ -218,21 +218,21 @@ public class CSVExporter<V, E>
     {
         if (g instanceof DirectedGraph<?, ?>) {
             for (V v : g.vertexSet()) {
-                exportEscapedField(out, vertexIDProvider.getVertexName(v));
+                exportEscapedField(out, vertexIDProvider.getName(v));
                 for (E e : ((DirectedGraph<V, E>) g).outgoingEdgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    exportEscapedField(out, vertexIDProvider.getVertexName(w));
+                    exportEscapedField(out, vertexIDProvider.getName(w));
                 }
                 out.println();
             }
         } else {
             for (V v : g.vertexSet()) {
-                exportEscapedField(out, vertexIDProvider.getVertexName(v));
+                exportEscapedField(out, vertexIDProvider.getName(v));
                 for (E e : g.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(g, e, v);
                     out.print(delimiter);
-                    exportEscapedField(out, vertexIDProvider.getVertexName(w));
+                    exportEscapedField(out, vertexIDProvider.getName(w));
                 }
                 out.println();
             }
@@ -250,14 +250,14 @@ public class CSVExporter<V, E>
         if (exportNodeId) {
             for (V v : g.vertexSet()) {
                 out.print(delimiter);
-                exportEscapedField(out, vertexIDProvider.getVertexName(v));
+                exportEscapedField(out, vertexIDProvider.getName(v));
             }
             out.println();
         }
         int n = g.vertexSet().size();
         for (V v : g.vertexSet()) {
             if (exportNodeId) {
-                exportEscapedField(out, vertexIDProvider.getVertexName(v));
+                exportEscapedField(out, vertexIDProvider.getName(v));
                 out.print(delimiter);
             }
             int i = 0;

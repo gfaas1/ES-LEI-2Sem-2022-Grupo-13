@@ -22,8 +22,11 @@ package org.jgrapht.ext;
  * 
  * @param <V> the graph vertex type
  * 
+ * @deprecated in favor of {@link ComponentNameProvider}
  */
+@Deprecated
 public interface VertexNameProvider<V>
+    extends ComponentNameProvider<V>
 {
     /**
      * Returns a unique name for a vertex. This is useful when exporting a a graph, as it ensures
@@ -34,6 +37,20 @@ public interface VertexNameProvider<V>
      * @return the name of the vertex
      */
     String getVertexName(V vertex);
+
+    /**
+     * Returns a unique name for a vertex. This is useful when exporting a a graph, as it ensures
+     * that all vertices are assigned simple, consistent names.
+     *
+     * @param vertex the vertex to be named
+     *
+     * @return the name of the vertex
+     */
+    @Override
+    default String getName(V vertex)
+    {
+        return this.getVertexName(vertex);
+    }
 }
 
 // End VertexNameProvider.java

@@ -22,25 +22,31 @@ import java.io.*;
 import org.jgrapht.*;
 
 /**
+ * Class with DOT format related utilities.
+ * 
  * @author Christoph Zauner
+ * 
+ * @deprecated in favor of implementing the current functionality directly by the user
  */
+@Deprecated
 public class DOTUtils
 {
     /**
-     * Convert a graph into a String in DOT format.
+     * Convert a graph into a string in DOT format.
      * 
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @return a {@link String} representation in DOT format of the given graph.
+     * @return a {@link String} representation in DOT format of the given graph
+     * @deprecated in favor of implementing the current functionality directly by the user
      */
+    @Deprecated
     public static <V, E> String convertGraphToDotString(Graph<V, E> graph)
     {
-
         StringWriter outputWriter = new StringWriter();
-        new DOTExporter<V, E>(new IntegerNameProvider<V>(),
+        new DOTExporter<V, E>(new IntegerComponentNameProvider<V>(),
             // vertex name provider
-            new StringNameProvider<V>(),
+            new StringComponentNameProvider<V>(),
             // edge label provider
             null).exportGraph(graph, outputWriter);
 

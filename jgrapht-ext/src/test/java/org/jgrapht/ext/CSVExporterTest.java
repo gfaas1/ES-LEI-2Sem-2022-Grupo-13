@@ -37,23 +37,25 @@ public class CSVExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    private static VertexNameProvider<Integer> nameProvider = new VertexNameProvider<Integer>()
-    {
-        @Override
-        public String getVertexName(Integer vertex)
+    private static ComponentNameProvider<Integer> nameProvider =
+        new ComponentNameProvider<Integer>()
         {
-            return String.valueOf(vertex);
-        }
-    };
+            @Override
+            public String getName(Integer vertex)
+            {
+                return String.valueOf(vertex);
+            }
+        };
 
-    private static VertexNameProvider<String> stringNameProvider = new VertexNameProvider<String>()
-    {
-        @Override
-        public String getVertexName(String vertex)
+    private static ComponentNameProvider<String> stringNameProvider =
+        new ComponentNameProvider<String>()
         {
-            return vertex;
-        }
-    };
+            @Override
+            public String getName(String vertex)
+            {
+                return vertex;
+            }
+        };
 
     // @formatter:off
     private static final String UNDIRECTED_EDGE_LIST =

@@ -21,8 +21,12 @@ package org.jgrapht.ext;
  * Assigns a display name for each of the graph edges.
  * 
  * @param <E> the graph edge type
+ * 
+ * @deprecated in favor of {@link ComponentNameProvider}
  */
+@Deprecated
 public interface EdgeNameProvider<E>
+    extends ComponentNameProvider<E>
 {
     /**
      * Returns a unique name for an edge. This is useful when exporting a graph, as it ensures that
@@ -33,6 +37,20 @@ public interface EdgeNameProvider<E>
      * @return the name of the edge
      */
     String getEdgeName(E edge);
+
+    /**
+     * Returns a unique name for an edge. This is useful when exporting a graph, as it ensures that
+     * all edges are assigned simple, consistent names.
+     *
+     * @param edge the edge to be named
+     *
+     * @return the name of the edge
+     */
+    @Override
+    default String getName(E edge)
+    {
+        return this.getEdgeName(edge);
+    }
 }
 
 // End EdgeNameProvider.java

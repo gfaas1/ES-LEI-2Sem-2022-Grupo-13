@@ -165,14 +165,14 @@ public final class GraphMLExportDemo
 
         // create GraphML exporter
         GraphMLExporter<GraphVertex, DefaultWeightedEdge> exporter =
-            new GraphMLExporter<>(new VertexNameProvider<GraphVertex>()
+            new GraphMLExporter<>(new ComponentNameProvider<GraphVertex>()
             {
                 @Override
-                public String getVertexName(GraphVertex v)
+                public String getName(GraphVertex v)
                 {
                     return v.id;
                 }
-            }, null, new IntegerEdgeNameProvider<>(), null);
+            }, null, new IntegerComponentNameProvider<>(), null);
 
         // set to export the internal edge weights
         exporter.setExportEdgeWeights(true);

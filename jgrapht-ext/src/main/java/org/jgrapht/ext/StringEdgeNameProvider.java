@@ -24,22 +24,13 @@ package org.jgrapht.ext;
  * @param <E> the graph edge type
  *
  * @author Trevor Harmon
+ *
+ * @deprecated in favor of {@link StringComponentNameProvider}
  */
+@Deprecated
 public class StringEdgeNameProvider<E>
-    implements EdgeNameProvider<E>
+    extends StringComponentNameProvider<E>
 {
-
-    /**
-     * Returns the String representation an edge.
-     *
-     * @param edge the edge to be named
-     * @return a unique String edge representation
-     */
-    @Override
-    public String getEdgeName(E edge)
-    {
-        return edge.toString();
-    }
 }
 
 // End StringEdgeNameProvider.java

@@ -24,7 +24,10 @@ package org.jgrapht.ext;
  * @param <V> the graph vertex type
  *
  * @author Charles Fry
+ * 
+ * @deprecated in favor of {@link StringComponentNameProvider}
  */
+@Deprecated
 public class StringNameProvider<V>
     implements VertexNameProvider<V>
 {

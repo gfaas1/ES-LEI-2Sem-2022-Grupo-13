@@ -365,18 +365,18 @@ public class GraphMLExporterTest
         g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
 
         GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-            new IntegerNameProvider<String>(), new VertexNameProvider<String>()
+            new IntegerComponentNameProvider<String>(), new ComponentNameProvider<String>()
             {
                 @Override
-                public String getVertexName(String vertex)
+                public String getName(String vertex)
                 {
                     return vertex;
                 }
-            }, new IntegerEdgeNameProvider<DefaultWeightedEdge>(),
-            new EdgeNameProvider<DefaultWeightedEdge>()
+            }, new IntegerComponentNameProvider<DefaultWeightedEdge>(),
+            new ComponentNameProvider<DefaultWeightedEdge>()
             {
                 @Override
-                public String getEdgeName(DefaultWeightedEdge edge)
+                public String getName(DefaultWeightedEdge edge)
                 {
                     return edge.toString();
                 }
@@ -437,19 +437,19 @@ public class GraphMLExporterTest
         g.setEdgeWeight(g.getEdge(V3, V1), 15.0);
 
         GraphMLExporter<String, DefaultWeightedEdge> exporter = new GraphMLExporter<>();
-        exporter.setVertexLabelProvider(new VertexNameProvider<String>()
+        exporter.setVertexLabelProvider(new ComponentNameProvider<String>()
         {
             @Override
-            public String getVertexName(String vertex)
+            public String getName(String vertex)
             {
                 return "myvertex-" + vertex;
             }
         });
         exporter.setVertexLabelAttributeName("custom_vertex_label");
-        exporter.setEdgeLabelProvider(new EdgeNameProvider<DefaultWeightedEdge>()
+        exporter.setEdgeLabelProvider(new ComponentNameProvider<DefaultWeightedEdge>()
         {
             @Override
-            public String getEdgeName(DefaultWeightedEdge edge)
+            public String getName(DefaultWeightedEdge edge)
             {
                 return "myedge-" + edge.toString();
             }
@@ -560,8 +560,8 @@ public class GraphMLExporterTest
 
         GraphMLExporter<String,
             DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-                new IntegerNameProvider<>(), null, vertexAttributeProvider,
-                new IntegerEdgeNameProvider<>(), null, edgeAttributeProvider);
+                new IntegerComponentNameProvider<>(), null, vertexAttributeProvider,
+                new IntegerComponentNameProvider<>(), null, edgeAttributeProvider);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
             "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,
@@ -637,8 +637,8 @@ public class GraphMLExporterTest
 
         GraphMLExporter<String,
             DefaultWeightedEdge> exporter = new GraphMLExporter<>(
-                new IntegerNameProvider<>(), null, vertexAttributeProvider,
-                new IntegerEdgeNameProvider<>(), null, edgeAttributeProvider);
+                new IntegerComponentNameProvider<>(), null, vertexAttributeProvider,
+                new IntegerComponentNameProvider<>(), null, edgeAttributeProvider);
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
             "color", GraphMLExporter.AttributeCategory.NODE, GraphMLExporter.AttributeType.STRING,

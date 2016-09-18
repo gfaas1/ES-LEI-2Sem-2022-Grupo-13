@@ -20,23 +20,19 @@ package org.jgrapht.ext;
 import java.util.*;
 
 /**
- * Assigns a unique integer to represent each edge. Each instance of IntegerEdgeNameProvider
- * maintains an internal map between every edge it has ever seen and the unique integer representing
- * that edge. As a result it is probably desirable to have a separate instance for each distinct
- * graph.
+ * Assigns a unique integer to represent each component. Each instance of provider maintains an
+ * internal map between every component it has ever seen and the unique integer representing that
+ * edge. As a result it is probably desirable to have a separate instance for each distinct graph.
  * 
- * @param <E> the graph edge type
+ * @param <T> the component type
  *
  * @author Trevor Harmon
- * 
- * @deprecated in favor of {@link IntegerComponentNameProvider}
  */
-@Deprecated
-public class IntegerEdgeNameProvider<E>
-    implements EdgeNameProvider<E>
+public class IntegerComponentNameProvider<T>
+    implements ComponentNameProvider<T>
 {
     private int nextID = 1;
-    private final Map<E, Integer> idMap = new HashMap<>();
+    private final Map<T, Integer> idMap = new HashMap<>();
 
     /**
      * Clears all cached identifiers, and resets the unique identifier counter.
@@ -48,21 +44,20 @@ public class IntegerEdgeNameProvider<E>
     }
 
     /**
-     * Returns the String representation of an edge.
+     * Returns the string representation of a component.
      *
-     * @param edge the edge to be named
+     * @param component the component to be named
      */
     @Override
-    public String getEdgeName(E edge)
+    public String getName(T component)
     {
-        Integer id = idMap.get(edge);
+        Integer id = idMap.get(component);
         if (id == null) {
             id = nextID++;
-            idMap.put(edge, id);
+            idMap.put(component, id);
         }
-
         return id.toString();
     }
 }
 
-// End IntegerEdgeNameProvider.java
+// End IntegerComponentNameProvider.java
