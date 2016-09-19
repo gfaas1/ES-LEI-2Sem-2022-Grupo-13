@@ -29,7 +29,6 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- *        TODO: Rename buildMaximumFlow(V source, V sink) to getMaximumFlow(V source, V sink)
  */
 public interface MaximumFlowAlgorithm<V, E>
 {
@@ -42,8 +41,22 @@ public interface MaximumFlowAlgorithm<V, E>
      * @param sink sink of the flow inside the network
      *
      * @return maximum flow
+     * @deprecated use {@link #getMaximumFlow(Object, Object)} instead
      */
-    MaximumFlow<E> buildMaximumFlow(V source, V sink);
+    @Deprecated
+    default MaximumFlow<E> buildMaximumFlow(V source, V sink){ return getMaximumFlow(source, sink); };
+
+    /**
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Returns an object containing detailed
+     * information about the flow.
+     *
+     * @param source source of the flow inside the network
+     * @param sink sink of the flow inside the network
+     *
+     * @return maximum flow
+     */
+    MaximumFlow<E> getMaximumFlow(V source, V sink);
 
     /**
      * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
@@ -57,7 +70,7 @@ public interface MaximumFlowAlgorithm<V, E>
      */
     default double calculateMaximumFlow(V source, V sink)
     {
-        return buildMaximumFlow(source, sink).getValue();
+        return getMaximumFlow(source, sink).getValue();
     }
 
     /**
@@ -72,22 +85,6 @@ public interface MaximumFlowAlgorithm<V, E>
     default double getMaximumFlowValue()
     {
         throw new UnsupportedOperationException("Function not implemented");
-    }
-
-    /**
-     * Returns maximum flow, that was calculated during last <tt>
-     * calculateMaximumFlow</tt> call, or <tt>null</tt>, if there was no <tt>
-     * calculateMaximumFlow</tt> calls.
-     *
-     * NOTE: this function currently has a default implementation to guarantee backwards
-     * compatibility. This function should be enforced in the next version.
-     *
-     * @return <i>read-only</i> mapping from edges to doubles - flow values
-     * @deprecated Use {@link #getFlowMap()} instead
-     */
-    default Map<E, Double> getMaximumFlow()
-    {
-        return getFlowMap();
     }
 
     /**

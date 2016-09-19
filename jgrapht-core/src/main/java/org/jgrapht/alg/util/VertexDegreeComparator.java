@@ -79,20 +79,6 @@ public class VertexDegreeComparator<V, E>
      * Creates a comparator for comparing the degrees of vertices in the specified graph.
      *
      * @param g graph with respect to which the degree is calculated.
-     * @param ascendingOrder true - compares in ascending order of degrees (lowest first), false -
-     *        compares in descending order of degrees (highest first).
-     */
-    @Deprecated
-    public VertexDegreeComparator(UndirectedGraph<V, E> g, boolean ascendingOrder)
-    {
-        graph = g;
-        this.ascendingOrder = ascendingOrder;
-    }
-
-    /**
-     * Creates a comparator for comparing the degrees of vertices in the specified graph.
-     *
-     * @param g graph with respect to which the degree is calculated.
      * @param order order in which the vertices are sorted (ascending or descending)
      */
     public VertexDegreeComparator(UndirectedGraph<V, E> g, Order order)

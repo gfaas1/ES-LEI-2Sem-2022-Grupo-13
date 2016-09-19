@@ -383,31 +383,6 @@ public abstract class Graphs
     }
 
     /**
-     * Gets the list of vertices visited by a path.
-     *
-     * @param path path of interest
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     *
-     * @return corresponding vertex list
-     * @deprecated This functionality is now directly provided by any GraphPath, see
-     *             {@link GraphPath#getVertexList()}
-     */
-    @Deprecated
-    public static <V, E> List<V> getPathVertexList(GraphPath<V, E> path)
-    {
-        Graph<V, E> g = path.getGraph();
-        List<V> list = new ArrayList<>();
-        V v = path.getStartVertex();
-        list.add(v);
-        for (E e : path.getEdgeList()) {
-            v = getOppositeVertex(g, e, v);
-            list.add(v);
-        }
-        return list;
-    }
-
-    /**
      * Removes the given vertex from the given graph. If the vertex to be removed has one or more
      * predecessors, the predecessors will be connected directly to the successors of the vertex to
      * be removed.

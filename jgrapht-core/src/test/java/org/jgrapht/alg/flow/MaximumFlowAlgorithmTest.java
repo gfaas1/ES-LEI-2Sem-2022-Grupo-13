@@ -45,7 +45,7 @@ public abstract class MaximumFlowAlgorithmTest
         for (int i = 0; i < sources.length; i++) {
             verifyDirected(
                 sources[i], sinks[i], expectedResults[i], network,
-                solver.buildMaximumFlow(sources[i], sinks[i]));
+                solver.getMaximumFlow(sources[i], sinks[i]));
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class MaximumFlowAlgorithmTest
         int expectedResult, MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver)
     {
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow =
-            solver.buildMaximumFlow(source, sink);
+            solver.getMaximumFlow(source, sink);
         Double flowValue = maxFlow.getValue();
         Map<DefaultWeightedEdge, Double> flow = maxFlow.getFlow();
 

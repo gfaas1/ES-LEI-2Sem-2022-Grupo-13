@@ -178,7 +178,7 @@ public class PushRelabelMFImpl<V, E>
     }
 
     @Override
-    public MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    public MaximumFlow<E> getMaximumFlow(V source, V sink)
     {
         this.calculateMaximumFlow(source, sink);
         maxFlow = composeFlow();

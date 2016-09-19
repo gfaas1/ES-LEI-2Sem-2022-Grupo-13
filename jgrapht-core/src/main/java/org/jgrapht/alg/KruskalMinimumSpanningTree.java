@@ -84,27 +84,6 @@ public class KruskalMinimumSpanningTree<V, E>
         return spanningTreeCost;
     }
 
-    /**
-     * Returns edges set constituting the minimum spanning tree/forest
-     *
-     * @return minimum spanning-tree edges set
-     */
-    @Deprecated
-    public Set<E> getEdgeSet()
-    {
-        return getMinimumSpanningTreeEdgeSet();
-    }
-
-    /**
-     * Returns total weight of the minimum spanning tree/forest.
-     *
-     * @return minimum spanning-tree total weight
-     */
-    @Deprecated
-    public double getSpanningTreeCost()
-    {
-        return getMinimumSpanningTreeTotalWeight();
-    }
 }
 
 // End KruskalMinimumSpanningTree.java

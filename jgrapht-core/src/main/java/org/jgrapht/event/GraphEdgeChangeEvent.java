@@ -75,21 +75,6 @@ public class GraphEdgeChangeEvent<V, E>
      * @param eventSource the source of this event.
      * @param type the event type of this event.
      * @param edge the edge that this event is related to.
-     *
-     * @deprecated Use new constructor which takes vertex parameters.
-     */
-    @Deprecated
-    public GraphEdgeChangeEvent(Object eventSource, int type, E edge)
-    {
-        this(eventSource, type, edge, null, null);
-    }
-
-    /**
-     * Constructor for GraphEdgeChangeEvent.
-     *
-     * @param eventSource the source of this event.
-     * @param type the event type of this event.
-     * @param edge the edge that this event is related to.
      * @param edgeSource edge source vertex
      * @param edgeTarget edge target vertex
      */

@@ -136,7 +136,7 @@ public class GraphPerformanceTest
         {
             EdmondsKarpMFImpl<Integer, DefaultWeightedEdge> maximumFlowAlg =
                 new EdmondsKarpMFImpl<>(graph);
-            return maximumFlowAlg.buildMaximumFlow(source, sink).getValue();
+            return maximumFlowAlg.getMaximumFlow(source, sink).getValue();
         }
 
         private boolean isStronglyConnected(
