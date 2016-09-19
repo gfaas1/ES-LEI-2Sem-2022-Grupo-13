@@ -2,7 +2,9 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.0.0** (under development):
+- **version 1.0.1** (under development):
+
+- **version 1.0.0** (19-sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
 	- Optimized edge lookups (contributed by Joris Kinable)
