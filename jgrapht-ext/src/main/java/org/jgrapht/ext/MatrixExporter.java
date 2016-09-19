@@ -151,69 +151,6 @@ public class MatrixExporter<V, E>
         }
     }
 
-    /**
-     * Exports the specified graph into a plain text file format containing a sparse representation
-     * of the graph's adjacency matrix. The value stored in each position of the matrix indicates
-     * the number of edges between two vertices. With an undirected graph, the adjacency matrix is
-     * symmetric.
-     *
-     * @param output the writer to which the graph to be exported.
-     * @param g the graph to be exported.
-     */
-    @Deprecated
-    public void exportAdjacencyMatrix(Writer output, UndirectedGraph<V, E> g)
-    {
-        exportAdjacencyMatrix(g, output);
-    }
-
-    /**
-     * Exports the specified graph into a plain text file format containing a sparse representation
-     * of the graph's adjacency matrix. The value stored in each position of the matrix indicates
-     * the number of directed edges going from one vertex to another.
-     *
-     * @param output the writer to which the graph to be exported.
-     * @param g the graph to be exported.
-     */
-    @Deprecated
-    public void exportAdjacencyMatrix(Writer output, DirectedGraph<V, E> g)
-    {
-        exportAdjacencyMatrix(g, output);
-    }
-
-    /**
-     * Exports the specified graph into a plain text file format containing a sparse representation
-     * of the graph's Laplacian matrix. Laplacian matrices are only defined for simple graphs, so
-     * edge direction, multiple edges, loops, and weights are all ignored when creating the
-     * Laplacian matrix. If you're unsure about Laplacian matrices, see:
-     * <a href="http://mathworld.wolfram.com/LaplacianMatrix.html"> http://
-     * mathworld.wolfram.com/LaplacianMatrix.html</a>.
-     *
-     * @param output the writer to which the graph is to be exported.
-     * @param g the graph to be exported.
-     */
-    @Deprecated
-    public void exportLaplacianMatrix(Writer output, UndirectedGraph<V, E> g)
-    {
-        exportLaplacianMatrix(g, output);
-    }
-
-    /**
-     * Exports the specified graph into a plain text file format containing a sparse representation
-     * of the graph's normalized Laplacian matrix. Laplacian matrices are only defined for simple
-     * graphs, so edge direction, multiple edges, loops, and weights are all ignored when creating
-     * the Laplacian matrix. If you're unsure about normalized Laplacian matrices, see:
-     * <a href="http://mathworld.wolfram.com/LaplacianMatrix.html"> http://
-     * mathworld.wolfram.com/LaplacianMatrix.html</a>.
-     *
-     * @param output the writer to which the graph is to be exported.
-     * @param g the graph to be exported.
-     */
-    @Deprecated
-    public void exportNormalizedLaplacianMatrix(Writer output, UndirectedGraph<V, E> g)
-    {
-        exportNormalizedLaplacianMatrix(g, output);
-    }
-
     private void exportAdjacencyMatrix(Graph<V, E> g, Writer writer)
     {
         for (V from : g.vertexSet()) {

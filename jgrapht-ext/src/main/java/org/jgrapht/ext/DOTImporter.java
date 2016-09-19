@@ -159,21 +159,6 @@ public class DOTImporter<V, E>
     /**
      * Read a dot formatted string and populate the provided graph.
      *
-     * @param input the content of a dot file as a string
-     * @param graph the graph to update
-     *
-     * @throws ImportException if there is a problem parsing the file.
-     */
-    @Deprecated
-    public void read(String input, AbstractBaseGraph<V, E> graph)
-        throws ImportException
-    {
-        read(input, (Graph<V, E>) graph);
-    }
-
-    /**
-     * Read a dot formatted string and populate the provided graph.
-     *
      * @param input the content of a dot file.
      * @param graph the graph to update.
      *
