@@ -69,30 +69,6 @@ public class GmlExporter<V, E>
         EXPORT_EDGE_WEIGHTS
     }
 
-    /**
-     * Option to export no vertex or edge labels.
-     */
-    @Deprecated
-    public static final Integer PRINT_NO_LABELS = 1;
-
-    /**
-     * Option to export only the edge labels.
-     */
-    @Deprecated
-    public static final Integer PRINT_EDGE_LABELS = 2;
-
-    /**
-     * Option to export both edge and vertex labels.
-     */
-    @Deprecated
-    public static final Integer PRINT_EDGE_VERTEX_LABELS = 3;
-
-    /**
-     * Option to export only the vertex labels.
-     */
-    @Deprecated
-    public static final Integer PRINT_VERTEX_LABELS = 4;
-
     private VertexNameProvider<V> vertexIDProvider;
     private VertexNameProvider<V> vertexLabelProvider;
     private EdgeNameProvider<E> edgeIDProvider;
@@ -184,30 +160,6 @@ public class GmlExporter<V, E>
     }
 
     /**
-     * Exports an undirected graph into a plain text file in GML format.
-     *
-     * @param writer the writer to which the graph to be exported
-     * @param g the undirected graph to be exported
-     */
-    @Deprecated
-    public void export(Writer writer, UndirectedGraph<V, E> g)
-    {
-        exportGraph(g, writer);
-    }
-
-    /**
-     * Exports a directed graph into a plain text file in GML format.
-     *
-     * @param writer the writer to which the graph to be exported
-     * @param g the directed graph to be exported
-     */
-    @Deprecated
-    public void export(Writer writer, DirectedGraph<V, E> g)
-    {
-        exportGraph(g, writer);
-    }
-
-    /**
      * Exports an graph into a plain text GML format.
      *
      * @param writer the writer
@@ -236,66 +188,6 @@ public class GmlExporter<V, E>
         exportEdges(out, g);
         out.println("]");
         out.flush();
-    }
-
-    /**
-     * Set whether to export the vertex and edge labels. The default behavior is to export no vertex
-     * or edge labels.
-     *
-     * @param i What labels to export. Valid options are {@link #PRINT_NO_LABELS},
-     *        {@link #PRINT_EDGE_LABELS}, {@link #PRINT_EDGE_VERTEX_LABELS}, and
-     *        {@link #PRINT_VERTEX_LABELS}.
-     *
-     * @throws IllegalArgumentException if a non-supported value is used
-     *
-     * @see #PRINT_NO_LABELS
-     * @see #PRINT_EDGE_LABELS
-     * @see #PRINT_EDGE_VERTEX_LABELS
-     * @see #PRINT_VERTEX_LABELS
-     */
-    @Deprecated
-    public void setPrintLabels(final Integer i)
-    {
-        if (i == PRINT_NO_LABELS) {
-            parameters.remove(Parameter.EXPORT_VERTEX_LABELS);
-            parameters.remove(Parameter.EXPORT_EDGE_LABELS);
-        } else if (i == PRINT_EDGE_LABELS) {
-            parameters.remove(Parameter.EXPORT_VERTEX_LABELS);
-            parameters.add(Parameter.EXPORT_EDGE_LABELS);
-        } else if (i == PRINT_VERTEX_LABELS) {
-            parameters.add(Parameter.EXPORT_VERTEX_LABELS);
-            parameters.remove(Parameter.EXPORT_EDGE_LABELS);
-        } else if (i == PRINT_EDGE_VERTEX_LABELS) {
-            parameters.add(Parameter.EXPORT_VERTEX_LABELS);
-            parameters.add(Parameter.EXPORT_EDGE_LABELS);
-        } else {
-            throw new IllegalArgumentException(
-                "Non-supported parameter value: " + Integer.toString(i));
-        }
-    }
-
-    /**
-     * Get whether to export the vertex and edge labels.
-     *
-     * @return One of the {@link #PRINT_NO_LABELS}, {@link #PRINT_EDGE_LABELS},
-     *         {@link #PRINT_EDGE_VERTEX_LABELS}, or {@link #PRINT_VERTEX_LABELS}.
-     */
-    @Deprecated
-    public Integer getPrintLabels()
-    {
-        if (parameters.contains(Parameter.EXPORT_VERTEX_LABELS)) {
-            if (parameters.contains(Parameter.EXPORT_EDGE_LABELS)) {
-                return PRINT_EDGE_VERTEX_LABELS;
-            } else {
-                return PRINT_VERTEX_LABELS;
-            }
-        } else {
-            if (parameters.contains(Parameter.EXPORT_EDGE_LABELS)) {
-                return PRINT_EDGE_LABELS;
-            } else {
-                return PRINT_NO_LABELS;
-            }
-        }
     }
 
     /**

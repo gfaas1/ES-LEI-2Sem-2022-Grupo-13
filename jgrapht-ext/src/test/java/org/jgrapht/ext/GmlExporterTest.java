@@ -390,32 +390,6 @@ public class GmlExporterTest
         assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
     }
 
-    public void testOldStyleDeprecatedParameters()
-    {
-        GmlExporter<String, DefaultWeightedEdge> exporter =
-            new GmlExporter<String, DefaultWeightedEdge>();
-
-        exporter.setPrintLabels(GmlExporter.PRINT_NO_LABELS);
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
-
-        exporter.setPrintLabels(GmlExporter.PRINT_VERTEX_LABELS);
-        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
-
-        exporter.setPrintLabels(GmlExporter.PRINT_EDGE_LABELS);
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
-
-        exporter.setPrintLabels(GmlExporter.PRINT_EDGE_VERTEX_LABELS);
-        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS));
-        assertTrue(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS));
-        assertFalse(exporter.isParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS));
-    }
-
 }
 
 // End GmlExporterTest.java

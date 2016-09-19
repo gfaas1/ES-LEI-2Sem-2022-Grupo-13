@@ -430,26 +430,6 @@ public class GraphMLExporter<V, E>
     }
 
     /**
-     * Exports a graph into a plain text file in GraphML format.
-     *
-     * @param writer the writer to which the graph to be exported
-     * @param g the graph to be exported
-     * 
-     * @throws SAXException in case of a SAX error
-     * @throws TransformerConfigurationException in case of a configuration error
-     */
-    @Deprecated
-    public void export(Writer writer, Graph<V, E> g)
-        throws SAXException, TransformerConfigurationException
-    {
-        try {
-            exportGraph(g, writer);
-        } catch (ExportException e) {
-            throw new SAXException(e);
-        }
-    }
-
-    /**
      * Exports a graph in GraphML format.
      *
      * @param g the graph

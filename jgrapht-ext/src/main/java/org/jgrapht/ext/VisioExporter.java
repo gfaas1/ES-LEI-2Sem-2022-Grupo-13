@@ -66,22 +66,6 @@ public class VisioExporter<V, E>
     /**
      * Exports the specified graph into a Visio CSV file format.
      *
-     * @param output the print stream to which the graph to be exported.
-     * @param g the graph to be exported.
-     */
-    @Deprecated
-    public void export(OutputStream output, Graph<V, E> g)
-    {
-        try {
-            exportGraph(g, output);
-        } catch (ExportException e) {
-            // ignore
-        }
-    }
-
-    /**
-     * Exports the specified graph into a Visio CSV file format.
-     *
      * @param g the graph to be exported.
      * @param writer the writer to which the graph to be exported.
      */
