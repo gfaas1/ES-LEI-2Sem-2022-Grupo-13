@@ -117,7 +117,7 @@ public final class EdmondsKarpMFImpl<V, E>
      * 
      * @return a maximum flow
      */
-    public MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    public MaximumFlow<E> getMaximumFlow(V source, V sink)
     {
         this.calculateMaximumFlow(source, sink);
         maxFlow = composeFlow();

@@ -45,19 +45,6 @@ public class UndirectedGraphUnion<V, E>
         super(g1, g2);
     }
 
-    @Deprecated
-    UndirectedGraphUnion(
-        UndirectedGraph<V, E> g1, UndirectedGraphUnion<V, E> g2, WeightCombiner operator)
-    {
-        super(g1, g2, operator);
-    }
-
-    @Deprecated
-    UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraphUnion<V, E> g2)
-    {
-        super(g1, g2);
-    }
-
     @Override
     public int degreeOf(V vertex)
     {

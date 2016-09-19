@@ -47,33 +47,12 @@ public class EdmondsBlossomShrinking<V, E>
 
     /**
      * Construct an instance of the Edmonds blossom shrinking algorithm.
-     */
-    @Deprecated
-    public EdmondsBlossomShrinking()
-    {
-    }
-
-    /**
-     * Construct an instance of the Edmonds blossom shrinking algorithm.
      * 
      * @param G the input graph
      */
     public EdmondsBlossomShrinking(final UndirectedGraph<V, E> G)
     {
         this.graph = G;
-    }
-
-    /**
-     * Find the matching.
-     * 
-     * @param g the input graph
-     * @deprecated See {@link #getMatching()} as preferred alternative to this one.
-     * @return a matching
-     */
-    @Deprecated
-    public Set<E> findMatch(final UndirectedGraph<V, E> g)
-    {
-        return new EdmondsBlossomShrinking<>(g).getMatching();
     }
 
     /**

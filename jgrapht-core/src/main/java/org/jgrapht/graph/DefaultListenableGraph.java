@@ -392,7 +392,7 @@ public class DefaultListenableGraph<V, E>
          */
         public FlyweightEdgeEvent(Object eventSource, int type, EE e)
         {
-            super(eventSource, type, e);
+            super(eventSource, type, e, null, null);
         }
 
         /**
