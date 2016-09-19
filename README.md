@@ -1,6 +1,6 @@
 # JGraphT
 
-Released: April 3, 2016</p>
+Released: September 19, 2016</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
