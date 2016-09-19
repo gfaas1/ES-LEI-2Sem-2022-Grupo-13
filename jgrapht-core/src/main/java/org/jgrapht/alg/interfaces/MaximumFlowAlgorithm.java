@@ -41,6 +41,20 @@ public interface MaximumFlowAlgorithm<V, E>
      * @param sink sink of the flow inside the network
      *
      * @return maximum flow
+     * @deprecated use {@link #getMaximumFlow(Object, Object)} instead
+     */
+    @Deprecated
+    MaximumFlow<E> buildMaximumFlow(V source, V sink);
+
+    /**
+     * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates
+     * maximum flow from <tt>source</tt> to <tt>sink</tt>. Returns an object containing detailed
+     * information about the flow.
+     *
+     * @param source source of the flow inside the network
+     * @param sink sink of the flow inside the network
+     *
+     * @return maximum flow
      */
     MaximumFlow<E> getMaximumFlow(V source, V sink);
 
