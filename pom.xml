@@ -32,7 +32,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
-		<url>http://sourceforge.net/tracker/?group_id=86459</url>
+		<url>https://github.com/jgrapht/jgrapht/issues</url>
 	</issueManagement>
 	<mailingLists>
 		<mailingList>
@@ -44,75 +44,6 @@
 			<archive>http://lists.sourceforge.net/lists/listinfo/jgrapht-announce</archive>
 		</mailingList>
 	</mailingLists>
-	<developers>
-		<developer>
-			<name>John V Sichi</name>
-			<email>perfecthash@users.sf.net</email>
-			<id>perfecthash</id>
-		</developer>
-		<developer>
-			<name>Andrew Newell</name>
-			<email>ajnewell@users.sf.net</email>
-			<id>ajnewell</id>
-		</developer>
-		<developer>
-			<name>Assaf Lehr</name>
-			<email>assaf-lehr@users.sf.net</email>
-			<id>assaf-lehr</id>
-		</developer>
-		<developer>
-			<name>Barak Naveh</name>
-			<email>barak_naveh@users.sf.net</email>
-			<id>barak_naveh</id>
-		</developer>
-		<developer>
-			<name>Michael Behrisch</name>
-			<email>behrisch@users.sf.net</email>
-			<id>behrisch</id>
-		</developer>
-		<developer>
-			<name>Charles Fry</name>
-			<email>cfry@users.sf.net</email>
-			<id>cfry</id>
-		</developer>
-		<developer>
-			<name>Chris Soltenborn</name>
-			<email>csoltenborn@users.sf.net</email>
-			<id>csoltenborn</id>
-		</developer>
-		<developer>
-			<name>Christian Hammer</name>
-			<email>hammerc@users.sf.net</email>
-			<id>hammerc</id>
-		</developer>
-		<developer>
-			<name>Ilya Razenshteyn</name>
-			<email>ilyaraz@users.sf.net</email>
-			<id>ilyaraz</id>
-		</developer>
-		<developer>
-			<name>Hartmut Benz</name>
-			<email>ivins@users.sf.net</email>
-			<id>ivins</id>
-		</developer>
-		<developer>
-			<name>Linda Buisman</name>
-			<email>linda_buisman@users.sf.net</email>
-			<id>linda_buisman</id>
-		</developer>
-		<developer>
-			<name>Liviu Rau</name>
-			<email>liviu_aurelian@users.sf.net</email>
-			<id>liviu_aurelian</id>
-		</developer>
-		<developer>
-			<name>Trevor Harmon</name>
-			<email>vocaro@users.sf.net</email>
-			<id>vocaro</id>
-		</developer>
-	</developers>
-
-	<!--<issueManagement> <url></url> </issueManagement> -->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
