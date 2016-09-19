@@ -190,25 +190,9 @@ public class GnmRandomGraphGenerator<V, E>
         }
 
         // compute maximum allowed edges
-        int maxAllowedEdges = Integer.MAX_VALUE;
-        if (!createLoops && !createMultipleEdges) {
-            try {
-                if (target instanceof DirectedGraph<?, ?>) {
-                    maxAllowedEdges = Math.multiplyExact(n, n - 1);
-                } else {
-                    // assume undirected
-                    if (n % 2 == 0) {
-                        maxAllowedEdges = Math.multiplyExact(n / 2, n - 1);
-                    } else {
-                        maxAllowedEdges = Math.multiplyExact(n, (n - 1) / 2);
-                    }
-                }
-            } catch (ArithmeticException e) {
-                maxAllowedEdges = Integer.MAX_VALUE;
-            }
-        }
-
-        if (m > maxAllowedEdges) {
+        if (m > computeMaximumAllowedEdges(
+            n, target instanceof DirectedGraph<?, ?>, createLoops, createMultipleEdges))
+        {
             throw new IllegalArgumentException(
                 "number of edges is not valid for the graph type " + "\n-> invalid number of edges="
                     + m + " for:" + " graph type=" + target.getClass() + ", number of vertices="
@@ -263,6 +247,59 @@ public class GnmRandomGraphGenerator<V, E>
                 }
             }
         }
+    }
+
+    /**
+     * Return the number of allowed edges based on the graph type.
+     * 
+     * @param n number of nodes
+     * @param isDirected whether the graph is directed or not
+     * @param createLoops if loops are allowed
+     * @param createMultipleEdges if multiple edges are allowed
+     * @return the number of maximum edges
+     */
+    static <V, E> int computeMaximumAllowedEdges(
+        int n, boolean isDirected, boolean createLoops, boolean createMultipleEdges)
+    {
+        if (n == 0) {
+            return 0;
+        }
+
+        int maxAllowedEdges;
+        try {
+            if (isDirected) {
+                maxAllowedEdges = Math.multiplyExact(n, n - 1);
+            } else {
+                // assume undirected
+                if (n % 2 == 0) {
+                    maxAllowedEdges = Math.multiplyExact(n / 2, n - 1);
+                } else {
+                    maxAllowedEdges = Math.multiplyExact(n, (n - 1) / 2);
+                }
+            }
+
+            if (createLoops) {
+                if (createMultipleEdges) {
+                    return Integer.MAX_VALUE;
+                } else {
+                    if (isDirected) {
+                        maxAllowedEdges = Math.addExact(maxAllowedEdges, Math.multiplyExact(2, n));
+                    } else {
+                        // assume undirected
+                        maxAllowedEdges = Math.addExact(maxAllowedEdges, n);
+                    }
+                }
+            } else {
+                if (createMultipleEdges) {
+                    if (n > 1) {
+                        return Integer.MAX_VALUE;
+                    }
+                }
+            }
+        } catch (ArithmeticException e) {
+            return Integer.MAX_VALUE;
+        }
+        return maxAllowedEdges;
     }
 
 }
