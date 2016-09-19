@@ -66,7 +66,7 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>0.9.2</version>
+  <version>1.0.0</version>
 ```
 
 ## Upgrading Versions ##
