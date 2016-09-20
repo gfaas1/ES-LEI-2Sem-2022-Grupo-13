@@ -23,7 +23,14 @@
 		<module name="JavadocType">
 			<property name="scope" value="public" />
 		</module>
+		
+		<module name="MissingDeprecated">
+			<property name="skipNoJavadoc" value="true" />
+		</module>
+		<module name="MissingOverride" />
+
 		<module name="ConstantName" />
+
 		<module name="EqualsHashCode" />
 		<module name="StringLiteralEquality" />
 	</module>
