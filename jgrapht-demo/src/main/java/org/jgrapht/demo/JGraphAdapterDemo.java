@@ -68,6 +68,7 @@ public class JGraphAdapterDemo
     /**
      * {@inheritDoc}
      */
+    @Override
     public void init()
     {
         // create a JGraphT graph
