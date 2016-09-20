@@ -4,6 +4,7 @@ Changes to JGraphT in each version:
 
 - **version 1.0.1** (under development):
 	- Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
+	- Cleanup of main pom.xml; Added `CONTRIBUTING.md` (contributed by John Sichi)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
