@@ -114,10 +114,10 @@ public class DOTImporterTest
                 {
                     return new DefaultEdge();
                 }
-            }, new VertexUpdater<String>()
+            }, new ComponentUpdater<String>()
             {
                 @Override
-                public void updateVertex(String vertex, Map<String, String> attributes)
+                public void update(String vertex, Map<String, String> attributes)
                 {
                 }
             });
@@ -169,14 +169,14 @@ public class DOTImporterTest
         start.addEdge("b", "d");
 
         DOTExporter<String, DefaultEdge> exporter =
-            new DOTExporter<String, DefaultEdge>(new VertexNameProvider<String>()
+            new DOTExporter<String, DefaultEdge>(new ComponentNameProvider<String>()
             {
                 @Override
-                public String getVertexName(String vertex)
+                public String getName(String vertex)
                 {
                     return vertex;
                 }
-            }, null, new IntegerEdgeNameProvider<DefaultEdge>());
+            }, null, new IntegerComponentNameProvider<DefaultEdge>());
 
         DOTImporter<String, DefaultEdge> importer = buildImporter();
 
@@ -226,10 +226,10 @@ public class DOTImporterTest
                 {
                     return new DefaultEdge();
                 }
-            }, new VertexUpdater<String>()
+            }, new ComponentUpdater<String>()
             {
                 @Override
-                public void updateVertex(String vertex, Map<String, String> attributes)
+                public void update(String vertex, Map<String, String> attributes)
                 {
                     // do nothing strings can't update.
                 }
@@ -410,10 +410,10 @@ public class DOTImporterTest
                 {
                     return new DefaultEdge();
                 }
-            }, new VertexUpdater<TestVertex>()
+            }, new ComponentUpdater<TestVertex>()
             {
                 @Override
-                public void updateVertex(TestVertex vertex, Map<String, String> attributes)
+                public void update(TestVertex vertex, Map<String, String> attributes)
                 {
                     vertex.getAttributes().putAll(attributes);
                 }

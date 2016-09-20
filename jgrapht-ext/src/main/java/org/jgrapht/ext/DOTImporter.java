@@ -102,7 +102,7 @@ public class DOTImporter<V, E>
     private static final int DONE = 32;
 
     private VertexProvider<V> vertexProvider;
-    private VertexUpdater<V> vertexUpdater;
+    private ComponentUpdater<V> vertexUpdater;
     private EdgeProvider<V, E> edgeProvider;
 
     /**
@@ -123,13 +123,13 @@ public class DOTImporter<V, E>
      *
      * @param vertexProvider Provider to create a vertex
      * @param edgeProvider Provider to create an edge
-     * @param updater Method used to update an existing Vertex
+     * @param vertexUpdater Method used to update an existing Vertex
      */
     public DOTImporter(
-        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, VertexUpdater<V> updater)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, ComponentUpdater<V> vertexUpdater)
     {
         this.vertexProvider = vertexProvider;
-        this.vertexUpdater = updater;
+        this.vertexUpdater = vertexUpdater;
         this.edgeProvider = edgeProvider;
     }
 
@@ -537,7 +537,7 @@ public class DOTImporter<V, E>
             vertexes.put(id, vertex);
         } else {
             if (vertexUpdater != null) {
-                vertexUpdater.updateVertex(existing, attributes);
+                vertexUpdater.update(existing, attributes);
             } else {
                 throw new ImportException(
                     "Update required for vertex " + id + " but no vertexUpdater provided");

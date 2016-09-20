@@ -81,7 +81,7 @@ public class DOTExporterTest
             };
 
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
-            new IntegerNameProvider<>(), null, null, vertexAttributeProvider, null);
+            new IntegerComponentNameProvider<>(), null, null, vertexAttributeProvider, null);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
@@ -91,8 +91,8 @@ public class DOTExporterTest
     public void testValidNodeIDs()
         throws ExportException
     {
-        DOTExporter<String, DefaultEdge> exporter =
-            new DOTExporter<>(new StringNameProvider<>(), new StringNameProvider<>(), null);
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
+            new StringComponentNameProvider<>(), new StringComponentNameProvider<>(), null);
 
         List<String> validVertices =
             Arrays.asList("-9.78", "-.5", "12", "a", "12", "abc_78", "\"--34asdf\"");
@@ -115,6 +115,32 @@ public class DOTExporterTest
             }
         }
     }
+
+    public void testDifferentGraphID()
+        throws UnsupportedEncodingException, ExportException
+    {
+        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+
+        DOTExporter<String,
+            DefaultEdge> exporter = new DOTExporter<>(
+                new IntegerComponentNameProvider<>(), null, null, null, null,
+                new ComponentNameProvider<Graph<String, DefaultEdge>>()
+                {
+                    @Override
+                    public String getName(Graph<String, DefaultEdge> component)
+                    {
+                        return "MyGraph";
+                    }
+                });
+
+        final String correctResult = "graph MyGraph {" + NL + "}" + NL;
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        assertEquals(correctResult, res);
+    }
+
 }
 
 // End DOTExporterTest.java

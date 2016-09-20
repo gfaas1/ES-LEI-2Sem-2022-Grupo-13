@@ -45,7 +45,7 @@ public class MatrixExporter<V, E>
 {
     private final String delimiter = " ";
     private Format format;
-    private VertexNameProvider<V> vertexIDProvider;
+    private ComponentNameProvider<V> vertexIDProvider;
 
     /**
      * Formats supported by the exporter.
@@ -76,7 +76,7 @@ public class MatrixExporter<V, E>
      */
     public MatrixExporter()
     {
-        this(Format.SPARSE_ADJACENCY_MATRIX, new IntegerNameProvider<>());
+        this(Format.SPARSE_ADJACENCY_MATRIX, new IntegerComponentNameProvider<>());
     }
 
     /**
@@ -86,7 +86,7 @@ public class MatrixExporter<V, E>
      */
     public MatrixExporter(Format format)
     {
-        this(format, new IntegerNameProvider<>());
+        this(format, new IntegerComponentNameProvider<>());
     }
 
     /**
@@ -95,7 +95,7 @@ public class MatrixExporter<V, E>
      * @param format format to use
      * @param vertexIDProvider for generating vertex identifiers. Must not be null.
      */
-    public MatrixExporter(Format format, VertexNameProvider<V> vertexIDProvider)
+    public MatrixExporter(Format format, ComponentNameProvider<V> vertexIDProvider)
     {
         this.format = format;
         if (vertexIDProvider == null) {
@@ -155,7 +155,7 @@ public class MatrixExporter<V, E>
     {
         for (V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
-            vertexIDProvider.getVertexName(from);
+            vertexIDProvider.getName(from);
         }
 
         PrintWriter out = new PrintWriter(writer);
@@ -176,10 +176,10 @@ public class MatrixExporter<V, E>
 
     private void exportAdjacencyMatrixVertex(PrintWriter writer, V from, List<V> neighbors)
     {
-        String fromName = vertexIDProvider.getVertexName(from);
+        String fromName = vertexIDProvider.getName(from);
         Map<String, ModifiableInteger> counts = new LinkedHashMap<>();
         for (V to : neighbors) {
-            String toName = vertexIDProvider.getVertexName(to);
+            String toName = vertexIDProvider.getName(to);
             ModifiableInteger count = counts.get(toName);
             if (count == null) {
                 count = new ModifiableInteger(0);
@@ -208,19 +208,19 @@ public class MatrixExporter<V, E>
     {
         PrintWriter out = new PrintWriter(writer);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<>();
+        ComponentNameProvider<V> nameProvider = new IntegerComponentNameProvider<>();
         for (V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
-            nameProvider.getVertexName(from);
+            nameProvider.getName(from);
         }
 
         for (V from : g.vertexSet()) {
-            String fromName = nameProvider.getVertexName(from);
+            String fromName = nameProvider.getName(from);
 
             List<V> neighbors = Graphs.neighborListOf(g, from);
             exportEntry(out, fromName, fromName, Integer.toString(neighbors.size()));
             for (V to : neighbors) {
-                String toName = nameProvider.getVertexName(to);
+                String toName = nameProvider.getName(to);
                 exportEntry(out, fromName, toName, "-1");
             }
         }
@@ -232,14 +232,14 @@ public class MatrixExporter<V, E>
     {
         PrintWriter out = new PrintWriter(writer);
 
-        VertexNameProvider<V> nameProvider = new IntegerNameProvider<>();
+        ComponentNameProvider<V> nameProvider = new IntegerComponentNameProvider<>();
         for (V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
-            nameProvider.getVertexName(from);
+            nameProvider.getName(from);
         }
 
         for (V from : g.vertexSet()) {
-            String fromName = nameProvider.getVertexName(from);
+            String fromName = nameProvider.getName(from);
             Set<V> neighbors = new LinkedHashSet<>(Graphs.neighborListOf(g, from));
             if (neighbors.isEmpty()) {
                 exportEntry(out, fromName, fromName, "0");
@@ -247,7 +247,7 @@ public class MatrixExporter<V, E>
                 exportEntry(out, fromName, fromName, "1");
 
                 for (V to : neighbors) {
-                    String toName = nameProvider.getVertexName(to);
+                    String toName = nameProvider.getName(to);
                     double value = -1 / Math.sqrt(g.degreeOf(from) * g.degreeOf(to));
                     exportEntry(out, fromName, toName, Double.toString(value));
                 }

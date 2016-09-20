@@ -69,10 +69,10 @@ public class GmlExporter<V, E>
         EXPORT_EDGE_WEIGHTS
     }
 
-    private VertexNameProvider<V> vertexIDProvider;
-    private VertexNameProvider<V> vertexLabelProvider;
-    private EdgeNameProvider<E> edgeIDProvider;
-    private EdgeNameProvider<E> edgeLabelProvider;
+    private ComponentNameProvider<V> vertexIDProvider;
+    private ComponentNameProvider<V> vertexLabelProvider;
+    private ComponentNameProvider<E> edgeIDProvider;
+    private ComponentNameProvider<E> edgeLabelProvider;
     private final Set<Parameter> parameters;
 
     /**
@@ -81,7 +81,8 @@ public class GmlExporter<V, E>
      */
     public GmlExporter()
     {
-        this(new IntegerNameProvider<>(), null, new IntegerEdgeNameProvider<>(), null);
+        this(
+            new IntegerComponentNameProvider<>(), null, new IntegerComponentNameProvider<>(), null);
     }
 
     /**
@@ -95,8 +96,8 @@ public class GmlExporter<V, E>
      *        using the toString() method of the edge object.
      */
     public GmlExporter(
-        VertexNameProvider<V> vertexIDProvider, VertexNameProvider<V> vertexLabelProvider,
-        EdgeNameProvider<E> edgeIDProvider, EdgeNameProvider<E> edgeLabelProvider)
+        ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
+        ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider)
     {
         this.vertexIDProvider = vertexIDProvider;
         this.vertexLabelProvider = vertexLabelProvider;
@@ -123,10 +124,10 @@ public class GmlExporter<V, E>
         for (V from : g.vertexSet()) {
             out.println(TAB1 + "node");
             out.println(TAB1 + "[");
-            out.println(TAB2 + "id" + DELIM + vertexIDProvider.getVertexName(from));
+            out.println(TAB2 + "id" + DELIM + vertexIDProvider.getName(from));
             if (exportVertexLabels) {
                 String label = (vertexLabelProvider == null) ? from.toString()
-                    : vertexLabelProvider.getVertexName(from);
+                    : vertexLabelProvider.getName(from);
                 out.println(TAB2 + "label" + DELIM + quoted(label));
             }
             out.println(TAB1 + "]");
@@ -141,15 +142,15 @@ public class GmlExporter<V, E>
         for (E edge : g.edgeSet()) {
             out.println(TAB1 + "edge");
             out.println(TAB1 + "[");
-            String id = edgeIDProvider.getEdgeName(edge);
+            String id = edgeIDProvider.getName(edge);
             out.println(TAB2 + "id" + DELIM + id);
-            String s = vertexIDProvider.getVertexName(g.getEdgeSource(edge));
+            String s = vertexIDProvider.getName(g.getEdgeSource(edge));
             out.println(TAB2 + "source" + DELIM + s);
-            String t = vertexIDProvider.getVertexName(g.getEdgeTarget(edge));
+            String t = vertexIDProvider.getName(g.getEdgeTarget(edge));
             out.println(TAB2 + "target" + DELIM + t);
             if (exportEdgeLabels) {
-                String label = (edgeLabelProvider == null) ? edge.toString()
-                    : edgeLabelProvider.getEdgeName(edge);
+                String label =
+                    (edgeLabelProvider == null) ? edge.toString() : edgeLabelProvider.getName(edge);
                 out.println(TAB2 + "label" + DELIM + quoted(label));
             }
             if (exportEdgeWeights && g instanceof WeightedGraph) {
@@ -172,7 +173,7 @@ public class GmlExporter<V, E>
 
         for (V from : g.vertexSet()) {
             // assign ids in vertex set iteration order
-            vertexIDProvider.getVertexName(from);
+            vertexIDProvider.getName(from);
         }
 
         exportHeader(out);

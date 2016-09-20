@@ -20,36 +20,20 @@ package org.jgrapht.ext;
 import java.util.*;
 
 /**
- * Type to handle updates to a vertex when an import gets more information about a vertex after it
- * has been created.
+ * Type to handle updates to a component when an import gets more information about it after it has
+ * been created.
  *
- * @param <V> the vertex type
- * 
- * @deprecated in favor of {@link ComponentUpdater}
+ * @param <T> the component type
  */
-@Deprecated
-public interface VertexUpdater<V>
- extends ComponentUpdater<V>
+public interface ComponentUpdater<T>
 {
-    /**
-     * Update vertex with the extra attributes.
-     *
-     * @param vertex to update
-     * @param attributes to add to the vertex
-     */
-    void updateVertex(V vertex, Map<String, String> attributes);
-    
     /**
      * Update component with the extra attributes.
      *
      * @param component to update
      * @param attributes to add to the component
      */
-    @Override
-    default void update(V component, Map<String, String> attributes) { 
-        this.updateVertex(component, attributes);
-    }
-    
+    void update(T component, Map<String, String> attributes);
 }
 
-// End VertexUpdater.java
+// End ComponentUpdater.java
