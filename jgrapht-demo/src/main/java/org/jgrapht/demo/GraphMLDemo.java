@@ -308,14 +308,6 @@ public final class GraphMLDemo
             GraphImporter<CustomVertex, DefaultWeightedEdge> importer = createImporter();
             importer.importGraph(graph2, new StringReader(graph1AsGraphML));
             
-            // export again as string
-            GraphExporter<CustomVertex, DefaultWeightedEdge> exporter2 = createExporter();
-            Writer writer2 = new StringWriter();
-            exporter2.exportGraph(graph2, writer2);
-            String graph2AsGraphML = writer2.toString();
-            
-            System.out.println("-- Exporting imported graph as GraphML");
-            System.out.println(graph2AsGraphML);
         } catch (ExportException | ImportException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(-1);
