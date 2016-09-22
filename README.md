@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/jgrapht/jgrapht.svg?branch=master)](https://travis-ci.org/jgrapht/jgrapht)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jgrapht/jgrapht/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jgrapht%22)
+[![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](http://www.gnu.org/licenses/lgpl-2.1.html)
+[![License](https://img.shields.io/badge/license-EPL%201.0-blue.svg)](http://www.eclipse.org/org/documents/epl-v10.php)
+[![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
+
 # JGraphT
 
 Released: September 19, 2016</p>
