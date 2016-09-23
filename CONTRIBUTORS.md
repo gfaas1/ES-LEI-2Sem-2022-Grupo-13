@@ -91,6 +91,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Benedikt Waldvogel
 - Victor Mikhaylov
 - Nils Olberg
+- Daniel Gómez-Sánchez
 
 (if we have missed your name on this list, please email us to get it fixed).
 
