@@ -20,6 +20,7 @@ package org.jgrapht.graph.specifics;
 import java.io.*;
 import java.util.*;
 
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -44,7 +45,7 @@ public class FastLookupDirectedSpecifics<V, E>
      * Maps a pair of vertices <u,v> to a set of edges {(u,v)}. In case of a multigraph, all edges
      * which touch both u,v are included in the set
      */
-    protected Map<VertexPair<V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
+    protected Map<Pair<V, V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap;
 
     /**
      * Construct a new fast lookup directed specifics.
@@ -79,7 +80,7 @@ public class FastLookupDirectedSpecifics<V, E>
             && abstractBaseGraph.containsVertex(targetVertex))
         {
             Set<E> edges =
-                touchingVerticesToEdgeMap.get(new VertexPair<>(sourceVertex, targetVertex));
+                touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
             return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
         } else {
             return null;
@@ -92,7 +93,7 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        List<E> edges = touchingVerticesToEdgeMap.get(new VertexPair<>(sourceVertex, targetVertex));
+        List<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
         if (edges == null || edges.isEmpty())
             return null;
         else
@@ -111,7 +112,7 @@ public class FastLookupDirectedSpecifics<V, E>
         getEdgeContainer(source).addOutgoingEdge(e);
         getEdgeContainer(target).addIncomingEdge(e);
 
-        VertexPair<V> vertexPair = new VertexPair<>(source, target);
+        Pair<V, V> vertexPair = new Pair<>(source, target);
         if (!touchingVerticesToEdgeMap.containsKey(vertexPair)) {
             ArrayUnenforcedSet<E> edgeSet = new ArrayUnenforcedSet<>();
             edgeSet.add(e);
@@ -135,7 +136,7 @@ public class FastLookupDirectedSpecifics<V, E>
         // Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
         // for a pair
         // of touching vertices, remove the pair from the map.
-        VertexPair<V> vertexPair = new VertexPair<>(source, target);
+        Pair<V, V> vertexPair = new Pair<>(source, target);
         if (touchingVerticesToEdgeMap.containsKey(vertexPair)) {
             ArrayUnenforcedSet<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
             edgeSet.remove(e);

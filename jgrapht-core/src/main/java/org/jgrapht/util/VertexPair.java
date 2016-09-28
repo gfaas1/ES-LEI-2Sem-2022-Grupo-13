@@ -28,7 +28,10 @@ import java.util.*;
  *
  * @author Soren (soren@tanesha.net)
  * @author Joris Kinable
+ * 
+ * @deprecated in favor of {@link org.jgrapht.alg.util.Pair}
  */
+@Deprecated
 public class VertexPair<V>
     implements Serializable
 {
