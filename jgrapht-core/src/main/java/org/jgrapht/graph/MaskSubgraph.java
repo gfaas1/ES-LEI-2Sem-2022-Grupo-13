@@ -17,9 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
 
-import org.jgrapht.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
 
 /**
  * An unmodifiable subgraph induced by a vertex/edge masking function. The subgraph will keep track
@@ -30,6 +34,9 @@ import org.jgrapht.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @see UndirectedMaskSubgraph
+ * @see DirectedMaskSubgraph
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
@@ -39,13 +46,11 @@ public class MaskSubgraph<V, E>
 {
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-    private Graph<V, E> base;
-
-    private Set<E> edges;
-
-    private MaskFunctor<V, E> mask;
-
-    private Set<V> vertices;
+    protected final Graph<V, E> base;
+    protected final Set<E> edges;
+    protected final Set<V> vertices;
+    protected final Predicate<V> vertexMask;
+    protected final Predicate<E> edgeMask;
 
     /**
      * Creates a new induced subgraph. Running-time = O(1).
@@ -53,15 +58,31 @@ public class MaskSubgraph<V, E>
      * @param base the base (backing) graph on which the subgraph will be based.
      * @param mask vertices and edges to exclude in the subgraph. If a vertex/edge is masked, it is
      *        as if it is not in the subgraph.
+     * @deprecated in favor of using the constructor with lambdas
      */
+    @Deprecated
     public MaskSubgraph(Graph<V, E> base, MaskFunctor<V, E> mask)
     {
-        super();
-        this.base = base;
-        this.mask = mask;
+        this(base, v -> mask.isVertexMasked(v), e -> mask.isEdgeMasked(e));
+    }
 
-        this.vertices = new MaskVertexSet<>(base.vertexSet(), mask);
-        this.edges = new MaskEdgeSet<>(base, base.edgeSet(), mask);
+    /**
+     * Creates a new induced subgraph. Running-time = O(1).
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexMask vertices to exclude in the subgraph. If a vertex is masked, it is as if it
+     *        is not in the subgraph. Edges incident to the masked vertex are also masked.
+     * @param edgeMask edges to exclude in the subgraph. If an edge is masked, it is as if it is not
+     *        in the subgraph.
+     */
+    public MaskSubgraph(Graph<V, E> base, Predicate<V> vertexMask, Predicate<E> edgeMask)
+    {
+        super();
+        this.base = Objects.requireNonNull(base, "Invalid graph provided");
+        this.vertexMask = Objects.requireNonNull(vertexMask, "Invalid vertex mask provided");
+        this.edgeMask = Objects.requireNonNull(edgeMask, "Invalid edge mask provided");
+        this.vertices = new MaskVertexSet<>(base.vertexSet(), vertexMask);
+        this.edges = new MaskEdgeSet<>(base, base.edgeSet(), vertexMask, edgeMask);
     }
 
     /**
@@ -110,130 +131,93 @@ public class MaskSubgraph<V, E>
     }
 
     /**
-     * Returns the degree of the specified vertex.
-     *
-     * @param vertex vertex whose degree is to be calculated
-     * @return the degree of the specified vertex.
+     * {@inheritDoc}
      */
-    public int degreeOf(V vertex)
-    {
-        return edgesOf(vertex).size();
-    }
-
     @Override
     public Set<E> edgeSet()
     {
-        return this.edges;
+        return edges;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<E> edgesOf(V vertex)
     {
         assertVertexExist(vertex);
 
-        return new MaskEdgeSet<>(this.base, this.base.edgesOf(vertex), this.mask);
+        return new MaskEdgeSet<>(base, base.edgesOf(vertex), vertexMask, edgeMask);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         if (containsVertex(sourceVertex) && containsVertex(targetVertex)) {
             return new MaskEdgeSet<>(
-                this.base, this.base.getAllEdges(sourceVertex, targetVertex), this.mask);
+                base, base.getAllEdges(sourceVertex, targetVertex), vertexMask, edgeMask);
         } else
             return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         Set<E> edges = getAllEdges(sourceVertex, targetVertex);
 
-        if ((edges == null) || edges.isEmpty()) {
+        if (edges == null) {
             return null;
         } else {
-            return edges.iterator().next();
+            return edges.stream().findAny().orElse(null);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public EdgeFactory<V, E> getEdgeFactory()
     {
-        return this.base.getEdgeFactory();
+        return base.getEdgeFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V getEdgeSource(E edge)
     {
         assert (edgeSet().contains(edge));
 
-        return this.base.getEdgeSource(edge);
+        return base.getEdgeSource(edge);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V getEdgeTarget(E edge)
     {
         assert (edgeSet().contains(edge));
 
-        return this.base.getEdgeTarget(edge);
+        return base.getEdgeTarget(edge);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getEdgeWeight(E edge)
     {
         assert (edgeSet().contains(edge));
 
-        return this.base.getEdgeWeight(edge);
-    }
-
-    /**
-     * Returns a set of all edges incoming into the specified vertex.
-     *
-     * @param vertex the vertex for which the list of incoming edges to be returned
-     * @return a set of all edges incoming into the specified vertex
-     */
-    public Set<E> incomingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return new MaskEdgeSet<>(
-            this.base, ((DirectedGraph<V, E>) this.base).incomingEdgesOf(vertex), this.mask);
-    }
-
-    /**
-     * Returns the "in degree" of the specified vertex.
-     *
-     * @param vertex vertex whose in degree is to be calculated
-     * @return the in degree of the specified vertex.
-     */
-    public int inDegreeOf(V vertex)
-    {
-        return incomingEdgesOf(vertex).size();
-    }
-
-    /**
-     * Returns the "out degree" of the specified vertex.
-     *
-     * @param vertex vertex whose out degree is to be calculated
-     * @return the out degree of the specified vertex.
-     */
-    public int outDegreeOf(V vertex)
-    {
-        return outgoingEdgesOf(vertex).size();
-    }
-
-    /**
-     * Returns a set of all edges outgoing from the specified vertex.
-     *
-     * @param vertex the vertex for which the list of outgoing edges to be returned
-     * @return a set of all edges outgoing from the specified vertex
-     */
-    public Set<E> outgoingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return new MaskEdgeSet<>(
-            this.base, ((DirectedGraph<V, E>) this.base).outgoingEdgesOf(vertex), this.mask);
+        return base.getEdgeWeight(edge);
     }
 
     /**
@@ -296,7 +280,7 @@ public class MaskSubgraph<V, E>
     @Override
     public Set<V> vertexSet()
     {
-        return this.vertices;
+        return vertices;
     }
 }
 

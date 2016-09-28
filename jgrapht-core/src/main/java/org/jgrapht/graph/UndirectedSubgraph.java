@@ -17,12 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.UndirectedGraph;
 
 /**
- * An undirected graph that is a subgraph on other graph.
+ * An undirected graph that is a subgraph of another graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -50,7 +51,29 @@ public class UndirectedSubgraph<V, E>
     }
 
     /**
-     * @see UndirectedGraph#degreeOf(Object)
+     * Creates a new undirected induced subgraph.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexSubset vertices to include in the subgraph. If <code>
+     * null</code> then all vertices are included.
+     */
+    public UndirectedSubgraph(UndirectedGraph<V, E> base, Set<V> vertexSubset)
+    {
+        this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new undirected induced subgraph with all vertices included.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public UndirectedSubgraph(UndirectedGraph<V, E> base)
+    {
+        this(base, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public int degreeOf(V vertex)
@@ -58,17 +81,14 @@ public class UndirectedSubgraph<V, E>
         assertVertexExist(vertex);
 
         int degree = 0;
-
-        for (E e : getBase().edgesOf(vertex)) {
-            if (containsEdge(e)) {
+        Iterator<E> it = base.edgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).iterator();
+        while (it.hasNext()) {
+            E e = it.next();
+            degree++;
+            if (getEdgeSource(e).equals(getEdgeTarget(e))) {
                 degree++;
-
-                if (getEdgeSource(e).equals(getEdgeTarget(e))) {
-                    degree++;
-                }
             }
         }
-
         return degree;
     }
 }

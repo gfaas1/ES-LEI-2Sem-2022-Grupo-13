@@ -49,6 +49,29 @@ public class UndirectedWeightedSubgraph<V, E>
     {
         super((UndirectedGraph<V, E>) base, vertexSubset, edgeSubset);
     }
+
+    /**
+     * Creates a new weighted undirected induced subgraph.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexSubset vertices to include in the subgraph. If <code>
+     * null</code> then all vertices are included.
+     */
+    public UndirectedWeightedSubgraph(WeightedGraph<V, E> base, Set<V> vertexSubset)
+    {
+        this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new weighted undirected induced subgraph with all vertices included.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public UndirectedWeightedSubgraph(WeightedGraph<V, E> base)
+    {
+        this(base, null, null);
+    }
+
 }
 
 // End UndirectedWeightedSubgraph.java

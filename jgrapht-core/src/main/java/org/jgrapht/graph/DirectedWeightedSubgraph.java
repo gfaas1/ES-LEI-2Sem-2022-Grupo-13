@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * A directed weighted graph that is a subgraph on other graph.
+ * A directed weighted graph that is a subgraph of another graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -49,6 +49,29 @@ public class DirectedWeightedSubgraph<V, E>
     {
         super((DirectedGraph<V, E>) base, vertexSubset, edgeSubset);
     }
+
+    /**
+     * Creates a new weighted directed induced subgraph.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexSubset vertices to include in the subgraph. If <code>
+     * null</code> then all vertices are included.
+     */
+    public DirectedWeightedSubgraph(WeightedGraph<V, E> base, Set<V> vertexSubset)
+    {
+        this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new weighted directed induced subgraph with all vertices included.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public DirectedWeightedSubgraph(WeightedGraph<V, E> base)
+    {
+        this(base, null, null);
+    }
+
 }
 
 // End DirectedWeightedSubgraph.java

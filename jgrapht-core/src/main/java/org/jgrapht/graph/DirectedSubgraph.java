@@ -17,13 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import org.jgrapht.DirectedGraph;
 
 /**
- * A directed graph that is a subgraph on other graph.
+ * A directed graph that is a subgraph of another graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -51,79 +52,67 @@ public class DirectedSubgraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
+     * Creates a new directed induced subgraph.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexSubset vertices to include in the subgraph. If <code>
+     * null</code> then all vertices are included.
+     */
+    public DirectedSubgraph(DirectedGraph<V, E> base, Set<V> vertexSubset)
+    {
+        this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new directed induced subgraph with all vertices included.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public DirectedSubgraph(DirectedGraph<V, E> base)
+    {
+        this(base, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public int inDegreeOf(V vertex)
     {
-        assertVertexExist(vertex);
-
-        int degree = 0;
-
-        for (E e : getBase().incomingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
-                degree++;
-            }
-        }
-
-        return degree;
+        return incomingEdgesOf(vertex).size();
     }
 
     /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<>();
-
-        for (E e : getBase().incomingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
-                edges.add(e);
-            }
-        }
-
-        return edges;
+        return base.incomingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
+            Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public int outDegreeOf(V vertex)
     {
-        assertVertexExist(vertex);
-
-        int degree = 0;
-
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
-                degree++;
-            }
-        }
-
-        return degree;
+        return outgoingEdgesOf(vertex).size();
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<>();
-
-        for (E e : getBase().outgoingEdgesOf(vertex)) {
-            if (containsEdge(e)) {
-                edges.add(e);
-            }
-        }
-
-        return edges;
+        return base.outgoingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
+            Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 }
 

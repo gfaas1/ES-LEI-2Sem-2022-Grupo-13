@@ -17,10 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.Predicate;
 
-import org.jgrapht.util.*;
-import org.jgrapht.util.PrefetchIterator.*;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * Helper for {@link MaskSubgraph}.
@@ -28,74 +31,52 @@ import org.jgrapht.util.PrefetchIterator.*;
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-class MaskVertexSet<V, E>
+class MaskVertexSet<V>
     extends AbstractSet<V>
+    implements Serializable
 {
-    private MaskFunctor<V, E> mask;
+    private static final long serialVersionUID = 3751931017141472763L;
 
-    private Set<V> vertexSet;
+    private final Set<V> vertexSet;
+    private final Predicate<V> mask;
 
-    public MaskVertexSet(Set<V> vertexSet, MaskFunctor<V, E> mask)
+    public MaskVertexSet(Set<V> vertexSet, Predicate<V> mask)
     {
         this.vertexSet = vertexSet;
         this.mask = mask;
     }
 
     /**
-     * @see java.util.Collection#contains(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean contains(Object o)
     {
-        // Force a cast to type V. This is nonsense, of course, but
-        // it's erased by the compiler anyway.
+        if (!vertexSet.contains(o)) {
+            return false;
+        }
         V v = TypeUtil.uncheckedCast(o, null);
-
-        // If o isn't a V, the first check will fail and
-        // short-circuit, so we never try to test the mask on
-        // non-vertex object inputs.
-        return vertexSet.contains(v) && !mask.isVertexMasked(v);
+        return !mask.test(v);
     }
 
     /**
-     * @see java.util.Set#iterator()
+     * {@inheritDoc}
      */
     @Override
     public Iterator<V> iterator()
     {
-        return new PrefetchIterator<V>(new MaskVertexSetNextElementFunctor());
+        return vertexSet.stream().filter(mask.negate()).iterator();
     }
 
     /**
-     * @see java.util.Set#size()
+     * {@inheritDoc}
      */
     @Override
     public int size()
     {
-        return (int) vertexSet.stream().filter(v -> contains(v)).count();
+        return (int) vertexSet.stream().filter(mask.negate()).count();
     }
 
-    private class MaskVertexSetNextElementFunctor
-        implements NextElementFunctor<V>
-    {
-        private Iterator<V> iter;
-
-        public MaskVertexSetNextElementFunctor()
-        {
-            this.iter = MaskVertexSet.this.vertexSet.iterator();
-        }
-
-        @Override
-        public V nextElement()
-            throws NoSuchElementException
-        {
-            V element = this.iter.next();
-            while (MaskVertexSet.this.mask.isVertexMasked(element)) {
-                element = this.iter.next();
-            }
-            return element;
-        }
-    }
 }
 
 // End MaskVertexSet.java
