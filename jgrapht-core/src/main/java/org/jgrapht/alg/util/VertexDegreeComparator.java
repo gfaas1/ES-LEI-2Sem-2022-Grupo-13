@@ -54,12 +54,6 @@ public class VertexDegreeComparator<V, E>
     private UndirectedGraph<V, E> graph;
 
     /**
-     * The sort order for vertex degree. <code>true</code> for ascending degree order (smaller
-     * degrees first), <code>false</code> for descending.
-     */
-    private boolean ascendingOrder;
-
-    /**
      * Order in which the vertices are sorted: ascending or descending
      */
     private Order order;

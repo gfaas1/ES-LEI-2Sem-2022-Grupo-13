@@ -128,7 +128,7 @@ public class JGraphAdapterDemo
         jg.setBackground(c);
     }
 
-    @SuppressWarnings("unchecked") // FIXME hb 28-nov-05: See FIXME below
+    @SuppressWarnings("unchecked") 
     private void positionVertexAt(Object vertex, int x, int y)
     {
         DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);
@@ -139,7 +139,6 @@ public class JGraphAdapterDemo
 
         GraphConstants.setBounds(attr, newBounds);
 
-        // TODO: Clean up generics once JGraph goes generic
         AttributeMap cellAttr = new AttributeMap();
         cellAttr.put(cell, attr);
         jgAdapter.edit(cellAttr, null, null, null);
