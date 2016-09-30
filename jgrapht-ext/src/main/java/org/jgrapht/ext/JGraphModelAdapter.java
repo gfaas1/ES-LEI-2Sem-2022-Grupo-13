@@ -403,7 +403,6 @@ public class JGraphModelAdapter<V, E>
             // JGraphT forbid dangling edges so we cannot add the edge yet. If
             // later the edge becomes connected, we will add it.
         } else {
-            // FIXME hb 28-nov-05: waiting for jgraph to go generic
             Object jSource = getSourceVertex(this, jEdge);
             Object jTarget = getTargetVertex(this, jEdge);
 
@@ -451,7 +450,6 @@ public class JGraphModelAdapter<V, E>
         V jtVertex;
 
         if (jVertex instanceof DefaultGraphCell) {
-            // FIXME hb 28-nov-05: waiting for jgraph to go generic
             jtVertex = (V) ((DefaultGraphCell) jVertex).getUserObject();
         } else {
             // FIXME: Why toString? Explain if for a good reason otherwise fix.
@@ -634,7 +632,6 @@ public class JGraphModelAdapter<V, E>
     {
         AttributeMap attrs = new AttributeMap();
 
-        // FIXME hb 28-nov-05: waiting for graph to go generic
         attrs.put(edgeCell, getDefaultEdgeAttributes().clone());
 
         return attrs;
@@ -645,7 +642,6 @@ public class JGraphModelAdapter<V, E>
     {
         AttributeMap attrs = new AttributeMap();
 
-        // FIXME hb 28-nov-05: waiting for graph to go generic
         attrs.put(vertexCell, getDefaultVertexAttributes().clone());
 
         return attrs;
@@ -658,7 +654,6 @@ public class JGraphModelAdapter<V, E>
      * @param attrs
      * @param cs
      */
-    // FIXME hb 28-nov-05: waiting for graph to go generic
     private void internalInsertCell(GraphCell cell, AttributeMap attrs, ConnectionSet cs)
     {
         jCellsBeingAdded.add(cell);

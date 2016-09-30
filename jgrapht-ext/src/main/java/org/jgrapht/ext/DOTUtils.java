@@ -26,10 +26,7 @@ import org.jgrapht.*;
  * Class with DOT format related utilities.
  * 
  * @author Christoph Zauner
- * 
- * @deprecated in favor of implementing the current functionality directly by the user
  */
-@Deprecated
 public class DOTUtils
 {
     /** Keyword for representing strict graphs. */

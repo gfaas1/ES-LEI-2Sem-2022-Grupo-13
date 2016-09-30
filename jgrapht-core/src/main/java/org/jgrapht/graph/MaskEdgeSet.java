@@ -38,8 +38,6 @@ class MaskEdgeSet<V, E>
 
     private MaskFunctor<V, E> mask;
 
-    private transient TypeUtil<E> edgeTypeDecl = null;
-
     public MaskEdgeSet(Graph<V, E> graph, Set<E> edgeSet, MaskFunctor<V, E> mask)
     {
         this.graph = graph;
@@ -55,7 +53,7 @@ class MaskEdgeSet<V, E>
     {
         // Force a cast to type E. This is nonsense, of course, but
         // it's erased by the compiler anyway.
-        E e = (E) o;
+        E e = TypeUtil.uncheckedCast(o, null);
 
         // If o isn't an E, the first check will fail and
         // short-circuit, so we never try to test the mask on non-edge

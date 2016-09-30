@@ -41,8 +41,6 @@ public class DOTExporterTest
 
     private static final String NL = System.getProperty("line.separator");
 
-    // TODO jvs 23-Dec-2006: externalized diff-based testing framework
-
     private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=\"a\" ];" + NL
         + "  2 [ x=\"y\" ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
 

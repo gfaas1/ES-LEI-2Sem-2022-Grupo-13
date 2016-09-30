@@ -35,8 +35,6 @@ class MaskVertexSet<V, E>
 
     private Set<V> vertexSet;
 
-    private transient TypeUtil<V> vertexTypeDecl = null;
-
     public MaskVertexSet(Set<V> vertexSet, MaskFunctor<V, E> mask)
     {
         this.vertexSet = vertexSet;
@@ -51,7 +49,7 @@ class MaskVertexSet<V, E>
     {
         // Force a cast to type V. This is nonsense, of course, but
         // it's erased by the compiler anyway.
-        V v = (V) o;
+        V v = TypeUtil.uncheckedCast(o, null);
 
         // If o isn't a V, the first check will fail and
         // short-circuit, so we never try to test the mask on
