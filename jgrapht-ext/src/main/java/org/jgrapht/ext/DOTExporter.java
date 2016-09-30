@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.AbstractBaseGraph;
 
 /**
  * Exports a graph into a DOT file.
@@ -42,7 +43,7 @@ public class DOTExporter<V, E>
      * Default graph id used by the exporter.
      */
     public static final String DEFAULT_GRAPH_ID = "G";
-    
+
     private ComponentNameProvider<Graph<V, E>> graphIDProvider;
     private ComponentNameProvider<V> vertexIDProvider;
     private ComponentNameProvider<V> vertexLabelProvider;
@@ -148,20 +149,27 @@ public class DOTExporter<V, E>
         PrintWriter out = new PrintWriter(writer);
         String indent = "  ";
         String connector;
-
+        String header = (g instanceof AbstractBaseGraph
+                && !((AbstractBaseGraph<V, E>) g).isAllowingMultipleEdges())
+                ? DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD + " " : "";
         String graphId = graphIDProvider.getName(g);
         if (graphId == null || graphId.trim().isEmpty()) {
             graphId = DEFAULT_GRAPH_ID;
         }
-        
-        if (g instanceof DirectedGraph<?, ?>) {
-            out.println("digraph " + graphId + " {");
-            connector = " -> ";
-        } else {
-            out.println("graph " + graphId + " {");
-            connector = " -- ";
+        if (!DOTUtils.isValidID(graphId)) {
+            throw new RuntimeException(
+                    "Generated graph ID '" + graphId
+                            + "' is not valid with respect to the .dot language");
         }
-
+        if (g instanceof DirectedGraph<?, ?>) {
+            header += DOTUtils.DIRECTED_GRAPH_KEYWORD;
+            connector = " " + DOTUtils.DIRECTED_GRAPH_EDGEOP + " ";
+        } else {
+            header += DOTUtils.UNDIRECTED_GRAPH_KEYWORD;
+            connector = " " + DOTUtils.UNDIRECTED_GRAPH_EDGEOP + " ";
+        }
+        header += " " + graphId + " {";
+        out.println(header);
         for (V v : g.vertexSet()) {
             out.print(indent + getVertexID(v));
 
@@ -246,18 +254,12 @@ public class DOTExporter<V, E>
     {
         // TODO jvs 28-Jun-2008: possible optimizations here are
         // (a) only validate once per vertex
-        // (b) compile regex patterns
 
         // use the associated id provider for an ID of the given vertex
         String idCandidate = vertexIDProvider.getName(v);
 
-        // now test that this is a valid ID
-        boolean isAlphaDig = idCandidate.matches("[a-zA-Z]+([\\w_]*)?");
-        boolean isDoubleQuoted = idCandidate.matches("\".*\"");
-        boolean isDotNumber = idCandidate.matches("[-]?([.][0-9]+|[0-9]+([.][0-9]*)?)");
-        boolean isHTML = idCandidate.matches("<.*>");
-
-        if (isAlphaDig || isDotNumber || isDoubleQuoted || isHTML) {
+        // test if it is a valid ID
+        if (DOTUtils.isValidID(idCandidate)) {
             return idCandidate;
         }
 
@@ -265,7 +267,7 @@ public class DOTExporter<V, E>
             "Generated id '" + idCandidate + "'for vertex '" + v
                 + "' is not valid with respect to the .dot language");
     }
-
+    
 }
 
 // End DOTExporter.java

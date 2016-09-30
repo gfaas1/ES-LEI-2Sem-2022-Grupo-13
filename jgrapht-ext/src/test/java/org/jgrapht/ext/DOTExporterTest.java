@@ -48,10 +48,15 @@ public class DOTExporterTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    public void testUndirected()
+    public void testUndirected() throws UnsupportedEncodingException, ExportException
+    {
+        testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
+        testUndirected(new Multigraph<>(DefaultEdge.class), false);
+    }
+
+    private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -85,7 +90,7 @@ public class DOTExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        assertEquals(UNDIRECTED, res);
+        assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, res);
     }
 
     public void testValidNodeIDs()
@@ -121,6 +126,8 @@ public class DOTExporterTest
     {
         UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
+        final String customID = "MyGraph";
+
         DOTExporter<String,
             DefaultEdge> exporter = new DOTExporter<>(
                 new IntegerComponentNameProvider<>(), null, null, null, null,
@@ -129,11 +136,11 @@ public class DOTExporterTest
                     @Override
                     public String getName(Graph<String, DefaultEdge> component)
                     {
-                        return "MyGraph";
+                        return customID;
                     }
                 });
 
-        final String correctResult = "graph MyGraph {" + NL + "}" + NL;
+        final String correctResult = "strict graph " + customID + " {" + NL + "}" + NL;
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
