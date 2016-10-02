@@ -26,6 +26,7 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.EnhancedTestCase;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
 import org.jgrapht.util.TypeUtil;
 
 /**
@@ -91,7 +92,7 @@ public class SimpleIdentityDirectedGraphTest
         }
 
         @Override
-        protected DirectedSpecifics<V, E> createDirectedSpecifics()
+        protected Specifics<V, E> createSpecifics()
         {
             return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }

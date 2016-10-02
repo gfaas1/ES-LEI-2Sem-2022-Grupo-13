@@ -48,18 +48,16 @@ public abstract class AbstractBaseGraph<V, E>
     private static final long serialVersionUID = -1263088497616142427L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
+    private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
+        "Graph specifics must not be null";
 
-    boolean allowingLoops;
-
+    private boolean allowingLoops;
     private EdgeFactory<V, E> edgeFactory;
-    private EdgeSetFactory<V, E> edgeSetFactory;
     private Map<E, IntrusiveEdge> edgeMap;
     private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
     private Specifics<V, E> specifics;
     private boolean allowingMultipleEdges;
-
-    private transient TypeUtil<V> vertexTypeDecl = null;
 
     /**
      * Construct a new graph. The graph can either be directed or undirected, depending on the
@@ -75,18 +73,13 @@ public abstract class AbstractBaseGraph<V, E>
     protected AbstractBaseGraph(
         EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
     {
-        if (ef == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(ef);
 
         edgeMap = new LinkedHashMap<>();
         edgeFactory = ef;
         allowingLoops = allowLoops;
         allowingMultipleEdges = allowMultipleEdges;
-
-        this.edgeSetFactory = new ArrayListFactory<>();
-        specifics = createSpecifics();
-
+        specifics = Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -136,29 +129,6 @@ public abstract class AbstractBaseGraph<V, E>
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return edgeFactory;
-    }
-
-    /**
-     * Set the {@link EdgeSetFactory} to use for this graph. Initially, a graph is created with a
-     * default implementation which always supplies an {@link java.util.ArrayList} with capacity 1.
-     *
-     * @param edgeSetFactory factory to use for subsequently created edge sets (this call has no
-     *        effect on existing edge sets)
-     */
-    public void setEdgeSetFactory(EdgeSetFactory<V, E> edgeSetFactory)
-    {
-        this.edgeSetFactory = edgeSetFactory;
-    }
-
-    /**
-     * Returns the {@link EdgeSetFactory} used by this graph. The default is
-     * {@link java.util.ArrayList} with capacity 1.
-     * 
-     * @return edgeSetFactory used by this graph
-     */
-    public EdgeSetFactory<V, E> getEdgeSetFactory()
-    {
-        return edgeSetFactory;
     }
 
     /**
@@ -260,7 +230,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeSource(E e)
     {
-        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).source, vertexTypeDecl);
+        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).source, null);
     }
 
     /**
@@ -269,7 +239,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeTarget(E e)
     {
-        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).target, vertexTypeDecl);
+        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).target, null);
     }
 
     private IntrusiveEdge getIntrusiveEdge(E e)
@@ -516,52 +486,21 @@ public abstract class AbstractBaseGraph<V, E>
         ((DefaultWeightedEdge) e).weight = weight;
     }
 
-    private Specifics<V, E> createSpecifics()
+    /**
+     * Create the specifics for this graph. Subclasses can override this method in order to adjust
+     * the specifics and thus the space-time tradeoffs of the graph implementation.
+     * 
+     * @return the specifics used by this graph
+     */
+    protected Specifics<V, E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
-            return createDirectedSpecifics();
+            return new FastLookupDirectedSpecifics<>(this);
         } else if (this instanceof UndirectedGraph<?, ?>) {
-            return createUndirectedSpecifics();
+            return new FastLookupUndirectedSpecifics<>(this);
         } else {
             throw new IllegalArgumentException(
                 "must be instance of either DirectedGraph or UndirectedGraph");
-        }
-    }
-
-    /**
-     * Create undirected specifics for the graph
-     * 
-     * @return undirected specifics for the graph
-     */
-    protected Specifics<V, E> createUndirectedSpecifics()
-    {
-        return new FastLookupUndirectedSpecifics<>(this);
-    }
-
-    /**
-     * Create directed specifics for the graph
-     * 
-     * @return directed specifics for the graph
-     */
-    protected Specifics<V, E> createDirectedSpecifics()
-    {
-        return new FastLookupDirectedSpecifics<>(this);
-    }
-
-    private static class ArrayListFactory<VV, EE>
-        implements EdgeSetFactory<VV, EE>, Serializable
-    {
-        private static final long serialVersionUID = 5936902837403445985L;
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Set<EE> createEdgeSet(VV vertex)
-        {
-            // NOTE: use size 1 to keep memory usage under control
-            // for the common case of vertices with low degree
-            return new ArrayUnenforcedSet<>(1);
         }
     }
 

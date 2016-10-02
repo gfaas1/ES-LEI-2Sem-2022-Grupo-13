@@ -232,12 +232,13 @@ public class GraphPerformanceTest
     /**
      * Creates an memory efficient graph implementation.
      * 
-     * @param <V>
-     * @param <E>
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
      */
     public static class MemoryEfficientDirectedWeightedGraph<V, E>
         extends SimpleDirectedWeightedGraph<V, E>
     {
+        private static final long serialVersionUID = -1826738982402033648L;
 
         public MemoryEfficientDirectedWeightedGraph(Class<? extends E> edgeClass)
         {
@@ -245,7 +246,7 @@ public class GraphPerformanceTest
         }
 
         @Override
-        protected DirectedSpecifics<V, E> createDirectedSpecifics()
+        protected Specifics<V, E> createSpecifics()
         {
             return new DirectedSpecifics<>(this);
         }
