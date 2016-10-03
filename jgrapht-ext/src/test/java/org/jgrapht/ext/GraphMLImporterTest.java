@@ -673,6 +673,40 @@ public class GraphMLImporterTest
         } catch (ImportException e) {
         }
     }
+    
+    public void testValidWithXLinkNodeAttrib()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xmlns:xlink=\"http://www.w3.org/1999/xlink\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"1\" xlink:href=\"http://graphml.graphdrawing.org\" />" + NL +
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
+
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsVertex("3"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertTrue(g.containsEdge("2", "3"));
+        assertTrue(g.containsEdge("3", "1"));
+    }
 
     public void testExportImport()
         throws Exception
