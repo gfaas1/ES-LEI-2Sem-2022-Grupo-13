@@ -18,12 +18,13 @@
 package org.jgrapht.ext;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import java.util.Map.*;
 
 import javax.xml.*;
 import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
 import org.jgrapht.*;
@@ -120,6 +121,7 @@ public class GraphMLImporter<V, E>
     implements GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
+    private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
 
     private VertexProvider<V> vertexProvider;
     private EdgeProvider<V, E> edgeProvider;
@@ -261,12 +263,22 @@ public class GraphMLImporter<V, E>
                 SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
             // load schema
-            URL xsd =
-                Thread.currentThread().getContextClassLoader().getResource(GRAPHML_SCHEMA_FILENAME);
-            if (xsd == null) {
+            InputStream xsdStream =
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                    GRAPHML_SCHEMA_FILENAME);
+            if (xsdStream == null) {
                 throw new ImportException("Failed to locate GraphML xsd");
             }
-            Schema schema = schemaFactory.newSchema(new File(xsd.getFile()));
+            InputStream xlinkStream =
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                    XLINK_SCHEMA_FILENAME);
+            if (xlinkStream == null) {
+                throw new ImportException("Failed to locate XLink xsd");
+            }
+            Source [] sources = new Source[2];
+            sources[0] = new StreamSource(xlinkStream);
+            sources[1] = new StreamSource(xsdStream);
+            Schema schema = schemaFactory.newSchema(sources);
 
             // create parser
             SAXParserFactory spf = SAXParserFactory.newInstance();
