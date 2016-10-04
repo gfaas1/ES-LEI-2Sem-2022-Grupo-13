@@ -20,9 +20,9 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 import org.junit.Assert;
 
 import junit.framework.*;
@@ -104,7 +104,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     {
 
         class _
-            extends VertexPair<V>
+            extends Pair<V, V>
         {
             public _(V _1, V _2)
             {

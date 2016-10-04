@@ -24,7 +24,10 @@ package org.jgrapht.util;
  * @param <V> the graph vertex type
  *
  * @author Joris Kinable
+ * 
+ * @deprecated in favor of {@link org.jgrapht.alg.util.UnorderedPair}
  */
+@Deprecated
 public class UnorderedVertexPair<V>
     extends VertexPair<V>
 {
