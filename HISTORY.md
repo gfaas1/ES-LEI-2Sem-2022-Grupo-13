@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
 	- DOT-language import/export changes (contributed by Daniel Gómez-Sánchez)
 	- Clean up tests and warnings (contributed by Dimitrios Michail)
 	- Fixed GraphML importer xsd resolution bug (contributed by Dimitrios Michail, spotted by Peter Manning Jr.)
+	- Replaced VertexPair/UnorderedVertexPair with Pair/UnorderedPair (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
