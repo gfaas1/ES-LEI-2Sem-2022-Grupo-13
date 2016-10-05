@@ -495,13 +495,37 @@ public abstract class AbstractBaseGraph<V, E>
     protected Specifics<V, E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
-            return new FastLookupDirectedSpecifics<>(this);
+            return createDirectedSpecifics();
         } else if (this instanceof UndirectedGraph<?, ?>) {
-            return new FastLookupUndirectedSpecifics<>(this);
+            return createUndirectedSpecifics();
         } else {
             throw new IllegalArgumentException(
                 "must be instance of either DirectedGraph or UndirectedGraph");
         }
+    }
+
+    /**
+     * Create undirected specifics for the graph
+     * 
+     * @return undirected specifics for the graph
+     * @deprecated specifics can be changed by overriding directly {@link #createSpecifics()}.
+     */
+    @Deprecated
+    protected Specifics<V, E> createUndirectedSpecifics()
+    {
+        return new FastLookupUndirectedSpecifics<>(this);
+    }
+
+    /**
+     * Create directed specifics for the graph
+     * 
+     * @return directed specifics for the graph
+     * @deprecated specifics can be changed by overriding directly {@link #createSpecifics()}.
+     */
+    @Deprecated
+    protected Specifics<V, E> createDirectedSpecifics()
+    {
+        return new FastLookupDirectedSpecifics<>(this);
     }
 
 }
