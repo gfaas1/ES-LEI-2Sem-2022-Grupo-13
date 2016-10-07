@@ -37,8 +37,7 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class DirectedSpecifics<V, E>
-    extends Specifics<V, E>
-    implements Serializable
+    implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 8971725103718958232L;
     private static final String NOT_IN_DIRECTED_GRAPH = "no such operation in a directed graph";
@@ -54,21 +53,35 @@ public class DirectedSpecifics<V, E>
      */
     public DirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>());
+        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new directed specifics.
      * 
      * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap a container to use the edges
+     * @param vertexMap map for the storage of vertex edge sets
      */
     public DirectedSpecifics(
         AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
     {
+        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+    }
+
+    /**
+     * Construct a new directed specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     */
+    public DirectedSpecifics(
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
+    {
         this.abstractBaseGraph = abstractBaseGraph;
         this.vertexMapDirected = vertexMap;
-        this.edgeSetFactory = abstractBaseGraph.getEdgeSetFactory();
+        this.edgeSetFactory = edgeSetFactory;
     }
 
     /**

@@ -37,8 +37,7 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class UndirectedSpecifics<V, E>
-    extends Specifics<V, E>
-    implements Serializable
+    implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 6494588405178655873L;
     private static final String NOT_IN_UNDIRECTED_GRAPH =
@@ -55,21 +54,37 @@ public class UndirectedSpecifics<V, E>
      */
     public UndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>());
+        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new undirected specifics.
      * 
      * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap a container to use for the edges
+     * @param vertexMap map for the storage of vertex edge sets
      */
     public UndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+        AbstractBaseGraph<V, E> abstractBaseGraph,
+        Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+    {
+        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+    }
+
+    /**
+     * Construct a new undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     */
+    public UndirectedSpecifics(
+        AbstractBaseGraph<V, E> abstractBaseGraph,
+        Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
     {
         this.abstractBaseGraph = abstractBaseGraph;
         this.vertexMapUndirected = vertexMap;
-        this.edgeSetFactory = abstractBaseGraph.getEdgeSetFactory();
+        this.edgeSetFactory = edgeSetFactory;
     }
 
     /**

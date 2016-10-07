@@ -17,11 +17,10 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
 import java.util.*;
 
 /**
- * A base class encapsulating the basic graph operations. Different implementations have different
+ * An interface encapsulating the basic graph operations. Different implementations have different
  * space-time tradeoffs.
  *
  * @param <V> the graph vertex type
@@ -29,24 +28,21 @@ import java.util.*;
  *
  * @author Barak Naveh
  */
-public abstract class Specifics<V, E>
-    implements Serializable
+public interface Specifics<V, E>
 {
-    private static final long serialVersionUID = 785196247314761183L;
-
     /**
      * Adds a vertex.
      *
      * @param vertex vertex to be added.
      */
-    public abstract void addVertex(V vertex);
+    void addVertex(V vertex);
 
     /**
      * Get the vertex set.
      * 
      * @return the vertex set
      */
-    public abstract Set<V> getVertexSet();
+    Set<V> getVertexSet();
 
     /**
      * Returns a set of all edges connecting source vertex to target vertex if such vertices exist
@@ -58,7 +54,7 @@ public abstract class Specifics<V, E>
      *
      * @return a set of all edges connecting source vertex to target vertex.
      */
-    public abstract Set<E> getAllEdges(V sourceVertex, V targetVertex);
+    Set<E> getAllEdges(V sourceVertex, V targetVertex);
 
     /**
      * Returns an edge connecting source vertex to target vertex if such vertices and such edge
@@ -75,14 +71,14 @@ public abstract class Specifics<V, E>
      *
      * @return an edge connecting source vertex to target vertex.
      */
-    public abstract E getEdge(V sourceVertex, V targetVertex);
+    E getEdge(V sourceVertex, V targetVertex);
 
     /**
      * Adds the specified edge to the edge containers of its source and target vertices.
      *
      * @param e the edge
      */
-    public abstract void addEdgeToTouchingVertices(E e);
+    void addEdgeToTouchingVertices(E e);
 
     /**
      * Returns the degree of the specified vertex. A degree of a vertex in an undirected graph is
@@ -92,7 +88,7 @@ public abstract class Specifics<V, E>
      *
      * @return the degree of the specified vertex.
      */
-    public abstract int degreeOf(V vertex);
+    int degreeOf(V vertex);
 
     /**
      * Returns a set of all edges touching the specified vertex. If no edges are touching the
@@ -101,7 +97,7 @@ public abstract class Specifics<V, E>
      * @param vertex the vertex for which a set of touching edges is to be returned.
      * @return a set of all edges touching the specified vertex.
      */
-    public abstract Set<E> edgesOf(V vertex);
+    Set<E> edgesOf(V vertex);
 
     /**
      * Returns the "in degree" of the specified vertex.
@@ -109,7 +105,7 @@ public abstract class Specifics<V, E>
      * @param vertex vertex whose in degree is to be calculated.
      * @return the in degree of the specified vertex.
      */
-    public abstract int inDegreeOf(V vertex);
+    int inDegreeOf(V vertex);
 
     /**
      * Returns a set of all edges incoming into the specified vertex.
@@ -117,7 +113,7 @@ public abstract class Specifics<V, E>
      * @param vertex the vertex for which the list of incoming edges to be returned.
      * @return a set of all edges incoming into the specified vertex.
      */
-    public abstract Set<E> incomingEdgesOf(V vertex);
+    Set<E> incomingEdgesOf(V vertex);
 
     /**
      * Returns the "out degree" of the specified vertex.
@@ -125,7 +121,7 @@ public abstract class Specifics<V, E>
      * @param vertex vertex whose out degree is to be calculated.
      * @return the out degree of the specified vertex.
      */
-    public abstract int outDegreeOf(V vertex);
+    int outDegreeOf(V vertex);
 
     /**
      * Returns a set of all edges outgoing from the specified vertex.
@@ -134,12 +130,12 @@ public abstract class Specifics<V, E>
      *
      * @return a set of all edges outgoing from the specified vertex.
      */
-    public abstract Set<E> outgoingEdgesOf(V vertex);
+    Set<E> outgoingEdgesOf(V vertex);
 
     /**
      * Removes the specified edge from the edge containers of its source and target vertices.
      *
      * @param e the edge
      */
-    public abstract void removeEdgeFromTouchingVertices(E e);
+    void removeEdgeFromTouchingVertices(E e);
 }

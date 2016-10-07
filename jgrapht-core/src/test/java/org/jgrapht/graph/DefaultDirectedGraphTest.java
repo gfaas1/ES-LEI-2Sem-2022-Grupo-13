@@ -17,9 +17,15 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EnhancedTestCase;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.specifics.DirectedSpecifics;
+import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
 
 /**
  * A unit test for directed multigraph.
@@ -43,9 +49,26 @@ public class DefaultDirectedGraphTest
      */
     public void testEdgeSetFactory()
     {
-        DirectedMultigraph<String, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
-        g.setEdgeSetFactory(new LinkedHashSetFactory<>());
-        initMultiTriangle(g);
+        DirectedMultigraph<String, DefaultEdge> g =
+            new LinkedHashSetDirectedMultigraph<>(DefaultEdge.class);
+
+        g.addVertex(v1);
+        g.addVertex(v2);
+        g.addVertex(v3);
+
+        DefaultEdge e1 = g.addEdge(v1, v2);
+        DefaultEdge e2 = g.addEdge(v2, v1);
+        DefaultEdge e3 = g.addEdge(v2, v3);
+        DefaultEdge e4 = g.addEdge(v3, v1);
+
+        Iterator<DefaultEdge> iter = g.edgeSet().iterator();
+        assertEquals(e1, iter.next());
+        assertEquals(e2, iter.next());
+        assertEquals(e3, iter.next());
+        assertEquals(e4, iter.next());
+        assertFalse(iter.hasNext());
+
+        assertEquals("([v1, v2, v3], [(v1,v2), (v2,v1), (v2,v3), (v3,v1)])", g.toString());
     }
 
     /**
@@ -147,20 +170,27 @@ public class DefaultDirectedGraphTest
 
     // ~ Inner Classes ----------------------------------------------------------
 
-    private static class LinkedHashSetFactory<V, E>
-        implements EdgeSetFactory<V, E>
+    /**
+     * A graph implementation with an edge factory using linked hash sets.
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    private class LinkedHashSetDirectedMultigraph<V, E>
+        extends DirectedMultigraph<V, E>
     {
-        /**
-         * .
-         *
-         * @param vertex
-         *
-         * @return an empty list.
-         */
-        @Override
-        public Set<E> createEdgeSet(V vertex)
+        private static final long serialVersionUID = -1826738982402033648L;
+
+        public LinkedHashSetDirectedMultigraph(Class<? extends E> edgeClass)
         {
-            return new LinkedHashSet<>();
+            super(edgeClass);
+        }
+
+        @Override
+        protected DirectedSpecifics<V, E> createSpecifics()
+        {
+            return new FastLookupDirectedSpecifics<>(
+                this, new LinkedHashMap<>(), v -> new LinkedHashSet<>());
         }
     }
 }

@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
 import java.util.*;
 
 import org.jgrapht.alg.util.*;
@@ -37,7 +36,6 @@ import org.jgrapht.util.*;
  */
 public class FastLookupDirectedSpecifics<V, E>
     extends DirectedSpecifics<V, E>
-    implements Serializable
 {
     private static final long serialVersionUID = 4089085208843722263L;
 
@@ -54,19 +52,33 @@ public class FastLookupDirectedSpecifics<V, E>
      */
     public FastLookupDirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>());
+        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup directed specifics.
      * 
      * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap a container to use the edges
+     * @param vertexMap map for the storage of vertex edge sets
      */
     public FastLookupDirectedSpecifics(
         AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
     {
-        super(abstractBaseGraph, vertexMap);
+        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+    }
+
+    /**
+     * Construct a new fast lookup directed specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     */
+    public FastLookupDirectedSpecifics(
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
+    {
+        super(abstractBaseGraph, vertexMap, edgeSetFactory);
         this.touchingVerticesToEdgeMap = new HashMap<>();
     }
 

@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
 import java.util.*;
 
 import org.jgrapht.alg.util.*;
@@ -37,7 +36,6 @@ import org.jgrapht.util.*;
  */
 public class FastLookupUndirectedSpecifics<V, E>
     extends UndirectedSpecifics<V, E>
-    implements Serializable
 {
     private static final long serialVersionUID = 225772727571597846L;
 
@@ -54,19 +52,35 @@ public class FastLookupUndirectedSpecifics<V, E>
      */
     public FastLookupUndirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>());
+        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup undirected specifics.
      * 
      * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap a container to use for the edges
+     * @param vertexMap map for the storage of vertex edge sets
      */
     public FastLookupUndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+        AbstractBaseGraph<V, E> abstractBaseGraph,
+        Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
-        super(abstractBaseGraph, vertexMap);
+        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+    }
+
+    /**
+     * Construct a new fast lookup undirected specifics.
+     * 
+     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     */
+    public FastLookupUndirectedSpecifics(
+        AbstractBaseGraph<V, E> abstractBaseGraph,
+        Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
+    {
+        super(abstractBaseGraph, vertexMap, edgeSetFactory);
         this.touchingVerticesToEdgeMap = new HashMap<>();
     }
 
