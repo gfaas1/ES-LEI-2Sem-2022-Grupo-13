@@ -16,6 +16,8 @@ Changes to JGraphT in each version:
 	- Fixed GraphML importer xsd resolution bug (contributed by Dimitrios Michail, spotted by Peter Manning Jr.)
 	- Replaced VertexPair/UnorderedVertexPair with Pair/UnorderedPair (contributed by Dimitrios Michail)
 	- Clean up AbstractBaseGraph/Specifics dependencies (contributed by Dimitrios Michail)
+	- `GraphTests` has been reworked, extended with additional functionality, and moved from experimental to the core package (contributed by Dimitrios Michail and Barak Naveh)
+	- a `IntegerVertexFactory` has been added to the test package to reduce code duplication (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
