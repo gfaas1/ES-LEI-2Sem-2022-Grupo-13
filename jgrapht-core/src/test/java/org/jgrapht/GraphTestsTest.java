@@ -25,6 +25,7 @@ import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.IntegerVertexFactory;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
@@ -481,17 +482,6 @@ public class GraphTestsTest
         Assert.assertTrue(GraphTests.isEulerian(g));
     }
 
-    class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int counter = 0;
-
-        @Override
-        public Integer createVertex()
-        {
-            return counter++;
-        }
-    }
 }
 
 // End GraphTestsTest.java

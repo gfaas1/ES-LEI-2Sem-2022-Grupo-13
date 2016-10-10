@@ -486,18 +486,6 @@ public class VertexCoverTest
         graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
         return g;
     }
-
-    private class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int counter = 0;
-
-        @Override
-        public Integer createVertex()
-        {
-            return counter++;
-        }
-    }
 }
 
 // End VertexCoverTest.java

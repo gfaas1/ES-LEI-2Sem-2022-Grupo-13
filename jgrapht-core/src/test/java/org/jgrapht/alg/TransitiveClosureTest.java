@@ -37,18 +37,7 @@ public class TransitiveClosureTest
 
         int N = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(N);
-
-        VertexFactory<Integer> vf = new VertexFactory<Integer>()
-        {
-            private int m_index = 0;
-
-            @Override
-            public Integer createVertex()
-            {
-                return m_index++;
-            }
-        };
-        gen.generateGraph(graph, vf, null);
+        gen.generateGraph(graph, new IntegerVertexFactory(), null);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
         assertEquals(true, graph.edgeSet().size() == ((N * (N - 1)) / 2));
@@ -66,18 +55,7 @@ public class TransitiveClosureTest
 
         int N = 10;
         RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(N);
-
-        VertexFactory<Integer> vf = new VertexFactory<Integer>()
-        {
-            private int m_index = 0;
-
-            @Override
-            public Integer createVertex()
-            {
-                return m_index++;
-            }
-        };
-        gen.generateGraph(graph, vf, null);
+        gen.generateGraph(graph, new IntegerVertexFactory(), null);
         TransitiveClosure.INSTANCE.closeSimpleDirectedGraph(graph);
 
         assertEquals(true, graph.edgeSet().size() == (N * (N - 1)));

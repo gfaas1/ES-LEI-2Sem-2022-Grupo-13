@@ -74,7 +74,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED);
         DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
             { 1, 2 }, { 1, 3 }, { 2, 5 }, { 4, 3 }, { 2, 3 }, { 5, 4 }, { 1, 4 }, { 2, 6 },
@@ -92,7 +92,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, true, false);
         DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 },
             { 3, 5 }, { 1, 2 }, { 1, 3 }, { 2, 5 }, { 4, 3 }, { 2, 3 }, { 2, 2 }, { 5, 4 },
@@ -110,7 +110,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, false, true);
         DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
             { 1, 2 }, { 6, 4 }, { 1, 6 }, { 1, 3 }, { 2, 5 }, { 3, 4 }, { 4, 3 }, { 2, 3 },
@@ -127,7 +127,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 18, SEED, true, true);
         DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 5, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 },
             { 3, 5 }, { 1, 2 }, { 6, 4 }, { 1, 6 }, { 1, 3 }, { 2, 5 }, { 3, 4 }, { 4, 3 },
@@ -144,7 +144,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 15, SEED);
         UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 1, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 }, { 1, 3 },
             { 2, 5 }, { 2, 3 }, { 5, 4 }, { 1, 4 }, { 2, 6 }, { 5, 1 }, { 4, 2 }, { 6, 3 } };
@@ -161,7 +161,7 @@ public class GnmRandomGraphGeneratorTest
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(6, 15, SEED, true, false);
         UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 6, 5 }, { 3, 3 }, { 1, 6 }, { 3, 4 }, { 6, 4 }, { 2, 1 }, { 3, 5 },
             { 1, 3 }, { 2, 5 }, { 2, 3 }, { 2, 2 }, { 5, 4 }, { 2, 2 }, { 1, 4 }, { 5, 5 } };
@@ -420,35 +420,6 @@ public class GnmRandomGraphGeneratorTest
             result = lg1.equalsByEdgeOrder(lg2);
 
             return result;
-        }
-    }
-
-    static class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int counter;
-
-        /**
-         * Equivalent to IntegerVertexFactory(0);
-         *
-         * @author Assaf
-         * @since Aug 6, 2005
-         */
-        public IntegerVertexFactory()
-        {
-            this(0);
-        }
-
-        public IntegerVertexFactory(int oneBeforeFirstValue)
-        {
-            this.counter = oneBeforeFirstValue;
-        }
-
-        @Override
-        public Integer createVertex()
-        {
-            this.counter++;
-            return this.counter;
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh, Andrew Newell, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2016, by Barak Naveh, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,15 +24,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
 import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.util.TypeUtil;
 
 /**
  * A collection of utilities to test for various graph properties.
  * 
  * @author Barak Naveh
- * @author Andrew Newell
  * @author Dimitrios Michail
  */
 public abstract class GraphTests
@@ -124,10 +123,15 @@ public abstract class GraphTests
     /**
      * Test whether an undirected graph is connected.
      * 
+     * <p>
+     * This method does not performing any caching, instead recomputes everything from scratch. In
+     * case more control is required use {@link ConnectivityInspector} directly.
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is connected, false otherwise
+     * @see ConnectivityInspector
      */
     public static <V, E> boolean isConnected(UndirectedGraph<V, E> graph)
     {
@@ -138,10 +142,15 @@ public abstract class GraphTests
     /**
      * Test whether a directed graph is weakly connected.
      * 
+     * <p>
+     * This method does not performing any caching, instead recomputes everything from scratch. In
+     * case more control is required use {@link ConnectivityInspector} directly.
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is weakly connected, false otherwise
+     * @see ConnectivityInspector
      */
     public static <V, E> boolean isWeaklyConnected(DirectedGraph<V, E> graph)
     {
@@ -152,10 +161,15 @@ public abstract class GraphTests
     /**
      * Test whether a directed graph is strongly connected.
      * 
+     * <p>
+     * This method does not performing any caching, instead recomputes everything from scratch. In
+     * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return true if the graph is strongly connected, false otherwise
+     * @see KosarajuStrongConnectivityInspector
      */
     public static <V, E> boolean isStronglyConnected(DirectedGraph<V, E> graph)
     {
@@ -165,7 +179,7 @@ public abstract class GraphTests
 
     /**
      * Test whether an undirected graph is a tree.
-     * 
+     *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -237,34 +251,12 @@ public abstract class GraphTests
      * @param <E> the graph edge type
      *
      * @return true if the graph is Eulerian, false otherwise
+     * @see EulerianCircuit#isEulerian(Graph)
      */
     public static <V, E> boolean isEulerian(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, "Graph cannot be null");
-        if (graph instanceof DirectedGraph) {
-            DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(graph, null);
-            for (V v : dg.vertexSet()) {
-                if (dg.inDegreeOf(v) != dg.outDegreeOf(v)) {
-                    return false;
-                }
-            }
-            if (!isStronglyConnected(dg)) {
-                return false;
-            }
-        } else if (graph instanceof UndirectedGraph) {
-            UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
-            for (V v : ug.vertexSet()) {
-                if (ug.degreeOf(v) % 2 == 1) {
-                    return false;
-                }
-            }
-            if (!isConnected(ug)) {
-                return false;
-            }
-        } else {
-            throw new IllegalArgumentException("Graph must be directed or undirected");
-        }
-        return true;
+        return EulerianCircuit.isEulerian(graph);
     }
 
 }

@@ -38,16 +38,7 @@ public class FloydWarshallShortestPathsTest
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(10, 15);
-        VertexFactory<Integer> f = new VertexFactory<Integer>()
-        {
-            int gid;
-
-            @Override
-            public Integer createVertex()
-            {
-                return gid++;
-            }
-        };
+        VertexFactory<Integer> f = new IntegerVertexFactory();
 
         for (int i = 0; i < 10; i++) {
             // Generate directed graph
