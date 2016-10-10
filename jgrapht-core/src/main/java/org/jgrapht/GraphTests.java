@@ -24,8 +24,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.graph.AbstractBaseGraph;
 
 /**
@@ -287,19 +287,21 @@ public abstract class GraphTests
     /**
      * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
      * vertex has an even degree. A directed graph is Eulerian if it is strongly connected and each
-     * vertex has the same incoming and outgoing degree.
+     * vertex has the same incoming and outgoing degree. Test whether a graph is Eulerian. An
+     * <a href="http://mathworld.wolfram.com/EulerianGraph.html">Eulerian graph</a> is a graph
+     * containing an <a href="http://mathworld.wolfram.com/EulerianCycle.html">Eulerian cycle</a>.
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
      * @return true if the graph is Eulerian, false otherwise
-     * @see EulerianCircuit#isEulerian(Graph)
+     * @see HierholzerEulerianCycle#isEulerian(Graph)
      */
     public static <V, E> boolean isEulerian(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, "Graph cannot be null");
-        return EulerianCircuit.isEulerian(graph);
+        return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
     }
 
 }
