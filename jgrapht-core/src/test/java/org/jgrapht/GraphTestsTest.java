@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,7 +18,9 @@
 package org.jgrapht;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
+import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -325,6 +327,158 @@ public class GraphTestsTest
             generator.generateGraph(g, new IntegerVertexFactory(), null);
             Assert.assertTrue(GraphTests.isBipartite(g));
         }
+    }
+
+    @Test
+    public void testUndirectedEulerian1()
+    {
+        // complete graph of 6 vertices
+        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(6);
+        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Assert.assertFalse(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian2()
+    {
+        // even degrees but disconnected
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+        g.addEdge(4, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 4);
+        Assert.assertFalse(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian3()
+    {
+        // even degrees
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+        g.addEdge(4, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 4);
+        g.addEdge(3, 4);
+        g.addEdge(3, 4);
+        Assert.assertTrue(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian4()
+    {
+        // even degrees
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        g.addVertex(1);
+        Assert.assertTrue(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian5()
+    {
+        // with loops
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+        g.addEdge(4, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 4);
+        g.addEdge(3, 4);
+        g.addEdge(3, 4);
+        IntStream.rangeClosed(1, 6).forEach(i -> g.addEdge(i, i));
+        Assert.assertTrue(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian6()
+    {
+        // with loops
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5, 6));
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 1);
+        g.addEdge(4, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 4);
+        IntStream.rangeClosed(1, 6).forEach(i -> g.addEdge(i, i));
+        Assert.assertFalse(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testUndirectedEulerian7()
+    {
+        // complete graph of 5 vertices
+        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(5);
+        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Assert.assertTrue(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testDirectedEulerian1()
+    {
+        // complete graph of 6 vertices
+        DirectedGraph<Integer, DefaultEdge> g1 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen1 = new CompleteGraphGenerator<>(6);
+        gen1.generateGraph(g1, new IntegerVertexFactory(), null);
+        Assert.assertTrue(GraphTests.isEulerian(g1));
+
+        // complete graph of 7 vertices
+        DirectedGraph<Integer, DefaultEdge> g2 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen2 = new CompleteGraphGenerator<>(7);
+        gen2.generateGraph(g2, new IntegerVertexFactory(), null);
+        Assert.assertTrue(GraphTests.isEulerian(g2));
+    }
+
+    @Test
+    public void testDirectedEulerian2()
+    {
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1));
+        Assert.assertTrue(GraphTests.isEulerian(g));
+        g.addEdge(1, 1);
+        g.addEdge(1, 1);
+        Assert.assertTrue(GraphTests.isEulerian(g));
+        Graphs.addAllVertices(g, Arrays.asList(2));
+        g.addEdge(2, 1);
+        Assert.assertFalse(GraphTests.isEulerian(g));
+    }
+
+    @Test
+    public void testDirectedEulerian3()
+    {
+        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
+        Assert.assertFalse(GraphTests.isEulerian(g));
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 4);
+        g.addEdge(4, 5);
+        g.addEdge(5, 1);
+        Assert.assertTrue(GraphTests.isEulerian(g));
+        g.addEdge(2, 1);
+        g.addEdge(3, 2);
+        g.addEdge(4, 3);
+        g.addEdge(5, 4);
+        Assert.assertFalse(GraphTests.isEulerian(g));
+        g.addEdge(1, 1);
+        g.addEdge(2, 2);
+        g.addEdge(3, 3);
+        g.addEdge(4, 4);
+        g.addEdge(5, 5);
+        Assert.assertFalse(GraphTests.isEulerian(g));
+        g.addEdge(1, 5);
+        Assert.assertTrue(GraphTests.isEulerian(g));
     }
 
     class IntegerVertexFactory

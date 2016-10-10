@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2016, by Barak Naveh, Andrew Newell, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,11 +26,13 @@ import java.util.Set;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
 import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * A collection of utilities to test for various graph properties.
  * 
  * @author Barak Naveh
+ * @author Andrew Newell
  * @author Dimitrios Michail
  */
 public abstract class GraphTests
@@ -52,7 +54,7 @@ public abstract class GraphTests
     }
 
     /**
-     * Check if a graph is simple, i.e. has no self-loops and multiple edges.
+     * Check if a graph is simple. A graph is simple if it has no self-loops and multiple edges.
      * 
      * @param graph a graph
      * @param <V> the graph vertex type
@@ -93,7 +95,7 @@ public abstract class GraphTests
      * Test whether a graph is complete. A complete undirected graph is a simple graph in which
      * every pair of distinct vertices is connected by a unique edge. A complete directed graph is a
      * directed graph in which every pair of distinct vertices is connected by a pair of unique
-     * edges (one in each direction)
+     * edges (one in each direction).
      * 
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -221,6 +223,46 @@ public abstract class GraphTests
                     return false;
                 }
             }
+        }
+        return true;
+    }
+
+    /**
+     * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
+     * vertex has an even degree. A directed graph is Eulerian if it is strongly connected and each
+     * vertex has the same incoming and outgoing degree.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
+     * @return true if the graph is Eulerian, false otherwise
+     */
+    public static <V, E> boolean isEulerian(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, "Graph cannot be null");
+        if (graph instanceof DirectedGraph) {
+            DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(graph, null);
+            for (V v : dg.vertexSet()) {
+                if (dg.inDegreeOf(v) != dg.outDegreeOf(v)) {
+                    return false;
+                }
+            }
+            if (!isStronglyConnected(dg)) {
+                return false;
+            }
+        } else if (graph instanceof UndirectedGraph) {
+            UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
+            for (V v : ug.vertexSet()) {
+                if (ug.degreeOf(v) % 2 == 1) {
+                    return false;
+                }
+            }
+            if (!isConnected(ug)) {
+                return false;
+            }
+        } else {
+            throw new IllegalArgumentException("Graph must be directed or undirected");
         }
         return true;
     }

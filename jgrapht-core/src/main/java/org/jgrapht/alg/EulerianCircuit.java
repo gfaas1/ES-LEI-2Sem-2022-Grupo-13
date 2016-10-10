@@ -44,19 +44,7 @@ public abstract class EulerianCircuit
      */
     public static <V, E> boolean isEulerian(UndirectedGraph<V, E> g)
     {
-        // If the graph is not connected, then no Eulerian circuit exists
-        if (!(new ConnectivityInspector<>(g)).isGraphConnected()) {
-            return false;
-        }
-
-        // A graph is Eulerian if and only if all vertices have even degree
-        // So, this code will check for that
-        for (V v : g.vertexSet()) {
-            if ((g.degreeOf(v) % 2) == 1) {
-                return false;
-            }
-        }
-        return true;
+        return GraphTests.isEulerian(g);
     }
 
     /**
