@@ -226,17 +226,8 @@ public class StrongConnectivityAlgorithmTest
             return (from + "->" + to).intern();
         });
 
-        new RingGraphGenerator<Integer, String>(3).generateGraph(graph, new VertexFactory<Integer>()
-        {
-            private int i = 0;
-
-            @Override
-            public Integer createVertex()
-            {
-                return i++;
-            }
-        }, null);
-
+        new RingGraphGenerator<Integer, String>(3).generateGraph(graph, new IntegerVertexFactory(), null);
+        
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);
         Set<Set<Integer>> expected = new HashSet<>();

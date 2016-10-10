@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 /**
  * This algorithm will check whether a graph is Eulerian (hence it contains an
@@ -33,28 +34,60 @@ import org.jgrapht.graph.*;
  */
 public abstract class EulerianCircuit
 {
+
     /**
-     * This method will check whether the graph passed in is Eulerian or not.
+     * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
+     * vertex has an even degree.
      *
-     * @param g The graph to be checked
+     * @param graph the input graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      *
-     * @return true for Eulerian and false for non-Eulerian
+     * @return true if the graph is Eulerian, false otherwise
+     * @deprecated in favor of {@link #isEulerian(Graph)}
      */
-    public static <V, E> boolean isEulerian(UndirectedGraph<V, E> g)
+    @Deprecated
+    public static <V, E> boolean isEulerian(UndirectedGraph<V, E> graph)
     {
-        // If the graph is not connected, then no Eulerian circuit exists
-        if (!(new ConnectivityInspector<>(g)).isGraphConnected()) {
-            return false;
-        }
+        return isEulerian((Graph<V, E>) graph);
+    }
 
-        // A graph is Eulerian if and only if all vertices have even degree
-        // So, this code will check for that
-        for (V v : g.vertexSet()) {
-            if ((g.degreeOf(v) % 2) == 1) {
+    /**
+     * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
+     * vertex has an even degree. A directed graph is Eulerian if it is strongly connected and each
+     * vertex has the same incoming and outgoing degree.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
+     * @return true if the graph is Eulerian, false otherwise
+     */
+    public static <V, E> boolean isEulerian(Graph<V, E> graph)
+    {
+        Objects.requireNonNull(graph, "Graph cannot be null");
+        if (graph instanceof DirectedGraph) {
+            DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(graph, null);
+            for (V v : dg.vertexSet()) {
+                if (dg.inDegreeOf(v) != dg.outDegreeOf(v)) {
+                    return false;
+                }
+            }
+            if (!GraphTests.isStronglyConnected(dg)) {
                 return false;
             }
+        } else if (graph instanceof UndirectedGraph) {
+            UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
+            for (V v : ug.vertexSet()) {
+                if (ug.degreeOf(v) % 2 == 1) {
+                    return false;
+                }
+            }
+            if (!GraphTests.isConnected(ug)) {
+                return false;
+            }
+        } else {
+            throw new IllegalArgumentException("Graph must be directed or undirected");
         }
         return true;
     }

@@ -75,15 +75,4 @@ public class GraphWalkTest
         assertEquals(10.0, p2.getWeight());
     }
 
-    private class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        int count;
-
-        @Override
-        public Integer createVertex()
-        {
-            return count++;
-        }
-    }
 }

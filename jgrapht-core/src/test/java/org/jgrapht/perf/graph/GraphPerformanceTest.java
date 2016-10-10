@@ -20,7 +20,6 @@ package org.jgrapht.perf.graph;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
@@ -173,16 +172,7 @@ public class GraphPerformanceTest
         {
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
                 new MemoryEfficientDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new VertexFactory<Integer>()
-            {
-                int i;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return ++i;
-                }
-            }, null);
+            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
             return graph;
         }
     }
@@ -199,16 +189,7 @@ public class GraphPerformanceTest
         {
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
                 new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-            rgg.generateGraph(graph, new VertexFactory<Integer>()
-            {
-                int i;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return ++i;
-                }
-            }, null);
+            rgg.generateGraph(graph, new IntegerVertexFactory(1), null);
             return graph;
         }
     }

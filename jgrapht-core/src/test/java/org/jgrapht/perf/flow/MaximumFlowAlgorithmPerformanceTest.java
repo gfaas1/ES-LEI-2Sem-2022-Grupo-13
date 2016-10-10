@@ -63,16 +63,7 @@ public class MaximumFlowAlgorithmPerformanceTest
                     return new DefaultWeightedEdge();
                 });
 
-            rgg.generateGraph(network, new VertexFactory<Integer>()
-            {
-                int i;
-
-                @Override
-                public Integer createVertex()
-                {
-                    return ++i;
-                }
-            }, null);
+            rgg.generateGraph(network, new IntegerVertexFactory(1), null);
 
             solver = createSolver(network);
 

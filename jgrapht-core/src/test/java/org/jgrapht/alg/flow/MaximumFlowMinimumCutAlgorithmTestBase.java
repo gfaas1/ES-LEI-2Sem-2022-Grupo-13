@@ -1479,16 +1479,4 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             .edgeSet().stream().forEach(e -> undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));
         return undirectedGraph;
     }
-
-    public class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int counter = 0;
-
-        @Override
-        public Integer createVertex()
-        {
-            return counter++;
-        }
-    }
 }

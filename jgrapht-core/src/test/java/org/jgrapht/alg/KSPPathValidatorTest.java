@@ -206,18 +206,9 @@ public class KSPPathValidatorTest
 
     private SimpleGraph<Integer, DefaultEdge> buildGraphForTestDisconnected(int size)
     {
-        VertexFactory<Integer> vertexFactory = new VertexFactory<Integer>()
-        {
-
-            private int index = 0;
-
-            @Override
-            public Integer createVertex()
-            {
-                return index++;
-            }
-        };
         SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        VertexFactory<Integer> vertexFactory = new IntegerVertexFactory();
 
         CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(size);
@@ -240,18 +231,7 @@ public class KSPPathValidatorTest
     {
         SimpleGraph<Integer, DefaultEdge> clique = new SimpleGraph<>(DefaultEdge.class);
         RingGraphGenerator<Integer, DefaultEdge> graphGenerator = new RingGraphGenerator<>(size);
-        graphGenerator.generateGraph(clique, new VertexFactory<Integer>()
-        {
-
-            private int index = 0;
-
-            @Override
-            public Integer createVertex()
-            {
-                return index++;
-            }
-        }, null);
-
+        graphGenerator.generateGraph(clique, new IntegerVertexFactory(), null);
         return clique;
     }
 }

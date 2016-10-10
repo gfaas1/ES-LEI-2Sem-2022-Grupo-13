@@ -525,15 +525,7 @@ public class CliqueMinimalSeparatorDecompositionTest
             do {
                 g = new SimpleGraph<>(DefaultEdge.class);
                 generator = new GnmRandomGraphGenerator<>(n, m);
-                generator.generateGraph(g, new VertexFactory<Integer>()
-                {
-                    int i;
-
-                    public Integer createVertex()
-                    {
-                        return ++i;
-                    }
-                }, null);
+                generator.generateGraph(g, new IntegerVertexFactory(1), null);
 
                 inspector = new ConnectivityInspector<>(g);
             } while (!inspector.isGraphConnected());
