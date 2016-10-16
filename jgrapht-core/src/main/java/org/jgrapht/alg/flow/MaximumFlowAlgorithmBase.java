@@ -22,6 +22,7 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.alg.util.extension.*;
 
 /**
@@ -42,13 +43,13 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      * Default tolerance.
      */
     public static final double DEFAULT_EPSILON = 1e-9;
-    /* tolerance (DEFAULT_EPSILON or user-defined) */
-    public final double epsilon;
 
     /* input network */
     protected Graph<V, E> network;
     /* indicates whether the input graph is directed or not */
     protected final boolean directed_graph;
+    /* Used to compare floating point values */
+    protected Comparator<Double> comparator;
 
     protected ExtensionManager<V, ? extends VertexExtensionBase> vertexExtensionManager;
     protected ExtensionManager<E, ? extends AnnotatedFlowEdge> edgeExtensionManager;
@@ -78,7 +79,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         this.network = network;
         this.directed_graph = network instanceof DirectedGraph;
-        this.epsilon = epsilon;
+        this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
     /**
@@ -208,10 +209,10 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
     {
         AnnotatedFlowEdge inverseEdge = edge.getInverse();
 
-        assert ((compareFlowTo(edge.flow, 0.0) == 0)
-            || (compareFlowTo(inverseEdge.flow, 0.0) == 0));
+        assert ((comparator.compare(edge.flow, 0.0) == 0)
+            || (comparator.compare(inverseEdge.flow, 0.0) == 0));
 
-        if (compareFlowTo(inverseEdge.flow, flow) == -1) { // If f1 >= f2
+        if (comparator.compare(inverseEdge.flow, flow) == -1) { // If f1 >= f2
             double flowDifference = flow - inverseEdge.flow;
 
             edge.flow += flowDifference;
@@ -246,23 +247,6 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         }
 
         return maxFlow;
-    }
-
-    /**
-     * Compares flow against val. Returns 0 if they are equal, -1 if {@literal flow < val}, 1
-     * otherwise
-     * 
-     * @param flow flow
-     * @param val value
-     * @return 0 if they are equal, -1 if {@literal flow < val}, 1 otherwise
-     */
-    protected int compareFlowTo(double flow, double val)
-    {
-        if (Math.abs(flow - val) < epsilon) {
-            return 0;
-        } else {
-            return (flow < val) ? -1 : 1;
-        }
     }
 
     class VertexExtensionBase
@@ -322,7 +306,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
 
         public boolean hasCapacity()
         {
-            return compareFlowTo(capacity, flow) > 0;
+            return comparator.compare(capacity, flow) > 0;
         }
 
         @Override

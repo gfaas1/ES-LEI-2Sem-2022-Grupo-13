@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.matching;
 
 import java.util.*;
 
@@ -41,10 +41,7 @@ import org.jgrapht.alg.interfaces.*;
  * @param <E> the graph edge type
  *
  * @author Alexey Kudinkin
- * @deprecated Use {@link org.jgrapht.alg.matching.KuhnMunkresMinimalWeightBipartitePerfectMatching}
- *             instead.
  */
-@Deprecated
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
     implements WeightedMatchingAlgorithm<V, E>
 {
@@ -126,7 +123,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
     /**
      * The actual implementation.
      */
-    protected static class KuhnMunkresMatrixImplementation<V, E>
+    static class KuhnMunkresMatrixImplementation<V, E>
     {
         /**
          * Cost matrix
