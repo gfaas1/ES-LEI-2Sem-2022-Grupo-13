@@ -20,8 +20,8 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 
 /**
  * This algorithm will check whether a graph is Eulerian (hence it contains an
@@ -31,7 +31,9 @@ import org.jgrapht.util.*;
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
+ * @deprecated use {@link HierholzerEulerianCycle} instead
  */
+@Deprecated
 public abstract class EulerianCircuit
 {
 
@@ -44,52 +46,10 @@ public abstract class EulerianCircuit
      * @param <E> the graph edge type
      *
      * @return true if the graph is Eulerian, false otherwise
-     * @deprecated in favor of {@link #isEulerian(Graph)}
      */
-    @Deprecated
     public static <V, E> boolean isEulerian(UndirectedGraph<V, E> graph)
     {
-        return isEulerian((Graph<V, E>) graph);
-    }
-
-    /**
-     * Test whether a graph is Eulerian. An undirected graph is Eulerian if it is connected and each
-     * vertex has an even degree. A directed graph is Eulerian if it is strongly connected and each
-     * vertex has the same incoming and outgoing degree.
-     *
-     * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     *
-     * @return true if the graph is Eulerian, false otherwise
-     */
-    public static <V, E> boolean isEulerian(Graph<V, E> graph)
-    {
-        Objects.requireNonNull(graph, "Graph cannot be null");
-        if (graph instanceof DirectedGraph) {
-            DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(graph, null);
-            for (V v : dg.vertexSet()) {
-                if (dg.inDegreeOf(v) != dg.outDegreeOf(v)) {
-                    return false;
-                }
-            }
-            if (!GraphTests.isStronglyConnected(dg)) {
-                return false;
-            }
-        } else if (graph instanceof UndirectedGraph) {
-            UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
-            for (V v : ug.vertexSet()) {
-                if (ug.degreeOf(v) % 2 == 1) {
-                    return false;
-                }
-            }
-            if (!GraphTests.isConnected(ug)) {
-                return false;
-            }
-        } else {
-            throw new IllegalArgumentException("Graph must be directed or undirected");
-        }
-        return true;
+        return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
     }
 
     /**

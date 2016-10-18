@@ -22,7 +22,7 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
 
 /**
