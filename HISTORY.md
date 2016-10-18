@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
 	- `GraphTests` has been reworked, extended with additional functionality, and moved from experimental to the core package (contributed by Dimitrios Michail and Barak Naveh)
 	- a `IntegerVertexFactory` has been added to the test package to reduce code duplication (contributed by Dimitrios Michail)
 	- 2 new 1/2-approximation algorithms (greedy algorithm and Drake and Hougardy path growing algorithm) have been added; matching algorithms have been moved to dedicated package (contributed by Dimitrios Michail)
+	- Added `HierholzerEulerianCycle`, a Linear time implementation of Hierholzer's algorithm to find a Eulerean Circuit in the graph. This class replaces the old `EulerianCircuit` implementation since it is significantly faster. (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
