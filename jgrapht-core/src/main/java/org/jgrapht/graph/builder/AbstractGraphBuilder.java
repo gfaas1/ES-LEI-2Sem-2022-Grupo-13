@@ -205,6 +205,20 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
         return this.self();
     }
 
+    /** Removes the specified edge from the graph. Removes the specified edge from this graph
+     * if it is present.
+     *
+     * @param edge edge to be removed from this graph, if present.
+     * @return this builder object
+     *
+     * @see Graph#removeEdge(Object)
+     */
+    public B removeEdge(E edge)
+    {
+        this.graph.removeEdge(edge);
+        return this.self();
+    }
+
     /**
      * Build the graph. Calling any method (including this method) on this builder object after
      * calling this method is undefined behaviour.
