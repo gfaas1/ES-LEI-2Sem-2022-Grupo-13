@@ -71,7 +71,8 @@ public abstract class DirectedWeightedGraphBuilderBase<V, E,
      *
      * @return this builder object
      *
-     * @see
+     * @see Graph#addEdge(Object, Object, Object)
+     * @see WeightedGraph#setEdgeWeight(Object, double)
      */
     public B addSpecifiedEdge(V source, V target, E edge, double weight)
     {
