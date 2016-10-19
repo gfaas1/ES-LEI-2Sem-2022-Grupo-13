@@ -101,6 +101,25 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     }
 
     /**
+     * Adds the specified edge to the graph being built. The source and target vertices are added
+     * to the graph, if not already included.
+     *
+     * @param source source vertex of the edge.
+     * @param target target vertex of the edge.
+     * @param edge edge to be added to this graph.
+     * @return this builder object
+     *
+     * @see Graph#addEdge(Object, Object, Object)
+     */
+    public B addSpecifiedEdge(V source, V target, E edge)
+    {
+        this.addVertex(source);
+        this.addVertex(target);
+        this.graph.addEdge(source, target, edge);
+        return this.self();
+    }
+
+    /**
      * Adds a chain of edges to the graph being built. The vertices are added to the graph, if not
      * already included.
      *
