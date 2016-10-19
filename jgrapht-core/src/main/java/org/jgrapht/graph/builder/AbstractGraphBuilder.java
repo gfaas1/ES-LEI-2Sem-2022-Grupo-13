@@ -111,7 +111,7 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @see Graph#addEdge(Object, Object, Object)
      */
-    public B addSpecifiedEdge(V source, V target, E edge)
+    public B addEdge(V source, V target, E edge)
     {
         this.addVertex(source);
         this.addVertex(target);

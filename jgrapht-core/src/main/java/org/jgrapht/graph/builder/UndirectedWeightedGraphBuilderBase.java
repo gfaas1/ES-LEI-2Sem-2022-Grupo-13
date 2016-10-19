@@ -75,7 +75,7 @@ public abstract class UndirectedWeightedGraphBuilderBase<V, E,
      * @see Graph#addEdge(Object, Object, Object)
      * @see WeightedGraph#setEdgeWeight(Object, double)
      */
-    public B addSpecifiedEdge(V source, V target, E edge, double weight)
+    public B addEdge(V source, V target, E edge, double weight)
     {
         this.graph.addEdge(source, target, edge);
         this.graph.setEdgeWeight(edge, weight);
