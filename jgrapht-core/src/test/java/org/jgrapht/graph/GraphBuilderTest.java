@@ -52,22 +52,31 @@ public class GraphBuilderTest
 
     public void testAddEdge()
     {
+        DefaultWeightedEdge e1 = new DefaultWeightedEdge();
+        DefaultWeightedEdge e2 = new DefaultWeightedEdge();
+
         UnmodifiableGraph<String,
             DefaultWeightedEdge> g = new DirectedWeightedGraphBuilder<>(
                 new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class))
                         .addEdge(v1, v2).addEdgeChain(v3, v4, v5, v6).addEdge(v7, v8, 10.0)
+                        .addEdge(v1, v7, e1).addEdge(v1, v8, e2, 42.0)
                         .buildUnmodifiable();
 
         assertEquals(8, g.vertexSet().size());
-        assertEquals(5, g.edgeSet().size());
+        assertEquals(7, g.edgeSet().size());
         assertTrue(g.vertexSet().containsAll(Arrays.asList(v1, v2, v3, v4, v5, v6, v7, v8)));
         assertTrue(g.containsEdge(v1, v2));
         assertTrue(g.containsEdge(v3, v4));
         assertTrue(g.containsEdge(v4, v5));
         assertTrue(g.containsEdge(v5, v6));
         assertTrue(g.containsEdge(v7, v8));
+        assertTrue(g.containsEdge(v1, v7));
+        assertTrue(g.containsEdge(v1, v8));
+        assertEquals(e1, g.getEdge(v1, v7));
+        assertEquals(e2, g.getEdge(v1, v8));
         assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)));
+        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)));
     }
 
     public void testAddGraph()
@@ -109,15 +118,18 @@ public class GraphBuilderTest
 
     public void testRemoveEdge()
     {
+        DefaultEdge e = new DefaultEdge();
+
         Graph<String,
             DefaultEdge> g1 = new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                    .addEdgeChain(v1, v2, v3, v4).buildUnmodifiable();
+                    .addEdgeChain(v1, v2, v3, v4).addEdge(v1, v4, e)
+                    .buildUnmodifiable();
 
         Graph<String,
             DefaultEdge> g2 = new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                    .addGraph(g1).removeEdge(v2, v3).build();
+                    .addGraph(g1).removeEdge(v2, v3).removeEdge(e).build();
 
         assertEquals(4, g2.vertexSet().size());
         assertEquals(2, g2.edgeSet().size());
