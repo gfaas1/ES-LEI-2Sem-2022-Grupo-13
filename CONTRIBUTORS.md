@@ -92,6 +92,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - Victor Mikhaylov
 - Nils Olberg
 - [Daniel Gomez-Sanchez](https://github.com/magicDGS)
+- [Skuratovich Sergey](https://github.com/SSNikolaevich)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
