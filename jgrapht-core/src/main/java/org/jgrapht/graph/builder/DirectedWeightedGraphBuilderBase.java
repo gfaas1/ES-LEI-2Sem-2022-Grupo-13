@@ -59,6 +59,27 @@ public abstract class DirectedWeightedGraphBuilderBase<V, E,
         Graphs.addEdgeWithVertices(this.graph, source, target, weight);
         return this.self();
     }
+
+    /**
+     * Adds the specified weighted edge to the graph being built. The source and target vertices
+     * are added to the graph, if not already included.
+     *
+     * @param source source vertex of the edge.
+     * @param target target vertex of the edge.
+     * @param edge edge to be added to this graph.
+     * @param weight weight of the edge.
+     *
+     * @return this builder object
+     *
+     * @see Graph#addEdge(Object, Object, Object)
+     * @see WeightedGraph#setEdgeWeight(Object, double)
+     */
+    public B addEdge(V source, V target, E edge, double weight)
+    {
+        this.graph.addEdge(source, target, edge);
+        this.graph.setEdgeWeight(edge, weight);
+        return this.self();
+    }
 }
 
 // End DirectedWeightedGraphBuilderBase.java
