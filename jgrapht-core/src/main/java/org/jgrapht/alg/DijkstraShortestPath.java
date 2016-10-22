@@ -32,7 +32,9 @@ import org.jgrapht.traverse.*;
  *
  * @author John V. Sichi
  * @since Sep 2, 2003
+ * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.DijkstraShortestPath}
  */
+@Deprecated
 public final class DijkstraShortestPath<V, E>
 {
     private GraphPath<V, E> path;

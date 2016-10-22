@@ -41,7 +41,9 @@ import org.jgrapht.util.*;
  *
  * @author Dimitrios Michail
  * @since July 2016
+ * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath}
  */
+@Deprecated
 public final class BidirectionalDijkstraShortestPath<V, E>
 {
 

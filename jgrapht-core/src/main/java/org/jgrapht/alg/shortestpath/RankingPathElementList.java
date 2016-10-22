@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.*;
 
 /**
@@ -27,9 +28,7 @@ import org.jgrapht.graph.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
- * @deprecated Use {@link org.jgrapht.alg.shortestpath.RankingPathElement} instead.
  */
-@Deprecated
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
@@ -308,21 +307,17 @@ final class RankingPathElementList<V, E>
         }
 
         ConnectivityInspector<V, E> connectivityInspector;
-        PathMask<V, E> connectivityMask;
+        MaskFunctor<V, E> connectivityMask;
 
         if (this.graph instanceof DirectedGraph<?, ?>) {
             connectivityMask = new PathMask<>(prevPathElement);
-            DirectedMaskSubgraph<V,
-                E> connectivityGraph = new DirectedMaskSubgraph<>(
-                    (DirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),
-                    e -> connectivityMask.isEdgeMasked(e));
+            DirectedMaskSubgraph<V, E> connectivityGraph =
+                new DirectedMaskSubgraph<>((DirectedGraph<V, E>) this.graph, connectivityMask);
             connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
         } else {
             connectivityMask = new PathMask<>(prevPathElement);
-            UndirectedMaskSubgraph<V,
-                E> connectivityGraph = new UndirectedMaskSubgraph<>(
-                    (UndirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),
-                    e -> connectivityMask.isEdgeMasked(e));
+            UndirectedMaskSubgraph<V, E> connectivityGraph =
+                new UndirectedMaskSubgraph<>((UndirectedGraph<V, E>) this.graph, connectivityMask);
             connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
         }
 
@@ -388,6 +383,7 @@ final class RankingPathElementList<V, E>
     }
 
     private static class PathMask<V, E>
+        implements MaskFunctor<V, E>
     {
         private Set<E> maskedEdges;
 
@@ -412,11 +408,15 @@ final class RankingPathElementList<V, E>
             this.maskedVertices.add(pathElement.getVertex());
         }
 
+        // implement MaskFunctor
+        @Override
         public boolean isEdgeMasked(E edge)
         {
             return this.maskedEdges.contains(edge);
         }
 
+        // implement MaskFunctor
+        @Override
         public boolean isVertexMasked(V vertex)
         {
             return this.maskedVertices.contains(vertex);

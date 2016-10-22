@@ -15,36 +15,42 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.graph.*;
 
 /**
+ * <img src="./Picture1.jpg">
+ *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-public class KShortestPathCompleteGraph6
-    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
+public class Picture1Graph
+    extends SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
-    private static final long serialVersionUID = 6310990195071210970L;
+    private static final long serialVersionUID = 5587737522611531029L;
 
     // ~ Instance fields --------------------------------------------------------
 
-    public DefaultWeightedEdge e12;
+    public DefaultWeightedEdge e15;
 
-    public DefaultWeightedEdge e13;
+    public DefaultWeightedEdge e25;
 
-    public DefaultWeightedEdge e14;
+    public DefaultWeightedEdge e27;
 
-    public DefaultWeightedEdge e23;
+    public DefaultWeightedEdge e37;
 
-    public DefaultWeightedEdge e24;
+    public DefaultWeightedEdge e47;
 
-    public DefaultWeightedEdge e34;
+    public DefaultWeightedEdge e56;
+
+    public DefaultWeightedEdge e57;
+
+    public DefaultWeightedEdge e67;
 
     public DefaultWeightedEdge eS1;
 
@@ -54,19 +60,14 @@ public class KShortestPathCompleteGraph6
 
     public DefaultWeightedEdge eS4;
 
-    private DefaultWeightedEdge e15;
-
-    private DefaultWeightedEdge e25;
-
-    private DefaultWeightedEdge e35;
-
-    private DefaultWeightedEdge e45;
-
-    private DefaultWeightedEdge eS5;
+    public DefaultWeightedEdge eS7;
 
     // ~ Constructors -----------------------------------------------------------
 
-    public KShortestPathCompleteGraph6()
+    /**
+     * <img src="./Picture1.jpg">
+     */
+    public Picture1Graph()
     {
         super(DefaultWeightedEdge.class);
 
@@ -82,41 +83,29 @@ public class KShortestPathCompleteGraph6
         this.eS2 = this.addEdge("vS", "v2");
         this.eS3 = this.addEdge("vS", "v3");
         this.eS4 = this.addEdge("vS", "v4");
-        this.eS5 = this.addEdge("vS", "v5");
-
-        this.e12 = this.addEdge("v1", "v2");
-        this.e13 = this.addEdge("v1", "v3");
-        this.e14 = this.addEdge("v1", "v4");
+        this.eS7 = this.addEdge("vS", "v7");
         this.e15 = this.addEdge("v1", "v5");
-
-        this.e23 = this.addEdge("v2", "v3");
-        this.e24 = this.addEdge("v2", "v4");
         this.e25 = this.addEdge("v2", "v5");
+        this.e27 = this.addEdge("v2", "v7");
+        this.e37 = this.addEdge("v3", "v7");
+        this.e47 = this.addEdge("v4", "v7");
+        this.e56 = this.addEdge("v5", "v6");
+        this.e57 = this.addEdge("v5", "v7");
+        this.e67 = this.addEdge("v6", "v7");
 
-        this.e34 = this.addEdge("v3", "v4");
-        this.e35 = this.addEdge("v3", "v5");
-
-        this.e45 = this.addEdge("v4", "v5");
-
-        setEdgeWeight(this.eS1, 1.0);
-        setEdgeWeight(this.eS2, 1.0);
-        setEdgeWeight(this.eS3, 1.0);
-        setEdgeWeight(this.eS4, 1.0);
-        setEdgeWeight(this.eS5, 1000.0);
-
-        setEdgeWeight(this.e12, 1.0);
-        setEdgeWeight(this.e13, 1.0);
-        setEdgeWeight(this.e14, 1.0);
-        setEdgeWeight(this.e15, 1.0);
-
-        setEdgeWeight(this.e23, 1.0);
-        setEdgeWeight(this.e24, 1.0);
-        setEdgeWeight(this.e25, 1.0);
-
-        setEdgeWeight(this.e34, 1.0);
-        setEdgeWeight(this.e35, 1.0);
-
-        setEdgeWeight(this.e45, 1.0);
+        setEdgeWeight(this.eS1, 3.0);
+        setEdgeWeight(this.eS2, 2.0);
+        setEdgeWeight(this.eS3, 10.0);
+        setEdgeWeight(this.eS4, 15.0);
+        setEdgeWeight(this.eS7, 15.0);
+        setEdgeWeight(this.e15, 3.0);
+        setEdgeWeight(this.e25, 6.0);
+        setEdgeWeight(this.e27, 10.0);
+        setEdgeWeight(this.e37, 20.0);
+        setEdgeWeight(this.e47, 5.0);
+        setEdgeWeight(this.e56, -3.0);
+        setEdgeWeight(this.e57, 4.0);
+        setEdgeWeight(this.e67, 5.0);
     }
 
     private void addVertices()
@@ -127,7 +116,9 @@ public class KShortestPathCompleteGraph6
         addVertex("v3");
         addVertex("v4");
         addVertex("v5");
+        addVertex("v6");
+        addVertex("v7");
     }
 }
 
-// End KShortestPathCompleteGraph6.java
+// End Picture1Graph.java

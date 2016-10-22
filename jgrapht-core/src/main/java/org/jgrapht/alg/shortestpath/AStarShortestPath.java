@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -25,25 +25,28 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 /**
+ * A* shortest path.
+ * 
  * An implementation of <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">A* shortest path
- * algorithm</a>. <a href="http://de.wikipedia.org/wiki/A*-Algorithmus">A* shortest path algorithm
- * german Wiki</a> . This class works for Directed and Undirected graphs, as well as Multi-Graphs
- * and Mixed-Graphs. It's ok if the graph changes in between invocations of the
- * {@link #getShortestPath(Object, Object, AStarAdmissibleHeuristic)} getShortestPath} method; no
- * new instance of this class has to be created. The heuristic is implemented using a FibonacciHeap
- * data structure to maintain the set of open nodes. However, there still exist several approaches
- * in literature to improve the performance of this heuristic which one could consider to implement.
- * Another issue to take into consideration is the following: given two candidate nodes, i, j to
- * expand, where f(i)=f(j), g(i)&gt;g(j), h(i)&lt;g(j), f(i)=g(i)+h(i), g(i) is the actual distance
- * from the source node to i, h(i) is the estimated distance from i to the target node. Usually a
- * depth-first search is desired, so ideally we would expand node i first. Using the FibonacciHeap,
- * this is not necessarily the case though. This could be improved in a later version.
- *
- * <p>Note: This implementation works with both consistent and inconsistent admissible heuristics. For details on
- * consistency, refer to the description of the method {@link #isConsistentHeuristic(AStarAdmissibleHeuristic)}. However, this class is
- * <i>not</i> optimized for inconsistent heuristics. Several opportunities to improve both worst case and average
- * runtime complexities for A* with inconsistent heuristics described in literature can be used to
- * improve this implementation!
+ * algorithm</a>. This class works for directed and undirected graphs, as well as multi-graphs and
+ * mixed-graphs. The graph can also change between invocations of the
+ * {@link #getPath(Object, Object)} method; no new instance of this class has to be created. The
+ * heuristic is implemented using a FibonacciHeap data structure to maintain the set of open nodes.
+ * However, there still exist several approaches in literature to improve the performance of this
+ * heuristic which one could consider to implement. Another issue to take into consideration is the
+ * following: given two candidate nodes, i, j to expand, where f(i)=f(j), g(i)&gt;g(j),
+ * h(i)&lt;g(j), f(i)=g(i)+h(i), g(i) is the actual distance from the source node to i, h(i) is the
+ * estimated distance from i to the target node. Usually a depth-first search is desired, so ideally
+ * we would expand node i first. Using the FibonacciHeap, this is not necessarily the case though.
+ * This could be improved in a later version.
+ * 
+ * <p>
+ * Note: This implementation works with both consistent and inconsistent admissible heuristics. For
+ * details on consistency, refer to the description of the method
+ * {@link #isConsistentHeuristic(AStarAdmissibleHeuristic)}. However, this class is <i>not</i>
+ * optimized for inconsistent heuristics. Several opportunities to improve both worst case and
+ * average runtime complexities for A* with inconsistent heuristics described in literature can be
+ * used to improve this implementation!
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -52,14 +55,10 @@ import org.jgrapht.util.*;
  * @author Jon Robison
  * @author Thomas Breitbart
  * @since Aug, 2015
- * 
- * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.AStarShortestPath}
  */
-@Deprecated
 public class AStarShortestPath<V, E>
+    extends BaseShortestPathAlgorithm<V, E>
 {
-    private final Graph<V, E> graph;
-
     // List of open nodes
     protected FibonacciHeap<V> openList;
     protected Map<V, FibonacciHeapNode<V>> vertexToHeapNodeMap;
@@ -84,13 +83,14 @@ public class AStarShortestPath<V, E>
      * Create a new instance of the A* shortest path algorithm.
      * 
      * @param graph the input graph
+     * @param admissibleHeuristic admissible heuristic which estimates the distance from a node to
+     *        the target node. The heuristic must never overestimate the distance.
      */
-    public AStarShortestPath(Graph<V, E> graph)
+    public AStarShortestPath(Graph<V, E> graph, AStarAdmissibleHeuristic<V> admissibleHeuristic)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null!");
-        }
-        this.graph = graph;
+        super(graph);
+        this.admissibleHeuristic =
+            Objects.requireNonNull(admissibleHeuristic, "Heuristic function cannot be null!");
     }
 
     /**
@@ -115,21 +115,21 @@ public class AStarShortestPath<V, E>
      *
      * @param sourceVertex source vertex
      * @param targetVertex target vertex
-     * @param admissibleHeuristic admissible heuristic which estimates the distance from a node to
-     *        the target node.
-     *
      * @return the shortest path from sourceVertex to targetVertex
      */
-    public GraphPath<V, E> getShortestPath(
-        V sourceVertex, V targetVertex, AStarAdmissibleHeuristic<V> admissibleHeuristic)
+    @Override
+    public GraphPath<V, E> getPath(V sourceVertex, V targetVertex)
     {
         if (!graph.containsVertex(sourceVertex) || !graph.containsVertex(targetVertex)) {
             throw new IllegalArgumentException(
                 "Source or target vertex not contained in the graph!");
         }
 
-        this.initialize(admissibleHeuristic);
+        if (sourceVertex.equals(targetVertex)) {
+            return createEmptyPath(sourceVertex, targetVertex);
+        }
 
+        this.initialize(admissibleHeuristic);
         gScoreMap.put(sourceVertex, 0.0);
         FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(sourceVertex);
         openList.insert(heapNode, 0.0);
@@ -150,7 +150,48 @@ public class AStarShortestPath<V, E>
         } while (!openList.isEmpty());
 
         // No path exists from sourceVertex to TargetVertex
-        return null;
+        return createEmptyPath(sourceVertex, targetVertex);
+    }
+
+    /**
+     * Returns how many nodes have been expanded in the A* search procedure in its last invocation.
+     * A node is expanded if it is removed from the open list.
+     *
+     * @return number of expanded nodes
+     */
+    public int getNumberOfExpandedNodes()
+    {
+        return numberOfExpandedNodes;
+    }
+
+    /**
+     * Returns true if the provided heuristic is a <i>consistent</i> or <i>monotone</i> heuristic
+     * wrt the graph provided at construction time. A heuristic is monotonic if its estimate is
+     * always less than or equal to the estimated distance from any neighboring vertex to the goal,
+     * plus the step cost of reaching that neighbor. For details, refer to <a href=
+     * "https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
+     * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge
+     * (u,v), where d(u,v) is the weight of edge (u,v) and h(u) is the estimated cost to reach the
+     * target node from vertex u. Most natural admissible heuristics, such as Manhattan or Euclidean
+     * distance, are consistent heuristics.
+     * 
+     * @param admissibleHeuristic admissible heuristic
+     * @return true is the heuristic is consistent, false otherwise
+     */
+    public boolean isConsistentHeuristic(AStarAdmissibleHeuristic<V> admissibleHeuristic)
+    {
+        for (V targetVertex : graph.vertexSet()) {
+            for (E e : graph.edgeSet()) {
+                double weight = graph.getEdgeWeight(e);
+                V edgeSource = graph.getEdgeSource(e);
+                V edgeTarget = graph.getEdgeTarget(e);
+                double h_x = admissibleHeuristic.getCostEstimate(edgeSource, targetVertex);
+                double h_y = admissibleHeuristic.getCostEstimate(edgeTarget, targetVertex);
+                if (h_x > weight + h_y)
+                    return false;
+            }
+        }
+        return true;
     }
 
     private void expandNode(FibonacciHeapNode<V> currentNode, V endVertex)
@@ -172,22 +213,27 @@ public class AStarShortestPath<V, E>
 
             double gScore_current = gScoreMap.get(currentNode.getData());
             double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
-            double fScore = tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
+            double fScore =
+                tentativeGScore + admissibleHeuristic.getCostEstimate(successor, endVertex);
 
-            if (vertexToHeapNodeMap.containsKey(successor)){ //We re-encountered a vertex. It's either in the open or closed list.
-                if(tentativeGScore >= gScoreMap.get(successor)) //Ignore path since it is non-improving
+            if (vertexToHeapNodeMap.containsKey(successor)) { // We re-encountered a vertex. It's
+                                                              // either in the open or closed list.
+                if (tentativeGScore >= gScoreMap.get(successor)) // Ignore path since it is
+                                                                 // non-improving
                     continue;
 
                 cameFrom.put(successor, edge);
                 gScoreMap.put(successor, tentativeGScore);
 
-                if(closedList.contains(successor)){ //it's in the closed list. Move node back to open list, since we discovered a shorter path to this node
+                if (closedList.contains(successor)) { // it's in the closed list. Move node back to
+                                                      // open list, since we discovered a shorter
+                                                      // path to this node
                     closedList.remove(successor);
                     openList.insert(vertexToHeapNodeMap.get(successor), fScore);
-                }else{ //It's in the open list
+                } else { // It's in the open list
                     openList.decreaseKey(vertexToHeapNodeMap.get(successor), fScore);
                 }
-            }else{ //We've encountered a new vertex.
+            } else { // We've encountered a new vertex.
                 cameFrom.put(successor, edge);
                 gScoreMap.put(successor, tentativeGScore);
                 FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(successor);
@@ -213,7 +259,7 @@ public class AStarShortestPath<V, E>
         vertexList.add(targetVertex);
 
         V v = targetVertex;
-        while (v != startVertex) {
+        while (!v.equals(startVertex)) {
             edgeList.add(cameFrom.get(v));
             v = Graphs.getOppositeVertex(graph, cameFrom.get(v), v);
             vertexList.add(v);
@@ -223,42 +269,6 @@ public class AStarShortestPath<V, E>
         return new GraphWalk<>(graph, startVertex, targetVertex, vertexList, edgeList, pathLength);
     }
 
-    /**
-     * Returns how many nodes have been expanded in the A* search procedure in its last invocation.
-     * A node is expanded if it is removed from the open list.
-     *
-     * @return number of expanded nodes
-     */
-    public int getNumberOfExpandedNodes()
-    {
-        return numberOfExpandedNodes;
-    }
-
-    /**
-     * Returns true if the provided heuristic is a <i>consistent</i> or <i>monotone</i> heuristic wrt the graph provided
-     * at construction time. A heuristic is monotonic if its estimate is always less than or equal to the estimated
-     * distance from any neighboring vertex to the goal, plus the step cost of reaching that neighbor. For details, refer to
-     * <a href="https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
-     * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge (u,v), where d(u,v) is
-     * the weight of edge (u,v) and h(u) is the estimated cost to reach the target node from vertex u. Most natural
-     * admissible heuristics, such as Manhattan or Euclidian distance, are consistent heuristics.
-     * @param admissibleHeuristic admissible heuristic
-     * @return true is the heuristic is consistent
-     */
-    public boolean isConsistentHeuristic(AStarAdmissibleHeuristic<V> admissibleHeuristic){
-        for(V targetVertex : graph.vertexSet()) {
-            for (E e : graph.edgeSet()) {
-                double weight = graph.getEdgeWeight(e);
-                V edgeSource = graph.getEdgeSource(e);
-                V edgeTarget = graph.getEdgeTarget(e);
-                double h_x = admissibleHeuristic.getCostEstimate(edgeSource, targetVertex);
-                double h_y = admissibleHeuristic.getCostEstimate(edgeTarget, targetVertex);
-                if (h_x > weight + h_y)
-                    return false;
-            }
-        }
-        return true;
-    }
 }
 
 // End AStarShortestPath.java

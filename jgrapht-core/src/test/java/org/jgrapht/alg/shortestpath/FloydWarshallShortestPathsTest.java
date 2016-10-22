@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -27,7 +27,6 @@ import junit.framework.*;
 
 /**
  * @author Tom Larkworthy
- * @version $Id: FloydWarshallShortestPathsTest.java 715 2010-06-13 01:25:00Z perfecthash $
  */
 public class FloydWarshallShortestPathsTest
     extends TestCase
@@ -53,13 +52,14 @@ public class FloydWarshallShortestPathsTest
             for (Integer v1 : directed.vertexSet()) {
                 for (Integer v2 : directed.vertexSet()) {
                     double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp = new DijkstraShortestPath<>(directed, v1, v2).getPathLength();
+                    double dijSp = new DijkstraShortestPath<>(directed).getPath(v1, v2).getWeight();
                     assertTrue(
                         (Math.abs(dijSp - fwSp) < .01)
                             || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
-                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getShortestPath(v1, v2);
-                    if (path != null)
+                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
+                    if (!path.getEdgeList().isEmpty()) {
                         this.verifyPath(directed, path, fw.shortestDistance(v1, v2));
+                    }
                 }
             }
 
@@ -74,12 +74,13 @@ public class FloydWarshallShortestPathsTest
             for (Integer v1 : undirected.vertexSet()) {
                 for (Integer v2 : undirected.vertexSet()) {
                     double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp = new DijkstraShortestPath<>(undirected, v1, v2).getPathLength();
+                    double dijSp =
+                        new DijkstraShortestPath<>(undirected).getPath(v1, v2).getWeight();
                     assertTrue(
                         (Math.abs(dijSp - fwSp) < .01)
                             || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
-                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getShortestPath(v1, v2);
-                    if (path != null) {
+                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
+                    if (!path.getEdgeList().isEmpty()) {
                         this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
                         List<Integer> vertexPath = path.getVertexList();
                         assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
@@ -156,7 +157,7 @@ public class FloydWarshallShortestPathsTest
         FloydWarshallShortestPaths<String, DefaultEdge> fw =
             new FloydWarshallShortestPaths<>(graph);
         double diameter = fw.getDiameter();
-        assertEquals(0.0, diameter);
+        assertTrue(Double.isNaN(diameter));
     }
 
     public void testEdgeLessDiameter()
@@ -168,7 +169,7 @@ public class FloydWarshallShortestPathsTest
         FloydWarshallShortestPaths<String, DefaultEdge> fw =
             new FloydWarshallShortestPaths<>(graph);
         double diameter = fw.getDiameter();
-        assertEquals(0.0, diameter);
+        assertEquals(Double.POSITIVE_INFINITY, diameter, 1e-9);
         assertNull(fw.getFirstHop(a, b));
         assertNull(fw.getLastHop(a, b));
     }
@@ -185,14 +186,15 @@ public class FloydWarshallShortestPathsTest
             new FloydWarshallShortestPaths<>(weighted);
         double sD = fw.shortestDistance("a", "b");
         assertEquals(5.0, sD, 0.1);
-        GraphPath<String, DefaultWeightedEdge> path = fw.getShortestPath("a", "b");
+        GraphPath<String, DefaultWeightedEdge> path = fw.getPath("a", "b");
         assertNotNull(path);
         assertEquals(Collections.singletonList(edge), path.getEdgeList());
         assertEquals("a", path.getStartVertex());
         assertEquals("b", path.getEndVertex());
         assertEquals(5.0, path.getWeight());
         assertEquals(weighted, path.getGraph());
-        assertNull(fw.getShortestPath("b", "a"));
+        assertEquals(0, fw.getPath("b", "a").getLength());
+        assertEquals(Double.POSITIVE_INFINITY, fw.getPath("b", "a").getWeight(), 1e-9);
         List<String> vertexPath = path.getVertexList();
         assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));
         assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size() - 2));

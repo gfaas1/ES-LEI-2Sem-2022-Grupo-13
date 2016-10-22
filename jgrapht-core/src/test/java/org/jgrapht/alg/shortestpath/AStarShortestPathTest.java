@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -24,7 +24,7 @@ import org.jgrapht.graph.*;
 import junit.framework.*;
 
 /**
- * .Test class for AStarShortestPath implementation
+ * Test class for AStarShortestPath implementation
  *
  * @author Joris Kinable
  * @since Aug 21, 2015
@@ -80,7 +80,7 @@ public class AStarShortestPathTest
             for (int j = 0; j < labyrinth[0].length(); j++) {
                 if (labyrinth[i].charAt(j) == '#' || labyrinth[i].charAt(j) == ' ')
                     continue;
-                nodes[i][j] = new Node(i, j/2);
+                nodes[i][j] = new Node(i, j / 2);
                 graph.addVertex(nodes[i][j]);
                 if (labyrinth[i].charAt(j) == 'S')
                     sourceNode = nodes[i][j];
@@ -114,19 +114,23 @@ public class AStarShortestPathTest
     {
         this.readLabyrinth(labyrinth1);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-            new AStarShortestPath<>(graph);
+            new AStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
-            aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
+            aStarShortestPath.getPath(sourceNode, targetNode);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
         assertEquals(path.getLength() + 1, 48);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
 
-        path = aStarShortestPath.getShortestPath(sourceNode, targetNode, new EuclideanDistance());
-        assertNotNull(path);
-        assertEquals((int) path.getWeight(), 47);
-        assertEquals(path.getEdgeList().size(), 47);
-        assertTrue(aStarShortestPath.isConsistentHeuristic(new EuclideanDistance()));
+        AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath2 =
+            new AStarShortestPath<>(graph, new EuclideanDistance());
+        GraphPath<Node, DefaultWeightedEdge> path2 =
+            aStarShortestPath2.getPath(sourceNode, targetNode);
+        assertNotNull(path2);
+        assertEquals((int) path2.getWeight(), 47);
+        assertEquals(path2.getEdgeList().size(), 47);
+        assertTrue(aStarShortestPath2.isConsistentHeuristic(new EuclideanDistance()));
     }
 
     /**
@@ -136,9 +140,9 @@ public class AStarShortestPathTest
     {
         this.readLabyrinth(labyrinth2);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-            new AStarShortestPath<>(graph);
+            new AStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
-            aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
+            aStarShortestPath.getPath(sourceNode, targetNode);
         assertNull(path);
         assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
@@ -167,9 +171,8 @@ public class AStarShortestPathTest
         Graphs.addEdge(multigraph, n2, n3, 9);
         Graphs.addEdge(multigraph, n2, n3, 2);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-            new AStarShortestPath<>(multigraph);
-        GraphPath<Node, DefaultWeightedEdge> path =
-            aStarShortestPath.getShortestPath(n1, n3, new ManhattanDistance());
+            new AStarShortestPath<>(multigraph, new ManhattanDistance());
+        GraphPath<Node, DefaultWeightedEdge> path = aStarShortestPath.getPath(n1, n3);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
         assertEquals(path.getEdgeList().size(), 2);
@@ -227,11 +230,9 @@ public class AStarShortestPathTest
             }
         };
 
-        AStarShortestPath<Integer, DefaultWeightedEdge> alg=new AStarShortestPath<>(g);
+        AStarShortestPath<Integer, DefaultWeightedEdge> alg = new AStarShortestPath<>(g, h);
         // shortest path from 3 to 2 is 3->0->1->2 with weight 0.9641320715228003
-        assertEquals(
-            0.9641320715228003, alg.getShortestPath(3, 2, h).getWeight(),
-            1e-9);
+        assertEquals(0.9641320715228003, alg.getPath(3, 2).getWeight(), 1e-9);
         assertFalse(alg.isConsistentHeuristic(h));
     }
 

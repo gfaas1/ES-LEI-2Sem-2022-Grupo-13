@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -23,10 +23,7 @@ import org.jgrapht.*;
 
 /**
  * Helper class for {@link BellmanFordShortestPath}; not intended for general use.
- * 
- * @deprecated moved into shortest path package
  */
-@Deprecated
 class BellmanFordIterator<V, E>
     implements Iterator<List<V>>
 {

@@ -36,7 +36,9 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated Use {@link org.jgrapht.alg.shortestpath.KShortestPaths} instead.
  */
+@Deprecated
 public class KShortestPaths<V, E>
 {
     /**

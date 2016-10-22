@@ -1,0 +1,436 @@
+/*
+ * (C) Copyright 2009-2016, by Tom Larkworthy and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+package org.jgrapht.alg.shortestpath;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.TypeUtil;
+
+/**
+ * The Floyd-Warshall algorithm.
+ * 
+ * <p>
+ * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
+ * finds all shortest paths (all n^2 of them) in O(n^3) time. It can also calculate the graph
+ * diameter. Note that during construction time, no computations are performed! All computations are
+ * performed the first time one of the member methods of this class is invoked. The results are
+ * stored, so all subsequent calls to the same method are computationally efficient.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Tom Larkworthy
+ * @author Soren Davidsen (soren@tanesha.net)
+ * @author Joris Kinable
+ * @author Dimitrios Michail
+ */
+public class FloydWarshallShortestPaths<V, E>
+    extends BaseShortestPathAlgorithm<V, E>
+{
+    private final List<V> vertices;
+    private final Map<V, Integer> vertexIndices;
+
+    private int nShortestPaths = 0;
+    private double diameter = Double.NaN;
+    private double[][] d = null;
+    private Object[][] backtrace = null;
+    private Object[][] lastHopMatrix = null;
+
+    /**
+     * Create a new instance of the Floyd-Warshall all-pairs shortest path algorithm.
+     * 
+     * @param graph the input graph
+     */
+    public FloydWarshallShortestPaths(Graph<V, E> graph)
+    {
+        super(graph);
+        this.vertices = new ArrayList<>(graph.vertexSet());
+        this.vertexIndices = new HashMap<>(this.vertices.size());
+        int i = 0;
+        for (V vertex : vertices) {
+            vertexIndices.put(vertex, i++);
+        }
+    }
+
+    /**
+     * Get the graph on which this algorithm operates.
+     * 
+     * @return the graph on which this algorithm operates
+     */
+    public Graph<V, E> getGraph()
+    {
+        return graph;
+    }
+
+    /**
+     * Get the total number of shortest paths.
+     * 
+     * @return total number of shortest paths
+     */
+    public int getShortestPathsCount()
+    {
+        lazyCalculateMatrix();
+
+        return nShortestPaths;
+    }
+
+    /**
+     * Get the length of a shortest path.
+     *
+     * @param a first vertex
+     * @param b second vertex
+     *
+     * @return shortest distance between a and b
+     */
+    public double shortestDistance(V a, V b)
+    {
+        if (!graph.containsVertex(a)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+        if (!graph.containsVertex(b)) {
+            throw new IllegalArgumentException("graph must contain the sink vertex");
+        }
+
+        lazyCalculateMatrix();
+
+        return d[vertexIndices.get(a)][vertexIndices.get(b)];
+    }
+
+    /**
+     * Compute the diameter of the graph.
+     * 
+     * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
+     *         is vertexless, return 0.0.
+     */
+    public double getDiameter()
+    {
+        lazyCalculateMatrix();
+
+        if (!Double.isNaN(diameter)) {
+            return diameter;
+        }
+
+        int n = vertices.size();
+        if (n > 0) {
+            diameter = 0.0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    diameter = Double.max(diameter, d[i][j]);
+                }
+            }
+        }
+        return diameter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphPath<V, E> getPath(V a, V b)
+    {
+        if (!graph.containsVertex(a)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+        if (!graph.containsVertex(b)) {
+            throw new IllegalArgumentException("graph must contain the sink vertex");
+        }
+
+        lazyCalculateMatrix();
+
+        int v_a = vertexIndices.get(a);
+        int v_b = vertexIndices.get(b);
+
+        if (backtrace[v_a][v_b] == null) { // No path exists
+            return createEmptyPath(a, b);
+        }
+
+        // Reconstruct the path
+        List<E> edges = new ArrayList<>();
+        V u = a;
+        while (!u.equals(b)) {
+            int v_u = vertexIndices.get(u);
+            E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+            edges.add(e);
+            u = Graphs.getOppositeVertex(graph, e, u);
+        }
+        return new GraphWalk<>(graph, a, b, null, edges, d[v_a][v_b]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SingleSourcePaths<V, E> getPaths(V source)
+    {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+
+        lazyCalculateMatrix();
+
+        Map<V, Pair<Double, E>> map = new HashMap<>();
+
+        int n = vertices.size();
+        int v_a = vertexIndices.get(source);
+        for (int v_b = 0; v_b < n; v_b++) {
+            if (v_a == v_b || backtrace[v_a][v_b] == null) {
+                continue;
+            }
+
+            // Reconstruct path from source(v_a) to b
+            double weight = 0d;
+            V u = source;
+            V b = vertices.get(v_b);
+            while (!u.equals(b)) {
+                int v_u = vertexIndices.get(u);
+                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+                weight += graph.getEdgeWeight(e);
+                V other = Graphs.getOppositeVertex(graph, e, u);
+                if (!map.containsKey(other)) {
+                    map.put(other, Pair.of(weight, e));
+                }
+                u = other;
+            }
+        }
+
+        return new TreeSingleSourcePaths<>(graph, source, map);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AllPairsPaths<V, E> getPaths()
+    {
+        return new FloydWarshallAllPairsPaths();
+    }
+
+    /**
+     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is
+     * O(1). If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next
+     * invocation would query the first hop on the shortest path from c to b, vertex d would be
+     * returned, etc. This method is computationally cheaper than calling
+     * {@link #getPath(Object, Object)} and then reading the first vertex.
+     * 
+     * @param a source vertex
+     * @param b target vertex
+     * @return next hop on the shortest path from a to b, or null when there exists no path from a
+     *         to b.
+     */
+    public V getFirstHop(V a, V b)
+    {
+        lazyCalculateMatrix();
+
+        int v_a = vertexIndices.get(a);
+        int v_b = vertexIndices.get(b);
+
+        if (backtrace[v_a][v_b] == null) { // No path exists
+            return null;
+        } else {
+            E e = TypeUtil.uncheckedCast(backtrace[v_a][v_b], null);
+            return Graphs.getOppositeVertex(graph, e, a);
+        }
+    }
+
+    /**
+     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup
+     * time is O(1). If the shortest path from a to b is a,c,d,e,b, this method returns e. If the
+     * next invocation would query the next hop on the shortest path from c to e, vertex d would be
+     * returned, etc. This method is computationally cheaper than calling
+     * {@link #getPath(Object, Object)} and then reading the vertex. The first invocation of this
+     * method populates a last hop matrix.
+     * 
+     * @param a source vertex
+     * @param b target vertex
+     * @return last hop on the shortest path from a to b, or null when there exists no path from a
+     *         to b.
+     */
+    public V getLastHop(V a, V b)
+    {
+        lazyCalculateMatrix();
+
+        int v_a = vertexIndices.get(a);
+        int v_b = vertexIndices.get(b);
+
+        if (backtrace[v_a][v_b] == null) { // No path exists
+            return null;
+        } else {
+            populateLastHopMatrix();
+            E e = TypeUtil.uncheckedCast(lastHopMatrix[v_a][v_b], null);
+            return Graphs.getOppositeVertex(graph, e, b);
+        }
+    }
+
+    /**
+     * Calculates the matrix of all shortest paths, but does not populate the last hops matrix.
+     */
+    private void lazyCalculateMatrix()
+    {
+        if (d != null) {
+            // already done
+            return;
+        }
+
+        int n = vertices.size();
+
+        // init the backtrace matrix
+        backtrace = new Object[n][n];
+
+        // initialize matrix, 0
+        d = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(d[i], Double.POSITIVE_INFINITY);
+        }
+
+        // initialize matrix, 1
+        for (int i = 0; i < n; i++) {
+            d[i][i] = 0.0;
+        }
+
+        // initialize matrix, 2
+        if (graph instanceof UndirectedGraph<?, ?>) {
+            for (E edge : graph.edgeSet()) {
+                int v_1 = vertexIndices.get(graph.getEdgeSource(edge));
+                int v_2 = vertexIndices.get(graph.getEdgeTarget(edge));
+                double edgeWeight = graph.getEdgeWeight(edge);
+                if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
+                    d[v_1][v_2] = d[v_2][v_1] = edgeWeight;
+                    backtrace[v_1][v_2] = edge;
+                    backtrace[v_2][v_1] = edge;
+                }
+            }
+        } else { // This works for both Directed and Mixed graphs! Iterating over
+                 // the arcs and querying source/sink does not suffice for graphs
+                 // which contain both edges and arcs
+            DirectedGraph<V, E> directedGraph = (DirectedGraph<V, E>) graph;
+            for (V v1 : directedGraph.vertexSet()) {
+                int v_1 = vertexIndices.get(v1);
+                for (E e : directedGraph.outgoingEdgesOf(v1)) {
+                    V v2 = Graphs.getOppositeVertex(directedGraph, e, v1);
+                    int v_2 = vertexIndices.get(v2);
+                    double edgeWeight = graph.getEdgeWeight(e);
+                    if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
+                        d[v_1][v_2] = edgeWeight;
+                        backtrace[v_1][v_2] = e;
+                    }
+                }
+            }
+        }
+
+        // run fw alg
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    double ik_kj = d[i][k] + d[k][j];
+                    if (Double.compare(ik_kj, d[i][j]) < 0) {
+                        d[i][j] = ik_kj;
+                        backtrace[i][j] = backtrace[i][k];
+                    }
+                }
+            }
+        }
+
+        // count shortest paths
+        nShortestPaths = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (Double.isFinite(d[i][j])) {
+                    nShortestPaths++;
+                }
+            }
+        }
+    }
+
+    /**
+     * Populate the last hop matrix, using the earlier computed backtrace matrix.
+     */
+    private void populateLastHopMatrix()
+    {
+        lazyCalculateMatrix();
+
+        if (lastHopMatrix != null)
+            return;
+
+        // Initialize matrix
+        int n = vertices.size();
+        lastHopMatrix = new Object[n][n];
+
+        // Populate matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j || lastHopMatrix[i][j] != null || backtrace[i][j] == null)
+                    continue;
+
+                // Reconstruct the path from i to j
+                List<E> edges = new ArrayList<>();
+                V u = vertices.get(i);
+                V b = vertices.get(j);
+                while (!u.equals(b)) {
+                    int v_u = vertexIndices.get(u);
+                    E e = TypeUtil.uncheckedCast(backtrace[v_u][j], null);
+                    edges.add(e);
+                    V other = Graphs.getOppositeVertex(graph, e, u);
+                    lastHopMatrix[i][vertexIndices.get(other)] = e;
+                    u = other;
+                }
+            }
+        }
+    }
+
+    class FloydWarshallAllPairsPaths
+        implements AllPairsPaths<V, E>
+    {
+
+        @Override
+        public Graph<V, E> getGraph()
+        {
+            return graph;
+        }
+
+        @Override
+        public double getWeight(V sourceVertex, V targetVertex)
+        {
+            return shortestDistance(sourceVertex, targetVertex);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public GraphPath<V, E> getPath(V sourceVertex, V targetVertex)
+        {
+            return getPath(sourceVertex, targetVertex);
+        }
+
+    }
+
+}

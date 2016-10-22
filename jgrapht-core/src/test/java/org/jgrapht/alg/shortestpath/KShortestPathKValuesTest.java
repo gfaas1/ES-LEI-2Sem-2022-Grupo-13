@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
@@ -53,13 +53,13 @@ public class KShortestPathKValuesTest
 
         for (int maxSize = 1; maxSize <= calculateNbElementaryPathsForCompleteGraph(6); maxSize++) {
             KShortestPaths<String, DefaultWeightedEdge> finder =
-                new KShortestPaths<>(graph, "vS", maxSize);
+                new KShortestPaths<>(graph, maxSize);
 
-            assertEquals(finder.getPaths("v1").size(), maxSize);
-            assertEquals(finder.getPaths("v2").size(), maxSize);
-            assertEquals(finder.getPaths("v3").size(), maxSize);
-            assertEquals(finder.getPaths("v4").size(), maxSize);
-            assertEquals(finder.getPaths("v5").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v1").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v2").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v3").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v4").size(), maxSize);
+            assertEquals(finder.getPaths("vS", "v5").size(), maxSize);
         }
     }
 
@@ -99,10 +99,10 @@ public class KShortestPathKValuesTest
 
         for (String sourceVertex : graph.vertexSet()) {
             KShortestPaths<String, DefaultWeightedEdge> finder =
-                new KShortestPaths<>(graph, sourceVertex, maxSize);
+                new KShortestPaths<>(graph, maxSize);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    assertEquals(finder.getPaths(targetVertex).size(), nbPaths);
+                    assertEquals(finder.getPaths(sourceVertex, targetVertex).size(), nbPaths);
                 }
             }
         }
