@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -79,6 +80,9 @@ public class AStarShortestPath<V, E>
     // Counter which keeps track of the number of expanded nodes
     protected int numberOfExpandedNodes;
 
+    // Comparator for comparing doubles with tolerance
+    protected Comparator<Double> comparator;
+
     /**
      * Create a new instance of the A* shortest path algorithm.
      * 
@@ -91,6 +95,7 @@ public class AStarShortestPath<V, E>
         super(graph);
         this.admissibleHeuristic =
             Objects.requireNonNull(admissibleHeuristic, "Heuristic function cannot be null!");
+        this.comparator = new ToleranceDoubleComparator();
     }
 
     /**
