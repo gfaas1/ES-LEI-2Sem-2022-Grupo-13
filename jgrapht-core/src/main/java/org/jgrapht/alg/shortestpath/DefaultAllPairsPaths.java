@@ -76,7 +76,7 @@ class DefaultAllPairsPaths<V, E>
                 return Double.POSITIVE_INFINITY;
             }
         } else {
-            return paths.get(sourceVertex).getWeight(targetVertex);
+            return ss.getWeight(targetVertex);
         }
     }
 

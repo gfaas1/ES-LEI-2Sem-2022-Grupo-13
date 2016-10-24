@@ -126,7 +126,8 @@ public class FloydWarshallShortestPaths<V, E>
      * Compute the diameter of the graph.
      * 
      * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
-     *         is vertexless, return 0.0.
+     *         contains no vertices, return {@link Double#NaN}. If there is no path between any two
+     *         vertices, return {@link Double#POSITIVE_INFINITY}.
      */
     public double getDiameter()
     {
@@ -316,13 +317,17 @@ public class FloydWarshallShortestPaths<V, E>
         // initialize matrix, 2
         if (graph instanceof UndirectedGraph<?, ?>) {
             for (E edge : graph.edgeSet()) {
-                int v_1 = vertexIndices.get(graph.getEdgeSource(edge));
-                int v_2 = vertexIndices.get(graph.getEdgeTarget(edge));
-                double edgeWeight = graph.getEdgeWeight(edge);
-                if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
-                    d[v_1][v_2] = d[v_2][v_1] = edgeWeight;
-                    backtrace[v_1][v_2] = edge;
-                    backtrace[v_2][v_1] = edge;
+                V source = graph.getEdgeSource(edge);
+                V target = graph.getEdgeTarget(edge);
+                if (!source.equals(target)) {
+                    int v_1 = vertexIndices.get(source);
+                    int v_2 = vertexIndices.get(target);
+                    double edgeWeight = graph.getEdgeWeight(edge);
+                    if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
+                        d[v_1][v_2] = d[v_2][v_1] = edgeWeight;
+                        backtrace[v_1][v_2] = edge;
+                        backtrace[v_2][v_1] = edge;
+                    }
                 }
             }
         } else { // This works for both Directed and Mixed graphs! Iterating over
@@ -333,11 +338,13 @@ public class FloydWarshallShortestPaths<V, E>
                 int v_1 = vertexIndices.get(v1);
                 for (E e : directedGraph.outgoingEdgesOf(v1)) {
                     V v2 = Graphs.getOppositeVertex(directedGraph, e, v1);
-                    int v_2 = vertexIndices.get(v2);
-                    double edgeWeight = graph.getEdgeWeight(e);
-                    if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
-                        d[v_1][v_2] = edgeWeight;
-                        backtrace[v_1][v_2] = e;
+                    if (!v1.equals(v2)) {
+                        int v_2 = vertexIndices.get(v2);
+                        double edgeWeight = graph.getEdgeWeight(e);
+                        if (Double.compare(edgeWeight, d[v_1][v_2]) < 0) {
+                            d[v_1][v_2] = edgeWeight;
+                            backtrace[v_1][v_2] = e;
+                        }
                     }
                 }
             }
@@ -360,10 +367,7 @@ public class FloydWarshallShortestPaths<V, E>
         nShortestPaths = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    continue;
-                }
-                if (Double.isFinite(d[i][j])) {
+                if (i != j && Double.isFinite(d[i][j])) {
                     nShortestPaths++;
                 }
             }
@@ -422,9 +426,6 @@ public class FloydWarshallShortestPaths<V, E>
             return shortestDistance(sourceVertex, targetVertex);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public GraphPath<V, E> getPath(V sourceVertex, V targetVertex)
         {

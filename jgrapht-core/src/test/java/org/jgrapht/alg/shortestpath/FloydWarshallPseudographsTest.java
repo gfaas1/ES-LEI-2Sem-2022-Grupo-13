@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.AllPairsPaths;
@@ -228,6 +229,49 @@ public class FloydWarshallPseudographsTest
         assertNull(fw.getLastHop(4, 3));
         assertNull(fw.getLastHop(4, 4));
 
+    }
+
+    @Test
+    public void testLoops()
+    {
+        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2));
+        DefaultWeightedEdge e12_1 = g.addEdge(1, 2);
+        g.setEdgeWeight(e12_1, 5.0);
+        DefaultWeightedEdge e21_1 = g.addEdge(2, 1);
+        g.setEdgeWeight(e21_1, 15.0);
+
+        g.addEdge(1, 1);
+        g.addEdge(1, 1);
+        g.addEdge(1, 1);
+        g.addEdge(2, 2);
+        g.addEdge(2, 2);
+        g.addEdge(2, 2);
+
+        FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
+            new FloydWarshallShortestPaths<>(g);
+
+        GraphPath<Integer, DefaultWeightedEdge> p1 = fw.getPath(1, 1);
+        assertEquals(1, p1.getStartVertex().intValue());
+        assertEquals(1, p1.getEndVertex().intValue());
+        assertEquals(0, p1.getLength());
+        assertEquals(0d, p1.getWeight(), 1e-9);
+        assertTrue(p1.getEdgeList().isEmpty());
+        assertEquals(1, p1.getVertexList().size());
+        assertEquals(1, p1.getVertexList().get(0).intValue());
+
+        GraphPath<Integer, DefaultWeightedEdge> p2 = fw.getPath(2, 2);
+        assertEquals(2, p2.getStartVertex().intValue());
+        assertEquals(2, p2.getEndVertex().intValue());
+        assertEquals(0, p2.getLength());
+        assertEquals(0d, p2.getWeight(), 1e-9);
+        assertTrue(p2.getEdgeList().isEmpty());
+        assertEquals(1, p2.getVertexList().size());
+        assertEquals(2, p2.getVertexList().get(0).intValue());
+
+        assertEquals(5.0, fw.getPath(1, 2).getWeight(), 1e-9);
+        assertEquals(15.0, fw.getPath(2, 1).getWeight(), 1e-9);
     }
 
 }
