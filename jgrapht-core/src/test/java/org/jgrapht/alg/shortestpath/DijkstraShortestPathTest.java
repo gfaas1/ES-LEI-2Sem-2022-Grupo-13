@@ -123,6 +123,23 @@ public class DijkstraShortestPathTest
         assertTrue(p15.getEdgeList().isEmpty());
 
     }
+
+    public void testNonNegativeWeights()
+    {
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(V1, V2));
+
+        DefaultWeightedEdge we12 = g.addEdge(V1, V2);
+        g.setEdgeWeight(we12, -100.0);
+
+        try {
+            new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPath(V1, V2);
+            fail("No!");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
 }
 
 // End DijkstraShortestPathTest.java

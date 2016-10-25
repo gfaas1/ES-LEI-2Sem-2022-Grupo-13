@@ -17,28 +17,17 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.traverse.ClosestFirstIterator;
 
 /**
  * An implementation of <a href="http://mathworld.wolfram.com/DijkstrasAlgorithm.html">Dijkstra's
- * shortest path algorithm</a> using <code>ClosestFirstIterator</code>.
+ * shortest path algorithm</a> using a Fibonacci heap.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author John V. Sichi
- * @since Sep 2, 2003
  */
 public final class DijkstraShortestPath<V, E>
     extends BaseShortestPathAlgorithm<V, E>
@@ -64,6 +53,9 @@ public final class DijkstraShortestPath<V, E>
     public DijkstraShortestPath(Graph<V, E> graph, double radius)
     {
         super(graph);
+        if (radius < 0.0) {
+            throw new IllegalArgumentException("Radius must be non-negative");
+        }
         this.radius = radius;
     }
 
@@ -79,18 +71,21 @@ public final class DijkstraShortestPath<V, E>
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException("graph must contain the sink vertex");
         }
+        if (source.equals(sink)) {
+            return createEmptyPath(source, sink);
+        }
 
-        ClosestFirstIterator<V, E> iter = new ClosestFirstIterator<>(graph, source, radius);
+        DijkstraClosestFirstIterator<V, E> it =
+            new DijkstraClosestFirstIterator<>(graph, source, radius);
 
-        while (iter.hasNext()) {
-            V vertex = iter.next();
-
+        while (it.hasNext()) {
+            V vertex = it.next();
             if (vertex.equals(sink)) {
-                return createPath(graph, iter, source, sink);
+                break;
             }
         }
 
-        return createEmptyPath(source, sink);
+        return it.getPaths().getPath(sink);
     }
 
     /**
@@ -100,53 +95,17 @@ public final class DijkstraShortestPath<V, E>
     public SingleSourcePaths<V, E> getPaths(V source)
     {
         if (!graph.containsVertex(source)) {
-            throw new IllegalArgumentException("graph must contain the start vertex");
+            throw new IllegalArgumentException("graph must contain the source vertex");
         }
 
-        // traverse
-        ClosestFirstIterator<V, E> iter = new ClosestFirstIterator<>(graph, source, radius);
+        DijkstraClosestFirstIterator<V, E> it =
+            new DijkstraClosestFirstIterator<>(graph, source, radius);
 
-        while (iter.hasNext()) {
-            iter.next();
+        while (it.hasNext()) {
+            it.next();
         }
 
-        // compute distance and predecessor map
-        Map<V, Pair<Double, E>> map = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            E e = iter.getSpanningTreeEdge(v);
-            if (e != null) {
-                map.put(v, Pair.of(iter.getShortestPathLength(v), e));
-            }
-        }
-
-        return new TreeSingleSourcePaths<>(graph, source, map);
-    }
-
-    private GraphPath<V, E> createPath(
-        Graph<V, E> graph, ClosestFirstIterator<V, E> iter, V startVertex, V endVertex)
-    {
-        List<E> edgeList = new ArrayList<>();
-        List<V> vertexList = new ArrayList<>();
-        vertexList.add(endVertex);
-
-        V v = endVertex;
-
-        while (true) {
-            E edge = iter.getSpanningTreeEdge(v);
-
-            if (edge == null) {
-                break;
-            }
-
-            edgeList.add(edge);
-            v = Graphs.getOppositeVertex(graph, edge, v);
-            vertexList.add(v);
-        }
-
-        Collections.reverse(edgeList);
-        Collections.reverse(vertexList);
-        double pathLength = iter.getShortestPathLength(endVertex);
-        return new GraphWalk<>(graph, startVertex, endVertex, vertexList, edgeList, pathLength);
+        return it.getPaths();
     }
 
 }

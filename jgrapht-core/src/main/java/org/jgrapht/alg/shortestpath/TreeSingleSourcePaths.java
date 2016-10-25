@@ -122,6 +122,9 @@ class TreeSingleSourcePaths<V, E>
         }
         while (p != null) {
             E e = p.getSecond();
+            if (e == null) {
+                break;
+            }
             edgeList.addFirst(e);
             weight += g.getEdgeWeight(e);
             cur = Graphs.getOppositeVertex(g, e, cur);
