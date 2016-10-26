@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2016, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,18 +17,21 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
+import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 
 /**
  * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
- * a given graph.
+ * a given bipartite graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @author Dimitrios Michail
  */
-public interface MatchingAlgorithm<V, E>
+public interface BipartiteMatchingAlgorithm<V, E>
 {
     /**
      * Default tolerance used by algorithms comparing floating point values.
@@ -36,47 +39,14 @@ public interface MatchingAlgorithm<V, E>
     double DEFAULT_EPSILON = 1e-9;
 
     /**
-     * Returns set of edges making up the matching
-     * 
-     * @return a matching
-     * @deprecated Use {@link #getMatching(Graph)} instead.
-     */
-    @Deprecated
-    default Set<E> getMatching()
-    {
-        throw new UnsupportedOperationException("Deprecated");
-    }
-
-    /**
      * Compute a matching for a given graph.
      * 
      * @param graph the input graph
+     * @param partition1 the first partition of the vertices
+     * @param partition2 the second partition of the vertices
      * @return a matching
      */
-    Matching<E> getMatching(Graph<V, E> graph);
-
-    /**
-     * A graph matching.
-     *
-     * @param <E> the graph edge type
-     */
-    interface Matching<E>
-    {
-        /**
-         * Returns the weight of the matching.
-         *
-         * @return the weight of the matching
-         */
-        double getWeight();
-
-        /**
-         * Get the edges of the matching.
-         *
-         * @return the edges of the matching
-         */
-        Set<E> getEdges();
-    }
+    Matching<E> getMatching(
+        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2);
 
 }
-
-// End MatchingAlgorithm.java

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
@@ -65,10 +66,10 @@ public class MaximumWeightBipartiteMatchingTest
     {
         DefaultWeightedEdge e1 = graph.addEdge("s1", "t1");
         graph.setEdgeWeight(e1, 1);
-        matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Set<DefaultWeightedEdge> matchings = matcher.getMatching();
-        assertEquals(1, matchings.size());
-        assertTrue(matchings.contains(e1));
+        matcher = new MaximumWeightBipartiteMatching<>();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching(graph, partition1, partition2);
+        assertEquals(1, matchings.getEdges().size());
+        assertTrue(matchings.getEdges().contains(e1));
     }
 
     @Test
@@ -79,10 +80,10 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e2 = graph.addEdge("s2", "t1");
         graph.setEdgeWeight(e2, 2);
 
-        matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Set<DefaultWeightedEdge> matchings = matcher.getMatching();
-        assertEquals(1, matchings.size());
-        assertTrue(matchings.contains(e2));
+        matcher = new MaximumWeightBipartiteMatching<>();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching(graph, partition1, partition2);
+        assertEquals(1, matchings.getEdges().size());
+        assertTrue(matchings.getEdges().contains(e2));
     }
 
     @Test
@@ -95,11 +96,11 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e3 = graph.addEdge("s2", "t1");
         graph.setEdgeWeight(e3, 2);
 
-        matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Set<DefaultWeightedEdge> matchings = matcher.getMatching();
-        assertEquals(2, matchings.size());
-        assertTrue(matchings.contains(e2));
-        assertTrue(matchings.contains(e3));
+        matcher = new MaximumWeightBipartiteMatching<>();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching(graph, partition1, partition2);
+        assertEquals(2, matchings.getEdges().size());
+        assertTrue(matchings.getEdges().contains(e2));
+        assertTrue(matchings.getEdges().contains(e3));
     }
 
     @Test
@@ -112,11 +113,11 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e3 = graph.addEdge("s2", "t2");
         graph.setEdgeWeight(e3, 1);
 
-        matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Set<DefaultWeightedEdge> matchings = matcher.getMatching();
-        assertEquals(2, matchings.size());
-        assertTrue(matchings.contains(e1));
-        assertTrue(matchings.contains(e3));
+        matcher = new MaximumWeightBipartiteMatching<>();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching(graph, partition1, partition2);
+        assertEquals(2, matchings.getEdges().size());
+        assertTrue(matchings.getEdges().contains(e1));
+        assertTrue(matchings.getEdges().contains(e3));
     }
 
     @Test
@@ -137,13 +138,13 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e7 = graph.addEdge("s4", "t4");
         graph.setEdgeWeight(e7, 1);
 
-        matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Set<DefaultWeightedEdge> matchings = matcher.getMatching();
-        assertEquals(4, matchings.size());
-        assertTrue(matchings.contains(e1));
-        assertTrue(matchings.contains(e3));
-        assertTrue(matchings.contains(e5));
-        assertTrue(matchings.contains(e7));
+        matcher = new MaximumWeightBipartiteMatching<>();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching(graph, partition1, partition2);
+        assertEquals(4, matchings.getEdges().size());
+        assertTrue(matchings.getEdges().contains(e1));
+        assertTrue(matchings.getEdges().contains(e3));
+        assertTrue(matchings.getEdges().contains(e5));
+        assertTrue(matchings.getEdges().contains(e7));
     }
 
 }

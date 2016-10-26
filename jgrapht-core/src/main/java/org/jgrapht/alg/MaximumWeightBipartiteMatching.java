@@ -98,6 +98,15 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         return weight;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> getMatching(Graph<V, E> graph)
+    {
+        throw new UnsupportedOperationException();
+    }
 
     private void initializeVerticesAndEdges()
     {

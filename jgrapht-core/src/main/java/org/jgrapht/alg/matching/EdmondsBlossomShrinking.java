@@ -36,43 +36,39 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
-
-    private UndirectedGraph<V, E> graph;
-
-    private Set<E> matching;
-
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
 
     /**
      * Construct an instance of the Edmonds blossom shrinking algorithm.
-     * 
-     * @param G the input graph
      */
-    public EdmondsBlossomShrinking(final UndirectedGraph<V, E> G)
+    public EdmondsBlossomShrinking()
     {
-        this.graph = G;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<E> getMatching()
+    public Matching<E> getMatching(Graph<V, E> graph)
     {
-        if (matching == null) {
-            matching = findMatch();
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
         }
-        return Collections.unmodifiableSet(matching);
+        if (!(graph instanceof UndirectedGraph)) {
+            throw new IllegalArgumentException("Only undirected graphs supported");
+        }
+        Set<E> edges = findMatch(TypeUtil.uncheckedCast(graph, null));
+        return new DefaultMatching<>(edges, edges.size());
     }
 
     /**
      * Runs the algorithm on the input graph and returns the match edge set.
      *
-     * @return set of Edges
+     * @return set of edges
      */
-    private Set<E> findMatch()
+    private Set<E> findMatch(UndirectedGraph<V, E> graph)
     {
         Set<E> result = new ArrayUnenforcedSet<>();
         match = new HashMap<>();
@@ -84,7 +80,7 @@ public class EdmondsBlossomShrinking<V, E>
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(i)) {
                 // Match is maximal iff graph G contains no more augmenting paths
-                V v = findPath(i);
+                V v = findPath(graph, i);
                 while (v != null) {
                     V pv = path.get(v);
                     V ppv = match.get(pv);
@@ -106,7 +102,7 @@ public class EdmondsBlossomShrinking<V, E>
         return result;
     }
 
-    private V findPath(V root)
+    private V findPath(Graph<V, E> graph, V root)
     {
         Set<V> used = new HashSet<>();
         Queue<V> q = new ArrayDeque<>();

@@ -252,7 +252,7 @@ public abstract class GraphTests
      * @param <E> the graph edge type
      */
     public static <V, E> boolean isBipartitePartition(
-        Graph<V, E> graph, Set<V> firstPartition, Set<V> secondPartition)
+        Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
     {
         Objects.requireNonNull(graph, "Graph cannot be null");
         Objects.requireNonNull(firstPartition, "First partition cannot be null");
@@ -263,7 +263,7 @@ public abstract class GraphTests
         }
 
         for (V v : graph.vertexSet()) {
-            Set<V> otherPartition;
+            Set<? extends V> otherPartition;
             if (firstPartition.contains(v)) {
                 otherPartition = secondPartition;
             } else if (secondPartition.contains(v)) {

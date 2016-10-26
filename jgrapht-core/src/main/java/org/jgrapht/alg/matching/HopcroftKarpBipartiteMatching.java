@@ -21,6 +21,8 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
@@ -37,40 +39,48 @@ import org.jgrapht.alg.interfaces.*;
  *
  * @author Joris Kinable
  */
-
 public class HopcroftKarpBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements BipartiteMatchingAlgorithm<V, E>
 {
-    private final UndirectedGraph<V, E> graph;
-    private final Set<V> partition1; // Partitions of bipartite graph
-    private final Set<V> partition2;
+    private UndirectedGraph<V, E> graph;
+    private Set<? extends V> partition1; // Partitions of bipartite graph
+    private Set<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
 
-    private final Set<V> unmatchedVertices1; // Set which contains the unmatched
-                                             // vertices in partition 1
-    private final Set<V> unmatchedVertices2;
+    private Set<V> unmatchedVertices1; // Set which contains the unmatched
+                                       // vertices in partition 1
+    private Set<V> unmatchedVertices2;
 
     /**
-     * Create a new instance of the Hopcroft-Karp algorithm for the computation of maximum matchings
-     * in bipartite graphs.
-     * 
-     * @param graph the input graph
-     * @param partition1 vertex set of one of the partitions of the bipartite graph
-     * @param partition2 vertex set of the other partition of the bipartite graph
+     * Construct a new instance of the Hopcroft-Karp algorithm for the computation of maximum
+     * matchings in bipartite graphs.
      */
-    public HopcroftKarpBipartiteMatching(
-        UndirectedGraph<V, E> graph, Set<V> partition1, Set<V> partition2)
+    public HopcroftKarpBipartiteMatching()
     {
-        this.graph = graph;
+    }
+
+    @Override
+    public Matching<E> getMatching(
+        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
+    {
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        if (!(graph instanceof UndirectedGraph)) {
+            throw new IllegalArgumentException("Only undirected graphs supported");
+        }
+
+        this.graph = TypeUtil.uncheckedCast(graph, null);
         this.partition1 = partition1;
         this.partition2 = partition2;
-        matching = new HashSet<>();
+        this.matching = new HashSet<>();
+        this.unmatchedVertices1 = new HashSet<>(partition1);
+        this.unmatchedVertices2 = new HashSet<>(partition2);
 
-        unmatchedVertices1 = new HashSet<>(partition1);
-        unmatchedVertices2 = new HashSet<>(partition2);
+        checkInputData();
+        maxMatching();
 
-        assert this.checkInputData();
-        this.maxMatching();
+        return new DefaultMatching<>(matching, matching.size());
     }
 
     /**
@@ -305,11 +315,6 @@ public class HopcroftKarpBipartiteMatching<V, E>
         return false;
     }
 
-    @Override
-    public Set<E> getMatching()
-    {
-        return Collections.unmodifiableSet(matching);
-    }
 }
 
 // End HopcroftKarpBipartiteMatching.java

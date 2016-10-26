@@ -207,6 +207,16 @@ public class EdmondsBlossomShrinking<V, E>
             b = path.get(match.get(b));
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> getMatching(Graph<V, E> graph)
+    {
+        throw new UnsupportedOperationException();
+    }
+
 }
 
 // End EdmondsBlossomShrinking.java

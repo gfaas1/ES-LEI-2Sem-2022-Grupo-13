@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
@@ -61,63 +61,44 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * @since September 2016
  */
 public class GreedyWeightedMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
-    private Set<E> matching;
-    private double weight;
     private final Comparator<Double> comparator;
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm. Floating
      * point values are compared using {@link #DEFAULT_EPSILON} tolerance.
-     * 
-     * @param graph the input graph
      */
-    public GreedyWeightedMatching(Graph<V, E> graph)
+    public GreedyWeightedMatching()
     {
-        this(graph, DEFAULT_EPSILON);
+        this(DEFAULT_EPSILON);
     }
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm.
      * 
-     * @param graph the input graph
      * @param epsilon tolerance when comparing floating point values
      */
-    public GreedyWeightedMatching(Graph<V, E> graph, double epsilon)
+    public GreedyWeightedMatching(double epsilon)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
         this.comparator = new ToleranceDoubleComparator(epsilon);
-
-        Pair<Double, Set<E>> result;
-        result = run(graph);
-
-        this.weight = result.getFirst();
-        this.matching = result.getSecond();
     }
 
     /**
      * Get a matching that is a 1/2-approximation of the maximum weighted matching.
      * 
+     * @param graph the input graph
      * @return a matching
      */
     @Override
-    public Set<E> getMatching()
+    public Matching<E> getMatching(Graph<V, E> graph)
     {
-        return Collections.unmodifiableSet(matching);
-    }
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
 
-    /**
-     * Get the weight of the computed matching.
-     * 
-     * @return the weight of the matching
-     */
-    @Override
-    public double getMatchingWeight()
-    {
-        return weight;
+        Pair<Double, Set<E>> result = run(graph);
+        return new DefaultMatching<>(result.getSecond(), result.getFirst());
     }
 
     // the algorithm

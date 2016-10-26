@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
@@ -48,7 +48,7 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * <p>
  * This particular implementation uses by default two additional heuristics discussed by the authors
  * which also take linear time but improve the quality of the matchings. These heuristics can be
- * disabled by calling the constructor {@link #PathGrowingWeightedMatching(Graph, boolean)}.
+ * disabled by calling the constructor {@link #PathGrowingWeightedMatching(boolean)}.
  * Disabling the heuristics has the effect of fewer passes over the edge set of the input graph,
  * probably at the expense of the total weight of the matching.
  * 
@@ -68,92 +68,74 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * @since September 2016
  */
 public class PathGrowingWeightedMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
     /**
      * Default value on whether to use extra heuristics to improve the result.
      */
     public static final boolean DEFAULT_USE_HEURISTICS = true;
 
-    private Set<E> matching;
-    private double weight;
     private final Comparator<Double> comparator;
+    private final boolean useHeuristics;
 
     /**
-     * Create and execute a new instance of the path growing algorithm. Floating point values are
-     * compared using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time
-     * heuristics are used in order to improve the quality of the matchings.
-     * 
-     * @param graph the input graph
+     * Construct a new instance of the path growing algorithm. Floating point values are compared
+     * using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time heuristics
+     * are used in order to improve the quality of the matchings.
      */
-    public PathGrowingWeightedMatching(Graph<V, E> graph)
+    public PathGrowingWeightedMatching()
     {
-        this(graph, DEFAULT_USE_HEURISTICS, DEFAULT_EPSILON);
+        this(DEFAULT_USE_HEURISTICS, DEFAULT_EPSILON);
     }
 
     /**
-     * Create and execute a new instance of the path growing algorithm. Floating point values are
-     * compared using {@link #DEFAULT_EPSILON} tolerance.
+     * Construct a new instance of the path growing algorithm. Floating point values are compared
+     * using {@link #DEFAULT_EPSILON} tolerance.
      * 
-     * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
      *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
      *        higher quality.
      */
-    public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics)
+    public PathGrowingWeightedMatching(boolean useHeuristics)
     {
-        this(graph, useHeuristics, DEFAULT_EPSILON);
+        this(useHeuristics, DEFAULT_EPSILON);
     }
 
     /**
-     * Create and execute a new instance of the path growing algorithm.
+     * Construct a new instance of the path growing algorithm.
      * 
-     * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
      *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
      *        higher quality.
      * @param epsilon tolerance when comparing floating point values
      */
-    public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics, double epsilon)
+    public PathGrowingWeightedMatching(boolean useHeuristics, double epsilon)
+    {
+        this.comparator = new ToleranceDoubleComparator(epsilon);
+        this.useHeuristics = useHeuristics;
+    }
+
+    /**
+     * Get a matching that is a 1/2-approximation of the maximum weighted matching.
+     * 
+     * @param graph the input graph
+     * @return a matching
+     */
+    @Override
+    public Matching<E> getMatching(Graph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
         }
-        this.comparator = new ToleranceDoubleComparator(epsilon);
-
         Pair<Double, Set<E>> result;
         if (useHeuristics) {
             result = runWithHeuristics(graph);
         } else {
             result = run(graph);
         }
-
-        this.weight = result.getFirst();
-        this.matching = result.getSecond();
-    }
-
-    /**
-     * Get a matching that is a 1/2-approximation of the maximum weighted matching.
-     * 
-     * @return a matching
-     */
-    @Override
-    public Set<E> getMatching()
-    {
-        return Collections.unmodifiableSet(matching);
-    }
-
-    /**
-     * Get the weight of the computed matching.
-     * 
-     * @return the weight of the matching
-     */
-    @Override
-    public double getMatchingWeight()
-    {
-        return weight;
+        return new DefaultMatching<>(result.getSecond(), result.getFirst());
     }
 
     /**

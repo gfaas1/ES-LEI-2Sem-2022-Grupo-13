@@ -17,9 +17,8 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -52,11 +51,11 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e34 = g.addEdge(v3, v4);
 
         // compute max match
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
-        Set<DefaultEdge> match = matcher.getMatching();
-        assertEquals(2, match.size());
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
+        Matching<DefaultEdge> match = matcher.getMatching(g);
+        assertEquals(2, match.getEdges().size());
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
     }
 
     public void testCrash()
@@ -78,14 +77,14 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e12 = g.addEdge(v1, v2);
         DefaultEdge e34 = g.addEdge(v3, v4);
 
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
 
-        Set<DefaultEdge> match = matcher.getMatching();
+        Matching<DefaultEdge> match = matcher.getMatching(g);
 
-        assertEquals(2, match.size());
+        assertEquals(2, match.getEdges().size());
 
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
     }
 
     public void testCrash2()
@@ -105,17 +104,17 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e910 = g.addEdge(vs[9], vs[10]);
         DefaultEdge e1112 = g.addEdge(vs[11], vs[12]);
 
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
 
-        Set<DefaultEdge> match = matcher.getMatching();
+        Matching<DefaultEdge> match = matcher.getMatching(g);
 
-        assertEquals(6, match.size());
+        assertEquals(6, match.getEdges().size());
 
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
-        assertTrue(match.contains(e56));
-        assertTrue(match.contains(e78));
-        assertTrue(match.contains(e910));
-        assertTrue(match.contains(e1112));
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
+        assertTrue(match.getEdges().contains(e56));
+        assertTrue(match.getEdges().contains(e78));
+        assertTrue(match.getEdges().contains(e910));
+        assertTrue(match.getEdges().contains(e1112));
     }
 }

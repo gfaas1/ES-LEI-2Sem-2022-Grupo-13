@@ -17,8 +17,7 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
@@ -31,10 +30,9 @@ public class GreedyWeightedMatchingTest
 {
 
     @Override
-    public WeightedMatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
-        Graph<Integer, DefaultWeightedEdge> graph)
+    public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm()
     {
-        return new GreedyWeightedMatching<>(graph);
+        return new GreedyWeightedMatching<>();
     };
 
 }

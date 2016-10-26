@@ -326,6 +326,15 @@ public class HopcroftKarpBipartiteMatching<V, E>
     {
         return Collections.unmodifiableSet(matching);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> getMatching(Graph<V, E> graph)
+    {
+        throw new UnsupportedOperationException();
+    }
 }
 
 // End HopcroftKarpBipartiteMatching.java
