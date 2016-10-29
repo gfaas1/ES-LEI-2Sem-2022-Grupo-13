@@ -269,13 +269,12 @@ public class GraphMLImporter<V, E>
             if (xsdStream == null) {
                 throw new ImportException("Failed to locate GraphML xsd");
             }
-            InputStream xlinkStream =
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                    XLINK_SCHEMA_FILENAME);
+            InputStream xlinkStream = Thread
+                .currentThread().getContextClassLoader().getResourceAsStream(XLINK_SCHEMA_FILENAME);
             if (xlinkStream == null) {
                 throw new ImportException("Failed to locate XLink xsd");
             }
-            Source [] sources = new Source[2];
+            Source[] sources = new Source[2];
             sources[0] = new StreamSource(xlinkStream);
             sources[1] = new StreamSource(xsdStream);
             Schema schema = schemaFactory.newSchema(sources);
@@ -297,6 +296,8 @@ public class GraphMLImporter<V, E>
     private class GraphMLHandler
         extends DefaultHandler
     {
+        private static final String GRAPH = "graph";
+        private static final String GRAPH_ID = "id";
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
         private static final String EDGE = "edge";
@@ -446,6 +447,7 @@ public class GraphMLImporter<V, E>
             currentKey = null;
             currentData = null;
             currentNodeOrEdge = new ArrayDeque<NodeOrEdge>();
+            currentNodeOrEdge.push(new NodeOrEdge("graphml"));
         }
 
         @Override
@@ -453,6 +455,9 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             switch (localName) {
+            case GRAPH:
+                currentNodeOrEdge.push(new NodeOrEdge(findAttribute(GRAPH_ID, attributes)));
+                break;
             case NODE:
                 currentNodeOrEdge.push(new NodeOrEdge(findAttribute(NODE_ID, attributes)));
                 break;
@@ -498,6 +503,9 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             switch (localName) {
+            case GRAPH:
+                currentNodeOrEdge.pop();
+                break;
             case NODE:
                 NodeOrEdge currentNode = currentNodeOrEdge.pop();
                 if (nodes.containsKey(currentNode.id1)) {

@@ -673,7 +673,7 @@ public class GraphMLImporterTest
         } catch (ImportException e) {
         }
     }
-    
+
     public void testValidWithXLinkNodeAttrib()
         throws ImportException
     {
@@ -732,6 +732,64 @@ public class GraphMLImporterTest
         assertTrue(g2.containsEdge("1", "2"));
         assertTrue(g2.containsEdge("2", "3"));
         assertTrue(g2.containsEdge("3", "3"));
+    }
+
+    public void testWithAttributesAtGraphLevel()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"graph\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\"/>" + NL +
+            "<node id=\"n1\"/>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\"/>" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</graph>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
+
+        assertEquals(2, g.vertexSet().size());
+        assertEquals(1, g.edgeSet().size());
+        assertTrue(g.containsVertex("n0"));
+        assertTrue(g.containsVertex("n1"));
+        assertTrue(g.containsEdge("n0", "n1"));
+    }
+
+    public void testWithAttributesAtGraphMLLevel()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"graph\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\"/>" + NL +
+            "<node id=\"n1\"/>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\"/>" + NL +
+            "</graph>" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String, DefaultEdge> g = readGraph(input, DefaultEdge.class, false, false);
+
+        assertEquals(2, g.vertexSet().size());
+        assertEquals(1, g.edgeSet().size());
+        assertTrue(g.containsVertex("n0"));
+        assertTrue(g.containsVertex("n1"));
+        assertTrue(g.containsEdge("n0", "n1"));
     }
 
     public void testUnsupportedGraph()
