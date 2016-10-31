@@ -17,19 +17,32 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.xml.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.xml.validation.*;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
-import org.jgrapht.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -269,13 +282,12 @@ public class GraphMLImporter<V, E>
             if (xsdStream == null) {
                 throw new ImportException("Failed to locate GraphML xsd");
             }
-            InputStream xlinkStream =
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                    XLINK_SCHEMA_FILENAME);
+            InputStream xlinkStream = Thread
+                .currentThread().getContextClassLoader().getResourceAsStream(XLINK_SCHEMA_FILENAME);
             if (xlinkStream == null) {
                 throw new ImportException("Failed to locate XLink xsd");
             }
-            Source [] sources = new Source[2];
+            Source[] sources = new Source[2];
             sources[0] = new StreamSource(xlinkStream);
             sources[1] = new StreamSource(xsdStream);
             Schema schema = schemaFactory.newSchema(sources);
@@ -297,6 +309,8 @@ public class GraphMLImporter<V, E>
     private class GraphMLHandler
         extends DefaultHandler
     {
+        private static final String GRAPH = "graph";
+        private static final String GRAPH_ID = "id";
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
         private static final String EDGE = "edge";
@@ -312,8 +326,8 @@ public class GraphMLImporter<V, E>
         private static final String DATA_KEY = "key";
 
         // collect graph elements here
-        private Map<String, NodeOrEdge> nodes;
-        private List<NodeOrEdge> edges;
+        private Map<String, GraphElement> nodes;
+        private List<GraphElement> edges;
 
         // record state of parser
         private boolean insideDefault;
@@ -323,7 +337,7 @@ public class GraphMLImporter<V, E>
         // stack needed due to nested graphs in GraphML
         private Data currentData;
         private Key currentKey;
-        private Deque<NodeOrEdge> currentNodeOrEdge;
+        private Deque<GraphElement> currentGraphElement;
 
         // collect custom keys
         private Map<String, Key> nodeValidKeys;
@@ -340,7 +354,7 @@ public class GraphMLImporter<V, E>
             // create nodes
             Map<String, V> graphNodes = new HashMap<String, V>();
 
-            for (Entry<String, NodeOrEdge> en : nodes.entrySet()) {
+            for (Entry<String, GraphElement> en : nodes.entrySet()) {
                 String nodeId = en.getKey();
 
                 // create attributes
@@ -386,7 +400,7 @@ public class GraphMLImporter<V, E>
             }
 
             // create edges
-            for (NodeOrEdge p : edges) {
+            for (GraphElement p : edges) {
                 V from = graphNodes.get(p.id1);
                 if (from == null) {
                     throw new ImportException("Source vertex " + p.id1 + " not found");
@@ -437,15 +451,16 @@ public class GraphMLImporter<V, E>
         public void startDocument()
             throws SAXException
         {
-            nodes = new HashMap<String, NodeOrEdge>();
-            edges = new ArrayList<NodeOrEdge>();
+            nodes = new HashMap<String, GraphElement>();
+            edges = new ArrayList<GraphElement>();
             nodeValidKeys = new HashMap<String, Key>();
             edgeValidKeys = new HashMap<String, Key>();
             insideDefault = false;
             insideData = false;
             currentKey = null;
             currentData = null;
-            currentNodeOrEdge = new ArrayDeque<NodeOrEdge>();
+            currentGraphElement = new ArrayDeque<GraphElement>();
+            currentGraphElement.push(new GraphElement("graphml"));
         }
 
         @Override
@@ -453,12 +468,15 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             switch (localName) {
+            case GRAPH:
+                currentGraphElement.push(new GraphElement(findAttribute(GRAPH_ID, attributes)));
+                break;
             case NODE:
-                currentNodeOrEdge.push(new NodeOrEdge(findAttribute(NODE_ID, attributes)));
+                currentGraphElement.push(new GraphElement(findAttribute(NODE_ID, attributes)));
                 break;
             case EDGE:
-                currentNodeOrEdge.push(
-                    new NodeOrEdge(
+                currentGraphElement.push(
+                    new GraphElement(
                         findAttribute(EDGE_SOURCE, attributes),
                         findAttribute(EDGE_TARGET, attributes)));
                 break;
@@ -498,15 +516,18 @@ public class GraphMLImporter<V, E>
             throws SAXException
         {
             switch (localName) {
+            case GRAPH:
+                currentGraphElement.pop();
+                break;
             case NODE:
-                NodeOrEdge currentNode = currentNodeOrEdge.pop();
+                GraphElement currentNode = currentGraphElement.pop();
                 if (nodes.containsKey(currentNode.id1)) {
                     throw new SAXException("Node with id " + currentNode.id1 + " already exists");
                 }
                 nodes.put(currentNode.id1, currentNode);
                 break;
             case EDGE:
-                NodeOrEdge currentEdge = currentNodeOrEdge.pop();
+                GraphElement currentEdge = currentGraphElement.pop();
                 edges.add(currentEdge);
                 break;
             case KEY:
@@ -531,7 +552,7 @@ public class GraphMLImporter<V, E>
                 break;
             case DATA:
                 if (currentData.isValid()) {
-                    currentNodeOrEdge.peek().attributes.put(currentData.key, currentData.value);
+                    currentGraphElement.peek().attributes.put(currentData.key, currentData.value);
                 }
                 insideData = false;
                 currentData = null;
@@ -632,20 +653,20 @@ public class GraphMLImporter<V, E>
         }
     }
 
-    private class NodeOrEdge
+    private class GraphElement
     {
         String id1;
         String id2;
         Map<String, String> attributes;
 
-        public NodeOrEdge(String id1)
+        public GraphElement(String id1)
         {
             this.id1 = id1;
             this.id2 = null;
             this.attributes = new HashMap<String, String>();
         }
 
-        public NodeOrEdge(String id1, String id2)
+        public GraphElement(String id1, String id2)
         {
             this.id1 = id1;
             this.id2 = id2;
