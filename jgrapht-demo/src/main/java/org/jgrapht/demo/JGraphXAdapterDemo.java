@@ -46,11 +46,11 @@ public class JGraphXAdapterDemo
      * An alternative starting point for this demo, to also allow running this applet as an
      * application.
      *
-     * @param args ignored.
+     * @param args command line arguments
      */
     public static void main(String[] args)
     {
-        JGraphAdapterDemo applet = new JGraphAdapterDemo();
+        JGraphXAdapterDemo applet = new JGraphXAdapterDemo();
         applet.init();
 
         JFrame frame = new JFrame();
