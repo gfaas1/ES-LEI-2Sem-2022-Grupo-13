@@ -29,9 +29,7 @@ build
 .idea/*
 *.iml
 out/*
-**/.idea/*
 **/out/*
 pom.xml.releaseBackup
 **/pom.xml.releaseBackup
-*.iml
 .classpath
