@@ -20,15 +20,12 @@ package org.jgrapht.alg.matching;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.Assert;
-
-import junit.framework.*;
+import org.junit.*;
 
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
-    extends TestCase
 {
 
     interface V
@@ -38,7 +35,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     /**
      * First partition
      */
-    enum FIRST_PARTITION
+    private enum FIRST_PARTITION
         implements V
     {
         A,
@@ -65,12 +62,12 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         V
     }
 
-    static List<? extends V> firstPartition = Arrays.asList(FIRST_PARTITION.values());
+    private static List<? extends V> firstPartition = Arrays.asList(FIRST_PARTITION.values());
 
     /**
      * Second partition
      */
-    enum SECOND_PARTITION
+    private enum SECOND_PARTITION
         implements V
     {
         A,
@@ -97,24 +94,24 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         V
     }
 
-    static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
+    private static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
 
-    static class WeightedEdge
+    private static class WeightedEdge
         extends DefaultWeightedEdge
     {
 
-        class _
-            extends VertexPair<V>
+        class APair
+            extends Pair<V, V>
         {
-            public _(V _1, V _2)
+            APair(V first, V second)
             {
-                super(_1, _2);
+                super(first, second);
             }
         }
 
-        WeightedEdge(V _1, V _2)
+        WeightedEdge(V source, V target)
         {
-            __ = new _(_1, _2);
+            aPair = new APair(source, target);
         }
 
         static WeightedEdge make(V source, V target)
@@ -125,36 +122,32 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         @Override
         public boolean equals(Object edge)
         {
-            return (edge instanceof WeightedEdge) && __.equals(((WeightedEdge) edge).__);
+            return (edge instanceof WeightedEdge) && aPair.equals(((WeightedEdge) edge).aPair);
         }
 
         @Override
         public int hashCode()
         {
-            return __.hashCode();
+            return aPair.hashCode();
         }
 
         @Override
         public String toString()
         {
-            return __.toString() + " : " + getWeight();
+            return aPair.toString() + " : " + getWeight();
         }
 
-        _ __;
+        APair aPair;
 
     }
 
-    static KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge> match(
+    private static KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)
     {
-
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);
         List<? extends V> second = secondPartition.subList(0, partitionCardinality);
 
-        WeightedGraph<V, WeightedEdge> target =
-            new SimpleWeightedGraph<>((sourceVertex, targetVertex) -> {
-                return WeightedEdge.make(sourceVertex, targetVertex);
-            });
+        WeightedGraph<V, WeightedEdge> target = new SimpleWeightedGraph<>(WeightedEdge::make);
 
         WeightedGraphGeneratorAdapter<V, WeightedEdge, V> generator =
             new SimpleWeightedBipartiteGraphMatrixGenerator<V, WeightedEdge>()
@@ -163,12 +156,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         generator.generateGraph(target, null, null);
 
         return new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(target, first, second);
-
     }
 
+    @Test
     public void testForEmptyGraph()
     {
-
         WeightedGraph<V, WeightedEdge> graph = new SimpleWeightedGraph<>(WeightedEdge.class);
 
         List<? extends V> emptyList = Collections.emptyList();
@@ -178,9 +170,9 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
                 .getMatching().isEmpty());
     }
 
+    @Test
     public void test3x3SimpleAssignmentTask()
     {
-
         // Obvious case:
         // Optimal selection being disposed on the diagonal of the given matrix
 
@@ -189,12 +181,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double w = match(costMatrix, costMatrix.length).getMatchingWeight();
 
         Assert.assertTrue(w == 12);
-
     }
 
+    @Test
     public void test3x3SimpleAssignmentTaskNo2()
     {
-
         // Simple case:
         // Every selection gives the same value of 15
 
@@ -206,6 +197,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
+    @Test
     public void test5x5AssignmentTask()
     {
 
@@ -220,6 +212,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
+    @Test
     public void test5x5InvertedAssignmentTask()
     {
 
@@ -245,9 +238,9 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
+    @Test
     public void test6x6DegeneratedAssignmentTask()
     {
-
         // First DEGENERATED case:
         // Degenerated worker and degenerated task added
         //
@@ -261,12 +254,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double w = match(costMatrix, costMatrix.length).getMatchingWeight();
 
         Assert.assertTrue(w == 21);
-
     }
 
+    @Test
     public void test6x6DegeneratedAssignmentTaskNo2()
     {
-
         // Second DEGENERATED case:
         //
         // |Workers| > |Tasks|
@@ -280,12 +272,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double w = match(costMatrix, costMatrix.length).getMatchingWeight();
 
         Assert.assertTrue(w == 19);
-
     }
 
+    @Test
     public void test5x5DegeneratedAssignmentTask()
     {
-
         // Third DEGENERATED case:
         //
         // Task #1 can't be performed by the worker #1 (designated by the MAX + 1 value (9))
@@ -301,12 +292,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double w = match(costMatrix, costMatrix.length).getMatchingWeight();
 
         Assert.assertTrue(w == 12);
-
     }
 
+    @Test
     public void test8x8BulkyAssignmentTask()
     {
-
         double[][] costMatrix = new double[][] {
             { 233160, 1485901, 3245737, 25965896, 25965896, 25965896, 25965896, 25965896 },
             { 238594, 25965896, 25965896, 25965896, 25965896, 25965896, 25965896, 25965896 },
@@ -320,12 +310,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         // Case entailing set-cover algo drastically degenerating, therefore need just to pass
 
         match(costMatrix, costMatrix.length);
-
     }
 
+    @Test
     public void test21x21BulkyAssignmentTask()
     {
-
         double[][] costMatrix = new double[][] {
             { 284169900, 16680, 27111, 0, 25914, 13400124, 13400124, 13400124, 13400124, 13400124,
                 13400124, 13400124, 13400124, 13400124, 13400124, 13400124, 13400124, 13400124,
@@ -393,12 +382,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         // Case entailing set-cover algo drastically degenerating, therefore need just to pass
 
         match(costMatrix, costMatrix.length);
-
     }
 
+    @Test
     public void test20x20BulkyAssignmentTask()
     {
-
         double[][] costMatrix = new double[][] {
             { 284309466, 162348, 179093, 121766, 230867, 175501, 284309466, 284309466, 284309466,
                 284309466, 284309466, 284309466, 284309466, 284309466, 284309466, 284309466,
@@ -467,7 +455,5 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         // Case entailing set-cover algo drastically degenerating, therefore need just to pass
 
         match(costMatrix, costMatrix.length);
-
     }
-
 }
