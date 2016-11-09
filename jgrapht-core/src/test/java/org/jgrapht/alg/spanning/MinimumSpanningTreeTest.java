@@ -17,13 +17,22 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm;
+import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm.SpanningTree;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.IntegerVertexFactory;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.WeightedPseudograph;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class MinimumSpanningTreeTest
     extends TestCase
@@ -76,6 +85,54 @@ public class MinimumSpanningTreeTest
             new PrimMinimumSpanningTree<String, DefaultWeightedEdge>()
                 .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+    }
+
+    public void testBoruvska()
+    {
+        testMinimumSpanningTreeBuilding(
+            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
+                createSimpleConnectedWeightedGraph()),
+            Arrays.asList(AB, AC, BD, DE), 15.0);
+
+        testMinimumSpanningTreeBuilding(
+            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>()
+                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
+            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+    }
+
+    public void testRandomInstances()
+    {
+        final Random rng = new Random(33);
+        final double edgeProbability = 0.5;
+        final int numberVertices = 100;
+        final int repeat = 10;
+
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> gg =
+            new GnpRandomGraphGenerator<Integer, DefaultWeightedEdge>(
+                numberVertices, edgeProbability, rng, false);
+
+        for (int i = 0; i < repeat; i++) {
+            WeightedPseudograph<Integer, DefaultWeightedEdge> g =
+                new WeightedPseudograph<>(DefaultWeightedEdge.class);
+            gg.generateGraph(g, new IntegerVertexFactory(), null);
+
+            for (DefaultWeightedEdge e : g.edgeSet()) {
+                g.setEdgeWeight(e, rng.nextDouble());
+            }
+
+            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg1 =
+                new BoruvkaMinimumSpanningTree<>();
+            SpanningTree<DefaultWeightedEdge> tree1 = alg1.getSpanningTree(g);
+            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg2 =
+                new KruskalMinimumSpanningTree<>();
+            SpanningTree<DefaultWeightedEdge> tree2 = alg2.getSpanningTree(g);
+            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg3 =
+                new PrimMinimumSpanningTree<>();
+            SpanningTree<DefaultWeightedEdge> tree3 = alg3.getSpanningTree(g);
+
+            assertEquals(tree1.getWeight(), tree2.getWeight(), 1e-9);
+            assertEquals(tree2.getWeight(), tree3.getWeight(), 1e-9);
+        }
     }
 
     protected <V, E> void testMinimumSpanningTreeBuilding(
