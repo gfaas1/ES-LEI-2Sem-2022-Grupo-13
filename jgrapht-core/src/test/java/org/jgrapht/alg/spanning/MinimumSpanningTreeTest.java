@@ -15,12 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.spanning;
 
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -55,50 +55,34 @@ public class MinimumSpanningTreeTest
     {
 
         testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<>(createSimpleConnectedWeightedGraph()),
+            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
+                createSimpleConnectedWeightedGraph()),
             Arrays.asList(AB, AC, BD, DE), 15.0);
 
         testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<>(createSimpleDisconnectedWeightedGraph()),
+            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>()
+                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
-
-        testKruskalMinimumSpanningTreeBuildingBackwardCompatibility(
-            new KruskalMinimumSpanningTree<>(createSimpleConnectedWeightedGraph()),
-            Arrays.asList(AB, AC, BD, DE), 15.0);
-
     }
 
     public void testPrim()
     {
-
         testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<>(createSimpleConnectedWeightedGraph()),
+            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
+                createSimpleConnectedWeightedGraph()),
             Arrays.asList(AB, AC, BD, DE), 15.0);
 
         testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<>(createSimpleDisconnectedWeightedGraph()),
+            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>()
+                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
-
     }
 
     protected <V, E> void testMinimumSpanningTreeBuilding(
-        final MinimumSpanningTree<V, DefaultWeightedEdge> mst, final Collection<E> edgeSet,
-        final double weight)
+        final SpanningTree<E> mst, final Collection<E> edgeSet, final double weight)
     {
-
-        assertEquals(weight, mst.getMinimumSpanningTreeTotalWeight());
-        assertTrue(mst.getMinimumSpanningTreeEdgeSet().containsAll(edgeSet));
-
-    }
-
-    protected <V, E> void testKruskalMinimumSpanningTreeBuildingBackwardCompatibility(
-        final KruskalMinimumSpanningTree<V, DefaultWeightedEdge> mst, final Collection<E> edgeSet,
-        final double weight)
-    {
-
-        assertEquals(weight, mst.getMinimumSpanningTreeTotalWeight());
-        assertTrue(mst.getMinimumSpanningTreeEdgeSet().containsAll(edgeSet));
-
+        assertEquals(weight, mst.getWeight());
+        assertTrue(mst.getEdges().containsAll(edgeSet));
     }
 
     protected Graph<String, DefaultWeightedEdge> createSimpleDisconnectedWeightedGraph()

@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.spanning;
 
 import java.util.*;
 
@@ -34,23 +34,22 @@ import org.jgrapht.alg.util.*;
  *
  * @author Tom Conerly
  * @since Feb 10, 2010
- * @deprecated Use {@link org.jgrapht.alg.spanning.KruskalMinimumSpanningTree} instead.
  */
-@Deprecated
 public class KruskalMinimumSpanningTree<V, E>
-    implements MinimumSpanningTree<V, E>
+    implements MinimumSpanningTreeAlgorithm<V, E>
 {
-    private double spanningTreeCost;
-    private Set<E> edgeList;
+    /**
+     * Construct a new instance of the algorithm.
+     */
+    public KruskalMinimumSpanningTree()
+    {
+    }
 
     /**
-     * Creates and executes a new KruskalMinimumSpanningTree algorithm instance. An instance is only
-     * good for a single spanning tree; after construction, it can be accessed to retrieve
-     * information about the spanning tree found.
-     *
-     * @param graph the graph to be searched
+     * {@inheritDoc}
      */
-    public KruskalMinimumSpanningTree(final Graph<V, E> graph)
+    @Override
+    public SpanningTree<E> getSpanningTree(Graph<V, E> graph)
     {
         UnionFind<V> forest = new UnionFind<>(graph.vertexSet());
         ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
@@ -58,8 +57,8 @@ public class KruskalMinimumSpanningTree<V, E>
             allEdges, (edge1, edge2) -> Double
                 .valueOf(graph.getEdgeWeight(edge1)).compareTo(graph.getEdgeWeight(edge2)));
 
-        spanningTreeCost = 0;
-        edgeList = new HashSet<>();
+        double spanningTreeCost = 0;
+        Set<E> edgeList = new HashSet<>();
 
         for (E edge : allEdges) {
             V source = graph.getEdgeSource(edge);
@@ -72,20 +71,9 @@ public class KruskalMinimumSpanningTree<V, E>
             edgeList.add(edge);
             spanningTreeCost += graph.getEdgeWeight(edge);
         }
-    }
 
-    @Override
-    public Set<E> getMinimumSpanningTreeEdgeSet()
-    {
-        return edgeList;
+        return new DefaultSpanningEdgeSet<>(edgeList, spanningTreeCost);
     }
-
-    @Override
-    public double getMinimumSpanningTreeTotalWeight()
-    {
-        return spanningTreeCost;
-    }
-
 }
 
 // End KruskalMinimumSpanningTree.java

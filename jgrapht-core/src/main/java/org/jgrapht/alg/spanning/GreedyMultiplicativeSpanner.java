@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.spanning;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
@@ -52,57 +53,59 @@ import org.jgrapht.util.*;
  *
  * @author Dimitrios Michail
  * @since July 15, 2016
- * @deprecated Use {@link org.jgrapht.alg.spanning.GreedyMultiplicativeSpanner} instead.
  */
-@Deprecated
 public class GreedyMultiplicativeSpanner<V, E>
+    implements SpannerAlgorithm<V, E>
 {
-    private final Set<E> edgeList;
-    private final UndirectedGraph<V, E> graph;
     private final int k;
     private static final int MAX_K = 1 << 29;
 
     /**
      * Constructs instance to compute a (2k-1)-spanner of a graph.
      * 
-     * @param graph the input graph
      * @param k positive integer.
      */
-    public GreedyMultiplicativeSpanner(UndirectedGraph<V, E> graph, int k)
+    public GreedyMultiplicativeSpanner(int k)
     {
-        this.graph = graph;
-        this.edgeList = new LinkedHashSet<>();
         if (k <= 0) {
             throw new IllegalArgumentException(
                 "k should be positive in (2k-1)-spanner construction");
         }
         this.k = Math.min(k, MAX_K);
-        if (graph instanceof WeightedGraph) {
-            new WeightedSpannerAlgorithm().run();
-        } else {
-            new UnweightedSpannerAlgorithm().run();
-        }
     }
 
-    /**
-     * Get the edge set of the spanner.
-     *
-     * @return the set of edges of the spanner
-     */
-    public Set<E> getSpannerEdgeSet()
+    @Override
+    public Spanner<E> getSpanner(Graph<V, E> graph)
     {
-        return edgeList;
+        if (graph == null) {
+            throw new IllegalArgumentException("Graph cannot be null");
+        }
+        if (!(graph instanceof UndirectedGraph)) {
+            throw new IllegalArgumentException("Only undirected graphs supported");
+        }
+        UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
+        if (graph instanceof WeightedGraph) {
+            return new WeightedSpannerAlgorithm(ug).run();
+        } else {
+            return new UnweightedSpannerAlgorithm(ug).run();
+        }
     }
 
     // base algorithm implementation
     private abstract class SpannerAlgorithmBase
     {
+        private UndirectedGraph<V, E> graph;
+
+        public SpannerAlgorithmBase(UndirectedGraph<V, E> graph)
+        {
+            this.graph = graph;
+        }
 
         public abstract boolean isSpannerReachable(V s, V t, double distance);
 
         public abstract void addSpannerEdge(V s, V t, double weight);
 
-        public void run()
+        public Spanner<E> run()
         {
             // sort edges
             ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
@@ -117,18 +120,23 @@ public class GreedyMultiplicativeSpanner<V, E>
             }
 
             // run main loop
+            Set<E> edgeList = new LinkedHashSet<>();
+            double edgeListWeight = 0d;
+
             for (E e : allEdges) {
                 V s = graph.getEdgeSource(e);
                 V t = graph.getEdgeTarget(e);
 
                 if (!s.equals(t)) { // self-loop?
-                    double distance = (2 * k - 1) * graph.getEdgeWeight(e);
-                    if (!isSpannerReachable(s, t, distance)) {
+                    double eWeight = graph.getEdgeWeight(e);
+                    if (!isSpannerReachable(s, t, (2 * k - 1) * eWeight)) {
                         edgeList.add(e);
-                        addSpannerEdge(s, t, graph.getEdgeWeight(e));
+                        edgeListWeight += eWeight;
+                        addSpannerEdge(s, t, eWeight);
                     }
                 }
             }
+            return new DefaultSpanningEdgeSet<>(edgeList, edgeListWeight);
         }
 
     }
@@ -136,14 +144,14 @@ public class GreedyMultiplicativeSpanner<V, E>
     private class UnweightedSpannerAlgorithm
         extends SpannerAlgorithmBase
     {
-
         protected UndirectedGraph<V, E> spanner;
         protected Map<V, Integer> vertexDistance;
         protected Deque<V> queue;
         protected Deque<V> touchedVertices;
 
-        public UnweightedSpannerAlgorithm()
+        public UnweightedSpannerAlgorithm(UndirectedGraph<V, E> graph)
         {
+            super(graph);
             spanner = new SimpleGraph<V, E>(graph.getEdgeFactory());
             touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
@@ -152,12 +160,6 @@ public class GreedyMultiplicativeSpanner<V, E>
             }
             vertexDistance = new HashMap<V, Integer>(graph.vertexSet().size());
             queue = new ArrayDeque<>();
-        }
-
-        @Override
-        public void addSpannerEdge(V s, V t, double weight)
-        {
-            spanner.addEdge(s, t);
         }
 
         /**
@@ -207,18 +209,23 @@ public class GreedyMultiplicativeSpanner<V, E>
             return false;
         }
 
+        @Override
+        public void addSpannerEdge(V s, V t, double weight)
+        {
+            spanner.addEdge(s, t);
+        }
     }
 
     private class WeightedSpannerAlgorithm
         extends SpannerAlgorithmBase
     {
-
         protected WeightedGraph<V, E> spanner;
         protected FibonacciHeap<V> heap;
         protected Map<V, FibonacciHeapNode<V>> nodes;
 
-        public WeightedSpannerAlgorithm()
+        public WeightedSpannerAlgorithm(UndirectedGraph<V, E> graph)
         {
+            super(graph);
             this.spanner = new SimpleWeightedGraph<V, E>(graph.getEdgeFactory());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);

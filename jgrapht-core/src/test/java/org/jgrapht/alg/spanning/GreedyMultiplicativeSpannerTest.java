@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.spanning;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ import org.jgrapht.graph.*;
 
 import junit.framework.*;
 
-/*
+/**
  * @author Dimitrios Michail
  * @since July 15, 2016
  */
@@ -155,7 +155,7 @@ public class GreedyMultiplicativeSpannerTest
 
     private <V, E> void runTest(UndirectedGraph<V, E> g, int k, Set<E> correct)
     {
-        Set<E> result = new GreedyMultiplicativeSpanner<V, E>(g, k).getSpannerEdgeSet();
+        Set<E> result = new GreedyMultiplicativeSpanner<V, E>(k).getSpanner(g).getEdges();
 
         assertEquals(correct.size(), result.size());
         for (E e : correct) {
@@ -368,7 +368,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
         try {
-            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(g, 2).getSpannerEdgeSet();
+            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(2).getSpanner(g);
             fail("Negative edge weights not permitted.");
         } catch (IllegalArgumentException e) {
         }

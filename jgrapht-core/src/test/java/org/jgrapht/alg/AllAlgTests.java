@@ -35,8 +35,8 @@ import org.junit.runners.*;
     EdmondsKarpMinimumSTCutTest.class, EulerianCircuitTest.class,
     FloydWarshallShortestPathsTest.class, HamiltonianCycleTest.class, KShortestPathCostTest.class,
     KShortestPathKValuesTest.class, KSPDiscardsValidPathsTest.class, KSPExampleTest.class,
-    MinimumSpanningTreeTest.class, NaiveLcaFinderTest.class, NeighborIndexTest.class,
-    PushRelabelMFImplTest.class, PushRelabelMinimumSTCutTest.class, StoerWagnerMinimumCutTest.class,
+    NaiveLcaFinderTest.class, NeighborIndexTest.class, PushRelabelMFImplTest.class,
+    PushRelabelMinimumSTCutTest.class, StoerWagnerMinimumCutTest.class,
     StrongConnectivityAlgorithmTest.class, TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class, VertexCoverTest.class, WeightedVertexCoverTest.class })
 public final class AllAlgTests
