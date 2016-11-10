@@ -40,12 +40,13 @@ public class UndirectedSubgraph<V, E>
      * Creates a new undirected subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
+     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
+     *        edges whose vertices found in the graph are included.
      */
-    public UndirectedSubgraph(UndirectedGraph<V, E> base, Set<V> vertexSubset, Set<E> edgeSubset)
+    public UndirectedSubgraph(
+        UndirectedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -54,10 +55,10 @@ public class UndirectedSubgraph<V, E>
      * Creates a new undirected induced subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
      */
-    public UndirectedSubgraph(UndirectedGraph<V, E> base, Set<V> vertexSubset)
+    public UndirectedSubgraph(UndirectedGraph<V, E> base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
     }

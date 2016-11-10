@@ -109,12 +109,12 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * Creates a new Subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
+     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
+     *        edges whose vertices found in the graph are included.
      */
-    public Subgraph(G base, Set<V> vertexSubset, Set<E> edgeSubset)
+    public Subgraph(G base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
         super();
 
@@ -134,10 +134,10 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * identical to the call Subgraph(base, vertexSubset, null).
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
      */
-    public Subgraph(G base, Set<V> vertexSubset)
+    public Subgraph(G base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
     }
@@ -419,7 +419,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         ((WeightedGraph<V, E>) base).setEdgeWeight(e, weight);
     }
 
-    private void initialize(Set<V> vertexFilter, Set<E> edgeFilter)
+    private void initialize(Set<? extends V> vertexFilter, Set<? extends E> edgeFilter)
     {
         // add vertices
         if (vertexFilter == null) {
