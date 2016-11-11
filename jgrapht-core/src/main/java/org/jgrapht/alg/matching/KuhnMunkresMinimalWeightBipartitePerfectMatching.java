@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 
 /**
  * Kuhn-Munkres algorithm (named in honor of Harold Kuhn and James Munkres) solving <i>assignment
@@ -44,29 +43,42 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
  * @author Alexey Kudinkin
  */
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements BipartiteMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
+    private final Graph<V, E> graph;
+    private Set<? extends V> partition1;
+    private Set<? extends V> partition2;
+
     /**
      * Construct a new instance of the algorithm.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
      */
-    public KuhnMunkresMinimalWeightBipartitePerfectMatching()
+    public KuhnMunkresMinimalWeightBipartitePerfectMatching(
+        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
     {
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        this.graph = graph;
+        if (partition1 == null) {
+            throw new IllegalArgumentException("Invalid partition provided");
+        }
+        this.partition1 = partition1;
+        if (partition2 == null) {
+            throw new IllegalArgumentException("Invalid partition provided");
+        }
+        this.partition2 = partition2;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> getMatching(
-        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
+    public Matching<E> computeMatching()
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
-        if (partition1 == null || partition2 == null) {
-            throw new IllegalArgumentException("Invalid partition provided");
-        }
-
         // Validate graph being complete bipartite with equally-sized partitions
         if (partition1.size() != partition2.size()) {
             throw new IllegalArgumentException(

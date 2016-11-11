@@ -48,7 +48,7 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * <p>
  * This particular implementation uses by default two additional heuristics discussed by the authors
  * which also take linear time but improve the quality of the matchings. These heuristics can be
- * disabled by calling the constructor {@link #PathGrowingWeightedMatching(boolean)}.
+ * disabled by calling the constructor {@link #PathGrowingWeightedMatching(Graph, boolean)}.
  * Disabling the heuristics has the effect of fewer passes over the edge set of the input graph,
  * probably at the expense of the total weight of the matching.
  * 
@@ -75,6 +75,7 @@ public class PathGrowingWeightedMatching<V, E>
      */
     public static final boolean DEFAULT_USE_HEURISTICS = true;
 
+    private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
     private final boolean useHeuristics;
 
@@ -82,37 +83,45 @@ public class PathGrowingWeightedMatching<V, E>
      * Construct a new instance of the path growing algorithm. Floating point values are compared
      * using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time heuristics
      * are used in order to improve the quality of the matchings.
+     * 
+     * @param graph the input graph
      */
-    public PathGrowingWeightedMatching()
+    public PathGrowingWeightedMatching(Graph<V, E> graph)
     {
-        this(DEFAULT_USE_HEURISTICS, DEFAULT_EPSILON);
+        this(graph, DEFAULT_USE_HEURISTICS, DEFAULT_EPSILON);
     }
 
     /**
      * Construct a new instance of the path growing algorithm. Floating point values are compared
      * using {@link #DEFAULT_EPSILON} tolerance.
      * 
+     * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
      *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
      *        higher quality.
      */
-    public PathGrowingWeightedMatching(boolean useHeuristics)
+    public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics)
     {
-        this(useHeuristics, DEFAULT_EPSILON);
+        this(graph, useHeuristics, DEFAULT_EPSILON);
     }
 
     /**
      * Construct a new instance of the path growing algorithm.
      * 
+     * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
      *        running time remains linear but performs a few more passes over the input. While the
      *        approximation factor remains 1/2, in most cases the heuristics produce matchings of
      *        higher quality.
      * @param epsilon tolerance when comparing floating point values
      */
-    public PathGrowingWeightedMatching(boolean useHeuristics, double epsilon)
+    public PathGrowingWeightedMatching(Graph<V, E> graph, boolean useHeuristics, double epsilon)
     {
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
         this.useHeuristics = useHeuristics;
     }
@@ -120,20 +129,16 @@ public class PathGrowingWeightedMatching<V, E>
     /**
      * Get a matching that is a 1/2-approximation of the maximum weighted matching.
      * 
-     * @param graph the input graph
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching(Graph<V, E> graph)
+    public Matching<E> computeMatching()
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
         Pair<Double, Set<E>> result;
         if (useHeuristics) {
-            result = runWithHeuristics(graph);
+            result = runWithHeuristics();
         } else {
-            result = run(graph);
+            result = run();
         }
         return new DefaultMatching<>(result.getSecond(), result.getFirst());
     }
@@ -142,10 +147,9 @@ public class PathGrowingWeightedMatching<V, E>
      * Compute all vertices that have positive degree by iterating over the edges on purpose. This
      * keeps the complexity to O(m) where m is the number of edges.
      * 
-     * @param graph the graph
      * @return set of vertices with positive degree
      */
-    private Set<V> initVisibleVertices(Graph<V, E> graph)
+    private Set<V> initVisibleVertices()
     {
         Set<V> visibleVertex = new HashSet<>();
         for (E e : graph.edgeSet()) {
@@ -160,10 +164,10 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (no heuristics)
-    private Pair<Double, Set<E>> run(Graph<V, E> graph)
+    private Pair<Double, Set<E>> run()
     {
         // lookup all relevant vertices
-        Set<V> visibleVertex = initVisibleVertices(graph);
+        Set<V> visibleVertex = initVisibleVertices();
 
         // run algorithm
         Set<E> m1 = new HashSet<>();
@@ -229,10 +233,10 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (improved with additional heuristics)
-    private Pair<Double, Set<E>> runWithHeuristics(Graph<V, E> graph)
+    private Pair<Double, Set<E>> runWithHeuristics()
     {
         // lookup all relevant vertices
-        Set<V> visibleVertex = initVisibleVertices(graph);
+        Set<V> visibleVertex = initVisibleVertices();
 
         // create solver for paths
         DynamicProgrammingPathSolver pathSolver = new DynamicProgrammingPathSolver();

@@ -17,9 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
-
-import org.jgrapht.Graph;
+import java.util.Set;
 
 /**
  * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
@@ -39,21 +37,20 @@ public interface MatchingAlgorithm<V, E>
      * Returns set of edges making up the matching
      * 
      * @return a matching
-     * @deprecated Use {@link #getMatching(Graph)} instead.
+     * @deprecated Use {@link #computeMatching()} instead.
      */
     @Deprecated
     default Set<E> getMatching()
     {
-        throw new UnsupportedOperationException("Deprecated");
+        return computeMatching().getEdges();
     }
 
     /**
      * Compute a matching for a given graph.
      * 
-     * @param graph the input graph
      * @return a matching
      */
-    Matching<E> getMatching(Graph<V, E> graph);
+    Matching<E> computeMatching();
 
     /**
      * A graph matching.

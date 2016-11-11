@@ -103,9 +103,28 @@ public class MaximumWeightBipartiteMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> getMatching(Graph<V, E> graph)
+    public Matching<E> computeMatching()
     {
-        throw new UnsupportedOperationException();
+        Set<E> m = getMatching();
+        double w = 0d;
+        for (E e : m) {
+            w += graph.getEdgeWeight(e);
+        }
+        final double weight = w;
+        return new Matching<E>()
+        {
+            @Override
+            public double getWeight()
+            {
+                return weight;
+            }
+
+            @Override
+            public Set<E> getEdges()
+            {
+                return m;
+            }
+        };
     }
 
     private void initializeVerticesAndEdges()

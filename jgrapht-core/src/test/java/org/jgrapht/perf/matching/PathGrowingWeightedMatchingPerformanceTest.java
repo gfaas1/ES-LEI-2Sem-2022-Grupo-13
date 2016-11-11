@@ -19,6 +19,7 @@ package org.jgrapht.perf.matching;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
@@ -62,7 +63,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
         private GraphGenerator<Integer, DefaultEdge, Integer> generator = null;
         private UndirectedGraph<Integer, DefaultEdge> graph;
 
-        abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver();
+        abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver(
+            Graph<Integer, DefaultEdge> graph);
 
         @Setup(Level.Iteration)
         public void setup()
@@ -90,7 +92,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         @Benchmark
         public void run()
         {
-            createSolver().getMatching(graph);
+            createSolver(graph).computeMatching();
         }
     }
 
@@ -98,9 +100,9 @@ public class PathGrowingWeightedMatchingPerformanceTest
         extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver()
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new PathGrowingWeightedMatching<>();
+            return new PathGrowingWeightedMatching<>(graph);
         }
     }
 
@@ -108,10 +110,10 @@ public class PathGrowingWeightedMatchingPerformanceTest
         extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver()
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
             final boolean useHeuristics = false;
-            return new PathGrowingWeightedMatching<>(useHeuristics);
+            return new PathGrowingWeightedMatching<>(graph, useHeuristics);
         }
     }
 
@@ -119,9 +121,9 @@ public class PathGrowingWeightedMatchingPerformanceTest
         extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver()
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new GreedyWeightedMatching<>();
+            return new GreedyWeightedMatching<>(graph);
         }
     }
 
@@ -129,9 +131,9 @@ public class PathGrowingWeightedMatchingPerformanceTest
         extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver()
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>();
+            return new EdmondsBlossomShrinking<>(graph);
         }
     }
 

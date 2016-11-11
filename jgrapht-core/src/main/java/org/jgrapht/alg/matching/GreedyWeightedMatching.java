@@ -63,40 +63,43 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
 public class GreedyWeightedMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
+    private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm. Floating
      * point values are compared using {@link #DEFAULT_EPSILON} tolerance.
+     * 
+     * @param graph the input graph
      */
-    public GreedyWeightedMatching()
+    public GreedyWeightedMatching(Graph<V, E> graph)
     {
-        this(DEFAULT_EPSILON);
+        this(graph, DEFAULT_EPSILON);
     }
 
     /**
      * Create and execute a new instance of the greedy maximum weight matching algorithm.
      * 
+     * @param graph the input graph
      * @param epsilon tolerance when comparing floating point values
      */
-    public GreedyWeightedMatching(double epsilon)
+    public GreedyWeightedMatching(Graph<V, E> graph, double epsilon)
     {
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
     /**
      * Get a matching that is a 1/2-approximation of the maximum weighted matching.
      * 
-     * @param graph the input graph
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching(Graph<V, E> graph)
+    public Matching<E> computeMatching()
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
-
         Pair<Double, Set<E>> result = run(graph);
         return new DefaultMatching<>(result.getSecond(), result.getFirst());
     }

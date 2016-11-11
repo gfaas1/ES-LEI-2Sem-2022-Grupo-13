@@ -34,13 +34,10 @@ public interface WeightedMatchingAlgorithm<V, E>
      * Returns weight of a matching found
      *
      * @return weight of a matching found
-     * @deprecated Use {@link #getMatching(org.jgrapht.Graph)} instead.
+     * @deprecated Use {@link #computeMatching()} instead.
      */
     @Deprecated
-    default double getMatchingWeight()
-    {
-        throw new UnsupportedOperationException("Deprecated");
-    }
+    double getMatchingWeight();
 }
 
 // End WeightedMatchingAlgorithm.java

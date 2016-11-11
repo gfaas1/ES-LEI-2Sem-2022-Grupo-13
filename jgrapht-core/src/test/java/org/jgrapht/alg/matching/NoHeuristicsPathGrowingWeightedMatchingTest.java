@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
@@ -38,9 +39,10 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 {
 
     @Override
-    public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm()
+    public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
+        Graph<Integer, DefaultWeightedEdge> graph)
     {
-        return new PathGrowingWeightedMatching<>(false);
+        return new PathGrowingWeightedMatching<>(graph, false);
     };
 
     @Override
@@ -66,8 +68,8 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 4, 5, 2.5);
         Graphs.addEdge(g, 5, 6, 5.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(5, m.getEdges().size());
         assertEquals(22.5, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -98,8 +100,8 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 3, 3, -100.0);
         Graphs.addEdge(g, 4, 4, 0.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(3, m.getEdges().size());
         assertEquals(3.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -124,8 +126,8 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 1.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
-            new PathGrowingWeightedMatching<>(false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+            new PathGrowingWeightedMatching<>(g, false);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         // maximum here is 4.0
         // path growing algorithm gets 3.0
@@ -162,8 +164,8 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 2.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
-            new PathGrowingWeightedMatching<>(false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+            new PathGrowingWeightedMatching<>(g, false);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0
@@ -200,8 +202,8 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 2.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
-            new PathGrowingWeightedMatching<>(false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+            new PathGrowingWeightedMatching<>(g, false);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0

@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.matching;
 
+import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
@@ -30,9 +31,10 @@ public class PathGrowingWeightedMatchingTest
 {
 
     @Override
-    public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm()
+    public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
+        Graph<Integer, DefaultWeightedEdge> graph)
     {
-        return new PathGrowingWeightedMatching<>();
+        return new PathGrowingWeightedMatching<>(graph);
     };
 
 }

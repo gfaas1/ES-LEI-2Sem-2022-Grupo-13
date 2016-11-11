@@ -36,22 +36,18 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
+    private UndirectedGraph<V, E> graph;
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
 
     /**
      * Construct an instance of the Edmonds blossom shrinking algorithm.
+     * 
+     * @param graph the input graph
+     * @throws IllegalArgumentException if the graph is not undirected
      */
-    public EdmondsBlossomShrinking()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Matching<E> getMatching(Graph<V, E> graph)
+    public EdmondsBlossomShrinking(Graph<V, E> graph)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
@@ -59,7 +55,16 @@ public class EdmondsBlossomShrinking<V, E>
         if (!(graph instanceof UndirectedGraph)) {
             throw new IllegalArgumentException("Only undirected graphs supported");
         }
-        Set<E> edges = findMatch(TypeUtil.uncheckedCast(graph, null));
+        this.graph = TypeUtil.uncheckedCast(graph, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
+        Set<E> edges = findMatch(graph);
         return new DefaultMatching<>(edges, edges.size());
     }
 

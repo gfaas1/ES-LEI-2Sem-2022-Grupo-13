@@ -142,7 +142,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
-    private static Matching<WeightedEdge> match(final double[][] costMatrix, final int partitionCardinality)
+    private static Matching<WeightedEdge> match(
+        final double[][] costMatrix, final int partitionCardinality)
     {
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);
         List<? extends V> second = secondPartition.subList(0, partitionCardinality);
@@ -155,8 +156,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         generator.generateGraph(target, null, null);
 
-        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>()
-            .getMatching(target, new LinkedHashSet<>(first), new LinkedHashSet<>(second));
+        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(
+            target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).computeMatching();
     }
 
     @Test
@@ -166,10 +167,10 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         Set<? extends V> emptyList = Collections.emptySet();
 
-        BipartiteMatchingAlgorithm<V, WeightedEdge> alg =
-            new KuhnMunkresMinimalWeightBipartitePerfectMatching<>();
+        MatchingAlgorithm<V, WeightedEdge> alg =
+            new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList);
 
-        Assert.assertTrue(alg.getMatching(graph, emptyList, emptyList).getEdges().isEmpty());
+        Assert.assertTrue(alg.computeMatching().getEdges().isEmpty());
     }
 
     @Test

@@ -29,8 +29,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.BipartiteMatchingAlgorithm;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * This class finds a maximum weight matching of a simple undirected weighted bipartite graph. The
@@ -45,11 +45,11 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
  * @author Graeme Ahokas
  */
 public class MaximumWeightBipartiteMatching<V, E>
-    implements BipartiteMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
-    private Graph<V, E> graph;
-    private Set<? extends V> partition1;
-    private Set<? extends V> partition2;
+    private UndirectedGraph<V, E> graph;
+    private Set<V> partition1;
+    private Set<V> partition2;
 
     private Map<V, Long> vertexWeights;
     private Map<V, Boolean> hasVertexBeenProcessed;
@@ -60,17 +60,13 @@ public class MaximumWeightBipartiteMatching<V, E>
     /**
      * Construct a new instance of the algorithm. Supported graphs are simple undirected weighted
      * bipartite with positive integer edge weights.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
+     * @throws IllegalArgumentException if the graph is not undirected
      */
-    public MaximumWeightBipartiteMatching()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Matching<E> getMatching(
-        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
+    public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
@@ -78,17 +74,29 @@ public class MaximumWeightBipartiteMatching<V, E>
         if (!(graph instanceof UndirectedGraph)) {
             throw new IllegalArgumentException("Only undirected graphs supported");
         }
+        this.graph = TypeUtil.uncheckedCast(graph, null);
+        if (partition1 == null) {
+            throw new IllegalArgumentException("Invalid partition provided");
+        }
+        this.partition1 = partition1;
+        if (partition2 == null) {
+            throw new IllegalArgumentException("Invalid partition provided");
+        }
+        this.partition2 = partition2;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Only simple graphs supported");
         }
         if (!GraphTests.isBipartitePartition(graph, partition1, partition2)) {
             throw new IllegalArgumentException("Graph partition is not bipartite");
         }
-
-        this.graph = graph;
-        this.partition1 = partition1;
-        this.partition2 = partition2;
-
         this.vertexWeights = new HashMap<>();
         this.hasVertexBeenProcessed = new HashMap<>();
         this.isEdgeMatched = new HashMap<>();

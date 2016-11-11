@@ -51,8 +51,8 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e34 = g.addEdge(v3, v4);
 
         // compute max match
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
-        Matching<DefaultEdge> match = matcher.getMatching(g);
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
+        Matching<DefaultEdge> match = matcher.computeMatching();
         assertEquals(2, match.getEdges().size());
         assertTrue(match.getEdges().contains(e12));
         assertTrue(match.getEdges().contains(e34));
@@ -77,9 +77,9 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e12 = g.addEdge(v1, v2);
         DefaultEdge e34 = g.addEdge(v3, v4);
 
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Matching<DefaultEdge> match = matcher.getMatching(g);
+        Matching<DefaultEdge> match = matcher.computeMatching();
 
         assertEquals(2, match.getEdges().size());
 
@@ -104,9 +104,9 @@ public final class EdmondsBlossomShrinkingTest
         DefaultEdge e910 = g.addEdge(vs[9], vs[10]);
         DefaultEdge e1112 = g.addEdge(vs[11], vs[12]);
 
-        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>();
+        EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Matching<DefaultEdge> match = matcher.getMatching(g);
+        Matching<DefaultEdge> match = matcher.computeMatching();
 
         assertEquals(6, match.getEdges().size());
 

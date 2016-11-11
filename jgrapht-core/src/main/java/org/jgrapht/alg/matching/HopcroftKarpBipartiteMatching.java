@@ -21,8 +21,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.util.*;
 
 /**
  * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
@@ -40,7 +39,7 @@ import org.jgrapht.util.TypeUtil;
  * @author Joris Kinable
  */
 public class HopcroftKarpBipartiteMatching<V, E>
-    implements BipartiteMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
     private UndirectedGraph<V, E> graph;
     private Set<? extends V> partition1; // Partitions of bipartite graph
@@ -54,14 +53,12 @@ public class HopcroftKarpBipartiteMatching<V, E>
     /**
      * Construct a new instance of the Hopcroft-Karp algorithm for the computation of maximum
      * matchings in bipartite graphs.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
      */
-    public HopcroftKarpBipartiteMatching()
-    {
-    }
-
-    @Override
-    public Matching<E> getMatching(
-        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
+    public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
@@ -69,10 +66,17 @@ public class HopcroftKarpBipartiteMatching<V, E>
         if (!(graph instanceof UndirectedGraph)) {
             throw new IllegalArgumentException("Only undirected graphs supported");
         }
-
         this.graph = TypeUtil.uncheckedCast(graph, null);
         this.partition1 = partition1;
         this.partition2 = partition2;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
         this.matching = new HashSet<>();
         this.unmatchedVertices1 = new HashSet<>(partition1);
         this.unmatchedVertices2 = new HashSet<>(partition2);

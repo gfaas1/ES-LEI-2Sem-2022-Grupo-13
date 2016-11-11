@@ -43,7 +43,8 @@ public abstract class ApproximateWeightedMatchingTest
     extends TestCase
 {
 
-    public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm();
+    public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
+        Graph<Integer, DefaultWeightedEdge> graph);
 
     public void testPath1()
     {
@@ -57,9 +58,9 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 3, 4, 1.0);
         Graphs.addEdge(g, 4, 5, 1.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
 
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
         assertEquals(3, m.getEdges().size());
         assertEquals(3.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
         assertTrue(m.getEdges().contains(g.getEdge(0, 1)));
@@ -80,8 +81,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 3, 4, 5.0);
         Graphs.addEdge(g, 4, 5, 1.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(2, m.getEdges().size());
         assertEquals(10.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -103,8 +104,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 3, 1, 0d);
         Graphs.addEdge(g, 0, 2, 0d);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(0, m.getEdges().size());
         assertEquals(0d, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -124,8 +125,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 3, 1, -1.0d);
         Graphs.addEdge(g, 0, 2, -1.0d);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(0, m.getEdges().size());
         assertEquals(0d, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -151,8 +152,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 9, 11, 1.0);
         Graphs.addEdge(g, 10, 12, 1.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertTrue(isMatching(g, m));
         assertTrue(m.getWeight() >= 2d);
@@ -181,8 +182,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 4, 5, 2.5);
         Graphs.addEdge(g, 5, 6, 5.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(7, m.getEdges().size());
         assertEquals(35.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -205,8 +206,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 6, 7, 1.0);
         Graphs.addEdge(g, 7, 4, 1.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(4.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -236,8 +237,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 3, 3, -100.0);
         Graphs.addEdge(g, 4, 4, 0.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(4.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -270,8 +271,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 6, 7, 2.0);
         Graphs.addEdge(g, 7, 4, 2.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         // greedy finds maximum here 8.0
         assertEquals(4, m.getEdges().size());
@@ -305,8 +306,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 6, 7, 2.0);
         Graphs.addEdge(g, 7, 4, 2.0);
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertEquals(4, m.getEdges().size());
         assertEquals(8.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -330,8 +331,8 @@ public abstract class ApproximateWeightedMatchingTest
         Graphs.addEdge(g, 7, 4, 1.0);
         Graphs.addAllVertices(g, Arrays.asList(8, 9, 10, 11));
 
-        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm();
-        Matching<DefaultWeightedEdge> m = mm.getMatching(g);
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<DefaultWeightedEdge> m = mm.computeMatching();
 
         assertTrue(m.getWeight() >= 2.0);
         assertTrue(isMatching(g, m));
@@ -360,8 +361,9 @@ public abstract class ApproximateWeightedMatchingTest
                 }
             }
 
-            MatchingAlgorithm<Integer, DefaultWeightedEdge> maxAlg = getApproximationAlgorithm();
-            Matching<DefaultWeightedEdge> matching = maxAlg.getMatching(graph);
+            MatchingAlgorithm<Integer, DefaultWeightedEdge> maxAlg =
+                getApproximationAlgorithm(graph);
+            Matching<DefaultWeightedEdge> matching = maxAlg.computeMatching();
             double weight = matching.getWeight();
 
             assertTrue(isMatching(graph, matching));
