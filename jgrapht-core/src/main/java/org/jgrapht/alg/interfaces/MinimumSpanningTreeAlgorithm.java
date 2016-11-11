@@ -19,27 +19,21 @@ package org.jgrapht.alg.interfaces;
 
 import java.util.Set;
 
-import org.jgrapht.Graph;
-
 /**
  * An algorithm which computes a <a href=http://en.wikipedia.org/wiki/Minimum_spanning_tree> minimum
  * spanning tree</a> of a given connected graph. In the case of disconnected graphs it would rather
  * derive a minimum spanning <i>forest</i>.
  *
- * @param <V> vertex the graph vertex type
  * @param <E> edge the graph edge type
  */
-public interface MinimumSpanningTreeAlgorithm<V, E>
+public interface MinimumSpanningTreeAlgorithm<E>
 {
-
     /**
      * Computes a minimum spanning tree.
      *
-     * @param graph the graph
      * @return a minimum spanning tree
-     * @throws IllegalArgumentException in case the graph type is not supported
      */
-    SpanningTree<E> getSpanningTree(Graph<V, E> graph);
+    SpanningTree<E> getSpanningTree();
 
     /**
      * A spanning tree.
@@ -48,7 +42,6 @@ public interface MinimumSpanningTreeAlgorithm<V, E>
      */
     interface SpanningTree<E>
     {
-
         /**
          * Returns the weight of the spanning tree.
          * 

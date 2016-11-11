@@ -19,27 +19,22 @@ package org.jgrapht.alg.interfaces;
 
 import java.util.Set;
 
-import org.jgrapht.Graph;
-
 /**
  * An algorithm which computes a
  * <a href="https://en.wikipedia.org/wiki/Glossary_of_graph_theory#spanner">graph spanner</a> of a
  * given graph.
  *
- * @param <V> vertex the graph vertex type
  * @param <E> edge the graph edge type
  */
-public interface SpannerAlgorithm<V, E>
+public interface SpannerAlgorithm<E>
 {
 
     /**
      * Computes a graph spanner.
      *
-     * @param graph the graph
      * @return a graph spanner
-     * @throws IllegalArgumentException in case the graph type is not supported
      */
-    Spanner<E> getSpanner(Graph<V, E> graph);
+    Spanner<E> getSpanner();
 
     /**
      * A graph spanner.

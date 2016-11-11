@@ -55,18 +55,21 @@ import org.jgrapht.util.*;
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpanner<V, E>
-    implements SpannerAlgorithm<V, E>
+    implements SpannerAlgorithm<E>
 {
+    private final UndirectedGraph<V, E> graph;
     private final int k;
     private static final int MAX_K = 1 << 29;
 
     /**
-     * Constructs instance to compute a (2k-1)-spanner of a graph.
+     * Constructs instance to compute a (2k-1)-spanner of an undirected graph.
      * 
+     * @param graph an undirected graph
      * @param k positive integer.
      */
-    public GreedyMultiplicativeSpanner(int k)
+    public GreedyMultiplicativeSpanner(UndirectedGraph<V, E> graph, int k)
     {
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         if (k <= 0) {
             throw new IllegalArgumentException(
                 "k should be positive in (2k-1)-spanner construction");
@@ -75,32 +78,18 @@ public class GreedyMultiplicativeSpanner<V, E>
     }
 
     @Override
-    public Spanner<E> getSpanner(Graph<V, E> graph)
+    public Spanner<E> getSpanner()
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null");
-        }
-        if (!(graph instanceof UndirectedGraph)) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
-        UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
         if (graph instanceof WeightedGraph) {
-            return new WeightedSpannerAlgorithm(ug).run();
+            return new WeightedSpannerAlgorithm().run();
         } else {
-            return new UnweightedSpannerAlgorithm(ug).run();
+            return new UnweightedSpannerAlgorithm().run();
         }
     }
 
     // base algorithm implementation
     private abstract class SpannerAlgorithmBase
     {
-        private UndirectedGraph<V, E> graph;
-
-        public SpannerAlgorithmBase(UndirectedGraph<V, E> graph)
-        {
-            this.graph = graph;
-        }
-
         public abstract boolean isSpannerReachable(V s, V t, double distance);
 
         public abstract void addSpannerEdge(V s, V t, double weight);
@@ -149,9 +138,8 @@ public class GreedyMultiplicativeSpanner<V, E>
         protected Deque<V> queue;
         protected Deque<V> touchedVertices;
 
-        public UnweightedSpannerAlgorithm(UndirectedGraph<V, E> graph)
+        public UnweightedSpannerAlgorithm()
         {
-            super(graph);
             spanner = new SimpleGraph<V, E>(graph.getEdgeFactory());
             touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
@@ -223,9 +211,8 @@ public class GreedyMultiplicativeSpanner<V, E>
         protected FibonacciHeap<V> heap;
         protected Map<V, FibonacciHeapNode<V>> nodes;
 
-        public WeightedSpannerAlgorithm(UndirectedGraph<V, E> graph)
+        public WeightedSpannerAlgorithm()
         {
-            super(graph);
             this.spanner = new SimpleWeightedGraph<V, E>(graph.getEdgeFactory());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);

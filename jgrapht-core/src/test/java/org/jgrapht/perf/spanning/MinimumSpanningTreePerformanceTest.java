@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
@@ -58,7 +59,8 @@ public class MinimumSpanningTreePerformanceTest
         protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator = null;
         protected DirectedGraph<Integer, DefaultWeightedEdge> graph;
 
-        abstract MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> createSolver();
+        abstract MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph);
 
         public void setup()
         {
@@ -81,8 +83,8 @@ public class MinimumSpanningTreePerformanceTest
 
         public void run()
         {
-            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> algo = createSolver();
-            algo.getSpanningTree(graph);
+            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(graph);
+            algo.getSpanningTree();
         }
     }
 
@@ -90,9 +92,10 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> createSolver()
+        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
         {
-            return new PrimMinimumSpanningTree<>();
+            return new PrimMinimumSpanningTree<>(graph);
         }
 
         @Override
@@ -106,9 +109,10 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> createSolver()
+        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
         {
-            return new KruskalMinimumSpanningTree<>();
+            return new KruskalMinimumSpanningTree<>(graph);
         }
 
         @Override
@@ -122,9 +126,10 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> createSolver()
+        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> graph)
         {
-            return new BoruvkaMinimumSpanningTree<>();
+            return new BoruvkaMinimumSpanningTree<>(graph);
         }
 
         @Override

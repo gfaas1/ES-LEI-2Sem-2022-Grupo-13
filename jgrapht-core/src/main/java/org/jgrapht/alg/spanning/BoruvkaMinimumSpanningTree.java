@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.jgrapht.Graph;
@@ -50,22 +51,27 @@ import org.jgrapht.alg.util.UnionFind;
  * @since November 2016
  */
 public class BoruvkaMinimumSpanningTree<V, E>
-    implements MinimumSpanningTreeAlgorithm<V, E>
+    implements MinimumSpanningTreeAlgorithm<E>
 {
-    private Comparator<Double> comparator = new ToleranceDoubleComparator();
+    private final Graph<V, E> graph;
+    private final Comparator<Double> comparator;
 
     /**
      * Construct a new instance of the algorithm.
+     * 
+     * @param graph the input graph
      */
-    public BoruvkaMinimumSpanningTree()
+    public BoruvkaMinimumSpanningTree(Graph<V, E> graph)
     {
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.comparator = new ToleranceDoubleComparator();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SpanningTree<E> getSpanningTree(Graph<V, E> graph)
+    public SpanningTree<E> getSpanningTree()
     {
         // create result placeholder
         Set<E> mstEdges = new LinkedHashSet<>();

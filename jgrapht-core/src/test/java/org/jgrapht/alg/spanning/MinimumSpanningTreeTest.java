@@ -64,39 +64,39 @@ public class MinimumSpanningTreeTest
     {
 
         testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
-                createSimpleConnectedWeightedGraph()),
+            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleConnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, DE), 15.0);
 
         testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>()
-                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
+            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
     public void testPrim()
     {
         testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
-                createSimpleConnectedWeightedGraph()),
+            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleConnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, DE), 15.0);
 
         testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>()
-                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
+            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
     public void testBoruvska()
     {
         testMinimumSpanningTreeBuilding(
-            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>().getSpanningTree(
-                createSimpleConnectedWeightedGraph()),
+            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleConnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, DE), 15.0);
 
         testMinimumSpanningTreeBuilding(
-            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>()
-                .getSpanningTree(createSimpleDisconnectedWeightedGraph()),
+            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>(
+                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
@@ -120,15 +120,15 @@ public class MinimumSpanningTreeTest
                 g.setEdgeWeight(e, rng.nextDouble());
             }
 
-            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg1 =
-                new BoruvkaMinimumSpanningTree<>();
-            SpanningTree<DefaultWeightedEdge> tree1 = alg1.getSpanningTree(g);
-            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg2 =
-                new KruskalMinimumSpanningTree<>();
-            SpanningTree<DefaultWeightedEdge> tree2 = alg2.getSpanningTree(g);
-            MinimumSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> alg3 =
-                new PrimMinimumSpanningTree<>();
-            SpanningTree<DefaultWeightedEdge> tree3 = alg3.getSpanningTree(g);
+            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg1 =
+                new BoruvkaMinimumSpanningTree<>(g);
+            SpanningTree<DefaultWeightedEdge> tree1 = alg1.getSpanningTree();
+            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg2 =
+                new KruskalMinimumSpanningTree<>(g);
+            SpanningTree<DefaultWeightedEdge> tree2 = alg2.getSpanningTree();
+            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg3 =
+                new PrimMinimumSpanningTree<>(g);
+            SpanningTree<DefaultWeightedEdge> tree3 = alg3.getSpanningTree();
 
             assertEquals(tree1.getWeight(), tree2.getWeight(), 1e-9);
             assertEquals(tree2.getWeight(), tree3.getWeight(), 1e-9);

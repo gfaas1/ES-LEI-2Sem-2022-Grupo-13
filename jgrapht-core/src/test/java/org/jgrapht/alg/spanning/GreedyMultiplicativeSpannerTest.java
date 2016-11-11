@@ -155,7 +155,7 @@ public class GreedyMultiplicativeSpannerTest
 
     private <V, E> void runTest(UndirectedGraph<V, E> g, int k, Set<E> correct)
     {
-        Set<E> result = new GreedyMultiplicativeSpanner<V, E>(k).getSpanner(g).getEdges();
+        Set<E> result = new GreedyMultiplicativeSpanner<V, E>(g, k).getSpanner().getEdges();
 
         assertEquals(correct.size(), result.size());
         for (E e : correct) {
@@ -368,7 +368,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V2, V0), 1.0);
 
         try {
-            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(2).getSpanner(g);
+            new GreedyMultiplicativeSpanner<String, DefaultWeightedEdge>(g, 2).getSpanner();
             fail("Negative edge weights not permitted.");
         } catch (IllegalArgumentException e) {
         }

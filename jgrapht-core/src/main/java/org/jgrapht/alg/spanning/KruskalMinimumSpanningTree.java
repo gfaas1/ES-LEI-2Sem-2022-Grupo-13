@@ -36,20 +36,25 @@ import org.jgrapht.alg.util.*;
  * @since Feb 10, 2010
  */
 public class KruskalMinimumSpanningTree<V, E>
-    implements MinimumSpanningTreeAlgorithm<V, E>
+    implements MinimumSpanningTreeAlgorithm<E>
 {
+    private final Graph<V, E> graph;
+
     /**
      * Construct a new instance of the algorithm.
+     * 
+     * @param graph the input graph
      */
-    public KruskalMinimumSpanningTree()
+    public KruskalMinimumSpanningTree(Graph<V, E> graph)
     {
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SpanningTree<E> getSpanningTree(Graph<V, E> graph)
+    public SpanningTree<E> getSpanningTree()
     {
         UnionFind<V> forest = new UnionFind<>(graph.vertexSet());
         ArrayList<E> allEdges = new ArrayList<>(graph.edgeSet());
