@@ -1,90 +1,117 @@
+/*
+ * (C) Copyright 2016-2016, by Joris Kinable and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.*;
 
 /**
- * Implementation of the Gomory Hu minimum cut tree algorithm defined
- * originally by Gomory and Hu in 1961, and revised for simplicity by
- * Gusfield.  The article builds on computing O(n) max flows. The algorithm
- * may compute more than cut tree for the same flow network.
+ * This class computes an Equivalent Flow Tree (EFT) using the algorithm proposed by Dan Gusfield. EFTs can be used to
+ * efficiently calculate the maximum flow for all pairs of vertices. The algorithm is described in:
+ * <i>Gusfiel, D, Very simple methods for all pairs network flow analysis. SIAM Journal on Computing, 19(1), p142-155, 1990</i><br>
+ * In an undirected graph, there exist n(n-1)/2 different vertex pairs. This class computes the maximum flow between each of these
+ * pairs efficiently by performing exactly (n-1) minimum s-t cut computations. If your application needs fewer than (n-1) flow values,
+ * consider computing the maximum flows manually through {@link MaximumFlowAlgorithm}.
  *
- * @article{gomory1961multi,
- *   title={Multi-terminal network flows},
- *   author={Gomory, Ralph E and Hu, Tien Chung},
- *   journal={Journal of the Society for Industrial \& Applied Mathematics},
- *   volume={9},
- *   number={4},
- *   pages={551--570},
- *   year={1961},
- *   publisher={SIAM}
- * }
  *
- * @article{gusfield1990very,
- *   title={Very simple methods for all pairs network flow analysis},
- *   author={Gusfield, Dan},
- *   journal={SIAM Journal on Computing},
- *   volume={19},
- *   number={1},
- *   pages={143--155},
- *   year={1990},
- *   publisher={SIAM}
- * }
+ * <p>The runtime complexity of this class is O((V-1)Q), where Q is the runtime complexity of the algorithm used to compute
+ * s-t cuts in the graph. By default, this class uses the {@link PushRelabelMFImpl} implementation to calculate minimum s-t cuts.
+ * This class has a runtime complexity of O(V^3), resulting in a O(V^4) runtime complexity for the overal algorithm.
+ *
+ *
+ * <p>Note: this class performs calculations in a lazy manner. The EFT is not calculated until the first invocation of
+ * {@link GusfieldEquivalentFlowTree#calculateMaximumFlow(Object, Object)} or {@link GusfieldEquivalentFlowTree#getEquivalentFlowTree()}.
+ * Moreover, this class <em>only</em> calculates the value of the maximum flow between a source-destination pair; it does not calculate
+ * the corresponding flow per edge. If you need to know the exact flow through an edge, use one of the alternative {@link MaximumFlowAlgorithm} implementations.
+ *
+ * <p>Warning: EFTs do not allow you to calculate minimum cuts for all pairs of vertex! For that, Gomory-Hu cut trees are required! Use the {@link GusfieldGomoryHuCutTree} implementation instead.
+ *
+ * <p>This class does not support changes to the graph. Results of this class are undefined when the graph is changes after constructing an instance of this class.
  *
  * @author Joris Kinable
  * @since January 2016
  */
 public class GusfieldEquivalentFlowTree<V,E> implements MaximumFlowAlgorithm<V,E>{
 
-    private final Graph<V, E> network;
+    /* Number of vertices in the graph */
     private final int N;
-//    /* Used to compare floating point values */
-//    private final Comparator<Double> comparator;
+    /* Algorithm used to computed the Maximum s-t flows */
     private final MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm;
 
     /* Data structures for computations */
     private List<V> vertexList=new ArrayList<>();
     private Map<V, Integer> indexMap=new HashMap<>();
-    private int[] p;
+    private int[] p; //See vector p in the paper description
+    private int[] neighbors;
 
-    /* Results */
+    /* Matrix containing the flow values for every s-t pair */
     private double[][] flowMatrix=null;
-
 
     private V lastInvokedSource=null;
     private V lastInvokedTarget=null;
 
+    /**
+     * Constructs a new GusfieldEquivalentFlowTree instance.
+     * @param network input graph
+     */
     public GusfieldEquivalentFlowTree(SimpleWeightedGraph<V, E> network) {
         this(network, MaximumFlowAlgorithmBase.DEFAULT_EPSILON);
     }
 
+    /**
+     * Constructs a new GusfieldEquivalentFlowTree instance.
+     * @param network input graph
+     * @param epsilon precision
+     */
     public GusfieldEquivalentFlowTree(SimpleWeightedGraph<V, E> network, double epsilon) {
-        this(network, new PushRelabelMFImpl(network, epsilon));
+        this(network, new PushRelabelMFImpl<>(network, epsilon));
     }
 
+    /**
+     * Constructs a new GusfieldEquivalentFlowTree instance.
+     * @param network input graph
+     * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
+     */
     public GusfieldEquivalentFlowTree(SimpleWeightedGraph<V, E> network, MinimumSTCutAlgorithm<V,E> minimumSTCutAlgorithm) {
-        this.network = network;
         this.N=network.vertexSet().size();
-//        this.comparator = new ToleranceDoubleComparator(epsilon);
         this.minimumSTCutAlgorithm=minimumSTCutAlgorithm;
         vertexList.addAll(network.vertexSet());
         for(int i=0; i<vertexList.size(); i++)
             indexMap.put(vertexList.get(i), i);
     }
 
+    /**
+     * Runs the algorithm
+     */
     private void calculateEquivalentFlowTree(){
         flowMatrix=new double[N][N];
         p=new int[N];
+        System.out.println("Init p: "+Arrays.toString(p));
+        neighbors=new int[N];
 
         for(int s=1; s<N; s++){
             int t=p[s];
+            neighbors[s]=t;
             double flowValue=minimumSTCutAlgorithm.calculateMinCut(vertexList.get(s),vertexList.get(t));
             Set<V> sourcePartition=minimumSTCutAlgorithm.getSourcePartition(); //Set X in the paper
             for(int i=s; i<N; i++)
@@ -93,63 +120,118 @@ public class GusfieldEquivalentFlowTree<V,E> implements MaximumFlowAlgorithm<V,E
 
             //populate the flow matrix
             flowMatrix[s][t]=flowMatrix[t][s]=flowValue;
+            System.out.println("Calculated flow between: "+s+"-"+t);
             for(int i=0; i<s; i++)
                 if(i != t)
                     flowMatrix[s][i]=flowMatrix[i][s]=Math.min(flowMatrix[s][t], flowMatrix[t][i]);
         }
+        System.out.println("Final p: "+Arrays.toString(p));
     }
 
+    /**
+     * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not necessary unique.
+     * @return Equivalent Flow Tree
+     */
     private SimpleWeightedGraph<V,DefaultWeightedEdge> getEquivalentFlowTree(){
         if(p==null) //Lazy invocation of the algorithm
             this.calculateEquivalentFlowTree();
         SimpleWeightedGraph<V, DefaultWeightedEdge> equivalentFlowTree=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(equivalentFlowTree, vertexList);
-        for(int i=1; i<p.length; i++){
-            DefaultWeightedEdge e=equivalentFlowTree.addEdge(vertexList.get(i), vertexList.get(p[i]));
-            equivalentFlowTree.setEdgeWeight(e, flowMatrix[i][p[i]]);
+        System.out.println("p: "+Arrays.toString(p));
+        for(int i=1; i<N; i++){
+            DefaultWeightedEdge e=equivalentFlowTree.addEdge(vertexList.get(i), vertexList.get(neighbors[i]));
+            equivalentFlowTree.setEdgeWeight(e, flowMatrix[i][neighbors[i]]);
         }
         return equivalentFlowTree;
     }
 
+    /**
+     * Unsupported operation
+     * @param source source of the flow inside the network
+     * @param sink sink of the flow inside the network
+     *
+     * @return nothing
+     */
     @Override
     public MaximumFlow<E> getMaximumFlow(V source, V sink) {
         throw new UnsupportedOperationException("Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
+    /**
+     * Returns the Maximum flow between source and sink. The algorithm is only executed once; successive invocations of this method will return in O(1) time.
+     * @param source source vertex
+     * @param sink sink vertex
+     * @return the Maximum flow between source and sink.
+     */
     @Override
     public double calculateMaximumFlow(V source, V sink) {
+        assert indexMap.containsKey(source) && indexMap.containsKey(sink);
+        if(!(indexMap.containsKey(source) && indexMap.containsKey(sink)))
+            throw new RuntimeException("cannot find: source: "+indexMap.containsKey(source)+" sink: "+indexMap.containsKey(sink));
+
         if(p==null) //Lazy invocation of the algorithm
             this.calculateEquivalentFlowTree();
         return flowMatrix[indexMap.get(source)][indexMap.get(sink)];
     }
 
+    /**
+     * Returns maximum flow value, that was calculated during last <tt>
+     * calculateMaximumFlow</tt> call.
+     * @return maximum flow value
+     */
     @Override
     public double getMaximumFlowValue() {
         return calculateMaximumFlow(lastInvokedSource, lastInvokedTarget);
     }
 
+    /**
+     * Unsupported operation
+     * @return nothing
+     */
     @Override
     public Map<E, Double> getFlowMap() {
         throw new UnsupportedOperationException("Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
+    /**
+     * Unsupported operation
+     * @param e edge
+     * @return nothing
+     */
     @Override
     public V getFlowDirection(E e) {
         throw new UnsupportedOperationException("Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
     public static void main(String[] args){
+//        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+//        Graphs.addAllVertices(network, Arrays.asList(0,1,2));
+//        Graphs.addEdge(network, 0, 1, 3);
+//        Graphs.addEdge(network, 1, 2, 4);
+//        Graphs.addEdge(network, 0, 2, 7);
+//        GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge> gusfieldEquivalentFlowTree=new GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge>(network);
+//        for(Integer v1 : network.vertexSet()){
+//            for(Integer v2 : network.vertexSet()){
+//                if(v1==v2) continue;
+//                System.out.println("Max flow "+v1+"-"+v2+": "+gusfieldEquivalentFlowTree.calculateMaximumFlow(v1, v2));
+//            }
+//        }
+
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(0,1,2));
-        network.addEdge(0,1);
-        network.addEdge(1,2);
-        network.addEdge(2,0);
+        Graphs.addAllVertices(network, Arrays.asList(1,2,3,4,5,6));
+        Graphs.addEdge(network, 1, 2, 1);
+        Graphs.addEdge(network, 3, 4, 1);
+        Graphs.addEdge(network, 5, 6, 1);
+        Graphs.addEdge(network, 5, 1, 1);
+        Graphs.addEdge(network, 1, 3, 1);
+        Graphs.addEdge(network, 6, 2, 1);
+        Graphs.addEdge(network, 2, 4, 1);
         GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge> gusfieldEquivalentFlowTree=new GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge>(network);
-        for(Integer v1 : network.vertexSet()){
-            for(Integer v2 : network.vertexSet()){
-                if(v1==v2) continue;
-                System.out.println("Max flow "+v1+"-"+v2+": "+gusfieldEquivalentFlowTree.getMaximumFlow(v1, v2));
+        for(int i=1; i<6; i++){
+            for(int j=i+1; j<7; j++){
+                System.out.println("Max flow "+i+"-"+j+": "+gusfieldEquivalentFlowTree.calculateMaximumFlow(i, j));
             }
         }
+        System.out.println("EquivalentFlowTree: "+gusfieldEquivalentFlowTree.getEquivalentFlowTree());
     }
 }
