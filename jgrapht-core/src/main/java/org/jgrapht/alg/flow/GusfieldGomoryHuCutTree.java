@@ -51,6 +51,9 @@ import java.util.*;
  *
  * <p>This class does not support changes to the underlying graph. The behavior of this class is undefined when the graph is modified after instantiating this class.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
  * @author Joris Kinable
  */
 public class GusfieldGomoryHuCutTree<V,E> implements MaximumFlowAlgorithm<V,E>, MinimumSTCutAlgorithm<V,E>{
