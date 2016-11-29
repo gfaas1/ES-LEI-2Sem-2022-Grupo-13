@@ -32,36 +32,49 @@ import java.util.List;
  *
  * @author Joris Kinable
  */
-public class GusfieldEquivalentFlowTreeTest extends GusfieldTreeAlgorithmsTestBase{
+public class GusfieldEquivalentFlowTreeTest
+    extends GusfieldTreeAlgorithmsTestBase
+{
     @Override
-    public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network) {
-        GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge> alg=new GusfieldEquivalentFlowTree<>(network);
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> equivalentFlowTree=alg.getEquivalentFlowTree();
+    public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network)
+    {
+        GusfieldEquivalentFlowTree<Integer, DefaultWeightedEdge> alg =
+            new GusfieldEquivalentFlowTree<>(network);
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> equivalentFlowTree =
+            alg.getEquivalentFlowTree();
 
-        //Verify that the Equivalent Flow tree is an actual tree
+        // Verify that the Equivalent Flow tree is an actual tree
         assertTrue(GraphTests.isTree(equivalentFlowTree));
 
-        //Find the minimum cut in the graph
-        StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg=new StoerWagnerMinimumCut<>(network);
-        double expectedMinimumCut= minimumCutAlg.minCutWeight();
-        double cheapestEdge= equivalentFlowTree.edgeSet().stream().mapToDouble(equivalentFlowTree::getEdgeWeight).min().getAsDouble();
+        // Find the minimum cut in the graph
+        StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg =
+            new StoerWagnerMinimumCut<>(network);
+        double expectedMinimumCut = minimumCutAlg.minCutWeight();
+        double cheapestEdge = equivalentFlowTree
+            .edgeSet().stream().mapToDouble(equivalentFlowTree::getEdgeWeight).min().getAsDouble();
         assertEquals(expectedMinimumCut, cheapestEdge);
 
-        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm=new PushRelabelMFImpl<>(network);
-        for(Integer i : network.vertexSet()){
-            for(Integer j : network.vertexSet()){
-                if(j <= i) continue;
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
+            new PushRelabelMFImpl<>(network);
+        for (Integer i : network.vertexSet()) {
+            for (Integer j : network.vertexSet()) {
+                if (j <= i)
+                    continue;
 
-                //Check cut weights
-                double expectedCutWeight=minimumSTCutAlgorithm.calculateMinCut(i, j);
+                // Check cut weights
+                double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
                 assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j));
                 assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i));
                 assertEquals(expectedCutWeight, alg.getMaximumFlowValue());
 
-                //Verify the correctness of the tree
-                //The cost of the cheapest edge in the path from i to j must equal the weight of an i-j cut
-                List<DefaultWeightedEdge> pathEdges= DijkstraShortestPath.findPathBetween(equivalentFlowTree, i, j);
-                DefaultWeightedEdge cheapestEdgeInPath=pathEdges.stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight)).orElseThrow(()->new RuntimeException("path is empty?!"));
+                // Verify the correctness of the tree
+                // The cost of the cheapest edge in the path from i to j must equal the weight of an
+                // i-j cut
+                List<DefaultWeightedEdge> pathEdges =
+                    DijkstraShortestPath.findPathBetween(equivalentFlowTree, i, j);
+                DefaultWeightedEdge cheapestEdgeInPath = pathEdges
+                    .stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight))
+                    .orElseThrow(() -> new RuntimeException("path is empty?!"));
                 assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath));
             }
         }

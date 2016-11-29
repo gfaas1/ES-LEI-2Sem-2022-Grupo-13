@@ -32,17 +32,22 @@ import java.util.Random;
  *
  * @author Joris Kinable
  */
-public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
+public abstract class GusfieldTreeAlgorithmsTestBase
+    extends TestCase
+{
 
-    public abstract void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network);
+    public abstract void validateAlgorithm(
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network);
 
     /**
-     * Triangle graph example from the paper <it>Very simple methods for all pairs network flow analysis</it>
-     * by Dan gusfield (Figure 1)
+     * Triangle graph example from the paper <it>Very simple methods for all pairs network flow
+     * analysis</it> by Dan gusfield (Figure 1)
      */
-    public void testTriangleGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(0,1,2));
+    public void testTriangleGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2));
         Graphs.addEdge(network, 0, 1, 3);
         Graphs.addEdge(network, 1, 2, 4);
         Graphs.addEdge(network, 0, 2, 7);
@@ -50,12 +55,14 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
     }
 
     /**
-     * Square graph example from the paper <it>Very simple methods for all pairs network flow analysis</it>
-     * by Dan gusfield (Figure 2)
+     * Square graph example from the paper <it>Very simple methods for all pairs network flow
+     * analysis</it> by Dan gusfield (Figure 2)
      */
-    public void testSquareGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(1,2,3,4,5,6));
+    public void testSquareGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(1, 2, 3, 4, 5, 6));
         Graphs.addEdge(network, 1, 2, 1);
         Graphs.addEdge(network, 3, 4, 1);
         Graphs.addEdge(network, 5, 6, 1);
@@ -67,12 +74,13 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
     }
 
     /**
-     * Graph example from the paper <it>Multi-Terminal Network Flows</it>
-     * by Gomory, R. and Hu, T.
+     * Graph example from the paper <it>Multi-Terminal Network Flows</it> by Gomory, R. and Hu, T.
      */
-    public void testGomoryHuExampleGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(1,2,3,4,5,6));
+    public void testGomoryHuExampleGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(1, 2, 3, 4, 5, 6));
         Graphs.addEdge(network, 1, 2, 10);
         Graphs.addEdge(network, 1, 6, 8);
         Graphs.addEdge(network, 2, 6, 3);
@@ -87,8 +95,10 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
         validateAlgorithm(network);
     }
 
-    public void testGraphWithNoEdges(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testGraphWithNoEdges()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(network, Arrays.asList(1, 2));
         validateAlgorithm(network);
     }
@@ -96,10 +106,12 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
     /**
      * Some graph taken from the wikipedia article about Gomory-Hu trees
      */
-    public void testWikipediaGraph(){
-        //Example wikipedia
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(0,1,2,3,4,5));
+    public void testWikipediaGraph()
+    {
+        // Example wikipedia
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2, 3, 4, 5));
         Graphs.addEdge(network, 0, 1, 1);
         Graphs.addEdge(network, 0, 2, 7);
         Graphs.addEdge(network, 1, 2, 1);
@@ -115,9 +127,11 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
     /**
      * Test disconnected graph
      */
-    public void testDisconnectedGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(0,1,2,3,4));
+    public void testDisconnectedGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2, 3, 4));
         Graphs.addEdge(network, 0, 1, 3);
         Graphs.addEdge(network, 1, 2, 4);
         Graphs.addEdge(network, 0, 2, 7);
@@ -125,15 +139,18 @@ public abstract class GusfieldTreeAlgorithmsTestBase extends TestCase {
         validateAlgorithm(network);
     }
 
-    public void testRandomGraphs(){
-        Random rand=new Random(0);
-        for(int i=0; i<10; i++){
-            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-            int vertices=rand.nextInt((20 - 10) + 1) + 10; //10-20 vertices
-            double p=0.01*(rand.nextInt((85 - 50) + 1) + 50); //p=[0.5;0.85]
-            GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen=new GnpRandomGraphGenerator<>(vertices, p);
+    public void testRandomGraphs()
+    {
+        Random rand = new Random(0);
+        for (int i = 0; i < 10; i++) {
+            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            int vertices = rand.nextInt((20 - 10) + 1) + 10; // 10-20 vertices
+            double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
+            GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =
+                new GnpRandomGraphGenerator<>(vertices, p);
             graphGen.generateGraph(randomGraph, new IntegerVertexFactory(0), null);
-            for(DefaultWeightedEdge edge : randomGraph.edgeSet())
+            for (DefaultWeightedEdge edge : randomGraph.edgeSet())
                 randomGraph.setEdgeWeight(edge, rand.nextInt(150));
             validateAlgorithm(randomGraph);
         }

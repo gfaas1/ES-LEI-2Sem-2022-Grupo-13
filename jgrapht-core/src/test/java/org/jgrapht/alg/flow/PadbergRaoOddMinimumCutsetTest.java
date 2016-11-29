@@ -33,54 +33,77 @@ import java.util.stream.Collectors;
  *
  * @author Joris Kinable
  */
-public class PadbergRaoOddMinimumCutsetTest extends TestCase{
+public class PadbergRaoOddMinimumCutsetTest
+    extends TestCase
+{
 
-    private void runTest(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network, Set<Integer> oddVertices, boolean useTreeCompression){
-        PadbergRaoOddMinimumCutset<Integer, DefaultWeightedEdge> padbergRaoOddMinimumCutset =new PadbergRaoOddMinimumCutset<>(network);
-        double cutValue= padbergRaoOddMinimumCutset.calculateMinCut(oddVertices, useTreeCompression);
-        Set<Integer> sourcePartition= padbergRaoOddMinimumCutset.getSourcePartition();
-        Set<Integer> sinkPartition= padbergRaoOddMinimumCutset.getSinkPartition();
-        Set<DefaultWeightedEdge> cutEdges= padbergRaoOddMinimumCutset.getCutEdges();
+    private void runTest(
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network, Set<Integer> oddVertices,
+        boolean useTreeCompression)
+    {
+        PadbergRaoOddMinimumCutset<Integer, DefaultWeightedEdge> padbergRaoOddMinimumCutset =
+            new PadbergRaoOddMinimumCutset<>(network);
+        double cutValue =
+            padbergRaoOddMinimumCutset.calculateMinCut(oddVertices, useTreeCompression);
+        Set<Integer> sourcePartition = padbergRaoOddMinimumCutset.getSourcePartition();
+        Set<Integer> sinkPartition = padbergRaoOddMinimumCutset.getSinkPartition();
+        Set<DefaultWeightedEdge> cutEdges = padbergRaoOddMinimumCutset.getCutEdges();
 
-        Set<Integer> intersection=new HashSet<>(sourcePartition);
+        Set<Integer> intersection = new HashSet<>(sourcePartition);
         intersection.retainAll(sinkPartition);
         assertTrue(intersection.isEmpty());
-        Set<Integer> union=new HashSet<>(sourcePartition);
+        Set<Integer> union = new HashSet<>(sourcePartition);
         union.addAll(sinkPartition);
         assertEquals(network.vertexSet(), union);
 
         assertTrue(PadbergRaoOddMinimumCutset.isOddSet(sourcePartition, oddVertices));
         assertTrue(PadbergRaoOddMinimumCutset.isOddSet(sinkPartition, oddVertices));
 
-        Set<DefaultWeightedEdge> expectedCutEdges=network.edgeSet().stream().filter(e -> sourcePartition.contains(network.getEdgeSource(e)) ^ sourcePartition.contains(network.getEdgeTarget(e))).collect(Collectors.toSet());
+        Set<DefaultWeightedEdge> expectedCutEdges = network
+            .edgeSet().stream()
+            .filter(
+                e -> sourcePartition.contains(network.getEdgeSource(e))
+                    ^ sourcePartition.contains(network.getEdgeTarget(e)))
+            .collect(Collectors.toSet());
         assertEquals(expectedCutEdges, cutEdges);
-        double expectedWeight=cutEdges.stream().mapToDouble(network::getEdgeWeight).sum();
+        double expectedWeight = cutEdges.stream().mapToDouble(network::getEdgeWeight).sum();
         assertEquals(expectedWeight, cutValue);
 
-        //Verify whether the returned odd cut-set is indeed of minimum weight. To verify this, we exhaustively iterate over all possible cutsets.
-        GusfieldGomoryHuCutTree<Integer, DefaultWeightedEdge> gusfieldGomoryHuCutTreeAlgorithm=new GusfieldGomoryHuCutTree<>(network);
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuCutTree=gusfieldGomoryHuCutTreeAlgorithm.getGomoryHuTree();
-        Set<DefaultWeightedEdge> edges=new LinkedHashSet<>(gomoryHuCutTree.edgeSet());
-        boolean foundBest=false; //Just to make sure that our brute-force approach is exhaustive
-        for(DefaultWeightedEdge edge : edges){
-            Integer source=gomoryHuCutTree.getEdgeSource(edge);
-            Integer target=gomoryHuCutTree.getEdgeTarget(edge);
-            double edgeWeight=gomoryHuCutTree.getEdgeWeight(edge);
-            gomoryHuCutTree.removeEdge(edge); //Temporarily remove edge
-            Set<Integer> partition=new ConnectivityInspector<>(gomoryHuCutTree).connectedSetOf(source);
-            if(PadbergRaoOddMinimumCutset.isOddSet(partition, oddVertices)) { //If the source partition forms an odd cutset, check whether the cut isn't better than the one we already found.
+        // Verify whether the returned odd cut-set is indeed of minimum weight. To verify this, we
+        // exhaustively iterate over all possible cutsets.
+        GusfieldGomoryHuCutTree<Integer, DefaultWeightedEdge> gusfieldGomoryHuCutTreeAlgorithm =
+            new GusfieldGomoryHuCutTree<>(network);
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuCutTree =
+            gusfieldGomoryHuCutTreeAlgorithm.getGomoryHuTree();
+        Set<DefaultWeightedEdge> edges = new LinkedHashSet<>(gomoryHuCutTree.edgeSet());
+        boolean foundBest = false; // Just to make sure that our brute-force approach is exhaustive
+        for (DefaultWeightedEdge edge : edges) {
+            Integer source = gomoryHuCutTree.getEdgeSource(edge);
+            Integer target = gomoryHuCutTree.getEdgeTarget(edge);
+            double edgeWeight = gomoryHuCutTree.getEdgeWeight(edge);
+            gomoryHuCutTree.removeEdge(edge); // Temporarily remove edge
+            Set<Integer> partition =
+                new ConnectivityInspector<>(gomoryHuCutTree).connectedSetOf(source);
+            if (PadbergRaoOddMinimumCutset.isOddSet(partition, oddVertices)) { // If the source
+                                                                               // partition forms an
+                                                                               // odd cutset, check
+                                                                               // whether the cut
+                                                                               // isn't better than
+                                                                               // the one we already
+                                                                               // found.
                 assertTrue(cutValue <= edgeWeight);
-                foundBest|= cutValue == edgeWeight;
+                foundBest |= cutValue == edgeWeight;
             }
-            gomoryHuCutTree.addEdge(source, target, edge); //Place edge back
+            gomoryHuCutTree.addEdge(source, target, edge); // Place edge back
         }
         assertTrue(foundBest);
     }
 
-    public void testIsOddSetMethod(){
-        Set<Integer> vertices=new HashSet<>(Arrays.asList(1,2,3,4,5,6));
-        Set<Integer> oddVertices1=new HashSet<>(Arrays.asList(1,2,3,7));
-        Set<Integer> oddVertices2=new HashSet<>(Arrays.asList(1,2,3,4));
+    public void testIsOddSetMethod()
+    {
+        Set<Integer> vertices = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+        Set<Integer> oddVertices1 = new HashSet<>(Arrays.asList(1, 2, 3, 7));
+        Set<Integer> oddVertices2 = new HashSet<>(Arrays.asList(1, 2, 3, 4));
         assertTrue(PadbergRaoOddMinimumCutset.isOddSet(vertices, oddVertices1));
         assertFalse(PadbergRaoOddMinimumCutset.isOddSet(vertices, oddVertices2));
     }
@@ -88,9 +111,11 @@ public class PadbergRaoOddMinimumCutsetTest extends TestCase{
     /**
      * Test the example graph from the paper Odd Minimum Cut-Sets and b-Matchings by Padberg and Rao
      */
-    public void testExampleGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(1,2,3,4,5,6));
+    public void testExampleGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(1, 2, 3, 4, 5, 6));
         Graphs.addEdge(network, 1, 2, 10);
         Graphs.addEdge(network, 1, 6, 8);
         Graphs.addEdge(network, 2, 6, 3);
@@ -103,7 +128,7 @@ public class PadbergRaoOddMinimumCutsetTest extends TestCase{
         Graphs.addEdge(network, 5, 4, 7);
         Graphs.addEdge(network, 3, 4, 5);
 
-        Set<Integer> oddVertices=new HashSet<>(Arrays.asList(2,3,5,6));
+        Set<Integer> oddVertices = new HashSet<>(Arrays.asList(2, 3, 5, 6));
         this.runTest(network, oddVertices, true);
         this.runTest(network, oddVertices, false);
 
@@ -112,14 +137,16 @@ public class PadbergRaoOddMinimumCutsetTest extends TestCase{
     /**
      * Test disconnected graph
      */
-    public void testDisconnectedGraph(){
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addAllVertices(network, Arrays.asList(0,1,2,3,4));
+    public void testDisconnectedGraph()
+    {
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> network =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(network, Arrays.asList(0, 1, 2, 3, 4));
         Graphs.addEdge(network, 0, 1, 3);
         Graphs.addEdge(network, 1, 2, 4);
         Graphs.addEdge(network, 0, 2, 7);
         Graphs.addEdge(network, 3, 4, 9);
-        Set<Integer> oddVertices=new HashSet<>(Arrays.asList(0,1,2,4));
+        Set<Integer> oddVertices = new HashSet<>(Arrays.asList(0, 1, 2, 4));
         this.runTest(network, oddVertices, true);
         this.runTest(network, oddVertices, false);
     }
@@ -127,23 +154,33 @@ public class PadbergRaoOddMinimumCutsetTest extends TestCase{
     /**
      * Test random graphs
      */
-    public void testRandomGraphs(){
-        Random rand=new Random(0);
-        for(int i=0; i<8; i++){
-            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-            int vertices=rand.nextInt((30 - 10) + 1) + 10; //10-30 vertices
-            double p=0.01*(rand.nextInt((85 - 50) + 1) + 50); //p=[0.5;0.85]
-            GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen=new GnpRandomGraphGenerator<>(vertices, p);
+    public void testRandomGraphs()
+    {
+        Random rand = new Random(0);
+        for (int i = 0; i < 8; i++) {
+            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            int vertices = rand.nextInt((30 - 10) + 1) + 10; // 10-30 vertices
+            double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
+            GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =
+                new GnpRandomGraphGenerator<>(vertices, p);
             graphGen.generateGraph(randomGraph, new IntegerVertexFactory(0), null);
-            for(DefaultWeightedEdge edge : randomGraph.edgeSet())
+            for (DefaultWeightedEdge edge : randomGraph.edgeSet())
                 randomGraph.setEdgeWeight(edge, rand.nextInt(150));
 
-            for(int j=0; j<8; j++) {
-                //Select a random subset of vertices of even cardinality. These will be the 'odd' vertices.
+            for (int j = 0; j < 8; j++) {
+                // Select a random subset of vertices of even cardinality. These will be the 'odd'
+                // vertices.
                 int max = vertices - 1;
                 int min = 2;
-                if (max % 2 == 1) --max;
-                int nrOfOddVertices = min + 2 * (int) (rand.nextDouble() * ((max - min) / 2 +1)); //even number between 2 and |V|-1
+                if (max % 2 == 1)
+                    --max;
+                int nrOfOddVertices = min + 2 * (int) (rand.nextDouble() * ((max - min) / 2 + 1)); // even
+                                                                                                   // number
+                                                                                                   // between
+                                                                                                   // 2
+                                                                                                   // and
+                                                                                                   // |V|-1
 
                 Set<Integer> oddVertices = new LinkedHashSet<>(nrOfOddVertices);
                 List<Integer> allVertices = new ArrayList<>(randomGraph.vertexSet());

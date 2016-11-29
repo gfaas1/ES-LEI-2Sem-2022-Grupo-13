@@ -35,33 +35,46 @@ import java.util.Set;
  *
  * @author Joris Kinable
  */
-public class GusfieldGomoryHuCutTreeTest extends GusfieldTreeAlgorithmsTestBase{
+public class GusfieldGomoryHuCutTreeTest
+    extends GusfieldTreeAlgorithmsTestBase
+{
 
     @Override
-    public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network) {
-        GusfieldGomoryHuCutTree<Integer, DefaultWeightedEdge> alg=new GusfieldGomoryHuCutTree<>(network);
-        SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuTree=alg.getGomoryHuTree();
+    public void validateAlgorithm(SimpleWeightedGraph<Integer, DefaultWeightedEdge> network)
+    {
+        GusfieldGomoryHuCutTree<Integer, DefaultWeightedEdge> alg =
+            new GusfieldGomoryHuCutTree<>(network);
+        SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuTree = alg.getGomoryHuTree();
 
-        //Verify that the Gomory-Hu tree is an actual tree
+        // Verify that the Gomory-Hu tree is an actual tree
         assertTrue(GraphTests.isTree(gomoryHuTree));
 
-        //Find the minimum cut in the graph
-        StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg=new StoerWagnerMinimumCut<>(network);
-        double expectedMinimumCut= minimumCutAlg.minCutWeight();
-        double cheapestEdge= gomoryHuTree.edgeSet().stream().mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
+        // Find the minimum cut in the graph
+        StoerWagnerMinimumCut<Integer, DefaultWeightedEdge> minimumCutAlg =
+            new StoerWagnerMinimumCut<>(network);
+        double expectedMinimumCut = minimumCutAlg.minCutWeight();
+        double cheapestEdge = gomoryHuTree
+            .edgeSet().stream().mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
         assertEquals(expectedMinimumCut, cheapestEdge);
         assertEquals(expectedMinimumCut, alg.calculateMinCut());
-        Set<Integer> partition=alg.getSourcePartition();
-        double cutWeight=network.edgeSet().stream().filter(e -> partition.contains(network.getEdgeSource(e)) ^ partition.contains(network.getEdgeTarget(e))).mapToDouble(network::getEdgeWeight).sum();
+        Set<Integer> partition = alg.getSourcePartition();
+        double cutWeight = network
+            .edgeSet().stream()
+            .filter(
+                e -> partition.contains(network.getEdgeSource(e))
+                    ^ partition.contains(network.getEdgeTarget(e)))
+            .mapToDouble(network::getEdgeWeight).sum();
         assertEquals(expectedMinimumCut, cutWeight);
 
-        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm=new PushRelabelMFImpl<>(network);
-        for(Integer i : network.vertexSet()){
-            for(Integer j : network.vertexSet()){
-                if(j <= i) continue;
+        MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
+            new PushRelabelMFImpl<>(network);
+        for (Integer i : network.vertexSet()) {
+            for (Integer j : network.vertexSet()) {
+                if (j <= i)
+                    continue;
 
-                //Check cut weights
-                double expectedCutWeight=minimumSTCutAlgorithm.calculateMinCut(i, j);
+                // Check cut weights
+                double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
                 assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j));
                 assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i));
                 assertEquals(expectedCutWeight, alg.getMaximumFlowValue());
@@ -69,27 +82,40 @@ public class GusfieldGomoryHuCutTreeTest extends GusfieldTreeAlgorithmsTestBase{
                 assertEquals(expectedCutWeight, alg.calculateMinCut(i, j));
                 assertEquals(expectedCutWeight, alg.getCutCapacity());
 
-                //Check cut partitions
-                Set<Integer> sourcePartition=alg.getSourcePartition();
+                // Check cut partitions
+                Set<Integer> sourcePartition = alg.getSourcePartition();
                 assertTrue(sourcePartition.contains(i));
-                Set<Integer> sinkPartition=alg.getSinkPartition();
+                Set<Integer> sinkPartition = alg.getSinkPartition();
                 assertTrue(sinkPartition.contains(j));
-                Set<Integer> intersection=new HashSet<>(sourcePartition);
+                Set<Integer> intersection = new HashSet<>(sourcePartition);
                 intersection.retainAll(sinkPartition);
                 assertTrue(intersection.isEmpty());
-                cutWeight=network.edgeSet().stream().filter(e -> sourcePartition.contains(network.getEdgeSource(e)) ^ sourcePartition.contains(network.getEdgeTarget(e))).mapToDouble(network::getEdgeWeight).sum();
+                cutWeight = network
+                    .edgeSet().stream()
+                    .filter(
+                        e -> sourcePartition.contains(network.getEdgeSource(e))
+                            ^ sourcePartition.contains(network.getEdgeTarget(e)))
+                    .mapToDouble(network::getEdgeWeight).sum();
                 assertEquals(expectedCutWeight, cutWeight);
 
-                //Verify the correctness of the tree
-                //a. the cost of the cheapest edge in the path from i to j must equal the weight of an i-j cut
-                SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuTreeCopy=alg.getGomoryHuTree();
-                List<DefaultWeightedEdge> pathEdges= DijkstraShortestPath.findPathBetween(gomoryHuTreeCopy, i, j);
-                DefaultWeightedEdge cheapestEdgeInPath=pathEdges.stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight)).orElseThrow(()->new RuntimeException("path is empty?!"));
+                // Verify the correctness of the tree
+                // a. the cost of the cheapest edge in the path from i to j must equal the weight of
+                // an i-j cut
+                SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuTreeCopy =
+                    alg.getGomoryHuTree();
+                List<DefaultWeightedEdge> pathEdges =
+                    DijkstraShortestPath.findPathBetween(gomoryHuTreeCopy, i, j);
+                DefaultWeightedEdge cheapestEdgeInPath = pathEdges
+                    .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
+                    .orElseThrow(() -> new RuntimeException("path is empty?!"));
                 assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath));
 
-                //b. splitting the tree by removing the cheapest edge from the path from i to j should provide the cut partition.
+                // b. splitting the tree by removing the cheapest edge from the path from i to j
+                // should provide the cut partition.
                 gomoryHuTreeCopy.removeEdge(cheapestEdgeInPath);
-                assertEquals(sourcePartition, new ConnectivityInspector<>(gomoryHuTreeCopy).connectedSetOf(i));
+                assertEquals(
+                    sourcePartition,
+                    new ConnectivityInspector<>(gomoryHuTreeCopy).connectedSetOf(i));
             }
         }
     }
