@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test clas for the GusfieldGomoryHuCutTree implementation
+ * Test class for the GusfieldGomoryHuCutTree implementation
  *
  * @author Joris Kinable
  */

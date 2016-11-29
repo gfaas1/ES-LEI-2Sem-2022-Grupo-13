@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Test clas for the GusfieldEquivalentFlowTree implementation
+ * Test class for the GusfieldEquivalentFlowTree implementation
  *
  * @author Joris Kinable
  */
