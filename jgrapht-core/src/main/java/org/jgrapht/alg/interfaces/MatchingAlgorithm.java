@@ -33,6 +33,11 @@ public interface MatchingAlgorithm<V, E>
      */
     double DEFAULT_EPSILON = 1e-9;
 
+    /*
+     * TODO after next release: Rename computeMatching() to getMatching() and deprecate
+     * computeMatching().
+     */
+
     /**
      * Returns set of edges making up the matching
      * 

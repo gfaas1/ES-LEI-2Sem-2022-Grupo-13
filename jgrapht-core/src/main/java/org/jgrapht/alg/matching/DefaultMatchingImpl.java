@@ -29,7 +29,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
  *
  * @author Dimitrios Michail
  */
-class DefaultMatching<E>
+class DefaultMatchingImpl<E>
     implements Matching<E>, Serializable
 {
     private static final long serialVersionUID = 4767675421846527768L;
@@ -43,7 +43,7 @@ class DefaultMatching<E>
      * @param edges the edges of the matching
      * @param weight the weight of the matching
      */
-    public DefaultMatching(Set<E> edges, double weight)
+    public DefaultMatchingImpl(Set<E> edges, double weight)
     {
         this.edges = edges;
         this.weight = weight;
@@ -65,6 +65,12 @@ class DefaultMatching<E>
     public Set<E> getEdges()
     {
         return edges;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Matching [edges=" + edges + ", weight=" + weight + "]";
     }
 
 }

@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
@@ -100,13 +99,6 @@ public class GreedyWeightedMatching<V, E>
     @Override
     public Matching<E> computeMatching()
     {
-        Pair<Double, Set<E>> result = run(graph);
-        return new DefaultMatching<>(result.getSecond(), result.getFirst());
-    }
-
-    // the algorithm
-    private Pair<Double, Set<E>> run(Graph<V, E> graph)
-    {
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
@@ -134,7 +126,7 @@ public class GreedyWeightedMatching<V, E>
         }
 
         // return matching
-        return Pair.of(matchingWeight, matching);
+        return new DefaultMatchingImpl<>(matching, matchingWeight);
     }
 
 }

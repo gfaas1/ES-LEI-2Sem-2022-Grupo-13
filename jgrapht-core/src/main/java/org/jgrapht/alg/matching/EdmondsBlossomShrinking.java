@@ -36,7 +36,7 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private UndirectedGraph<V, E> graph;
+    private final UndirectedGraph<V, E> graph;
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
@@ -64,8 +64,8 @@ public class EdmondsBlossomShrinking<V, E>
     @Override
     public Matching<E> computeMatching()
     {
-        Set<E> edges = findMatch(graph);
-        return new DefaultMatching<>(edges, edges.size());
+        Set<E> edges = findMatch();
+        return new DefaultMatchingImpl<>(edges, edges.size());
     }
 
     /**
@@ -73,7 +73,7 @@ public class EdmondsBlossomShrinking<V, E>
      *
      * @return set of edges
      */
-    private Set<E> findMatch(UndirectedGraph<V, E> graph)
+    private Set<E> findMatch()
     {
         Set<E> result = new ArrayUnenforcedSet<>();
         match = new HashMap<>();
@@ -85,7 +85,7 @@ public class EdmondsBlossomShrinking<V, E>
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(i)) {
                 // Match is maximal iff graph G contains no more augmenting paths
-                V v = findPath(graph, i);
+                V v = findPath(i);
                 while (v != null) {
                     V pv = path.get(v);
                     V ppv = match.get(pv);
@@ -107,7 +107,7 @@ public class EdmondsBlossomShrinking<V, E>
         return result;
     }
 
-    private V findPath(Graph<V, E> graph, V root)
+    private V findPath(V root)
     {
         Set<V> used = new HashSet<>();
         Queue<V> q = new ArrayDeque<>();

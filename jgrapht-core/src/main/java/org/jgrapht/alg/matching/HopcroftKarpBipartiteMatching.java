@@ -41,7 +41,7 @@ import org.jgrapht.util.*;
 public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private UndirectedGraph<V, E> graph;
+    private final UndirectedGraph<V, E> graph;
     private Set<? extends V> partition1; // Partitions of bipartite graph
     private Set<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
@@ -84,7 +84,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
         checkInputData();
         maxMatching();
 
-        return new DefaultMatching<>(matching, matching.size());
+        return new DefaultMatchingImpl<>(matching, matching.size());
     }
 
     /**

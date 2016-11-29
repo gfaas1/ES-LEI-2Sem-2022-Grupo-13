@@ -64,11 +64,11 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
         }
         this.graph = graph;
         if (partition1 == null) {
-            throw new IllegalArgumentException("Invalid partition provided");
+            throw new IllegalArgumentException("Partition 1 cannot be null");
         }
         this.partition1 = partition1;
         if (partition2 == null) {
-            throw new IllegalArgumentException("Invalid partition provided");
+            throw new IllegalArgumentException("Partition 2 cannot be null");
         }
         this.partition2 = partition2;
     }
@@ -121,7 +121,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
             edgeSet.add(e);
         }
 
-        return new DefaultMatching<>(edgeSet, weight);
+        return new DefaultMatchingImpl<>(edgeSet, weight);
     }
 
     /**

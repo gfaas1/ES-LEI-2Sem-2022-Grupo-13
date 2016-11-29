@@ -47,7 +47,7 @@ import org.jgrapht.util.TypeUtil;
 public class MaximumWeightBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private UndirectedGraph<V, E> graph;
+    private final UndirectedGraph<V, E> graph;
     private Set<V> partition1;
     private Set<V> partition2;
 
@@ -76,11 +76,11 @@ public class MaximumWeightBipartiteMatching<V, E>
         }
         this.graph = TypeUtil.uncheckedCast(graph, null);
         if (partition1 == null) {
-            throw new IllegalArgumentException("Invalid partition provided");
+            throw new IllegalArgumentException("Partition 1 cannot be null");
         }
         this.partition1 = partition1;
         if (partition2 == null) {
-            throw new IllegalArgumentException("Invalid partition provided");
+            throw new IllegalArgumentException("Partition 2 cannot be null");
         }
         this.partition2 = partition2;
     }
@@ -108,7 +108,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         for (E edge : bipartiteMatching) {
             weight += graph.getEdgeWeight(edge);
         }
-        return new DefaultMatching<>(bipartiteMatching, weight);
+        return new DefaultMatchingImpl<>(bipartiteMatching, weight);
     }
 
     private void initializeVerticesAndEdges()

@@ -134,13 +134,11 @@ public class PathGrowingWeightedMatching<V, E>
     @Override
     public Matching<E> computeMatching()
     {
-        Pair<Double, Set<E>> result;
         if (useHeuristics) {
-            result = runWithHeuristics();
+            return runWithHeuristics();
         } else {
-            result = run();
+            return run();
         }
-        return new DefaultMatching<>(result.getSecond(), result.getFirst());
     }
 
     /**
@@ -164,7 +162,7 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (no heuristics)
-    private Pair<Double, Set<E>> run()
+    private Matching<E> run()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -226,14 +224,14 @@ public class PathGrowingWeightedMatching<V, E>
 
         // return best matching
         if (comparator.compare(m1Weight, m2Weight) > 0) {
-            return Pair.of(m1Weight, m1);
+            return new DefaultMatchingImpl<E>(m1, m1Weight);
         } else {
-            return Pair.of(m2Weight, m2);
+            return new DefaultMatchingImpl<E>(m2, m2Weight);
         }
     }
 
     // the algorithm (improved with additional heuristics)
-    private Pair<Double, Set<E>> runWithHeuristics()
+    private Matching<E> runWithHeuristics()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -324,7 +322,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // return extended matching
-        return Pair.of(matchingWeight, matching);
+        return new DefaultMatchingImpl<E>(matching, matchingWeight);
     }
 
     /**
