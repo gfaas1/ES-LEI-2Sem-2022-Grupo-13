@@ -56,8 +56,8 @@ public class PadbergRaoOddMinimumCutsetTest
         union.addAll(sinkPartition);
         assertEquals(network.vertexSet(), union);
 
-        assertTrue(PadbergRaoOddMinimumCutset.isOddSet(sourcePartition, oddVertices));
-        assertTrue(PadbergRaoOddMinimumCutset.isOddSet(sinkPartition, oddVertices));
+        assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices));
+        assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(sinkPartition, oddVertices));
 
         Set<DefaultWeightedEdge> expectedCutEdges = network
             .edgeSet().stream()
@@ -84,7 +84,7 @@ public class PadbergRaoOddMinimumCutsetTest
             gomoryHuCutTree.removeEdge(edge); // Temporarily remove edge
             Set<Integer> partition =
                 new ConnectivityInspector<>(gomoryHuCutTree).connectedSetOf(source);
-            if (PadbergRaoOddMinimumCutset.isOddSet(partition, oddVertices)) { // If the source
+            if (PadbergRaoOddMinimumCutset.isOddVertexSet(partition, oddVertices)) { // If the source
                                                                                // partition forms an
                                                                                // odd cutset, check
                                                                                // whether the cut
@@ -104,8 +104,8 @@ public class PadbergRaoOddMinimumCutsetTest
         Set<Integer> vertices = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
         Set<Integer> oddVertices1 = new HashSet<>(Arrays.asList(1, 2, 3, 7));
         Set<Integer> oddVertices2 = new HashSet<>(Arrays.asList(1, 2, 3, 4));
-        assertTrue(PadbergRaoOddMinimumCutset.isOddSet(vertices, oddVertices1));
-        assertFalse(PadbergRaoOddMinimumCutset.isOddSet(vertices, oddVertices2));
+        assertTrue(PadbergRaoOddMinimumCutset.isOddVertexSet(vertices, oddVertices1));
+        assertFalse(PadbergRaoOddMinimumCutset.isOddVertexSet(vertices, oddVertices2));
     }
 
     /**

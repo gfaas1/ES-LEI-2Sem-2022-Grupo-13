@@ -18,7 +18,6 @@
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -163,7 +162,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
             Set<V> sourcePartition =
                 new ConnectivityInspector<>(gomoryHuTree).connectedSetOf(source);
             if (edgeWeight < minimumCutWeight
-                && PadbergRaoOddMinimumCutset.isOddSet(sourcePartition, oddVertices))
+                && PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices))
             { // If the source partition forms an odd cutset, check whether the cut isn't better
               // than the one we already found.
                 minimumCutWeight = edgeWeight;
@@ -386,7 +385,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * @param oddVertices subset of vertices which are labeled odd
      * @return true if the given set contains an odd number of odd-labeled nodes.
      */
-    public static <V> boolean isOddSet(Set<V> vertices, Set<V> oddVertices)
+    public static <V> boolean isOddVertexSet(Set<V> vertices, Set<V> oddVertices)
     {
         return vertices.stream().filter(oddVertices::contains).count() % 2 == 1;
     }
