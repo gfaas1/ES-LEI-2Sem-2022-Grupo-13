@@ -43,81 +43,85 @@ import org.jgrapht.alg.interfaces.*;
  * @author Alexey Kudinkin
  */
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private final WeightedGraph<V, E> graph;
-
-    private final List<? extends V> firstPartition;
-    private final List<? extends V> secondPartition;
-
-    private final int[] matching;
+    private final Graph<V, E> graph;
+    private Set<? extends V> partition1;
+    private Set<? extends V> partition2;
 
     /**
      * Construct a new instance of the algorithm.
      * 
-     * @param G target weighted bipartite graph to find matching in
-     * @param S first vertex partition of the target bipartite graph
-     * @param T second vertex partition of the target bipartite graph
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
      */
     public KuhnMunkresMinimalWeightBipartitePerfectMatching(
-        final WeightedGraph<V, E> G, List<? extends V> S, List<? extends V> T)
+        Graph<V, E> graph, Set<? extends V> partition1, Set<? extends V> partition2)
+    {
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        this.graph = graph;
+        if (partition1 == null) {
+            throw new IllegalArgumentException("Partition 1 cannot be null");
+        }
+        this.partition1 = partition1;
+        if (partition2 == null) {
+            throw new IllegalArgumentException("Partition 2 cannot be null");
+        }
+        this.partition2 = partition2;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
     {
         // Validate graph being complete bipartite with equally-sized partitions
-        if (S.size() != T.size()) {
+        if (partition1.size() != partition2.size()) {
             throw new IllegalArgumentException(
                 "Graph supplied isn't complete bipartite with equally sized partitions!");
         }
 
-        int partition = S.size(), edges = G.edgeSet().size();
+        if (!GraphTests.isBipartitePartition(graph, partition1, partition2)) {
+            throw new IllegalArgumentException("Invalid bipartite partition provided");
+        }
 
+        int partition = partition1.size();
+        int edges = graph.edgeSet().size();
         if (edges != (partition * partition)) {
             throw new IllegalArgumentException(
                 "Graph supplied isn't complete bipartite with equally sized partitions!");
         }
 
-        graph = G;
-        firstPartition = S;
-        secondPartition = T;
+        if (!GraphTests.isSimple(graph)) {
+            throw new IllegalArgumentException("Only simple graphs supported");
+        }
 
-        // Expected behaviour for an empty graph is to return an empty set, so
+        List<? extends V> firstPartition = new ArrayList<>(partition1);
+        List<? extends V> secondPartition = new ArrayList<>(partition2);
+
+        // Expected behavior for an empty graph is to return an empty set, so
         // we check this last
-        if (G.vertexSet().isEmpty()) {
+        int[] matching;
+        if (graph.vertexSet().isEmpty()) {
             matching = new int[] {};
         } else {
-            matching = new KuhnMunkresMatrixImplementation<>(G, S, T).buildMatching();
+            matching = new KuhnMunkresMatrixImplementation<>(graph, firstPartition, secondPartition)
+                .buildMatching();
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<E> getMatching()
-    {
-        Set<E> edges = new HashSet<>();
-
+        Set<E> edgeSet = new HashSet<>();
+        double weight = 0d;
         for (int i = 0; i < matching.length; ++i) {
-            edges.add(graph.getEdge(firstPartition.get(i), secondPartition.get(matching[i])));
+            E e = graph.getEdge(firstPartition.get(i), secondPartition.get(matching[i]));
+            weight += graph.getEdgeWeight(e);
+            edgeSet.add(e);
         }
 
-        return edges;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getMatchingWeight()
-    {
-        double weight = 0.;
-
-        for (E edge : getMatching()) {
-            weight += graph.getEdgeWeight(edge);
-        }
-
-        return weight;
+        return new MatchingImpl<>(edgeSet, weight);
     }
 
     /**
@@ -163,7 +167,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
          * @param T second partition of the vertex set
          */
         public KuhnMunkresMatrixImplementation(
-            final WeightedGraph<V, E> G, final List<? extends V> S, final List<? extends V> T)
+            final Graph<V, E> G, final List<? extends V> S, final List<? extends V> T)
         {
             int partition = S.size();
 

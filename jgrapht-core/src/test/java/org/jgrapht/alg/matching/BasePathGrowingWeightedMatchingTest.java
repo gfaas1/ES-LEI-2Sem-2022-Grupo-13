@@ -7,7 +7,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
@@ -24,8 +24,8 @@ public abstract class BasePathGrowingWeightedMatchingTest
         super();
     }
 
-    public abstract WeightedMatchingAlgorithm<Integer,
-        DefaultWeightedEdge> getApproximationAlgorithm(Graph<Integer, DefaultWeightedEdge> graph);
+    public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
+        Graph<Integer, DefaultWeightedEdge> graph);
 
     public void testDynamicProgrammingOnPaths()
     {
@@ -51,7 +51,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         Pair<Double, Set<DefaultWeightedEdge>> result =
             pathSolver.getMaximumWeightMatching(g, path);
         double weight = result.getFirst();
-        assertEquals(15.0, weight, WeightedMatchingAlgorithm.DEFAULT_EPSILON);
+        assertEquals(15.0, weight, MatchingAlgorithm.DEFAULT_EPSILON);
         Set<DefaultWeightedEdge> matching = result.getSecond();
         assertEquals(3, matching.size());
         assertTrue(matching.contains(g.getEdge(0, 1)));
@@ -63,7 +63,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         Pair<Double, Set<DefaultWeightedEdge>> result1 =
             pathSolver.getMaximumWeightMatching(g, path1);
         double weight1 = result1.getFirst();
-        assertEquals(0.0, weight1, WeightedMatchingAlgorithm.DEFAULT_EPSILON);
+        assertEquals(0.0, weight1, MatchingAlgorithm.DEFAULT_EPSILON);
         Set<DefaultWeightedEdge> matching1 = result1.getSecond();
         assertEquals(0, matching1.size());
 
@@ -74,7 +74,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         Pair<Double, Set<DefaultWeightedEdge>> result2 =
             pathSolver.getMaximumWeightMatching(g, path2);
         double weight2 = result2.getFirst();
-        assertEquals(100.0, weight2, WeightedMatchingAlgorithm.DEFAULT_EPSILON);
+        assertEquals(100.0, weight2, MatchingAlgorithm.DEFAULT_EPSILON);
         Set<DefaultWeightedEdge> matching2 = result2.getSecond();
         assertEquals(1, matching2.size());
         assertTrue(matching2.contains(g.getEdge(7, 8)));
@@ -87,7 +87,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         Pair<Double, Set<DefaultWeightedEdge>> result3 =
             pathSolver.getMaximumWeightMatching(g, path3);
         double weight3 = result3.getFirst();
-        assertEquals(15.0, weight3, WeightedMatchingAlgorithm.DEFAULT_EPSILON);
+        assertEquals(15.0, weight3, MatchingAlgorithm.DEFAULT_EPSILON);
         Set<DefaultWeightedEdge> matching3 = result3.getSecond();
         assertEquals(1, matching3.size());
         assertTrue(matching3.contains(g.getEdge(10, 11)));
@@ -111,22 +111,22 @@ public abstract class BasePathGrowingWeightedMatchingTest
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);
-            Set<DefaultWeightedEdge> m1 = alg1.getMatching();
+            Matching<DefaultWeightedEdge> m1 = alg1.computeMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg2 =
                 new PathGrowingWeightedMatching<>(g, false);
-            Set<DefaultWeightedEdge> m2 = alg2.getMatching();
+            Matching<DefaultWeightedEdge> m2 = alg2.computeMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 = new EdmondsBlossomShrinking<>(g);
-            Set<DefaultWeightedEdge> m3 = alg3.getMatching();
+            Matching<DefaultWeightedEdge> m3 = alg3.computeMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 = new GreedyWeightedMatching<>(g);
-            Set<DefaultWeightedEdge> m4 = alg4.getMatching();
+            Matching<DefaultWeightedEdge> m4 = alg4.computeMatching();
 
             assertTrue(isMatching(g, m1));
             assertTrue(isMatching(g, m2));
             assertTrue(isMatching(g, m3));
             assertTrue(isMatching(g, m4));
-            assertTrue(m1.size() >= 0.5 * m3.size());
-            assertTrue(m2.size() >= 0.5 * m3.size());
-            assertTrue(m4.size() >= 0.5 * m3.size());
+            assertTrue(m1.getEdges().size() >= 0.5 * m3.getEdges().size());
+            assertTrue(m2.getEdges().size() >= 0.5 * m3.getEdges().size());
+            assertTrue(m4.getEdges().size() >= 0.5 * m3.getEdges().size());
         }
     }
 

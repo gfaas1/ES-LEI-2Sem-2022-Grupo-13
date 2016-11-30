@@ -18,26 +18,25 @@
 package org.jgrapht.alg.interfaces;
 
 /**
- * Allows to derive weighted matching from <i>general</i> graph
+ * Compute a weighted matching of a graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @see MatchingAlgorithm
+ * @deprecated Use {@link MatchingAlgorithm} directly
  */
+@Deprecated
 public interface WeightedMatchingAlgorithm<V, E>
     extends MatchingAlgorithm<V, E>
 {
     /**
-     * Default tolerance used by the algorithm.
-     */
-    double DEFAULT_EPSILON = 1e-9;
-
-    /**
      * Returns weight of a matching found
      *
      * @return weight of a matching found
+     * @deprecated Use {@link #computeMatching()} instead.
      */
+    @Deprecated
     double getMatchingWeight();
 }
 

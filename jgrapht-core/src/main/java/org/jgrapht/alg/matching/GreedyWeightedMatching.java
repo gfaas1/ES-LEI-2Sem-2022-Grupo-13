@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
-import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
@@ -61,10 +60,9 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * @since September 2016
  */
 public class GreedyWeightedMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
-    private Set<E> matching;
-    private double weight;
+    private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
 
     /**
@@ -89,13 +87,8 @@ public class GreedyWeightedMatching<V, E>
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
         }
+        this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
-
-        Pair<Double, Set<E>> result;
-        result = run(graph);
-
-        this.weight = result.getFirst();
-        this.matching = result.getSecond();
     }
 
     /**
@@ -104,24 +97,7 @@ public class GreedyWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Set<E> getMatching()
-    {
-        return Collections.unmodifiableSet(matching);
-    }
-
-    /**
-     * Get the weight of the computed matching.
-     * 
-     * @return the weight of the matching
-     */
-    @Override
-    public double getMatchingWeight()
-    {
-        return weight;
-    }
-
-    // the algorithm
-    private Pair<Double, Set<E>> run(Graph<V, E> graph)
+    public Matching<E> computeMatching()
     {
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)
@@ -150,7 +126,7 @@ public class GreedyWeightedMatching<V, E>
         }
 
         // return matching
-        return Pair.of(matchingWeight, matching);
+        return new MatchingImpl<>(matching, matchingWeight);
     }
 
 }

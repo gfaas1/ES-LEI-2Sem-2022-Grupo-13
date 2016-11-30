@@ -17,24 +17,122 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
- * Allows to derive <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> from
- * given graph
+ * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
+ * a given graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public interface MatchingAlgorithm<V, E>
 {
     /**
+     * Default tolerance used by algorithms comparing floating point values.
+     */
+    double DEFAULT_EPSILON = 1e-9;
+
+    /*
+     * TODO after next release: Rename computeMatching() to getMatching() and deprecate
+     * computeMatching().
+     */
+
+    /**
      * Returns set of edges making up the matching
      * 
      * @return a matching
+     * @deprecated Use {@link #computeMatching()} instead.
      */
-    Set<E> getMatching();
+    @Deprecated
+    default Set<E> getMatching()
+    {
+        return computeMatching().getEdges();
+    }
+
+    /**
+     * Compute a matching for a given graph.
+     * 
+     * @return a matching
+     */
+    Matching<E> computeMatching();
+
+    /**
+     * A graph matching.
+     *
+     * @param <E> the graph edge type
+     */
+    interface Matching<E>
+    {
+        /**
+         * Returns the weight of the matching.
+         *
+         * @return the weight of the matching
+         */
+        double getWeight();
+
+        /**
+         * Get the edges of the matching.
+         *
+         * @return the edges of the matching
+         */
+        Set<E> getEdges();
+    }
+
+    /**
+     * A default implementation of the matching interface.
+     *
+     * @param <E> the graph edge type
+     */
+    class MatchingImpl<E>
+        implements Matching<E>, Serializable
+    {
+        private static final long serialVersionUID = 4767675421846527768L;
+
+        private Set<E> edges;
+        private double weight;
+
+        /**
+         * Construct a new instance
+         *
+         * @param edges the edges of the matching
+         * @param weight the weight of the matching
+         */
+        public MatchingImpl(Set<E> edges, double weight)
+        {
+            this.edges = edges;
+            this.weight = weight;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double getWeight()
+        {
+            return weight;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> getEdges()
+        {
+            return edges;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString()
+        {
+            return "Matching [edges=" + edges + ", weight=" + weight + "]";
+        }
+    }
+
 }
 
 // End MatchingAlgorithm.java

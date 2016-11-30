@@ -17,10 +17,20 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * This class finds a maximum weight matching of a simple undirected weighted bipartite graph. The
@@ -35,11 +45,11 @@ import org.jgrapht.alg.interfaces.*;
  * @author Graeme Ahokas
  */
 public class MaximumWeightBipartiteMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
-    private final WeightedGraph<V, E> graph;
-    private final Set<V> partition1;
-    private final Set<V> partition2;
+    private final UndirectedGraph<V, E> graph;
+    private Set<V> partition1;
+    private Set<V> partition2;
 
     private Map<V, Long> vertexWeights;
     private Map<V, Boolean> hasVertexBeenProcessed;
@@ -48,53 +58,57 @@ public class MaximumWeightBipartiteMatching<V, E>
     private Set<E> bipartiteMatching;
 
     /**
-     * Creates a new MaximumWeightBipartiteMatching algorithm instance. The union of
-     * vertexPartition1 and vertexParition2 should be equal to the vertex set of the graph Every
-     * edge in the graph must connect a vertex in vertexPartition1 with a vertex in vertexPartition2
-     *
-     * @param graph simple undirected weighted bipartite graph to find matching in, with positive
-     *        integer edge weights
-     * @param vertexPartition1 first vertex partition of the bipartite graph, disjoint from
-     *        vertexPartition2
-     * @param vertexPartition2 second vertex partition of the bipartite graph, disjoint from
-     *        vertexPartition1
+     * Construct a new instance of the algorithm. Supported graphs are simple undirected weighted
+     * bipartite with positive integer edge weights.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
+     * @throws IllegalArgumentException if the graph is not undirected
      */
-    public MaximumWeightBipartiteMatching(
-        final WeightedGraph<V, E> graph, Set<V> vertexPartition1, Set<V> vertexPartition2)
+    public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        this.graph = graph;
-        partition1 = vertexPartition1;
-        partition2 = vertexPartition2;
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        if (!(graph instanceof UndirectedGraph)) {
+            throw new IllegalArgumentException("Only undirected graphs supported");
+        }
+        this.graph = TypeUtil.uncheckedCast(graph, null);
+        if (partition1 == null) {
+            throw new IllegalArgumentException("Partition 1 cannot be null");
+        }
+        this.partition1 = partition1;
+        if (partition2 == null) {
+            throw new IllegalArgumentException("Partition 2 cannot be null");
+        }
+        this.partition2 = partition2;
+    }
 
-        vertexWeights = new HashMap<>();
-        hasVertexBeenProcessed = new HashMap<>();
-        isEdgeMatched = new HashMap<>();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
+        if (!GraphTests.isSimple(graph)) {
+            throw new IllegalArgumentException("Only simple graphs supported");
+        }
+        if (!GraphTests.isBipartitePartition(graph, partition1, partition2)) {
+            throw new IllegalArgumentException("Graph partition is not bipartite");
+        }
+        this.vertexWeights = new HashMap<>();
+        this.hasVertexBeenProcessed = new HashMap<>();
+        this.isEdgeMatched = new HashMap<>();
 
         initializeVerticesAndEdges();
-    }
 
-    @Override
-    public Set<E> getMatching()
-    {
-        if (bipartiteMatching == null) {
-            bipartiteMatching = maximumWeightBipartiteMatching();
-        }
-        return bipartiteMatching;
-    }
-
-    @Override
-    public double getMatchingWeight()
-    {
-        if (bipartiteMatching == null) {
-            getMatching();
-        }
-
-        long weight = 0;
+        this.bipartiteMatching = maximumWeightBipartiteMatching();
+        double weight = 0d;
         for (E edge : bipartiteMatching) {
             weight += graph.getEdgeWeight(edge);
         }
-
-        return weight;
+        return new MatchingImpl<>(bipartiteMatching, weight);
     }
 
     private void initializeVerticesAndEdges()

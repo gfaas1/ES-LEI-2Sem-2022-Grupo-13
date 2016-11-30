@@ -20,6 +20,8 @@ package org.jgrapht.alg.matching;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
@@ -99,7 +101,6 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     private static class WeightedEdge
         extends DefaultWeightedEdge
     {
-
         class APair
             extends Pair<V, V>
         {
@@ -141,7 +142,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
-    private static KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge> match(
+    private static Matching<WeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)
     {
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);
@@ -155,7 +156,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         generator.generateGraph(target, null, null);
 
-        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(target, first, second);
+        return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(
+            target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).computeMatching();
     }
 
     @Test
@@ -163,11 +165,12 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     {
         WeightedGraph<V, WeightedEdge> graph = new SimpleWeightedGraph<>(WeightedEdge.class);
 
-        List<? extends V> emptyList = Collections.emptyList();
+        Set<? extends V> emptyList = Collections.emptySet();
 
-        Assert.assertTrue(
-            new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList)
-                .getMatching().isEmpty());
+        MatchingAlgorithm<V, WeightedEdge> alg =
+            new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList);
+
+        Assert.assertTrue(alg.computeMatching().getEdges().isEmpty());
     }
 
     @Test
@@ -178,7 +181,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double[][] costMatrix = new double[][] { { 1, 2, 3 }, { 5, 4, 6 }, { 8, 9, 7 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 12);
     }
@@ -191,7 +194,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
         double[][] costMatrix = new double[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 15);
 
@@ -206,7 +209,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double[][] costMatrix = new double[][] { { 1, 2, 3, 4, 5 }, { 6, 7, 8, 7, 2 },
             { 1, 3, 4, 4, 5 }, { 3, 6, 2, 8, 7 }, { 4, 1, 3, 5, 4 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 10);
 
@@ -232,7 +235,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double[][] costMatrix = new double[][] { { 7, 6, 5, 4, 3 }, { 2, 1, 0, 1, 6 },
             { 7, 5, 4, 4, 3 }, { 5, 2, 6, 0, 1 }, { 4, 7, 5, 3, 4 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 12);
 
@@ -251,7 +254,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
             new double[][] { { 7, 6, 5, 4, 3, 9 }, { 2, 1, 0, 1, 6, 9 }, { 7, 5, 4, 4, 3, 9 },
                 { 5, 2, 6, 0, 1, 9 }, { 4, 7, 5, 3, 4, 9 }, { 9, 9, 9, 9, 9, 9 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 21);
     }
@@ -269,7 +272,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
             new double[][] { { 7, 6, 5, 4, 3, 9 }, { 2, 1, 0, 1, 6, 9 }, { 7, 5, 4, 4, 3, 9 },
                 { 5, 2, 6, 0, 1, 9 }, { 4, 7, 5, 3, 4, 9 }, { 3, 5, 8, 7, 1, 9 } };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 19);
     }
@@ -289,7 +292,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         double[][] costMatrix = new double[][] { { 9, 6, 5, 9, 3 }, { 2, 1, 0, 1, 6 },
             { 7, 5, 9, 4, 3 }, { 9, 2, 6, 0, 1 }, { 4, 9, 5, 9, 4 }, };
 
-        double w = match(costMatrix, costMatrix.length).getMatchingWeight();
+        double w = match(costMatrix, costMatrix.length).getWeight();
 
         Assert.assertTrue(w == 12);
     }

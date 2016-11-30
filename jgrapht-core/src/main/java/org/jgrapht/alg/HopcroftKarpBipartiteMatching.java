@@ -326,6 +326,20 @@ public class HopcroftKarpBipartiteMatching<V, E>
     {
         return Collections.unmodifiableSet(matching);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
+        Set<E> m = getMatching();
+        double w = 0d;
+        for (E e : m) {
+            w += graph.getEdgeWeight(e);
+        }
+        return new MatchingImpl<E>(m, w);
+    }
 }
 
 // End HopcroftKarpBipartiteMatching.java
