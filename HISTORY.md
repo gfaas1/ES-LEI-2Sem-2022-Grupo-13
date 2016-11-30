@@ -24,6 +24,7 @@ Changes to JGraphT in each version:
     - Fixed a NullPointerException caused by `GraphMLImport` when an attributed was associated with the graph itself (i.e. at the <graphml> level); this could occur for instance with yED graphml instances. (reported by Tim Schultze, contributed by Dimitrios Michail)
 	- Minor updates and fixes to demo (contributed by Dimitrios Michail)
     - Removed underscore identifiers and refactored tests in KuhnMunkresMinimalWeightBipartitePerfectMatchingTest. (contributed by Szabolcs Besenyei)
+    -All matching algorithms are now unified under a new MatchingAlgorithm interface; the old WeightedMatchingAlgorithm interface is now deprecated. (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
