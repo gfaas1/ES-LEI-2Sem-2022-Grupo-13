@@ -17,6 +17,9 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
@@ -43,8 +46,8 @@ import java.util.stream.Collectors;
  * Journal of Discrete Mathematics, 22(4), p1480-1487, 2008.
  *
  * <p>
- * The runtime complexity of the algorithm, although not formally stated, is roughly O(|V|+Q), where
- * Q is the runtime complexity of the algorithm used to compute a Gomory-Hu tree on graph G.
+ * The runtime complexity of this algorithm is dominated by the runtime complexity of the algorithm used
+ * to compute A Gomory-Hu tree on graph G. Consequently, the runtime complexity of this class is O(V^4).
  *
  * <p>
  * This class does not support changes to the underlying graph. The behavior of this class is
@@ -59,7 +62,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
 {
 
     /* Input graph */
-    private final SimpleWeightedGraph<V, E> network;
+    private final Graph<V, E> network;
     /* Set of vertices which are labeled 'odd' (set T in the paper) */
     private Set<V> oddVertices;
     /* Algorithm used to calculate the Gomory-Hu Cut-tree */
@@ -77,7 +80,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * 
      * @param network input graph
      */
-    public PadbergRaoOddMinimumCutset(SimpleWeightedGraph<V, E> network)
+    public PadbergRaoOddMinimumCutset(Graph<V, E> network)
     {
         this(network, MaximumFlowAlgorithmBase.DEFAULT_EPSILON);
     }
@@ -88,7 +91,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * @param network input graph
      * @param epsilon tolerance
      */
-    public PadbergRaoOddMinimumCutset(SimpleWeightedGraph<V, E> network, double epsilon)
+    public PadbergRaoOddMinimumCutset(Graph<V, E> network, double epsilon)
     {
         this(network, new PushRelabelMFImpl<>(network, epsilon));
     }
@@ -100,8 +103,10 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * @param minimumSTCutAlgorithm algorithm used to calculate the Gomory-Hu tree
      */
     public PadbergRaoOddMinimumCutset(
-        SimpleWeightedGraph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+        Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
+        if(!(network instanceof UndirectedGraph))
+            throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         gusfieldGomoryHuCutTreeAlgorithm =
             new GusfieldGomoryHuCutTree<>(network, minimumSTCutAlgorithm);

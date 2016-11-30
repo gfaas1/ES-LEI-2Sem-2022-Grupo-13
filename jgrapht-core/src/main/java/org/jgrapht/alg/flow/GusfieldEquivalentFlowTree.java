@@ -17,7 +17,9 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -28,7 +30,7 @@ import java.util.*;
 /**
  * This class computes an Equivalent Flow Tree (EFT) using the algorithm proposed by Dan Gusfield.
  * EFTs can be used to efficiently calculate the maximum flow for all pairs of vertices. The
- * algorithm is described in: <i>Gusfiel, D, Very simple methods for all pairs network flow
+ * algorithm is described in: <i>Gusfield, D, Very simple methods for all pairs network flow
  * analysis. SIAM Journal on Computing, 19(1), p142-155, 1990</i><br>
  * In an undirected graph, there exist n(n-1)/2 different vertex pairs. This class computes the
  * maximum flow between each of these pairs efficiently by performing exactly (n-1) minimum s-t cut
@@ -91,7 +93,7 @@ public class GusfieldEquivalentFlowTree<V, E>
      * 
      * @param network input graph
      */
-    public GusfieldEquivalentFlowTree(SimpleWeightedGraph<V, E> network)
+    public GusfieldEquivalentFlowTree(Graph<V, E> network)
     {
         this(network, MaximumFlowAlgorithmBase.DEFAULT_EPSILON);
     }
@@ -102,7 +104,7 @@ public class GusfieldEquivalentFlowTree<V, E>
      * @param network input graph
      * @param epsilon precision
      */
-    public GusfieldEquivalentFlowTree(SimpleWeightedGraph<V, E> network, double epsilon)
+    public GusfieldEquivalentFlowTree(Graph<V, E> network, double epsilon)
     {
         this(network, new PushRelabelMFImpl<>(network, epsilon));
     }
@@ -114,8 +116,10 @@ public class GusfieldEquivalentFlowTree<V, E>
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
     public GusfieldEquivalentFlowTree(
-        SimpleWeightedGraph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+            Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
+        if(!(network instanceof UndirectedGraph))
+            throw new IllegalArgumentException("Graph must be undirected");
         this.N = network.vertexSet().size();
         if (N < 2)
             throw new IllegalArgumentException("Graph must have at least 2 vertices");

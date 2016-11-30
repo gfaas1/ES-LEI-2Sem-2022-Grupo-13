@@ -17,7 +17,9 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
@@ -32,7 +34,7 @@ import java.util.*;
  * definition of GHTs, refer to: <i>Gomory, R., Hu, T. Multi-terminal network flows. Journal of the
  * Socieity for Industrial and Applied mathematics, 9(4), p551-570, 1961.</i> GHTs can be used to
  * efficiently query the maximum flows and minimum cuts for all pairs of vertices. The algorithm is
- * described in: <i>Gusfiel, D, Very simple methods for all pairs network flow analysis. SIAM
+ * described in: <i>Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM
  * Journal on Computing, 19(1), p142-155, 1990</i><br>
  * In an undirected graph, there exist n(n-1)/2 different vertex pairs. This class computes the
  * maximum flow/minimum cut between each of these pairs efficiently by performing exactly (n-1)
@@ -45,7 +47,7 @@ import java.util.*;
  * The runtime complexity of this class is O((V-1)Q), where Q is the runtime complexity of the
  * algorithm used to compute s-t cuts in the graph. By default, this class uses the
  * {@link PushRelabelMFImpl} implementation to calculate minimum s-t cuts. This class has a runtime
- * complexity of O(V^3), resulting in a O(V^4) runtime complexity for the overal algorithm.
+ * complexity of O(V^3), resulting in a O(V^4) runtime complexity for the overall algorithm.
  *
  *
  * <p>
@@ -73,7 +75,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
 {
 
-    private final SimpleWeightedGraph<V, E> network;
+    private final Graph<V, E> network;
     /* Number of vertices in the graph */
     private final int N;
     /* Algorithm used to computed the Maximum s-t flows */
@@ -97,7 +99,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * 
      * @param network input graph
      */
-    public GusfieldGomoryHuCutTree(SimpleWeightedGraph<V, E> network)
+    public GusfieldGomoryHuCutTree(Graph<V, E> network)
     {
         this(network, MaximumFlowAlgorithmBase.DEFAULT_EPSILON);
     }
@@ -108,7 +110,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * @param network input graph
      * @param epsilon precision
      */
-    public GusfieldGomoryHuCutTree(SimpleWeightedGraph<V, E> network, double epsilon)
+    public GusfieldGomoryHuCutTree(Graph<V, E> network, double epsilon)
     {
         this(network, new PushRelabelMFImpl<>(network, epsilon));
     }
@@ -120,8 +122,10 @@ public class GusfieldGomoryHuCutTree<V, E>
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
     public GusfieldGomoryHuCutTree(
-        SimpleWeightedGraph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+        Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
+        if(!(network instanceof UndirectedGraph))
+            throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         this.N = network.vertexSet().size();
         if (N < 2)
