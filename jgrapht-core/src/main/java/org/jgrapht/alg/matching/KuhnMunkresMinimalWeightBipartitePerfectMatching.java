@@ -121,7 +121,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
             edgeSet.add(e);
         }
 
-        return new DefaultMatchingImpl<>(edgeSet, weight);
+        return new MatchingImpl<>(edgeSet, weight);
     }
 
     /**

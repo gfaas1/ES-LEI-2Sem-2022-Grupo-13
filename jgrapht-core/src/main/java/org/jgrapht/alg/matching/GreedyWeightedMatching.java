@@ -126,7 +126,7 @@ public class GreedyWeightedMatching<V, E>
         }
 
         // return matching
-        return new DefaultMatchingImpl<>(matching, matchingWeight);
+        return new MatchingImpl<>(matching, matchingWeight);
     }
 
 }

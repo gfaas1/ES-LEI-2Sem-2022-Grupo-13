@@ -65,7 +65,7 @@ public class EdmondsBlossomShrinking<V, E>
     public Matching<E> computeMatching()
     {
         Set<E> edges = findMatch();
-        return new DefaultMatchingImpl<>(edges, edges.size());
+        return new MatchingImpl<>(edges, edges.size());
     }
 
     /**

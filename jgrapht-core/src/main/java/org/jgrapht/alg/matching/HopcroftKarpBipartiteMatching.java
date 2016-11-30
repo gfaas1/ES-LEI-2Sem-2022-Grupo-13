@@ -84,7 +84,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
         checkInputData();
         maxMatching();
 
-        return new DefaultMatchingImpl<>(matching, matching.size());
+        return new MatchingImpl<>(matching, matching.size());
     }
 
     /**

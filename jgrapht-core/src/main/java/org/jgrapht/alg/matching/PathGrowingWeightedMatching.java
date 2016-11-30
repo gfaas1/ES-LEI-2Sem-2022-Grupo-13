@@ -224,9 +224,9 @@ public class PathGrowingWeightedMatching<V, E>
 
         // return best matching
         if (comparator.compare(m1Weight, m2Weight) > 0) {
-            return new DefaultMatchingImpl<E>(m1, m1Weight);
+            return new MatchingImpl<E>(m1, m1Weight);
         } else {
-            return new DefaultMatchingImpl<E>(m2, m2Weight);
+            return new MatchingImpl<E>(m2, m2Weight);
         }
     }
 
@@ -322,7 +322,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // return extended matching
-        return new DefaultMatchingImpl<E>(matching, matchingWeight);
+        return new MatchingImpl<E>(matching, matchingWeight);
     }
 
     /**

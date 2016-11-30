@@ -338,21 +338,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
         for (E e : m) {
             w += graph.getEdgeWeight(e);
         }
-        final double weight = w;
-        return new Matching<E>()
-        {
-            @Override
-            public double getWeight()
-            {
-                return weight;
-            }
-
-            @Override
-            public Set<E> getEdges()
-            {
-                return m;
-            }
-        };
+        return new MatchingImpl<E>(m, w);
     }
 }
 

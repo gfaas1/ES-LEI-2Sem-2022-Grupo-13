@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -77,6 +78,59 @@ public interface MatchingAlgorithm<V, E>
          * @return the edges of the matching
          */
         Set<E> getEdges();
+    }
+
+    /**
+     * A default implementation of the matching interface.
+     *
+     * @param <E> the graph edge type
+     */
+    class MatchingImpl<E>
+        implements Matching<E>, Serializable
+    {
+        private static final long serialVersionUID = 4767675421846527768L;
+
+        private Set<E> edges;
+        private double weight;
+
+        /**
+         * Construct a new instance
+         *
+         * @param edges the edges of the matching
+         * @param weight the weight of the matching
+         */
+        public MatchingImpl(Set<E> edges, double weight)
+        {
+            this.edges = edges;
+            this.weight = weight;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double getWeight()
+        {
+            return weight;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> getEdges()
+        {
+            return edges;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString()
+        {
+            return "Matching [edges=" + edges + ", weight=" + weight + "]";
+        }
     }
 
 }

@@ -108,7 +108,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         for (E edge : bipartiteMatching) {
             weight += graph.getEdgeWeight(edge);
         }
-        return new DefaultMatchingImpl<>(bipartiteMatching, weight);
+        return new MatchingImpl<>(bipartiteMatching, weight);
     }
 
     private void initializeVerticesAndEdges()
