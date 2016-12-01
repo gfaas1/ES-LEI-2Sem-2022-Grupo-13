@@ -23,8 +23,8 @@ import java.util.Random;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm.SpanningTree;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -120,13 +120,13 @@ public class MinimumSpanningTreeTest
                 g.setEdgeWeight(e, rng.nextDouble());
             }
 
-            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg1 =
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg1 =
                 new BoruvkaMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree1 = alg1.getSpanningTree();
-            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg2 =
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg2 =
                 new KruskalMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree2 = alg2.getSpanningTree();
-            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> alg3 =
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg3 =
                 new PrimMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree3 = alg3.getSpanningTree();
 

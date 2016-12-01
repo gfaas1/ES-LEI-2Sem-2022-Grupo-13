@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import org.jgrapht.alg.util.UnionFind;
 
@@ -51,7 +51,7 @@ import org.jgrapht.alg.util.UnionFind;
  * @since November 2016
  */
 public class BoruvkaMinimumSpanningTree<V, E>
-    implements MinimumSpanningTreeAlgorithm<E>
+    implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
@@ -147,6 +147,6 @@ public class BoruvkaMinimumSpanningTree<V, E>
         } while (!bestEdge.isEmpty());
 
         // return mst
-        return new DefaultSpanningEdgeSet<>(mstEdges, mstWeight);
+        return new SpanningTreeImpl<>(mstEdges, mstWeight);
     }
 }

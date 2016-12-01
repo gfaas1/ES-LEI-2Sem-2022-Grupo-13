@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MinimumSpanningTreeAlgorithm;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
@@ -59,7 +59,7 @@ public class MinimumSpanningTreePerformanceTest
         protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator = null;
         protected DirectedGraph<Integer, DefaultWeightedEdge> graph;
 
-        abstract MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph);
 
         public void setup()
@@ -83,7 +83,7 @@ public class MinimumSpanningTreePerformanceTest
 
         public void run()
         {
-            MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(graph);
+            SpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(graph);
             algo.getSpanningTree();
         }
     }
@@ -92,7 +92,7 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph)
         {
             return new PrimMinimumSpanningTree<>(graph);
@@ -109,7 +109,7 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph)
         {
             return new KruskalMinimumSpanningTree<>(graph);
@@ -126,7 +126,7 @@ public class MinimumSpanningTreePerformanceTest
         extends BenchmarkBase
     {
         @Override
-        MinimumSpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph)
         {
             return new BoruvkaMinimumSpanningTree<>(graph);

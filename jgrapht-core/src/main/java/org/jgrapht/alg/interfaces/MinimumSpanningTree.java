@@ -26,7 +26,7 @@ import java.util.*;
  *
  * @param <V> vertex concept type
  * @param <E> edge concept type
- * @deprecated In favor of {@link MinimumSpanningTreeAlgorithm}.
+ * @deprecated In favor of {@link SpanningTreeAlgorithm}.
  */
 @Deprecated
 public interface MinimumSpanningTree<V, E>

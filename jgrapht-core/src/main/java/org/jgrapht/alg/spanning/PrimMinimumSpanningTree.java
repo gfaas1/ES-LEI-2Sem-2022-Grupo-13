@@ -35,7 +35,7 @@ import org.jgrapht.alg.interfaces.*;
  * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
-    implements MinimumSpanningTreeAlgorithm<E>
+    implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> g;
 
@@ -101,7 +101,7 @@ public class PrimMinimumSpanningTree<V, E>
             }
         }
 
-        return new DefaultSpanningEdgeSet<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
+        return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
     }
 }
 

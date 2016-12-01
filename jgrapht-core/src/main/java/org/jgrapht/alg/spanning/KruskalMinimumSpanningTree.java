@@ -36,7 +36,7 @@ import org.jgrapht.alg.util.*;
  * @since Feb 10, 2010
  */
 public class KruskalMinimumSpanningTree<V, E>
-    implements MinimumSpanningTreeAlgorithm<E>
+    implements SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
 
@@ -77,7 +77,7 @@ public class KruskalMinimumSpanningTree<V, E>
             spanningTreeCost += graph.getEdgeWeight(edge);
         }
 
-        return new DefaultSpanningEdgeSet<>(edgeList, spanningTreeCost);
+        return new SpanningTreeImpl<>(edgeList, spanningTreeCost);
     }
 }
 

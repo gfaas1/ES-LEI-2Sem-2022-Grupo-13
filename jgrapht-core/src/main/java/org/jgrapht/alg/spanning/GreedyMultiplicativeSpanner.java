@@ -125,7 +125,7 @@ public class GreedyMultiplicativeSpanner<V, E>
                     }
                 }
             }
-            return new DefaultSpanningEdgeSet<>(edgeList, edgeListWeight);
+            return new SpannerImpl<>(edgeList, edgeListWeight);
         }
 
     }

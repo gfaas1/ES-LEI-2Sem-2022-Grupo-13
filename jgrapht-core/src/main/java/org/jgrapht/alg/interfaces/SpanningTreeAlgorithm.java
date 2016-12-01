@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2013-2016, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,65 +21,63 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * An algorithm which computes a
- * <a href="https://en.wikipedia.org/wiki/Glossary_of_graph_theory#spanner">graph spanner</a> of a
- * given graph.
+ * An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Spanning_tree"> spanning
+ * tree</a> of a given connected graph. In the case of disconnected graphs it would rather derive a
+ * spanning <i>forest</i>.
  *
- * @param <E> edge the graph edge type
+ * @param <E> the graph edge type
  */
-public interface SpannerAlgorithm<E>
+public interface SpanningTreeAlgorithm<E>
 {
-
     /**
-     * Computes a graph spanner.
+     * Computes a spanning tree.
      *
-     * @return a graph spanner
+     * @return a spanning tree
      */
-    Spanner<E> getSpanner();
+    SpanningTree<E> getSpanningTree();
 
     /**
-     * A graph spanner.
+     * A spanning tree.
      *
      * @param <E> the graph edge type
      */
-    interface Spanner<E>
+    interface SpanningTree<E>
     {
-
         /**
-         * Returns the weight of the graph spanner.
+         * Returns the weight of the spanning tree.
          * 
-         * @return weight of the graph spanner
+         * @return weight of the spanning tree
          */
         double getWeight();
 
         /**
-         * Set of edges of the graph spanner.
+         * Set of edges of the spanning tree.
          * 
-         * @return edge set of the spanner
+         * @return edge set of the spanning tree
          */
         Set<E> getEdges();
     }
 
     /**
-     * Default implementation of the spanner interface.
+     * Default implementation of the spanning tree interface.
      *
      * @param <E> the graph edge type
      */
-    class SpannerImpl<E>
-        implements Spanner<E>, Serializable
+    class SpanningTreeImpl<E>
+        implements SpanningTree<E>, Serializable
     {
-        private static final long serialVersionUID = 5951646499902668516L;
+        private static final long serialVersionUID = 402707108331703333L;
 
         private final double weight;
         private final Set<E> edges;
 
         /**
-         * Construct a new spanner
+         * Construct a new spanning tree.
          *
          * @param edges the edges
          * @param weight the weight
          */
-        public SpannerImpl(Set<E> edges, double weight)
+        public SpanningTreeImpl(Set<E> edges, double weight)
         {
             this.edges = edges;
             this.weight = weight;
@@ -100,7 +98,7 @@ public interface SpannerAlgorithm<E>
         @Override
         public String toString()
         {
-            return "Spanner [weight=" + weight + ", edges=" + edges + "]";
+            return "Spanning-Tree [weight=" + weight + ", edges=" + edges + "]";
         }
     }
 
