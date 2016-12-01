@@ -25,6 +25,9 @@ Changes to JGraphT in each version:
 	- Minor updates and fixes to demo (contributed by Dimitrios Michail)
     - Removed underscore identifiers and refactored tests in KuhnMunkresMinimalWeightBipartitePerfectMatchingTest. (contributed by Szabolcs Besenyei)
     -All matching algorithms are now unified under a new MatchingAlgorithm interface; the old WeightedMatchingAlgorithm interface is now deprecated. (contributed by Dimitrios Michail)
+    -Added Borůvka's algorithm for the computation of a minimum spanning tree (contributed by Dimitrios Michail)
+    -Revised spanning tree and spanner interfaces and bundled them under the alg.spanning package (contributed by Dimitrios Michail)
+    -Small improvements in StopWatch class (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
