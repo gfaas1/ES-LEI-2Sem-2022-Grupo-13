@@ -28,6 +28,7 @@ Changes to JGraphT in each version:
     -Added Borůvka's algorithm for the computation of a minimum spanning tree (contributed by Dimitrios Michail)
     -Revised spanning tree and spanner interfaces and bundled them under the alg.spanning package (contributed by Dimitrios Michail)
     -Small improvements in StopWatch class (contributed by Dimitrios Michail)
+    
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
