@@ -109,13 +109,6 @@ public class GusfieldGomoryHuCutTreeTest
                     .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));
                 assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath));
-
-                // b. splitting the tree by removing the cheapest edge from the path from i to j
-                // should provide the cut partition.
-                gomoryHuTreeCopy.removeEdge(cheapestEdgeInPath);
-                assertEquals(
-                    sourcePartition,
-                    new ConnectivityInspector<>(gomoryHuTreeCopy).connectedSetOf(i));
             }
         }
     }
