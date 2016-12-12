@@ -26,6 +26,7 @@ import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.UnmodifiableGraph;
 
 import java.util.*;
 
@@ -93,6 +94,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     private V lastInvokedSource = null;
     private V lastInvokedTarget = null;
     private Set<V> sourcePartitionLastInvokedSource = null;
+    private SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree = null;
 
     /**
      * Constructs a new GusfieldEquivalentFlowTree instance.
@@ -170,7 +172,6 @@ public class GusfieldGomoryHuCutTree<V, E>
                     flowMatrix[s][i] =
                         flowMatrix[i][s] = Math.min(flowMatrix[s][t], flowMatrix[t][i]);
         }
-
     }
 
     /**
@@ -184,12 +185,16 @@ public class GusfieldGomoryHuCutTree<V, E>
     {
         if (p == null) // Lazy invocation of the algorithm
             this.calculateGomoryHuTree();
+
+        //Compute the tree from scratch. Since we compute a new tree, the user is free to modify this tree.
+        //Alternatively we could return a Unmodifiable view of this.gomoryHuTree
         SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree =
-            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(gomoryHuTree, vertexList);
         for (int i = 1; i < N; i++) {
             Graphs.addEdge(gomoryHuTree, vertexList.get(i), vertexList.get(p[i]), fl[i]);
         }
+
         return gomoryHuTree;
     }
 
@@ -207,7 +212,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     public MaximumFlow<E> getMaximumFlow(V source, V sink)
     {
         throw new UnsupportedOperationException(
-            "Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
+            "Flows calculated via Gomory-Hu trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
     /**
@@ -226,6 +231,7 @@ public class GusfieldGomoryHuCutTree<V, E>
         lastInvokedSource = source;
         lastInvokedTarget = sink;
         sourcePartitionLastInvokedSource = null;
+        gomoryHuTree = null;
 
         if (p == null) // Lazy invocation of the algorithm
             this.calculateGomoryHuTree();
@@ -253,7 +259,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     public Map<E, Double> getFlowMap()
     {
         throw new UnsupportedOperationException(
-            "Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
+            "Flows calculated via Gomory-Hu trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
     /**
@@ -266,7 +272,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     public V getFlowDirection(E e)
     {
         throw new UnsupportedOperationException(
-            "Flows calculated via Equivalent Flow trees only provide a maximum flow value, not the exact flow per edge/arc.");
+            "Flows calculated via Gomory-Hu trees only provide a maximum flow value, not the exact flow per edge/arc.");
     }
 
     /* ================== Minimum Cut ================== */
@@ -280,7 +286,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     /**
      * Calculates the minimum cut in the graph, that is, the minimum cut over all s-t pairs. The
      * same result can be obtained with the {@link org.jgrapht.alg.StoerWagnerMinimumCut}
-     * implementation. After invoking this methdo, the source/sink partitions corresponding to the
+     * implementation. After invoking this method, the source/sink partitions corresponding to the
      * minimum cut can be queried through the {@link #getSourcePartition()} and
      * {@link #getSinkPartition()} methods. After computing the Gomory-Hu Cut tree, this method runs
      * in O(N) time.
@@ -289,7 +295,8 @@ public class GusfieldGomoryHuCutTree<V, E>
      */
     public double calculateMinCut()
     {
-        SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree = this.getGomoryHuTree();
+        if(this.gomoryHuTree==null)
+            this.gomoryHuTree=this.getGomoryHuTree();
         DefaultWeightedEdge cheapestEdge = gomoryHuTree
             .edgeSet().stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
             .orElseThrow(() -> new RuntimeException("graph is empty?!"));
@@ -311,26 +318,67 @@ public class GusfieldGomoryHuCutTree<V, E>
         if (sourcePartitionLastInvokedSource != null)
             return sourcePartitionLastInvokedSource;
 
-        SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree = this.getGomoryHuTree();
+        if(this.gomoryHuTree==null)
+            this.gomoryHuTree=this.getGomoryHuTree();
 
-        // This is inefficient. Even though there's by definition only one path between a pair of
-        // vertices in a tree graph, the shortest path method keeps searching whereas
-        // it could terminate as soon as the target vertex has been found. Should be replaced by a
-        // BFS search.
-        List<DefaultWeightedEdge> pathEdges = DijkstraShortestPath
-            .findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
+        Set<DefaultWeightedEdge> pathEdges = this.findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
         DefaultWeightedEdge cheapestEdge =
             pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight)).orElseThrow(
                 () -> new RuntimeException("path is empty?!"));
 
         // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of 2
         // components
+        V source=gomoryHuTree.getEdgeSource(cheapestEdge);
+        V target=gomoryHuTree.getEdgeTarget(cheapestEdge);
         gomoryHuTree.removeEdge(cheapestEdge);
 
         // Return the vertices in the component with the source vertex
         sourcePartitionLastInvokedSource =
             new ConnectivityInspector<>(gomoryHuTree).connectedSetOf(lastInvokedSource);
+
+        //Restore the internal tree structure by putting the edge back
+        gomoryHuTree.addEdge(source, target, cheapestEdge);
+
         return sourcePartitionLastInvokedSource;
+    }
+
+    /**
+     * BFS method to find the edges in the shortest path from a source to a target vertex in a tree graph.
+     * @param tree input graph
+     * @param source source
+     * @param target target
+     * @return edges constituting the shortest path between source and target
+     */
+    private Set<DefaultWeightedEdge> findPathBetween(SimpleWeightedGraph<V,DefaultWeightedEdge> tree, V source, V target){
+        boolean[] visited=new boolean[vertexList.size()];
+        Map<V,V> predecessorMap=new HashMap<V, V>();
+        Queue<V> queue=new LinkedList<V>();
+        queue.add(source);
+
+        boolean found=false;
+        while(!found && !queue.isEmpty()){
+            V next=queue.poll();
+            for(V v : Graphs.neighborListOf(tree, next)){
+                if(!visited[indexMap.get(v)]){
+                    predecessorMap.put(v, next);
+                    queue.add(v);
+                }
+                if(v == target){
+                    found=true;
+                    break;
+                }
+            }
+            visited[indexMap.get(next)]=true;
+        }
+
+        Set<DefaultWeightedEdge> edges=new LinkedHashSet<>();
+        V v=target;
+        while(v != source){
+            V pred=predecessorMap.get(v);
+            edges.add(tree.getEdge(v, pred));
+            v=pred;
+        }
+        return edges;
     }
 
     @Override
