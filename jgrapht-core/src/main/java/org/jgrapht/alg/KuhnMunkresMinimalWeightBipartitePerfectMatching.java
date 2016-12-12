@@ -122,6 +122,20 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
         return weight;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Matching<E> computeMatching()
+    {
+        Set<E> m = getMatching();
+        double w = 0d;
+        for (E e : m) {
+            w += graph.getEdgeWeight(e);
+        }
+        return new MatchingImpl<E>(m, w);
+    }
 
     /**
      * The actual implementation.

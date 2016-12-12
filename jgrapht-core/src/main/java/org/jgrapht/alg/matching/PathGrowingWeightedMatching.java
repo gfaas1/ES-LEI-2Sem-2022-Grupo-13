@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.WeightedMatchingAlgorithm;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
@@ -68,21 +68,21 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
  * @since September 2016
  */
 public class PathGrowingWeightedMatching<V, E>
-    implements WeightedMatchingAlgorithm<V, E>
+    implements MatchingAlgorithm<V, E>
 {
     /**
      * Default value on whether to use extra heuristics to improve the result.
      */
     public static final boolean DEFAULT_USE_HEURISTICS = true;
 
-    private Set<E> matching;
-    private double weight;
+    private final Graph<V, E> graph;
     private final Comparator<Double> comparator;
+    private final boolean useHeuristics;
 
     /**
-     * Create and execute a new instance of the path growing algorithm. Floating point values are
-     * compared using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time
-     * heuristics are used in order to improve the quality of the matchings.
+     * Construct a new instance of the path growing algorithm. Floating point values are compared
+     * using {@link #DEFAULT_EPSILON} tolerance. By default two additional linear time heuristics
+     * are used in order to improve the quality of the matchings.
      * 
      * @param graph the input graph
      */
@@ -92,8 +92,8 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     /**
-     * Create and execute a new instance of the path growing algorithm. Floating point values are
-     * compared using {@link #DEFAULT_EPSILON} tolerance.
+     * Construct a new instance of the path growing algorithm. Floating point values are compared
+     * using {@link #DEFAULT_EPSILON} tolerance.
      * 
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
@@ -107,7 +107,7 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     /**
-     * Create and execute a new instance of the path growing algorithm.
+     * Construct a new instance of the path growing algorithm.
      * 
      * @param graph the input graph
      * @param useHeuristics if true an improved version with additional heuristics is executed. The
@@ -121,17 +121,9 @@ public class PathGrowingWeightedMatching<V, E>
         if (graph == null) {
             throw new IllegalArgumentException("Input graph cannot be null");
         }
+        this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
-
-        Pair<Double, Set<E>> result;
-        if (useHeuristics) {
-            result = runWithHeuristics(graph);
-        } else {
-            result = run(graph);
-        }
-
-        this.weight = result.getFirst();
-        this.matching = result.getSecond();
+        this.useHeuristics = useHeuristics;
     }
 
     /**
@@ -140,30 +132,22 @@ public class PathGrowingWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Set<E> getMatching()
+    public Matching<E> computeMatching()
     {
-        return Collections.unmodifiableSet(matching);
-    }
-
-    /**
-     * Get the weight of the computed matching.
-     * 
-     * @return the weight of the matching
-     */
-    @Override
-    public double getMatchingWeight()
-    {
-        return weight;
+        if (useHeuristics) {
+            return runWithHeuristics();
+        } else {
+            return run();
+        }
     }
 
     /**
      * Compute all vertices that have positive degree by iterating over the edges on purpose. This
      * keeps the complexity to O(m) where m is the number of edges.
      * 
-     * @param graph the graph
      * @return set of vertices with positive degree
      */
-    private Set<V> initVisibleVertices(Graph<V, E> graph)
+    private Set<V> initVisibleVertices()
     {
         Set<V> visibleVertex = new HashSet<>();
         for (E e : graph.edgeSet()) {
@@ -178,10 +162,10 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (no heuristics)
-    private Pair<Double, Set<E>> run(Graph<V, E> graph)
+    private Matching<E> run()
     {
         // lookup all relevant vertices
-        Set<V> visibleVertex = initVisibleVertices(graph);
+        Set<V> visibleVertex = initVisibleVertices();
 
         // run algorithm
         Set<E> m1 = new HashSet<>();
@@ -240,17 +224,17 @@ public class PathGrowingWeightedMatching<V, E>
 
         // return best matching
         if (comparator.compare(m1Weight, m2Weight) > 0) {
-            return Pair.of(m1Weight, m1);
+            return new MatchingImpl<E>(m1, m1Weight);
         } else {
-            return Pair.of(m2Weight, m2);
+            return new MatchingImpl<E>(m2, m2Weight);
         }
     }
 
     // the algorithm (improved with additional heuristics)
-    private Pair<Double, Set<E>> runWithHeuristics(Graph<V, E> graph)
+    private Matching<E> runWithHeuristics()
     {
         // lookup all relevant vertices
-        Set<V> visibleVertex = initVisibleVertices(graph);
+        Set<V> visibleVertex = initVisibleVertices();
 
         // create solver for paths
         DynamicProgrammingPathSolver pathSolver = new DynamicProgrammingPathSolver();
@@ -338,7 +322,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // return extended matching
-        return Pair.of(matchingWeight, matching);
+        return new MatchingImpl<E>(matching, matchingWeight);
     }
 
     /**

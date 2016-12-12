@@ -17,36 +17,44 @@
  */
 package org.jgrapht.util;
 
+import java.util.concurrent.TimeUnit;
+
 /**
- * @author Assaf
- * @since May 30, 2005
+ * A very simple stop watch.
+ * 
+ * @author Assaf Lehr
  */
 public class StopWatch
 {
-    // ~ Instance fields --------------------------------------------------------
+    private long startTime;
 
-    long beforeTime;
+    /**
+     * Construct a new stop watch and start it.
+     */
+    public StopWatch()
+    {
+        start();
+    }
 
-    // ~ Methods ----------------------------------------------------------------
-
+    /**
+     * Restart.
+     */
     public void start()
     {
-        this.beforeTime = System.currentTimeMillis();
+        this.startTime = System.nanoTime();
     }
 
-    public void stopAndReport()
+    /**
+     * Get the elapsed time from the last restart.
+     * 
+     * @param timeUnit the time unit
+     * @return the elapsed time in the given time unit
+     */
+    public long getElapsed(TimeUnit timeUnit)
     {
-        long deltaTime = System.currentTimeMillis() - beforeTime;
-        if (deltaTime > 9999) {
-            double deltaTimeSec = deltaTime / 1000.0;
-            System.out.println("# Performence: " + deltaTimeSec + " full Seconds");
-        } else {
-            String timeDesc;
-            timeDesc = (deltaTime <= 10) ? "<10ms [less than minumun measurement time]"
-                : String.valueOf(deltaTime);
-            System.out.println("# Performence:  in MiliSeconds:" + timeDesc);
-        }
+        return timeUnit.convert(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
     }
+
 }
 
 // End StopWatch.java

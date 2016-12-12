@@ -36,11 +36,7 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
-
-    private UndirectedGraph<V, E> graph;
-
-    private Set<E> matching;
-
+    private final UndirectedGraph<V, E> graph;
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
@@ -48,29 +44,34 @@ public class EdmondsBlossomShrinking<V, E>
     /**
      * Construct an instance of the Edmonds blossom shrinking algorithm.
      * 
-     * @param G the input graph
+     * @param graph the input graph
+     * @throws IllegalArgumentException if the graph is not undirected
      */
-    public EdmondsBlossomShrinking(final UndirectedGraph<V, E> G)
+    public EdmondsBlossomShrinking(Graph<V, E> graph)
     {
-        this.graph = G;
+        if (graph == null) {
+            throw new IllegalArgumentException("Input graph cannot be null");
+        }
+        if (!(graph instanceof UndirectedGraph)) {
+            throw new IllegalArgumentException("Only undirected graphs supported");
+        }
+        this.graph = TypeUtil.uncheckedCast(graph, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<E> getMatching()
+    public Matching<E> computeMatching()
     {
-        if (matching == null) {
-            matching = findMatch();
-        }
-        return Collections.unmodifiableSet(matching);
+        Set<E> edges = findMatch();
+        return new MatchingImpl<>(edges, edges.size());
     }
 
     /**
      * Runs the algorithm on the input graph and returns the match edge set.
      *
-     * @return set of Edges
+     * @return set of edges
      */
     private Set<E> findMatch()
     {

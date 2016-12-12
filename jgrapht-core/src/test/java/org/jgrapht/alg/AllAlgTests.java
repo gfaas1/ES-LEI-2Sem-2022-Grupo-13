@@ -36,7 +36,7 @@ import org.junit.runners.*;
     FloydWarshallShortestPathsTest.class, GusfieldEquivalentFlowTreeTest.class, GusfieldGomoryHuCutTreeTest.class,
     HamiltonianCycleTest.class, KShortestPathCostTest.class,
     KShortestPathKValuesTest.class, KSPDiscardsValidPathsTest.class, KSPExampleTest.class,
-    MinimumSpanningTreeTest.class, NaiveLcaFinderTest.class, NeighborIndexTest.class, PadbergRaoOddMinimumCutsetTest.class,
+    NaiveLcaFinderTest.class, NeighborIndexTest.class, PadbergRaoOddMinimumCutsetTest.class,
     PushRelabelMFImplTest.class, PushRelabelMinimumSTCutTest.class, StoerWagnerMinimumCutTest.class,
     StrongConnectivityAlgorithmTest.class, TarjanLowestCommonAncestorTest.class,
     TransitiveClosureTest.class, VertexCoverTest.class, WeightedVertexCoverTest.class })

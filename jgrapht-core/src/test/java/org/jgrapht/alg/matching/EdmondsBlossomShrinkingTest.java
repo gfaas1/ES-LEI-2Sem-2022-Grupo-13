@@ -17,9 +17,8 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -53,10 +52,10 @@ public final class EdmondsBlossomShrinkingTest
 
         // compute max match
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
-        Set<DefaultEdge> match = matcher.getMatching();
-        assertEquals(2, match.size());
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
+        Matching<DefaultEdge> match = matcher.computeMatching();
+        assertEquals(2, match.getEdges().size());
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
     }
 
     public void testCrash()
@@ -80,12 +79,12 @@ public final class EdmondsBlossomShrinkingTest
 
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Set<DefaultEdge> match = matcher.getMatching();
+        Matching<DefaultEdge> match = matcher.computeMatching();
 
-        assertEquals(2, match.size());
+        assertEquals(2, match.getEdges().size());
 
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
     }
 
     public void testCrash2()
@@ -107,15 +106,15 @@ public final class EdmondsBlossomShrinkingTest
 
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Set<DefaultEdge> match = matcher.getMatching();
+        Matching<DefaultEdge> match = matcher.computeMatching();
 
-        assertEquals(6, match.size());
+        assertEquals(6, match.getEdges().size());
 
-        assertTrue(match.contains(e12));
-        assertTrue(match.contains(e34));
-        assertTrue(match.contains(e56));
-        assertTrue(match.contains(e78));
-        assertTrue(match.contains(e910));
-        assertTrue(match.contains(e1112));
+        assertTrue(match.getEdges().contains(e12));
+        assertTrue(match.getEdges().contains(e34));
+        assertTrue(match.getEdges().contains(e56));
+        assertTrue(match.getEdges().contains(e78));
+        assertTrue(match.getEdges().contains(e910));
+        assertTrue(match.getEdges().contains(e1112));
     }
 }

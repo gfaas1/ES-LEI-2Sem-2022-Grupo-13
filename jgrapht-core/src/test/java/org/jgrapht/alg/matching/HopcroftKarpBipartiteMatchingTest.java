@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -53,10 +54,11 @@ public class HopcroftKarpBipartiteMatchingTest
         HopcroftKarpBipartiteMatching<Integer, DefaultEdge> bm =
             new HopcroftKarpBipartiteMatching<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        assertEquals(3, bm.getMatching().size(), 0);
         List<DefaultEdge> l1 = Arrays.asList(e11, e02, e20);
         Set<DefaultEdge> matching = new HashSet<>(l1);
-        assertEquals(matching, bm.getMatching());
+        Matching<DefaultEdge> bmMatching = bm.computeMatching();
+        assertEquals(3, bmMatching.getEdges().size(), 0);
+        assertEquals(matching, bmMatching.getEdges());
     }
 
     /**
@@ -80,10 +82,11 @@ public class HopcroftKarpBipartiteMatchingTest
         HopcroftKarpBipartiteMatching<Integer, DefaultEdge> bm =
             new HopcroftKarpBipartiteMatching<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        assertEquals(6, bm.getMatching().size(), 0);
+        Matching<DefaultEdge> bmMatching = bm.computeMatching();
+        assertEquals(6, bmMatching.getEdges().size(), 0);
         List<DefaultEdge> l1 = Arrays.asList(e21, e13, e00, e42, e34, e55);
         Set<DefaultEdge> matching = new HashSet<>(l1);
-        assertEquals(matching, bm.getMatching());
+        assertEquals(matching, bmMatching.getEdges());
     }
 
     /**
@@ -99,7 +102,8 @@ public class HopcroftKarpBipartiteMatchingTest
         HopcroftKarpBipartiteMatching<Integer, DefaultEdge> bm =
             new HopcroftKarpBipartiteMatching<>(
                 graph, new HashSet<>(partition1), new HashSet<>(partition2));
-        assertEquals(Collections.EMPTY_SET, bm.getMatching());
+        Matching<DefaultEdge> bmMatching = bm.computeMatching();
+        assertEquals(Collections.EMPTY_SET, bmMatching.getEdges());
     }
 
     /**
@@ -118,11 +122,12 @@ public class HopcroftKarpBipartiteMatchingTest
         g.addEdge(0, 3);
         g.addEdge(1, 2);
 
-        Set<DefaultEdge> m =
-            new HopcroftKarpBipartiteMatching<Integer, DefaultEdge>(g, left, right).getMatching();
-        assertTrue(m.contains(g.getEdge(1, 2)));
-        assertTrue(m.contains(g.getEdge(0, 3)));
-        assertEquals(2, m.size());
+        Matching<DefaultEdge> m =
+            new HopcroftKarpBipartiteMatching<Integer, DefaultEdge>(g, left, right)
+                .computeMatching();
+        assertTrue(m.getEdges().contains(g.getEdge(1, 2)));
+        assertTrue(m.getEdges().contains(g.getEdge(0, 3)));
+        assertEquals(2, m.getEdges().size());
     }
 
 }

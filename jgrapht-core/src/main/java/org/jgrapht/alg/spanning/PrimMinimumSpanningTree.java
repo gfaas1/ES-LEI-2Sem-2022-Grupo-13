@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.spanning;
 
 import java.util.*;
 
@@ -33,30 +33,30 @@ import org.jgrapht.alg.interfaces.*;
  *
  * @author Alexey Kudinkin
  * @since Mar 5, 2013
- * @deprecated Use {@link org.jgrapht.alg.spanning.PrimMinimumSpanningTree} instead.
  */
-@Deprecated
 public class PrimMinimumSpanningTree<V, E>
-    implements MinimumSpanningTree<V, E>
+    implements SpanningTreeAlgorithm<E>
 {
-    /**
-     * Minimum Spanning-Tree/Forest edge set
-     */
-    private final Set<E> minimumSpanningTreeEdgeSet;
+    private final Graph<V, E> g;
 
     /**
-     * Minimum Spanning-Tree/Forest edge set overall weight
-     */
-    private final double minimumSpanningTreeTotalWeight;
-
-    /**
-     * Create and execute a new instance of Prim's algorithm.
+     * Construct a new instance of the algorithm.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      */
-    public PrimMinimumSpanningTree(final Graph<V, E> g)
+    public PrimMinimumSpanningTree(Graph<V, E> graph)
     {
-        this.minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
+        this.g = Objects.requireNonNull(graph, "Graph cannot be null");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SpanningTree<E> getSpanningTree()
+    {
+        Set<E> minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
+        double spanningTreeWeight = 0d;
 
         Set<V> unspanned = new HashSet<>(g.vertexSet());
 
@@ -86,7 +86,8 @@ public class PrimMinimumSpanningTree<V, E>
                     continue;
                 }
 
-                this.minimumSpanningTreeEdgeSet.add(next);
+                minimumSpanningTreeEdgeSet.add(next);
+                spanningTreeWeight += g.getEdgeWeight(next);
 
                 unspanned.remove(t);
 
@@ -100,24 +101,7 @@ public class PrimMinimumSpanningTree<V, E>
             }
         }
 
-        double spanningTreeWeight = 0;
-        for (E e : minimumSpanningTreeEdgeSet) {
-            spanningTreeWeight += g.getEdgeWeight(e);
-        }
-
-        this.minimumSpanningTreeTotalWeight = spanningTreeWeight;
-    }
-
-    @Override
-    public Set<E> getMinimumSpanningTreeEdgeSet()
-    {
-        return Collections.unmodifiableSet(minimumSpanningTreeEdgeSet);
-    }
-
-    @Override
-    public double getMinimumSpanningTreeTotalWeight()
-    {
-        return minimumSpanningTreeTotalWeight;
+        return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
     }
 }
 
