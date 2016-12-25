@@ -79,6 +79,15 @@ import org.jgrapht.event.GraphVertexChangeEvent;
  * {@link LinkedHashSet}).
  * </p>
  *
+ * <p>
+ * Note that this implementation tries to maintain a "live-window" on the base graph, which has
+ * implications in the performance of the various operations. For example iterating over the
+ * adjacent edges of a vertex takes time proportional to the number of adjacent edges of the vertex
+ * in the base graph even if the subgraph contains only a small subset of those edges. Therefore,
+ * the user must be aware that using this implementation for certain algorithms might come with
+ * computational overhead. For certain algorithms it is better to maintain a subgraph by hand
+ * instead of using this implementation as a black box.
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  * @param <G> the type of the base graph
@@ -421,9 +430,15 @@ public class Subgraph<V, E, G extends Graph<V, E>>
 
     private void initialize(Set<? extends V> vertexFilter, Set<? extends E> edgeFilter)
     {
+        if (vertexFilter == null && edgeFilter == null) {
+            vertexSet.addAll(base.vertexSet());
+            edgeSet.addAll(base.edgeSet());
+            return;
+        }
+
         // add vertices
         if (vertexFilter == null) {
-            base.vertexSet().stream().forEach(v -> vertexSet.add(v));
+            vertexSet.addAll(base.vertexSet());
         } else {
             if (vertexFilter.size() > base.vertexSet().size()) {
                 base.vertexSet().stream().filter(v -> vertexFilter.contains(v)).forEach(
