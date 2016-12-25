@@ -17,6 +17,8 @@
  */
 package org.jgrapht.graph;
 
+import java.util.Iterator;
+
 import org.jgrapht.*;
 
 /**
@@ -52,23 +54,8 @@ public class MaskEdgeSetTest
         loop1 = directed.addEdge(v1, v1);
         loop2 = directed.addEdge(v4, v4);
 
-        // Functor that masks vertex v1 and and the edge v2-v3
-        MaskFunctor<String, DefaultEdge> mask = new MaskFunctor<String, DefaultEdge>()
-        {
-            @Override
-            public boolean isEdgeMasked(DefaultEdge edge)
-            {
-                return (edge == e2);
-            }
-
-            @Override
-            public boolean isVertexMasked(String vertex)
-            {
-                return (vertex == v1);
-            }
-        };
-
-        testMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), mask);
+        testMaskedEdgeSet =
+            new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v == v1, e -> e == e2);
     }
 
     public void testContains()
@@ -86,5 +73,15 @@ public class MaskEdgeSetTest
     public void testSize()
     {
         assertEquals(2, testMaskedEdgeSet.size());
+    }
+
+    public void testIterator()
+    {
+        Iterator<DefaultEdge> it = testMaskedEdgeSet.iterator();
+        assertTrue(it.hasNext());
+        assertEquals(e3, it.next());
+        assertTrue(it.hasNext());
+        assertEquals(loop2, it.next());
+        assertFalse(it.hasNext());
     }
 }

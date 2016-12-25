@@ -25,7 +25,10 @@ package org.jgrapht.graph;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * 
+ * @deprecated in favor of using lambdas
  */
+@Deprecated
 public interface MaskFunctor<V, E>
 {
     /**

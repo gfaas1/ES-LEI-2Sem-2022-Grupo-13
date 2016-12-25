@@ -154,6 +154,88 @@ public class SubgraphTest
 
         assertFalse(subgraph.containsEdge(v1, v2));
     }
+
+    public void testEdges()
+    {
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
+        g.addEdge(1, 2);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        DefaultEdge e14 = g.addEdge(1, 4);
+        g.addEdge(2, 3);
+        g.addEdge(2, 1);
+        g.addEdge(3, 3);
+        g.addEdge(4, 5);
+        g.addEdge(5, 5);
+        g.addEdge(5, 2);
+
+        UndirectedSubgraph<Integer, DefaultEdge> sg = new UndirectedSubgraph<>(g);
+        assertEquals(10, sg.edgeSet().size());
+        sg.removeVertex(2);
+        assertEquals(5, sg.edgeSet().size());
+        assertEquals(2, sg.edgesOf(1).size());
+        assertFalse(sg.containsVertex(2));
+        assertEquals(2, sg.edgesOf(3).size());
+        assertEquals(2, sg.edgesOf(4).size());
+        assertEquals(2, sg.edgesOf(5).size());
+
+        sg.removeEdge(e14);
+        assertEquals(4, sg.edgeSet().size());
+        assertEquals(1, sg.edgesOf(1).size());
+        assertEquals(2, sg.edgesOf(3).size());
+        assertEquals(1, sg.edgesOf(4).size());
+        assertEquals(2, sg.edgesOf(5).size());
+
+        assertEquals(10, g.edgeSet().size());
+    }
+
+    public void testNonValidVerticesFilter()
+    {
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
+        g.addEdge(1, 2);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(1, 4);
+        g.addEdge(2, 3);
+        g.addEdge(2, 1);
+        g.addEdge(3, 3);
+        g.addEdge(4, 5);
+        g.addEdge(5, 5);
+        g.addEdge(5, 2);
+
+        UndirectedSubgraph<Integer, DefaultEdge> sg = new UndirectedSubgraph<>(
+            g, new HashSet<>(Arrays.asList(1, 3, 100, 200, 300, 500, 800, 1000)));
+        assertEquals(2, sg.edgeSet().size());
+        assertEquals(2, sg.vertexSet().size());
+    }
+
+    public void testNonValidEdgesFilter()
+    {
+        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
+        DefaultEdge e1 = g.addEdge(1, 2);
+        g.addEdge(1, 2);
+        DefaultEdge e2 = g.addEdge(1, 3);
+        DefaultEdge e3 = g.addEdge(1, 4);
+        g.addEdge(2, 3);
+        g.addEdge(2, 1);
+        g.addEdge(3, 3);
+        DefaultEdge e4 = g.addEdge(4, 5);
+        DefaultEdge e5 = g.addEdge(5, 5);
+        g.addEdge(5, 2);
+
+        DefaultEdge nonValid1 = g.addEdge(5, 1);
+        g.removeEdge(nonValid1);
+        DefaultEdge nonValid2 = g.addEdge(5, 1);
+        g.removeEdge(nonValid2);
+
+        UndirectedSubgraph<Integer, DefaultEdge> sg = new UndirectedSubgraph<>(
+            g, null, new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, nonValid1, nonValid2)));
+        assertEquals(5, sg.edgeSet().size());
+        assertEquals(5, sg.vertexSet().size());
+    }
 }
 
 // End SubgraphTest.java

@@ -20,9 +20,10 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 /**
- * A directed weighted graph that is a subgraph on other graph.
+ * A directed weighted graph that is a subgraph of another graph.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -39,16 +40,39 @@ public class DirectedWeightedSubgraph<V, E>
      * Creates a new weighted directed subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
+     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
+     *        edges whose vertices found in the graph are included.
      */
     public DirectedWeightedSubgraph(
-        WeightedGraph<V, E> base, Set<V> vertexSubset, Set<E> edgeSubset)
+        WeightedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
-        super((DirectedGraph<V, E>) base, vertexSubset, edgeSubset);
+        super(TypeUtil.uncheckedCast(base, null), vertexSubset, edgeSubset);
     }
+
+    /**
+     * Creates a new weighted directed induced subgraph.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
+     */
+    public DirectedWeightedSubgraph(WeightedGraph<V, E> base, Set<? extends V> vertexSubset)
+    {
+        this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new weighted directed induced subgraph with all vertices included.
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public DirectedWeightedSubgraph(WeightedGraph<V, E> base)
+    {
+        this(base, null, null);
+    }
+
 }
 
 // End DirectedWeightedSubgraph.java

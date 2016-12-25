@@ -17,11 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.Predicate;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
-import org.jgrapht.util.PrefetchIterator.*;
+import org.jgrapht.Graph;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * Helper for {@link MaskSubgraph}.
@@ -31,84 +34,67 @@ import org.jgrapht.util.PrefetchIterator.*;
  */
 class MaskEdgeSet<V, E>
     extends AbstractSet<E>
+    implements Serializable
 {
-    private Set<E> edgeSet;
+    private static final long serialVersionUID = 4208908842850100708L;
 
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
+    private final Set<E> edgeSet;
+    private final Predicate<V> vertexMask;
+    private final Predicate<E> edgeMask;
 
-    private MaskFunctor<V, E> mask;
-
-    public MaskEdgeSet(Graph<V, E> graph, Set<E> edgeSet, MaskFunctor<V, E> mask)
+    public MaskEdgeSet(
+        Graph<V, E> graph, Set<E> edgeSet, Predicate<V> vertexMask, Predicate<E> edgeMask)
     {
         this.graph = graph;
         this.edgeSet = edgeSet;
-        this.mask = mask;
+        this.vertexMask = vertexMask;
+        this.edgeMask = edgeMask;
     }
 
     /**
-     * @see java.util.Collection#contains(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean contains(Object o)
     {
-        // Force a cast to type E. This is nonsense, of course, but
-        // it's erased by the compiler anyway.
+        if (!edgeSet.contains(o)) {
+            return false;
+        }
         E e = TypeUtil.uncheckedCast(o, null);
 
-        // If o isn't an E, the first check will fail and
-        // short-circuit, so we never try to test the mask on non-edge
-        // object inputs.
-        return edgeSet.contains(e) && !mask.isEdgeMasked(e)
-            && !mask.isVertexMasked(graph.getEdgeSource(e))
-            && !mask.isVertexMasked(graph.getEdgeTarget(e));
+        return !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
+            && !vertexMask.test(graph.getEdgeTarget(e));
     }
 
     /**
-     * @see java.util.Set#iterator()
+     * {@inheritDoc}
      */
     @Override
     public Iterator<E> iterator()
     {
-        return new PrefetchIterator<E>(new MaskEdgeSetNextElementFunctor());
+        return edgeSet
+            .stream()
+            .filter(
+                e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
+                    && !vertexMask.test(graph.getEdgeTarget(e)))
+            .iterator();
     }
 
     /**
-     * @see java.util.Set#size()
+     * {@inheritDoc}
      */
     @Override
     public int size()
     {
-        return (int) edgeSet.stream().filter(e -> contains(e)).count();
+        return (int) edgeSet
+            .stream()
+            .filter(
+                e -> !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
+                    && !vertexMask.test(graph.getEdgeTarget(e)))
+            .count();
     }
 
-    private class MaskEdgeSetNextElementFunctor
-        implements NextElementFunctor<E>
-    {
-        private Iterator<E> iter;
-
-        public MaskEdgeSetNextElementFunctor()
-        {
-            this.iter = MaskEdgeSet.this.edgeSet.iterator();
-        }
-
-        @Override
-        public E nextElement()
-            throws NoSuchElementException
-        {
-            E edge = this.iter.next();
-            while (isMasked(edge)) {
-                edge = this.iter.next();
-            }
-            return edge;
-        }
-
-        private boolean isMasked(E edge)
-        {
-            return MaskEdgeSet.this.mask.isEdgeMasked(edge)
-                || MaskEdgeSet.this.mask.isVertexMasked(MaskEdgeSet.this.graph.getEdgeSource(edge))
-                || MaskEdgeSet.this.mask.isVertexMasked(MaskEdgeSet.this.graph.getEdgeTarget(edge));
-        }
-    }
 }
 
 // End MaskEdgeSet.java

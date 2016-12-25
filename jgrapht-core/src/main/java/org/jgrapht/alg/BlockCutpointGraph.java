@@ -166,9 +166,8 @@ public class BlockCutpointGraph<V, E>
         vertexComponent.add(edge.getSource());
         vertexComponent.add(edge.getTarget());
 
-        VertexComponentForbiddenFunction mask =
-            new VertexComponentForbiddenFunction(vertexComponent);
-        UndirectedGraph<V, E> biconnectedSubgraph = new UndirectedMaskSubgraph<>(this.graph, mask);
+        UndirectedGraph<V, E> biconnectedSubgraph =
+            new UndirectedMaskSubgraph<>(this.graph, v -> !vertexComponent.contains(v), e -> false);
         for (V vertex : vertexComponent) {
             this.vertex2block.put(vertex, biconnectedSubgraph);
             getBiconnectedSubgraphs(vertex).add(biconnectedSubgraph);
@@ -279,29 +278,6 @@ public class BlockCutpointGraph<V, E>
         public V getTarget()
         {
             return this.target;
-        }
-    }
-
-    private class VertexComponentForbiddenFunction
-        implements MaskFunctor<V, E>
-    {
-        private Set<V> vertexComponent;
-
-        public VertexComponentForbiddenFunction(Set<V> vertexComponent)
-        {
-            this.vertexComponent = vertexComponent;
-        }
-
-        @Override
-        public boolean isEdgeMasked(E edge)
-        {
-            return false;
-        }
-
-        @Override
-        public boolean isVertexMasked(V vertex)
-        {
-            return !this.vertexComponent.contains(vertex);
         }
     }
 }

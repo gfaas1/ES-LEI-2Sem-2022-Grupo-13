@@ -17,12 +17,20 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.util.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.Graph;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
 
 /**
  * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some
@@ -59,7 +67,7 @@ import org.jgrapht.util.*;
  * and edges added to the subgraph must be <i>identical</i> (that is, reference-equal and not only
  * value-equal) to their respective ones in the base graph. Previous versions of this class enforced
  * such identity, at a severe performance cost. Currently it is no longer enforced. If you want to
- * achieve a "live-window"functionality, your safest tactics would be to NOT override the
+ * achieve a "live-window" functionality, your safest tactics would be to NOT override the
  * <code>equals()</code> methods of your vertices and edges. If you use a class that has already
  * overridden the <code>equals()</code> method, such as <code>String</code>, than you can use a
  * wrapper around it, or else use it directly but exercise a great care to avoid having
@@ -70,6 +78,15 @@ import org.jgrapht.util.*;
  * This graph implementation guarantees deterministic vertex and edge set ordering (via
  * {@link LinkedHashSet}).
  * </p>
+ *
+ * <p>
+ * Note that this implementation tries to maintain a "live-window" on the base graph, which has
+ * implications in the performance of the various operations. For example iterating over the
+ * adjacent edges of a vertex takes time proportional to the number of adjacent edges of the vertex
+ * in the base graph even if the subgraph contains only a small subset of those edges. Therefore,
+ * the user must be aware that using this implementation for certain algorithms might come with
+ * computational overhead. For certain algorithms it is better to maintain a subgraph by hand
+ * instead of using this implementation as a black box.
  *
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -85,60 +102,65 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     implements Serializable
 {
     private static final long serialVersionUID = 3208313055169665387L;
+
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
 
-    //
-    Set<E> edgeSet = new LinkedHashSet<>(); // friendly to improve performance
-    Set<V> vertexSet = new LinkedHashSet<>(); // friendly to improve
+    protected final Set<E> edgeSet = new LinkedHashSet<>();
+    protected final Set<V> vertexSet = new LinkedHashSet<>();
+    protected final G base;
+    protected final boolean isInduced;
 
-    // performance
-
-    //
     private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
-    private G base;
-    private boolean isInduced = false;
 
     /**
      * Creates a new Subgraph.
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>
-     * null</code> then all the edges whose vertices found in the graph are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
+     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
+     *        edges whose vertices found in the graph are included.
      */
-    public Subgraph(G base, Set<V> vertexSubset, Set<E> edgeSubset)
+    public Subgraph(G base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
         super();
 
-        this.base = base;
-
-        if (edgeSubset == null) {
-            isInduced = true;
-        }
+        this.base = Objects.requireNonNull(base, "Invalid graph provided");
+        this.isInduced = edgeSubset == null;
 
         if (base instanceof ListenableGraph<?, ?>) {
             ((ListenableGraph<V, E>) base).addGraphListener(new BaseGraphListener());
         }
 
-        addVerticesUsingFilter(base.vertexSet(), vertexSubset);
-        addEdgesUsingFilter(base.edgeSet(), edgeSubset);
+        initialize(vertexSubset, edgeSubset);
     }
 
     /**
      * Creates a new induced Subgraph. The subgraph will keep track of edges being added to its
      * vertex subset as well as deletion of edges and vertices. If base it not listenable, this is
-     * identical to the call Subgraph(base, vertexSubset, null) .
+     * identical to the call Subgraph(base, vertexSubset, null).
      *
      * @param base the base (backing) graph on which the subgraph will be based.
-     * @param vertexSubset vertices to include in the subgraph. If <code>
-     * null</code> then all vertices are included.
+     * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
+     *        vertices are included.
      */
-    public Subgraph(G base, Set<V> vertexSubset)
+    public Subgraph(G base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
+    }
+
+    /**
+     * Creates a new induced Subgraph with all vertices included. The subgraph will keep track of
+     * edges being added to its vertex subset as well as deletion of edges and vertices. If base it
+     * not listenable, this is identical to the call Subgraph(base, null, null).
+     *
+     * @param base the base (backing) graph on which the subgraph will be based.
+     */
+    public Subgraph(G base)
+    {
+        this(base, null, null);
     }
 
     /**
@@ -147,22 +169,13 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        Set<E> edges = null;
-
         if (containsVertex(sourceVertex) && containsVertex(targetVertex)) {
-            edges = new ArrayUnenforcedSet<>();
-
-            Set<E> baseEdges = base.getAllEdges(sourceVertex, targetVertex);
-
-            for (E e : baseEdges) {
-                if (edgeSet.contains(e)) { // add if subgraph also contains
-                    // it
-                    edges.add(e);
-                }
-            }
+            return base
+                .getAllEdges(sourceVertex, targetVertex).stream().filter(e -> edgeSet.contains(e))
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+        } else {
+            return null;
         }
-
-        return edges;
     }
 
     /**
@@ -173,10 +186,10 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         Set<E> edges = getAllEdges(sourceVertex, targetVertex);
 
-        if ((edges == null) || edges.isEmpty()) {
+        if (edges == null) {
             return null;
         } else {
-            return edges.iterator().next();
+            return edges.stream().findAny().orElse(null);
         }
     }
 
@@ -190,7 +203,19 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
+     * Add an edge to the subgraph. The end-points must exist in the subgraph and the edge must
+     * exist in the base graph. In case multiple such edges exist in the base graph, one that is not
+     * already in the subgraph is chosen arbitrarily and added to the subgraph. In case all such
+     * edges already exist in the subgraph, the method returns null.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the source vertex
+     * @return the added edge or null if all such edges from the base graph already belong in the
+     *         subgraph
+     * @throws IllegalArgumentException if the source or target vertex does not belong to the
+     *         subgraph
+     * @throws IllegalArgumentException if the base graph does not contain any edge between the two
+     *         end-points
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -207,7 +232,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         for (E e : edges) {
             if (!containsEdge(e)) {
                 edgeSet.add(e);
-
                 return e;
             }
         }
@@ -235,13 +259,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         assert (base.getEdgeSource(e) == sourceVertex);
         assert (base.getEdgeTarget(e) == targetVertex);
 
-        if (containsEdge(e)) {
-            return false;
-        } else {
-            edgeSet.add(e);
-
-            return true;
-        }
+        return edgeSet.add(e);
     }
 
     /**
@@ -264,18 +282,10 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         if (v == null) {
             throw new NullPointerException();
         }
-
         if (!base.containsVertex(v)) {
             throw new IllegalArgumentException(NO_SUCH_VERTEX_IN_BASE);
         }
-
-        if (containsVertex(v)) {
-            return false;
-        } else {
-            vertexSet.add(v);
-
-            return true;
-        }
+        return vertexSet.add(v);
     }
 
     /**
@@ -305,7 +315,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         if (unmodifiableEdgeSet == null) {
             unmodifiableEdgeSet = Collections.unmodifiableSet(edgeSet);
         }
-
         return unmodifiableEdgeSet;
     }
 
@@ -317,16 +326,8 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         assertVertexExist(vertex);
 
-        Set<E> edges = new ArrayUnenforcedSet<>();
-        Set<E> baseEdges = base.edgesOf(vertex);
-
-        for (E e : baseEdges) {
-            if (containsEdge(e)) {
-                edges.add(e);
-            }
-        }
-
-        return edges;
+        return base.edgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
+            Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 
     /**
@@ -396,38 +397,6 @@ public class Subgraph<V, E, G extends Graph<V, E>>
         return base.getEdgeTarget(e);
     }
 
-    private void addEdgesUsingFilter(Set<E> edgeSet, Set<E> filter)
-    {
-        E e;
-        boolean containsVertices;
-        boolean edgeIncluded;
-
-        for (E anEdgeSet : edgeSet) {
-            e = anEdgeSet;
-
-            V sourceVertex = base.getEdgeSource(e);
-            V targetVertex = base.getEdgeTarget(e);
-            containsVertices = containsVertex(sourceVertex) && containsVertex(targetVertex);
-
-            // note the use of short circuit evaluation
-            edgeIncluded = (filter == null) || filter.contains(e);
-
-            if (containsVertices && edgeIncluded) {
-                addEdge(sourceVertex, targetVertex, e);
-            }
-        }
-    }
-
-    private void addVerticesUsingFilter(Set<V> vertexSet, Set<V> filter)
-    {
-        for (V v : vertexSet) {
-            // note the use of short circuit evaluation
-            if ((filter == null) || filter.contains(v)) {
-                addVertex(v);
-            }
-        }
-    }
-
     /**
      * Get the base graph.
      * 
@@ -457,6 +426,55 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     public void setEdgeWeight(E e, double weight)
     {
         ((WeightedGraph<V, E>) base).setEdgeWeight(e, weight);
+    }
+
+    private void initialize(Set<? extends V> vertexFilter, Set<? extends E> edgeFilter)
+    {
+        if (vertexFilter == null && edgeFilter == null) {
+            vertexSet.addAll(base.vertexSet());
+            edgeSet.addAll(base.edgeSet());
+            return;
+        }
+
+        // add vertices
+        if (vertexFilter == null) {
+            vertexSet.addAll(base.vertexSet());
+        } else {
+            if (vertexFilter.size() > base.vertexSet().size()) {
+                base.vertexSet().stream().filter(v -> vertexFilter.contains(v)).forEach(
+                    v -> vertexSet.add(v));
+            } else {
+                vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
+                    v -> vertexSet.add(v));
+            }
+        }
+
+        // add edges
+        if (edgeFilter == null) {
+            base
+                .edgeSet().stream()
+                .filter(
+                    e -> vertexSet.contains(base.getEdgeSource(e))
+                        && vertexSet.contains(base.getEdgeTarget(e)))
+                .forEach(e -> edgeSet.add(e));
+        } else {
+            if (edgeFilter.size() > base.edgeSet().size()) {
+                base
+                    .edgeSet().stream()
+                    .filter(
+                        e -> edgeFilter.contains(e) && vertexSet.contains(base.getEdgeSource(e))
+                            && vertexSet.contains(base.getEdgeTarget(e)))
+                    .forEach(e -> edgeSet.add(e));
+            } else {
+                edgeFilter
+                    .stream()
+                    .filter(
+                        e -> e != null && base.containsEdge(e)
+                            && vertexSet.contains(base.getEdgeSource(e))
+                            && vertexSet.contains(base.getEdgeTarget(e)))
+                    .forEach(e -> edgeSet.add(e));
+            }
+        }
     }
 
     /**
