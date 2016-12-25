@@ -57,8 +57,8 @@ public class ListSingleSourcePathsTest
             map.put(i, path);
         }
 
-        ListSingleSourcePaths<Integer, DefaultWeightedEdge> paths =
-            new ListSingleSourcePaths<>(g, 0, map);
+        ListSingleSourcePathsImpl<Integer, DefaultWeightedEdge> paths =
+            new ListSingleSourcePathsImpl<>(g, 0, map);
 
         assertEquals(0, paths.getSourceVertex().intValue());
         assertEquals(0d, paths.getWeight(0), 1e-9);

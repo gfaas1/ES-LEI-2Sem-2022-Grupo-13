@@ -28,7 +28,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.TypeUtil;
 
@@ -189,47 +188,7 @@ public class FloydWarshallShortestPaths<V, E>
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
     {
-        if (!graph.containsVertex(source)) {
-            throw new IllegalArgumentException("graph must contain the source vertex");
-        }
-
-        lazyCalculateMatrix();
-
-        Map<V, Pair<Double, E>> map = new HashMap<>();
-
-        int n = vertices.size();
-        int v_a = vertexIndices.get(source);
-        for (int v_b = 0; v_b < n; v_b++) {
-            if (v_a == v_b || backtrace[v_a][v_b] == null) {
-                continue;
-            }
-
-            // Reconstruct path from source(v_a) to b
-            double weight = 0d;
-            V u = source;
-            V b = vertices.get(v_b);
-            while (!u.equals(b)) {
-                int v_u = vertexIndices.get(u);
-                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
-                weight += graph.getEdgeWeight(e);
-                V other = Graphs.getOppositeVertex(graph, e, u);
-                if (!map.containsKey(other)) {
-                    map.put(other, Pair.of(weight, e));
-                }
-                u = other;
-            }
-        }
-
-        return new TreeSingleSourcePaths<>(graph, source, map);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AllPairsPaths<V, E> getPaths()
-    {
-        return new FloydWarshallAllPairsPaths();
+        return new FloydWarshallSingleSourcePaths(source);
     }
 
     /**
@@ -410,9 +369,15 @@ public class FloydWarshallShortestPaths<V, E>
         }
     }
 
-    class FloydWarshallAllPairsPaths
-        implements AllPairsPaths<V, E>
+    class FloydWarshallSingleSourcePaths
+        implements SingleSourcePaths<V, E>
     {
+        private V source;
+
+        public FloydWarshallSingleSourcePaths(V source)
+        {
+            this.source = source;
+        }
 
         @Override
         public Graph<V, E> getGraph()
@@ -421,15 +386,55 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         @Override
-        public double getWeight(V sourceVertex, V targetVertex)
+        public V getSourceVertex()
         {
-            return shortestDistance(sourceVertex, targetVertex);
+            return source;
         }
 
         @Override
-        public GraphPath<V, E> getPath(V sourceVertex, V targetVertex)
+        public double getWeight(V sink)
         {
-            return getPath(sourceVertex, targetVertex);
+            if (!graph.containsVertex(source)) {
+                throw new IllegalArgumentException("graph must contain the source vertex");
+            }
+            if (!graph.containsVertex(sink)) {
+                throw new IllegalArgumentException("graph must contain the sink vertex");
+            }
+
+            lazyCalculateMatrix();
+
+            return d[vertexIndices.get(source)][vertexIndices.get(sink)];
+        }
+
+        @Override
+        public GraphPath<V, E> getPath(V sink)
+        {
+            if (!graph.containsVertex(source)) {
+                throw new IllegalArgumentException("graph must contain the source vertex");
+            }
+            if (!graph.containsVertex(sink)) {
+                throw new IllegalArgumentException("graph must contain the sink vertex");
+            }
+
+            lazyCalculateMatrix();
+
+            int v_a = vertexIndices.get(source);
+            int v_b = vertexIndices.get(sink);
+
+            if (backtrace[v_a][v_b] == null) { // No path exists
+                return createEmptyPath(source, sink);
+            }
+
+            // Reconstruct the path
+            List<E> edges = new ArrayList<>();
+            V u = source;
+            while (!u.equals(sink)) {
+                int v_u = vertexIndices.get(u);
+                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b], null);
+                edges.add(e);
+                u = Graphs.getOppositeVertex(graph, e, u);
+            }
+            return new GraphWalk<>(graph, source, sink, null, edges, d[v_a][v_b]);
         }
 
     }

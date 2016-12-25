@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -27,19 +28,36 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.graph.GraphWalk;
 
 /**
- * An implementation of {@link SingleSourcePaths} which keeps one path per vertex.
+ * An implementation of {@link SingleSourcePaths} which stores one path per vertex.
+ * 
+ * <p>
+ * This is an explicit representation which stores all paths. For a more compact representation see
+ * {@link TreeSingleSourcePathsImpl}.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-class ListSingleSourcePaths<V, E>
-    implements SingleSourcePaths<V, E>
+public class ListSingleSourcePathsImpl<V, E>
+    implements SingleSourcePaths<V, E>, Serializable
 {
-    private Graph<V, E> graph;
-    private V source;
-    private Map<V, GraphPath<V, E>> paths;
+    private static final long serialVersionUID = -60070018446561686L;
+
+    /**
+     * The graph
+     */
+    protected Graph<V, E> graph;
+
+    /**
+     * The source vertex of all paths
+     */
+    protected V source;
+
+    /**
+     * One path per vertex
+     */
+    protected Map<V, GraphPath<V, E>> paths;
 
     /**
      * Construct a new instance.
@@ -48,7 +66,7 @@ class ListSingleSourcePaths<V, E>
      * @param source the source vertex
      * @param paths one path per target vertex
      */
-    public ListSingleSourcePaths(Graph<V, E> graph, V source, Map<V, GraphPath<V, E>> paths)
+    public ListSingleSourcePathsImpl(Graph<V, E> graph, V source, Map<V, GraphPath<V, E>> paths)
     {
         this.graph = Objects.requireNonNull(graph, "Graph is null");
         this.source = Objects.requireNonNull(source, "Source vertex is null");
@@ -104,9 +122,7 @@ class ListSingleSourcePaths<V, E>
                     graph, source, targetVertex, Collections.singletonList(source),
                     Collections.emptyList(), 0d);
             } else {
-                return new GraphWalk<>(
-                    graph, source, targetVertex, Collections.emptyList(), Collections.emptyList(),
-                    Double.POSITIVE_INFINITY);
+                return null;
             }
         } else {
             return p;

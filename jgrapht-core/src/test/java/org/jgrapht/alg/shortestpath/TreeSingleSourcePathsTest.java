@@ -66,8 +66,8 @@ public class TreeSingleSourcePathsTest
         map.put(3, Pair.of(-10d, e23_3));
         map.put(4, Pair.of(-110d, e34_1));
         
-        TreeSingleSourcePaths<Integer, DefaultWeightedEdge> t1 = 
-            new TreeSingleSourcePaths<>(g, 1, map);
+        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 = 
+            new TreeSingleSourcePathsImpl<>(g, 1, map);
         
         assertEquals(1, t1.getSourceVertex().intValue());
         assertEquals(0d, t1.getWeight(1), 1e-9);

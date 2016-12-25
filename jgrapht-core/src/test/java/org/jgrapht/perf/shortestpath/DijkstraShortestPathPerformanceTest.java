@@ -148,13 +148,6 @@ public class DijkstraShortestPathPerformanceTest
                 {
                     throw new UnsupportedOperationException();
                 }
-
-                @Override
-                public org.jgrapht.alg.interfaces.ShortestPathAlgorithm.AllPairsPaths<Integer,
-                    DefaultWeightedEdge> getPaths()
-                {
-                    throw new UnsupportedOperationException();
-                }
             };
         }
 

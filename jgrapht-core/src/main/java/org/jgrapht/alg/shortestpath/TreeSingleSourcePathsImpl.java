@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map;
@@ -30,24 +31,40 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.GraphWalk;
 
 /**
- * A default implementation of {@link SingleSourcePaths} which uses linear space.
+ * An implementation of {@link SingleSourcePaths} which uses linear space.
  * 
  * <p>
- * In order to keep space to linear, the paths are recomputed in each invocation of the
- * {@link #getPath(Object)} method. The complexity of {@link #getPath(Object)} is linear to the
- * number of edges of the path while the complexity of {@link #getWeight(Object)} is O(1).
+ * This implementation uses the traditional representation of maintaining for each vertex the
+ * predecessor in the shortest path tree. In order to keep space to linear, the paths are recomputed
+ * in each invocation of the {@link #getPath(Object)} method. The complexity of
+ * {@link #getPath(Object)} is linear to the number of edges of the path while the complexity of
+ * {@link #getWeight(Object)} is O(1).
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-class TreeSingleSourcePaths<V, E>
-    implements SingleSourcePaths<V, E>
+public class TreeSingleSourcePathsImpl<V, E>
+    implements SingleSourcePaths<V, E>, Serializable
 {
-    private Graph<V, E> g;
-    private V source;
-    private Map<V, Pair<Double, E>> map;
+    private static final long serialVersionUID = -5914007312734512847L;
+
+    /**
+     * The graph
+     */
+    protected Graph<V, E> g;
+
+    /**
+     * The source vertex
+     */
+    protected V source;
+
+    /**
+     * A map which keeps for each target vertex the predecessor edge and the total length of the
+     * shortest path.
+     */
+    protected Map<V, Pair<Double, E>> map;
 
     /**
      * Construct a new instance.
@@ -56,9 +73,10 @@ class TreeSingleSourcePaths<V, E>
      * @param source the source vertex
      * @param distanceAndPredecessorMap a map which contains for each vertex the distance and the
      *        last edge that was used to discover the vertex. The map does not need to contain any
-     *        entry for the source vertex.
+     *        entry for the source vertex. In case it does contain the predecessor at the source
+     *        vertex must be null.
      */
-    public TreeSingleSourcePaths(
+    public TreeSingleSourcePathsImpl(
         Graph<V, E> g, V source, Map<V, Pair<Double, E>> distanceAndPredecessorMap)
     {
         this.g = Objects.requireNonNull(g, "Graph is null");
@@ -112,15 +130,17 @@ class TreeSingleSourcePaths<V, E>
         if (source.equals(targetVertex)) {
             return new GraphWalk<>(g, source, targetVertex, null, Collections.emptyList(), 0d);
         }
+
         LinkedList<E> edgeList = new LinkedList<>();
-        double weight = Double.POSITIVE_INFINITY;
 
         V cur = targetVertex;
         Pair<Double, E> p = map.get(cur);
-        if (p != null) {
-            weight = 0d;
+        if (p == null) {
+            return null;
         }
-        while (p != null) {
+
+        double weight = 0d;
+        while (p != null && !p.equals(source)) {
             E e = p.getSecond();
             if (e == null) {
                 break;

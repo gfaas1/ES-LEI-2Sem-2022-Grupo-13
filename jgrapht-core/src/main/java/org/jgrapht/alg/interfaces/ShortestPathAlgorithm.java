@@ -36,7 +36,7 @@ public interface ShortestPathAlgorithm<V, E>
      * 
      * @param source the source vertex
      * @param sink the target vertex
-     * @return a shortest path
+     * @return a shortest path or null if no path exists
      */
     GraphPath<V, E> getPath(V source, V sink);
 
@@ -47,13 +47,6 @@ public interface ShortestPathAlgorithm<V, E>
      * @return the shortest paths
      */
     SingleSourcePaths<V, E> getPaths(V source);
-
-    /**
-     * Compute all-pairs shortest paths.
-     * 
-     * @return the set of all-pairs shortest paths
-     */
-    AllPairsPaths<V, E> getPaths();
 
     /**
      * A set of paths starting from a single source vertex.
@@ -92,46 +85,9 @@ public interface ShortestPathAlgorithm<V, E>
          * Return the path from the source vertex to the sink vertex.
          * 
          * @param sink the sink vertex
-         * @return the path from the source vertex to the sink vertex
+         * @return the path from the source vertex to the sink vertex or null if no such path exists
          */
         GraphPath<V, E> getPath(V sink);
-    }
-
-    /**
-     * All-pairs paths.
-     * 
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     */
-    interface AllPairsPaths<V, E>
-    {
-        /**
-         * Returns the graph over which this collection of paths is defined.
-         *
-         * @return the graph
-         */
-        Graph<V, E> getGraph();
-
-        /**
-         * Return the weight of the path from the source vertex to the sink vertex. If no such path
-         * exists, {@link Double#POSITIVE_INFINITY} is returned. The weight of the path between a
-         * vertex and itself is always zero.
-         * 
-         * @param source the source vertex
-         * @param sink the sink vertex
-         * @return the weight of the path between the source and sink vertices or
-         *         {@link Double#POSITIVE_INFINITY} in case no such path exists
-         */
-        double getWeight(V source, V sink);
-
-        /**
-         * Return the path from the source vertex to the sink vertex.
-         * 
-         * @param source the source vertex
-         * @param sink the sink vertex
-         * @return the path from the source vertex to the sink vertex
-         */
-        GraphPath<V, E> getPath(V source, V sink);
     }
 
 }

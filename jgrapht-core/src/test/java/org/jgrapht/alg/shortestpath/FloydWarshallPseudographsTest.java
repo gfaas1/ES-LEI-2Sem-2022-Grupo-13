@@ -30,7 +30,6 @@ import java.util.function.Supplier;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.AllPairsPaths;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
@@ -88,7 +87,6 @@ public class FloydWarshallPseudographsTest
                 // run one Floyd-Warshall
                 FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
                     new FloydWarshallShortestPaths<>(g);
-                AllPairsPaths<Integer, DefaultWeightedEdge> allPairs = fw.getPaths();
 
                 for (Integer v : g.vertexSet()) {
                     // run Dijkstra
@@ -99,7 +97,7 @@ public class FloydWarshallPseudographsTest
 
                     for (Integer u : g.vertexSet()) {
                         // compare with Dijkstra
-                        assertEquals(dTree.getWeight(u), allPairs.getWeight(v, u), 1e-9);
+                        assertEquals(dTree.getWeight(u), fw.getPath(v, u).getWeight(), 1e-9);
 
                         // Test getPath method w.r.t getPathsTree
                         assertEquals(
@@ -153,8 +151,7 @@ public class FloydWarshallPseudographsTest
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> t2 = fw.getPaths(2);
         assertEquals(Double.POSITIVE_INFINITY, t2.getWeight(1), 1e-9);
-        assertTrue(t2.getPath(1).getEdgeList().isEmpty());
-        assertTrue(t2.getPath(1).getVertexList().isEmpty());
+        assertNull(t2.getPath(1));
         assertEquals(0d, t2.getWeight(2), 1e-9);
         assertTrue(t2.getPath(2).getEdgeList().isEmpty());
         assertEquals(Arrays.asList(g.getEdgeSource(e23_1)), t2.getPath(2).getVertexList());
@@ -165,26 +162,18 @@ public class FloydWarshallPseudographsTest
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> t3 = fw.getPaths(3);
         assertEquals(Double.POSITIVE_INFINITY, t3.getWeight(1), 1e-9);
-        assertTrue(t3.getPath(1).getEdgeList().isEmpty());
-        assertTrue(t3.getPath(1).getVertexList().isEmpty());
+        assertNull(t3.getPath(1));
         assertEquals(Double.POSITIVE_INFINITY, t3.getWeight(2), 1e-9);
-        assertTrue(t3.getPath(2).getEdgeList().isEmpty());
-        assertTrue(t3.getPath(2).getVertexList().isEmpty());
+        assertNull(t3.getPath(2));
         assertEquals(0d, t3.getWeight(3), 1e-9);
         assertTrue(t3.getPath(3).getEdgeList().isEmpty());
         assertEquals(-100d, t3.getWeight(4), 1e-9);
         assertEquals(Arrays.asList(e34_1), t3.getPath(4).getEdgeList());
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> t4 = fw.getPaths(4);
-        assertEquals(Double.POSITIVE_INFINITY, t4.getWeight(1), 1e-9);
-        assertTrue(t4.getPath(1).getEdgeList().isEmpty());
-        assertTrue(t4.getPath(1).getVertexList().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, t4.getWeight(2), 1e-9);
-        assertTrue(t4.getPath(2).getEdgeList().isEmpty());
-        assertTrue(t4.getPath(2).getVertexList().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, t4.getWeight(3), 1e-9);
-        assertTrue(t4.getPath(3).getEdgeList().isEmpty());
-        assertTrue(t4.getPath(3).getVertexList().isEmpty());
+        assertNull(t4.getPath(1));
+        assertNull(t4.getPath(2));
+        assertNull(t4.getPath(3));
         assertEquals(0d, t4.getWeight(4), 1e-9);
         assertTrue(t4.getPath(4).getEdgeList().isEmpty());
 

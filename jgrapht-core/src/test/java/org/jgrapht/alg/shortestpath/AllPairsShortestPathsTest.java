@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
@@ -44,6 +45,22 @@ public class AllPairsShortestPathsTest
     public void testRandomFixedSeed()
     {
         final long seed = 47;
+        Random rng = new Random(seed);
+        testAllPairsShortestPaths(rng);
+    }
+
+    @Test
+    public void testRandomFixedSeed8()
+    {
+        final long seed = 8;
+        Random rng = new Random(seed);
+        testAllPairsShortestPaths(rng);
+    }
+
+    @Test
+    public void testRandomFixedSeed13()
+    {
+        final long seed = 13;
         Random rng = new Random(seed);
         testAllPairsShortestPaths(rng);
     }
@@ -98,7 +115,15 @@ public class AllPairsShortestPathsTest
                 ShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = spProvider.apply(g);
                 for (Integer v : g.vertexSet()) {
                     for (Integer u : g.vertexSet()) {
-                        double d = alg.getPath(v, u).getWeight();
+                        GraphPath<Integer, DefaultWeightedEdge> path = alg.getPath(v, u);
+
+                        double d;
+                        if (path == null) {
+                            d = Double.POSITIVE_INFINITY;
+                        } else {
+                            d = path.getWeight();
+                        }
+
                         if (j == 0) {
                             dist[v][u] = d;
                         } else {

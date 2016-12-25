@@ -22,8 +22,14 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.graph.GraphWalk;
 
 /**
- * <a href="http://www.nist.gov/dads/HTML/bellmanford.html">Bellman-Ford algorithm</a>: weights
- * could be negative, paths could be constrained by a maximum number of edges.
+ * The <a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm">Bellman-Ford
+ * algorithm</a>. Computes shortest paths form a single source vertex to all the other vertices in a
+ * weighted graph. Supports graphs with negative weights. Additionally the user can constrain the
+ * paths by a maximum number of edges.
+ * 
+ * The algorithm has worst-case complexity O(nm) when n is the number of vertices and m the number
+ * of edges of the input graph.
+ * 
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -49,10 +55,9 @@ public class BellmanFordShortestPath<V, E>
     protected double epsilon;
 
     /**
-     * Creates an object to calculate shortest paths between the start vertex and others vertices
-     * using the Bellman-Ford algorithm.
+     * Construct a new instance of the Bellman-Ford algorithm.
      *
-     * @param graph the graph
+     * @param graph the input graph
      */
     public BellmanFordShortestPath(Graph<V, E> graph)
     {
@@ -60,10 +65,9 @@ public class BellmanFordShortestPath<V, E>
     }
 
     /**
-     * Creates an object to calculate shortest paths between the start vertex and others vertices
-     * using the Bellman-Ford algorithm.
+     * Construct a new instance of the Bellman-Ford algorithm.
      *
-     * @param graph the graph
+     * @param graph the input graph
      * @param nMaxHops maximum number of edges of the calculated paths
      */
     public BellmanFordShortestPath(Graph<V, E> graph, int nMaxHops)
@@ -72,10 +76,9 @@ public class BellmanFordShortestPath<V, E>
     }
 
     /**
-     * Creates an object to calculate shortest paths between the start vertex and others vertices
-     * using the Bellman-Ford algorithm.
+     * Construct a new instance of the Bellman-Ford algorithm.
      *
-     * @param graph the graph
+     * @param graph the input graph
      * @param nMaxHops maximum number of edges of the calculated paths.
      * @param epsilon tolerance factor when comparing floating point values
      */
@@ -119,8 +122,26 @@ public class BellmanFordShortestPath<V, E>
         return new PathElementSingleSourcePaths(iter);
     }
 
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
+     * the constructor instead.
+     * 
+     * @param graph the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink the vertex at which the path should end
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
+     * @return a shortest path, or null if no path exists
+     */
+    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
+    {
+        return new BellmanFordShortestPath<>(graph).getPath(source, sink);
+    }
+
     // interface wrapper
-    class PathElementSingleSourcePaths
+    private class PathElementSingleSourcePaths
         implements SingleSourcePaths<V, E>
     {
         private BellmanFordIterator<V, E> it;

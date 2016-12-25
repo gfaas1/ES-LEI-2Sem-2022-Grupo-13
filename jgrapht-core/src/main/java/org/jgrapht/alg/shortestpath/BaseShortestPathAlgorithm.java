@@ -64,28 +64,15 @@ abstract class BaseShortestPathAlgorithm<V, E>
         for (V v : graph.vertexSet()) {
             paths.put(v, getPath(source, v));
         }
-        return new ListSingleSourcePaths<>(graph, source, paths);
+        return new ListSingleSourcePathsImpl<>(graph, source, paths);
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AllPairsPaths<V, E> getPaths()
-    {
-        Map<V, SingleSourcePaths<V, E>> paths = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            paths.put(v, getPaths(v));
-        }
-        return new DefaultAllPairsPaths<>(graph, paths);
-    }
-
-    /**
-     * Create an empty path.
+     * Create an empty path. Returns null if the source vertex is different than the target vertex.
      * 
      * @param source the source vertex
      * @param sink the sink vertex
-     * @return an empty path
+     * @return an empty path or null null if the source vertex is different than the target vertex
      */
     GraphPath<V, E> createEmptyPath(V source, V sink)
     {
@@ -94,9 +81,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
                 graph, source, sink, Collections.singletonList(source), Collections.emptyList(),
                 0d);
         } else {
-            return new GraphWalk<>(
-                graph, source, sink, Collections.emptyList(), Collections.emptyList(),
-                Double.POSITIVE_INFINITY);
+            return null;
         }
     }
 

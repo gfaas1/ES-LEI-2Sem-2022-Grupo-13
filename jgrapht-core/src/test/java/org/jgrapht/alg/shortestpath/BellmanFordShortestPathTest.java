@@ -58,8 +58,7 @@ public class BellmanFordShortestPathTest
 
         // find best path within 1 hop (doesn't exist!)
         tree = new BellmanFordShortestPath<>(g, 1).getPaths(V3);
-        assertTrue(tree.getPath(V5).getEdgeList().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, tree.getPath(V5).getWeight());
+        assertNull(tree.getPath(V5));
     }
 
     @Override

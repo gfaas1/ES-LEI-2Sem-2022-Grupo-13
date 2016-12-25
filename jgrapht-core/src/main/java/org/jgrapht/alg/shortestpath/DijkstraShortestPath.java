@@ -108,4 +108,22 @@ public final class DijkstraShortestPath<V, E>
         return it.getPaths();
     }
 
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
+     * the constructor instead.
+     * 
+     * @param graph the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink the vertex at which the path should end
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
+     * @return a shortest path, or null if no path exists
+     */
+    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
+    {
+        return new DijkstraShortestPath<>(graph).getPath(source, sink);
+    }
+
 }

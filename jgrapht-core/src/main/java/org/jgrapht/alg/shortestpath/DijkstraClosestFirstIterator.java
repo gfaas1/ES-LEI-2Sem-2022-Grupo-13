@@ -174,7 +174,7 @@ class DijkstraClosestFirstIterator<V, E>
             distanceAndPredecessorMap.put(v, Pair.of(vDistance, vNode.getData().e));
         }
 
-        return new TreeSingleSourcePaths<>(graph, source, distanceAndPredecessorMap);
+        return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
     }
 
     private void updateDistance(V v, E e, double distance)

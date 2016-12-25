@@ -51,14 +51,21 @@ public class FloydWarshallShortestPathsTest
 
             for (Integer v1 : directed.vertexSet()) {
                 for (Integer v2 : directed.vertexSet()) {
-                    double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp = new DijkstraShortestPath<>(directed).getPath(v1, v2).getWeight();
-                    assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                            || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
-                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
-                    if (!path.getEdgeList().isEmpty()) {
-                        this.verifyPath(directed, path, fw.shortestDistance(v1, v2));
+
+                    GraphPath<Integer, DefaultWeightedEdge> dPath =
+                        new DijkstraShortestPath<>(directed).getPath(v1, v2);
+                    if (dPath == null) {
+                        assertNull(fw.getPath(v1, v2));
+                    } else {
+                        double fwSp = fw.shortestDistance(v1, v2);
+                        double dijSp = dPath.getWeight();
+                        assertTrue(
+                            (Math.abs(dijSp - fwSp) < .01)
+                                || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
+                        GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
+                        if (!path.getEdgeList().isEmpty()) {
+                            this.verifyPath(directed, path, fw.shortestDistance(v1, v2));
+                        }
                     }
                 }
             }
@@ -73,18 +80,25 @@ public class FloydWarshallShortestPathsTest
 
             for (Integer v1 : undirected.vertexSet()) {
                 for (Integer v2 : undirected.vertexSet()) {
-                    double fwSp = fw.shortestDistance(v1, v2);
-                    double dijSp =
-                        new DijkstraShortestPath<>(undirected).getPath(v1, v2).getWeight();
-                    assertTrue(
-                        (Math.abs(dijSp - fwSp) < .01)
-                            || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
-                    GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
-                    if (!path.getEdgeList().isEmpty()) {
-                        this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
-                        List<Integer> vertexPath = path.getVertexList();
-                        assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
-                        assertEquals(fw.getLastHop(v1, v2), vertexPath.get(vertexPath.size() - 2));
+                    GraphPath<Integer, DefaultWeightedEdge> dPath =
+                        new DijkstraShortestPath<>(undirected).getPath(v1, v2);
+
+                    if (dPath == null) {
+                        assertNull(fw.getPath(v1, v2));
+                    } else {
+                        double fwSp = fw.shortestDistance(v1, v2);
+                        double dijSp = dPath.getWeight();
+                        assertTrue(
+                            (Math.abs(dijSp - fwSp) < .01)
+                                || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
+                        GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
+                        if (!path.getEdgeList().isEmpty()) {
+                            this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
+                            List<Integer> vertexPath = path.getVertexList();
+                            assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
+                            assertEquals(
+                                fw.getLastHop(v1, v2), vertexPath.get(vertexPath.size() - 2));
+                        }
                     }
 
                 }
@@ -193,11 +207,10 @@ public class FloydWarshallShortestPathsTest
         assertEquals("b", path.getEndVertex());
         assertEquals(5.0, path.getWeight());
         assertEquals(weighted, path.getGraph());
-        assertEquals(0, fw.getPath("b", "a").getLength());
-        assertEquals(Double.POSITIVE_INFINITY, fw.getPath("b", "a").getWeight(), 1e-9);
         List<String> vertexPath = path.getVertexList();
         assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));
         assertEquals(fw.getLastHop("a", "b"), vertexPath.get(vertexPath.size() - 2));
+        assertNull(fw.getPath("b", "a"));
     }
 }
 

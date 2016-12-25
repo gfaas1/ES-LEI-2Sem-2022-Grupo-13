@@ -52,8 +52,7 @@ public class DijkstraShortestPathTest
         assertEquals(10.0, path.getWeight(), 0);
 
         path = new DijkstraShortestPath<String, DefaultWeightedEdge>(g, 7.0).getPath(V3, V4);
-        assertTrue(path.getEdgeList().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, path.getWeight(), 0);
+        assertNull(path);
     }
 
     @Override
@@ -117,11 +116,7 @@ public class DijkstraShortestPathTest
         assertEquals(Arrays.asList(we13, we32, we24), p14.getEdgeList());
 
         GraphPath<String, DefaultWeightedEdge> p15 = pathsTree.getPath(V5);
-        assertEquals(V1, p15.getStartVertex());
-        assertEquals(V5, p15.getEndVertex());
-        assertEquals(Double.POSITIVE_INFINITY, p15.getWeight(), 1e-9);
-        assertTrue(p15.getEdgeList().isEmpty());
-
+        assertNull(p15);
     }
 
     public void testNonNegativeWeights()

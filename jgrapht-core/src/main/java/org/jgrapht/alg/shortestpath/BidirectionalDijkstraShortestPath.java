@@ -164,6 +164,24 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
     }
 
+    /**
+     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
+     * the constructor instead.
+     * 
+     * @param graph the graph to be searched
+     * @param source the vertex at which the path should start
+     * @param sink the vertex at which the path should end
+     * 
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
+     * @return a shortest path, or null if no path exists
+     */
+    public static <V, E> GraphPath<V, E> findPathBetween(Graph<V, E> graph, V source, V sink)
+    {
+        return new BidirectionalDijkstraShortestPath<>(graph).getPath(source, sink);
+    }
+
     private GraphPath<V, E> createPath(
         SearchFrontier forwardFrontier, SearchFrontier backwardFrontier, double weight, V source,
         V commonVertex, V sink)

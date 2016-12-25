@@ -33,19 +33,27 @@ import org.jgrapht.graph.EdgeReversedGraph;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle
- * inequality. Assumes that the graph contains non-negative edge weights. Preprocessing requires two
- * shortest path computations per landmark using Dijkstra's algorithm. The heuristic's space
- * requirement is O(n) per landmark where n is the number of vertices of the graph.
+ * inequality. Assumes that the graph contains non-negative edge weights. Pre-processing requires
+ * two shortest path computations per landmark using Dijkstra's algorithm. The heuristic's space
+ * requirement is O(n) per landmark where n is the number of vertices of the graph. In case of
+ * undirected graphs only one Dijkstra's algorithm execution is performed per landmark.
  * 
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
- * in detail in the following paper which also contains a discussion on landmark selection
- * strategies.
+ * in detail in the following <a href=
+ * "https://www.microsoft.com/en-us/research/publication/computing-the-shortest-path-a-search-meets-graph-theory">
+ * paper</a> which also contains a discussion on landmark selection strategies.
  * <ul>
- * <li>Andrew Goldberg and Chris Harrelson. Computing the shortest path: A Search Meets Graph
+ * <li>Andrew Goldberg and Chris Harrelson. Computing the shortest path: A* Search Meets Graph
  * Theory. In Proceedings of the sixteenth annual ACM-SIAM symposium on Discrete algorithms (SODA'
  * 05), 156--165, 2005.</li>
  * </ul>
+ * 
+ * <p>
+ * Note that using this heuristic does not require the edge weights to satisfy the
+ * triangle-inequality. The method depends on the triangle inequality with respect to the shortest
+ * path distances in the graph, not an embedding in Euclidean space or some other metric, which need
+ * not be present.
  * 
  * <p>
  * In general more landmarks will speed up A* but will need more space. Given an A* query with
@@ -119,6 +127,30 @@ public class ALTAdmissibleHeuristic<V, E>
     {
         double maxEstimate = 0d;
 
+        /*
+         * Special case, source equals target
+         */
+        if (u.equals(t)) {
+            return maxEstimate;
+        }
+
+        /*
+         * Special case, source is landmark
+         */
+        if (fromLandmark.containsKey(u)) {
+            return fromLandmark.get(u).get(t);
+        }
+
+        /*
+         * Special case, target is landmark
+         */
+        if (toLandmark.containsKey(t)) {
+            return toLandmark.get(t).get(u);
+        }
+
+        /*
+         * Compute from landmarks
+         */
         for (V l : fromLandmark.keySet()) {
             double estimate;
             Map<V, Double> from = fromLandmark.get(l);
@@ -130,7 +162,9 @@ public class ALTAdmissibleHeuristic<V, E>
             }
 
             // max over all landmarks
-            maxEstimate = Math.max(maxEstimate, estimate);
+            if (Double.isFinite(estimate)) {
+                maxEstimate = Math.max(maxEstimate, estimate);
+            }
         }
 
         return maxEstimate;
