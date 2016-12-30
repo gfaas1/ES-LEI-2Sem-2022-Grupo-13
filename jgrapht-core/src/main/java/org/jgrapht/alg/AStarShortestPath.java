@@ -239,9 +239,7 @@ public class AStarShortestPath<V, E>
      * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge (u,v), where d(u,v) is
      * the weight of edge (u,v) and h(u) is the estimated cost to reach the target node from vertex u. Most natural
      * admissible heuristics, such as Manhattan or Euclidian distance, are consistent heuristics.
-     * @return true if the heuristic is consistent
-     * Convenience method: tests whether the heuristic is consistent. This method is not used in the implementation.
-     * @param admissibleHeuristic heuristic
+     * @param admissibleHeuristic admissible heuristic
      * @return true is the heuristic is consistent
      */
     public boolean isConsistentHeuristic(AStarAdmissibleHeuristic<V> admissibleHeuristic){
