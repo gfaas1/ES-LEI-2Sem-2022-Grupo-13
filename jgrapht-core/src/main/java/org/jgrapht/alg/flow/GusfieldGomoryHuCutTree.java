@@ -60,7 +60,7 @@ import java.util.*;
  * alternative {@link MaximumFlowAlgorithm} implementations.
  *
  * <p>
- * In contrast to an Equivalent Flow Tree ({@link GusfieldGomoryHuCutTree}), Gomory-Hu trees also
+ * In contrast to an Equivalent Flow Tree ({@link GusfieldEquivalentFlowTree}), Gomory-Hu trees also
  * provide all minimum cuts for all pairs of vertices!
  *
  * <p>
@@ -175,7 +175,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     }
 
     /**
-     * Returns the Gomory-Hu Tree as an actual tree (graph). Note that this tree is not necessary
+     * Returns the Gomory-Hu Tree as an actual tree (graph). Note that this tree is not necessarily
      * unique. The edge weights represent the flow values/cut weights. This method runs in O(n)
      * time.
      * 
@@ -187,7 +187,6 @@ public class GusfieldGomoryHuCutTree<V, E>
             this.calculateGomoryHuTree();
 
         //Compute the tree from scratch. Since we compute a new tree, the user is free to modify this tree.
-        //Alternatively we could return a Unmodifiable view of this.gomoryHuTree
         SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree =
                 new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(gomoryHuTree, vertexList);

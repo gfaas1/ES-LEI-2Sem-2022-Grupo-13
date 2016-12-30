@@ -139,8 +139,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
             throw new IllegalArgumentException("There needs to be an even number of odd vertices");
         assert network.vertexSet().containsAll(oddVertices); // All odd vertices must be contained
         // in the graph
-        assert oddVertices.size() % 2 == 0; // Number of odd vertices needs to be even
-        //all edge weights mucht be positive
+        //all edge weights mucht be non-negative
         assert network.edgeSet().stream().filter(e -> network.getEdgeWeight(e) < 0).count() == 0;
 
         gomoryHuTree = gusfieldGomoryHuCutTreeAlgorithm.getGomoryHuTree();

@@ -160,7 +160,7 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not
-     * necessary unique. The edge weights represent the flow values/cut weights. This method runs in
+     * necessarily unique. The edge weights represent the flow values/cut weights. This method runs in
      * O(n) time
      * 
      * @return Equivalent Flow Tree
