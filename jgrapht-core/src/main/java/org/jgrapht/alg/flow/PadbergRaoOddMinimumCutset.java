@@ -18,10 +18,8 @@
 package org.jgrapht.alg.flow;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -261,12 +259,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
             b = set1;
         }
 
-        Set<V> intersection=new HashSet<>();
-        for(V v : a){
-            if(b.contains(v))
-                intersection.add(v);
-        }
-        return intersection;
+        return a.stream().filter(v -> b.contains(v)).collect(Collectors.toSet());
     }
 
 
