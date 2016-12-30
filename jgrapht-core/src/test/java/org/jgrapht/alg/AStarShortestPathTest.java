@@ -80,7 +80,7 @@ public class AStarShortestPathTest
             for (int j = 0; j < labyrinth[0].length(); j++) {
                 if (labyrinth[i].charAt(j) == '#' || labyrinth[i].charAt(j) == ' ')
                     continue;
-                nodes[i][j] = new Node(i, j);
+                nodes[i][j] = new Node(i, j/2);
                 graph.addVertex(nodes[i][j]);
                 if (labyrinth[i].charAt(j) == 'S')
                     sourceNode = nodes[i][j];
@@ -126,6 +126,7 @@ public class AStarShortestPathTest
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new EuclideanDistance()));
     }
 
     /**
@@ -139,6 +140,7 @@ public class AStarShortestPathTest
         GraphPath<Node, DefaultWeightedEdge> path =
             aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNull(path);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
     /**
@@ -171,9 +173,10 @@ public class AStarShortestPathTest
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
         assertEquals(path.getEdgeList().size(), 2);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
-    public void testWeightedGraph1()
+    public void testInconsistentHeuristic()
     {
         WeightedGraph<Integer, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
@@ -224,10 +227,12 @@ public class AStarShortestPathTest
             }
         };
 
+        AStarShortestPath<Integer, DefaultWeightedEdge> alg=new AStarShortestPath<>(g);
         // shortest path from 3 to 2 is 3->0->1->2 with weight 0.9641320715228003
         assertEquals(
-            0.9641320715228003, new AStarShortestPath<>(g).getShortestPath(3, 2, h).getWeight(),
+            0.9641320715228003, alg.getShortestPath(3, 2, h).getWeight(),
             1e-9);
+        assertFalse(alg.isConsistentHeuristic(h));
     }
 
     private class ManhattanDistance
