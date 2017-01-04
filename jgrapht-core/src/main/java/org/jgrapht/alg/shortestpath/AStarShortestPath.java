@@ -213,8 +213,9 @@ public class AStarShortestPath<V, E>
         for (E edge : outgoingEdges) {
             V successor = Graphs.getOppositeVertex(graph, edge, currentNode.getData());
 
-            if (successor == currentNode.getData()) // Ignore self-loop
+            if (successor.equals(currentNode.getData())) { // Ignore self-loop
                 continue;
+            }
 
             double gScore_current = gScoreMap.get(currentNode.getData());
             double tentativeGScore = gScore_current + graph.getEdgeWeight(edge);
