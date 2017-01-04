@@ -80,7 +80,7 @@ public class AStarShortestPathTest
             for (int j = 0; j < labyrinth[0].length(); j++) {
                 if (labyrinth[i].charAt(j) == '#' || labyrinth[i].charAt(j) == ' ')
                     continue;
-                nodes[i][j] = new Node(i, j);
+                nodes[i][j] = new Node(i, j/2);
                 graph.addVertex(nodes[i][j]);
                 if (labyrinth[i].charAt(j) == 'S')
                     sourceNode = nodes[i][j];
@@ -126,6 +126,7 @@ public class AStarShortestPathTest
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new EuclideanDistance()));
     }
 
     /**
@@ -139,6 +140,7 @@ public class AStarShortestPathTest
         GraphPath<Node, DefaultWeightedEdge> path =
             aStarShortestPath.getShortestPath(sourceNode, targetNode, new ManhattanDistance());
         assertNull(path);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
     /**
@@ -171,6 +173,66 @@ public class AStarShortestPathTest
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
         assertEquals(path.getEdgeList().size(), 2);
+        assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
+    }
+
+    public void testInconsistentHeuristic()
+    {
+        WeightedGraph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+
+        g.setEdgeWeight(g.addEdge(0, 1), 0.5822723681370429);
+        g.setEdgeWeight(g.addEdge(0, 3), 0.8512429683406786);
+        g.setEdgeWeight(g.addEdge(3, 0), 0.22867383417976428);
+        g.setEdgeWeight(g.addEdge(1, 2), 0.1531858692059932);
+        g.setEdgeWeight(g.addEdge(3, 1), 0.9639222864568235);
+        g.setEdgeWeight(g.addEdge(2, 2), 0.23262564370920258);
+        g.setEdgeWeight(g.addEdge(2, 2), 0.6166416559599189);
+        g.setEdgeWeight(g.addEdge(3, 3), 0.6088954021459719);
+        g.setEdgeWeight(g.addEdge(3, 3), 0.2476189990121238);
+
+        AStarAdmissibleHeuristic<Integer> h = new AStarAdmissibleHeuristic<Integer>()
+        {
+
+            @Override
+            public double getCostEstimate(Integer s, Integer t)
+            {
+                if (s.intValue() == 0 && t.intValue() == 1) {
+                    // actual = 0.5822723681370429
+                    return 0.5822723681370429;
+                }
+                if (s.intValue() == 3 && t.intValue() == 1) {
+                    // actual = 0.8109462023168071
+                    return 0.8109462023168071;
+                }
+                if (s.intValue() == 3 && t.intValue() == 2) {
+                    // actual = 0.9641320715228003
+                    return 0.9639222864568235;
+                }
+                if (s.intValue() == 0 && t.intValue() == 1) {
+                    // actual = 0.5822723681370429
+                    return 0.5822723681370429;
+                }
+                if (s.intValue() == 0 && t.intValue() == 2) {
+                    // actual = 0.7354582373430361
+                    return 0.7354582373430361;
+                }
+
+                // all other zero
+                return 0d;
+            }
+        };
+
+        AStarShortestPath<Integer, DefaultWeightedEdge> alg=new AStarShortestPath<>(g);
+        // shortest path from 3 to 2 is 3->0->1->2 with weight 0.9641320715228003
+        assertEquals(
+            0.9641320715228003, alg.getShortestPath(3, 2, h).getWeight(),
+            1e-9);
+        assertFalse(alg.isConsistentHeuristic(h));
     }
 
     private class ManhattanDistance

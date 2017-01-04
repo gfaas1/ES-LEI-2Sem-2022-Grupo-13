@@ -38,6 +38,7 @@ public interface AStarAdmissibleHeuristic<V>
      * @return an estimate of the distance from the source to the target vertex
      */
     double getCostEstimate(V sourceVertex, V targetVertex);
+
 }
 
 // End AStarAdmissibleHeuristic.java
