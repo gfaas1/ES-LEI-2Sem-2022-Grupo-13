@@ -29,7 +29,7 @@ Changes to JGraphT in each version:
 	- Revised spanning tree and spanner interfaces and bundled them under the alg.spanning package (contributed by Dimitrios Michail)
 	- Small improvements in `StopWatch` class (contributed by Dimitrios Michail)
 	- Revised `Subgraph`, `MaskSubgraph` and subclasses to use Java 8 features; incorporated a number of performance improvements. Revised `MaskSubgraph` uses Java 8 predicates instead of the `MaskFunctor` interface. The latter interface is now deprecated. (contributed by Dimitrios Michail)
-	- Added `GusfieldGomoryHuCutTree`, `GusfieldEquivalentFlowTree`, and `PadbergRaoOddMinimumCutset` (contributed by Joris Kinable)
+	- Added `GusfieldGomoryHuCutTree`, `GusfieldEquivalentFlowTree`, and `PadbergRaoOddMinimumCutset` (contributed by Joris Kinable, following up on a Gomory-Hu proposal from Mads Jensen)
     - Added support for inconsistent admissible heuristics in A* search (contributed by Joris Kinable)
 
 - **version 1.0.0** (19-Sept-2016):
