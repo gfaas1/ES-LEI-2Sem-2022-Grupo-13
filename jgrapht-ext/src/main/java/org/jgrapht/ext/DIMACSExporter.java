@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,22 +30,29 @@ import org.jgrapht.Graph;
  *
  * <p>
  * For a description of the format see <a href="http://dimacs.rutgers.edu/Challenges/">
- * http://dimacs.rutgers.edu/Challenges</a>.
- * </p>
+ * http://dimacs.rutgers.edu/Challenges</a>. Note that there are a lot of different formats based on
+ * each different challenge, see {@link DIMACSFormat} for the supported formats. The exporter uses
+ * the {@link DIMACSFormat#MAX_CLIQUE} by default.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @since January 2017
  */
 public class DIMACSExporter<V, E>
     implements GraphExporter<V, E>
 {
-    private final static String DEFAULT_DIMACS_PROBLEM = "sp";
+    /**
+     * The default format used by the exporter.
+     */
+    public static final DIMACSFormat DEFAULT_DIMACS_FORMAT = DIMACSFormat.MAX_CLIQUE;
+
+    private static final String HEADER = "Generated using the JGraphT library";
 
     private final ComponentNameProvider<V> vertexIDProvider;
     private final Set<Parameter> parameters;
-    private final String problem;
+    private DIMACSFormat format;
 
     /**
      * Parameters that affect the behavior of the exporter.
@@ -55,7 +62,7 @@ public class DIMACSExporter<V, E>
         /**
          * If set the exporter outputs edge weights
          */
-        EXPORT_EDGE_WEIGHTS
+        EXPORT_EDGE_WEIGHTS,
     }
 
     /**
@@ -73,20 +80,20 @@ public class DIMACSExporter<V, E>
      */
     public DIMACSExporter(ComponentNameProvider<V> vertexIDProvider)
     {
-        this(vertexIDProvider, DEFAULT_DIMACS_PROBLEM);
+        this(vertexIDProvider, DEFAULT_DIMACS_FORMAT);
     }
 
     /**
      * Constructs a new exporter with a given vertex ID provider.
      *
      * @param vertexIDProvider for generating vertex IDs. Must not be null.
-     * @param problem the DIMACS problem to use, like sp, max, etc.
+     * @param format the format to use
      */
-    public DIMACSExporter(ComponentNameProvider<V> vertexIDProvider, String problem)
+    public DIMACSExporter(ComponentNameProvider<V> vertexIDProvider, DIMACSFormat format)
     {
         this.vertexIDProvider =
             Objects.requireNonNull(vertexIDProvider, "Vertex id provider cannot be null");
-        this.problem = Objects.requireNonNull(problem, "DIMACS problem cannot be null");
+        this.format = Objects.requireNonNull(format, "Format cannot be null");
         this.parameters = new HashSet<>();
     }
 
@@ -99,14 +106,16 @@ public class DIMACSExporter<V, E>
         PrintWriter out = new PrintWriter(writer);
 
         out.println("c");
-        out.println("c Generated using JGraphT");
+        out.println("c SOURCE: " + HEADER);
         out.println("c");
-        out.println("p " + problem + " " + g.vertexSet().size() + " " + g.edgeSet().size());
+        out.println(
+            "p " + format.getProblem() + " " + g.vertexSet().size() + " " + g.edgeSet().size());
 
         boolean exportEdgeWeights = parameters.contains(Parameter.EXPORT_EDGE_WEIGHTS);
 
         for (E edge : g.edgeSet()) {
-            out.print("a ");
+            out.print(format.getEdgeDescriptor());
+            out.print(" ");
             out.print(vertexIDProvider.getName(g.getEdgeSource(edge)));
             out.print(" ");
             out.print(vertexIDProvider.getName(g.getEdgeTarget(edge)));
@@ -144,6 +153,26 @@ public class DIMACSExporter<V, E>
         } else {
             parameters.remove(p);
         }
+    }
+
+    /**
+     * Get the format of the exporter
+     * 
+     * @return the format of the exporter
+     */
+    public DIMACSFormat getFormat()
+    {
+        return format;
+    }
+
+    /**
+     * Set the format of the exporter
+     * 
+     * @param format the format to use
+     */
+    public void setFormat(DIMACSFormat format)
+    {
+        this.format = Objects.requireNonNull(format, "Format cannot be null");
     }
 
 }

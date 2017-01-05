@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -51,7 +51,7 @@ public class DIMACSExporterTest
     // @formatter:off
     private static final String UNDIRECTED =
         "c" + NL +
-        "c Generated using JGraphT" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
         "p sp 3 2" + NL +
         "a 1 2" + NL +
@@ -59,7 +59,7 @@ public class DIMACSExporterTest
 
     private static final String UNDIRECTED_WEIGHTED = 
         "c" + NL +
-        "c Generated using JGraphT" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
         "p sp 3 2" + NL +
         "a 1 2 2.0" + NL +
@@ -67,7 +67,7 @@ public class DIMACSExporterTest
 
     private static final String UNDIRECTED_AS_UNWEIGHTED =
         "c" + NL +
-        "c Generated using JGraphT" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
         "p sp 3 2" + NL +
         "a 1 2 1.0" + NL +
@@ -75,14 +75,36 @@ public class DIMACSExporterTest
 
     private static final String DIRECTED = 
         "c" + NL +
-        "c Generated using JGraphT" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
         "c" + NL +
         "p sp 5 5" + NL +
         "a 1 2" + NL +
         "a 3 1" + NL +
         "a 2 3" + NL +
         "a 3 4" + NL +
-        "a 4 5" + NL;        
+        "a 4 5" + NL;
+    
+    private static final String DIRECTED_MAX_CLIQUE = 
+        "c" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
+        "c" + NL +
+        "p edge 5 5" + NL +
+        "e 1 2" + NL +
+        "e 3 1" + NL +
+        "e 2 3" + NL +
+        "e 3 4" + NL +
+        "e 4 5" + NL;
+    
+    private static final String DIRECTED_COLORING = 
+        "c" + NL +
+        "c SOURCE: Generated using the JGraphT library" + NL +
+        "c" + NL +
+        "p col 5 5" + NL +
+        "e 1 2" + NL +
+        "e 3 1" + NL +
+        "e 2 3" + NL +
+        "e 3 4" + NL +
+        "e 4 5" + NL;    
     // @formatter:on
 
     @Test
@@ -98,6 +120,7 @@ public class DIMACSExporterTest
         g.addEdge(V3, V1);
 
         DIMACSExporter<String, DefaultEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.SHORTEST_PATH);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
@@ -116,6 +139,7 @@ public class DIMACSExporterTest
         g.addEdge(V3, V1);
 
         DIMACSExporter<String, DefaultEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.SHORTEST_PATH);
         exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
@@ -140,6 +164,7 @@ public class DIMACSExporterTest
         g.addEdge(V4, V5);
 
         DIMACSExporter<String, DefaultEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.SHORTEST_PATH);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
@@ -161,6 +186,7 @@ public class DIMACSExporterTest
         g.setEdgeWeight(e2, 5.0);
 
         DIMACSExporter<String, DefaultWeightedEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.SHORTEST_PATH);
         exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
@@ -177,6 +203,61 @@ public class DIMACSExporterTest
         assertTrue(exporter.isParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS));
         exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, false);
         assertFalse(exporter.isParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS));
+    }
+
+    @Test
+    public void testDefaultFormat()
+    {
+        DIMACSExporter<String, DefaultWeightedEdge> exporter = new DIMACSExporter<>();
+        assertEquals(DIMACSFormat.MAX_CLIQUE, exporter.getFormat());
+    }
+
+    @Test
+    public void testDirectedColoring()
+        throws UnsupportedEncodingException, ExportException
+    {
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+        g.addVertex(V5);
+        g.addEdge(V1, V2);
+        g.addEdge(V3, V1);
+        g.addEdge(V2, V3);
+        g.addEdge(V3, V4);
+        g.addEdge(V4, V5);
+
+        DIMACSExporter<String, DefaultEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.COLORING);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        assertEquals(DIRECTED_COLORING, res);
+    }
+
+    @Test
+    public void testDirectedMaxClique()
+        throws UnsupportedEncodingException, ExportException
+    {
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+        g.addVertex(V5);
+        g.addEdge(V1, V2);
+        g.addEdge(V3, V1);
+        g.addEdge(V2, V3);
+        g.addEdge(V3, V4);
+        g.addEdge(V4, V5);
+
+        DIMACSExporter<String, DefaultEdge> exporter = new DIMACSExporter<>();
+        exporter.setFormat(DIMACSFormat.MAX_CLIQUE);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        assertEquals(DIRECTED_MAX_CLIQUE, res);
     }
 
 }
