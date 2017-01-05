@@ -18,7 +18,7 @@
 package org.jgrapht.ext;
 
 /**
- * Supported DIMACS formats.
+ * DIMACS challenge format.
  * 
  * <p>
  * For a general description of the formats see <a href="http://dimacs.rutgers.edu/Challenges/">
@@ -65,7 +65,7 @@ public enum DIMACSFormat
      * 
      * <p>
      * This is the <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">format</a> used in
-     * the the 2nd DIMACS implementation challenge.
+     * the 2nd DIMACS implementation challenge.
      * 
      * A graph file looks as follows:
      * 
@@ -94,7 +94,7 @@ public enum DIMACSFormat
      * Coloring format.
      * 
      * <p>
-     * This is the <a href="ftp://dimacs.rutgers.edu/pub/challenge/">format</a> used in the the 2nd
+     * This is the <a href="ftp://dimacs.rutgers.edu/pub/challenge/">format</a> used in the 2nd
      * DIMACS implementation challenge. Same as the {@link DIMACSFormat#MAX_CLIQUE} but uses "col"
      * instead of "edge" in the problem definition line.
      */
