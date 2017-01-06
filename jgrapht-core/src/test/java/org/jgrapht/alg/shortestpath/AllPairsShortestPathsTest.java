@@ -34,7 +34,6 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.graph.IntegerVertexFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -58,11 +57,6 @@ public class AllPairsShortestPathsTest
         testAllPairsShortestPaths(rng);
     }
 
-    /*
-     * FIXME: Disabled test which seems to be looping indefinitely. The problem seems to be in the
-     * Fibonacci Heap, but this needs further investigation.
-     */
-    @Ignore
     @Test
     public void testRandomFixedSeed13()
     {
