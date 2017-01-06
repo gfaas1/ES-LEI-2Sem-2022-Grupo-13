@@ -41,7 +41,7 @@ public enum DIMACSFormat
      * 
      * <pre>
      * {@code
-     * c <comments>;
+     * c <comments>
      * p sp <number of nodes> <number of edges>
      * a <edge source 1> <edge target 1>
      * a <edge source 2> <edge target 2>
@@ -71,7 +71,7 @@ public enum DIMACSFormat
      * 
      * <pre>
      * {@code
-     * c <comments>;
+     * c <comments>
      * p edge <number of nodes> <number of edges>
      * e <edge source 1> <edge target 1>
      * e <edge source 2> <edge target 2>

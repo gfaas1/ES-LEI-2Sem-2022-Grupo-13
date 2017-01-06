@@ -24,13 +24,20 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Imports a graph specified in DIMACS format (http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps).
- * In summary, graphs specified in DIMACS format adhere to the following structure:
+ * Imports a graph specified in DIMACS format.
+ *
+ * <p>
+ * See {@link DIMACSFormat} for a description of all the supported DIMACS formats.
+ *
+ * <p>
+ * In summary, one of the most common DIMACS formats was used in the
+ * <a href="http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps">2nd DIMACS challenge</a> and follows
+ * the following structure:
  * 
  * <pre>
  * {@code
  * DIMACS G {
- *    c <comments; ignored during parsing of the graph
+ *    c <comments> ignored during parsing of the graph
  *    p edge <number of nodes> <number of edges>
  *    e <edge source 1> <edge target 1>
  *    e <edge source 2> <edge target 2>
@@ -51,7 +58,7 @@ import org.jgrapht.*;
  * </pre>
  * 
  * Note: the current implementation does not fully implement the DIMACS specifications! Special
- * (rarely used) fields specified as 'Optional Descriptors' are currently not supported.
+ * (rarely used) fields specified as 'Optional Descriptors' are currently not supported (ignored).
  *
  * @author Michael Behrisch (adaptation of GraphReader class)
  * @author Joris Kinable
@@ -190,7 +197,7 @@ public class DIMACSImporter<V, E>
         // add edges
         String[] cols = skipComments(in);
         while (cols != null) {
-            if (cols[0].equals("e")) {
+            if (cols[0].equals("e") || cols[0].equals("a")) {
                 if (cols.length < 3) {
                     throw new ImportException("Failed to parse edge:" + Arrays.toString(cols));
                 }

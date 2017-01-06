@@ -123,6 +123,32 @@ public class DIMACSImporterTest
         }
     }
 
+    public void testReadDIMACSShortestPathFormat()
+        throws ImportException
+    {
+        // @formatter:off
+        String input = "p sp 3 3\n" +
+                       "a 1 2\n" +
+                       "a 2 1\n" +
+                       "a 2 3\n";
+        // @formatter:on
+
+        Graph<Integer,
+            DefaultWeightedEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultWeightedEdge.class, false);
+
+        assertEquals(3, graph.vertexSet().size());
+        assertEquals(3, graph.edgeSet().size());
+
+        int[][] edges = { { 1, 2, 1 }, { 2, 1, 1 }, { 2, 3, 1 } };
+        for (int[] edge : edges) {
+            assertTrue(graph.containsEdge(edge[0], edge[1]));
+            DefaultWeightedEdge e = graph.getEdge(edge[0], edge[1]);
+            assertEquals((int) graph.getEdgeWeight(e), edge[2]);
+        }
+    }
+
     public void testWrongDIMACSInstance1()
         throws ImportException
     {
