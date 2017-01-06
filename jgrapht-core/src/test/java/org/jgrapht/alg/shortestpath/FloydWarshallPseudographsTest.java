@@ -221,6 +221,40 @@ public class FloydWarshallPseudographsTest
     }
 
     @Test
+    public void testGetPathWeight()
+    {
+        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
+        DefaultWeightedEdge e12_1 = g.addEdge(1, 2);
+        g.setEdgeWeight(e12_1, -5.0);
+        DefaultWeightedEdge e12_2 = g.addEdge(1, 2);
+        g.setEdgeWeight(e12_2, -2.0);
+        DefaultWeightedEdge e12_3 = g.addEdge(1, 2);
+        g.setEdgeWeight(e12_3, 1.0);
+        DefaultWeightedEdge e23_1 = g.addEdge(2, 3);
+        g.setEdgeWeight(e23_1, 0d);
+        DefaultWeightedEdge e23_2 = g.addEdge(2, 3);
+        g.setEdgeWeight(e23_2, -2.0);
+        DefaultWeightedEdge e23_3 = g.addEdge(2, 3);
+        g.setEdgeWeight(e23_3, -5.0);
+        DefaultWeightedEdge e34_1 = g.addEdge(3, 4);
+        g.setEdgeWeight(e34_1, -100.0);
+        DefaultWeightedEdge e34_2 = g.addEdge(3, 4);
+        g.setEdgeWeight(e34_2, 100.0);
+        DefaultWeightedEdge e34_3 = g.addEdge(3, 4);
+        g.setEdgeWeight(e34_3, 1.0);
+
+        FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
+            new FloydWarshallShortestPaths<>(g);
+
+        assertEquals(Double.POSITIVE_INFINITY, fw.getPathWeight(2, 1), 1e-9);
+        assertEquals(0d, fw.getPathWeight(2, 2), 1e-9);
+        assertEquals(-5d, fw.getPathWeight(2, 3), 1e-9);
+        assertEquals(-105d, fw.getPathWeight(2, 4), 1e-9);
+    }
+
+    @Test
     public void testLoops()
     {
         DirectedPseudograph<Integer, DefaultWeightedEdge> g =

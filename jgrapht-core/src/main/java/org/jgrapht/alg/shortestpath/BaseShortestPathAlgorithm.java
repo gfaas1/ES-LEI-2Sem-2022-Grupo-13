@@ -68,13 +68,27 @@ abstract class BaseShortestPathAlgorithm<V, E>
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double getPathWeight(V source, V sink)
+    {
+        GraphPath<V, E> p = getPath(source, sink);
+        if (p == null) {
+            return Double.POSITIVE_INFINITY;
+        } else {
+            return p.getWeight();
+        }
+    }
+
+    /**
      * Create an empty path. Returns null if the source vertex is different than the target vertex.
      * 
      * @param source the source vertex
      * @param sink the sink vertex
      * @return an empty path or null null if the source vertex is different than the target vertex
      */
-    GraphPath<V, E> createEmptyPath(V source, V sink)
+    protected final GraphPath<V, E> createEmptyPath(V source, V sink)
     {
         if (source.equals(sink)) {
             return new GraphWalk<>(

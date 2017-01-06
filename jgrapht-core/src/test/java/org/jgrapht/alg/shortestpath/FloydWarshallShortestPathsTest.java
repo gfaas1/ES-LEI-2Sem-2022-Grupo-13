@@ -57,14 +57,14 @@ public class FloydWarshallShortestPathsTest
                     if (dPath == null) {
                         assertNull(fw.getPath(v1, v2));
                     } else {
-                        double fwSp = fw.shortestDistance(v1, v2);
+                        double fwSp = fw.getPathWeight(v1, v2);
                         double dijSp = dPath.getWeight();
                         assertTrue(
                             (Math.abs(dijSp - fwSp) < .01)
                                 || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
                         GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
                         if (!path.getEdgeList().isEmpty()) {
-                            this.verifyPath(directed, path, fw.shortestDistance(v1, v2));
+                            this.verifyPath(directed, path, fw.getPathWeight(v1, v2));
                         }
                     }
                 }
@@ -86,14 +86,14 @@ public class FloydWarshallShortestPathsTest
                     if (dPath == null) {
                         assertNull(fw.getPath(v1, v2));
                     } else {
-                        double fwSp = fw.shortestDistance(v1, v2);
+                        double fwSp = fw.getPathWeight(v1, v2);
                         double dijSp = dPath.getWeight();
                         assertTrue(
                             (Math.abs(dijSp - fwSp) < .01)
                                 || (Double.isInfinite(fwSp) && Double.isInfinite(dijSp)));
                         GraphPath<Integer, DefaultWeightedEdge> path = fw.getPath(v1, v2);
                         if (!path.getEdgeList().isEmpty()) {
-                            this.verifyPath(undirected, path, fw.shortestDistance(v1, v2));
+                            this.verifyPath(undirected, path, fw.getPathWeight(v1, v2));
                             List<Integer> vertexPath = path.getVertexList();
                             assertEquals(fw.getFirstHop(v1, v2), vertexPath.get(1));
                             assertEquals(
@@ -198,7 +198,7 @@ public class FloydWarshallShortestPathsTest
         weighted.setEdgeWeight(edge, 5.0);
         FloydWarshallShortestPaths<String, DefaultWeightedEdge> fw =
             new FloydWarshallShortestPaths<>(weighted);
-        double sD = fw.shortestDistance("a", "b");
+        double sD = fw.getPathWeight("a", "b");
         assertEquals(5.0, sD, 0.1);
         GraphPath<String, DefaultWeightedEdge> path = fw.getPath("a", "b");
         assertNotNull(path);

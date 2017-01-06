@@ -90,6 +90,10 @@ public final class DijkstraShortestPath<V, E>
 
     /**
      * {@inheritDoc}
+     *
+     * Note that in the case of Dijkstra's algorithm it is more efficient to compute all
+     * single-source shortest paths using this method than repeatedly invoking
+     * {@link #getPath(Object, Object)} for the same source but different sink vertex.
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)

@@ -119,6 +119,37 @@ public class DijkstraShortestPathTest
         assertNull(p15);
     }
 
+    public void testGetPathWeight()
+    {
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(V1, V2, V3, V4, V5));
+
+        DefaultWeightedEdge we12 = g.addEdge(V1, V2);
+        DefaultWeightedEdge we24 = g.addEdge(V2, V4);
+        DefaultWeightedEdge we13 = g.addEdge(V1, V3);
+        DefaultWeightedEdge we32 = g.addEdge(V3, V2);
+        DefaultWeightedEdge we34 = g.addEdge(V3, V4);
+
+        g.setEdgeWeight(we12, 3.0);
+        g.setEdgeWeight(we24, 1.0);
+        g.setEdgeWeight(we13, 1.0);
+        g.setEdgeWeight(we32, 1.0);
+        g.setEdgeWeight(we34, 3.0);
+
+        assertEquals(
+            0d, new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPathWeight(V1, V1));
+        assertEquals(
+            2d, new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPathWeight(V1, V2));
+        assertEquals(
+            1d, new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPathWeight(V1, V3));
+        assertEquals(
+            3d, new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPathWeight(V1, V4));
+        assertEquals(
+            Double.POSITIVE_INFINITY,
+            new DijkstraShortestPath<String, DefaultWeightedEdge>(g).getPathWeight(V1, V5));
+    }
+
     public void testNonNegativeWeights()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =

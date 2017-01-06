@@ -33,10 +33,17 @@ import org.jgrapht.graph.EdgeReversedGraph;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle
- * inequality. Assumes that the graph contains non-negative edge weights. Pre-processing requires
- * two shortest path computations per landmark using Dijkstra's algorithm. The heuristic's space
- * requirement is O(n) per landmark where n is the number of vertices of the graph. In case of
- * undirected graphs only one Dijkstra's algorithm execution is performed per landmark.
+ * inequality. Assumes that the graph contains non-negative edge weights.
+ *
+ * <p>
+ * The heuristic requires a set of input nodes from the graph, which are used as landmarks. During a
+ * pre-processing phase, which requires two shortest path computations per landmark using Dijkstra's
+ * algorithm, all distances to and from these landmark nodes are computed and stored. Afterwards,
+ * the heuristic estimates the distance from a vertex to another vertex using the already computed
+ * distances to and from the landmarks and the fact that shortest path distances obey the
+ * triangle-inequality. The heuristic's space requirement is O(n) per landmark where n is the number
+ * of vertices of the graph. In case of undirected graphs only one Dijkstra's algorithm execution is
+ * performed per landmark.
  * 
  * <p>
  * The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described

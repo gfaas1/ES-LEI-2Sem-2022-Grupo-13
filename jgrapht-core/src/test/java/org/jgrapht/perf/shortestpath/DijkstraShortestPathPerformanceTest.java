@@ -143,6 +143,16 @@ public class DijkstraShortestPathPerformanceTest
                 }
 
                 @Override
+                public double getPathWeight(Integer source, Integer sink)
+                {
+                    GraphPath<Integer, DefaultWeightedEdge> p = getPath(source, sink);
+                    if (p == null) {
+                        return Double.POSITIVE_INFINITY;
+                    } else {
+                        return p.getWeight();
+                    }
+                }
+
                 public org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths<Integer,
                     DefaultWeightedEdge> getPaths(Integer source)
                 {

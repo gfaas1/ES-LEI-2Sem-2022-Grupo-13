@@ -78,17 +78,7 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Get the graph on which this algorithm operates.
-     * 
-     * @return the graph on which this algorithm operates
-     */
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * Get the total number of shortest paths.
+     * Get the total number of shortest paths. Does not count the paths from a vertex to itself.
      * 
      * @return total number of shortest paths
      */
@@ -97,28 +87,6 @@ public class FloydWarshallShortestPaths<V, E>
         lazyCalculateMatrix();
 
         return nShortestPaths;
-    }
-
-    /**
-     * Get the length of a shortest path.
-     *
-     * @param a first vertex
-     * @param b second vertex
-     *
-     * @return shortest distance between a and b
-     */
-    public double shortestDistance(V a, V b)
-    {
-        if (!graph.containsVertex(a)) {
-            throw new IllegalArgumentException("graph must contain the source vertex");
-        }
-        if (!graph.containsVertex(b)) {
-            throw new IllegalArgumentException("graph must contain the sink vertex");
-        }
-
-        lazyCalculateMatrix();
-
-        return d[vertexIndices.get(a)][vertexIndices.get(b)];
     }
 
     /**
@@ -180,6 +148,24 @@ public class FloydWarshallShortestPaths<V, E>
             u = Graphs.getOppositeVertex(graph, e, u);
         }
         return new GraphWalk<>(graph, a, b, null, edges, d[v_a][v_b]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double getPathWeight(V source, V sink)
+    {
+        if (!graph.containsVertex(source)) {
+            throw new IllegalArgumentException("graph must contain the source vertex");
+        }
+        if (!graph.containsVertex(sink)) {
+            throw new IllegalArgumentException("graph must contain the sink vertex");
+        }
+
+        lazyCalculateMatrix();
+
+        return d[vertexIndices.get(source)][vertexIndices.get(sink)];
     }
 
     /**
