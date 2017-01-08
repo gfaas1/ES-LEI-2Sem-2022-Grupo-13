@@ -21,8 +21,8 @@ import java.util.*;
 
 /**
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
- * the algorithms in the "Introduction to Algorithms"by Cormen, Leiserson, and Rivest in Chapter 21.
- * The amortized running time of most of these methods is O(1), making it a very fast data
+ * the algorithms in the "Introduction to Algorithms" by Cormen, Leiserson, and Rivest in Chapter
+ * 21. The amortized running time of most of these methods is O(1), making it a very fast data
  * structure. Several have an actual running time of O(1). removeMin() and delete() have O(log n)
  * amortized running times because they do the heap consolidation. If you attempt to store nodes in
  * this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
@@ -113,6 +113,10 @@ public class FibonacciHeap<T>
                 "decreaseKey() got larger key value. Current key: " + x.key + " new key: " + k);
         }
 
+        if (x.right == null) {
+            throw new IllegalArgumentException("Invalid heap node");
+        }
+
         x.key = k;
 
         FibonacciHeapNode<T> y = x.parent;
@@ -161,9 +165,14 @@ public class FibonacciHeap<T>
      *
      * @param node new node to insert into heap
      * @param key key value associated with data object
+     * @throws IllegalArgumentException if the node already belongs to a heap
      */
     public void insert(FibonacciHeapNode<T> node, double key)
     {
+        if (node.right != null) {
+            throw new IllegalArgumentException("Invalid heap node");
+        }
+
         node.key = key;
 
         // concatenate node into min list
@@ -177,6 +186,8 @@ public class FibonacciHeap<T>
                 minNode = node;
             }
         } else {
+            node.left = node;
+            node.right = node;
             minNode = node;
         }
 
@@ -254,6 +265,13 @@ public class FibonacciHeap<T>
 
             // decrement size of heap
             nNodes--;
+
+            // clear z
+            z.left = null;
+            z.right = null;
+            z.degree = 0;
+            z.child = null;
+            z.mark = false;
         }
 
         return z;
