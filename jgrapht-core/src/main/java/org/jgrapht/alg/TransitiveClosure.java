@@ -127,11 +127,10 @@ public class TransitiveClosure
     {
         List<V> orderedItems = getTopologicallyOrderedVertices(graph);
         for (int i = 0; i < orderedItems.size(); i++) {
-            V next = orderedItems.get(orderedItems.size() - 1 - i);
-            for (V successor : Graphs.successorListOf(graph, next)) {
-                Graphs.addEdgeWithVertices(graph, next, successor);
-                for (V closureItem : Graphs.successorListOf(graph, successor)) {
-                    Graphs.addEdgeWithVertices(graph, next, closureItem);
+            V vertex = orderedItems.get(orderedItems.size() - 1 - i);
+            for (V successor : Graphs.successorListOf(graph, vertex)) {
+                for (V closureVertex : Graphs.successorListOf(graph, successor)) {
+                    graph.addEdge(vertex, closureVertex);
                 }
             }
         }
