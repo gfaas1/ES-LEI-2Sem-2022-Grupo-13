@@ -32,6 +32,7 @@ Changes to JGraphT in each version:
 	- Added `GusfieldGomoryHuCutTree`, `GusfieldEquivalentFlowTree`, and `PadbergRaoOddMinimumCutset` (contributed by Joris Kinable, following up on a Gomory-Hu proposal from Mads Jensen)
     - Added support for inconsistent admissible heuristics in A* search (contributed by Joris Kinable)
     - Added a `DIMACSExporter` which supports exporting graphs in various DIMACS formats (contributed by Dimitrios Michail)
+    - Enforce valid nodes in `FibonacciHeap` (contributed by Dimitrios Michail)
 
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
