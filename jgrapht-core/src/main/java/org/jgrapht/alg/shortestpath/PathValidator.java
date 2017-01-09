@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 /**
  * May be used to provide external path validations in addition to the basic validations done by
@@ -27,9 +27,8 @@ package org.jgrapht.alg;
  * 
  * @author Assaf Mizrachi
  * @since July, 21, 2016
- * @deprecated Use {@link org.jgrapht.alg.shortestpath.PathValidator} instead.
+ *
  */
-@Deprecated
 public interface PathValidator<V, E>
 {
 

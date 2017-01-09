@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -31,10 +31,7 @@ import org.jgrapht.graph.*;
  *
  * @author Andrew Gainer-Dewar
  * @since Feb, 2016
- * 
- * @deprecated In favor of {@link org.jgrapht.alg.shortestpath.AllDirectedPaths}.
  */
-@Deprecated
 public class AllDirectedPaths<V, E>
 {
     private final DirectedGraph<V, E> graph;

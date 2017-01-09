@@ -16,7 +16,7 @@
  * the Eclipse Foundation.
  */
 
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -44,28 +44,16 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String,
-                DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                    clique, String.valueOf(i), 1, Integer.MAX_VALUE,
-                    new PathValidator<String, DefaultEdge>()
-                    {
-
-                        @Override
-                        public boolean isValidPath(
-                            AbstractPathElement<String, DefaultEdge> prevPathElement,
-                            DefaultEdge edge)
-                        {
-                            // block all paths
-                            return false;
-                        }
-                    });
+            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
+                clique, 1, Integer.MAX_VALUE, (prevPathElement, edge) -> false);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
-                assertNull(paths);
+                List<GraphPath<String, DefaultEdge>> paths =
+                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
+                assertTrue(paths.isEmpty());
             }
         }
     }
@@ -78,27 +66,15 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String,
-                DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                    clique, String.valueOf(i), 30, Integer.MAX_VALUE,
-                    new PathValidator<String, DefaultEdge>()
-                    {
-
-                        @Override
-                        public boolean isValidPath(
-                            AbstractPathElement<String, DefaultEdge> prevPathElement,
-                            DefaultEdge edge)
-                        {
-                            // block all paths
-                            return true;
-                        }
-                    });
+            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
+                clique, 30, Integer.MAX_VALUE, (prevPathElement, edge) -> true);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<String, DefaultEdge>> paths = ksp.getPaths(String.valueOf(j));
+                List<GraphPath<String, DefaultEdge>> paths =
+                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
                 assertNotNull(paths);
                 assertEquals(16, paths.size());
             }
@@ -114,27 +90,20 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                ring, i, 2, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
-                {
-
-                    @Override
-                    public boolean isValidPath(
-                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
-                    {
-                        if (prevPathElement == null) {
-                            return true;
-                        }
-                        return Math.abs(
-                            prevPathElement.getVertex() - Graphs
-                                .getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
+                ring, 2, Integer.MAX_VALUE, (prevPathElement, edge) -> {
+                    if (prevPathElement == null) {
+                        return true;
                     }
+                    return Math.abs(
+                        prevPathElement.getVertex() - Graphs
+                            .getOppositeVertex(ring, edge, prevPathElement.getVertex())) == 1;
                 });
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
                 assertNotNull(paths);
                 assertEquals(1, paths.size());
             }
@@ -152,32 +121,26 @@ public class KSPPathValidatorTest
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
             KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                graph, i, 100, Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
-                {
-
-                    @Override
-                    public boolean isValidPath(
-                        AbstractPathElement<Integer, DefaultEdge> prevPathElement, DefaultEdge edge)
-                    {
-                        // accept all requests but the one to pass through the edge connecting
-                        // the two cliques.
-                        DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
-                        return connectingEdge != edge;
-                    }
+                graph, 100, Integer.MAX_VALUE, (prevPathElement, edge) -> {
+                    // accept all requests but the one to pass through the edge connecting
+                    // the two cliques.
+                    DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
+                    return connectingEdge != edge;
                 });
 
             for (int j = 0; j < graph.vertexSet().size(); j++) {
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
                 if ((i < cliqueSize && j < cliqueSize) || (i >= cliqueSize && j >= cliqueSize)) {
                     // within the clique - path should exist
                     assertNotNull(paths);
                     assertTrue(paths.size() > 0);
                 } else {
                     // else - should not
-                    assertNull(paths);
+                    assertNotNull(paths);
+                    assertTrue(paths.isEmpty());
                 }
 
             }

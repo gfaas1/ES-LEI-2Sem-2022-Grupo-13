@@ -37,7 +37,9 @@ import org.jgrapht.graph.*;
  * @author Tom Larkworthy
  * @author Soren Davidsen (soren@tanesha.net)
  * @author Joris Kinable
+ * @deprecated In favor of {@link org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths}.
  */
+@Deprecated
 public class FloydWarshallShortestPaths<V, E>
 {
     private final Graph<V, E> graph;

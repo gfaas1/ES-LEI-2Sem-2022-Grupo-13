@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.*;
 
 /**
@@ -27,9 +28,7 @@ import org.jgrapht.graph.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
- * @deprecated Use {@link org.jgrapht.alg.shortestpath.RankingPathElement} instead.
  */
-@Deprecated
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
@@ -308,17 +307,15 @@ final class RankingPathElementList<V, E>
         }
 
         ConnectivityInspector<V, E> connectivityInspector;
-        PathMask<V, E> connectivityMask;
+        PathMask<V, E> connectivityMask = new PathMask<>(prevPathElement);
 
         if (this.graph instanceof DirectedGraph<?, ?>) {
-            connectivityMask = new PathMask<>(prevPathElement);
             DirectedMaskSubgraph<V,
                 E> connectivityGraph = new DirectedMaskSubgraph<>(
                     (DirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),
                     e -> connectivityMask.isEdgeMasked(e));
             connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
         } else {
-            connectivityMask = new PathMask<>(prevPathElement);
             UndirectedMaskSubgraph<V,
                 E> connectivityGraph = new UndirectedMaskSubgraph<>(
                     (UndirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),

@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 
@@ -24,9 +24,7 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
- * @deprecated Use {@link org.jgrapht.alg.shortestpath.RankingPathElement} instead.
  */
-@Deprecated
 final class RankingPathElement<V, E>
     extends AbstractPathElement<V, E>
 {

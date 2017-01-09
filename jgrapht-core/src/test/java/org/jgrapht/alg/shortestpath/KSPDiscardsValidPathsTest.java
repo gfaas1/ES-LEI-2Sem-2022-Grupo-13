@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.graph.*;
 
@@ -71,9 +71,9 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "K", "L", 1.0);
         this.addGraphEdge(graph, "L", "S", 1.0);
 
-        paths = new KShortestPaths<>(graph, "S", 3);
+        paths = new KShortestPaths<>(graph, 3);
 
-        assertTrue(paths.getPaths("T").size() == 3);
+        assertTrue(paths.getPaths("S", "T").size() == 3);
     }
 
     /**
@@ -101,14 +101,14 @@ public class KSPDiscardsValidPathsTest
         this.addGraphEdge(graph, "B", "E", 1.0);
         this.addGraphEdge(graph, "C", "D", 1.0);
 
-        paths = new KShortestPaths<>(graph, "A", 2);
-        assertTrue(paths.getPaths("E").size() == 2);
+        paths = new KShortestPaths<>(graph, 2);
+        assertTrue(paths.getPaths("A", "E").size() == 2);
 
-        paths = new KShortestPaths<>(graph, "A", 3);
-        assertTrue(paths.getPaths("E").size() == 3);
+        paths = new KShortestPaths<>(graph, 3);
+        assertTrue(paths.getPaths("A", "E").size() == 3);
 
-        paths = new KShortestPaths<>(graph, "A", 4);
-        assertTrue(paths.getPaths("E").size() == 4);
+        paths = new KShortestPaths<>(graph, 4);
+        assertTrue(paths.getPaths("A", "E").size() == 4);
     }
 
     private void addGraphEdge(

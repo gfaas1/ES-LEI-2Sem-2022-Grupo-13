@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -26,9 +26,7 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
- * @deprecated moved in shortest path package
  */
-@Deprecated
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
     extends AbstractList<T>
 {
