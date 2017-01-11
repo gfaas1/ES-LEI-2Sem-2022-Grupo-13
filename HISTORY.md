@@ -39,7 +39,8 @@ Changes to JGraphT in each version:
 	- `DijkstraShortestPath` as well as several other shortest path classes can now return single-source shortest paths, using the traditional representation of a shortest path tree (contributed by Dimitrios Michail)
 	- Added an implementation of Goldberg and Harrelson's ALT admissible heuristic for A* (contributed by Dimitrios Michail)
 	- Replaced the `ClosestFirstIterator` in `DijkstraShortestPath` by a light-weight version of the iterator which significantly speeds up the shortest path computations. (contributed by Dimitrios Michail)
-
+	- Added implementation of Larry Page's `PageRank` algorithm. (contributed by Dimitrios Michail)
+	
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar
