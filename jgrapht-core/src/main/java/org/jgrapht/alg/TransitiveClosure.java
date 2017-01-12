@@ -17,15 +17,14 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graphs;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -125,9 +124,10 @@ public class TransitiveClosure
      */
     public <V, E> void closeDirectedAcyclicGraph(DirectedAcyclicGraph<V, E> graph)
     {
-        List<V> orderedItems = getTopologicallyOrderedVertices(graph);
-        for (int i = 0; i < orderedItems.size(); i++) {
-            V vertex = orderedItems.get(orderedItems.size() - 1 - i);
+        Deque<V> orderedVertices = new ArrayDeque<>(graph.vertexSet().size());
+        new TopologicalOrderIterator<>(graph).forEachRemaining(orderedVertices::addFirst);
+
+        for (V vertex : orderedVertices) {
             for (V successor : Graphs.successorListOf(graph, vertex)) {
                 for (V closureVertex : Graphs.successorListOf(graph, successor)) {
                     graph.addEdge(vertex, closureVertex);
@@ -136,14 +136,6 @@ public class TransitiveClosure
         }
     }
 
-    private static <V, E> List<V> getTopologicallyOrderedVertices(DirectedGraph<V, E> graph) {
-        List<V> orderedItems = new ArrayList<>(graph.vertexSet().size());
-        TopologicalOrderIterator<V, E> iterator = new TopologicalOrderIterator<>(graph);
-        while(iterator.hasNext()) {
-            orderedItems.add(iterator.next());
-        }
-        return orderedItems;
-    }
 }
 
 // End TransitiveClosure.java
