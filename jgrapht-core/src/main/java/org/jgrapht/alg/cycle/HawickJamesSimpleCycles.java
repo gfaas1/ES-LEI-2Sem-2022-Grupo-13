@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2014-2016, by Luiz Kill and Contributors.
+ * (C) Copyright 2014-2017, by Luiz Kill and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
