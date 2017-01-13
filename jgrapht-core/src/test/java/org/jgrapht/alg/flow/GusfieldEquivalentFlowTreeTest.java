@@ -17,15 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.StoerWagnerMinimumCut;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.*;
 
 /**
  * Test class for the GusfieldEquivalentFlowTree implementation

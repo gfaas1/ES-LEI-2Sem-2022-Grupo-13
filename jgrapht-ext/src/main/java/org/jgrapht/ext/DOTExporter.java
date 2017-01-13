@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.graph.*;
 
 /**
  * Exports a graph into a DOT file.

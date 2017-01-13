@@ -17,16 +17,10 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * PageRank implementation.

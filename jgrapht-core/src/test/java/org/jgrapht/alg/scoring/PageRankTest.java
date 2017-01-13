@@ -17,14 +17,10 @@
  */
 package org.jgrapht.alg.scoring;
 
-import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * Unit tests for PageRank

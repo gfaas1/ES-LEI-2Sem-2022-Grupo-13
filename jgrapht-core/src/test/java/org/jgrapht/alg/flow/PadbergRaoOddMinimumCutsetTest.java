@@ -17,16 +17,15 @@
  */
 package org.jgrapht.alg.flow;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleWeightedGraph;
-
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * Test class for the PadbergRaoOddMinimumCutset implementation

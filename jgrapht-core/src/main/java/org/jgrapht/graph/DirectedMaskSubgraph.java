@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
 
 /**
  * A directed graph that is a {@link MaskSubgraph} of another graph.

@@ -17,19 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle

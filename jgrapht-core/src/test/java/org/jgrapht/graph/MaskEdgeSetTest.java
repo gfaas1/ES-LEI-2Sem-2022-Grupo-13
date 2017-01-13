@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Iterator;
+import java.util.*;
 
 import org.jgrapht.*;
 

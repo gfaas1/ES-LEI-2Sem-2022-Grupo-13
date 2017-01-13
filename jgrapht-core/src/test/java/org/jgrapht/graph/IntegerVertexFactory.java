@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.VertexFactory;
+import org.jgrapht.*;
 
 /**
  * Default implementation of a vertex factory which creates integers. The vertices start by default

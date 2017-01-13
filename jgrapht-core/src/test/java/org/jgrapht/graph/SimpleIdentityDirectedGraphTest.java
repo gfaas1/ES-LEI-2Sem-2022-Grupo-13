@@ -17,17 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
+import org.jgrapht.util.*;
 
 /**
  * A unit test for simple directed graph when the backing map is an IdentityHashMap

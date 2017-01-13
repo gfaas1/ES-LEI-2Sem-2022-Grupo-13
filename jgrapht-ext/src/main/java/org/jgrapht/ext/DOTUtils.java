@@ -18,7 +18,7 @@
 package org.jgrapht.ext;
 
 import java.io.*;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import org.jgrapht.*;
 
