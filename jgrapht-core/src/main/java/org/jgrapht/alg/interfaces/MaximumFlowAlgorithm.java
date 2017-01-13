@@ -44,7 +44,10 @@ public interface MaximumFlowAlgorithm<V, E>
      * @deprecated use {@link #getMaximumFlow(Object, Object)} instead
      */
     @Deprecated
-    default MaximumFlow<E> buildMaximumFlow(V source, V sink){ return getMaximumFlow(source, sink); };
+    default MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    {
+        return getMaximumFlow(source, sink);
+    };
 
     /**
      * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates

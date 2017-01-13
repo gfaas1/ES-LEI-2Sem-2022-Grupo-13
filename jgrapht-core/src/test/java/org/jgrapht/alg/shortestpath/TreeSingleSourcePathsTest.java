@@ -20,15 +20,12 @@ package org.jgrapht.alg.shortestpath;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * @author Dimitrios Michail
@@ -60,15 +57,15 @@ public class TreeSingleSourcePathsTest
         g.setEdgeWeight(e34_2, 100.0);
         DefaultWeightedEdge e34_3 = g.addEdge(3, 4);
         g.setEdgeWeight(e34_3, 1.0);
-        
+
         Map<Integer, Pair<Double, DefaultWeightedEdge>> map = new HashMap<>();
         map.put(2, Pair.of(-5d, e12_1));
         map.put(3, Pair.of(-10d, e23_3));
         map.put(4, Pair.of(-110d, e34_1));
-        
-        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 = 
+
+        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 =
             new TreeSingleSourcePathsImpl<>(g, 1, map);
-        
+
         assertEquals(1, t1.getSourceVertex().intValue());
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());

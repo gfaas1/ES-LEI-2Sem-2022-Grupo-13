@@ -56,7 +56,8 @@ public class ToleranceDoubleComparator
     }
 
     /**
-     * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1 otherwise
+     * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1
+     * otherwise
      * 
      * @param o1 the first value
      * @param o2 the second value

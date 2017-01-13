@@ -46,7 +46,8 @@ public class DOTExporterTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    public void testUndirected() throws UnsupportedEncodingException, ExportException
+    public void testUndirected()
+        throws UnsupportedEncodingException, ExportException
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);

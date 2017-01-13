@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An algorithm which computes a <a href="https://en.wikipedia.org/wiki/Spanning_tree"> spanning

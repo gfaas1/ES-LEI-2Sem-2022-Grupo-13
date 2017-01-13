@@ -64,8 +64,7 @@ public class UndirectedSpecifics<V, E>
      * @param vertexMap map for the storage of vertex edge sets
      */
     public UndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph,
-        Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
         this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
@@ -78,8 +77,7 @@ public class UndirectedSpecifics<V, E>
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public UndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph,
-        Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
         EdgeSetFactory<V, E> edgeSetFactory)
     {
         this.abstractBaseGraph = abstractBaseGraph;

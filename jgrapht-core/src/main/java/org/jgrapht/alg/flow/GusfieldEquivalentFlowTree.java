@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
  * This class computes an Equivalent Flow Tree (EFT) using the algorithm proposed by Dan Gusfield.
@@ -116,9 +112,9 @@ public class GusfieldEquivalentFlowTree<V, E>
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
     public GusfieldEquivalentFlowTree(
-            Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+        Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if(!(network instanceof UndirectedGraph))
+        if (!(network instanceof UndirectedGraph))
             throw new IllegalArgumentException("Graph must be undirected");
         this.N = network.vertexSet().size();
         if (N < 2)
@@ -160,8 +156,8 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not
-     * necessarily unique. The edge weights represent the flow values/cut weights. This method runs in
-     * O(n) time
+     * necessarily unique. The edge weights represent the flow values/cut weights. This method runs
+     * in O(n) time
      * 
      * @return Equivalent Flow Tree
      */

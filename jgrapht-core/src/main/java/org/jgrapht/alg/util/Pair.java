@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.util;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 /**

@@ -61,8 +61,8 @@ public abstract class DirectedWeightedGraphBuilderBase<V, E,
     }
 
     /**
-     * Adds the specified weighted edge to the graph being built. The source and target vertices
-     * are added to the graph, if not already included.
+     * Adds the specified weighted edge to the graph being built. The source and target vertices are
+     * added to the graph, if not already included.
      *
      * @param source source vertex of the edge.
      * @param target target vertex of the edge.

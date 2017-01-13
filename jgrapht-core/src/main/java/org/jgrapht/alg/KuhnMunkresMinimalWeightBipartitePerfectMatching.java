@@ -122,7 +122,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
         return weight;
     }
-    
+
     /**
      * {@inheritDoc}
      */

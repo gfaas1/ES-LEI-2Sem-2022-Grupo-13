@@ -17,15 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
 /**
  * A unit test for directed multigraph.

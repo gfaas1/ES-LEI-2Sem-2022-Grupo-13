@@ -19,18 +19,12 @@ package org.jgrapht.alg.shortestpath;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * @author Dimitrios Michail
@@ -63,8 +57,8 @@ public class ListSingleSourcePathsTest
         assertEquals(0, paths.getSourceVertex().intValue());
         assertEquals(0d, paths.getWeight(0), 1e-9);
         for (int i = 1; i < n; i++) {
-            assertEquals(p.get(i-1).getWeight(), paths.getWeight(i), 1e-9);
-            assertEquals(p.get(i-1).getEdgeList(), paths.getPath(i).getEdgeList());
+            assertEquals(p.get(i - 1).getWeight(), paths.getWeight(i), 1e-9);
+            assertEquals(p.get(i - 1).getEdgeList(), paths.getPath(i).getEdgeList());
         }
         assertEquals(Double.POSITIVE_INFINITY, paths.getWeight(n), 1e-9);
     }

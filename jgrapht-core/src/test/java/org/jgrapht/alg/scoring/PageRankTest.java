@@ -17,14 +17,10 @@
  */
 package org.jgrapht.alg.scoring;
 
-import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * Unit tests for PageRank
@@ -37,8 +33,7 @@ public class PageRankTest
 
     public void testGraph2Nodes()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("1");
         g.addVertex("2");
@@ -52,8 +47,7 @@ public class PageRankTest
 
     public void testGraph3Nodes()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("1");
         g.addVertex("2");
@@ -70,8 +64,7 @@ public class PageRankTest
 
     public void testGraphWikipedia()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("A");
         g.addVertex("B");
@@ -120,8 +113,7 @@ public class PageRankTest
 
     public void testUndirectedGraphWikipedia()
     {
-        Pseudograph<String, DefaultEdge> g = new Pseudograph<>(
-            DefaultEdge.class);
+        Pseudograph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         g.addVertex("A");
         g.addVertex("B");
@@ -170,8 +162,8 @@ public class PageRankTest
 
     public void testWeightedGraph1()
     {
-        DirectedPseudograph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
-            DefaultWeightedEdge.class);
+        DirectedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -182,11 +174,7 @@ public class PageRankTest
         g.setEdgeWeight(g.addEdge("center", "b"), 20.0);
         g.setEdgeWeight(g.addEdge("center", "c"), 5.0);
 
-        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(
-            g,
-            0.85,
-            100,
-            0.0001);
+        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 0.2061, 0.0001);
         assertEquals(pr.getVertexScore("a"), 0.3376, 0.0001);
@@ -196,8 +184,8 @@ public class PageRankTest
 
     public void testUnweightedGraph1()
     {
-        DirectedPseudograph<String, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
-            DefaultWeightedEdge.class);
+        DirectedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -208,11 +196,7 @@ public class PageRankTest
         g.setEdgeWeight(g.addEdge("center", "b"), 1.0);
         g.setEdgeWeight(g.addEdge("center", "c"), 1.0);
 
-        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(
-            g,
-            0.85,
-            100,
-            0.0001);
+        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 0.2061, 0.0001);
         assertEquals(pr.getVertexScore("a"), 0.2646, 0.0001);
@@ -226,8 +210,7 @@ public class PageRankTest
 
     public void testUnweightedGraph2()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -239,11 +222,7 @@ public class PageRankTest
         g.addEdge("center", "b");
         g.addEdge("center", "c");
 
-        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(
-            g,
-            0.85,
-            100,
-            0.0001);
+        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
         assertEquals(pr.getVertexScore("center"), 0.1709, 0.0001);
         assertEquals(pr.getVertexScore("a"), 0.21937, 0.0001);
@@ -258,22 +237,16 @@ public class PageRankTest
 
     public void testEmptyGraph()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
-        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(
-            g,
-            0.85,
-            100,
-            0.0001);
+        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
         assertTrue(pr.getScores().isEmpty());
     }
 
     public void testNonExistantVertex()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         g.addVertex("center");
         g.addVertex("a");
@@ -285,11 +258,7 @@ public class PageRankTest
         g.addEdge("center", "b");
         g.addEdge("center", "c");
 
-        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(
-            g,
-            0.85,
-            100,
-            0.0001);
+        VertexScoringAlgorithm<String, Double> pr = new PageRank<>(g, 0.85, 100, 0.0001);
 
         try {
             pr.getVertexScore("unknown");
@@ -300,8 +269,7 @@ public class PageRankTest
 
     public void testBadParameters()
     {
-        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(
-            DefaultEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         try {
             new PageRank<>(g, 1.1, 100, 0.0001);

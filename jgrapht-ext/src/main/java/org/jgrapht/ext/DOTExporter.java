@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.graph.*;
 
 /**
  * Exports a graph into a DOT file.
@@ -150,7 +150,7 @@ public class DOTExporter<V, E>
         String indent = "  ";
         String connector;
         String header = (g instanceof AbstractBaseGraph
-                && !((AbstractBaseGraph<V, E>) g).isAllowingMultipleEdges())
+            && !((AbstractBaseGraph<V, E>) g).isAllowingMultipleEdges())
                 ? DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD + " " : "";
         String graphId = graphIDProvider.getName(g);
         if (graphId == null || graphId.trim().isEmpty()) {
@@ -158,8 +158,8 @@ public class DOTExporter<V, E>
         }
         if (!DOTUtils.isValidID(graphId)) {
             throw new RuntimeException(
-                    "Generated graph ID '" + graphId
-                            + "' is not valid with respect to the .dot language");
+                "Generated graph ID '" + graphId
+                    + "' is not valid with respect to the .dot language");
         }
         if (g instanceof DirectedGraph<?, ?>) {
             header += DOTUtils.DIRECTED_GRAPH_KEYWORD;
@@ -267,7 +267,7 @@ public class DOTExporter<V, E>
             "Generated id '" + idCandidate + "'for vertex '" + v
                 + "' is not valid with respect to the .dot language");
     }
-    
+
 }
 
 // End DOTExporter.java

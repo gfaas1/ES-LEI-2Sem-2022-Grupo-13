@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
  * Unit tests for the GreedyWeightedMatching algorithm.

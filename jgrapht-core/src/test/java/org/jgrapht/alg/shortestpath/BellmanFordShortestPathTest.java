@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.graph.*;
 
 /**
  * .

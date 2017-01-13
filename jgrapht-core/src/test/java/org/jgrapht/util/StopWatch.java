@@ -17,7 +17,7 @@
  */
 package org.jgrapht.util;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * A very simple stop watch.

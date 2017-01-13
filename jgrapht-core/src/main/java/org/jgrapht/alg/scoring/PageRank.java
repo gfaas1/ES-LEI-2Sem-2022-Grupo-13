@@ -17,48 +17,39 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * PageRank implementation.
  * 
  * <p>
- * The <a href="https://en.wikipedia.org/wiki/PageRank">wikipedia</a> article
- * contains a nice description of PageRank. The method can be found on the
- * article: Sergey Brin and Larry Page: The Anatomy of a Large-Scale
- * Hypertextual Web Search Engine. Proceedings of the 7th World-Wide Web
+ * The <a href="https://en.wikipedia.org/wiki/PageRank">wikipedia</a> article contains a nice
+ * description of PageRank. The method can be found on the article: Sergey Brin and Larry Page: The
+ * Anatomy of a Large-Scale Hypertextual Web Search Engine. Proceedings of the 7th World-Wide Web
  * Conference, Brisbane, Australia, April 1998. See also the following
  * <a href="http://infolab.stanford.edu/~backrub/google.html">page</a>.
  * </p>
  * 
  * <p>
- * This is a simple iterative implementation of PageRank which stops after a
- * given number of iterations or if the PageRank values between two iterations
- * do not change more than a predefined value. The implementation uses the
- * variant which divides by the number of nodes, thus forming a probability
- * distribution over graph nodes.
+ * This is a simple iterative implementation of PageRank which stops after a given number of
+ * iterations or if the PageRank values between two iterations do not change more than a predefined
+ * value. The implementation uses the variant which divides by the number of nodes, thus forming a
+ * probability distribution over graph nodes.
  * </p>
  *
  * <p>
- * Each iteration of the algorithm runs in linear time O(n+m) when n is the
- * number of nodes and m the number of edges of the graph. The maximum number of
- * iterations can be adjusted by the caller. The default value is
- * {@link PageRank#MAX_ITERATIONS_DEFAULT}.
+ * Each iteration of the algorithm runs in linear time O(n+m) when n is the number of nodes and m
+ * the number of edges of the graph. The maximum number of iterations can be adjusted by the caller.
+ * The default value is {@link PageRank#MAX_ITERATIONS_DEFAULT}.
  * </p>
  * 
  * <p>
- * If the graph is a weighted graph, a weighted variant is used where the
- * probability of following an edge e out of node v is equal to the weight of e
- * over the sum of weights of all outgoing edges of v.
+ * If the graph is a weighted graph, a weighted variant is used where the probability of following
+ * an edge e out of node v is equal to the weight of e over the sum of weights of all outgoing edges
+ * of v.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -76,9 +67,8 @@ public final class PageRank<V, E>
     public static final int MAX_ITERATIONS_DEFAULT = 100;
 
     /**
-     * Default value for the tolerance. The calculation will stop if the
-     * difference of PageRank values between iterations change less than this
-     * value.
+     * Default value for the tolerance. The calculation will stop if the difference of PageRank
+     * values between iterations change less than this value.
      */
     public static final double TOLERANCE_DEFAULT = 0.0001;
 
@@ -97,11 +87,7 @@ public final class PageRank<V, E>
      */
     public PageRank(Graph<V, E> g)
     {
-        this(
-            g,
-            DAMPING_FACTOR_DEFAULT,
-            MAX_ITERATIONS_DEFAULT,
-            TOLERANCE_DEFAULT);
+        this(g, DAMPING_FACTOR_DEFAULT, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
 
     /**
@@ -133,21 +119,16 @@ public final class PageRank<V, E>
      * @param g the input graph
      * @param dampingFactor the damping factor
      * @param maxIterations the maximum number of iterations to perform
-     * @param tolerance the calculation will stop if the difference of PageRank
-     *        values between iterations change less than this value
+     * @param tolerance the calculation will stop if the difference of PageRank values between
+     *        iterations change less than this value
      */
-    public PageRank(
-        Graph<V, E> g,
-        double dampingFactor,
-        int maxIterations,
-        double tolerance)
+    public PageRank(Graph<V, E> g, double dampingFactor, int maxIterations, double tolerance)
     {
         this.g = g;
         this.scores = new HashMap<>();
 
         if (maxIterations <= 0) {
-            throw new IllegalArgumentException(
-                "Maximum iterations must be positive");
+            throw new IllegalArgumentException("Maximum iterations must be positive");
         }
 
         if (dampingFactor < 0.0 || dampingFactor > 1.0) {
@@ -155,8 +136,7 @@ public final class PageRank<V, E>
         }
 
         if (tolerance <= 0.0) {
-            throw new IllegalArgumentException(
-                "Tolerance not valid, must be positive");
+            throw new IllegalArgumentException("Tolerance not valid, must be positive");
         }
 
         run(dampingFactor, maxIterations, tolerance);
@@ -178,8 +158,7 @@ public final class PageRank<V, E>
     public Double getVertexScore(V v)
     {
         if (!g.containsVertex(v)) {
-            throw new IllegalArgumentException(
-                "Cannot return score of unknown vertex");
+            throw new IllegalArgumentException("Cannot return score of unknown vertex");
         }
         return scores.get(v);
     }
@@ -238,21 +217,20 @@ public final class PageRank<V, E>
                 if (weighted) {
                     for (E e : specifics.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution += dampingFactor * scores.get(w)
-                            * g.getEdgeWeight(e) / weights.get(w);
+                        contribution +=
+                            dampingFactor * scores.get(w) * g.getEdgeWeight(e) / weights.get(w);
                     }
                 } else {
                     for (E e : specifics.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution += dampingFactor * scores.get(w)
-                            / specifics.outgoingEdgesOf(w).size();
+                        contribution +=
+                            dampingFactor * scores.get(w) / specifics.outgoingEdgesOf(w).size();
                     }
                 }
 
                 double vOldValue = scores.get(v);
                 double vNewValue = r + contribution;
-                maxChange = Math
-                    .max(maxChange, Math.abs(vNewValue - vOldValue));
+                maxChange = Math.max(maxChange, Math.abs(vNewValue - vOldValue));
                 nextScores.put(v, vNewValue);
             }
 
