@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Tim Shearouse and Contributors.
+ * (C) Copyright 2003-2017, by Tim Shearouse and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
