@@ -29,7 +29,7 @@ import java.util.*;
  */
 @Deprecated
 public interface VertexUpdater<V>
- extends ComponentUpdater<V>
+    extends ComponentUpdater<V>
 {
     /**
      * Update vertex with the extra attributes.
@@ -38,7 +38,7 @@ public interface VertexUpdater<V>
      * @param attributes to add to the vertex
      */
     void updateVertex(V vertex, Map<String, String> attributes);
-    
+
     /**
      * Update component with the extra attributes.
      *
@@ -46,10 +46,11 @@ public interface VertexUpdater<V>
      * @param attributes to add to the component
      */
     @Override
-    default void update(V component, Map<String, String> attributes) { 
+    default void update(V component, Map<String, String> attributes)
+    {
         this.updateVertex(component, attributes);
     }
-    
+
 }
 
 // End VertexUpdater.java

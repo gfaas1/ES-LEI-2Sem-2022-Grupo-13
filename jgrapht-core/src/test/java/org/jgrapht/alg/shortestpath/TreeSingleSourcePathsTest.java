@@ -60,15 +60,15 @@ public class TreeSingleSourcePathsTest
         g.setEdgeWeight(e34_2, 100.0);
         DefaultWeightedEdge e34_3 = g.addEdge(3, 4);
         g.setEdgeWeight(e34_3, 1.0);
-        
+
         Map<Integer, Pair<Double, DefaultWeightedEdge>> map = new HashMap<>();
         map.put(2, Pair.of(-5d, e12_1));
         map.put(3, Pair.of(-10d, e23_3));
         map.put(4, Pair.of(-110d, e34_1));
-        
-        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 = 
+
+        TreeSingleSourcePathsImpl<Integer, DefaultWeightedEdge> t1 =
             new TreeSingleSourcePathsImpl<>(g, 1, map);
-        
+
         assertEquals(1, t1.getSourceVertex().intValue());
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());

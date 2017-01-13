@@ -98,7 +98,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         return weight;
     }
-    
+
     /**
      * {@inheritDoc}
      */

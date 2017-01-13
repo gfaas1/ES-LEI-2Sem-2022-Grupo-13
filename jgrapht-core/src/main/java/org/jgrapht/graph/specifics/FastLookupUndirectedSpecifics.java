@@ -62,8 +62,7 @@ public class FastLookupUndirectedSpecifics<V, E>
      * @param vertexMap map for the storage of vertex edge sets
      */
     public FastLookupUndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph,
-        Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
         this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
@@ -76,8 +75,7 @@ public class FastLookupUndirectedSpecifics<V, E>
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public FastLookupUndirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph,
-        Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
+        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap,
         EdgeSetFactory<V, E> edgeSetFactory)
     {
         super(abstractBaseGraph, vertexMap, edgeSetFactory);
@@ -93,8 +91,8 @@ public class FastLookupUndirectedSpecifics<V, E>
         if (abstractBaseGraph.containsVertex(sourceVertex)
             && abstractBaseGraph.containsVertex(targetVertex))
         {
-            Set<E> edges = touchingVerticesToEdgeMap
-                .get(new UnorderedPair<>(sourceVertex, targetVertex));
+            Set<E> edges =
+                touchingVerticesToEdgeMap.get(new UnorderedPair<>(sourceVertex, targetVertex));
             return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
         } else {
             return null;

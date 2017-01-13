@@ -377,11 +377,11 @@ public class BidirectionalDijkstraShortestPathTest
 
                 GraphPath<String, DefaultEdge> p2 =
                     new BidirectionalDijkstraShortestPath<>(g, radius).getPath(v, u);
-                
+
                 if (p1 == null || p2 == null) {
                     assertNull(p1);
                     assertNull(p2);
-                } else { 
+                } else {
                     assertEquals(p1.getLength(), p2.getLength());
                     assertEquals(p1.getWeight(), p2.getWeight(), 0.0001);
                     assertEquals(p2.getWeight(), computePathWeight(g, p2), 0.0001);

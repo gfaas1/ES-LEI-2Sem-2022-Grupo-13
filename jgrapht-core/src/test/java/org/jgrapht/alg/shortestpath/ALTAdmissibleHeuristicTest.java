@@ -137,7 +137,8 @@ public class ALTAdmissibleHeuristicTest
                         SingleSourcePaths<Integer, DefaultWeightedEdge> paths = sp.getPaths(v);
                         for (Integer u : g.vertexSet()) {
                             GraphPath<Integer, DefaultWeightedEdge> path = paths.getPath(u);
-                            //System.out.println(h.getCostEstimate(v, u) + " <= " + path.getWeight());
+                            // System.out.println(h.getCostEstimate(v, u) + " <= " +
+                            // path.getWeight());
                             assertTrue(
                                 comparator.compare(h.getCostEstimate(v, u), path.getWeight()) <= 0);
                         }

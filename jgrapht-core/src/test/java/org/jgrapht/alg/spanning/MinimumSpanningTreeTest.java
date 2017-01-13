@@ -120,14 +120,11 @@ public class MinimumSpanningTreeTest
                 g.setEdgeWeight(e, rng.nextDouble());
             }
 
-            SpanningTreeAlgorithm<DefaultWeightedEdge> alg1 =
-                new BoruvkaMinimumSpanningTree<>(g);
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg1 = new BoruvkaMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree1 = alg1.getSpanningTree();
-            SpanningTreeAlgorithm<DefaultWeightedEdge> alg2 =
-                new KruskalMinimumSpanningTree<>(g);
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg2 = new KruskalMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree2 = alg2.getSpanningTree();
-            SpanningTreeAlgorithm<DefaultWeightedEdge> alg3 =
-                new PrimMinimumSpanningTree<>(g);
+            SpanningTreeAlgorithm<DefaultWeightedEdge> alg3 = new PrimMinimumSpanningTree<>(g);
             SpanningTree<DefaultWeightedEdge> tree3 = alg3.getSpanningTree();
 
             assertEquals(tree1.getWeight(), tree2.getWeight(), 1e-9);

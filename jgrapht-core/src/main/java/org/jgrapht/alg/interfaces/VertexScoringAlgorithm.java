@@ -47,4 +47,3 @@ public interface VertexScoringAlgorithm<V, D>
     D getVertexScore(V v);
 
 }
-

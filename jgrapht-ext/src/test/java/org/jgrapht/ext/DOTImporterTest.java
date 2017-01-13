@@ -29,22 +29,26 @@ public class DOTImporterTest
     extends TestCase
 {
 
-    private static class GraphWithID extends AbstractBaseGraph<String,DefaultEdge> implements UndirectedGraph<String,DefaultEdge> {
+    private static class GraphWithID
+        extends AbstractBaseGraph<String, DefaultEdge>
+        implements UndirectedGraph<String, DefaultEdge>
+    {
 
         String id = null;
 
-        protected GraphWithID() {
+        protected GraphWithID()
+        {
             super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
         }
 
     }
 
-    private static DOTImporter<String, DefaultEdge> idGraphImporter = new DOTImporter<String, DefaultEdge>(null, null,
-            null, (component, attributes) -> {
-        if (component instanceof GraphWithID) {
-            ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
-        }
-    });
+    private static DOTImporter<String, DefaultEdge> idGraphImporter =
+        new DOTImporter<String, DefaultEdge>(null, null, null, (component, attributes) -> {
+            if (component instanceof GraphWithID) {
+                ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
+            }
+        });
 
     public void testImportID()
         throws ImportException
@@ -66,7 +70,7 @@ public class DOTImporterTest
     }
 
     public void testImportWrongID()
-            throws ImportException
+        throws ImportException
     {
         String invalidID = "2test";
         String input = "graph " + invalidID + " {\n}\n";
@@ -77,23 +81,18 @@ public class DOTImporterTest
             idGraphImporter.importGraph(result, new StringReader(input));
             Assert.fail("Should not get here");
         } catch (ImportException e) {
-           Assert.assertEquals(e.getMessage(), "ID in the graph is not formatted correctly: '"
-               + invalidID + "'");
+            Assert.assertEquals(
+                e.getMessage(), "ID in the graph is not formatted correctly: '" + invalidID + "'");
         }
     }
 
     public void testInvalidHeader()
-            throws ImportException
+        throws ImportException
     {
         // testing all cases of missing keywords or wrong order
-        for (String invalidInput: new String[]{
-                " {}",
-                "strict {}",
-                "id {}",
-                "strict id {}",
-                "id strict {}",
-                "id strict graph {}",
-                "graph strict id {}"}) {
+        for (String invalidInput : new String[] { " {}", "strict {}", "id {}", "strict id {}",
+            "id strict {}", "id strict graph {}", "graph strict id {}" })
+        {
 
             GraphWithID result = new GraphWithID();
 
@@ -109,7 +108,7 @@ public class DOTImporterTest
     }
 
     public void testImportOnlyGraphKeyword()
-            throws ImportException
+        throws ImportException
     {
         String input = "graph {\n}\n";
         GraphWithID result = new GraphWithID();
@@ -118,7 +117,7 @@ public class DOTImporterTest
     }
 
     public void testImportNoID()
-            throws ImportException
+        throws ImportException
     {
         String input = "strict graph {\n}\n";
         GraphWithID result = new GraphWithID();

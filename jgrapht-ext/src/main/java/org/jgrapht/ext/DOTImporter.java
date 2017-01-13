@@ -110,7 +110,7 @@ public class DOTImporter<V, E>
     private VertexProvider<V> vertexProvider;
     private ComponentUpdater<V> vertexUpdater;
     private EdgeProvider<V, E> edgeProvider;
-    private ComponentUpdater<Graph<V,E>> graphUpdater;
+    private ComponentUpdater<Graph<V, E>> graphUpdater;
 
     /**
      * Constructs a new DOTImporter with the given providers
@@ -131,7 +131,8 @@ public class DOTImporter<V, E>
      * @param vertexUpdater Method used to update an existing Vertex
      */
     public DOTImporter(
-        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, ComponentUpdater<V> vertexUpdater)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider,
+        ComponentUpdater<V> vertexUpdater)
     {
         this(vertexProvider, edgeProvider, vertexUpdater, null);
     }
@@ -145,12 +146,14 @@ public class DOTImporter<V, E>
      * @param graphUpdater Method used to update the graph ID
      */
     public DOTImporter(
-            VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, ComponentUpdater<V> vertexUpdater, ComponentUpdater<Graph<V,E>> graphUpdater)
+        VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider,
+        ComponentUpdater<V> vertexUpdater, ComponentUpdater<Graph<V, E>> graphUpdater)
     {
         this.vertexProvider = vertexProvider;
         this.vertexUpdater = vertexUpdater;
         this.edgeProvider = edgeProvider;
-        this.graphUpdater = (graphUpdater != null) ?  graphUpdater : (c, a) -> {};
+        this.graphUpdater = (graphUpdater != null) ? graphUpdater : (c, a) -> {
+        };
     }
 
     /**
@@ -288,41 +291,47 @@ public class DOTImporter<V, E>
 
             int i = 0;
             if (graph instanceof AbstractBaseGraph
-                && ((AbstractBaseGraph<V, E>) graph).isAllowingMultipleEdges()
-                && headerParts[i].toLowerCase()
-                    .equals(DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD))
+                && ((AbstractBaseGraph<V, E>) graph).isAllowingMultipleEdges() && headerParts[i]
+                    .toLowerCase().equals(DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD))
             {
-                throw new ImportException("graph defines "
-                        + DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD + " but Multigraph given.");
-            } else if (headerParts[i].toLowerCase()
-                    .equals(DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD)) {
+                throw new ImportException(
+                    "graph defines " + DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD
+                        + " but Multigraph given.");
+            } else if (headerParts[i]
+                .toLowerCase().equals(DOTUtils.DONT_ALLOW_MULTIPLE_EDGES_KEYWORD))
+            {
                 i = i + 1;
             }
 
             if (headerParts.length <= i) {
                 throw new ImportException("Malformed header: " + sectionBuffer.toString());
             } else if ((graph instanceof DirectedGraph)
-                    && headerParts[i].toLowerCase().equals(DOTUtils.UNDIRECTED_GRAPH_KEYWORD)) {
+                && headerParts[i].toLowerCase().equals(DOTUtils.UNDIRECTED_GRAPH_KEYWORD))
+            {
                 throw new ImportException(
                     "input asks for undirected graph and directed graph provided.");
             } else if (!(graph instanceof DirectedGraph)
-                    && headerParts[i].equals(DOTUtils.DIRECTED_GRAPH_KEYWORD)) {
+                && headerParts[i].equals(DOTUtils.DIRECTED_GRAPH_KEYWORD))
+            {
                 throw new ImportException(
                     "input asks for directed graph but undirected graph provided.");
             } else if (!headerParts[i].toLowerCase().equals(DOTUtils.UNDIRECTED_GRAPH_KEYWORD)
-                    && !headerParts[i].toLowerCase().equals(DOTUtils.DIRECTED_GRAPH_KEYWORD)) {
+                && !headerParts[i].toLowerCase().equals(DOTUtils.DIRECTED_GRAPH_KEYWORD))
+            {
                 throw new ImportException("unknown graph type: " + headerParts[i]);
             }
 
-            // only parse the graph ID if we will update the components and there is a provided header
+            // only parse the graph ID if we will update the components and there is a provided
+            // header
             if (headerParts.length > ++i) {
-                final String idCandidate = String
-                        .join(" ", Arrays.copyOfRange(headerParts, i, headerParts.length));
+                final String idCandidate =
+                    String.join(" ", Arrays.copyOfRange(headerParts, i, headerParts.length));
                 if (!DOTUtils.isValidID(idCandidate)) {
-                    throw new ImportException("ID in the graph is not formatted correctly: '"
-                        + idCandidate + "'");
+                    throw new ImportException(
+                        "ID in the graph is not formatted correctly: '" + idCandidate + "'");
                 }
-                graphUpdater.update(graph, Collections.singletonMap(DEFAULT_GRAPH_ID_KEY, idCandidate));
+                graphUpdater
+                    .update(graph, Collections.singletonMap(DEFAULT_GRAPH_ID_KEY, idCandidate));
             }
 
             sectionBuffer.setLength(0); // reset the buffer.
@@ -641,7 +650,8 @@ public class DOTImporter<V, E>
                 index = idChunk.length() + 1;
             }
             if (!chunk.equals(DOTUtils.UNDIRECTED_GRAPH_EDGEOP)
-                    && !chunk.equals(DOTUtils.DIRECTED_GRAPH_EDGEOP)) { // a label then?
+                && !chunk.equals(DOTUtils.DIRECTED_GRAPH_EDGEOP))
+            { // a label then?
                 ids.add(chunk);
             }
         }

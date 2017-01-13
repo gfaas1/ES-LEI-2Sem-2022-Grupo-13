@@ -91,8 +91,7 @@ public class FastLookupDirectedSpecifics<V, E>
         if (abstractBaseGraph.containsVertex(sourceVertex)
             && abstractBaseGraph.containsVertex(targetVertex))
         {
-            Set<E> edges =
-                touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
+            Set<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
             return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
         } else {
             return null;

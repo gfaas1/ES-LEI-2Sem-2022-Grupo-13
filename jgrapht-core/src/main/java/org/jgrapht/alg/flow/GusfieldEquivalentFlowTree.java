@@ -116,9 +116,9 @@ public class GusfieldEquivalentFlowTree<V, E>
      * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
     public GusfieldEquivalentFlowTree(
-            Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+        Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if(!(network instanceof UndirectedGraph))
+        if (!(network instanceof UndirectedGraph))
             throw new IllegalArgumentException("Graph must be undirected");
         this.N = network.vertexSet().size();
         if (N < 2)
@@ -160,8 +160,8 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /**
      * Returns the Equivalent Flow Tree as an actual tree (graph). Note that this tree is not
-     * necessarily unique. The edge weights represent the flow values/cut weights. This method runs in
-     * O(n) time
+     * necessarily unique. The edge weights represent the flow values/cut weights. This method runs
+     * in O(n) time
      * 
      * @return Equivalent Flow Tree
      */

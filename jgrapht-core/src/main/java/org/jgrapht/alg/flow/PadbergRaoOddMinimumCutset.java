@@ -44,8 +44,9 @@ import java.util.stream.Collectors;
  * Journal of Discrete Mathematics, 22(4), p1480-1487, 2008.
  *
  * <p>
- * The runtime complexity of this algorithm is dominated by the runtime complexity of the algorithm used
- * to compute A Gomory-Hu tree on graph G. Consequently, the runtime complexity of this class is O(V^4).
+ * The runtime complexity of this algorithm is dominated by the runtime complexity of the algorithm
+ * used to compute A Gomory-Hu tree on graph G. Consequently, the runtime complexity of this class
+ * is O(V^4).
  *
  * <p>
  * This class does not support changes to the underlying graph. The behavior of this class is
@@ -101,13 +102,13 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * @param minimumSTCutAlgorithm algorithm used to calculate the Gomory-Hu tree
      */
     public PadbergRaoOddMinimumCutset(
-            Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
+        Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if(!(network instanceof UndirectedGraph))
+        if (!(network instanceof UndirectedGraph))
             throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         gusfieldGomoryHuCutTreeAlgorithm =
-                new GusfieldGomoryHuCutTree<>(network, minimumSTCutAlgorithm);
+            new GusfieldGomoryHuCutTree<>(network, minimumSTCutAlgorithm);
     }
 
     /**
@@ -116,11 +117,10 @@ public class PadbergRaoOddMinimumCutset<V, E>
      * The original algorithm runs on a compressed Gomory-Hu tree: a cut-tree with the odd vertices
      * as terminal vertices. This tree has |T|-1 edges as opposed to |V|-1 for a Gomory-Hu tree
      * defined on the input graph G. This compression step can however be skipped. If you want to
-     * run the original algorithm in the paper, set the parameter
-     * <code>useTreeCompression</code> to true. Alternatively, experiment which setting of this
-     * parameter produces the fastest results. Both settings are guaranteed to find the optimal cut.
-     * Experiments on random graphs showed that setting <code>useTreeCompression</code> to false was
-     * on average a bit faster.
+     * run the original algorithm in the paper, set the parameter <code>useTreeCompression</code> to
+     * true. Alternatively, experiment which setting of this parameter produces the fastest results.
+     * Both settings are guaranteed to find the optimal cut. Experiments on random graphs showed
+     * that setting <code>useTreeCompression</code> to false was on average a bit faster.
      *
      * @param oddVertices Set of vertices which are labeled 'odd'. Note that the number of vertices
      *        in this set must be even!
@@ -137,7 +137,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
             throw new IllegalArgumentException("There needs to be an even number of odd vertices");
         assert network.vertexSet().containsAll(oddVertices); // All odd vertices must be contained
         // in the graph
-        //all edge weights mucht be non-negative
+        // all edge weights mucht be non-negative
         assert network.edgeSet().stream().filter(e -> network.getEdgeWeight(e) < 0).count() == 0;
 
         gomoryHuTree = gusfieldGomoryHuCutTreeAlgorithm.getGomoryHuTree();
@@ -164,15 +164,29 @@ public class PadbergRaoOddMinimumCutset<V, E>
             V target = gomoryHuTree.getEdgeTarget(edge);
             double edgeWeight = gomoryHuTree.getEdgeWeight(edge);
 
-            if(edgeWeight >= minimumCutWeight)
+            if (edgeWeight >= minimumCutWeight)
                 continue;
 
             gomoryHuTree.removeEdge(edge); // Temporarily remove edge
             Set<V> sourcePartition =
-                    new ConnectivityInspector<>(gomoryHuTree).connectedSetOf(source);
-            if (PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices))
-            { // If the source partition forms an odd cutset, check whether the cut isn't better
-                // than the one we already found.
+                new ConnectivityInspector<>(gomoryHuTree).connectedSetOf(source);
+            if (PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices)) { // If the
+                                                                                           // source
+                                                                                           // partition
+                                                                                           // forms
+                                                                                           // an odd
+                                                                                           // cutset,
+                                                                                           // check
+                                                                                           // whether
+                                                                                           // the
+                                                                                           // cut
+                                                                                           // isn't
+                                                                                           // better
+                                                                                           // than
+                                                                                           // the
+                                                                                           // one we
+                                                                                           // already
+                                                                                           // found.
                 minimumCutWeight = edgeWeight;
                 sourcePartitionMinimumCut = sourcePartition;
             }
@@ -192,9 +206,9 @@ public class PadbergRaoOddMinimumCutset<V, E>
         Queue<Set<V>> queue = new LinkedList<>();
         queue.add(oddVertices);
 
-        //Keep splitting the clusters until each resulting cluster containes exactly one vertex.
-        while(!queue.isEmpty()){
-            Set<V>  nextCluster=queue.poll();
+        // Keep splitting the clusters until each resulting cluster containes exactly one vertex.
+        while (!queue.isEmpty()) {
+            Set<V> nextCluster = queue.poll();
             this.splitCluster(nextCluster, queue);
         }
 
@@ -202,53 +216,58 @@ public class PadbergRaoOddMinimumCutset<V, E>
     }
 
     /**
-     * Takes a set of odd vertices with cardinality 2 or more, and splits them into 2 new non-empty sets.
+     * Takes a set of odd vertices with cardinality 2 or more, and splits them into 2 new non-empty
+     * sets.
+     * 
      * @param cluster group of odd vertices
      * @param queue clusters with cardinality 2 or more
      */
-    private void splitCluster(Set<V>  cluster, Queue<Set<V> > queue){
-        assert cluster.size()>=2;
+    private void splitCluster(Set<V> cluster, Queue<Set<V>> queue)
+    {
+        assert cluster.size() >= 2;
 
         // Choose 2 random odd nodes
         Iterator<V> iterator = cluster.iterator();
         V oddNode1 = iterator.next();
         V oddNode2 = iterator.next();
 
-        //Calculate the minimum cut separating these two nodes.
-        double cutWeight=gusfieldGomoryHuCutTreeAlgorithm.calculateMinCut(oddNode1, oddNode2);
-        Set<V> sourcePartition=null;
+        // Calculate the minimum cut separating these two nodes.
+        double cutWeight = gusfieldGomoryHuCutTreeAlgorithm.calculateMinCut(oddNode1, oddNode2);
+        Set<V> sourcePartition = null;
 
-        if(cutWeight < minimumCutWeight){
-            sourcePartition=gusfieldGomoryHuCutTreeAlgorithm.getSourcePartition();
-            if(PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices)) {
+        if (cutWeight < minimumCutWeight) {
+            sourcePartition = gusfieldGomoryHuCutTreeAlgorithm.getSourcePartition();
+            if (PadbergRaoOddMinimumCutset.isOddVertexSet(sourcePartition, oddVertices)) {
                 this.minimumCutWeight = cutWeight;
                 this.sourcePartitionMinimumCut = sourcePartition;
             }
         }
 
-        if(cluster.size()==2)
+        if (cluster.size() == 2)
             return;
 
-        if(sourcePartition==null)
-            sourcePartition=gusfieldGomoryHuCutTreeAlgorithm.getSourcePartition();
+        if (sourcePartition == null)
+            sourcePartition = gusfieldGomoryHuCutTreeAlgorithm.getSourcePartition();
 
-        Set<V> split1=this.intersection(cluster, sourcePartition);
-        Set<V> split2= new HashSet<>(cluster);
+        Set<V> split1 = this.intersection(cluster, sourcePartition);
+        Set<V> split2 = new HashSet<>(cluster);
         split2.removeAll(split1);
 
-        if(split1.size()>1)
+        if (split1.size() > 1)
             queue.add(split1);
-        if(split2.size()>1)
+        if (split2.size() > 1)
             queue.add(split2);
     }
 
     /**
      * Efficient way to compute the intersection between two sets
+     * 
      * @param set1 set 1
      * @param set2 set 2
      * @return intersection of set 1 and 2
      */
-    private Set<V> intersection(Set<V> set1, Set<V> set2){
+    private Set<V> intersection(Set<V> set1, Set<V> set2)
+    {
         Set<V> a;
         Set<V> b;
         if (set1.size() <= set2.size()) {
@@ -262,7 +281,6 @@ public class PadbergRaoOddMinimumCutset<V, E>
         return a.stream().filter(v -> b.contains(v)).collect(Collectors.toSet());
     }
 
-
     /**
      * Convenience method which test whether the given set contains an odd number of odd-labeled
      * nodes.
@@ -274,7 +292,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
      */
     public static <V> boolean isOddVertexSet(Set<V> vertices, Set<V> oddVertices)
     {
-        if(vertices.size() < oddVertices.size())
+        if (vertices.size() < oddVertices.size())
             return vertices.stream().filter(oddVertices::contains).count() % 2 == 1;
         else
             return oddVertices.stream().filter(vertices::contains).count() % 2 == 1;
@@ -314,9 +332,9 @@ public class PadbergRaoOddMinimumCutset<V, E>
     public Set<E> getCutEdges()
     {
         Predicate<E> predicate = e -> sourcePartitionMinimumCut.contains(network.getEdgeSource(e))
-                ^ sourcePartitionMinimumCut.contains(network.getEdgeTarget(e));
+            ^ sourcePartitionMinimumCut.contains(network.getEdgeTarget(e));
         return network.edgeSet().stream().filter(predicate).collect(
-                Collectors.toCollection(LinkedHashSet::new));
+            Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

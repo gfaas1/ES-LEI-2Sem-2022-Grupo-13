@@ -124,7 +124,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     public GusfieldGomoryHuCutTree(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if(!(network instanceof UndirectedGraph))
+        if (!(network instanceof UndirectedGraph))
             throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         this.N = network.vertexSet().size();
@@ -184,9 +184,10 @@ public class GusfieldGomoryHuCutTree<V, E>
         if (p == null) // Lazy invocation of the algorithm
             this.calculateGomoryHuTree();
 
-        //Compute the tree from scratch. Since we compute a new tree, the user is free to modify this tree.
+        // Compute the tree from scratch. Since we compute a new tree, the user is free to modify
+        // this tree.
         SimpleWeightedGraph<V, DefaultWeightedEdge> gomoryHuTree =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(gomoryHuTree, vertexList);
         for (int i = 1; i < N; i++) {
             Graphs.addEdge(gomoryHuTree, vertexList.get(i), vertexList.get(p[i]), fl[i]);
@@ -292,8 +293,8 @@ public class GusfieldGomoryHuCutTree<V, E>
      */
     public double calculateMinCut()
     {
-        if(this.gomoryHuTree==null)
-            this.gomoryHuTree=this.getGomoryHuTree();
+        if (this.gomoryHuTree == null)
+            this.gomoryHuTree = this.getGomoryHuTree();
         DefaultWeightedEdge cheapestEdge = gomoryHuTree
             .edgeSet().stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight))
             .orElseThrow(() -> new RuntimeException("graph is empty?!"));
@@ -315,65 +316,70 @@ public class GusfieldGomoryHuCutTree<V, E>
         if (sourcePartitionLastInvokedSource != null)
             return sourcePartitionLastInvokedSource;
 
-        if(this.gomoryHuTree==null)
-            this.gomoryHuTree=this.getGomoryHuTree();
+        if (this.gomoryHuTree == null)
+            this.gomoryHuTree = this.getGomoryHuTree();
 
-        Set<DefaultWeightedEdge> pathEdges = this.findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
+        Set<DefaultWeightedEdge> pathEdges =
+            this.findPathBetween(gomoryHuTree, lastInvokedSource, lastInvokedTarget);
         DefaultWeightedEdge cheapestEdge =
             pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight)).orElseThrow(
                 () -> new RuntimeException("path is empty?!"));
 
         // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of 2
         // components
-        V source=gomoryHuTree.getEdgeSource(cheapestEdge);
-        V target=gomoryHuTree.getEdgeTarget(cheapestEdge);
+        V source = gomoryHuTree.getEdgeSource(cheapestEdge);
+        V target = gomoryHuTree.getEdgeTarget(cheapestEdge);
         gomoryHuTree.removeEdge(cheapestEdge);
 
         // Return the vertices in the component with the source vertex
         sourcePartitionLastInvokedSource =
             new ConnectivityInspector<>(gomoryHuTree).connectedSetOf(lastInvokedSource);
 
-        //Restore the internal tree structure by putting the edge back
+        // Restore the internal tree structure by putting the edge back
         gomoryHuTree.addEdge(source, target, cheapestEdge);
 
         return sourcePartitionLastInvokedSource;
     }
 
     /**
-     * BFS method to find the edges in the shortest path from a source to a target vertex in a tree graph.
+     * BFS method to find the edges in the shortest path from a source to a target vertex in a tree
+     * graph.
+     * 
      * @param tree input graph
      * @param source source
      * @param target target
      * @return edges constituting the shortest path between source and target
      */
-    private Set<DefaultWeightedEdge> findPathBetween(SimpleWeightedGraph<V,DefaultWeightedEdge> tree, V source, V target){
-        boolean[] visited=new boolean[vertexList.size()];
-        Map<V,V> predecessorMap=new HashMap<V, V>();
-        Queue<V> queue=new LinkedList<V>();
+    private Set<DefaultWeightedEdge> findPathBetween(
+        SimpleWeightedGraph<V, DefaultWeightedEdge> tree, V source, V target)
+    {
+        boolean[] visited = new boolean[vertexList.size()];
+        Map<V, V> predecessorMap = new HashMap<V, V>();
+        Queue<V> queue = new LinkedList<V>();
         queue.add(source);
 
-        boolean found=false;
-        while(!found && !queue.isEmpty()){
-            V next=queue.poll();
-            for(V v : Graphs.neighborListOf(tree, next)){
-                if(!visited[indexMap.get(v)]){
+        boolean found = false;
+        while (!found && !queue.isEmpty()) {
+            V next = queue.poll();
+            for (V v : Graphs.neighborListOf(tree, next)) {
+                if (!visited[indexMap.get(v)]) {
                     predecessorMap.put(v, next);
                     queue.add(v);
                 }
-                if(v == target){
-                    found=true;
+                if (v == target) {
+                    found = true;
                     break;
                 }
             }
-            visited[indexMap.get(next)]=true;
+            visited[indexMap.get(next)] = true;
         }
 
-        Set<DefaultWeightedEdge> edges=new LinkedHashSet<>();
-        V v=target;
-        while(v != source){
-            V pred=predecessorMap.get(v);
+        Set<DefaultWeightedEdge> edges = new LinkedHashSet<>();
+        V v = target;
+        while (v != source) {
+            V pred = predecessorMap.get(v);
             edges.add(tree.getEdge(v, pred));
-            v=pred;
+            v = pred;
         }
         return edges;
     }
