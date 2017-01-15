@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graphs;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import java.util.*;
 
-import java.util.Arrays;
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * Test base class for the GusfieldGomoryHuCutTree and GusfieldEquivalentFlow implementations

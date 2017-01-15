@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Andrew Chen and Contributors.
+ * (C) Copyright 2015-2017, by Andrew Chen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -101,8 +101,8 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     }
 
     /**
-     * Adds the specified edge to the graph being built. The source and target vertices are added
-     * to the graph, if not already included.
+     * Adds the specified edge to the graph being built. The source and target vertices are added to
+     * the graph, if not already included.
      *
      * @param source source vertex of the edge.
      * @param target target vertex of the edge.
@@ -205,8 +205,9 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
         return this.self();
     }
 
-    /** Removes the specified edge from the graph. Removes the specified edge from this graph
-     * if it is present.
+    /**
+     * Removes the specified edge from the graph. Removes the specified edge from this graph if it
+     * is present.
      *
      * @param edge edge to be removed from this graph, if present.
      * @return this builder object

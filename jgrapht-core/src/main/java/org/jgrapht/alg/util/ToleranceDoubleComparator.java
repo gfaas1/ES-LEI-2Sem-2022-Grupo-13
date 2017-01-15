@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -56,7 +56,8 @@ public class ToleranceDoubleComparator
     }
 
     /**
-     * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1 otherwise
+     * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1
+     * otherwise
      * 
      * @param o1 the first value
      * @param o2 the second value

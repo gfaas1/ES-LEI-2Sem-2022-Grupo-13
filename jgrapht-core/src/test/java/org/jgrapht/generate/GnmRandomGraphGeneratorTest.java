@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2016, by Assaf Lehr, Dimitrios Michail and Contributors.
+ * (C) Copyright 2005-2017, by Assaf Lehr, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -247,45 +247,80 @@ public class GnmRandomGraphGeneratorTest
         UndirectedGraph<Integer, DefaultEdge> g4 = new Pseudograph<>(DefaultEdge.class);
         gen4.generateGraph(g4, new IntegerVertexFactory(), null);
     }
-    
-    public void testMaximumAllowedEdges() {
+
+    public void testMaximumAllowedEdges()
+    {
         // undirected graphs
         boolean isDirected = false;
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, true));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, true));
-        
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, false));
-        assertEquals(1,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, true));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, true));
-        
-        assertEquals(45,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, false));
-        assertEquals(55,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, false));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, true));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, true));
-        
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(200000, isDirected, false, false));
-        
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, true));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, true));
+
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, false));
+        assertEquals(
+            1, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, true));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, true));
+
+        assertEquals(
+            45, GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, false));
+        assertEquals(
+            55, GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, false));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, true));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, true));
+
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(200000, isDirected, false, false));
+
         // directed graphs
         isDirected = true;
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, true));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, true));
-        
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, false));
-        assertEquals(2,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, false));
-        assertEquals(0,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, true));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, true));
-        
-        assertEquals(90,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, false));
-        assertEquals(110,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, false));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, true));
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, true));
-        
-        assertEquals(Integer.MAX_VALUE,GnmRandomGraphGenerator.computeMaximumAllowedEdges(200000, isDirected, false, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, false, true));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(0, isDirected, true, true));
+
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, false));
+        assertEquals(
+            2, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, false));
+        assertEquals(
+            0, GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, false, true));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(1, isDirected, true, true));
+
+        assertEquals(
+            90, GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, false));
+        assertEquals(
+            110, GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, false));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, false, true));
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(10, isDirected, true, true));
+
+        assertEquals(
+            Integer.MAX_VALUE,
+            GnmRandomGraphGenerator.computeMaximumAllowedEdges(200000, isDirected, false, false));
     }
 
     public void testCannotGuessGraphType()

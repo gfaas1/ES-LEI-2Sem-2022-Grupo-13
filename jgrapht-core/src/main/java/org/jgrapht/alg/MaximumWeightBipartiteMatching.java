@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2015-2017, by Graeme Ahokas and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -98,7 +98,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         return weight;
     }
-    
+
     /**
      * {@inheritDoc}
      */

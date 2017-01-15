@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * An unmodifiable subgraph induced by a vertex/edge masking function. The subgraph will keep track

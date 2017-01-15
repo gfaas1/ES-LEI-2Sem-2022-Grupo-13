@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2016-2017, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 

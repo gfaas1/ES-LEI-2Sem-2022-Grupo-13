@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Test {@link Pair} and {@link UnorderedPair} classes.
@@ -40,71 +40,72 @@ public class PairTest
     public void testPair()
     {
         Pair<String, Custom> p = Pair.of(CUSTOM, new Custom(1));
-        
+
         assertEquals(CUSTOM, p.getFirst());
         assertNotEquals(ANOTHER, p.getFirst());
-        
+
         assertEquals(new Custom(1), p.getSecond());
         assertNotEquals(new Custom(2), p.getSecond());
-        
+
         assertTrue(p.hasElement(CUSTOM));
         assertFalse(p.hasElement(ANOTHER));
         assertTrue(p.hasElement(new Custom(1)));
         assertFalse(p.hasElement(new Custom(2)));
         assertFalse(p.hasElement(null));
     }
-    
+
     @Test
     public void testUnorderedPair()
     {
         Pair<String, Custom> p = UnorderedPair.of(CUSTOM, new Custom(1));
-        
+
         assertEquals(CUSTOM, p.getFirst());
         assertNotEquals(ANOTHER, p.getFirst());
-        
+
         assertEquals(new Custom(1), p.getSecond());
         assertNotEquals(new Custom(2), p.getSecond());
-        
+
         assertTrue(p.hasElement(CUSTOM));
         assertFalse(p.hasElement(ANOTHER));
         assertTrue(p.hasElement(new Custom(1)));
         assertFalse(p.hasElement(new Custom(2)));
         assertFalse(p.hasElement(null));
     }
-    
+
     @Test
     public void testPairWithNull()
     {
         Pair<String, Custom> p = Pair.of(null, new Custom(1));
-        
+
         assertNull(p.getFirst());
         assertEquals(new Custom(1), p.getSecond());
-        
+
         assertTrue(p.hasElement(null));
         assertTrue(p.hasElement(new Custom(1)));
     }
-    
+
     @Test
     public void testUnorderedPairWithNull()
     {
         Pair<String, Custom> p = UnorderedPair.of(null, new Custom(1));
-        
+
         assertNull(p.getFirst());
         assertEquals(new Custom(1), p.getSecond());
-        
+
         assertTrue(p.hasElement(null));
         assertTrue(p.hasElement(new Custom(1)));
     }
-    
+
     @Test
-    public void testPairEquals() { 
+    public void testPairEquals()
+    {
         Pair<String, Custom> p1 = Pair.of(CUSTOM, new Custom(1));
         Pair<String, Custom> p2 = Pair.of(ANOTHER, new Custom(1));
         Pair<String, Custom> p3 = Pair.of(ANOTHER, new Custom(2));
         Pair<String, Custom> p4 = Pair.of(CUSTOM, new Custom(1));
         Pair<String, Custom> p5 = Pair.of(CUSTOM, new Custom(2));
         Pair<Custom, String> p6 = Pair.of(new Custom(1), CUSTOM);
-        
+
         assertNotEquals(p1, p2);
         assertNotEquals(p1, p3);
         assertEquals(p1, p4);
@@ -121,16 +122,17 @@ public class PairTest
         assertNotEquals(p4, p6);
         assertNotEquals(p5, p6);
     }
-    
+
     @Test
-    public void testUnorderedPairEquals() { 
+    public void testUnorderedPairEquals()
+    {
         Pair<String, Custom> p1 = UnorderedPair.of(CUSTOM, new Custom(1));
         Pair<String, Custom> p2 = UnorderedPair.of(ANOTHER, new Custom(1));
         Pair<String, Custom> p3 = UnorderedPair.of(ANOTHER, new Custom(2));
         Pair<String, Custom> p4 = UnorderedPair.of(CUSTOM, new Custom(1));
         Pair<String, Custom> p5 = UnorderedPair.of(CUSTOM, new Custom(2));
         Pair<Custom, String> p6 = UnorderedPair.of(new Custom(1), CUSTOM);
-        
+
         assertNotEquals(p1, p2);
         assertNotEquals(p1, p3);
         assertEquals(p1, p4);
@@ -147,15 +149,16 @@ public class PairTest
         assertEquals(p4, p6);
         assertNotEquals(p5, p6);
     }
-    
+
     @Test
-    public void testPairEqualsWithNull() { 
+    public void testPairEqualsWithNull()
+    {
         Pair<String, Custom> p1 = Pair.of(CUSTOM, null);
         Pair<Custom, String> p2 = Pair.of(null, CUSTOM);
         Pair<String, Custom> p3 = Pair.of(ANOTHER, null);
         Pair<String, Custom> p4 = Pair.of(CUSTOM, null);
         Pair<String, Custom> p5 = Pair.of(CUSTOM, new Custom(1));
-        
+
         assertNotEquals(p1, p2);
         assertNotEquals(p1, p3);
         assertEquals(p1, p4);
@@ -167,15 +170,16 @@ public class PairTest
         assertNotEquals(p3, p5);
         assertNotEquals(p4, p5);
     }
-    
+
     @Test
-    public void testUnorderedPairEqualsWithNull() { 
+    public void testUnorderedPairEqualsWithNull()
+    {
         Pair<String, Custom> p1 = UnorderedPair.of(CUSTOM, null);
         Pair<Custom, String> p2 = UnorderedPair.of(null, CUSTOM);
         Pair<String, Custom> p3 = UnorderedPair.of(ANOTHER, null);
         Pair<String, Custom> p4 = UnorderedPair.of(CUSTOM, null);
         Pair<String, Custom> p5 = UnorderedPair.of(CUSTOM, new Custom(1));
-        
+
         assertEquals(p1, p2);
         assertNotEquals(p1, p3);
         assertEquals(p1, p4);
@@ -187,16 +191,17 @@ public class PairTest
         assertNotEquals(p3, p5);
         assertNotEquals(p4, p5);
     }
-    
+
     @Test
-    public void testDifferentTypesEqualsWithNull() {
+    public void testDifferentTypesEqualsWithNull()
+    {
         Pair<String, Custom> p1 = Pair.of(null, null);
         Pair<String, Custom> p2 = Pair.of(null, null);
         Pair<Custom, String> p3 = Pair.of(null, null);
         assertEquals(p1, p2);
         assertEquals(p2, p3);
         assertEquals(p3, p1);
-        
+
         UnorderedPair<String, Custom> p4 = UnorderedPair.of(null, null);
         UnorderedPair<String, Custom> p5 = UnorderedPair.of(null, null);
         UnorderedPair<Custom, String> p6 = UnorderedPair.of(null, null);
@@ -204,9 +209,10 @@ public class PairTest
         assertEquals(p5, p6);
         assertEquals(p6, p4);
     }
-    
+
     @Test
-    public void testUnorderedSameHashCode() {
+    public void testUnorderedSameHashCode()
+    {
         UnorderedPair<String, Custom> p1 = UnorderedPair.of(CUSTOM, new Custom(1));
         UnorderedPair<Custom, String> p2 = UnorderedPair.of(new Custom(1), CUSTOM);
         assertEquals(p1.hashCode(), p2.hashCode());

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2016, by Alejandro Ramon Lopez del Huerto and Contributors.
+ * (C) Copyright 2012-2017, by Alejandro Ramon Lopez del Huerto and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

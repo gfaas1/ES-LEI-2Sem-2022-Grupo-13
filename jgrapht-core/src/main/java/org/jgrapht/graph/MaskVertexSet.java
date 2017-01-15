@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,13 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.function.Predicate;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.util.*;
 
 /**
  * Helper for {@link MaskSubgraph}.

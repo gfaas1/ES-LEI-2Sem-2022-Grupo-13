@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,18 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.alg.StoerWagnerMinimumCut;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import java.util.*;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.*;
 
 /**
  * Test class for the GusfieldGomoryHuCutTree implementation
@@ -104,7 +99,7 @@ public class GusfieldGomoryHuCutTreeTest
                 SimpleWeightedGraph<Integer, DefaultWeightedEdge> gomoryHuTreeCopy =
                     alg.getGomoryHuTree();
                 List<DefaultWeightedEdge> pathEdges =
-                    DijkstraShortestPath.findPathBetween(gomoryHuTreeCopy, i, j);
+                    DijkstraShortestPath.findPathBetween(gomoryHuTreeCopy, i, j).getEdgeList();
                 DefaultWeightedEdge cheapestEdgeInPath = pathEdges
                     .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));

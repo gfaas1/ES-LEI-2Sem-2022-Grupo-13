@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2017, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 

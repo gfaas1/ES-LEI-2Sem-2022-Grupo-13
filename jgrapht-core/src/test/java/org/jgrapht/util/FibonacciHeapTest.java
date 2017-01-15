@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2016, by John V Sichi and Contributors.
+ * (C) Copyright 2008-2017, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -68,6 +68,109 @@ public class FibonacciHeapTest
         // tally should come back down to zero, or thereabouts (due to roundoff)
         assertEquals(0.0, t, 0.00001);
     }
+
+    public void testValidReinsert()
+    {
+        FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
+        FibonacciHeapNode<String> n2 = new FibonacciHeapNode<>("2");
+        FibonacciHeapNode<String> n3 = new FibonacciHeapNode<>("3");
+        FibonacciHeapNode<String> n4 = new FibonacciHeapNode<>("4");
+
+        FibonacciHeap<String> h = new FibonacciHeap<>();
+        h.insert(n1, 1d);
+        h.insert(n2, 2d);
+        h.insert(n3, 3d);
+        h.insert(n4, 4d);
+
+        assertEquals("1", h.min().getData());
+        h.removeMin();
+        h.insert(n1, 5d);
+        assertEquals("2", h.min().getData());
+        h.removeMin();
+        assertEquals("3", h.min().getData());
+        h.removeMin();
+        assertEquals("4", h.min().getData());
+        h.removeMin();
+        assertEquals("1", h.min().getData());
+        h.removeMin();
+        assertTrue(h.isEmpty());
+    }
+
+    public void testBadReinsert()
+    {
+        FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
+        FibonacciHeapNode<String> n2 = new FibonacciHeapNode<>("2");
+        FibonacciHeapNode<String> n3 = new FibonacciHeapNode<>("3");
+        FibonacciHeapNode<String> n4 = new FibonacciHeapNode<>("4");
+
+        FibonacciHeap<String> h = new FibonacciHeap<>();
+        h.insert(n1, 1d);
+        h.insert(n2, 2d);
+        h.insert(n3, 3d);
+        h.insert(n4, 4d);
+
+        assertEquals("1", h.min().getData());
+        try {
+            h.insert(n2, 5d);
+            fail("Reinsert allowed!");
+        } catch (IllegalArgumentException e) {
+            // ignore
+        }
+    }
+
+    public void testBadDecreaseKey()
+    {
+        FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
+        FibonacciHeapNode<String> n2 = new FibonacciHeapNode<>("2");
+        FibonacciHeapNode<String> n3 = new FibonacciHeapNode<>("3");
+        FibonacciHeapNode<String> n4 = new FibonacciHeapNode<>("4");
+
+        FibonacciHeap<String> h = new FibonacciHeap<>();
+        h.insert(n1, 1d);
+        h.insert(n2, 2d);
+        h.insert(n3, 3d);
+        h.insert(n4, 4d);
+
+        assertEquals("1", h.min().getData());
+        h.decreaseKey(n4, 0.5);
+        assertEquals("4", h.min().getData());
+        h.removeMin();
+        assertEquals("1", h.min().getData());
+        try {
+            h.decreaseKey(n4, 0.1);
+            fail("Invalid decrease key allowed!");
+        } catch (IllegalArgumentException e) {
+            // ignore
+        }
+    }
+
+    public void testBadDelete()
+    {
+        FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
+        FibonacciHeapNode<String> n2 = new FibonacciHeapNode<>("2");
+        FibonacciHeapNode<String> n3 = new FibonacciHeapNode<>("3");
+        FibonacciHeapNode<String> n4 = new FibonacciHeapNode<>("4");
+
+        FibonacciHeap<String> h = new FibonacciHeap<>();
+        h.insert(n1, 1d);
+        h.insert(n2, 2d);
+        h.insert(n3, 3d);
+        h.insert(n4, 4d);
+
+        assertEquals("1", h.min().getData());
+        h.removeMin();
+        assertEquals("2", h.min().getData());
+        try {
+            h.delete(n1);
+            fail("Invalid delete allowed!");
+        } catch (IllegalArgumentException e) {
+            // ignore
+        }
+        h.delete(n2);
+        h.delete(n3);
+        h.delete(n4);
+    }
+
 }
 
 // End FibonacciHeapTest.java

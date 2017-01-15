@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,9 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated moved in shortest path package
  */
+@Deprecated
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
     extends AbstractList<T>
 {

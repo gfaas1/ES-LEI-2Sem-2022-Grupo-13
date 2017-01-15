@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,20 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
-import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.*;
+import org.jgrapht.event.*;
 
 /**
  * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some

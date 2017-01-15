@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.alg.StoerWagnerMinimumCut;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import java.util.*;
 
-import java.util.Comparator;
-import java.util.List;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.*;
 
 /**
  * Test class for the GusfieldEquivalentFlowTree implementation
@@ -71,7 +69,7 @@ public class GusfieldEquivalentFlowTreeTest
                 // The cost of the cheapest edge in the path from i to j must equal the weight of an
                 // i-j cut
                 List<DefaultWeightedEdge> pathEdges =
-                    DijkstraShortestPath.findPathBetween(equivalentFlowTree, i, j);
+                    DijkstraShortestPath.findPathBetween(equivalentFlowTree, i, j).getEdgeList();
                 DefaultWeightedEdge cheapestEdgeInPath = pathEdges
                     .stream().min(Comparator.comparing(equivalentFlowTree::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));

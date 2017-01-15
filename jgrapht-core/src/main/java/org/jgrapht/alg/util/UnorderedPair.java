@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Joris Kinable and Contributors.
+ * (C) Copyright 2003-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.util;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 /**

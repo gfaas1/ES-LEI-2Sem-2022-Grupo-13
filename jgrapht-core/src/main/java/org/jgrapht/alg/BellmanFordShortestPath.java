@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2016, by France Telecom and Contributors.
+ * (C) Copyright 2006-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,9 @@ import org.jgrapht.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.BellmanFordShortestPath}
  */
+@Deprecated
 public class BellmanFordShortestPath<V, E>
 {
     private static final double DEFAULT_EPSILON = 0.000000001;

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.*;
 
 /**
  * An undirected graph that is a subgraph of another graph.

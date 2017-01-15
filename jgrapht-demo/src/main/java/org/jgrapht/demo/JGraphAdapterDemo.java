@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -128,7 +128,7 @@ public class JGraphAdapterDemo
         jg.setBackground(c);
     }
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     private void positionVertexAt(Object vertex, int x, int y)
     {
         DefaultGraphCell cell = jgAdapter.getVertexCell(vertex);

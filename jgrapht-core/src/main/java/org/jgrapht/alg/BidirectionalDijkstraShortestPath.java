@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -41,7 +41,9 @@ import org.jgrapht.util.*;
  *
  * @author Dimitrios Michail
  * @since July 2016
+ * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath}
  */
+@Deprecated
 public final class BidirectionalDijkstraShortestPath<V, E>
 {
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.setEdgeWeight(g.addEdge("5", "4"), 5.0);
 
         GraphPath<String, DefaultWeightedEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "3", "4").getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("3", "4");
 
         assertEquals("3", p.getStartVertex());
         assertEquals("4", p.getEndVertex());
@@ -81,7 +81,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.setEdgeWeight(g.addEdge("5", "4"), 5.0);
 
         GraphPath<String, DefaultWeightedEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "3", "4", 9.5).getPath();
+            new BidirectionalDijkstraShortestPath<>(g, 9.5).getPath("3", "4");
 
         assertEquals("3", p.getStartVertex());
         assertEquals("4", p.getEndVertex());
@@ -113,7 +113,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.setEdgeWeight(g.addEdge("5", "4"), 5.0);
 
         GraphPath<String, DefaultWeightedEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "3", "4").getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("3", "4");
 
         assertEquals("3", p.getStartVertex());
         assertEquals("4", p.getEndVertex());
@@ -145,7 +145,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.setEdgeWeight(g.addEdge("5", "4"), 5.0);
 
         GraphPath<String, DefaultWeightedEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "3", "3").getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("3", "3");
 
         assertEquals("3", p.getStartVertex());
         assertEquals("3", p.getEndVertex());
@@ -171,10 +171,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.setEdgeWeight(g.addEdge("3", "5"), 5.0);
         g.setEdgeWeight(g.addEdge("4", "5"), 5.0);
 
-        GraphPath<String, DefaultWeightedEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "3", "4").getPath();
-
-        assertNull(p);
+        assertNull(new BidirectionalDijkstraShortestPath<>(g).getPath("3", "4"));
     }
 
     public void testSingleEdgePath()
@@ -190,7 +187,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.addEdge("3", "1");
 
         GraphPath<String, DefaultEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "1", "2").getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("1", "2");
 
         assertEquals(p.getLength(), 1);
         assertEquals("1", p.getStartVertex());
@@ -213,7 +210,7 @@ public class BidirectionalDijkstraShortestPathTest
         g.addEdge("4", "1");
 
         GraphPath<String, DefaultEdge> p =
-            new BidirectionalDijkstraShortestPath<>(g, "4", "1").getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("4", "1");
 
         assertEquals(1, p.getLength());
         assertEquals(1.0, p.getWeight());
@@ -256,7 +253,7 @@ public class BidirectionalDijkstraShortestPathTest
         for (int i = 0; i < 10; i++) {
             for (int j = 11; j < 21; j++) {
                 GraphPath<Integer, DefaultWeightedEdge> p =
-                    new BidirectionalDijkstraShortestPath<>(g, i, j).getPath();
+                    new BidirectionalDijkstraShortestPath<>(g).getPath(i, j);
                 if (i == 0 && j == 11) {
                     assertEquals(200.0, p.getWeight());
                 } else if (i == 0) {
@@ -289,10 +286,10 @@ public class BidirectionalDijkstraShortestPathTest
 
         for (String v : g.vertexSet()) {
             for (String u : g.vertexSet()) {
-                GraphPath<String, DefaultEdge> p1 = new DijkstraShortestPath<>(g, v, u).getPath();
+                GraphPath<String, DefaultEdge> p1 = new DijkstraShortestPath<>(g).getPath(v, u);
 
                 GraphPath<String, DefaultEdge> p2 =
-                    new BidirectionalDijkstraShortestPath<>(g, v, u).getPath();
+                    new BidirectionalDijkstraShortestPath<>(g).getPath(v, u);
 
                 if (p1 == null) {
                     assertNull(p2);
@@ -335,10 +332,10 @@ public class BidirectionalDijkstraShortestPathTest
         for (String v : g.vertexSet()) {
             for (String u : g.vertexSet()) {
                 GraphPath<String, DefaultWeightedEdge> p1 =
-                    new DijkstraShortestPath<>(g, v, u).getPath();
+                    new DijkstraShortestPath<>(g).getPath(v, u);
 
                 GraphPath<String, DefaultWeightedEdge> p2 =
-                    new BidirectionalDijkstraShortestPath<>(g, v, u).getPath();
+                    new BidirectionalDijkstraShortestPath<>(g).getPath(v, u);
 
                 if (p1 == null) {
                     assertNull(p2);
@@ -376,15 +373,14 @@ public class BidirectionalDijkstraShortestPathTest
         for (String v : g.vertexSet()) {
             for (String u : g.vertexSet()) {
                 GraphPath<String, DefaultEdge> p1 =
-                    new DijkstraShortestPath<>(g, v, u, radius).getPath();
+                    new DijkstraShortestPath<>(g, radius).getPath(v, u);
 
                 GraphPath<String, DefaultEdge> p2 =
-                    new BidirectionalDijkstraShortestPath<>(g, v, u, radius).getPath();
+                    new BidirectionalDijkstraShortestPath<>(g, radius).getPath(v, u);
 
-                if (p1 == null) {
-                    assertNull(p2);
-                } else if (p2 == null) {
+                if (p1 == null || p2 == null) {
                     assertNull(p1);
+                    assertNull(p2);
                 } else {
                     assertEquals(p1.getLength(), p2.getLength());
                     assertEquals(p1.getWeight(), p2.getWeight(), 0.0001);
@@ -394,7 +390,6 @@ public class BidirectionalDijkstraShortestPathTest
                 }
             }
         }
-
     }
 
     public void testWrongParameters()
@@ -406,37 +401,37 @@ public class BidirectionalDijkstraShortestPathTest
         g.addEdge("1", "2");
 
         try {
-            new BidirectionalDijkstraShortestPath<>(g, "1", "2", -2.0).getPath();
+            new BidirectionalDijkstraShortestPath<>(g, -2.0).getPath("1", "2");
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
 
         try {
-            new BidirectionalDijkstraShortestPath<>(g, "3", "2", 2.0).getPath();
+            new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("3", "2");
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
 
         try {
-            new BidirectionalDijkstraShortestPath<>(g, "2", "3", 2.0).getPath();
+            new BidirectionalDijkstraShortestPath<>(g, 2.0).getPath("2", "3");
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
 
         try {
-            new BidirectionalDijkstraShortestPath<>(null, "1", "1").getPath();
+            new BidirectionalDijkstraShortestPath<>(null).getPath("1", "1");
+            fail("No!");
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            new BidirectionalDijkstraShortestPath<>(g).getPath(null, "1");
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
 
         try {
-            new BidirectionalDijkstraShortestPath<>(g, null, "1").getPath();
-            fail("No!");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new BidirectionalDijkstraShortestPath<>(g, "1", null).getPath();
+            new BidirectionalDijkstraShortestPath<>(g).getPath("1", null);
             fail("No!");
         } catch (IllegalArgumentException e) {
         }
@@ -444,6 +439,13 @@ public class BidirectionalDijkstraShortestPathTest
 
     private <V, E> double computePathWeight(Graph<V, E> g, GraphPath<V, E> path)
     {
+        if (path.getEdgeList().isEmpty()) {
+            if (path.getStartVertex().equals(path.getEndVertex())) {
+                return 0d;
+            } else {
+                return Double.POSITIVE_INFINITY;
+            }
+        }
         double total = 0d;
         for (E e : path.getEdgeList()) {
             total += g.getEdgeWeight(e);

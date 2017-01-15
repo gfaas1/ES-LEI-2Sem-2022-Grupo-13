@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
+ * (C) Copyright 2015-2017, by Joris Kinable, Jon Robison, Thomas Breitbart and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,8 @@ public interface AStarAdmissibleHeuristic<V>
 {
     /**
      * An admissible "heuristic estimate" of the distance from x, the sourceVertex, to the goal
-     * (usually denoted h(x)). This is the good guess function.
+     * (usually denoted h(x)). This is the good guess function which must never overestimate the
+     * distance.
      * 
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex

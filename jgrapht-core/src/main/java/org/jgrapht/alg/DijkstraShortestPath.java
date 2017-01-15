@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2017, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,7 +32,9 @@ import org.jgrapht.traverse.*;
  *
  * @author John V. Sichi
  * @since Sep 2, 2003
+ * @deprecated in favor of {@link org.jgrapht.alg.shortestpath.DijkstraShortestPath}
  */
+@Deprecated
 public final class DijkstraShortestPath<V, E>
 {
     private GraphPath<V, E> path;

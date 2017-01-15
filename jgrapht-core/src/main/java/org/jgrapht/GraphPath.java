@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2008-2016, by John V Sichi and Contributors.
+ * (C) Copyright 2008-2017, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -92,8 +92,14 @@ public interface GraphPath<V, E>
     {
         List<E> edgeList = this.getEdgeList();
 
-        if (edgeList.isEmpty())
-            return Collections.emptyList();
+        if (edgeList.isEmpty()) {
+            V startVertex = getStartVertex();
+            if (startVertex != null && startVertex.equals(getEndVertex())) {
+                return Collections.singletonList(startVertex);
+            } else {
+                return Collections.emptyList();
+            }
+        }
 
         Graph<V, E> g = this.getGraph();
         List<V> list = new ArrayList<>();

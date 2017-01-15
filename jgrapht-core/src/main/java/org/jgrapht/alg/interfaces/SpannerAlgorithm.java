@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An algorithm which computes a

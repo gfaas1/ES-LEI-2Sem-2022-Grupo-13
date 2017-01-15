@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,12 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -41,8 +42,8 @@ public class KShortestPathCostTest
         KShortestPathCompleteGraph4 graph = new KShortestPathCompleteGraph4();
 
         KShortestPaths<String, DefaultWeightedEdge> pathFinder =
-            new KShortestPaths<>(graph, "vS", nbPaths);
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("v3");
+            new KShortestPaths<>(graph, nbPaths);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v3");
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -65,11 +66,11 @@ public class KShortestPathCostTest
         int maxSize = 10;
 
         KShortestPaths<String, DefaultWeightedEdge> pathFinder =
-            new KShortestPaths<>(picture1Graph, "vS", maxSize);
+            new KShortestPaths<>(picture1Graph, maxSize);
 
         // assertEquals(2, pathFinder.getPaths("v5").size());
 
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("v5");
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v5");
         GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
             Arrays.asList(new Object[] { picture1Graph.eS1, picture1Graph.e15 }),
@@ -86,7 +87,7 @@ public class KShortestPathCostTest
         vertices = pathElement.getVertexList();
         assertEquals(Arrays.asList(new Object[] { "vS", "v2", "v5" }), vertices);
 
-        pathElements = pathFinder.getPaths("v7");
+        pathElements = pathFinder.getPaths("vS", "v7");
         pathElement = pathElements.get(0);
         double lastCost = pathElement.getWeight();
         for (int i = 0; i < pathElements.size(); i++) {
@@ -154,11 +155,11 @@ public class KShortestPathCostTest
         for (String sourceVertex : graph.vertexSet()) {
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestPaths<String, E> pathFinder =
-                        new KShortestPaths<>(graph, sourceVertex, maxSize);
+                    KShortestPaths<String, E> pathFinder = new KShortestPaths<>(graph, maxSize);
 
-                    List<GraphPath<String, E>> pathElements = pathFinder.getPaths(targetVertex);
-                    if (pathElements == null) {
+                    List<GraphPath<String, E>> pathElements =
+                        pathFinder.getPaths(sourceVertex, targetVertex);
+                    if (pathElements.isEmpty()) {
                         // no path exists between the start vertex and the end
                         // vertex
                         continue;
@@ -185,21 +186,20 @@ public class KShortestPathCostTest
         for (String sourceVertex : graph.vertexSet()) {
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    KShortestPaths<String, E> pathFinder =
-                        new KShortestPaths<>(graph, sourceVertex, 1);
+                    KShortestPaths<String, E> pathFinder = new KShortestPaths<>(graph, 1);
                     List<GraphPath<String, E>> prevPathElementsResults =
-                        pathFinder.getPaths(targetVertex);
+                        pathFinder.getPaths(sourceVertex, targetVertex);
 
-                    if (prevPathElementsResults == null) {
+                    if (prevPathElementsResults.isEmpty()) {
                         // no path exists between the start vertex and the
                         // end vertex
                         continue;
                     }
 
                     for (int maxSize = 2; maxSize < maxSizeLimit; maxSize++) {
-                        pathFinder = new KShortestPaths<>(graph, sourceVertex, maxSize);
+                        pathFinder = new KShortestPaths<>(graph, maxSize);
                         List<GraphPath<String, E>> pathElementsResults =
-                            pathFinder.getPaths(targetVertex);
+                            pathFinder.getPaths(sourceVertex, targetVertex);
 
                         verifyWeightsConsistency(prevPathElementsResults, pathElementsResults);
                     }
@@ -263,12 +263,11 @@ public class KShortestPathCostTest
 
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
-        KShortestPaths<String, DefaultWeightedEdge> kPaths =
-            new KShortestPaths<>(graph, graph.getEdgeSource(src), 5);
+        KShortestPaths<String, DefaultWeightedEdge> kPaths = new KShortestPaths<>(graph, 5);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {
-            paths = kPaths.getPaths(graph.getEdgeTarget(src));
+            paths = kPaths.getPaths(graph.getEdgeSource(src), graph.getEdgeTarget(src));
             for (GraphPath<String, DefaultWeightedEdge> path : paths) {
                 for (DefaultWeightedEdge edge : path.getEdgeList()) {
                     System.out.print(

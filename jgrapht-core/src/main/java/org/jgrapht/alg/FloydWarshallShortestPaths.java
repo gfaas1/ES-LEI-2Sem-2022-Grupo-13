@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2016, by Tom Larkworthy and Contributors.
+ * (C) Copyright 2009-2017, by Tom Larkworthy and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -37,7 +37,9 @@ import org.jgrapht.graph.*;
  * @author Tom Larkworthy
  * @author Soren Davidsen (soren@tanesha.net)
  * @author Joris Kinable
+ * @deprecated In favor of {@link org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths}.
  */
+@Deprecated
 public class FloydWarshallShortestPaths<V, E>
 {
     private final Graph<V, E> graph;

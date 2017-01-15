@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,11 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
 
 /**
  * A directed graph that is a subgraph of another graph.

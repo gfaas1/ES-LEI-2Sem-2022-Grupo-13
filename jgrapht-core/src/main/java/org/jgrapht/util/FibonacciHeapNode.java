@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 1999-2016, by Nathan Fiedler and Contributors.
+ * (C) Copyright 1999-2017, by Nathan Fiedler and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -69,15 +69,12 @@ public class FibonacciHeapNode<T>
     int degree;
 
     /**
-     * Default constructor. Initializes the right and left pointers, making this a circular
-     * doubly-linked list.
+     * Constructs a new node.
      *
      * @param data data for this node
      */
     public FibonacciHeapNode(T data)
     {
-        right = this;
-        left = this;
         this.data = data;
     }
 

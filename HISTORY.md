@@ -32,7 +32,15 @@ Changes to JGraphT in each version:
 	- Added `GusfieldGomoryHuCutTree`, `GusfieldEquivalentFlowTree`, and `PadbergRaoOddMinimumCutset` (contributed by Joris Kinable, following up on a Gomory-Hu proposal from Mads Jensen)
     - Added support for inconsistent admissible heuristics in A* search (contributed by Joris Kinable)
     - Added a `DIMACSExporter` which supports exporting graphs in various DIMACS formats (contributed by Dimitrios Michail)
-
+    - Enforce valid nodes in `FibonacciHeap`; Fixed a bug which could cause an infinite loop in the Fibonacci heap consolidate() method. (contributed by Dimitrios Michail)
+	- Revision of shortest path algorithms. Added interfaces `ShortestPathAlgorithm` and `KShortestPathAlgorithm`, and bundled shortest path algorithms in dedicated package. Adjusted KShortestPaths returns an empty list instead of null if no path exists. (contributed by Dimitrios Michail)
+	- `FlowdWarshall` now has support for multigraphs. Fixed diameter method now returns POSITIVE_INFINITY when a graph is disconnected. (contributed by Dimitrios Michail)
+	- `GraphPath` supports zero edge paths (path consisting of 1 vertex). (contributed by Dimitrios Michail)
+	- `DijkstraShortestPath` as well as several other shortest path classes can now return single-source shortest paths, using the traditional representation of a shortest path tree (contributed by Dimitrios Michail)
+	- Added an implementation of Goldberg and Harrelson's ALT admissible heuristic for A* (contributed by Dimitrios Michail)
+	- Replaced the `ClosestFirstIterator` in `DijkstraShortestPath` by a light-weight version of the iterator which significantly speeds up the shortest path computations. (contributed by Dimitrios Michail)
+	- Added implementation of Larry Page's `PageRank` algorithm. (contributed by Dimitrios Michail)
+	
 - **version 1.0.0** (19-Sept-2016):
 	- Moved to JDK 1.8 (cleanup contributed by Joris Kinable)
 	- Fixes for `MaskSubgraph`, contributed by Andrew Gainer-Dewar

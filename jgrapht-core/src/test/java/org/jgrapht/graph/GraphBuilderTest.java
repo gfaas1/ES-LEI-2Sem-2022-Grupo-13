@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Andrew Chen and Contributors.
+ * (C) Copyright 2015-2017, by Andrew Chen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -60,8 +60,7 @@ public class GraphBuilderTest
                 new DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>(
                     DefaultWeightedEdge.class))
                         .addEdge(v1, v2).addEdgeChain(v3, v4, v5, v6).addEdge(v7, v8, 10.0)
-                        .addEdge(v1, v7, e1).addEdge(v1, v8, e2, 42.0)
-                        .buildUnmodifiable();
+                        .addEdge(v1, v7, e1).addEdge(v1, v8, e2, 42.0).buildUnmodifiable();
 
         assertEquals(8, g.vertexSet().size());
         assertEquals(7, g.edgeSet().size());
@@ -123,8 +122,7 @@ public class GraphBuilderTest
         Graph<String,
             DefaultEdge> g1 = new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class))
-                    .addEdgeChain(v1, v2, v3, v4).addEdge(v1, v4, e)
-                    .buildUnmodifiable();
+                    .addEdgeChain(v1, v2, v3, v4).addEdge(v1, v4, e).buildUnmodifiable();
 
         Graph<String,
             DefaultEdge> g2 = new DirectedGraphBuilder<>(

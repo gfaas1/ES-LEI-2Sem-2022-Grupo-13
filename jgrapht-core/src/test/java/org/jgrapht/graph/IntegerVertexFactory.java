@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Assaf Lehr and Contributors. 
+ * (C) Copyright 2003-2017, by Assaf Lehr and Contributors. 
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.VertexFactory;
+import org.jgrapht.*;
 
 /**
  * Default implementation of a vertex factory which creates integers. The vertices start by default

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Joris Kinable and Contributors.
+ * (C) Copyright 2015-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.specifics.*;
@@ -125,8 +126,8 @@ public class GraphPerformanceTest
             Integer sink)
         {
             DijkstraShortestPath<Integer, DefaultWeightedEdge> shortestPathAlg =
-                new DijkstraShortestPath<>(graph, source, sink);
-            return shortestPathAlg.getPathLength();
+                new DijkstraShortestPath<>(graph);
+            return shortestPathAlg.getPath(source, sink).getWeight();
         }
 
         private double calculateMaxFlow(

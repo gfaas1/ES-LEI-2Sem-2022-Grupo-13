@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2003-2017, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -226,8 +226,9 @@ public class StrongConnectivityAlgorithmTest
             return (from + "->" + to).intern();
         });
 
-        new RingGraphGenerator<Integer, String>(3).generateGraph(graph, new IntegerVertexFactory(), null);
-        
+        new RingGraphGenerator<Integer, String>(3)
+            .generateGraph(graph, new IntegerVertexFactory(), null);
+
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);
         Set<Set<Integer>> expected = new HashSet<>();

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.*;
 
 /**
  * A directed graph that is a {@link MaskSubgraph} of another graph.

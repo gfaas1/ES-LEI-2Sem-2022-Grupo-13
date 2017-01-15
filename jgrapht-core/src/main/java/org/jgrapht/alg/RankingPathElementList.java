@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,9 @@ import org.jgrapht.graph.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated Use {@link org.jgrapht.alg.shortestpath.RankingPathElement} instead.
  */
+@Deprecated
 final class RankingPathElementList<V, E>
     extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {

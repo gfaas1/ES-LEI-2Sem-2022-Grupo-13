@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Andrew Gainer-Dewar and Contributors.
+ * (C) Copyright 2016-2017, by Andrew Gainer-Dewar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Iterator;
+import java.util.*;
 
 import org.jgrapht.*;
 

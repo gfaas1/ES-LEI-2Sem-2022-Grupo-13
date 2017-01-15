@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.specifics.DirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
 
 /**
  * A unit test for directed multigraph.

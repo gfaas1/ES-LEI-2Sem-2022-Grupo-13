@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2017, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -44,7 +44,10 @@ public interface MaximumFlowAlgorithm<V, E>
      * @deprecated use {@link #getMaximumFlow(Object, Object)} instead
      */
     @Deprecated
-    default MaximumFlow<E> buildMaximumFlow(V source, V sink){ return getMaximumFlow(source, sink); };
+    default MaximumFlow<E> buildMaximumFlow(V source, V sink)
+    {
+        return getMaximumFlow(source, sink);
+    };
 
     /**
      * Sets current source to <tt>source</tt>, current sink to <tt>sink</tt>, then calculates

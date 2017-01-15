@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by France Telecom and Contributors.
+ * (C) Copyright 2007-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.graph.*;
 
@@ -31,11 +31,10 @@ public class KSPExampleTest
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
         String sourceVertex = "S";
-        KShortestPaths<String, DefaultWeightedEdge> ksp =
-            new KShortestPaths<>(graph, sourceVertex, 4);
+        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, 4);
 
         String targetVertex = "T";
-        assertEquals(3, ksp.getPaths(targetVertex).size());
+        assertEquals(3, ksp.getPaths(sourceVertex, targetVertex).size());
     }
 
     public void testThreeReturnedPathsJGraphT()
@@ -44,11 +43,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 3;
-        KShortestPaths<String, DefaultWeightedEdge> ksp =
-            new KShortestPaths<>(graph, sourceVertex, nbPaths);
+        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
     }
 
     public void testTwoReturnedPathsJGraphT()
@@ -57,11 +55,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 2;
-        KShortestPaths<String, DefaultWeightedEdge> ksp =
-            new KShortestPaths<>(graph, sourceVertex, nbPaths);
+        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
     }
 }
 

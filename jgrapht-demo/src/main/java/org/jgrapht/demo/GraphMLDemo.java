@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,8 +31,8 @@ import org.jgrapht.graph.*;
  * GraphML. Vertices of the graph have an attribute called "color" and a "name" attribute. Edges
  * have a "weight" attribute as well as a "name" attribute.
  * 
- * The demo constructs a complete graph with random edge weights and exports it as GraphML. The output
- * is then re-imported into a second graph which is exported a second time.  
+ * The demo constructs a complete graph with random edge weights and exports it as GraphML. The
+ * output is then re-imported into a second graph which is exported a second time.
  */
 public final class GraphMLDemo
 {
@@ -129,7 +129,7 @@ public final class GraphMLDemo
         public String toString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.append("(").append(id); 
+            sb.append("(").append(id);
             if (color != null) {
                 sb.append(",").append(color);
             }
@@ -209,7 +209,7 @@ public final class GraphMLDemo
             public CustomVertex buildVertex(String id, Map<String, String> attributes)
             {
                 CustomVertex cv = new CustomVertex(id);
-                
+
                 // read color from attributes
                 String color = attributes.get("color");
                 if (color != null) {
@@ -307,7 +307,7 @@ public final class GraphMLDemo
                 new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
             GraphImporter<CustomVertex, DefaultWeightedEdge> importer = createImporter();
             importer.importGraph(graph2, new StringReader(graph1AsGraphML));
-            
+
         } catch (ExportException | ImportException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(-1);

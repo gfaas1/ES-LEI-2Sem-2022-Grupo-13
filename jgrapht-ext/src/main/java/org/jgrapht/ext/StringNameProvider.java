@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2016, by Charles Fry and Contributors.
+ * (C) Copyright 2005-2017, by Charles Fry and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

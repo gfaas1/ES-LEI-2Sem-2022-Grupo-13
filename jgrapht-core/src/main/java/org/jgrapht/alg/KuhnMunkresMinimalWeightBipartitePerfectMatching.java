@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2016, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2017, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -122,7 +122,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
         return weight;
     }
-    
+
     /**
      * {@inheritDoc}
      */

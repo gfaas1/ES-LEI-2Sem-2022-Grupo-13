@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016, by Vera-Licona Research Group and Contributors.
+ * (C) Copyright 2015-2017, by Vera-Licona Research Group and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -31,7 +31,10 @@ import org.jgrapht.graph.*;
  *
  * @author Andrew Gainer-Dewar
  * @since Feb, 2016
+ * 
+ * @deprecated In favor of {@link org.jgrapht.alg.shortestpath.AllDirectedPaths}.
  */
+@Deprecated
 public class AllDirectedPaths<V, E>
 {
     private final DirectedGraph<V, E> graph;

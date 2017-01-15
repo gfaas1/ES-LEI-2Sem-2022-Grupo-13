@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2016, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2017, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,7 @@
  */
 package org.jgrapht.util;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * A very simple stop watch.

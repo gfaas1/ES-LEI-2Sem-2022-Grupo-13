@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2016, by Vinayak R Borkar and Contributors.
+ * (C) Copyright 2007-2017, by Vinayak R Borkar and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import junit.framework.TestCase;
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
-import org.jgrapht.generate.CompleteBipartiteGraphGenerator;
-import org.jgrapht.generate.EmptyGraphGenerator;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.generate.RingGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
+
+import junit.framework.*;
+import org.jgrapht.experimental.dag.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
 /**
  */

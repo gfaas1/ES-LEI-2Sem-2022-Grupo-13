@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2016, by France Telecom and Contributors.
+ * (C) Copyright 2006-2017, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,7 +21,10 @@ import org.jgrapht.*;
 
 /**
  * Helper class for {@link BellmanFordShortestPath}; not intended for general use.
+ * 
+ * @deprecated moved into shortest path package
  */
+@Deprecated
 final class BellmanFordPathElement<V, E>
     extends AbstractPathElement<V, E>
 {

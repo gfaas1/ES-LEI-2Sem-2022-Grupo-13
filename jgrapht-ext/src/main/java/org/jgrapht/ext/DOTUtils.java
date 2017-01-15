@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Christoph Zauner and Contributors.
+ * (C) Copyright 2003-2017, by Christoph Zauner and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,7 +18,7 @@
 package org.jgrapht.ext;
 
 import java.io.*;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import org.jgrapht.*;
 
@@ -75,11 +75,11 @@ public class DOTUtils
      *
      * @return <code>true</code> if it is valid; <code>false</code> otherwise.
      */
-    static boolean isValidID(String idCandidate) {
+    static boolean isValidID(String idCandidate)
+    {
         return ALPHA_DIG.matcher(idCandidate).matches()
-                || DOUBLE_QUOTE.matcher(idCandidate).matches()
-                || DOT_NUMBER.matcher(idCandidate).matches()
-                || HTML.matcher(idCandidate).matches();
+            || DOUBLE_QUOTE.matcher(idCandidate).matches()
+            || DOT_NUMBER.matcher(idCandidate).matches() || HTML.matcher(idCandidate).matches();
     }
 
 }

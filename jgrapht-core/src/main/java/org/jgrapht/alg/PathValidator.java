@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2016, by Assaf Mizrachi and Contributors.
+ * (C) Copyright 2016-2017, by Assaf Mizrachi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,8 +27,9 @@ package org.jgrapht.alg;
  * 
  * @author Assaf Mizrachi
  * @since July, 21, 2016
- *
+ * @deprecated Use {@link org.jgrapht.alg.shortestpath.PathValidator} instead.
  */
+@Deprecated
 public interface PathValidator<V, E>
 {
 

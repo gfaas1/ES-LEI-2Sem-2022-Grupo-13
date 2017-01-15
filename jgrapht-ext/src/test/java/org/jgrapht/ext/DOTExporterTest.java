@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2016, by Trevor Harmon and Contributors.
+ * (C) Copyright 2003-2017, by Trevor Harmon and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -46,7 +46,8 @@ public class DOTExporterTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    public void testUndirected() throws UnsupportedEncodingException, ExportException
+    public void testUndirected()
+        throws UnsupportedEncodingException, ExportException
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
