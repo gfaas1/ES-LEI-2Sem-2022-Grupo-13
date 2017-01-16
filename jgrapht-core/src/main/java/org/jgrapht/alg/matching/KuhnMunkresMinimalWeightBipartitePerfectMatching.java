@@ -77,7 +77,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         // Validate graph being complete bipartite with equally-sized partitions
         if (partition1.size() != partition2.size()) {

@@ -35,19 +35,6 @@ public class DirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements DirectedGraph<V, E>
 {
-    /**
-     * Create a new directed {@link MaskSubgraph} of another graph.
-     * 
-     * @param base the base graph
-     * @param mask vertices and edges to exclude in the subgraph. If a vertex/edge is masked, it is
-     *        as if it is not in the subgraph.
-     * @deprecated in favor of using lambdas
-     */
-    @Deprecated
-    public DirectedMaskSubgraph(DirectedGraph<V, E> base, MaskFunctor<V, E> mask)
-    {
-        super(base, mask);
-    }
 
     /**
      * Create a new directed {@link MaskSubgraph} of another graph.

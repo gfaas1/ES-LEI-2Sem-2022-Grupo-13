@@ -105,14 +105,14 @@ public abstract class BasePathGrowingWeightedMatchingTest
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);
-            Matching<DefaultWeightedEdge> m1 = alg1.computeMatching();
+            Matching<DefaultWeightedEdge> m1 = alg1.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg2 =
                 new PathGrowingWeightedMatching<>(g, false);
-            Matching<DefaultWeightedEdge> m2 = alg2.computeMatching();
+            Matching<DefaultWeightedEdge> m2 = alg2.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 = new EdmondsBlossomShrinking<>(g);
-            Matching<DefaultWeightedEdge> m3 = alg3.computeMatching();
+            Matching<DefaultWeightedEdge> m3 = alg3.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 = new GreedyWeightedMatching<>(g);
-            Matching<DefaultWeightedEdge> m4 = alg4.computeMatching();
+            Matching<DefaultWeightedEdge> m4 = alg4.getMatching();
 
             assertTrue(isMatching(g, m1));
             assertTrue(isMatching(g, m2));

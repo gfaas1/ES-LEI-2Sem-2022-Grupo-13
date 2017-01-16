@@ -40,23 +40,23 @@ public interface MatchingAlgorithm<V, E>
      */
 
     /**
-     * Returns set of edges making up the matching
-     * 
+     * Compute a matching for a given graph.
+     *
      * @return a matching
-     * @deprecated Use {@link #computeMatching()} instead.
      */
-    @Deprecated
-    default Set<E> getMatching()
-    {
-        return computeMatching().getEdges();
-    }
+    Matching<E> getMatching();
 
     /**
      * Compute a matching for a given graph.
      * 
      * @return a matching
+     * @deprecated This method has been renamed to {@link #getMatching()}
      */
-    Matching<E> computeMatching();
+    @Deprecated
+    default Matching<E> computeMatching()
+    {
+        return getMatching();
+    }
 
     /**
      * A graph matching.

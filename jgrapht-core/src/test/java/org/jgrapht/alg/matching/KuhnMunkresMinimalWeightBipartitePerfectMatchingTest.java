@@ -157,7 +157,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         generator.generateGraph(target, null, null);
 
         return new KuhnMunkresMinimalWeightBipartitePerfectMatching<V, WeightedEdge>(
-            target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).computeMatching();
+            target, new LinkedHashSet<>(first), new LinkedHashSet<>(second)).getMatching();
     }
 
     @Test
@@ -170,7 +170,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         MatchingAlgorithm<V, WeightedEdge> alg =
             new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(graph, emptyList, emptyList);
 
-        Assert.assertTrue(alg.computeMatching().getEdges().isEmpty());
+        Assert.assertTrue(alg.getMatching().getEdges().isEmpty());
     }
 
     @Test

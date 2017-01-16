@@ -92,7 +92,7 @@ public class GreedyWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)

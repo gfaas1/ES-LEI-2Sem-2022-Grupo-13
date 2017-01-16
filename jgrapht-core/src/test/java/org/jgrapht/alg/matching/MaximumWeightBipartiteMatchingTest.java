@@ -67,7 +67,7 @@ public class MaximumWeightBipartiteMatchingTest
         DefaultWeightedEdge e1 = graph.addEdge("s1", "t1");
         graph.setEdgeWeight(e1, 1);
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.computeMatching();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(1, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
     }
@@ -81,7 +81,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e2, 2);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.computeMatching();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(1, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e2));
     }
@@ -97,7 +97,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e3, 2);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.computeMatching();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(2, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e2));
         assertTrue(matchings.getEdges().contains(e3));
@@ -114,7 +114,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e3, 1);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.computeMatching();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(2, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
         assertTrue(matchings.getEdges().contains(e3));
@@ -139,7 +139,7 @@ public class MaximumWeightBipartiteMatchingTest
         graph.setEdgeWeight(e7, 1);
 
         matcher = new MaximumWeightBipartiteMatching<>(graph, partition1, partition2);
-        Matching<DefaultWeightedEdge> matchings = matcher.computeMatching();
+        Matching<DefaultWeightedEdge> matchings = matcher.getMatching();
         assertEquals(4, matchings.getEdges().size());
         assertTrue(matchings.getEdges().contains(e1));
         assertTrue(matchings.getEdges().contains(e3));

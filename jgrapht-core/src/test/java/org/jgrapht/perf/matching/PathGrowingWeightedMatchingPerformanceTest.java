@@ -79,7 +79,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         @Benchmark
         public void run()
         {
-            createSolver(graph).computeMatching();
+            createSolver(graph).getMatching();
         }
     }
 

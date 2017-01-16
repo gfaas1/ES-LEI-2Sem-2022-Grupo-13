@@ -52,7 +52,7 @@ public final class EdmondsBlossomShrinkingTest
 
         // compute max match
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
-        Matching<DefaultEdge> match = matcher.computeMatching();
+        Matching<DefaultEdge> match = matcher.getMatching();
         assertEquals(2, match.getEdges().size());
         assertTrue(match.getEdges().contains(e12));
         assertTrue(match.getEdges().contains(e34));
@@ -79,7 +79,7 @@ public final class EdmondsBlossomShrinkingTest
 
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Matching<DefaultEdge> match = matcher.computeMatching();
+        Matching<DefaultEdge> match = matcher.getMatching();
 
         assertEquals(2, match.getEdges().size());
 
@@ -106,7 +106,7 @@ public final class EdmondsBlossomShrinkingTest
 
         EdmondsBlossomShrinking<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g);
 
-        Matching<DefaultEdge> match = matcher.computeMatching();
+        Matching<DefaultEdge> match = matcher.getMatching();
 
         assertEquals(6, match.getEdges().size());
 

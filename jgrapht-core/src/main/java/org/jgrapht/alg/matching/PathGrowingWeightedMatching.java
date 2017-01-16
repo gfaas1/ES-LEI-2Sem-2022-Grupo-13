@@ -125,7 +125,7 @@ public class PathGrowingWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         if (useHeuristics) {
             return runWithHeuristics();

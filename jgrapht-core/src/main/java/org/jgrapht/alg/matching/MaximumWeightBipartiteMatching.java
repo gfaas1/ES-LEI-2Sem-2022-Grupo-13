@@ -80,7 +80,7 @@ public class MaximumWeightBipartiteMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Only simple graphs supported");
