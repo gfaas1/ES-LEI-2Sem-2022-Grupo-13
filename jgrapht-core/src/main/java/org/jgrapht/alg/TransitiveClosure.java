@@ -17,9 +17,15 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graphs;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.traverse.TopologicalOrderIterator;
 
-import org.jgrapht.graph.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Constructs the transitive closure of the input graph.
@@ -108,6 +114,28 @@ public class TransitiveClosure
 
         return result;
     }
+
+    /**
+     * Computes the transitive closure of a directed acyclic graph in O(n*m)
+     *
+     * @param graph - Graph to compute transitive closure for.
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public <V, E> void closeDirectedAcyclicGraph(DirectedAcyclicGraph<V, E> graph)
+    {
+        Deque<V> orderedVertices = new ArrayDeque<>(graph.vertexSet().size());
+        new TopologicalOrderIterator<>(graph).forEachRemaining(orderedVertices::addFirst);
+
+        for (V vertex : orderedVertices) {
+            for (V successor : Graphs.successorListOf(graph, vertex)) {
+                for (V closureVertex : Graphs.successorListOf(graph, successor)) {
+                    graph.addEdge(vertex, closureVertex);
+                }
+            }
+        }
+    }
+
 }
 
 // End TransitiveClosure.java
