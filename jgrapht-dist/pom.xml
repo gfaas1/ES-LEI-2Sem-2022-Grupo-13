@@ -57,6 +57,7 @@
 							<attach>true</attach>
 							<finalName>jgrapht-${project.version}</finalName>
 							<descriptorSourceDirectory>${basedir}/src/assembly</descriptorSourceDirectory>
+                                                        <appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 				</executions>
