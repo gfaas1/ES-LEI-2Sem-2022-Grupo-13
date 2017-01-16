@@ -6,11 +6,11 @@
 
 # JGraphT
 
-Released: September 19, 2016</p>
+Released: January 17, 2017</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
-(C) Copyright 2003-2016, by Barak Naveh and Contributors. All rights
+(C) Copyright 2003-2017, by Barak Naveh and Contributors. All rights
 reserved.
 
 Please address all contributions, suggestions, and inquiries to the [user mailing list](https://lists.sourceforge.net/lists/listinfo/jgrapht-users)
@@ -72,7 +72,7 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 ```
 
 ## Upgrading Versions ##
