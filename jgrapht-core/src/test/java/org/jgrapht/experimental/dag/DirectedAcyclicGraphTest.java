@@ -509,7 +509,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getAncestors(graph, "C");
 
-        Assert.assertEquals(expectedAncestors, ancestors);
+        assertEquals(expectedAncestors, ancestors);
     }
 
     //@formatter:off
@@ -551,7 +551,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getAncestors(graph, "A");
 
-        Assert.assertEquals(expectedAncestors, ancestors);
+        assertEquals(expectedAncestors, ancestors);
     }
 
     //@formatter:off
@@ -593,7 +593,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getAncestors(graph, "C");
 
-        Assert.assertEquals(expectedAncestors, ancestors);
+        assertEquals(expectedAncestors, ancestors);
     }
 
     //@formatter:off
@@ -638,7 +638,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getDescendants(graph, "B");
 
-        Assert.assertEquals(expectedDescendents, ancestors);
+        assertEquals(expectedDescendents, ancestors);
     }
 
     //@formatter:off
@@ -680,7 +680,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getDescendants(graph, "C");
 
-        Assert.assertEquals(expectedDescendents, ancestors);
+        assertEquals(expectedDescendents, ancestors);
     }
 
     //@formatter:off
@@ -722,7 +722,7 @@ public class DirectedAcyclicGraphTest
 
         Set<String> ancestors = graph.getDescendants(graph, "A");
 
-        Assert.assertEquals(expectedAncestors, ancestors);
+        assertEquals(expectedAncestors, ancestors);
     }
 
     public void testRemoveAllVerticesShouldNotDeleteTopologyIfTheGraphHasVerticesLeft()

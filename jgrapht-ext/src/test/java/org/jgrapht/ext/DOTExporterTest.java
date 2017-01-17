@@ -113,7 +113,7 @@ public class DOTExporterTest
 
             try {
                 exporter.exportGraph(graph, new ByteArrayOutputStream());
-                Assert.fail(vertex);
+                fail(vertex);
             } catch (RuntimeException re) {
                 // this is a negative test so exception is expected
             }
