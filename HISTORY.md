@@ -2,9 +2,9 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.0.1** (under development):
+- **version 1.0.2** (under development):
         - Added ID descripter to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
-        - Deleted all previously deprecated methods (contributed by Joris Kinable)
+        - Deleted all previously deprecated methods and general cleanup (contributed by Joris Kinable)
 
 - **version 1.0.1** (16-Jan-2017):
 	- Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
