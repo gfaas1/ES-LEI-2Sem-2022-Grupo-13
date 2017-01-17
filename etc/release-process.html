@@ -167,7 +167,7 @@ code coverage.
 
 <li>Run <code>mvn source:jar; mvn javadoc:jar; mvn release:prepare; mvn release:perform</code> to create the Maven artifacts and push them to Maven Central
 
-<li>Publish the release using the Sonatype UI
+<li>Publish the release using the Sonatype UI. For details see <a href="http://central.sonatype.org/pages/releasing-the-deployment.html">here</a>
 
 <li>Run <code>mvn javadoc:aggregate; mvn install</code> from the new
 release branch to produce the release archive distribution
@@ -187,6 +187,18 @@ to reflect the beginning of development for the next version.  Also
 update the version in jgrapht-touchgraph/pom.xml since for whatever
 reason, this one is not done automatically by maven.  Finally, remove 
 all existing deprecated methods.
+  
+</ol>
+  
+<h1><font size="5"><font color="#CC3399">J</font>Graph<font color=
+  "#FFCC00">T</font></font> Notes:</h1><br>
+<ol>
+
+<li> The release artifacts are signed with private keys. In order to sign
+  this release, you'll need to make sure you've already created and published your own key.
+  For details, see <a href="http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven/"> here</a>
+<li> To rebuild the full release package after it has been pushed to github, you can run git checkout jgrapht-1.0.0 
+  (the tag you published for the release), and then run mvn package.
   
 </ol>
 
