@@ -49,19 +49,6 @@ public class MaskSubgraph<V, E>
     protected final Predicate<V> vertexMask;
     protected final Predicate<E> edgeMask;
 
-    /**
-     * Creates a new induced subgraph. Running-time = O(1).
-     *
-     * @param base the base (backing) graph on which the subgraph will be based.
-     * @param mask vertices and edges to exclude in the subgraph. If a vertex/edge is masked, it is
-     *        as if it is not in the subgraph.
-     * @deprecated in favor of using the constructor with lambdas
-     */
-    @Deprecated
-    public MaskSubgraph(Graph<V, E> base, MaskFunctor<V, E> mask)
-    {
-        this(base, v -> mask.isVertexMasked(v), e -> mask.isEdgeMasked(e));
-    }
 
     /**
      * Creates a new induced subgraph. Running-time = O(1).

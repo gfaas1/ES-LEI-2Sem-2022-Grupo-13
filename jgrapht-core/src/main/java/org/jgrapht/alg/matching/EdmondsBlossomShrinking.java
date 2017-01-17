@@ -62,7 +62,7 @@ public class EdmondsBlossomShrinking<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         Set<E> edges = findMatch();
         return new MatchingImpl<>(edges, edges.size());

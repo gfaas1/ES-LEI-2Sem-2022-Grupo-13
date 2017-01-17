@@ -75,7 +75,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> computeMatching()
+    public Matching<E> getMatching()
     {
         this.matching = new HashSet<>();
         this.unmatchedVertices1 = new HashSet<>(partition1);
