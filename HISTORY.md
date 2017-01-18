@@ -3,8 +3,8 @@
 Changes to JGraphT in each version:
 
 - **version 1.0.2** (under development):
-        - Added ID descripter to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
-        - Deleted all previously deprecated methods and general cleanup (contributed by Joris Kinable)
+	- Added ID descripter to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
+	- Deleted all previously deprecated methods and general cleanup (contributed by Joris Kinable)
 
 - **version 1.0.1** (16-Jan-2017):
 	- Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
@@ -25,7 +25,7 @@ Changes to JGraphT in each version:
 	- 2 new 1/2-approximation algorithms (greedy algorithm and Drake and Hougardy path growing algorithm) have been added; matching algorithms have been moved to dedicated package (contributed by Dimitrios Michail)
 	- Added `HierholzerEulerianCycle`, a Linear time implementation of Hierholzer's algorithm to find a Eulerean Circuit in the graph. This class replaces the old `EulerianCircuit` implementation since it is significantly faster. (contributed by Dimitrios Michail)
 	- Added methods for adding/deletion of specified edge in graph builders (contributed by Skuratovich Sergey)
-    - Fixed a NullPointerException caused by `GraphMLImport` when an attributed was associated with the graph itself (i.e. at the <graphml> level); this could occur for instance with yED graphml instances. (reported by Tim Schultze, contributed by Dimitrios Michail)
+	- Fixed a NullPointerException caused by `GraphMLImport` when an attributed was associated with the graph itself (i.e. at the <graphml> level); this could occur for instance with yED graphml instances. (reported by Tim Schultze, contributed by Dimitrios Michail)
 	- Minor updates and fixes to demo (contributed by Dimitrios Michail)
 	- Removed underscore identifiers and refactored tests in `KuhnMunkresMinimalWeightBipartitePerfectMatchingTest`. (contributed by Szabolcs Besenyei)
 	- All matching algorithms are now unified under a new `MatchingAlgorithm` interface; the old `WeightedMatchingAlgorithm` interface is now deprecated. (contributed by Dimitrios Michail)
@@ -34,9 +34,9 @@ Changes to JGraphT in each version:
 	- Small improvements in `StopWatch` class (contributed by Dimitrios Michail)
 	- Revised `Subgraph`, `MaskSubgraph` and subclasses to use Java 8 features; incorporated a number of performance improvements. Revised `MaskSubgraph` uses Java 8 predicates instead of the `MaskFunctor` interface. The latter interface is now deprecated. (contributed by Dimitrios Michail)
 	- Added `GusfieldGomoryHuCutTree`, `GusfieldEquivalentFlowTree`, and `PadbergRaoOddMinimumCutset` (contributed by Joris Kinable, following up on a Gomory-Hu proposal from Mads Jensen)
-    - Added support for inconsistent admissible heuristics in A* search (contributed by Joris Kinable)
-    - Added a `DIMACSExporter` which supports exporting graphs in various DIMACS formats (contributed by Dimitrios Michail)
-    - Enforce valid nodes in `FibonacciHeap`; Fixed a bug which could cause an infinite loop in the Fibonacci heap consolidate() method. (contributed by Dimitrios Michail)
+	- Added support for inconsistent admissible heuristics in A* search (contributed by Joris Kinable)
+	- Added a `DIMACSExporter` which supports exporting graphs in various DIMACS formats (contributed by Dimitrios Michail)
+	- Enforce valid nodes in `FibonacciHeap`; Fixed a bug which could cause an infinite loop in the Fibonacci heap consolidate() method. (contributed by Dimitrios Michail)
 	- Revision of shortest path algorithms. Added interfaces `ShortestPathAlgorithm` and `KShortestPathAlgorithm`, and bundled shortest path algorithms in dedicated package. Adjusted KShortestPaths returns an empty list instead of null if no path exists. (contributed by Dimitrios Michail)
 	- `FlowdWarshall` now has support for multigraphs. Fixed diameter method now returns POSITIVE_INFINITY when a graph is disconnected. (contributed by Dimitrios Michail)
 	- `GraphPath` supports zero edge paths (path consisting of 1 vertex). (contributed by Dimitrios Michail)
