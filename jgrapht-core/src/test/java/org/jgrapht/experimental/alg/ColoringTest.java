@@ -37,20 +37,6 @@ public class ColoringTest
     /**
      * .
      */
-    public void testGreedyColoring()
-    {
-        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
-            new CompleteGraphGenerator<>(6);
-        completeGraphGenerator
-            .generateGraph(completeGraph, new ClassBasedVertexFactory<>(Object.class), null);
-        GreedyColoring<Object, DefaultEdge> colorer = new GreedyColoring<>(completeGraph);
-        assertEquals(new Integer(6), colorer.getUpperBound(null));
-    }
-
-    /**
-     * .
-     */
     public void testBacktrackColoring()
     {
         Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);
