@@ -23,7 +23,7 @@ Changes to JGraphT in each version:
     - `GraphTests` has been reworked, extended with additional functionality, and moved from experimental to the core package (contributed by Dimitrios Michail and Barak Naveh)
     - a `IntegerVertexFactory` has been added to the test package to reduce code duplication (contributed by Dimitrios Michail)
     - 2 new 1/2-approximation algorithms (greedy algorithm and Drake and Hougardy path growing algorithm) have been added; matching algorithms have been moved to dedicated package (contributed by Dimitrios Michail)
-    - Added `HierholzerEulerianCycle`, a Linear time implementation of Hierholzer's algorithm to find a Eulerean Circuit in the graph. This class replaces the old `EulerianCircuit` implementation since it is significantly faster. (contributed by Dimitrios Michail)
+    - Added `HierholzerEulerianCycle`, a Linear time implementation of Hierholzer's algorithm to find a Eulerian Circuit in the graph. This class replaces the old `EulerianCircuit` implementation since it is significantly faster. (contributed by Dimitrios Michail)
     - Added methods for adding/deletion of specified edge in graph builders (contributed by Skuratovich Sergey)
     - Fixed a NullPointerException caused by `GraphMLImport` when an attributed was associated with the graph itself (i.e. at the <graphml> level); this could occur for instance with yED graphml instances. (reported by Tim Schultze, contributed by Dimitrios Michail)
     - Minor updates and fixes to demo (contributed by Dimitrios Michail)
