@@ -24,7 +24,10 @@ import java.util.*;
  *
  * @param <V> the type of vertex being linked.
  * @param <E> the type of edge being created.
+ * 
+ * @deprecated Use {@link org.jgrapht.io.EdgeProvider} instead.
  */
+@Deprecated
 public interface EdgeProvider<V, E>
 {
     /**

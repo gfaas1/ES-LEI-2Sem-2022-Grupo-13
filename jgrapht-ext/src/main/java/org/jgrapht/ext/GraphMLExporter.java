@@ -42,7 +42,10 @@ import org.xml.sax.helpers.*;
  *
  * @author Trevor Harmon
  * @author Dimitrios Michail
+ * 
+ * @deprecated Use {@link org.jgrapht.io.GraphMLExporter} instead.
  */
+@Deprecated
 public class GraphMLExporter<V, E>
     implements GraphExporter<V, E>
 {

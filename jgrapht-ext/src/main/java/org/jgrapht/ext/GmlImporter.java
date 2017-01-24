@@ -66,7 +66,10 @@ import org.jgrapht.ext.GmlParser.*;
  *
  * @param <V> the vertex type
  * @param <E> the edge type
+ * 
+ * @deprecated Use {@link org.jgrapht.io.GmlImporter} instead.
  */
+@Deprecated
 public class GmlImporter<V, E>
     implements GraphImporter<V, E>
 {

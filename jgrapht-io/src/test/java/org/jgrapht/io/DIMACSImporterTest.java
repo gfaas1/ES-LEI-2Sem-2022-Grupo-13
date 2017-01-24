@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.ext;
+package org.jgrapht.io;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -23,6 +23,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.io.DIMACSImporter;
+import org.jgrapht.io.EdgeProvider;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 

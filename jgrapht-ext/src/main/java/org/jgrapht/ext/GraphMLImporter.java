@@ -116,7 +116,9 @@ import org.xml.sax.helpers.*;
  * 
  * @author Dimitrios Michail
  * @since July 2016
+ * @deprecated Use {@link org.jgrapht.io.GraphMLImporter} instead.
  */
+@Deprecated
 public class GraphMLImporter<V, E>
     implements GraphImporter<V, E>
 {

@@ -58,7 +58,9 @@ import org.jgrapht.*;
  * 
  * @author Dimitrios Michail
  * @since August 2016
+ * @deprecated Use {@link org.jgrapht.io.CSVImporter} instead.
  */
+@Deprecated
 public class CSVImporter<V, E>
     implements GraphImporter<V, E>
 {

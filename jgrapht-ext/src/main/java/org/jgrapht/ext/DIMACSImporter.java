@@ -66,7 +66,10 @@ import org.jgrapht.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DIMACSImporter} instead.
  */
+@Deprecated
 public class DIMACSImporter<V, E>
     implements GraphImporter<V, E>
 {

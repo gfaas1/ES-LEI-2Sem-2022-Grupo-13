@@ -28,6 +28,16 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-io</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-ext</artifactId>
 		</dependency>
 		<dependency>
@@ -48,7 +58,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-                                                <id>assembly</id>
+						<id>assembly</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
@@ -57,7 +67,7 @@
 							<attach>true</attach>
 							<finalName>jgrapht-${project.version}</finalName>
 							<descriptorSourceDirectory>${basedir}/src/assembly</descriptorSourceDirectory>
-                                                        <appendAssemblyId>false</appendAssemblyId>
+							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 				</executions>

@@ -24,7 +24,9 @@ import java.util.*;
  * been created.
  *
  * @param <T> the component type
+ * @deprecated Use {@link org.jgrapht.io.ComponentUpdater} instead.
  */
+@Deprecated
 public interface ComponentUpdater<T>
 {
     /**

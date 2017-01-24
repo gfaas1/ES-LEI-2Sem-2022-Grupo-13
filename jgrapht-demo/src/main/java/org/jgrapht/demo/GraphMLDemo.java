@@ -21,8 +21,8 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.ext.*;
-import org.jgrapht.ext.GraphMLExporter.*;
+import org.jgrapht.io.*;
+import org.jgrapht.io.GraphMLExporter.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 

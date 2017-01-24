@@ -19,7 +19,10 @@ package org.jgrapht.ext;
 
 /**
  * An exception that the library throws in case of graph export errors.
+ * 
+ * @deprecated Use {@link org.jgrapht.io.ExportException} instead.
  */
+@Deprecated
 public class ExportException
     extends Exception
 {

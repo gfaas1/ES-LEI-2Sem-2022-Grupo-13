@@ -27,7 +27,9 @@ import java.util.*;
  * @param <T> the component type
  *
  * @author Trevor Harmon
+ * @deprecated Use {@link org.jgrapht.io.IntegerComponentNameProvider} instead.
  */
+@Deprecated
 public class IntegerComponentNameProvider<T>
     implements ComponentNameProvider<T>
 {

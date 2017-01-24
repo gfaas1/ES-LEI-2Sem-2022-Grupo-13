@@ -39,7 +39,9 @@ import org.jgrapht.util.*;
  * 
  * @author Charles Fry
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.io.MatrixExporter} instead.
  */
+@Deprecated
 public class MatrixExporter<V, E>
     implements GraphExporter<V, E>
 {

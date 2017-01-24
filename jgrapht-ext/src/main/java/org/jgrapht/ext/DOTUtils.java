@@ -17,16 +17,16 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
 import java.util.regex.*;
-
-import org.jgrapht.*;
 
 /**
  * Class with DOT format related utilities.
  * 
  * @author Christoph Zauner
+ * 
+ * @deprecated Contains no public methods
  */
+@Deprecated
 public class DOTUtils
 {
     /** Keyword for representing strict graphs. */

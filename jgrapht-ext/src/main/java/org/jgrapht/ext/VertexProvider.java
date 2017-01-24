@@ -23,7 +23,9 @@ import java.util.*;
  * Creates a Vertex of type V
  *
  * @param <V> the vertex type
+ * @deprecated Use {@link org.jgrapht.io.VertexProvider} instead.
  */
+@Deprecated
 public interface VertexProvider<V>
 {
     /**

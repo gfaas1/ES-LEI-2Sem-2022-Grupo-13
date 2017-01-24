@@ -25,7 +25,9 @@ import java.util.*;
  * @param <T> the type for which attributes are provided for
  *
  * @author John Sichi
+ * @deprecated Use {@link org.jgrapht.io.ComponentAttributeProvider} instead.
  */
+@Deprecated
 public interface ComponentAttributeProvider<T>
 {
     /**

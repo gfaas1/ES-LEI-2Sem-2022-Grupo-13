@@ -141,8 +141,9 @@ package org.jgrapht.ext;
  * 
  * @author Dimitrios Michail
  * @since August 2016
- *
+ * @deprecated Use {@link org.jgrapht.io.CSVFormat} instead.
  */
+@Deprecated
 public enum CSVFormat
 {
     /**

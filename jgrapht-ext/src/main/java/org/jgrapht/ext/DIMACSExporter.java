@@ -36,7 +36,10 @@ import org.jgrapht.*;
  *
  * @author Dimitrios Michail
  * @since January 2017
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DIMACSExporter} instead.
  */
+@Deprecated
 public class DIMACSExporter<V, E>
     implements GraphExporter<V, E>
 {

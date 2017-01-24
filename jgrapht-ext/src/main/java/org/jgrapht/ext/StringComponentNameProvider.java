@@ -24,7 +24,9 @@ package org.jgrapht.ext;
  * @param <T> the component type
  * 
  * @author Trevor Harmon
+ * @deprecated Use {@link org.jgrapht.io.StringComponentNameProvider} instead.
  */
+@Deprecated
 public class StringComponentNameProvider<T>
     implements ComponentNameProvider<T>
 {

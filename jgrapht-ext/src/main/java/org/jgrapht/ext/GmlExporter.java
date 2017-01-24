@@ -39,7 +39,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * 
+ * @deprecated Use {@link org.jgrapht.io.GmlExporter} instead.
  */
+@Deprecated
 public class GmlExporter<V, E>
     implements GraphExporter<V, E>
 {

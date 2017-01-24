@@ -21,7 +21,9 @@ package org.jgrapht.ext;
  * Provides a name for a component.
  *
  * @param <T> the type of the component
+ * @deprecated Use {@link org.jgrapht.io.ComponentNameProvider} instead.
  */
+@Deprecated
 public interface ComponentNameProvider<T>
 {
 

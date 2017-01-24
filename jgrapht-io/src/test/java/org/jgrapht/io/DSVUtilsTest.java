@@ -15,7 +15,9 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.ext;
+package org.jgrapht.io;
+
+import org.jgrapht.io.DSVUtils;
 
 import junit.framework.*;
 
