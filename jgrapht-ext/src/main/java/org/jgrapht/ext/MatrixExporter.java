@@ -17,11 +17,19 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.jgrapht.*;
-import org.jgrapht.util.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.util.ModifiableInteger;
 
 /**
  * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation
@@ -51,7 +59,10 @@ public class MatrixExporter<V, E>
 
     /**
      * Formats supported by the exporter.
+     * 
+     * @deprecated Use {@link org.jgrapht.io.MatrixExporter.Format} instead.
      */
+    @Deprecated
     public enum Format
     {
         /**

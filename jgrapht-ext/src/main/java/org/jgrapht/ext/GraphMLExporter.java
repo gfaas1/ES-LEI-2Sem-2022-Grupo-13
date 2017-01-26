@@ -17,17 +17,23 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
-import org.jgrapht.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Exports a graph as GraphML.
@@ -140,7 +146,10 @@ public class GraphMLExporter<V, E>
 
     /**
      * Denotes the category of a GraphML-Attribute.
+     * 
+     * @deprecated Use {@link org.jgrapht.io.GraphMLExporter.AttributeCategory} instead.
      */
+    @Deprecated
     public enum AttributeCategory
     {
         GRAPH("graph"),
@@ -168,7 +177,10 @@ public class GraphMLExporter<V, E>
 
     /**
      * Denotes the type of a GraphML-Attribute.
+     * 
+     * @deprecated Use {@link org.jgrapht.io.GraphMLExporter.AttributeType} instead.
      */
+    @Deprecated
     public enum AttributeType
     {
         BOOLEAN("boolean"),

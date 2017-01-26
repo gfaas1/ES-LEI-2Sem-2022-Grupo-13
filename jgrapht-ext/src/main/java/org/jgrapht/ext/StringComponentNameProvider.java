@@ -28,20 +28,9 @@ package org.jgrapht.ext;
  */
 @Deprecated
 public class StringComponentNameProvider<T>
+    extends org.jgrapht.io.StringComponentNameProvider<T>
     implements ComponentNameProvider<T>
 {
-
-    /**
-     * Returns the string representation of a component.
-     *
-     * @param component the component
-     * @return a unique string representation
-     */
-    @Override
-    public String getName(T component)
-    {
-        return component.toString();
-    }
 }
 
 // End StringComponentNameProvider.java

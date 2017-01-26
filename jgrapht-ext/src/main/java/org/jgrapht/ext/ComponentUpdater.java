@@ -17,8 +17,6 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
 /**
  * Type to handle updates to a component when an import gets more information about it after it has
  * been created.
@@ -28,14 +26,8 @@ import java.util.*;
  */
 @Deprecated
 public interface ComponentUpdater<T>
+    extends org.jgrapht.io.ComponentUpdater<T>
 {
-    /**
-     * Update component with the extra attributes.
-     *
-     * @param component to update
-     * @param attributes to add to the component
-     */
-    void update(T component, Map<String, String> attributes);
 }
 
 // End ComponentUpdater.java

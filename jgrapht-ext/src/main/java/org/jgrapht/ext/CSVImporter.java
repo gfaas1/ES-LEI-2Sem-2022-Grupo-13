@@ -17,13 +17,9 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
+import java.io.Reader;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.
@@ -66,11 +62,7 @@ public class CSVImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
-    private CSVFormat format;
-    private VertexProvider<V> vertexProvider;
-    private EdgeProvider<V, E> edgeProvider;
-    private char delimiter;
-    private final Set<CSVFormat.Parameter> parameters;
+    private org.jgrapht.io.CSVImporter<V, E> delegate;
 
     /**
      * Constructs a new importer using the {@link CSVFormat#ADJACENCY_LIST} format as default.
@@ -108,20 +100,20 @@ public class CSVImporter<V, E>
         VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, CSVFormat format,
         char delimiter)
     {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
+        switch (format) {
+        case ADJACENCY_LIST:
+            this.delegate = new org.jgrapht.io.CSVImporter<>(
+                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.ADJACENCY_LIST, delimiter);
+            break;
+        case EDGE_LIST:
+            this.delegate = new org.jgrapht.io.CSVImporter<>(
+                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.EDGE_LIST, delimiter);
+            break;
+        case MATRIX:
+            this.delegate = new org.jgrapht.io.CSVImporter<>(
+                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.MATRIX, delimiter);
+            break;
         }
-        this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
-        this.format = format;
-        if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException("Character cannot be used as a delimiter");
-        }
-        this.delimiter = delimiter;
-        this.parameters = new HashSet<>();
     }
 
     /**
@@ -131,7 +123,15 @@ public class CSVImporter<V, E>
      */
     public CSVFormat getFormat()
     {
-        return format;
+        switch (delegate.getFormat()) {
+        case ADJACENCY_LIST:
+            return CSVFormat.ADJACENCY_LIST;
+        case MATRIX:
+            return CSVFormat.MATRIX;
+        case EDGE_LIST:
+        default:
+            return CSVFormat.EDGE_LIST;
+        }
     }
 
     /**
@@ -141,7 +141,17 @@ public class CSVImporter<V, E>
      */
     public void setFormat(CSVFormat format)
     {
-        this.format = format;
+        switch (format) {
+        case ADJACENCY_LIST:
+            this.delegate.setFormat(org.jgrapht.io.CSVFormat.ADJACENCY_LIST);
+            break;
+        case MATRIX:
+            this.delegate.setFormat(org.jgrapht.io.CSVFormat.MATRIX);
+            break;
+        case EDGE_LIST:
+            this.delegate.setFormat(org.jgrapht.io.CSVFormat.EDGE_LIST);
+            break;
+        }
     }
 
     /**
@@ -151,7 +161,7 @@ public class CSVImporter<V, E>
      */
     public char getDelimiter()
     {
-        return delimiter;
+        return delegate.getDelimiter();
     }
 
     /**
@@ -161,10 +171,7 @@ public class CSVImporter<V, E>
      */
     public void setDelimiter(char delimiter)
     {
-        if (!DSVUtils.isValidDelimiter(delimiter)) {
-            throw new IllegalArgumentException("Character cannot be used as a delimiter");
-        }
-        this.delimiter = delimiter;
+        this.delegate.setDelimiter(delimiter);
     }
 
     /**
@@ -175,7 +182,17 @@ public class CSVImporter<V, E>
      */
     public boolean isParameter(CSVFormat.Parameter p)
     {
-        return parameters.contains(p);
+        switch (p) {
+        case MATRIX_FORMAT_EDGE_WEIGHTS:
+            return delegate
+                .isParameter(org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
+        case MATRIX_FORMAT_NODEID:
+            return delegate.isParameter(org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
+        case MATRIX_FORMAT_ZERO_WHEN_NO_EDGE:
+            return delegate
+                .isParameter(org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
+        }
+        return false;
     }
 
     /**
@@ -186,10 +203,18 @@ public class CSVImporter<V, E>
      */
     public void setParameter(CSVFormat.Parameter p, boolean value)
     {
-        if (value) {
-            parameters.add(p);
-        } else {
-            parameters.remove(p);
+        switch (p) {
+        case MATRIX_FORMAT_EDGE_WEIGHTS:
+            delegate
+                .setParameter(org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS, value);
+            break;
+        case MATRIX_FORMAT_NODEID:
+            delegate.setParameter(org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_NODEID, value);
+            break;
+        case MATRIX_FORMAT_ZERO_WHEN_NO_EDGE:
+            delegate.setParameter(
+                org.jgrapht.io.CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, value);
+            break;
         }
     }
 
@@ -212,343 +237,11 @@ public class CSVImporter<V, E>
     public void importGraph(Graph<V, E> graph, Reader input)
         throws ImportException
     {
-        switch (format) {
-        case EDGE_LIST:
-        case ADJACENCY_LIST:
-            read(graph, input, new AdjacencyListCSVListener(graph));
-            break;
-        case MATRIX:
-            read(graph, input, new MatrixCSVListener(graph));
-            break;
-        }
-    }
-
-    private void read(Graph<V, E> graph, Reader input, CSVBaseListener listener)
-        throws ImportException
-    {
         try {
-            ThrowingErrorListener errorListener = new ThrowingErrorListener();
-
-            // create lexer
-            CSVLexer lexer = new CSVLexer(new ANTLRInputStream(input));
-            lexer.setSep(delimiter);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(errorListener);
-
-            // create parser
-            CSVParser parser = new CSVParser(new CommonTokenStream(lexer));
-            parser.removeErrorListeners();
-            parser.addErrorListener(errorListener);
-
-            // Specify our entry point
-            CSVParser.FileContext graphContext = parser.file();
-
-            // Walk it and attach our listener
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(listener, graphContext);
-        } catch (IOException e) {
-            throw new ImportException("Failed to import CSV graph: " + e.getMessage(), e);
-        } catch (ParseCancellationException pe) {
-            throw new ImportException("Failed to import CSV graph: " + pe.getMessage(), pe);
-        } catch (IllegalArgumentException iae) {
-            throw new ImportException("Failed to import CSV graph: " + iae.getMessage(), iae);
+            delegate.importGraph(graph, input);
+        } catch (org.jgrapht.io.ImportException e) {
+            throw new ImportException(e);
         }
-    }
-
-    private class ThrowingErrorListener
-        extends BaseErrorListener
-    {
-
-        @Override
-        public void syntaxError(
-            Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-            String msg, RecognitionException e)
-            throws ParseCancellationException
-        {
-            throw new ParseCancellationException(
-                "line " + line + ":" + charPositionInLine + " " + msg);
-        }
-    }
-
-    // listener for the edge list format
-    private class AdjacencyListCSVListener
-        extends RowCSVListener
-    {
-        public AdjacencyListCSVListener(Graph<V, E> graph)
-        {
-            super(graph);
-        }
-
-        @Override
-        protected void handleRow()
-        {
-            // first is source
-            String sourceKey = row.get(0);
-            if (sourceKey.isEmpty()) {
-                throw new ParseCancellationException("Source vertex cannot be empty");
-            }
-            V source = vertices.get(sourceKey);
-            if (source == null) {
-                source = vertexProvider.buildVertex(sourceKey, new HashMap<>());
-                vertices.put(sourceKey, source);
-                graph.addVertex(source);
-            }
-            row.remove(0);
-
-            // remaining are targets
-            for (String key : row) {
-                if (key.isEmpty()) {
-                    throw new ParseCancellationException("Target vertex cannot be empty");
-                }
-                V target = vertices.get(key);
-
-                if (target == null) {
-                    target = vertexProvider.buildVertex(key, new HashMap<>());
-                    vertices.put(key, target);
-                    graph.addVertex(target);
-                }
-
-                try {
-                    String label = "e_" + source + "_" + target;
-                    E e = edgeProvider
-                        .buildEdge(source, target, label, new HashMap<String, String>());
-                    graph.addEdge(source, target, e);
-                } catch (IllegalArgumentException e) {
-                    throw new ParseCancellationException(
-                        "Provided graph does not support input: " + e.getMessage(), e);
-                }
-            }
-        }
-
-    }
-
-    // listener for the edge list format
-    private class MatrixCSVListener
-        extends RowCSVListener
-    {
-        private boolean assumeNodeIds;
-        private boolean assumeEdgeWeights;
-        private boolean assumeZeroWhenNoEdge;
-        private int verticesCount;
-        private int currentVertex;
-        private String currentVertexName;
-        private Map<Integer, String> columnIndex;
-
-        public MatrixCSVListener(Graph<V, E> graph)
-        {
-            super(graph);
-            this.assumeNodeIds = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
-            this.assumeEdgeWeights =
-                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
-            this.assumeZeroWhenNoEdge =
-                parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);
-            this.verticesCount = 0;
-            this.currentVertex = 1;
-            this.currentVertexName = null;
-            this.columnIndex = new HashMap<>();
-        }
-
-        @Override
-        protected void handleRow()
-        {
-            if (assumeNodeIds) {
-                if (!header) {
-                    currentVertexName = row.get(0);
-                }
-                row.remove(0);
-            } else {
-                currentVertexName = String.valueOf(currentVertex);
-            }
-
-            if (header) {
-                if (assumeNodeIds) {
-                    createVerticesFromNodeIds();
-                } else {
-                    createVertices();
-                    createEdges();
-                    currentVertex++;
-                }
-            } else {
-                createEdges();
-                currentVertex++;
-            }
-        }
-
-        private void createVerticesFromNodeIds()
-        {
-            // header line contains nodes
-            verticesCount = row.size();
-            if (verticesCount < 1) {
-                throw new ParseCancellationException("Failed to parse header with vertices");
-            }
-            int v = 1;
-            for (String vertexName : row) {
-                if (vertexName.trim().isEmpty()) {
-                    throw new ParseCancellationException(
-                        "Failed to parse header with vertices (empty name)");
-                }
-                V vertex = vertexProvider.buildVertex(vertexName, new HashMap<>());
-                vertices.put(vertexName, vertex);
-                graph.addVertex(vertex);
-                columnIndex.put(v, vertexName);
-                v++;
-            }
-        }
-
-        private void createVertices()
-        {
-            // header line contains nodes
-            verticesCount = row.size();
-            if (verticesCount < 1) {
-                throw new ParseCancellationException("Failed to parse header with vertices");
-            }
-            int v = 1;
-            for (v = 1; v <= verticesCount; v++) {
-                String vertexName = String.valueOf(v);
-                V vertex = vertexProvider.buildVertex(vertexName, new HashMap<>());
-                vertices.put(vertexName, vertex);
-                graph.addVertex(vertex);
-                columnIndex.put(v, vertexName);
-            }
-        }
-
-        private void createEdges()
-        {
-            if (row.size() != verticesCount) {
-                throw new ParseCancellationException(
-                    "Row contains fewer than " + verticesCount + " entries");
-            }
-
-            int target = 1;
-            for (String entry : row) {
-                // try to parse an integer
-                try {
-                    Integer entryAsInteger = Integer.parseInt(entry);
-                    if (entryAsInteger == 0) {
-                        if (!assumeZeroWhenNoEdge && assumeEdgeWeights) {
-                            createEdge(currentVertexName, columnIndex.get(target), 0d);
-                        }
-                    } else {
-                        if (assumeEdgeWeights) {
-                            createEdge(
-                                currentVertexName, columnIndex.get(target),
-                                Double.valueOf(entryAsInteger));
-                        } else {
-                            createEdge(currentVertexName, columnIndex.get(target), null);
-                        }
-
-                    }
-                    target++;
-                    continue;
-                } catch (NumberFormatException nfe) {
-                    // nothing
-                }
-
-                // try to parse a double
-                try {
-                    Double entryAsDouble = Double.parseDouble(entry);
-                    if (assumeEdgeWeights) {
-                        createEdge(currentVertexName, columnIndex.get(target), entryAsDouble);
-                    } else {
-                        throw new ParseCancellationException(
-                            "Double entry found when expecting no weights");
-                    }
-                } catch (NumberFormatException nfe) {
-                    // nothing
-                }
-
-                target++;
-            }
-        }
-
-        private void createEdge(String sourceName, String targetName, Double weight)
-        {
-            try {
-                V source = vertices.get(sourceName);
-                V target = vertices.get(targetName);
-
-                String label = "e_" + source + "_" + target;
-                E e = edgeProvider.buildEdge(source, target, label, new HashMap<String, String>());
-                graph.addEdge(source, target, e);
-
-                if (weight != null) {
-                    if (graph instanceof WeightedGraph<?, ?>) {
-                        ((WeightedGraph<V, E>) graph).setEdgeWeight(e, weight);
-                    }
-                }
-            } catch (IllegalArgumentException e) {
-                throw new ParseCancellationException(
-                    "Provided graph does not support input: " + e.getMessage(), e);
-            }
-        }
-
-    }
-
-    // base listener
-    private abstract class RowCSVListener
-        extends CSVBaseListener
-    {
-        protected Graph<V, E> graph;
-        protected List<String> row;
-        protected Map<String, V> vertices;
-        protected boolean header;
-
-        public RowCSVListener(Graph<V, E> graph)
-        {
-            this.graph = graph;
-            this.row = new ArrayList<>();
-            this.vertices = new HashMap<>();
-            this.header = false;
-        }
-
-        @Override
-        public void enterHeader(CSVParser.HeaderContext ctx)
-        {
-            header = true;
-        }
-
-        @Override
-        public void exitHeader(CSVParser.HeaderContext ctx)
-        {
-            header = false;
-        }
-
-        @Override
-        public void enterRecord(CSVParser.RecordContext ctx)
-        {
-            row.clear();
-        }
-
-        @Override
-        public void exitRecord(CSVParser.RecordContext ctx)
-        {
-            if (row.isEmpty()) {
-                throw new ParseCancellationException("Empty CSV record");
-            }
-
-            handleRow();
-        }
-
-        @Override
-        public void exitTextField(CSVParser.TextFieldContext ctx)
-        {
-            row.add(ctx.TEXT().getText());
-        }
-
-        @Override
-        public void exitStringField(CSVParser.StringFieldContext ctx)
-        {
-            row.add(DSVUtils.unescapeDSV(ctx.STRING().getText(), delimiter));
-        }
-
-        @Override
-        public void exitEmptyField(CSVParser.EmptyFieldContext ctx)
-        {
-            row.add("");
-        }
-
-        protected abstract void handleRow();
-
     }
 
 }

@@ -25,17 +25,8 @@ package org.jgrapht.ext;
  */
 @Deprecated
 public interface ComponentNameProvider<T>
+    extends org.jgrapht.io.ComponentNameProvider<T>
 {
-
-    /**
-     * Returns a unique name. This is useful when exporting a graph, as it ensures that all
-     * vertices/edges are assigned simple, consistent names.
-     *
-     * @param component the component to be named
-     * @return the name of the component
-     */
-    String getName(T component);
-
 }
 
 // End ComponentNameProvider.java
