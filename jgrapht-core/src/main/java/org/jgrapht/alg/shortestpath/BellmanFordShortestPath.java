@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by France Telecom and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,75 +17,62 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.lang.reflect.Array;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
 
 /**
- * The <a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm">Bellman-Ford
- * algorithm</a>. Computes shortest paths form a single source vertex to all the other vertices in a
- * weighted graph. Supports graphs with negative weights. Additionally the user can constrain the
- * paths by a maximum number of edges.
- * 
- * The algorithm has worst-case complexity O(nm) when n is the number of vertices and m the number
- * of edges of the input graph.
- * 
- * 
+ * The Bellman-Ford algorithm.
+ *
+ * <p>
+ * Computes shortest paths from a single source vertex to all other vertices in a weighted graph.
+ * The Bellman-Ford algorithm supports negative edge weights. Negative weight cycles are not allowed
+ * and will be reported by the algorithm. This implies that negative edge weights are not allowed in
+ * undirected graphs.
+ *
+ * <p>
+ * The running time is O(|E||V|).
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ *
+ * @author Dimitrios Michail
  */
 public class BellmanFordShortestPath<V, E>
     extends BaseShortestPathAlgorithm<V, E>
 {
-    private static final double DEFAULT_EPSILON = 0.000000001;
+    private final Comparator<Double> comparator;
 
     /**
-     * Start vertex.
-     */
-    protected V startVertex;
-
-    /**
-     * Maximum number of edges of the calculated paths.
-     */
-    protected int nMaxHops;
-
-    /**
-     * Tolerance when comparing floating point values.
-     */
-    protected double epsilon;
-
-    /**
-     * Construct a new instance of the Bellman-Ford algorithm.
+     * Construct a new instance.
      *
      * @param graph the input graph
      */
     public BellmanFordShortestPath(Graph<V, E> graph)
     {
-        this(graph, graph.vertexSet().size() - 1);
+        this(graph, ToleranceDoubleComparator.DEFAULT_EPSILON);
     }
 
     /**
-     * Construct a new instance of the Bellman-Ford algorithm.
+     * Construct a new instance.
      *
      * @param graph the input graph
-     * @param nMaxHops maximum number of edges of the calculated paths
+     * @param epsilon tolerance when comparing floating point values
      */
-    public BellmanFordShortestPath(Graph<V, E> graph, int nMaxHops)
-    {
-        this(graph, nMaxHops, DEFAULT_EPSILON);
-    }
-
-    /**
-     * Construct a new instance of the Bellman-Ford algorithm.
-     *
-     * @param graph the input graph
-     * @param nMaxHops maximum number of edges of the calculated paths.
-     * @param epsilon tolerance factor when comparing floating point values
-     */
-    public BellmanFordShortestPath(Graph<V, E> graph, int nMaxHops, double epsilon)
+    public BellmanFordShortestPath(Graph<V, E> graph, double epsilon)
     {
         super(graph);
-        this.nMaxHops = nMaxHops;
-        this.epsilon = epsilon;
+        this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
     /**
@@ -95,7 +82,7 @@ public class BellmanFordShortestPath<V, E>
     public GraphPath<V, E> getPath(V source, V sink)
     {
         if (!graph.containsVertex(sink)) {
-            throw new IllegalArgumentException("Graph must contain the sink vertex!");
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
         return getPaths(source).getPath(sink);
     }
@@ -104,26 +91,98 @@ public class BellmanFordShortestPath<V, E>
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public SingleSourcePaths<V, E> getPaths(V source)
     {
         if (!graph.containsVertex(source)) {
-            throw new IllegalArgumentException("Graph must contain the source vertex!");
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
 
-        BellmanFordIterator<V, E> iter = new BellmanFordIterator<>(graph, source, epsilon);
+        /*
+         * Initialize distance and predecessor.
+         */
+        int n = graph.vertexSet().size();
+        Map<V, Double> distance = new HashMap<>();
+        Map<V, E> pred = new HashMap<>();
+        for (V v : graph.vertexSet()) {
+            distance.put(v, Double.POSITIVE_INFINITY);
+        }
+        distance.put(source, 0d);
 
-        // at the i-th pass the shortest paths with less (or equal) than i edges
-        // are calculated.
-        for (int passNumber = 1; (passNumber <= nMaxHops) && iter.hasNext(); passNumber++) {
-            iter.next();
+        /*
+         * Create specifics for outgoing edge traversal.
+         */
+        Specifics specifics;
+        if (graph instanceof DirectedGraph<?, ?>) {
+            specifics = new DirectedSpecifics((DirectedGraph<V, E>) graph);
+        } else {
+            specifics = new UndirectedSpecifics(graph);
         }
 
-        return new PathElementSingleSourcePaths(iter);
+        /*
+         * Maintain two sets of vertices whose edges need relaxation. The first set is the current
+         * set of vertices while the second if the set for the subsequent iteration.
+         */
+        Set<V>[] updated = (Set<V>[]) Array.newInstance(Set.class, 2);
+        updated[0] = new LinkedHashSet<>();
+        updated[1] = new LinkedHashSet<>();
+        int curUpdated = 0;
+        updated[curUpdated].add(source);
+
+        /*
+         * Relax edges.
+         */
+        for (int i = 0; i < n - 1; i++) {
+            Set<V> curVertexSet = updated[curUpdated];
+            Set<V> nextVertexSet = updated[(curUpdated + 1) % 2];
+
+            for (V v : curVertexSet) {
+                for (E e : specifics.edgesOf(v)) {
+                    V u = Graphs.getOppositeVertex(graph, e, v);
+                    double newDist = distance.get(v) + graph.getEdgeWeight(e);
+                    if (comparator.compare(newDist, distance.get(u)) < 0) {
+                        distance.put(u, newDist);
+                        pred.put(u, e);
+                        nextVertexSet.add(u);
+                    }
+                }
+            }
+
+            // swap next with current
+            curVertexSet.clear();
+            curUpdated = (curUpdated + 1) % 2;
+
+            // stop if no relaxation
+            if (nextVertexSet.isEmpty()) {
+                break;
+            }
+        }
+
+        /*
+         * Check for negative cycles
+         */
+        for (V v : updated[curUpdated]) {
+            for (E e : specifics.edgesOf(v)) {
+                V u = Graphs.getOppositeVertex(graph, e, v);
+                double newDist = distance.get(v) + graph.getEdgeWeight(e);
+                if (comparator.compare(newDist, distance.get(u)) < 0) {
+                    throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+                }
+            }
+        }
+
+        /*
+         * Transform result
+         */
+        Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
+        for (V v : graph.vertexSet()) {
+            distanceAndPredecessorMap.put(v, Pair.of(distance.get(v), pred.get(v)));
+        }
+        return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
     }
 
     /**
-     * Find a path between two vertices. For a more advanced search (e.g. limited by radius), use
-     * the constructor instead.
+     * Find a path between two vertices.
      * 
      * @param graph the graph to be searched
      * @param source the vertex at which the path should start
@@ -139,65 +198,46 @@ public class BellmanFordShortestPath<V, E>
         return new BellmanFordShortestPath<>(graph).getPath(source, sink);
     }
 
-    // interface wrapper
-    private class PathElementSingleSourcePaths
-        implements SingleSourcePaths<V, E>
+    // specifics
+    private abstract class Specifics
     {
-        private BellmanFordIterator<V, E> it;
+        public abstract Set<? extends E> edgesOf(V vertex);
+    }
 
-        PathElementSingleSourcePaths(BellmanFordIterator<V, E> it)
+    private class DirectedSpecifics
+        extends Specifics
+    {
+
+        private DirectedGraph<V, E> graph;
+
+        public DirectedSpecifics(DirectedGraph<V, E> g)
         {
-            this.it = it;
+            graph = g;
         }
 
         @Override
-        public Graph<V, E> getGraph()
+        public Set<? extends E> edgesOf(V vertex)
         {
-            return it.graph;
+            return graph.outgoingEdgesOf(vertex);
+        }
+    }
+
+    private class UndirectedSpecifics
+        extends Specifics
+    {
+
+        private Graph<V, E> graph;
+
+        public UndirectedSpecifics(Graph<V, E> g)
+        {
+            graph = g;
         }
 
         @Override
-        public V getSourceVertex()
+        public Set<E> edgesOf(V vertex)
         {
-            return it.startVertex;
+            return graph.edgesOf(vertex);
         }
-
-        @Override
-        public double getWeight(V targetVertex)
-        {
-            if (targetVertex.equals(it.startVertex)) {
-                return 0d;
-            }
-
-            BellmanFordPathElement<V, E> pathElement = it.getPathElement(targetVertex);
-
-            if (pathElement == null) {
-                return Double.POSITIVE_INFINITY;
-            } else {
-                return pathElement.getCost();
-            }
-        }
-
-        @Override
-        public GraphPath<V, E> getPath(V targetVertex)
-        {
-            if (targetVertex.equals(it.startVertex)) {
-                return createEmptyPath(it.startVertex, targetVertex);
-            }
-
-            BellmanFordPathElement<V, E> pathElement = it.getPathElement(targetVertex);
-
-            if (pathElement == null) {
-                return createEmptyPath(it.startVertex, targetVertex);
-            } else {
-                return new GraphWalk<>(
-                    graph, it.startVertex, targetVertex, null, pathElement.createEdgeListPath(),
-                    pathElement.getCost());
-            }
-        }
-
     }
 
 }
-
-// End BellmanFordShortestPath.java

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,12 +22,13 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
+ * A weighted view of an undirected graph.
+ * 
  * <p>
  * A weighted view of the backing graph specified in the constructor. This allows you to apply
  * algorithms designed for weighted graphs to an unweighted graph by providing an explicit edge
  * weight mapping. The implementation also allows for "masking" weights for a subset of the edges in
  * an existing weighted graph.
- * </p>
  *
  * <p>
  * Query operations on this graph "read through" to the backing graph. Vertex addition/removal and
@@ -35,44 +36,39 @@ import org.jgrapht.*;
  * an edge weight will pass the operation to the backing graph as well if the backing graph
  * implements the WeightedGraph interface. Setting an edge weight will modify the weight map in
  * order to maintain a consistent graph.
- * </p>
  *
  * <p>
  * Note that edges returned by this graph's accessors are really just the edges of the underlying
  * directed graph.
- * </p>
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
  * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
  * serializable if the backing graph is serializable.
- * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Joris Kinable
- * @since Aug 20, 2015
+ * @author Dimitrios Michail
  */
-public class AsWeightedDirectedGraph<V, E>
+public class AsWeightedUndirectedGraph<V, E>
     extends AsWeightedGraph<V, E>
-    implements DirectedGraph<V, E>
+    implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = -6264605187276749471L;
+
+    private static final long serialVersionUID = 2226726301464282811L;
 
     /**
-     * Constructor for AsWeightedGraph.
+     * Constructor
      *
      * @param g the backing graph over which a weighted view is to be created.
-     * @param weightMap A mapping of edges to weights. If an edge is not present in the weight map,
+     * @param weightMap a mapping of edges to weights. If an edge is not present in the weight map,
      *        the edge weight for the underlying graph is returned. Note that a live reference to
      *        this map is retained, so if the caller changes the map after construction, the changes
-     *        will affect the the AsWeightedDirectedGraph instance as well.
+     *        will affect the the AsWeightedUndirectedGraph instance as well.
      */
-    public AsWeightedDirectedGraph(DirectedGraph<V, E> g, Map<E, Double> weightMap)
+    public AsWeightedUndirectedGraph(UndirectedGraph<V, E> g, Map<E, Double> weightMap)
     {
         super(g, weightMap);
     }
 }
-
-// End AsWeightedDirectedGraph.java
