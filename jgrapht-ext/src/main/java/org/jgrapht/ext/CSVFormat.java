@@ -141,8 +141,9 @@ package org.jgrapht.ext;
  * 
  * @author Dimitrios Michail
  * @since August 2016
- *
+ * @deprecated Use {@link org.jgrapht.io.CSVFormat} instead.
  */
+@Deprecated
 public enum CSVFormat
 {
     /**
@@ -160,7 +161,9 @@ public enum CSVFormat
 
     /**
      * Parameters that affect the behavior of CVS importers/exporters.
+     * @deprecated Use {@link org.jgrapht.io.CSVFormat.Parameter} instead.
      */
+    @Deprecated
     public enum Parameter
     {
         /**

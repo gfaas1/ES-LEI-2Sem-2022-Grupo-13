@@ -27,7 +27,10 @@ import org.jgrapht.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @deprecated Use {@link org.jgrapht.io.GraphImporter} instead.
  */
+@Deprecated
 public interface GraphImporter<V, E>
 {
 

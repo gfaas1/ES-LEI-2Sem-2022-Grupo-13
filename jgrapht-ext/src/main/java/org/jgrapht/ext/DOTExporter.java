@@ -35,7 +35,10 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  *
  * @author Trevor Harmon
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DOTExporter} instead.
  */
+@Deprecated
 public class DOTExporter<V, E>
     implements GraphExporter<V, E>
 {

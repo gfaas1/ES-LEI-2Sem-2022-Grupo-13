@@ -27,7 +27,10 @@ package org.jgrapht.ext;
  * 
  * @author Dimitrios Michail
  * @since January 2017
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DIMACSFormat} instead.
  */
+@Deprecated
 public enum DIMACSFormat
 {
     /**

@@ -15,13 +15,19 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.ext;
+package org.jgrapht.io;
 
 import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.io.EdgeProvider;
+import org.jgrapht.io.ExportException;
+import org.jgrapht.io.GmlExporter;
+import org.jgrapht.io.GmlImporter;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 

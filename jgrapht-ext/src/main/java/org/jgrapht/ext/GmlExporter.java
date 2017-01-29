@@ -17,10 +17,14 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).
@@ -39,7 +43,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * 
+ * @deprecated Use {@link org.jgrapht.io.GmlExporter} instead.
  */
+@Deprecated
 public class GmlExporter<V, E>
     implements GraphExporter<V, E>
 {
@@ -52,7 +59,10 @@ public class GmlExporter<V, E>
 
     /**
      * Parameters that affect the behavior of the exporter.
+     * 
+     * @deprecated Use {@link org.jgrapht.io.GmlExporter.Parameter} instead.
      */
+    @Deprecated
     public enum Parameter
     {
         /**

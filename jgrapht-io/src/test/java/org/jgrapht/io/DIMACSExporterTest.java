@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.ext;
+package org.jgrapht.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,6 +25,9 @@ import java.io.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.io.DIMACSExporter;
+import org.jgrapht.io.DIMACSFormat;
+import org.jgrapht.io.ExportException;
 import org.junit.*;
 
 /**

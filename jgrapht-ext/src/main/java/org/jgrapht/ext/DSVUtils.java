@@ -27,7 +27,10 @@ package org.jgrapht.ext;
  * 
  * @author Dimitrios Michail
  * @since August 2016
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DSVUtils} instead.
  */
+@Deprecated
 class DSVUtils
 {
     private static final char DSV_QUOTE = '"';

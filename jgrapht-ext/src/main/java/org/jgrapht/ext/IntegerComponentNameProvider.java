@@ -17,8 +17,6 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
 /**
  * Assigns a unique integer to represent each component. Each instance of provider maintains an
  * internal map between every component it has ever seen and the unique integer representing that
@@ -27,37 +25,13 @@ import java.util.*;
  * @param <T> the component type
  *
  * @author Trevor Harmon
+ * @deprecated Use {@link org.jgrapht.io.IntegerComponentNameProvider} instead.
  */
+@Deprecated
 public class IntegerComponentNameProvider<T>
+    extends org.jgrapht.io.IntegerComponentNameProvider<T>
     implements ComponentNameProvider<T>
 {
-    private int nextID = 1;
-    private final Map<T, Integer> idMap = new HashMap<>();
-
-    /**
-     * Clears all cached identifiers, and resets the unique identifier counter.
-     */
-    public void clear()
-    {
-        nextID = 1;
-        idMap.clear();
-    }
-
-    /**
-     * Returns the string representation of a component.
-     *
-     * @param component the component to be named
-     */
-    @Override
-    public String getName(T component)
-    {
-        Integer id = idMap.get(component);
-        if (id == null) {
-            id = nextID++;
-            idMap.put(component, id);
-        }
-        return id.toString();
-    }
 }
 
 // End IntegerComponentNameProvider.java

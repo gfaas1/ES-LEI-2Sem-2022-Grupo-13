@@ -49,7 +49,9 @@ import org.jgrapht.*;
  * 
  * @author Dimitrios Michail
  * @since August 2016
+ * @deprecated Use {@link org.jgrapht.io.CSVExporter} instead.
  */
+@Deprecated
 public class CSVExporter<V, E>
     implements GraphExporter<V, E>
 {

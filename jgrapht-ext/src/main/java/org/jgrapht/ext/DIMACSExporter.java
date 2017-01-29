@@ -17,10 +17,13 @@
  */
 package org.jgrapht.ext;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * Exports a graph into DIMACS format.
@@ -36,7 +39,10 @@ import org.jgrapht.*;
  *
  * @author Dimitrios Michail
  * @since January 2017
+ * 
+ * @deprecated Use {@link org.jgrapht.io.DIMACSExporter} instead.
  */
+@Deprecated
 public class DIMACSExporter<V, E>
     implements GraphExporter<V, E>
 {
@@ -53,7 +59,10 @@ public class DIMACSExporter<V, E>
 
     /**
      * Parameters that affect the behavior of the exporter.
+     * 
+     * @deprecated Use {@link org.jgrapht.io.DIMACSExporter.Parameter} instead.
      */
+    @Deprecated
     public enum Parameter
     {
         /**
