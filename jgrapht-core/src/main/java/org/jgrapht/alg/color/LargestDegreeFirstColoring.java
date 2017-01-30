@@ -32,7 +32,12 @@ import org.jgrapht.Graph;
  * The largest degree first greedy coloring algorithm.
  * 
  * <p>
- * This is the greedy coloring algorithm which orders the vertices by non-increasing degree.
+ * This is the greedy coloring algorithm which orders the vertices by non-increasing degree. See the
+ * following paper for details.
+ * <ul>
+ * <li>D. J. A. Welsh and M. B. Powell. An upper bound for the chromatic number of a graph and its
+ * application to timetabling problems. The Computer Journal, 10(1):85--86, 1967.</li>
+ * </ul>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -77,15 +82,7 @@ public class LargestDegreeFirstColoring<V, E>
              */
             List<V> nodes = new ArrayList<>(graph.vertexSet());
             Collections.sort(nodes, (u, v) -> {
-                int du = degree.get(u);
-                int dv = degree.get(v);
-                if (du > dv) {
-                    return -1;
-                } else if (du < dv) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return -1 * Integer.compare(degree.get(u), degree.get(v));
             });
             return nodes;
         } else {

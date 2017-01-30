@@ -18,14 +18,11 @@
 package org.jgrapht.alg.color;
 
 import java.lang.reflect.Array;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.NavigableSet;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -40,14 +37,25 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
  * selects always the vertex with the largest saturation degree. If multiple vertices have the same
  * maximum saturation degree, a vertex of maximum degree in the uncolored subgraph is selected.
  *
- * See the following paper for details:
+ * <p>
+ * Note that the DSatur is not optimal in general, but is optimal for bipartite graphs. Compared to
+ * other simpler greedy ordering heuristics, it is usually considered slower but more efficient
+ * w.r.t. the number of used colors. See the following papers for details:
  * <ul>
  * <li>D. Brelaz. New methods to color the vertices of a graph. Communications of ACM,
  * 22(4):251–256, 1979.</li>
+ * <li>The smallest hard-to-color graph for algorithm DSATUR. Discrete Mathematics, 236:151--165,
+ * 2001.</li>
  * </ul>
  * 
  * <p>
- * Note that the DSatur is not optimal in general, but is optimal for bipartite graphs.
+ * This implementation requires O(n^2) running time and space. The following paper discusses
+ * possible improvements in the running time.
+ * <ul>
+ * <li>J. S. Turner. Almost all k-colorable graphs are easy to color. Journal of Algorithms.
+ * 9(1):63--82, 1988.
+ * </li>
+ * </ul>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -76,143 +84,246 @@ public class SaturationDegreeColoring<V, E>
     @SuppressWarnings("unchecked")
     public Coloring<V> getColoring()
     {
+        /*
+         * Initialize data structures
+         */
         int n = graph.vertexSet().size();
         int maxColor = -1;
         Map<V, Integer> colors = new HashMap<>(n);
-        Map<V, Set<Integer>> adjColors = new HashMap<>(n);
+        Map<V, BitSet> adjColors = new HashMap<>(n);
+        Map<V, Integer> saturation = new HashMap<>(n);
 
         /*
-         * Compute degrees and the maximum degree.
+         * Compute degrees, available colors, and maximum degree.
          */
         int maxDegree = 0;
         Map<V, Integer> degree = new HashMap<>(n);
-        Map<V, Integer> index = new HashMap<>(n);
-        int i = 0;
         for (V v : graph.vertexSet()) {
             int d = graph.edgesOf(v).size();
             degree.put(v, d);
-            if (d > maxDegree) {
-                maxDegree = d;
-            }
-            index.put(v, i++);
-            adjColors.put(v, new HashSet<>());
+            maxDegree = Math.max(maxDegree, d);
+            adjColors.put(v, new BitSet());
+            saturation.put(v, 0);
         }
 
         /*
-         * Create and fill buckets with saturation degree as index. Each bucket contains vertices
-         * ordered by degree in non-increasing order. Therefore, any updates in the degree map for
-         * some vertex v must be performed only if v does not belong to any bucket.
+         * Initialize heap
          */
-        final NavigableSet<V>[] buckets =
-            (NavigableSet<V>[]) Array.newInstance(NavigableSet.class, maxDegree + 1);
-        Comparator<V> degreeComparator = new DegreeComparator(index, degree);
-        for (i = 0; i <= maxDegree; i++) {
-            buckets[i] = new TreeSet<>(degreeComparator);
-        }
+        Heap heap = new Heap(n, new DSaturComparator(saturation, degree));
+        Map<V, HeapHandle> handles = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            buckets[0].add(v);
+            handles.put(v, new HeapHandle(v));
         }
+        heap.bulkInsert(
+            handles.values().toArray((HeapHandle[]) Array.newInstance(HeapHandle.class, 0)));
 
         /*
-         * Extract from buckets
+         * Color vertices
          */
-        int maxSaturation = 0;
-        while (maxSaturation >= 0) {
-            NavigableSet<V> b = buckets[maxSaturation];
-
-            if (b.isEmpty()) {
-                maxSaturation--;
-                continue;
-            }
-
-            // find next vertex
-            V v = b.pollFirst();
+        while (heap.size() > 0) {
+            V v = heap.deleteMin().vertex;
 
             // find first free color
-            Set<Integer> used = adjColors.get(v);
-            int candidate = 0;
-            while (used.contains(candidate)) {
-                candidate++;
-            }
-            colors.put(v, candidate);
-            if (candidate > maxColor) {
-                maxColor = candidate;
-            }
+            BitSet used = adjColors.get(v);
+            int c = used.nextClearBit(0);
+            maxColor = Math.max(maxColor, c);
 
-            // cleanup vertex
-            degree.remove(v);
+            // color the vertex
+            colors.put(v, c);
+
+            // partial cleanup to save some space
             adjColors.remove(v);
 
-            // update neighbor saturation
+            // update neighbors
             for (E e : graph.edgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
 
-                // if colored skip
-                if (colors.containsKey(u)) {
-                    continue;
-                }
+                if (!colors.containsKey(u)) {
+                    // update used colors
+                    int uSaturation = saturation.get(u);
+                    BitSet uAdjColors = adjColors.get(u);
 
-                Set<Integer> otherUsed = adjColors.get(u);
+                    HeapHandle uHandle = handles.get(u);
+                    if (uAdjColors.get(c)) {
+                        // same saturation, degree decrease
+                        // remove and reinsert
+                        heap.delete(uHandle);
+                        degree.put(u, degree.get(u) - 1);
+                        heap.insert(uHandle);
+                    } else {
+                        // saturation increase, degree decrease
+                        uAdjColors.set(c);
+                        saturation.put(u, uSaturation + 1);
+                        degree.put(u, degree.get(u) - 1);
 
-                // remove from saturation bucket
-                int sat = otherUsed.size();
-                buckets[sat].remove(u);
-
-                // update colored subgraph degree
-                degree.put(u, degree.get(u) - 1);
-
-                // re-insert into saturation bucket
-                if (!otherUsed.contains(candidate)) {
-                    otherUsed.add(candidate);
-                    buckets[sat + 1].add(u);
-
-                    if (sat + 1 > maxSaturation) {
-                        maxSaturation = sat + 1;
+                        // simple fix upwards inside heap since priority increased
+                        heap.fixup(uHandle);
                     }
-                } else {
-                    buckets[sat].add(u);
                 }
             }
+
         }
 
         return new ColoringImpl<>(colors, maxColor + 1);
     }
 
-    /**
-     * A vertex comparator based on vertex degree. We use lexicographic ordering to distinguish
-     * vertices with the same degrees.
+    /*
+     * Special case comparator for the DSatur algorithm. Compares first by saturation and then by
+     * degree (maximum is better in both cases).
      */
-    private class DegreeComparator
+    private class DSaturComparator
         implements Comparator<V>
     {
-        private Map<V, Integer> index;
+        private Map<V, Integer> saturation;
         private Map<V, Integer> degree;
 
-        public DegreeComparator(Map<V, Integer> index, Map<V, Integer> degree)
+        public DSaturComparator(Map<V, Integer> saturation, Map<V, Integer> degree)
         {
-            this.index = index;
+            this.saturation = saturation;
             this.degree = degree;
         }
 
         @Override
         public int compare(V o1, V o2)
         {
-            int d1 = degree.get(o1);
-            int d2 = degree.get(o2);
-            if (d1 > d2) {
+            int sat1 = saturation.get(o1);
+            int sat2 = saturation.get(o2);
+            if (sat1 > sat2) {
                 return -1;
-            } else if (d2 > d1) {
+            } else if (sat1 < sat2) {
                 return 1;
             } else {
-                int i1 = index.get(o1);
-                int i2 = index.get(o2);
-                if (i1 < i2) {
-                    return -1;
-                } else if (i1 > i2) {
-                    return 1;
-                } else {
-                    return 0;
+                return -1 * Integer.compare(degree.get(o1), degree.get(o2));
+            }
+        }
+    }
+
+    /*
+     * An addressable heap handle.
+     */
+    private class HeapHandle
+    {
+        int index;
+        V vertex;
+
+        public HeapHandle(V vertex)
+        {
+            this.vertex = vertex;
+            this.index = -1;
+        }
+    }
+
+    /*
+     * An addressable binary heap.
+     * 
+     * No checks are performed (on purpose) for invalid handle use, or capacity violations.
+     */
+    private class Heap
+    {
+        private Comparator<V> comparator;
+        private int size;
+        private HeapHandle[] array;
+
+        @SuppressWarnings("unchecked")
+        public Heap(int capacity, Comparator<V> comparator)
+        {
+            this.comparator = comparator;
+            this.size = 0;
+            this.array = (HeapHandle[]) Array.newInstance(HeapHandle.class, capacity + 1);
+        }
+
+        private void fixdown(int k)
+        {
+            HeapHandle h = array[k];
+            while (2 * k <= size) {
+                int j = 2 * k;
+                if (j < size && comparator.compare(array[j].vertex, array[j + 1].vertex) > 0) {
+                    j++;
                 }
+                if (comparator.compare(h.vertex, array[j].vertex) <= 0) {
+                    break;
+                }
+                array[k] = array[j];
+                array[k].index = k;
+                k = j;
+            }
+            array[k] = h;
+            h.index = k;
+        }
+
+        private void fixup(int k)
+        {
+            HeapHandle h = array[k];
+            while (k > 1 && comparator.compare(array[k / 2].vertex, h.vertex) > 0) {
+                array[k] = array[k / 2];
+                array[k].index = k;
+                k /= 2;
+            }
+            array[k] = h;
+            h.index = k;
+        }
+
+        private void forceFixup(int k)
+        {
+            HeapHandle h = array[k];
+            while (k > 1) {
+                array[k] = array[k / 2];
+                array[k].index = k;
+                k /= 2;
+            }
+            array[k] = h;
+            h.index = k;
+        }
+
+        public HeapHandle deleteMin()
+        {
+            HeapHandle result = array[1];
+            if (size == 1) {
+                array[1] = null;
+                size = 0;
+            } else {
+                array[1] = array[size];
+                array[size] = null;
+                size--;
+                fixdown(1);
+            }
+            result.index = -1;
+            return result;
+        }
+
+        public int size()
+        {
+            return size;
+        }
+
+        public void fixup(HeapHandle handle)
+        {
+            fixup(handle.index);
+        }
+
+        public void delete(HeapHandle handle)
+        {
+            forceFixup(handle.index);
+            deleteMin();
+        }
+
+        public void insert(HeapHandle handle)
+        {
+            size++;
+            array[size] = handle;
+            handle.index = size;
+            fixup(size);
+        }
+
+        public void bulkInsert(HeapHandle[] handles)
+        {
+            for (int i = 0; i < handles.length; i++) {
+                size++;
+                array[size] = handles[i];
+                handles[i].index = size;
+            }
+            for (int i = size / 2; i > 0; i--) {
+                fixdown(i);
             }
         }
 

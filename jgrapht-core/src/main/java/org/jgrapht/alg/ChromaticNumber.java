@@ -20,6 +20,7 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
@@ -32,7 +33,9 @@ import org.jgrapht.graph.*;
  *
  * @author Andrew Newell
  * @since Dec 21, 2008
+ * @deprecated Use the classes implementing {@link VertexColoringAlgorithm} instead.
  */
+@Deprecated
 public abstract class ChromaticNumber
 {
     /**

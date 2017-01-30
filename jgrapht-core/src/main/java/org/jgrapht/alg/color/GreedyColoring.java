@@ -103,9 +103,7 @@ public class GreedyColoring<V, E>
 
             // set color
             colors.put(v, candidate);
-            if (candidate > maxColor) {
-                maxColor = candidate;
-            }
+            maxColor = Math.max(maxColor, candidate);
         }
 
         return new ColoringImpl<>(colors, maxColor + 1);

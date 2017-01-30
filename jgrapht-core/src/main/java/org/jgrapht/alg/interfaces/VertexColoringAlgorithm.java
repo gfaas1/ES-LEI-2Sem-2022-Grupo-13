@@ -18,8 +18,10 @@
 package org.jgrapht.alg.interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,11 +63,13 @@ public interface VertexColoringAlgorithm<V>
         Map<V, Integer> getColors();
 
         /**
-         * Get the color groups.
+         * Get the color classes. A subset of vertices assigned to the same color is called a color
+         * class; every such class forms an independent set. This method returns a partitioning of
+         * the vertices in the graph in disjoint color classes.
          *
-         * @return a map containing a set of vertices for each color
+         * @return a list of color classes
          */
-        Map<Integer, Set<V>> getColorGroups();
+        List<Set<V>> getColorClasses();
     }
 
     /**
@@ -115,7 +119,7 @@ public interface VertexColoringAlgorithm<V>
          * {@inheritDoc}
          */
         @Override
-        public Map<Integer, Set<V>> getColorGroups()
+        public List<Set<V>> getColorClasses()
         {
             Map<Integer, Set<V>> groups = new HashMap<>();
             colors.forEach((v, color) -> {
@@ -126,7 +130,11 @@ public interface VertexColoringAlgorithm<V>
                 }
                 g.add(v);
             });
-            return groups;
+            List<Set<V>> classes = new ArrayList<>(numberColors);
+            for (Set<V> c : groups.values()) {
+                classes.add(c);
+            }
+            return classes;
         }
 
         /**
