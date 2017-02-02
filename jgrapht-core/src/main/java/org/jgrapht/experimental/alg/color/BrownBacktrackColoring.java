@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by micha and Contributors.
+ * (C) Copyright 2010-2017, by Michael Behrisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -28,12 +28,15 @@ import org.jgrapht.experimental.alg.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
- * @author micha
+ * @author Michael Behrisch
  */
 public class BrownBacktrackColoring<V, E>
-    extends IntArrayGraphAlgorithm<V, E>
     implements ExactAlgorithm<Integer, V>
 {
+    private final List<V> _vertices;
+    private final int[][] _neighbors;
+    private final Map<V, Integer> _vertexToPos;
+
     private int[] _color;
     private int[] _colorCount;
     private BitSet[] _allowedColors;
@@ -46,7 +49,22 @@ public class BrownBacktrackColoring<V, E>
      */
     public BrownBacktrackColoring(final Graph<V, E> g)
     {
-        super(g);
+        final int numVertices = g.vertexSet().size();
+        _vertices = new ArrayList<>(numVertices);
+        _neighbors = new int[numVertices][];
+        _vertexToPos = new HashMap<>(numVertices);
+        for (V vertex : g.vertexSet()) {
+            _neighbors[_vertices.size()] = new int[g.edgesOf(vertex).size()];
+            _vertexToPos.put(vertex, _vertices.size());
+            _vertices.add(vertex);
+        }
+        for (int i = 0; i < numVertices; i++) {
+            int nbIndex = 0;
+            final V vertex = _vertices.get(i);
+            for (E e : g.edgesOf(vertex)) {
+                _neighbors[i][nbIndex++] = _vertexToPos.get(Graphs.getOppositeVertex(g, e, vertex));
+            }
+        }
     }
 
     void recursiveColor(int pos)
