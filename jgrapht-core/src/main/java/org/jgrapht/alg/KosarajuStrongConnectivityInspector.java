@@ -20,22 +20,17 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 /**
- * <p>
- * Complements the {@link org.jgrapht.alg.ConnectivityInspector} class with the capability to
- * compute the strongly connected components of a directed graph. The algorithm is implemented after
- * "Cormen et al: Introduction to agorithms", Chapter 22.5. It has a running time of O(V + E).
- * </p>
+ * Computes strongly connected components of a directed graph. The algorithm is implemented after
+ * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of O(V + E).
  *
  * <p>
  * Unlike {@link org.jgrapht.alg.ConnectivityInspector}, this class does not implement incremental
  * inspection. The full algorithm is executed at the first call of
  * {@link KosarajuStrongConnectivityInspector#stronglyConnectedSets()} or
  * {@link KosarajuStrongConnectivityInspector#isStronglyConnected()}.
- * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -45,70 +40,26 @@ import org.jgrapht.graph.*;
  * @since Feb 2, 2005
  */
 public class KosarajuStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+    extends AbstractStrongConnectivityInspector<V, E>
 {
-    // the graph to compute the strongly connected sets for
-    private final DirectedGraph<V, E> graph;
-
     // stores the vertices, ordered by their finishing time in first dfs
     private LinkedList<VertexData<V>> orderedVertices;
-
-    // the result of the computation, cached for future calls
-    private List<Set<V>> stronglyConnectedSets;
-
-    // the result of the computation, cached for future calls
-    private List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs;
 
     // maps vertices to their VertexData object
     private Map<V, VertexData<V>> vertexToVertexData;
 
     /**
-     * The constructor of the StrongConnectivityAlgorithm class.
+     * Constructor
      *
-     * @param directedGraph the graph to inspect
-     *
-     * @throws IllegalArgumentException if the input graph is null
+     * @param graph the input graph
+     * @throws NullPointerException if the input graph is null
      */
-    public KosarajuStrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
+    public KosarajuStrongConnectivityInspector(DirectedGraph<V, E> graph)
     {
-        if (directedGraph == null) {
-            throw new IllegalArgumentException("null not allowed for graph!");
-        }
-
-        graph = directedGraph;
-        vertexToVertexData = null;
-        orderedVertices = null;
-        stronglyConnectedSets = null;
-        stronglyConnectedSubgraphs = null;
+        super(graph);
     }
 
-    /**
-     * Returns the graph inspected by the StrongConnectivityAlgorithm.
-     *
-     * @return the graph inspected by this StrongConnectivityAlgorithm
-     */
-    public DirectedGraph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * Returns true if the graph of this <code>
-     * StronglyConnectivityInspector</code> instance is strongly connected.
-     *
-     * @return true if the graph is strongly connected, false otherwise
-     */
-    public boolean isStronglyConnected()
-    {
-        return stronglyConnectedSets().size() == 1;
-    }
-
-    /**
-     * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
-     * a strongly connected component within the given graph.
-     *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
-     */
+    @Override
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
@@ -150,35 +101,6 @@ public class KosarajuStrongConnectivityInspector<V, E>
         }
 
         return stronglyConnectedSets;
-    }
-
-    /**
-     * <p>
-     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
-     * a strongly connected component and will contain all vertices of that component. The subgraph
-     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
-     * </p>
-     *
-     * <p>
-     * NOTE: Calling this method will first execute
-     * {@link KosarajuStrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
-     * subgraphs, use that method.
-     * </p>
-     *
-     * @return a list of subgraphs representing the strongly connected components
-     */
-    public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
-    {
-        if (stronglyConnectedSubgraphs == null) {
-            List<Set<V>> sets = stronglyConnectedSets();
-            stronglyConnectedSubgraphs = new Vector<DirectedSubgraph<V, E>>(sets.size());
-
-            for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(new DirectedSubgraph<V, E>(graph, set, null));
-            }
-        }
-
-        return stronglyConnectedSubgraphs;
     }
 
     /*
