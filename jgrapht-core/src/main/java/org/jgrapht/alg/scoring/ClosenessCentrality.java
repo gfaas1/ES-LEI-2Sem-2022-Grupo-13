@@ -32,18 +32,24 @@ import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.graph.EdgeReversedGraph;
 
 /**
- * Closeness centrality. Computes the closeness centrality of each vertex of a graph. See
- * <a href="https://en.wikipedia.org/wiki/Closeness_centrality">wikipedia</a> for the definition of
- * closeness centrality.
+ * Closeness centrality.
+ * 
+ * <p>
+ * Computes the closeness centrality of each vertex of a graph. The closeness of a vertex x is
+ * defined as the reciprocal of the farness, that is H(x)= 1 / \sum_{y \neq x} d(x,y), where d(x,y)
+ * is the shortest path distance from x to y. When normalization is used, the score is multiplied by
+ * n-1 where n is the total number of vertices in the graph. For more details see
+ * <a href="https://en.wikipedia.org/wiki/Closeness_centrality">wikipedia</a> and
+ * <ul>
+ * <li>Alex Bavelas. Communication patterns in task-oriented groups. J. Acoust. Soc. Am,
+ * 22(6):725–730, 1950.</li>
+ * </ul>
  *
  * <p>
  * This implementation computes by default the closeness centrality using outgoing paths and
- * normalizes the scores. This behavior can be adjusted by the constructor arguments.
- * 
- * <p>
- * Note that the closeness centrality is not defined when the graph is disconnected. Nevertheless,
- * if there is no (directed) path between two vertices then the total number of vertices is used in
- * the formula instead of the path length.
+ * normalizes the scores. This behavior can be adjusted by the constructor arguments. Note that the
+ * closeness centrality is zero for every vertex if the graph is is disconnected. See
+ * {@link HarmonicCentrality} for a different approach in case of disconnected graphs.
  * 
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
@@ -57,17 +63,29 @@ import org.jgrapht.graph.EdgeReversedGraph;
  * @author Dimitrios Michail
  * @since January 2017
  */
-public final class ClosenessCentrality<V, E>
+public class ClosenessCentrality<V, E>
     implements VertexScoringAlgorithm<V, Double>
 {
-    private final Graph<V, E> graph;
-    private final boolean incoming;
-    private final boolean normalize;
-    private Map<V, Double> scores;
+    /**
+     * Underlying graph
+     */
+    protected final Graph<V, E> graph;
+    /**
+     * Whether to use incoming or outgoing paths
+     */
+    protected final boolean incoming;
+    /**
+     * Whether to normalize scores
+     */
+    protected final boolean normalize;
+    /**
+     * The actual scores
+     */
+    protected Map<V, Double> scores;
 
     /**
-     * Construct a new instance. By default the closeness centrality is normalized and computed
-     * using outgoing paths.
+     * Construct a new instance. By default the centrality is normalized and computed using outgoing
+     * paths.
      * 
      * @param graph the input graph
      */
@@ -119,7 +137,12 @@ public final class ClosenessCentrality<V, E>
         return scores.get(v);
     }
 
-    private void compute()
+    /**
+     * Get the shortest path algorithm for the paths computation.
+     * 
+     * @return the shortest path algorithm
+     */
+    protected ShortestPathAlgorithm<V, E> getShortestPathAlgorithm()
     {
         // setup graph
         Graph<V, E> g;
@@ -128,42 +151,47 @@ public final class ClosenessCentrality<V, E>
         } else {
             g = graph;
         }
-        int n = g.vertexSet().size();
-
-        // create result container
-        this.scores = new HashMap<>();
 
         // test if we can use Dijkstra
-        boolean nonNegativeWeights = true;
+        boolean noNegativeWeights = true;
         for (E e : g.edgeSet()) {
             double w = g.getEdgeWeight(e);
             if (w < 0.0) {
-                nonNegativeWeights = false;
+                noNegativeWeights = false;
                 break;
             }
         }
 
         // initialize shortest path algorithm
         ShortestPathAlgorithm<V, E> alg;
-        if (nonNegativeWeights) {
+        if (noNegativeWeights) {
             alg = new DijkstraShortestPath<>(g);
         } else {
             alg = new FloydWarshallShortestPaths<>(g);
         }
+        return alg;
+    }
+
+    /**
+     * Compute the centrality index
+     */
+    protected void compute()
+    {
+        // create result container
+        this.scores = new HashMap<>();
+
+        // initialize shortest path algorithm
+        ShortestPathAlgorithm<V, E> alg = getShortestPathAlgorithm();
 
         // compute shortest paths
-        for (V v : g.vertexSet()) {
+        int n = graph.vertexSet().size();
+        for (V v : graph.vertexSet()) {
             double sum = 0d;
 
             SingleSourcePaths<V, E> paths = alg.getPaths(v);
-            for (V u : g.vertexSet()) {
+            for (V u : graph.vertexSet()) {
                 if (!u.equals(v)) {
-                    double pathWeight = paths.getWeight(u);
-                    if (Double.isFinite(pathWeight)) {
-                        sum += paths.getWeight(u);
-                    } else {
-                        sum += n;
-                    }
+                    sum += paths.getWeight(u);
                 }
             }
 
