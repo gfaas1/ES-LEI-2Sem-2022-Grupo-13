@@ -30,7 +30,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Ewgenij Proschak
+ * @deprecated In favor of {@link org.jgrapht.alg.clique.BronKerboschCliqueFinder}.
  */
+@Deprecated
 public class BronKerboschCliqueFinder<V, E>
 {
     private final Graph<V, E> graph;

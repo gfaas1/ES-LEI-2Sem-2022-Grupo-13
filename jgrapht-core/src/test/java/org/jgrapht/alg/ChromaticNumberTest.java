@@ -30,6 +30,7 @@ import junit.framework.*;
  *
  * @author Andrew Newell
  */
+@Deprecated
 public class ChromaticNumberTest
     extends TestCase
 {

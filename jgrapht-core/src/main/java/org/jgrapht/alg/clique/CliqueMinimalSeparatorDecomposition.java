@@ -15,12 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.clique;
 
 import java.util.*;
 import java.util.Map.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 
 /**
@@ -41,10 +42,7 @@ import org.jgrapht.graph.*;
  * @author Thomas Tschager (thomas.tschager@inf.ethz.ch)
  * @author Tomas Hruz (tomas.hruz@inf.ethz.ch)
  * @author Philipp Hoppen
- * 
- * @deprecated Use {@link org.jgrapht.alg.clique.CliqueMinimalSeparatorDecomposition} instead.
  */
-@Deprecated
 public class CliqueMinimalSeparatorDecomposition<V, E>
 {
     /**
