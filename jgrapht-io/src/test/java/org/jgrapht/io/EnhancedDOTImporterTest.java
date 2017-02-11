@@ -31,7 +31,7 @@ import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.junit.Test;
 
-public class DOTImporter2Test
+public class EnhancedDOTImporterTest
 {
     private static final String NL = "\n";
 
