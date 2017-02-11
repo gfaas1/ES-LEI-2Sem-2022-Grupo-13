@@ -47,8 +47,11 @@ import org.jgrapht.graph.EdgeReversedGraph;
  *
  * <p>
  * This implementation computes by default the closeness centrality using outgoing paths and
- * normalizes the scores. This behavior can be adjusted by the constructor arguments. Note that the
- * closeness centrality is zero for every vertex if the graph is is disconnected. See
+ * normalizes the scores. This behavior can be adjusted by the constructor arguments.
+ *
+ * <p>
+ * When the graph is disconnected, the closeness centrality score equals 0 for all vertices. In the
+ * case of weakly connected digraphs, the closeness centrality of several vertices might be 0. See
  * {@link HarmonicCentrality} for a different approach in case of disconnected graphs.
  * 
  * <p>

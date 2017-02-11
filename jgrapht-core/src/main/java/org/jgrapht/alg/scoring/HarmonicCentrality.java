@@ -28,8 +28,9 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
  * 
  * <p>
  * The harmonic centrality of a vertex x is defined as H(x)=\sum_{y \neq x} 1/d(x,y), where d(x,y)
- * is the shortest path distance from x to y. When normalization is used the score is divided n-1
- * where n is the total number of vertices in the graph.
+ * is the shortest path distance from x to y. In case a distance d(x,y)=\infinity, then 1/d(x,y)=0.
+ * When normalization is used the score is divided by n-1 where n is the total number of vertices in
+ * the graph.
  *
  * For details see the following papers:
  * <ul>
@@ -104,7 +105,7 @@ public final class HarmonicCentrality<V, E>
                 }
             }
 
-            if (normalize) {
+            if (normalize && n > 1) {
                 this.scores.put(v, sum / (n - 1));
             } else {
                 this.scores.put(v, sum);

@@ -145,6 +145,24 @@ public class ClosenessCentralityTest
         assertEquals(0d, pr.getVertexScore("6"), 1e-9);
     }
 
+    @Test
+    public void testSingletonWithNormalize()
+    {
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        g.addVertex("1");
+        VertexScoringAlgorithm<String, Double> pr = new ClosenessCentrality<>(g, false, true);
+        assertEquals(Double.NaN, pr.getVertexScore("1"), 1e-9);
+    }
+
+    @Test
+    public void testSingletonWithoutNormalize()
+    {
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        g.addVertex("1");
+        VertexScoringAlgorithm<String, Double> pr = new ClosenessCentrality<>(g, false, false);
+        assertEquals(Double.POSITIVE_INFINITY, pr.getVertexScore("1"), 1e-9);
+    }
+
     private DirectedGraph<String, DefaultEdge> createInstance1()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
