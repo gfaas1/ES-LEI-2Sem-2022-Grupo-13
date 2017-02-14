@@ -262,6 +262,32 @@ public class StrongConnectivityAlgorithmTest
             condensation.toString());
     }
 
+    public void testCondensation2()
+    {
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V1);
+        g.addEdge(V3, V4);
+        g.addEdge(V4, V3);
+
+        g.addEdge(V1, V3);
+        g.addEdge(V2, V4);
+
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
+            new GabowStrongConnectivityInspector<>(g);
+
+        DirectedGraph<DirectedSubgraph<String, DefaultEdge>, DefaultEdge> condensation =
+            inspector.getCondensation();
+        assertEquals(
+            "([([v3, v4], [(v3,v4), (v4,v3)]), ([v1, v2], [(v1,v2), (v2,v1)])], [(([v1, v2], [(v1,v2), (v2,v1)]),([v3, v4], [(v3,v4), (v4,v3)]))])",
+            condensation.toString());
+    }
+
     private <V, E> StrongConnectivityAlgorithm<V, E> getStrongConnectivityInspector(
         DirectedGraph<V, E> graph, Class<?> strongConnectivityAlgorithm)
     {

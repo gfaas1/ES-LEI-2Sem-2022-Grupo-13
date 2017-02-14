@@ -27,8 +27,8 @@ import java.util.Vector;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
  * Base implementation of the strongly connected components algorithm.
@@ -84,7 +84,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
         List<Set<V>> sets = stronglyConnectedSets();
 
         DirectedGraph<DirectedSubgraph<V, E>, DefaultEdge> condensation =
-            new DirectedPseudograph<>(DefaultEdge.class);
+            new SimpleDirectedGraph<>(DefaultEdge.class);
         Map<V, DirectedSubgraph<V, E>> vertexToComponent = new HashMap<>();
 
         for (Set<V> set : sets) {
