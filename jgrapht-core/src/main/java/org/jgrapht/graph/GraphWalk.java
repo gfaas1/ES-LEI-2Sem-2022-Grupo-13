@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,7 +40,7 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author John Sichi
+ * @author Joris Kinable
  * 
  */
 public class GraphWalk<V, E>
