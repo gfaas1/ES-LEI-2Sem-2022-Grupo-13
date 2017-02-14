@@ -18,8 +18,6 @@
 package org.jgrapht;
 
 import org.jgrapht.alg.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
@@ -32,8 +30,8 @@ import org.junit.runners.*;
  * @author Barak Naveh
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ AllAlgTests.class, AllAlgUtilTests.class, AllGenerateTests.class,
-    AllGraphTests.class, AllTraverseTests.class, AllUtilTests.class })
+@Suite.SuiteClasses({ AllAlgTests.class, AllGraphTests.class, AllTraverseTests.class,
+    AllUtilTests.class })
 public final class AllTests
 {
 }
