@@ -25,13 +25,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.ClassBasedVertexFactory;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.junit.Test;
@@ -125,7 +128,29 @@ public class TwoApproxMetricTSPTest
         double mstWeight = new KruskalMinimumSpanningTree<>(g).getSpanningTree().getWeight();
         double tourWeight = tour.getWeight();
         assertTrue(2 * mstWeight >= tourWeight);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidInstanceDirected()
+    {
+        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        g.addVertex("A");
+
+        new TwoApproxMetricTSP<String, DefaultEdge>().getTour(g);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidInstanceNotComplete()
+    {
+        SimpleWeightedGraph<String, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        g.addVertex("A");
+        g.addVertex("B");
+        g.addVertex("C");
+        g.setEdgeWeight(g.addEdge("A", "B"), 20d);
+        g.setEdgeWeight(g.addEdge("A", "C"), 42d);
+
+        new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
     }
 
     private static <V, E> void assertHamiltonian(UndirectedGraph<V, E> g, GraphPath<V, E> path)
@@ -145,38 +170,18 @@ public class TwoApproxMetricTSPTest
         visited.add(start);
         assertEquals(visited.size(), g.vertexSet().size());
 
-        // check that edges are valid
+        // check again with edges
         List<E> edges = path.getEdgeList();
         if (edges.isEmpty()) {
             return;
         }
-
-        E prev = null;
-        E first = null, last = null;
-        Iterator<E> it = edges.iterator();
-        while (it.hasNext()) {
-            E cur = it.next();
-            if (prev == null) {
-                first = cur;
-            } else {
-                assertTrue(
-                    g.getEdgeSource(cur).equals(g.getEdgeSource(prev))
-                        || g.getEdgeSource(cur).equals(g.getEdgeTarget(prev))
-                        || g.getEdgeTarget(cur).equals(g.getEdgeSource(prev))
-                        || g.getEdgeTarget(cur).equals(g.getEdgeTarget(prev)));
-            }
-            if (!it.hasNext()) {
-                last = cur;
-            }
-            prev = cur;
+        Set<V> visited2 = new HashSet<>();
+        V v = path.getStartVertex();
+        for (E e : edges) {
+            v = Graphs.getOppositeVertex(g, e, v);
+            assertTrue(visited2.add(v));
         }
-        if (edges.size() > 1) {
-            assertTrue(
-                g.getEdgeSource(first).equals(g.getEdgeSource(last))
-                    || g.getEdgeSource(first).equals(g.getEdgeTarget(last))
-                    || g.getEdgeTarget(first).equals(g.getEdgeSource(last))
-                    || g.getEdgeTarget(first).equals(g.getEdgeTarget(last)));
-        }
+        assertEquals(visited2.size(), g.vertexSet().size());
         assertEquals(edges.size(), g.vertexSet().size());
     }
 

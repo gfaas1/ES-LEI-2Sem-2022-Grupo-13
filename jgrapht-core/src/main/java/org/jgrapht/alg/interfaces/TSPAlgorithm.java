@@ -41,8 +41,7 @@ public interface TSPAlgorithm<V, E>
      *
      * @param graph the input graph
      * @return a tour
-     * @throws IllegalArgumentException if the graph is not complete
      */
-    GraphPath<V, E> getTour(UndirectedGraph<V, E> graph);
+    GraphPath<V, E> getTour(Graph<V, E> graph);
 
 }

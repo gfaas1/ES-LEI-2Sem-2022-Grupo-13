@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
 import org.jgrapht.UndirectedGraph;
@@ -46,7 +47,8 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * <p>
  * This is an implementation of the folklore algorithm which returns a depth-first ordering of the
  * minimum spanning tree. The algorithm is a 2-approximation assuming that the instance satisfies
- * the triangle inequality. The running time is O(|V|^2 log|V|).
+ * the triangle inequality. The implementation requires the input graph to be undirected and
+ * complete. The running time is O(|V|^2 log|V|).
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">wikipedia</a> for more
@@ -68,13 +70,20 @@ public class TwoApproxMetricTSP<V, E>
     }
 
     /**
-     * {@inheritDoc}
-     * 
      * Computes a 2-approximate tour.
+     * 
+     * @param graph the input graph
+     * @return a tour
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if the graph is not complete
+     * @throws IllegalArgumentException if the graph contains no vertices
      */
     @Override
-    public GraphPath<V, E> getTour(UndirectedGraph<V, E> graph)
+    public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
+        if (!(graph instanceof UndirectedGraph<?, ?>)) {
+            throw new IllegalArgumentException("Graph must be undirected");
+        }
         if (!GraphTests.isComplete(graph)) {
             throw new IllegalArgumentException("Graph is not complete");
         }
@@ -107,7 +116,7 @@ public class TwoApproxMetricTSP<V, E>
          */
         int n = graph.vertexSet().size();
         Set<V> found = new HashSet<>(n);
-        List<V> tour = new ArrayList<>(n);
+        List<V> tour = new ArrayList<>(n + 1);
         V start = graph.vertexSet().iterator().next();
         DepthFirstIterator<V, DefaultEdge> dfsIt = new DepthFirstIterator<>(mst, start);
         while (dfsIt.hasNext()) {
@@ -133,7 +142,7 @@ public class TwoApproxMetricTSP<V, E>
             tourWeight += graph.getEdgeWeight(e);
             u = v;
         }
-        return new GraphWalk<>(graph, start, start, null, tourEdges, tourWeight);
+        return new GraphWalk<>(graph, start, start, tour, tourEdges, tourWeight);
     }
 
 }
