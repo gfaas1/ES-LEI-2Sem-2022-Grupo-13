@@ -36,7 +36,10 @@ import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.Multigraph;
 import org.junit.Test;
 
-public class DOTImporterTest
+/**
+ * 1st part of tests for DOTImporter. See also {@link DOTImporter2Test}.
+ */
+public class DOTImporter1Test
 {
 
     @Test

@@ -31,7 +31,10 @@ import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.junit.Test;
 
-public class EnhancedDOTImporterTest
+/**
+ * 2nd part of tests for DOTImporter. See also {@link DOTImporter1Test}.
+ */
+public class DOTImporter2Test
 {
     private static final String NL = "\n";
 
