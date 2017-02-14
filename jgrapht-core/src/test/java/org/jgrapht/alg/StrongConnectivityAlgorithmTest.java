@@ -42,6 +42,7 @@ public class StrongConnectivityAlgorithmTest
     private static final String V2 = "v2";
     private static final String V3 = "v3";
     private static final String V4 = "v4";
+    private static final String V5 = "v5";
 
     // ~ Instance fields --------------------------------------------------------
 
@@ -234,6 +235,57 @@ public class StrongConnectivityAlgorithmTest
         Set<Set<Integer>> expected = new HashSet<>();
         expected.add(graph.vertexSet());
         assertEquals(expected, new HashSet<>(sc.stronglyConnectedSets()));
+    }
+
+    public void testCondensation()
+    {
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+        g.addVertex(V5);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V1); // strongly connected
+
+        g.addEdge(V3, V4); // only weakly connected
+        g.addEdge(V5, V4); // only weakly connected
+
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
+            new GabowStrongConnectivityInspector<>(g);
+
+        DirectedGraph<DirectedSubgraph<String, DefaultEdge>, DefaultEdge> condensation =
+            inspector.getCondensation();
+        assertEquals(
+            "([([v1, v2], [(v1,v2), (v2,v1)]), ([v4], []), ([v3], []), ([v5], [])], [(([v3], []),([v4], [])), (([v5], []),([v4], []))])",
+            condensation.toString());
+    }
+
+    public void testCondensation2()
+    {
+        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addVertex(V3);
+        g.addVertex(V4);
+
+        g.addEdge(V1, V2);
+        g.addEdge(V2, V1);
+        g.addEdge(V3, V4);
+        g.addEdge(V4, V3);
+
+        g.addEdge(V1, V3);
+        g.addEdge(V2, V4);
+
+        StrongConnectivityAlgorithm<String, DefaultEdge> inspector =
+            new GabowStrongConnectivityInspector<>(g);
+
+        DirectedGraph<DirectedSubgraph<String, DefaultEdge>, DefaultEdge> condensation =
+            inspector.getCondensation();
+        assertEquals(
+            "([([v3, v4], [(v3,v4), (v4,v3)]), ([v1, v2], [(v1,v2), (v2,v1)])], [(([v1, v2], [(v1,v2), (v2,v1)]),([v3, v4], [(v3,v4), (v4,v3)]))])",
+            condensation.toString());
     }
 
     private <V, E> StrongConnectivityAlgorithm<V, E> getStrongConnectivityInspector(

@@ -17,16 +17,21 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.DirectedGraph;
 
 /**
- * Allows obtaining the strongly connected components of a directed graph. The implemented algorithm
- * follows Cheriyan-Mehlhorn/Gabow's algorithm Presented in Path-based depth-first search for strong
- * and biconnected components by Gabow (2000). The running time is order of O(|V|+|E|)
+ * Computes the strongly connected components of a directed graph. The implemented algorithm follows
+ * Cheriyan-Mehlhorn/Gabow's algorithm presented in Path-based depth-first search for strong and
+ * biconnected components by Gabow (2000). The running time is order of O(|V|+|E|).
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -34,21 +39,11 @@ import org.jgrapht.graph.*;
  * @author Sarah Komla-Ebri
  * @since September, 2013
  */
-
 public class GabowStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+    extends AbstractStrongConnectivityInspector<V, E>
 {
-    // the graph to compute the strongly connected sets
-    private final DirectedGraph<V, E> graph;
-
     // stores the vertices
     private Deque<VertexNumber<V>> stack = new ArrayDeque<>();
-
-    // the result of the computation, cached for future calls
-    private List<Set<V>> stronglyConnectedSets;
-
-    // the result of the computation, cached for future calls
-    private List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs;
 
     // maps vertices to their VertexNumber object
     private Map<V, VertexNumber<V>> vertexToVertexNumber;
@@ -60,50 +55,17 @@ public class GabowStrongConnectivityInspector<V, E>
     private int c;
 
     /**
-     * The constructor of GabowStrongConnectivityInspector class.
+     * Constructor
      *
-     * @param directedGraph the graph to inspect
-     *
-     * @throws IllegalArgumentException in case the graph is null
+     * @param graph the graph to inspect
+     * @throws NullPointerException in case the graph is null
      */
-    public GabowStrongConnectivityInspector(DirectedGraph<V, E> directedGraph)
+    public GabowStrongConnectivityInspector(DirectedGraph<V, E> graph)
     {
-        if (directedGraph == null) {
-            throw new IllegalArgumentException("null not allowed for graph!");
-        }
-
-        graph = directedGraph;
-        vertexToVertexNumber = null;
-
-        stronglyConnectedSets = null;
+        super(graph);
     }
 
-    /**
-     * Returns the graph inspected
-     *
-     * @return the graph inspected
-     */
-    public DirectedGraph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * Returns true if the graph instance is strongly connected.
-     *
-     * @return true if the graph is strongly connected, false otherwise
-     */
-    public boolean isStronglyConnected()
-    {
-        return stronglyConnectedSets().size() == 1;
-    }
-
-    /**
-     * Computes a {@link List} of {@link Set}s, where each set contains vertices which together form
-     * a strongly connected component within the given graph.
-     *
-     * @return <code>List</code> of <code>Set</code> s containing the strongly connected components
-     */
+    @Override
     public List<Set<V>> stronglyConnectedSets()
     {
         if (stronglyConnectedSets == null) {
@@ -125,35 +87,6 @@ public class GabowStrongConnectivityInspector<V, E>
         }
 
         return stronglyConnectedSets;
-    }
-
-    /**
-     * <p>
-     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
-     * a strongly connected component and will contain all vertices of that component. The subgraph
-     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
-     * </p>
-     *
-     * <p>
-     * NOTE: Calling this method will first execute
-     * {@link GabowStrongConnectivityInspector#stronglyConnectedSets()}. If you don't need
-     * subgraphs, use that method.
-     * </p>
-     *
-     * @return a list of subgraphs representing the strongly connected components
-     */
-    public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
-    {
-        if (stronglyConnectedSubgraphs == null) {
-            List<Set<V>> sets = stronglyConnectedSets();
-            stronglyConnectedSubgraphs = new Vector<>(sets.size());
-
-            for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(new DirectedSubgraph<>(graph, set, null));
-            }
-        }
-
-        return stronglyConnectedSubgraphs;
     }
 
     /*

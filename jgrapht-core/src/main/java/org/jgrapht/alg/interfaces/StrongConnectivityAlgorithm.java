@@ -23,27 +23,25 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 /**
- * An interface to the StrongConnectivityInspector algorithm classes. These classes verify whether
- * the graph is strongly connected.
+ * A strong connectivity inspector algorithm.
  *
- * @param <V> vertex concept type
- * @param <E> edge concept type
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Sarah Komla-Ebri
- * @since September, 2013
+ * @since September 2013
  */
 public interface StrongConnectivityAlgorithm<V, E>
 {
     /**
-     * Returns the graph inspected by the StrongConnectivityAlgorithm.
+     * Return the underlying graph.
      *
-     * @return the graph inspected by this StrongConnectivityAlgorithm
+     * @return the underlying graph
      */
     DirectedGraph<V, E> getGraph();
 
     /**
-     * Returns true if the graph of this <code>
-     * StrongConnectivityAlgorithm</code> instance is strongly connected.
+     * Returns true if the graph is strongly connected, false otherwise.
      *
      * @return true if the graph is strongly connected, false otherwise
      */
@@ -58,15 +56,22 @@ public interface StrongConnectivityAlgorithm<V, E>
     List<Set<V>> stronglyConnectedSets();
 
     /**
-     * <p>
      * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
      * a strongly connected component and will contain all vertices of that component. The subgraph
      * will have an edge (u,v) iff u and v are contained in the strongly connected component.
-     * </p>
      *
      * @return a list of subgraphs representing the strongly connected components
      */
     List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
+
+    /**
+     * Compute the condensation of the given graph. If each strongly connected component is
+     * contracted to a single vertex, the resulting graph is a directed acyclic graph, the
+     * condensation of the graph.
+     * 
+     * @return the condensation of the given graph
+     */
+    DirectedGraph<DirectedSubgraph<V, E>, DefaultEdge> getCondensation();
 }
 
 // End StrongConnectivityAlgorithm.java
