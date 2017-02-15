@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
     - Extended the network analysis algorithms by adding closeness centrality computation (contributed by Dimitrios Michail)
     - Added interface `StrongConnectivityAlgorithm`; Extracted common code of strong connectivity inspectors to abstract base class; added method which computes the graph condensation. (contributed by Dimitrios Michail)
     - Added interface `TSPAlgorithm`, Added 2-approximation algorithm for metric TSP `TwoApproxMetricTSP`. The old implementation `HamiltonianCycle` is now deprecated due to its reduced efficiency. (contributed by Dimitrios Michail)
+    - Added a new, scalable `DOTImporter` which handles the full DOT specification including XML string identifiers. A dependency on the commons-lang3 package has been added to handle escaping/unescaping of strings efficiently; Updated antlr version to 4.6. (contributed by Dimitrios Michail)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
