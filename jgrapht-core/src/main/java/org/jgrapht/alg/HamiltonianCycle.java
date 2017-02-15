@@ -28,7 +28,9 @@ import org.jgrapht.graph.*;
  * Problem</a>.
  *
  * @author Andrew Newell
+ * @deprecated Use {@link org.jgrapht.alg.tour.TwoApproxMetricTSP} instead.
  */
+@Deprecated
 public class HamiltonianCycle
 {
     /**
