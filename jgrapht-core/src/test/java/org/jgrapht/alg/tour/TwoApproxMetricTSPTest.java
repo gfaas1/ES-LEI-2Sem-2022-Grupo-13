@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.ClassBasedVertexFactory;
@@ -153,36 +153,49 @@ public class TwoApproxMetricTSPTest
         new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
     }
 
-    private static <V, E> void assertHamiltonian(UndirectedGraph<V, E> g, GraphPath<V, E> path)
+    private static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)
     {
-        // check that all vertices are visited
-        List<V> vertices = path.getVertexList();
-        Iterator<V> vIt = vertices.iterator();
-        V start = vIt.next();
-        Set<V> visited = new HashSet<>();
-        while (vIt.hasNext()) {
-            V v = vIt.next();
-            assertTrue(visited.add(v));
-            if (!vIt.hasNext()) {
-                assert (v.equals(start));
-            }
-        }
-        visited.add(start);
-        assertEquals(visited.size(), g.vertexSet().size());
+        List<V> tourVertices = path.getVertexList();
+        List<E> tourEdges = path.getEdgeList();
 
-        // check again with edges
-        List<E> edges = path.getEdgeList();
-        if (edges.isEmpty()) {
+        // check tour length, beginning and end of the tour
+        assertEquals(path.getStartVertex(), path.getEndVertex());
+        assertEquals(path.getStartVertex(), tourVertices.get(0));
+        if (g.vertexSet().size() == 1) {
+            assertTrue(tourEdges.isEmpty());
+            assertEquals(path.getWeight(), 0.0, 1e-9);
             return;
         }
-        Set<V> visited2 = new HashSet<>();
+
+        assertEquals(g.vertexSet().size(), tourVertices.size() - 1);
+        assertEquals(g.vertexSet().size(), tourEdges.size());
+
+        // check tour with edges
+        double weight = 0d;
         V v = path.getStartVertex();
-        for (E e : edges) {
+        Set<V> visited = new HashSet<>();
+        for (E e : tourEdges) {
             v = Graphs.getOppositeVertex(g, e, v);
-            assertTrue(visited2.add(v));
+            assertTrue(visited.add(v));
+            weight += g.getEdgeWeight(e);
         }
-        assertEquals(visited2.size(), g.vertexSet().size());
-        assertEquals(edges.size(), g.vertexSet().size());
+        assertEquals(path.getWeight(), weight, 1e-9);
+        assertEquals(visited.size(), g.vertexSet().size());
+
+        // check tour with vertices
+        visited.clear();
+        Iterator<V> vIt = tourVertices.iterator();
+        V start = vIt.next();
+        visited.add(start);
+        while (vIt.hasNext()) {
+            v = vIt.next();
+            if (!vIt.hasNext()) {
+                assertTrue(v.equals(start));
+            } else {
+                assertTrue(visited.add(v));
+            }
+        }
+        assertEquals(visited.size(), g.vertexSet().size());
     }
 
 }
