@@ -8,7 +8,8 @@ Changes to JGraphT in each version:
     - Moved all importers/exporters from org.jgrapht.ext to org.jgrapht.io. This change allows users to use importers/exporters without the dependency on the various visualization libraries. (contributed by Dimitrios Michail)
     - Added vertex coloring interface `VertexColoringAlgorithm`, as well as several greedy graph coloring algorithms (`LargestDegreeFirstColoring`, `RandomGreedyColoring`, `SaturationDegreeColoring`, `SmallestDegreeLastColoring`). The former `ChromaticNumber` class is now deprecated, as well as some related classes in the experimental package. (contributed by Dimitrios Michail)
     - Extended the network analysis algorithms by adding closeness centrality computation (contributed by Dimitrios Michail)
-    - added interface `StrongConnectivityAlgorithm`; Extracted common code of strong connectivity inspectors to abstract base class; added method which computes the graph condensation. (contributed by Dimitrios Michail)
+    - Added interface `StrongConnectivityAlgorithm`; Extracted common code of strong connectivity inspectors to abstract base class; added method which computes the graph condensation. (contributed by Dimitrios Michail)
+    - Added interface `TSPAlgorithm`, Added 2-approximation algorithm for metric TSP `TwoApproxMetricTSP`. The old implementation `HamiltonianCycle` is now deprecated due to its reduced efficiency. (contributed by Dimitrios Michail)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
