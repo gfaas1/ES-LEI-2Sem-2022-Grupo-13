@@ -17,46 +17,32 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.DOTImporter;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.IntegerComponentNameProvider;
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
-import junit.framework.*;
+import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.graph.ClassBasedEdgeFactory;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.graph.Multigraph;
+import org.junit.Test;
 
-public class DOTImporterTest
-    extends TestCase
+/**
+ * 1st part of tests for DOTImporter. See also {@link DOTImporter2Test}.
+ */
+public class DOTImporter1Test
 {
 
-    private static class GraphWithID
-        extends AbstractBaseGraph<String, DefaultEdge>
-        implements UndirectedGraph<String, DefaultEdge>
-    {
-
-        private static final long serialVersionUID = 1L;
-
-        String id = null;
-
-        protected GraphWithID()
-        {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
-        }
-
-    }
-
-    private static DOTImporter<String, DefaultEdge> idGraphImporter =
-        new DOTImporter<>(null, null, null, (component, attributes) -> {
-            if (component instanceof GraphWithID) {
-                ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
-            }
-        });
-
+    @Test
     public void testImportID()
         throws ImportException
     {
@@ -70,12 +56,12 @@ public class DOTImporterTest
         GraphWithID result = new GraphWithID();
         assertNull(result.id);
 
-        idGraphImporter.importGraph(result, new StringReader(input));
+        buildGraphIDImporter().importGraph(result, new StringReader(input));
         assertEquals(expected.toString(), result.toString());
         assertEquals(expected.id, id);
-
     }
 
+    @Test
     public void testImportWrongID()
         throws ImportException
     {
@@ -85,14 +71,16 @@ public class DOTImporterTest
         GraphWithID result = new GraphWithID();
 
         try {
-            idGraphImporter.importGraph(result, new StringReader(input));
+            buildGraphIDImporter().importGraph(result, new StringReader(input));
             fail("Should not get here");
         } catch (ImportException e) {
             assertEquals(
-                e.getMessage(), "ID in the graph is not formatted correctly: '" + invalidID + "'");
+                "Failed to import DOT graph: line 1:7 extraneous input 'test' expecting '{'",
+                e.getMessage());
         }
     }
 
+    @Test
     public void testInvalidHeader()
         throws ImportException
     {
@@ -104,7 +92,7 @@ public class DOTImporterTest
             GraphWithID result = new GraphWithID();
 
             try {
-                idGraphImporter.importGraph(result, new StringReader(invalidInput));
+                buildGraphIDImporter().importGraph(result, new StringReader(invalidInput));
                 fail("Correctly loaded incorrect graph: " + invalidInput);
             } catch (ImportException e) {
                 // this is the expected exception
@@ -114,24 +102,27 @@ public class DOTImporterTest
         }
     }
 
+    @Test
     public void testImportOnlyGraphKeyword()
         throws ImportException
     {
         String input = "graph {\n}\n";
         GraphWithID result = new GraphWithID();
-        idGraphImporter.importGraph(result, new StringReader(input));
+        buildGraphIDImporter().importGraph(result, new StringReader(input));
         assertNull(result.id);
     }
 
+    @Test
     public void testImportNoID()
         throws ImportException
     {
         String input = "strict graph {\n}\n";
         GraphWithID result = new GraphWithID();
-        idGraphImporter.importGraph(result, new StringReader(input));
+        buildGraphIDImporter().importGraph(result, new StringReader(input));
         assertNull(result.id);
     }
 
+    @Test
     public void testUndirectedWithLabels()
         throws ImportException
     {
@@ -143,7 +134,7 @@ public class DOTImporterTest
         expected.addVertex("2");
         expected.addEdge("1", "2");
 
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
 
         Multigraph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
         importer.importGraph(result, new StringReader(input));
@@ -155,6 +146,7 @@ public class DOTImporterTest
 
     }
 
+    @Test
     public void testDirectedNoLabels()
         throws ImportException
     {
@@ -171,7 +163,7 @@ public class DOTImporterTest
         expected.addEdge("b", "c");
         expected.addEdge("b", "d");
 
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
 
         DirectedMultigraph<String, DefaultEdge> result =
             new DirectedMultigraph<>(DefaultEdge.class);
@@ -184,6 +176,7 @@ public class DOTImporterTest
 
     }
 
+    @Test
     public void testDirectedSameLabels()
         throws ImportException
     {
@@ -199,11 +192,11 @@ public class DOTImporterTest
         expected.addEdge("a", "b");
         expected.addEdge("b", "c");
 
-        DOTImporter<String,
-            DefaultEdge> importer = new DOTImporter<>(
-                (label, attributes) -> label, (from, to, label, attributes) -> new DefaultEdge(),
-                (vertex, attributes) -> {
-                });
+        VertexProvider<String> vp = (label, attrs) -> label;
+        EdgeProvider<String, DefaultEdge> ep = (f, t, l, attrs) -> new DefaultEdge();
+        ComponentUpdater<String> cu = (v, attrs) -> {
+        };
+        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>(vp, ep, cu);
 
         DirectedMultigraph<String, DefaultEdge> result =
             new DirectedMultigraph<>(DefaultEdge.class);
@@ -212,6 +205,7 @@ public class DOTImporterTest
         assertEquals(expected.toString(), result.toString());
     }
 
+    @Test
     public void testMultiLinksUndirected()
         throws ImportException
     {
@@ -225,7 +219,7 @@ public class DOTImporterTest
         expected.addEdge("1", "2", new DefaultEdge());
         expected.addEdge("1", "2", new DefaultEdge());
 
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
 
         Multigraph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
         importer.importGraph(result, new StringReader(input));
@@ -236,6 +230,7 @@ public class DOTImporterTest
         assertEquals(2, result.edgeSet().size());
     }
 
+    @Test
     public void testExportImportLoop()
         throws ImportException, ExportException, UnsupportedEncodingException
     {
@@ -251,7 +246,7 @@ public class DOTImporterTest
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(
             vertex -> vertex, null, new IntegerComponentNameProvider<DefaultEdge>());
 
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(start, os);
@@ -269,6 +264,7 @@ public class DOTImporterTest
 
     }
 
+    @Test
     public void testDashLabelVertex()
         throws ImportException
     {
@@ -277,23 +273,27 @@ public class DOTImporterTest
 
         Multigraph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
 
-        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>((label, attributes) -> {
-            if (label.equals("a")) {
-                assertTrue(
-                    attributes.get("label").equals("------this------contains-------dashes------"));
-            }
+        Map<String, Map<String, String>> attrs = new HashMap<>();
+
+        VertexProvider<String> vp = (label, a) -> {
+            attrs.put(label, a);
             return label;
-        }, (from, to, label, attributes) -> new DefaultEdge(), (vertex, attributes) -> {
-            // do nothing strings can't update.
-        });
+        };
+        EdgeProvider<String, DefaultEdge> ep = (f, t, l, a) -> new DefaultEdge();
+        ComponentUpdater<String> cu = (v, a) -> {
+        };
+        DOTImporter<String, DefaultEdge> importer =
+            new DOTImporter<String, DefaultEdge>(vp, ep, cu);
 
         importer.importGraph(result, new StringReader(input));
 
         assertEquals(1, result.vertexSet().size());
-        assertTrue(result.vertexSet().contains("a"));
-
+        String v = result.vertexSet().stream().findFirst().get();
+        assertEquals("a", v);
+        assertEquals("------this------contains-------dashes------", attrs.get("a").get("label"));
     }
 
+    @Test
     public void testAttributesWithNoQuotes()
         throws ImportException
     {
@@ -302,11 +302,10 @@ public class DOTImporterTest
             // the extra label will be ignored but not cause any problems.
                 + "  1 -- 2 [ label = \"friend\" \"foo\" = wibble];\n" + "}";
 
-        Multigraph<TestVertex, TestEdge> result = new Multigraph<>(TestEdge.class);
-        DOTImporter<TestVertex,
-            TestEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new TestEdge(label, attributes));
+        Multigraph<TestVertex, TestEdge> result =
+            new Multigraph<TestVertex, TestEdge>(TestEdge.class);
+        DOTImporter<TestVertex, TestEdge> importer = new DOTImporter<TestVertex, TestEdge>(
+            (l, a) -> new TestVertex(l, a), (f, t, l, a) -> new TestEdge(l, a));
 
         importer.importGraph(result, new StringReader(input));
         assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
@@ -332,39 +331,46 @@ public class DOTImporterTest
 
     }
 
+    @Test
     public void testEmptyString()
     {
-        testGarbage("", "Dot string was empty");
+        testGarbage(
+            "",
+            "Failed to import DOT graph: line 1:0 mismatched input '' expecting {GRAPH, DIGRAPH}");
     }
 
+    @Test
     public void testGarbageStringEnoughLines()
     {
         String input =
             "jsfhg kjdsf hgkfds\n" + "fdsgfdsgfd\n" + "gfdgfdsgfdsg\n" + "jdhgkjfdshgsjkhl\n";
 
-        testGarbage(input, "Invalid Header");
+        testGarbage(
+            input,
+            "Failed to import DOT graph: line 1:0 mismatched input 'jsfhg' expecting {STRICT, GRAPH, DIGRAPH}");
     }
 
+    @Test
     public void testGarbageStringInvalidFirstLine()
     {
         String input = "jsfhgkjdsfhgkfds\n" + "fdsgfdsgfd\n";
 
-        testGarbage(input, "Invalid Header");
+        testGarbage(
+            input,
+            "Failed to import DOT graph: line 1:0 mismatched input 'jsfhgkjdsfhgkfds' expecting {STRICT, GRAPH, DIGRAPH}");
     }
 
+    @Test
     public void testGarbageStringNotEnoughLines()
     {
         String input = "jsfhgkjdsfhgkfds\n";
 
-        testGarbage(input, "Invalid Header");
+        testGarbage(
+            input,
+            "Failed to import DOT graph: line 1:0 mismatched input 'jsfhgkjdsfhgkfds' expecting {STRICT, GRAPH, DIGRAPH}");
     }
 
-    public void testIncompatibleGraphMulti()
-    {
-        String input = "strict digraph G {\n" + "a -- b\n" + "}";
-        testGarbage(input, "graph defines strict but Multigraph given.");
-    }
-
+    @Test
     public void testIncompatibleDirectedGraph()
     {
         String input = "digraph G {\n" + "a -- b\n" + "}";
@@ -372,9 +378,10 @@ public class DOTImporterTest
         Multigraph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
 
         testGarbageGraph(
-            input, "input asks for directed graph but undirected graph provided.", result);
+            input, "Failed to import DOT graph: Provided graph is not directed", result);
     }
 
+    @Test
     public void testIncompatibleGraph()
     {
         String input = "graph G {\n" + "a -- b\n" + "}";
@@ -383,10 +390,12 @@ public class DOTImporterTest
             new DirectedMultigraph<>(DefaultEdge.class);
 
         testGarbageGraph(
-            input, "input asks for undirected graph and directed graph provided.", result);
+            input, "Failed to import DOT graph: Provided graph is not undirected", result);
     }
 
-    public void testInvalidAttributes()
+    @Test
+    public void testAttributesWithNoValues()
+        throws ImportException
     {
         String input =
             "graph G {\n" + "  1 [ label = \"bob\" \"foo\" ];\n" + "  2 [ label = \"fred\" ];\n"
@@ -395,30 +404,28 @@ public class DOTImporterTest
 
         Multigraph<TestVertex, TestEdge> graph = new Multigraph<>(TestEdge.class);
 
-        DOTImporter<TestVertex,
-            TestEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new TestEdge(label, attributes));
+        VertexProvider<TestVertex> vp = (label, attrs) -> new TestVertex(label, attrs);
+        EdgeProvider<TestVertex, TestEdge> ep = (f, t, l, attrs) -> new TestEdge(l, attrs);
+        DOTImporter<TestVertex, TestEdge> importer = new DOTImporter<TestVertex, TestEdge>(vp, ep);
 
         try {
             importer.importGraph(graph, new StringReader(input));
-            fail("Should not get here");
+            fail("Failed to import DOT graph: line 2:26 mismatched input ']' expecting '='");
         } catch (ImportException e) {
-            assertEquals("Invalid attributes", e.getMessage());
         }
     }
 
+    @Test
     public void testUpdatingVertex()
         throws ImportException
     {
         String input = "graph G {\n" + "a -- b;\n" + "a [foo=\"bar\"];\n" + "}";
         Multigraph<TestVertex, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
 
-        DOTImporter<TestVertex,
-            DefaultEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new DefaultEdge(),
-                (vertex, attributes) -> vertex.getAttributes().putAll(attributes));
+        VertexProvider<TestVertex> vp = (label, attrs) -> new TestVertex(label, attrs);
+        EdgeProvider<TestVertex, DefaultEdge> ep = (f, t, l, attrs) -> new DefaultEdge();
+        ComponentUpdater<TestVertex> cu = (v, attrs) -> v.getAttributes().putAll(attrs);
+        DOTImporter<TestVertex, DefaultEdge> importer = new DOTImporter<>(vp, ep, cu);
 
         importer.importGraph(result, new StringReader(input));
 
@@ -434,78 +441,59 @@ public class DOTImporterTest
 
     }
 
+    @Test
     public void testParametersWithSemicolons()
         throws ImportException
     {
         String input = "graph G {\n  1 [ label=\"this label; contains a semi colon\" ];\n}\n";
-        Multigraph<TestVertex, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
-        DOTImporter<TestVertex,
-            DefaultEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new DefaultEdge());
+        Multigraph<TestVertex, DefaultEdge> result =
+            new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+        DOTImporter<TestVertex, DefaultEdge> importer = new DOTImporter<TestVertex, DefaultEdge>(
+            (l, a) -> new TestVertex(l, a), (f, t, l, a) -> new DefaultEdge());
 
         importer.importGraph(result, new StringReader(input));
         assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
         assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
     }
 
+    @Test
     public void testLabelsWithEscapedSemicolons()
         throws ImportException
     {
         String escapedLabel = "this \\\"label; \\\"contains an escaped semi colon";
-        String input = "graph G {\n node [ label=\"" + escapedLabel + "\" ];\n}\n";
-        Multigraph<TestVertex, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
-        DOTImporter<TestVertex, DefaultEdge> importer = new DOTImporter<>((label, attributes) -> {
-            if (label.equals("node")) {
-                assertEquals(attributes.get("label"), escapedLabel);
-            }
-            return new TestVertex(label, attributes);
-        }, (from, to, label, attributes) -> new DefaultEdge());
+        String input = "graph G {\n node [ label=\"" + escapedLabel + "\" ];\n node0 }\n";
+        Multigraph<TestVertex, DefaultEdge> result =
+            new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+        DOTImporter<TestVertex, DefaultEdge> importer = new DOTImporter<TestVertex, DefaultEdge>(
+            (label, attrs) -> new TestVertex(label, attrs), (f, t, l, a) -> new DefaultEdge());
 
         importer.importGraph(result, new StringReader(input));
         assertEquals("wrong size of vertexSet", 1, result.vertexSet().size());
         assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
         assertEquals(
-            "wrong parsing", "node", ((TestVertex) result.vertexSet().toArray()[0]).getId());
+            "wrong parsing", "node0", ((TestVertex) result.vertexSet().toArray()[0]).getId());
+        assertEquals(
+            "wrong parsing", "this \"label; \"contains an escaped semi colon",
+            ((TestVertex) result.vertexSet().toArray()[0]).getAttributes().get("label"));
     }
 
+    @Test
     public void testNoLineEndBetweenNodes()
         throws ImportException
     {
         String input =
             "graph G {\n  1 [ label=\"this label; contains a semi colon\" ];  2 [ label=\"wibble\" ] \n}\n";
-        Multigraph<TestVertex, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
-        DOTImporter<TestVertex,
-            DefaultEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new DefaultEdge());
+        Multigraph<TestVertex, DefaultEdge> result =
+            new Multigraph<TestVertex, DefaultEdge>(DefaultEdge.class);
+        DOTImporter<TestVertex, DefaultEdge> importer = new DOTImporter<TestVertex, DefaultEdge>(
+            (l, a) -> new TestVertex(l, a), (f, t, l, a) -> new DefaultEdge());
 
         importer.importGraph(result, new StringReader(input));
         assertEquals("wrong size of vertexSet", 2, result.vertexSet().size());
         assertEquals("wrong size of edgeSet", 0, result.edgeSet().size());
     }
 
-    public void testNonConfiguredUpdate()
-    {
-        String input = "graph G {\n" + "a -- b // this is before the attributes for this test\n"
-            + "a [foo=\"bar\"];\n" + "}";
-        Multigraph<TestVertex, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
-        DOTImporter<TestVertex,
-            DefaultEdge> importer = new DOTImporter<>(
-                (label, attributes) -> new TestVertex(label, attributes),
-                (from, to, label, attributes) -> new DefaultEdge());
-
-        try {
-            importer.importGraph(result, new StringReader(input));
-            fail("should not get here");
-        } catch (ImportException e) {
-            assertEquals(
-                "exception not as expected",
-                "Update required for vertex a but no vertexUpdater provided", e.getMessage());
-        }
-
-    }
-
+    @Test
     public void testWithReader()
         throws ImportException
     {
@@ -517,7 +505,7 @@ public class DOTImporterTest
         expected.addVertex("2");
         expected.addEdge("1", "2");
 
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
 
         Graph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
         importer.importGraph(result, new StringReader(input));
@@ -539,7 +527,7 @@ public class DOTImporterTest
     private void testGarbageGraph(
         String input, String expected, AbstractBaseGraph<String, DefaultEdge> graph)
     {
-        DOTImporter<String, DefaultEdge> importer = buildImporter();
+        GraphImporter<String, DefaultEdge> importer = buildImporter();
         try {
             importer.importGraph(graph, new StringReader(input));
             fail("Should not get here");
@@ -548,10 +536,50 @@ public class DOTImporterTest
         }
     }
 
-    private DOTImporter<String, DefaultEdge> buildImporter()
+    private GraphImporter<String, DefaultEdge> buildImporter()
     {
-        return new DOTImporter<>(
-            (label, attributes) -> label, (from, to, label, attributes) -> new DefaultEdge());
+        return new DOTImporter<String, DefaultEdge>(new VertexProvider<String>()
+        {
+            @Override
+            public String buildVertex(String label, Map<String, String> attributes)
+            {
+                return label;
+            }
+        }, new EdgeProvider<String, DefaultEdge>()
+        {
+            @Override
+            public DefaultEdge buildEdge(
+                String from, String to, String label, Map<String, String> attributes)
+            {
+                return new DefaultEdge();
+            }
+        });
+    }
+
+    private static class GraphWithID
+        extends AbstractBaseGraph<String, DefaultEdge>
+        implements UndirectedGraph<String, DefaultEdge>
+    {
+        private static final long serialVersionUID = 1L;
+
+        String id = null;
+
+        protected GraphWithID()
+        {
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
+        }
+
+    }
+
+    private GraphImporter<String, DefaultEdge> buildGraphIDImporter()
+    {
+        return new DOTImporter<String, DefaultEdge>(
+            (label, attributes) -> label, (from, to, label, attributes) -> new DefaultEdge(), null,
+            (component, attributes) -> {
+                if (component instanceof GraphWithID) {
+                    ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
+                }
+            });
     }
 
     private class TestVertex
@@ -574,6 +602,13 @@ public class DOTImporterTest
         {
             return attributes;
         }
+
+        @Override
+        public String toString()
+        {
+            return id + ", " + attributes;
+        }
+
     }
 
     private class TestEdge
@@ -599,6 +634,12 @@ public class DOTImporterTest
         public Map<String, String> getAttributes()
         {
             return attributes;
+        }
+
+        @Override
+        public String toString()
+        {
+            return id + ", " + attributes;
         }
     }
 }
