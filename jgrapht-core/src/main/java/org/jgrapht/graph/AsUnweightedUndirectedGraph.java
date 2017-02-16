@@ -17,12 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-
 import org.jgrapht.*;
 
 /**
- * An unweighted view of a graph.
+ * An unweighted view of an undirected graph.
  * 
  * <p>
  * An unweighted view of the backing weighted graph specified in the constructor. This graph allows
@@ -33,7 +31,7 @@ import org.jgrapht.*;
  *
  * <p>
  * Note that edges returned by this graph's accessors are really just the edges of the underlying
- * graph.
+ * undirected graph.
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
@@ -44,36 +42,21 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Lucas J. Scharenbroich
- * @since Sep 7, 2007
+ * @author Joris Kinable
  */
-public class AsUnweightedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable
+public class AsUnweightedUndirectedGraph<V, E>
+    extends AsUnweightedGraph<V, E>
+    implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 7175505077601824663L;
+    private static final long serialVersionUID = -1746886363764825714L;
 
     /**
      * Constructor
      *
      * @param g the backing graph over which an unweighted view is to be created.
      */
-    public AsUnweightedGraph(Graph<V, E> g)
+    public AsUnweightedUndirectedGraph(UndirectedGraph<V, E> g)
     {
         super(g);
     }
-
-    /**
-     * @see Graph#getEdgeWeight
-     */
-    @Override
-    public double getEdgeWeight(E e)
-    {
-        if (e == null) {
-            throw new NullPointerException();
-        } else {
-            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
-        }
-    }
 }
-
-// End AsUnweightedGraph.java

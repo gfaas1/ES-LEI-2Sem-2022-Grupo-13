@@ -62,7 +62,7 @@ public class AsUnweightedGraphTest
     /**
      * .
      */
-    public void testUndirected()
+    public void testWeightedGraph()
     {
         WeightedGraph<String, DefaultWeightedEdge> undirected =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -70,6 +70,20 @@ public class AsUnweightedGraphTest
 
         AsUnweightedGraph<String, DefaultWeightedEdge> unweighted =
             new AsUnweightedGraph<>(undirected);
+        checkView(undirected, unweighted);
+    }
+
+    /**
+     * .
+     */
+    public void testUndirected()
+    {
+        SimpleWeightedGraph<String, DefaultWeightedEdge> undirected =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        constructWeighted(undirected);
+
+        AsUnweightedUndirectedGraph<String, DefaultWeightedEdge> unweighted =
+            new AsUnweightedUndirectedGraph<>(undirected);
         checkView(undirected, unweighted);
     }
 
