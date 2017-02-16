@@ -20,6 +20,9 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 
 /**
+ * An unweighted view of a directed graph.
+ * 
+ * <p>
  * An unweighted view of the backing weighted graph specified in the constructor. This graph allows
  * modules to apply algorithms designed for unweighted graphs to a weighted graph by simply ignoring
  * edge weights. Query operations on this graph "read through" to the backing graph. Vertex
@@ -29,13 +32,11 @@ import org.jgrapht.*;
  * <p>
  * Note that edges returned by this graph's accessors are really just the edges of the underlying
  * directed graph.
- * </p>
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
  * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
  * serializable if the backing graph is serializable.
- * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -51,7 +52,7 @@ public class AsUnweightedDirectedGraph<V, E>
     private static final long serialVersionUID = 4999731801535663595L;
 
     /**
-     * Constructor for AsUnweightedGraph.
+     * Constructor
      *
      * @param g the backing graph over which an unweighted view is to be created.
      */

@@ -75,10 +75,10 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     public GraphPath<V, E> getPath(V source, V sink)
     {
         if (!graph.containsVertex(source)) {
-            throw new IllegalArgumentException("graph must contain the source vertex");
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
         }
         if (!graph.containsVertex(sink)) {
-            throw new IllegalArgumentException("graph must contain the sink vertex");
+            throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
 
         // handle special case if source equals target

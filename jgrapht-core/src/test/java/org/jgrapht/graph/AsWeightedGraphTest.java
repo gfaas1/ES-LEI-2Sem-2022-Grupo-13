@@ -38,6 +38,9 @@ public class AsWeightedGraphTest
     public SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> directedWeightedGraph;
     public DirectedGraph<String, DefaultEdge> directedUnweightedGraph;
 
+    public SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedWeightedGraph;
+    public UndirectedGraph<String, DefaultEdge> undirectedUnweightedGraph;
+
     // ~ Methods ----------------------------------------------------------------
 
     @Override
@@ -50,6 +53,14 @@ public class AsWeightedGraphTest
         // Create an undirected graph without weights
         unweightedGraph = new SimpleGraph<>(DefaultEdge.class);
         this.createdUnweightedGraph(unweightedGraph);
+
+        // Create another weighted, undirected graph
+        undirectedWeightedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        this.createdWeightedGraph(undirectedWeightedGraph);
+
+        // Create another undirected graph without weights
+        undirectedUnweightedGraph = new SimpleGraph<>(DefaultEdge.class);
+        this.createdUnweightedGraph(undirectedUnweightedGraph);
 
         // Create a weighted, directed graph
         directedWeightedGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -87,6 +98,7 @@ public class AsWeightedGraphTest
     public void testUnweightedGraphs()
     {
         this.testUnweightedGraph(unweightedGraph);
+        this.testUnweightedGraph(undirectedUnweightedGraph);
         this.testUnweightedGraph(directedUnweightedGraph);
     }
 
@@ -105,6 +117,9 @@ public class AsWeightedGraphTest
         if (graph instanceof DirectedGraph)
             graphView = new AsWeightedDirectedGraph<>(
                 (DirectedGraph<String, DefaultEdge>) graph, weightMap);
+        else if (graph instanceof UndirectedGraph)
+            graphView = new AsWeightedUndirectedGraph<>(
+                (UndirectedGraph<String, DefaultEdge>) graph, weightMap);
         else
             graphView = new AsWeightedGraph<>(graph, weightMap);
 
@@ -122,6 +137,7 @@ public class AsWeightedGraphTest
     public void testWeightedGraphs()
     {
         this.testWeightedGraph(weightedGraph);
+        this.testWeightedGraph(undirectedWeightedGraph);
         this.testWeightedGraph(directedWeightedGraph);
     }
 
@@ -139,6 +155,9 @@ public class AsWeightedGraphTest
         if (graph instanceof DirectedGraph)
             graphView = new AsWeightedDirectedGraph<>(
                 (DirectedGraph<String, DefaultWeightedEdge>) graph, weightMap);
+        else if (graph instanceof UndirectedGraph)
+            graphView = new AsWeightedUndirectedGraph<>(
+                (UndirectedGraph<String, DefaultWeightedEdge>) graph, weightMap);
         else
             graphView = new AsWeightedGraph<>(graph, weightMap);
 

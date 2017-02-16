@@ -23,12 +23,13 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
+ * A weighted view of a graph.
+ * 
  * <p>
  * A weighted view of the backing graph specified in the constructor. This graph allows modules to
  * apply algorithms designed for weighted graphs to an unweighted graph by providing an explicit
  * edge weight mapping. The implementation also allows for "masking" weights for a subset of the
  * edges in an existing weighted graph.
- * </p>
  *
  * <p>
  * Query operations on this graph "read through" to the backing graph. Vertex addition/removal and
@@ -36,18 +37,15 @@ import org.jgrapht.*;
  * an edge weight will pass the operation to the backing graph as well if the backing graph
  * implements the WeightedGraph interface. Setting an edge weight will modify the weight map in
  * order to maintain a consistent graph.
- * </p>
  *
  * <p>
  * Note that edges returned by this graph's accessors are really just the edges of the underlying
- * directed graph.
- * </p>
+ * graph.
  *
  * <p>
  * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
  * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
  * serializable if the backing graph is serializable.
- * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -59,8 +57,6 @@ public class AsWeightedGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable, WeightedGraph<V, E>
 {
-    /**
-     */
     private static final long serialVersionUID = -716810639338971372L;
 
     protected final Map<E, Double> weightMap;

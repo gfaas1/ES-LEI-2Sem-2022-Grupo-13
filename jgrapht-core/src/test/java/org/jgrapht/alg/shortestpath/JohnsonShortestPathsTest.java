@@ -1,0 +1,139 @@
+/*
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+package org.jgrapht.alg.shortestpath;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
+
+import org.jgrapht.VertexFactory;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.IntegerVertexFactory;
+import org.junit.Test;
+
+/**
+ * @author Dimitrios Michail
+ */
+public class JohnsonShortestPathsTest
+{
+
+    private VertexFactory<String> vertexFactory = new VertexFactory<String>()
+    {
+        private int i = 0;
+
+        @Override
+        public String createVertex()
+        {
+            return "vertex" + i++;
+        }
+    };
+
+    @Test
+    public void testWikipediaExample()
+    {
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        g.addVertex("w");
+        g.addVertex("y");
+        g.addVertex("x");
+        g.addVertex("z");
+        g.setEdgeWeight(g.addEdge("w", "z"), 2);
+        g.setEdgeWeight(g.addEdge("y", "w"), 4);
+        g.setEdgeWeight(g.addEdge("x", "w"), 6);
+        g.setEdgeWeight(g.addEdge("x", "y"), 3);
+        g.setEdgeWeight(g.addEdge("z", "x"), -7);
+        g.setEdgeWeight(g.addEdge("y", "z"), 5);
+        g.setEdgeWeight(g.addEdge("z", "y"), -3);
+
+        JohnsonShortestPaths<String, DefaultWeightedEdge> alg =
+            new JohnsonShortestPaths<>(g, vertexFactory);
+        assertEquals(-1d, alg.getPathWeight("z", "w"), 1e-9);
+        assertEquals(-4d, alg.getPathWeight("z", "y"), 1e-9);
+        assertEquals(0, alg.getPathWeight("z", "z"), 1e-9);
+        assertEquals(-7, alg.getPathWeight("z", "x"), 1e-9);
+    }
+
+    @Test
+    public void testRandomGraphsCompareWithFloydWarshall()
+    {
+        final int tests = 20;
+        final int n = 50;
+        final double p = 0.55;
+
+        Random rng = new Random();
+
+        List<Supplier<WeightedGraph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
+        graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
+
+        for (Supplier<WeightedGraph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
+            GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
+                new GnpRandomGraphGenerator<>(n, p, rng, false);
+            for (int i = 0; i < tests; i++) {
+                WeightedGraph<Integer, DefaultWeightedEdge> g = gSupplier.get();
+                IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+                gen.generateGraph(g, vertexFactory, null);
+
+                // assign weights
+                for (DefaultWeightedEdge e : g.edgeSet()) {
+                    Integer u = g.getEdgeSource(e);
+                    Integer v = g.getEdgeTarget(e);
+                    double rWeight;
+                    if (u >= v) {
+                        rWeight = (n + 1) + 2 * (n + 1) * rng.nextDouble();
+                    } else {
+                        rWeight = rng.nextDouble();
+                        if (rng.nextDouble() < 0.5) {
+                            rWeight *= -1;
+                        }
+                    }
+                    g.setEdgeWeight(e, rWeight);
+                }
+
+                try {
+                    // run Johnson algorithm
+                    JohnsonShortestPaths<Integer, DefaultWeightedEdge> fw =
+                        new JohnsonShortestPaths<>(g, vertexFactory);
+
+                    // run Floyd-Warshall algorithm
+                    FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw1 =
+                        new FloydWarshallShortestPaths<>(g);
+
+                    for (Integer v : g.vertexSet()) {
+                        for (Integer u : g.vertexSet()) {
+                            // compare with Dijkstra
+                            assertEquals(
+                                fw1.getPath(v, u).getWeight(), fw.getPath(v, u).getWeight(), 1e-9);
+                        }
+                    }
+                } catch (RuntimeException e) {
+                    // negative weight cycle, skip test
+                    assertEquals("Graph contains a negative-weight cycle", e.getMessage());
+                }
+            }
+        }
+
+    }
+
+}

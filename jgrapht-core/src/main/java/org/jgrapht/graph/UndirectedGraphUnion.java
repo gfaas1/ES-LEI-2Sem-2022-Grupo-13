@@ -34,13 +34,27 @@ public class UndirectedGraphUnion<V, E>
 {
     private static final long serialVersionUID = -740199233080172450L;
 
-    UndirectedGraphUnion(
+    /**
+     * Construct a new undirected graph union.
+     * 
+     * @param g1 the first graph
+     * @param g2 the second graph
+     * @param operator the weight combiner (policy for edge weight calculation)
+     */
+    public UndirectedGraphUnion(
         UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
-    UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2)
+    /**
+     * Construct a new undirected graph union. The union will use the {@link WeightCombiner#SUM}
+     * weight combiner.
+     * 
+     * @param g1 the first graph
+     * @param g2 the second graph
+     */
+    public UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2)
     {
         super(g1, g2);
     }
