@@ -419,7 +419,7 @@ public class CSVExporterTest
         throws ImportException
     {
         DirectedPseudograph<String, DefaultEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex("'john doe'");
         g.addVertex("fred");
         g.addVertex("fred\n\"21\"");

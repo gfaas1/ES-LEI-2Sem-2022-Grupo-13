@@ -29,7 +29,7 @@ import org.jgrapht.*;
  */
 public class ListenableDirectedWeightedGraph<V, E>
     extends ListenableDirectedGraph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3977582476627621938L;
 
@@ -48,9 +48,9 @@ public class ListenableDirectedWeightedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableDirectedWeightedGraph(WeightedGraph<V, E> base)
+    public ListenableDirectedWeightedGraph(DirectedWeightedGraph<V, E> base)
     {
-        super((DirectedGraph<V, E>) base);
+        super(base);
     }
 }
 

@@ -43,29 +43,29 @@ public class UnionGraphTest
     private String v3 = "v3";
     private String v4 = "v4";
 
-    private DefaultEdge e1 = new DefaultEdge(); // (v0,v1);
-    private DefaultEdge e2 = new DefaultEdge(); // (v1,v4);
-    private DefaultEdge e3 = new DefaultEdge(); // (v4,v0);
-    private DefaultEdge e4 = new DefaultEdge(); // (v1,v2);
-    private DefaultEdge e5 = new DefaultEdge(); // (v2,v3);
-    private DefaultEdge e6 = new DefaultEdge(); // (v3,v4);
-    private DefaultEdge e7 = new DefaultEdge(); // (v4,v1);
+    private DefaultWeightedEdge e1 = new DefaultWeightedEdge(); // (v0,v1);
+    private DefaultWeightedEdge e2 = new DefaultWeightedEdge(); // (v1,v4);
+    private DefaultWeightedEdge e3 = new DefaultWeightedEdge(); // (v4,v0);
+    private DefaultWeightedEdge e4 = new DefaultWeightedEdge(); // (v1,v2);
+    private DefaultWeightedEdge e5 = new DefaultWeightedEdge(); // (v2,v3);
+    private DefaultWeightedEdge e6 = new DefaultWeightedEdge(); // (v3,v4);
+    private DefaultWeightedEdge e7 = new DefaultWeightedEdge(); // (v4,v1);
 
-    SimpleGraph<String, DefaultEdge> undirectedGraph1;
-    SimpleGraph<String, DefaultEdge> undirectedGraph2;
+    SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedGraph1;
+    SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedGraph2;
 
-    DirectedGraph<String, DefaultEdge> directedGraph1;
-    DirectedGraph<String, DefaultEdge> directedGraph2;
+    DirectedGraph<String, DefaultWeightedEdge> directedGraph1;
+    DirectedGraph<String, DefaultWeightedEdge> directedGraph2;
 
     // ~ Methods ----------------------------------------------------------------
 
     @Override
     public void setUp()
     {
-        undirectedGraph1 = new SimpleWeightedGraph<>(DefaultEdge.class);
-        undirectedGraph2 = new SimpleWeightedGraph<>(DefaultEdge.class);
-        directedGraph1 = new SimpleDirectedGraph<>(DefaultEdge.class);
-        directedGraph2 = new SimpleDirectedGraph<>(DefaultEdge.class);
+        undirectedGraph1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        undirectedGraph2 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        directedGraph1 = new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
+        directedGraph2 = new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(undirectedGraph1, Arrays.asList(v0, v1, v4));
         Graphs.addAllVertices(undirectedGraph2, Arrays.asList(v1, v2, v3, v4));
@@ -96,8 +96,9 @@ public class UnionGraphTest
      */
     public void testUndirectedGraphUnion()
     {
-        GraphUnion<String, DefaultEdge, UndirectedGraph<String, DefaultEdge>> graphUnion =
-            new UndirectedGraphUnion<>(undirectedGraph1, undirectedGraph2);
+        GraphUnion<String, DefaultWeightedEdge,
+            UndirectedGraph<String, DefaultWeightedEdge>> graphUnion =
+                new UndirectedGraphUnion<>(undirectedGraph1, undirectedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(
             new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7)), graphUnion.edgeSet());
@@ -115,7 +116,7 @@ public class UnionGraphTest
      */
     public void testDirectedGraphUnion()
     {
-        DirectedGraphUnion<String, DefaultEdge> graphUnion =
+        DirectedGraphUnion<String, DefaultWeightedEdge> graphUnion =
             new DirectedGraphUnion<>(directedGraph1, directedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(
@@ -144,7 +145,7 @@ public class UnionGraphTest
      */
     public void testMixedGraphUnion()
     {
-        MixedGraphUnion<String, DefaultEdge> graphUnion =
+        MixedGraphUnion<String, DefaultWeightedEdge> graphUnion =
             new MixedGraphUnion<>(undirectedGraph1, directedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(

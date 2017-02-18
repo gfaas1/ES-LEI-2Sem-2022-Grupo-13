@@ -207,13 +207,14 @@ public class GreedyMultiplicativeSpanner<V, E>
     private class WeightedSpannerAlgorithm
         extends SpannerAlgorithmBase
     {
-        protected WeightedGraph<V, E> spanner;
+        protected WeightedGraph<V, DefaultWeightedEdge> spanner;
         protected FibonacciHeap<V> heap;
         protected Map<V, FibonacciHeapNode<V>> nodes;
 
         public WeightedSpannerAlgorithm()
         {
-            this.spanner = new SimpleWeightedGraph<V, E>(graph.getEdgeFactory());
+            this.spanner =
+                new SimpleWeightedGraph<V, DefaultWeightedEdge>(DefaultWeightedEdge.class);
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
             }
@@ -245,7 +246,7 @@ public class GreedyMultiplicativeSpanner<V, E>
                     return true;
                 }
 
-                for (E e : spanner.edgesOf(u)) {
+                for (DefaultWeightedEdge e : spanner.edgesOf(u)) {
                     V v = Graphs.getOppositeVertex(spanner, e, u);
                     FibonacciHeapNode<V> vNode = nodes.get(v);
                     double vDistance = uDistance + spanner.getEdgeWeight(e);

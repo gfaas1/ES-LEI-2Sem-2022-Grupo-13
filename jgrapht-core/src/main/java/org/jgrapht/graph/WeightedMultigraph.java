@@ -29,11 +29,10 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class WeightedMultigraph<V, E>
     extends Multigraph<V, E>
-    implements WeightedGraph<V, E>
+    implements UndirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3544671793370640696L;
 

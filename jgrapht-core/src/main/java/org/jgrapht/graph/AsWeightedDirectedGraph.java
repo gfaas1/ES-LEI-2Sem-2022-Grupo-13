@@ -54,7 +54,7 @@ import org.jgrapht.*;
  */
 public class AsWeightedDirectedGraph<V, E>
     extends AsWeightedGraph<V, E>
-    implements DirectedGraph<V, E>
+    implements DirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = -6264605187276749471L;
 

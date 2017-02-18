@@ -19,14 +19,9 @@ package org.jgrapht.io;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.DIMACSImporter;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 
@@ -51,28 +46,8 @@ public class DIMACSImporterTest
             g = new DirectedPseudograph<Integer, E>(edgeClass);
         }
 
-        VertexProvider<Integer> vp = new VertexProvider<Integer>()
-        {
-            @Override
-            public Integer buildVertex(String label, Map<String, String> attributes)
-            {
-                return Integer.parseInt(label);
-            }
-        };
-
-        EdgeProvider<Integer, E> ep = new EdgeProvider<Integer, E>()
-        {
-
-            @Override
-            public E buildEdge(
-                Integer from, Integer to, String label, Map<String, String> attributes)
-            {
-                return g.getEdgeFactory().createEdge(from, to);
-            }
-
-        };
-
-        DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(vp, ep);
+        DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
         try {
             importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {

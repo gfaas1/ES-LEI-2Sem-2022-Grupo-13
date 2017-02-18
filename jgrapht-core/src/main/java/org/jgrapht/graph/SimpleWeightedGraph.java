@@ -26,11 +26,10 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
-    implements WeightedGraph<V, E>
+    implements UndirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3906088949100655922L;
 

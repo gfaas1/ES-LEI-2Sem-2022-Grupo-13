@@ -18,15 +18,9 @@
 package org.jgrapht.io;
 
 import java.io.*;
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.CSVFormat;
-import org.jgrapht.io.CSVImporter;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 
@@ -42,29 +36,8 @@ public class CSVImporterTest
     public <E> CSVImporter<String, E> createImporter(
         Graph<String, E> g, CSVFormat format, Character delimiter)
     {
-        VertexProvider<String> vp = new VertexProvider<String>()
-        {
-            @Override
-            public String buildVertex(String label, Map<String, String> attributes)
-            {
-                return label;
-            }
-        };
-
-        EdgeProvider<String, E> ep = new EdgeProvider<String, E>()
-        {
-
-            @Override
-            public E buildEdge(String from, String to, String label, Map<String, String> attributes)
-            {
-                return g.getEdgeFactory().createEdge(from, to);
-            }
-
-        };
-
-        CSVImporter<String, E> importer = new CSVImporter<>(vp, ep, format, delimiter);
-
-        return importer;
+        return new CSVImporter<>(
+            (l, a) -> l, (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t), format, delimiter);
     }
 
     public <E> Graph<String, E> readGraph(

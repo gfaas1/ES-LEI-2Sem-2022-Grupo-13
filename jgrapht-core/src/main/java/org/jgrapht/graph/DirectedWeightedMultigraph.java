@@ -27,11 +27,10 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 4049071636005206066L;
 

@@ -36,7 +36,7 @@ public final class UndirectedWeightedGraphBuilder<V, E,
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * <p>
-     * The recomended way to use this constructor is: {@code new
+     * The recommended way to use this constructor is: {@code new
      * UndirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
      *
      * <p>

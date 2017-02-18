@@ -43,7 +43,8 @@ public class DijkstraShortestPathTest
 
         path = new DijkstraShortestPath<String, DefaultWeightedEdge>(g, Double.POSITIVE_INFINITY)
             .getPath(V3, V4);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e13, e12, e24 }), path.getEdgeList());
+        assertEquals(
+            Arrays.asList(new DefaultWeightedEdge[] { e13, e12, e24 }), path.getEdgeList());
         assertEquals(10.0, path.getWeight(), 0);
 
         path = new DijkstraShortestPath<String, DefaultWeightedEdge>(g, 7.0).getPath(V3, V4);

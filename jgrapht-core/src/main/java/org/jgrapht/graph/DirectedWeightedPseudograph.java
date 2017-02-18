@@ -30,7 +30,7 @@ import org.jgrapht.graph.builder.*;
  */
 public class DirectedWeightedPseudograph<V, E>
     extends DirectedPseudograph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 8762514879586423517L;
 

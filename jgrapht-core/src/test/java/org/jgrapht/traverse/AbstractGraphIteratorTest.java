@@ -44,10 +44,10 @@ public abstract class AbstractGraphIteratorTest
     {
         result = new StringBuffer();
 
-        DirectedGraph<String, DefaultEdge> graph = createDirectedGraph();
+        DirectedGraph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, DefaultEdge> iterator = createIterator(graph, "1");
-        MyTraversalListener listener = new MyTraversalListener();
+        AbstractGraphIterator<String, DefaultWeightedEdge> iterator = createIterator(graph, "1");
+        MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
         while (iterator.hasNext()) {
@@ -72,9 +72,9 @@ public abstract class AbstractGraphIteratorTest
         return "";
     }
 
-    DirectedGraph<String, DefaultEdge> createDirectedGraph()
+    DirectedGraph<String, DefaultWeightedEdge> createDirectedGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph =
+        DirectedGraph<String, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         //
@@ -119,8 +119,8 @@ public abstract class AbstractGraphIteratorTest
         return graph;
     }
 
-    abstract AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g, String startVertex);
+    abstract AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
+        DirectedGraph<String, DefaultWeightedEdge> g, String startVertex);
 
     // ~ Inner Classes ----------------------------------------------------------
 
@@ -129,8 +129,8 @@ public abstract class AbstractGraphIteratorTest
      *
      * @author Barak Naveh
      */
-    private class MyTraversalListener
-        implements TraversalListener<String, DefaultEdge>
+    private class MyTraversalListener<E>
+        implements TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;
@@ -178,7 +178,7 @@ public abstract class AbstractGraphIteratorTest
          * @see TraversalListener#edgeTraversed(EdgeTraversalEvent)
          */
         @Override
-        public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e)
+        public void edgeTraversed(EdgeTraversalEvent<E> e)
         {
             // to be tested...
         }

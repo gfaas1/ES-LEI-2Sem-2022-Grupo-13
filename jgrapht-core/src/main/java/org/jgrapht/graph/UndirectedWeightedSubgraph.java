@@ -20,7 +20,6 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 /**
  * An undirected weighted graph that is a subgraph on other graph.
@@ -32,7 +31,7 @@ import org.jgrapht.util.*;
  */
 public class UndirectedWeightedSubgraph<V, E>
     extends UndirectedSubgraph<V, E>
-    implements WeightedGraph<V, E>
+    implements UndirectedWeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3689346615735236409L;
 
@@ -46,9 +45,10 @@ public class UndirectedWeightedSubgraph<V, E>
      *        edges whose vertices found in the graph are included.
      */
     public UndirectedWeightedSubgraph(
-        WeightedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
+        UndirectedWeightedGraph<V, E> base, Set<? extends V> vertexSubset,
+        Set<? extends E> edgeSubset)
     {
-        super(TypeUtil.uncheckedCast(base, null), vertexSubset, edgeSubset);
+        super(base, vertexSubset, edgeSubset);
     }
 
     /**
@@ -58,7 +58,8 @@ public class UndirectedWeightedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
      *        vertices are included.
      */
-    public UndirectedWeightedSubgraph(WeightedGraph<V, E> base, Set<? extends V> vertexSubset)
+    public UndirectedWeightedSubgraph(
+        UndirectedWeightedGraph<V, E> base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
     }
@@ -68,7 +69,7 @@ public class UndirectedWeightedSubgraph<V, E>
      *
      * @param base the base (backing) graph on which the subgraph will be based.
      */
-    public UndirectedWeightedSubgraph(WeightedGraph<V, E> base)
+    public UndirectedWeightedSubgraph(UndirectedWeightedGraph<V, E> base)
     {
         this(base, null, null);
     }

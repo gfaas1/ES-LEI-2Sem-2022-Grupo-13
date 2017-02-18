@@ -190,8 +190,8 @@ public class FloydWarshallShortestPathsTest
 
     public void testWeightedEdges()
     {
-        SimpleDirectedGraph<String, DefaultWeightedEdge> weighted =
-            new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
+        SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> weighted =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         weighted.addVertex("a");
         weighted.addVertex("b");
         DefaultWeightedEdge edge = weighted.addEdge("a", "b");

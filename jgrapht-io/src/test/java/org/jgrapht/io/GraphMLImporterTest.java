@@ -23,11 +23,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.GraphMLExporter;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 
@@ -951,30 +946,14 @@ public class GraphMLImporterTest
         Graph<String, E> g, Map<String, Map<String, String>> vertexAttributes,
         Map<E, Map<String, String>> edgeAttributes)
     {
-        VertexProvider<String> vp = new VertexProvider<String>()
-        {
-            @Override
-            public String buildVertex(String label, Map<String, String> attributes)
-            {
-                vertexAttributes.put(label, attributes);
-                return label;
-            }
-        };
-
-        EdgeProvider<String, E> ep = new EdgeProvider<String, E>()
-        {
-
-            @Override
-            public E buildEdge(String from, String to, String label, Map<String, String> attributes)
-            {
-                E e = g.getEdgeFactory().createEdge(from, to);
-                edgeAttributes.put(e, attributes);
-                return e;
-            }
-
-        };
-
-        return createGraphImporter(g, vp, ep);
+        return createGraphImporter(g, (label, attributes) -> {
+            vertexAttributes.put(label, attributes);
+            return label;
+        }, (from, to, label, attributes) -> {
+            E e = g.getEdgeFactory().createEdge(from, to);
+            edgeAttributes.put(e, attributes);
+            return e;
+        });
     }
 
     public <E> GraphMLImporter<String, E> createGraphImporter(

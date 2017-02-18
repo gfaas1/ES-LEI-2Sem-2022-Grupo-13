@@ -57,17 +57,11 @@ public class GraphDelegator<V, E>
      * Constructor for GraphDelegator.
      *
      * @param g the backing graph (the delegate).
-     * @throws IllegalArgumentException iff <code>g==null</code>
      */
     public GraphDelegator(Graph<V, E> g)
     {
         super();
-
-        if (g == null) {
-            throw new IllegalArgumentException("g must not be null.");
-        }
-
-        delegate = g;
+        delegate = Objects.requireNonNull(g, "g must not be null");
     }
 
     /**

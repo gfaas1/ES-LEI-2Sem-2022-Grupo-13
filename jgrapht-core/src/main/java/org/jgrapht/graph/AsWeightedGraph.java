@@ -59,7 +59,7 @@ public class AsWeightedGraph<V, E>
 {
     private static final long serialVersionUID = -716810639338971372L;
 
-    protected final Map<E, Double> weightMap;
+    private final Map<E, Double> weightMap;
     private final boolean isWeightedGraph;
 
     /**
