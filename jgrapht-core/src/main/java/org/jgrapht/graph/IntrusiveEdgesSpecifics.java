@@ -21,14 +21,18 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * An interface for the set of intrusive edges.
+ * An interface for the set of intrusive edges of a graph.
+ * 
+ * <p>
+ * Since the library supports edges which can be any user defined object, we need to provide
+ * explicit support for storing vertex source, target and weight.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
  */
-interface IntrusiveSpecifics<V, E>
+interface IntrusiveEdgesSpecifics<V, E>
     extends Serializable
 {
     /**
@@ -91,5 +95,4 @@ interface IntrusiveSpecifics<V, E>
      * @param weight the new weight
      */
     void setEdgeWeight(E e, double weight);
-
 }

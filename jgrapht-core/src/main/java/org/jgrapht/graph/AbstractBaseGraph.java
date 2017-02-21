@@ -53,10 +53,9 @@ public abstract class AbstractBaseGraph<V, E>
 
     private boolean allowingLoops;
     private EdgeFactory<V, E> edgeFactory;
-    private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
     private Specifics<V, E> specifics;
-    private IntrusiveSpecifics<V, E> intrusiveSpecifics;
+    private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
     private boolean allowingMultipleEdges;
 
     /**
@@ -79,8 +78,8 @@ public abstract class AbstractBaseGraph<V, E>
         allowingLoops = allowLoops;
         allowingMultipleEdges = allowMultipleEdges;
         specifics = Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        intrusiveSpecifics =
-            Objects.requireNonNull(createIntrusiveSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        intrusiveEdgesSpecifics = Objects
+            .requireNonNull(createIntrusiveEdgesSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -154,7 +153,7 @@ public abstract class AbstractBaseGraph<V, E>
         if (containsEdge(e)) { // this restriction should stay!
             return null;
         } else {
-            intrusiveSpecifics.add(e, sourceVertex, targetVertex);
+            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
             specifics.addEdgeToTouchingVertices(e);
             return e;
         }
@@ -183,7 +182,7 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        intrusiveSpecifics.add(e, sourceVertex, targetVertex);
+        intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
         specifics.addEdgeToTouchingVertices(e);
 
         return true;
@@ -212,7 +211,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeSource(E e)
     {
-        return intrusiveSpecifics.getEdgeSource(e);
+        return intrusiveEdgesSpecifics.getEdgeSource(e);
     }
 
     /**
@@ -221,7 +220,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeTarget(E e)
     {
-        return intrusiveSpecifics.getEdgeTarget(e);
+        return intrusiveEdgesSpecifics.getEdgeTarget(e);
     }
 
     /**
@@ -240,14 +239,13 @@ public abstract class AbstractBaseGraph<V, E>
             AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
 
             newGraph.edgeFactory = this.edgeFactory;
-            newGraph.unmodifiableEdgeSet = null;
             newGraph.unmodifiableVertexSet = null;
 
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
             newGraph.specifics = newGraph.createSpecifics();
-            newGraph.intrusiveSpecifics = newGraph.createIntrusiveSpecifics();
+            newGraph.intrusiveEdgesSpecifics = newGraph.createIntrusiveEdgesSpecifics();
 
             Graphs.addGraph(newGraph, this);
 
@@ -264,7 +262,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public boolean containsEdge(E e)
     {
-        return intrusiveSpecifics.containsEdge(e);
+        return intrusiveEdgesSpecifics.containsEdge(e);
     }
 
     /**
@@ -294,10 +292,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public Set<E> edgeSet()
     {
-        if (unmodifiableEdgeSet == null) {
-            unmodifiableEdgeSet = Collections.unmodifiableSet(intrusiveSpecifics.getEdgeSet());
-        }
-        return unmodifiableEdgeSet;
+        return intrusiveEdgesSpecifics.getEdgeSet();
     }
 
     /**
@@ -373,7 +368,7 @@ public abstract class AbstractBaseGraph<V, E>
 
         if (e != null) {
             specifics.removeEdgeFromTouchingVertices(e);
-            intrusiveSpecifics.remove(e);
+            intrusiveEdgesSpecifics.remove(e);
         }
 
         return e;
@@ -387,7 +382,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         if (containsEdge(e)) {
             specifics.removeEdgeFromTouchingVertices(e);
-            intrusiveSpecifics.remove(e);
+            intrusiveEdgesSpecifics.remove(e);
             return true;
         } else {
             return false;
@@ -437,7 +432,7 @@ public abstract class AbstractBaseGraph<V, E>
         if (e == null) {
             throw new NullPointerException();
         }
-        return intrusiveSpecifics.getEdgeWeight(e);
+        return intrusiveEdgesSpecifics.getEdgeWeight(e);
     }
 
     /**
@@ -452,7 +447,7 @@ public abstract class AbstractBaseGraph<V, E>
         if (e == null) {
             throw new NullPointerException();
         }
-        intrusiveSpecifics.setEdgeWeight(e, weight);
+        intrusiveEdgesSpecifics.setEdgeWeight(e, weight);
     }
 
     /**
@@ -474,16 +469,16 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Create the specifics for the edge weights of this graph.
+     * Create the specifics for the edges set of the graph.
      * 
-     * @return the specifics used by this graph
+     * @return the specifics used for the edge set of this graph
      */
-    protected IntrusiveSpecifics<V, E> createIntrusiveSpecifics()
+    protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics()
     {
         if (this instanceof WeightedGraph<?, ?>) {
-            return new WeightedIntrusiveSpecifics<V, E>();
+            return new WeightedIntrusiveEdgesSpecifics<V, E>();
         } else {
-            return new UnweightedIntrusiveSpecifics<V, E>();
+            return new UniformIntrusiveEdgesSpecifics<V, E>();
         }
     }
 
