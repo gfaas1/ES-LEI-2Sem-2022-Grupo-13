@@ -15,12 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.experimental.alg.color;
+package org.jgrapht.experimental;
 
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.experimental.alg.*;
 
 /**
  * Brown graph coloring algorithm.
@@ -31,7 +30,6 @@ import org.jgrapht.experimental.alg.*;
  * @author Michael Behrisch
  */
 public class BrownBacktrackColoring<V, E>
-    implements ExactAlgorithm<Integer, V>
 {
     private final List<V> _vertices;
     private final int[][] _neighbors;
@@ -100,10 +98,12 @@ public class BrownBacktrackColoring<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the coloring.
+     * 
+     * @param additionalData map which contains the color of each vertex
+     * @return the number of colors used
      */
-    @Override
-    public Integer getResult(Map<V, Object> additionalData)
+    public Integer getResult(Map<V, Integer> additionalData)
     {
         _chi = _neighbors.length;
         _color = new int[_neighbors.length];

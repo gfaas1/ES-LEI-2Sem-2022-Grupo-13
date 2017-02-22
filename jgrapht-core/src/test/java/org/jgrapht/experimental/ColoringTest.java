@@ -15,10 +15,9 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.experimental.alg;
+package org.jgrapht.experimental;
 
 import org.jgrapht.*;
-import org.jgrapht.experimental.alg.color.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
