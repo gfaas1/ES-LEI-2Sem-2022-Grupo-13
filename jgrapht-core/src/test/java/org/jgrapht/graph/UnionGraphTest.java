@@ -50,9 +50,10 @@ public class UnionGraphTest
     private DefaultWeightedEdge e5 = new DefaultWeightedEdge(); // (v2,v3);
     private DefaultWeightedEdge e6 = new DefaultWeightedEdge(); // (v3,v4);
     private DefaultWeightedEdge e7 = new DefaultWeightedEdge(); // (v4,v1);
+    private DefaultWeightedEdge e8 = new DefaultWeightedEdge(); // (v4,v4);
 
-    SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedGraph1;
-    SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedGraph2;
+    UndirectedGraph<String, DefaultWeightedEdge> undirectedGraph1;
+    UndirectedGraph<String, DefaultWeightedEdge> undirectedGraph2;
 
     DirectedGraph<String, DefaultWeightedEdge> directedGraph1;
     DirectedGraph<String, DefaultWeightedEdge> directedGraph2;
@@ -62,10 +63,10 @@ public class UnionGraphTest
     @Override
     public void setUp()
     {
-        undirectedGraph1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        undirectedGraph2 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        directedGraph1 = new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
-        directedGraph2 = new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
+        undirectedGraph1 = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        undirectedGraph2 = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        directedGraph1 = new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        directedGraph2 = new DirectedPseudograph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(undirectedGraph1, Arrays.asList(v0, v1, v4));
         Graphs.addAllVertices(undirectedGraph2, Arrays.asList(v1, v2, v3, v4));
@@ -75,10 +76,12 @@ public class UnionGraphTest
         undirectedGraph1.addEdge(v0, v1, e1);
         undirectedGraph1.addEdge(v1, v4, e2);
         undirectedGraph1.addEdge(v4, v0, e3);
+        undirectedGraph1.addEdge(v4, v4, e8);
 
         directedGraph1.addEdge(v0, v1, e1);
         directedGraph1.addEdge(v1, v4, e2);
         directedGraph1.addEdge(v4, v0, e3);
+        directedGraph1.addEdge(v4, v4, e8);
 
         undirectedGraph2.addEdge(v4, v1, e7);
         undirectedGraph2.addEdge(v1, v2, e4);
@@ -101,8 +104,45 @@ public class UnionGraphTest
                 new UndirectedGraphUnion<>(undirectedGraph1, undirectedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7)), graphUnion.edgeSet());
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7)), graphUnion.edgesOf(v4));
+            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+
+        assertEquals(2, graphUnion.degreeOf(v0));
+        assertEquals(4, graphUnion.degreeOf(v1));
+        assertEquals(2, graphUnion.degreeOf(v2));
+        assertEquals(2, graphUnion.degreeOf(v3));
+        assertEquals(6, graphUnion.degreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.incomingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.incomingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.incomingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.incomingEdgesOf(v3));
+        assertEquals(
+            new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.incomingEdgesOf(v4));
+
+        assertEquals(2, graphUnion.inDegreeOf(v0));
+        assertEquals(4, graphUnion.inDegreeOf(v1));
+        assertEquals(2, graphUnion.inDegreeOf(v2));
+        assertEquals(2, graphUnion.inDegreeOf(v3));
+        assertEquals(6, graphUnion.inDegreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(
+            new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+
+        assertEquals(2, graphUnion.outDegreeOf(v0));
+        assertEquals(4, graphUnion.outDegreeOf(v1));
+        assertEquals(2, graphUnion.outDegreeOf(v2));
+        assertEquals(2, graphUnion.outDegreeOf(v3));
+        assertEquals(6, graphUnion.outDegreeOf(v4));
 
         assertTrue(graphUnion.getG1() == undirectedGraph1);
         assertTrue(graphUnion.getG2() == undirectedGraph2);
@@ -120,10 +160,43 @@ public class UnionGraphTest
             new DirectedGraphUnion<>(directedGraph1, directedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7)), graphUnion.edgeSet());
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7)), graphUnion.edgesOf(v4));
-        assertEquals(new HashSet<>(Arrays.asList(e3, e7)), graphUnion.outgoingEdgesOf(v4));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e6)), graphUnion.incomingEdgesOf(v4));
+            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+
+        assertEquals(2, graphUnion.degreeOf(v0));
+        assertEquals(4, graphUnion.degreeOf(v1));
+        assertEquals(2, graphUnion.degreeOf(v2));
+        assertEquals(2, graphUnion.degreeOf(v3));
+        assertEquals(6, graphUnion.degreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e3)), graphUnion.incomingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e7)), graphUnion.incomingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4)), graphUnion.incomingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.incomingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e6, e8)), graphUnion.incomingEdgesOf(v4));
+
+        assertEquals(1, graphUnion.inDegreeOf(v0));
+        assertEquals(2, graphUnion.inDegreeOf(v1));
+        assertEquals(1, graphUnion.inDegreeOf(v2));
+        assertEquals(1, graphUnion.inDegreeOf(v3));
+        assertEquals(3, graphUnion.inDegreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e1)), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e4)), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e6)), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e3, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+
+        assertEquals(1, graphUnion.outDegreeOf(v0));
+        assertEquals(2, graphUnion.outDegreeOf(v1));
+        assertEquals(1, graphUnion.outDegreeOf(v2));
+        assertEquals(1, graphUnion.outDegreeOf(v3));
+        assertEquals(3, graphUnion.outDegreeOf(v4));
 
         assertTrue(graphUnion.getG1() == directedGraph1);
         assertTrue(graphUnion.getG2() == directedGraph2);
@@ -132,11 +205,6 @@ public class UnionGraphTest
         assertFalse(directedGraph2.containsEdge(v1, v4));
         assertTrue(graphUnion.getEdge(v1, v4) == e2);
         assertTrue(graphUnion.getEdge(v4, v1) == e7);
-
-        assertEquals(2, graphUnion.outDegreeOf(v1));
-        assertEquals(2, graphUnion.outDegreeOf(v4));
-        assertEquals(2, graphUnion.inDegreeOf(v1));
-        assertEquals(2, graphUnion.inDegreeOf(v4));
     }
 
     /**
@@ -149,10 +217,43 @@ public class UnionGraphTest
             new MixedGraphUnion<>(undirectedGraph1, directedGraph2);
         assertEquals(new HashSet<>(Arrays.asList(v0, v1, v2, v3, v4)), graphUnion.vertexSet());
         assertEquals(
-            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7)), graphUnion.edgeSet());
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7)), graphUnion.edgesOf(v4));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e7)), graphUnion.outgoingEdgesOf(v4));
-        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6)), graphUnion.incomingEdgesOf(v4));
+            new HashSet<>(Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8)), graphUnion.edgeSet());
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.edgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4, e7)), graphUnion.edgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4, e5)), graphUnion.edgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5, e6)), graphUnion.edgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e7, e8)), graphUnion.edgesOf(v4));
+
+        assertEquals(2, graphUnion.degreeOf(v0));
+        assertEquals(4, graphUnion.degreeOf(v1));
+        assertEquals(2, graphUnion.degreeOf(v2));
+        assertEquals(2, graphUnion.degreeOf(v3));
+        assertEquals(6, graphUnion.degreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.incomingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e7)), graphUnion.incomingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e4)), graphUnion.incomingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.incomingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e6, e8)), graphUnion.incomingEdgesOf(v4));
+
+        assertEquals(2, graphUnion.inDegreeOf(v0));
+        assertEquals(3, graphUnion.inDegreeOf(v1));
+        assertEquals(1, graphUnion.inDegreeOf(v2));
+        assertEquals(1, graphUnion.inDegreeOf(v3));
+        assertEquals(5, graphUnion.inDegreeOf(v4));
+
+        assertEquals(new HashSet<>(Arrays.asList(e1, e3)), graphUnion.outgoingEdgesOf(v0));
+        assertEquals(new HashSet<>(Arrays.asList(e1, e2, e4)), graphUnion.outgoingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e5)), graphUnion.outgoingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e6)), graphUnion.outgoingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e2, e3, e7, e8)), graphUnion.outgoingEdgesOf(v4));
+
+        assertEquals(2, graphUnion.outDegreeOf(v0));
+        assertEquals(3, graphUnion.outDegreeOf(v1));
+        assertEquals(1, graphUnion.outDegreeOf(v2));
+        assertEquals(1, graphUnion.outDegreeOf(v3));
+        assertEquals(5, graphUnion.outDegreeOf(v4));
 
         assertTrue(graphUnion.getG1() == undirectedGraph1);
         assertTrue(graphUnion.getG2() == directedGraph2);
@@ -161,12 +262,6 @@ public class UnionGraphTest
         assertTrue(graphUnion.containsEdge(v1, v0)); // undirected edge
         assertTrue(graphUnion.containsEdge(v3, v4)); // directed edge
         assertFalse(graphUnion.containsEdge(v4, v3)); // directed edge
-
-        assertEquals(3, graphUnion.outDegreeOf(v1));
-        assertEquals(3, graphUnion.outDegreeOf(v4));
-        assertEquals(3, graphUnion.inDegreeOf(v1));
-        assertEquals(3, graphUnion.inDegreeOf(v4));
-
     }
 
     /**
@@ -190,30 +285,30 @@ public class UnionGraphTest
         // for the same edge in g1 as well!
         Map<DefaultWeightedEdge, Double> weightMap = new HashMap<>();
         weightMap.put(edge, 20.0);
-        WeightedGraph<Integer, DefaultWeightedEdge> g2Masked = new AsWeightedGraph<>(g2, weightMap);
+        Graph<Integer, DefaultWeightedEdge> g2Masked = new AsWeightedGraph<>(g2, weightMap);
 
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionSum =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionSum =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
         assertEquals(30.0, graphUnionSum.getEdgeWeight(edge));
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionFirst =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionFirst =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
         assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge));
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionSecond =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionSecond =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
         assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge));
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMax =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionMax =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
         assertEquals(20.0, graphUnionMax.getEdgeWeight(edge));
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMin =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionMin =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
         assertEquals(10.0, graphUnionMin.getEdgeWeight(edge));
         GraphUnion<Integer, DefaultWeightedEdge,
-            WeightedGraph<Integer, DefaultWeightedEdge>> graphUnionMult =
+            Graph<Integer, DefaultWeightedEdge>> graphUnionMult =
                 new GraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
         assertEquals(200.0, graphUnionMult.getEdgeWeight(edge));
 

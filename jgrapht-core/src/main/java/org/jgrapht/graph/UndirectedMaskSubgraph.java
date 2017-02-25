@@ -17,6 +17,7 @@
  */
 package org.jgrapht.graph;
 
+import java.util.Iterator;
 import java.util.function.*;
 
 import org.jgrapht.*;
@@ -56,7 +57,34 @@ public class UndirectedMaskSubgraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        return edgesOf(vertex).size();
+        int degree = 0;
+        Iterator<E> it = edgesOf(vertex).iterator();
+        while (it.hasNext()) {
+            E e = it.next();
+            degree++;
+            if (getEdgeSource(e).equals(getEdgeTarget(e))) {
+                degree++;
+            }
+        }
+        return degree;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return degreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        return degreeOf(vertex);
     }
 
 }

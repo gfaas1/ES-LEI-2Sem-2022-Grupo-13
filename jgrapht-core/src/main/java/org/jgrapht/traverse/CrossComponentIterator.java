@@ -104,7 +104,6 @@ public abstract class CrossComponentIterator<V, E, D>
         }
         graph = g;
 
-        specifics = createGraphSpecifics(g);
         vertexIterator = g.vertexSet().iterator();
         setCrossComponentTraversal(startVertex == null);
 
@@ -295,7 +294,7 @@ public abstract class CrossComponentIterator<V, E, D>
 
     private void addUnseenChildrenOf(V vertex)
     {
-        for (E edge : specifics.edgesOf(vertex)) {
+        for (E edge : graph.outgoingEdgesOf(vertex)) {
             if (nListeners != 0) {
                 fireEdgeTraversed(createEdgeTraversalEvent(edge));
             }

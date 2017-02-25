@@ -55,9 +55,9 @@ public class AsUndirectedGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable, UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3257845485078065462L; // @todo renew
+    private static final long serialVersionUID = 9144684998028568853L;
+
     private static final String NO_EDGE_ADD = "this graph does not support edge addition";
-    private static final String UNDIRECTED = "this graph only supports undirected operations";
 
     /**
      * Constructor for AsUndirectedGraph.
@@ -70,7 +70,7 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
@@ -91,7 +91,7 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
@@ -107,7 +107,9 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -116,7 +118,9 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -125,7 +129,7 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see UndirectedGraph#degreeOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public int degreeOf(V vertex)
@@ -135,39 +139,41 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
-     */
-    @Override
-    public int inDegreeOf(V vertex)
-    {
-        throw new UnsupportedOperationException(UNDIRECTED);
-    }
-
-    /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        return super.edgesOf(vertex);
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
     @Override
-    public int outDegreeOf(V vertex)
+    public int inDegreeOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        // this counts loops twice, which is consistent with AbstractBaseGraph
+        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        return super.edgesOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        // this counts loops twice, which is consistent with AbstractBaseGraph
+        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
     }
 
     /**
@@ -180,7 +186,7 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see AbstractBaseGraph#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString()

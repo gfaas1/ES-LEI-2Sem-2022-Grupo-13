@@ -41,8 +41,8 @@ public class UndirectedSubgraph<V, E>
      * @param base the base (backing) graph on which the subgraph will be based.
      * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
      *        vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
-     *        edges whose vertices found in the graph are included.
+     * @param edgeSubset edges to include in the subgraph. If <code>null</code> then all the edges
+     *        whose vertices found in the graph are included.
      */
     public UndirectedSubgraph(
         UndirectedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
@@ -91,6 +91,25 @@ public class UndirectedSubgraph<V, E>
         }
         return degree;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        return degreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return degreeOf(vertex);
+    }
+
 }
 
 // End UndirectedSubgraph.java

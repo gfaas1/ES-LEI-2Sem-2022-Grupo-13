@@ -27,6 +27,8 @@ import org.jgrapht.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @author Ilya Razenshteyn
  */
 public class UndirectedGraphUnion<V, E>
     extends GraphUnion<V, E, UndirectedGraph<V, E>>
@@ -56,14 +58,43 @@ public class UndirectedGraphUnion<V, E>
      */
     public UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2)
     {
-        super(g1, g2);
+        this(g1, g2, WeightCombiner.SUM);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int degreeOf(V vertex)
     {
-        Set<E> res = edgesOf(vertex);
-        return res.size();
+        int degree = 0;
+        Iterator<E> it = super.edgesOf(vertex).iterator();
+        while (it.hasNext()) {
+            E e = it.next();
+            degree++;
+            if (getEdgeSource(e).equals(getEdgeTarget(e))) {
+                degree++;
+            }
+        }
+        return degree;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        return this.degreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return this.degreeOf(vertex);
     }
 }
 

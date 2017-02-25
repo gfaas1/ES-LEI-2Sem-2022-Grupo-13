@@ -40,7 +40,6 @@ public class DirectedSpecifics<V, E>
     implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 8971725103718958232L;
-    private static final String NOT_IN_DIRECTED_GRAPH = "no such operation in a directed graph";
 
     protected AbstractBaseGraph<V, E> abstractBaseGraph;
     protected Map<V, DirectedEdgeContainer<V, E>> vertexMapDirected;
@@ -168,7 +167,7 @@ public class DirectedSpecifics<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        throw new UnsupportedOperationException(NOT_IN_DIRECTED_GRAPH);
+        return inDegreeOf(vertex) + outDegreeOf(vertex);
     }
 
     /**
@@ -258,9 +257,6 @@ public class DirectedSpecifics<V, E>
      */
     protected DirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {
-        // abstractBaseGraph.assertVertexExist(vertex); //JK: I don't think we need this here. This
-        // should have been verified upstream
-
         DirectedEdgeContainer<V, E> ec = vertexMapDirected.get(vertex);
 
         if (ec == null) {

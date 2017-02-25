@@ -19,7 +19,6 @@ package org.jgrapht.traverse;
 
 import java.util.*;
 
-import org.jgrapht.*;
 import org.jgrapht.event.*;
 
 /**
@@ -47,7 +46,6 @@ public abstract class AbstractGraphIterator<V, E>
     // during iteration.
     protected FlyweightEdgeEvent<V, E> reusableEdgeEvent;
     protected FlyweightVertexEvent<V> reusableVertexEvent;
-    protected Specifics<V, E> specifics;
 
     /**
      * Sets the cross component traversal flag - indicates whether to traverse the graph across
@@ -250,97 +248,6 @@ public abstract class AbstractGraphIterator<V, E>
         }
     }
 
-    // -------------------------------------------------------------------------
-    /**
-     * Creates directed/undirected graph specifics according to the provided graph -
-     * directed/undirected, respectively.
-     * 
-     * @param g the graph to create specifics for
-     *
-     * @return the created specifics
-     */
-    static <V, E> Specifics<V, E> createGraphSpecifics(Graph<V, E> g)
-    {
-        if (g instanceof DirectedGraph<?, ?>) {
-            return new DirectedSpecifics<>((DirectedGraph<V, E>) g);
-        } else {
-            return new UndirectedSpecifics<>(g);
-        }
-    }
-
-    /**
-     * Provides unified interface for operations that are different in directed graphs and in
-     * undirected graphs.
-     */
-    abstract static class Specifics<VV, EE>
-    {
-        /**
-         * Returns the edges outgoing from the specified vertex in case of directed graph, and the
-         * edge touching the specified vertex in case of undirected graph.
-         *
-         * @param vertex the vertex whose outgoing edges are to be returned.
-         *
-         * @return the edges outgoing from the specified vertex in case of directed graph, and the
-         *         edge touching the specified vertex in case of undirected graph.
-         */
-        public abstract Set<? extends EE> edgesOf(VV vertex);
-    }
-
-    /**
-     * An implementation of {@link Specifics} for a directed graph.
-     */
-    static class DirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private DirectedGraph<VV, EE> graph;
-
-        /**
-         * Creates a new DirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public DirectedSpecifics(DirectedGraph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        /**
-         * @see CrossComponentIterator.Specifics#edgesOf(Object)
-         */
-        @Override
-        public Set<? extends EE> edgesOf(VV vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-    }
-
-    /**
-     * An implementation of {@link Specifics} in which edge direction (if any) is ignored.
-     */
-    static class UndirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private Graph<VV, EE> graph;
-
-        /**
-         * Creates a new UndirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public UndirectedSpecifics(Graph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        /**
-         * @see CrossComponentIterator.Specifics#edgesOf(Object)
-         */
-        @Override
-        public Set<EE> edgesOf(VV vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-    }
 }
 
 // End AbstractGraphIterator.java

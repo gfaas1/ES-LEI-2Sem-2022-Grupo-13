@@ -342,12 +342,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the degree of the specified vertex.
-     *
-     * @param vertex vertex whose degree is to be calculated.
-     * @return the degree of the specified vertex.
-     * @see UndirectedGraph#degreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int degreeOf(V vertex)
     {
         return specifics.degreeOf(vertex);
@@ -373,13 +370,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the "in degree" of the specified vertex.
-     *
-     * @param vertex vertex whose in degree is to be calculated.
-     * @return the in degree of the specified vertex.
-     * 
-     * @see DirectedGraph#inDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int inDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -387,12 +380,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns a set of all edges incoming into the specified vertex.
-     *
-     * @param vertex the vertex for which the list of incoming edges to be returned
-     * @return a set of all edges incoming into the specified vertex
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -400,12 +390,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the "out degree" of the specified vertex.
-     *
-     * @param vertex vertex whose out degree is to be calculated
-     * @return the out degree of the specified vertex
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int outDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -413,12 +400,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns a set of all edges outgoing from the specified vertex.
-     *
-     * @param vertex the vertex for which the list of outgoing edges to be returned
-     * @return a set of all edges outgoing from the specified vertex
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);

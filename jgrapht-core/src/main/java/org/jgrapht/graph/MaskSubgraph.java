@@ -135,6 +135,59 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
+     * 
+     * <p>
+     * By default this method returns the sum of in-degree and out-degree. The exact value returned
+     * depends on the type of the underlying graph.
+     */
+    @Override
+    public int degreeOf(V vertex)
+    {
+        return inDegreeOf(vertex) + outDegreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        assertVertexExist(vertex);
+
+        return new MaskEdgeSet<>(base, base.incomingEdgesOf(vertex), vertexMask, edgeMask);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        return incomingEdgesOf(vertex).size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        assertVertexExist(vertex);
+
+        return new MaskEdgeSet<>(base, base.outgoingEdgesOf(vertex), vertexMask, edgeMask);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return outgoingEdgesOf(vertex).size();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)

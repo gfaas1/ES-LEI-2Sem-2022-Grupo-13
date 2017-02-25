@@ -18,7 +18,6 @@
 package org.jgrapht.graph;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.jgrapht.*;
 
@@ -71,48 +70,6 @@ public class DirectedSubgraph<V, E>
     public DirectedSubgraph(DirectedGraph<V, E> base)
     {
         this(base, null, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int inDegreeOf(V vertex)
-    {
-        return incomingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<E> incomingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return base.incomingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
-            Collectors.toCollection(() -> new LinkedHashSet<>()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int outDegreeOf(V vertex)
-    {
-        return outgoingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<E> outgoingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return base.outgoingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
-            Collectors.toCollection(() -> new LinkedHashSet<>()));
     }
 }
 

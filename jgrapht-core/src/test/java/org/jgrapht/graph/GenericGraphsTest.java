@@ -195,6 +195,11 @@ public class GenericGraphsTest
         {
             str = s;
         }
+
+        public String toString()
+        {
+            return str;
+        }
     }
 
     public static class BarEdge

@@ -52,7 +52,6 @@ class DijkstraClosestFirstIterator<V, E>
     private final Graph<V, E> graph;
     private final V source;
     private final double radius;
-    private final Specifics specifics;
     private final FibonacciHeap<QueueEntry> heap;
     private final Map<V, FibonacciHeapNode<QueueEntry>> seen;
 
@@ -86,11 +85,6 @@ class DijkstraClosestFirstIterator<V, E>
             throw new IllegalArgumentException("Radius must be non-negative");
         }
         this.radius = radius;
-        if (graph instanceof DirectedGraph) {
-            this.specifics = new DirectedSpecifics((DirectedGraph<V, E>) graph);
-        } else {
-            this.specifics = new UndirectedSpecifics(graph);
-        }
         this.heap = new FibonacciHeap<>();
         this.seen = new HashMap<>();
 
@@ -132,7 +126,7 @@ class DijkstraClosestFirstIterator<V, E>
         double vDistance = vNode.getKey();
 
         // relax edges
-        for (E e : specifics.edgesOf(v)) {
+        for (E e : graph.outgoingEdgesOf(v)) {
             V u = Graphs.getOppositeVertex(graph, e, v);
             double eWeight = graph.getEdgeWeight(e);
             if (eWeight < 0.0) {
@@ -198,47 +192,6 @@ class DijkstraClosestFirstIterator<V, E>
                 heap.decreaseKey(node, distance);
                 node.getData().e = e;
             }
-        }
-    }
-
-    abstract class Specifics
-    {
-        public abstract Set<? extends E> edgesOf(V vertex);
-    }
-
-    class DirectedSpecifics
-        extends Specifics
-    {
-
-        private DirectedGraph<V, E> graph;
-
-        public DirectedSpecifics(DirectedGraph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<? extends E> edgesOf(V vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-    }
-
-    class UndirectedSpecifics
-        extends Specifics
-    {
-
-        private Graph<V, E> graph;
-
-        public UndirectedSpecifics(Graph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<E> edgesOf(V vertex)
-        {
-            return graph.edgesOf(vertex);
         }
     }
 

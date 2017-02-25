@@ -324,6 +324,61 @@ public class Subgraph<V, E, G extends Graph<V, E>>
 
     /**
      * {@inheritDoc}
+     * 
+     * <p>
+     * By default this method returns the sum of in-degree and out-degree. The exact value returned
+     * depends on the types of the underlying graph.
+     */
+    @Override
+    public int degreeOf(V vertex)
+    {
+        return inDegreeOf(vertex) + outDegreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        assertVertexExist(vertex);
+
+        return base.incomingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
+            Collectors.toCollection(() -> new LinkedHashSet<>()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        return incomingEdgesOf(vertex).size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        assertVertexExist(vertex);
+
+        return base.outgoingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
+            Collectors.toCollection(() -> new LinkedHashSet<>()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return outgoingEdgesOf(vertex).size();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean removeEdge(E e)

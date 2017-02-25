@@ -17,17 +17,24 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
 /**
  * Read-only union of an undirected and a directed graph.
  * 
+ * <p>
+ * Since this graph is a union of an undirected and a directed graph, calls to method
+ * {@link MixedGraphUnion#incomingEdgesOf(Object)} and/or
+ * {@link MixedGraphUnion#outgoingEdgesOf(Object)} might return edges having their source and target
+ * vertices in the opposite order. Similarly methods {@link MixedGraphUnion#degreeOf(Object)},
+ * {@link MixedGraphUnion#inDegreeOf(Object)} and {@link MixedGraphUnion#outDegreeOf(Object)} will
+ * return the sum of the degrees in the underlying graphs.
+ * 
  * @param <V> the vertex type
  * @param <E> the edge type
  * 
+ * @author Joris Kinable
  */
 public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
@@ -62,50 +69,57 @@ public class MixedGraphUnion<V, E>
      */
     public MixedGraphUnion(UndirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
     {
-        super(g1, g2);
-        this.undirectedGraph = g1;
-        this.directedGraph = g2;
+        this(g1, g2, WeightCombiner.SUM);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int degreeOf(V vertex)
+    {
+        int d = 0;
+        if (directedGraph.containsVertex(vertex)) {
+            d += directedGraph.degreeOf(vertex);
+        }
+        if (undirectedGraph.containsVertex(vertex)) {
+            d += undirectedGraph.degreeOf(vertex);
+        }
+        return d;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int inDegreeOf(V vertex)
     {
-        Set<E> res = incomingEdgesOf(vertex);
-        return res.size();
-    }
-
-    @Override
-    public Set<E> incomingEdgesOf(V vertex)
-    {
-        Set<E> res = new LinkedHashSet<>();
+        int d = 0;
         if (directedGraph.containsVertex(vertex)) {
-            res.addAll(directedGraph.incomingEdgesOf(vertex));
+            d += directedGraph.inDegreeOf(vertex);
         }
         if (undirectedGraph.containsVertex(vertex)) {
-            res.addAll(undirectedGraph.edgesOf(vertex));
+            d += undirectedGraph.inDegreeOf(vertex);
         }
-        return Collections.unmodifiableSet(res);
+        return d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int outDegreeOf(V vertex)
     {
-        Set<E> res = outgoingEdgesOf(vertex);
-        return res.size();
-    }
-
-    @Override
-    public Set<E> outgoingEdgesOf(V vertex)
-    {
-        Set<E> res = new LinkedHashSet<>();
+        int d = 0;
         if (directedGraph.containsVertex(vertex)) {
-            res.addAll(directedGraph.outgoingEdgesOf(vertex));
+            d += directedGraph.outDegreeOf(vertex);
         }
         if (undirectedGraph.containsVertex(vertex)) {
-            res.addAll(undirectedGraph.edgesOf(vertex));
+            d += undirectedGraph.outDegreeOf(vertex);
         }
-        return Collections.unmodifiableSet(res);
+        return d;
     }
+
 }
 
 // End MixedGraphUnion.java
