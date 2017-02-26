@@ -32,16 +32,21 @@ import org.jgrapht.traverse.*;
  * would induce a cycle throws an {@link IllegalArgumentException}.
  *
  * <p>
- * This is done using a dynamic topological sort which is based on the algorithm PK described in "D.
- * Pearce &amp; P. Kelly, 2007: A Dynamic Topological Sort Algorithm for Directed Acyclic Graphs",
- * (see <a href="http://www.mcs.vuw.ac.nz/~djp/files/PK-JEA07.pdf">paper</a> or
- * <a href="http://doi.acm.org/10.1145/1187436.1210590">ACM link</a> for details).
- *
+ * This is done using a dynamic topological sort which is based on the algorithm described in "David
+ * J. Pearce &amp; Paul H. J. Kelly. A dynamic topological sort algorithm for directed acyclic
+ * graphs. Journal of Experimental Algorithmics, 11, 2007." (see
+ * <a href="http://www.mcs.vuw.ac.nz/~djp/files/PK-JEA07.pdf">paper</a> or
+ * <a href="http://doi.acm.org/10.1145/1187436.1210590">ACM link</a> for details). The
+ * implementation differs from the algorithm specified in the above paper in some ways, perhaps most
+ * notably in that the topological ordering is stored by default using two hash maps, which will
+ * have some effects on the runtime, but also allow for vertex addition and removal. This storage
+ * mechanism can be adjusted by subclasses.
+ * 
  * <p>
- * The implementation differs from the algorithm specified in the above paper in some ways, perhaps
- * most notably in that the topological ordering is stored by default using two hash maps, which
- * will have some effects on the runtime, but also allow for vertex addition and removal. This
- * storage mechanism can be adjusted by subclasses.
+ * The complexity of adding a new edge in the graph depends on the number of edges incident to the
+ * "affected region", and should in general be faster than recomputing the whole topological
+ * ordering from scratch. For details about the complexity parameters and running times, see the
+ * previously mentioned paper.
  *
  * <p>
  * This class makes no claims to thread safety, and concurrent usage from multiple threads will
@@ -57,6 +62,8 @@ public class DirectedAcyclicGraph<V, E>
     implements Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
+
+    private static final String EDGE_WOULD_INDUCE_A_CYCLE = "Edge would induce a cycle";
 
     private final Comparator<V> topoComparator;
     private final TopoOrderMap<V> topoOrderMap;
@@ -109,7 +116,7 @@ public class DirectedAcyclicGraph<V, E>
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
             Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
-        this.topoComparator = (o1, o2) -> topoOrderMap
+        this.topoComparator = (Comparator<V> & Serializable) (o1, o2) -> topoOrderMap
             .getTopologicalIndex(o1).compareTo(topoOrderMap.getTopologicalIndex(o2));
     }
 
@@ -163,6 +170,11 @@ public class DirectedAcyclicGraph<V, E>
     /**
      * {@inheritDoc}
      * 
+     * <p>
+     * The complexity of adding a new edge in the graph depends on the number of edges incident to
+     * the "affected region", and should in general be faster than recomputing the whole topological
+     * ordering from scratch.
+     * 
      * @throws IllegalArgumentException if the edge would induce a cycle in the graph
      */
     @Override
@@ -176,13 +188,18 @@ public class DirectedAcyclicGraph<V, E>
             updateDag(sourceVertex, targetVertex);
             result = super.addEdge(sourceVertex, targetVertex);
         } catch (CycleFoundException e) {
-            throw new IllegalArgumentException("Edge would induce a cycle");
+            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
         }
         return result;
     }
 
     /**
      * {@inheritDoc}
+     * 
+     * <p>
+     * The complexity of adding a new edge in the graph depends on the number of edges incident to
+     * the "affected region", and should in general be faster than recomputing the whole topological
+     * ordering from scratch.
      * 
      * @throws IllegalArgumentException if the edge would induce a cycle in the graph
      */
@@ -203,7 +220,7 @@ public class DirectedAcyclicGraph<V, E>
             updateDag(sourceVertex, targetVertex);
             result = super.addEdge(sourceVertex, targetVertex, e);
         } catch (CycleFoundException ex) {
-            throw new IllegalArgumentException("Edge would induce a cycle");
+            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
         }
         return result;
     }
@@ -225,9 +242,7 @@ public class DirectedAcyclicGraph<V, E>
             iterator.next();
         }
 
-        while (iterator.hasNext()) {
-            ancestors.add(iterator.next());
-        }
+        iterator.forEachRemaining(ancestors::add);
 
         return ancestors;
     }
@@ -248,9 +263,7 @@ public class DirectedAcyclicGraph<V, E>
             iterator.next();
         }
 
-        while (iterator.hasNext()) {
-            descendants.add(iterator.next());
-        }
+        iterator.forEachRemaining(descendants::add);
 
         return descendants;
     }
