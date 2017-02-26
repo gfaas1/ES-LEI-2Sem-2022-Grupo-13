@@ -174,7 +174,7 @@ public final class PageRank<V, E>
         }
 
         int totalVertices = g.vertexSet().size();
-        boolean weighted = (g instanceof WeightedGraph<?, ?>);
+        boolean weighted = g.getType().isWeighted();
         Map<V, Double> weights;
         if (weighted) {
             weights = new HashMap<>(totalVertices);

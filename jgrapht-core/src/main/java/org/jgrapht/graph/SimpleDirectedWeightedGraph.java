@@ -29,7 +29,7 @@ import org.jgrapht.graph.builder.*;
  */
 public class SimpleDirectedWeightedGraph<V, E>
     extends SimpleDirectedGraph<V, E>
-    implements DirectedWeightedGraph<V, E>
+    implements DirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3904960841681220919L;
 

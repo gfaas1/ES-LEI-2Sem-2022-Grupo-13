@@ -64,7 +64,7 @@ public class AsUnweightedGraphTest
      */
     public void testWeightedGraph()
     {
-        WeightedGraph<String, DefaultWeightedEdge> undirected =
+        Graph<String, DefaultWeightedEdge> undirected =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         constructWeighted(undirected);
 
@@ -87,7 +87,7 @@ public class AsUnweightedGraphTest
         checkView(undirected, unweighted);
     }
 
-    private void constructWeighted(WeightedGraph<String, DefaultWeightedEdge> weighted)
+    private void constructWeighted(Graph<String, DefaultWeightedEdge> weighted)
     {
         weighted.addVertex(v1);
         weighted.addVertex(v2);
@@ -97,24 +97,19 @@ public class AsUnweightedGraphTest
     }
 
     private void checkView(
-        WeightedGraph<String, DefaultWeightedEdge> weighted,
-        Graph<String, DefaultWeightedEdge> unweighted)
+        Graph<String, DefaultWeightedEdge> weighted, Graph<String, DefaultWeightedEdge> unweighted)
     {
         assertEquals(
-            WeightedGraph.DEFAULT_EDGE_WEIGHT,
-            unweighted.getEdgeWeight(unweighted.getEdge(v1, v2)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v1, v2)));
 
         Graphs.addEdge(weighted, v2, v3, 5.0);
         assertEquals(
-            WeightedGraph.DEFAULT_EDGE_WEIGHT,
-            unweighted.getEdgeWeight(unweighted.getEdge(v2, v3)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v2, v3)));
 
         unweighted.addEdge(v3, v1);
         assertEquals(
-            WeightedGraph.DEFAULT_EDGE_WEIGHT,
-            unweighted.getEdgeWeight(unweighted.getEdge(v3, v1)));
-        assertEquals(
-            WeightedGraph.DEFAULT_EDGE_WEIGHT, weighted.getEdgeWeight(weighted.getEdge(v3, v1)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v3, v1)));
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, weighted.getEdgeWeight(weighted.getEdge(v3, v1)));
     }
 }
 

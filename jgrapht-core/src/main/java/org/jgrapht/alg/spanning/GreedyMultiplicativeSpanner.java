@@ -80,7 +80,7 @@ public class GreedyMultiplicativeSpanner<V, E>
     @Override
     public Spanner<E> getSpanner()
     {
-        if (graph instanceof WeightedGraph) {
+        if (graph.getType().isWeighted()) {
             return new WeightedSpannerAlgorithm().run();
         } else {
             return new UnweightedSpannerAlgorithm().run();
@@ -207,14 +207,13 @@ public class GreedyMultiplicativeSpanner<V, E>
     private class WeightedSpannerAlgorithm
         extends SpannerAlgorithmBase
     {
-        protected WeightedGraph<V, DefaultWeightedEdge> spanner;
+        protected Graph<V, DefaultWeightedEdge> spanner;
         protected FibonacciHeap<V> heap;
         protected Map<V, FibonacciHeapNode<V>> nodes;
 
         public WeightedSpannerAlgorithm()
         {
-            this.spanner =
-                new SimpleWeightedGraph<V, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+            this.spanner = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
             }

@@ -28,8 +28,7 @@ import org.jgrapht.*;
  * @param <G> type of the resulting graph
  * 
  */
-public final class DirectedWeightedGraphBuilder<V, E,
-    G extends DirectedGraph<V, E> & WeightedGraph<V, E>>
+public final class DirectedWeightedGraphBuilder<V, E, G extends DirectedGraph<V, E>>
     extends DirectedWeightedGraphBuilderBase<V, E, G, DirectedWeightedGraphBuilder<V, E, G>>
 {
     /**

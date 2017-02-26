@@ -55,12 +55,11 @@ import org.jgrapht.*;
  */
 public class AsWeightedGraph<V, E>
     extends GraphDelegator<V, E>
-    implements Serializable, WeightedGraph<V, E>
+    implements WeightedGraph<V, E>, Serializable
 {
     private static final long serialVersionUID = -716810639338971372L;
 
     private final Map<E, Double> weightMap;
-    private final boolean isWeightedGraph;
 
     /**
      * Constructor for AsWeightedGraph.
@@ -74,21 +73,16 @@ public class AsWeightedGraph<V, E>
     public AsWeightedGraph(Graph<V, E> g, Map<E, Double> weightMap)
     {
         super(g);
-        assert (weightMap != null);
-        this.weightMap = weightMap;
-
-        // Remember whether the backing graph implements the WeightedGraph
-        // interface
-        this.isWeightedGraph = (g instanceof WeightedGraph<?, ?>);
+        this.weightMap = Objects.requireNonNull(weightMap, "Weight map cannot be null");
     }
 
     /**
-     * @see WeightedGraph#setEdgeWeight
+     * {@inheritDoc}
      */
     @Override
     public void setEdgeWeight(E e, double weight)
     {
-        if (isWeightedGraph) {
+        if (super.getType().isWeighted()) {
             super.setEdgeWeight(e, weight);
         }
 
@@ -98,7 +92,7 @@ public class AsWeightedGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeWeight
+     * {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -115,6 +109,16 @@ public class AsWeightedGraph<V, E>
 
         return weight;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return super.getType().asWeighted();
+    }
+
 }
 
 // End AsWeightedGraph.java

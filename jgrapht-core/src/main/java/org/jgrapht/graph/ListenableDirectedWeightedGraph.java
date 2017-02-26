@@ -26,10 +26,13 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see DefaultListenableGraph
+ * @deprecated Not needed, since {@link ListenableDirectedGraph} provides the necessary
+ *             functionality.
  */
+@Deprecated
 public class ListenableDirectedWeightedGraph<V, E>
     extends ListenableDirectedGraph<V, E>
-    implements DirectedWeightedGraph<V, E>
+    implements DirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3977582476627621938L;
 
@@ -48,7 +51,7 @@ public class ListenableDirectedWeightedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableDirectedWeightedGraph(DirectedWeightedGraph<V, E> base)
+    public ListenableDirectedWeightedGraph(DirectedGraph<V, E> base)
     {
         super(base);
     }

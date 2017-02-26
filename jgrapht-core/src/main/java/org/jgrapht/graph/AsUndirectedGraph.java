@@ -171,6 +171,15 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return super.getType().asUndirected();
+    }
+
+    /**
      * @see AbstractBaseGraph#toString()
      */
     @Override

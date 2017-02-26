@@ -28,8 +28,7 @@ import org.jgrapht.*;
  * @param <G> type of the resulting graph
  * 
  */
-public final class UndirectedWeightedGraphBuilder<V, E,
-    G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>
+public final class UndirectedWeightedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
     extends UndirectedWeightedGraphBuilderBase<V, E, G, UndirectedWeightedGraphBuilder<V, E, G>>
 {
     /**

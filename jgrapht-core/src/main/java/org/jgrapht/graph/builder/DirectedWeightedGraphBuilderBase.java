@@ -27,8 +27,7 @@ import org.jgrapht.*;
  * @param <G> type of the resulting graph
  * @param <B> type of this builder
  */
-public abstract class DirectedWeightedGraphBuilderBase<V, E,
-    G extends DirectedGraph<V, E> & WeightedGraph<V, E>,
+public abstract class DirectedWeightedGraphBuilderBase<V, E, G extends DirectedGraph<V, E>,
     B extends DirectedWeightedGraphBuilderBase<V, E, G, B>>
     extends DirectedGraphBuilderBase<V, E, G, B>
 {
@@ -72,7 +71,7 @@ public abstract class DirectedWeightedGraphBuilderBase<V, E,
      * @return this builder object
      *
      * @see Graph#addEdge(Object, Object, Object)
-     * @see WeightedGraph#setEdgeWeight(Object, double)
+     * @see Graph#setEdgeWeight(Object, double)
      */
     public B addEdge(V source, V target, E edge, double weight)
     {

@@ -36,7 +36,7 @@ import org.jgrapht.graph.*;
  */
 public class StoerWagnerMinimumCut<V, E>
 {
-    final WeightedGraph<Set<V>, DefaultWeightedEdge> workingGraph;
+    final Graph<Set<V>, DefaultWeightedEdge> workingGraph;
 
     protected double bestCutWeight = Double.POSITIVE_INFINITY;
     protected Set<V> bestCut;

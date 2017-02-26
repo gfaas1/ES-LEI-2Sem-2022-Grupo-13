@@ -287,14 +287,21 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * Assigns a weight to an edge.
-     *
-     * @param e edge on which to set weight
-     * @param weight new weight for edge
+     * {@inheritDoc}
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
-        ((WeightedGraph<V, E>) delegate).setEdgeWeight(e, weight);
+        delegate.setEdgeWeight(e, weight);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return delegate.getType();
     }
 }
 

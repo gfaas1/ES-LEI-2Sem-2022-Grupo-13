@@ -72,7 +72,7 @@ public class AllPairsShortestPathsTest
         final double p = 0.35;
         final int landmarksCount = 2;
 
-        List<Function<WeightedGraph<Integer, DefaultWeightedEdge>,
+        List<Function<Graph<Integer, DefaultWeightedEdge>,
             ShortestPathAlgorithm<Integer, DefaultWeightedEdge>>> algs = new ArrayList<>();
         algs.add((g) -> new DijkstraShortestPath<>(g));
         algs.add((g) -> new BidirectionalDijkstraShortestPath<>(g));
@@ -90,7 +90,7 @@ public class AllPairsShortestPathsTest
             new GnpRandomGraphGenerator<>(n, p, rng, true);
 
         for (int i = 0; i < tests; i++) {
-            WeightedGraph<Integer, DefaultWeightedEdge> g =
+            Graph<Integer, DefaultWeightedEdge> g =
                 new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
             gen.generateGraph(g, new IntegerVertexFactory(), null);
 
@@ -102,7 +102,7 @@ public class AllPairsShortestPathsTest
             double[][] dist = new double[n][n];
 
             int j = 0;
-            for (Function<WeightedGraph<Integer, DefaultWeightedEdge>,
+            for (Function<Graph<Integer, DefaultWeightedEdge>,
                 ShortestPathAlgorithm<Integer, DefaultWeightedEdge>> spProvider : algs)
             {
                 ShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = spProvider.apply(g);

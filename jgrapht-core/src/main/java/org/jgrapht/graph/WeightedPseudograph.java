@@ -32,7 +32,7 @@ import org.jgrapht.graph.builder.*;
  */
 public class WeightedPseudograph<V, E>
     extends Pseudograph<V, E>
-    implements UndirectedWeightedGraph<V, E>
+    implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3257290244524356152L;
 

@@ -153,7 +153,7 @@ public class GmlExporter<V, E>
                     (edgeLabelProvider == null) ? edge.toString() : edgeLabelProvider.getName(edge);
                 out.println(TAB2 + "label" + DELIM + quoted(label));
             }
-            if (exportEdgeWeights && g instanceof WeightedGraph) {
+            if (exportEdgeWeights && g.getType().isWeighted()) {
                 out.println(TAB2 + "weight" + DELIM + Double.toString(g.getEdgeWeight(edge)));
             }
             out.println(TAB1 + "]");

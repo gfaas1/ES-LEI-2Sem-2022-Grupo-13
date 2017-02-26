@@ -247,7 +247,7 @@ public class EqualsAndHashCodeTest
         weightMap1.put(e23, 20.0);
         weightMap1.put(e31, 30.0);
 
-        WeightedGraph<String, DefaultEdge> g3 = new AsWeightedGraph<>(g1, weightMap1);
+        Graph<String, DefaultEdge> g3 = new AsWeightedGraph<>(g1, weightMap1);
 
         Map<DefaultEdge, Double> weightMap2 = new HashMap<>();
 
@@ -255,7 +255,7 @@ public class EqualsAndHashCodeTest
         weightMap2.put(e23, 20.0);
         weightMap2.put(e31, 30.0);
 
-        WeightedGraph<String, DefaultEdge> g4 = new AsWeightedGraph<>(g2, weightMap2);
+        Graph<String, DefaultEdge> g4 = new AsWeightedGraph<>(g2, weightMap2);
 
         Map<DefaultEdge, Double> weightMap3 = new HashMap<>();
 
@@ -263,7 +263,7 @@ public class EqualsAndHashCodeTest
         weightMap3.put(e23, 200.0);
         weightMap3.put(e31, 300.0);
 
-        WeightedGraph<String, DefaultEdge> g5 = new AsWeightedGraph<>(g2, weightMap3);
+        Graph<String, DefaultEdge> g5 = new AsWeightedGraph<>(g2, weightMap3);
 
         assertTrue(g1.equals(g2));
         assertEquals(g2.hashCode(), g1.hashCode());

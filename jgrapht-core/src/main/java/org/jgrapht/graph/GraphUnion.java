@@ -267,6 +267,36 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        GraphType type1 = g1.getType();
+        GraphType type2 = g2.getType();
+        GraphType t = DefaultGraphType.mixed();
+        if (type1.isDirected() && type2.isDirected()) {
+            t = t.asDirected();
+        }
+        if (type1.isUndirected() && type2.isUndirected()) {
+            t = t.asUndirected();
+        }
+        if (type1.isWeighted() || type2.isWeighted()) {
+            t = t.asWeighted();
+        }
+        return t;
+    }
+
+    /**
+     * Throws {@link UnsupportedOperationException} since graph union is read-only.
+     */
+    @Override
+    public void setEdgeWeight(E e, double weight)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
      * Return G<sub>1</sub>
      * 
      * @return G<sub>1</sub>
@@ -285,6 +315,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     {
         return g2;
     }
+
 }
 
 // End GraphUnion.java

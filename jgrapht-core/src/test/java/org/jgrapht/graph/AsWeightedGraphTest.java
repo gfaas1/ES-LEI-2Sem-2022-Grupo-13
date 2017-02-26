@@ -32,7 +32,7 @@ public class AsWeightedGraphTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    public WeightedGraph<String, DefaultWeightedEdge> weightedGraph;
+    public Graph<String, DefaultWeightedEdge> weightedGraph;
     public Graph<String, DefaultEdge> unweightedGraph;
 
     public SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> directedWeightedGraph;
@@ -71,7 +71,7 @@ public class AsWeightedGraphTest
         this.createdUnweightedGraph(directedUnweightedGraph);
     }
 
-    private void createdWeightedGraph(WeightedGraph<String, DefaultWeightedEdge> graph)
+    private void createdWeightedGraph(Graph<String, DefaultWeightedEdge> graph)
     {
         graph.addVertex("v1");
         graph.addVertex("v2");
@@ -111,9 +111,9 @@ public class AsWeightedGraphTest
         Map<DefaultEdge, Double> weightMap = new HashMap<>();
         weightMap.put(e1, 9.0);
 
-        assertEquals(graph.getEdgeWeight(e1), WeightedGraph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT);
 
-        WeightedGraph<String, DefaultEdge> graphView;
+        Graph<String, DefaultEdge> graphView;
         if (graph instanceof DirectedGraph)
             graphView = new AsWeightedDirectedGraph<>(
                 (DirectedGraph<String, DefaultEdge>) graph, weightMap);
@@ -124,12 +124,12 @@ public class AsWeightedGraphTest
             graphView = new AsWeightedGraph<>(graph, weightMap);
 
         assertEquals(graphView.getEdgeWeight(e1), 9.0);
-        assertEquals(graphView.getEdgeWeight(e2), WeightedGraph.DEFAULT_EDGE_WEIGHT);
-        assertEquals(graphView.getEdgeWeight(e3), WeightedGraph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graphView.getEdgeWeight(e3), Graph.DEFAULT_EDGE_WEIGHT);
 
         graphView.setEdgeWeight(e2, 5.0);
         assertEquals(graphView.getEdgeWeight(e2), 5.0);
-        assertEquals(graph.getEdgeWeight(e2), WeightedGraph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graph.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT);
     }
 
     /*** Weighted graphs ***/
@@ -151,7 +151,7 @@ public class AsWeightedGraphTest
         weightMap.put(e1, 9.0);
         weightMap.put(e3, 8.0);
 
-        WeightedGraph<String, DefaultWeightedEdge> graphView;
+        Graph<String, DefaultWeightedEdge> graphView;
         if (graph instanceof DirectedGraph)
             graphView = new AsWeightedDirectedGraph<>(
                 (DirectedGraph<String, DefaultWeightedEdge>) graph, weightMap);

@@ -21,15 +21,14 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A simple weighted graph. A simple weighted graph is a simple graph for which edges are assigned
- * weights.
+ * A simple weighted graph.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
-    implements UndirectedWeightedGraph<V, E>
+    implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3906088949100655922L;
 

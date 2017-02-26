@@ -17,12 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
-
 /**
- * A default implementation for edges in a {@link WeightedGraph}. All access to the weight of an
- * edge must go through the graph interface, which is why this class doesn't expose any public
- * methods.
+ * A default implementation for edges in a weighted graph. All access to the weight of an edge must
+ * go through the graph interface, which is why this class doesn't expose any public methods.
  *
  * @author John V. Sichi
  */

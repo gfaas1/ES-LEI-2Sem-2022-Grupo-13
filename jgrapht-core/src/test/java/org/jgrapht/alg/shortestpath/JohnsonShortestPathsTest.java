@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import org.jgrapht.Graph;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.WeightedGraph;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -84,14 +84,14 @@ public class JohnsonShortestPathsTest
 
         Random rng = new Random();
 
-        List<Supplier<WeightedGraph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
+        List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
         graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
 
-        for (Supplier<WeightedGraph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
+        for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, false);
             for (int i = 0; i < tests; i++) {
-                WeightedGraph<Integer, DefaultWeightedEdge> g = gSupplier.get();
+                Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
                 IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
                 gen.generateGraph(g, vertexFactory, null);
 

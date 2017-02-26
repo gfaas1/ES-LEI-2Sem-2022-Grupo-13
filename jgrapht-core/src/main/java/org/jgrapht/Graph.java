@@ -385,17 +385,38 @@ public interface Graph<V, E>
     V getEdgeTarget(E e);
 
     /**
+     * Get the graph type. The graph type can be used to query for additional metadata such as
+     * whether the graph supports directed or undirected edges, self-loops, parallel-edges, weights,
+     * etc.
+     * 
+     * @return the graph type
+     */
+    GraphType getType();
+
+    /**
+     * The default weight for an edge.
+     */
+    double DEFAULT_EDGE_WEIGHT = 1.0;
+
+    /**
      * Returns the weight assigned to a given edge. Unweighted graphs return 1.0 (as defined by
-     * {@link WeightedGraph#DEFAULT_EDGE_WEIGHT}), allowing weighted-graph algorithms to apply to
-     * them where meaningful.
+     * {@link #DEFAULT_EDGE_WEIGHT}), allowing weighted-graph algorithms to apply to them when
+     * meaningful.
      *
      * @param e edge of interest
-     *
      * @return edge weight
-     *
-     * @see WeightedGraph
      */
     double getEdgeWeight(E e);
+
+    /**
+     * Assigns a weight to an edge.
+     *
+     * @param e edge on which to set weight
+     * @param weight new weight for edge
+     * @throws UnsupportedOperationException if the graph does not support weights
+     */
+    void setEdgeWeight(E e, double weight);
+
 }
 
 // End Graph.java

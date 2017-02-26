@@ -148,9 +148,9 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);
         List<? extends V> second = secondPartition.subList(0, partitionCardinality);
 
-        WeightedGraph<V, WeightedEdge> target = new SimpleWeightedGraph<>(WeightedEdge::make);
+        Graph<V, WeightedEdge> target = new SimpleWeightedGraph<>(WeightedEdge::make);
 
-        WeightedGraphGeneratorAdapter<V, WeightedEdge, V> generator =
+        GraphGenerator<V, WeightedEdge, V> generator =
             new SimpleWeightedBipartiteGraphMatrixGenerator<V, WeightedEdge>()
                 .first(first).second(second).weights(costMatrix);
 
@@ -163,7 +163,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     @Test
     public void testForEmptyGraph()
     {
-        WeightedGraph<V, WeightedEdge> graph = new SimpleWeightedGraph<>(WeightedEdge.class);
+        Graph<V, WeightedEdge> graph = new SimpleWeightedGraph<>(WeightedEdge.class);
 
         Set<? extends V> emptyList = Collections.emptySet();
 

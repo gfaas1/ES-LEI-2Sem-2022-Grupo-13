@@ -509,12 +509,30 @@ public abstract class AbstractBaseGraph<V, E>
      * @param weight the weight
      * @throws UnsupportedOperationException if the graph is not weighted
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
         if (e == null) {
             throw new NullPointerException();
         }
         intrusiveEdgesSpecifics.setEdgeWeight(e, weight);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        if (directed) {
+            return new DefaultGraphType.Builder()
+                .directed().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
+                .allowSelfLoops(allowingLoops).build();
+        } else {
+            return new DefaultGraphType.Builder()
+                .undirected().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
+                .allowSelfLoops(allowingLoops).build();
+        }
     }
 
     /**

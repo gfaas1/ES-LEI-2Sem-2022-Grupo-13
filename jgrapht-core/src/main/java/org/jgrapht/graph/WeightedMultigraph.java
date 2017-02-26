@@ -32,7 +32,7 @@ import org.jgrapht.graph.builder.*;
  */
 public class WeightedMultigraph<V, E>
     extends Multigraph<V, E>
-    implements UndirectedWeightedGraph<V, E>
+    implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3544671793370640696L;
 

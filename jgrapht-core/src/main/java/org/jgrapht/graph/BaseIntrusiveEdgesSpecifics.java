@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.WeightedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.util.TypeUtil;
 
 /**
@@ -124,7 +124,7 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
      */
     public double getEdgeWeight(E e)
     {
-        return WeightedGraph.DEFAULT_EDGE_WEIGHT;
+        return Graph.DEFAULT_EDGE_WEIGHT;
     }
 
     /**

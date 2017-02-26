@@ -49,7 +49,6 @@ public class MaskSubgraph<V, E>
     protected final Predicate<V> vertexMask;
     protected final Predicate<E> edgeMask;
 
-
     /**
      * Creates a new induced subgraph. Running-time = O(1).
      *
@@ -197,11 +196,31 @@ public class MaskSubgraph<V, E>
      * {@inheritDoc}
      */
     @Override
+    public GraphType getType()
+    {
+        return base.getType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getEdgeWeight(E edge)
     {
         assert (edgeSet().contains(edge));
 
         return base.getEdgeWeight(edge);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEdgeWeight(E edge, double weight)
+    {
+        assert (edgeSet().contains(edge));
+
+        base.setEdgeWeight(edge, weight);
     }
 
     /**
@@ -266,6 +285,7 @@ public class MaskSubgraph<V, E>
     {
         return vertices;
     }
+
 }
 
 // End MaskSubgraph.java

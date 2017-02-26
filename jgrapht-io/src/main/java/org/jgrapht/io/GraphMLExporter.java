@@ -528,7 +528,7 @@ public class GraphMLExporter<V, E>
                 handler, edgeWeightAttributeName,
                 new AttributeDetails(
                     "edge_weight_key", AttributeCategory.EDGE, AttributeType.DOUBLE,
-                    Double.toString(WeightedGraph.DEFAULT_EDGE_WEIGHT)));
+                    Double.toString(Graph.DEFAULT_EDGE_WEIGHT)));
         }
 
         for (String attributeName : registeredAttributes.keySet()) {
@@ -639,9 +639,9 @@ public class GraphMLExporter<V, E>
 
             if (exportEdgeWeights) {
                 Double weight = g.getEdgeWeight(e);
-                if (!weight.equals(WeightedGraph.DEFAULT_EDGE_WEIGHT)) { // not
-                                                                         // default
-                                                                         // value
+                if (!weight.equals(Graph.DEFAULT_EDGE_WEIGHT)) { // not
+                                                                 // default
+                                                                 // value
                     writeData(handler, "edge_weight_key", String.valueOf(weight));
                 }
             }

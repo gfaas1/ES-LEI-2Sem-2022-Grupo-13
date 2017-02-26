@@ -53,7 +53,7 @@ import org.jgrapht.*;
  */
 public class AsWeightedUndirectedGraph<V, E>
     extends AsWeightedGraph<V, E>
-    implements UndirectedWeightedGraph<V, E>
+    implements UndirectedGraph<V, E>
 {
     private static final long serialVersionUID = 2226726301464282811L;
 

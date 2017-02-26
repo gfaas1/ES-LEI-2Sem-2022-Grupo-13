@@ -37,7 +37,10 @@ public class ListenableUndirectedGraph<V, E>
      * Creates a new listenable undirected simple graph.
      *
      * @param edgeClass class on which to base factory for edges
+     * @deprecated Use {@link ListenableUndirectedGraph#ListenableUndirectedGraph(UndirectedGraph)}
+     *             instead.
      */
+    @Deprecated
     public ListenableUndirectedGraph(Class<? extends E> edgeClass)
     {
         this(new SimpleGraph<>(edgeClass));

@@ -29,10 +29,11 @@ import org.jgrapht.*;
  */
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
+    implements GraphGenerator<V, E, V>
 {
-    List<V> first;
-
-    List<V> second;
+    protected List<V> first;
+    protected List<V> second;
+    protected double[][] weights;
 
     /**
      * Set the first partition of the generator.
@@ -59,11 +60,23 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
     }
 
     /**
+     * Set the weights of the generator.
+     * 
+     * @param weights the weights
+     * @return the generator
+     */
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> weights(double[][] weights)
+    {
+        this.weights = weights;
+        return this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void generateGraph(
-        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -92,6 +105,19 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
                 target.setEdgeWeight(target.addEdge(first.get(i), second.get(j)), weights[i][j]);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated Not needed since {@link WeightedGraph} is deprecated.
+     */
+    @Override
+    @Deprecated
+    public void generateGraph(
+        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    {
+        generateGraph((Graph<V, E>) target, vertexFactory, resultMap);
     }
 }
 

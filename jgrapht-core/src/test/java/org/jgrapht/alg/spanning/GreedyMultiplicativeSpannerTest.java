@@ -126,7 +126,7 @@ public class GreedyMultiplicativeSpannerTest
 
     // ~ Methods
     // ----------------------------------------------------------------
-    public void createGraph3(WeightedGraph<String, DefaultWeightedEdge> g)
+    public void createGraph3(Graph<String, DefaultWeightedEdge> g)
     {
         g.addVertex(V0);
         g.addVertex(V1);

@@ -403,21 +403,27 @@ public class Subgraph<V, E, G extends Graph<V, E>>
      * {@inheritDoc}
      */
     @Override
+    public GraphType getType()
+    {
+        return base.getType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getEdgeWeight(E e)
     {
         return base.getEdgeWeight(e);
     }
 
     /**
-     * Assigns a weight to an edge.
-     *
-     * @param e edge on which to set weight
-     * @param weight new weight for edge
-     * @see WeightedGraph#setEdgeWeight(Object, double)
+     * {@inheritDoc}
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
-        ((WeightedGraph<V, E>) base).setEdgeWeight(e, weight);
+        base.setEdgeWeight(e, weight);
     }
 
     private void initialize(Set<? extends V> vertexFilter, Set<? extends E> edgeFilter)
@@ -527,6 +533,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
             removeVertex(vertex);
         }
     }
+
 }
 
 // End Subgraph.java
