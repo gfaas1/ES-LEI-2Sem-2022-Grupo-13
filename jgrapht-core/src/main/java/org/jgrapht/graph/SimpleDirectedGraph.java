@@ -62,7 +62,7 @@ public class SimpleDirectedGraph<V, E>
      */
     public SimpleDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, false, false, weighted);
+        super(ef, true, false, false, weighted);
     }
 
     /**

@@ -66,7 +66,7 @@ public class DefaultDirectedGraph<V, E>
      */
     public DefaultDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, false, true, weighted);
+        super(ef, true, false, true, weighted);
     }
 
     /**

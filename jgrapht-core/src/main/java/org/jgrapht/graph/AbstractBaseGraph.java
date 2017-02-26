@@ -51,13 +51,16 @@ public abstract class AbstractBaseGraph<V, E>
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
 
-    private boolean allowingLoops;
     private EdgeFactory<V, E> edgeFactory;
     private transient Set<V> unmodifiableVertexSet = null;
+
     private Specifics<V, E> specifics;
-    private boolean weighted;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
+
+    private boolean directed;
+    private boolean weighted;
     private boolean allowingMultipleEdges;
+    private boolean allowingLoops;
 
     /**
      * Construct a new graph. The graph can either be directed or undirected, depending on the
@@ -69,29 +72,12 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
-     * @deprecated Use {@link #AbstractBaseGraph(EdgeFactory, boolean, boolean, boolean)} instead.
+     * @deprecated Use {@link #AbstractBaseGraph(EdgeFactory, boolean, boolean, boolean, boolean)}
+     *             instead.
      */
     @Deprecated
     protected AbstractBaseGraph(
         EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
-    {
-        this(ef, allowMultipleEdges, allowLoops, false);
-    }
-
-    /**
-     * Construct a new graph. The graph can either be directed or undirected, depending on the
-     * specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @param allowMultipleEdges whether to allow multiple edges or not.
-     * @param allowLoops whether to allow edges that are self-loops or not.
-     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
-     *
-     * @throws NullPointerException if the specified edge factory is <code>
-     * null</code>.
-     */
-    protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops, boolean weighted)
     {
         Objects.requireNonNull(ef);
 
@@ -100,6 +86,43 @@ public abstract class AbstractBaseGraph<V, E>
         this.allowingMultipleEdges = allowMultipleEdges;
         this.specifics =
             Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        if (this instanceof DirectedGraph<?, ?>) {
+            this.directed = true;
+        } else if (this instanceof UndirectedGraph<?, ?>) {
+            this.directed = false;
+        } else {
+            throw new IllegalArgumentException("Graph must be either directed or undirected");
+        }
+        this.weighted = false;
+        this.intrusiveEdgesSpecifics = Objects
+            .requireNonNull(createIntrusiveEdgesSpecifics(false), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+    }
+
+    /**
+     * Construct a new graph. The graph can either be directed or undirected, depending on the
+     * specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     * @param directed if true the graph will be directed, otherwise undirected
+     * @param allowMultipleEdges whether to allow multiple edges or not.
+     * @param allowLoops whether to allow edges that are self-loops or not.
+     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
+     *
+     * @throws NullPointerException if the specified edge factory is <code>
+     * null</code>.
+     */
+    protected AbstractBaseGraph(
+        EdgeFactory<V, E> ef, boolean directed, boolean allowMultipleEdges, boolean allowLoops,
+        boolean weighted)
+    {
+        Objects.requireNonNull(ef);
+
+        this.edgeFactory = ef;
+        this.allowingLoops = allowLoops;
+        this.allowingMultipleEdges = allowMultipleEdges;
+        this.directed = directed;
+        this.specifics =
+            Objects.requireNonNull(createSpecifics(directed), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
         this.weighted = weighted;
         this.intrusiveEdgesSpecifics = Objects.requireNonNull(
             createIntrusiveEdgesSpecifics(weighted), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
@@ -144,6 +167,16 @@ public abstract class AbstractBaseGraph<V, E>
     public boolean isWeighted()
     {
         return weighted;
+    }
+
+    /**
+     * Returns <code>true</code> if the graph is directed, false if undirected.
+     *
+     * @return <code>true</code> if the graph is directed, false if undirected.
+     */
+    public boolean isDirected()
+    {
+        return directed;
     }
 
     /**
@@ -277,7 +310,7 @@ public abstract class AbstractBaseGraph<V, E>
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.createSpecifics();
+            newGraph.specifics = newGraph.createSpecifics(this.directed);
             newGraph.intrusiveEdgesSpecifics =
                 newGraph.createIntrusiveEdgesSpecifics(this.weighted);
 
@@ -489,7 +522,9 @@ public abstract class AbstractBaseGraph<V, E>
      * the specifics and thus the space-time tradeoffs of the graph implementation.
      * 
      * @return the specifics used by this graph
+     * @deprecated Use {@link #createSpecifics(boolean)} instead.
      */
+    @Deprecated
     protected Specifics<V, E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
@@ -500,6 +535,30 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(
                 "must be instance of either DirectedGraph or UndirectedGraph");
         }
+    }
+
+    /**
+     * Create the specifics for this graph. Subclasses can override this method in order to adjust
+     * the specifics and thus the space-time tradeoffs of the graph implementation.
+     * 
+     * @param directed if true the specifics should adjust the behavior to a directed graph
+     *        otherwise undirected
+     * @return the specifics used by this graph
+     */
+    protected Specifics<V, E> createSpecifics(boolean directed)
+    {
+        // @formatter:off
+        /*
+         * TODO: replace with following snippet after the next release 
+         * 
+         * if (directed) {
+         *    return new FastLookupDirectedSpecifics<>(this);
+         * } else {
+         *    return new FastLookupUndirectedSpecifics<>(this);
+         * }
+         */
+        // @formatter:on
+        return createSpecifics();
     }
 
     /**

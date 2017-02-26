@@ -64,7 +64,7 @@ public class Pseudograph<V, E>
      */
     public Pseudograph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, true, true, weighted);
+        super(ef, false, true, true, weighted);
     }
 
     /**

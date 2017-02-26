@@ -64,7 +64,7 @@ public class DirectedPseudograph<V, E>
      */
     public DirectedPseudograph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, true, true, weighted);
+        super(ef, true, true, true, weighted);
     }
 
     /**

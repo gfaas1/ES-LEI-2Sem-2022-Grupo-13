@@ -62,7 +62,7 @@ public class DirectedMultigraph<V, E>
      */
     public DirectedMultigraph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, true, false, weighted);
+        super(ef, true, true, false, weighted);
     }
 
     /**

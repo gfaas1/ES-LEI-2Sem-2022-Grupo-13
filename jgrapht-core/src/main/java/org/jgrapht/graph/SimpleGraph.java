@@ -44,7 +44,7 @@ public class SimpleGraph<V, E>
      */
     public SimpleGraph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, false, false, weighted);
+        super(ef, false, false, false, weighted);
     }
 
     /**

@@ -77,19 +77,20 @@ public class SimpleIdentityDirectedGraphTest
 
         public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass)
         {
-            super(edgeClass);
+            this(new ClassBasedEdgeFactory<>(edgeClass));
         }
 
         public SimpleIdentityDirectedGraph(EdgeFactory<V, E> ef)
         {
-            super(ef);
+            super(ef, false);
         }
 
         @Override
-        protected Specifics<V, E> createSpecifics()
+        protected Specifics<V, E> createSpecifics(boolean directed)
         {
             return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }
+        
     }
 
     // ~ Instance fields --------------------------------------------------------

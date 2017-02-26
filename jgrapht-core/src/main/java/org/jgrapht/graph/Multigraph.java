@@ -64,7 +64,7 @@ public class Multigraph<V, E>
      */
     public Multigraph(EdgeFactory<V, E> ef, boolean weighted)
     {
-        super(ef, true, false, weighted);
+        super(ef, false, true, false, weighted);
     }
 
     /**
