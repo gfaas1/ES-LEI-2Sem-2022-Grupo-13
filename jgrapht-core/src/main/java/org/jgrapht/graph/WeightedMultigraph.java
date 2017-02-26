@@ -43,7 +43,7 @@ public class WeightedMultigraph<V, E>
      */
     public WeightedMultigraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**

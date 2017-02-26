@@ -40,7 +40,7 @@ public class SimpleWeightedGraph<V, E>
      */
     public SimpleWeightedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**

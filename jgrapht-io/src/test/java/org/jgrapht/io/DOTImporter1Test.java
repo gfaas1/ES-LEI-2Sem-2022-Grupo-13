@@ -566,7 +566,7 @@ public class DOTImporter1Test
 
         protected GraphWithID()
         {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false, false);
         }
 
     }

@@ -55,7 +55,18 @@ public class DefaultDirectedGraph<V, E>
      */
     public DefaultDirectedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef, false, true);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new directed graph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public DefaultDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, false, true, weighted);
     }
 
     /**

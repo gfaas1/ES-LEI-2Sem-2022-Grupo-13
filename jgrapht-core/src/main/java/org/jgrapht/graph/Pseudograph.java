@@ -53,7 +53,18 @@ public class Pseudograph<V, E>
      */
     public Pseudograph(EdgeFactory<V, E> ef)
     {
-        super(ef, true, true);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new pseudograph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public Pseudograph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, true, true, weighted);
     }
 
     /**

@@ -43,7 +43,7 @@ public class WeightedPseudograph<V, E>
      */
     public WeightedPseudograph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**

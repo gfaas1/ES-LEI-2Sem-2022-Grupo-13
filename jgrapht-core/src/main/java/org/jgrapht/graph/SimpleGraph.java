@@ -39,11 +39,22 @@ public class SimpleGraph<V, E>
     /**
      * Creates a new simple graph with the specified edge factory.
      *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public SimpleGraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, false, false, weighted);
+    }
+
+    /**
+     * Creates a new simple graph with the specified edge factory.
+     *
      * @param ef the edge factory of the new graph.
      */
     public SimpleGraph(EdgeFactory<V, E> ef)
     {
-        super(ef, false, false);
+        this(ef, false);
     }
 
     /**

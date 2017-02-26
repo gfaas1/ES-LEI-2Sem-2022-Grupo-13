@@ -55,8 +55,28 @@ public abstract class AbstractBaseGraph<V, E>
     private EdgeFactory<V, E> edgeFactory;
     private transient Set<V> unmodifiableVertexSet = null;
     private Specifics<V, E> specifics;
+    private boolean weighted;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
     private boolean allowingMultipleEdges;
+
+    /**
+     * Construct a new graph. The graph can either be directed or undirected, depending on the
+     * specified edge factory. The graph is by default unweighted.
+     *
+     * @param ef the edge factory of the new graph.
+     * @param allowMultipleEdges whether to allow multiple edges or not.
+     * @param allowLoops whether to allow edges that are self-loops or not.
+     *
+     * @throws NullPointerException if the specified edge factory is <code>
+     * null</code>.
+     * @deprecated Use {@link #AbstractBaseGraph(EdgeFactory, boolean, boolean, boolean)} instead.
+     */
+    @Deprecated
+    protected AbstractBaseGraph(
+        EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
+    {
+        this(ef, allowMultipleEdges, allowLoops, false);
+    }
 
     /**
      * Construct a new graph. The graph can either be directed or undirected, depending on the
@@ -65,21 +85,24 @@ public abstract class AbstractBaseGraph<V, E>
      * @param ef the edge factory of the new graph.
      * @param allowMultipleEdges whether to allow multiple edges or not.
      * @param allowLoops whether to allow edges that are self-loops or not.
+     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
      *
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
      */
     protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
+        EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops, boolean weighted)
     {
         Objects.requireNonNull(ef);
 
-        edgeFactory = ef;
-        allowingLoops = allowLoops;
-        allowingMultipleEdges = allowMultipleEdges;
-        specifics = Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        intrusiveEdgesSpecifics = Objects
-            .requireNonNull(createIntrusiveEdgesSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.edgeFactory = ef;
+        this.allowingLoops = allowLoops;
+        this.allowingMultipleEdges = allowMultipleEdges;
+        this.specifics =
+            Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.weighted = weighted;
+        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
+            createIntrusiveEdgesSpecifics(weighted), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -111,6 +134,16 @@ public abstract class AbstractBaseGraph<V, E>
     public boolean isAllowingMultipleEdges()
     {
         return allowingMultipleEdges;
+    }
+
+    /**
+     * Returns <code>true</code> if and only if the graph supports edge weights.
+     *
+     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
+     */
+    public boolean isWeighted()
+    {
+        return weighted;
     }
 
     /**
@@ -245,7 +278,8 @@ public abstract class AbstractBaseGraph<V, E>
             // method so that the new inner class instance gets associated with
             // the right outer class instance
             newGraph.specifics = newGraph.createSpecifics();
-            newGraph.intrusiveEdgesSpecifics = newGraph.createIntrusiveEdgesSpecifics();
+            newGraph.intrusiveEdgesSpecifics =
+                newGraph.createIntrusiveEdgesSpecifics(this.weighted);
 
             Graphs.addGraph(newGraph, this);
 
@@ -471,11 +505,12 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Create the specifics for the edges set of the graph.
      * 
+     * @param weighted if true the specifics should support weighted edges
      * @return the specifics used for the edge set of this graph
      */
-    protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics()
+    protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics(boolean weighted)
     {
-        if (this instanceof WeightedGraph<?, ?>) {
+        if (weighted) {
             return new WeightedIntrusiveEdgesSpecifics<V, E>();
         } else {
             return new UniformIntrusiveEdgesSpecifics<V, E>();

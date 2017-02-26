@@ -53,7 +53,7 @@ public class DefaultDirectedWeightedGraph<V, E>
      */
     public DefaultDirectedWeightedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**

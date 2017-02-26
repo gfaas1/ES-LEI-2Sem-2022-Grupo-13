@@ -51,7 +51,18 @@ public class SimpleDirectedGraph<V, E>
      */
     public SimpleDirectedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef, false, false);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new simple directed graph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public SimpleDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, false, false, weighted);
     }
 
     /**
