@@ -73,6 +73,37 @@ public class SerializationTest
         assertEquals(2, graph.edgesOf(v3).size());
     }
 
+    /**
+     * Tests serialization of DirectedAcyclicGraph
+     */
+    @SuppressWarnings("unchecked")
+    public void testDirectedAcyclicGraph()
+        throws Exception
+    {
+        DirectedAcyclicGraph<String, DefaultEdge> graph1 =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
+        graph1.addVertex(v1);
+        graph1.addVertex(v2);
+        graph1.addVertex(v3);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v3);
+
+        DirectedAcyclicGraph<String, DefaultEdge> graph2 =
+            (DirectedAcyclicGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+        assertTrue(graph2.containsVertex(v1));
+        assertTrue(graph2.containsVertex(v2));
+        assertTrue(graph2.containsVertex(v3));
+        assertTrue(graph2.containsEdge(v1, v2));
+        assertTrue(graph2.containsEdge(v2, v3));
+        assertTrue(graph2.containsEdge(v1, v3));
+        assertEquals(2, graph2.edgesOf(v1).size());
+        assertEquals(2, graph2.edgesOf(v2).size());
+        assertEquals(2, graph2.edgesOf(v3).size());
+
+        assertEquals(graph1.toString(), graph2.toString());
+    }
+
     private Object serializeAndDeserialize(Object obj)
         throws Exception
     {
