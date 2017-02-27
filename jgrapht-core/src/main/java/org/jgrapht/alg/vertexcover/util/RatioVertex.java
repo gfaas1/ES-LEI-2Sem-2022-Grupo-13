@@ -19,6 +19,8 @@ package org.jgrapht.alg.vertexcover.util;
 
 import java.util.*;
 
+import org.jgrapht.util.TypeUtil;
+
 /**
  * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a
  * unique ordering.
@@ -132,7 +134,7 @@ public class RatioVertex<V>
             return true;
         else if (!(o instanceof RatioVertex))
             return false;
-        RatioVertex<V> other = (RatioVertex<V>) o;
+        RatioVertex<V> other = TypeUtil.uncheckedCast(o, null);
         return this.ID == other.ID;
     }
 

@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg;
 
+import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -94,8 +95,8 @@ public class ConnectivityInspectorTest
      */
     public void testDirectedGraph()
     {
-        ListenableDirectedGraph<String, DefaultEdge> g =
-            new ListenableDirectedGraph<>(DefaultEdge.class);
+        ListenableGraph<String, DefaultEdge> g =
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);

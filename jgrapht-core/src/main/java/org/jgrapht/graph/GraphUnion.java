@@ -40,7 +40,6 @@ import org.jgrapht.util.*;
  * @param <E> the edge type
  * @param <G> the graph type of the two graphs that are combined
  * 
- * @author Ilya Razenshteyn
  */
 public class GraphUnion<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
@@ -50,9 +49,9 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
 
     private static final String READ_ONLY = "union of graphs is read-only";
 
-    private final G g1;
-    private final G g2;
-    private final WeightCombiner operator;
+    private G g1;
+    private G g2;
+    private WeightCombiner operator;
 
     /**
      * Construct a new graph union.
@@ -63,11 +62,17 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
      */
     public GraphUnion(G g1, G g2, WeightCombiner operator)
     {
-        this.g1 = Objects.requireNonNull(g1, "g1 is null");
-        this.g2 = Objects.requireNonNull(g2, "g2 is null");
+        if (g1 == null) {
+            throw new NullPointerException("g1 is null");
+        }
+        if (g2 == null) {
+            throw new NullPointerException("g2 is null");
+        }
         if (g1 == g2) {
             throw new IllegalArgumentException("g1 is equal to g2");
         }
+        this.g1 = g1;
+        this.g2 = g2;
         this.operator = operator;
     }
 
@@ -110,9 +115,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public EdgeFactory<V, E> getEdgeFactory()
@@ -121,9 +125,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -132,9 +135,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -143,9 +145,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public boolean addVertex(V v)
@@ -153,31 +154,18 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         throw new UnsupportedOperationException(READ_ONLY);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean containsEdge(E e)
     {
         return g1.containsEdge(e) || g2.containsEdge(e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean containsVertex(V v)
     {
         return g1.containsVertex(v) || g2.containsVertex(v);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
-     * the two underlying graphs.
-     */
     @Override
     public Set<E> edgeSet()
     {
@@ -187,13 +175,6 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return Collections.unmodifiableSet(res);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
-     * the two underlying graphs.
-     */
     @Override
     public Set<E> edgesOf(V vertex)
     {
@@ -208,86 +189,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
-     * the two underlying graphs.
-     */
-    @Override
-    public Set<E> incomingEdgesOf(V vertex)
-    {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(vertex)) {
-            res.addAll(g1.incomingEdgesOf(vertex));
-        }
-        if (g2.containsVertex(vertex)) {
-            res.addAll(g2.incomingEdgesOf(vertex));
-        }
-        return Collections.unmodifiableSet(res);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
-     * the two underlying graphs.
-     */
-    @Override
-    public Set<E> outgoingEdgesOf(V vertex)
-    {
-        Set<E> res = new LinkedHashSet<>();
-        if (g1.containsVertex(vertex)) {
-            res.addAll(g1.outgoingEdgesOf(vertex));
-        }
-        if (g2.containsVertex(vertex)) {
-            res.addAll(g2.outgoingEdgesOf(vertex));
-        }
-        return Collections.unmodifiableSet(res);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * By default this method returns the sum of in-degree and out-degree. The exact value returned
-     * depends on the types of the underlying graphs.
-     */
-    @Override
-    public int degreeOf(V vertex)
-    {
-        return inDegreeOf(vertex) + outDegreeOf(vertex);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * By default this class behaves like a directed graph.
-     */
-    @Override
-    public int inDegreeOf(V vertex)
-    {
-        return incomingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * By default this class behaves like a directed graph.
-     */
-    @Override
-    public int outDegreeOf(V vertex)
-    {
-        return outgoingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
@@ -296,9 +199,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public boolean removeEdge(E e)
@@ -307,9 +209,8 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
+     * Throws <tt>UnsupportedOperationException</tt>, because <tt>
+     * GraphUnion</tt> is read-only.
      */
     @Override
     public boolean removeVertex(V v)
@@ -317,13 +218,6 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         throw new UnsupportedOperationException(READ_ONLY);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
-     * the two underlying graphs.
-     */
     @Override
     public Set<V> vertexSet()
     {
@@ -333,9 +227,6 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return Collections.unmodifiableSet(res);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public V getEdgeSource(E e)
     {
@@ -348,9 +239,6 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public V getEdgeTarget(E e)
     {
@@ -363,9 +251,6 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double getEdgeWeight(E e)
     {
@@ -396,19 +281,7 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
         if (type1.isUndirected() && type2.isUndirected()) {
             t = t.asUndirected();
         }
-        if (type1.isWeighted() || type2.isWeighted()) {
-            t = t.asWeighted();
-        }
-        return t;
-    }
-
-    /**
-     * Throws {@link UnsupportedOperationException} since graph union is read-only.
-     */
-    @Override
-    public void setEdgeWeight(E e, double weight)
-    {
-        throw new UnsupportedOperationException(READ_ONLY);
+        return t.asWeighted().asUnmodifiable();
     }
 
     /**
@@ -429,6 +302,42 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     public G getG2()
     {
         return g2;
+    }
+
+    @Override
+    public int degreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setEdgeWeight(E e, double weight)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
     }
 
 }

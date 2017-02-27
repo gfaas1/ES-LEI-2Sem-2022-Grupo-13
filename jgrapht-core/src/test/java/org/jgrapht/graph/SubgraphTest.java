@@ -28,7 +28,9 @@ import junit.framework.*;
  *
  * @author Michael Behrisch
  * @since Sep 21, 2004
+ * @deprecated Since {@link Subgraph} is deprecated.
  */
+@Deprecated
 public class SubgraphTest
     extends TestCase
 {

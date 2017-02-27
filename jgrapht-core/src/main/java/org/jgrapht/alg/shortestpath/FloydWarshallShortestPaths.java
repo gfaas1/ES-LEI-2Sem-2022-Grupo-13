@@ -252,7 +252,7 @@ public class FloydWarshallShortestPaths<V, E>
         }
 
         // initialize matrix, 2
-        if (graph instanceof UndirectedGraph<?, ?>) {
+        if (graph.getType().isUndirected()) {
             for (E edge : graph.edgeSet()) {
                 V source = graph.getEdgeSource(edge);
                 V target = graph.getEdgeTarget(edge);
@@ -270,11 +270,10 @@ public class FloydWarshallShortestPaths<V, E>
         } else { // This works for both Directed and Mixed graphs! Iterating over
                  // the arcs and querying source/sink does not suffice for graphs
                  // which contain both edges and arcs
-            DirectedGraph<V, E> directedGraph = (DirectedGraph<V, E>) graph;
-            for (V v1 : directedGraph.vertexSet()) {
+            for (V v1 : graph.vertexSet()) {
                 int v_1 = vertexIndices.get(v1);
-                for (E e : directedGraph.outgoingEdgesOf(v1)) {
-                    V v2 = Graphs.getOppositeVertex(directedGraph, e, v1);
+                for (E e : graph.outgoingEdgesOf(v1)) {
+                    V v2 = Graphs.getOppositeVertex(graph, e, v1);
                     if (!v1.equals(v2)) {
                         int v_2 = vertexIndices.get(v2);
                         double edgeWeight = graph.getEdgeWeight(e);

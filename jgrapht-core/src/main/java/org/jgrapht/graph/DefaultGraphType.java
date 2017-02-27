@@ -25,10 +25,10 @@ import org.jgrapht.GraphType;
  * Default implementation of the graph type.
  * 
  * <p>
- * The graph type describes various properties of a graph such as whether they it is
- * directed/undirected or mixed, whether it contain self-loops (edges with the same source and
- * target vertices), whether it contain parallel-edges (multiple edges with the same source and
- * target) and whether it is weighted or not.
+ * The graph type describes various properties of a graph such as whether it is directed, undirected
+ * or mixed, whether it contain self-loops (edges with the same source and target vertices), whether
+ * it contain parallel-edges (multiple edges with the same source and target) and whether it is
+ * weighted or not.
  * 
  * @author Dimitrios Michail
  */
@@ -43,10 +43,11 @@ public class DefaultGraphType
     private final boolean multipleEdges;
     private final boolean weighted;
     private final boolean allowsCycles;
+    private final boolean modifiable;
 
     private DefaultGraphType(
         boolean directed, boolean undirected, boolean selfLoops, boolean multipleEdges,
-        boolean weighted, boolean allowsCycles)
+        boolean weighted, boolean allowsCycles, boolean modifiable)
     {
         this.directed = directed;
         this.undirected = undirected;
@@ -54,6 +55,7 @@ public class DefaultGraphType
         this.multipleEdges = multipleEdges;
         this.weighted = weighted;
         this.allowsCycles = allowsCycles;
+        this.modifiable = modifiable;
     }
 
     @Override
@@ -99,6 +101,12 @@ public class DefaultGraphType
     }
 
     @Override
+    public boolean isModifiable()
+    {
+        return modifiable;
+    }
+
+    @Override
     public boolean isSimple()
     {
         return !isAllowingMultipleEdges() && !isAllowingSelfLoops();
@@ -110,11 +118,7 @@ public class DefaultGraphType
         return isAllowingMultipleEdges() && isAllowingSelfLoops();
     }
 
-    /**
-     * Returns <code>true</code> if the graph is a multigraph, <code>false</code> otherwise.
-     * 
-     * @return <code>true</code> if the graph is a multigraph, <code>false</code> otherwise
-     */
+    @Override
     public boolean isMultigraph()
     {
         return isAllowingMultipleEdges() && !isAllowingSelfLoops();
@@ -148,6 +152,18 @@ public class DefaultGraphType
     public GraphType asWeighted()
     {
         return new Builder(this).weighted(true).build();
+    }
+
+    @Override
+    public GraphType asModifiable()
+    {
+        return new Builder(this).modifiable(true).build();
+    }
+
+    @Override
+    public GraphType asUnmodifiable()
+    {
+        return new Builder(this).modifiable(false).build();
     }
 
     /**
@@ -259,6 +275,7 @@ public class DefaultGraphType
         private boolean allowMultipleEdges;
         private boolean weighted;
         private boolean allowCycles;
+        private boolean modifiable;
 
         /**
          * Construct a new Builder.
@@ -271,6 +288,7 @@ public class DefaultGraphType
             this.allowMultipleEdges = true;
             this.weighted = false;
             this.allowCycles = true;
+            this.modifiable = true;
         }
 
         /**
@@ -286,6 +304,7 @@ public class DefaultGraphType
             this.allowMultipleEdges = type.isAllowingMultipleEdges();
             this.weighted = type.isWeighted();
             this.allowCycles = type.isAllowingCycles();
+            this.modifiable = type.isModifiable();
         }
 
         /**
@@ -373,6 +392,18 @@ public class DefaultGraphType
         }
 
         /**
+         * Set whether the graph is modifiable.
+         * 
+         * @param value if true the graph will be modifiable, otherwise not
+         * @return the builder
+         */
+        public Builder modifiable(boolean value)
+        {
+            this.modifiable = value;
+            return this;
+        }
+
+        /**
          * Build the type.
          * 
          * @return the type
@@ -380,7 +411,8 @@ public class DefaultGraphType
         public DefaultGraphType build()
         {
             return new DefaultGraphType(
-                directed, undirected, allowSelfLoops, allowMultipleEdges, weighted, allowCycles);
+                directed, undirected, allowSelfLoops, allowMultipleEdges, weighted, allowCycles,
+                modifiable);
         }
 
     }

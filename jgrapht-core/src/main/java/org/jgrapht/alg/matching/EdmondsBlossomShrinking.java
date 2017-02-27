@@ -36,7 +36,7 @@ import org.jgrapht.util.*;
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private final UndirectedGraph<V, E> graph;
+    private final Graph<V, E> graph;
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
@@ -49,13 +49,10 @@ public class EdmondsBlossomShrinking<V, E>
      */
     public EdmondsBlossomShrinking(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
-        if (!(graph instanceof UndirectedGraph)) {
+        this.graph = Objects.requireNonNull(graph, "Input graph cannot be null");
+        if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException("Only undirected graphs supported");
         }
-        this.graph = TypeUtil.uncheckedCast(graph, null);
     }
 
     /**

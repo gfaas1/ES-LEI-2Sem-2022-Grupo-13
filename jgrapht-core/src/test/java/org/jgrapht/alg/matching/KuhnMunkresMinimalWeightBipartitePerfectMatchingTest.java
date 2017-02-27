@@ -101,9 +101,13 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     private static class WeightedEdge
         extends DefaultWeightedEdge
     {
+        private static final long serialVersionUID = 1L;
+
         class APair
             extends Pair<V, V>
         {
+            private static final long serialVersionUID = 1L;
+
             APair(V first, V second)
             {
                 super(first, second);

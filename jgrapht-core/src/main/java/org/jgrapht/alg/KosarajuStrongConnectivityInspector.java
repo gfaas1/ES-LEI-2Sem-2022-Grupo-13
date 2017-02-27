@@ -54,7 +54,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
      * @param graph the input graph
      * @throws NullPointerException if the input graph is null
      */
-    public KosarajuStrongConnectivityInspector(DirectedGraph<V, E> graph)
+    public KosarajuStrongConnectivityInspector(Graph<V, E> graph)
     {
         super(graph);
     }
@@ -78,7 +78,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
             }
 
             // 'create' inverse graph (i.e. every edge is reversed)
-            DirectedGraph<V, E> inverseGraph = new EdgeReversedGraph<V, E>(graph);
+            Graph<V, E> inverseGraph = new EdgeReversedGraph<V, E>(graph);
 
             // get ready for next dfs round
             resetVertexData();
@@ -120,8 +120,7 @@ public class KosarajuStrongConnectivityInspector<V, E>
      * set == null: finished vertices are stored (1st round). set != null: all vertices found will
      * be saved in the set (2nd round)
      */
-    private void dfsVisit(
-        DirectedGraph<V, E> visitedGraph, VertexData<V> vertexData, Set<V> vertices)
+    private void dfsVisit(Graph<V, E> visitedGraph, VertexData<V> vertexData, Set<V> vertices)
     {
         Deque<VertexData<V>> stack = new ArrayDeque<VertexData<V>>();
         stack.add(vertexData);

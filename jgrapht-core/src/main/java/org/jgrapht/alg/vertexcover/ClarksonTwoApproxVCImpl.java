@@ -35,7 +35,6 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- *
  */
 public class ClarksonTwoApproxVCImpl<V, E>
     implements MinimumWeightedVertexCoverAlgorithm<V, E>
@@ -44,9 +43,12 @@ public class ClarksonTwoApproxVCImpl<V, E>
     private static int vertexCounter = 0;
 
     @Override
-    public VertexCover<V> getVertexCover(
-        UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
+        if (!graph.getType().isUndirected()) {
+            throw new IllegalArgumentException("graph must be undirected");
+        }
+
         // Result
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;

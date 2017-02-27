@@ -32,9 +32,6 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
- * @see UndirectedMaskSubgraph
- * @see DirectedMaskSubgraph
- *
  * @author Guillaume Boulmier
  * @since July 5, 2007
  */
@@ -44,6 +41,7 @@ public class MaskSubgraph<V, E>
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     protected final Graph<V, E> base;
+    protected final GraphType baseType;
     protected final Set<E> edges;
     protected final Set<V> vertices;
     protected final Predicate<V> vertexMask;
@@ -62,6 +60,7 @@ public class MaskSubgraph<V, E>
     {
         super();
         this.base = Objects.requireNonNull(base, "Invalid graph provided");
+        this.baseType = base.getType();
         this.vertexMask = Objects.requireNonNull(vertexMask, "Invalid vertex mask provided");
         this.edgeMask = Objects.requireNonNull(edgeMask, "Invalid edge mask provided");
         this.vertices = new MaskVertexSet<>(base.vertexSet(), vertexMask);
@@ -143,7 +142,20 @@ public class MaskSubgraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        return inDegreeOf(vertex) + outDegreeOf(vertex);
+        if (baseType.isDirected()) {
+            return inDegreeOf(vertex) + outDegreeOf(vertex);
+        } else {
+            int degree = 0;
+            Iterator<E> it = edgesOf(vertex).iterator();
+            while (it.hasNext()) {
+                E e = it.next();
+                degree++;
+                if (getEdgeSource(e).equals(getEdgeTarget(e))) {
+                    degree++;
+                }
+            }
+            return degree;
+        }
     }
 
     /**
@@ -163,7 +175,11 @@ public class MaskSubgraph<V, E>
     @Override
     public int inDegreeOf(V vertex)
     {
-        return incomingEdgesOf(vertex).size();
+        if (baseType.isUndirected()) {
+            return degreeOf(vertex);
+        } else {
+            return incomingEdgesOf(vertex).size();
+        }
     }
 
     /**
@@ -183,7 +199,11 @@ public class MaskSubgraph<V, E>
     @Override
     public int outDegreeOf(V vertex)
     {
-        return outgoingEdgesOf(vertex).size();
+        if (baseType.isUndirected()) {
+            return degreeOf(vertex);
+        } else {
+            return outgoingEdgesOf(vertex).size();
+        }
     }
 
     /**
@@ -251,7 +271,7 @@ public class MaskSubgraph<V, E>
     @Override
     public GraphType getType()
     {
-        return base.getType();
+        return baseType.asUnmodifiable();
     }
 
     /**

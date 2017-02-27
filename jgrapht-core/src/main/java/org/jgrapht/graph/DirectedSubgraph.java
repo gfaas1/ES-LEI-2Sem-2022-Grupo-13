@@ -28,9 +28,11 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see Subgraph
+ * @deprecated In favor of {@link AsSubgraph}.
  */
+@Deprecated
 public class DirectedSubgraph<V, E>
-    extends Subgraph<V, E, DirectedGraph<V, E>>
+    extends Subgraph<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
 {
     private static final long serialVersionUID = 3616445700507054133L;
@@ -45,7 +47,7 @@ public class DirectedSubgraph<V, E>
      *        whose vertices found in the graph are included.
      */
     public DirectedSubgraph(
-        DirectedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
+        Graph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
         super(base, vertexSubset, edgeSubset);
     }
@@ -57,7 +59,7 @@ public class DirectedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
      *        vertices are included.
      */
-    public DirectedSubgraph(DirectedGraph<V, E> base, Set<? extends V> vertexSubset)
+    public DirectedSubgraph(Graph<V, E> base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
     }
@@ -67,7 +69,7 @@ public class DirectedSubgraph<V, E>
      *
      * @param base the base (backing) graph on which the subgraph will be based.
      */
-    public DirectedSubgraph(DirectedGraph<V, E> base)
+    public DirectedSubgraph(Graph<V, E> base)
     {
         this(base, null, null);
     }

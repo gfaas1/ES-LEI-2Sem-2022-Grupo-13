@@ -39,7 +39,7 @@ public class GraphOrderingTest
          * v1--v2 |\ | v5 | \ | v3 v4
          *
          */
-        UndirectedGraph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1", v2 = "v2", v3 = "v3", v4 = "v4", v5 = "v5";
 
@@ -158,7 +158,7 @@ public class GraphOrderingTest
          * v1 ---> v2 <---> v3 ---> v4 v5
          *
          */
-        DirectedGraph<String, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         String v1 = "v1", v2 = "v2", v3 = "v3", v4 = "v4", v5 = "v5";
 

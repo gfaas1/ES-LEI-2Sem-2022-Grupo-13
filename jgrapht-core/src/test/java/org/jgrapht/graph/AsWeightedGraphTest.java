@@ -36,10 +36,10 @@ public class AsWeightedGraphTest
     public Graph<String, DefaultEdge> unweightedGraph;
 
     public SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> directedWeightedGraph;
-    public DirectedGraph<String, DefaultEdge> directedUnweightedGraph;
+    public Graph<String, DefaultEdge> directedUnweightedGraph;
 
     public SimpleWeightedGraph<String, DefaultWeightedEdge> undirectedWeightedGraph;
-    public UndirectedGraph<String, DefaultEdge> undirectedUnweightedGraph;
+    public Graph<String, DefaultEdge> undirectedUnweightedGraph;
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -114,14 +114,7 @@ public class AsWeightedGraphTest
         assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT);
 
         Graph<String, DefaultEdge> graphView;
-        if (graph instanceof DirectedGraph)
-            graphView = new AsWeightedDirectedGraph<>(
-                (DirectedGraph<String, DefaultEdge>) graph, weightMap);
-        else if (graph instanceof UndirectedGraph)
-            graphView = new AsWeightedUndirectedGraph<>(
-                (UndirectedGraph<String, DefaultEdge>) graph, weightMap);
-        else
-            graphView = new AsWeightedGraph<>(graph, weightMap);
+        graphView = new AsWeightedGraph<>(graph, weightMap);
 
         assertEquals(graphView.getEdgeWeight(e1), 9.0);
         assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT);
@@ -152,14 +145,7 @@ public class AsWeightedGraphTest
         weightMap.put(e3, 8.0);
 
         Graph<String, DefaultWeightedEdge> graphView;
-        if (graph instanceof DirectedGraph)
-            graphView = new AsWeightedDirectedGraph<>(
-                (DirectedGraph<String, DefaultWeightedEdge>) graph, weightMap);
-        else if (graph instanceof UndirectedGraph)
-            graphView = new AsWeightedUndirectedGraph<>(
-                (UndirectedGraph<String, DefaultWeightedEdge>) graph, weightMap);
-        else
-            graphView = new AsWeightedGraph<>(graph, weightMap);
+        graphView = new AsWeightedGraph<>(graph, weightMap);
 
         assertEquals(graphView.getEdgeWeight(e1), 9.0);
         assertEquals(graphView.getEdgeWeight(e2), 2.0);

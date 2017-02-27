@@ -58,7 +58,7 @@ public class DepthFirstIteratorTest
 
     @Override
     AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-        DirectedGraph<String, DefaultWeightedEdge> g, String vertex)
+        Graph<String, DefaultWeightedEdge> g, String vertex)
     {
         AbstractGraphIterator<String, DefaultWeightedEdge> i = new DepthFirstIterator<>(g, vertex);
         i.setCrossComponentTraversal(true);
@@ -71,7 +71,7 @@ public class DepthFirstIteratorTest
      */
     public void testBug1169182()
     {
-        DirectedGraph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         String a = "A";
         String b = "B";

@@ -25,7 +25,7 @@ package org.jgrapht;
  *
  * @author Barak Naveh
  * @since Jul 23, 2003
- * @deprecated All weight related methods are in {@link Graph}.
+ * @deprecated In favor of {@link Graph}.
  */
 @Deprecated
 public interface WeightedGraph<V, E>

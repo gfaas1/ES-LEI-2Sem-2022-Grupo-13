@@ -38,7 +38,7 @@ public class TopologicalOrderIteratorTest
      */
     public void testRecipe()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         String[] v = new String[9];
 
@@ -85,7 +85,7 @@ public class TopologicalOrderIteratorTest
         }
 
         // Test with a reversed view
-        DirectedGraph<String, DefaultEdge> reversed = new EdgeReversedGraph<>(graph);
+        Graph<String, DefaultEdge> reversed = new EdgeReversedGraph<>(graph);
 
         iter = new TopologicalOrderIterator<>(reversed);
         i = v.length - 1;
@@ -101,7 +101,7 @@ public class TopologicalOrderIteratorTest
      */
     public void testEmptyGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         Iterator<String> iter = new TopologicalOrderIterator<>(graph);
         assertFalse(iter.hasNext());
     }

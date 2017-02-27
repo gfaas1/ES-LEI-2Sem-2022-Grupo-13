@@ -40,9 +40,10 @@ public class BiconnectivityInspector<V, E>
      * 
      * @param graph the input graph
      */
-    public BiconnectivityInspector(UndirectedGraph<V, E> graph)
+    public BiconnectivityInspector(Graph<V, E> graph)
     {
         super();
+        GraphTests.requireUndirected(graph, "Graph must be undirected");
         this.blockCutpointGraph = new BlockCutpointGraph<>(graph);
     }
 
@@ -54,7 +55,7 @@ public class BiconnectivityInspector<V, E>
     public Set<Set<V>> getBiconnectedVertexComponents()
     {
         Set<Set<V>> biconnectedVertexComponents = new HashSet<>();
-        for (UndirectedGraph<V, E> subgraph : this.blockCutpointGraph.vertexSet()) {
+        for (Graph<V, E> subgraph : this.blockCutpointGraph.vertexSet()) {
             if (!subgraph.edgeSet().isEmpty()) {
                 biconnectedVertexComponents.add(subgraph.vertexSet());
             }

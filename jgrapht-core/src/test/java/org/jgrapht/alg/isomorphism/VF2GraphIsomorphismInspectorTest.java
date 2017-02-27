@@ -94,10 +94,8 @@ public class VF2GraphIsomorphismInspectorTest
     @Test
     public void testSubgraph()
     {
-        DirectedGraph<Integer, DefaultEdge> g1 =
-            SubgraphIsomorphismTestUtils.randomGraph(10, 30, 12345);
-        DirectedGraph<Integer, DefaultEdge> g2 =
-            SubgraphIsomorphismTestUtils.randomSubgraph(g1, 7, 54321);
+        Graph<Integer, DefaultEdge> g1 = SubgraphIsomorphismTestUtils.randomGraph(10, 30, 12345);
+        Graph<Integer, DefaultEdge> g2 = SubgraphIsomorphismTestUtils.randomSubgraph(g1, 7, 54321);
 
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
             new VF2GraphIsomorphismInspector<>(g1, g2);
@@ -108,8 +106,8 @@ public class VF2GraphIsomorphismInspectorTest
     public void testSubgraph2()
     {
 
-        ListenableUndirectedGraph<Integer, DefaultEdge> g1 =
-            new ListenableUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
         g1.addVertex(0);
         g1.addVertex(1);
@@ -125,8 +123,8 @@ public class VF2GraphIsomorphismInspectorTest
         g1.addEdge(2, 4);
         g1.addEdge(3, 4);
 
-        ListenableUndirectedGraph<Integer, DefaultEdge> g2 =
-            new ListenableUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g2 =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
         g2.addVertex(0);
         g2.addVertex(1);
@@ -143,8 +141,8 @@ public class VF2GraphIsomorphismInspectorTest
         g2.addEdge(4, 0);
         g2.addEdge(1, 4);
 
-        ListenableUndirectedGraph<Integer, DefaultEdge> g3 =
-            new ListenableUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g3 =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
         g3.addVertex(0);
         g3.addVertex(1);
@@ -161,8 +159,8 @@ public class VF2GraphIsomorphismInspectorTest
         g3.addEdge(5, 3);
         g3.addEdge(5, 4);
 
-        ListenableUndirectedGraph<Integer, DefaultEdge> g4 =
-            new ListenableUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g4 =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
 
         g4.addVertex(0);
         g4.addVertex(1);

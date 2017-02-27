@@ -216,26 +216,14 @@ public class CSVExporter<V, E>
 
     private void exportAsAdjacencyList(Graph<V, E> g, PrintWriter out)
     {
-        if (g instanceof DirectedGraph<?, ?>) {
-            for (V v : g.vertexSet()) {
-                exportEscapedField(out, vertexIDProvider.getName(v));
-                for (E e : ((DirectedGraph<V, E>) g).outgoingEdgesOf(v)) {
-                    V w = Graphs.getOppositeVertex(g, e, v);
-                    out.print(delimiter);
-                    exportEscapedField(out, vertexIDProvider.getName(w));
-                }
-                out.println();
+        for (V v : g.vertexSet()) {
+            exportEscapedField(out, vertexIDProvider.getName(v));
+            for (E e : g.outgoingEdgesOf(v)) {
+                V w = Graphs.getOppositeVertex(g, e, v);
+                out.print(delimiter);
+                exportEscapedField(out, vertexIDProvider.getName(w));
             }
-        } else {
-            for (V v : g.vertexSet()) {
-                exportEscapedField(out, vertexIDProvider.getName(v));
-                for (E e : g.edgesOf(v)) {
-                    V w = Graphs.getOppositeVertex(g, e, v);
-                    out.print(delimiter);
-                    exportEscapedField(out, vertexIDProvider.getName(w));
-                }
-                out.println();
-            }
+            out.println();
         }
     }
 

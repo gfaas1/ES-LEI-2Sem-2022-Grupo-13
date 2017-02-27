@@ -57,11 +57,11 @@ public class IgnoreDirectionTest
 
     @Override
     AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-        DirectedGraph<String, DefaultWeightedEdge> g, String vertex)
+        Graph<String, DefaultWeightedEdge> g, String vertex)
     {
         // ignore the passed in vertex and always start from v4, since that's
         // the only vertex without out-edges
-        UndirectedGraph<String, DefaultWeightedEdge> undirectedView = new AsUndirectedGraph<>(g);
+        Graph<String, DefaultWeightedEdge> undirectedView = new AsUndirectedGraph<>(g);
         AbstractGraphIterator<String, DefaultWeightedEdge> i =
             new DepthFirstIterator<>(undirectedView, "4");
         i.setCrossComponentTraversal(true);

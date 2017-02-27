@@ -120,7 +120,7 @@ public class GusfieldGomoryHuCutTree<V, E>
     public GusfieldGomoryHuCutTree(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if (!(network instanceof UndirectedGraph))
+        if (!network.getType().isUndirected())
             throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         this.N = network.vertexSet().size();

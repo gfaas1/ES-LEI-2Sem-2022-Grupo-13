@@ -106,13 +106,7 @@ class GraphOrdering<V, E>
         }
 
         V v = getVertex(vertexNumber);
-        Set<E> edgeSet;
-
-        if (graph instanceof DirectedGraph<?, ?>) {
-            edgeSet = ((DirectedGraph<V, E>) graph).outgoingEdgesOf(v);
-        } else {
-            edgeSet = graph.edgesOf(v);
-        }
+        Set<E> edgeSet = graph.outgoingEdgesOf(v);
 
         int[] vertexArray = new int[edgeSet.size()];
         int i = 0;
@@ -142,13 +136,7 @@ class GraphOrdering<V, E>
         }
 
         V v = getVertex(vertexNumber);
-        Set<E> edgeSet;
-
-        if (graph instanceof DirectedGraph<?, ?>) {
-            edgeSet = ((DirectedGraph<V, E>) graph).incomingEdgesOf(v);
-        } else {
-            edgeSet = graph.edgesOf(v);
-        }
+        Set<E> edgeSet = graph.incomingEdgesOf(v);
 
         int[] vertexArray = new int[edgeSet.size()];
         int i = 0;

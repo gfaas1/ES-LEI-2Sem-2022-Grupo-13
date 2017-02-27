@@ -30,7 +30,9 @@ package org.jgrapht;
  *
  * @author Barak Naveh
  * @since Jul 14, 2003
+ * @deprecated In favor of {@link Graph}.
  */
+@Deprecated
 public interface UndirectedGraph<V, E>
     extends Graph<V, E>
 {

@@ -102,7 +102,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
     public PadbergRaoOddMinimumCutset(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if (!(network instanceof UndirectedGraph))
+        if (!network.getType().isUndirected())
             throw new IllegalArgumentException("Graph must be undirected");
         this.network = network;
         gusfieldGomoryHuCutTreeAlgorithm =

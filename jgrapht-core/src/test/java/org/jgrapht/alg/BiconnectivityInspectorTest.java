@@ -52,7 +52,7 @@ public class BiconnectivityInspectorTest
 
     public void testLinearGraph(int nbVertices)
     {
-        UndirectedGraph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         LinearGraphGenerator<Object, DefaultEdge> generator =
             new LinearGraphGenerator<>(nbVertices);

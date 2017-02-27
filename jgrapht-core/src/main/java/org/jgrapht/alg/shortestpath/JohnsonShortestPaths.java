@@ -22,16 +22,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.graph.AsWeightedDirectedGraph;
+import org.jgrapht.graph.AsGraphUnion;
+import org.jgrapht.graph.AsWeightedGraph;
 import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DirectedGraphUnion;
 import org.jgrapht.graph.DirectedPseudograph;
 
 /**
@@ -145,12 +144,12 @@ public class JohnsonShortestPaths<V, E>
         if (paths != null) {
             return;
         }
-        if (graph instanceof DirectedGraph<?, ?>) {
-            run((DirectedGraph<V, E>) graph);
-        } else if (graph instanceof UndirectedGraph<?, ?>) {
-            run((UndirectedGraph<V, E>) graph);
+        GraphTests.requireDirectedOrUndirected(graph);
+
+        if (graph.getType().isDirected()) {
+            runDirected(graph);
         } else {
-            throw new IllegalArgumentException("Graph must be either directed or undirected");
+            runUndirected(graph);
         }
     }
 
@@ -159,7 +158,7 @@ public class JohnsonShortestPaths<V, E>
      * 
      * @param g the input graph
      */
-    private void run(UndirectedGraph<V, E> g)
+    private void runUndirected(Graph<V, E> g)
     {
         /*
          * Check that no negative edge weight exists, otherwise there is a negative-weight cycle.
@@ -186,7 +185,7 @@ public class JohnsonShortestPaths<V, E>
      * 
      * @param g the input graph
      */
-    private void run(DirectedGraph<V, E> g)
+    private void runDirected(Graph<V, E> g)
     {
         /*
          * Compute vertex weights using Bellman-Ford
@@ -207,7 +206,7 @@ public class JohnsonShortestPaths<V, E>
         /*
          * Create graph with new edge weights
          */
-        DirectedGraph<V, E> newEdgeWeightsGraph = new AsWeightedDirectedGraph<>(g, newEdgeWeights);
+        Graph<V, E> newEdgeWeightsGraph = new AsWeightedGraph<>(g, newEdgeWeights);
 
         /*
          * Run Dijkstra using new weights for all vertices
@@ -244,10 +243,12 @@ public class JohnsonShortestPaths<V, E>
      * @param g the input graph
      * @return the vertex weights
      */
-    private Map<V, Double> computeVertexWeights(DirectedGraph<V, E> g)
+    private Map<V, Double> computeVertexWeights(Graph<V, E> g)
     {
+        GraphTests.requireDirected(g);
+
         // create extra graph
-        DirectedGraph<V, E> extraGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
+        Graph<V, E> extraGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
 
         // add new vertex
         V s = vertexFactory.createVertex();
@@ -266,8 +267,8 @@ public class JohnsonShortestPaths<V, E>
         /*
          * Union extra and input graph
          */
-        DirectedGraph<V, E> unionGraph = new DirectedGraphUnion<>(
-            new AsWeightedDirectedGraph<>(extraGraph, zeroWeightFunction), g);
+        Graph<V, E> unionGraph =
+            new AsGraphUnion<>(new AsWeightedGraph<>(extraGraph, zeroWeightFunction), g);
 
         /*
          * Run Bellman-Ford from new vertex

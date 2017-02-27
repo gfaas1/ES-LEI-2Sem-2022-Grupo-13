@@ -17,10 +17,12 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  * A strong connectivity inspector algorithm.
@@ -38,7 +40,7 @@ public interface StrongConnectivityAlgorithm<V, E>
      *
      * @return the underlying graph
      */
-    DirectedGraph<V, E> getGraph();
+    Graph<V, E> getGraph();
 
     /**
      * Returns true if the graph is strongly connected, false otherwise.
@@ -56,13 +58,24 @@ public interface StrongConnectivityAlgorithm<V, E>
     List<Set<V>> stronglyConnectedSets();
 
     /**
-     * Computes a list of {@link DirectedSubgraph}s of the given graph. Each subgraph will represent
-     * a strongly connected component and will contain all vertices of that component. The subgraph
-     * will have an edge (u,v) iff u and v are contained in the strongly connected component.
+     * Computes a list of subgraphs of the given graph. Each subgraph will represent a strongly
+     * connected component and will contain all vertices of that component. The subgraph will have
+     * an edge (u,v) iff u and v are contained in the strongly connected component.
+     *
+     * @return a list of subgraphs representing the strongly connected components
+     * @deprecated In favor of {@link #getStronglyConnectedComponents()}.
+     */
+    @Deprecated
+    List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
+
+    /**
+     * Computes a list of subgraphs of the given graph. Each subgraph will represent a strongly
+     * connected component and will contain all vertices of that component. The subgraph will have
+     * an edge (u,v) iff u and v are contained in the strongly connected component.
      *
      * @return a list of subgraphs representing the strongly connected components
      */
-    List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs();
+    List<Graph<V, E>> getStronglyConnectedComponents();
 
     /**
      * Compute the condensation of the given graph. If each strongly connected component is
@@ -71,7 +84,7 @@ public interface StrongConnectivityAlgorithm<V, E>
      * 
      * @return the condensation of the given graph
      */
-    DirectedGraph<DirectedSubgraph<V, E>, DefaultEdge> getCondensation();
+    Graph<Graph<V, E>, DefaultEdge> getCondensation();
 }
 
 // End StrongConnectivityAlgorithm.java

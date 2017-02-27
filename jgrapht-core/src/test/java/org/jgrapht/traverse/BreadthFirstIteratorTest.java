@@ -50,7 +50,7 @@ public class BreadthFirstIteratorTest
 
     @Override
     AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-        DirectedGraph<String, DefaultWeightedEdge> g, String vertex)
+        Graph<String, DefaultWeightedEdge> g, String vertex)
     {
         AbstractGraphIterator<String, DefaultWeightedEdge> i =
             new BreadthFirstIterator<>(g, vertex);

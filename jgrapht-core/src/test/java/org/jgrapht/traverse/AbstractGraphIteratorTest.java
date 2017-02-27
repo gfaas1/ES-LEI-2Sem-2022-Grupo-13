@@ -44,7 +44,7 @@ public abstract class AbstractGraphIteratorTest
     {
         result = new StringBuffer();
 
-        DirectedGraph<String, DefaultWeightedEdge> graph = createDirectedGraph();
+        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
         AbstractGraphIterator<String, DefaultWeightedEdge> iterator = createIterator(graph, "1");
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
@@ -72,9 +72,9 @@ public abstract class AbstractGraphIteratorTest
         return "";
     }
 
-    DirectedGraph<String, DefaultWeightedEdge> createDirectedGraph()
+    Graph<String, DefaultWeightedEdge> createDirectedGraph()
     {
-        DirectedGraph<String, DefaultWeightedEdge> graph =
+        Graph<String, DefaultWeightedEdge> graph =
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         //
@@ -120,7 +120,7 @@ public abstract class AbstractGraphIteratorTest
     }
 
     abstract AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-        DirectedGraph<String, DefaultWeightedEdge> g, String startVertex);
+        Graph<String, DefaultWeightedEdge> g, String startVertex);
 
     // ~ Inner Classes ----------------------------------------------------------
 

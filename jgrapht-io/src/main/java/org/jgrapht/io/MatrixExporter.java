@@ -133,16 +133,16 @@ public class MatrixExporter<V, E>
             exportAdjacencyMatrix(g, writer);
             break;
         case SPARSE_LAPLACIAN_MATRIX:
-            if (g instanceof UndirectedGraph<?, ?>) {
-                exportLaplacianMatrix((UndirectedGraph<V, E>) g, writer);
+            if (g.getType().isUndirected()) {
+                exportLaplacianMatrix(g, writer);
             } else {
                 throw new ExportException(
                     "Exporter can only export undirected graphs in this format");
             }
             break;
         case SPARSE_NORMALIZED_LAPLACIAN_MATRIX:
-            if (g instanceof UndirectedGraph<?, ?>) {
-                exportNormalizedLaplacianMatrix((UndirectedGraph<V, E>) g, writer);
+            if (g.getType().isUndirected()) {
+                exportNormalizedLaplacianMatrix(g, writer);
             } else {
                 throw new ExportException(
                     "Exporter can only export undirected graphs in this format");
@@ -160,10 +160,9 @@ public class MatrixExporter<V, E>
 
         PrintWriter out = new PrintWriter(writer);
 
-        if (g instanceof DirectedGraph<?, ?>) {
+        if (g.getType().isDirected()) {
             for (V from : g.vertexSet()) {
-                exportAdjacencyMatrixVertex(
-                    out, from, Graphs.successorListOf((DirectedGraph<V, E>) g, from));
+                exportAdjacencyMatrixVertex(out, from, Graphs.successorListOf(g, from));
             }
         } else {
             for (V from : g.vertexSet()) {
@@ -204,7 +203,7 @@ public class MatrixExporter<V, E>
         writer.println(from + delimiter + to + delimiter + value);
     }
 
-    private void exportLaplacianMatrix(UndirectedGraph<V, E> g, Writer writer)
+    private void exportLaplacianMatrix(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 
@@ -228,7 +227,7 @@ public class MatrixExporter<V, E>
         out.flush();
     }
 
-    private void exportNormalizedLaplacianMatrix(UndirectedGraph<V, E> g, Writer writer)
+    private void exportNormalizedLaplacianMatrix(Graph<V, E> g, Writer writer)
     {
         PrintWriter out = new PrintWriter(writer);
 

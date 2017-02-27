@@ -1,5 +1,4 @@
 /**
- * The front-end API's interfaces and classes, including {@link org.jgrapht.Graph},
- * {@link org.jgrapht.DirectedGraph} and {@link org.jgrapht.UndirectedGraph}.
+ * The front-end API's interfaces and classes, including {@link org.jgrapht.Graph}.
  */
 package org.jgrapht;

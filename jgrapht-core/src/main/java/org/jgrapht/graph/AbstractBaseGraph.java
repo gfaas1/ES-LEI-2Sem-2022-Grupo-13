@@ -549,18 +549,19 @@ public abstract class AbstractBaseGraph<V, E>
      */
     protected Specifics<V, E> createSpecifics(boolean directed)
     {
-        // @formatter:off
         /*
-         * TODO: replace with following snippet after the next release 
-         * 
-         * if (directed) {
-         *    return new FastLookupDirectedSpecifics<>(this);
-         * } else {
-         *    return new FastLookupUndirectedSpecifics<>(this);
-         * }
+         * Try-catch only for backward-compatibility, remove after next release.
          */
-        // @formatter:on
-        return createSpecifics();
+        try {
+            return createSpecifics();
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        if (directed) {
+            return new FastLookupDirectedSpecifics<>(this);
+        } else {
+            return new FastLookupUndirectedSpecifics<>(this);
+        }
     }
 
     /**

@@ -491,8 +491,7 @@ public class GraphMLExporter<V, E>
         // <graph>
         AttributesImpl attr = new AttributesImpl();
         attr.addAttribute(
-            "", "", "edgedefault", "CDATA",
-            (g instanceof DirectedGraph<?, ?>) ? "directed" : "undirected");
+            "", "", "edgedefault", "CDATA", g.getType().isDirected() ? "directed" : "undirected");
         handler.startElement("", "", "graph", attr);
     }
 

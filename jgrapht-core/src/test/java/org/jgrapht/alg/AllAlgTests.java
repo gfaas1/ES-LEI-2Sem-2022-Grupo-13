@@ -26,8 +26,7 @@ import org.junit.runners.*;
  * @author Barak Naveh
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ CycleDetectorTest.class,
-    HamiltonianCycleTest.class, NaiveLcaFinderTest.class, NeighborIndexTest.class,
+@Suite.SuiteClasses({ CycleDetectorTest.class, NaiveLcaFinderTest.class, NeighborIndexTest.class,
     StoerWagnerMinimumCutTest.class, StrongConnectivityAlgorithmTest.class,
     TarjanLowestCommonAncestorTest.class, TransitiveClosureTest.class, VertexCoverTest.class,
     WeightedVertexCoverTest.class })

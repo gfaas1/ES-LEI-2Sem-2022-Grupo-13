@@ -28,7 +28,7 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see Subgraph
- * @deprecated Not needed since {@link UndirectedSubgraph} can be used directly.
+ * @deprecated In favor of {@link AsSubgraph}.
  */
 @Deprecated
 public class UndirectedWeightedSubgraph<V, E>

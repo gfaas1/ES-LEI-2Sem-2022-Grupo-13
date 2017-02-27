@@ -27,8 +27,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
  * @param <B> type of this builder
- * 
+ * @deprecated In favor of {@link GraphBuilderBase}.
  */
+@Deprecated
 public abstract class DirectedGraphBuilderBase<V, E, G extends DirectedGraph<V, E>,
     B extends DirectedGraphBuilderBase<V, E, G, B>>
     extends AbstractGraphBuilder<V, E, G, B>

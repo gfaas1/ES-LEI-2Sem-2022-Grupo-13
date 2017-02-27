@@ -89,9 +89,8 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         // create frontiers
         SearchFrontier forwardFrontier = new SearchFrontier(graph);
         SearchFrontier backwardFrontier;
-        if (graph instanceof DirectedGraph) {
-            backwardFrontier =
-                new SearchFrontier(new EdgeReversedGraph<>(((DirectedGraph<V, E>) graph)));
+        if (graph.getType().isDirected()) {
+            backwardFrontier = new SearchFrontier(new EdgeReversedGraph<>(graph));
         } else {
             backwardFrontier = new SearchFrontier(graph);
         }

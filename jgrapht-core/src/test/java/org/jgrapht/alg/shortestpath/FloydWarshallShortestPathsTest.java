@@ -132,9 +132,9 @@ public class FloydWarshallShortestPathsTest
         assertEquals(path.getEndVertex(), path.getVertexList().get(path.getLength()));
     }
 
-    private static UndirectedGraph<String, DefaultEdge> createStringGraph()
+    private static Graph<String, DefaultEdge> createStringGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";
@@ -158,7 +158,7 @@ public class FloydWarshallShortestPathsTest
 
     public void testDiameter()
     {
-        UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
+        Graph<String, DefaultEdge> stringGraph = createStringGraph();
         FloydWarshallShortestPaths<String, DefaultEdge> testFWPath =
             new FloydWarshallShortestPaths<>(stringGraph);
         double diameter = testFWPath.getDiameter();
@@ -167,7 +167,7 @@ public class FloydWarshallShortestPathsTest
 
     public void testEmptyDiameter()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         FloydWarshallShortestPaths<String, DefaultEdge> fw =
             new FloydWarshallShortestPaths<>(graph);
         double diameter = fw.getDiameter();
@@ -176,7 +176,7 @@ public class FloydWarshallShortestPathsTest
 
     public void testEdgeLessDiameter()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         String a = "a", b = "b";
         graph.addVertex(a);
         graph.addVertex(b);

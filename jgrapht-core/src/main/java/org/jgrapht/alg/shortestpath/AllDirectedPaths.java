@@ -34,20 +34,20 @@ import org.jgrapht.graph.*;
  */
 public class AllDirectedPaths<V, E>
 {
-    private final DirectedGraph<V, E> graph;
+    private final Graph<V, E> graph;
 
     /**
      * Create a new instance
      * 
      * @param graph the input graph
+     * @throws IllegalArgumentException if the graph is not directed
      */
-    public AllDirectedPaths(DirectedGraph<V, E> graph)
+    public AllDirectedPaths(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null!");
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
+        if (!graph.getType().isDirected()) {
+            throw new IllegalArgumentException("Graph must be directed");
         }
-
-        this.graph = graph;
     }
 
     /**

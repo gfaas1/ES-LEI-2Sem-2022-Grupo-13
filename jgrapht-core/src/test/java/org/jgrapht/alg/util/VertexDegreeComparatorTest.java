@@ -46,7 +46,7 @@ public class VertexDegreeComparatorTest
     public void testVertexDegreeComparator()
     {
         for (int repeat = 0; repeat < TEST_REPEATS; repeat++) {
-            UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             randomGraphGenerator.generateGraph(graph, new IntegerVertexFactory(), new HashMap<>());
             List<Integer> vertices = new ArrayList<>(graph.vertexSet());
             // Sort in ascending vertex degree

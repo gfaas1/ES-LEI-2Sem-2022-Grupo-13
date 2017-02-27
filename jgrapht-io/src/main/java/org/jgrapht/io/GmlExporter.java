@@ -180,7 +180,7 @@ public class GmlExporter<V, E>
         out.println("graph");
         out.println("[");
         out.println(TAB1 + "label" + DELIM + quoted(""));
-        if (g instanceof DirectedGraph<?, ?>) {
+        if (g.getType().isDirected()) {
             out.println(TAB1 + "directed" + DELIM + "1");
         } else {
             out.println(TAB1 + "directed" + DELIM + "0");

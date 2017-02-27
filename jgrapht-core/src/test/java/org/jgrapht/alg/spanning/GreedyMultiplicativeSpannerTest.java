@@ -53,7 +53,7 @@ public class GreedyMultiplicativeSpannerTest
 
     // ~ Methods
     // ----------------------------------------------------------------
-    public void createGraph1(UndirectedGraph<String, DefaultEdge> g)
+    public void createGraph1(Graph<String, DefaultEdge> g)
     {
         g.addVertex(V0);
         g.addVertex(V1);
@@ -80,7 +80,7 @@ public class GreedyMultiplicativeSpannerTest
         g.addEdge(V6, V7);
     }
 
-    public void createGraph2(UndirectedGraph<String, DefaultEdge> g)
+    public void createGraph2(Graph<String, DefaultEdge> g)
     {
         g.addVertex(V0);
         g.addVertex(V1);
@@ -153,7 +153,7 @@ public class GreedyMultiplicativeSpannerTest
         g.setEdgeWeight(g.addEdge(V6, V7), 5.0);
     }
 
-    private <V, E> void runTest(UndirectedGraph<V, E> g, int k, Set<E> correct)
+    private <V, E> void runTest(Graph<V, E> g, int k, Set<E> correct)
     {
         Set<E> result = new GreedyMultiplicativeSpanner<V, E>(g, k).getSpanner().getEdges();
 
@@ -165,7 +165,7 @@ public class GreedyMultiplicativeSpannerTest
 
     public void testGraph1()
     {
-        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         createGraph1(g);
 
@@ -214,7 +214,7 @@ public class GreedyMultiplicativeSpannerTest
 
     public void testGraph1WithLoops()
     {
-        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         createGraph1(g);
 
@@ -239,7 +239,7 @@ public class GreedyMultiplicativeSpannerTest
 
     public void testGraph1WithMultipleEdges()
     {
-        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         createGraph1(g);
 
@@ -264,7 +264,7 @@ public class GreedyMultiplicativeSpannerTest
 
     public void testGraph2()
     {
-        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         createGraph2(g);
 

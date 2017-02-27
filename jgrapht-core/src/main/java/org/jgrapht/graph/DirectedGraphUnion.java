@@ -17,6 +17,8 @@
  */
 package org.jgrapht.graph;
 
+import java.util.*;
+
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
@@ -25,9 +27,9 @@ import org.jgrapht.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
- * @author Ilya Razenshteyn
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class DirectedGraphUnion<V, E>
     extends GraphUnion<V, E, DirectedGraph<V, E>>
     implements DirectedGraph<V, E>
@@ -56,7 +58,47 @@ public class DirectedGraphUnion<V, E>
      */
     public DirectedGraphUnion(DirectedGraph<V, E> g1, DirectedGraph<V, E> g2)
     {
-        this(g1, g2, WeightCombiner.SUM);
+        super(g1, g2);
+    }
+
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        Set<E> res = incomingEdgesOf(vertex);
+        return res.size();
+    }
+
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        Set<E> res = new HashSet<>();
+        if (getG1().containsVertex(vertex)) {
+            res.addAll(getG1().incomingEdgesOf(vertex));
+        }
+        if (getG2().containsVertex(vertex)) {
+            res.addAll(getG2().incomingEdgesOf(vertex));
+        }
+        return Collections.unmodifiableSet(res);
+    }
+
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        Set<E> res = outgoingEdgesOf(vertex);
+        return res.size();
+    }
+
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        Set<E> res = new HashSet<>();
+        if (getG1().containsVertex(vertex)) {
+            res.addAll(getG1().outgoingEdgesOf(vertex));
+        }
+        if (getG2().containsVertex(vertex)) {
+            res.addAll(getG2().outgoingEdgesOf(vertex));
+        }
+        return Collections.unmodifiableSet(res);
     }
 }
 

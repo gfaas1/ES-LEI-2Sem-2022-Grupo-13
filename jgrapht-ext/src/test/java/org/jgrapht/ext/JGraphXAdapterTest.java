@@ -40,7 +40,7 @@ public class JGraphXAdapterTest
     public void genericTest()
     {
         ListenableGraph<String, DefaultEdge> jGraphT =
-            new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
 
         // fill graph with data
         String v1 = "Vertex 1";
@@ -91,7 +91,7 @@ public class JGraphXAdapterTest
     public void listenerTest()
     {
         ListenableGraph<String, String> jGraphT =
-            new ListenableDirectedGraph<String, String>(String.class);
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(String.class));
 
         JGraphXAdapter<String, String> graphX = new JGraphXAdapter<String, String>(jGraphT);
 
@@ -190,7 +190,7 @@ public class JGraphXAdapterTest
         final int maxEdges = 1000;
 
         ListenableGraph<Integer, DefaultEdge> jGraphT =
-            new ListenableDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
 
         for (int i = 0; i < maxVertices; i++) {
             jGraphT.addVertex(i);
@@ -270,7 +270,7 @@ public class JGraphXAdapterTest
     public void duplicateEntriesTest()
     {
         ListenableGraph<String, DefaultEdge> jGraphT =
-            new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
 
         JGraphXAdapter<String, DefaultEdge> graphX =
             new JGraphXAdapter<String, DefaultEdge>(jGraphT);

@@ -145,11 +145,10 @@ public class JGraphAdapterDemo
     }
 
     /**
-     * a listenable directed multigraph that allows loops and parallel edges.
+     * A listenable directed multigraph that allows loops and parallel edges.
      */
     private static class ListenableDirectedMultigraph<V, E>
         extends DefaultListenableGraph<V, E>
-        implements DirectedGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 

@@ -37,7 +37,7 @@ import org.jgrapht.*;
 public class TarjanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    private DirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     private List<List<V>> cycles;
     private Set<V> marked;
@@ -61,19 +61,16 @@ public class TarjanSimpleCycles<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public TarjanSimpleCycles(DirectedGraph<V, E> graph)
+    public TarjanSimpleCycles(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -82,12 +79,9 @@ public class TarjanSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    public void setGraph(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**

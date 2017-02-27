@@ -31,8 +31,7 @@ import org.junit.runners.*;
     AsWeightedGraphTest.class, CloneTest.class, DefaultDirectedGraphTest.class,
     EqualsAndHashCodeTest.class, GenericGraphsTest.class, ListenableGraphTest.class,
     MaskEdgeSetTest.class, MaskVertexSetTest.class, SerializationTest.class,
-    SimpleDirectedGraphTest.class, GraphWalkTest.class, SubgraphTest.class,
-    SimpleIdentityDirectedGraphTest.class, UnionGraphTest.class })
+    SimpleDirectedGraphTest.class, GraphWalkTest.class, SimpleIdentityDirectedGraphTest.class })
 public final class AllGraphTests
 {
 }

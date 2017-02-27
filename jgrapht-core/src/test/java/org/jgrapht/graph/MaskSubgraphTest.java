@@ -18,13 +18,13 @@
 package org.jgrapht.graph;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.UndirectedGraph;
 import org.junit.Test;
 
 /**
@@ -36,9 +36,16 @@ public class MaskSubgraphTest
 {
 
     @Test
+    public void testUnmodifiable()
+    {
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        assertFalse(new MaskSubgraph<>(g, v -> v.equals(5), e -> false).getType().isModifiable());
+    }
+
+    @Test
     public void testInOutEdgesUndirected()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e13 = g.addEdge(1, 3);
@@ -50,8 +57,8 @@ public class MaskSubgraphTest
         DefaultEdge e44 = g.addEdge(4, 4);
         g.addEdge(4, 5);
 
-        UndirectedGraph<Integer, DefaultEdge> sg =
-            new UndirectedMaskSubgraph<>(g, v -> v.equals(5), e -> e.equals(e24_3));
+        Graph<Integer, DefaultEdge> sg =
+            new MaskSubgraph<>(g, v -> v.equals(5), e -> e.equals(e24_3));
 
         assertEquals(6, sg.edgeSet().size());
 
@@ -89,7 +96,7 @@ public class MaskSubgraphTest
     @Test
     public void testInOutEdgesDirected()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4, 5));
         DefaultEdge e12 = g.addEdge(1, 2);
         DefaultEdge e13 = g.addEdge(1, 3);
@@ -101,8 +108,8 @@ public class MaskSubgraphTest
         DefaultEdge e44 = g.addEdge(4, 4);
         g.addEdge(4, 5);
 
-        DirectedGraph<Integer, DefaultEdge> sg =
-            new DirectedMaskSubgraph<>(g, v -> v.equals(5), e -> e.equals(e24_3));
+        Graph<Integer, DefaultEdge> sg =
+            new MaskSubgraph<>(g, v -> v.equals(5), e -> e.equals(e24_3));
 
         assertEquals(6, sg.edgeSet().size());
 

@@ -133,8 +133,10 @@ public class TransitiveReduction
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public <V, E> void reduce(final DirectedGraph<V, E> directedGraph)
+    public <V, E> void reduce(final Graph<V, E> directedGraph)
     {
+        GraphTests.requireDirected(directedGraph, "Graph must be directed");
+        
         final List<V> vertices = new ArrayList<>(directedGraph.vertexSet());
 
         final int n = vertices.size();

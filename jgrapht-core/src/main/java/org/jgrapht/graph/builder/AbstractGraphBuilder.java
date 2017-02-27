@@ -27,9 +27,8 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
  * @param <B> type of this builder
- *
- * @see DirectedGraphBuilderBase
- * @see UndirectedGraphBuilderBase
+ * 
+ * @author Andrew Chen
  */
 public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     B extends AbstractGraphBuilder<V, E, G, B>>
@@ -75,7 +74,8 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @see #addVertex(Object)
      */
-    public B addVertices(V... vertices)
+    @SafeVarargs
+    public final B addVertices(V... vertices)
     {
         for (V vertex : vertices) {
             this.addVertex(vertex);
@@ -130,7 +130,8 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @see #addEdge(Object, Object)
      */
-    public B addEdgeChain(V first, V second, V... rest)
+    @SafeVarargs
+    public final B addEdgeChain(V first, V second, V... rest)
     {
         this.addEdge(first, second);
         V last = second;
@@ -180,7 +181,8 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @see #removeVertex(Object)
      */
-    public B removeVertices(V... vertices)
+    @SafeVarargs
+    public final B removeVertices(V... vertices)
     {
         for (V vertex : vertices) {
             this.removeVertex(vertex);
@@ -221,6 +223,45 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
     }
 
     /**
+     * Adds an weighted edge to the graph being built. The source and target vertices are added to
+     * the graph, if not already included.
+     *
+     * @param source source vertex of the edge.
+     * @param target target vertex of the edge.
+     * @param weight weight of the edge.
+     *
+     * @return this builder object
+     *
+     * @see Graphs#addEdgeWithVertices(Graph, Object, Object, double)
+     */
+    public B addEdge(V source, V target, double weight)
+    {
+        Graphs.addEdgeWithVertices(this.graph, source, target, weight);
+        return this.self();
+    }
+
+    /**
+     * Adds the specified weighted edge to the graph being built. The source and target vertices are
+     * added to the graph, if not already included.
+     *
+     * @param source source vertex of the edge.
+     * @param target target vertex of the edge.
+     * @param edge edge to be added to this graph.
+     * @param weight weight of the edge.
+     *
+     * @return this builder object
+     *
+     * @see Graph#addEdge(Object, Object, Object)
+     * @see Graph#setEdgeWeight(Object, double)
+     */
+    public B addEdge(V source, V target, E edge, double weight)
+    {
+        this.graph.addEdge(source, target, edge);
+        this.graph.setEdgeWeight(edge, weight);
+        return this.self();
+    }
+
+    /**
      * Build the graph. Calling any method (including this method) on this builder object after
      * calling this method is undefined behaviour.
      *
@@ -238,10 +279,25 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      * @return the built unmodifiable graph.
      *
      * @see #build()
+     * @deprecated In favor of {@link #buildAsUnmodifiable()}.
      */
+    @Deprecated
     public UnmodifiableGraph<V, E> buildUnmodifiable()
     {
         return new UnmodifiableGraph<>(this.graph);
+    }
+
+    /**
+     * Build an unmodifiable version graph. Calling any method (including this method) on this
+     * builder object after calling this method is undefined behaviour.
+     *
+     * @return the built unmodifiable graph.
+     *
+     * @see #build()
+     */
+    public AsUnmodifiableGraph<V, E> buildAsUnmodifiable()
+    {
+        return new AsUnmodifiableGraph<>(this.graph);
     }
 }
 

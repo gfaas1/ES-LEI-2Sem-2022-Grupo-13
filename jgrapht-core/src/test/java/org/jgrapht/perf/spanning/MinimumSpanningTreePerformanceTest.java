@@ -49,7 +49,7 @@ public class MinimumSpanningTreePerformanceTest
     {
         protected Random rng = new Random(SEED);
         protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator = null;
-        protected DirectedGraph<Integer, DefaultWeightedEdge> graph;
+        protected Graph<Integer, DefaultWeightedEdge> graph;
 
         abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph);

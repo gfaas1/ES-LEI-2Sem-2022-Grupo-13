@@ -49,7 +49,7 @@ public class MaximumFlowAlgorithmPerformanceTest
         private Integer sink;
 
         abstract MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-            DirectedGraph<Integer, DefaultWeightedEdge> network);
+            Graph<Integer, DefaultWeightedEdge> network);
 
         @Setup
         public void setup()
@@ -85,7 +85,7 @@ public class MaximumFlowAlgorithmPerformanceTest
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-            DirectedGraph<Integer, DefaultWeightedEdge> network)
+            Graph<Integer, DefaultWeightedEdge> network)
         {
             return new EdmondsKarpMFImpl<>(network);
         }
@@ -96,7 +96,7 @@ public class MaximumFlowAlgorithmPerformanceTest
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-            DirectedGraph<Integer, DefaultWeightedEdge> network)
+            Graph<Integer, DefaultWeightedEdge> network)
         {
             return new PushRelabelMFImpl<>(network);
         }

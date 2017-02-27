@@ -17,6 +17,10 @@
  */
 package org.jgrapht.graph;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
@@ -35,7 +39,9 @@ import org.jgrapht.util.*;
  * @param <E> the edge type
  * 
  * @author Joris Kinable
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class MixedGraphUnion<V, E>
     extends GraphUnion<V, E, Graph<V, E>>
     implements DirectedGraph<V, E>
@@ -72,52 +78,50 @@ public class MixedGraphUnion<V, E>
         this(g1, g2, WeightCombiner.SUM);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int degreeOf(V vertex)
-    {
-        int d = 0;
-        if (directedGraph.containsVertex(vertex)) {
-            d += directedGraph.degreeOf(vertex);
-        }
-        if (undirectedGraph.containsVertex(vertex)) {
-            d += undirectedGraph.degreeOf(vertex);
-        }
-        return d;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int inDegreeOf(V vertex)
     {
-        int d = 0;
-        if (directedGraph.containsVertex(vertex)) {
-            d += directedGraph.inDegreeOf(vertex);
-        }
-        if (undirectedGraph.containsVertex(vertex)) {
-            d += undirectedGraph.inDegreeOf(vertex);
-        }
-        return d;
+        Set<E> res = incomingEdgesOf(vertex);
+        return res.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        Set<E> res = new LinkedHashSet<>();
+        if (directedGraph.containsVertex(vertex)) {
+            res.addAll(directedGraph.incomingEdgesOf(vertex));
+        }
+        if (undirectedGraph.containsVertex(vertex)) {
+            res.addAll(undirectedGraph.edgesOf(vertex));
+        }
+        return Collections.unmodifiableSet(res);
+    }
+
     @Override
     public int outDegreeOf(V vertex)
     {
-        int d = 0;
+        Set<E> res = outgoingEdgesOf(vertex);
+        return res.size();
+    }
+
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        Set<E> res = new LinkedHashSet<>();
         if (directedGraph.containsVertex(vertex)) {
-            d += directedGraph.outDegreeOf(vertex);
+            res.addAll(directedGraph.outgoingEdgesOf(vertex));
         }
         if (undirectedGraph.containsVertex(vertex)) {
-            d += undirectedGraph.outDegreeOf(vertex);
+            res.addAll(undirectedGraph.edgesOf(vertex));
         }
-        return d;
+        return Collections.unmodifiableSet(res);
+    }
+
+    @Override
+    public int degreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
     }
 
 }

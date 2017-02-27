@@ -27,74 +27,31 @@ import org.jgrapht.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
- * @author Ilya Razenshteyn
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class UndirectedGraphUnion<V, E>
     extends GraphUnion<V, E, UndirectedGraph<V, E>>
     implements UndirectedGraph<V, E>
 {
     private static final long serialVersionUID = -740199233080172450L;
 
-    /**
-     * Construct a new undirected graph union.
-     * 
-     * @param g1 the first graph
-     * @param g2 the second graph
-     * @param operator the weight combiner (policy for edge weight calculation)
-     */
-    public UndirectedGraphUnion(
+    UndirectedGraphUnion(
         UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2, WeightCombiner operator)
     {
         super(g1, g2, operator);
     }
 
-    /**
-     * Construct a new undirected graph union. The union will use the {@link WeightCombiner#SUM}
-     * weight combiner.
-     * 
-     * @param g1 the first graph
-     * @param g2 the second graph
-     */
-    public UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2)
+    UndirectedGraphUnion(UndirectedGraph<V, E> g1, UndirectedGraph<V, E> g2)
     {
-        this(g1, g2, WeightCombiner.SUM);
+        super(g1, g2);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int degreeOf(V vertex)
     {
-        int degree = 0;
-        Iterator<E> it = super.edgesOf(vertex).iterator();
-        while (it.hasNext()) {
-            E e = it.next();
-            degree++;
-            if (getEdgeSource(e).equals(getEdgeTarget(e))) {
-                degree++;
-            }
-        }
-        return degree;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int inDegreeOf(V vertex)
-    {
-        return this.degreeOf(vertex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int outDegreeOf(V vertex)
-    {
-        return this.degreeOf(vertex);
+        Set<E> res = edgesOf(vertex);
+        return res.size();
     }
 }
 

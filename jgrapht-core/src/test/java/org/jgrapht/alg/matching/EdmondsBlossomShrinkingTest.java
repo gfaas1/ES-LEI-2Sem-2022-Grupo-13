@@ -35,7 +35,7 @@ public final class EdmondsBlossomShrinkingTest
     public void testOne()
     {
         // create an undirected graph
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         Integer v1 = 1;
         Integer v2 = 2;
@@ -60,7 +60,7 @@ public final class EdmondsBlossomShrinkingTest
 
     public void testCrash()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         Integer v1 = 1;
         Integer v2 = 2;
@@ -89,7 +89,7 @@ public final class EdmondsBlossomShrinkingTest
 
     public void testCrash2()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         Integer vs[] = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
 

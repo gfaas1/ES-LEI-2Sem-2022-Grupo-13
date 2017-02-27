@@ -34,7 +34,7 @@ public abstract class MaximumFlowAlgorithmTest
         Graph<Integer, DefaultWeightedEdge> network);
 
     private void runTestDirected(
-        DirectedGraph<Integer, DefaultWeightedEdge> network, int[] sources, int[] sinks,
+        Graph<Integer, DefaultWeightedEdge> network, int[] sources, int[] sinks,
         double[] expectedResults)
     {
         assertTrue(sources.length == sinks.length);
@@ -51,7 +51,7 @@ public abstract class MaximumFlowAlgorithmTest
 
     static void verifyDirected(
         int source, int sink, double expectedResult,
-        DirectedGraph<Integer, DefaultWeightedEdge> network,
+        Graph<Integer, DefaultWeightedEdge> network,
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow)
     {
         Double flowValue = maxFlow.getValue();
@@ -94,7 +94,7 @@ public abstract class MaximumFlowAlgorithmTest
     }
 
     private void runTestUndirected(
-        UndirectedGraph<Integer, DefaultWeightedEdge> graph, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink,
         int expectedResult)
     {
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver = createSolver(graph);
@@ -103,7 +103,7 @@ public abstract class MaximumFlowAlgorithmTest
     }
 
     static void verifyUndirected(
-        UndirectedGraph<Integer, DefaultWeightedEdge> graph, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> graph, int source, int sink,
         int expectedResult, MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> solver)
     {
         MaximumFlowAlgorithm.MaximumFlow<DefaultWeightedEdge> maxFlow =

@@ -47,12 +47,12 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     /**
      * Source graph to operate on
      */
-    private UndirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Minimal triangulation of graph
      */
-    private UndirectedGraph<V, E> chordalGraph;
+    private Graph<V, E> chordalGraph;
 
     /**
      * Fill edges
@@ -92,9 +92,9 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      *
      * @param g The graph to decompose.
      */
-    public CliqueMinimalSeparatorDecomposition(UndirectedGraph<V, E> g)
+    public CliqueMinimalSeparatorDecomposition(Graph<V, E> g)
     {
-        this.graph = g;
+        this.graph = GraphTests.requireUndirected(g);
         this.fillEdges = new HashSet<>();
     }
 
@@ -112,7 +112,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         }
 
         // initialize g' as subgraph of graph (same vertices and edges)
-        final UndirectedGraph<V, E> gprime = copyAsSimpleGraph(graph);
+        final Graph<V, E> gprime = copyAsSimpleGraph(graph);
         int s = -1;
         generators = new ArrayList<>();
         meo = new LinkedList<>();
@@ -232,10 +232,10 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
         separators = new HashSet<>();
 
         // initialize g' as subgraph of graph (same vertices and edges)
-        UndirectedGraph<V, E> gprime = copyAsSimpleGraph(graph);
+        Graph<V, E> gprime = copyAsSimpleGraph(graph);
 
         // initialize h' as subgraph of chordalGraph (same vertices and edges)
-        UndirectedGraph<V, E> hprime = copyAsSimpleGraph(chordalGraph);
+        Graph<V, E> hprime = copyAsSimpleGraph(chordalGraph);
 
         atoms = new HashSet<>();
 
@@ -255,7 +255,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
                             separators.add(separator);
                         }
                     }
-                    UndirectedGraph<V, E> tmpGraph = copyAsSimpleGraph(gprime);
+                    Graph<V, E> tmpGraph = copyAsSimpleGraph(gprime);
 
                     tmpGraph.removeAllVertices(separator);
                     ConnectivityInspector<V, E> con = new ConnectivityInspector<>(tmpGraph);
@@ -291,11 +291,11 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      *
      * @return true if the induced subgraph is a clique.
      */
-    private static <V, E> boolean isClique(UndirectedGraph<V, E> graph, Set<V> vertices)
+    private static <V, E> boolean isClique(Graph<V, E> graph, Set<V> vertices)
     {
         for (V v1 : vertices) {
             for (V v2 : vertices) {
-                if ((v1 != v2) && (graph.getEdge(v1, v2) == null)) {
+                if (!v1.equals(v2) && graph.getEdge(v1, v2) == null) {
                     return false;
                 }
             }
@@ -310,9 +310,9 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      *
      * @return A copy of the graph projected to a SimpleGraph.
      */
-    private static <V, E> UndirectedGraph<V, E> copyAsSimpleGraph(UndirectedGraph<V, E> graph)
+    private static <V, E> Graph<V, E> copyAsSimpleGraph(Graph<V, E> graph)
     {
-        UndirectedGraph<V, E> copy = new SimpleGraph<>(graph.getEdgeFactory());
+        Graph<V, E> copy = new SimpleGraph<>(graph.getEdgeFactory());
 
         if (graph instanceof SimpleGraph) {
             Graphs.addGraph(copy, graph);
@@ -322,7 +322,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             for (E e : graph.edgeSet()) {
                 V v1 = graph.getEdgeSource(e);
                 V v2 = graph.getEdgeTarget(e);
-                if ((v1 != v2) && !copy.containsEdge(e)) {
+                if (!v1.equals(v2) && !copy.containsEdge(e)) {
                     copy.addEdge(v1, v2);
                 }
             }
@@ -363,7 +363,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      *
      * @return Triangulated graph.
      */
-    public UndirectedGraph<V, E> getMinimalTriangulation()
+    public Graph<V, E> getMinimalTriangulation()
     {
         if (chordalGraph == null) {
             computeMinimalTriangulation();
@@ -448,7 +448,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
      *
      * @return Original graph.
      */
-    public UndirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }

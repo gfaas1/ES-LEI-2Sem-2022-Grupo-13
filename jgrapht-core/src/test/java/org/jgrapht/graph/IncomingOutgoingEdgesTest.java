@@ -22,8 +22,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.Graph;
 import org.junit.Test;
 
 /**
@@ -40,7 +39,7 @@ public class IncomingOutgoingEdgesTest
     @Test
     public void testDirectedGraph()
     {
-        DirectedGraph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");
@@ -98,7 +97,7 @@ public class IncomingOutgoingEdgesTest
     @Test
     public void testUndirectedGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");

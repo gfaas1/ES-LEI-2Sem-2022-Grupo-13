@@ -31,7 +31,7 @@ public class AsUndirectedGraphTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    private DirectedGraph<String, DefaultEdge> directed;
+    private Graph<String, DefaultEdge> directed;
     private DefaultEdge loop;
     private DefaultEdge e12;
     private DefaultEdge e23;
@@ -40,7 +40,7 @@ public class AsUndirectedGraphTest
     private String v2 = "v2";
     private String v3 = "v3";
     private String v4 = "v4";
-    private UndirectedGraph<String, DefaultEdge> undirected;
+    private Graph<String, DefaultEdge> undirected;
 
     // ~ Constructors -----------------------------------------------------------
 
@@ -114,7 +114,7 @@ public class AsUndirectedGraphTest
         assertEquals(1, undirected.inDegreeOf(v3));
         assertEquals(3, undirected.inDegreeOf(v4));
     }
-    
+
     /**
      * .
      */
@@ -136,7 +136,7 @@ public class AsUndirectedGraphTest
         assertEquals(1, undirected.outDegreeOf(v3));
         assertEquals(3, undirected.outDegreeOf(v4));
     }
-    
+
     /**
      * .
      */
@@ -191,6 +191,17 @@ public class AsUndirectedGraphTest
         undirected.removeVertex(v4);
         assertEquals(false, undirected.containsVertex(v4));
         assertEquals(false, directed.containsVertex(v4));
+    }
+
+    /**
+     * .
+     */
+    public void testToString()
+    {
+        assertEquals(
+            "([v1, v2, v3, v4], [(v1,v2), (v2,v3), (v2,v4), (v4,v4)])", directed.toString());
+        assertEquals(
+            "([v1, v2, v3, v4], [{v1,v2}, {v2,v3}, {v2,v4}, {v4,v4}])", undirected.toString());
     }
 
     /**

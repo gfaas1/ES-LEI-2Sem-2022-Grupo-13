@@ -26,8 +26,7 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see DefaultListenableGraph
- * @deprecated Not needed, since {@link ListenableDirectedGraph} provides the necessary
- *             functionality.
+ * @deprecated In favor of {@link DefaultListenableGraph}.
  */
 @Deprecated
 public class ListenableDirectedWeightedGraph<V, E>

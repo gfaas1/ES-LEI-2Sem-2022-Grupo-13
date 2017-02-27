@@ -26,7 +26,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see DefaultListenableGraph
+ * @deprecated In favor of {@link DefaultListenableGraph}.
  */
+@Deprecated
 public class ListenableUndirectedGraph<V, E>
     extends DefaultListenableGraph<V, E>
     implements UndirectedGraph<V, E>

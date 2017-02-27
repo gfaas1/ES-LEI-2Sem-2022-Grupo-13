@@ -29,7 +29,9 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated In favor of {@link MaskSubgraph}.
  */
+@Deprecated
 public class DirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements DirectedGraph<V, E>

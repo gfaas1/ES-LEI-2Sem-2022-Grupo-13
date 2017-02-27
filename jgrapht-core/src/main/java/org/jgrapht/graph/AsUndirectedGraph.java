@@ -63,10 +63,12 @@ public class AsUndirectedGraph<V, E>
      * Constructor for AsUndirectedGraph.
      *
      * @param g the backing directed graph over which an undirected view is to be created.
+     * @throws IllegalArgumentException if the graph is not directed
      */
-    public AsUndirectedGraph(DirectedGraph<V, E> g)
+    public AsUndirectedGraph(Graph<V, E> g)
     {
         super(g);
+        GraphTests.requireDirected(g);
     }
 
     /**

@@ -29,7 +29,7 @@ import org.jgrapht.*;
 public class MaskVertexSetTest
     extends EnhancedTestCase
 {
-    private DirectedGraph<String, DefaultEdge> directed;
+    private Graph<String, DefaultEdge> directed;
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";

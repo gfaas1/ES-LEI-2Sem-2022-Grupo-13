@@ -57,7 +57,7 @@ import org.jgrapht.util.*;
 public class GreedyMultiplicativeSpanner<V, E>
     implements SpannerAlgorithm<E>
 {
-    private final UndirectedGraph<V, E> graph;
+    private final Graph<V, E> graph;
     private final int k;
     private static final int MAX_K = 1 << 29;
 
@@ -66,10 +66,16 @@ public class GreedyMultiplicativeSpanner<V, E>
      * 
      * @param graph an undirected graph
      * @param k positive integer.
+     * 
+     * @throws IllegalArgumentException if the graph is not undirected
+     * @throws IllegalArgumentException if k is not positive
      */
-    public GreedyMultiplicativeSpanner(UndirectedGraph<V, E> graph, int k)
+    public GreedyMultiplicativeSpanner(Graph<V, E> graph, int k)
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        if (!graph.getType().isUndirected()) {
+            throw new IllegalArgumentException("graph is not undirected");
+        }
         if (k <= 0) {
             throw new IllegalArgumentException(
                 "k should be positive in (2k-1)-spanner construction");
@@ -133,7 +139,7 @@ public class GreedyMultiplicativeSpanner<V, E>
     private class UnweightedSpannerAlgorithm
         extends SpannerAlgorithmBase
     {
-        protected UndirectedGraph<V, E> spanner;
+        protected Graph<V, E> spanner;
         protected Map<V, Integer> vertexDistance;
         protected Deque<V> queue;
         protected Deque<V> touchedVertices;

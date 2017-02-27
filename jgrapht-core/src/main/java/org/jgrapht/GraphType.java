@@ -103,6 +103,13 @@ public interface GraphType
     boolean isMultigraph();
 
     /**
+     * Returns <code>true</code> if the graph is modifiable, <code>false</code> otherwise.
+     * 
+     * @return <code>true</code> if the graph is modifiable, <code>false</code> otherwise
+     */
+    boolean isModifiable();
+
+    /**
      * Create a directed variant of the current graph type.
      * 
      * @return a directed variant of the current graph type
@@ -136,4 +143,18 @@ public interface GraphType
      * @return a weighted variant of the current graph type
      */
     GraphType asWeighted();
+
+    /**
+     * Create a modifiable variant of the current graph type.
+     * 
+     * @return a modifiable variant of the current graph type
+     */
+    GraphType asModifiable();
+
+    /**
+     * Create an unmodifiable variant of the current graph type.
+     * 
+     * @return a unmodifiable variant of the current graph type
+     */
+    GraphType asUnmodifiable();
 }

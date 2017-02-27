@@ -48,7 +48,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         public static final long SEED = 13l;
 
         private GraphGenerator<Integer, DefaultEdge, Integer> generator = null;
-        private UndirectedGraph<Integer, DefaultEdge> graph;
+        private Graph<Integer, DefaultEdge> graph;
 
         abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver(
             Graph<Integer, DefaultEdge> graph);

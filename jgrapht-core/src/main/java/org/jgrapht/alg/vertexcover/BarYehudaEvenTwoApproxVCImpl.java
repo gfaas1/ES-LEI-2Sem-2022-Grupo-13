@@ -43,20 +43,21 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
- *
  */
 public class BarYehudaEvenTwoApproxVCImpl<V, E>
     implements MinimumWeightedVertexCoverAlgorithm<V, E>
 {
 
     @Override
-    public VertexCover<V> getVertexCover(
-        UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
+        if (!graph.getType().isUndirected()) {
+            throw new IllegalArgumentException("graph must be undirected");
+        }
 
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
-        UndirectedGraph<V, E> copy = new UndirectedSubgraph<>(graph, null, null);
+        Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
         Map<V, Double> W = new HashMap<>();
         for (V v : graph.vertexSet())
             W.put(v, vertexWeightMap.get(v));

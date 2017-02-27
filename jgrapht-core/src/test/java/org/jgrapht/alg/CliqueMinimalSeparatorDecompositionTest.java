@@ -563,7 +563,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * @param vertices the vertices to induce the subgraph from.
      * @return true if the induced subgraph is a clique.
      */
-    private static <V, E> boolean isClique(UndirectedGraph<V, E> graph, Set<V> vertices)
+    private static <V, E> boolean isClique(Graph<V, E> graph, Set<V> vertices)
     {
         for (V v1 : vertices) {
             for (V v2 : vertices) {

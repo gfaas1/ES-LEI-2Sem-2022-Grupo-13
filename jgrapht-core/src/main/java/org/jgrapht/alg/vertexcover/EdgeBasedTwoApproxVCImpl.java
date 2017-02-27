@@ -65,13 +65,17 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
      * @return a set of vertices which is a vertex cover for the specified graph.
      */
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph)
     {
+        if (!graph.getType().isUndirected()) {
+            throw new IllegalArgumentException("graph must be undirected");
+        }
+
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
         // G'=(V',E') <-- G(V,E)
-        UndirectedGraph<V, E> sg = new UndirectedSubgraph<>(graph, null, null);
+        Graph<V,E> sg = new AsSubgraph<>(graph, null, null);
 
         // while E' is non-empty
         while (!sg.edgeSet().isEmpty()) {

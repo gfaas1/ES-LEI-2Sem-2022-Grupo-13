@@ -144,7 +144,7 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
         }
 
         // check if graph is directed
-        boolean isDirected = target instanceof DirectedGraph<?, ?>;
+        boolean isDirected = target.getType().isDirected();
 
         // create edges
         for (int i = 0; i < n1; i++) {
