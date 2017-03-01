@@ -21,10 +21,10 @@ package org.jgrapht;
  * A graph type.
  * 
  * <p>
- * The graph type describes various properties of a graph such as whether they it is
- * directed/undirected or mixed, whether it contain self-loops (edges with the same source and
- * target vertices), whether it contain parallel-edges (multiple edges with the same source and
- * target) and whether it is weighted or not.
+ * The graph type describes various properties of a graph such as whether it is directed/undirected
+ * or mixed, whether it contain self-loops (edges with the same source and target vertices), whether
+ * it contain parallel-edges (multiple edges with the same source and target) and whether it is
+ * weighted or not.
  * 
  * @author Dimitrios Michail
  */

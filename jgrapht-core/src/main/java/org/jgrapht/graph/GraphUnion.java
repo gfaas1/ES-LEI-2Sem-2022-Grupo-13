@@ -39,8 +39,9 @@ import org.jgrapht.util.*;
  * @param <V> the vertex type
  * @param <E> the edge type
  * @param <G> the graph type of the two graphs that are combined
- * 
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class GraphUnion<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
     implements Serializable
