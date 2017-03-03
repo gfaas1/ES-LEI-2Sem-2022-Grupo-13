@@ -25,6 +25,8 @@ import java.util.Random;
 
 import org.jgrapht.Graph;
 import org.jgrapht.VertexFactory;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.Pseudograph;
 
 /**
  * The linearized chord diagram graph model generator.
@@ -36,8 +38,10 @@ import org.jgrapht.VertexFactory;
  * Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
  * 
  * <p>
- * In contrast with the original model, Bollobás and Riordan allow for multiple edges and loops,
- * showing that their number will be negligible.
+ * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allow for multiple
+ * edges (parallel-edges) and self-loops. They show, however, that their number will be small. This
+ * means that this generator works only on graphs which allow multiple edges (parallel-edges) such
+ * as {@link Pseudograph} or {@link DirectedPseudograph}.
  * 
  * <p>
  * The generator starts with a graph of one node and grows the network by adding n-1 additional

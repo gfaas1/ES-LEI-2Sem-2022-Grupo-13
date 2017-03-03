@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jgrapht.Graph;
@@ -117,15 +116,7 @@ public class LinearizedChordDiagramGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 0, 0 }, { 1, 0 }, { 2, 2 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 2 },
-            { 7, 0 }, { 8, 2 }, { 9, 0 }, { 10, 1 }, { 11, 1 }, { 12, 11 }, { 13, 3 }, { 14, 4 },
-            { 15, 0 }, { 16, 0 }, { 17, 5 }, { 18, 7 }, { 19, 0 } };
-
         assertEquals(20, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
     }
 
     @Test
@@ -138,18 +129,7 @@ public class LinearizedChordDiagramGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 0, 0 }, { 0, 0 }, { 1, 1 }, { 1, 0 }, { 2, 0 }, { 2, 0 }, { 3, 1 },
-            { 3, 0 }, { 4, 1 }, { 4, 0 }, { 5, 0 }, { 5, 0 }, { 6, 5 }, { 6, 1 }, { 7, 2 },
-            { 7, 0 }, { 8, 0 }, { 8, 2 }, { 9, 3 }, { 9, 0 }, { 10, 2 }, { 10, 2 }, { 11, 0 },
-            { 11, 2 }, { 12, 11 }, { 12, 2 }, { 13, 11 }, { 13, 1 }, { 14, 3 }, { 14, 14 },
-            { 15, 9 }, { 15, 2 }, { 16, 3 }, { 16, 8 }, { 17, 3 }, { 17, 6 }, { 18, 8 }, { 18, 4 },
-            { 19, 0 }, { 19, 8 } };
-
         assertEquals(20, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
     }
 
     @Test
@@ -162,16 +142,7 @@ public class LinearizedChordDiagramGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 0, 0 }, { 1, 0 }, { 2, 2 }, { 3, 0 }, { 4, 0 }, { 5, 0 }, { 6, 2 },
-            { 7, 0 }, { 8, 2 }, { 9, 0 }, { 10, 1 }, { 11, 1 }, { 12, 11 }, { 13, 3 }, { 14, 4 },
-            { 15, 0 }, { 16, 0 }, { 17, 5 }, { 18, 7 }, { 19, 0 } };
-
         assertEquals(20, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
-
     }
 
 }

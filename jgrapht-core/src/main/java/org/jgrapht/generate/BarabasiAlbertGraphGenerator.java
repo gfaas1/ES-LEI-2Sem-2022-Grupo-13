@@ -18,14 +18,14 @@
 package org.jgrapht.generate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.VertexFactory;
 
 /**
@@ -57,7 +57,6 @@ public class BarabasiAlbertGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
     private final Random rng;
-
     private final int m0;
     private final int m;
     private final int n;
@@ -131,46 +130,18 @@ public class BarabasiAlbertGraphGenerator<V, E>
         Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         /*
-         * Ensure directed or undirected.
-         */
-        boolean isDirected;
-        if (target instanceof DirectedGraph<?, ?>) {
-            isDirected = true;
-        } else if (target instanceof UndirectedGraph<?, ?>) {
-            isDirected = false;
-        } else {
-            throw new IllegalArgumentException("Graph must be either directed or undirected");
-        }
-
-        /*
          * Create complete graph with m0 nodes
          */
         List<V> nodes = new ArrayList<>(n * m);
-        for (int i = 0; i < m0; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
-            nodes.add(v);
-        }
-        for (int i = 0; i < m0; i++) {
-            for (int j = i + 1; j < m0; j++) {
-                V v = nodes.get(i);
-                V u = nodes.get(j);
-                target.addEdge(v, u);
-                if (isDirected) {
-                    target.addEdge(u, v);
-                }
-            }
-        }
+        Set<V> oldNodes = new HashSet<>(target.vertexSet());
+        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, vertexFactory, resultMap);
+        target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(nodes::add);
 
         /*
          * Augment node list to have node multiplicity equal to m0-1.
          */
         for (int i = 0; i < m0 - 2; i++) {
-            for (V v : target.vertexSet()) {
-                nodes.add(v);
-            }
+            nodes.addAll(target.vertexSet());
         }
 
         /*

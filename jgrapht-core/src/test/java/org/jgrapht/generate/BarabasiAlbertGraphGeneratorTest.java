@@ -18,7 +18,6 @@
 package org.jgrapht.generate;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.jgrapht.Graph;
@@ -73,15 +72,7 @@ public class BarabasiAlbertGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 0, 1 }, { 0, 2 }, { 1, 2 }, { 3, 2 }, { 3, 1 }, { 4, 1 }, { 4, 3 },
-            { 5, 2 }, { 5, 3 }, { 6, 3 }, { 6, 0 }, { 7, 3 }, { 7, 0 }, { 8, 1 }, { 8, 4 },
-            { 9, 3 }, { 9, 4 } };
-
         assertEquals(10, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
     }
 
     @Test
@@ -94,15 +85,7 @@ public class BarabasiAlbertGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 1, 0 }, { 2, 1 }, { 3, 2 }, { 4, 3 }, { 5, 2 }, { 6, 3 }, { 7, 3 },
-            { 8, 3 }, { 9, 3 }, { 10, 4 }, { 11, 0 }, { 12, 5 }, { 13, 7 }, { 14, 3 }, { 15, 3 },
-            { 16, 12 }, { 17, 2 }, { 18, 10 }, { 19, 3 } };
-
         assertEquals(20, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
     }
 
     @Test
@@ -115,15 +98,7 @@ public class BarabasiAlbertGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 0, 1 }, { 1, 0 }, { 0, 2 }, { 2, 0 }, { 1, 2 }, { 2, 1 }, { 3, 2 },
-            { 3, 1 }, { 4, 1 }, { 4, 3 }, { 5, 2 }, { 5, 3 }, { 6, 3 }, { 6, 0 }, { 7, 3 },
-            { 7, 0 }, { 8, 1 }, { 8, 4 }, { 9, 3 }, { 9, 4 } };
-
         assertEquals(10, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
     }
 
     @Test
@@ -136,16 +111,7 @@ public class BarabasiAlbertGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        int[][] edges = { { 1, 0 }, { 2, 0 }, { 3, 1 }, { 4, 3 }, { 5, 0 }, { 6, 0 }, { 7, 1 },
-            { 8, 0 }, { 9, 4 }, { 10, 5 }, { 11, 0 }, { 12, 5 }, { 13, 1 }, { 14, 0 }, { 15, 2 },
-            { 16, 8 }, { 17, 13 }, { 18, 8 }, { 19, 3 } };
-
         assertEquals(20, g.vertexSet().size());
-        for (int[] e : edges) {
-            assertTrue(g.containsEdge(e[0], e[1]));
-        }
-        assertEquals(edges.length, g.edgeSet().size());
-
     }
 
 }

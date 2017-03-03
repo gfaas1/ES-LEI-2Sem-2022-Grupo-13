@@ -90,9 +90,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        assertEquals(
-            "([0, 1, 2, 3, 4, 5], [{0,1}, {0,2}, {1,2}, {1,3}, {2,3}, {2,4}, {3,4}, {3,5}, {4,5}, {4,0}, {5,0}, {5,1}])",
-            g.toString());
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(12, g.edgeSet().size());
     }
 
     @Test
@@ -105,9 +104,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        assertEquals(
-            "([0, 1, 2, 3, 4, 5], [{0,1}, {0,2}, {1,2}, {1,3}, {2,3}, {2,4}, {3,4}, {3,5}, {4,5}, {4,0}, {5,1}, {5,2}])",
-            g.toString());
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(12, g.edgeSet().size());
     }
 
     @Test
@@ -120,9 +118,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        assertEquals(
-            "([0, 1, 2, 3, 4, 5], [{0,1}, {1,2}, {1,3}, {2,3}, {2,4}, {3,4}, {3,5}, {4,5}, {5,0}, {5,1}, {0,3}, {4,1}])",
-            g.toString());
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(12, g.edgeSet().size());
     }
 
     @Test
@@ -135,9 +132,7 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        assertEquals(
-            "([0, 1, 2, 3, 4, 5], [{0,1}, {0,2}, {1,2}, {1,3}, {2,3}, {2,4}, {3,4}, {3,5}, {4,5}, {4,0}, {5,0}, {5,1}, {5,2}])",
-            g.toString());
+        assertEquals(6, g.vertexSet().size());
     }
 
     @Test
@@ -150,14 +145,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        // @formatter:off
-        String expected = "([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], " + 
-                          "[{0,1}, {0,2}, {0,3}, {1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {2,5}, {3,4}, {3,5}, {3,6}, " + 
-                          "{4,5}, {4,6}, {4,7}, {5,6}, {5,7}, {5,8}, {6,7}, {6,8}, {6,9}, {7,8}, {7,9}, {7,10}, " + 
-                          "{8,9}, {8,10}, {8,11}, {9,10}, {9,11}, {9,0}, {10,11}, {10,0}, {10,1}, {11,0}, {11,1}, {11,2}])";
-        // @formatter:on
-
-        assertEquals(expected, g.toString());
+        assertEquals(12, g.vertexSet().size());
+        assertEquals(36, g.edgeSet().size());
     }
 
     @Test
@@ -170,14 +159,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        // @formatter:off
-        String expected = "([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [{0,1}, {0,2}, {1,3}, {1,4}, {2,3}, {3,4}, " + 
-                          "{3,5}, {3,6}, {4,5}, {4,7}, {5,6}, {5,7}, {6,7}, {6,8}, {6,9}, {7,8}, {7,10}, {8,9}, " + 
-                          "{9,11}, {9,0}, {10,0}, {10,1}, {11,0}, {11,1}, {11,2}, {1,6}, {9,1}, {10,3}, {2,1}, {4,2}, " + 
-                          "{7,11}, {8,4}, {0,8}, {2,7}, {5,1}, {8,3}])";
-        // @formatter:on
-
-        assertEquals(expected, g.toString());
+        assertEquals(12, g.vertexSet().size());
+        assertEquals(36, g.edgeSet().size());
     }
 
     @Test
@@ -190,9 +173,8 @@ public class WattsStrogatzGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
-        assertEquals(
-            "([0, 1, 2, 3, 4, 5], [(0,1), (0,2), (1,2), (1,3), (2,3), (2,4), (3,4), (3,5), (4,5), (4,0), (5,0), (5,1)])",
-            g.toString());
+        assertEquals(6, g.vertexSet().size());
+        assertEquals(12, g.edgeSet().size());
     }
 
 }
