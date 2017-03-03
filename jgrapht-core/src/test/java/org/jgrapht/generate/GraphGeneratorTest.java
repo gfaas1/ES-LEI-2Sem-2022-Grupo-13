@@ -148,6 +148,18 @@ public class GraphGeneratorTest
         // complete graph with 10 vertices has 10*(10-1)/2 = 45 edges
         assertEquals(45, completeGraph.edgeSet().size());
     }
+    
+    public void testCompleteGraphGeneratorWithDirectedGraph()
+    {
+        Graph<Object, DefaultEdge> completeGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Object, DefaultEdge> completeGenerator =
+            new CompleteGraphGenerator<>(10);
+        completeGenerator
+            .generateGraph(completeGraph, new ClassBasedVertexFactory<>(Object.class), null);
+
+        // complete graph with 10 vertices has 10*(10-1) = 90 edges
+        assertEquals(90, completeGraph.edgeSet().size());
+    }
 
     /**
      * .

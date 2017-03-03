@@ -569,7 +569,7 @@ public class GnmRandomGraphGeneratorTest
             return sb.toString();
         }
 
-        private class LabelsEdge
+        private static class LabelsEdge
         {
             private int source;
             private int target;

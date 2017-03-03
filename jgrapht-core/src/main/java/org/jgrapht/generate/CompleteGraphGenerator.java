@@ -22,14 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Generates a complete graph of any size. A complete graph is a graph where every vertex shares an
- * edge with every other vertex. If it is a directed graph, then edges must always exist in both
- * directions. On a side note, a complete graph is the least efficient possible graph in terms of
- * memory and cpu usage. Note: This contructor was designed for a simple undirected or directed
- * graph. It will act strangely when used with certain graph types, such as undirected multigraphs.
- * Note, though, that a complete undirected multigraph is rather senseless -- you can keep adding
- * edges and the graph is never truly complete.
- *
+ * Generates a complete graph of any size.
+ * 
+ * <p>
+ * A complete graph is a graph where every vertex shares an edge with every other vertex. If it is a
+ * directed graph, then edges must always exist in both directions.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -45,8 +43,7 @@ public class CompleteGraphGenerator<V, E>
      * Construct a new CompleteGraphGenerator.
      *
      * @param size number of vertices to be generated
-     *
-     * @throws IllegalArgumentException if the specified size is negative.
+     * @throws IllegalArgumentException if the specified size is negative
      */
     public CompleteGraphGenerator(int size)
     {
@@ -68,39 +65,41 @@ public class CompleteGraphGenerator<V, E>
             return;
         }
 
-        // Add all the vertices to the set
-        for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+        /*
+         * Ensure directed or undirected
+         */
+        boolean isDirected;
+        if (target instanceof DirectedGraph<?, ?>) {
+            isDirected = true;
+        } else if (target instanceof UndirectedGraph<?, ?>) {
+            isDirected = false;
+        } else {
+            throw new IllegalArgumentException("Graph must be either directed or undirected");
         }
 
         /*
-         * We want two iterators over the vertex set, one fast and one slow. The slow one will move
-         * through the set once. For each vertex, the fast iterator moves through the set, adding an
-         * edge to all vertices we haven't connected to yet.
-         *
-         * If we have an undirected graph, the second addEdge call will return nothing; it will not
-         * add a second edge.
+         * Add vertices
          */
-        Iterator<V> slowI = target.vertexSet().iterator();
-        Iterator<V> fastI;
-
-        while (slowI.hasNext()) { // While there are more vertices in the set
-
-            V latestVertex = slowI.next();
-            fastI = target.vertexSet().iterator();
-
-            // Jump to the first vertex *past* latestVertex
-            while (fastI.next() != latestVertex) {
-                ;
+        List<V> nodes = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            V newVertex = vertexFactory.createVertex();
+            if (!target.addVertex(newVertex)) {
+                throw new IllegalArgumentException("Invalid vertex factory");
             }
+            nodes.add(newVertex);
+        }
 
-            // And, add edges to all remaining vertices
-            V temp;
-            while (fastI.hasNext()) {
-                temp = fastI.next();
-                target.addEdge(latestVertex, temp);
-                target.addEdge(temp, latestVertex);
+        /*
+         * Add edges
+         */
+        for (int i = 0; i < size; i++) {
+            for (int j = i + 1; j < size; j++) {
+                V v = nodes.get(i);
+                V u = nodes.get(j);
+                target.addEdge(v, u);
+                if (isDirected) {
+                    target.addEdge(u, v);
+                }
             }
         }
     }
