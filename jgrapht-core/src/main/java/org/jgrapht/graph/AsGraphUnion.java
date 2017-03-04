@@ -73,14 +73,17 @@ public class AsGraphUnion<V, E>
         this.operator = Objects.requireNonNull(operator, "Weight combiner cannot be null");
 
         // compute result type
-        GraphType t = DefaultGraphType.mixed();
+        DefaultGraphType.Builder builder = new DefaultGraphType.Builder();
         if (type1.isDirected() && type2.isDirected()) {
-            t = t.asDirected();
+            builder = builder.directed();
+        } else if (type1.isUndirected() && type2.isUndirected()) {
+            builder = builder.undirected();
+        } else {
+            builder = builder.mixed();
         }
-        if (type1.isUndirected() && type2.isUndirected()) {
-            t = t.asUndirected();
-        }
-        this.type = t.asWeighted().asUnmodifiable();
+        this.type = builder
+            .allowSelfLoops(type1.isAllowingSelfLoops() || type2.isAllowingSelfLoops())
+            .allowMultipleEdges(true).weighted(true).modifiable(false).build();
     }
 
     /**

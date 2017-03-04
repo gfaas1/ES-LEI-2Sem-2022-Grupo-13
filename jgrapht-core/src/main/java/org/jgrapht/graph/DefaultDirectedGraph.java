@@ -77,10 +77,10 @@ public class DefaultDirectedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultDirectedGraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new DefaultDirectedGraph<>(edgeClass));
+        return new GraphBuilder<>(new DefaultDirectedGraph<>(edgeClass));
     }
 
     /**
@@ -91,10 +91,10 @@ public class DefaultDirectedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DefaultDirectedGraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new DefaultDirectedGraph<>(ef));
+        return new GraphBuilder<>(new DefaultDirectedGraph<>(ef));
     }
 
     /**

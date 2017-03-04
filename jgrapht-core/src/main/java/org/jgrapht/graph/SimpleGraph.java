@@ -75,10 +75,10 @@ public class SimpleGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends SimpleGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleGraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new SimpleGraph<>(edgeClass));
+        return new GraphBuilder<>(new SimpleGraph<>(edgeClass));
     }
 
     /**
@@ -90,9 +90,9 @@ public class SimpleGraph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends SimpleGraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
+        E> GraphBuilder<V, E, ? extends SimpleGraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new SimpleGraph<>(ef));
+        return new GraphBuilder<>(new SimpleGraph<>(ef));
     }
 
     /**

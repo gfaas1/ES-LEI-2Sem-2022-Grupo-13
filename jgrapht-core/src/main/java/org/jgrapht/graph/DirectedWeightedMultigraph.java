@@ -63,10 +63,10 @@ public class DirectedWeightedMultigraph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
             Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new DirectedWeightedMultigraph<>(edgeClass));
+        return new GraphBuilder<>(new DirectedWeightedMultigraph<>(edgeClass));
     }
 
     /**
@@ -78,10 +78,10 @@ public class DirectedWeightedMultigraph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
             EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new DirectedWeightedMultigraph<>(ef));
+        return new GraphBuilder<>(new DirectedWeightedMultigraph<>(ef));
     }
 
     /**

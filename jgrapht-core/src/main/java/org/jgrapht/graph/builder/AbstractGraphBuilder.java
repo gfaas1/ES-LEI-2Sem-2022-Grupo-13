@@ -295,7 +295,7 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      *
      * @see #build()
      */
-    public AsUnmodifiableGraph<V, E> buildAsUnmodifiable()
+    public Graph<V, E> buildAsUnmodifiable()
     {
         return new AsUnmodifiableGraph<>(this.graph);
     }

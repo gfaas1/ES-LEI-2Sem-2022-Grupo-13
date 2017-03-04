@@ -28,8 +28,8 @@ import org.jgrapht.*;
  * 
  * @author Andrew Chen
  */
-public class GraphBuilderBase<V, E, G extends Graph<V, E>>
-    extends AbstractGraphBuilder<V, E, G, GraphBuilderBase<V, E, G>>
+public class GraphBuilder<V, E, G extends Graph<V, E>>
+    extends AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
 {
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
@@ -44,13 +44,13 @@ public class GraphBuilderBase<V, E, G extends Graph<V, E>>
      *
      * @param baseGraph the graph object to base building on
      */
-    public GraphBuilderBase(G baseGraph)
+    public GraphBuilder(G baseGraph)
     {
         super(baseGraph);
     }
 
     @Override
-    protected GraphBuilderBase<V, E, G> self()
+    protected GraphBuilder<V, E, G> self()
     {
         return this;
     }

@@ -75,10 +75,10 @@ public class Pseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends Pseudograph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new Pseudograph<>(edgeClass));
+        return new GraphBuilder<>(new Pseudograph<>(edgeClass));
     }
 
     /**
@@ -90,9 +90,9 @@ public class Pseudograph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends Pseudograph<V, E>> createBuilder(EdgeFactory<V, E> ef)
+        E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new Pseudograph<>(ef));
+        return new GraphBuilder<>(new Pseudograph<>(ef));
     }
 
     /**

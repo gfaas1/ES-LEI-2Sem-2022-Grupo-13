@@ -73,10 +73,10 @@ public class SimpleDirectedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new SimpleDirectedGraph<>(edgeClass));
+        return new GraphBuilder<>(new SimpleDirectedGraph<>(edgeClass));
     }
 
     /**
@@ -87,10 +87,10 @@ public class SimpleDirectedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new SimpleDirectedGraph<>(ef));
+        return new GraphBuilder<>(new SimpleDirectedGraph<>(ef));
     }
 
     /**

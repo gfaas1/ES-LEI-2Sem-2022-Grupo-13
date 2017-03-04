@@ -75,10 +75,10 @@ public class DirectedPseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new DirectedPseudograph<>(edgeClass));
+        return new GraphBuilder<>(new DirectedPseudograph<>(edgeClass));
     }
 
     /**
@@ -89,10 +89,10 @@ public class DirectedPseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new DirectedPseudograph<>(ef));
+        return new GraphBuilder<>(new DirectedPseudograph<>(ef));
     }
 
     /**

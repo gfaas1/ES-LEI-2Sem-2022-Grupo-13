@@ -75,10 +75,10 @@ public class Multigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends Multigraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends Multigraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new Multigraph<>(edgeClass));
+        return new GraphBuilder<>(new Multigraph<>(edgeClass));
     }
 
     /**
@@ -90,9 +90,9 @@ public class Multigraph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends Multigraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
+        E> GraphBuilder<V, E, ? extends Multigraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new Multigraph<>(ef));
+        return new GraphBuilder<>(new Multigraph<>(ef));
     }
 
     /**

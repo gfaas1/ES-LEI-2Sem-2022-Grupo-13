@@ -64,10 +64,10 @@ public class WeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new WeightedMultigraph<>(edgeClass));
+        return new GraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
 
     /**
@@ -78,10 +78,10 @@ public class WeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new WeightedMultigraph<>(ef));
+        return new GraphBuilder<>(new WeightedMultigraph<>(ef));
     }
 
     /**

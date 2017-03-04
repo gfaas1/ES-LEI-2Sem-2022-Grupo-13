@@ -136,8 +136,7 @@ public class AsUndirectedGraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        // this counts loops twice, which is consistent with AbstractBaseGraph
-        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
+        return super.degreeOf(vertex);
     }
 
     /**
@@ -155,8 +154,7 @@ public class AsUndirectedGraph<V, E>
     @Override
     public int inDegreeOf(V vertex)
     {
-        // this counts loops twice, which is consistent with AbstractBaseGraph
-        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
+        return super.degreeOf(vertex);
     }
 
     /**
@@ -174,8 +172,7 @@ public class AsUndirectedGraph<V, E>
     @Override
     public int outDegreeOf(V vertex)
     {
-        // this counts loops twice, which is consistent with AbstractBaseGraph
-        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
+        return super.degreeOf(vertex);
     }
 
     /**

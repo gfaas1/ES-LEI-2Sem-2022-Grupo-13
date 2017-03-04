@@ -63,10 +63,10 @@ public class DirectedWeightedPseudograph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
+        E> GraphBuilder<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
             Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new DirectedWeightedPseudograph<>(edgeClass));
+        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(edgeClass));
     }
 
     /**
@@ -78,10 +78,10 @@ public class DirectedWeightedPseudograph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilderBase<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
+        E> GraphBuilder<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
             EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new DirectedWeightedPseudograph<>(ef));
+        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(ef));
     }
 
     /**

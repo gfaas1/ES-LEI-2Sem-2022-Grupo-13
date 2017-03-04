@@ -64,10 +64,10 @@ public class WeightedPseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends WeightedPseudograph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new WeightedPseudograph<>(edgeClass));
+        return new GraphBuilder<>(new WeightedPseudograph<>(edgeClass));
     }
 
     /**
@@ -78,10 +78,10 @@ public class WeightedPseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends WeightedPseudograph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends WeightedPseudograph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new WeightedPseudograph<>(ef));
+        return new GraphBuilder<>(new WeightedPseudograph<>(ef));
     }
 
     /**

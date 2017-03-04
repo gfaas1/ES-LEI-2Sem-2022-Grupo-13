@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.GraphBuilderBase;
+import org.jgrapht.graph.builder.GraphBuilder;
 import org.jgrapht.traverse.*;
 
 /**
@@ -152,10 +152,10 @@ public class DirectedAcyclicGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
         Class<? extends E> edgeClass)
     {
-        return new GraphBuilderBase<>(new DirectedAcyclicGraph<>(edgeClass));
+        return new GraphBuilder<>(new DirectedAcyclicGraph<>(edgeClass));
     }
 
     /**
@@ -166,10 +166,10 @@ public class DirectedAcyclicGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilderBase<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
-        return new GraphBuilderBase<>(new DirectedAcyclicGraph<>(ef));
+        return new GraphBuilder<>(new DirectedAcyclicGraph<>(ef));
     }
 
     @Override
