@@ -13,6 +13,8 @@ Changes to JGraphT in each version:
     - Added a new, scalable `DOTImporter` which handles the full DOT specification including XML string identifiers. A dependency on the commons-lang3 package has been added to handle escaping/unescaping of strings efficiently; Updated antlr version to 4.6. (contributed by Dimitrios Michail)
     - Added Johnson's all-pairs-shortest paths algorithm `JohnsonShortestPaths`; Simplified Bellman-Ford implementation and added support for negative cycle detection; added `AsWeightedUndirectedGraph` and `AsUnweightedUndirectedGraph`; Constructors of `UndirectedGraphUnion` are now public. (contributed by Dimitrios Michail)
     - Refactored `DirectedAcyclicGraph`, moved it out of the experimental package, and refactored its perfomance tests using jmh; Deleted `GraphSquare` from experimental (inefficient implementation) (contributed by Dimitrios Michail)
+    - Added Watts-Strogatz small-world graph generator, Kleinberg's small-world graph generator, Barabasi-Albert graph generator, Linearized Chord Diagram GraphGenerator, AliasMethodSampler utility class with Vose's implementation; Refactored ScaleFreeGraphGenerator (constructor with random number generator added); Refactored CompleteGraphGenerator to not assume a specific graph type (simple, etc). (contributed by Dimitrios Michail)
+    - Deleted JUnit test suites. (contributed by Joris Kinable)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)

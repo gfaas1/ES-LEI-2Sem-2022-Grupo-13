@@ -66,15 +66,4 @@ public class VertexDegreeComparatorTest
 
     }
 
-    public class IntegerVertexFactory
-        implements VertexFactory<Integer>
-    {
-        private int vertices = 0;
-
-        @Override
-        public Integer createVertex()
-        {
-            return vertices++;
-        }
-    }
 }
