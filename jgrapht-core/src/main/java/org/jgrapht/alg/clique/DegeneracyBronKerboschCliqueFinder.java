@@ -18,7 +18,6 @@
 package org.jgrapht.alg.clique;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +42,7 @@ import org.jgrapht.traverse.DegeneracyOrderingIterator;
  * 
  * <p>
  * and has running time O(d n 3^{d/3}) where n is the number of vertices of the graph and d is the
- * degeneracy of the graph. The algorithm looks for a maximal clique parametrized by degeneracy, a
+ * degeneracy of the graph. The algorithm looks for a maximal clique parameterized by degeneracy, a
  * frequently-used measure of the sparseness of a graph that is closely related to other common
  * sparsity measures such as arboricity and thickness, and that has previously been used for other
  * fixed-parameter problems.
@@ -54,6 +53,9 @@ import org.jgrapht.traverse.DegeneracyOrderingIterator;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @see BronKerboschCliqueFinder
+ * @see PivotBronKerboschCliqueFinder
  *
  * @author Dimitrios Michail
  */
@@ -120,10 +122,10 @@ public class DegeneracyBronKerboschCliqueFinder<V, E>
                     }
                 }
 
-                Set<V> R = new HashSet<>(Arrays.asList(vi));
+                Set<V> R = new HashSet<>();
+                R.add(vi);
 
                 Set<V> X = new HashSet<>();
-
                 for (int j = 0; j < i; j++) {
                     V vj = ordering.get(j);
                     if (viNeighbors.contains(vj)) {

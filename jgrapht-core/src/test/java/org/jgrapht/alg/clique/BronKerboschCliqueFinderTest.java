@@ -20,7 +20,6 @@ package org.jgrapht.alg.clique;
 import java.util.concurrent.TimeUnit;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximalCliqueEnumerationAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 
 /**
@@ -33,21 +32,21 @@ public class BronKerboschCliqueFinderTest
 {
 
     @Override
-    protected MaximalCliqueEnumerationAlgorithm<String, DefaultEdge> createFinder1(
+    protected BaseBronKerboschCliqueFinder<String, DefaultEdge> createFinder1(
         Graph<String, DefaultEdge> graph)
     {
         return new BronKerboschCliqueFinder<>(graph);
     }
 
     @Override
-    protected MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> createFinder2(
+    protected BaseBronKerboschCliqueFinder<Object, DefaultEdge> createFinder2(
         Graph<Object, DefaultEdge> graph)
     {
         return new BronKerboschCliqueFinder<>(graph);
     }
 
     @Override
-    protected MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> createFinder2(
+    protected BaseBronKerboschCliqueFinder<Object, DefaultEdge> createFinder2(
         Graph<Object, DefaultEdge> graph, long timeout, TimeUnit unit)
     {
         return new BronKerboschCliqueFinder<>(graph, timeout, unit);

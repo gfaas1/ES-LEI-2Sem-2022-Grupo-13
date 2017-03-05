@@ -91,37 +91,7 @@ public class DegeneracyOrderingIteratorTest
     }
 
     @Test
-    public void testGraph2()
-    {
-        SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        Graphs.addAllVertices(
-            g, Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"));
-        g.addEdge("b", "c");
-        g.addEdge("c", "d");
-        g.addEdge("c", "e");
-        g.addEdge("e", "f");
-        g.addEdge("e", "g");
-        g.addEdge("e", "h");
-        g.addEdge("f", "g");
-        g.addEdge("f", "h");
-        g.addEdge("f", "i");
-        g.addEdge("g", "h");
-        g.addEdge("i", "j");
-        g.addEdge("i", "k");
-        g.addEdge("j", "k");
-
-        StringBuffer sb = new StringBuffer();
-        DegeneracyOrderingIterator<String, DefaultEdge> it = new DegeneracyOrderingIterator<>(g);
-        while (it.hasNext()) {
-            String v = it.next();
-            sb.append("," + v);
-        }
-        assertEquals(",a,b,d,c,j,i,k,e,f,g,h", sb.toString());
-    }
-
-    @Test
-    public void testGraph2WithListener()
+    public void testGraphWithListener()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 

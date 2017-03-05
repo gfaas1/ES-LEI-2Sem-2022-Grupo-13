@@ -39,9 +39,12 @@ import org.jgrapht.event.VertexTraversalEvent;
  * ordering.
  * 
  * <p>
- * The iterator crosses components but does not track them, it only tracks visited vertices. The
- * iterator treats the input graph as undirected even if the graph is directed. Moreover, it
- * completely ignores self-loops.
+ * The iterator crosses components but does not track them, it only tracks visited vertices.
+ * 
+ * <p>
+ * The iterator treats the input graph as undirected even if the graph is directed. Moreover, it
+ * completely ignores self-loops, meaning that it operates as if self-loops do not contribute to the
+ * degree of a vertex.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -55,7 +58,6 @@ public class DegeneracyOrderingIterator<V, E>
     private final Graph<V, E> graph;
 
     private Set<V>[] buckets;
-    private int n;
     private Map<V, Integer> degrees;
     private int minDegree;
     private V cur;
@@ -70,19 +72,13 @@ public class DegeneracyOrderingIterator<V, E>
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
 
-        // initialize
-        n = graph.vertexSet().size();
-        this.buckets = (Set<V>[]) Array.newInstance(Set.class, n + 1);
-        for (int i = 0; i <= n; i++) {
-            buckets[i] = new HashSet<>();
-        }
-
-        minDegree = n + 1;
+        /*
+         * Count degrees, but skip self-loops
+         */
+        this.minDegree = Integer.MAX_VALUE;
+        int maxDegree = 0;
         this.degrees = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            /*
-             * Count degree but skip self-loops
-             */
             int d = 0;
             for (E e : graph.edgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
@@ -90,9 +86,21 @@ public class DegeneracyOrderingIterator<V, E>
                     d++;
                 }
             }
-            buckets[d].add(v);
             degrees.put(v, d);
             minDegree = Math.min(minDegree, d);
+            maxDegree = Math.max(maxDegree, d);
+        }
+        minDegree = Math.min(minDegree, maxDegree);
+
+        /*
+         * Create buckets
+         */
+        this.buckets = (Set<V>[]) Array.newInstance(Set.class, maxDegree + 1);
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new HashSet<>();
+        }
+        for (V v : graph.vertexSet()) {
+            buckets[degrees.get(v)].add(v);
         }
     }
 
@@ -150,13 +158,13 @@ public class DegeneracyOrderingIterator<V, E>
 
     private V advance()
     {
-        while (minDegree <= n && buckets[minDegree].isEmpty()) {
+        while (minDegree < buckets.length && buckets[minDegree].isEmpty()) {
             minDegree++;
         }
 
         V result = null;
 
-        if (minDegree <= n) {
+        if (minDegree < buckets.length) {
             Set<V> b = buckets[minDegree];
             V v = b.iterator().next();
             b.remove(v);

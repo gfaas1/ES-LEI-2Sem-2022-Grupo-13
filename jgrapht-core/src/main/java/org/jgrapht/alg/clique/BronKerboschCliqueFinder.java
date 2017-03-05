@@ -42,6 +42,9 @@ import org.jgrapht.GraphTests;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @see PivotBronKerboschCliqueFinder
+ * @see DegeneracyBronKerboschCliqueFinder
  *
  * @author Ewgenij Proschak
  */
@@ -117,6 +120,7 @@ public class BronKerboschCliqueFinder<V, E>
              * Check if timeout
              */
             if (nanosTimeLimit - System.nanoTime() < 0) {
+                timeLimitReached = true;
                 return;
             }
 

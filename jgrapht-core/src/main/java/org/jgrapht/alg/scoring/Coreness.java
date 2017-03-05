@@ -116,6 +116,10 @@ public final class Coreness<V, E>
             return;
         }
 
+        if (!GraphTests.isSimple(g)) {
+            throw new IllegalArgumentException("Graph must be simple");
+        }
+
         scores = new HashMap<>();
         degeneracy = 0;
 
@@ -123,12 +127,13 @@ public final class Coreness<V, E>
          * Initialize buckets
          */
         int n = g.vertexSet().size();
-        Set<V>[] buckets = (Set<V>[]) Array.newInstance(Set.class, n + 1);
-        for (int i = 0; i <= n; i++) {
+        int maxDegree = n - 1;
+        Set<V>[] buckets = (Set<V>[]) Array.newInstance(Set.class, maxDegree + 1);
+        for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new HashSet<>();
         }
 
-        int minDegree = n + 1;
+        int minDegree = n;
         Map<V, Integer> degrees = new HashMap<>();
         for (V v : g.vertexSet()) {
             int d = g.degreeOf(v);
@@ -140,7 +145,7 @@ public final class Coreness<V, E>
         /*
          * Extract from buckets
          */
-        while (minDegree <= n) {
+        while (minDegree < n) {
             Set<V> b = buckets[minDegree];
             if (b.isEmpty()) {
                 minDegree++;

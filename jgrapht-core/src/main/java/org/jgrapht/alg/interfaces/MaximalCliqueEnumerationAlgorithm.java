@@ -40,14 +40,4 @@ public interface MaximalCliqueEnumerationAlgorithm<V, E>
     @Override
     Iterator<Set<V>> iterator();
 
-    /**
-     * Returns an iterator over all maximum cliques.
-     * 
-     * <p>
-     * This procedure just filters the maximal cliques by clique size.
-     * 
-     * @return an iterator over all the maximum cliques
-     */
-    Iterator<Set<V>> maximumIterator();
-
 }

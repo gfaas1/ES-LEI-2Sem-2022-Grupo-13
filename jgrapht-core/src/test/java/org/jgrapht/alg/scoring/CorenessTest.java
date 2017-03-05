@@ -147,7 +147,7 @@ public class CorenessTest
     public void testBadParameters()
     {
         try {
-            new PageRank<>(null);
+            new Coreness<>(null);
             fail("No!");
         } catch (NullPointerException e) {
         }

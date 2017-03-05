@@ -46,6 +46,10 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
      */
     protected final long nanos;
     /**
+     * Whether the last computation terminated due to a time limit.
+     */
+    protected boolean timeLimitReached;
+    /**
      * The result
      */
     protected List<Set<V>> allMaximalCliques;
@@ -72,6 +76,7 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
         if (this.nanos < 1L) {
             throw new IllegalArgumentException("Invalid timeout, must be positive");
         }
+        this.timeLimitReached = false;
     }
 
     @Override
@@ -81,11 +86,27 @@ abstract class BaseBronKerboschCliqueFinder<V, E>
         return allMaximalCliques.iterator();
     }
 
-    @Override
+    /**
+     * Create an iterator which returns only the maximum cliques of a graph. The iterator computes
+     * all maximal cliques and then filters them by the size of the maximum found clique.
+     * 
+     * @return an iterator which returns only the maximum cliques of a graph
+     */
     public Iterator<Set<V>> maximumIterator()
     {
         lazyRun();
         return allMaximalCliques.stream().filter(c -> c.size() == maxSize).iterator();
+    }
+
+    /**
+     * Check the computation has stopped due to a time limit or due to computing all maximal
+     * cliques.
+     * 
+     * @return true if the computation has stopped due to a time limit, false otherwise
+     */
+    public boolean isTimeLimitReached()
+    {
+        return timeLimitReached;
     }
 
     /**

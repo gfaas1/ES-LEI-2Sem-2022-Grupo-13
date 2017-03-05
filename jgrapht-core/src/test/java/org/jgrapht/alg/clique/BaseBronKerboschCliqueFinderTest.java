@@ -18,7 +18,6 @@
 package org.jgrapht.alg.clique;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -53,13 +52,13 @@ public abstract class BaseBronKerboschCliqueFinderTest
     protected static final String V9 = "v9";
     protected static final String V10 = "v10";
 
-    protected abstract MaximalCliqueEnumerationAlgorithm<String, DefaultEdge> createFinder1(
+    protected abstract BaseBronKerboschCliqueFinder<String, DefaultEdge> createFinder1(
         Graph<String, DefaultEdge> graph);
 
-    protected abstract MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> createFinder2(
+    protected abstract BaseBronKerboschCliqueFinder<Object, DefaultEdge> createFinder2(
         Graph<Object, DefaultEdge> graph);
 
-    protected abstract MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> createFinder2(
+    protected abstract BaseBronKerboschCliqueFinder<Object, DefaultEdge> createFinder2(
         Graph<Object, DefaultEdge> graph, long timeout, TimeUnit unit);
 
     @Test
@@ -68,7 +67,7 @@ public abstract class BaseBronKerboschCliqueFinderTest
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         createGraph(g);
 
-        MaximalCliqueEnumerationAlgorithm<String, DefaultEdge> finder = createFinder1(g);
+        BaseBronKerboschCliqueFinder<String, DefaultEdge> finder = createFinder1(g);
 
         Collection<Set<String>> cliques = new HashSet<>();
         finder.maximumIterator().forEachRemaining(cliques::add);
@@ -206,28 +205,6 @@ public abstract class BaseBronKerboschCliqueFinderTest
         g.addEdge(V2, V9);
         g.addEdge(V2, V10);
         g.addEdge(V9, V10);
-    }
-
-    @Test
-    public void testTimeout()
-    {
-        final int size = 100;
-        Graph<Object, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
-            new CompleteGraphGenerator<>(size);
-        completeGraphGenerator.generateGraph(g, new ClassBasedVertexFactory<>(Object.class), null);
-
-        MaximalCliqueEnumerationAlgorithm<Object, DefaultEdge> finder =
-            createFinder2(g, 1, TimeUnit.SECONDS);
-
-        Set<Set<Object>> cliques = new HashSet<>();
-        finder.iterator().forEachRemaining(cliques::add);
-
-        int found = cliques.size();
-        assertTrue(found == 0 || found == 1);
-        if (found == 1) {
-            cliques.stream().forEach(clique -> assertEquals(size, clique.size()));
-        }
     }
 
     @Test
