@@ -132,16 +132,18 @@ public class BarabasiAlbertGraphGenerator<V, E>
         /*
          * Create complete graph with m0 nodes
          */
-        List<V> nodes = new ArrayList<>(n * m);
         Set<V> oldNodes = new HashSet<>(target.vertexSet());
+        Set<V> newNodes = new HashSet<>();
         new CompleteGraphGenerator<V, E>(m0).generateGraph(target, vertexFactory, resultMap);
-        target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(nodes::add);
+        target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(newNodes::add);
 
+        List<V> nodes = new ArrayList<>(n * m);
+        nodes.addAll(newNodes);
         /*
-         * Augment node list to have node multiplicity equal to m0-1.
+         * Augment node list to have node multiplicity equal to min(1,m0-1).
          */
         for (int i = 0; i < m0 - 2; i++) {
-            nodes.addAll(target.vertexSet());
+            nodes.addAll(newNodes);
         }
 
         /*

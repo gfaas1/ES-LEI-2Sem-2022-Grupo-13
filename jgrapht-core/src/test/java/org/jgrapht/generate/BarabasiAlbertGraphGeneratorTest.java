@@ -113,5 +113,20 @@ public class BarabasiAlbertGraphGeneratorTest
 
         assertEquals(20, g.vertexSet().size());
     }
+    
+    @Test
+    public void testUndirectedWithGraphWhichAlreadyHasSomeVertices()
+    {
+        final long seed = 5;
+
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new BarabasiAlbertGraphGenerator<>(3, 2, 10, seed);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex(1000);
+        gen.generateGraph(g, new IntegerVertexFactory(), null);
+
+        assertEquals(11, g.vertexSet().size());
+    }
+    
 
 }
