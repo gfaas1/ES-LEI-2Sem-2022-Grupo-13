@@ -55,8 +55,8 @@ public class AsUndirectedGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable, UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 9144684998028568853L;
-
+    private static final long serialVersionUID = 325983813283133557L;
+    
     private static final String NO_EDGE_ADD = "this graph does not support edge addition";
 
     /**

@@ -49,10 +49,7 @@ public class EdmondsBlossomShrinking<V, E>
      */
     public EdmondsBlossomShrinking(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Input graph cannot be null");
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
+        this.graph = GraphTests.requireUndirected(graph);
     }
 
     /**

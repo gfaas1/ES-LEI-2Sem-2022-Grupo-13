@@ -46,8 +46,8 @@ public class GraphDelegator<V, E>
     extends AbstractGraph<V, E>
     implements Graph<V, E>, Serializable
 {
-    private static final long serialVersionUID = 3257005445226181425L;
-
+    private static final long serialVersionUID = -215068279981825448L;
+    
     /**
      * The graph to which operations are delegated.
      */

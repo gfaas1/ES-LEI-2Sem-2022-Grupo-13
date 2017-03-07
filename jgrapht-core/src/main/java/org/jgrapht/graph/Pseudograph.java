@@ -28,13 +28,12 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
  */
 public class Pseudograph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3833183614484755253L;
+    private static final long serialVersionUID = -7574564204896552581L;
 
     /**
      * Creates a new pseudograph.

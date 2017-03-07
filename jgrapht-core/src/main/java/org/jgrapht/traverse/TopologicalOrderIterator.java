@@ -180,9 +180,7 @@ public class TopologicalOrderIterator<V, E>
     private static <V,
         E> V initialize(Graph<V, E> dg, Queue<V> queue, Map<V, ModifiableInteger> inDegreeMap)
     {
-        if (!dg.getType().isDirected()) {
-            throw new IllegalArgumentException("Graph is not directed");
-        }
+        GraphTests.requireDirected(dg);
 
         for (V vertex : dg.vertexSet()) {
             int inDegree = dg.inDegreeOf(vertex);

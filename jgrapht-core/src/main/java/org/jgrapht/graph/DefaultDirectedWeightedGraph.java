@@ -34,7 +34,7 @@ public class DefaultDirectedWeightedGraph<V, E>
     extends DefaultDirectedGraph<V, E>
     implements WeightedGraph<V, E>, DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3761405317841171513L;
+    private static final long serialVersionUID = -4867672646995721544L;
 
     /**
      * Creates a new directed weighted graph.

@@ -34,7 +34,7 @@ public class DirectedPseudograph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = -8300409752893486415L;
+    private static final long serialVersionUID = -7461248851245878913L;
 
     /**
      * Creates a new directed pseudograph.

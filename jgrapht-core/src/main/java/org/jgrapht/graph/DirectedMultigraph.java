@@ -32,7 +32,7 @@ public class DirectedMultigraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3258408413590599219L;
+    private static final long serialVersionUID = 2919338637676573948L;
 
     /**
      * Creates a new directed multigraph.

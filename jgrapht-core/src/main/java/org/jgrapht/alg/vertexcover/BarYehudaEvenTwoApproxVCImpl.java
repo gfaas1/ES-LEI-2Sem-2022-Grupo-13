@@ -51,9 +51,7 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
     @Override
     public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("graph must be undirected");
-        }
+        GraphTests.requireUndirected(graph);
 
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;

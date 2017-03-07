@@ -41,7 +41,7 @@ public class AsGraphUnion<V, E>
     extends AbstractGraph<V, E>
     implements Serializable
 {
-    private static final long serialVersionUID = -740199233080172450L;
+    private static final long serialVersionUID = -3848082143382987713L;
 
     private static final String READ_ONLY = "union of graphs is read-only";
 
@@ -380,7 +380,7 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * <p>
-     * Note that this operation might by expensive as it currently involves copying the edge sets of
+     * Note that this operation might by expensive as it currently involves copying the vertex sets of
      * the two underlying graphs.
      */
     @Override

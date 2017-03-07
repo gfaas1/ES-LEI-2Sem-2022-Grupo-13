@@ -44,10 +44,7 @@ public class AllDirectedPaths<V, E>
      */
     public AllDirectedPaths(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
-        if (!graph.getType().isDirected()) {
-            throw new IllegalArgumentException("Graph must be directed");
-        }
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     /**

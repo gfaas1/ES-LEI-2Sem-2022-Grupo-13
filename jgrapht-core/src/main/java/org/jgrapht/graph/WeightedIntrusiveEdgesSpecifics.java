@@ -34,7 +34,7 @@ class WeightedIntrusiveEdgesSpecifics<V, E>
     extends BaseIntrusiveEdgesSpecifics<V, E, IntrusiveWeightedEdge>
     implements IntrusiveEdgesSpecifics<V, E>
 {
-    private static final long serialVersionUID = -3043688536993767461L;
+    private static final long serialVersionUID = 5327226615635500554L;
 
     /**
      * Constructor

@@ -34,7 +34,7 @@ public class Multigraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3257001055819871795L;
+    private static final long serialVersionUID = -8313058939737164595L;
 
     /**
      * Creates a new multigraph.

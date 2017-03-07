@@ -58,10 +58,7 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        this.graph = Objects.requireNonNull(graph, "Input graph cannot be null");
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
+        this.graph = GraphTests.requireUndirected(graph);
         if (partition1 == null) {
             throw new IllegalArgumentException("Partition 1 cannot be null");
         }

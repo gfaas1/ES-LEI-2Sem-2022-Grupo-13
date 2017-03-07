@@ -59,10 +59,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      */
     public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        this.graph = Objects.requireNonNull(graph, "Input graph cannot be null");
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
+        this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = partition1;
         this.partition2 = partition2;
     }

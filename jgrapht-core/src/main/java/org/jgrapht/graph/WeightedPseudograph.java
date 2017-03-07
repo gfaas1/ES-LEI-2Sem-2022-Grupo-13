@@ -34,7 +34,7 @@ public class WeightedPseudograph<V, E>
     extends Pseudograph<V, E>
     implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
-    private static final long serialVersionUID = 3257290244524356152L;
+    private static final long serialVersionUID = 3037964528481084240L;
 
     /**
      * Creates a new weighted pseudograph with the specified edge factory.

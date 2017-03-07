@@ -30,7 +30,7 @@ public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
     implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
-    private static final long serialVersionUID = 3906088949100655922L;
+    private static final long serialVersionUID = -1568410577378365671L;
 
     /**
      * Creates a new simple weighted graph with the specified edge factory.

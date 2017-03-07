@@ -105,12 +105,8 @@ public class RecursiveExactVCImpl<V, E>
     @Override
     public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
-        if (!graph.getType().isUndirected()) {
-            throw new IllegalArgumentException("graph must be undirected");
-        }
-
         // Initialize
-        this.graph = graph;
+        this.graph = GraphTests.requireUndirected(graph);
         memo = new HashMap<>();
         vertices = new ArrayList<>(graph.vertexSet());
         neighborIndex = new NeighborIndex<>(graph);

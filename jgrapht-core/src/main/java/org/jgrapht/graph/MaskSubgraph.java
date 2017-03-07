@@ -17,6 +17,7 @@
  */
 package org.jgrapht.graph;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
 
@@ -36,8 +37,10 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 public class MaskSubgraph<V, E>
-    extends AbstractGraph<V, E>
+    extends AbstractGraph<V, E> implements Serializable
 {
+    private static final long serialVersionUID = -7397441126669119179L;
+
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     protected final Graph<V, E> base;

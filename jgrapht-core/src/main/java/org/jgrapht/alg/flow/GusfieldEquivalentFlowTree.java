@@ -114,8 +114,7 @@ public class GusfieldEquivalentFlowTree<V, E>
     public GusfieldEquivalentFlowTree(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
     {
-        if (!network.getType().isUndirected())
-            throw new IllegalArgumentException("Graph must be undirected");
+        GraphTests.requireUndirected(network);
         this.N = network.vertexSet().size();
         if (N < 2)
             throw new IllegalArgumentException("Graph must have at least 2 vertices");

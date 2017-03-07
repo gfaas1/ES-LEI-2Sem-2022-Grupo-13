@@ -39,8 +39,8 @@ import org.jgrapht.util.TypeUtil;
 abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
     implements Serializable
 {
-    private static final long serialVersionUID = 1045928311657674815L;
-
+    private static final long serialVersionUID = -7498268216742485L;
+    
     protected Map<E, IE> edgeMap;
     protected transient Set<E> unmodifiableEdgeSet = null;
 

@@ -34,7 +34,7 @@ public class SimpleGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3545796589454112304L;
+    private static final long serialVersionUID = 4607246833824317836L;
 
     /**
      * Creates a new simple graph with the specified edge factory.

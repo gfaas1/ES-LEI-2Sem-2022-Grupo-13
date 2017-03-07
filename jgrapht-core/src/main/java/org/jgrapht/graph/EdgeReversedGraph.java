@@ -42,9 +42,7 @@ public class EdgeReversedGraph<V, E>
     extends GraphDelegator<V, E>
     implements DirectedGraph<V, E>
 {
-    /**
-     */
-    private static final long serialVersionUID = 9091361782455418631L;
+    private static final long serialVersionUID = -3806030402468293063L;
 
     /**
      * Creates a new EdgeReversedGraph.

@@ -32,7 +32,7 @@ public class SimpleDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 4049358608472879671L;
+    private static final long serialVersionUID = 1665314455034181409L;
 
     /**
      * Creates a new simple directed graph.
