@@ -89,9 +89,8 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         // create frontiers
         SearchFrontier forwardFrontier = new SearchFrontier(graph);
         SearchFrontier backwardFrontier;
-        if (graph instanceof DirectedGraph) {
-            backwardFrontier =
-                new SearchFrontier(new EdgeReversedGraph<>(((DirectedGraph<V, E>) graph)));
+        if (graph.getType().isDirected()) {
+            backwardFrontier = new SearchFrontier(new EdgeReversedGraph<>(graph));
         } else {
             backwardFrontier = new SearchFrontier(graph);
         }
@@ -122,8 +121,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             V v = node.getData().v;
             double vDistance = node.getKey();
 
-            for (E e : frontier.specifics.edgesOf(v)) {
-
+            for (E e : frontier.graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(frontier.graph, e, v);
 
                 double eWeight = frontier.graph.getEdgeWeight(e);
@@ -221,7 +219,6 @@ public final class BidirectionalDijkstraShortestPath<V, E>
     class SearchFrontier
     {
         final Graph<V, E> graph;
-        final Specifics specifics;
 
         final FibonacciHeap<QueueEntry> heap;
         final Map<V, FibonacciHeapNode<QueueEntry>> seen;
@@ -229,11 +226,6 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         public SearchFrontier(Graph<V, E> graph)
         {
             this.graph = graph;
-            if (graph instanceof DirectedGraph) {
-                this.specifics = new DirectedSpecifics((DirectedGraph<V, E>) graph);
-            } else {
-                this.specifics = new UndirectedSpecifics(graph);
-            }
             this.heap = new FibonacciHeap<>();
             this.seen = new HashMap<>();
         }
@@ -273,47 +265,6 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
         }
 
-    }
-
-    abstract class Specifics
-    {
-        public abstract Set<? extends E> edgesOf(V vertex);
-    }
-
-    class DirectedSpecifics
-        extends Specifics
-    {
-
-        private DirectedGraph<V, E> graph;
-
-        public DirectedSpecifics(DirectedGraph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<? extends E> edgesOf(V vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-    }
-
-    class UndirectedSpecifics
-        extends Specifics
-    {
-
-        private Graph<V, E> graph;
-
-        public UndirectedSpecifics(Graph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<E> edgesOf(V vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
     }
 
     class QueueEntry

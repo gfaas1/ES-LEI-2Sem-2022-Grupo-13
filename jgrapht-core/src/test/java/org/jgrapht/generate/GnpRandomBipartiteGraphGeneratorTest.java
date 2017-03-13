@@ -37,7 +37,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(0, 0, 0.5);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -74,7 +74,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.5, SEED);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 5, 1 }, { 1, 6 }, { 6, 1 }, { 1, 7 }, { 1, 8 }, { 2, 5 }, { 6, 2 },
@@ -92,7 +92,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 1.0, SEED);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         assertEquals(4 + 4, g.vertexSet().size());
@@ -103,7 +103,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.1, SEED);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 5, 1 }, { 7, 3 }, { 3, 8 }, { 8, 4 } };
@@ -119,7 +119,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.5, SEED);
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         int[][] edges = { { 1, 6 }, { 1, 7 }, { 1, 8 }, { 2, 5 }, { 2, 7 }, { 3, 5 }, { 3, 8 },
@@ -136,7 +136,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 1.0, SEED);
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         assertEquals(4 + 4, g.vertexSet().size());
@@ -147,7 +147,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnpRandomBipartiteGraphGenerator<>(4, 4, 0.0, SEED);
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(1), null);
 
         assertEquals(4 + 4, g.vertexSet().size());

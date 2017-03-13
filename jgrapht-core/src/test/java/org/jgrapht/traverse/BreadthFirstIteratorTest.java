@@ -49,10 +49,11 @@ public class BreadthFirstIteratorTest
     }
 
     @Override
-    AbstractGraphIterator<String, DefaultEdge> createIterator(
-        DirectedGraph<String, DefaultEdge> g, String vertex)
+    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
+        Graph<String, DefaultWeightedEdge> g, String vertex)
     {
-        AbstractGraphIterator<String, DefaultEdge> i = new BreadthFirstIterator<>(g, vertex);
+        AbstractGraphIterator<String, DefaultWeightedEdge> i =
+            new BreadthFirstIterator<>(g, vertex);
         i.setCrossComponentTraversal(true);
 
         return i;

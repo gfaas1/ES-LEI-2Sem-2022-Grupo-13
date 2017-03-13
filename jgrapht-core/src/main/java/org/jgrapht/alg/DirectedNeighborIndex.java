@@ -44,18 +44,18 @@ import org.jgrapht.event.*;
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V>> predecessorMap = new HashMap<>();
-    Map<V, Neighbors<V>> successorMap = new HashMap<>();
-    private DirectedGraph<V, E> graph;
+    private Map<V, Neighbors<V>> predecessorMap = new HashMap<>();
+    private Map<V, Neighbors<V>> successorMap = new HashMap<>();
+    private Graph<V, E> graph;
 
     /**
      * Creates a neighbor index for the specified directed graph.
      *
      * @param g the graph for which a neighbor index is to be created.
      */
-    public DirectedNeighborIndex(DirectedGraph<V, E> g)
+    public DirectedNeighborIndex(Graph<V, E> g)
     {
-        graph = g;
+        this.graph = GraphTests.requireDirected(g, "Graph must be directed");
     }
 
     /**

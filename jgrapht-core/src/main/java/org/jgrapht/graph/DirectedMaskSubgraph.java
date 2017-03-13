@@ -17,7 +17,6 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.jgrapht.*;
@@ -30,7 +29,9 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated In favor of {@link MaskSubgraph}.
  */
+@Deprecated
 public class DirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements DirectedGraph<V, E>
@@ -50,49 +51,6 @@ public class DirectedMaskSubgraph<V, E>
     {
         super(base, vertexMask, edgeMask);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int inDegreeOf(V vertex)
-    {
-        return incomingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<E> incomingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return new MaskEdgeSet<>(
-            base, ((DirectedGraph<V, E>) base).incomingEdgesOf(vertex), vertexMask, edgeMask);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int outDegreeOf(V vertex)
-    {
-        return outgoingEdgesOf(vertex).size();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<E> outgoingEdgesOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        return new MaskEdgeSet<>(
-            base, ((DirectedGraph<V, E>) base).outgoingEdgesOf(vertex), vertexMask, edgeMask);
-    }
-
 }
 
 // End DirectedMaskSubgraph.java

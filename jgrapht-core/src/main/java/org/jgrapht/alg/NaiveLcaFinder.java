@@ -65,16 +65,16 @@ import org.jgrapht.*;
  */
 public class NaiveLcaFinder<V, E>
 {
-    private DirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Create a new instance of the native LCA finder.
      * 
      * @param graph the input graph
      */
-    public NaiveLcaFinder(DirectedGraph<V, E> graph)
+    public NaiveLcaFinder(Graph<V, E> graph)
     {
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**

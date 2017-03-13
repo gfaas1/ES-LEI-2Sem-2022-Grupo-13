@@ -53,9 +53,7 @@ public abstract class Graphs
 
         // we first create the edge and set the weight to make sure that
         // listeners will see the correct weight upon addEdge.
-
-        assert (g instanceof WeightedGraph<?, ?>) : g.getClass();
-        ((WeightedGraph<V, E>) g).setEdgeWeight(e, weight);
+        g.setEdgeWeight(e, weight);
 
         return g.addEdge(sourceVertex, targetVertex, e) ? e : null;
     }
@@ -167,7 +165,6 @@ public abstract class Graphs
      * <p>
      * The behavior of this operation is undefined if any of the specified graphs is modified while
      * operation is in progress.
-     * </p>
      *
      * @param destination the graph to which vertices and edges are added
      * @param source the graph used as source for vertices and edges to add
@@ -176,9 +173,13 @@ public abstract class Graphs
      *
      * @see EdgeReversedGraph
      */
-    public static <V, E> void addGraphReversed(
-        DirectedGraph<? super V, ? super E> destination, DirectedGraph<V, E> source)
+    public static <V,
+        E> void addGraphReversed(Graph<? super V, ? super E> destination, Graph<V, E> source)
     {
+        if (!source.getType().isDirected() || !destination.getType().isDirected()) {
+            throw new IllegalArgumentException("graph must be directed");
+        }
+
         addAllVertices(destination, source.vertexSet());
 
         for (E edge : source.edgeSet()) {
@@ -249,6 +250,9 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
      * multigraph vertices may appear more than once in the returned list.
+     * 
+     * <p>
+     * The method uses {@link Graph#edgesOf(Object)} to traverse the graph.
      *
      * @param g the graph to look for neighbors in
      * @param vertex the vertex to get the neighbors of
@@ -271,7 +275,10 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
      * graph is a multigraph, vertices may appear more than once in the returned list.
-     *
+     * 
+     * <p>
+     * The method uses {@link Graph#incomingEdgesOf(Object)} to traverse the graph.
+     * 
      * @param g the graph to look for predecessors in
      * @param vertex the vertex to get the predecessors of
      * @param <V> the graph vertex type
@@ -279,7 +286,7 @@ public abstract class Graphs
      *
      * @return a list of the vertices that are the direct predecessors of the specified vertex.
      */
-    public static <V, E> List<V> predecessorListOf(DirectedGraph<V, E> g, V vertex)
+    public static <V, E> List<V> predecessorListOf(Graph<V, E> g, V vertex)
     {
         List<V> predecessors = new ArrayList<>();
         Set<? extends E> edges = g.incomingEdgesOf(vertex);
@@ -295,6 +302,9 @@ public abstract class Graphs
      * Returns a list of vertices that are the direct successors of a specified vertex. If the graph
      * is a multigraph vertices may appear more than once in the returned list.
      *
+     * <p>
+     * The method uses {@link Graph#outgoingEdgesOf(Object)} to traverse the graph.
+     *
      * @param g the graph to look for successors in
      * @param vertex the vertex to get the successors of
      * @param <V> the graph vertex type
@@ -302,7 +312,7 @@ public abstract class Graphs
      *
      * @return a list of the vertices that are the direct successors of the specified vertex.
      */
-    public static <V, E> List<V> successorListOf(DirectedGraph<V, E> g, V vertex)
+    public static <V, E> List<V> successorListOf(Graph<V, E> g, V vertex)
     {
         List<V> successors = new ArrayList<>();
         Set<? extends E> edges = g.outgoingEdgesOf(vertex);
@@ -326,19 +336,17 @@ public abstract class Graphs
      * @return an undirected view of the specified graph, if it is directed, or or the specified
      *         graph itself if it is already undirected.
      *
-     * @throws IllegalArgumentException if the graph is neither DirectedGraph nor UndirectedGraph.
-     *
+     * @throws IllegalArgumentException if the graph is neither directed nor undirected
      * @see AsUndirectedGraph
      */
-    public static <V, E> UndirectedGraph<V, E> undirectedGraph(Graph<V, E> g)
+    public static <V, E> Graph<V, E> undirectedGraph(Graph<V, E> g)
     {
-        if (g instanceof DirectedGraph<?, ?>) {
-            return new AsUndirectedGraph<>((DirectedGraph<V, E>) g);
-        } else if (g instanceof UndirectedGraph<?, ?>) {
-            return (UndirectedGraph<V, E>) g;
+        if (g.getType().isDirected()) {
+            return new AsUndirectedGraph<>(g);
+        } else if (g.getType().isUndirected()) {
+            return g;
         } else {
-            throw new IllegalArgumentException(
-                "Graph must be either DirectedGraph or UndirectedGraph");
+            throw new IllegalArgumentException("graph must be either directed or undirected");
         }
     }
 
@@ -394,10 +402,8 @@ public abstract class Graphs
      *
      * @return true if the graph contained the specified vertex; false otherwise.
      */
-    public static <V,
-        E> boolean removeVertexAndPreserveConnectivity(DirectedGraph<V, E> graph, V vertex)
+    public static <V, E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, V vertex)
     {
-
         if (!graph.containsVertex(vertex)) {
             return false;
         }
@@ -428,10 +434,9 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E> boolean removeVerticesAndPreserveConnectivity(
-        DirectedGraph<V, E> graph, Predicate<V> predicate)
+    public static <V,
+        E> boolean removeVerticesAndPreserveConnectivity(Graph<V, E> graph, Predicate<V> predicate)
     {
-
         List<V> verticesToRemove = new ArrayList<>();
 
         for (V node : graph.vertexSet()) {
@@ -455,10 +460,9 @@ public abstract class Graphs
      *
      * @return true if at least one vertex has been removed; false otherwise.
      */
-    public static <V, E> boolean removeVertexAndPreserveConnectivity(
-        DirectedGraph<V, E> graph, Iterable<V> vertices)
+    public static <V,
+        E> boolean removeVertexAndPreserveConnectivity(Graph<V, E> graph, Iterable<V> vertices)
     {
-
         boolean atLeastOneVertexHasBeenRemoved = false;
 
         for (V vertex : vertices) {
@@ -480,8 +484,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static <V,
-        E> void addOutgoingEdges(DirectedGraph<V, E> graph, V source, Iterable<V> targets)
+    public static <V, E> void addOutgoingEdges(Graph<V, E> graph, V source, Iterable<V> targets)
     {
         if (!graph.containsVertex(source)) {
             graph.addVertex(source);
@@ -496,7 +499,7 @@ public abstract class Graphs
 
     /**
      * Add edges from multiple source vertices to one target vertex. Whether duplicates are created
-     * depends on the underlying {@link DirectedGraph} implementation.
+     * depends on the underlying {@link Graph} implementation.
      *
      * @param graph graph to be mutated
      * @param target target vertex for the new edges
@@ -504,8 +507,7 @@ public abstract class Graphs
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static <V,
-        E> void addIncomingEdges(DirectedGraph<V, E> graph, V target, Iterable<V> sources)
+    public static <V, E> void addIncomingEdges(Graph<V, E> graph, V target, Iterable<V> sources)
     {
         if (!graph.containsVertex(target)) {
             graph.addVertex(target);
@@ -528,7 +530,7 @@ public abstract class Graphs
      *
      * @return true if the vertex has any successors, false otherwise
      */
-    public static <V, E> boolean vertexHasSuccessors(DirectedGraph<V, E> graph, V vertex)
+    public static <V, E> boolean vertexHasSuccessors(Graph<V, E> graph, V vertex)
     {
         return !graph.outgoingEdgesOf(vertex).isEmpty();
     }
@@ -543,7 +545,7 @@ public abstract class Graphs
      *
      * @return true if the vertex has any predecessors, false otherwise
      */
-    public static <V, E> boolean vertexHasPredecessors(DirectedGraph<V, E> graph, V vertex)
+    public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
     }

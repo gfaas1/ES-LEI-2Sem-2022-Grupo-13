@@ -22,12 +22,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GmlExporter;
-import org.jgrapht.io.GmlImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 
 import junit.framework.*;
 
@@ -59,27 +53,8 @@ public class GmlImporterTest
             }
         }
 
-        VertexProvider<String> vp = new VertexProvider<String>()
-        {
-            @Override
-            public String buildVertex(String label, Map<String, String> attributes)
-            {
-                return label;
-            }
-        };
-
-        EdgeProvider<String, E> ep = new EdgeProvider<String, E>()
-        {
-
-            @Override
-            public E buildEdge(String from, String to, String label, Map<String, String> attributes)
-            {
-                return g.getEdgeFactory().createEdge(from, to);
-            }
-
-        };
-
-        GmlImporter<String, E> importer = new GmlImporter<String, E>(vp, ep);
+        GmlImporter<String, E> importer = new GmlImporter<String, E>(
+            (l, a) -> l, (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
         importer.importGraph(g, new StringReader(input));
 
         return g;

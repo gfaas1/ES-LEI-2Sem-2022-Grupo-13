@@ -202,7 +202,7 @@ public class RandomWalkIterator<V, E>
             throw new NoSuchElementException();
         }
 
-        Set<? extends E> potentialEdges = specifics.edgesOf(currentVertex);
+        Set<? extends E> potentialEdges = graph.outgoingEdgesOf(currentVertex);
 
         // randomly select an edge from the set of potential edges.
         E nextEdge = drawEdge(potentialEdges);

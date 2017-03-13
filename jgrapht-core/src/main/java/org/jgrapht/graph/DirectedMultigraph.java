@@ -32,7 +32,7 @@ public class DirectedMultigraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3258408413590599219L;
+    private static final long serialVersionUID = 2919338637676573948L;
 
     /**
      * Creates a new directed multigraph.
@@ -51,7 +51,18 @@ public class DirectedMultigraph<V, E>
      */
     public DirectedMultigraph(EdgeFactory<V, E> ef)
     {
-        super(ef, true, false);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new directed multigraph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public DirectedMultigraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, true, true, false, weighted);
     }
 
     /**
@@ -62,6 +73,36 @@ public class DirectedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedMultigraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new DirectedMultigraph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedMultigraph<V, E>> createBuilder(
+        EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new DirectedMultigraph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -76,7 +117,9 @@ public class DirectedMultigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends DirectedMultigraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

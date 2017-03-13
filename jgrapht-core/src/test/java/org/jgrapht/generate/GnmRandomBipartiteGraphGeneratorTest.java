@@ -37,7 +37,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(0, 0, 10);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
         assertEquals(0, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
@@ -68,7 +68,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(4, 4, 20, SEED);
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
         int[][] edges = { { 3, 5 }, { 6, 3 }, { 2, 8 }, { 7, 2 }, { 6, 2 }, { 4, 5 }, { 7, 4 },
@@ -86,7 +86,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new GnmRandomBipartiteGraphGenerator<>(4, 4, 10, SEED);
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(), null);
 
         int[][] edges = { { 3, 5 }, { 1, 7 }, { 2, 8 }, { 2, 6 }, { 3, 8 }, { 4, 8 }, { 1, 6 },
@@ -104,7 +104,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomBipartiteGraphGenerator<>(4, 4, 17, SEED);
-            UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
             gen.generateGraph(g, new IntegerVertexFactory(), null);
             fail("More edges than permitted");
         } catch (IllegalArgumentException e) {
@@ -113,7 +113,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         try {
             GraphGenerator<Integer, DefaultEdge, Integer> gen =
                 new GnmRandomBipartiteGraphGenerator<>(4, 4, 33, SEED);
-            DirectedGraph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+            Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
             gen.generateGraph(g, new IntegerVertexFactory(), null);
             fail("More edges than permitted");
         } catch (IllegalArgumentException e) {

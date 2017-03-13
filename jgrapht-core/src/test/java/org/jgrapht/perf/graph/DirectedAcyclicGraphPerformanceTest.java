@@ -154,7 +154,7 @@ public class DirectedAcyclicGraphPerformanceTest
         {
             super(
                 new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayImpl(),
-                new TopoVertexBiMap<>());
+                new TopoVertexBiMap<>(), false);
         }
     }
 
@@ -175,7 +175,7 @@ public class DirectedAcyclicGraphPerformanceTest
         {
             super(
                 new ClassBasedEdgeFactory<>(edgeClass), new VisitedArrayListImpl(),
-                new TopoVertexBiMap<>());
+                new TopoVertexBiMap<>(), false);
         }
     }
 
@@ -196,7 +196,7 @@ public class DirectedAcyclicGraphPerformanceTest
         {
             super(
                 new ClassBasedEdgeFactory<>(edgeClass), new VisitedHashSetImpl(),
-                new TopoVertexBiMap<>());
+                new TopoVertexBiMap<>(), false);
         }
     }
 
@@ -217,7 +217,7 @@ public class DirectedAcyclicGraphPerformanceTest
         {
             super(
                 new ClassBasedEdgeFactory<>(edgeClass), new VisitedBitSetImpl(),
-                new TopoVertexBiMap<>());
+                new TopoVertexBiMap<>(), false);
         }
     }
 

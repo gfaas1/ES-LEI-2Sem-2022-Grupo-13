@@ -18,6 +18,8 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
+import org.jgrapht.graph.specifics.Specifics;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -100,7 +102,7 @@ public class GenericGraphsTest
 
     public void testAlissaHacker()
     {
-        DirectedGraph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
+        Graph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addEdge("a", "b");
@@ -119,6 +121,21 @@ public class GenericGraphsTest
         g.addEdge(v1, v2, new DefaultEdge());
         assertEquals(2, g.degreeOf(v1));
         assertEquals(2, g.degreeOf(v2));
+    }
+    
+    /*
+     * Test added in order to check that old style specifics override still works.
+     * Safely remove after next-release.
+     */
+    @Deprecated
+    public void testOldStyleSpecificsOverride()
+    {
+        DeprecatedSpecificsTestGraph g = new DeprecatedSpecificsTestGraph();
+        g.addVertex("1");
+        g.addVertex("2");
+        g.addEdge("1", "2");
+        assertTrue(g.containsEdge("2", "1"));
+        assertTrue(g.containsEdge("1", "2"));
     }
 
     /**
@@ -163,15 +180,33 @@ public class GenericGraphsTest
 
     public static class EquivGraph
         extends AbstractBaseGraph<EquivVertex, DefaultEdge>
-        implements UndirectedGraph<EquivVertex, DefaultEdge>
     {
-        /**
-         */
         private static final long serialVersionUID = 8647217182401022498L;
 
         public EquivGraph()
         {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), true, true);
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, true, true, false);
+        }
+    }
+
+    /*
+     * Graph added for test to check for backward compatibility on specifics override. Safely remove
+     * after next-release.
+     */
+    @Deprecated
+    static class DeprecatedSpecificsTestGraph
+        extends Pseudograph<String, DefaultEdge>
+    {
+        private static final long serialVersionUID = 8647217182401022498L;
+
+        public DeprecatedSpecificsTestGraph()
+        {
+            super(DefaultEdge.class);
+        }
+
+        protected Specifics<String, DefaultEdge> createSpecifics()
+        {
+            return new FastLookupUndirectedSpecifics<>(this);
         }
     }
 
@@ -194,6 +229,11 @@ public class GenericGraphsTest
         public FooVertex(String s)
         {
             str = s;
+        }
+
+        public String toString()
+        {
+            return str;
         }
     }
 

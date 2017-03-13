@@ -60,16 +60,16 @@ public abstract class ShortestPathTestCase
         Graph<String, DefaultWeightedEdge> g = create();
 
         path = findPathBetween(g, V1, V2);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e12 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e12 }), path);
 
         path = findPathBetween(g, V1, V4);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e12, e24 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e12, e24 }), path);
 
         path = findPathBetween(g, V1, V5);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e12, e24, e45 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e12, e24, e45 }), path);
 
         path = findPathBetween(g, V3, V4);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e13, e12, e24 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e13, e12, e24 }), path);
     }
 
     protected abstract List<DefaultWeightedEdge> findPathBetween(

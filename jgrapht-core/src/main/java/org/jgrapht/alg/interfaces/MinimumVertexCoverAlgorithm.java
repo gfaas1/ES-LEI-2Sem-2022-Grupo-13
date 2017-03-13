@@ -33,6 +33,7 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
+ * @author Joris Kinable
  */
 public interface MinimumVertexCoverAlgorithm<V, E>
 {
@@ -43,7 +44,7 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      * @param graph the graph
      * @return a vertex cover
      */
-    VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph);
+    VertexCover<V> getVertexCover(Graph<V, E> graph);
 
     /**
      * A vertex cover

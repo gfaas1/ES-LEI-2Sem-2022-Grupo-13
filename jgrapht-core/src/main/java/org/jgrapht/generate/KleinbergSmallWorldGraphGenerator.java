@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.VertexFactory;
 import org.jgrapht.alg.util.AliasMethodSampler;
 
@@ -155,14 +154,8 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
         /*
          * Ensure directed or undirected
          */
-        boolean isDirected;
-        if (target instanceof DirectedGraph<?, ?>) {
-            isDirected = true;
-        } else if (target instanceof UndirectedGraph<?, ?>) {
-            isDirected = false;
-        } else {
-            throw new IllegalArgumentException("Graph must be either directed or undirected");
-        }
+        GraphTests.requireDirectedOrUndirected(target);
+        boolean isDirected = target.getType().isDirected();
 
         /*
          * Create vertices

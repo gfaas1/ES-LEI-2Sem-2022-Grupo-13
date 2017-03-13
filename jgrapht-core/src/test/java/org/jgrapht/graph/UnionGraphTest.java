@@ -30,7 +30,9 @@ import junit.framework.*;
  *
  * @author Joris Kinable
  * @since Aug 24, 2015
+ * @deprecated Since {@link GraphUnion} is deprecated.
  */
+@Deprecated
 public class UnionGraphTest
     extends TestCase
 {

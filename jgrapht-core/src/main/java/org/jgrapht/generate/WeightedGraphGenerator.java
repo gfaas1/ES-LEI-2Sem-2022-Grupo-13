@@ -24,7 +24,9 @@ import org.jgrapht.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * @deprecated Since {@link WeightedGraph} is deprecated.
  */
+@Deprecated
 public abstract class WeightedGraphGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {

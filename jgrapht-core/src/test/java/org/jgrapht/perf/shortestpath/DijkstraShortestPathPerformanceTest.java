@@ -51,7 +51,7 @@ public class DijkstraShortestPathPerformanceTest
     {
         protected Random rng = new Random(SEED);
         protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator = null;
-        protected DirectedGraph<Integer, DefaultWeightedEdge> graph;
+        protected Graph<Integer, DefaultWeightedEdge> graph;
 
         abstract ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph);

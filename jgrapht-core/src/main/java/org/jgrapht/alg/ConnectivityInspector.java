@@ -53,30 +53,28 @@ import org.jgrapht.traverse.*;
 public class ConnectivityInspector<V, E>
     implements GraphListener<V, E>
 {
-    List<Set<V>> connectedSets;
-    Map<V, Set<V>> vertexToConnectedSet;
+    private static final String GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED =
+        "Graph must be directed or undirected";
+
+    private List<Set<V>> connectedSets;
+    private Map<V, Set<V>> vertexToConnectedSet;
     private Graph<V, E> graph;
 
     /**
-     * Creates a connectivity inspector for the specified undirected graph.
+     * Creates a connectivity inspector for the specified graph.
      *
      * @param g the graph for which a connectivity inspector to be created.
      */
-    public ConnectivityInspector(UndirectedGraph<V, E> g)
+    public ConnectivityInspector(Graph<V, E> g)
     {
         init();
-        this.graph = g;
-    }
-
-    /**
-     * Creates a connectivity inspector for the specified directed graph.
-     *
-     * @param g the graph for which a connectivity inspector to be created.
-     */
-    public ConnectivityInspector(DirectedGraph<V, E> g)
-    {
-        init();
-        this.graph = new AsUndirectedGraph<>(g);
+        if (g.getType().isDirected()) {
+            this.graph = new AsUndirectedGraph<>(g);
+        } else if (g.getType().isUndirected()) {
+            this.graph = g;
+        } else {
+            throw new IllegalArgumentException(GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
+        }
     }
 
     /**

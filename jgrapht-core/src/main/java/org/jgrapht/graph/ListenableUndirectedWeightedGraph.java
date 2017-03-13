@@ -26,10 +26,12 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see DefaultListenableGraph
+ * @deprecated In favor of {@link DefaultListenableGraph}.
  */
+@Deprecated
 public class ListenableUndirectedWeightedGraph<V, E>
     extends ListenableUndirectedGraph<V, E>
-    implements WeightedGraph<V, E>
+    implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3690762799613949747L;
 
@@ -48,9 +50,9 @@ public class ListenableUndirectedWeightedGraph<V, E>
      *
      * @param base the backing graph.
      */
-    public ListenableUndirectedWeightedGraph(WeightedGraph<V, E> base)
+    public ListenableUndirectedWeightedGraph(UndirectedGraph<V, E> base)
     {
-        super((UndirectedGraph<V, E>) base);
+        super(base);
     }
 }
 

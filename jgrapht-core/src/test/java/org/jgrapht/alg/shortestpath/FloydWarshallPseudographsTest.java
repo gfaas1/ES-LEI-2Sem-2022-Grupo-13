@@ -47,15 +47,15 @@ public class FloydWarshallPseudographsTest
 
         Random rng = new Random();
 
-        List<Supplier<WeightedGraph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
+        List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
         graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
         graphs.add(() -> new WeightedPseudograph<>(DefaultWeightedEdge.class));
 
-        for (Supplier<WeightedGraph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
+        for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, true);
             for (int i = 0; i < tests; i++) {
-                WeightedGraph<Integer, DefaultWeightedEdge> g = gSupplier.get();
+                Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
                 gen.generateGraph(g, new IntegerVertexFactory(), null);
 
                 // assign random weights
@@ -103,8 +103,8 @@ public class FloydWarshallPseudographsTest
     @Test
     public void test1()
     {
-        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         DefaultWeightedEdge e12_1 = g.addEdge(1, 2);
         g.setEdgeWeight(e12_1, -5.0);
@@ -213,8 +213,8 @@ public class FloydWarshallPseudographsTest
     @Test
     public void testGetPathWeight()
     {
-        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2, 3, 4));
         DefaultWeightedEdge e12_1 = g.addEdge(1, 2);
         g.setEdgeWeight(e12_1, -5.0);
@@ -247,8 +247,8 @@ public class FloydWarshallPseudographsTest
     @Test
     public void testLoops()
     {
-        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1, 2));
         DefaultWeightedEdge e12_1 = g.addEdge(1, 2);
         g.setEdgeWeight(e12_1, 5.0);

@@ -260,7 +260,7 @@ public final class GraphMLDemo
          * 
          * Vertices have random colors and edges have random edge weights.
          */
-        DirectedPseudograph<CustomVertex, DefaultWeightedEdge> graph1 =
+        DirectedWeightedPseudograph<CustomVertex, DefaultWeightedEdge> graph1 =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
             new CompleteGraphGenerator<>(SIZE);

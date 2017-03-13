@@ -246,7 +246,7 @@ public class PushRelabelMFImpl<V, E>
         // this.
         for (E e : network.edgesOf(sink)) {
             AnnotatedFlowEdge edge = edgeExtensionManager.getExtension(e);
-            maxFlowValue += (directed_graph ? edge.flow : edge.flow + edge.getInverse().flow);
+            maxFlowValue += (directedGraph ? edge.flow : edge.flow + edge.getInverse().flow);
         }
 
         if (DIAGNOSTIC_ENABLED) {

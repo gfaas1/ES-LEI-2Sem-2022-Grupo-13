@@ -32,7 +32,7 @@ public class SimpleDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
     implements DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 4049358608472879671L;
+    private static final long serialVersionUID = 1665314455034181409L;
 
     /**
      * Creates a new simple directed graph.
@@ -51,7 +51,18 @@ public class SimpleDirectedGraph<V, E>
      */
     public SimpleDirectedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef, false, false);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new simple directed graph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public SimpleDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, true, false, false, weighted);
     }
 
     /**
@@ -62,6 +73,36 @@ public class SimpleDirectedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new SimpleDirectedGraph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
+        EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new SimpleDirectedGraph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -76,7 +117,9 @@ public class SimpleDirectedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V,
         E> DirectedGraphBuilderBase<V, E, ? extends SimpleDirectedGraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

@@ -88,7 +88,7 @@ public class NaiveLcaFinderTest
     @Test
     public void testLoops()
     {
-        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         g.addVertex("a");
         g.addVertex("b");
@@ -120,7 +120,7 @@ public class NaiveLcaFinderTest
     @Test
     public void testArrivalOrder()
     {
-        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         g.addVertex("a");
         g.addVertex("b");

@@ -51,7 +51,7 @@ public class GraphsTest
     public void removeVertex_vertexNotFound()
     {
 
-        DirectedGraph<String, TestEdge> graph =
+        Graph<String, TestEdge> graph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
@@ -69,7 +69,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
@@ -110,7 +110,7 @@ public class GraphsTest
     public void removeVertex00()
     {
 
-        DirectedGraph<String, TestEdge> graph =
+        Graph<String, TestEdge> graph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
@@ -127,7 +127,7 @@ public class GraphsTest
         graph.addEdge(b, c);
         graph.addEdge(b, d);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
@@ -158,7 +158,7 @@ public class GraphsTest
     public void removeVertex01()
     {
 
-        DirectedGraph<String, TestEdge> graph =
+        Graph<String, TestEdge> graph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
@@ -169,7 +169,7 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(b);
@@ -195,7 +195,7 @@ public class GraphsTest
     public void removeVertex02()
     {
 
-        DirectedGraph<String, TestEdge> graph =
+        Graph<String, TestEdge> graph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
@@ -206,7 +206,7 @@ public class GraphsTest
 
         graph.addEdge(a, b);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
@@ -247,7 +247,7 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);
@@ -296,7 +296,7 @@ public class GraphsTest
 
         graph.addVertex(b);
 
-        DirectedGraph<String, TestEdge> expectedGraph =
+        Graph<String, TestEdge> expectedGraph =
             new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         expectedGraph.addVertex(a);

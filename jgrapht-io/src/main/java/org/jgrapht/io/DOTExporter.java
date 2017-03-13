@@ -161,7 +161,7 @@ public class DOTExporter<V, E>
                 "Generated graph ID '" + graphId
                     + "' is not valid with respect to the .dot language");
         }
-        if (g instanceof DirectedGraph<?, ?>) {
+        if (g.getType().isDirected()) {
             header += DOTUtils.DIRECTED_GRAPH_KEYWORD;
             connector = " " + DOTUtils.DIRECTED_GRAPH_EDGEOP + " ";
         } else {

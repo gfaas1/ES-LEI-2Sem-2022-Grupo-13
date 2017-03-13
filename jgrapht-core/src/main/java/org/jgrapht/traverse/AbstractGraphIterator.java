@@ -45,7 +45,6 @@ public abstract class AbstractGraphIterator<V, E>
     protected final FlyweightEdgeEvent<V, E> reusableEdgeEvent;
     protected final FlyweightVertexEvent<V> reusableVertexEvent;
     protected final Graph<V, E> graph;
-    protected final Specifics<V, E> specifics;
     protected boolean crossComponentTraversal;
     protected boolean reuseEvents;
 
@@ -57,7 +56,6 @@ public abstract class AbstractGraphIterator<V, E>
     public AbstractGraphIterator(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph, "graph must not be null");
-        this.specifics = createGraphSpecifics(graph);
         this.reusableEdgeEvent = new FlyweightEdgeEvent<>(this, null);
         this.reusableVertexEvent = new FlyweightVertexEvent<>(this, null);
         this.crossComponentTraversal = true;
@@ -287,114 +285,6 @@ public abstract class AbstractGraphIterator<V, E>
         }
     }
 
-    // -------------------------------------------------------------------------
-    /**
-     * Creates directed/undirected graph specifics according to the provided graph -
-     * directed/undirected, respectively.
-     * 
-     * @param g the graph to create specifics for
-     *
-     * @return the created specifics
-     */
-    static <V, E> Specifics<V, E> createGraphSpecifics(Graph<V, E> g)
-    {
-        if (g instanceof DirectedGraph<?, ?>) {
-            return new DirectedSpecifics<>((DirectedGraph<V, E>) g);
-        } else {
-            return new UndirectedSpecifics<>(g);
-        }
-    }
-
-    /**
-     * Provides unified interface for operations that are different in directed graphs and in
-     * undirected graphs.
-     */
-    abstract static class Specifics<VV, EE>
-    {
-        /**
-         * Returns the edges outgoing from the specified vertex in case of directed graph, and the
-         * edge touching the specified vertex in case of undirected graph.
-         *
-         * @param vertex the vertex whose outgoing edges are to be returned.
-         *
-         * @return the edges outgoing from the specified vertex in case of directed graph, and the
-         *         edge touching the specified vertex in case of undirected graph.
-         */
-        public abstract Set<? extends EE> edgesOf(VV vertex);
-
-        /**
-         * Returns the edges incoming from the specified vertex in case of directed graph, and the
-         * edge touching the specified vertex in case of undirected graph.
-         *
-         * @param vertex the vertex whose incoming edges are to be returned.
-         *
-         * @return the edges incoming from the specified vertex in case of directed graph, and the
-         *         edge touching the specified vertex in case of undirected graph.
-         */
-        public abstract Set<? extends EE> incomingEdgesOf(VV vertex);
-    }
-
-    /**
-     * An implementation of {@link Specifics} for a directed graph.
-     */
-    static class DirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private DirectedGraph<VV, EE> graph;
-
-        /**
-         * Creates a new DirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public DirectedSpecifics(DirectedGraph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<? extends EE> edgesOf(VV vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-
-        @Override
-        public Set<? extends EE> incomingEdgesOf(VV vertex)
-        {
-            return graph.incomingEdgesOf(vertex);
-        }
-    }
-
-    /**
-     * An implementation of {@link Specifics} in which edge direction (if any) is ignored.
-     */
-    static class UndirectedSpecifics<VV, EE>
-        extends Specifics<VV, EE>
-    {
-        private Graph<VV, EE> graph;
-
-        /**
-         * Creates a new UndirectedSpecifics object.
-         *
-         * @param g the graph for which this specifics object to be created.
-         */
-        public UndirectedSpecifics(Graph<VV, EE> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<EE> edgesOf(VV vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-
-        @Override
-        public Set<EE> incomingEdgesOf(VV vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-    }
 }
 
 // End AbstractGraphIterator.java

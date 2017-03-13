@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
@@ -149,8 +148,8 @@ public class ClosenessCentrality<V, E>
     {
         // setup graph
         Graph<V, E> g;
-        if (incoming && graph instanceof DirectedGraph<?, ?>) {
-            g = new EdgeReversedGraph<>((DirectedGraph<V, E>) graph);
+        if (incoming && graph.getType().isDirected()) {
+            g = new EdgeReversedGraph<>(graph);
         } else {
             g = graph;
         }

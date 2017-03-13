@@ -203,12 +203,7 @@ public class AStarShortestPath<V, E>
     {
         numberOfExpandedNodes++;
 
-        Set<E> outgoingEdges = null;
-        if (graph instanceof UndirectedGraph) {
-            outgoingEdges = graph.edgesOf(currentNode.getData());
-        } else if (graph instanceof DirectedGraph) {
-            outgoingEdges = ((DirectedGraph<V, E>) graph).outgoingEdgesOf(currentNode.getData());
-        }
+        Set<E> outgoingEdges = graph.outgoingEdgesOf(currentNode.getData());
 
         for (E edge : outgoingEdges) {
             V successor = Graphs.getOppositeVertex(graph, edge, currentNode.getData());

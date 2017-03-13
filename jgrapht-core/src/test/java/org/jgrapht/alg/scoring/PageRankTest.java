@@ -162,7 +162,7 @@ public class PageRankTest
 
     public void testWeightedGraph1()
     {
-        DirectedPseudograph<String, DefaultWeightedEdge> g =
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         g.addVertex("center");
@@ -184,7 +184,7 @@ public class PageRankTest
 
     public void testUnweightedGraph1()
     {
-        DirectedPseudograph<String, DefaultWeightedEdge> g =
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         g.addVertex("center");

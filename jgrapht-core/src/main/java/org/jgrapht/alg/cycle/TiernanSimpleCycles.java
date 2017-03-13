@@ -37,7 +37,7 @@ import org.jgrapht.*;
 public class TiernanSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
-    private DirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Create a simple cycle finder with an unspecified graph.
@@ -54,19 +54,16 @@ public class TiernanSimpleCycles<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public TiernanSimpleCycles(DirectedGraph<V, E> graph)
+    public TiernanSimpleCycles(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -75,12 +72,9 @@ public class TiernanSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    public void setGraph(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**

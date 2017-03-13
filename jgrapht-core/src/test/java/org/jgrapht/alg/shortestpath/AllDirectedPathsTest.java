@@ -82,7 +82,7 @@ public class AllDirectedPathsTest
 
     public void testCycleBehavior()
     {
-        DirectedGraph<String, DefaultEdge> toyGraph = toyGraph();
+        Graph<String, DefaultEdge> toyGraph = toyGraph();
         toyGraph.addEdge(D, A);
 
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph);
@@ -126,9 +126,9 @@ public class AllDirectedPathsTest
         }
     }
 
-    private static DirectedGraph<String, DefaultEdge> toyGraph()
+    private static Graph<String, DefaultEdge> toyGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(I1);
         graph.addVertex(I2);
         graph.addVertex(A);

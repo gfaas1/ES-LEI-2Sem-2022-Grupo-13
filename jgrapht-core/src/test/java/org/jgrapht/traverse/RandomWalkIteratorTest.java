@@ -39,7 +39,7 @@ public class RandomWalkIteratorTest
      */
     public void testEmptyGraph()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         Iterator<String> iter = new RandomWalkIterator<>(graph);
         assertFalse(iter.hasNext());
     }
@@ -49,7 +49,7 @@ public class RandomWalkIteratorTest
      */
     public void testSingleNode()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         graph.addVertex("123");
         Iterator<String> iter = new RandomWalkIterator<>(graph);
         assertTrue(iter.hasNext());
@@ -62,7 +62,7 @@ public class RandomWalkIteratorTest
      */
     public void testSink()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         int graphSize = 10;
         LinearGraphGenerator<String, DefaultEdge> graphGenerator =
             new LinearGraphGenerator<>(graphSize);
@@ -89,7 +89,7 @@ public class RandomWalkIteratorTest
      */
     public void testExhausted()
     {
-        UndirectedGraph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
         graphGenerator.generateGraph(graph, new VertexFactory<String>()
         {
@@ -116,7 +116,7 @@ public class RandomWalkIteratorTest
      */
     public void testDeterministic()
     {
-        DirectedGraph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
         graphGenerator.generateGraph(graph, new VertexFactory<String>()

@@ -69,7 +69,7 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param graph the directed graph to be iterated
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> graph)
+    public TopologicalOrderIterator(Graph<V, E> graph)
     {
         this(graph, (Comparator<V>) null);
     }
@@ -86,12 +86,13 @@ public class TopologicalOrderIterator<V, E>
      * @param graph the directed graph to be iterated.
      * @param queue queue to use for tie-break in case of partial order (e.g. a PriorityQueue can be
      *        used to break ties according to vertex priority); must be initially empty
-     * @deprecated in favor of {@link #TopologicalOrderIterator(DirectedGraph, Comparator)}
+     * @deprecated in favor of {@link #TopologicalOrderIterator(Graph, Comparator)}
      */
     @Deprecated
-    public TopologicalOrderIterator(DirectedGraph<V, E> graph, Queue<V> queue)
+    public TopologicalOrderIterator(Graph<V, E> graph, Queue<V> queue)
     {
         super(graph);
+        GraphTests.requireDirected(graph);
 
         this.queue = Objects.requireNonNull(queue, "Queue must not be null");
         if (!queue.isEmpty()) {
@@ -102,7 +103,7 @@ public class TopologicalOrderIterator<V, E>
         this.inDegreeMap = new HashMap<>();
         for (V v : graph.vertexSet()) {
             int d = 0;
-            for (E e : specifics.incomingEdgesOf(v)) {
+            for (E e : graph.incomingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 if (v.equals(u)) {
                     throw new IllegalArgumentException(GRAPH_IS_NOT_A_DAG);
@@ -131,9 +132,10 @@ public class TopologicalOrderIterator<V, E>
      * @param graph the directed graph to be iterated
      * @param comparator comparator in order to break ties in case of partial order
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> graph, Comparator<V> comparator)
+    public TopologicalOrderIterator(Graph<V, E> graph, Comparator<V> comparator)
     {
         super(graph);
+        GraphTests.requireDirected(graph);
 
         // create queue
         if (comparator == null) {
@@ -146,7 +148,7 @@ public class TopologicalOrderIterator<V, E>
         this.inDegreeMap = new HashMap<>();
         for (V v : graph.vertexSet()) {
             int d = 0;
-            for (E e : specifics.incomingEdgesOf(v)) {
+            for (E e : graph.incomingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 if (v.equals(u)) {
                     throw new IllegalArgumentException(GRAPH_IS_NOT_A_DAG);
@@ -207,6 +209,7 @@ public class TopologicalOrderIterator<V, E>
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
+
         V result = cur;
         cur = null;
         if (nListeners != 0) {
@@ -220,7 +223,7 @@ public class TopologicalOrderIterator<V, E>
         V result = queue.poll();
 
         if (result != null) {
-            for (E e : specifics.edgesOf(result)) {
+            for (E e : graph.outgoingEdgesOf(result)) {
                 V other = Graphs.getOppositeVertex(graph, e, result);
 
                 ModifiableInteger inDegree = inDegreeMap.get(other);

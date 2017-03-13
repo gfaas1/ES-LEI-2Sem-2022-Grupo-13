@@ -77,7 +77,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithCycle()
     {
-        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
 
         Set<String> cyclicSet = new HashSet<>();
@@ -99,7 +99,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithDoubledCycle()
     {
-        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         // build the graph: vertex order is chosen specifically
         // to exercise old bug-cases in CycleDetector
@@ -128,7 +128,7 @@ public class CycleDetectorTest
     @SuppressWarnings("unchecked")
     public void testDirectedWithoutCycle()
     {
-        DirectedGraph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
         g.removeVertex(V2);
 
@@ -141,7 +141,7 @@ public class CycleDetectorTest
     }
 
     private void runTest(
-        DirectedGraph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
+        Graph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
         CycleDetector<String, DefaultEdge> detector = new CycleDetector<>(g);
 

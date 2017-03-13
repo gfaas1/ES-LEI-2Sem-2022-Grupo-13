@@ -17,19 +17,31 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.xml.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.xml.validation.*;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
-import org.jgrapht.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.jgrapht.Graph;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Imports a graph from a GraphML data source.
@@ -366,8 +378,8 @@ public class GraphMLImporter<V, E>
 
             // check how to handle special edge weight
             boolean handleSpecialEdgeWeights = false;
-            double defaultSpecialEdgeWeight = WeightedGraph.DEFAULT_EDGE_WEIGHT;
-            if (graph instanceof WeightedGraph<?, ?>) {
+            double defaultSpecialEdgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
+            if (graph.getType().isWeighted()) {
                 for (Key k : edgeValidKeys.values()) {
                     if (k.attributeName.equals(edgeWeightAttributeName)) {
                         handleSpecialEdgeWeights = true;
@@ -420,12 +432,11 @@ public class GraphMLImporter<V, E>
                 if (handleSpecialEdgeWeights) {
                     if (finalAttributes.containsKey(edgeWeightAttributeName)) {
                         try {
-                            ((WeightedGraph<V, E>) graph).setEdgeWeight(
+                            graph.setEdgeWeight(
                                 e,
                                 Double.parseDouble(finalAttributes.get(edgeWeightAttributeName)));
                         } catch (NumberFormatException nfe) {
-                            ((WeightedGraph<V, E>) graph)
-                                .setEdgeWeight(e, defaultSpecialEdgeWeight);
+                            graph.setEdgeWeight(e, defaultSpecialEdgeWeight);
                         }
                     }
 

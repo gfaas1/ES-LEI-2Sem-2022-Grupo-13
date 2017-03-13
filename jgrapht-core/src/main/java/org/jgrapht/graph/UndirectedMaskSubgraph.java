@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.function.*;
+import java.util.function.Predicate;
 
-import org.jgrapht.*;
+import org.jgrapht.UndirectedGraph;
 
 /**
  * An undirected graph that is a {@link MaskSubgraph} of another graph.
@@ -29,7 +29,9 @@ import org.jgrapht.*;
  *
  * @author Guillaume Boulmier
  * @since July 5, 2007
+ * @deprecated In favor of {@link MaskSubgraph}.
  */
+@Deprecated
 public class UndirectedMaskSubgraph<V, E>
     extends MaskSubgraph<V, E>
     implements UndirectedGraph<V, E>
@@ -48,15 +50,6 @@ public class UndirectedMaskSubgraph<V, E>
         UndirectedGraph<V, E> base, Predicate<V> vertexMask, Predicate<E> edgeMask)
     {
         super(base, vertexMask, edgeMask);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int degreeOf(V vertex)
-    {
-        return edgesOf(vertex).size();
     }
 
 }

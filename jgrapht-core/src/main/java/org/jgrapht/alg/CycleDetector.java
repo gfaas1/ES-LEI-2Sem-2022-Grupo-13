@@ -38,17 +38,17 @@ public class CycleDetector<V, E>
     /**
      * Graph on which cycle detection is being performed.
      */
-    private DirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Creates a cycle detector for the specified graph. Currently only directed graphs are
      * supported.
      *
-     * @param graph the DirectedGraph in which to detect cycles
+     * @param graph the directed graph in which to detect cycles
      */
-    public CycleDetector(DirectedGraph<V, E> graph)
+    public CycleDetector(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     /**

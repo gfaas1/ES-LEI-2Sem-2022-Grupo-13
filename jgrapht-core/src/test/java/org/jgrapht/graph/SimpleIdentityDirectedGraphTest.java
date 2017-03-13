@@ -77,28 +77,29 @@ public class SimpleIdentityDirectedGraphTest
 
         public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass)
         {
-            super(edgeClass);
+            this(new ClassBasedEdgeFactory<>(edgeClass));
         }
 
         public SimpleIdentityDirectedGraph(EdgeFactory<V, E> ef)
         {
-            super(ef);
+            super(ef, false);
         }
 
         @Override
-        protected Specifics<V, E> createSpecifics()
+        protected Specifics<V, E> createSpecifics(boolean directed)
         {
             return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }
+        
     }
 
     // ~ Instance fields --------------------------------------------------------
 
-    DirectedGraph<Holder<String>, DefaultEdge> gEmpty;
-    private DirectedGraph<Holder<String>, DefaultEdge> g1;
-    private DirectedGraph<Holder<String>, DefaultEdge> g2;
-    private DirectedGraph<Holder<String>, DefaultEdge> g3;
-    private DirectedGraph<Holder<String>, DefaultEdge> g4;
+    Graph<Holder<String>, DefaultEdge> gEmpty;
+    private Graph<Holder<String>, DefaultEdge> g1;
+    private Graph<Holder<String>, DefaultEdge> g2;
+    private Graph<Holder<String>, DefaultEdge> g3;
+    private Graph<Holder<String>, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<Holder<String>, DefaultEdge> eFactory;
     private Holder<String> v1 = new Holder<>("v1");
@@ -582,9 +583,9 @@ public class SimpleIdentityDirectedGraphTest
     {
         init();
 
-        DirectedGraph<Holder<String>, DefaultEdge> g =
+        Graph<Holder<String>, DefaultEdge> g =
             new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
-        DirectedGraph<Holder<String>, DefaultEdge> r = new EdgeReversedGraph<>(g);
+        Graph<Holder<String>, DefaultEdge> r = new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
@@ -610,7 +611,7 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     private void verifyReversal(
-        DirectedGraph<Holder<String>, DefaultEdge> g, DirectedGraph<Holder<String>, DefaultEdge> r,
+        Graph<Holder<String>, DefaultEdge> g, Graph<Holder<String>, DefaultEdge> r,
         DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));

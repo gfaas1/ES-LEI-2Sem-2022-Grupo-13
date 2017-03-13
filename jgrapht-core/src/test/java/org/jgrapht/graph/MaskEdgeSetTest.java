@@ -40,7 +40,7 @@ public class MaskEdgeSetTest
     @Override
     protected void setUp()
     {
-        DirectedGraph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);

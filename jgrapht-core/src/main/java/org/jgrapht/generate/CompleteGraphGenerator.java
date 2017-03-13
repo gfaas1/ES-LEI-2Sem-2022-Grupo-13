@@ -68,14 +68,8 @@ public class CompleteGraphGenerator<V, E>
         /*
          * Ensure directed or undirected
          */
-        boolean isDirected;
-        if (target instanceof DirectedGraph<?, ?>) {
-            isDirected = true;
-        } else if (target instanceof UndirectedGraph<?, ?>) {
-            isDirected = false;
-        } else {
-            throw new IllegalArgumentException("Graph must be either directed or undirected");
-        }
+        GraphTests.requireDirectedOrUndirected(target);
+        boolean isDirected = target.getType().isDirected();
 
         /*
          * Add vertices

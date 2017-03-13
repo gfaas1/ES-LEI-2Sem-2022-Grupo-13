@@ -72,7 +72,7 @@ public class PushRelabelMinimumSTCutTest
     public void testRandomDirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {
-            DirectedGraph<Integer, DefaultWeightedEdge> network = generateDirectedGraph();
+            Graph<Integer, DefaultWeightedEdge> network = generateDirectedGraph();
             int source = 0;
             int sink = network.vertexSet().size() - 1;
 
@@ -97,7 +97,7 @@ public class PushRelabelMinimumSTCutTest
     public void testRandomUndirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {
-            UndirectedGraph<Integer, DefaultWeightedEdge> network = generateUndirectedGraph();
+            Graph<Integer, DefaultWeightedEdge> network = generateUndirectedGraph();
             int source = 0;
             int sink = network.vertexSet().size() - 1;
 

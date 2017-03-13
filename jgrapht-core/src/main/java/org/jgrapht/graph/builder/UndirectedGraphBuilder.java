@@ -26,8 +26,9 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
- * 
+ * @deprecated In favor of {@link GraphBuilder}.
  */
+@Deprecated
 public final class UndirectedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
     extends UndirectedGraphBuilderBase<V, E, G, UndirectedGraphBuilder<V, E, G>>
 {

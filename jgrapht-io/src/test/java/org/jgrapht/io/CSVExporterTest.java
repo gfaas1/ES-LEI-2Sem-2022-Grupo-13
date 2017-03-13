@@ -148,7 +148,7 @@ public class CSVExporterTest
 
     public void testUndirectedEdgeList()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -170,7 +170,7 @@ public class CSVExporterTest
 
     public void testDirectedEdgeList()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -192,7 +192,7 @@ public class CSVExporterTest
 
     public void testDirectedAdjacencyList()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -219,7 +219,7 @@ public class CSVExporterTest
 
     public void testUndirectedAdjacencyList()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -246,7 +246,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNodeId()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -273,7 +273,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNoNodeId()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -299,7 +299,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNodeIdZeroMissingEdges()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -327,7 +327,7 @@ public class CSVExporterTest
 
     public void testDirectedMatrixNoNodeIdZeroMissingEdges()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -418,8 +418,7 @@ public class CSVExporterTest
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {
-        DirectedPseudograph<String, DefaultEdge> g =
-            new DirectedPseudograph<>(DefaultWeightedEdge.class);
+        DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex("'john doe'");
         g.addVertex("fred");
         g.addVertex("fred\n\"21\"");

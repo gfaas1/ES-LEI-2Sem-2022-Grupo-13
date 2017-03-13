@@ -473,8 +473,8 @@ public class CSVImporter<V, E>
                 graph.addEdge(source, target, e);
 
                 if (weight != null) {
-                    if (graph instanceof WeightedGraph<?, ?>) {
-                        ((WeightedGraph<V, E>) graph).setEdgeWeight(e, weight);
+                    if (graph.getType().isWeighted()) {
+                        graph.setEdgeWeight(e, weight);
                     }
                 }
             } catch (IllegalArgumentException e) {

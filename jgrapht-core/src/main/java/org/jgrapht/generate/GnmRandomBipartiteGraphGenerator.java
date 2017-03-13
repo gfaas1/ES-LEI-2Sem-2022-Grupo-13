@@ -145,7 +145,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         }
 
         // check if graph is directed
-        final boolean isDirected = target instanceof DirectedGraph<?, ?>;
+        final boolean isDirected = target.getType().isDirected();
 
         int maxAllowedEdges = Integer.MAX_VALUE;
         try {

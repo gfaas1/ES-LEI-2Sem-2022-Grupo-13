@@ -63,7 +63,7 @@ public class AsUnweightedGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdgeWeight
+     * {@inheritDoc}
      */
     @Override
     public double getEdgeWeight(E e)
@@ -71,9 +71,28 @@ public class AsUnweightedGraph<V, E>
         if (e == null) {
             throw new NullPointerException();
         } else {
-            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
+            return Graph.DEFAULT_EDGE_WEIGHT;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEdgeWeight(E e, double weight)
+    {
+        throw new UnsupportedOperationException("Graph is unweighted");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return super.getType().asUnweighted();
+    }
+
 }
 
 // End AsUnweightedGraph.java

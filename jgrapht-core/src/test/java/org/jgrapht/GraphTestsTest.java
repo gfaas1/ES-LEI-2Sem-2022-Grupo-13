@@ -178,7 +178,7 @@ public class GraphTestsTest
     @Test
     public void testIsConnectedUndirected()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.isConnected(g));
         g.addVertex(1);
         Assert.assertTrue(GraphTests.isConnected(g));
@@ -195,7 +195,7 @@ public class GraphTestsTest
     @Test
     public void testIsConnectedDirected()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.isWeaklyConnected(g));
         Assert.assertFalse(GraphTests.isStronglyConnected(g));
         g.addVertex(1);
@@ -221,7 +221,7 @@ public class GraphTestsTest
     @Test
     public void testIsTree()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.isTree(g));
         g.addVertex(1);
         Assert.assertTrue(GraphTests.isTree(g));
@@ -237,7 +237,7 @@ public class GraphTestsTest
         Assert.assertFalse(GraphTests.isTree(g));
 
         // disconnected but with correct number of edges
-        UndirectedGraph<Integer, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = new Pseudograph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.isTree(g1));
         g1.addVertex(1);
         g1.addVertex(2);
@@ -248,7 +248,7 @@ public class GraphTestsTest
     @Test
     public void testBipartite1()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         Assert.assertTrue(GraphTests.isBipartite(g));
         g.addVertex(1);
         Assert.assertTrue(GraphTests.isBipartite(g));
@@ -267,7 +267,7 @@ public class GraphTestsTest
     @Test
     public void testBipartite2()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         for (int i = 0; i < 100; i++) {
             g.addVertex(i);
@@ -282,7 +282,7 @@ public class GraphTestsTest
     @Test
     public void testBipartite3()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         for (int i = 0; i < 101; i++) {
             g.addVertex(i);
@@ -297,7 +297,7 @@ public class GraphTestsTest
     @Test
     public void testBipartite4()
     {
-        DirectedGraph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
 
         for (int i = 0; i < 101; i++) {
             g.addVertex(i);

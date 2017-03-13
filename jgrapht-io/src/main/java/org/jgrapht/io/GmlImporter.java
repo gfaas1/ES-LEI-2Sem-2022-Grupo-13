@@ -269,8 +269,8 @@ public class GmlImporter<V, E>
                     E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
                     graph.addEdge(from, to, e);
                     if (pe.weight != null) {
-                        if (graph instanceof WeightedGraph<?, ?>) {
-                            ((WeightedGraph<V, E>) graph).setEdgeWeight(e, pe.weight);
+                        if (graph.getType().isWeighted()) {
+                            graph.setEdgeWeight(e, pe.weight);
                         }
                     }
                 }

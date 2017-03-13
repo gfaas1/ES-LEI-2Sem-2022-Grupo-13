@@ -19,7 +19,6 @@ package org.jgrapht.alg.scoring;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
 import org.jgrapht.graph.AsUndirectedGraph;
@@ -163,7 +162,7 @@ public class ClosenessCentralityTest
         assertEquals(Double.POSITIVE_INFINITY, pr.getVertexScore("1"), 1e-9);
     }
 
-    private DirectedGraph<String, DefaultEdge> createInstance1()
+    private Graph<String, DefaultEdge> createInstance1()
     {
         DirectedPseudograph<String, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
         g.addVertex("1");

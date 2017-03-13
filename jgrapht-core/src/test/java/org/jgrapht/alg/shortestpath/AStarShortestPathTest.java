@@ -66,7 +66,7 @@ public class AStarShortestPathTest
         ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
         "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ." };
 
-    private WeightedGraph<Node, DefaultWeightedEdge> graph;
+    private Graph<Node, DefaultWeightedEdge> graph;
     private Node sourceNode;
     private Node targetNode;
 
@@ -181,7 +181,7 @@ public class AStarShortestPathTest
 
     public void testInconsistentHeuristic()
     {
-        WeightedGraph<Integer, DefaultWeightedEdge> g =
+        Graph<Integer, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         g.addVertex(0);
         g.addVertex(1);

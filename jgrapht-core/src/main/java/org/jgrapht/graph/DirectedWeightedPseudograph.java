@@ -30,9 +30,9 @@ import org.jgrapht.graph.builder.*;
  */
 public class DirectedWeightedPseudograph<V, E>
     extends DirectedPseudograph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedGraph<V, E>, WeightedGraph<V, E>
 {
-    private static final long serialVersionUID = 8762514879586423517L;
+    private static final long serialVersionUID = -4775269773843490859L;
 
     /**
      * Creates a new directed weighted pseudograph.
@@ -51,7 +51,7 @@ public class DirectedWeightedPseudograph<V, E>
      */
     public DirectedWeightedPseudograph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**
@@ -62,6 +62,38 @@ public class DirectedWeightedPseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedPseudograph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new DirectedWeightedPseudograph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DirectedWeightedPseudograph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
@@ -75,7 +107,9 @@ public class DirectedWeightedPseudograph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DirectedWeightedPseudograph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {

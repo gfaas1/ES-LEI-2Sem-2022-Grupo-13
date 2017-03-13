@@ -42,16 +42,14 @@ public class EdgeReversedGraph<V, E>
     extends GraphDelegator<V, E>
     implements DirectedGraph<V, E>
 {
-    /**
-     */
-    private static final long serialVersionUID = 9091361782455418631L;
+    private static final long serialVersionUID = -3806030402468293063L;
 
     /**
      * Creates a new EdgeReversedGraph.
      *
      * @param g the base (backing) graph on which the edge-reversed view will be based.
      */
-    public EdgeReversedGraph(DirectedGraph<V, E> g)
+    public EdgeReversedGraph(Graph<V, E> g)
     {
         super(g);
     }
@@ -161,7 +159,7 @@ public class EdgeReversedGraph<V, E>
     @Override
     public String toString()
     {
-        return toStringFromSets(vertexSet(), edgeSet(), true);
+        return toStringFromSets(vertexSet(), edgeSet(), getType().isDirected());
     }
 }
 

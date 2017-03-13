@@ -252,8 +252,7 @@ public class GmlExporterTest
     public void testUndirected()
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -270,7 +269,7 @@ public class GmlExporterTest
     public void testUnweightedUndirected()
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -288,7 +287,7 @@ public class GmlExporterTest
     public void testDirected()
         throws UnsupportedEncodingException, ExportException
     {
-        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);

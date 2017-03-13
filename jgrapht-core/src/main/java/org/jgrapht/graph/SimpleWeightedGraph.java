@@ -21,18 +21,16 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A simple weighted graph. A simple weighted graph is a simple graph for which edges are assigned
- * weights.
+ * A simple weighted graph.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class SimpleWeightedGraph<V, E>
     extends SimpleGraph<V, E>
-    implements WeightedGraph<V, E>
+    implements UndirectedGraph<V, E>, WeightedGraph<V, E>
 {
-    private static final long serialVersionUID = 3906088949100655922L;
+    private static final long serialVersionUID = -1568410577378365671L;
 
     /**
      * Creates a new simple weighted graph with the specified edge factory.
@@ -41,7 +39,7 @@ public class SimpleWeightedGraph<V, E>
      */
     public SimpleWeightedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**
@@ -62,6 +60,36 @@ public class SimpleWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleWeightedGraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new SimpleWeightedGraph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V, E> GraphBuilder<V, E, ? extends SimpleWeightedGraph<V, E>> createBuilder(
+        EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new SimpleWeightedGraph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
             Class<? extends E> edgeClass)
@@ -76,7 +104,9 @@ public class SimpleWeightedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V,
         E> UndirectedWeightedGraphBuilderBase<V, E, ? extends SimpleWeightedGraph<V, E>, ?> builder(
             EdgeFactory<V, E> ef)

@@ -32,11 +32,11 @@ public class SimpleDirectedGraphTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    DirectedGraph<String, DefaultEdge> gEmpty;
-    private DirectedGraph<String, DefaultEdge> g1;
-    private DirectedGraph<String, DefaultEdge> g2;
-    private DirectedGraph<String, DefaultEdge> g3;
-    private DirectedGraph<String, DefaultEdge> g4;
+    Graph<String, DefaultEdge> gEmpty;
+    private Graph<String, DefaultEdge> g1;
+    private Graph<String, DefaultEdge> g2;
+    private Graph<String, DefaultEdge> g3;
+    private Graph<String, DefaultEdge> g4;
     private DefaultEdge eLoop;
     private EdgeFactory<String, DefaultEdge> eFactory;
     private String v1 = "v1";
@@ -534,8 +534,8 @@ public class SimpleDirectedGraphTest
     {
         init();
 
-        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        DirectedGraph<String, DefaultEdge> r = new EdgeReversedGraph<>(g);
+        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> r = new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
         g.addVertex(v2);
@@ -561,7 +561,7 @@ public class SimpleDirectedGraphTest
     }
 
     private void verifyReversal(
-        DirectedGraph<String, DefaultEdge> g, DirectedGraph<String, DefaultEdge> r, DefaultEdge e)
+        Graph<String, DefaultEdge> g, Graph<String, DefaultEdge> r, DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));
         assertTrue(r.containsVertex(v2));

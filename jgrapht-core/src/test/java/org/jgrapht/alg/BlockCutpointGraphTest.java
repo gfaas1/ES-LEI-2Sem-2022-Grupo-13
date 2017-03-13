@@ -48,7 +48,7 @@ public class BlockCutpointGraphTest
 
     public <V> void testGetBlock(BlockCutpointGraph<V, DefaultEdge> blockCutpointGraph)
     {
-        for (UndirectedGraph<V, DefaultEdge> component : blockCutpointGraph.vertexSet()) {
+        for (Graph<V, DefaultEdge> component : blockCutpointGraph.vertexSet()) {
             if (!component.edgeSet().isEmpty()) {
                 for (V vertex : component.vertexSet()) {
                     if (!blockCutpointGraph.getCutpoints().contains(vertex)) {
@@ -71,7 +71,7 @@ public class BlockCutpointGraphTest
 
     public void testLinearGraph(int nbVertices)
     {
-        UndirectedGraph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         LinearGraphGenerator<Object, DefaultEdge> generator =
             new LinearGraphGenerator<>(nbVertices);
@@ -89,7 +89,7 @@ public class BlockCutpointGraphTest
 
     public void testNotBiconnected()
     {
-        UndirectedGraph<String, DefaultEdge> graph = new NotBiconnectedGraph();
+        Graph<String, DefaultEdge> graph = new NotBiconnectedGraph();
 
         BlockCutpointGraph<String, DefaultEdge> blockCutpointGraph =
             new BlockCutpointGraph<>(graph);

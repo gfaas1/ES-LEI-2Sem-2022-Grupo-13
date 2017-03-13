@@ -48,7 +48,7 @@ import org.jgrapht.util.*;
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    Map<V, Neighbors<V>> neighborMap = new HashMap<>();
+    private Map<V, Neighbors<V>> neighborMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**

@@ -17,6 +17,8 @@
  */
 package org.jgrapht.graph;
 
+import java.io.Serializable;
+
 import org.jgrapht.*;
 
 /**
@@ -28,8 +30,10 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 public class ClassBasedVertexFactory<V>
-    implements VertexFactory<V>
+    implements VertexFactory<V>, Serializable
 {
+    private static final long serialVersionUID = 2023739507430993272L;
+
     private final Class<? extends V> vertexClass;
 
     /**

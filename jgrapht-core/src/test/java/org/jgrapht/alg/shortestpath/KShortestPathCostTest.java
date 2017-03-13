@@ -147,8 +147,7 @@ public class KShortestPathCostTest
         verifyShortestPathsWeightsWithMaxSizeIncreases(picture1Graph);
     }
 
-    private <E extends DefaultEdge> void verifyShortestPathsInIncreasingOrderOfWeight(
-        Graph<String, E> graph)
+    private <E> void verifyShortestPathsInIncreasingOrderOfWeight(Graph<String, E> graph)
     {
         int maxSize = 20;
 
@@ -178,8 +177,7 @@ public class KShortestPathCostTest
         }
     }
 
-    private <E extends DefaultEdge> void verifyShortestPathsWeightsWithMaxSizeIncreases(
-        Graph<String, E> graph)
+    private <E> void verifyShortestPathsWeightsWithMaxSizeIncreases(Graph<String, E> graph)
     {
         int maxSizeLimit = 10;
 
