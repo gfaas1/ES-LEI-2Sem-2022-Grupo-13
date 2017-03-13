@@ -24,7 +24,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
@@ -110,16 +109,6 @@ public class BellmanFordShortestPath<V, E>
         distance.put(source, 0d);
 
         /*
-         * Create specifics for outgoing edge traversal.
-         */
-        Specifics specifics;
-        if (graph instanceof DirectedGraph<?, ?>) {
-            specifics = new DirectedSpecifics((DirectedGraph<V, E>) graph);
-        } else {
-            specifics = new UndirectedSpecifics(graph);
-        }
-
-        /*
          * Maintain two sets of vertices whose edges need relaxation. The first set is the current
          * set of vertices while the second if the set for the subsequent iteration.
          */
@@ -137,7 +126,7 @@ public class BellmanFordShortestPath<V, E>
             Set<V> nextVertexSet = updated[(curUpdated + 1) % 2];
 
             for (V v : curVertexSet) {
-                for (E e : specifics.edgesOf(v)) {
+                for (E e : graph.outgoingEdgesOf(v)) {
                     V u = Graphs.getOppositeVertex(graph, e, v);
                     double newDist = distance.get(v) + graph.getEdgeWeight(e);
                     if (comparator.compare(newDist, distance.get(u)) < 0) {
@@ -162,7 +151,7 @@ public class BellmanFordShortestPath<V, E>
          * Check for negative cycles
          */
         for (V v : updated[curUpdated]) {
-            for (E e : specifics.edgesOf(v)) {
+            for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
                 double newDist = distance.get(v) + graph.getEdgeWeight(e);
                 if (comparator.compare(newDist, distance.get(u)) < 0) {
@@ -197,47 +186,4 @@ public class BellmanFordShortestPath<V, E>
     {
         return new BellmanFordShortestPath<>(graph).getPath(source, sink);
     }
-
-    // specifics
-    private abstract class Specifics
-    {
-        public abstract Set<? extends E> edgesOf(V vertex);
-    }
-
-    private class DirectedSpecifics
-        extends Specifics
-    {
-
-        private DirectedGraph<V, E> graph;
-
-        public DirectedSpecifics(DirectedGraph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<? extends E> edgesOf(V vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-    }
-
-    private class UndirectedSpecifics
-        extends Specifics
-    {
-
-        private Graph<V, E> graph;
-
-        public UndirectedSpecifics(Graph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<E> edgesOf(V vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-    }
-
 }

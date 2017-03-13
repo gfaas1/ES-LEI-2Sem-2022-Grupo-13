@@ -129,7 +129,7 @@ public class DOTExporterTest
     public void testDifferentGraphID()
         throws UnsupportedEncodingException, ExportException
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         final String customID = "MyGraph";
 

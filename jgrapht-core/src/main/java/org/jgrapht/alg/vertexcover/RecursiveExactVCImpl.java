@@ -62,7 +62,7 @@ public class RecursiveExactVCImpl<V, E>
 {
 
     /** Input graph **/
-    private UndirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
     /** Number of vertices in the graph **/
     private int N;
     /**
@@ -94,7 +94,7 @@ public class RecursiveExactVCImpl<V, E>
     private Map<V, Double> vertexWeightMap = null;
 
     @Override
-    public VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph)
     {
         Map<V, Double> vertexWeightMap = graph
             .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
@@ -103,12 +103,10 @@ public class RecursiveExactVCImpl<V, E>
     }
 
     @Override
-    public VertexCover<V> getVertexCover(
-        UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
-
         // Initialize
-        this.graph = graph;
+        this.graph = GraphTests.requireUndirected(graph);
         memo = new HashMap<>();
         vertices = new ArrayList<>(graph.vertexSet());
         neighborIndex = new NeighborIndex<>(graph);

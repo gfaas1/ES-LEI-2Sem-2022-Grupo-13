@@ -37,7 +37,7 @@ public abstract class MinimumSourceSinkCutTest
         Graph<Integer, DefaultWeightedEdge> network);
 
     private void runTestDirected(
-        DirectedGraph<Integer, DefaultWeightedEdge> network, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
         double expectedCutWeight)
     {
         network.addVertex(source);
@@ -55,7 +55,7 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     void verifyDirected(
-        DirectedGraph<Integer, DefaultWeightedEdge> network, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
         double expectedCutWeight, double cutWeight, Set<Integer> sourcePartition,
         Set<Integer> sinkPartition, Set<DefaultWeightedEdge> cutEdges)
     {
@@ -81,7 +81,7 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     private void runTestUndirected(
-        UndirectedGraph<Integer, DefaultWeightedEdge> network, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
         double expectedCutWeight)
     {
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> mc = createSolver(network);
@@ -96,7 +96,7 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     void verifyUndirected(
-        UndirectedGraph<Integer, DefaultWeightedEdge> network, int source, int sink,
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
         double expectedCutWeight, double cutWeight, Set<Integer> sourcePartition,
         Set<Integer> sinkPartition, Set<DefaultWeightedEdge> cutEdges)
     {
@@ -124,7 +124,7 @@ public abstract class MinimumSourceSinkCutTest
 
     public void testProblematicCase()
     {
-        UndirectedGraph<Integer, DefaultWeightedEdge> network =
+        Graph<Integer, DefaultWeightedEdge> network =
             new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(network, 1, 2, 0);
         Graphs.addEdgeWithVertices(network, 1, 4, 1);

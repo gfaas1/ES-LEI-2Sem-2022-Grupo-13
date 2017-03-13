@@ -27,13 +27,12 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- * 
  */
 public class DirectedWeightedMultigraph<V, E>
     extends DirectedMultigraph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedGraph<V, E>, WeightedGraph<V, E>
 {
-    private static final long serialVersionUID = 4049071636005206066L;
+    private static final long serialVersionUID = 1984381120642160572L;
 
     /**
      * Creates a new directed weighted multigraph.
@@ -52,7 +51,7 @@ public class DirectedWeightedMultigraph<V, E>
      */
     public DirectedWeightedMultigraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**
@@ -63,6 +62,38 @@ public class DirectedWeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new DirectedWeightedMultigraph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new DirectedWeightedMultigraph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DirectedWeightedMultigraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
@@ -76,7 +107,9 @@ public class DirectedWeightedMultigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DirectedWeightedMultigraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {

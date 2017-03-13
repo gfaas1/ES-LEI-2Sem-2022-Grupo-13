@@ -25,22 +25,12 @@ package org.jgrapht;
  *
  * @author Barak Naveh
  * @since Jul 23, 2003
+ * @deprecated In favor of {@link Graph}.
  */
+@Deprecated
 public interface WeightedGraph<V, E>
     extends Graph<V, E>
 {
-    /**
-     * The default weight for an edge.
-     */
-    double DEFAULT_EDGE_WEIGHT = 1.0;
-
-    /**
-     * Assigns a weight to an edge.
-     *
-     * @param e edge on which to set weight
-     * @param weight new weight for edge
-     */
-    void setEdgeWeight(E e, double weight);
 }
 
 // End WeightedGraph.java

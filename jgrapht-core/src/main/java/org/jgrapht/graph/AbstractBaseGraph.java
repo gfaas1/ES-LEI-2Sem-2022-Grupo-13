@@ -45,23 +45,26 @@ public abstract class AbstractBaseGraph<V, E>
     extends AbstractGraph<V, E>
     implements Graph<V, E>, Cloneable, Serializable
 {
-    private static final long serialVersionUID = -1263088497616142427L;
+    private static final long serialVersionUID = 4811000483921413364L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
 
-    private boolean allowingLoops;
     private EdgeFactory<V, E> edgeFactory;
-    private Map<E, IntrusiveEdge> edgeMap;
-    private transient Set<E> unmodifiableEdgeSet = null;
     private transient Set<V> unmodifiableVertexSet = null;
+
     private Specifics<V, E> specifics;
+    private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
+
+    private boolean directed;
+    private boolean weighted;
     private boolean allowingMultipleEdges;
+    private boolean allowingLoops;
 
     /**
      * Construct a new graph. The graph can either be directed or undirected, depending on the
-     * specified edge factory.
+     * specified edge factory. The graph is by default unweighted.
      *
      * @param ef the edge factory of the new graph.
      * @param allowMultipleEdges whether to allow multiple edges or not.
@@ -69,17 +72,60 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
+     * @deprecated Use {@link #AbstractBaseGraph(EdgeFactory, boolean, boolean, boolean, boolean)}
+     *             instead.
      */
+    @Deprecated
     protected AbstractBaseGraph(
         EdgeFactory<V, E> ef, boolean allowMultipleEdges, boolean allowLoops)
     {
         Objects.requireNonNull(ef);
 
-        edgeMap = new LinkedHashMap<>();
-        edgeFactory = ef;
-        allowingLoops = allowLoops;
-        allowingMultipleEdges = allowMultipleEdges;
-        specifics = Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.edgeFactory = ef;
+        this.allowingLoops = allowLoops;
+        this.allowingMultipleEdges = allowMultipleEdges;
+        this.specifics =
+            Objects.requireNonNull(createSpecifics(), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        if (this instanceof DirectedGraph<?, ?>) {
+            this.directed = true;
+        } else if (this instanceof UndirectedGraph<?, ?>) {
+            this.directed = false;
+        } else {
+            throw new IllegalArgumentException("Graph must be either directed or undirected");
+        }
+        this.weighted = false;
+        this.intrusiveEdgesSpecifics = Objects
+            .requireNonNull(createIntrusiveEdgesSpecifics(false), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+    }
+
+    /**
+     * Construct a new graph. The graph can either be directed or undirected, depending on the
+     * specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     * @param directed if true the graph will be directed, otherwise undirected
+     * @param allowMultipleEdges whether to allow multiple edges or not.
+     * @param allowLoops whether to allow edges that are self-loops or not.
+     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
+     *
+     * @throws NullPointerException if the specified edge factory is <code>
+     * null</code>.
+     */
+    protected AbstractBaseGraph(
+        EdgeFactory<V, E> ef, boolean directed, boolean allowMultipleEdges, boolean allowLoops,
+        boolean weighted)
+    {
+        Objects.requireNonNull(ef);
+
+        this.edgeFactory = ef;
+        this.allowingLoops = allowLoops;
+        this.allowingMultipleEdges = allowMultipleEdges;
+        this.directed = directed;
+        this.specifics =
+            Objects.requireNonNull(createSpecifics(directed), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.weighted = weighted;
+        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
+            createIntrusiveEdgesSpecifics(weighted), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -111,6 +157,26 @@ public abstract class AbstractBaseGraph<V, E>
     public boolean isAllowingMultipleEdges()
     {
         return allowingMultipleEdges;
+    }
+
+    /**
+     * Returns <code>true</code> if and only if the graph supports edge weights.
+     *
+     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
+     */
+    public boolean isWeighted()
+    {
+        return weighted;
+    }
+
+    /**
+     * Returns <code>true</code> if the graph is directed, false if undirected.
+     *
+     * @return <code>true</code> if the graph is directed, false if undirected.
+     */
+    public boolean isDirected()
+    {
+        return directed;
     }
 
     /**
@@ -151,14 +217,10 @@ public abstract class AbstractBaseGraph<V, E>
         E e = edgeFactory.createEdge(sourceVertex, targetVertex);
 
         if (containsEdge(e)) { // this restriction should stay!
-
             return null;
         } else {
-            IntrusiveEdge intrusiveEdge = createIntrusiveEdge(e, sourceVertex, targetVertex);
-
-            edgeMap.put(e, intrusiveEdge);
+            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
             specifics.addEdgeToTouchingVertices(e);
-
             return e;
         }
     }
@@ -186,25 +248,10 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        IntrusiveEdge intrusiveEdge = createIntrusiveEdge(e, sourceVertex, targetVertex);
-
-        edgeMap.put(e, intrusiveEdge);
+        intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
         specifics.addEdgeToTouchingVertices(e);
 
         return true;
-    }
-
-    private IntrusiveEdge createIntrusiveEdge(E e, V sourceVertex, V targetVertex)
-    {
-        IntrusiveEdge intrusiveEdge;
-        if (e instanceof IntrusiveEdge) {
-            intrusiveEdge = (IntrusiveEdge) e;
-        } else {
-            intrusiveEdge = new IntrusiveEdge();
-        }
-        intrusiveEdge.source = sourceVertex;
-        intrusiveEdge.target = targetVertex;
-        return intrusiveEdge;
     }
 
     /**
@@ -230,7 +277,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeSource(E e)
     {
-        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).source, null);
+        return intrusiveEdgesSpecifics.getEdgeSource(e);
     }
 
     /**
@@ -239,16 +286,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public V getEdgeTarget(E e)
     {
-        return TypeUtil.uncheckedCast(getIntrusiveEdge(e).target, null);
-    }
-
-    private IntrusiveEdge getIntrusiveEdge(E e)
-    {
-        if (e instanceof IntrusiveEdge) {
-            return (IntrusiveEdge) e;
-        }
-
-        return edgeMap.get(e);
+        return intrusiveEdgesSpecifics.getEdgeTarget(e);
     }
 
     /**
@@ -266,16 +304,15 @@ public abstract class AbstractBaseGraph<V, E>
         try {
             AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
 
-            newGraph.edgeMap = new LinkedHashMap<>();
-
             newGraph.edgeFactory = this.edgeFactory;
-            newGraph.unmodifiableEdgeSet = null;
             newGraph.unmodifiableVertexSet = null;
 
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.createSpecifics();
+            newGraph.specifics = newGraph.createSpecifics(this.directed);
+            newGraph.intrusiveEdgesSpecifics =
+                newGraph.createIntrusiveEdgesSpecifics(this.weighted);
 
             Graphs.addGraph(newGraph, this);
 
@@ -292,7 +329,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public boolean containsEdge(E e)
     {
-        return edgeMap.containsKey(e);
+        return intrusiveEdgesSpecifics.containsEdge(e);
     }
 
     /**
@@ -305,12 +342,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the degree of the specified vertex.
-     *
-     * @param vertex vertex whose degree is to be calculated.
-     * @return the degree of the specified vertex.
-     * @see UndirectedGraph#degreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int degreeOf(V vertex)
     {
         return specifics.degreeOf(vertex);
@@ -322,11 +356,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public Set<E> edgeSet()
     {
-        if (unmodifiableEdgeSet == null) {
-            unmodifiableEdgeSet = Collections.unmodifiableSet(edgeMap.keySet());
-        }
-
-        return unmodifiableEdgeSet;
+        return intrusiveEdgesSpecifics.getEdgeSet();
     }
 
     /**
@@ -340,13 +370,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the "in degree" of the specified vertex.
-     *
-     * @param vertex vertex whose in degree is to be calculated.
-     * @return the in degree of the specified vertex.
-     * 
-     * @see DirectedGraph#inDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int inDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -354,12 +380,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns a set of all edges incoming into the specified vertex.
-     *
-     * @param vertex the vertex for which the list of incoming edges to be returned
-     * @return a set of all edges incoming into the specified vertex
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -367,12 +390,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns the "out degree" of the specified vertex.
-     *
-     * @param vertex vertex whose out degree is to be calculated
-     * @return the out degree of the specified vertex
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int outDegreeOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -380,12 +400,9 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns a set of all edges outgoing from the specified vertex.
-     *
-     * @param vertex the vertex for which the list of outgoing edges to be returned
-     * @return a set of all edges outgoing from the specified vertex
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
         assertVertexExist(vertex);
@@ -402,7 +419,7 @@ public abstract class AbstractBaseGraph<V, E>
 
         if (e != null) {
             specifics.removeEdgeFromTouchingVertices(e);
-            edgeMap.remove(e);
+            intrusiveEdgesSpecifics.remove(e);
         }
 
         return e;
@@ -416,8 +433,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         if (containsEdge(e)) {
             specifics.removeEdgeFromTouchingVertices(e);
-            edgeMap.remove(e);
-
+            intrusiveEdgesSpecifics.remove(e);
             return true;
         } else {
             return false;
@@ -464,26 +480,43 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public double getEdgeWeight(E e)
     {
-        if (e instanceof DefaultWeightedEdge) {
-            return ((DefaultWeightedEdge) e).getWeight();
-        } else if (e == null) {
+        if (e == null) {
             throw new NullPointerException();
-        } else {
-            return WeightedGraph.DEFAULT_EDGE_WEIGHT;
         }
+        return intrusiveEdgesSpecifics.getEdgeWeight(e);
     }
 
     /**
-     * Assigns a weight to an edge.
-     *
-     * @param e edge on which to set weight
-     * @param weight new weight for edge
-     * @see WeightedGraph#setEdgeWeight(Object, double)
+     * Set an edge weight.
+     * 
+     * @param e the edge
+     * @param weight the weight
+     * @throws UnsupportedOperationException if the graph is not weighted
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
-        assert (e instanceof DefaultWeightedEdge) : e.getClass();
-        ((DefaultWeightedEdge) e).weight = weight;
+        if (e == null) {
+            throw new NullPointerException();
+        }
+        intrusiveEdgesSpecifics.setEdgeWeight(e, weight);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        if (directed) {
+            return new DefaultGraphType.Builder()
+                .directed().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
+                .allowSelfLoops(allowingLoops).build();
+        } else {
+            return new DefaultGraphType.Builder()
+                .undirected().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
+                .allowSelfLoops(allowingLoops).build();
+        }
     }
 
     /**
@@ -491,7 +524,9 @@ public abstract class AbstractBaseGraph<V, E>
      * the specifics and thus the space-time tradeoffs of the graph implementation.
      * 
      * @return the specifics used by this graph
+     * @deprecated Use {@link #createSpecifics(boolean)} instead.
      */
+    @Deprecated
     protected Specifics<V, E> createSpecifics()
     {
         if (this instanceof DirectedGraph<?, ?>) {
@@ -501,6 +536,46 @@ public abstract class AbstractBaseGraph<V, E>
         } else {
             throw new IllegalArgumentException(
                 "must be instance of either DirectedGraph or UndirectedGraph");
+        }
+    }
+
+    /**
+     * Create the specifics for this graph. Subclasses can override this method in order to adjust
+     * the specifics and thus the space-time tradeoffs of the graph implementation.
+     * 
+     * @param directed if true the specifics should adjust the behavior to a directed graph
+     *        otherwise undirected
+     * @return the specifics used by this graph
+     */
+    protected Specifics<V, E> createSpecifics(boolean directed)
+    {
+        /*
+         * Try-catch only for backward-compatibility, remove after next release.
+         */
+        try {
+            return createSpecifics();
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        if (directed) {
+            return new FastLookupDirectedSpecifics<>(this);
+        } else {
+            return new FastLookupUndirectedSpecifics<>(this);
+        }
+    }
+
+    /**
+     * Create the specifics for the edges set of the graph.
+     * 
+     * @param weighted if true the specifics should support weighted edges
+     * @return the specifics used for the edge set of this graph
+     */
+    protected IntrusiveEdgesSpecifics<V, E> createIntrusiveEdgesSpecifics(boolean weighted)
+    {
+        if (weighted) {
+            return new WeightedIntrusiveEdgesSpecifics<V, E>();
+        } else {
+            return new UniformIntrusiveEdgesSpecifics<V, E>();
         }
     }
 

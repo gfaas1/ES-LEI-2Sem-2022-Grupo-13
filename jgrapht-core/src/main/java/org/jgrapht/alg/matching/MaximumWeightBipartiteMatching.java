@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
 
 /**
  * This class finds a maximum weight matching of a simple undirected weighted bipartite graph. The
@@ -38,7 +37,7 @@ import org.jgrapht.util.*;
 public class MaximumWeightBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private final UndirectedGraph<V, E> graph;
+    private final Graph<V, E> graph;
     private Set<V> partition1;
     private Set<V> partition2;
 
@@ -59,13 +58,7 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
-        if (!(graph instanceof UndirectedGraph)) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
-        this.graph = TypeUtil.uncheckedCast(graph, null);
+        this.graph = GraphTests.requireUndirected(graph);
         if (partition1 == null) {
             throw new IllegalArgumentException("Partition 1 cannot be null");
         }

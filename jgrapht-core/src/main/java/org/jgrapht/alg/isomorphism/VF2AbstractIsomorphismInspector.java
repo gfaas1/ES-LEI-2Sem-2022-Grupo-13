@@ -20,7 +20,6 @@ package org.jgrapht.alg.isomorphism;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.*;
 
 /**
  * Base implementation of the VF2 algorithm using its feature of detecting
@@ -59,22 +58,24 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         Graph<V, E> graph1, Graph<V, E> graph2, Comparator<V> vertexComparator,
         Comparator<E> edgeComparator, boolean cacheEdges)
     {
-        if ((graph1 instanceof Multigraph) || (graph2 instanceof Multigraph)
-            || (graph1 instanceof Pseudograph) || (graph2 instanceof Pseudograph)
-            || (graph1 instanceof DirectedMultigraph) || (graph2 instanceof DirectedMultigraph)
-            || (graph1 instanceof DirectedPseudograph) || (graph2 instanceof DirectedPseudograph))
-        {
+        GraphType type1 = graph1.getType();
+        GraphType type2 = graph2.getType();
+        if (type1.isPseudograph() || type1.isMultigraph() || type2.isMultigraph() || type2.isPseudograph()) { 
             throw new UnsupportedOperationException(
                 "graphs with multiple " + "edges are not supported");
         }
 
-        if (((graph1 instanceof DirectedGraph) && (graph2 instanceof UndirectedGraph))
-            || ((graph1 instanceof UndirectedGraph) && (graph2 instanceof DirectedGraph)))
-        {
+        if (type1.isMixed() || type2.isMixed()) { 
+            throw new UnsupportedOperationException(
+                "mixed graphs not supported");
+        }
+        
+        if (type1.isUndirected() && type2.isDirected() || 
+            type1.isDirected() && type2.isUndirected()) { 
             throw new IllegalArgumentException(
                 "can not match directed with " + "undirected graphs");
         }
-
+            
         this.graph1 = graph1;
         this.graph2 = graph2;
         this.vertexComparator = vertexComparator;

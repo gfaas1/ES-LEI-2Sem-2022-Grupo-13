@@ -92,10 +92,10 @@ public class ALTAdmissibleHeuristic<V, E>
             throw new IllegalArgumentException("At least one landmark must be provided");
         }
         this.fromLandmark = new HashMap<>();
-        if (graph instanceof DirectedGraph) {
+        if (graph.getType().isDirected()) {
             this.directed = true;
             this.toLandmark = new HashMap<>();
-        } else if (graph instanceof UndirectedGraph) {
+        } else if (graph.getType().isUndirected()) {
             this.directed = false;
             this.toLandmark = this.fromLandmark;
         } else {
@@ -189,7 +189,7 @@ public class ALTAdmissibleHeuristic<V, E>
 
         // compute distances to landmark (using reverse graph)
         if (directed) {
-            DirectedGraph<V, E> reverseGraph = new EdgeReversedGraph<>((DirectedGraph<V, E>) graph);
+            Graph<V, E> reverseGraph = new EdgeReversedGraph<>(graph);
             SingleSourcePaths<V, E> toLandmarkPaths =
                 new DijkstraShortestPath<>(reverseGraph).getPaths(landmark);
             Map<V, Double> toLandMarkDistances = new HashMap<>();

@@ -33,8 +33,8 @@ public class ListenableGraphTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    DefaultEdge lastAddedEdge;
-    DefaultEdge lastRemovedEdge;
+    Object lastAddedEdge;
+    Object lastRemovedEdge;
     Object lastAddedVertex;
     Object lastRemovedVertex;
 
@@ -57,8 +57,9 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g = new ListenableUndirectedGraph<>(DefaultEdge.class);
-        GraphListener<Object, DefaultEdge> listener = new MyGraphListner<>();
+        ListenableGraph<Object, DefaultEdge> g =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
+        GraphListener<Object, DefaultEdge> listener = new MyGraphListener<>();
         g.addGraphListener(listener);
 
         String v1 = "v1";
@@ -115,8 +116,9 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g = new ListenableUndirectedGraph<>(DefaultEdge.class);
-        VertexSetListener<Object> listener = new MyGraphListner<>();
+        ListenableGraph<Object, DefaultEdge> g =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
+        VertexSetListener<Object> listener = new MyGraphListener<>();
         g.addVertexSetListener(listener);
 
         String v1 = "v1";
@@ -173,9 +175,10 @@ public class ListenableGraphTest
     {
         init();
 
-        ListenableDirectedWeightedGraph<Object, DefaultWeightedEdge> g =
-            new ListenableDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-        GraphListener<Object, DefaultWeightedEdge> listener = new MyGraphListner<>();
+        ListenableGraph<Object, DefaultWeightedEdge> g = new DefaultListenableGraph<>(
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class));
+
+        GraphListener<Object, DefaultWeightedEdge> listener = new MyGraphListener<>();
         g.addGraphListener(listener);
 
         String v1 = "v1";
@@ -212,7 +215,7 @@ public class ListenableGraphTest
      * @author Barak Naveh
      * @since Aug 3, 2003
      */
-    private class MyGraphListner<E extends DefaultEdge>
+    private class MyGraphListener<E>
         implements GraphListener<Object, E>
     {
         /**

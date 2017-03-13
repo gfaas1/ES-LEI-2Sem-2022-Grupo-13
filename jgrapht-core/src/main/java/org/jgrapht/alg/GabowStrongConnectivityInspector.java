@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 
 /**
  * Computes the strongly connected components of a directed graph. The implemented algorithm follows
@@ -60,7 +60,7 @@ public class GabowStrongConnectivityInspector<V, E>
      * @param graph the graph to inspect
      * @throws NullPointerException in case the graph is null
      */
-    public GabowStrongConnectivityInspector(DirectedGraph<V, E> graph)
+    public GabowStrongConnectivityInspector(Graph<V, E> graph)
     {
         super(graph);
     }
@@ -109,7 +109,7 @@ public class GabowStrongConnectivityInspector<V, E>
     /*
      * The subroutine of DFS.
      */
-    private void dfsVisit(DirectedGraph<V, E> visitedGraph, VertexNumber<V> v)
+    private void dfsVisit(Graph<V, E> visitedGraph, VertexNumber<V> v)
     {
         VertexNumber<V> w;
         stack.add(v);

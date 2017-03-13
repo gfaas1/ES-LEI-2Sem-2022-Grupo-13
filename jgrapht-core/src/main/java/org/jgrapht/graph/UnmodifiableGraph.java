@@ -39,7 +39,9 @@ import org.jgrapht.*;
  *
  * @author Barak Naveh
  * @since Jul 24, 2003
+ * @deprecated In favor of {@link AsUnmodifiableGraph}.
  */
+@Deprecated
 public class UnmodifiableGraph<V, E>
     extends GraphDelegator<V, E>
     implements Serializable

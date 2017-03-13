@@ -39,7 +39,7 @@ public class JohnsonSimpleCycles<V, E>
     implements DirectedSimpleCycles<V, E>
 {
     // The graph.
-    private DirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     // The main state of the algorithm.
     private List<List<V>> cycles = null;
@@ -72,19 +72,16 @@ public class JohnsonSimpleCycles<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public JohnsonSimpleCycles(DirectedGraph<V, E> graph)
+    public JohnsonSimpleCycles(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -93,18 +90,16 @@ public class JohnsonSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void setGraph(DirectedGraph<V, E> graph)
+    public void setGraph(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<List<V>> findSimpleCycles()
     {
         if (graph == null) {
@@ -118,8 +113,7 @@ public class JohnsonSimpleCycles<V, E>
             Object[] minSCCGResult = findMinSCSG(startIndex);
             if (minSCCGResult[0] != null) {
                 startIndex = (Integer) minSCCGResult[1];
-                @SuppressWarnings("unchecked") DirectedGraph<V, E> scg =
-                    (DirectedGraph<V, E>) minSCCGResult[0];
+                Graph<V, E> scg = (Graph<V, E>) minSCCGResult[0];
                 V startV = toV(startIndex);
                 for (E e : scg.outgoingEdgesOf(startV)) {
                     V v = graph.getEdgeTarget(e);
@@ -138,6 +132,7 @@ public class JohnsonSimpleCycles<V, E>
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private Object[] findMinSCSG(int startIndex)
     {
         // Per Johnson : "adjacency structure of strong
@@ -170,7 +165,7 @@ public class JohnsonSimpleCycles<V, E>
         }
 
         // build a graph for the SCC found
-        @SuppressWarnings("unchecked") DirectedGraph<V, E> resultGraph = new DefaultDirectedGraph<>(
+        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(
             new ClassBasedEdgeFactory<>((Class<? extends E>) DefaultEdge.class));
         for (V v : minSCC) {
             resultGraph.addVertex(v);
@@ -261,7 +256,7 @@ public class JohnsonSimpleCycles<V, E>
         }
     }
 
-    private boolean findCyclesInSCG(int startIndex, int vertexIndex, DirectedGraph<V, E> scg)
+    private boolean findCyclesInSCG(int startIndex, int vertexIndex, Graph<V, E> scg)
     {
         // Find cycles in a strongly connected graph
         // per Johnson.

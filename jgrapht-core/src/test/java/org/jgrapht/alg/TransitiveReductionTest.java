@@ -251,7 +251,7 @@ public class TransitiveReductionTest
     @Test
     public void testReduceCanonicalGraph()
     {
-        DirectedGraph<Integer, DefaultEdge> graph = fromMatrixToDirectedGraph(matrix);
+        Graph<Integer, DefaultEdge> graph = fromMatrixToDirectedGraph(matrix);
 
         // a few spot tests to verify the graph looks like it should
         assertFalse(graph.containsEdge(0, 0));
@@ -279,7 +279,7 @@ public class TransitiveReductionTest
         assertArrayEquals(expected_transitively_reduced_matrix, actual_transitively_reduced_matrix);
     }
 
-    static private DirectedGraph<Integer, DefaultEdge> fromMatrixToDirectedGraph(
+    static private Graph<Integer, DefaultEdge> fromMatrixToDirectedGraph(
         final int[][] matrix)
     {
         final SimpleDirectedGraph<Integer, DefaultEdge> graph =
@@ -299,7 +299,7 @@ public class TransitiveReductionTest
     }
 
     private int[][] fromDirectedGraphToMatrix(
-        final DirectedGraph<Integer, DefaultEdge> directedGraph)
+        final Graph<Integer, DefaultEdge> directedGraph)
     {
         final List<Integer> vertices = new ArrayList<>(directedGraph.vertexSet());
         final int n = vertices.size();

@@ -226,22 +226,6 @@ class KShortestPathsIterator<V, E>
     }
 
     /**
-     * Returns an iterator to loop over outgoing edges <code>Edge</code> of the vertex.
-     *
-     * @param vertex
-     *
-     * @return .
-     */
-    private Iterator<E> edgesOfIterator(V vertex)
-    {
-        if (this.graph instanceof DirectedGraph<?, ?>) {
-            return ((DirectedGraph<V, E>) this.graph).outgoingEdgesOf(vertex).iterator();
-        } else {
-            return this.graph.edgesOf(vertex).iterator();
-        }
-    }
-
-    /**
      * Initializes the list of paths at the start vertex and adds an empty path.
      */
     private void encounterStartVertex()
@@ -343,8 +327,7 @@ class KShortestPathsIterator<V, E>
     {
         // try to add new paths for the target vertices of the outgoing edges
         // of the vertex in argument.
-        for (Iterator<E> iter = edgesOfIterator(vertex); iter.hasNext();) {
-            E edge = iter.next();
+        for (E edge : this.graph.outgoingEdgesOf(vertex)) {
             V vertexReachedByEdge = Graphs.getOppositeVertex(this.graph, edge, vertex);
 
             // check if the path does not loop over the start vertex.

@@ -55,7 +55,7 @@ import org.jgrapht.alg.interfaces.*;
 public final class Coreness<V, E>
     implements VertexScoringAlgorithm<V, Integer>
 {
-    private final UndirectedGraph<V, E> g;
+    private final Graph<V, E> g;
     private Map<V, Integer> scores;
     private int degeneracy;
 
@@ -64,9 +64,9 @@ public final class Coreness<V, E>
      * 
      * @param g the input graph
      */
-    public Coreness(UndirectedGraph<V, E> g)
+    public Coreness(Graph<V, E> g)
     {
-        this.g = Objects.requireNonNull(g, "Graph cannot be null");
+        this.g = GraphTests.requireUndirected(g);
     }
 
     /**

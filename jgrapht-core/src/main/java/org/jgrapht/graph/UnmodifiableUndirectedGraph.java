@@ -26,7 +26,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see UnmodifiableGraph
+ * @deprecated In favor of {@link AsUnmodifiableGraph}.
  */
+@Deprecated
 public class UnmodifiableUndirectedGraph<V, E>
     extends UnmodifiableGraph<V, E>
     implements UndirectedGraph<V, E>

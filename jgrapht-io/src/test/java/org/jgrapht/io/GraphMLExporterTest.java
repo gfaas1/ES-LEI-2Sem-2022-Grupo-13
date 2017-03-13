@@ -17,20 +17,21 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.custommonkey.xmlunit.*;
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.io.ComponentAttributeProvider;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.GraphExporter;
-import org.jgrapht.io.GraphMLExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
-import org.jgrapht.io.GraphMLExporter.*;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.io.GraphMLExporter.AttributeCategory;
+import org.jgrapht.io.GraphMLExporter.AttributeType;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * @author Trevor Harmon
@@ -71,8 +72,7 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -110,8 +110,7 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);
@@ -146,7 +145,7 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        DirectedGraph<String, DefaultEdge> g =
+        Graph<String, DefaultEdge> g =
             new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
@@ -184,8 +183,7 @@ public class GraphMLExporterTest
 				+ "</graphml>" + NL;
 		    // @formatter:on
 
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addEdge(V1, V2);

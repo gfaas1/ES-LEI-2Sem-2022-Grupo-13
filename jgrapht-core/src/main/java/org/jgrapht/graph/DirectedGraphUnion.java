@@ -27,7 +27,9 @@ import org.jgrapht.util.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class DirectedGraphUnion<V, E>
     extends GraphUnion<V, E, DirectedGraph<V, E>>
     implements DirectedGraph<V, E>

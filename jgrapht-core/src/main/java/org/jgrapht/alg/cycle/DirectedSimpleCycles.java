@@ -37,16 +37,15 @@ public interface DirectedSimpleCycles<V, E>
      *
      * @return The graph.
      */
-    DirectedGraph<V, E> getGraph();
+    Graph<V, E> getGraph();
 
     /**
      * Sets the graph on which the simple cycle search algorithm is executed by this object.
      *
      * @param graph the graph.
-     *
      * @throws IllegalArgumentException if the argument is <code>null</code>.
      */
-    void setGraph(DirectedGraph<V, E> graph);
+    void setGraph(Graph<V, E> graph);
 
     /**
      * Finds the simple cycles of the graph.<br>
@@ -55,7 +54,6 @@ public interface DirectedSimpleCycles<V, E>
      *
      * @return The list of all simple cycles. Possibly empty but never <code>
      * null</code>.
-     *
      * @throws IllegalArgumentException if the current graph is null.
      */
     List<List<V>> findSimpleCycles();

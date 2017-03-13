@@ -166,15 +166,8 @@ public final class PageRank<V, E>
     private void run(double dampingFactor, int maxIterations, double tolerance)
     {
         // initialization
-        Specifics specifics;
-        if (g instanceof DirectedGraph<?, ?>) {
-            specifics = new DirectedSpecifics((DirectedGraph<V, E>) g);
-        } else {
-            specifics = new UndirectedSpecifics(g);
-        }
-
         int totalVertices = g.vertexSet().size();
-        boolean weighted = (g instanceof WeightedGraph<?, ?>);
+        boolean weighted = g.getType().isWeighted();
         Map<V, Double> weights;
         if (weighted) {
             weights = new HashMap<>(totalVertices);
@@ -187,7 +180,7 @@ public final class PageRank<V, E>
             scores.put(v, initScore);
             if (weighted) {
                 double sum = 0;
-                for (E e : specifics.outgoingEdgesOf(v)) {
+                for (E e : g.outgoingEdgesOf(v)) {
                     sum += g.getEdgeWeight(e);
                 }
                 weights.put(v, sum);
@@ -202,7 +195,7 @@ public final class PageRank<V, E>
             // compute next iteration scores
             double r = 0d;
             for (V v : g.vertexSet()) {
-                if (specifics.outgoingEdgesOf(v).size() > 0) {
+                if (g.outgoingEdgesOf(v).size() > 0) {
                     r += (1d - dampingFactor) * scores.get(v);
                 } else {
                     r += scores.get(v);
@@ -215,16 +208,15 @@ public final class PageRank<V, E>
                 double contribution = 0d;
 
                 if (weighted) {
-                    for (E e : specifics.incomingEdgesOf(v)) {
+                    for (E e : g.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
                         contribution +=
                             dampingFactor * scores.get(w) * g.getEdgeWeight(e) / weights.get(w);
                     }
                 } else {
-                    for (E e : specifics.incomingEdgesOf(v)) {
+                    for (E e : g.incomingEdgesOf(v)) {
                         V w = Graphs.getOppositeVertex(g, e, v);
-                        contribution +=
-                            dampingFactor * scores.get(w) / specifics.outgoingEdgesOf(w).size();
+                        contribution += dampingFactor * scores.get(w) / g.outgoingEdgesOf(w).size();
                     }
                 }
 
@@ -243,59 +235,6 @@ public final class PageRank<V, E>
             maxIterations--;
         }
 
-    }
-
-    abstract class Specifics
-    {
-        public abstract Set<? extends E> outgoingEdgesOf(V vertex);
-
-        public abstract Set<? extends E> incomingEdgesOf(V vertex);
-    }
-
-    class DirectedSpecifics
-        extends Specifics
-    {
-        private DirectedGraph<V, E> graph;
-
-        public DirectedSpecifics(DirectedGraph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<? extends E> outgoingEdgesOf(V vertex)
-        {
-            return graph.outgoingEdgesOf(vertex);
-        }
-
-        @Override
-        public Set<? extends E> incomingEdgesOf(V vertex)
-        {
-            return graph.incomingEdgesOf(vertex);
-        }
-    }
-
-    class UndirectedSpecifics
-        extends Specifics
-    {
-        private Graph<V, E> graph;
-
-        public UndirectedSpecifics(Graph<V, E> g)
-        {
-            graph = g;
-        }
-
-        @Override
-        public Set<E> outgoingEdgesOf(V vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
-
-        @Override
-        public Set<E> incomingEdgesOf(V vertex)
-        {
-            return graph.edgesOf(vertex);
-        }
     }
 
 }

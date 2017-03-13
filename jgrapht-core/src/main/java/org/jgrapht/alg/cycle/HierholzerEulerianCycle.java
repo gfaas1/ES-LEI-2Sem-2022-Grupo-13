@@ -75,50 +75,26 @@ public class HierholzerEulerianCycle<V, E>
      */
     public boolean isEulerian(Graph<V, E> graph)
     {
-        Objects.requireNonNull(graph, "Graph cannot be null");
+        GraphTests.requireDirectedOrUndirected(graph);
+
         if (graph.vertexSet().isEmpty()) {
             // null-graph return false
             return false;
         } else if (graph.edgeSet().isEmpty()) {
             // empty-graph with vertices
             return true;
-        } else if (graph instanceof UndirectedGraph) {
-            UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(graph, null);
+        } else if (graph.getType().isUndirected()) {
             // check odd degrees
-            for (V v : ug.vertexSet()) {
-                if (ug.degreeOf(v) % 2 == 1) {
+            for (V v : graph.vertexSet()) {
+                if (graph.degreeOf(v) % 2 == 1) {
                     return false;
                 }
             }
             // check that at most one connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new ConnectivityInspector<V, E>(ug).connectedSets()) {
+            for (Set<V> component : new ConnectivityInspector<V, E>(graph).connectedSets()) {
                 for (V v : component) {
-                    if (ug.degreeOf(v) > 0) {
-                        if (foundComponentWithEdges) {
-                            return false;
-                        }
-                        foundComponentWithEdges = true;
-                        break;
-                    }
-                }
-            }
-            return true;
-        } else if (graph instanceof DirectedGraph) {
-            DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(graph, null);
-            // check same in and out degrees
-            for (V v : dg.vertexSet()) {
-                if (dg.inDegreeOf(v) != dg.outDegreeOf(v)) {
-                    return false;
-                }
-            }
-            // check that at most one strongly connected component contains edges
-            boolean foundComponentWithEdges = false;
-            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(dg)
-                .stronglyConnectedSets())
-            {
-                for (V v : component) {
-                    if (dg.inDegreeOf(v) > 0 || dg.outDegreeOf(v) > 0) {
+                    if (graph.degreeOf(v) > 0) {
                         if (foundComponentWithEdges) {
                             return false;
                         }
@@ -129,7 +105,28 @@ public class HierholzerEulerianCycle<V, E>
             }
             return true;
         } else {
-            throw new IllegalArgumentException("Graph must be directed or undirected");
+            // check same in and out degrees
+            for (V v : graph.vertexSet()) {
+                if (graph.inDegreeOf(v) != graph.outDegreeOf(v)) {
+                    return false;
+                }
+            }
+            // check that at most one strongly connected component contains edges
+            boolean foundComponentWithEdges = false;
+            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
+                .stronglyConnectedSets())
+            {
+                for (V v : component) {
+                    if (graph.inDegreeOf(v) > 0 || graph.outDegreeOf(v) > 0) {
+                        if (foundComponentWithEdges) {
+                            return false;
+                        }
+                        foundComponentWithEdges = true;
+                        break;
+                    }
+                }
+            }
+            return true;
         }
     }
 
@@ -206,25 +203,13 @@ public class HierholzerEulerianCycle<V, E>
     private void initialize(Graph<V, E> g)
     {
         this.g = g;
-        this.isDirected = (g instanceof DirectedGraph);
+        this.isDirected = g.getType().isDirected();
         this.verticesHead = null;
         this.eulerianHead = null;
 
         Map<V, VertexNode> vertices = new HashMap<>();
         for (V v : g.vertexSet()) {
-            boolean shouldAddVertex = false;
-            if (isDirected) {
-                DirectedGraph<V, E> dg = TypeUtil.uncheckedCast(g, null);
-                if (dg.outDegreeOf(v) > 0) {
-                    shouldAddVertex = true;
-                }
-            } else {
-                UndirectedGraph<V, E> ug = TypeUtil.uncheckedCast(g, null);
-                if (ug.degreeOf(v) > 0) {
-                    shouldAddVertex = true;
-                }
-            }
-            if (shouldAddVertex) {
+            if (g.outDegreeOf(v) > 0) {
                 VertexNode n = new VertexNode(null, v, verticesHead);
                 if (verticesHead != null) {
                     verticesHead.prev = n;

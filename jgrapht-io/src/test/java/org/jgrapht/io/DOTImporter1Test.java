@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultEdge;
@@ -558,7 +557,6 @@ public class DOTImporter1Test
 
     private static class GraphWithID
         extends AbstractBaseGraph<String, DefaultEdge>
-        implements UndirectedGraph<String, DefaultEdge>
     {
         private static final long serialVersionUID = 1L;
 
@@ -566,7 +564,7 @@ public class DOTImporter1Test
 
         protected GraphWithID()
         {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false);
+            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false, false, false);
         }
 
     }

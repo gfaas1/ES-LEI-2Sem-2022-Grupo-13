@@ -28,7 +28,7 @@ public class SubgraphIsomorphismTestUtils
 
     public static boolean allMatchingsCorrect(
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2,
-        DirectedGraph<Integer, DefaultEdge> g1, DirectedGraph<Integer, DefaultEdge> g2)
+        Graph<Integer, DefaultEdge> g1, Graph<Integer, DefaultEdge> g2)
     {
         showLog(">> ");
         boolean isCorrect = true;
@@ -45,8 +45,8 @@ public class SubgraphIsomorphismTestUtils
     }
 
     public static boolean isCorrectMatching(
-        GraphMapping<Integer, DefaultEdge> rel, DirectedGraph<Integer, DefaultEdge> g1,
-        DirectedGraph<Integer, DefaultEdge> g2)
+        GraphMapping<Integer, DefaultEdge> rel, Graph<Integer, DefaultEdge> g1,
+        Graph<Integer, DefaultEdge> g2)
     {
         Set<Integer> vertexSet = g2.vertexSet();
 
@@ -83,11 +83,11 @@ public class SubgraphIsomorphismTestUtils
         return true;
     }
 
-    public static DirectedGraph<Integer, DefaultEdge> randomSubgraph(
-        DirectedGraph<Integer, DefaultEdge> g1, int vertexCount, long seed)
+    public static Graph<Integer, DefaultEdge> randomSubgraph(
+        Graph<Integer, DefaultEdge> g1, int vertexCount, long seed)
     {
         Map<Integer, Integer> map = new HashMap<>();
-        DirectedGraph<Integer, DefaultEdge> g2 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g2 = new DefaultDirectedGraph<>(DefaultEdge.class);
         Set<Integer> vertexSet = g1.vertexSet();
         int n = vertexSet.size();
 
@@ -115,11 +115,11 @@ public class SubgraphIsomorphismTestUtils
         return g2;
     }
 
-    public static DirectedGraph<Integer, DefaultEdge> randomGraph(
+    public static Graph<Integer, DefaultEdge> randomGraph(
         int vertexCount, int edgeCount, long seed)
     {
         Integer[] vertexes = new Integer[vertexCount];
-        DirectedGraph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         for (int i = 0; i < vertexCount; i++)
             g.addVertex(vertexes[i] = i);

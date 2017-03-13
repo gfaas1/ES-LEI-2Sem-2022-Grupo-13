@@ -32,9 +32,9 @@ import org.jgrapht.graph.builder.*;
  */
 public class DefaultDirectedWeightedGraph<V, E>
     extends DefaultDirectedGraph<V, E>
-    implements WeightedGraph<V, E>
+    implements WeightedGraph<V, E>, DirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3761405317841171513L;
+    private static final long serialVersionUID = -4867672646995721544L;
 
     /**
      * Creates a new directed weighted graph.
@@ -53,7 +53,7 @@ public class DefaultDirectedWeightedGraph<V, E>
      */
     public DefaultDirectedWeightedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef);
+        super(ef, true);
     }
 
     /**
@@ -64,6 +64,38 @@ public class DefaultDirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(Class<? extends E> edgeClass)
     {
@@ -77,7 +109,9 @@ public class DefaultDirectedWeightedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V, E> DirectedWeightedGraphBuilderBase<V, E,
         ? extends DefaultDirectedWeightedGraph<V, E>, ?> builder(EdgeFactory<V, E> ef)
     {

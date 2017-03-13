@@ -27,7 +27,6 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.interfaces.TSPAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultEdge;
@@ -81,7 +80,7 @@ public class TwoApproxMetricTSP<V, E>
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph)
     {
-        if (!(graph instanceof UndirectedGraph<?, ?>)) {
+        if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException("Graph must be undirected");
         }
         if (!GraphTests.isComplete(graph)) {
@@ -103,7 +102,7 @@ public class TwoApproxMetricTSP<V, E>
         /*
          * Create MST
          */
-        UndirectedGraph<V, DefaultEdge> mst = new SimpleGraph<>(DefaultEdge.class);
+        Graph<V, DefaultEdge> mst = new SimpleGraph<>(DefaultEdge.class);
         for (V v : graph.vertexSet()) {
             mst.addVertex(v);
         }

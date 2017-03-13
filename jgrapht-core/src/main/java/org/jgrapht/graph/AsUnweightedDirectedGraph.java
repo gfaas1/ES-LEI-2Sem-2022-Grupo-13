@@ -44,7 +44,9 @@ import org.jgrapht.*;
  * @author Lucas J. Scharenbroich
  * @author Joris Kinable
  * @since Sep 7, 2007
+ * @deprecated In favor of {@link AsUnweightedGraph}.
  */
+@Deprecated
 public class AsUnweightedDirectedGraph<V, E>
     extends AsUnweightedGraph<V, E>
     implements DirectedGraph<V, E>

@@ -42,7 +42,7 @@ public class BellmanFordShortestPathTest
 
         // find best path
         assertEquals(
-            Arrays.asList(new DefaultEdge[] { e13, e12, e24, e45 }),
+            Arrays.asList(new DefaultWeightedEdge[] { e13, e12, e24, e45 }),
             tree.getPath(V5).getEdgeList());
         assertEquals(3.0, tree.getPath(V1).getWeight(), 1e-9);
         assertEquals(5.0, tree.getPath(V2).getWeight(), 1e-9);
@@ -65,10 +65,10 @@ public class BellmanFordShortestPathTest
         List<DefaultWeightedEdge> path;
 
         path = findPathBetween(g, V1, V4);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e13, e34 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e13, e34 }), path);
 
         path = findPathBetween(g, V1, V5);
-        assertEquals(Arrays.asList(new DefaultEdge[] { e15 }), path);
+        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e15 }), path);
     }
 
     public void testWikipediaExampleBellmanFord()

@@ -19,6 +19,7 @@ package org.jgrapht.alg;
 
 import java.util.*;
 
+import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
@@ -44,7 +45,9 @@ public class NeighborIndexTest
         // We use Object instead of DefaultEdge for the edge type
         // in order to cover the case in
         // https://sourceforge.net/tracker/index.php?func=detail&aid=3486775&group_id=86459&atid=579687
-        ListenableUndirectedGraph<String, Object> g = new ListenableUndirectedGraph<>(Object.class);
+        ListenableGraph<String, Object> g =
+            new DefaultListenableGraph<>(new SimpleGraph<>(Object.class));
+
         g.addVertex(V1);
         g.addVertex(V2);
 
@@ -83,7 +86,8 @@ public class NeighborIndexTest
 
     public void testDirectedNeighborSet()
     {
-        ListenableDirectedGraph<String, Object> g = new ListenableDirectedGraph<>(Object.class);
+        ListenableGraph<String, Object> g =
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(Object.class));
         g.addVertex(V1);
         g.addVertex(V2);
 

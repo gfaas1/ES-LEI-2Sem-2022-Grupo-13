@@ -45,7 +45,7 @@ public class HawickJamesSimpleCycles<V, E>
     }
 
     // The graph
-    private DirectedGraph<V, E> graph = null;
+    private Graph<V, E> graph;
 
     // Number of vertices
     private int nVertices = 0;
@@ -82,13 +82,10 @@ public class HawickJamesSimpleCycles<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public HawickJamesSimpleCycles(DirectedGraph<V, E> graph)
+    public HawickJamesSimpleCycles(Graph<V, E> graph)
         throws IllegalArgumentException
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     @SuppressWarnings("unchecked")
@@ -250,7 +247,7 @@ public class HawickJamesSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public DirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -259,13 +256,9 @@ public class HawickJamesSimpleCycles<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void setGraph(DirectedGraph<V, E> graph)
-        throws IllegalArgumentException
+    public void setGraph(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
     }
 
     /**

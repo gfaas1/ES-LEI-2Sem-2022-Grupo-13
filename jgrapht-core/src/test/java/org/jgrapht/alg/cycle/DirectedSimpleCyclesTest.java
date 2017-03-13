@@ -50,7 +50,7 @@ public class DirectedSimpleCyclesTest
 
     private void testAlgorithm(DirectedSimpleCycles<Integer, DefaultEdge> finder)
     {
-        DirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);

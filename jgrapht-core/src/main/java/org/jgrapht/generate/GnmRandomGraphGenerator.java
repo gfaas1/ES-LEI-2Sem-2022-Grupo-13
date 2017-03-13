@@ -191,7 +191,7 @@ public class GnmRandomGraphGenerator<V, E>
 
         // compute maximum allowed edges
         if (m > computeMaximumAllowedEdges(
-            n, target instanceof DirectedGraph<?, ?>, createLoops, createMultipleEdges))
+            n, target.getType().isDirected(), createLoops, createMultipleEdges))
         {
             throw new IllegalArgumentException(
                 "number of edges is not valid for the graph type " + "\n-> invalid number of edges="

@@ -309,19 +309,11 @@ final class RankingPathElementList<V, E>
         ConnectivityInspector<V, E> connectivityInspector;
         PathMask<V, E> connectivityMask = new PathMask<>(prevPathElement);
 
-        if (this.graph instanceof DirectedGraph<?, ?>) {
-            DirectedMaskSubgraph<V,
-                E> connectivityGraph = new DirectedMaskSubgraph<>(
-                    (DirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),
-                    e -> connectivityMask.isEdgeMasked(e));
-            connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
-        } else {
-            UndirectedMaskSubgraph<V,
-                E> connectivityGraph = new UndirectedMaskSubgraph<>(
-                    (UndirectedGraph<V, E>) this.graph, v -> connectivityMask.isVertexMasked(v),
-                    e -> connectivityMask.isEdgeMasked(e));
-            connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
-        }
+        MaskSubgraph<V,
+            E> connectivityGraph = new MaskSubgraph<>(
+                this.graph, v -> connectivityMask.isVertexMasked(v),
+                e -> connectivityMask.isEdgeMasked(e));
+        connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
 
         if (connectivityMask.isVertexMasked(this.guardVertexToNotDisconnect)) {
             // the guard-vertex was already in the path element -> invalid path

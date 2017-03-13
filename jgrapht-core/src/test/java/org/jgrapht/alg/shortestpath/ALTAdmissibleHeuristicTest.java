@@ -47,15 +47,15 @@ public class ALTAdmissibleHeuristicTest
 
         Random rng = new Random(47);
 
-        List<Supplier<WeightedGraph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
+        List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
         graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
         graphs.add(() -> new WeightedPseudograph<>(DefaultWeightedEdge.class));
 
-        for (Supplier<WeightedGraph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
+        for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, true);
             for (int i = 0; i < tests; i++) {
-                WeightedGraph<Integer, DefaultWeightedEdge> g = gSupplier.get();
+                Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
                 gen.generateGraph(g, new IntegerVertexFactory(), null);
 
                 // assign random weights
@@ -98,17 +98,17 @@ public class ALTAdmissibleHeuristicTest
 
         Random rng = new Random(33);
 
-        List<Supplier<WeightedGraph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
+        List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
         graphs.add(() -> new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class));
         graphs.add(() -> new WeightedPseudograph<>(DefaultWeightedEdge.class));
 
         Comparator<Double> comparator = new ToleranceDoubleComparator();
 
-        for (Supplier<WeightedGraph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
+        for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
                 new GnpRandomGraphGenerator<>(n, p, rng, true);
             for (int i = 0; i < tests; i++) {
-                WeightedGraph<Integer, DefaultWeightedEdge> g = gSupplier.get();
+                Graph<Integer, DefaultWeightedEdge> g = gSupplier.get();
                 gen.generateGraph(g, new IntegerVertexFactory(), null);
 
                 // assign random weights

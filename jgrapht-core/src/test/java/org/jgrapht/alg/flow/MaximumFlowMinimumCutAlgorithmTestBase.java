@@ -29,7 +29,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
     extends TestCase
 {
 
-    protected DirectedGraph<Integer, DefaultWeightedEdge> constructDirectedGraph(
+    protected Graph<Integer, DefaultWeightedEdge> constructDirectedGraph(
         int[] tails, int[] heads, double[] capacities, int[] sources, int[] sinks)
     {
         assertTrue(tails.length == heads.length);
@@ -47,7 +47,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return network;
     }
 
-    protected UndirectedGraph<Integer, DefaultWeightedEdge> constructUndirectedGraph(int[][] edges)
+    protected Graph<Integer, DefaultWeightedEdge> constructUndirectedGraph(int[][] edges)
     {
         // Construct undirected graph
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> graph =
@@ -59,27 +59,27 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
 
     /*************** TEST CASES FOR DIRECTED GRAPHS ***************/
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN0()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN0()
     {
         return constructDirectedGraph(
             new int[] { 1, 2, 3 }, new int[] { 2, 3, 4 }, new double[] { 10, 10, 5 },
             new int[] { 1 }, new int[] { 4 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN1()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN1()
     {
         return constructDirectedGraph(
             new int[] {}, new int[] {}, new double[] {}, new int[] { 1 }, new int[] { 4057218 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN2()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN2()
     {
         return constructDirectedGraph(
             new int[] { 3, 1, 4, 3, 2, 8, 2, 5, 7 }, new int[] { 1, 4, 8, 2, 8, 6, 5, 7, 6 },
             new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 }, new int[] { 3 }, new int[] { 6 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN3()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN3()
     {
         return constructDirectedGraph(
             new int[] { 5, 5, 5, 1, 1, 4, 2, 7, 8, 3 }, new int[] { 1, 4, 2, 7, 8, 3, 8, 6, 6, 6 },
@@ -87,7 +87,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 6 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN4()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN4()
     {
         return constructDirectedGraph(
             new int[] { 1, 1, 2, 2, 3 }, new int[] { 2, 3, 3, 4, 4 },
@@ -95,7 +95,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 4 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN6()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN6()
     {
         return constructDirectedGraph(
             new int[] { 46, 27, 44, 49, 11, 22, 17, 37, 12, 7, 12, 17, 26, 35, 4, 14, 16, 27, 2, 8,
@@ -253,7 +253,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 50 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN7()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN7()
     {
         return constructDirectedGraph(
             new int[] { 3, 42, 11, 19, 16, 45, 18, 35, 38, 7, 15, 12, 33, 21, 47, 12, 40, 25, 29,
@@ -487,14 +487,14 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 50 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN8()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN8()
     {
         return constructDirectedGraph(
             new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4 }, new int[] { 1, 2, 2, 3, 1, 4, 2, 5, 3, 5 },
             new double[] { 16, 13, 10, 12, 4, 14, 9, 20, 7, 4 }, new int[] { 0 }, new int[] { 5 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN9()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN9()
     {
         return constructDirectedGraph(
             new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 5, 6, 6, 7, 7 },
@@ -503,7 +503,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 0 }, new int[] { 8 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN10()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN10()
     {
         return constructDirectedGraph(
             new int[] { 82, 75, 26, 4, 43, 89, 54, 42, 48, 26, 42, 66, 76, 80, 93, 88, 13, 17, 37,
@@ -653,7 +653,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 99 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN11()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN11()
     {
         return constructDirectedGraph(
             new int[] { 99, 38, 98, 90, 54, 21, 86, 38, 65, 95, 83, 61, 54, 26, 55, 78, 3, 18, 65,
@@ -816,7 +816,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 99 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> getDirectedN12()
+    public Graph<Integer, DefaultWeightedEdge> getDirectedN12()
     {
         return constructDirectedGraph(
             new int[] { 11, 68, 97, 73, 17, 65, 76, 72, 25, 50, 26, 9, 54, 29, 93, 73, 4, 62, 84,
@@ -924,7 +924,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new int[] { 1 }, new int[] { 99 });
     }
 
-    public DirectedGraph<Integer, DefaultWeightedEdge> generateDirectedGraph()
+    public Graph<Integer, DefaultWeightedEdge> generateDirectedGraph()
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> randomGraphGenerator =
             new GnmRandomGraphGenerator<>(100, 500);
@@ -939,7 +939,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN1()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN1()
     {
         int[][] edges =
             { { 0, 1, 12 }, { 0, 2, 15 }, { 0, 3, 20 }, { 1, 5, 5 }, { 1, 6, 2 }, { 1, 2, 5 },
@@ -948,14 +948,14 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN2()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN2()
     {
         int[][] edges = { { 2, 1, 20 }, { 3, 4, 58 }, { 1, 3, 39 }, { 3, 2, 57 }, { 4, 2, 25 },
             { 5, 3, 13 }, { 5, 1, 51 }, { 5, 4, 21 } };
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN3()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN3()
     {
         int[][] edges =
             { { 8, 15, 20 }, { 24, 30, 58 }, { 26, 33, 39 }, { 2, 22, 57 }, { 26, 5, 25 },
@@ -985,7 +985,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN4()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN4()
     {
         int[][] edges =
             { { 100, 23, 20 }, { 96, 70, 58 }, { 79, 97, 39 }, { 24, 22, 57 }, { 11, 64, 25 },
@@ -1191,7 +1191,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN5()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN5()
     {
         int[][] edges = { { 18, 3, 20 }, { 31, 30, 58 }, { 19, 8, 39 }, { 38, 22, 57 },
             { 21, 34, 25 }, { 47, 21, 13 }, { 49, 40, 51 }, { 29, 10, 21 }, { 20, 23, 29 },
@@ -1236,7 +1236,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN6()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN6()
     {
         int[][] edges =
             { { 20, 51, 20 }, { 43, 61, 58 }, { 27, 6, 39 }, { 47, 13, 57 }, { 63, 4, 25 },
@@ -1282,7 +1282,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN7()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN7()
     {
         int[][] edges =
             { { 5, 40, 20 }, { 5, 38, 58 }, { 17, 40, 39 }, { 61, 2, 57 }, { 25, 38, 25 },
@@ -1304,7 +1304,7 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN8()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN8()
     {
         int[][] edges =
             { { 22, 65, 20 }, { 59, 32, 58 }, { 45, 13, 39 }, { 29, 75, 57 }, { 100, 54, 25 },
@@ -1460,14 +1460,14 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> getUndirectedN9()
+    public Graph<Integer, DefaultWeightedEdge> getUndirectedN9()
     {
         int[][] edges = { { 1, 2, 0 }, { 2, 3, 1 }, { 3, 4, 0 }, { 4, 1, 1 }, { 1, 5, 1 },
             { 4, 5, 1 }, { 6, 2, 1 }, { 3, 6, 1 } };
         return constructUndirectedGraph(edges);
     }
 
-    public UndirectedGraph<Integer, DefaultWeightedEdge> generateUndirectedGraph()
+    public Graph<Integer, DefaultWeightedEdge> generateUndirectedGraph()
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> randomGraphGenerator =
             new GnmRandomGraphGenerator<>(100, 500);

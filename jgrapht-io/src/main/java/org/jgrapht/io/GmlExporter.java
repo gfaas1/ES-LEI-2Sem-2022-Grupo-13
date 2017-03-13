@@ -153,7 +153,7 @@ public class GmlExporter<V, E>
                     (edgeLabelProvider == null) ? edge.toString() : edgeLabelProvider.getName(edge);
                 out.println(TAB2 + "label" + DELIM + quoted(label));
             }
-            if (exportEdgeWeights && g instanceof WeightedGraph) {
+            if (exportEdgeWeights && g.getType().isWeighted()) {
                 out.println(TAB2 + "weight" + DELIM + Double.toString(g.getEdgeWeight(edge)));
             }
             out.println(TAB1 + "]");
@@ -180,7 +180,7 @@ public class GmlExporter<V, E>
         out.println("graph");
         out.println("[");
         out.println(TAB1 + "label" + DELIM + quoted(""));
-        if (g instanceof DirectedGraph<?, ?>) {
+        if (g.getType().isDirected()) {
             out.println(TAB1 + "directed" + DELIM + "1");
         } else {
             out.println(TAB1 + "directed" + DELIM + "0");

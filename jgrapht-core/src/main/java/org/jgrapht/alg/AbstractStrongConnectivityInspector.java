@@ -17,15 +17,16 @@
  */
 package org.jgrapht.alg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Vector;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
+import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedSubgraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
@@ -43,17 +44,17 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 abstract class AbstractStrongConnectivityInspector<V, E>
     implements StrongConnectivityAlgorithm<V, E>
 {
-    protected final DirectedGraph<V, E> graph;
+    protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;
     protected List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs;
 
-    public AbstractStrongConnectivityInspector(DirectedGraph<V, E> graph)
+    public AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
     }
 
     @Override
-    public DirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -65,11 +66,12 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     }
 
     @Override
+    @Deprecated
     public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
     {
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
-            stronglyConnectedSubgraphs = new Vector<>(sets.size());
+            stronglyConnectedSubgraphs = new ArrayList<>(sets.size());
 
             for (Set<V> set : sets) {
                 stronglyConnectedSubgraphs.add(new DirectedSubgraph<>(graph, set, null));
@@ -79,16 +81,25 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     }
 
     @Override
-    public DirectedGraph<DirectedSubgraph<V, E>, DefaultEdge> getCondensation()
+    public List<Graph<V, E>> getStronglyConnectedComponents()
+    {
+        List<Graph<V, E>> result = new ArrayList<>();
+        for (DirectedSubgraph<V, E> dsg : stronglyConnectedSubgraphs()) {
+            result.add(dsg);
+        }
+        return result;
+    }
+
+    @Override
+    public Graph<Graph<V, E>, DefaultEdge> getCondensation()
     {
         List<Set<V>> sets = stronglyConnectedSets();
 
-        DirectedGraph<DirectedSubgraph<V, E>, DefaultEdge> condensation =
-            new SimpleDirectedGraph<>(DefaultEdge.class);
-        Map<V, DirectedSubgraph<V, E>> vertexToComponent = new HashMap<>();
+        Graph<Graph<V, E>, DefaultEdge> condensation = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Map<V, Graph<V, E>> vertexToComponent = new HashMap<>();
 
         for (Set<V> set : sets) {
-            DirectedSubgraph<V, E> component = new DirectedSubgraph<>(graph, set, null);
+            Graph<V, E> component = new AsSubgraph<>(graph, set, null);
             condensation.addVertex(component);
             for (V v : set) {
                 vertexToComponent.put(v, component);
@@ -97,10 +108,10 @@ abstract class AbstractStrongConnectivityInspector<V, E>
 
         for (E e : graph.edgeSet()) {
             V s = graph.getEdgeSource(e);
-            DirectedSubgraph<V, E> sComponent = vertexToComponent.get(s);
+            Graph<V, E> sComponent = vertexToComponent.get(s);
 
             V t = graph.getEdgeTarget(e);
-            DirectedSubgraph<V, E> tComponent = vertexToComponent.get(t);
+            Graph<V, E> tComponent = vertexToComponent.get(t);
 
             if (sComponent != tComponent) { // reference equal on purpose
                 condensation.addEdge(sComponent, tComponent);

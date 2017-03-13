@@ -20,7 +20,6 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 /**
  * A directed weighted graph that is a subgraph of another graph.
@@ -29,10 +28,12 @@ import org.jgrapht.util.*;
  * @param <E> the graph edge type
  *
  * @see Subgraph
+ * @deprecated In favor of {@link AsSubgraph}.
  */
+@Deprecated
 public class DirectedWeightedSubgraph<V, E>
     extends DirectedSubgraph<V, E>
-    implements WeightedGraph<V, E>
+    implements DirectedGraph<V, E>, WeightedGraph<V, E>
 {
     private static final long serialVersionUID = 3905799799168250680L;
 
@@ -46,9 +47,9 @@ public class DirectedWeightedSubgraph<V, E>
      *        edges whose vertices found in the graph are included.
      */
     public DirectedWeightedSubgraph(
-        WeightedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
+        DirectedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
     {
-        super(TypeUtil.uncheckedCast(base, null), vertexSubset, edgeSubset);
+        super(base, vertexSubset, edgeSubset);
     }
 
     /**
@@ -58,7 +59,7 @@ public class DirectedWeightedSubgraph<V, E>
      * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
      *        vertices are included.
      */
-    public DirectedWeightedSubgraph(WeightedGraph<V, E> base, Set<? extends V> vertexSubset)
+    public DirectedWeightedSubgraph(DirectedGraph<V, E> base, Set<? extends V> vertexSubset)
     {
         this(base, vertexSubset, null);
     }
@@ -68,7 +69,7 @@ public class DirectedWeightedSubgraph<V, E>
      *
      * @param base the base (backing) graph on which the subgraph will be based.
      */
-    public DirectedWeightedSubgraph(WeightedGraph<V, E> base)
+    public DirectedWeightedSubgraph(DirectedGraph<V, E> base)
     {
         this(base, null, null);
     }

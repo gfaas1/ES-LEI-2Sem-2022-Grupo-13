@@ -41,7 +41,7 @@ public class HopcroftKarpBipartiteMatchingTest
      */
     public void testBipartiteMatching1()
     {
-        UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         List<Integer> partition1 = Arrays.asList(0, 1, 2, 3);
         List<Integer> partition2 = Arrays.asList(4, 5, 6, 7);
         Graphs.addAllVertices(graph, partition1);
@@ -66,7 +66,7 @@ public class HopcroftKarpBipartiteMatchingTest
      */
     public void testBipartiteMatching2()
     {
-        UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         List<Integer> partition1 = Arrays.asList(0, 1, 2, 3, 4, 5);
         List<Integer> partition2 = Arrays.asList(6, 7, 8, 9, 10, 11);
         Graphs.addAllVertices(graph, partition1);
@@ -94,7 +94,7 @@ public class HopcroftKarpBipartiteMatchingTest
      */
     public void testEmptyMatching()
     {
-        UndirectedGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         List<Integer> partition1 = Collections.singletonList(0);
         List<Integer> partition2 = Collections.singletonList(1);
         Graphs.addAllVertices(graph, partition1);
@@ -111,7 +111,7 @@ public class HopcroftKarpBipartiteMatchingTest
      */
     public void testBipartiteMatchingIssue233()
     {
-        UndirectedGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         Graphs.addAllVertices(g, IntStream.rangeClosed(0, 3).boxed().collect(Collectors.toList()));
 

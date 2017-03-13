@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
@@ -133,7 +132,7 @@ public class TwoApproxMetricTSPTest
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidInstanceDirected()
     {
-        DirectedGraph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex("A");
 
         new TwoApproxMetricTSP<String, DefaultEdge>().getTour(g);

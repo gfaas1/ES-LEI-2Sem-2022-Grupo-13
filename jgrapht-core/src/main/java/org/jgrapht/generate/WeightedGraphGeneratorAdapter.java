@@ -31,7 +31,9 @@ import org.jgrapht.*;
  *
  * @author Alexey Kudinkin
  * @since Aug 1, 2013
+ * @deprecated Not needed since {@link WeightedGraph} is deprecated.
  */
+@Deprecated
 public abstract class WeightedGraphGeneratorAdapter<V, E, T>
     implements GraphGenerator<V, E, T>
 {
@@ -51,7 +53,9 @@ public abstract class WeightedGraphGeneratorAdapter<V, E, T>
      * @param vertexFactory called to produce new vertices
      * @param resultMap if non-null, receives implementation-specific mappings from String roles to
      *        graph elements (or collections of graph elements)
+     * @deprecated Not needed since {@link WeightedGraph} is deprecated.
      */
+    @Deprecated
     public abstract void generateGraph(
         WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap);
 

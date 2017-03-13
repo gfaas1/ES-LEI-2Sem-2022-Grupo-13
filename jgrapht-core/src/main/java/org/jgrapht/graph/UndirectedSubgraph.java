@@ -28,7 +28,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see Subgraph
+ * @deprecated In favor of {@link AsSubgraph}.
  */
+@Deprecated
 public class UndirectedSubgraph<V, E>
     extends Subgraph<V, E, UndirectedGraph<V, E>>
     implements UndirectedGraph<V, E>
@@ -41,8 +43,8 @@ public class UndirectedSubgraph<V, E>
      * @param base the base (backing) graph on which the subgraph will be based.
      * @param vertexSubset vertices to include in the subgraph. If <code>null</code> then all
      *        vertices are included.
-     * @param edgeSubset edges to in include in the subgraph. If <code>null</code> then all the
-     *        edges whose vertices found in the graph are included.
+     * @param edgeSubset edges to include in the subgraph. If <code>null</code> then all the edges
+     *        whose vertices found in the graph are included.
      */
     public UndirectedSubgraph(
         UndirectedGraph<V, E> base, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset)
@@ -72,25 +74,6 @@ public class UndirectedSubgraph<V, E>
         this(base, null, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int degreeOf(V vertex)
-    {
-        assertVertexExist(vertex);
-
-        int degree = 0;
-        Iterator<E> it = base.edgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).iterator();
-        while (it.hasNext()) {
-            E e = it.next();
-            degree++;
-            if (getEdgeSource(e).equals(getEdgeTarget(e))) {
-                degree++;
-            }
-        }
-        return degree;
-    }
 }
 
 // End UndirectedSubgraph.java

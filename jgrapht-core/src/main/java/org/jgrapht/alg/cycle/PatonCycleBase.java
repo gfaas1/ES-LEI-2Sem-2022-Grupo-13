@@ -37,7 +37,7 @@ import org.jgrapht.*;
 public class PatonCycleBase<V, E>
     implements UndirectedCycleBase<V, E>
 {
-    private UndirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Create a cycle base finder with an unspecified graph.
@@ -54,19 +54,16 @@ public class PatonCycleBase<V, E>
      * @throws IllegalArgumentException if the graph argument is <code>
      * null</code>.
      */
-    public PatonCycleBase(UndirectedGraph<V, E> graph)
+    public PatonCycleBase(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireUndirected(graph, "Graph must be undirected");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public UndirectedGraph<V, E> getGraph()
+    public Graph<V, E> getGraph()
     {
         return graph;
     }
@@ -75,12 +72,9 @@ public class PatonCycleBase<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void setGraph(UndirectedGraph<V, E> graph)
+    public void setGraph(Graph<V, E> graph)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph argument.");
-        }
-        this.graph = graph;
+        this.graph = GraphTests.requireUndirected(graph, "Graph must be undirected");
     }
 
     /**

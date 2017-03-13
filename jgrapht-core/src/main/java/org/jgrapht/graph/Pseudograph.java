@@ -28,13 +28,12 @@ import org.jgrapht.graph.builder.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
  */
 public class Pseudograph<V, E>
     extends AbstractBaseGraph<V, E>
     implements UndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = 3833183614484755253L;
+    private static final long serialVersionUID = -7574564204896552581L;
 
     /**
      * Creates a new pseudograph.
@@ -53,7 +52,18 @@ public class Pseudograph<V, E>
      */
     public Pseudograph(EdgeFactory<V, E> ef)
     {
-        super(ef, true, true);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new pseudograph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public Pseudograph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, false, true, true, weighted);
     }
 
     /**
@@ -64,6 +74,36 @@ public class Pseudograph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
+    public static <V, E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
+    {
+        return new GraphBuilder<>(new Pseudograph<>(edgeClass));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param ef the edge factory of the new graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V,
+        E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(EdgeFactory<V, E> ef)
+    {
+        return new GraphBuilder<>(new Pseudograph<>(ef));
+    }
+
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeClass class on which to base factory for edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(Class)}.
+     */
+    @Deprecated
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
         Class<? extends E> edgeClass)
     {
@@ -77,7 +117,9 @@ public class Pseudograph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
      */
+    @Deprecated
     public static <V, E> UndirectedGraphBuilderBase<V, E, ? extends Pseudograph<V, E>, ?> builder(
         EdgeFactory<V, E> ef)
     {

@@ -39,8 +39,9 @@ import org.jgrapht.util.*;
  * @param <V> the vertex type
  * @param <E> the edge type
  * @param <G> the graph type of the two graphs that are combined
- * 
+ * @deprecated In favor of {@link AsGraphUnion}.
  */
+@Deprecated
 public class GraphUnion<V, E, G extends Graph<V, E>>
     extends AbstractGraph<V, E>
     implements Serializable
@@ -267,6 +268,24 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        GraphType type1 = g1.getType();
+        GraphType type2 = g2.getType();
+        GraphType t = DefaultGraphType.mixed();
+        if (type1.isDirected() && type2.isDirected()) {
+            t = t.asDirected();
+        }
+        if (type1.isUndirected() && type2.isUndirected()) {
+            t = t.asUndirected();
+        }
+        return t.asWeighted().asUnmodifiable();
+    }
+
+    /**
      * Return G<sub>1</sub>
      * 
      * @return G<sub>1</sub>
@@ -285,6 +304,43 @@ public class GraphUnion<V, E, G extends Graph<V, E>>
     {
         return g2;
     }
+
+    @Override
+    public int degreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int inDegreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<E> incomingEdgesOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<E> outgoingEdgesOf(V vertex)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setEdgeWeight(E e, double weight)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
 }
 
 // End GraphUnion.java

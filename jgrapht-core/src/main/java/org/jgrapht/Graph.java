@@ -239,17 +239,89 @@ public interface Graph<V, E>
     Set<E> edgeSet();
 
     /**
+     * Returns the degree of the specified vertex.
+     * 
+     * <p>
+     * A degree of a vertex in an undirected graph is the number of edges touching that vertex.
+     * Edges with same source and target vertices (self-loops) are counted twice.
+     * 
+     * <p>
+     * In directed graphs this method returns the sum of the "in degree" and the "out degree".
+     *
+     * @param vertex vertex whose degree is to be calculated.
+     * @return the degree of the specified vertex.
+     */
+    int degreeOf(V vertex);
+
+    /**
      * Returns a set of all edges touching the specified vertex. If no edges are touching the
      * specified vertex returns an empty set.
      *
      * @param vertex the vertex for which a set of touching edges is to be returned.
-     *
      * @return a set of all edges touching the specified vertex.
      *
      * @throws IllegalArgumentException if vertex is not found in the graph.
      * @throws NullPointerException if vertex is <code>null</code>.
      */
     Set<E> edgesOf(V vertex);
+
+    /**
+     * Returns the "in degree" of the specified vertex.
+     * 
+     * <p>
+     * The "in degree" of a vertex in a directed graph is the number of inward directed edges from
+     * that vertex. See <a href="http://mathworld.wolfram.com/Indegree.html">
+     * http://mathworld.wolfram.com/Indegree.html</a>.
+     * 
+     * <p>
+     * In the case of undirected graphs this method returns the number of edges touching the vertex.
+     * Edges with same source and target vertices (self-loops) are counted twice.
+     *
+     * @param vertex vertex whose degree is to be calculated.
+     * @return the degree of the specified vertex.
+     */
+    int inDegreeOf(V vertex);
+
+    /**
+     * Returns a set of all edges incoming into the specified vertex.
+     *
+     * <p>
+     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
+     * some of the returned edges may have their source and target vertices in the opposite order.
+     *
+     * @param vertex the vertex for which the list of incoming edges to be returned.
+     * @return a set of all edges incoming into the specified vertex.
+     */
+    Set<E> incomingEdgesOf(V vertex);
+
+    /**
+     * Returns the "out degree" of the specified vertex.
+     * 
+     * <p>
+     * The "out degree" of a vertex in a directed graph is the number of outward directed edges from
+     * that vertex. See <a href="http://mathworld.wolfram.com/Outdegree.html">
+     * http://mathworld.wolfram.com/Outdegree.html</a>.
+     * 
+     * <p>
+     * In the case of undirected graphs this method returns the number of edges touching the vertex.
+     * Edges with same source and target vertices (self-loops) are counted twice.
+     *
+     * @param vertex vertex whose degree is to be calculated.
+     * @return the degree of the specified vertex.
+     */
+    int outDegreeOf(V vertex);
+
+    /**
+     * Returns a set of all edges outgoing from the specified vertex.
+     * 
+     * <p>
+     * In the case of undirected graphs this method returns all edges touching the vertex, thus,
+     * some of the returned edges may have their source and target vertices in the opposite order.
+     *
+     * @param vertex the vertex for which the list of outgoing edges to be returned.
+     * @return a set of all edges outgoing from the specified vertex.
+     */
+    Set<E> outgoingEdgesOf(V vertex);
 
     /**
      * Removes all the edges in this graph that are also contained in the specified edge collection.
@@ -385,17 +457,38 @@ public interface Graph<V, E>
     V getEdgeTarget(E e);
 
     /**
+     * Get the graph type. The graph type can be used to query for additional metadata such as
+     * whether the graph supports directed or undirected edges, self-loops, parallel-edges, weights,
+     * etc.
+     * 
+     * @return the graph type
+     */
+    GraphType getType();
+
+    /**
+     * The default weight for an edge.
+     */
+    double DEFAULT_EDGE_WEIGHT = 1.0;
+
+    /**
      * Returns the weight assigned to a given edge. Unweighted graphs return 1.0 (as defined by
-     * {@link WeightedGraph#DEFAULT_EDGE_WEIGHT}), allowing weighted-graph algorithms to apply to
-     * them where meaningful.
+     * {@link #DEFAULT_EDGE_WEIGHT}), allowing weighted-graph algorithms to apply to them when
+     * meaningful.
      *
      * @param e edge of interest
-     *
      * @return edge weight
-     *
-     * @see WeightedGraph
      */
     double getEdgeWeight(E e);
+
+    /**
+     * Assigns a weight to an edge.
+     *
+     * @param e edge on which to set weight
+     * @param weight new weight for edge
+     * @throws UnsupportedOperationException if the graph does not support weights
+     */
+    void setEdgeWeight(E e, double weight);
+
 }
 
 // End Graph.java

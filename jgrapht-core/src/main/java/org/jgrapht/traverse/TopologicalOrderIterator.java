@@ -66,7 +66,7 @@ public class TopologicalOrderIterator<V, E>
      *
      * @param dg the directed graph to be iterated.
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> dg)
+    public TopologicalOrderIterator(Graph<V, E> dg)
     {
         this(dg, new LinkedListQueue<>());
     }
@@ -82,7 +82,7 @@ public class TopologicalOrderIterator<V, E>
      * @param queue queue to use for tie-break in case of partial order (e.g. a PriorityQueue can be
      *        used to break ties according to vertex priority); must be initially empty
      */
-    public TopologicalOrderIterator(DirectedGraph<V, E> dg, Queue<V> queue)
+    public TopologicalOrderIterator(Graph<V, E> dg, Queue<V> queue)
     {
         this(dg, queue, new HashMap<>());
     }
@@ -90,7 +90,7 @@ public class TopologicalOrderIterator<V, E>
     // NOTE: This is a hack to deal with the fact that CrossComponentIterator
     // needs to know the start vertex in its constructor
     private TopologicalOrderIterator(
-        DirectedGraph<V, E> dg, Queue<V> queue, Map<V, ModifiableInteger> inDegreeMap)
+        Graph<V, E> dg, Queue<V> queue, Map<V, ModifiableInteger> inDegreeMap)
     {
         this(dg, initialize(dg, queue, inDegreeMap));
         this.queue = queue;
@@ -103,7 +103,7 @@ public class TopologicalOrderIterator<V, E>
 
     // NOTE: This is intentionally private, because starting the sort "in the
     // middle" doesn't make sense.
-    private TopologicalOrderIterator(DirectedGraph<V, E> dg, V start)
+    private TopologicalOrderIterator(Graph<V, E> dg, V start)
     {
         super(dg, start);
     }
@@ -177,9 +177,11 @@ public class TopologicalOrderIterator<V, E>
      *
      * @return start vertex
      */
-    private static <V, E> V initialize(
-        DirectedGraph<V, E> dg, Queue<V> queue, Map<V, ModifiableInteger> inDegreeMap)
+    private static <V,
+        E> V initialize(Graph<V, E> dg, Queue<V> queue, Map<V, ModifiableInteger> inDegreeMap)
     {
+        GraphTests.requireDirected(dg);
+
         for (V vertex : dg.vertexSet()) {
             int inDegree = dg.inDegreeOf(vertex);
             inDegreeMap.put(vertex, new ModifiableInteger(inDegree));

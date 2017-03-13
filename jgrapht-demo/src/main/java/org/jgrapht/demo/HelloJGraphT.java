@@ -41,13 +41,13 @@ public final class HelloJGraphT
      */
     public static void main(String[] args)
     {
-        UndirectedGraph<String, DefaultEdge> stringGraph = createStringGraph();
+        Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
         // note undirected edges are printed as: {<v1>,<v2>}
         System.out.println(stringGraph.toString());
 
         // create a graph based on URL objects
-        DirectedGraph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
 
         // note directed edges are printed as: (<v1>,<v2>)
         System.out.println(hrefGraph.toString());
@@ -58,9 +58,9 @@ public final class HelloJGraphT
      *
      * @return a graph based on URL objects.
      */
-    private static DirectedGraph<URL, DefaultEdge> createHrefGraph()
+    private static Graph<URL, DefaultEdge> createHrefGraph()
     {
-        DirectedGraph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         try {
             URL amazon = new URL("http://www.amazon.com");
@@ -87,9 +87,9 @@ public final class HelloJGraphT
      *
      * @return a graph based on String objects.
      */
-    private static UndirectedGraph<String, DefaultEdge> createStringGraph()
+    private static Graph<String, DefaultEdge> createStringGraph()
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";

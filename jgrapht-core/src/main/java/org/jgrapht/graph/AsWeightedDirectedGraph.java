@@ -51,7 +51,9 @@ import org.jgrapht.*;
  *
  * @author Joris Kinable
  * @since Aug 20, 2015
+ * @deprecated In favor of {@link AsWeightedGraph}.
  */
+@Deprecated
 public class AsWeightedDirectedGraph<V, E>
     extends AsWeightedGraph<V, E>
     implements DirectedGraph<V, E>

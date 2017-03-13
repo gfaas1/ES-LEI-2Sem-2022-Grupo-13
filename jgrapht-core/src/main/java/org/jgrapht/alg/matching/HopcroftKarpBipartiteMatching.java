@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
 
 /**
  * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
@@ -41,7 +40,7 @@ import org.jgrapht.util.*;
 public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
-    private final UndirectedGraph<V, E> graph;
+    private final Graph<V, E> graph;
     private Set<? extends V> partition1; // Partitions of bipartite graph
     private Set<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
@@ -60,13 +59,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      */
     public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("Input graph cannot be null");
-        }
-        if (!(graph instanceof UndirectedGraph)) {
-            throw new IllegalArgumentException("Only undirected graphs supported");
-        }
-        this.graph = TypeUtil.uncheckedCast(graph, null);
+        this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = partition1;
         this.partition2 = partition2;
     }

@@ -105,7 +105,7 @@ public class DIMACSImporter<V, E>
      */
     public DIMACSImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
-        this(vertexProvider, edgeProvider, WeightedGraph.DEFAULT_EDGE_WEIGHT);
+        this(vertexProvider, edgeProvider, Graph.DEFAULT_EDGE_WEIGHT);
     }
 
     // ~ Methods ---------------------------------------------------------------
@@ -231,12 +231,12 @@ public class DIMACSImporter<V, E>
                     E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
                     graph.addEdge(from, to, e);
 
-                    if (graph instanceof WeightedGraph<?, ?>) {
+                    if (graph.getType().isWeighted()) {
                         double weight = defaultWeight;
                         if (cols.length > 3) {
                             weight = Double.parseDouble(cols[3]);
                         }
-                        ((WeightedGraph<V, E>) graph).setEdgeWeight(e, weight);
+                        graph.setEdgeWeight(e, weight);
                     }
                 } catch (IllegalArgumentException e) {
                     throw new ImportException("Failed to import DIMACS graph:" + e.getMessage(), e);

@@ -28,7 +28,9 @@ import junit.framework.*;
  * .
  *
  * @author Andrew Newell
+ * @deprecated Since {@link HamiltonianCycle} is deprecated.
  */
+@Deprecated
 public class HamiltonianCycleTest
     extends TestCase
 {

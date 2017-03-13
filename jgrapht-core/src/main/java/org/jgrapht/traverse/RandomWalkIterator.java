@@ -133,7 +133,6 @@ public class RandomWalkIterator<V, E>
         this.graph = graph;
         this.isWeighted = isWeighted;
         this.maxSteps = maxSteps;
-        this.specifics = createGraphSpecifics(graph);
         // select a random start vertex in case not provided.
         if (startVertex == null) {
             if (graph.vertexSet().size() > 0) {
@@ -191,7 +190,7 @@ public class RandomWalkIterator<V, E>
             throw new NoSuchElementException();
         }
 
-        Set<? extends E> potentialEdges = specifics.edgesOf(currentVertex);
+        Set<? extends E> potentialEdges = graph.outgoingEdgesOf(currentVertex);
 
         // randomly select an edge from the set of potential edges.
         E nextEdge = drawEdge(potentialEdges);

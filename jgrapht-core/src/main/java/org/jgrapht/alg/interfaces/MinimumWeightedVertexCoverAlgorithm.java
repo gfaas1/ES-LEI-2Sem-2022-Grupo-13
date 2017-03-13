@@ -37,6 +37,7 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
+ * @author Joris Kinable
  */
 public interface MinimumWeightedVertexCoverAlgorithm<V, E>
     extends MinimumVertexCoverAlgorithm<V, E>
@@ -46,7 +47,7 @@ public interface MinimumWeightedVertexCoverAlgorithm<V, E>
      * {@inheritDoc}
      */
     @Override
-    default VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph)
+    default VertexCover<V> getVertexCover(Graph<V, E> graph)
     {
         Map<V, Double> vertexWeightMap = graph
             .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
@@ -61,5 +62,5 @@ public interface MinimumWeightedVertexCoverAlgorithm<V, E>
      * @param vertexWeightMap map containing non-negative weights for each vertex
      * @return a vertex cover
      */
-    VertexCover<V> getVertexCover(UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap);
+    VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap);
 }

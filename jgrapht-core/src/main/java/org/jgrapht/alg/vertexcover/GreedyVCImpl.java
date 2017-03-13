@@ -60,9 +60,10 @@ public class GreedyVCImpl<V, E>
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(
-        UndirectedGraph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
+        GraphTests.requireUndirected(graph);
+
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
 

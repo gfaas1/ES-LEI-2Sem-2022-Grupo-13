@@ -29,8 +29,10 @@ import org.jgrapht.*;
  */
 public class SimpleWeightedGraphMatrixGenerator<V, E>
     extends WeightedGraphGeneratorAdapter<V, E, V>
+    implements GraphGenerator<V, E, V>
 {
     protected List<V> vertices;
+    protected double[][] weights;
 
     /**
      * Set the generator vertices.
@@ -44,9 +46,21 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
         return this;
     }
 
+    /**
+     * Set the weights of the generator.
+     * 
+     * @param weights the weights
+     * @return the generator
+     */
+    public SimpleWeightedGraphMatrixGenerator<V, E> weights(double[][] weights)
+    {
+        this.weights = weights;
+        return this;
+    }
+
     @Override
     public void generateGraph(
-        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -74,6 +88,19 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
                 }
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @deprecated Not needed since {@link WeightedGraph} is deprecated.
+     */
+    @Override
+    @Deprecated
+    public void generateGraph(
+        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    {
+        generateGraph((Graph<V, E>) target, vertexFactory, resultMap);
     }
 }
 

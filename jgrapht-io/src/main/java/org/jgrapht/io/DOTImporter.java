@@ -40,9 +40,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
 import org.apache.commons.lang3.text.translate.LookupTranslator;
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
 
 /**
  * Import a graph from a DOT file.
@@ -233,10 +231,10 @@ public class DOTImporter<V, E>
              * Validate graph for directed or undirected. We do not validate for strict on purpose,
              * but let the user decide the behavior by using the appropriate graph class.
              */
-            if (ctx.DIGRAPH() != null && !(graph instanceof DirectedGraph)) {
+            if (ctx.DIGRAPH() != null && !graph.getType().isDirected()) {
                 throw new IllegalArgumentException("Provided graph is not directed");
             }
-            if (ctx.GRAPH() != null && !(graph instanceof UndirectedGraph)) {
+            if (ctx.GRAPH() != null && !graph.getType().isUndirected()) {
                 throw new IllegalArgumentException("Provided graph is not undirected");
             }
         }

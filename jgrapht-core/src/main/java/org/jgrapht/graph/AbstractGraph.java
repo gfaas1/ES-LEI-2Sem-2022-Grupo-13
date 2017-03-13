@@ -32,8 +32,6 @@ import org.jgrapht.util.*;
  *
  * @author Barak Naveh
  * @see Graph
- * @see DirectedGraph
- * @see UndirectedGraph
  */
 public abstract class AbstractGraph<V, E>
     implements Graph<V, E>
@@ -109,7 +107,7 @@ public abstract class AbstractGraph<V, E>
     @Override
     public String toString()
     {
-        return toStringFromSets(vertexSet(), edgeSet(), (this instanceof DirectedGraph<?, ?>));
+        return toStringFromSets(vertexSet(), edgeSet(), this.getType().isDirected());
     }
 
     /**

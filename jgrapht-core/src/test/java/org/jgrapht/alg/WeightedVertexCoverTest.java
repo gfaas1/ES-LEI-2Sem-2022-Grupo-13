@@ -103,7 +103,7 @@ public class WeightedVertexCoverTest
             { 30, 51 }, { 36, 48 }, { 36, 54 }, { 37, 38 }, { 38, 43 }, { 40, 41 }, { 41, 58 },
             { 44, 50 }, { 45, 49 }, { 47, 49 }, { 48, 56 }, { 49, 55 }, { 52, 54 }, { 54, 55 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -141,7 +141,7 @@ public class WeightedVertexCoverTest
             { 39, 44 }, { 39, 45 }, { 39, 59 }, { 41, 44 }, { 42, 45 }, { 43, 46 }, { 43, 49 },
             { 44, 46 }, { 46, 51 }, { 47, 56 }, { 48, 56 }, { 50, 57 }, { 54, 59 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -173,7 +173,7 @@ public class WeightedVertexCoverTest
             { 36, 47 }, { 37, 39 }, { 38, 42 }, { 38, 49 }, { 41, 44 }, { 49, 58 }, { 51, 55 },
             { 51, 58 }, { 53, 57 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -206,7 +206,7 @@ public class WeightedVertexCoverTest
             { 30, 57 }, { 35, 50 }, { 36, 57 }, { 37, 50 }, { 38, 43 }, { 41, 47 }, { 46, 52 },
             { 47, 57 }, { 55, 59 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -232,7 +232,7 @@ public class WeightedVertexCoverTest
         int[][] edges = { { 0, 30 }, { 3, 4 }, { 6, 15 }, { 7, 10 }, { 9, 56 }, { 13, 42 },
             { 19, 49 }, { 22, 44 }, { 47, 58 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -268,7 +268,7 @@ public class WeightedVertexCoverTest
             { 35, 45 }, { 35, 56 }, { 36, 58 }, { 37, 47 }, { 38, 45 }, { 38, 49 }, { 38, 58 },
             { 39, 50 }, { 40, 49 }, { 42, 58 }, { 43, 58 }, { 50, 51 }, { 56, 59 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -308,7 +308,7 @@ public class WeightedVertexCoverTest
             { 43, 56 }, { 47, 50 }, { 48, 52 }, { 49, 57 }, { 50, 51 }, { 50, 58 }, { 53, 58 },
             { 54, 58 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -348,7 +348,7 @@ public class WeightedVertexCoverTest
             { 41, 50 }, { 43, 53 }, { 43, 58 }, { 44, 46 }, { 45, 47 }, { 45, 48 }, { 48, 56 },
             { 50, 56 }, { 51, 52 }, { 51, 53 }, { 51, 57 }, { 51, 58 }, { 53, 59 }, { 54, 55 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -385,7 +385,7 @@ public class WeightedVertexCoverTest
             { 41, 54 }, { 42, 59 }, { 44, 49 }, { 47, 54 }, { 50, 56 }, { 51, 57 }, { 52, 58 },
             { 53, 55 }, { 53, 56 }, { 55, 57 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)
@@ -415,7 +415,7 @@ public class WeightedVertexCoverTest
             { 34, 36 }, { 34, 46 }, { 34, 55 }, { 35, 52 }, { 37, 44 }, { 37, 45 }, { 37, 52 },
             { 39, 45 }, { 48, 57 } };
 
-        UndirectedGraph<Integer, DefaultEdge> graph =
+        Graph<Integer, DefaultEdge> graph =
             new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 
         for (int[] edge : edges)

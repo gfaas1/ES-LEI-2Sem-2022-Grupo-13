@@ -26,17 +26,17 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
- * 
+ * @deprecated In favor of {@link GraphBuilder}.
  */
-public final class UndirectedWeightedGraphBuilder<V, E,
-    G extends UndirectedGraph<V, E> & WeightedGraph<V, E>>
+@Deprecated
+public final class UndirectedWeightedGraphBuilder<V, E, G extends UndirectedGraph<V, E>>
     extends UndirectedWeightedGraphBuilderBase<V, E, G, UndirectedWeightedGraphBuilder<V, E, G>>
 {
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.
      *
      * <p>
-     * The recomended way to use this constructor is: {@code new
+     * The recommended way to use this constructor is: {@code new
      * UndirectedWeightedGraphBuilder<...>(new YourGraph<...>(...))}.
      *
      * <p>

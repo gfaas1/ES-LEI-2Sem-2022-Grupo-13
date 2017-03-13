@@ -40,8 +40,6 @@ public class UndirectedSpecifics<V, E>
     implements Specifics<V, E>, Serializable
 {
     private static final long serialVersionUID = 6494588405178655873L;
-    private static final String NOT_IN_UNDIRECTED_GRAPH =
-        "no such operation in an undirected graph";
 
     protected AbstractBaseGraph<V, E> abstractBaseGraph;
     protected Map<V, UndirectedEdgeContainer<V, E>> vertexMapUndirected;
@@ -184,7 +182,6 @@ public class UndirectedSpecifics<V, E>
     public int degreeOf(V vertex)
     {
         if (abstractBaseGraph.isAllowingLoops()) { // then we must count, and add loops twice
-
             int degree = 0;
             Set<E> edges = getEdgeContainer(vertex).vertexEdges;
 
@@ -217,7 +214,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int inDegreeOf(V vertex)
     {
-        throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
+        return degreeOf(vertex);
     }
 
     /**
@@ -226,7 +223,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
+        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
     }
 
     /**
@@ -235,7 +232,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int outDegreeOf(V vertex)
     {
-        throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
+        return degreeOf(vertex);
     }
 
     /**
@@ -244,7 +241,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(NOT_IN_UNDIRECTED_GRAPH);
+        return getEdgeContainer(vertex).getUnmodifiableVertexEdges();
     }
 
     /**
@@ -272,9 +269,6 @@ public class UndirectedSpecifics<V, E>
      */
     protected UndirectedEdgeContainer<V, E> getEdgeContainer(V vertex)
     {
-        // abstractBaseGraph.assertVertexExist(vertex); //JK: I don't think we need this here. This
-        // should have been verified upstream
-
         UndirectedEdgeContainer<V, E> ec = vertexMapUndirected.get(vertex);
 
         if (ec == null) {

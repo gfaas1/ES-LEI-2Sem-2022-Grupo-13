@@ -26,7 +26,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @see DefaultListenableGraph
+ * @deprecated In favor of {@link DefaultListenableGraph}.
  */
+@Deprecated
 public class ListenableUndirectedGraph<V, E>
     extends DefaultListenableGraph<V, E>
     implements UndirectedGraph<V, E>
@@ -37,7 +39,10 @@ public class ListenableUndirectedGraph<V, E>
      * Creates a new listenable undirected simple graph.
      *
      * @param edgeClass class on which to base factory for edges
+     * @deprecated Use {@link ListenableUndirectedGraph#ListenableUndirectedGraph(UndirectedGraph)}
+     *             instead.
      */
+    @Deprecated
     public ListenableUndirectedGraph(Class<? extends E> edgeClass)
     {
         this(new SimpleGraph<>(edgeClass));

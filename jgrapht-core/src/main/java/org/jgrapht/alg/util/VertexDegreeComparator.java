@@ -51,7 +51,7 @@ public class VertexDegreeComparator<V, E>
     /**
      * The graph that contains the vertices to be compared.
      */
-    private UndirectedGraph<V, E> graph;
+    private Graph<V, E> graph;
 
     /**
      * Order in which the vertices are sorted: ascending or descending
@@ -64,7 +64,7 @@ public class VertexDegreeComparator<V, E>
      *
      * @param g graph with respect to which the degree is calculated.
      */
-    public VertexDegreeComparator(UndirectedGraph<V, E> g)
+    public VertexDegreeComparator(Graph<V, E> g)
     {
         this(g, Order.ASCENDING);
     }
@@ -75,7 +75,7 @@ public class VertexDegreeComparator<V, E>
      * @param g graph with respect to which the degree is calculated.
      * @param order order in which the vertices are sorted (ascending or descending)
      */
-    public VertexDegreeComparator(UndirectedGraph<V, E> g, Order order)
+    public VertexDegreeComparator(Graph<V, E> g, Order order)
     {
         graph = g;
         this.order = order;

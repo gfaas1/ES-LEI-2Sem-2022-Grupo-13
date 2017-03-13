@@ -31,13 +31,16 @@ public class AsUndirectedGraphTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    private DirectedGraph<String, DefaultEdge> directed;
+    private Graph<String, DefaultEdge> directed;
     private DefaultEdge loop;
+    private DefaultEdge e12;
+    private DefaultEdge e23;
+    private DefaultEdge e24;
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
     private String v4 = "v4";
-    private UndirectedGraph<String, DefaultEdge> undirected;
+    private Graph<String, DefaultEdge> undirected;
 
     // ~ Constructors -----------------------------------------------------------
 
@@ -93,6 +96,61 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    public void testEdgesOf()
+    {
+        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.edgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.edgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.edgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.edgesOf(v4));
+    }
+
+    /**
+     * .
+     */
+    public void testInDegreeOf()
+    {
+        assertEquals(1, undirected.inDegreeOf(v1));
+        assertEquals(3, undirected.inDegreeOf(v2));
+        assertEquals(1, undirected.inDegreeOf(v3));
+        assertEquals(3, undirected.inDegreeOf(v4));
+    }
+
+    /**
+     * .
+     */
+    public void testIncomingEdgesOf()
+    {
+        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.incomingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.incomingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.incomingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.incomingEdgesOf(v4));
+    }
+
+    /**
+     * .
+     */
+    public void testOutDegreeOf()
+    {
+        assertEquals(1, undirected.outDegreeOf(v1));
+        assertEquals(3, undirected.outDegreeOf(v2));
+        assertEquals(1, undirected.outDegreeOf(v3));
+        assertEquals(3, undirected.outDegreeOf(v4));
+    }
+
+    /**
+     * .
+     */
+    public void testOutgoingEdgesOf()
+    {
+        assertEquals(new HashSet<>(Arrays.asList(e12)), undirected.outgoingEdgesOf(v1));
+        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24)), undirected.outgoingEdgesOf(v2));
+        assertEquals(new HashSet<>(Arrays.asList(e23)), undirected.outgoingEdgesOf(v3));
+        assertEquals(new HashSet<>(Arrays.asList(e24, loop)), undirected.outgoingEdgesOf(v4));
+    }
+
+    /**
+     * .
+     */
     public void testGetAllEdges()
     {
         Set<DefaultEdge> edges = undirected.getAllEdges(v3, v2);
@@ -138,6 +196,17 @@ public class AsUndirectedGraphTest
     /**
      * .
      */
+    public void testToString()
+    {
+        assertEquals(
+            "([v1, v2, v3, v4], [(v1,v2), (v2,v3), (v2,v4), (v4,v4)])", directed.toString());
+        assertEquals(
+            "([v1, v2, v3, v4], [{v1,v2}, {v2,v3}, {v2,v4}, {v4,v4}])", undirected.toString());
+    }
+
+    /**
+     * .
+     */
     @Override
     protected void setUp()
     {
@@ -148,9 +217,9 @@ public class AsUndirectedGraphTest
         directed.addVertex(v2);
         directed.addVertex(v3);
         directed.addVertex(v4);
-        directed.addEdge(v1, v2);
-        directed.addEdge(v2, v3);
-        directed.addEdge(v2, v4);
+        e12 = directed.addEdge(v1, v2);
+        e23 = directed.addEdge(v2, v3);
+        e24 = directed.addEdge(v2, v4);
         loop = directed.addEdge(v4, v4);
     }
 }

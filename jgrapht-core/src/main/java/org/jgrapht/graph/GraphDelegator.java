@@ -46,8 +46,8 @@ public class GraphDelegator<V, E>
     extends AbstractGraph<V, E>
     implements Graph<V, E>, Serializable
 {
-    private static final long serialVersionUID = 3257005445226181425L;
-
+    private static final long serialVersionUID = -215068279981825448L;
+    
     /**
      * The graph to which operations are delegated.
      */
@@ -57,17 +57,11 @@ public class GraphDelegator<V, E>
      * Constructor for GraphDelegator.
      *
      * @param g the backing graph (the delegate).
-     * @throws IllegalArgumentException iff <code>g==null</code>
      */
     public GraphDelegator(Graph<V, E> g)
     {
         super();
-
-        if (g == null) {
-            throw new IllegalArgumentException("g must not be null.");
-        }
-
-        delegate = g;
+        delegate = Objects.requireNonNull(g, "g must not be null");
     }
 
     /**
@@ -147,11 +141,10 @@ public class GraphDelegator<V, E>
      *
      * @param vertex vertex whose degree is to be calculated
      * @return the degree of the specified vertex
-     * @see UndirectedGraph#degreeOf(Object)
      */
     public int degreeOf(V vertex)
     {
-        return ((UndirectedGraph<V, E>) delegate).degreeOf(vertex);
+        return delegate.degreeOf(vertex);
     }
 
     /**
@@ -173,51 +166,39 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * Returns the "in degree" of the specified vertex.
-     *
-     * @param vertex vertex whose in degree is to be calculated
-     * @return the in degree of the specified vertex
-     * @see DirectedGraph#inDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int inDegreeOf(V vertex)
     {
-        return ((DirectedGraph<V, ? extends E>) delegate).inDegreeOf(vertex);
+        return delegate.inDegreeOf(vertex);
     }
 
     /**
-     * Returns a set of all edges incoming into the specified vertex.
-     *
-     * @param vertex the vertex for which the list of incoming edges to be returned
-     * @return a set of all edges incoming into the specified vertex
-     * @see DirectedGraph#incomingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        return ((DirectedGraph<V, E>) delegate).incomingEdgesOf(vertex);
+        return delegate.incomingEdgesOf(vertex);
     }
 
     /**
-     * Returns the "out degree" of the specified vertex.
-     *
-     * @param vertex vertex whose out degree is to be calculated
-     * @return the out degree of the specified vertex
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int outDegreeOf(V vertex)
     {
-        return ((DirectedGraph<V, ? extends E>) delegate).outDegreeOf(vertex);
+        return delegate.outDegreeOf(vertex);
     }
 
     /**
-     * Returns a set of all edges outgoing from the specified vertex.
-     *
-     * @param vertex the vertex for which the list of outgoing edges to be returned
-     * @return a set of all edges outgoing from the specified vertex
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        return ((DirectedGraph<V, E>) delegate).outgoingEdgesOf(vertex);
+        return delegate.outgoingEdgesOf(vertex);
     }
 
     /**
@@ -293,14 +274,21 @@ public class GraphDelegator<V, E>
     }
 
     /**
-     * Assigns a weight to an edge.
-     *
-     * @param e edge on which to set weight
-     * @param weight new weight for edge
+     * {@inheritDoc}
      */
+    @Override
     public void setEdgeWeight(E e, double weight)
     {
-        ((WeightedGraph<V, E>) delegate).setEdgeWeight(e, weight);
+        delegate.setEdgeWeight(e, weight);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return delegate.getType();
     }
 }
 
