@@ -41,18 +41,17 @@ import org.jgrapht.*;
  * @author Avner Linder
  */
 public class VisioExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
-    private ComponentNameProvider<V> vertexNameProvider;
-
     /**
      * Creates a new VisioExporter with the specified naming policy.
      *
-     * @param vertexNameProvider the vertex name provider to be used for naming the Visio shapes.
+     * @param vertexIDProvider the vertex id provider to be used for naming the Visio shapes
      */
-    public VisioExporter(ComponentNameProvider<V> vertexNameProvider)
+    public VisioExporter(ComponentNameProvider<V> vertexIDProvider)
     {
-        this.vertexNameProvider = vertexNameProvider;
+        super(vertexIDProvider);
     }
 
     /**
@@ -87,8 +86,8 @@ public class VisioExporter<V, E>
 
     private void exportEdge(PrintWriter out, E edge, Graph<V, E> g)
     {
-        String sourceName = vertexNameProvider.getName(g.getEdgeSource(edge));
-        String targetName = vertexNameProvider.getName(g.getEdgeTarget(edge));
+        String sourceName = vertexIDProvider.getName(g.getEdgeSource(edge));
+        String targetName = vertexIDProvider.getName(g.getEdgeTarget(edge));
 
         out.print("Link,");
 
@@ -107,7 +106,7 @@ public class VisioExporter<V, E>
 
     private void exportVertex(PrintWriter out, V vertex)
     {
-        String name = vertexNameProvider.getName(vertex);
+        String name = vertexIDProvider.getName(vertex);
 
         out.print("Shape,");
         out.print(name);

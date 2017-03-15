@@ -20,6 +20,7 @@ package org.jgrapht.io;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jgrapht.*;
 
 /**
@@ -28,12 +29,11 @@ import org.jgrapht.*;
  * <p>
  * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  * http://www. infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
- * </p>
  * 
  * <p>
  * The behavior of the exporter such as whether to print vertex labels, edge labels, and/or edge
  * weights can be adjusted using the {@link #setParameter(Parameter, boolean) setParameter} method.
- * </p>
+ * When exporting labels, the exporter escapes them as Java strings.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,6 +41,7 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class GmlExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     private static final String CREATOR = "JGraphT GML Exporter";
@@ -49,6 +50,10 @@ public class GmlExporter<V, E>
     private static final String DELIM = " ";
     private static final String TAB1 = "\t";
     private static final String TAB2 = "\t\t";
+
+    private ComponentNameProvider<V> vertexLabelProvider;
+    private ComponentNameProvider<E> edgeLabelProvider;
+    private final Set<Parameter> parameters;
 
     /**
      * Parameters that affect the behavior of the {@link GmlExporter} exporter.
@@ -66,14 +71,12 @@ public class GmlExporter<V, E>
         /**
          * If set the exporter outputs edge weights
          */
-        EXPORT_EDGE_WEIGHTS
+        EXPORT_EDGE_WEIGHTS,
+        /**
+         * If set the exporter escapes all strings as Java strings
+         */
+        ESCAPE_STRINGS_AS_JAVA,
     }
-
-    private ComponentNameProvider<V> vertexIDProvider;
-    private ComponentNameProvider<V> vertexLabelProvider;
-    private ComponentNameProvider<E> edgeIDProvider;
-    private ComponentNameProvider<E> edgeLabelProvider;
-    private final Set<Parameter> parameters;
 
     /**
      * Creates a new GmlExporter object with integer name providers for the vertex and edge IDs and
@@ -99,16 +102,22 @@ public class GmlExporter<V, E>
         ComponentNameProvider<V> vertexIDProvider, ComponentNameProvider<V> vertexLabelProvider,
         ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider)
     {
-        this.vertexIDProvider = vertexIDProvider;
+        super(
+            vertexIDProvider,
+            Objects.requireNonNull(edgeIDProvider, "Edge ID provider cannot be null"));
         this.vertexLabelProvider = vertexLabelProvider;
-        this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
         this.parameters = new HashSet<>();
     }
 
     private String quoted(final String s)
     {
-        return "\"" + s + "\"";
+        boolean escapeStringAsJava = parameters.contains(Parameter.ESCAPE_STRINGS_AS_JAVA);
+        if (escapeStringAsJava) {
+            return "\"" + StringEscapeUtils.escapeJava(s) + "\"";
+        } else {
+            return "\"" + s + "\"";
+        }
     }
 
     private void exportHeader(PrintWriter out)

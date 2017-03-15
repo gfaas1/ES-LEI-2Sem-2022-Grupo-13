@@ -102,10 +102,10 @@ import org.xml.sax.helpers.DefaultHandler;
  * </pre>
  * 
  * <p>
- * The importer reads the input into a graph which is provided by the user. In case the graph is an
- * instance of {@link org.jgrapht.WeightedGraph} and the corresponding edge key with
- * attr.name="weight" is defined, the importer also reads edge weights. Otherwise edge weights are
- * ignored.
+ * The importer reads the input into a graph which is provided by the user. In case the graph is
+ * weighted and the corresponding edge key with attr.name="weight" is defined, the importer also
+ * reads edge weights. Otherwise edge weights are ignored. To test whether the graph is weighted,
+ * method {@link Graph#getType()} can be used.
  * 
  * <p>
  * GraphML-Attributes Values are read as string key-value pairs and passed on to the
@@ -130,13 +130,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @since July 2016
  */
 public class GraphMLImporter<V, E>
+    extends AbstractBaseImporter<V, E>
     implements GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
-
-    private VertexProvider<V> vertexProvider;
-    private EdgeProvider<V, E> edgeProvider;
 
     // special attributes
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
@@ -150,60 +148,7 @@ public class GraphMLImporter<V, E>
      */
     public GraphMLImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
-    }
-
-    /**
-     * Get the vertex provider
-     * 
-     * @return the vertex provider
-     */
-    public VertexProvider<V> getVertexProvider()
-    {
-        return vertexProvider;
-    }
-
-    /**
-     * Set the vertex provider
-     * 
-     * @param vertexProvider the new vertex provider. Must not be null.
-     */
-    public void setVertexProvider(VertexProvider<V> vertexProvider)
-    {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-    }
-
-    /**
-     * Get the edge provider
-     * 
-     * @return The edge provider
-     */
-    public EdgeProvider<V, E> getEdgeProvider()
-    {
-        return edgeProvider;
-    }
-
-    /**
-     * Set the edge provider.
-     * 
-     * @param edgeProvider the new edge provider. Must not be null.
-     */
-    public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
-    {
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
+        super(vertexProvider, edgeProvider);
     }
 
     /**
