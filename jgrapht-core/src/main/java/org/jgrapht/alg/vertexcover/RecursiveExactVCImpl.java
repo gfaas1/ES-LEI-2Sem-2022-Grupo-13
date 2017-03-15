@@ -206,11 +206,8 @@ public class RecursiveExactVCImpl<V, E>
         double weight = this.getWeight(neighbors);
         BitSetCover rightCover = calculateCoverRecursively(
             indexNextVertex + 1, visitedRightBranch, accumulatedWeight + weight);
-
-        List<Integer> neighborsIndices = new ArrayList<Integer>();
-        for(V v: neighbors) { 
-            neighborsIndices.add(vertexIDDictionary.get(v));
-        }
+        List<Integer> neighborsIndices =
+            neighbors.stream().map(vertexIDDictionary::get).collect(Collectors.toList());
         rightCover.addAllVertices(neighborsIndices,weight);
 
         // Left branch (vertex v is added to the cover, and we solve for G_{v}):
@@ -244,11 +241,7 @@ public class RecursiveExactVCImpl<V, E>
     private double getWeight(Collection<V> vertices)
     {
         if (weighted) { 
-            double total = 0d;
-            for(V v: vertices) { 
-                total += vertexWeightMap.get(v);
-            }
-            return total;
+            return vertices.stream().map(vertexWeightMap::get).reduce(0d, Double::sum);
         } else { 
             return vertices.size();
         }
