@@ -70,7 +70,7 @@ public class RecursiveExactVCImpl<V, E>
      * view. As such, all operations can be simplified to bitset operations, which may improve the
      * algorithm's performance.
      **/
-    NeighborIndex<V, E> neighborIndex;
+    private NeighborIndex<V, E> neighborIndex;
 
     /** Map for memoization **/
     private Map<BitSet, BitSetCover> memo;
@@ -205,10 +205,9 @@ public class RecursiveExactVCImpl<V, E>
         double weight = this.getWeight(neighbors);
         BitSetCover rightCover = calculateCoverRecursively(
             indexNextVertex + 1, visitedRightBranch, accumulatedWeight + weight);
-        rightCover.addAllVertices(
-            neighbors.stream().mapToInt(vertexIDDictionary::get).boxed().collect(
-                Collectors.toList()),
-            weight);
+        List<Integer> neighborsIndices =
+            neighbors.stream().map(vertexIDDictionary::get).collect(Collectors.toList());
+        rightCover.addAllVertices(neighborsIndices,weight);
 
         // Left branch (vertex v is added to the cover, and we solve for G_{v}):
         BitSet visitedLeftBranch = (BitSet) visited.clone();
@@ -240,10 +239,11 @@ public class RecursiveExactVCImpl<V, E>
      */
     private double getWeight(Collection<V> vertices)
     {
-        if (weighted)
-            return vertices.stream().mapToDouble(vertexWeightMap::get).sum();
-        else
+        if (weighted) { 
+            return vertices.stream().map(vertexWeightMap::get).reduce(0d, Double::sum);
+        } else { 
             return vertices.size();
+        }
     }
 
     /**
