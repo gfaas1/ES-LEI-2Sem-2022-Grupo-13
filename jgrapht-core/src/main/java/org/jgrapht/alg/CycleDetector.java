@@ -48,7 +48,7 @@ public class CycleDetector<V, E>
      */
     public CycleDetector(Graph<V, E> graph)
     {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
+        this.graph = GraphTests.requireDirected(graph);
     }
 
     /**
@@ -142,7 +142,7 @@ public class CycleDetector<V, E>
 
     private void execute(Set<V> s, V v)
     {
-        ProbeIterator iter = new ProbeIterator(s, v);
+        ProbeIterator<V, E> iter = new ProbeIterator<>(graph, s, v);
 
         while (iter.hasNext()) {
             iter.next();
@@ -162,19 +162,19 @@ public class CycleDetector<V, E>
     /**
      * Version of DFS which maintains a backtracking path used to probe for cycles.
      */
-    private class ProbeIterator
+    private static class ProbeIterator<V, E>
         extends DepthFirstIterator<V, E>
     {
         private List<V> path;
         private Set<V> cycleSet;
         private V root;
 
-        ProbeIterator(Set<V> cycleSet, V startVertex)
+        ProbeIterator(Graph<V, E> graph, Set<V> cycleSet, V startVertex)
         {
             super(graph, startVertex);
-            root = startVertex;
+            this.path = new ArrayList<>();
             this.cycleSet = cycleSet;
-            path = new ArrayList<>();
+            this.root = startVertex;
         }
 
         /**

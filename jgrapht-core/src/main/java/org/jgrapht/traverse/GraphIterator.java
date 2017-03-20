@@ -34,12 +34,22 @@ public interface GraphIterator<V, E>
     extends Iterator<V>
 {
     /**
-     * Test whether this iterator is set to traverse the grpah across connected components.
+     * Test whether this iterator is set to traverse the graph across connected components.
      *
      * @return <code>true</code> if traverses across connected components, otherwise
      *         <code>false</code>.
      */
     boolean isCrossComponentTraversal();
+
+    /**
+     * Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to
+     * <code>true</code> this class will reuse previously fired events and will not create a new
+     * object for each event. This option increases performance but should be used with care,
+     * especially in multithreaded environment.
+     *
+     * @return the value of the <code>reuseEvents</code> flag.
+     */
+    boolean isReuseEvents();
 
     /**
      * Sets a value the <code>reuseEvents</code> flag. If the <code>
@@ -53,16 +63,6 @@ public interface GraphIterator<V, E>
     void setReuseEvents(boolean reuseEvents);
 
     /**
-     * Tests whether the <code>reuseEvents</code> flag is set. If the flag is set to
-     * <code>true</code> this class will reuse previously fired events and will not create a new
-     * object for each event. This option increases performance but should be used with care,
-     * especially in multithreaded environment.
-     *
-     * @return the value of the <code>reuseEvents</code> flag.
-     */
-    boolean isReuseEvents();
-
-    /**
      * Adds the specified traversal listener to this iterator.
      *
      * @param l the traversal listener to be added.
@@ -70,17 +70,19 @@ public interface GraphIterator<V, E>
     void addTraversalListener(TraversalListener<V, E> l);
 
     /**
-     * Unsupported.
-     */
-    @Override
-    void remove();
-
-    /**
      * Removes the specified traversal listener from this iterator.
      *
      * @param l the traversal listener to be removed.
      */
     void removeTraversalListener(TraversalListener<V, E> l);
+
+    /**
+     * Unsupported.
+     * 
+     * @throws UnsupportedOperationException always since operation is not supported
+     */
+    @Override
+    void remove();
 }
 
 // End GraphIterator.java

@@ -15,31 +15,31 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-
 package org.jgrapht.traverse;
 
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.event.*;
 
 /**
+ * A random walk iterator for a directed or undirected graph.
  * 
- * A <a href="https://en.wikipedia.org/wiki/Random_walk#Random_walk_on_graphs">random-walk</a>
- * iterator for a directed and an undirected graph. At each step selected a randomly (uniformly
- * distributed) edge out of the current vertex edges (in case of directed graph - from the outgoing
- * edges), and follows it to the next vertex.
+ * <p>
+ * At each step the iterator selects a random (uniformly distributed) edge out of the current vertex
+ * and follows it to the next vertex. In case of directed graphs the outgoing edge set is used. See
+ * <a href="https://en.wikipedia.org/wiki/Random_walk#Random_walk_on_graphs">wikipedia</a> for more
+ * details.
  * 
- * In case a weighted walk is desired (and in case the graph is weighted), edges are selected with
- * probability respective to its weight (out of the total weight of the edges).
+ * <p>
+ * In case a weighted walk is desired, edges are selected with probability respective to its weight
+ * (out of the total weight of the edges). The walk can be bounded by number of steps (default
+ * {@code Long#MAX_VALUE} . When the bound is reached the iterator is considered exhausted. Calling
+ * {@code next()} on exhausted iterator will throw {@code NoSuchElementException}.
  * 
- * Walk can be bounded by number of steps (default {@code Long#MAX_VALUE} . When the bound is
- * reached the iterator is considered exhausted. Calling {@code next()} on exhausted iterator will
+ * In case a sink (i.e. no edges) vertex is reached, any consecutive calls to {@code next()} will
  * throw {@code NoSuchElementException}.
  * 
- * In case a sink (i.e. no edges) vertex is reached, iterator will return null and consecutive calls
- * to {@code next()} will throw {@code NoSuchElementException}.
- * 
+ * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
  * undefined.
@@ -52,9 +52,7 @@ import org.jgrapht.event.*;
 public class RandomWalkIterator<V, E>
     extends AbstractGraphIterator<V, E>
 {
-
     private V currentVertex;
-    private final Graph<V, E> graph;
     private final boolean isWeighted;
     private boolean sinkReached;
     private long maxSteps;
@@ -125,14 +123,34 @@ public class RandomWalkIterator<V, E>
      */
     public RandomWalkIterator(Graph<V, E> graph, V startVertex, boolean isWeighted, long maxSteps)
     {
-        if (graph == null) {
-            throw new IllegalArgumentException("graph must not be null");
-        }
+        this(graph, startVertex, isWeighted, maxSteps, new Random());
+    }
+
+    /**
+     * Creates a new iterator for the specified graph. Iteration will start at the specified start
+     * vertex. If the specified start vertex is <code>
+     * null</code>, Iteration will start at an arbitrary graph vertex. Walk is bounded by the
+     * provided number steps.
+     *
+     * @param graph the graph to be iterated.
+     * @param startVertex the vertex iteration to be started.
+     * @param isWeighted set to <code>true</code> if a weighted walk is desired.
+     * @param maxSteps number of steps before walk is exhausted.
+     * @param rng the random number generator to use
+     *
+     * @throws IllegalArgumentException if <code>graph==null</code> or does not contain
+     *         <code>startVertex</code>
+     */
+    public RandomWalkIterator(
+        Graph<V, E> graph, V startVertex, boolean isWeighted, long maxSteps, Random rng)
+    {
+        super(graph);
+
         // do not cross components.
-        setCrossComponentTraversal(false);
-        this.graph = graph;
+        this.crossComponentTraversal = false;
         this.isWeighted = isWeighted;
         this.maxSteps = maxSteps;
+
         // select a random start vertex in case not provided.
         if (startVertex == null) {
             if (graph.vertexSet().size() > 0) {
@@ -143,8 +161,9 @@ public class RandomWalkIterator<V, E>
         } else {
             throw new IllegalArgumentException("graph must contain the start vertex");
         }
+
         this.sinkReached = false;
-        this.random = new Random();
+        this.random = Objects.requireNonNull(rng, "Random number generator cannot be null");
     }
 
     /**
@@ -170,22 +189,15 @@ public class RandomWalkIterator<V, E>
         maxSteps--;
     }
 
-    /**
-     * @see java.util.Iterator#hasNext()
-     */
     @Override
     public boolean hasNext()
     {
         return currentVertex != null && !isExhausted() && !sinkReached;
     }
 
-    /**
-     * @see java.util.Iterator#next()
-     */
     @Override
     public V next()
     {
-
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -237,28 +249,6 @@ public class RandomWalkIterator<V, E>
             drawn = random.nextInt(list.size());
         }
         return list.get(drawn);
-    }
-
-    private EdgeTraversalEvent<E> createEdgeTraversalEvent(E edge)
-    {
-        if (isReuseEvents()) {
-            reusableEdgeEvent.setEdge(edge);
-
-            return reusableEdgeEvent;
-        } else {
-            return new EdgeTraversalEvent<E>(this, edge);
-        }
-    }
-
-    private VertexTraversalEvent<V> createVertexTraversalEvent(V vertex)
-    {
-        if (isReuseEvents()) {
-            reusableVertexEvent.setVertex(vertex);
-
-            return reusableVertexEvent;
-        } else {
-            return new VertexTraversalEvent<V>(this, vertex);
-        }
     }
 
     private double getTotalWeight(Collection<E> edges)

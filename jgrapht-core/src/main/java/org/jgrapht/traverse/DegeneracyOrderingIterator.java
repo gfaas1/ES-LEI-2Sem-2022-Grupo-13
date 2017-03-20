@@ -22,15 +22,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.event.VertexTraversalEvent;
 
 /**
- * A degeneracy ordering iterator for graphs.
+ * A degeneracy ordering iterator.
  * 
  * <p>
  * The degeneracy of a graph G is the smallest value d such that every nonempty subgraph of G
@@ -55,8 +53,6 @@ import org.jgrapht.event.VertexTraversalEvent;
 public class DegeneracyOrderingIterator<V, E>
     extends AbstractGraphIterator<V, E>
 {
-    private final Graph<V, E> graph;
-
     private Set<V>[] buckets;
     private Map<V, Integer> degrees;
     private int minDegree;
@@ -70,7 +66,7 @@ public class DegeneracyOrderingIterator<V, E>
     @SuppressWarnings("unchecked")
     public DegeneracyOrderingIterator(Graph<V, E> graph)
     {
-        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        super(graph);
 
         /*
          * Count degrees, but skip self-loops
@@ -192,16 +188,6 @@ public class DegeneracyOrderingIterator<V, E>
         }
 
         return result;
-    }
-
-    private VertexTraversalEvent<V> createVertexTraversalEvent(V vertex)
-    {
-        if (isReuseEvents()) {
-            reusableVertexEvent.setVertex(vertex);
-            return reusableVertexEvent;
-        } else {
-            return new VertexTraversalEvent<>(this, vertex);
-        }
     }
 
 }

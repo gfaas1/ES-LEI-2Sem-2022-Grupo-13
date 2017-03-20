@@ -39,28 +39,6 @@ public abstract class CrossComponentIterator<V, E, D>
     private static final int CCS_WITHIN_COMPONENT = 2;
     private static final int CCS_AFTER_COMPONENT = 3;
 
-    /**
-     * Standard vertex visit state enumeration.
-     */
-    protected static enum VisitColor
-    {
-        /**
-         * Vertex has not been returned via iterator yet.
-         */
-        WHITE,
-
-        /**
-         * Vertex has been returned via iterator, but we're not done with all of its out-edges yet.
-         */
-        GRAY,
-
-        /**
-         * Vertex has been returned via iterator, and we're done with all of its out-edges.
-         */
-        BLACK
-    }
-
-    //
     private final ConnectedComponentTraversalEvent ccFinishedEvent =
         new ConnectedComponentTraversalEvent(
             this, ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_FINISHED);
@@ -68,21 +46,36 @@ public abstract class CrossComponentIterator<V, E, D>
         new ConnectedComponentTraversalEvent(
             this, ConnectedComponentTraversalEvent.CONNECTED_COMPONENT_STARTED);
 
-    private Iterator<V> vertexIterator = null;
-
     /**
      * Stores the vertices that have been seen during iteration and (optionally) some additional
      * traversal info regarding each vertex.
      */
     private Map<V, D> seen = new HashMap<>();
-    private V startVertex;
 
-    private final Graph<V, E> graph;
+    /**
+     * Iterator which provides start vertices for cross-component iteration.
+     */
+    private Iterator<V> startVertexIterator = null;
+
+    /**
+     * The start vertex.
+     */
+    private V startVertex;
 
     /**
      * The connected component state
      */
     private int state = CCS_BEFORE_COMPONENT;
+
+    /**
+     * Creates a new iterator for the specified graph.
+     *
+     * @param g the graph to be iterated
+     */
+    public CrossComponentIterator(Graph<V, E> g)
+    {
+        this(g, null);
+    }
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
@@ -97,44 +90,30 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
-        super();
+        super(g);
 
-        if (g == null) {
-            throw new IllegalArgumentException("graph must not be null");
-        }
-        graph = g;
-
-        vertexIterator = g.vertexSet().iterator();
-        setCrossComponentTraversal(startVertex == null);
-
-        reusableEdgeEvent = new FlyweightEdgeEvent<>(this, null);
-        reusableVertexEvent = new FlyweightVertexEvent<>(this, null);
-
+        /*
+         * Initialize start vertex
+         */
+        this.startVertexIterator = graph.vertexSet().iterator();
         if (startVertex == null) {
+            this.crossComponentTraversal = true;
             // pick a start vertex if graph not empty
-            if (vertexIterator.hasNext()) {
-                this.startVertex = vertexIterator.next();
+            if (startVertexIterator.hasNext()) {
+                this.startVertex = startVertexIterator.next();
             } else {
                 this.startVertex = null;
             }
-        } else if (g.containsVertex(startVertex)) {
-            this.startVertex = startVertex;
         } else {
-            throw new IllegalArgumentException("graph must contain the start vertex");
+            this.crossComponentTraversal = false;
+            if (graph.containsVertex(startVertex)) {
+                this.startVertex = startVertex;
+            } else {
+                throw new IllegalArgumentException("graph must contain the start vertex");
+            }
         }
     }
 
-    /**
-     * @return the graph being traversed
-     */
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * @see java.util.Iterator#hasNext()
-     */
     @Override
     public boolean hasNext()
     {
@@ -151,8 +130,8 @@ public abstract class CrossComponentIterator<V, E, D>
             }
 
             if (isCrossComponentTraversal()) {
-                while (vertexIterator.hasNext()) {
-                    V v = vertexIterator.next();
+                while (startVertexIterator.hasNext()) {
+                    V v = startVertexIterator.next();
 
                     if (!isSeenVertex(v)) {
                         encounterVertex(v, null);
@@ -171,9 +150,6 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    /**
-     * @see java.util.Iterator#next()
-     */
     @Override
     public V next()
     {
@@ -309,56 +285,10 @@ public abstract class CrossComponentIterator<V, E, D>
         }
     }
 
-    private EdgeTraversalEvent<E> createEdgeTraversalEvent(E edge)
-    {
-        if (isReuseEvents()) {
-            reusableEdgeEvent.setEdge(edge);
-
-            return reusableEdgeEvent;
-        } else {
-            return new EdgeTraversalEvent<>(this, edge);
-        }
-    }
-
-    private VertexTraversalEvent<V> createVertexTraversalEvent(V vertex)
-    {
-        if (isReuseEvents()) {
-            reusableVertexEvent.setVertex(vertex);
-
-            return reusableVertexEvent;
-        } else {
-            return new VertexTraversalEvent<>(this, vertex);
-        }
-    }
-
     private void encounterStartVertex()
     {
         encounterVertex(startVertex, null);
         startVertex = null;
-    }
-
-    static interface SimpleContainer<T>
-    {
-        /**
-         * Tests if this container is empty.
-         *
-         * @return <code>true</code> if empty, otherwise <code>false</code>.
-         */
-        public boolean isEmpty();
-
-        /**
-         * Adds the specified object to this container.
-         *
-         * @param o the object to be added.
-         */
-        public void add(T o);
-
-        /**
-         * Remove an object from this container and return it.
-         *
-         * @return the object removed from this container.
-         */
-        public T remove();
     }
 
 }

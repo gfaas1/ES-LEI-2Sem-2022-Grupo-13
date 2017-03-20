@@ -23,9 +23,12 @@ import org.jgrapht.*;
 import org.jgrapht.util.*;
 
 /**
- * A depth-first iterator for a directed and an undirected graph. For this iterator to work
- * correctly the graph must not be modified during iteration. Currently there are no means to ensure
- * that, nor to fail-fast. The results of such modifications are undefined.
+ * A depth-first iterator for a directed or undirected graph.
+ * 
+ * <p>
+ * For this iterator to work correctly the graph must not be modified during iteration. Currently
+ * there are no means to ensure that, nor to fail-fast. The results of such modifications are
+ * undefined.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -35,7 +38,7 @@ import org.jgrapht.util.*;
  * @since Jul 29, 2003
  */
 public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, CrossComponentIterator.VisitColor>
+    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
 {
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And
@@ -45,11 +48,27 @@ public class DepthFirstIterator<V, E>
     public static final Object SENTINEL = new Object();
 
     /**
-     * @see #getStack
+     * Standard vertex visit state enumeration.
      */
-    private Deque<Object> stack = new ArrayDeque<>();
+    protected static enum VisitColor
+    {
+        /**
+         * Vertex has not been returned via iterator yet.
+         */
+        WHITE,
 
-    private transient TypeUtil<V> vertexTypeDecl = null;
+        /**
+         * Vertex has been returned via iterator, but we're not done with all of its out-edges yet.
+         */
+        GRAY,
+
+        /**
+         * Vertex has been returned via iterator, and we're done with all of its out-edges.
+         */
+        BLACK
+    }
+
+    private Deque<Object> stack = new ArrayDeque<>();
 
     /**
      * Creates a new depth-first iterator for the specified graph.
@@ -75,9 +94,6 @@ public class DepthFirstIterator<V, E>
         super(g, startVertex);
     }
 
-    /**
-     * @see CrossComponentIterator#isConnectedComponentExhausted()
-     */
     @Override
     protected boolean isConnectedComponentExhausted()
     {
@@ -101,9 +117,6 @@ public class DepthFirstIterator<V, E>
         }
     }
 
-    /**
-     * @see CrossComponentIterator#encounterVertex(Object, Object)
-     */
     @Override
     protected void encounterVertex(V vertex, E edge)
     {
@@ -111,9 +124,6 @@ public class DepthFirstIterator<V, E>
         stack.addLast(vertex);
     }
 
-    /**
-     * @see CrossComponentIterator#encounterVertexAgain(Object, Object)
-     */
     @Override
     protected void encounterVertexAgain(V vertex, E edge)
     {
@@ -135,9 +145,6 @@ public class DepthFirstIterator<V, E>
         stack.addLast(vertex);
     }
 
-    /**
-     * @see CrossComponentIterator#provideNextVertex()
-     */
     @Override
     protected V provideNextVertex()
     {
@@ -150,7 +157,7 @@ public class DepthFirstIterator<V, E>
                 // Now carry on with another pop until we find a non-sentinel
             } else {
                 // Got a real vertex to start working on
-                v = TypeUtil.uncheckedCast(o, vertexTypeDecl);
+                v = TypeUtil.uncheckedCast(o, null);
                 break;
             }
         }
@@ -165,7 +172,7 @@ public class DepthFirstIterator<V, E>
 
     private void recordFinish()
     {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), vertexTypeDecl);
+        V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
         putSeenData(v, VisitColor.BLACK);
         finishVertex(v);
     }
