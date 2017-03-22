@@ -63,9 +63,6 @@ abstract class AbstractBaseImporter<V, E>
         this(vertexProvider, edgeProvider, (c, a) -> {
         }, (c, a) -> {
         });
-        this.vertexProvider =
-            Objects.requireNonNull(vertexProvider, "Vertex provider cannot be null");
-        this.edgeProvider = Objects.requireNonNull(edgeProvider, "Edge provider cannot be null");
     }
 
     /**

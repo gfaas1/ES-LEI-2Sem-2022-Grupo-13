@@ -73,7 +73,8 @@ public class GmlExporter<V, E>
          */
         EXPORT_EDGE_WEIGHTS,
         /**
-         * If set the exporter escapes all strings as Java strings
+         * If set the exporter escapes all strings as Java strings, otherwise no escaping is
+         * performed.
          */
         ESCAPE_STRINGS_AS_JAVA,
     }
