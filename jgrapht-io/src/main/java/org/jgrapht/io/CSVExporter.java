@@ -51,11 +51,11 @@ import org.jgrapht.*;
  * @since August 2016
  */
 public class CSVExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
-    private final ComponentNameProvider<V> vertexIDProvider;
     private final Set<CSVFormat.Parameter> parameters;
     private CSVFormat format;
     private char delimiter;
@@ -99,10 +99,7 @@ public class CSVExporter<V, E>
      */
     public CSVExporter(ComponentNameProvider<V> vertexIDProvider, CSVFormat format, char delimiter)
     {
-        if (vertexIDProvider == null) {
-            throw new IllegalArgumentException("Vertex id provider cannot be null");
-        }
-        this.vertexIDProvider = vertexIDProvider;
+        super(vertexIDProvider);
         this.format = format;
         if (!DSVUtils.isValidDelimiter(delimiter)) {
             throw new IllegalArgumentException("Character cannot be used as a delimiter");

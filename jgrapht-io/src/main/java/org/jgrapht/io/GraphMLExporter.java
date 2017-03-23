@@ -44,12 +44,11 @@ import org.xml.sax.helpers.*;
  * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     // providers
-    private ComponentNameProvider<V> vertexIDProvider;
     private ComponentNameProvider<V> vertexLabelProvider;
-    private ComponentNameProvider<E> edgeIDProvider;
     private ComponentNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
@@ -121,16 +120,11 @@ public class GraphMLExporter<V, E>
         ComponentNameProvider<E> edgeIDProvider, ComponentNameProvider<E> edgeLabelProvider,
         ComponentAttributeProvider<E> edgeAttributeProvider)
     {
-        if (vertexIDProvider == null) {
-            throw new IllegalArgumentException("Vertex ID provider must not be null");
-        }
-        this.vertexIDProvider = vertexIDProvider;
+        super(
+            vertexIDProvider,
+            Objects.requireNonNull(edgeIDProvider, "Edge ID provider must not be null"));
         this.vertexLabelProvider = vertexLabelProvider;
         this.vertexAttributeProvider = vertexAttributeProvider;
-        if (edgeIDProvider == null) {
-            throw new IllegalArgumentException("Edge ID provider must not be null");
-        }
-        this.edgeIDProvider = edgeIDProvider;
         this.edgeLabelProvider = edgeLabelProvider;
         this.edgeAttributeProvider = edgeAttributeProvider;
     }

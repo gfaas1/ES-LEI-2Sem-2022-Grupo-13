@@ -37,6 +37,7 @@ import org.jgrapht.graph.*;
  * @author Trevor Harmon
  */
 public class DOTExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     /**
@@ -45,7 +46,6 @@ public class DOTExporter<V, E>
     public static final String DEFAULT_GRAPH_ID = "G";
 
     private ComponentNameProvider<Graph<V, E>> graphIDProvider;
-    private ComponentNameProvider<V> vertexIDProvider;
     private ComponentNameProvider<V> vertexLabelProvider;
     private ComponentNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
@@ -128,7 +128,7 @@ public class DOTExporter<V, E>
         ComponentAttributeProvider<E> edgeAttributeProvider,
         ComponentNameProvider<Graph<V, E>> graphIDProvider)
     {
-        this.vertexIDProvider = vertexIDProvider;
+        super(vertexIDProvider);
         this.vertexLabelProvider = vertexLabelProvider;
         this.edgeLabelProvider = edgeLabelProvider;
         this.vertexAttributeProvider = vertexAttributeProvider;

@@ -41,11 +41,11 @@ import org.jgrapht.util.*;
  * @author Dimitrios Michail
  */
 public class MatrixExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     private final String delimiter = " ";
     private Format format;
-    private ComponentNameProvider<V> vertexIDProvider;
 
     /**
      * Formats supported by the {@link MatrixExporter} exporter.
@@ -97,11 +97,8 @@ public class MatrixExporter<V, E>
      */
     public MatrixExporter(Format format, ComponentNameProvider<V> vertexIDProvider)
     {
+        super(vertexIDProvider);
         this.format = format;
-        if (vertexIDProvider == null) {
-            throw new IllegalArgumentException("Vertex ID provider must not be null");
-        }
-        this.vertexIDProvider = vertexIDProvider;
     }
 
     /**

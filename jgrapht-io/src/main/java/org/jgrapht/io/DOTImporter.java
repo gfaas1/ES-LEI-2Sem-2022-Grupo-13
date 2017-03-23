@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenFactory;
@@ -58,6 +57,7 @@ import org.jgrapht.Graph;
  * @param <E> the graph edge type
  */
 public class DOTImporter<V, E>
+    extends AbstractBaseImporter<V, E>
     implements GraphImporter<V, E>
 {
     /**
@@ -69,11 +69,6 @@ public class DOTImporter<V, E>
     private static final CharSequenceTranslator UNESCAPE_ID = new AggregateTranslator(
         new LookupTranslator(
             new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" } }));
-
-    private VertexProvider<V> vertexProvider;
-    private ComponentUpdater<V> vertexUpdater;
-    private EdgeProvider<V, E> edgeProvider;
-    private ComponentUpdater<Graph<V, E>> graphUpdater;
 
     /**
      * Constructs a new importer.
@@ -112,13 +107,9 @@ public class DOTImporter<V, E>
         VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider,
         ComponentUpdater<V> vertexUpdater, ComponentUpdater<Graph<V, E>> graphUpdater)
     {
-        this.vertexProvider =
-            Objects.requireNonNull(vertexProvider, "Vertex provider cannot be null");
-        this.edgeProvider = Objects.requireNonNull(edgeProvider, "Edge provider cannot be null");
-        this.vertexUpdater = (vertexUpdater != null) ? vertexUpdater : (c, a) -> {
-        };
-        this.graphUpdater = (graphUpdater != null) ? graphUpdater : (c, a) -> {
-        };
+        super(vertexProvider, edgeProvider, (vertexUpdater != null) ? vertexUpdater : (c, a) -> {
+        }, (graphUpdater != null) ? graphUpdater : (c, a) -> {
+        });
     }
 
     /**
