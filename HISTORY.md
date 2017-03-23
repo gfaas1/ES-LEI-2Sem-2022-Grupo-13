@@ -19,6 +19,8 @@ Changes to JGraphT in each version:
     - Deprecated `DirectedGraph`, `UndirectedGraph`, and `WeightedGraph`, moving their methods up to the base `Graph` interface; added `GraphType` metadata; made usage of DefaultWeightedEdge optional for weighted graphs (contributed by Dimitrios Michail)
     - Refactored traversal iterators (contributed by Dimitrios Michail)
     - Backport to support build using Android SDK 24 (contributed by Dimitrios Michail)
+    - Added support for attributes in GmlImporter; extracted common code from importers and exporters into abstract base classes to avoid code duplication. (contributed by Dimitrios Michail)
+    
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
