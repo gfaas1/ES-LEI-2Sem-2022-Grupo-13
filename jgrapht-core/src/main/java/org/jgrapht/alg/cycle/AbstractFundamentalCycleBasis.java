@@ -131,15 +131,13 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
             return Pair.of(Arrays.asList(e), graph.getEdgeWeight(e));
         }
 
+        /*
+         * traverse half cycle
+         */
         Set<E> path1 = new LinkedHashSet<E>();
-        LinkedList<E> path2 = new LinkedList<E>();
-
-        // add edge e
         path1.add(e);
-
-        // traverse half cycle
         V cur = source;
-        while (true) {
+        while (!cur.equals(target)) {
             E edgeToParent = spanningForest.get(cur);
             if (edgeToParent == null) {
                 break;
@@ -149,23 +147,27 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
             cur = parent;
         }
 
-        // traverse the other half cycle
-        // while removing common edges
+        /*
+         * traverse the other half cycle, while removing common edges
+         */
         double path2Weight = 0d;
-        cur = target;
-        while (true) {
-            E edgeToParent = spanningForest.get(cur);
-            if (edgeToParent == null) {
-                break;
+        LinkedList<E> path2 = new LinkedList<E>();
+        if (!cur.equals(target)) {
+            cur = target;
+            while (true) {
+                E edgeToParent = spanningForest.get(cur);
+                if (edgeToParent == null) {
+                    break;
+                }
+                V parent = Graphs.getOppositeVertex(graph, edgeToParent, cur);
+                if (path1.contains(edgeToParent)) {
+                    path1.remove(edgeToParent);
+                } else {
+                    path2.add(edgeToParent);
+                    path2Weight += graph.getEdgeWeight(edgeToParent);
+                }
+                cur = parent;
             }
-            V parent = Graphs.getOppositeVertex(graph, edgeToParent, cur);
-            if (path1.contains(edgeToParent)) {
-                path1.remove(edgeToParent);
-            } else {
-                path2.add(edgeToParent);
-                path2Weight += graph.getEdgeWeight(edgeToParent);
-            }
-            cur = parent;
         }
 
         // now build cycle
