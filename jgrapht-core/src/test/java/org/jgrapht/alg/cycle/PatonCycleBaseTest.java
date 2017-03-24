@@ -173,7 +173,7 @@ public class PatonCycleBaseTest
         g.addEdge(11, 15);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 8, 8, 9, 5, 7, 4 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -196,45 +196,47 @@ public class PatonCycleBaseTest
         }
 
         CycleBasisAlgorithm<Integer, DefaultEdge> finder =
-            new PatonCycleBase<Integer, DefaultEdge>();
+            new PatonCycleBase<Integer, DefaultEdge>(graph);
         CycleBasis<Integer, DefaultEdge> basis;
 
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(2, 0);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(1, basis.getCycles().size());
         assertEquals(3, basis.getLength());
         graph.addEdge(2, 3);
         graph.addEdge(3, 0);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(2, basis.getCycles().size());
         assertEquals(6, basis.getLength());
         graph.addEdge(3, 1);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(3, basis.getCycles().size());
         assertEquals(9, basis.getLength());
         graph.addEdge(3, 4);
         graph.addEdge(4, 2);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(4, basis.getCycles().size());
         assertEquals(12, basis.getLength());
         graph.addEdge(4, 5);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(4, basis.getCycles().size());
         assertEquals(12, basis.getLength());
         graph.addEdge(5, 2);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(5, basis.getCycles().size());
         assertEquals(15, basis.getLength());
         graph.addEdge(5, 6);
         graph.addEdge(6, 4);
-        basis = finder.getCycleBasis(graph);
+        basis = finder.getCycleBasis();
         assertEquals(6, basis.getCycles().size());
         assertEquals(18, basis.getLength());
 
         for (int size = 1; size <= MAX_SIZE; size++) {
             graph = new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            finder =
+                new PatonCycleBase<Integer, DefaultEdge>(graph);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }
@@ -245,7 +247,7 @@ public class PatonCycleBaseTest
                     }
                 }
             }
-            basis = finder.getCycleBasis(graph);
+            basis = finder.getCycleBasis();
             assertEquals(RESULTS[size], basis.getCycles().size());
             assertEquals(3 * RESULTS[size], basis.getLength());
             assertEquals(3.0 * RESULTS[size], basis.getWeight(), 1e-9);
@@ -301,7 +303,7 @@ public class PatonCycleBaseTest
         g.addEdge(8, 15);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 24; i++) {
@@ -341,7 +343,7 @@ public class PatonCycleBaseTest
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 3; i++) {
@@ -379,7 +381,7 @@ public class PatonCycleBaseTest
         g.addEdge(8, 10);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 3, 3, 5, 3 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -409,7 +411,7 @@ public class PatonCycleBaseTest
         g.addEdge(5, 7);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 4, 4 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -445,7 +447,7 @@ public class PatonCycleBaseTest
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 2; i++) {
@@ -467,7 +469,7 @@ public class PatonCycleBaseTest
             Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
             gen.generateGraph(g, new IntegerVertexFactory(), null);
             CycleBasis<Integer, DefaultEdge> ucb =
-                new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(g);
+                new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
 
             int k = new ConnectivityInspector<>(g).connectedSets().size();
             int cycleSpaceDimension = g.edgeSet().size() - g.vertexSet().size() + k;
@@ -490,8 +492,8 @@ public class PatonCycleBaseTest
         graph.addEdge(0, 1);
         graph.addEdge(2, 3);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(0, cb.getCycles().size());
         assertEquals(0, cb.getLength());
         assertEquals(0d, cb.getWeight(), 1e-9);
@@ -511,8 +513,8 @@ public class PatonCycleBaseTest
         DefaultEdge e22 = graph.addEdge(2, 2);
         DefaultEdge e33 = graph.addEdge(3, 3);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
 
         int dimension = 5;
         Iterator<List<DefaultEdge>> it = cb.getCycles().iterator();
@@ -550,8 +552,8 @@ public class PatonCycleBaseTest
         Graphs.addAllVertices(graph, Arrays.asList(0));
         DefaultEdge e1 = graph.addEdge(0, 0);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
 
         int dimension = 1;
         Iterator<List<DefaultEdge>> it = cb.getCycles().iterator();
@@ -577,7 +579,7 @@ public class PatonCycleBaseTest
         graph.addEdge(0, 0);
         graph.addEdge(0, 0);
 
-        new PatonCycleBase<Integer, DefaultEdge>().getCycleBasis(graph);
+        new PatonCycleBase<Integer, DefaultEdge>(graph).getCycleBasis();
     }
 
     @Test
@@ -592,8 +594,8 @@ public class PatonCycleBaseTest
         graph.setEdgeWeight(graph.addEdge(3, 4), 102.0);
         graph.setEdgeWeight(graph.addEdge(4, 5), 107.0);
         graph.setEdgeWeight(graph.addEdge(5, 3), 113.0);
-        CycleBasisAlgorithm<Integer, DefaultWeightedEdge> fcb = new PatonCycleBase<>();
-        CycleBasis<Integer, DefaultWeightedEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultWeightedEdge> fcb = new PatonCycleBase<>(graph);
+        CycleBasis<Integer, DefaultWeightedEdge> cb = fcb.getCycleBasis();
         assertEquals(2, cb.getCycles().size());
         assertEquals(6, cb.getLength());
         assertEquals(344d, cb.getWeight(), 1e-9);

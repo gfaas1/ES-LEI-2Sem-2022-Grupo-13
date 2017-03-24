@@ -87,7 +87,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Check if a graph has self-loops.
+     * Check if a graph has self-loops. A self-loop is an edge with the same source and target
+     * vertices.
      * 
      * @param graph a graph
      * @param <V> the graph vertex type
@@ -96,7 +97,7 @@ public abstract class GraphTests
      */
     public static <V, E> boolean hasSelfLoops(Graph<V, E> graph)
     {
-        Objects.requireNonNull(graph, "Graph cannot be null");
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
 
         if (!graph.getType().isAllowingSelfLoops()) {
             return false;
@@ -112,7 +113,8 @@ public abstract class GraphTests
     }
 
     /**
-     * Check if a graph has multiple edges.
+     * Check if a graph has multiple edges (parallel edges), that is, whether the graph contains two
+     * or more edges connecting the same pair of vertices.
      * 
      * @param graph a graph
      * @param <V> the graph vertex type
@@ -121,7 +123,7 @@ public abstract class GraphTests
      */
     public static <V, E> boolean hasMultipleEdges(Graph<V, E> graph)
     {
-        Objects.requireNonNull(graph, "Graph cannot be null");
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
 
         if (!graph.getType().isAllowingMultipleEdges()) {
             return false;

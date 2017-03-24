@@ -27,12 +27,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
 import org.jgrapht.alg.util.Pair;
 
 /**
- * An base implementation for the computation of a fundamental cycle basis of a graph. Subclasses
+ * A base implementation for the computation of a fundamental cycle basis of a graph. Subclasses
  * should only provide a method for constructing a spanning forest of the graph. A cycle basis is
  * fundamental if and only if each cycle in the basis contains at least one edge which is not
  * contained in any other cycle in the basis.
@@ -54,21 +55,29 @@ import org.jgrapht.alg.util.Pair;
  * @author Dimitrios Michail
  * @since October 2016
  */
-abstract class AbstractFundamentalCycleBasis<V, E>
+public abstract class AbstractFundamentalCycleBasis<V, E>
     implements CycleBasisAlgorithm<V, E>
 {
+    protected Graph<V, E> graph;
+
+    /**
+     * Constructor
+     * 
+     * @param graph the input graph
+     */
+    public AbstractFundamentalCycleBasis(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireDirectedOrUndirected(graph);
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public CycleBasis<V, E> getCycleBasis(Graph<V, E> graph)
+    public CycleBasis<V, E> getCycleBasis()
     {
-        // check preconditions
-        Objects.requireNonNull(graph, "Graph cannot be null");
-
         // compute spanning forest
-        Map<V, E> spanningForest = computeSpanningForest(graph);
+        Map<V, E> spanningForest = computeSpanningForest();
 
         // collect set with all tree edges
         Set<E> treeEdges = spanningForest
@@ -81,7 +90,7 @@ abstract class AbstractFundamentalCycleBasis<V, E>
         double weight = 0d;
         for (E e : graph.edgeSet()) {
             if (!treeEdges.contains(e)) {
-                Pair<List<E>, Double> c = buildFundamentalCycle(graph, e, spanningForest);
+                Pair<List<E>, Double> c = buildFundamentalCycle(e, spanningForest);
                 cycles.add(c.getFirst());
                 length += c.getFirst().size();
                 weight += c.getSecond();
@@ -97,25 +106,22 @@ abstract class AbstractFundamentalCycleBasis<V, E>
      * 
      * <p>
      * The representation assumes that the map contains the predecessor edge of each vertex in the
-     * forest. The predecessor edge is the forest edge that was used to discover the vertex. In no
+     * forest. The predecessor edge is the forest edge that was used to discover the vertex. If no
      * such edge was used (the vertex is a leaf in the forest) then the corresponding entry must be
      * null.
      * 
-     * @param graph the input graph
      * @return a map representation of a spanning forest.
      */
-    protected abstract Map<V, E> computeSpanningForest(Graph<V, E> graph);
+    protected abstract Map<V, E> computeSpanningForest();
 
     /**
      * Given a non-tree edge and a spanning tree (forest) build a fundamental cycle.
      * 
-     * @param graph the graph
      * @param e a non-tree (forest) edge
      * @param spanningForest the spanning tree (forest)
      * @return a fundamental cycle
      */
-    private Pair<List<E>, Double> buildFundamentalCycle(
-        Graph<V, E> graph, E e, Map<V, E> spanningForest)
+    private Pair<List<E>, Double> buildFundamentalCycle(E e, Map<V, E> spanningForest)
     {
         V source = graph.getEdgeSource(e);
         V target = graph.getEdgeTarget(e);

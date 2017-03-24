@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.Graph;
-
 /**
  * Allows to derive an undirected <a href="https://en.wikipedia.org/wiki/Cycle_basis">cycle
  * basis</a> of a given graph.
@@ -47,10 +45,9 @@ public interface CycleBasisAlgorithm<V, E>
     /**
      * Return a list of cycles forming an undirected cycle basis of a graph.
      * 
-     * @param graph the input graph
      * @return an undirected cycle basis
      */
-    CycleBasis<V, E> getCycleBasis(Graph<V, E> graph);
+    CycleBasis<V, E> getCycleBasis();
 
     /**
      * An undirected cycle basis.

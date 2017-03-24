@@ -28,7 +28,7 @@ import org.jgrapht.Graphs;
  * Generate a set of fundamental cycles by building a spanning tree (forest) using a straightforward
  * implementation of BFS using a FIFO queue. The implementation first constructs the spanning forest
  * and then builds the fundamental-cycles set. It supports graphs with self-loops and/or graphs with
- * multiple edges.
+ * multiple (parallel) edges.
  * 
  * <p>
  * For information on algorithms computing fundamental cycle bases see the following paper: Narsingh
@@ -50,20 +50,29 @@ import org.jgrapht.Graphs;
 public class QueueBFSFundamentalCycleBasis<V, E>
     extends AbstractFundamentalCycleBasis<V, E>
 {
+    /**
+     * Constructor
+     * 
+     * @param graph the input graph
+     */
+    public QueueBFSFundamentalCycleBasis(Graph<V, E> graph)
+    {
+        super(graph);
+    }
 
     /**
      * Compute a spanning forest of the graph using a straightforward BFS implementation.
      * 
+     * <p>
      * The representation assumes that the map contains the predecessor edge of each vertex in the
-     * forest. The predecessor edge is the forest edge that was used to discover the vertex. In no
+     * forest. The predecessor edge is the forest edge that was used to discover the vertex. If no
      * such edge was used (the vertex is a leaf in the forest) then the corresponding entry must be
      * null.
      * 
-     * @param graph the input graph
      * @return a map representation of a spanning forest.
      */
     @Override
-    protected Map<V, E> computeSpanningForest(Graph<V, E> graph)
+    protected Map<V, E> computeSpanningForest()
     {
         Map<V, E> pred = new HashMap<>();
 

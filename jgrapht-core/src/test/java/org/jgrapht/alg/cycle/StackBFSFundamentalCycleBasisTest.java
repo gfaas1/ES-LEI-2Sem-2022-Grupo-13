@@ -52,10 +52,9 @@ public class StackBFSFundamentalCycleBasisTest
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 2, 0);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
 
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(1, cb.getCycles().size());
         List<List<DefaultEdge>> cycles = new ArrayList<>(cb.getCycles());
 
@@ -70,7 +69,7 @@ public class StackBFSFundamentalCycleBasisTest
         Graphs.addEdgeWithVertices(graph, 2, 3);
         Graphs.addEdgeWithVertices(graph, 3, 0);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(2, cb.getCycles().size());
         c1 = cycles.get(0);
@@ -89,7 +88,7 @@ public class StackBFSFundamentalCycleBasisTest
 
         Graphs.addEdgeWithVertices(graph, 3, 1);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(3, cb.getCycles().size());
         c1 = cycles.get(0);
@@ -116,7 +115,7 @@ public class StackBFSFundamentalCycleBasisTest
         Graphs.addEdgeWithVertices(graph, 3, 4);
         Graphs.addEdgeWithVertices(graph, 4, 2);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(4, cb.getCycles().size());
 
@@ -150,7 +149,7 @@ public class StackBFSFundamentalCycleBasisTest
 
         Graphs.addEdgeWithVertices(graph, 4, 5);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(4, cb.getCycles().size());
 
@@ -184,7 +183,7 @@ public class StackBFSFundamentalCycleBasisTest
 
         Graphs.addEdgeWithVertices(graph, 5, 2);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(5, cb.getCycles().size());
 
@@ -227,7 +226,7 @@ public class StackBFSFundamentalCycleBasisTest
         Graphs.addEdgeWithVertices(graph, 5, 6);
         Graphs.addEdgeWithVertices(graph, 6, 4);
 
-        cb = fcb.getCycleBasis(graph);
+        cb = fcb.getCycleBasis();
         cycles = new ArrayList<>(cb.getCycles());
         assertEquals(6, cb.getCycles().size());
 
@@ -302,9 +301,8 @@ public class StackBFSFundamentalCycleBasisTest
         DefaultEdge e77_2 = graph.addEdge(7, 7);
         DefaultEdge e77_3 = graph.addEdge(7, 7);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
 
         assertEquals(13, cb.getCycles().size());
 
@@ -387,8 +385,8 @@ public class StackBFSFundamentalCycleBasisTest
         List<DefaultEdge> c13 = cycles.get(12);
         assertTrue(c13.contains(e77_3));
         assertEquals(1, c13.size());
-        
-        for(List<DefaultEdge> c: cb.getCycles()) { 
+
+        for (List<DefaultEdge> c : cb.getCycles()) {
             assertCycle(graph, c);
         }
 
@@ -419,9 +417,8 @@ public class StackBFSFundamentalCycleBasisTest
         DefaultEdge e55_1 = graph.addEdge(5, 5);
         DefaultEdge e55_2 = graph.addEdge(5, 5);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(8, cb.getCycles().size());
 
         List<List<DefaultEdge>> cycles = new ArrayList<>(cb.getCycles());
@@ -479,9 +476,8 @@ public class StackBFSFundamentalCycleBasisTest
         DefaultEdge e1 = graph.addEdge(0, 1);
         DefaultEdge e2 = graph.addEdge(0, 1);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(1, cb.getCycles().size());
 
         List<DefaultEdge> c1 = cb.getCycles().stream().findFirst().get();
@@ -508,9 +504,8 @@ public class StackBFSFundamentalCycleBasisTest
         DefaultEdge e23_2 = graph.addEdge(2, 3);
         DefaultEdge e30 = graph.addEdge(3, 0);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(3, cb.getCycles().size());
 
         List<List<DefaultEdge>> cycles = new ArrayList<>(cb.getCycles());
@@ -547,9 +542,8 @@ public class StackBFSFundamentalCycleBasisTest
         graph.addEdge(0, 1);
         graph.addEdge(2, 3);
 
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(0, cb.getCycles().size());
         assertEquals(0, cb.getLength());
         assertEquals(0d, cb.getWeight(), 1e-9);
@@ -559,9 +553,8 @@ public class StackBFSFundamentalCycleBasisTest
     public void testEmptyGraph()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
         assertEquals(0, cb.getCycles().size());
         assertEquals(0, cb.getLength());
         assertEquals(0d, cb.getWeight(), 1e-9);
@@ -570,18 +563,18 @@ public class StackBFSFundamentalCycleBasisTest
     @Test
     public void test1()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, IntStream.rangeClosed(1, 7).boxed().collect(Collectors.toList()));
-        g.addEdge(1, 2);
-        g.addEdge(1, 3);
-        g.addEdge(2, 4);
-        g.addEdge(2, 5);
-        g.addEdge(3, 6);
-        g.addEdge(3, 7);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph, IntStream.rangeClosed(1, 7).boxed().collect(Collectors.toList()));
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(2, 5);
+        graph.addEdge(3, 6);
+        graph.addEdge(3, 7);
 
-        g.addEdge(4, 5);
-        g.addEdge(6, 7);
-        g.addEdge(4, 6);
+        graph.addEdge(4, 5);
+        graph.addEdge(6, 7);
+        graph.addEdge(4, 6);
 
         // @formatter:off
         // 
@@ -594,15 +587,14 @@ public class StackBFSFundamentalCycleBasisTest
         //   ---------
         // 
         // @formatter:on
-        CycleBasisAlgorithm<Integer, DefaultEdge> fcb =
-            new StackBFSFundamentalCycleBasis<>();
-        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis(g);
+        CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new StackBFSFundamentalCycleBasis<>(graph);
+        CycleBasis<Integer, DefaultEdge> cb = fcb.getCycleBasis();
 
         int[] cyclesSizes = { 5, 6, 3 };
         Iterator<List<DefaultEdge>> it = cb.getCycles().iterator();
         for (int i = 0; i < 3; i++) {
             List<DefaultEdge> cycle = it.next();
-            assertCycle(g, cycle);
+            assertCycle(graph, cycle);
             assertEquals(cyclesSizes[i], cycle.size());
         }
         assertEquals(14, cb.getLength());

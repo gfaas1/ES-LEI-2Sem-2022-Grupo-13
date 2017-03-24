@@ -44,16 +44,16 @@
  * <ol>
  * <li>A variant of Paton's algorithm {@link org.jgrapht.alg.cycle.PatonCycleBase}, performing a BFS
  * using a stack which returns a weakly fundamental cycle basis. Supports graphs with self-loops but
- * not multiple edges.</li>
+ * not multiple (parallel) edges.</li>
  * <li>A variant of Paton's algorithm {@link org.jgrapht.alg.cycle.StackBFSFundamentalCycleBasis},
  * which returns a fundamental cycle basis. This is a more generic implementation which supports
- * self-loops and multiple edges.</li>
+ * self-loops and multiple (parallel) edges.</li>
  * <li>An algorithm {@link org.jgrapht.alg.cycle.QueueBFSFundamentalCycleBasis} which constructs a
  * fundamental cycle basis using a straightforward implementation of BFS using a queue. The
- * implementation supports graph with self-loops and multiple edges.</li>
+ * implementation supports graphs with self-loops and multiple (parallel) edges.</li>
  * </ol>
  *
- * The worst case time complexity of all above algorithms is O(V^3) since the length of the cycle
+ * The worst case time complexity of all above algorithms is O(|V|^3) since the length of the cycle
  * basis can be that large.
  *
  * <p>
@@ -65,5 +65,11 @@
  * Cycles in a Graph. ACM Trans. Math. Softw. 8, 1, 26-42, 1982.</li>
  * </ol>
  * 
+ * <h3>Algorithms for the computation of Eulerian cycles</h3>
+ * 
+ * <ol>
+ * <li>An implementation of {@link org.jgrapht.alg.cycle.HierholzerEulerianCycle Hierholzer}'s
+ * algorithm for finding an Eulerian cycle in Eulerian graphs.</li>
+ * </ol>
  */
 package org.jgrapht.alg.cycle;

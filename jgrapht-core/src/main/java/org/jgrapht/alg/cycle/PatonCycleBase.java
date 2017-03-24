@@ -60,7 +60,10 @@ public class PatonCycleBase<V, E>
 
     /**
      * Construct a new instance of the cycle basis algorithm.
+     * 
+     * @deprecated Use {@link #PatonCycleBase(Graph)} instead.
      */
+    @Deprecated
     public PatonCycleBase()
     {
     }
@@ -69,10 +72,9 @@ public class PatonCycleBase<V, E>
      * Create a cycle base finder for the specified graph.
      *
      * @param graph the input graph
-     * @throws IllegalArgumentException if the graph argument is <code>null</code>
-     * @deprecated in favor of {@link CycleBasisAlgorithm}
+     * @throws IllegalArgumentException if the graph argument is <code>null</code> or the graph is
+     *         not undirected
      */
-    @Deprecated
     public PatonCycleBase(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireUndirected(graph);
@@ -106,7 +108,7 @@ public class PatonCycleBase<V, E>
      * {@inheritDoc}
      * 
      * @throws IllegalArgumentException if the graph contains multiple edges between two vertices
-     * @deprecated in favor of {@link #getCycleBasis(Graph)}
+     * @deprecated in favor of {@link #getCycleBasis()}
      */
     @Override
     @Deprecated
@@ -187,15 +189,14 @@ public class PatonCycleBase<V, E>
 
     /**
      * Return an undirected cycle basis of a graph. Works only for undirected graphs which do not
-     * have multiple edges.
+     * have multiple (parallel) edges.
      * 
-     * @param graph the input graph
      * @return an undirected cycle basis
      * @throws IllegalArgumentException if the graph is not undirected
      * @throws IllegalArgumentException if the graph contains multiple edges between two vertices
      */
     @Override
-    public CycleBasis<V, E> getCycleBasis(Graph<V, E> graph)
+    public CycleBasis<V, E> getCycleBasis()
     {
         GraphTests.requireUndirected(graph);
 
