@@ -144,7 +144,7 @@ public class HierholzerEulerianCycle<V, E>
         } else if (g.vertexSet().size() == 0) {
             throw new IllegalArgumentException("Null graph not permitted");
         } else if (GraphTests.isEmpty(g)) {
-            return new GraphWalk<>(g, null, null, Collections.emptyList(), 0d);
+            return GraphWalk.emptyWalk(g);
         }
 
         /*
