@@ -131,14 +131,6 @@ public interface GraphPath<V, E>
         return getEdgeList().size();
     }
 
-    /**
-     * Exception thrown in the event that the path is invalid.
-     */
-    class InvalidGraphPathException extends RuntimeException{
-
-        public InvalidGraphPathException(String message){ super(message);}
-
-    }
 }
 
 

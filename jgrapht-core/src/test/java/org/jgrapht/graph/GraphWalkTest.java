@@ -49,7 +49,7 @@ public class GraphWalkTest
         new GraphWalk<>(graph, 0, 0, Collections.emptyList(), Collections.emptyList(), 0);
     }
 
-    @Test(expected = GraphPath.InvalidGraphPathException.class)
+    @Test(expected = InvalidGraphWalkException.class)
     public void testInvalidPath3()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -59,7 +59,7 @@ public class GraphWalkTest
         gw.verify();
     }
 
-    @Test(expected = GraphPath.InvalidGraphPathException.class)
+    @Test(expected = InvalidGraphWalkException.class)
     public void testInvalidPath4()
     {
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
@@ -73,7 +73,7 @@ public class GraphWalkTest
         gw.verify();
     }
 
-    @Test(expected = GraphPath.InvalidGraphPathException.class)
+    @Test(expected = InvalidGraphWalkException.class)
     public void testInvalidPath5()
     {
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
@@ -154,26 +154,31 @@ public class GraphWalkTest
 
     @Test
     public void testReversePathUndirected(){
-        Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultWeightedEdge> graph=new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addAllVertices(graph, Arrays.asList(0,1,2,3));
-        DefaultEdge e1=graph.addEdge(0,1);
-        DefaultEdge e2=graph.addEdge(1,2);
-        DefaultEdge e3=graph.addEdge(2,3);
+        DefaultWeightedEdge e1=Graphs.addEdge(graph, 0,1,2);
+        DefaultWeightedEdge e2=Graphs.addEdge(graph, 1,2,3);
+        DefaultWeightedEdge e3=Graphs.addEdge(graph, 2,3,4);
 
-        GraphWalk<Integer, DefaultEdge> gw1=new GraphWalk<>(graph, 0, 3, Arrays.asList(0,1,2,3), null, 0);
-        GraphWalk<Integer, DefaultEdge> gw2=new GraphWalk<>(graph, 0, 3, null, Arrays.asList(e1, e2, e3), 0);
+        GraphWalk<Integer, DefaultWeightedEdge> gw1=new GraphWalk<>(graph, 0, 3, Arrays.asList(0,1,2,3), null, 9);
+        GraphWalk<Integer, DefaultWeightedEdge> gw2=new GraphWalk<>(graph, 0, 3, null, Arrays.asList(e1, e2, e3), 9);
 
-        GraphWalk<Integer, DefaultEdge> rev1=gw1.reverse(gw -> gw1.getWeight());
+        GraphWalk<Integer, DefaultWeightedEdge> rev1=gw1.reverse(gw -> gw1.getWeight());
         rev1.verify();
-        GraphWalk<Integer, DefaultEdge> rev2=gw2.reverse(gw -> gw2.getWeight());
+        GraphWalk<Integer, DefaultWeightedEdge> rev2=gw2.reverse(gw -> gw2.getWeight());
         rev2.verify();
 
-        GraphWalk<Integer, DefaultEdge> revPath=new GraphWalk<>(graph, 3, 0, null, Arrays.asList(e3, e2, e1), 0);
+        GraphWalk<Integer, DefaultWeightedEdge> revPath=new GraphWalk<>(graph, 3, 0, null, Arrays.asList(e3, e2, e1), 9);
         Assert.assertEquals(revPath, rev1);
         Assert.assertEquals(revPath, rev2);
+
+        rev1=gw1.reverse();
+        Assert.assertEquals(9.0, gw1.getWeight(), 0.0000000001);
+        rev2=gw2.reverse();
+        Assert.assertEquals(9.0, gw2.getWeight(), 0.0000000001);
     }
 
-    @Test(expected = GraphPath.InvalidGraphPathException.class)
+    @Test(expected = InvalidGraphWalkException.class)
     public void testReverseInvalidPathDirected(){
         Graph<Integer, DefaultEdge> graph=new SimpleDirectedGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(graph, Arrays.asList(0,1,2,3));
@@ -205,6 +210,9 @@ public class GraphWalkTest
 
         Assert.assertEquals(revPath, rev1);
         Assert.assertEquals(15, rev1.getWeight(), 0.00000001);
+
+        GraphWalk<Integer, DefaultWeightedEdge> rev2=gw1.reverse();
+        Assert.assertEquals(15, rev2.getWeight(), 0.00000001);
     }
 
     /**
