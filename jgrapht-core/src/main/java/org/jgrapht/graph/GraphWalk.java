@@ -435,7 +435,7 @@ public class GraphWalk<V, E>
     }
 
     /**
-     * Convenience method which creates a walk consisting of a single vertex.
+     * Convenience method which creates a walk consisting of a single vertex with weight 0.0.
      * @param graph input graph
      * @param v single vertex
      * @param <V> vertex type
@@ -464,6 +464,7 @@ public class GraphWalk<V, E>
  * Exception thrown in the event that the path is invalid.
  */
 class InvalidGraphWalkException extends RuntimeException{
+    private static final long serialVersionUID = 3811666107707436479L;
 
     public InvalidGraphWalkException(String message){ super(message);}
 
