@@ -46,8 +46,8 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     private final Graph<V,E> graph;
 
     public EdmondsBlossomAlgorithm(Graph<V,E> graph, Mode mode){
-        inputGraph=Objects.requireNonNull(graph);
-        graph.getType
+        inputGraph=GraphTests.requireUndirected(graph);
+
         if(mode == Mode.MAXCOST_MATCHING){
             this.graph=graph;
         }else if(mode == Mode.MAXCARDINALITY_MATCHING){
