@@ -724,11 +724,38 @@ public class HierholzerEulerianCycleTest
         }
     }
 
+    @Test
+    public void testPseudograph()
+    {
+        /*
+         * Test for issue 388 on github.
+         */
+        Graph<Character, DefaultWeightedEdge> g =
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList('A', 'B', 'C', 'D', 'E'));
+        Graphs.addEdge(g, 'A', 'B', 8);
+        Graphs.addEdge(g, 'A', 'C', 5);
+        Graphs.addEdge(g, 'A', 'D', 6);
+        Graphs.addEdge(g, 'B', 'C', 5);
+        Graphs.addEdge(g, 'B', 'E', 6);
+        Graphs.addEdge(g, 'C', 'D', 5);
+        Graphs.addEdge(g, 'C', 'E', 5);
+        Graphs.addEdge(g, 'D', 'E', 8);
+        Graphs.addEdge(g, 'A', 'D', 8);
+        Graphs.addEdge(g, 'B', 'E', 8);
+
+        GraphPath<Character, DefaultWeightedEdge> gp =
+            new HierholzerEulerianCycle<Character, DefaultWeightedEdge>().getEulerianCycle(g);
+        assertEquals('E', gp.getStartVertex().charValue());
+        assertEquals("[E, B, E, D, A, D, C, B, A, C, E]", gp.getVertexList().toString());
+        assertEulerian(gp);
+    }
+
     // assert that a cycle is Eulerian
-    private void assertEulerian(GraphPath<Integer, DefaultEdge> cycle)
+    private static <V, E> void assertEulerian(GraphPath<V, E> cycle)
     {
         assertNotNull(cycle.getGraph());
-        Graph<Integer, DefaultEdge> g = cycle.getGraph();
+        Graph<V, E> g = cycle.getGraph();
         assertTrue(GraphTests.isEulerian(g));
 
         if (g.vertexSet().size() == 0) {
@@ -743,11 +770,11 @@ public class HierholzerEulerianCycleTest
             assertNotNull(cycle.getStartVertex());
             assertEquals(cycle.getStartVertex(), cycle.getEndVertex());
             assertEquals(g.edgeSet().size(), cycle.getLength());
-            DefaultEdge prev = null;
-            Iterator<DefaultEdge> it = cycle.getEdgeList().iterator();
-            Set<DefaultEdge> dupCheck = new HashSet<>();
+            E prev = null;
+            Iterator<E> it = cycle.getEdgeList().iterator();
+            Set<E> dupCheck = new HashSet<>();
             while (it.hasNext()) {
-                DefaultEdge cur = it.next();
+                E cur = it.next();
                 assertTrue(dupCheck.add(cur));
                 if (prev != null) {
                     if (isDirected) {
