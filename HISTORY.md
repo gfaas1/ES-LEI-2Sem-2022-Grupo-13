@@ -20,6 +20,7 @@ Changes to JGraphT in each version:
     - Refactored traversal iterators (contributed by Dimitrios Michail)
     - Backport to support build using Android SDK 24 (contributed by Dimitrios Michail)
     - Added support for attributes in GmlImporter; extracted common code from importers and exporters into abstract base classes to avoid code duplication. (contributed by Dimitrios Michail)
+    - Fixed issue where HierholzerEulerianCycle would sometimes set the wrong startVertex (reported by Frank Gevaerts, contributed by Dimitrios Michail)
     
 
 - **version 1.0.1** (16-Jan-2017):
