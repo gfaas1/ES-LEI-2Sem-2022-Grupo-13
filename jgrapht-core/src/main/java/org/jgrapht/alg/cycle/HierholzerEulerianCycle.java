@@ -64,6 +64,10 @@ public class HierholzerEulerianCycle<V, E>
      * Result edge list head.
      */
     private EdgeNode eulerianHead;
+    /*
+     * Result first vertex in the tour.
+     */
+    private V startVertex;
 
     /**
      * Test whether a graph is Eulerian. An
@@ -111,7 +115,8 @@ public class HierholzerEulerianCycle<V, E>
                     return false;
                 }
             }
-            // check that at most one strongly connected component contains edges
+            // check that at most one strongly connected component contains
+            // edges
             boolean foundComponentWithEdges = false;
             for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
                 .stronglyConnectedSets())
@@ -206,6 +211,7 @@ public class HierholzerEulerianCycle<V, E>
         this.isDirected = g.getType().isDirected();
         this.verticesHead = null;
         this.eulerianHead = null;
+        this.startVertex = null;
 
         Map<V, VertexNode> vertices = new HashMap<>();
         for (V v : g.vertexSet()) {
@@ -234,6 +240,7 @@ public class HierholzerEulerianCycle<V, E>
         this.g = null;
         this.verticesHead = null;
         this.eulerianHead = null;
+        this.startVertex = null;
     }
 
     /**
@@ -244,6 +251,10 @@ public class HierholzerEulerianCycle<V, E>
      */
     private Pair<EdgeNode, EdgeNode> computePartialCycle()
     {
+        if (startVertex == null) {
+            // record global start vertex
+            startVertex = verticesHead.v;
+        }
         EdgeNode partialHead = null;
         EdgeNode partialTail = null;
         VertexNode v = verticesHead;
@@ -309,22 +320,6 @@ public class HierholzerEulerianCycle<V, E>
             result.add(it.e);
             totalWeight += g.getEdgeWeight(it.e);
             it = it.next;
-        }
-
-        V startVertex = null;
-        if (!result.isEmpty()) {
-            E firstEdge = result.get(0);
-            startVertex = g.getEdgeSource(firstEdge);
-
-            if (!isDirected && result.size() > 1) {
-                E secondEdge = result.get(1);
-                V other = g.getEdgeTarget(firstEdge);
-                if (!other.equals(g.getEdgeSource(secondEdge))
-                    && !other.equals(g.getEdgeTarget(secondEdge)))
-                {
-                    startVertex = other;
-                }
-            }
         }
         return new GraphWalk<>(g, startVertex, startVertex, result, totalWeight);
     }
