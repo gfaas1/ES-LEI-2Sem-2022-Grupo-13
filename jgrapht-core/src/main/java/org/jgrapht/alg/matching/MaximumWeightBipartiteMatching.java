@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,39 +17,70 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.util.ToleranceDoubleComparator;
+import org.jgrapht.util.FibonacciHeap;
+import org.jgrapht.util.FibonacciHeapNode;
 
 /**
- * This class finds a maximum weight matching of a simple undirected weighted bipartite graph. The
- * algorithm runs in O(V|E|^2). The algorithm is described in The LEDA Platform of Combinatorial and
- * Geometric Computing, Cambridge University Press, 1999.
- * https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html Note: the input graph must be bipartite
- * with positive integer edge weights
- *
+ * Maximum weight matching in bipartite graphs.
+ * 
+ * <p>
+ * Running time is O(n(m+nlogn)) where n is the number of vertices and m the number of edges of the
+ * input graph.
+ * 
+ * <p>
+ * This is the algorithm described in the
+ * <a href="https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html">LEDA book</a>. See the LEDA
+ * Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Graeme Ahokas
+ * @author Dimitrios Michail
  */
 public class MaximumWeightBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
-    private Set<V> partition1;
-    private Set<V> partition2;
+    private final Set<V> partition1;
+    private final Set<V> partition2;
+    private final Comparator<Double> comparator;
 
-    private Map<V, Long> vertexWeights;
-    private Map<V, Boolean> hasVertexBeenProcessed;
-    private Map<E, Boolean> isEdgeMatched;
+    // vertex potentials
+    private Map<V, Double> pot;
+    // the matched edge of a vertex, also used to check if a vertex is free
+    private Map<V, E> matchedEdge;
 
-    private Set<E> bipartiteMatching;
+    // shortest path related data structures
+    private FibonacciHeap<V> heap;
+    private Set<V> isInHeap;
+    private Map<V, FibonacciHeapNode<V>> nodeInHeap;
+    private Map<V, E> pred;
+    private Map<V, Double> dist;
+
+    // the actual result
+    private Set<E> matching;
+    private double matchingWeight;
 
     /**
-     * Construct a new instance of the algorithm. Supported graphs are simple undirected weighted
-     * bipartite with positive integer edge weights.
+     * Constructor.
      * 
      * @param graph the input graph
      * @param partition1 the first partition of the vertex set
@@ -58,15 +89,25 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
+        this(graph, partition1, partition2, ToleranceDoubleComparator.DEFAULT_EPSILON);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param graph the input graph
+     * @param partition1 the first partition of the vertex set
+     * @param partition2 the second partition of the vertex set
+     * @param epsilon tolerance when comparing floating point values
+     * @throws IllegalArgumentException if the graph is not undirected
+     */
+    public MaximumWeightBipartiteMatching(
+        Graph<V, E> graph, Set<V> partition1, Set<V> partition2, double epsilon)
+    {
         this.graph = GraphTests.requireUndirected(graph);
-        if (partition1 == null) {
-            throw new IllegalArgumentException("Partition 1 cannot be null");
-        }
-        this.partition1 = partition1;
-        if (partition2 == null) {
-            throw new IllegalArgumentException("Partition 2 cannot be null");
-        }
-        this.partition2 = partition2;
+        this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");
+        this.partition2 = Objects.requireNonNull(partition2, "Partition 2 cannot be null");
+        this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
     /**
@@ -75,210 +116,262 @@ public class MaximumWeightBipartiteMatching<V, E>
     @Override
     public Matching<V, E> getMatching()
     {
+        /*
+         * Test input instance
+         */
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Only simple graphs supported");
         }
         if (!GraphTests.isBipartitePartition(graph, partition1, partition2)) {
             throw new IllegalArgumentException("Graph partition is not bipartite");
         }
-        this.vertexWeights = new HashMap<>();
-        this.hasVertexBeenProcessed = new HashMap<>();
-        this.isEdgeMatched = new HashMap<>();
 
-        initializeVerticesAndEdges();
+        // initialize result
+        matching = new LinkedHashSet<>();
+        matchingWeight = 0d;
 
-        this.bipartiteMatching = maximumWeightBipartiteMatching();
-        double weight = 0d;
-        for (E edge : bipartiteMatching) {
-            weight += graph.getEdgeWeight(edge);
+        // empty graph
+        if (graph.edgeSet().isEmpty()) {
+            return new MatchingImpl<>(graph, matching, matchingWeight);
         }
-        return new MatchingImpl<>(graph, bipartiteMatching, weight);
+
+        // initialize
+        pot = new HashMap<>();
+        dist = new HashMap<>();
+        matchedEdge = new HashMap<>();
+        heap = new FibonacciHeap<>();
+        isInHeap = new HashSet<>();
+        nodeInHeap = new HashMap<>();
+        pred = new HashMap<>();
+        graph.vertexSet().stream().forEach(v -> {
+            pot.put(v, 0d);
+            nodeInHeap.put(v, null);
+            pred.put(v, null);
+            dist.put(v, 0d);
+        });
+
+        // run simple heuristic
+        simpleHeuristic();
+
+        // augment to optimality
+        for (V v : partition1) {
+            if (!matchedEdge.containsKey(v)) {
+                augment(v);
+            }
+        }
+
+        return new MatchingImpl<>(graph, matching, matchingWeight);
     }
 
-    private void initializeVerticesAndEdges()
+    /**
+     * Get the vertex potentials.
+     * 
+     * <p>
+     * This is a tight non-negative potential function which proves the optimality of the maximum
+     * weight matching. See any standard textbook about linear programming duality.
+     * 
+     * @return the vertex potentials
+     */
+    public Map<V, Double> getPotentials()
     {
-        for (V vertex : graph.vertexSet()) {
-            if (isTargetVertex(vertex)) {
-                hasVertexBeenProcessed.put(vertex, true);
-                setVertexWeight(vertex, (long) 0);
+        if (pot == null) {
+            return Collections.emptyMap();
+        } else {
+            return Collections.unmodifiableMap(pot);
+        }
+    }
+
+    /**
+     * Augment from a particular node. The algorithm always looks for augmenting paths from nodes in
+     * partition1. In the following code partition1 is A and partition2 is B.
+     * 
+     * @param a the node
+     */
+    private void augment(V a)
+    {
+        dist.put(a, 0d);
+        V bestInA = a;
+        double minA = pot.get(a);
+        double delta;
+
+        Deque<V> reachedA = new ArrayDeque<>();
+        reachedA.push(a);
+        Deque<V> reachedB = new ArrayDeque<>();
+
+        // relax all edges out of a1
+        V a1 = a;
+        for (E e1 : graph.edgesOf(a1)) {
+            if (!matching.contains(e1)) {
+                V b1 = Graphs.getOppositeVertex(graph, e1, a1);
+                double db1 = dist.get(a1) + (pot.get(a1) + pot.get(b1) - graph.getEdgeWeight(e1));
+                if (pred.get(b1) == null) {
+                    dist.put(b1, db1);
+                    pred.put(b1, e1);
+                    reachedB.push(b1);
+                    FibonacciHeapNode<V> node = new FibonacciHeapNode<>(b1);
+                    nodeInHeap.put(b1, node);
+                    heap.insert(node, db1);
+                    isInHeap.add(b1);
+                } else {
+                    if (comparator.compare(db1, dist.get(b1)) < 0) {
+                        dist.put(b1, db1);
+                        pred.put(b1, e1);
+                        heap.decreaseKey(nodeInHeap.get(b1), db1);
+                    }
+                }
+            }
+        }
+
+        while (true) {
+            /*
+             * select from priority queue the node b with minimal distance db
+             */
+            V b = null;
+            double db = 0d;
+            if (!heap.isEmpty()) {
+                b = heap.removeMin().getData();
+                isInHeap.remove(b);
+                db = dist.get(b);
+            }
+
+            /*
+             * three cases
+             */
+            if (b == null || comparator.compare(db, minA) >= 0) {
+                delta = minA;
+                augmentPathTo(bestInA);
+                break;
             } else {
-                hasVertexBeenProcessed.put(vertex, false);
-                setVertexWeight(vertex, maximumWeightOfEdgeIncidentToVertex(vertex));
+                E e = matchedEdge.get(b);
+                if (e == null) {
+                    delta = db;
+                    augmentPathTo(b);
+                    break;
+                } else {
+                    a1 = Graphs.getOppositeVertex(graph, e, b);
+                    pred.put(a1, e);
+                    reachedA.push(a1);
+                    dist.put(a1, db);
+
+                    if (comparator.compare(db + pot.get(a1), minA) < 0) {
+                        bestInA = a1;
+                        minA = db + pot.get(a1);
+                    }
+
+                    // relax all edges out of a1
+                    for (E e1 : graph.edgesOf(a1)) {
+                        if (!matching.contains(e1)) {
+                            V b1 = Graphs.getOppositeVertex(graph, e1, a1);
+                            double db1 = dist.get(a1)
+                                + (pot.get(a1) + pot.get(b1) - graph.getEdgeWeight(e1));
+                            if (pred.get(b1) == null) {
+                                dist.put(b1, db1);
+                                pred.put(b1, e1);
+                                reachedB.push(b1);
+                                FibonacciHeapNode<V> node = new FibonacciHeapNode<>(b1);
+                                nodeInHeap.put(b1, node);
+                                heap.insert(node, db1);
+                                isInHeap.add(b1);
+                            } else {
+                                if (comparator.compare(db1, dist.get(b1)) < 0) {
+                                    dist.put(b1, db1);
+                                    pred.put(b1, e1);
+                                    heap.decreaseKey(nodeInHeap.get(b1), db1);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        for (E edge : graph.edgeSet()) {
-            isEdgeMatched.put(edge, false);
-        }
-    }
-
-    private long maximumWeightOfEdgeIncidentToVertex(V vertex)
-    {
-        long maxWeight = 0;
-        for (E edge : graph.edgesOf(vertex)) {
-            if (graph.getEdgeWeight(edge) > maxWeight) {
-                maxWeight = (long) graph.getEdgeWeight(edge);
-            }
-        }
-        return maxWeight;
-    }
-
-    private boolean isSourceVertex(V vertex)
-    {
-        return partition1.contains(vertex);
-    }
-
-    private boolean isTargetVertex(V vertex)
-    {
-        return partition2.contains(vertex);
-    }
-
-    private long vertexWeight(V vertex)
-    {
-        return vertexWeights.get(vertex);
-    }
-
-    private void setVertexWeight(V vertex, Long weight)
-    {
-        vertexWeights.put(vertex, weight);
-    }
-
-    private long reducedWeight(E edge)
-    {
-        return (long) (vertexWeight(graph.getEdgeSource(edge))
-            + vertexWeight(graph.getEdgeTarget(edge)) - graph.getEdgeWeight(edge));
-    }
-
-    private boolean isVertexMatched(V vertex, Set<E> matchings)
-    {
-        for (E edge : matchings) {
-            if (graph.getEdgeSource(edge).equals(vertex)
-                || graph.getEdgeTarget(edge).equals(vertex))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void addPathToMatchings(List<E> path, Set<E> matchings)
-    {
-        for (int i = 0; i < path.size(); i++) {
-            E edge = path.get(i);
-            if ((i % 2) == 0) {
-                isEdgeMatched.put(edge, true);
-                matchings.add(edge);
-            } else {
-                isEdgeMatched.put(edge, false);
-                matchings.remove(edge);
-            }
-        }
-    }
-
-    private void adjustVertexWeights(Map<V, List<E>> reachableVertices)
-    {
-        long alpha = Long.MAX_VALUE;
-        for (V vertex : reachableVertices.keySet()) {
-            if (isSourceVertex(vertex) && (vertexWeights.get(vertex) < alpha)) {
-                alpha = vertexWeights.get(vertex);
-            }
-        }
-
-        long beta = Long.MAX_VALUE;
-        for (V vertex : reachableVertices.keySet()) {
-            if (isTargetVertex(vertex)) {
+        // augment: potential update and re-initialization
+        while (!reachedA.isEmpty()) {
+            V v = reachedA.pop();
+            pred.put(v, null);
+            double potChange = delta - dist.get(v);
+            if (comparator.compare(potChange, 0d) <= 0) {
                 continue;
             }
-            for (E edge : graph.edgesOf(vertex)) {
-                if (hasVertexBeenProcessed.get(Graphs.getOppositeVertex(graph, edge, vertex))
-                    && !reachableVertices
-                        .keySet().contains(Graphs.getOppositeVertex(graph, edge, vertex))
-                    && (reducedWeight(edge) < beta))
-                {
-                    beta = reducedWeight(edge);
-                }
-            }
+            pot.put(v, pot.get(v) - potChange);
         }
 
-        assert ((alpha > 0) && (beta > 0));
+        while (!reachedB.isEmpty()) {
+            V v = reachedB.pop();
+            pred.put(v, null);
+            if (isInHeap.contains(v)) {
+                heap.delete(nodeInHeap.get(v));
+            }
+            nodeInHeap.put(v, null);
+            double potChange = delta - dist.get(v);
+            if (comparator.compare(potChange, 0d) <= 0) {
+                continue;
+            }
+            pot.put(v, pot.get(v) + potChange);
+        }
+    }
 
-        long minValue = Math.min(alpha, beta);
+    private void augmentPathTo(V v)
+    {
+        List<E> matched = new ArrayList<E>();
+        List<E> free = new ArrayList<E>();
 
-        for (V vertex : reachableVertices.keySet()) {
-            if (isSourceVertex(vertex)) {
-                vertexWeights.put(vertex, vertexWeights.get(vertex) - minValue);
+        E e1 = pred.get(v);
+        while (e1 != null) {
+            if (matching.contains(e1)) {
+                matched.add(e1);
             } else {
-                vertexWeights.put(vertex, vertexWeights.get(vertex) + minValue);
+                free.add(e1);
             }
+            v = Graphs.getOppositeVertex(graph, e1, v);
+            e1 = pred.get(v);
+        }
+
+        for (E e : matched) {
+            double w = graph.getEdgeWeight(e);
+            V s = graph.getEdgeSource(e);
+            V t = graph.getEdgeTarget(e);
+            matchedEdge.remove(s);
+            matchedEdge.remove(t);
+            matchingWeight -= w;
+            matching.remove(e);
+        }
+
+        for (E e : free) {
+            double w = graph.getEdgeWeight(e);
+            V s = graph.getEdgeSource(e);
+            V t = graph.getEdgeTarget(e);
+            matchedEdge.put(s, e);
+            matchedEdge.put(t, e);
+            matchingWeight += w;
+            matching.add(e);
         }
     }
 
-    private Map<V, List<E>> verticesReachableByTightAlternatingEdgesFromVertex(V vertex)
+    private void simpleHeuristic()
     {
-        Map<V, List<E>> pathsToVertices = new HashMap<>();
-        pathsToVertices.put(vertex, new ArrayList<>());
-        findPathsToVerticesFromVertices(Collections.singletonList(vertex), false, pathsToVertices);
-        return pathsToVertices;
-    }
+        for (V v : partition1) {
+            E maxEdge = null;
+            double maxWeight = 0d;
 
-    private void findPathsToVerticesFromVertices(
-        List<V> verticesToProcess, boolean needMatchedEdge, Map<V, List<E>> pathsToVertices)
-    {
-        if (verticesToProcess.size() == 0) {
-            return;
-        }
-        List<V> nextVerticesToProcess = new ArrayList<>();
-        for (V vertex : verticesToProcess) {
-            for (E edge : graph.edgesOf(vertex)) {
-                V adjacentVertex = Graphs.getOppositeVertex(graph, edge, vertex);
-                if (hasVertexBeenProcessed.get(adjacentVertex) && (reducedWeight(edge) == 0)
-                    && !pathsToVertices.keySet().contains(adjacentVertex))
-                {
-                    if ((needMatchedEdge && isEdgeMatched.get(edge))
-                        || (!needMatchedEdge && !isEdgeMatched.get(edge)))
-                    {
-                        nextVerticesToProcess.add(adjacentVertex);
-                        List<E> pathToAdjacentVertex = new ArrayList<>(pathsToVertices.get(vertex));
-                        pathToAdjacentVertex.add(edge);
-                        pathsToVertices.put(adjacentVertex, pathToAdjacentVertex);
-                    }
+            for (E e : graph.edgesOf(v)) {
+                double w = graph.getEdgeWeight(e);
+                if (comparator.compare(w, maxWeight) > 0) {
+                    maxWeight = w;
+                    maxEdge = e;
+                }
+            }
+
+            pot.put(v, maxWeight);
+            if (maxEdge != null) {
+                V u = Graphs.getOppositeVertex(graph, maxEdge, v);
+                if (!matchedEdge.containsKey(u)) {
+                    matching.add(maxEdge);
+                    matchingWeight += graph.getEdgeWeight(maxEdge);
+                    matchedEdge.put(v, maxEdge);
+                    matchedEdge.put(u, maxEdge);
                 }
             }
         }
-        findPathsToVerticesFromVertices(nextVerticesToProcess, !needMatchedEdge, pathsToVertices);
-    }
-
-    private Set<E> maximumWeightBipartiteMatching()
-    {
-        Set<E> matchings = new HashSet<>();
-        for (V vertex : partition1) {
-            hasVertexBeenProcessed.put(vertex, true);
-            while (true) {
-                Map<V, List<E>> reachableVertices =
-                    verticesReachableByTightAlternatingEdgesFromVertex(vertex);
-                boolean successful = false;
-                for (V reachableVertex : reachableVertices.keySet()) {
-                    if (isSourceVertex(reachableVertex) && (vertexWeight(reachableVertex) == 0)) {
-                        addPathToMatchings(reachableVertices.get(reachableVertex), matchings);
-                        successful = true;
-                        break;
-                    }
-                    if (isTargetVertex(reachableVertex)
-                        && !isVertexMatched(reachableVertex, matchings))
-                    {
-                        addPathToMatchings(reachableVertices.get(reachableVertex), matchings);
-                        successful = true;
-                        break;
-                    }
-                }
-                if (successful) {
-                    break;
-                }
-                adjustVertexWeights(reachableVertices);
-            }
-        }
-        return matchings;
     }
 }
-
-// End MaximumWeightBipartiteMatching.java
