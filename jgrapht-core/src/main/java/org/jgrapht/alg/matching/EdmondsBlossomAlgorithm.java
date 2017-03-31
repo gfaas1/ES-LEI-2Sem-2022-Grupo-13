@@ -24,16 +24,24 @@ import org.jgrapht.graph.AsWeightedGraph;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
+ * A matching in a graph G(V,E) is a set M of edges such that no node of G is incident with more than one edge in M.
+ * The weight of a matching is defined as the sum of the weights of the edges in M. A matching has at most 1/2|V| edges.
+ * A node v in G is covered by matching M, if M contains an edge incident to v. A matching is perfect if all nodes are
+ * covered. By definition, a perfect matching consists of exactly 1/2|V| edges.
  *
- * This implementation supports 4 types of matchings:
+ * This algorithm solves the matching problems for general graphs (simple, undirected, weighted or unweighted graphs).
+ * If the input graph is bipartite (see {@link GraphTests#isBipartite(Graph)} for details) use
+ * {@link HopcroftKarpBipartiteMatching} instead.
+ *
+ * <p>
+ * This implementation can solve 4 different matching problems:
  * <ol>
- *     <li>Minimum Cost Perfect Matching: finds a perfect matching of minimum cost.</li>
- *     <li>Maximum Cost Perfect Matching: finds a perfect matching of maximum cost.</li>
- *     <li>Maximum Cost Matching: finds a matching of maximum cost (no guarantees are given in terms of the size of the matching).</li>
- *     <li>Maximum Cardinality Matching: finds a matching of maximum cardinality while ignoring the edge costs.</li>
+ *     <li>Minimum Cost Perfect Matching: find a perfect matching of minimum cost.</li>
+ *     <li>Maximum Cost Perfect Matching: find a perfect matching of maximum cost.</li>
+ *     <li>Maximum Cost Matching: find a matching of maximum cost (no guarantees are given in terms of the size of the matching).</li>
+ *     <li>Maximum Cardinality Matching: find a matching of maximum cardinality (ignores the edge costs).</li>
  * </ol>
  *
  * @author Joris Kinable
