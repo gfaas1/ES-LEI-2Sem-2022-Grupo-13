@@ -42,7 +42,7 @@ public interface SpannerAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    interface Spanner<E>
+    interface Spanner<E> extends Iterable<E>
     {
 
         /**
@@ -58,6 +58,14 @@ public interface SpannerAlgorithm<E>
          * @return edge set of the spanner
          */
         Set<E> getEdges();
+
+        /**
+         * Returns an iterator over the edges in the spanner.
+         * @return iterator over the edges in the spanner.
+         */
+        default Iterator<E> iterator(){
+            return getEdges().iterator();
+        }
     }
 
     /**

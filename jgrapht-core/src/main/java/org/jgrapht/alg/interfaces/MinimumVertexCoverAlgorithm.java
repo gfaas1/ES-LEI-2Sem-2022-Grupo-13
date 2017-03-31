@@ -51,7 +51,7 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      *
      * @param <V> the vertex type
      */
-    interface VertexCover<V>
+    interface VertexCover<V> extends Iterable<V>
     {
 
         /**
@@ -69,6 +69,14 @@ public interface MinimumVertexCoverAlgorithm<V, E>
          * @return vertices in the vertex cover
          */
         Set<V> getVertices();
+
+        /**
+         * Returns an iterator over the vertices in the cover.
+         * @return iterator over the vertices in the cover.
+         */
+        default Iterator<V> iterator(){
+            return getVertices().iterator();
+        }
     }
 
     /**
