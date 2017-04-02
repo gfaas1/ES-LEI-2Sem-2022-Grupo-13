@@ -74,6 +74,7 @@ public interface MinimumVertexCoverAlgorithm<V, E>
          * Returns an iterator over the vertices in the cover.
          * @return iterator over the vertices in the cover.
          */
+        @Override
         default Iterator<V> iterator(){
             return getVertices().iterator();
         }

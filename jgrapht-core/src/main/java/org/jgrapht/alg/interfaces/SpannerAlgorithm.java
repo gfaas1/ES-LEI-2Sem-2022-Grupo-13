@@ -63,6 +63,7 @@ public interface SpannerAlgorithm<E>
          * Returns an iterator over the edges in the spanner.
          * @return iterator over the edges in the spanner.
          */
+        @Override
         default Iterator<E> iterator(){
             return getEdges().iterator();
         }

@@ -83,6 +83,7 @@ public interface MatchingAlgorithm<V, E>
          * Returns an iterator over the edges in the matching.
          * @return iterator over the edges in the matching.
          */
+        @Override
         default Iterator<E> iterator(){
             return getEdges().iterator();
         }
