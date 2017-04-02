@@ -115,9 +115,7 @@ public class ListSingleSourcePathsImpl<V, E>
         GraphPath<V, E> p = paths.get(targetVertex);
         if (p == null) {
             if (source.equals(targetVertex)) {
-                return new GraphWalk<>(
-                    graph, source, targetVertex, Collections.singletonList(source),
-                    Collections.emptyList(), 0d);
+                return GraphWalk.singletonWalk(graph, source, 0d);
             } else {
                 return null;
             }
