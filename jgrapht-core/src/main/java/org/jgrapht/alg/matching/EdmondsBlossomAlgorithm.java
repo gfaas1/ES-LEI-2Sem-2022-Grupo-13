@@ -50,6 +50,8 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
     public enum Mode{MINCOST_PERFECT_MATCHING, MAXCOST_PERFECT_MATCHING, MAXCOST_MATCHING, MAXCARDINALITY_MATCHING}
 
+    private enum Label{ODD, EVEN, fREE}
+
     private final Graph<V,E> inputGraph;
     private final Graph<V,E> graph;
 
@@ -86,5 +88,32 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     @Override
     public Matching<E> getMatching() {
         return null;
+    }
+
+    private void grow(){
+
+    }
+    private void augment(){
+
+    }
+    private void shrink(){
+
+    }
+    private void expand(){
+
+    }
+
+    private class PseudoNode{
+        Label label; //odd, even or exposed
+        PseudoNode treeRoot; //Root of the tree the node belongs to
+        double dualValue; //Dual value of the node (y_u)
+    }
+
+    private class Edge{
+
+    }
+
+    private boolean areInSameTree(PseudoNode n1, PseudoNode n2){
+
     }
 }
