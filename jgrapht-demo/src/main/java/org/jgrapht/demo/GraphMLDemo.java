@@ -145,7 +145,7 @@ public final class GraphMLDemo
     {
         // create GraphML exporter
         GraphMLExporter<CustomVertex, DefaultWeightedEdge> exporter =
-            new GraphMLExporter<>((CustomVertex v) -> v.id, null, new IntegerComponentNameProvider<>(), null);
+            new GraphMLExporter<>((v) -> v.id, null, new IntegerComponentNameProvider<>(), null);
 
         // set to export the internal edge weights
         exporter.setExportEdgeWeights(true);
