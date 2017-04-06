@@ -22,9 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * A breadth-first iterator for a directed and an undirected graph. For this iterator to work
- * correctly the graph must not be modified during iteration. Currently there are no means to ensure
- * that, nor to fail-fast. The results of such modifications are undefined.
+ * A breadth-first iterator for a directed or undirected graph.
+ * 
+ * <p>
+ * For this iterator to work correctly the graph must not be modified during iteration. Currently
+ * there are no means to ensure that, nor to fail-fast. The results of such modifications are
+ * undefined.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

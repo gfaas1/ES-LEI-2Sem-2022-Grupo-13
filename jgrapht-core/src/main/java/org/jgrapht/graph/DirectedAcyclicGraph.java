@@ -140,8 +140,7 @@ public class DirectedAcyclicGraph<V, E>
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
             Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
-        this.topoComparator = (Comparator<V> & Serializable) (o1, o2) -> topoOrderMap
-            .getTopologicalIndex(o1).compareTo(topoOrderMap.getTopologicalIndex(o2));
+        this.topoComparator = new TopoComparator();
     }
 
     /**
@@ -1100,6 +1099,25 @@ public class DirectedAcyclicGraph<V, E>
         extends Exception
     {
         private static final long serialVersionUID = 5583471522212552754L;
+    }
+
+    /**
+     * Comparator for vertices based on their topological ordering
+     * 
+     * @author Peter Giles
+     */
+    private class TopoComparator
+        implements Comparator<V>, Serializable
+    {
+        private static final long serialVersionUID = 8144905376266340066L;
+
+        @Override
+        public int compare(V o1, V o2)
+        {
+            return topoOrderMap
+                .getTopologicalIndex(o1).compareTo(topoOrderMap.getTopologicalIndex(o2));
+        }
+
     }
 
     /**

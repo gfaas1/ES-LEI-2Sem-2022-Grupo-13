@@ -38,6 +38,7 @@ import org.jgrapht.*;
  * @since January 2017
  */
 public class DIMACSExporter<V, E>
+    extends AbstractBaseExporter<V, E>
     implements GraphExporter<V, E>
 {
     /**
@@ -47,7 +48,6 @@ public class DIMACSExporter<V, E>
 
     private static final String HEADER = "Generated using the JGraphT library";
 
-    private final ComponentNameProvider<V> vertexIDProvider;
     private final Set<Parameter> parameters;
     private DIMACSFormat format;
 
@@ -88,8 +88,7 @@ public class DIMACSExporter<V, E>
      */
     public DIMACSExporter(ComponentNameProvider<V> vertexIDProvider, DIMACSFormat format)
     {
-        this.vertexIDProvider =
-            Objects.requireNonNull(vertexIDProvider, "Vertex id provider cannot be null");
+        super(vertexIDProvider);
         this.format = Objects.requireNonNull(format, "Format cannot be null");
         this.parameters = new HashSet<>();
     }

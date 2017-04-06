@@ -123,7 +123,7 @@ public class TreeSingleSourcePathsImpl<V, E>
     public GraphPath<V, E> getPath(V targetVertex)
     {
         if (source.equals(targetVertex)) {
-            return new GraphWalk<>(g, source, targetVertex, null, Collections.emptyList(), 0d);
+            return GraphWalk.singletonWalk(g, source, 0d);
         }
 
         LinkedList<E> edgeList = new LinkedList<>();

@@ -68,10 +68,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E>
+    extends AbstractBaseImporter<V, E>
     implements GraphImporter<V, E>
 {
-    private VertexProvider<V> vertexProvider;
-    private EdgeProvider<V, E> edgeProvider;
     private final double defaultWeight;
 
     // ~ Constructors ----------------------------------------------------------
@@ -86,14 +85,7 @@ public class DIMACSImporter<V, E>
     public DIMACSImporter(
         VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, double defaultWeight)
     {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
+        super(vertexProvider, edgeProvider);
         this.defaultWeight = defaultWeight;
     }
 
@@ -109,52 +101,6 @@ public class DIMACSImporter<V, E>
     }
 
     // ~ Methods ---------------------------------------------------------------
-
-    /**
-     * Get the vertex provider
-     * 
-     * @return the vertex provider
-     */
-    public VertexProvider<V> getVertexProvider()
-    {
-        return vertexProvider;
-    }
-
-    /**
-     * Set the vertex provider
-     * 
-     * @param vertexProvider the new vertex provider. Must not be null.
-     */
-    public void setVertexProvider(VertexProvider<V> vertexProvider)
-    {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-    }
-
-    /**
-     * Get the edge provider
-     * 
-     * @return The edge provider
-     */
-    public EdgeProvider<V, E> getEdgeProvider()
-    {
-        return edgeProvider;
-    }
-
-    /**
-     * Set the edge provider.
-     * 
-     * @param edgeProvider the new edge provider. Must not be null.
-     */
-    public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
-    {
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
-    }
 
     /**
      * Import a graph.

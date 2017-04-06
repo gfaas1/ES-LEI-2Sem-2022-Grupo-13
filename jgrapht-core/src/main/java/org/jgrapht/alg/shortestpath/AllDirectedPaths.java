@@ -214,7 +214,7 @@ public class AllDirectedPaths<V, E>
         // Bootstrap the search with the source vertices
         for (V source : sourceVertices) {
             if (targetVertices.contains(source)) {
-                completePaths.add(new GraphWalk<>(graph, source, source, new ArrayList<>(), 0));
+                completePaths.add(GraphWalk.singletonWalk(graph, source, 0d));
             }
 
             for (E edge : graph.outgoingEdgesOf(source)) {

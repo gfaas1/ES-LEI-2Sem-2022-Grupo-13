@@ -19,6 +19,7 @@ package org.jgrapht.traverse;
 
 import java.util.*;
 
+import org.jgrapht.*;
 import org.jgrapht.event.*;
 
 /**
@@ -34,18 +35,42 @@ import org.jgrapht.event.*;
 public abstract class AbstractGraphIterator<V, E>
     implements GraphIterator<V, E>
 {
-    private List<TraversalListener<V, E>> traversalListeners = new ArrayList<>();
-    private boolean crossComponentTraversal = true;
-    private boolean reuseEvents = false;
+    private final Set<TraversalListener<V, E>> traversalListeners = new LinkedHashSet<>();
 
     // We keep this cached redundantly with traversalListeners.size()
     // so that subclasses can use it as a fast check to see if
     // event firing calls can be skipped.
     protected int nListeners = 0;
-    // TODO: support ConcurrentModificationException if graph modified
-    // during iteration.
-    protected FlyweightEdgeEvent<V, E> reusableEdgeEvent;
-    protected FlyweightVertexEvent<V> reusableVertexEvent;
+
+    protected final FlyweightEdgeEvent<V, E> reusableEdgeEvent;
+    protected final FlyweightVertexEvent<V> reusableVertexEvent;
+    protected final Graph<V, E> graph;
+    protected boolean crossComponentTraversal;
+    protected boolean reuseEvents;
+
+    /**
+     * Create a new iterator
+     * 
+     * @param graph the graph
+     */
+    public AbstractGraphIterator(Graph<V, E> graph)
+    {
+        this.graph = Objects.requireNonNull(graph, "graph must not be null");
+        this.reusableEdgeEvent = new FlyweightEdgeEvent<>(this, null);
+        this.reusableVertexEvent = new FlyweightVertexEvent<>(this, null);
+        this.crossComponentTraversal = true;
+        this.reuseEvents = false;
+    }
+
+    /**
+     * Get the graph being traversed.
+     * 
+     * @return the graph being traversed
+     */
+    public Graph<V, E> getGraph()
+    {
+        return graph;
+    }
 
     /**
      * Sets the cross component traversal flag - indicates whether to traverse the graph across
@@ -70,52 +95,31 @@ public abstract class AbstractGraphIterator<V, E>
         return crossComponentTraversal;
     }
 
-    /**
-     * @see GraphIterator#setReuseEvents(boolean)
-     */
     @Override
     public void setReuseEvents(boolean reuseEvents)
     {
         this.reuseEvents = reuseEvents;
     }
 
-    /**
-     * @see GraphIterator#isReuseEvents()
-     */
     @Override
     public boolean isReuseEvents()
     {
         return reuseEvents;
     }
 
-    /**
-     * Adds the specified traversal listener to this iterator.
-     *
-     * @param l the traversal listener to be added.
-     */
     @Override
     public void addTraversalListener(TraversalListener<V, E> l)
     {
-        if (!traversalListeners.contains(l)) {
-            traversalListeners.add(l);
-            nListeners = traversalListeners.size();
-        }
+        traversalListeners.add(l);
+        nListeners = traversalListeners.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void remove()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("remove");
     }
 
-    /**
-     * Removes the specified traversal listener from this iterator.
-     *
-     * @param l the traversal listener to be removed.
-     */
     @Override
     public void removeTraversalListener(TraversalListener<V, E> l)
     {
@@ -130,8 +134,7 @@ public abstract class AbstractGraphIterator<V, E>
      */
     protected void fireConnectedComponentFinished(ConnectedComponentTraversalEvent e)
     {
-        for (int i = 0; i < nListeners; i++) {
-            TraversalListener<V, E> l = traversalListeners.get(i);
+        for (TraversalListener<V, E> l : traversalListeners) {
             l.connectedComponentFinished(e);
         }
     }
@@ -143,8 +146,7 @@ public abstract class AbstractGraphIterator<V, E>
      */
     protected void fireConnectedComponentStarted(ConnectedComponentTraversalEvent e)
     {
-        for (int i = 0; i < nListeners; i++) {
-            TraversalListener<V, E> l = traversalListeners.get(i);
+        for (TraversalListener<V, E> l : traversalListeners) {
             l.connectedComponentStarted(e);
         }
     }
@@ -156,8 +158,7 @@ public abstract class AbstractGraphIterator<V, E>
      */
     protected void fireEdgeTraversed(EdgeTraversalEvent<E> e)
     {
-        for (int i = 0; i < nListeners; i++) {
-            TraversalListener<V, E> l = traversalListeners.get(i);
+        for (TraversalListener<V, E> l : traversalListeners) {
             l.edgeTraversed(e);
         }
     }
@@ -169,8 +170,7 @@ public abstract class AbstractGraphIterator<V, E>
      */
     protected void fireVertexTraversed(VertexTraversalEvent<V> e)
     {
-        for (int i = 0; i < nListeners; i++) {
-            TraversalListener<V, E> l = traversalListeners.get(i);
+        for (TraversalListener<V, E> l : traversalListeners) {
             l.vertexTraversed(e);
         }
     }
@@ -182,9 +182,40 @@ public abstract class AbstractGraphIterator<V, E>
      */
     protected void fireVertexFinished(VertexTraversalEvent<V> e)
     {
-        for (int i = 0; i < nListeners; i++) {
-            TraversalListener<V, E> l = traversalListeners.get(i);
+        for (TraversalListener<V, E> l : traversalListeners) {
             l.vertexFinished(e);
+        }
+    }
+
+    /**
+     * Create a vertex traversal event.
+     * 
+     * @param vertex the vertex
+     * @return the event
+     */
+    protected VertexTraversalEvent<V> createVertexTraversalEvent(V vertex)
+    {
+        if (reuseEvents) {
+            reusableVertexEvent.setVertex(vertex);
+            return reusableVertexEvent;
+        } else {
+            return new VertexTraversalEvent<>(this, vertex);
+        }
+    }
+
+    /**
+     * Create an edge traversal event.
+     * 
+     * @param edge the edge
+     * @return the event
+     */
+    protected EdgeTraversalEvent<E> createEdgeTraversalEvent(E edge)
+    {
+        if (isReuseEvents()) {
+            reusableEdgeEvent.setEdge(edge);
+            return reusableEdgeEvent;
+        } else {
+            return new EdgeTraversalEvent<>(this, edge);
         }
     }
 
@@ -200,7 +231,10 @@ public abstract class AbstractGraphIterator<V, E>
         private static final long serialVersionUID = 4051327833765000755L;
 
         /**
-         * @see EdgeTraversalEvent
+         * Creates a new FlyweightEdgeEvent.
+         *
+         * @param eventSource the source of the event.
+         * @param edge the traversed edge.
          */
         public FlyweightEdgeEvent(Object eventSource, localE edge)
         {
@@ -230,7 +264,10 @@ public abstract class AbstractGraphIterator<V, E>
         private static final long serialVersionUID = 3834024753848399924L;
 
         /**
-         * @see VertexTraversalEvent#VertexTraversalEvent(Object, Object)
+         * Creates a new FlyweightVertexEvent.
+         *
+         * @param eventSource the source of the event.
+         * @param vertex the traversed vertex.
          */
         public FlyweightVertexEvent(Object eventSource, VV vertex)
         {

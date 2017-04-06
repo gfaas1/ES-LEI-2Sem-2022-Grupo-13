@@ -63,13 +63,12 @@ import org.jgrapht.io.CSVParser;
  * @since August 2016
  */
 public class CSVImporter<V, E>
+    extends AbstractBaseImporter<V, E>
     implements GraphImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
     private CSVFormat format;
-    private VertexProvider<V> vertexProvider;
-    private EdgeProvider<V, E> edgeProvider;
     private char delimiter;
     private final Set<CSVFormat.Parameter> parameters;
 
@@ -109,14 +108,7 @@ public class CSVImporter<V, E>
         VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider, CSVFormat format,
         char delimiter)
     {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
+        super(vertexProvider, edgeProvider);
         this.format = format;
         if (!DSVUtils.isValidDelimiter(delimiter)) {
             throw new IllegalArgumentException("Character cannot be used as a delimiter");

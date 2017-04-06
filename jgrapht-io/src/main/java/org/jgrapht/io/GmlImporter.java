@@ -23,10 +23,8 @@ import java.util.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
+import org.apache.commons.lang3.*;
 import org.jgrapht.*;
-import org.jgrapht.io.GmlBaseListener;
-import org.jgrapht.io.GmlLexer;
-import org.jgrapht.io.GmlParser;
 import org.jgrapht.io.GmlParser.*;
 
 /**
@@ -46,6 +44,7 @@ import org.jgrapht.io.GmlParser.*;
  *   ]
  *   node [
  *     id 2
+ *     label "Node 2 has an optional label"
  *   ]
  *   node [
  *     id 3
@@ -54,28 +53,31 @@ import org.jgrapht.io.GmlParser.*;
  *     source 1
  *     target 2 
  *     weight 2.0
+ *     label "Edge between 1 and 2"
  *   ]
  *   edge [
  *     source 2
  *     target 3
  *     weight 3.0
+ *     label "Edge between 2 and 3"
  *   ]
  * ]
  * </pre>
  * 
  * <p>
- * In case the graph is an instance of {@link org.jgrapht.WeightedGraph} then the importer also
- * reads edge weights. Otherwise edge weights are ignored.
+ * In case the graph is weighted then the importer also reads edge weights. Otherwise edge weights
+ * are ignored. The importer also supports reading additional string attributes such as label or
+ * custom user attributes. String attributes are unescaped as if they are Java strings.
  *
  * @param <V> the vertex type
  * @param <E> the edge type
+ * 
+ * @author Dimitrios Michail
  */
 public class GmlImporter<V, E>
+    extends AbstractBaseImporter<V, E>
     implements GraphImporter<V, E>
 {
-    private VertexProvider<V> vertexProvider;
-    private EdgeProvider<V, E> edgeProvider;
-
     /**
      * Constructs a new importer.
      * 
@@ -84,60 +86,7 @@ public class GmlImporter<V, E>
      */
     public GmlImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
-    }
-
-    /**
-     * Get the vertex provider
-     * 
-     * @return the vertex provider
-     */
-    public VertexProvider<V> getVertexProvider()
-    {
-        return vertexProvider;
-    }
-
-    /**
-     * Set the vertex provider
-     * 
-     * @param vertexProvider the new vertex provider. Must not be null.
-     */
-    public void setVertexProvider(VertexProvider<V> vertexProvider)
-    {
-        if (vertexProvider == null) {
-            throw new IllegalArgumentException("Vertex provider cannot be null");
-        }
-        this.vertexProvider = vertexProvider;
-    }
-
-    /**
-     * Get the edge provider
-     * 
-     * @return The edge provider
-     */
-    public EdgeProvider<V, E> getEdgeProvider()
-    {
-        return edgeProvider;
-    }
-
-    /**
-     * Set the edge provider.
-     * 
-     * @param edgeProvider the new edge provider. Must not be null.
-     */
-    public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
-    {
-        if (edgeProvider == null) {
-            throw new IllegalArgumentException("Edge provider cannot be null");
-        }
-        this.edgeProvider = edgeProvider;
+        super(vertexProvider, edgeProvider);
     }
 
     /**
@@ -195,7 +144,6 @@ public class GmlImporter<V, E>
     private class ThrowingErrorListener
         extends BaseErrorListener
     {
-
         @Override
         public void syntaxError(
             Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
@@ -219,6 +167,7 @@ public class GmlImporter<V, E>
         private static final String SOURCE = "source";
         private static final String TARGET = "target";
 
+        // current state of parser
         private boolean foundGraph;
         private boolean insideGraph;
         private boolean insideNode;
@@ -228,31 +177,34 @@ public class GmlImporter<V, E>
         private Integer sourceId;
         private Integer targetId;
         private Double weight;
+        private Map<String, String> attributes;
 
-        private Set<Integer> nodes;
-        private int singletons;
+        // collected nodes and edges
+        private Map<Integer, Node> nodes;
+        private List<Node> singletons;
         private List<PartialEdge> edges;
 
         public void updateGraph(Graph<V, E> graph)
             throws ImportException
         {
             if (foundGraph) {
+                boolean isWeighted = graph.getType().isWeighted();
+
                 // add nodes
-                int maxV = 1;
+                int maxVertexId = 1;
                 Map<Integer, V> map = new HashMap<Integer, V>();
-                for (Integer id : nodes) {
-                    maxV = Math.max(maxV, id);
-                    V vertex =
-                        vertexProvider.buildVertex(id.toString(), new HashMap<String, String>());
+                for (Integer id : nodes.keySet()) {
+                    Node n = nodes.get(id);
+                    maxVertexId = Math.max(maxVertexId, id);
+                    V vertex = vertexProvider.buildVertex(id.toString(), n.attributes);
                     map.put(id, vertex);
                     graph.addVertex(vertex);
                 }
 
                 // add singleton nodes
-                for (int i = 0; i < singletons; i++) {
-                    String label = String.valueOf(maxV + 1 + i);
-                    graph.addVertex(
-                        vertexProvider.buildVertex(label, new HashMap<String, String>()));
+                for (Node n : singletons) {
+                    String id = String.valueOf(++maxVertexId);
+                    graph.addVertex(vertexProvider.buildVertex(id, n.attributes));
                 }
 
                 // add edges
@@ -266,12 +218,10 @@ public class GmlImporter<V, E>
                     if (to == null) {
                         throw new ImportException("Node " + pe.target + " does not exist");
                     }
-                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<String, String>());
+                    E e = edgeProvider.buildEdge(from, to, label, pe.attributes);
                     graph.addEdge(from, to, e);
-                    if (pe.weight != null) {
-                        if (graph.getType().isWeighted()) {
-                            graph.setEdgeWeight(e, pe.weight);
-                        }
+                    if (pe.weight != null && isWeighted) {
+                        graph.setEdgeWeight(e, pe.weight);
                     }
                 }
 
@@ -285,8 +235,8 @@ public class GmlImporter<V, E>
             insideGraph = false;
             insideNode = false;
             insideEdge = false;
-            nodes = new HashSet<Integer>();
-            singletons = 0;
+            nodes = new HashMap<>();
+            singletons = new ArrayList<>();
             edges = new ArrayList<PartialEdge>();
             level = 0;
         }
@@ -333,11 +283,13 @@ public class GmlImporter<V, E>
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
                 insideNode = true;
                 nodeId = null;
+                attributes = new HashMap<>();
             } else if (level == 1 && insideGraph && key.equals(EDGE)) {
                 insideEdge = true;
                 sourceId = null;
                 targetId = null;
                 weight = null;
+                attributes = new HashMap<>();
             }
             level++;
         }
@@ -351,20 +303,57 @@ public class GmlImporter<V, E>
                 insideGraph = false;
             } else if (level == 1 && insideGraph && key.equals(NODE)) {
                 if (nodeId == null) {
-                    singletons++;
+                    singletons.add(new Node(attributes));
                 } else {
-                    nodes.add(nodeId);
+                    nodes.put(nodeId, new Node(attributes));
                 }
                 insideNode = false;
+                attributes = null;
             } else if (level == 1 && insideGraph && key.equals(EDGE)) {
                 if (sourceId != null && targetId != null) {
-                    edges.add(new PartialEdge(sourceId, targetId, weight));
+                    edges.add(new PartialEdge(sourceId, targetId, weight, attributes));
                 }
                 insideEdge = false;
+                attributes = null;
             }
-
         }
 
+        @Override
+        public void enterStringKeyValue(GmlParser.StringKeyValueContext ctx)
+        {
+            if (!insideEdge && !insideNode && level != 2) {
+                return;
+            }
+
+            String key = ctx.ID().getText();
+
+            if (key.equals(ID)) {
+                throw new IllegalArgumentException("Invalid type for attribute id: string");
+            } else if (key.equals(SOURCE)) {
+                throw new IllegalArgumentException("Invalid type for attribute source: string");
+            } else if (key.equals(TARGET)) {
+                throw new IllegalArgumentException("Invalid type for attribute target: string");
+            } else if (key.equals(WEIGHT)) {
+                throw new IllegalArgumentException("Invalid type for attribute weight: string");
+            }
+
+            String text = ctx.STRING().getText();
+            String noQuotes = text.subSequence(1, text.length() - 1).toString();
+            String unescapedText = StringEscapeUtils.unescapeJava(noQuotes);
+
+            attributes.put(key, unescapedText);
+        }
+
+    }
+
+    private class Node
+    {
+        Map<String, String> attributes;
+
+        public Node(Map<String, String> attributes)
+        {
+            this.attributes = attributes;
+        }
     }
 
     private class PartialEdge
@@ -372,12 +361,15 @@ public class GmlImporter<V, E>
         Integer source;
         Integer target;
         Double weight;
+        Map<String, String> attributes;
 
-        public PartialEdge(Integer source, Integer target, Double weight)
+        public PartialEdge(
+            Integer source, Integer target, Double weight, Map<String, String> attributes)
         {
             this.source = source;
             this.target = target;
             this.weight = weight;
+            this.attributes = attributes;
         }
     }
 

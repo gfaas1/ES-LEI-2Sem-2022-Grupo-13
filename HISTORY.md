@@ -17,6 +17,12 @@ Changes to JGraphT in each version:
     - Deleted JUnit test suites. (contributed by Joris Kinable)
     - Added interface `MaximalCliqueEnumerationAlgorithm`; Refactored and added timeout in BronKerbosch clique enumeration; Added pivot variant of Bron-Kerbosch; Added Bron-Kerbosch variant with pivoting and degeneracy ordering; Added Coreness vertex scorer; Added Degeneracy graph iterator; Added performance test for maximal clique enumeration algorithms (contributed by Dimitrios Michail)
     - Deprecated `DirectedGraph`, `UndirectedGraph`, and `WeightedGraph`, moving their methods up to the base `Graph` interface; added `GraphType` metadata; made usage of DefaultWeightedEdge optional for weighted graphs (contributed by Dimitrios Michail)
+    - Refactored traversal iterators (contributed by Dimitrios Michail)
+    - Backport to support build using Android SDK 24 (contributed by Dimitrios Michail)
+    - Added support for attributes in GmlImporter; extracted common code from importers and exporters into abstract base classes to avoid code duplication. (contributed by Dimitrios Michail)
+    - Fixed issue where HierholzerEulerianCycle would sometimes set the wrong startVertex (reported by Frank Gevaerts, contributed by Dimitrios Michail)
+    - Revised `GraphWalk`; added additional input checks, additional functionality such as reverse and concat, added verification and factory methods. (contributed by Joris Kinable)
+    - Made several algorithm return objects iterable. (contributed by Joris Kinable)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
