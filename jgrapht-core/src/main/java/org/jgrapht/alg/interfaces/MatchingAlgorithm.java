@@ -63,7 +63,7 @@ public interface MatchingAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    interface Matching<E>
+    interface Matching<E> extends Iterable<E>
     {
         /**
          * Returns the weight of the matching.
@@ -78,6 +78,15 @@ public interface MatchingAlgorithm<V, E>
          * @return the edges of the matching
          */
         Set<E> getEdges();
+
+        /**
+         * Returns an iterator over the edges in the matching.
+         * @return iterator over the edges in the matching.
+         */
+        @Override
+        default Iterator<E> iterator(){
+            return getEdges().iterator();
+        }
     }
 
     /**
