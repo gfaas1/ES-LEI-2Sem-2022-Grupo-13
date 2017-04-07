@@ -21,9 +21,12 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.AsWeightedGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A matching in a graph G(V,E) is a set M of edges such that no node of G is incident with more than one edge in M.
@@ -50,7 +53,7 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
     public enum Mode{MINCOST_PERFECT_MATCHING, MAXCOST_PERFECT_MATCHING, MAXCOST_MATCHING, MAXCARDINALITY_MATCHING}
 
-    private enum Label{ODD, EVEN, fREE}
+    private enum Label{ODD, EVEN, FREE}
 
     private final Graph<V,E> inputGraph;
     private final Graph<V,E> graph;
@@ -85,33 +88,133 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
     }
 
+    private Map<V, PseudoNode> pseudoNodeMap=new HashMap<V, PseudoNode>();
+    Graph<PseudoNode, Edge> pseudoNodeGraph;
+
+    private void init(){
+        //Create pseudonode graph
+        pseudoNodeGraph=new SimpleWeightedGraph<PseudoNode, Edge>(Edge.class);
+        for(V v : graph.vertexSet()){
+            PseudoNode pn=new PseudoNode();
+            pseudoNodeGraph.addVertex(pn);
+            pseudoNodeMap.put(v, pn);
+        }
+        for(E e : graph.edgeSet()){
+            V source=graph.getEdgeSource(e);
+            V target=graph.getEdgeTarget(e);
+            Edge edge = pseudoNodeGraph.addEdge(pseudoNodeMap.get(source), pseudoNodeMap.get(target));
+            pseudoNodeGraph.setEdgeWeight(edge, graph.getEdgeWeight(e));
+        }
+
+        //Initialize dual values
+        for(PseudoNode ps : pseudoNodeGraph.vertexSet()){
+            double minWeight=Double.MAX_VALUE;
+            for(Edge e : pseudoNodeGraph.outgoingEdgesOf(ps))
+                minWeight=Math.min(minWeight, pseudoNodeGraph.getEdgeWeight(e));
+            ps.dualValue=minWeight/2.0;
+        }
+    }
+
+    private void run(){
+        while(true){
+            //primal updates
+            for(Edge e : pseudoNodeGraph.edgeSet()){
+                PseudoNode u=pseudoNodeGraph.getEdgeSource(e);
+                PseudoNode v=pseudoNodeGraph.getEdgeTarget(e);
+
+                double reducedCost=pseudoNodeGraph.getEdgeWeight(e)-u.dualValue-v.dualValue;
+                if(reducedCost == 0){ //Tight edges
+                    //Augment
+                    if(u.label == Label.EVEN && v.label == Label.EVEN && !areInSameTree(u, v))
+                        augment(u, v);
+
+                    //Grow
+                    if(u.label==Label.EVEN && v.label==Label.FREE)
+                        grow(u, v);
+                    else if(v.label==Label.EVEN && u.label==Label.FREE)
+                        grow(v, u);
+
+                    //Shrink
+                    if(u.label==Label.EVEN && v.label==Label.EVEN && areInSameTree(u,v))
+                        shrink(u, v);
+
+
+                }
+                //Expand
+                if(u.isBlossom() && u.label == Label.ODD && u.dualValue==0.0)
+                    expand(u);
+                else if(v.isBlossom() && v.label == Label.ODD && v.dualValue==0.0)
+                    expand(v);
+
+            }
+
+            //dual updates
+            boolean hasPerfectMatching=true;
+            for(Edge e : pseudoNodeGraph.edgeSet()) {
+                PseudoNode u = pseudoNodeGraph.getEdgeSource(e);
+                PseudoNode v = pseudoNodeGraph.getEdgeTarget(e);
+                if(!(u.label == Label.EVEN && v.label== Label.ODD)){
+                    hasPerfectMatching=true;
+                    break;
+                }
+                if(!(v.label == Label.EVEN && u.label== Label.ODD)){
+                    hasPerfectMatching=true;
+                    break;
+                }
+            }
+            if(!hasPerfectMatching) //No perfect matching exists in the graph!
+                break;
+            else
+                updateDuals();
+
+        }
+    }
+
     @Override
     public Matching<E> getMatching() {
         return null;
     }
 
-    private void grow(){
+    private void grow(PseudoNode u, PseudoNode v){
 
     }
-    private void augment(){
+    private void augment(PseudoNode u, PseudoNode v){
 
     }
-    private void shrink(){
+    private void shrink(PseudoNode u, PseudoNode v){
 
     }
-    private void expand(){
+    private void expand(PseudoNode blossom){
 
     }
 
     private class PseudoNode{
-        Label label; //odd, even or exposed
-        PseudoNode treeRoot; //Root of the tree the node belongs to
-        double dualValue; //Dual value of the node (y_u)
+        Label label= Label.FREE; //odd, even or exposed
+        PseudoNode treeRoot=null; //Root of the tree the node belongs to
+        double dualValue=0; //Dual value of the node (y_u)
+
+        public PseudoNode(){
+
+        }
+
+        public boolean isBlossom(){
+            return false;
+        }
     }
 
     private class Edge{
 
     }
+
+    private class BMatching{
+        Set<Edge> edges=new LinkedHashSet<>();
+        double weight=0;
+
+        public boolean isPerfect(){
+            return edges.size()==graph.vertexSet().size()/2.0;
+        }
+    }
+
 
     private boolean areInSameTree(PseudoNode n1, PseudoNode n2){
 
