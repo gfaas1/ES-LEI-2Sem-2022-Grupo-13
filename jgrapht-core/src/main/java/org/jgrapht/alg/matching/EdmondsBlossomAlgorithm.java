@@ -188,6 +188,10 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
     }
 
+    private void updateDuals(){
+
+    }
+
     private class PseudoNode{
         Label label= Label.FREE; //odd, even or exposed
         PseudoNode treeRoot=null; //Root of the tree the node belongs to
