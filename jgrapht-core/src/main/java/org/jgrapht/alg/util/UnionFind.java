@@ -42,7 +42,7 @@ public class UnionFind<T>
      * 
      * @param elements the initial elements to include (each element in a singleton set).
      */
-    public UnionFind(Set<T> elements)
+    public UnionFind(Collection<T> elements)
     {
         parentMap = new HashMap<>();
         rankMap = new HashMap<>();
