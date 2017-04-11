@@ -21,9 +21,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.AsWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -47,7 +49,7 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
+public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
 
     public enum Mode{MINCOST_PERFECT_MATCHING, MAXCOST_PERFECT_MATCHING, MAXCOST_MATCHING, MAXCARDINALITY_MATCHING}
 
@@ -56,7 +58,7 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     private final Graph<V,E> inputGraph;
     private final Graph<V,E> graph;
 
-    public EdmondsBlossomAlgorithm(Graph<V,E> graph, Mode mode){
+    public EdmondsBlossomAlgorithmv2(Graph<V, E> graph, Mode mode){
         inputGraph=GraphTests.requireUndirected(graph);
 
         if(mode == Mode.MAXCOST_MATCHING){
@@ -86,34 +88,54 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
     }
 
-    private Map<V, PseudoNode> pseudoNodeMap=new HashMap<V, PseudoNode>();
-    Graph<PseudoNode, Edge> pseudoNodeGraph;
+    private List<V> vertices=new ArrayList<>();
+    private Map<V, Integer> vertexIndexMap=new HashMap<>();
+    private int[] even,odd;
+    private double[] dualValues;
+
+    private Map<Integer, Edge>[] adjacencyList;
+
+    /* The blossoms UnionFind cache tracks for each vertex to which blossom it belongs. If two vertices u, v belong to the same blossom,
+     in [1] denoted by R(u), R(v), then the edge (u,v) has been 'shrunken away'. Initially, each vertex belongs to its own 'blossom'.
+     */
+    UnionFind<Integer> blossoms;
+
 
     /* key=exposed node, value=root of alternating tree */
     Map<V, PseudoNode> forest =new LinkedHashMap<>();
 
     private void init(){
-        //Create pseudonode graph
-        pseudoNodeGraph=new SimpleWeightedGraph<PseudoNode, Edge>(Edge.class);
-        for(V v : graph.vertexSet()){
-            PseudoNode pn=new PseudoNode();
-            pseudoNodeGraph.addVertex(pn);
-            pseudoNodeMap.put(v, pn);
-        }
-        for(E e : graph.edgeSet()){
-            V source=graph.getEdgeSource(e);
-            V target=graph.getEdgeTarget(e);
-            Edge edge = pseudoNodeGraph.addEdge(pseudoNodeMap.get(source), pseudoNodeMap.get(target));
-            pseudoNodeGraph.setEdgeWeight(edge, graph.getEdgeWeight(e));
-        }
+        vertices.addAll(graph.vertexSet());
+        for(int i=0; i<vertices.size(); i++)
+            vertexIndexMap.put(vertices.get(i), i);
 
-        //Initialize dual values
-        for(PseudoNode ps : pseudoNodeGraph.vertexSet()){
-            double minWeight=Double.MAX_VALUE;
-            for(Edge e : pseudoNodeGraph.outgoingEdgesOf(ps))
-                minWeight=Math.min(minWeight, pseudoNodeGraph.getEdgeWeight(e));
-            ps.dualValue=minWeight/2.0;
+        even=new int[vertices.size()];
+        odd=new int[vertices.size()];
+        dualValues=new double[vertices.size()];
+        Arrays.fill(dualValues, Double.MAX_VALUE);
+        blossoms=new UnionFind<>(vertexIndexMap.values());
+
+        //Build adjacencyList and initialize dual values
+        adjacencyList = (Map<Integer, Edge>[]) Array.newInstance(Map.class, vertices.size());
+        for(int ux=0; ux<vertices.size(); ux++){
+            V u=vertices.get(ux);
+            for(E e : graph.edgesOf(u)){
+                V v=Graphs.getOppositeVertex(graph, e, u);
+                int vx=vertexIndexMap.get(v);
+                if(adjacencyList[ux].containsKey(vx))
+                    continue;
+
+                double weight=graph.getEdgeWeight(e);
+                Edge edge=new Edge(ux, vx, weight);
+                adjacencyList[ux].put(vx, edge);
+                adjacencyList[vx].put(ux, edge);
+
+                dualValues[ux]=Math.min(dualValues[ux], weight);
+                dualValues[vx]=Math.min(dualValues[vx], weight);
+            }
         }
+        for(int ux=0; ux<vertices.size(); ux++)
+            dualValues[ux]/=2;
     }
 
     private void run(){
@@ -130,13 +152,13 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
                         augment(u, v);
 
                     //Grow
-                    if(u.label==Label.EVEN && v.label==Label.FREE)
+                    if(u.label== Label.EVEN && v.label== Label.FREE)
                         grow(u, v);
-                    else if(v.label==Label.EVEN && u.label==Label.FREE)
+                    else if(v.label== Label.EVEN && u.label== Label.FREE)
                         grow(v, u);
 
                     //Shrink
-                    if(u.label==Label.EVEN && v.label==Label.EVEN && areInSameTree(u,v))
+                    if(u.label== Label.EVEN && v.label== Label.EVEN && areInSameTree(u,v))
                         shrink(u, v);
 
 
@@ -190,28 +212,6 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     }
 
     private void updateDuals(){
-        double fixedDeltaDualIncrease=Double.MAX_VALUE;
-        for(Edge e : pseudoNodeGraph.edgeSet()){
-            PseudoNode u=pseudoNodeGraph.getEdgeSource(e);
-            PseudoNode v=pseudoNodeGraph.getEdgeTarget(e);
-            double reducedCost=pseudoNodeGraph.getEdgeWeight(e)-u.dualValue-v.dualValue;
-
-            if(u.label==Label.EVEN && v.label==Label.FREE || v.label==Label.EVEN && u.label==Label.FREE) //Case 4a
-                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, reducedCost);
-            else if(u.label==Label.EVEN && v.label==Label.EVEN) //Case 4b and 4c
-                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, reducedCost/2.0);
-            else if(u.label==Label.ODD && u.isBlossom() || v.label==Label.ODD && v.isBlossom()) //Case 4d
-                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, u.dualValue);
-            else if(v.label==Label.ODD && v.isBlossom()) //Case 4d
-                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, v.dualValue);
-        }
-        //perform the updates
-        for(PseudoNode v : pseudoNodeGraph.vertexSet()){
-            if(v.label==Label.EVEN)
-                v.dualValue+=fixedDeltaDualIncrease;
-            else if(v.label==Label.ODD)
-                v.dualValue-=fixedDeltaDualIncrease;
-        }
 
     }
 
@@ -230,12 +230,34 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     }
 
     private class Edge{
+        int source;
+        int target;
+        double weight;
+
+        public Edge(int source, int target, double weight){
+            this.source=source;
+            this.target=target;
+            this.weight=weight;
+        }
 
     }
 
-    private class BMatching{
+    private class Matching{
+        private static final int UNMATCHED=-1;
+        int[] matching;
+
         Set<Edge> edges=new LinkedHashSet<>();
         double weight=0;
+
+        public Matching(int N){
+            matching=new int[N];
+            Arrays.fill(matching, UNMATCHED);
+        }
+
+        public void addEdge(int u, int v){
+            matching[u]=v;
+            matching[v]=u;
+        }
 
         public boolean isPerfect(){
             return edges.size()==graph.vertexSet().size()/2.0;
@@ -243,15 +265,15 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
 
         /**
          * Test whether any of the edges in the matching touches vertex w. (needs optimization)
-         * @param w
+         * @param v
          * @return
          */
-        public boolean testIncidence(PseudoNode w){
-            for(Edge e : edges){
-                if(Graphs.testIncidence(pseudoNodeGraph, e, w))
-                    return true;
-            }
-            return false;
+        public boolean testIncidence(int v){
+            return matching[v] != UNMATCHED;
+        }
+
+        public int getOpposite(int v){
+            return matching[v];
         }
     }
 
