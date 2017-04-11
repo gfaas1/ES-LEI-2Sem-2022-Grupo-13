@@ -23,7 +23,6 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -88,21 +87,50 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
 
     }
 
+    /*
+    All vertices in the original graph are mapped to a unique integer to simplify the implementation and to improve efficiency.
+     */
     private List<V> vertices=new ArrayList<>();
     private Map<V, Integer> vertexIndexMap=new HashMap<>();
+
+    /* The representative cache tracks for each vertex its representative. If the vertex is part of a blossom, then the representative
+    of that blossom is returned. Otherwise, the vertex represents itself. Given an edge (u,v), if the two vertices u, v belong to the same blossom,
+     in [1] denoted by R(u)=R(v), then the edge (u,v) has been 'shrunken away'. Initially, each vertex represents itself.
+     */
+    UnionFind<Integer> representative;
+
+    /*
+    Arrays representing resp the even and odd nodes forming the alternating trees. A node is even (resp odd) if it is at
+    even (resp) odd distance from the root of the tree it belongs to. By definition, the root of a tree is even. All tree
+    roots are unmatched nodes. A node is unmatched if no edge in the current matching is incident to that node.
+    Similarly, an edge is said to be matched (resp unmatched) if the edge is part (resp not part) of the matching. Each layer
+    in an alternating tree consists alternatingly matched and unmatched edges. Edges leaving
+    even nodes are unmatched, edges leaving odd nodes are always matched. By definition,
+    odd nodes in an alternating tree always have cardinality 2. Each vertex and each edge is part of at most 1 tree.
+     Note that the odd and even arrays only contain representatives! odd[v] returns the ancestor u of vertex v in its alternating tree.
+     The returned vertex is not necessarily a representative vertex (the returned vertex can be part of a blossom). Therefore, to obtain
+     its presentative, invoke representatives.find(). In this example, the edge (u,v) is unmatched, and representative.find(u) must be an even node.
+     */
     private int[] even,odd;
+
+    /*
+    Vector storing the dual values for each node
+     */
     private double[] dualValues;
 
+    /*
+    Compact representation of the graph.
+     */
     private Map<Integer, Edge>[] adjacencyList;
 
-    /* The blossoms UnionFind cache tracks for each vertex to which blossom it belongs. If two vertices u, v belong to the same blossom,
-     in [1] denoted by R(u), R(v), then the edge (u,v) has been 'shrunken away'. Initially, each vertex belongs to its own 'blossom'.
+    /*
+    The current matching
      */
-    UnionFind<Integer> blossoms;
+    private Matching matching;
 
+    /** Special 'NIL' vertex. */
+    private static final int NIL = -1;
 
-    /* key=exposed node, value=root of alternating tree */
-    Map<V, PseudoNode> forest =new LinkedHashMap<>();
 
     private void init(){
         vertices.addAll(graph.vertexSet());
@@ -113,7 +141,7 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
         odd=new int[vertices.size()];
         dualValues=new double[vertices.size()];
         Arrays.fill(dualValues, Double.MAX_VALUE);
-        blossoms=new UnionFind<>(vertexIndexMap.values());
+        representative =new UnionFind<>(vertexIndexMap.values());
 
         //Build adjacencyList and initialize dual values
         adjacencyList = (Map<Integer, Edge>[]) Array.newInstance(Map.class, vertices.size());
@@ -136,6 +164,7 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
         }
         for(int ux=0; ux<vertices.size(); ux++)
             dualValues[ux]/=2;
+        matching=new Matching(vertices.size()/2);
     }
 
     private void run(){
@@ -198,16 +227,37 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
         return null;
     }
 
-    private void grow(PseudoNode u, PseudoNode v){
+    /*
+    Let u be a node in the last even layer of tree T, (u,v) be an edge
+    such that v is not in V(T) and v is a matched vertex. Let (v,w) be
+    the corresponding matched edge. We can then extend tree T with the
+    two edges (u,v) and (v,w).
+     */
+    private void grow(int u, int v){
+        odd[v] = u;
+        int w = matching.getOpposite(v);
+        // add the matched edge (potential though a blossom) if it
+        // isn't in the forest already
+        if (even[representative.find(w)] == NIL) { //Not sure this if check is needed?
+            even[w] = v;
+            queue.enqueue(u);
+        }
+    }
+
+    private void augment(int u, int v){
+        //Find the path P1 from node u to its root. In matching M, replace the edges in M \cap P1 by the edges in the symmetric difference between M and P1
+
+        //Find the path P2 from node v to its root. In matching M, replace the edges in M \cap P2 by the edges in the symmetric difference between M and P2
+
+        //Add the edge (u,v) to M, thereby increasing the cardinality of the matching by 1.
+        matching.match(u,v);
+    }
+
+    private void shrink(int u, int v){
 
     }
-    private void augment(PseudoNode u, PseudoNode v){
 
-    }
-    private void shrink(PseudoNode u, PseudoNode v){
-
-    }
-    private void expand(PseudoNode blossom){
+    private void expand(int u){
 
     }
 
@@ -215,19 +265,6 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
 
     }
 
-    private class PseudoNode{
-        Label label= Label.FREE; //odd, even or exposed
-        PseudoNode treeRoot=null; //Root of the tree the node belongs to
-        double dualValue=0; //Dual value of the node (y_u)
-
-        public PseudoNode(){
-
-        }
-
-        public boolean isBlossom(){
-            return false;
-        }
-    }
 
     private class Edge{
         int source;
@@ -254,7 +291,7 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
             Arrays.fill(matching, UNMATCHED);
         }
 
-        public void addEdge(int u, int v){
+        public void match(int u, int v){
             matching[u]=v;
             matching[v]=u;
         }
@@ -278,7 +315,7 @@ public class EdmondsBlossomAlgorithmv2<V,E> implements MatchingAlgorithm<V, E> {
     }
 
 
-    private boolean areInSameTree(PseudoNode n1, PseudoNode n2){
+    private boolean areInSameTree(int u, int v){
 
     }
 }
