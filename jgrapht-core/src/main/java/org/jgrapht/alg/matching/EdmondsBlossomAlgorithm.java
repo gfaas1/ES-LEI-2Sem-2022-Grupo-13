@@ -189,6 +189,28 @@ public class EdmondsBlossomAlgorithm<V,E> implements MatchingAlgorithm<V, E> {
     }
 
     private void updateDuals(){
+        double fixedDeltaDualIncrease=Double.MAX_VALUE;
+        for(Edge e : pseudoNodeGraph.edgeSet()){
+            PseudoNode u=pseudoNodeGraph.getEdgeSource(e);
+            PseudoNode v=pseudoNodeGraph.getEdgeTarget(e);
+            double reducedCost=pseudoNodeGraph.getEdgeWeight(e)-u.dualValue-v.dualValue;
+
+            if(u.label==Label.EVEN && v.label==Label.FREE || v.label==Label.EVEN && u.label==Label.FREE) //Case 4a
+                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, reducedCost);
+            else if(u.label==Label.EVEN && v.label==Label.EVEN) //Case 4b and 4c
+                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, reducedCost/2.0);
+            else if(u.label==Label.ODD && u.isBlossom() || v.label==Label.ODD && v.isBlossom()) //Case 4d
+                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, u.dualValue);
+            else if(v.label==Label.ODD && v.isBlossom()) //Case 4d
+                fixedDeltaDualIncrease=Math.min(fixedDeltaDualIncrease, v.dualValue);
+        }
+        //perform the updates
+        for(PseudoNode v : pseudoNodeGraph.vertexSet()){
+            if(v.label==Label.EVEN)
+                v.dualValue+=fixedDeltaDualIncrease;
+            else if(v.label==Label.ODD)
+                v.dualValue-=fixedDeltaDualIncrease;
+        }
 
     }
 
