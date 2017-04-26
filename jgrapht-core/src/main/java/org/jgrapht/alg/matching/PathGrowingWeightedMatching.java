@@ -125,7 +125,7 @@ public class PathGrowingWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         if (useHeuristics) {
             return runWithHeuristics();
@@ -155,7 +155,7 @@ public class PathGrowingWeightedMatching<V, E>
     }
 
     // the algorithm (no heuristics)
-    private Matching<E> run()
+    private Matching<V, E> run()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -217,14 +217,14 @@ public class PathGrowingWeightedMatching<V, E>
 
         // return best matching
         if (comparator.compare(m1Weight, m2Weight) > 0) {
-            return new MatchingImpl<E>(m1, m1Weight);
+            return new MatchingImpl<V, E>(graph, m1, m1Weight);
         } else {
-            return new MatchingImpl<E>(m2, m2Weight);
+            return new MatchingImpl<V, E>(graph, m2, m2Weight);
         }
     }
 
     // the algorithm (improved with additional heuristics)
-    private Matching<E> runWithHeuristics()
+    private Matching<V, E> runWithHeuristics()
     {
         // lookup all relevant vertices
         Set<V> visibleVertex = initVisibleVertices();
@@ -315,7 +315,7 @@ public class PathGrowingWeightedMatching<V, E>
         }
 
         // return extended matching
-        return new MatchingImpl<E>(matching, matchingWeight);
+        return new MatchingImpl<>(graph, matching, matchingWeight);
     }
 
     /**

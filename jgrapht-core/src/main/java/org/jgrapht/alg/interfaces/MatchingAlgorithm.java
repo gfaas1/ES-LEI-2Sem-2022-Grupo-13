@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
+import org.jgrapht.Graph;
+
 import java.io.*;
 import java.util.*;
 
@@ -44,7 +46,7 @@ public interface MatchingAlgorithm<V, E>
      *
      * @return a matching
      */
-    Matching<E> getMatching();
+    Matching<V, E> getMatching();
 
     /**
      * Compute a matching for a given graph.
@@ -53,7 +55,7 @@ public interface MatchingAlgorithm<V, E>
      * @deprecated This method has been renamed to {@link #getMatching()}
      */
     @Deprecated
-    default Matching<E> computeMatching()
+    default Matching<V, E> computeMatching()
     {
         return getMatching();
     }
@@ -61,9 +63,10 @@ public interface MatchingAlgorithm<V, E>
     /**
      * A graph matching.
      *
+     * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface Matching<E>
+    interface Matching<V, E>
     {
         /**
          * Returns the weight of the matching.
@@ -78,6 +81,21 @@ public interface MatchingAlgorithm<V, E>
          * @return the edges of the matching
          */
         Set<E> getEdges();
+
+        /**
+         * Returns true if vertex v is touched by an edge in this matching.
+         * @param v vertex
+         * @return true if vertex v is touched by an edge in this matching.
+         */
+        boolean isMatched(V v);
+
+        /**
+         * Returns true if the matching is a perfect matching. A matching is perfect if every vertex in the graph
+         * is indicent to an edge in the matching. For a match
+         * @return true if the matching is perfect. By definition, a perfect matching consists of exactly 1/2|V| edges,
+         * and the number of vertices in the graph must be even.
+         */
+        boolean isPerfect();
     }
 
     /**
@@ -85,11 +103,12 @@ public interface MatchingAlgorithm<V, E>
      *
      * @param <E> the graph edge type
      */
-    class MatchingImpl<E>
-        implements Matching<E>, Serializable
+    class MatchingImpl<V,E>
+        implements Matching<V,E>, Serializable
     {
         private static final long serialVersionUID = 4767675421846527768L;
 
+        private Graph<V,E> graph;
         private Set<E> edges;
         private double weight;
 
@@ -99,8 +118,9 @@ public interface MatchingAlgorithm<V, E>
          * @param edges the edges of the matching
          * @param weight the weight of the matching
          */
-        public MatchingImpl(Set<E> edges, double weight)
+        public MatchingImpl(Graph<V,E> graph, Set<E> edges, double weight)
         {
+            this.graph=graph;
             this.edges = edges;
             this.weight = weight;
         }
@@ -121,6 +141,22 @@ public interface MatchingAlgorithm<V, E>
         public Set<E> getEdges()
         {
             return edges;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isMatched(V v) {
+            return graph.edgesOf(v).stream().anyMatch(edges::contains);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isPerfect() {
+            return edges.size()==graph.vertexSet().size()/2.0;
         }
 
         /**

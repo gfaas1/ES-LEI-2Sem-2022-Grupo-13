@@ -65,7 +65,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 5, 6, 5.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(5, m.getEdges().size());
         assertEquals(22.5, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -97,7 +97,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
         Graphs.addEdge(g, 4, 4, 0.0);
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         assertEquals(3, m.getEdges().size());
         assertEquals(3.0, m.getWeight(), MatchingAlgorithm.DEFAULT_EPSILON);
@@ -123,7 +123,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 4.0
         // path growing algorithm gets 3.0
@@ -161,7 +161,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0
@@ -199,7 +199,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
 
         MatchingAlgorithm<Integer, DefaultWeightedEdge> mm =
             new PathGrowingWeightedMatching<>(g, false);
-        Matching<DefaultWeightedEdge> m = mm.getMatching();
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
 
         // maximum here is 8.0
         // path growing algorithm gets 6.0

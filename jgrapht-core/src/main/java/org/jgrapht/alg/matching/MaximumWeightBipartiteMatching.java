@@ -73,7 +73,7 @@ public class MaximumWeightBipartiteMatching<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Only simple graphs supported");
@@ -92,7 +92,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         for (E edge : bipartiteMatching) {
             weight += graph.getEdgeWeight(edge);
         }
-        return new MatchingImpl<>(bipartiteMatching, weight);
+        return new MatchingImpl<>(graph, bipartiteMatching, weight);
     }
 
     private void initializeVerticesAndEdges()

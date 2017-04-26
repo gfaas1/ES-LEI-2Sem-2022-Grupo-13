@@ -92,7 +92,7 @@ public class GreedyWeightedMatching<V, E>
      * @return a matching
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)
@@ -103,7 +103,7 @@ public class GreedyWeightedMatching<V, E>
 
         double matchingWeight = 0d;
         Set<E> matching = new HashSet<>();
-        Set<V> matchedVertices = new HashSet<V>();
+        Set<V> matchedVertices = new HashSet<>();
 
         // find maximal matching
         for (E e : allEdges) {
@@ -121,7 +121,7 @@ public class GreedyWeightedMatching<V, E>
         }
 
         // return matching
-        return new MatchingImpl<>(matching, matchingWeight);
+        return new MatchingImpl<>(graph, matching, matchingWeight);
     }
 
 }

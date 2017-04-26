@@ -36,6 +36,7 @@ public class UnionFind<T>
 {
     private Map<T, T> parentMap;
     private Map<T, Integer> rankMap;
+    private Collection<T> elements;
 
     /**
      * Creates a UnionFind instance with all the elements in separate sets.
@@ -46,6 +47,7 @@ public class UnionFind<T>
     {
         parentMap = new HashMap<>();
         rankMap = new HashMap<>();
+        this.elements=elements;
         for (T element : elements) {
             parentMap.put(element, element);
             rankMap.put(element, 0);
@@ -131,6 +133,18 @@ public class UnionFind<T>
         } else {
             parentMap.put(parent2, parent1);
             rankMap.put(parent1, rank1 + 1);
+        }
+    }
+
+    /**
+     * Resets the unionfind datastructure to its initial state (the state after its initialization).
+     */
+    public void clear(){
+        parentMap.clear();
+        rankMap.clear();
+        for (T element : elements) {
+            parentMap.put(element, element);
+            rankMap.put(element, 0);
         }
     }
 }
