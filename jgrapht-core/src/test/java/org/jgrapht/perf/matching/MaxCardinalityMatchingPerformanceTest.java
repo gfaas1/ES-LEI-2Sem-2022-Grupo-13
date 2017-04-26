@@ -43,8 +43,8 @@ public class MaxCardinalityMatchingPerformanceTest
     extends TestCase
 {
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
-    public static final double PERF_BENCHMARK_EDGES_PROP = 0.2;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 10000;
+    public static final double PERF_BENCHMARK_EDGES_PROP = 0.7;
 
     @State(Scope.Benchmark)
     private static abstract class RandomGraphBenchmarkBase

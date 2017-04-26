@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2017-2017, by John Mayfield and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
@@ -27,7 +44,7 @@ import java.util.*;
  * loop iterations particularly at the start when all length 1 augmenting paths
  * are discovered.
  *
- * @author John May
+ * @author John Mayfield
  * @see <a href="http://en.wikipedia.org/wiki/Blossom_algorithm">Blossom
  *      algorithm, Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm">Hopkroft-Karp,
