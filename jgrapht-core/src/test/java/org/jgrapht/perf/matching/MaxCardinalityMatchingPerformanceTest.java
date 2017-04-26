@@ -43,7 +43,7 @@ public class MaxCardinalityMatchingPerformanceTest
     extends TestCase
 {
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT = 10000;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
     public static final double PERF_BENCHMARK_EDGES_PROP = 0.7;
 
     @State(Scope.Benchmark)
@@ -117,7 +117,7 @@ public class MaxCardinalityMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>(graph, new RandomMatching<>(graph));
+            return new EdmondsBlossomShrinking<>(graph, new RandomMaxCardinalityMatching<>(graph));
         }
     }
 
@@ -127,7 +127,7 @@ public class MaxCardinalityMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsMaxCardinalityMatching<>(graph, new RandomMatching<>(graph));
+            return new EdmondsMaxCardinalityMatching<>(graph, new RandomMaxCardinalityMatching<>(graph));
         }
     }
 

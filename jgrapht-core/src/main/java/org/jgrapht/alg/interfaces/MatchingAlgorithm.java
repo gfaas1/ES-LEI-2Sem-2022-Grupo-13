@@ -69,6 +69,13 @@ public interface MatchingAlgorithm<V, E>
     interface Matching<V, E>
     {
         /**
+         * Returns the graph over which this matching is defined.
+         *
+         * @return the graph
+         */
+        Graph<V, E> getGraph();
+
+        /**
          * Returns the weight of the matching.
          *
          * @return the weight of the matching
@@ -83,19 +90,23 @@ public interface MatchingAlgorithm<V, E>
         Set<E> getEdges();
 
         /**
-         * Returns true if vertex v is touched by an edge in this matching.
+         * Returns true if vertex v is incident to an edge in this matching.
          * @param v vertex
-         * @return true if vertex v is touched by an edge in this matching.
+         * @return true if vertex v is incident to an edge in this matching.
          */
-        boolean isMatched(V v);
+        default boolean isMatched(V v){
+            return getGraph().edgesOf(v).stream().anyMatch(getEdges()::contains);
+        }
 
         /**
          * Returns true if the matching is a perfect matching. A matching is perfect if every vertex in the graph
-         * is indicent to an edge in the matching. For a match
+         * is incident to an edge in the matching.
          * @return true if the matching is perfect. By definition, a perfect matching consists of exactly 1/2|V| edges,
          * and the number of vertices in the graph must be even.
          */
-        boolean isPerfect();
+        default boolean isPerfect(){
+            return getEdges().size()==getGraph().vertexSet().size()/2.0;
+        }
     }
 
     /**
@@ -111,6 +122,7 @@ public interface MatchingAlgorithm<V, E>
         private Graph<V,E> graph;
         private Set<E> edges;
         private double weight;
+        private Set<V> matchedVertices=null;
 
         /**
          * Construct a new instance
@@ -123,6 +135,11 @@ public interface MatchingAlgorithm<V, E>
             this.graph=graph;
             this.edges = edges;
             this.weight = weight;
+        }
+
+        @Override
+        public Graph<V, E> getGraph() {
+            return graph;
         }
 
         /**
@@ -148,15 +165,14 @@ public interface MatchingAlgorithm<V, E>
          */
         @Override
         public boolean isMatched(V v) {
-            return graph.edgesOf(v).stream().anyMatch(edges::contains);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean isPerfect() {
-            return edges.size()==graph.vertexSet().size()/2.0;
+            if(matchedVertices == null){ //lazily index the vertices that have been matched
+                matchedVertices=new HashSet<>();
+                for(E e : edges) {
+                    matchedVertices.add(graph.getEdgeSource(e));
+                    matchedVertices.add(graph.getEdgeTarget(e));
+                }
+            }
+            return matchedVertices.contains(v);
         }
 
         /**
