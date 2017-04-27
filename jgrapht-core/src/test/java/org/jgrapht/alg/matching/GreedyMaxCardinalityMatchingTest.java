@@ -30,14 +30,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Tests for RandomMaxCardinalityMatching
+ * Tests for GreedyMaxCardinalityMatching
  * @author Joris Kinable
  */
-public class RandomMaxCardinalityMatchingTest extends TestCase{
+public class GreedyMaxCardinalityMatchingTest extends TestCase{
 
 
     /**
      * Generate a number of random graphs, find a random matching and check whether the matching returned is valid.
+     * Not sorted
      */
     public void testRandomGraphs(){
         GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
@@ -46,7 +47,38 @@ public class RandomMaxCardinalityMatchingTest extends TestCase{
 
         for(int i=0; i<100; i++){
             generator.generateGraph(graph, vertexFactory, null);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new RandomMaxCardinalityMatching<>(graph);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaxCardinalityMatching<>(graph, false);
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
+
+            Set<Integer> matched = new HashSet<>();
+            double weight=0;
+            for (DefaultEdge e : m.getEdges()) {
+                Integer source = graph.getEdgeSource(e);
+                Integer target = graph.getEdgeTarget(e);
+                if (matched.contains(source))
+                    fail("vertex is incident to multiple matches in the matching");
+                matched.add(source);
+                if (matched.contains(target))
+                    fail("vertex is incident to multiple matches in the matching");
+                matched.add(target);
+                weight += graph.getEdgeWeight(e);
+            }
+            assertEquals(m.getWeight(), weight, 0.0000001);
+        }
+    }
+
+    /**
+     * Generate a number of random graphs, find a random matching and check whether the matching returned is valid.
+     * Sorted.
+     */
+    public void testRandomGraphs2(){
+        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
+        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
+        Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
+
+        for(int i=0; i<1; i++){
+            generator.generateGraph(graph, vertexFactory, null);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaxCardinalityMatching<>(graph, true);
             MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
 
             Set<Integer> matched = new HashSet<>();

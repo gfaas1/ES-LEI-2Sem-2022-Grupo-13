@@ -117,7 +117,7 @@ public class MaxCardinalityMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>(graph, new RandomMaxCardinalityMatching<>(graph));
+            return new EdmondsBlossomShrinking<>(graph, new GreedyMaxCardinalityMatching<>(graph, false));
         }
     }
 
@@ -127,7 +127,7 @@ public class MaxCardinalityMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsMaxCardinalityMatching<>(graph, new RandomMaxCardinalityMatching<>(graph));
+            return new EdmondsMaxCardinalityMatching<>(graph, new GreedyMaxCardinalityMatching<>(graph, false));
         }
     }
 
