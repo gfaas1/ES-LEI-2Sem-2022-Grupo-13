@@ -182,6 +182,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         // even level (level = 0)
         for (int v = 0; v < vertices.size(); v++) {
             if (matching.isExposed(v)) {
+                System.out.println("exposed: "+vertices.get(v));
                 even[v] = v;
                 queue.enqueue(v);
             }
@@ -207,6 +208,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
                 // the tree with this matched edge
                 else if (odd[wx] == nil) {
                     odd[wx] = vx;
+                    System.out.println("odd: "+wx);
                     int u = matching.other(wx);
                     // add the matched edge (potential though a blossom) if it
                     // isn't in the forest already
@@ -261,6 +263,19 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         // The odd set achieves the minimum in the Tutte-Berge Formula.
         Set<V> oddVertices= vertexIndexMap.values().stream().filter(vx -> odd[vx] != nil).map(vertices::get).collect(Collectors.toSet());
         Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+
+        //TODO: manually draw augmenting tree and check the set of odd vertices
+
+//        Set<V> exposed=graph.vertexSet().stream().filter(v -> this.matching.isExposed(vertexIndexMap.get(v))).collect(Collectors.toSet());
+//        Set<V> oddVertices=new HashSet<V>();
+//        for(V v : exposed){
+//            for(V w : Graphs.neighborListOf(graph, v)){
+//                if(!exposed.contains(w))
+//                    oddVertices.add(w);
+//            }
+//        }
+//        Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+
         Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
         List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
         long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();

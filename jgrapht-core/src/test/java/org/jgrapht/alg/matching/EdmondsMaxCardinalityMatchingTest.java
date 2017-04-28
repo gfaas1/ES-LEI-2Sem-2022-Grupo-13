@@ -81,7 +81,7 @@ public final class EdmondsMaxCardinalityMatchingTest
         for(int[] edge : edges)
             graph.addEdge(edge[0], edge[1]);
 
-        System.out.println("Components in graph: "+new ConnectivityInspector<>(graph).connectedSets());
+        System.out.println("\nComponents in graph: "+new ConnectivityInspector<>(graph).connectedSets());
         Set<DefaultEdge> mEdges=new HashSet<>();
         mEdges.add(graph.getEdge(0,1));
         mEdges.add(graph.getEdge(2,3));
@@ -89,7 +89,7 @@ public final class EdmondsMaxCardinalityMatchingTest
         mEdges.add(graph.getEdge(5,8));
         Matching<Integer, DefaultEdge> m=new MatchingAlgorithm.MatchingImpl<>(graph, mEdges, 4);
         verifyMatching(graph, m, 4);
-        System.out.println("best bound: "+bestBound(graph));
+//        System.out.println("best bound: "+bestBound(graph));
 
         EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher=new EdmondsMaxCardinalityMatching<>(graph);
         assertTrue(matcher.isMaximumMatching(m));
