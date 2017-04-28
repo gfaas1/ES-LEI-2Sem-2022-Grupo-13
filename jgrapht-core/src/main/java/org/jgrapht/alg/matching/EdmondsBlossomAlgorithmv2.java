@@ -104,14 +104,14 @@
 //    /*
 //    Arrays representing resp the even and odd nodes forming the alternating trees. A node is even (resp odd) if it is at
 //    even (resp) odd distance from the root of the tree it belongs to. By definition, the root of a tree is even. All tree
-//    roots are unmatched nodes. A node is unmatched if no edge in the current matching is incident to that node.
-//    Similarly, an edge is said to be matched (resp unmatched) if the edge is part (resp not part) of the matching. Each layer
-//    in an alternating tree consists alternatingly matched and unmatched edges. Edges leaving
-//    even nodes are unmatched, edges leaving odd nodes are always matched. By definition,
+//    roots are isExposed nodes. A node is isExposed if no edge in the current matching is incident to that node.
+//    Similarly, an edge is said to be matched (resp isExposed) if the edge is part (resp not part) of the matching. Each layer
+//    in an alternating tree consists alternatingly matched and isExposed edges. Edges leaving
+//    even nodes are isExposed, edges leaving odd nodes are always matched. By definition,
 //    odd nodes in an alternating tree always have cardinality 2. Each vertex and each edge is part of at most 1 tree.
 //     Note that the odd and even arrays only contain representatives! odd[v] returns the ancestor u of vertex v in its alternating tree.
 //     The returned vertex is not necessarily a representatives vertex (the returned vertex can be part of a blossom). Therefore, to obtain
-//     its presentative, invoke representatives.find(). In this example, the edge (u,v) is unmatched, and representatives.find(u) must be an even node.
+//     its presentative, invoke representatives.find(). In this example, the edge (u,v) is isExposed, and representatives.find(u) must be an even node.
 //     */
 //    private int[] even,odd;
 //

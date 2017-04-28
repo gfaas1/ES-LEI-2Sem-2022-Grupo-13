@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by John Mayfield and Contributors.
+ * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,11 +20,14 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
+import org.jgrapht.graph.AsSubgraph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Maximum matching in general graphs using Edmond's Blossom Algorithm. This
@@ -44,7 +47,7 @@ import java.util.*;
  * loop iterations particularly at the start when all length 1 augmenting paths
  * are discovered.
  *
- * @author John Mayfield
+ * @author Joris Kinable
  * @see <a href="http://en.wikipedia.org/wiki/Blossom_algorithm">Blossom
  *      algorithm, Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm">Hopkroft-Karp,
@@ -54,31 +57,33 @@ import java.util.*;
  */
 public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
 
-    /** The graph we are matching on. */
+    /* The graph we are matching on. */
     private final Graph<V,E> graph;
+    /* (Heuristic) matching algorithm used to compute an initial solution */
+    private MatchingAlgorithm<V,E> initializer;
 
     /*
     All vertices in the original graph are mapped to a unique integer to simplify the implementation and to improve efficiency.
      */
-    private List<V> vertices=new ArrayList<>();
-    private Map<V, Integer> vertexIndexMap=new HashMap<>();
+    private List<V> vertices;
+    private Map<V, Integer> vertexIndexMap;
 
     /** The current matching. */
-    private final MatchingArray matching;
+    private MatchingArray matching;
 
 /* Algorithm data structures below. */
 
     /** Storage of the forest, even and odd levels */
-    private final int[] even, odd;
+    private int[] even, odd;
 
     /** Special 'nil' vertex. */
     private static final int nil = -1;
 
     /** Queue of 'even' (free) vertices to start paths from. */
-    private final FixedSizeQueue queue;
+    private FixedSizeQueue queue;
 
     /** Union-Find to store blossoms. */
-    private final UnionFind<Integer> uf;
+    private UnionFind<Integer> uf;
 
     /**
      * Map stores the bridges of the blossom - indexed by with support
@@ -87,26 +92,35 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     private final Map<Integer, Pair<Integer,Integer>> bridges = new HashMap<>();
 
     /** Temporary array to fill with path information. */
-    private final int[]  path;
+    private int[]  path;
 
     /**
      * Temporary bit sets when walking down 'trees' to check for
      * paths/blossoms.
      */
-    private final BitSet vAncestors, wAncestors;
+    private BitSet vAncestors, wAncestors;
 
     /** Number of matched vertices. */
-//    private final int nMatched;
+    private int nMatched;
 
 
     public EdmondsMaxCardinalityMatching(Graph<V,E> graph) {
         this(graph, null);
+//        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
     }
 
     public EdmondsMaxCardinalityMatching(Graph<V,E> graph, MatchingAlgorithm<V,E> initializer) {
-
         this.graph = GraphTests.requireUndirected(graph);
+        this.initializer=initializer;
+    }
+
+    /**
+     * Prepare the data structures
+     */
+    private void init(){
+        vertices=new ArrayList<>();
         vertices.addAll(graph.vertexSet());
+        vertexIndexMap=new HashMap<>();
         for(int i=0; i<vertices.size(); i++)
             vertexIndexMap.put(vertices.get(i), i);
         this.matching = new MatchingArray(vertices.size());
@@ -124,10 +138,13 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         vAncestors = new BitSet(vertices.size());
         wAncestors = new BitSet(vertices.size());
 
-//        this.nMatched = nMatched;
-
+        this.nMatched = 0;
     }
 
+    /**
+     * Provide an algorithm which computes an initial solution. The algorithm is usually a heuristic.
+     * @param initializer algorithm used to compute an initial matching
+     */
     private void warmStart(MatchingAlgorithm<V,E> initializer){
         Matching<V,E> initialSolution=initializer.getMatching();
         System.out.println("warmstart: "+initialSolution.getWeight());
@@ -138,6 +155,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             Integer vx=vertexIndexMap.get(v);
             this.matching.match(ux, vx);
         }
+        nMatched=initialSolution.getEdges().size()*2;
     }
 
     /**
@@ -149,6 +167,10 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      */
     private boolean augment() {
 
+        //If the matching is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices, we cannot augment.
+        if(nMatched >= graph.vertexSet().size()-1)
+            return false;
+
         // reset data structures
         Arrays.fill(even, nil);
         Arrays.fill(odd, nil);
@@ -156,10 +178,10 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         bridges.clear();
         queue.clear();
 
-        // queue every unmatched vertex and place in the
+        // queue every isExposed vertex and place in the
         // even level (level = 0)
         for (int v = 0; v < vertices.size(); v++) {
-            if (matching.unmatched(v)) {
+            if (matching.isExposed(v)) {
                 even[v] = v;
                 queue.enqueue(v);
             }
@@ -198,6 +220,57 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
         // no augmenting paths, matching is maximum
         return false;
+    }
+
+    /**
+     * Checks whether the given matching is of maximum cardinality. A matching m is maximum if there does not exist a different matching
+     * m' in the graph which is of larger cardinality. This method is solely intended for verification purposes. Any matching returned
+     * by the {@link #getMatching()} method in this class is guaranteed to be maximum.
+     * <p>
+     * To attest whether the matching is maximum, we use the Tutte-Berge Formula
+     * which provides a tight bound on the cardinality of the matching. The Tutte-Berge Formula states:
+     * 2 * m(G) = min_{X} ( |V(G)| + |X| - o(G-X) ), where m(G) is the size of the matching, X a subset of vertices,
+     * G-X the induced graph on vertex set V(G)\X, and o(G) the number of connected components of odd cardinality in graph G.<br>
+     * Note: to compute this bound, we do not iterate over all possible subsets X (this would be too expensive). Instead, X is
+     * computed as a by-product of Edmonds algorithm.
+     * @param matching matching
+     * @return true if the matching is maximum, false otherwise.
+     */
+    public boolean isMaximumMatching(Matching<V,E> matching){
+        //The matching is maximum if it is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices
+//        if(matching.getEdges().size()*2 >= graph.vertexSet().size()-1)
+//            return true;
+
+        this.init(); //Reset data structures and use the provided matching as a starting point
+        for(E e : matching.getEdges()){
+            V u=graph.getEdgeSource(e);
+            V v=graph.getEdgeTarget(e);
+            Integer ux=vertexIndexMap.get(u);
+            Integer vx=vertexIndexMap.get(v);
+            this.matching.match(ux, vx);
+        }
+        //Search for an augmenting path. If one is found, then clearly the matching is not maximum
+        boolean foundAugmentingPath=augment();
+        if(foundAugmentingPath)
+            return false;
+
+        System.out.println("checking with tutte berge formula");
+
+        //A side effect of the Edmonds Blossom-Shrinking algorithm is that it computes what is known as the
+        // Edmonds-Gallai decomposition of a graph: it decomposes the graph into three disjoint sets of vertices: odd, even, or free.
+        // The odd set achieves the minimum in the Tutte-Berge Formula.
+        Set<V> oddVertices= vertexIndexMap.values().stream().filter(vx -> odd[vx] != nil).map(vertices::get).collect(Collectors.toSet());
+        Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+        Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
+        List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
+        long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
+        System.out.println("matching: "+matching.getEdges().size());
+        System.out.println("vertices in graph: "+graph.vertexSet().size());
+        System.out.println("odd vertices: "+oddVertices);
+        System.out.println("nrOddCardinalityComponents: "+nrOddCardinalityComponents);
+        System.out.println("connected components: "+connectedComponents);
+        System.out.println("(graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0="+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
+        return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
     }
 
     /**
@@ -377,7 +450,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             path[i++] = start;
 
             // root of the tree
-            if (matching.unmatched(start))
+            if (matching.isExposed(start))
                 return i;
 
             path[i++] = matching.other(start);
@@ -392,11 +465,12 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
     @Override
     public Matching<V, E> getMatching() {
+        this.init();
 
         // continuously augment while we find new paths, each
         // path increases the matching cardinality by 2
         while (augment()) {
-//            nMatched += 2;
+            nMatched += 2;
         }
 
         Set<E> edges=new LinkedHashSet<E>();
@@ -414,7 +488,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
     final class MatchingArray {
 
-        /** Indicates an unmatched vertex. */
+        /** Indicates an isExposed vertex. */
         private static final int UNMATCHED = -1;
 
         /** Storage of which each vertex is matched with. */
@@ -431,16 +505,16 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
 
         boolean matched(int v) {
-            return !unmatched(v);
+            return !isExposed(v);
         }
 
         /**
-         * Is the vertex v 'unmatched'.
+         * Is the vertex v 'isExposed'.
          *
          * @param v a vertex
          * @return the vertex has no matching
          */
-        boolean unmatched(int v) {
+        boolean isExposed(int v) {
             int w = match[v];
             return w < 0 || match[w] != v;
         }
@@ -450,10 +524,10 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
          *
          * @param v a vertex
          * @return matched vertex
-         * @throws IllegalArgumentException the vertex is currently unmatched
+         * @throws IllegalArgumentException the vertex is currently isExposed
          */
         int other(int v) {
-            if (unmatched(v))
+            if (isExposed(v))
                 throw new IllegalArgumentException(v + " is not matched");
             return match[v];
         }

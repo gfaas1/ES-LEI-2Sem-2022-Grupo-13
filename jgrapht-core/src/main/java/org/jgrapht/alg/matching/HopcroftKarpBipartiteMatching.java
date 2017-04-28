@@ -45,7 +45,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
     private Set<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
 
-    private Set<V> unmatchedVertices1; // Set which contains the unmatched
+    private Set<V> unmatchedVertices1; // Set which contains the isExposed
                                        // vertices in partition 1
     private Set<V> unmatchedVertices2;
 
@@ -99,7 +99,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
 
     /**
      * Greedily match the vertices in partition1 to the vertices in partition2. For each vertex in
-     * partition 1, check whether there is an edge to an unmatched vertex in partition 2. If so, add
+     * partition 1, check whether there is an edge to an isExposed vertex in partition 2. If so, add
      * the edge to the matching.
      */
     private void greedyMatch()
