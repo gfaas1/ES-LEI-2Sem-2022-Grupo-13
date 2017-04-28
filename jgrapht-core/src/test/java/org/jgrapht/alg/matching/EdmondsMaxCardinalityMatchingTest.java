@@ -81,27 +81,44 @@ public final class EdmondsMaxCardinalityMatchingTest
         for(int[] edge : edges)
             graph.addEdge(edge[0], edge[1]);
 
-        System.out.println("\nComponents in graph: "+new ConnectivityInspector<>(graph).connectedSets());
         Set<DefaultEdge> mEdges=new HashSet<>();
         mEdges.add(graph.getEdge(0,1));
         mEdges.add(graph.getEdge(2,3));
         mEdges.add(graph.getEdge(4,9));
-        mEdges.add(graph.getEdge(5,8));
+        mEdges.add(graph.getEdge(5, 8));
         Matching<Integer, DefaultEdge> m=new MatchingAlgorithm.MatchingImpl<>(graph, mEdges, 4);
         verifyMatching(graph, m, 4);
-//        System.out.println("best bound: "+bestBound(graph));
 
         EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher=new EdmondsMaxCardinalityMatching<>(graph);
         assertTrue(matcher.isMaximumMatching(m));
     }
 
     public void testRandomGraphs(){
+        Random random=new Random(1);
+        int vertices=100;
+
+        for(int k=0; k<100; k++) {
+            int edges=random.nextInt(maxEdges(vertices)/2);
+            GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator<>(vertices, edges, 0);
+            IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            generator.generateGraph(graph, vertexFactory, null);
+            EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(graph);
+
+            Matching<Integer, DefaultEdge> m = matcher.getMatching();
+            this.verifyMatching(graph, m, m.getEdges().size());
+            assertTrue(matcher.isMaximumMatching(m));
+        }
+    }
+
+    public void testRandomGraphs2(){
         int counter=0;
         Random random=new Random(0);
 
-        for(int k=0; k<10000; k++) {
-            int vertices=10;
-            int edges=random.nextInt(maxEdges(vertices));
+        for(int k=0; k<100000; k++) {
+            int vertices=100;
+            int edges=random.nextInt(maxEdges(vertices)/2);
             GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator<>(vertices, edges, 0);
             IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
 
@@ -488,6 +505,22 @@ public final class EdmondsMaxCardinalityMatchingTest
         }
 
         return bestBound;
+    }
+
+    public double bound(Graph<Integer,DefaultEdge> graph){
+        Set<Integer> subset=new HashSet<>(Arrays.asList(5));
+        Set<Integer> otherVertices=graph.vertexSet().stream().filter(v -> !subset.contains(v)).collect(Collectors.toSet());
+        Graph<Integer,DefaultEdge> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
+        List<Set<Integer>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
+        long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
+        double bound=(graph.vertexSet().size() + subset.size() - nrOddCardinalityComponents)/2.0;
+        System.out.println("updating bound: bound: "+bound+" best bound: "+bound);
+        System.out.println("subset: "+subset);
+        System.out.println("othervertices: "+otherVertices);
+        System.out.println("subgraph: "+subgraph);
+        System.out.println("connected comp: "+connectedComponents);
+        System.out.println("nrOddCardinalityComponents "+nrOddCardinalityComponents);
+        return bound;
     }
 
     public <V,E> Matching<V,E> getOptimalMatching(Graph<V,E> graph){

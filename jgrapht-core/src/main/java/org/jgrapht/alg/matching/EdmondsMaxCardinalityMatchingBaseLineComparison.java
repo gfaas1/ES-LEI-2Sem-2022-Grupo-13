@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
  * @see <a href="http://research.microsoft.com/apps/video/dl.aspx?id=171055">Presentation
  *      from Vazirani on his and Micali O(|E| * sqrt(|V|)) algorithm</a>
  */
-public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
+public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements MatchingAlgorithm<V, E> {
 
     /* The graph we are matching on. */
     private final Graph<V,E> graph;
@@ -88,8 +88,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     /** Queue of 'even' (free) vertices to start paths from. */
     private FixedSizeQueue queue;
 
-    private FixedSizeQueue exposedVertices;
-
     /** Union-Find to store blossoms. */
     private UnionFind<Integer> uf;
 
@@ -112,12 +110,12 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     private int nMatched;
 
 
-    public EdmondsMaxCardinalityMatching(Graph<V,E> graph) {
+    public EdmondsMaxCardinalityMatchingBaseLineComparison(Graph<V, E> graph) {
         this(graph, null);
 //        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
     }
 
-    public EdmondsMaxCardinalityMatching(Graph<V,E> graph, MatchingAlgorithm<V,E> initializer) {
+    public EdmondsMaxCardinalityMatchingBaseLineComparison(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer) {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer=initializer;
     }
@@ -138,7 +136,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         this.even = new int[vertices.size()];
         this.odd = new int[vertices.size()];
 
-        this.exposedVertices=new FixedSizeQueue(vertices.size());
         this.queue = new FixedSizeQueue(vertices.size());
         this.uf = new UnionFind<>(vertexIndexMap.values());
 
@@ -189,42 +186,41 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
         // queue every isExposed vertex and place in the
         // even level (level = 0)
+        for (int v = 0; v < vertices.size(); v++) {
+            if (matching.isExposed(v)) {
+//                System.out.println("exposed: "+vertices.get(v));
+                even[v] = v;
+                queue.enqueue(v);
+            }
+        }
 
-        while(!exposedVertices.empty()) {
-            int exposedVertex=exposedVertices.poll();
-            if(!matching.isExposed(exposedVertex))
-                continue;
-            even[exposedVertex] = exposedVertex;
-            queue.enqueue(exposedVertex);
+        // for each 'free' vertex, start a bfs search
+        while (!queue.empty()) {
+            int vx = queue.poll();
+            V v=vertices.get(vx);
 
-            // for each 'free' vertex, start a bfs search
-            while (!queue.empty()) {
-                int vx = queue.poll();
-                V v = vertices.get(vx);
+            for (V w : Graphs.neighborListOf(graph, v)) {
+                int wx = vertexIndexMap.get(w);
 
-                for (V w : Graphs.neighborListOf(graph, v)) {
-                    int wx = vertexIndexMap.get(w);
+                // the endpoints of the edge are both at even levels in the
+                // forest - this means it is either an augmenting path or
+                // a blossom
+                if (even[uf.find(wx)] != nil) {
+                    if (check(vx, wx))
+                        return true;
+                }
 
-                    // the endpoints of the edge are both at even levels in the
-                    // forest - this means it is either an augmenting path or
-                    // a blossom
-                    if (even[uf.find(wx)] != nil) {
-                        if (check(vx, wx))
-                            return true;
-                    }
-
-                    // add the edge to the forest if is not already and extend
-                    // the tree with this matched edge
-                    else if (odd[wx] == nil) {
-                        odd[wx] = vx;
+                // add the edge to the forest if is not already and extend
+                // the tree with this matched edge
+                else if (odd[wx] == nil) {
+                    odd[wx] = vx;
 //                    System.out.println("odd: "+wx);
-                        int u = matching.other(wx);
-                        // add the matched edge (potential though a blossom) if it
-                        // isn't in the forest already
-                        if (even[uf.find(u)] == nil) {
-                            even[u] = wx;
-                            queue.enqueue(u);
-                        }
+                    int u = matching.other(wx);
+                    // add the matched edge (potential though a blossom) if it
+                    // isn't in the forest already
+                    if (even[uf.find(u)] == nil) {
+                        even[u] = wx;
+                        queue.enqueue(u);
                     }
                 }
             }
@@ -472,11 +468,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     @Override
     public Matching<V, E> getMatching() {
         this.init();
-
-        for (int v = 0; v < vertices.size(); v++) {
-            if (matching.isExposed(v))
-                exposedVertices.enqueue(v);
-        }
 
         // continuously augment while we find new paths, each
         // path increases the matching cardinality by 2
