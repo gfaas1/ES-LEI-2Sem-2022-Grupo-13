@@ -105,6 +105,7 @@ public final class EdmondsMaxCardinalityMatchingTest
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             generator.generateGraph(graph, vertexFactory, null);
             EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(graph);
+//            EdmondsMaxCardinalityMatchingBaseLineComparison<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatchingBaseLineComparison<>(graph);
 
             Matching<Integer, DefaultEdge> m = matcher.getMatching();
             this.verifyMatching(graph, m, m.getEdges().size());

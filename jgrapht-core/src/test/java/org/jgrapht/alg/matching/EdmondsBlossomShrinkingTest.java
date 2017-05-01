@@ -26,6 +26,7 @@ import org.jgrapht.graph.*;
 
 import junit.framework.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,6 +41,53 @@ import java.util.Set;
 public final class EdmondsBlossomShrinkingTest
     extends TestCase
 {
+    public void testUFBug(){
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4));
+        g.addEdge(3,1);
+        g.addEdge(2,0);
+        g.addEdge(0,3);
+        g.addEdge(1,4);
+        g.addEdge(3,4);
+        g.addEdge(2,3);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+    public void testGraph0(){
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6,7));
+        g.addEdge(7,3);
+        g.addEdge(7,4);
+        g.addEdge(6,0);
+        g.addEdge(1,0);
+        g.addEdge(7,0);
+        g.addEdge(3,2);
+        g.addEdge(2,1);
+        g.addEdge(2,4);
+        g.addEdge(7,6);
+        g.addEdge(1,4);
+    }
+
+
+    public void testGraph(){
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(1,2,3,4,5,6,7,8,9,10));
+        g.addEdge(1,2);
+        g.addEdge(1,3);
+        g.addEdge(2,3);
+        g.addEdge(3,4);
+        g.addEdge(4,5);
+        g.addEdge(5,6);
+        g.addEdge(5,7);
+        g.addEdge(6,7);
+        g.addEdge(6,8);
+        g.addEdge(7,9);
+        g.addEdge(9,10);
+    }
+
     public void testOne()
     {
         // create an undirected graph
@@ -127,29 +175,19 @@ public final class EdmondsBlossomShrinkingTest
         assertTrue(match.getEdges().contains(e1112));
     }
 
-//    public void testRandomGraphs(){
-//        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
-//        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-//        Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-//
-//        for(int i=0; i<100; i++){
-//            System.out.println("completed: "+i);
-//            generator.generateGraph(graph, vertexFactory, null);
-//            MatchingAlgorithm<Integer, DefaultEdge> matcher1 = new EdmondsBlossomShrinkingImproved<>(graph);
-//            MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<>(graph);
-//
-//            long time1=System.currentTimeMillis();
-//            Matching<Integer, DefaultEdge> m1=matcher1.getMatching();
-//            time1=System.currentTimeMillis()-time1;
-//            System.out.println("time 1: "+time1);
-//            long time2=System.currentTimeMillis();
-//            Matching<Integer, DefaultEdge> m2=matcher2.getMatching();
-//            time2=System.currentTimeMillis()-time2;
-//            System.out.println("time 2: "+time2);
-//            assertTrue(m1.getEdges().size()==m2.getEdges().size());
-//
-//        }
-//    }
+    public void testRandomGraphs(){
+        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(5, 6);
+
+        for(int i=0; i<100; i++){
+            System.out.println("completed: "+i);
+            Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+            IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
+            generator.generateGraph(graph, vertexFactory, null);
+            System.out.println("graph: "+graph);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(graph);
+            Matching<Integer, DefaultEdge> m1=matcher.getMatching();
+        }
+    }
 
     public void testGraph1(){
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);

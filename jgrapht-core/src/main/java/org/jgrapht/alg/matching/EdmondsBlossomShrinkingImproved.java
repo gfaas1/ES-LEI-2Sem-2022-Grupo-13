@@ -50,7 +50,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
     private final MatchingAlgorithm<V,E> initializer;
     private Map<Integer, Integer> match;
-    private Map<Integer, Integer> path;
+    /* Map defining the predecessors of the odd nodes */
+    private Map<Integer, Integer> pred;
 
     /** Union-Find to store blossoms. */
     private UnionFind<Integer> uf;
@@ -103,7 +104,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
     {
         Set<E> edges = new ArrayUnenforcedSet<>();
         match = new HashMap<>();
-        path = new HashMap<>();
+        pred = new HashMap<>();
         contracted = new HashMap<>();
         uf = new UnionFind<>(vertexIndexMap.values());
 
@@ -111,14 +112,14 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             this.warmStart(initializer);
 
         for (int i : vertexIndexMap.values()) {
-            // Any augmenting path should start with _exposed_ vertex
+            // Any augmenting pred should start with _exposed_ vertex
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(i)) {
                 // Match is maximal iff graph G contains no more augmenting paths
                 int v = findPath(i);
                 if(v != nil) {
                     while (v != nil) {
-                        int pv = path.get(v);
+                        int pv = pred.get(v);
                         int ppv = match.getOrDefault(pv, nil);//match.get(pv);
                         match.put(v, pv);
                         match.put(pv, v);
@@ -146,7 +147,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         Queue<Integer> q = new ArrayDeque<>();
 
         // Expand graph back from its contracted state
-        path.clear();
+        pred.clear();
         contracted.clear();
         uf.clear();
 
@@ -159,30 +160,30 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             int v = q.remove();
             System.out.println("remove q");
 
-            for (V w : Graphs.neighborListOf(graph, vertices.get(v))) {
-                int to = vertexIndexMap.get(w);
+            for (V neighbor : Graphs.neighborListOf(graph, vertices.get(v))) {
+                int w = vertexIndexMap.get(neighbor);
 
 //                if (contracted.get(v) == contracted.get(to) || (match.containsKey(v) && to == match.get(v)))
 //                    continue;
                 System.out.println("point 1");
-                if (uf.find(v).equals(uf.find(to)) || (match.containsKey(v) && to == match.get(v)))
+                if (uf.find(v).equals(uf.find(w)) || (match.containsKey(v) && w == match.get(v)))
                     continue;
 
                 System.out.println("point 2");
 
                 // Check whether we've hit a 'blossom'
-                if ((to == root)
-                    || ((match.containsKey(to)) && (path.containsKey(match.get(to)))))
+                if ((w == root)
+                    || ((match.containsKey(w)) && (pred.containsKey(match.get(w)))))
                 {
                     System.out.println("start lca");
-                    int stem = lowestCommonAncestor(v, to, root);
+                    int stem = lowestCommonAncestor(v, w, root);
                     System.out.println("end lca");
 
                     Set<Integer> blossom = new HashSet<>();
 
                     System.out.println("point 3a");
-                    markPath(v, to, stem, blossom);
-                    markPath(to, v, stem, blossom);
+                    markPath(v, w, stem, blossom);
+                    markPath(w, v, stem, blossom);
 
                     System.out.println("start1");
                     vertexIndexMap.values().stream()
@@ -191,7 +192,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                                 i -> blossom.contains(uf.find(i)))
                         .forEach(i -> {
                             contracted.put(i, stem);
-                            uf.union(stem, i);
+                            uf.union(i, stem);
                             if (!used.contains(i)) {
                                 used.add(i);
                                 q.add(i);
@@ -200,18 +201,18 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                     System.out.println("end1");
 
                     // Check whether we've had hit a loop (of even length (!) presumably)
-                } else if (!path.containsKey(to)) {
+                } else if (!pred.containsKey(w)) {
                     System.out.println("point 3b");
-                    path.put(to, v);
+                    pred.put(w, v);
 
-                    if (!match.containsKey(to)) {
-                        return to;
+                    if (!match.containsKey(w)) {
+                        return w;
                     }
 
-                    to = match.get(to);
+                    w = match.get(w);
 
-                    used.add(to);
-                    q.add(to);
+                    used.add(w);
+                    q.add(w);
                 }
                 System.out.println("point 4");
             }
@@ -228,9 +229,9 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             blossom.add(uf.find(v));
 //            blossom.add(contracted.get(match.get(v)));
             blossom.add(uf.find(match.get(v)));
-            path.put(v, child);
+            pred.put(v, child);
             child = match.get(v);
-            v = path.get(child);
+            v = pred.get(child);
         }
         System.out.println("end mark path");
     }
@@ -245,14 +246,14 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             seen.set(a);
             if (!match.containsKey(a)) //We've reached the root of the tree
                 break;
-            a = path.get(match.get(a));
+            a = pred.get(match.get(a));
         }
         for (;;) {
 //            b = contracted.get(b);
             b=uf.find(b);
             if (seen.get(b))
                 return b;
-            b = path.get(match.get(b));
+            b = pred.get(match.get(b));
         }
     }
 }
