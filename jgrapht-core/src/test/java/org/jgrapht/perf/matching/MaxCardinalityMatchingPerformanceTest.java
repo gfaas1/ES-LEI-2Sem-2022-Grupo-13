@@ -43,7 +43,7 @@ public class MaxCardinalityMatchingPerformanceTest
     extends TestCase
 {
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
     public static final double PERF_BENCHMARK_EDGES_PROP = 0.7;
 
     @State(Scope.Benchmark)
@@ -101,7 +101,7 @@ public class MaxCardinalityMatchingPerformanceTest
         }
     }
 
-    public static class EdmondsAlternativeImplBenchmark
+    public static class EdmondsMaxCardinalityMatchingBenchmark
             extends RandomGraphBenchmarkBase
     {
         @Override
@@ -111,23 +111,13 @@ public class MaxCardinalityMatchingPerformanceTest
         }
     }
 
-    public static class EdmondsBlossomShrinkingWarmstartBenchmark
+    public static class EdmondsMaxCardinalityMatchingBaseLineComparisonBenchmark
             extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>(graph, new GreedyMaxCardinalityMatching<>(graph, false));
-        }
-    }
-
-    public static class EdmondsAlternativeImplWarmstartBenchmark
-            extends RandomGraphBenchmarkBase
-    {
-        @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
-        {
-            return new EdmondsMaxCardinalityMatching<>(graph, new GreedyMaxCardinalityMatching<>(graph, false));
+            return new EdmondsMaxCardinalityMatchingBaseLineComparison<>(graph, new GreedyMaxCardinalityMatching<>(graph, false));
         }
     }
 
@@ -135,14 +125,14 @@ public class MaxCardinalityMatchingPerformanceTest
         throws RunnerException
     {
         Options opt = new OptionsBuilder()
-                .include(
-                        ".*" + EdmondsAlternativeImplWarmstartBenchmark.class.getSimpleName() + ".*")
+//                .include(
+//                        ".*" + EdmondsBlossomShrinkingBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsAlternativeImplBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaxCardinalityMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsBlossomShrinkingBenchmark.class.getSimpleName() + ".*")
-            .include(
-                    ".*" + EdmondsBlossomShrinkingWarmstartBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaxCardinalityMatchingBaseLineComparisonBenchmark.class.getSimpleName() + ".*")
+//            .include(
+//                    ".*" + EdmondsBlossomShrinkingWarmstartBenchmark.class.getSimpleName() + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

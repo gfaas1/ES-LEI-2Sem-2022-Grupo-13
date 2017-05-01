@@ -186,6 +186,11 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         uf.clear();
         bridges.clear();
         queue.clear();
+        for(int v : exposedVertices) {
+            if(!matching.isExposed(v))
+                continue;
+            even[v] = v;
+        }
 
         // queue every isExposed vertex and place in the
         // even level (level = 0)
@@ -194,7 +199,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             int exposedVertex=exposedVertices.poll();
             if(!matching.isExposed(exposedVertex))
                 continue;
-            even[exposedVertex] = exposedVertex;
             queue.enqueue(exposedVertex);
 
             // for each 'free' vertex, start a bfs search
@@ -564,7 +568,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * every vertex in the graph. Any new vertices are added at the 'end' index
      * and 'polling' a vertex advances the 'start'.
      */
-    private static final class FixedSizeQueue {
+    private static final class FixedSizeQueue implements Iterable<Integer>{
         private final int[] vs;
         private int i = 0;
         private int n = 0;
@@ -609,6 +613,37 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         void clear() {
             i = 0;
             n = 0;
+        }
+
+        public String toString(){
+            String s="";
+            for(int j=i; j<n; j++)
+                s+=vs[j]+" ";
+            return s;
+        }
+
+        @Override
+        public Iterator<Integer> iterator() {
+            Iterator<Integer> it = new Iterator<Integer>() {
+
+                private int currentIndex = i;
+
+                @Override
+                public boolean hasNext() {
+                    return currentIndex < n && vs[currentIndex] != nil;
+                }
+
+                @Override
+                public Integer next() {
+                    return vs[currentIndex++];
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+            return it;
         }
     }
 
