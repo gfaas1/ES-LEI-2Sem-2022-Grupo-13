@@ -36,7 +36,7 @@ import java.util.*;
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
  */
-public class EdmondsBlossomShrinkingImproved<V, E>
+public class EdmondsBlossomShrinkingImprovedBackup<V, E>
     implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
@@ -52,7 +52,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
     private Map<Integer, Integer> match;
     /* Map defining the predecessors of the odd nodes */
     private Map<Integer, Integer> predOdd;
-    private Map<Integer, Integer> predEven;
 
     /** Union-Find to store blossoms. */
     private UnionFind<Integer> uf;
@@ -68,13 +67,13 @@ public class EdmondsBlossomShrinkingImproved<V, E>
      * @param graph the input graph
      * @throws IllegalArgumentException if the graph is not undirected
      */
-    public EdmondsBlossomShrinkingImproved(Graph<V, E> graph)
+    public EdmondsBlossomShrinkingImprovedBackup(Graph<V, E> graph)
     {
         //this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
         this(graph, null);
     }
 
-    public EdmondsBlossomShrinkingImproved(Graph<V, E> graph, MatchingAlgorithm<V,E> initializer)
+    public EdmondsBlossomShrinkingImprovedBackup(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer=initializer;
@@ -106,7 +105,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         Set<E> edges = new ArrayUnenforcedSet<>();
         match = new HashMap<>();
         predOdd = new HashMap<>();
-        predEven = new HashMap<>();
         contracted = new HashMap<>();
         uf = new UnionFind<>(vertexIndexMap.values());
 
@@ -129,14 +127,11 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                     System.out.println("found augmenting path");
                     while (w != nil) {
                         int pv = predOdd.get(w);
-                        //int ppv = match.getOrDefault(pv, nil);//match.get(pv);
-                        int ppv = predEven.get(pv);
+                        int ppv = match.getOrDefault(pv, nil);//match.get(pv);
                         System.out.println("matched edge: ("+w+","+pv+")");
                         match.put(w, pv);
                         match.put(pv, w);
                         w = ppv;
-                        if(pv==ppv)
-                            break;
                     }
                 }
             }else{
@@ -163,10 +158,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
         // Expand graph back from its contracted state
         predOdd.clear();
-        predEven.clear();
         contracted.clear();
         uf.reset();
-        predEven.put(root, root);
         System.out.println("uf: "+uf);
 
 //        vertexIndexMap.values().forEach(vertex -> contracted.put(vertex, vertex));
@@ -185,14 +178,14 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                 System.out.println("checking edge ("+v+","+w+")");
                 //If edge (v,w) is part of a blossom, it is shrunken away and we can ignore it.
                 //If w is odd, we can ignore the edge as well.
-                if (uf.connected(v, w) || (predEven.containsKey(v) && w == predEven.get(v))) { //I think this could be: predOdd.containsKey(w)
+                if (uf.connected(v, w) || (match.containsKey(v) && w == match.get(v))) { //I think this could be: predOdd.containsKey(w)
                     System.out.println("ignore edge");
                     continue;
                 }
 
                 // Check whether we've hit a 'blossom'
                 if ((w == root)
-                    || ((predEven.containsKey(w)) && (predOdd.containsKey(predEven.get(w)))))
+                    || ((match.containsKey(w)) && (predOdd.containsKey(match.get(w)))))
                 {
                     System.out.println("found blossom. Search stem");
                     int stem = lowestCommonAncestor(v, w, root);
@@ -208,7 +201,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //                            i -> blossom.contains(contracted.get(i)))
                                 i -> blossom.contains(uf.find(i)))
                         .forEach(i -> {
-//                            contracted.put(i, stem);
+                            contracted.put(i, stem);
                             //uf.union(i, stem);
                             uf.union(stem, i);
                             if (!used.contains(i)) {
@@ -217,7 +210,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                             }
                         });
                     System.out.println("uf: "+uf);
-                    predEven.put(uf.find(stem), predEven.get(stem));
 
                     // Check whether we've had hit a loop (of even length (!) presumably)
                 } else if (!predOdd.containsKey(w)) {
@@ -229,11 +221,10 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                     }
 
                     System.out.println("growing tree ("+v+","+w+","+match.get(w)+")");
-                    int x = match.get(w);
-                    predEven.put(x, w);
+                    w = match.get(w);
 
-                    used.add(x);
-                    q.add(x);
+                    used.add(w);
+                    q.add(w);
                 }
             }
         }
@@ -288,7 +279,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
             seen.set(v);
             System.out.println("seen.add: "+v);
-            int parent = uf.find(predEven.getOrDefault(v, v)); //If not matched, then we've reached the root of the tree
+            int parent = uf.find(match.getOrDefault(v, v)); //If not matched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
             v= predOdd.get(parent);
@@ -304,7 +295,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //            System.out.println("uf.find(w): "+w);
             if (seen.get(w))
                 return w;
-            w = predOdd.get(predEven.get(w));
+            w = predOdd.get(match.get(w));
         }
     }
 

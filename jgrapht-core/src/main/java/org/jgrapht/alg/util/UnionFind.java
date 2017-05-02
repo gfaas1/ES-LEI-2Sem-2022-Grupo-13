@@ -109,7 +109,8 @@ public class UnionFind<T>
     }
 
     /**
-     * Merges the sets which contain element1 and element2.
+     * Merges the sets which contain element1 and element2. No guarantees are given as to which element becomes the
+     * representative of the resulting (merged) set: this can be either find(element1) or find(element2).
      *
      * @param element1 The first element to union.
      * @param element2 The second element to union.
@@ -129,11 +130,11 @@ public class UnionFind<T>
         }
 
         //TEMP: tempory disable ranking. this guarantees that after the union, the representative of the resulting set is find(element1).
-        if(1==1){
-            parentMap.put(parent2, parent1);
-            count--;
-            return;
-        }
+//        if(1==1){
+//            parentMap.put(parent2, parent1);
+//            count--;
+//            return;
+//        }
 
         //END TEMP
 
