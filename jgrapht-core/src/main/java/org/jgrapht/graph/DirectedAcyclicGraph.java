@@ -402,7 +402,7 @@ public class DirectedAcyclicGraph<V, E>
                     }
                 } catch (UnsupportedOperationException e) {
                     // okay, fine, some implementations (ones that automatically
-                    // clear themselves out) don't work this way
+                    // reset themselves out) don't work this way
                 }
                 throw new CycleFoundException();
             }
@@ -601,7 +601,7 @@ public class DirectedAcyclicGraph<V, E>
          * @param index the index
          * @throws UnsupportedOperationException if the implementation doesn't support (or doesn't
          *         need) clearance. For example, if the factory creates a new instance every time,
-         *         it is a waste of cycles to clear the state after the search of the Affected
+         *         it is a waste of cycles to reset the state after the search of the Affected
          *         Region is done, so an UnsupportedOperationException *should* be thrown.
          */
         void clearVisited(int index)

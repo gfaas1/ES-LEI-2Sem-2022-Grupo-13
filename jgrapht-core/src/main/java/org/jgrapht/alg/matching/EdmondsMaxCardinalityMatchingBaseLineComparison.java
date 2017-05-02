@@ -180,7 +180,7 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
         // reset data structures
         Arrays.fill(even, nil);
         Arrays.fill(odd, nil);
-        uf.clear();
+        uf.reset();
         bridges.clear();
         queue.clear();
 

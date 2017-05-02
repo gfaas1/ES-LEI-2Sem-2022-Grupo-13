@@ -45,27 +45,42 @@ public class UnionFindTest
             sets.get(sets.size() - 1).add(str);
         }
         UnionFind<String> uf = new UnionFind<String>(set);
+        assertEquals(5, uf.size());
+        assertEquals(5, uf.count());
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[1]);
+        assertEquals(4, uf.count());
         union(sets, strs[0], strs[1]);
         testIdentical(strs, sets, uf);
+        assertTrue(uf.connected("aaa", "bbb"));
+        assertFalse(uf.connected("bbb", "ccc"));
 
         uf.union(strs[2], strs[3]);
+        assertEquals(3, uf.count());
         union(sets, strs[2], strs[3]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
+        assertEquals(2, uf.count());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
+        assertEquals(2, uf.count());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[4]);
+        assertEquals(1, uf.count());
         union(sets, strs[0], strs[4]);
         testIdentical(strs, sets, uf);
+
+        uf.addElement("fff");
+        assertEquals(2, uf.count());
+        assertEquals(6, uf.size());
+        uf.reset();
+        assertEquals(6, uf.count());
     }
 
     private void union(ArrayList<ArrayList<String>> sets, String a, String b)

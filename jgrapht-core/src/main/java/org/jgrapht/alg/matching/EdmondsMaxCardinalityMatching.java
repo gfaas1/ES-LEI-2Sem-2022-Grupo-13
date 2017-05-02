@@ -183,7 +183,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         // reset data structures
         Arrays.fill(even, nil);
         Arrays.fill(odd, nil);
-        uf.clear();
+        uf.reset();
         bridges.clear();
         queue.clear();
         for(int v : exposedVertices) {

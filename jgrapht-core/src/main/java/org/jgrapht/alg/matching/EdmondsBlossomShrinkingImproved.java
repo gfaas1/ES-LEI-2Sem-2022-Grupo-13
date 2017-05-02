@@ -149,7 +149,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         // Expand graph back from its contracted state
         pred.clear();
         contracted.clear();
-        uf.clear();
+        uf.reset();
 
 //        vertexIndexMap.values().forEach(vertex -> contracted.put(vertex, vertex));
 
@@ -166,7 +166,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //                if (contracted.get(v) == contracted.get(to) || (match.containsKey(v) && to == match.get(v)))
 //                    continue;
                 System.out.println("point 1");
-                if (uf.find(v).equals(uf.find(w)) || (match.containsKey(v) && w == match.get(v)))
+                if (uf.connected(v, w) || (match.containsKey(v) && w == match.get(v)))
                     continue;
 
                 System.out.println("point 2");
