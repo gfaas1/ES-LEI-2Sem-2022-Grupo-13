@@ -41,6 +41,27 @@ import java.util.Set;
 public final class EdmondsBlossomShrinkingTest
     extends TestCase
 {
+
+    public void testUFBug2(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,3}, {6,2}, {6,0}, {0,2}, {0,3}, {5,2}, {5,4}, {6,1}, {5,1}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6));
+        g.addEdge(4,3);
+        g.addEdge(6,2);
+        g.addEdge(6,0);
+        g.addEdge(0,2);
+        g.addEdge(0,3);
+        g.addEdge(5,2);
+        g.addEdge(5,4);
+        g.addEdge(6,1);
+        g.addEdge(5,1);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+
     public void testUFBug(){
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4));
@@ -69,6 +90,9 @@ public final class EdmondsBlossomShrinkingTest
         g.addEdge(2,4);
         g.addEdge(7,6);
         g.addEdge(1,4);
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
     }
 
 
@@ -86,6 +110,9 @@ public final class EdmondsBlossomShrinkingTest
         g.addEdge(6,8);
         g.addEdge(7,9);
         g.addEdge(9,10);
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
     }
 
     public void testOne()
@@ -176,9 +203,9 @@ public final class EdmondsBlossomShrinkingTest
     }
 
     public void testRandomGraphs(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(5, 6);
+        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 200);
 
-        for(int i=0; i<100; i++){
+        for(int i=0; i<1000; i++){
             System.out.println("completed: "+i);
             Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
             IntegerVertexFactory vertexFactory=new IntegerVertexFactory();

@@ -48,6 +48,25 @@ public final class EdmondsMaxCardinalityMatchingTest
     extends TestCase
 {
 
+    public void testUFBug2(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,3}, {6,2}, {6,0}, {0,2}, {0,3}, {5,2}, {5,4}, {6,1}, {5,1}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6));
+        g.addEdge(4,3);
+        g.addEdge(6,2);
+        g.addEdge(6,0);
+        g.addEdge(0,2);
+        g.addEdge(0,3);
+        g.addEdge(5,2);
+        g.addEdge(5,4);
+        g.addEdge(6,1);
+        g.addEdge(5,1);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
     public void testIsMaximumMatching(){
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1,2,3,4));

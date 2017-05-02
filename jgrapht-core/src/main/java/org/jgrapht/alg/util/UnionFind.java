@@ -128,6 +128,15 @@ public class UnionFind<T>
             return;
         }
 
+        //TEMP: tempory disable ranking. this guarantees that after the union, the representative of the resulting set is find(element1).
+        if(1==1){
+            parentMap.put(parent2, parent1);
+            count--;
+            return;
+        }
+
+        //END TEMP
+
         int rank1 = rankMap.get(parent1);
         int rank2 = rankMap.get(parent2);
         if (rank1 > rank2) {
@@ -188,7 +197,7 @@ public class UnionFind<T>
         for(T t : parentMap.keySet()){
             T representative=find(t);
             if(!setRep.containsKey(representative))
-                setRep.put(t, new LinkedHashSet<>());
+                setRep.put(representative, new LinkedHashSet<>());
             setRep.get(representative).add(t);
         }
 

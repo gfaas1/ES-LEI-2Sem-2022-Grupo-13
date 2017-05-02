@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.matching;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
@@ -111,21 +112,31 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         if(initializer != null)
             this.warmStart(initializer);
 
-        for (int i : vertexIndexMap.values()) {
+        for (int v : vertexIndexMap.values()) {
+
+            //If the matching matches |V|-1 vertices, we are done
+//            if(match.size() >= vertices.size()-1)
+//                break;
+
+            System.out.println("growing path from "+v);
             // Any augmenting pred should start with _exposed_ vertex
             // (vertex may not escape match-set being added once)
-            if (!match.containsKey(i)) {
+            if (!match.containsKey(v)) {
                 // Match is maximal iff graph G contains no more augmenting paths
-                int v = findPath(i);
-                if(v != nil) {
-                    while (v != nil) {
-                        int pv = pred.get(v);
+                int w = findPath(v);
+                if(w != nil) {
+                    System.out.println("found augmenting path");
+                    while (w != nil) {
+                        int pv = pred.get(w);
                         int ppv = match.getOrDefault(pv, nil);//match.get(pv);
-                        match.put(v, pv);
-                        match.put(pv, v);
-                        v = ppv;
+                        System.out.println("matched edge: ("+w+","+pv+")");
+                        match.put(w, pv);
+                        match.put(pv, w);
+                        w = ppv;
                     }
                 }
+            }else{
+                System.out.println("already matched. skipping: "+v);
             }
         }
 
@@ -150,6 +161,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         pred.clear();
         contracted.clear();
         uf.reset();
+        System.out.println("uf: "+uf);
 
 //        vertexIndexMap.values().forEach(vertex -> contracted.put(vertex, vertex));
 
@@ -158,65 +170,66 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
         while (!q.isEmpty()) {
             int v = q.remove();
-            System.out.println("remove q");
 
             for (V neighbor : Graphs.neighborListOf(graph, vertices.get(v))) {
                 int w = vertexIndexMap.get(neighbor);
 
 //                if (contracted.get(v) == contracted.get(to) || (match.containsKey(v) && to == match.get(v)))
 //                    continue;
-                System.out.println("point 1");
-                if (uf.connected(v, w) || (match.containsKey(v) && w == match.get(v)))
+                System.out.println("checking edge ("+v+","+w+")");
+                //If edge (v,w) is part of a blossom, it is shrunken away and we can ignore it.
+                //If w is odd, we can ignore the edge as well.
+                if (uf.connected(v, w) || (match.containsKey(v) && w == match.get(v))) { //I think this could be: pred.containsKey(w)
+                    System.out.println("ignore edge");
                     continue;
-
-                System.out.println("point 2");
+                }
 
                 // Check whether we've hit a 'blossom'
                 if ((w == root)
                     || ((match.containsKey(w)) && (pred.containsKey(match.get(w)))))
                 {
-                    System.out.println("start lca");
+                    System.out.println("found blossom. Search stem");
                     int stem = lowestCommonAncestor(v, w, root);
-                    System.out.println("end lca");
+                    System.out.println("stem: "+stem);
 
                     Set<Integer> blossom = new HashSet<>();
-
-                    System.out.println("point 3a");
                     markPath(v, w, stem, blossom);
                     markPath(w, v, stem, blossom);
+                    System.out.println("blossom: "+blossom);
 
-                    System.out.println("start1");
                     vertexIndexMap.values().stream()
                         .filter(
 //                            i -> blossom.contains(contracted.get(i)))
                                 i -> blossom.contains(uf.find(i)))
                         .forEach(i -> {
                             contracted.put(i, stem);
-                            uf.union(i, stem);
+                            //uf.union(i, stem);
+                            uf.union(stem, i);
                             if (!used.contains(i)) {
                                 used.add(i);
                                 q.add(i);
                             }
                         });
-                    System.out.println("end1");
+                    System.out.println("uf: "+uf);
 
                     // Check whether we've had hit a loop (of even length (!) presumably)
                 } else if (!pred.containsKey(w)) {
-                    System.out.println("point 3b");
                     pred.put(w, v);
 
                     if (!match.containsKey(w)) {
+                        System.out.println("found augmenting path after adding edge ("+v+","+w+")");
                         return w;
                     }
 
+                    System.out.println("growing tree ("+v+","+w+","+match.get(w)+")");
                     w = match.get(w);
 
                     used.add(w);
                     q.add(w);
                 }
-                System.out.println("point 4");
             }
         }
+        System.out.println("No augmenting path found");
         return nil;
     }
 
@@ -236,26 +249,67 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         System.out.println("end mark path");
     }
 
-    private int lowestCommonAncestor(int a, int b, int root)
+//    private int lowestCommonAncestor(int v, int w, int root)
+//    {
+//        BitSet seen=new BitSet(vertices.size());
+//        for (;;) {
+//            //a = contracted.get(a);
+//            v = uf.find(v);
+////            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
+//            seen.set(v);
+//            if (!match.containsKey(v)) //We've reached the root of the tree
+//                break;
+//            v = pred.get(match.get(v));
+//        }
+//        for (;;) {
+////            b = contracted.get(b);
+//            w=uf.find(w);
+//            if (seen.get(w))
+//                return w;
+//            w = pred.get(match.get(w));
+//        }
+//    }
+
+    private int lowestCommonAncestor(int v, int w, int root)
     {
+        System.out.println("lca. v: "+v+" w: "+w);
         BitSet seen=new BitSet(vertices.size());
         for (;;) {
             //a = contracted.get(a);
-            a = uf.find(a);
+            v = uf.find(v);
 //            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
-            seen.set(a);
-            if (!match.containsKey(a)) //We've reached the root of the tree
-                break;
-            a = pred.get(match.get(a));
+            seen.set(v);
+            System.out.println("seen.add: "+v);
+            int parent = uf.find(match.getOrDefault(v, v)); //If not matched, then we've reached the root of the tree
+            if(parent == v)
+                break; //root of tree
+            v=pred.get(parent);
+
+//            if (!match.containsKey(v)) //We've reached the root of the tree
+//                break;
+//            v = pred.get(match.get(v));
         }
+//        System.out.println("w: "+w);
         for (;;) {
 //            b = contracted.get(b);
-            b=uf.find(b);
-            if (seen.get(b))
-                return b;
-            b = pred.get(match.get(b));
+            w=uf.find(w);
+//            System.out.println("uf.find(w): "+w);
+            if (seen.get(w))
+                return w;
+            w = pred.get(match.get(w));
         }
     }
+
+
+//    private int parent(BitSet ancestors, int curr) {
+//        curr = uf.find(curr);
+//        ancestors.set(curr);
+//        int parent = uf.find(even[curr]);
+//        if (parent == curr)
+//            return curr; // root of tree
+//        ancestors.set(parent);
+//        return uf.find(odd[parent]);
+//    }
 }
 
 // End EdmondsBlossomShrinking.java

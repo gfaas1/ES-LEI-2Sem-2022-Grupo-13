@@ -375,7 +375,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * @param base connected to the stem (common ancestor of v and w)
      */
     private void blossom(int v, int w, int base) {
+        System.out.println("base1: "+base);
         base = uf.find(base);
+        System.out.println("base2: "+base);
         int[] supports1 = blossomSupports(v, w, base);
         int[] supports2 = blossomSupports(w, v, base);
 
@@ -383,6 +385,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             uf.union(supports1[i], supports1[0]);
         for (int i = 0; i < supports2.length; i++)
             uf.union(supports2[i], supports2[0]);
+        System.out.println("uf: "+uf);
+
+        System.out.println("base3: "+uf.find(base));
 
         even[uf.find(base)] = even[base];
     }
