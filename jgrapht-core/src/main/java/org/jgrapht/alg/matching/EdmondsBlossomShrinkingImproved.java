@@ -297,9 +297,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         for (;;) {
             //a = contracted.get(a);
             v = uf.find(v);
-//            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
             seen.set(v);
-            System.out.println("seen.add: "+v);
+//            System.out.println("seen.add: "+v);
             int parent = uf.find(predEven.get(v)); //If not matched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
@@ -309,7 +308,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //                break;
 //            v = predOdd.get(match.get(v));
         }
-//        System.out.println("w: "+w);
         for (;;) {
 //            b = contracted.get(b);
             w=uf.find(w);

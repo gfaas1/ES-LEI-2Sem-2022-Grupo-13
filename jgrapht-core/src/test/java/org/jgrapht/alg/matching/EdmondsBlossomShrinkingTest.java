@@ -42,6 +42,67 @@ public final class EdmondsBlossomShrinkingTest
     extends TestCase
 {
 
+    public void testUFBug5(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{0,4}, {4,2}, {5,7}, {6,7}, {3,5}, {1,3}, {7,4}, {1,4}, {4,6}, {0,7}, {0,2}, {3,0}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        g.addEdge(10,6);
+        g.addEdge(10,5);
+        g.addEdge(6,7);
+        g.addEdge(0,9);
+        g.addEdge(5,4);
+        g.addEdge(1,8);
+        g.addEdge(9,1);
+        g.addEdge(7,10);
+        g.addEdge(4,3);
+        g.addEdge(10,8);
+        g.addEdge(10,4);
+        g.addEdge(1,0);
+        g.addEdge(0,3);
+        g.addEdge(1,4);
+        g.addEdge(2,8);
+        g.addEdge(2,10);
+        g.addEdge(2,7);
+        g.addEdge(9,8);
+        g.addEdge(3,9);
+        g.addEdge(5,8);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+
+        /* For drawing:
+
+        g.addEdge(0,3);
+g.addEdge(0,9);
+g.addEdge(3,9);
+
+g.addEdge(9,1);
+g.addEdge(9,8);
+g.addEdge(1,8);
+
+g.addEdge(2,8);
+g.addEdge(2,10);
+g.addEdge(10,8);
+
+g.addEdge(10,4)
+g.addEdge(10,5);
+g.addEdge(5,4);
+
+g.addEdge(6,7);
+g.addEdge(7,10);
+g.addEdge(10,6);
+
+
+g.addEdge(1,0);
+g.addEdge(1,4);
+g.addEdge(2,7);
+g.addEdge(4,3);
+g.addEdge(5,8);
+
+         */
+    }
+
     public void testUFBug4(){
         //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{0,4}, {4,2}, {5,7}, {6,7}, {3,5}, {1,3}, {7,4}, {1,4}, {4,6}, {0,7}, {0,2}, {3,0}])
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -245,7 +306,8 @@ public final class EdmondsBlossomShrinkingTest
     }
 
     public void testRandomGraphs(){
-        for(int n=4; n<20; n++) {
+//        for(int n=4; n<20; n++) {
+        int n=11;
             for(int m=5; m<maxEdges(n); m++) {
                 GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator(n, m);
 
@@ -259,12 +321,12 @@ public final class EdmondsBlossomShrinkingTest
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
 
                     MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<Integer, DefaultEdge>(graph);
-                    Matching<Integer, DefaultEdge> m2 = matcher.getMatching();
-                    if (m1.getEdges().size() != m2.getEdges().size())
-                        throw new RuntimeException("weird, weights don't match");
+//                    Matching<Integer, DefaultEdge> m2 = matcher.getMatching();
+//                    if (m1.getEdges().size() != m2.getEdges().size())
+//                        throw new RuntimeException("weird, weights don't match");
                 }
             }
-        }
+//        }
     }
 
     public void testGraph1(){
