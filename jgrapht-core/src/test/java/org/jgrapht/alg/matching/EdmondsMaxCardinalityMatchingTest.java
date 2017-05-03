@@ -112,6 +112,20 @@ public final class EdmondsMaxCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(m));
     }
 
+    public void testIsMaximum1(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6], [{5,6}, {1,2}, {0,6}, {4,6}, {2,6}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        g.addEdge(5,6);
+        g.addEdge(1,2);
+        g.addEdge(0,6);
+        g.addEdge(4,6);
+        g.addEdge(2,6);
+
+        EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher=new EdmondsMaxCardinalityMatching<>(g);
+        assertTrue(matcher.isMaximumMatching(matcher.getMatching()));
+    }
+
     public void testRandomGraphs(){
         Random random=new Random(1);
         int vertices=100;

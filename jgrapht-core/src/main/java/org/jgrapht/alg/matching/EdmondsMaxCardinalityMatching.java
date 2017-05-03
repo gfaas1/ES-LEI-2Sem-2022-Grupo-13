@@ -156,7 +156,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      */
     private void warmStart(MatchingAlgorithm<V,E> initializer){
         Matching<V,E> initialSolution=initializer.getMatching();
-        System.out.println("warmstart: "+initialSolution.getWeight());
+//        System.out.println("warmstart: "+initialSolution.getWeight());
         for(E e : initialSolution.getEdges()){
             V u=graph.getEdgeSource(e);
             V v=graph.getEdgeTarget(e);
@@ -280,6 +280,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
         List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
         long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
+
+        System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
+
         return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
     }
 
@@ -375,9 +378,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * @param base connected to the stem (common ancestor of v and w)
      */
     private void blossom(int v, int w, int base) {
-        System.out.println("base1: "+base);
+//        System.out.println("base1: "+base);
         base = uf.find(base);
-        System.out.println("base2: "+base);
+//        System.out.println("base2: "+base);
         int[] supports1 = blossomSupports(v, w, base);
         int[] supports2 = blossomSupports(w, v, base);
 
@@ -385,9 +388,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             uf.union(supports1[i], supports1[0]);
         for (int i = 0; i < supports2.length; i++)
             uf.union(supports2[i], supports2[0]);
-        System.out.println("uf: "+uf);
+//        System.out.println("uf: "+uf);
 
-        System.out.println("base3: "+uf.find(base));
+//        System.out.println("base3: "+uf.find(base));
 
         even[uf.find(base)] = even[base];
     }
