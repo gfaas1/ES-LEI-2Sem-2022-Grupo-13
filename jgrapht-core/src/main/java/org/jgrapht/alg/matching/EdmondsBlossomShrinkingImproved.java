@@ -119,18 +119,22 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //            if(match.size() >= vertices.size()-1)
 //                break;
 
-            System.out.println("growing path from "+v);
+            System.out.println("\ngrowing path from "+v);
             // Any augmenting predOdd should start with _exposed_ vertex
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(v)) {
                 // Match is maximal iff graph G contains no more augmenting paths
                 int w = findPath(v);
                 if(w != nil) {
-                    System.out.println("found augmenting path");
+                    System.out.println("found augmenting path ending in: "+w);
+                    System.out.println("predOdd: "+predOdd);
+                    System.out.println("predEven: "+predEven);
                     while (w != nil) {
                         int pv = predOdd.get(w);
+                        System.out.println("pv: "+pv);
                         //int ppv = match.getOrDefault(pv, nil);//match.get(pv);
                         int ppv = predEven.get(pv);
+                        System.out.println("ppv: "+ppv);
                         System.out.println("matched edge: ("+w+","+pv+")");
                         match.put(w, pv);
                         match.put(pv, w);
@@ -217,7 +221,11 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                             }
                         });
                     System.out.println("uf: "+uf);
-                    predEven.put(uf.find(stem), predEven.get(stem));
+//                    predEven.put(uf.find(stem), predEven.get(stem));
+                    //even[uf.find(base)] = even[base];
+
+                    System.out.println("predOdd: "+predOdd);
+                    System.out.println("predEven: "+predEven);
 
                     // Check whether we've had hit a loop (of even length (!) presumably)
                 } else if (!predOdd.containsKey(w)) {
@@ -232,6 +240,9 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                     int x = match.get(w);
                     predEven.put(x, w);
 
+                    System.out.println("predOdd: "+predOdd);
+                    System.out.println("predEven: "+predEven);
+
                     used.add(x);
                     q.add(x);
                 }
@@ -243,18 +254,19 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
     private void markPath(int v, int child, int stem, Set<Integer> blossom)
     {
-        System.out.println("start mark path");
+        System.out.println("markPath. v: "+v+" child: "+child);
+
 //        while (!contracted.get(v).equals(stem)) {
         while (uf.find(v)!= stem) {
-            //blossom.add(contracted.get(v));
             blossom.add(uf.find(v));
-//            blossom.add(contracted.get(match.get(v)));
             blossom.add(uf.find(match.get(v)));
             predOdd.put(v, child);
+            System.out.println("predOdd["+v+"]="+child);
             child = match.get(v);
+            predEven.put(child, v);
+            System.out.println("predEven["+child+"]="+v);
             v = predOdd.get(child);
         }
-        System.out.println("end mark path");
     }
 
 //    private int lowestCommonAncestor(int v, int w, int root)
@@ -288,7 +300,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
             seen.set(v);
             System.out.println("seen.add: "+v);
-            int parent = uf.find(predEven.getOrDefault(v, v)); //If not matched, then we've reached the root of the tree
+            int parent = uf.find(predEven.get(v)); //If not matched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
             v= predOdd.get(parent);

@@ -42,6 +42,48 @@ public final class EdmondsBlossomShrinkingTest
     extends TestCase
 {
 
+    public void testUFBug4(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{0,4}, {4,2}, {5,7}, {6,7}, {3,5}, {1,3}, {7,4}, {1,4}, {4,6}, {0,7}, {0,2}, {3,0}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7));
+        g.addEdge(0,4);
+        g.addEdge(4,2);
+        g.addEdge(5,7);
+        g.addEdge(6,7);
+        g.addEdge(3,5);
+        g.addEdge(1,3);
+        g.addEdge(7,4);
+        g.addEdge(1,4);
+        g.addEdge(4,6);
+        g.addEdge(0,7);
+        g.addEdge(0,2);
+        g.addEdge(3,0);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+
+
+    public void testUFBug3(){
+        //graph: ([0, 1, 2, 3, 4, 5], [{4,0}, {5,1}, {1,2}, {5,2}, {4,2}, {0,3}, {2,0}, {3,1}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5));
+        g.addEdge(4,0);
+        g.addEdge(5,1);
+        g.addEdge(1,2);
+        g.addEdge(5,2);
+        g.addEdge(4,2);
+        g.addEdge(0,3);
+        g.addEdge(2,0);
+        g.addEdge(3,1);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
     public void testUFBug2(){
         //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,3}, {6,2}, {6,0}, {0,2}, {0,3}, {5,2}, {5,4}, {6,1}, {5,1}])
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -203,16 +245,25 @@ public final class EdmondsBlossomShrinkingTest
     }
 
     public void testRandomGraphs(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 200);
+        for(int n=4; n<20; n++) {
+            for(int m=5; m<maxEdges(n); m++) {
+                GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator(n, m);
 
-        for(int i=0; i<1000; i++){
-            System.out.println("completed: "+i);
-            Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-            IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-            generator.generateGraph(graph, vertexFactory, null);
-            System.out.println("graph: "+graph);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(graph);
-            Matching<Integer, DefaultEdge> m1=matcher.getMatching();
+                for (int i = 0; i < 2000; i++) {
+                    System.out.println("completed: " + i);
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+                    IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+                    generator.generateGraph(graph, vertexFactory, null);
+                    System.out.println("graph: " + graph);
+                    MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(graph);
+                    Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
+
+                    MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<Integer, DefaultEdge>(graph);
+                    Matching<Integer, DefaultEdge> m2 = matcher.getMatching();
+                    if (m1.getEdges().size() != m2.getEdges().size())
+                        throw new RuntimeException("weird, weights don't match");
+                }
+            }
         }
     }
 
@@ -349,4 +400,12 @@ public final class EdmondsBlossomShrinkingTest
 //        System.out.println("m1: "+m1.getEdges().size());
 //        System.out.println("m2: "+m2.getEdges().size());
 //    }
+
+    public static int maxEdges(int n){
+        if (n % 2 == 0) {
+            return Math.multiplyExact(n / 2, n - 1);
+        } else {
+            return Math.multiplyExact(n, (n - 1) / 2);
+        }
+    }
 }
