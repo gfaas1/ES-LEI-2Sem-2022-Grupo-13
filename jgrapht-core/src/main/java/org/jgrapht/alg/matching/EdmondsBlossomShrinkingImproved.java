@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 public class EdmondsBlossomShrinkingImproved<V, E>
     implements MatchingAlgorithm<V, E>
 {
+
+    public final boolean DEBUG=true;
     /* Input graph */
     private final Graph<V, E> graph;
 
@@ -125,7 +127,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
     @Override
     public Matching<V, E> getMatching()
     {
-        Set<E> edges = new ArrayUnenforcedSet<>();
         this.init();
 
         for (int v : vertexIndexMap.values()) {
@@ -134,45 +135,34 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //            if(match.size() >= vertices.size()-1)
 //                break;
 
-            System.out.println("\ngrowing path from "+v);
+            if(DEBUG) System.out.println("\ngrowing path from "+v);
 
             // Any augmenting predOdd should start with _exposed_ vertex
             // (vertex may not escape match-set being added once)
             if (!match.containsKey(v)) {
                 // Match is maximal iff graph G contains no more augmenting paths
-                int w = findAugmentingPath(v);
-                if(w != nil) {
+                int w = findAugmentingPath(v); //path always ends in an odd vertex
+                if(w != nil) { //Augmenting path was found
 //                    System.out.println("found augmenting path ending in: "+w);
-//                    System.out.println("predOdd: "+predOdd);
-//                    System.out.println("predEven: "+predEven);
-                    while (w != nil) {
-                        int pv = predOdd.get(w);
-//                        System.out.println("pv: "+pv);
-                        //int ppv = match.getOrDefault(pv, nil);//match.get(pv);
-                        int ppv = match.getOrDefault(pv, nil);
-//                        int ppv = predEven.get(pv);
-//                        System.out.println("ppv: "+ppv);
-                        System.out.println("matched edge: ("+w+","+pv+")");
-                        match.put(w, pv);
-                        match.put(pv, w);
-                        w = ppv;
-                        if(pv==ppv)
-                            break;
-                    }
+                    if(DEBUG) System.out.println("predOdd: "+predOdd);
+                    if(DEBUG) System.out.println("predEven: "+predEven);
+                    do{ //Reconstruct augmenting path and take the symmetric difference with the matching.
+                        int u = predOdd.get(w); //even vertex
+                        int t= match.getOrDefault(u, nil); //odd vertex
+                        match.put(w, u);
+                        match.put(u, w);
+                        if(DEBUG) System.out.println("matched edge: ("+w+","+u+")");
+                        w=t;
+                    }while (w != nil);
                 }
             }else{
 //                System.out.println("already matched. skipping: "+v);
             }
         }
 
-        Set<Integer> seen = new HashSet<>();
-        vertexIndexMap.values().stream().filter(v -> !seen.contains(v) && match.containsKey(v)).forEach(
-            v -> {
-                seen.add(v);
-                seen.add(match.get(v));
-                edges.add(graph.getEdge(vertices.get(v), vertices.get(match.get(v))));
-            });
-
+        Set<E> edges=new LinkedHashSet<E>();
+        for(int v : match.keySet())
+            edges.add(graph.getEdge(vertices.get(v), vertices.get(match.get(v))));
         return new MatchingImpl<>(graph, edges, edges.size());
     }
 
@@ -206,27 +196,27 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
 //                if (contracted.get(v) == contracted.get(to) || (match.containsKey(v) && to == match.get(v)))
 //                    continue;
-                System.out.println("checking edge ("+v+","+w+")");
+                if(DEBUG) System.out.println("checking edge ("+v+","+w+")");
 
                 //If edge (v,w) is part of a blossom, it is shrunken away and we can ignore it.
                 //If w is odd, we can ignore the edge as well.
                 if (uf.connected(v, w) /*||
                         (predEven.containsKey(v) && w == predEven.get(v))*/) { //I think this could be: predOdd.containsKey(w)
-                    System.out.println("ignore edge");
+                    if(DEBUG) System.out.println("ignore edge");
                     continue;
 
 
                 // Check whether we encountered a blossom. A blossom can only exist if w is an even vertex
                 }else if(predEven.containsKey(uf.find(w)))//if(predEven.containsKey(w))
                 {
-                    System.out.println("found blossom. Search base");
+                    if(DEBUG) System.out.println("found blossom. Search base");
                     int base = lowestCommonAncestor(v, w);
-                    System.out.println("stem: "+base);
+                    if(DEBUG) System.out.println("stem: "+base);
 
                     Set<Integer> blossom = new HashSet<>();
                     markPath(v, w, base, blossom);
                     markPath(w, v, base, blossom);
-                    System.out.println("blossom: "+blossom);
+                    if(DEBUG) System.out.println("blossom: "+blossom);
 
                     vertexIndexMap.values().stream()
                         .filter(
@@ -234,12 +224,13 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                         .forEach(i -> {
                             //uf.union(i, base);
                             uf.union(base, i);
-//                            if (!used.contains(i)) {
-//                                used.add(i);
-////                                q.add(i); //check whether this indeed only adds the ODD vertices in the blossom back to the queue
-//                            }
+                            if (!used.contains(i)) {
+                                used.add(i);
+                                q.add(i); //check whether this indeed only adds the ODD vertices in the blossom back to the queue
+                            }
+                            System.out.println("unionizing: "+base+" + "+i);
                         });
-                    System.out.println("uf: "+uf);
+                    if(DEBUG) System.out.println("uf: "+uf);
                     predEven.put(uf.find(base), predEven.get(base));
                     //even[uf.find(base)] = even[base];
 
@@ -253,11 +244,11 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
                     //We found an augmenting path from root to w.
                     if (!match.containsKey(w)) {
-                        System.out.println("found augmenting path after adding edge ("+v+","+w+")");
+                        if(DEBUG) System.out.println("found augmenting path after adding edge ("+v+","+w+")");
                         return w;
                     }
 
-                    System.out.println("growing tree ("+v+","+w+","+match.get(w)+")");
+                    if(DEBUG) System.out.println("growing tree ("+v+","+w+","+match.get(w)+")");
 
                     //Perform a grow step
                     int x = match.get(w);
@@ -267,59 +258,63 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
 
 
-                    System.out.println("predOdd: "+predOdd);
-                    System.out.println("predEven: "+predEven);
+                    if(DEBUG) System.out.println("predOdd: "+predOdd);
+                    if(DEBUG) System.out.println("predEven: "+predEven);
 
                 }
             }
         }
-        System.out.println("No augmenting path found");
+        if(DEBUG) System.out.println("No augmenting path found");
         return nil;
     }
 
     private void markPath(int v, int child, int base, Set<Integer> blossom)
     {
-        System.out.println("markPath. v: "+v+" child: "+child);
-        System.out.println("predOdd: "+predOdd);
-        System.out.println("predEven: "+predEven);
+        if(DEBUG) System.out.println("markPath. v: "+v+" child: "+child);
+        if(DEBUG) System.out.println("predOdd: "+predOdd);
+        if(DEBUG) System.out.println("predEven: "+predEven);
+        int safety=0;
 
-        while (uf.find(v)!= base) {
-            blossom.add(uf.find(v));
-            blossom.add(uf.find(match.get(v)));
-            predOdd.put(v, child);
-            System.out.println("predOdd[" + v + "]=" + child);
-            child = match.get(v); //child = Odd vertex
-            q.add(child);
-
+//        while (uf.find(v)!= uf.find(base)) {
+////        while (v!= base) {
+////            blossom.add(uf.find(v));
+////            blossom.add(uf.find(match.get(v)));
+//            predOdd.put(v, child);
+//            if(DEBUG) System.out.println("predOdd[" + v + "]=" + child);
+//            //child = match.get(v); //child = Odd vertex
+//            child = predEven.get(uf.find(v));
+//            if(DEBUG) System.out.println("childNew: "+child);
 //            q.add(child);
+//
 //            uf.union(base, uf.find(child));
 //            uf.union(base, uf.find(v));
-
-            v = predOdd.get(child);
-        }
+//            if(DEBUG) System.out.println("uf: "+uf);
+//
+//            v = predOdd.get(child);
+//            if(DEBUG) System.out.println("vNew: "+v);
+//
+//            safety++;
+//            if(safety > vertices.size())
+//                throw new RuntimeException("bug");
+//        }
 
 //        for(int u : blossom){
 //            uf.union(base, uf.find(u));
 //        }
 
-//        while (uf.find(v)!= uf.find(base)) {
-//        while (v != base) {
-//
-//            predOdd.put(v, child);
-////            uf.union(base, v);
-//
-//            System.out.println("v=" + v);
-//            child=predEven.get(v);
-////            child = match.get(v); //child = Odd vertex
-//            System.out.println("child=" + child);
-//
-//            q.add(child);
-////            uf.union(base, child);
-//            uf.union(base, v);
-//
-////            System.out.println("predEven["+child+"]="+v);
-//            v = uf.find(predOdd.get(child));
-//        }
+        if(DEBUG) System.out.println("uf: "+uf);
+
+        while (uf.find(v)!= base) {
+            blossom.add(uf.find(v));
+            blossom.add(uf.find(match.get(v)));
+            predOdd.put(v, child);
+            if(DEBUG) System.out.println("predOdd[" + v + "]=" + child);
+            child = match.get(v);
+            if(DEBUG) System.out.println("childNew: "+child);
+            v = predOdd.get(child);
+            if(DEBUG) System.out.println("vNew: "+v);
+        }
+
     }
 
     private int lowestCommonAncestor(int v, int w)
@@ -369,8 +364,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
      */
     public boolean isMaximumMatching(Matching<V,E> matching){
 
-        System.out.println("Matching: "+matching);
-        System.out.println("graph: "+graph);
+        if(DEBUG) System.out.println("Matching: "+matching);
+        if(DEBUG) System.out.println("graph: "+graph);
 
         //The matching is maximum if it is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices
         if(matching.getEdges().size()*2 >= graph.vertexSet().size()-1)
@@ -409,7 +404,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             if(v==null) //no unmatched vertices found in this component
                 continue;
 
-            System.out.println("1 pass edmonds. Start: "+vertexIndexMap.get(v));
+            if(DEBUG) System.out.println("1 pass edmonds. Start: "+vertexIndexMap.get(v));
             int endVertexAugmentingPath=findAugmentingPath(vertexIndexMap.get(v));
             //The matching is not maximum if an augmenting path was found
             if(endVertexAugmentingPath != nil) {
@@ -440,11 +435,11 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 //        if(endVertexAugmentingPath != nil)
 //            return false;
 
-        System.out.println("checking tutte");
-        System.out.println("predODD: "+predOdd);
-        System.out.println("predeven: "+predEven);
-        System.out.println("uf: "+uf);
-        System.out.println("odd vertices: "+oddVertices);
+        if(DEBUG) System.out.println("checking tutte");
+        if(DEBUG) System.out.println("predODD: "+predOdd);
+        if(DEBUG) System.out.println("predeven: "+predEven);
+        if(DEBUG) System.out.println("uf: "+uf);
+        if(DEBUG) System.out.println("odd vertices: "+oddVertices);
 //        Set<V> oddVertices = vertexIndexMap.values().stream().filter(w -> predOdd.containsKey(w) ).map(vertices::get).collect(Collectors.toSet());
 
 
@@ -455,7 +450,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         List<Set<V>> connectedComponentsSubgraph=new ConnectivityInspector<>(subgraph).connectedSets();
         long nrOddCardinalityComponents=connectedComponentsSubgraph.stream().filter(s -> s.size()%2==1).count();
 
-        System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
+        if(DEBUG) System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
         return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
     }
 

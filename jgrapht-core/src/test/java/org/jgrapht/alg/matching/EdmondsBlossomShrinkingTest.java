@@ -103,6 +103,33 @@ public final class EdmondsBlossomShrinkingTest
         matcher.isMaximumMatching(match);
     }
 
+    public void testUFBug10(){
+        //optimal matching not found
+        //graph: ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [{4,9}, {2,4}, {3,5}, {6,9}, {7,3}, {9,8}, {9,7}, {1,3}, {5,1}, {6,3}, {1,0}, {0,9}, {0,5}, {1,2}, {4,6}, {2,6}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+        int[][] edges={{4,9}, {2,4}, {3,5}, {6,9}, {7,3}, {9,8}, {9,7}, {1,3}, {5,1}, {6,3}, {1,0}, {0,9}, {0,5}, {1,2}, {4,6}, {2,6}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+    public void testUFBug9(){
+        //graph: ([0, 1, 2, 3, 4], [{1,2}, {0,4}, {3,2}, {0,2}, {1,3}, {1,4}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        int[][] edges={{1,2}, {0,4}, {3,2}, {0,2}, {1,3}, {1,4}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
     public void testUFBug8(){
         //graph: ([0, 1, 2, 3, 4, 5, 6], [{3,6}, {1,0}, {3,4}, {5,4}, {6,2}, {0,2}, {2,3}, {0,3}, {1,5}])
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);

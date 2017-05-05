@@ -63,6 +63,8 @@ import java.util.stream.Collectors;
  */
 public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
 
+    public final boolean DEBUG=true;
+
     /* The graph we are matching on. */
     private final Graph<V,E> graph;
     /* (Heuristic) matching algorithm used to compute an initial solution */
@@ -176,57 +178,64 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      */
     private boolean augment() {
 
-        //If the matching is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices, we cannot augment.
-        if(nMatched >= graph.vertexSet().size()-1)
-            return false;
-
         // reset data structures
         Arrays.fill(even, nil);
         Arrays.fill(odd, nil);
         uf.reset();
         bridges.clear();
         queue.clear();
-        for(int v : exposedVertices) {
-            if(!matching.isExposed(v))
-                continue;
-            even[v] = v;
-        }
 
-        // queue every isExposed vertex and place in the
-        // even level (level = 0)
 
-        while(!exposedVertices.empty()) {
-            int exposedVertex=exposedVertices.poll();
-            if(!matching.isExposed(exposedVertex))
+        for (int root = 0; root < vertices.size(); root++) {
+            if(!matching.isExposed(root))
                 continue;
-            queue.enqueue(exposedVertex);
+            even[root] = root;
+            queue.enqueue(root);
+
+            if(DEBUG) System.out.println("\ngrowing path from "+root);
+
+            // queue every isExposed vertex and place in the
+            // even level (level = 0)
+
 
             // for each 'free' vertex, start a bfs search
             while (!queue.empty()) {
-                int vx = queue.poll();
-                V v = vertices.get(vx);
+                int v = queue.poll(); //Even vertex
 
-                for (V w : Graphs.neighborListOf(graph, v)) {
-                    int wx = vertexIndexMap.get(w);
+                for (V wOrig : Graphs.neighborListOf(graph, vertices.get(v))) {
+                    int w = vertexIndexMap.get(wOrig);
+
+                    if(DEBUG) System.out.println("checking edge ("+v+","+w+")");
 
                     // the endpoints of the edge are both at even levels in the
                     // forest - this means it is either an augmenting path or
                     // a blossom
-                    if (even[uf.find(wx)] != nil) {
-                        if (check(vx, wx))
+                    if (even[uf.find(w)] != nil) {
+                        if (check(v, w))
                             return true;
                     }
 
                     // add the edge to the forest if is not already and extend
                     // the tree with this matched edge
-                    else if (odd[wx] == nil) {
-                        odd[wx] = vx;
+                    else if (odd[w] == nil) {
+                        odd[w] = v;
+
+                        if(matching.isExposed(w)){
+                            if(DEBUG) System.out.println("found augmenting path after adding edge ("+v+","+w+")");
+                            augment(v);
+                            augment(w);
+                            matching.match(v, w);
+                            return true;
+                        }
 //                    System.out.println("odd: "+wx);
-                        int u = matching.other(wx);
+                        int u = matching.other(w);
+
+                        if(DEBUG) System.out.println("growing tree ("+v+","+w+","+u+")");
+
                         // add the matched edge (potential though a blossom) if it
                         // isn't in the forest already
                         if (even[uf.find(u)] == nil) {
-                            even[u] = wx;
+                            even[u] = w;
                             queue.enqueue(u);
                         }
                     }
@@ -234,57 +243,12 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             }
         }
 
+        if(DEBUG) System.out.println("No augmenting path found");
+
         // no augmenting paths, matching is maximum
         return false;
     }
 
-    /**
-     * Checks whether the given matching is of maximum cardinality. A matching m is maximum if there does not exist a different matching
-     * m' in the graph which is of larger cardinality. This method is solely intended for verification purposes. Any matching returned
-     * by the {@link #getMatching()} method in this class is guaranteed to be maximum.
-     * <p>
-     * To attest whether the matching is maximum, we use the Tutte-Berge Formula
-     * which provides a tight bound on the cardinality of the matching. The Tutte-Berge Formula states:
-     * 2 * m(G) = min_{X} ( |V(G)| + |X| - o(G-X) ), where m(G) is the size of the matching, X a subset of vertices,
-     * G-X the induced graph on vertex set V(G)\X, and o(G) the number of connected components of odd cardinality in graph G.<br>
-     * Note: to compute this bound, we do not iterate over all possible subsets X (this would be too expensive). Instead, X is
-     * computed as a by-product of Edmonds algorithm. Consequently, the runtime of this method equals the runtime of one iteration
-     * of Edmonds algorithm.
-     * @param matching matching
-     * @return true if the matching is maximum, false otherwise.
-     */
-    public boolean isMaximumMatching(Matching<V,E> matching){
-        //The matching is maximum if it is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices
-        if(matching.getEdges().size()*2 >= graph.vertexSet().size()-1)
-            return true;
-
-        this.init(); //Reset data structures and use the provided matching as a starting point
-        for(E e : matching.getEdges()){
-            V u=graph.getEdgeSource(e);
-            V v=graph.getEdgeTarget(e);
-            Integer ux=vertexIndexMap.get(u);
-            Integer vx=vertexIndexMap.get(v);
-            this.matching.match(ux, vx);
-        }
-        //Search for an augmenting path. If one is found, then clearly the matching is not maximum
-        boolean foundAugmentingPath=augment();
-        if(foundAugmentingPath)
-            return false;
-
-        //A side effect of the Edmonds Blossom-Shrinking algorithm is that it computes what is known as the
-        // Edmonds-Gallai decomposition of a graph: it decomposes the graph into three disjoint sets of vertices: odd, even, or free.
-        // The odd set achieves the minimum in the Tutte-Berge Formula. Note: we only take odd vertices that are not consumed by blossoms (every blossom is even).
-        Set<V> oddVertices= vertexIndexMap.values().stream().filter(vx -> odd[vx] != nil && !bridges.containsKey(vx)).map(vertices::get).collect(Collectors.toSet());
-        Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
-
-        Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
-        List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
-        long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
-
-        System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
-
-        return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
-    }
 
     /**
      * An edge was found which connects two 'even' vertices in the forest. If
@@ -303,7 +267,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     private boolean check(int v, int w) {
 
         // self-loop (within blossom) ignored
-        if (uf.find(v).equals(uf.find(w)))
+        if (uf.connected(v, w))
             return false;
 
         vAncestors.clear();
@@ -329,12 +293,12 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
             // we are at the root of each tree and the roots are different, we
             // have found and augmenting path
-            if (uf.find(even[vCurr]) == vCurr && uf.find(even[wCurr]) == wCurr) {
-                augment(v);
-                augment(w);
-                matching.match(v, w);
-                return true;
-            }
+//            if (uf.find(even[vCurr]) == vCurr && uf.find(even[wCurr]) == wCurr) {
+//                augment(v);
+//                augment(w);
+//                matching.match(v, w);
+//                return true;
+//            }
 
             // the current vertex in 'v' can be found in w's ancestors they must
             // share a root - we have found a blossom whose base is 'vCurr'
@@ -378,6 +342,8 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * @param base connected to the stem (common ancestor of v and w)
      */
     private void blossom(int v, int w, int base) {
+        if(DEBUG) System.out.println("Found blossom. base: "+base+" bridge: ("+v+","+w+")");
+
 //        System.out.println("base1: "+base);
         base = uf.find(base);
 //        System.out.println("base2: "+base);
@@ -485,15 +451,13 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     public Matching<V, E> getMatching() {
         this.init();
 
-        for (int v = 0; v < vertices.size(); v++) {
-            if (matching.isExposed(v))
-                exposedVertices.enqueue(v);
-        }
-
         // continuously augment while we find new paths, each
         // path increases the matching cardinality by 2
-        while (augment()) {
-            nMatched += 2;
+        //If the matching is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices, we cannot augment.
+        if(nMatched < graph.vertexSet().size()-1) {
+            while (augment()) {
+                nMatched += 2;
+            }
         }
 
         Set<E> edges=new LinkedHashSet<E>();
@@ -507,6 +471,54 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
 
         return new MatchingImpl<V, E>(graph, edges, edges.size());
+    }
+
+    /**
+     * Checks whether the given matching is of maximum cardinality. A matching m is maximum if there does not exist a different matching
+     * m' in the graph which is of larger cardinality. This method is solely intended for verification purposes. Any matching returned
+     * by the {@link #getMatching()} method in this class is guaranteed to be maximum.
+     * <p>
+     * To attest whether the matching is maximum, we use the Tutte-Berge Formula
+     * which provides a tight bound on the cardinality of the matching. The Tutte-Berge Formula states:
+     * 2 * m(G) = min_{X} ( |V(G)| + |X| - o(G-X) ), where m(G) is the size of the matching, X a subset of vertices,
+     * G-X the induced graph on vertex set V(G)\X, and o(G) the number of connected components of odd cardinality in graph G.<br>
+     * Note: to compute this bound, we do not iterate over all possible subsets X (this would be too expensive). Instead, X is
+     * computed as a by-product of Edmonds algorithm. Consequently, the runtime of this method equals the runtime of one iteration
+     * of Edmonds algorithm.
+     * @param matching matching
+     * @return true if the matching is maximum, false otherwise.
+     */
+    public boolean isMaximumMatching(Matching<V,E> matching){
+        //The matching is maximum if it is perfect, or if it leaves only one node exposed in a graph with an odd number of vertices
+        if(matching.getEdges().size()*2 >= graph.vertexSet().size()-1)
+            return true;
+
+        this.init(); //Reset data structures and use the provided matching as a starting point
+        for(E e : matching.getEdges()){
+            V u=graph.getEdgeSource(e);
+            V v=graph.getEdgeTarget(e);
+            Integer ux=vertexIndexMap.get(u);
+            Integer vx=vertexIndexMap.get(v);
+            this.matching.match(ux, vx);
+        }
+        //Search for an augmenting path. If one is found, then clearly the matching is not maximum
+        boolean foundAugmentingPath=augment();
+        if(foundAugmentingPath)
+            return false;
+
+        //A side effect of the Edmonds Blossom-Shrinking algorithm is that it computes what is known as the
+        // Edmonds-Gallai decomposition of a graph: it decomposes the graph into three disjoint sets of vertices: odd, even, or free.
+        // The odd set achieves the minimum in the Tutte-Berge Formula. Note: we only take odd vertices that are not consumed by blossoms (every blossom is even).
+        Set<V> oddVertices= vertexIndexMap.values().stream().filter(vx -> odd[vx] != nil && !bridges.containsKey(vx)).map(vertices::get).collect(Collectors.toSet());
+        Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !oddVertices.contains(v)).collect(Collectors.toSet());
+
+        Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
+        List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
+        long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
+
+        System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
+
+        return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
     }
 
     final class MatchingArray {
@@ -528,7 +540,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
 
         boolean matched(int v) {
-            return !isExposed(v);
+            return match[v] != UNMATCHED;
         }
 
         /**
@@ -538,8 +550,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
          * @return the vertex has no matching
          */
         boolean isExposed(int v) {
-            int w = match[v];
-            return w < 0 || match[w] != v;
+            return match[v]==UNMATCHED;
+            //int w = match[v];
+            //return w < 0 || match[w] != v;
         }
 
         /**
@@ -550,8 +563,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
          * @throws IllegalArgumentException the vertex is currently isExposed
          */
         int other(int v) {
-            if (isExposed(v))
-                throw new IllegalArgumentException(v + " is not matched");
+            assert !isExposed(v);
             return match[v];
         }
 
@@ -576,7 +588,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * every vertex in the graph. Any new vertices are added at the 'end' index
      * and 'polling' a vertex advances the 'start'.
      */
-    private static final class FixedSizeQueue implements Iterable<Integer>{
+    private static final class FixedSizeQueue{
         private final int[] vs;
         private int i = 0;
         private int n = 0;
@@ -628,30 +640,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             for(int j=i; j<n; j++)
                 s+=vs[j]+" ";
             return s;
-        }
-
-        @Override
-        public Iterator<Integer> iterator() {
-            Iterator<Integer> it = new Iterator<Integer>() {
-
-                private int currentIndex = i;
-
-                @Override
-                public boolean hasNext() {
-                    return currentIndex < n && vs[currentIndex] != nil;
-                }
-
-                @Override
-                public Integer next() {
-                    return vs[currentIndex++];
-                }
-
-                @Override
-                public void remove() {
-                    throw new UnsupportedOperationException();
-                }
-            };
-            return it;
         }
     }
 
