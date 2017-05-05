@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
  */
-public class EdmondsBlossomShrinkingImproved<V, E>
+public class EdmondsBlossomShrinkingImproved3<V, E>
     implements MatchingAlgorithm<V, E>
 {
     /* Input graph */
@@ -77,13 +77,13 @@ public class EdmondsBlossomShrinkingImproved<V, E>
      * @param graph the input graph
      * @throws IllegalArgumentException if the graph is not undirected
      */
-    public EdmondsBlossomShrinkingImproved(Graph<V, E> graph)
+    public EdmondsBlossomShrinkingImproved3(Graph<V, E> graph)
     {
 //        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
         this(graph, null);
     }
 
-    public EdmondsBlossomShrinkingImproved(Graph<V, E> graph, MatchingAlgorithm<V,E> initializer)
+    public EdmondsBlossomShrinkingImproved3(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer=initializer;
@@ -152,7 +152,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                         int ppv = match.getOrDefault(pv, nil);
 //                        int ppv = predEven.get(pv);
 //                        System.out.println("ppv: "+ppv);
-                        System.out.println("matched edge: ("+w+","+pv+")");
+//                        System.out.println("matched edge: ("+w+","+pv+")");
                         match.put(w, pv);
                         match.put(pv, w);
                         w = ppv;
@@ -176,7 +176,6 @@ public class EdmondsBlossomShrinkingImproved<V, E>
         return new MatchingImpl<>(graph, edges, edges.size());
     }
 
-    private Queue<Integer> q;
     /**
      * Find an augmenting path.
      * @param root starting vertex of the augmenting path
@@ -186,7 +185,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
     {
 //        System.out.println("find path");
         Set<Integer> used = new HashSet<>();
-        q = new ArrayDeque<>();
+        Queue<Integer> q = new ArrayDeque<>();
 
         predOdd.clear();
         predEven.clear();
@@ -217,7 +216,9 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
 
                 // Check whether we encountered a blossom. A blossom can only exist if w is an even vertex
-                }else if(predEven.containsKey(uf.find(w)))//if(predEven.containsKey(w))
+                }/*else if ((w == root)
+                    || ((predEven.containsKey(w)) && (predOdd.containsKey(predEven.get(w)))))*/
+                else if(predEven.containsKey(uf.find(w)))//if(predEven.containsKey(w))
                 {
                     System.out.println("found blossom. Search base");
                     int base = lowestCommonAncestor(v, w);
@@ -230,14 +231,15 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
                     vertexIndexMap.values().stream()
                         .filter(
+//                            i -> blossom.contains(contracted.get(i)))
                                 i -> blossom.contains(uf.find(i)))
                         .forEach(i -> {
                             //uf.union(i, base);
                             uf.union(base, i);
-//                            if (!used.contains(i)) {
-//                                used.add(i);
-////                                q.add(i); //check whether this indeed only adds the ODD vertices in the blossom back to the queue
-//                            }
+                            if (!used.contains(i)) {
+                                used.add(i);
+                                q.add(i); //check whether this indeed only adds the ODD vertices in the blossom back to the queue
+                            }
                         });
                     System.out.println("uf: "+uf);
                     predEven.put(uf.find(base), predEven.get(base));
@@ -267,8 +269,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
 
 
-                    System.out.println("predOdd: "+predOdd);
-                    System.out.println("predEven: "+predEven);
+//                    System.out.println("predOdd: "+predOdd);
+//                    System.out.println("predEven: "+predEven);
 
                 }
             }
@@ -279,47 +281,18 @@ public class EdmondsBlossomShrinkingImproved<V, E>
 
     private void markPath(int v, int child, int base, Set<Integer> blossom)
     {
-        System.out.println("markPath. v: "+v+" child: "+child);
-        System.out.println("predOdd: "+predOdd);
-        System.out.println("predEven: "+predEven);
+//        System.out.println("markPath. v: "+v+" child: "+child);
 
+//        while (!contracted.get(v).equals(stem)) {
         while (uf.find(v)!= base) {
             blossom.add(uf.find(v));
             blossom.add(uf.find(match.get(v)));
             predOdd.put(v, child);
-            System.out.println("predOdd[" + v + "]=" + child);
-            child = match.get(v); //child = Odd vertex
-            q.add(child);
-
-//            q.add(child);
-//            uf.union(base, uf.find(child));
-//            uf.union(base, uf.find(v));
-
+//            System.out.println("predOdd[" + v + "]=" + child);
+            child = match.get(v);
+//            System.out.println("predEven["+child+"]="+v);
             v = predOdd.get(child);
         }
-
-//        for(int u : blossom){
-//            uf.union(base, uf.find(u));
-//        }
-
-//        while (uf.find(v)!= uf.find(base)) {
-//        while (v != base) {
-//
-//            predOdd.put(v, child);
-////            uf.union(base, v);
-//
-//            System.out.println("v=" + v);
-//            child=predEven.get(v);
-////            child = match.get(v); //child = Odd vertex
-//            System.out.println("child=" + child);
-//
-//            q.add(child);
-////            uf.union(base, child);
-//            uf.union(base, v);
-//
-////            System.out.println("predEven["+child+"]="+v);
-//            v = uf.find(predOdd.get(child));
-//        }
     }
 
     private int lowestCommonAncestor(int v, int w)
