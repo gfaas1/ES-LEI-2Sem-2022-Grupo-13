@@ -152,7 +152,7 @@ public class EdmondsBlossomShrinkingImproved3<V, E>
                         int ppv = match.getOrDefault(pv, nil);
 //                        int ppv = predEven.get(pv);
 //                        System.out.println("ppv: "+ppv);
-//                        System.out.println("matched edge: ("+w+","+pv+")");
+//                        System.out.println("isMatched edge: ("+w+","+pv+")");
                         match.put(w, pv);
                         match.put(pv, w);
                         w = ppv;
@@ -161,7 +161,7 @@ public class EdmondsBlossomShrinkingImproved3<V, E>
                     }
                 }
             }else{
-//                System.out.println("already matched. skipping: "+v);
+//                System.out.println("already isMatched. skipping: "+v);
             }
         }
 
@@ -305,8 +305,8 @@ public class EdmondsBlossomShrinkingImproved3<V, E>
             v = uf.find(v);
             seen.set(v);
 //            System.out.println("seen.add: "+v);
-            int parent = uf.find(predEven.get(v)); //If not matched, then we've reached the root of the tree
-//            int parent = predEven.get(v); //If not matched, then we've reached the root of the tree
+            int parent = uf.find(predEven.get(v)); //If not isMatched, then we've reached the root of the tree
+//            int parent = predEven.get(v); //If not isMatched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
             v= predOdd.get(parent);

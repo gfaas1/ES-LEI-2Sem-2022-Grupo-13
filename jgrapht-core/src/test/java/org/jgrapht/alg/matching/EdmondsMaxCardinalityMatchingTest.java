@@ -47,6 +47,63 @@ import java.util.stream.IntStream;
 public final class EdmondsMaxCardinalityMatchingTest
     extends TestCase
 {
+    public void testGraph14(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{2,0}, {2,6}, {4,6}, {4,3}, {6,7}, {3,6}, {5,0}, {2,5}, {3,7}, {2,4}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7));
+
+        int[][] edges={{2,0}, {2,6}, {4,6}, {4,3}, {6,7}, {3,6}, {5,0}, {2,5}, {3,7}, {2,4}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+    public void testGraph13(){
+        //graph: ([0, 1, 2, 3, 4], [{0,3}, {0,2}, {4,2}, {0,1}, {1,3}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4));
+
+        int[][] edges={{0,3}, {0,2}, {4,2}, {0,1}, {1,3}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+    public void testGraph12(){
+        //graph: ([0, 1, 2, 3], [{3,2}, {3,1}, {0,3}, {0,1}, {2,1}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3));
+
+        int[][] edges={{3,2}, {3,1}, {0,3}, {0,1}, {2,1}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
+
+    public void testGraph11(){
+        //graph: ([0, 1, 2, 3], [])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3));
+
+        int[][] edges={{0,2}, {1,0}, {2,1}, {0,3}, {2,3}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
 
     public void testUFBug2(){
         //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,3}, {6,2}, {6,0}, {0,2}, {0,3}, {5,2}, {5,4}, {6,1}, {5,1}])
@@ -308,6 +365,46 @@ public final class EdmondsMaxCardinalityMatchingTest
 //
 //        }
 //    }
+
+    public void testRandomGraphsSmall(){
+        System.out.println("starting");
+        for(int n=4; n<20; n++) {
+//        int n=5;
+            for(int m=5; m<maxEdges(n); m++) {
+                GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator(n, m);
+
+                for (int i = 0; i < 2000; i++) {
+                    System.out.println("completed: " + i);
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+                    IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+                    generator.generateGraph(graph, vertexFactory, null);
+                    System.out.println("graph: " + graph);
+                    EdmondsMaxCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(graph);
+                    Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
+                    assertTrue(matcher.isMaximumMatching(m1));
+
+//                    MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<Integer, DefaultEdge>(graph);
+//                    Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
+//                    if (m1.getEdges().size() != m2.getEdges().size())
+//                        throw new RuntimeException("weird, weights don't match");
+
+                }
+            }
+        }
+    }
+
+    public void testGraphs(){
+        testGraph1();
+        testGraph2();
+        testGraph3();
+        testGraph4();
+        testGraph5();
+        testGraph6();
+        testGraph7();
+        testGraph8();
+        testGraph9();
+        testGraph10();
+    }
 
     public void testGraph1(){
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);

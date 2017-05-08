@@ -105,9 +105,9 @@
 //    Arrays representing resp the even and odd nodes forming the alternating trees. A node is even (resp odd) if it is at
 //    even (resp) odd distance from the root of the tree it belongs to. By definition, the root of a tree is even. All tree
 //    roots are isExposed nodes. A node is isExposed if no edge in the current matching is incident to that node.
-//    Similarly, an edge is said to be matched (resp isExposed) if the edge is part (resp not part) of the matching. Each layer
-//    in an alternating tree consists alternatingly matched and isExposed edges. Edges leaving
-//    even nodes are isExposed, edges leaving odd nodes are always matched. By definition,
+//    Similarly, an edge is said to be isMatched (resp isExposed) if the edge is part (resp not part) of the matching. Each layer
+//    in an alternating tree consists alternatingly isMatched and isExposed edges. Edges leaving
+//    even nodes are isExposed, edges leaving odd nodes are always isMatched. By definition,
 //    odd nodes in an alternating tree always have cardinality 2. Each vertex and each edge is part of at most 1 tree.
 //     Note that the odd and even arrays only contain representatives! odd[v] returns the ancestor u of vertex v in its alternating tree.
 //     The returned vertex is not necessarily a representatives vertex (the returned vertex can be part of a blossom). Therefore, to obtain
@@ -231,14 +231,14 @@
 //
 //    /*
 //    Let u be a node in the last even layer of tree T, (u,v) be an edge
-//    such that v is not in V(T) and v is a matched vertex. Let (v,w) be
-//    the corresponding matched edge. We can then extend tree T with the
+//    such that v is not in V(T) and v is a isMatched vertex. Let (v,w) be
+//    the corresponding isMatched edge. We can then extend tree T with the
 //    two edges (u,v) and (v,w).
 //     */
 //    private void grow(int u, int v){
 //        odd[v] = u;
 //        int w = matching.getOpposite(v);
-//        // add the matched edge (potential though a blossom) if it
+//        // add the isMatched edge (potential though a blossom) if it
 //        // isn't in the forest already
 //        if (even[representatives.find(w)] == NIL) { //Not sure this if check is needed?
 //            even[w] = v;

@@ -156,7 +156,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                     }while (w != nil);
                 }
             }else{
-//                System.out.println("already matched. skipping: "+v);
+//                System.out.println("already isMatched. skipping: "+v);
             }
         }
 
@@ -228,7 +228,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
                                 used.add(i);
                                 q.add(i); //check whether this indeed only adds the ODD vertices in the blossom back to the queue
                             }
-                            System.out.println("unionizing: "+base+" + "+i);
+                            System.out.println("unionizing: " + base + " + " + i);
                         });
                     if(DEBUG) System.out.println("uf: "+uf);
                     predEven.put(uf.find(base), predEven.get(base));
@@ -327,8 +327,8 @@ public class EdmondsBlossomShrinkingImproved<V, E>
             v = uf.find(v);
             seen.set(v);
 //            System.out.println("seen.add: "+v);
-            int parent = uf.find(predEven.get(v)); //If not matched, then we've reached the root of the tree
-//            int parent = predEven.get(v); //If not matched, then we've reached the root of the tree
+            int parent = uf.find(predEven.get(v)); //If not isMatched, then we've reached the root of the tree
+//            int parent = predEven.get(v); //If not isMatched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
             v= predOdd.get(parent);

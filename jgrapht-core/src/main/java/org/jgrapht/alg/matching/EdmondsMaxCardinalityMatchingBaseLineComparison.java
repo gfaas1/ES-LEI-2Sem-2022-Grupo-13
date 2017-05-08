@@ -106,7 +106,7 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
      */
     private BitSet vAncestors, wAncestors;
 
-    /** Number of matched vertices. */
+    /** Number of isMatched vertices. */
     private int nMatched;
 
 
@@ -211,12 +211,12 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
                 }
 
                 // add the edge to the forest if is not already and extend
-                // the tree with this matched edge
+                // the tree with this isMatched edge
                 else if (odd[wx] == nil) {
                     odd[wx] = vx;
 //                    System.out.println("odd: "+wx);
                     int u = matching.other(wx);
-                    // add the matched edge (potential though a blossom) if it
+                    // add the isMatched edge (potential though a blossom) if it
                     // isn't in the forest already
                     if (even[uf.find(u)] == nil) {
                         even[u] = wx;
@@ -493,7 +493,7 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
         /** Indicates an isExposed vertex. */
         private static final int UNMATCHED = -1;
 
-        /** Storage of which each vertex is matched with. */
+        /** Storage of which each vertex is isMatched with. */
         private final int[] match;
 
         /**
@@ -522,10 +522,10 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
         }
 
         /**
-         * Access the vertex matched with 'v'.
+         * Access the vertex isMatched with 'v'.
          *
          * @param v a vertex
-         * @return matched vertex
+         * @return isMatched vertex
          * @throws IllegalArgumentException the vertex is currently isExposed
          */
         int other(int v) {
@@ -535,8 +535,8 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
         }
 
         /**
-         * Add the edge '{u,v}' to the matched edge set. Any existing matches for
-         * 'u' or 'v' are removed from the matched set.
+         * Add the edge '{u,v}' to the isMatched edge set. Any existing matches for
+         * 'u' or 'v' are removed from the isMatched set.
          *
          * @param u a vertex
          * @param v another vertex

@@ -279,7 +279,7 @@ public class EdmondsBlossomShrinkingImprovedBackup<V, E>
 //            System.out.println("lc a: "+a+" expected: "+contracted.get(a));
             seen.set(v);
             System.out.println("seen.add: "+v);
-            int parent = uf.find(match.getOrDefault(v, v)); //If not matched, then we've reached the root of the tree
+            int parent = uf.find(match.getOrDefault(v, v)); //If not isMatched, then we've reached the root of the tree
             if(parent == v)
                 break; //root of tree
             v= predOdd.get(parent);
