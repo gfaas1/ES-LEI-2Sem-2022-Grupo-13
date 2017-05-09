@@ -63,23 +63,26 @@ import java.util.stream.Collectors;
  */
 public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
 
-    public final boolean DEBUG=true;
+    public final boolean DEBUG=false;
 
     /* The graph we are matching on. */
     private final Graph<V,E> graph;
-    /* (Heuristic) matching algorithm used to compute an initial solution */
+    /* (Heuristic) matching algorithm used to compute an initial feasible solution */
     private MatchingAlgorithm<V,E> initializer;
 
-    /*
-    All vertices in the original graph are mapped to a unique integer to simplify the implementation and to improve efficiency.
-     */
+    /* Ordered list of vertices */
     private List<V> vertices;
+    /* Mapping of a vertex to their unique position in the ordered list of vertices */
     private Map<V, Integer> vertexIndexMap;
 
-    /** The current matching. */
+    /* A matching for the input graph (can be an empty set of edges) */
     private SimpleMatching matching;
 
-/* Algorithm data structures below. */
+    /* Number of matched vertices. */
+    private int matchedVertices;
+
+
+    /* -----Algorithm data structures below---------- */
 
     /** Storage of the forest, even and odd levels */
     private int[] even, odd;
@@ -87,36 +90,40 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     /** Special 'nil' vertex. */
     private static final int nil = -1;
 
-    /** Queue of 'even' (free) vertices to start paths from. */
+    /** Queue of 'even' (exposed) vertices */
     private FixedSizeQueue queue;
 
     /** Union-Find to store blossoms. */
     private UnionFind<Integer> uf;
 
     /**
-     * Map stores the bridges of the blossom - indexed by with support
-     * vertices.
+     * For each odd vertex condensed into a blossom, a bridge is defined. Suppose the examination of edge [v,w] causes a blossom to form containing odd vertex x.
+     * We define bridge(x) to be [v,w] if x is an ancestor of v before the blossom is formed, or [w,v] if x is an ancestor of w.
      */
     private final Map<Integer, Pair<Integer,Integer>> bridges = new HashMap<>();
 
-    /** Temporary array to fill with path information. */
+    /** Pre-allocated array which stores augmenting paths. */
     private int[]  path;
 
-    /**
-     * Temporary bit sets when walking down 'trees' to check for
-     * paths/blossoms.
-     */
+     /* Pre-allocated bit sets to track paths in the trees. */
     private BitSet vAncestors, wAncestors;
 
-    /** Number of isMatched vertices. */
-    private int matchedVertices;
 
-
+    /**
+     * Constructs a new instance of the algorithm. {@link GreedyMaxCardinalityMatching} is used to quickly generate a
+     * near optimal initial solution.
+     * @param graph graph
+     */
     public EdmondsMaxCardinalityMatching(Graph<V,E> graph) {
-        this(graph, null);
-//        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
+//        this(graph, null);
+        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
     }
 
+    /**
+     * Constructs a new instance of the algorithm.
+     * @param graph graph
+     * @param initializer heuristic matching algorithm used to quickly generate a (near optimal) initial feasible solution.
+     */
     public EdmondsMaxCardinalityMatching(Graph<V,E> graph, MatchingAlgorithm<V,E> initializer) {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer=initializer;
@@ -132,6 +139,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         for(int i=0; i<vertices.size(); i++)
             vertexIndexMap.put(vertices.get(i), i);
         this.matching = new SimpleMatching(vertices.size());
+        this.matchedVertices = 0;
         if(initializer != null)
             this.warmStart(initializer);
 
@@ -145,27 +153,22 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         path = new int[vertices.size()];
         vAncestors = new BitSet(vertices.size());
         wAncestors = new BitSet(vertices.size());
-
-        this.matchedVertices = 0;
     }
 
     /**
-     * Provide an algorithm which (heuristically) computes an initial feasible solution.
-     * @param initializer algorithm used to compute an initial matching
+     * Calculates an initial feasible.
+     * @param initializer algorithm used to compute the initial matching
      */
     private void warmStart(MatchingAlgorithm<V,E> initializer){
         Matching<V,E> initialSolution=initializer.getMatching();
         for(E e : initialSolution.getEdges()){
             V u=graph.getEdgeSource(e);
             V v=graph.getEdgeTarget(e);
-            Integer ux=vertexIndexMap.get(u);
-            Integer vx=vertexIndexMap.get(v);
-            this.matching.match(ux, vx);
+            this.matching.match(vertexIndexMap.get(u), vertexIndexMap.get(v));
         }
         matchedVertices =initialSolution.getEdges().size()*2;
     }
 
-//    Set<Integer> thisTree;
 
     /**
      * Find an augmenting path an alternate it's matching. If an augmenting path
@@ -235,7 +238,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
                             return true;
                         }
                         odd[w] = v;
-                        int u = matching.other(w);
+                        int u = matching.opposite(w);
 
                         if(DEBUG) System.out.println("growing tree ("+v+","+w+","+u+")");
 
@@ -255,39 +258,31 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         return false;
     }
 
-/**
- * Create a new blossom for the specified 'bridge' edge.
- *
- * @param v    adjacent to w
- * @param w    adjacent to v
- * @param base connected to the stem (common ancestor of v and w)
- */
     /**
-     * An edge was found which connects two 'even' vertices in the forest. If
-     * the vertices have the same root we have a blossom otherwise we have
-     * identified an augmenting path. This method checks for these cases and
-     * responds accordingly. <p/>
+     * Creates a new blossom using bridge (v,w). The blossom is an odd cycle. Nodes v and w are both even vertices.
      *
-     * If an augmenting path was found - then it's edges are alternated and the
-     * method returns true. Otherwise if a blossom was found - it is contracted
-     * and the search continues.
-     *
-     * @param v endpoint of an edge
-     * @param w another endpoint of an edge
-     * @return a path was augmented
+     * @param v endpoint of the bridge
+     * @param w another endpoint the bridge
      */
     private void blossom(int v, int w) {
+        //Compute the base of the blossom. Let p1, p2 be the paths from the root of the tree to v resp. w. The base vertex
+        //is the last vertex p1 and p2 have in common. In a blossom, the base vertex is unique in the sense that it is
+        //the only vertex incident to 2 unmatched edges.
         int base=lowestCommonAncestor(v, w);
 
         if(DEBUG) System.out.println("Found blossom. base: "+base+" bridge: ("+v+","+w+")");
-        int[] supports1 = blossomSupports(v, w, base);
-        int[] supports2 = blossomSupports(w, v, base);
+        //Compute resp the left leg (v to base) and right leg (w to base) of the blossom.
+        blossomSupports(v, w, base);
+        blossomSupports(w, v, base);
 
-//        for (int i = 0; i < supports1.length; i++)
-//            uf.union(supports1[i], supports1[0]);
-//        for (int i = 0; i < supports2.length; i++)
-//            uf.union(supports2[i], supports2[0]);
+        //To complete the blossom, combine the left and the right leg.
+        uf.union(v, base);
+        uf.union(w, base);
 
+        //Blossoms are efficiently stored in a UnionFind data structure uf. Ideally, uf.find(x) for some vertex x returns
+        //the base u of the blossom containing x. However, when uf uses rank compression, it cannot be guaranteed that the vertex
+        // returned is indeed the base of the blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to ensure
+        //that the predecessor of the blossom's representative is the predecessor of the actual base vertex.
         even[uf.find(base)] = even[base];
     }
 
@@ -302,38 +297,19 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * @param w    another endpoint of the blossom bridge
      * @param base the base of the blossom
      */
-    private int[] blossomSupports(int v, int w, int base) {
-        System.out.println("blossom supports: v: "+v+" w: "+w+" base: "+base);
-
-        /*int n = 0;
-        path[n++] = uf.find(v);
+    private void blossomSupports(int v, int w, int base) {
         Pair<Integer,Integer> bridge = new Pair<>(v,w);
-        while (path[n - 1] != base) {
-            int u = even[path[n - 1]];
-            path[n++] = u;
-            this.bridges.put(u, bridge);
-            // contracting the blossom allows us to continue searching from odd
-            // vertices (any odd vertices are now even - part of the blossom set)
-            queue.enqueue(u); //CHECK WHETHER U HAS ALREADY BEEN ADDED TO THE QUEUE?
-            path[n++] = uf.find(odd[u]);
-        }
+        v=uf.find(v);
+        int u=v;
+        while (v != base){
+            uf.union(v, u);
 
-        return Arrays.copyOf(path, n);*/
-
-        Pair<Integer,Integer> bridge = new Pair<>(v,w);
-        int u=uf.find(v);
-        while (u != base){
-            uf.union(base, u);
-
-            u = even[u]; //odd vertex
-            uf.union(base, u);
+            u = even[v]; //odd vertex
             this.bridges.put(u, bridge);
             queue.enqueue(u);
-            u = uf.find(odd[u]); //even vertex
+            uf.union(v, u);
+            v = uf.find(odd[u]); //even vertex
         }
-        System.out.println("uf: "+uf);
-
-        return null;
     }
 
     private int lowestCommonAncestor(int v, int w)
@@ -344,7 +320,10 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         // walk back along the trees filling up 'vAncestors' and 'wAncestors'
         // with the vertices in the tree -  vCurr and wCurr are the 'even' parents
         // from v/w along the tree
+        int counter=0;
         while (true) {
+            if(counter>vertices.size())
+                throw new RuntimeException("counter exceeded2");
 
             v = parent(vAncestors, v);
             w = parent(wAncestors, w);
@@ -357,7 +336,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             }
             // the current vertex in 'v' can be found in w's ancestors they must
             // share a root - we have found a blossom whose base is 'v'
-            if (wAncestors.get(v)) {
+            else if (wAncestors.get(v)) {
                 return v;
             }
 
@@ -366,33 +345,33 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             else if (vAncestors.get(w)) {
                 return w;
             }
+            counter++;
         }
     }
 
     /**
-     * Access the next ancestor in a tree of the forest. Note we go back two
-     * places at once as we only need check 'even' vertices.
+     * Compute the nearest even ancestor of even node v. If v is the root of a tree, then this method returns v itself.
      *
-     * @param ancestors temporary set which fills up the path we traversed
-     * @param curr      the current even vertex in the tree
-     * @return the next 'even' vertex
+     * @param ancestors temporary set which records
+     * @param v      even vertex
+     * @return the nearest even ancestor of v
      */
-    private int parent(BitSet ancestors, int curr) {
-        curr = uf.find(curr);
-        ancestors.set(curr);
-        int parent = uf.find(even[curr]);
-        if (parent == curr)
-            return curr; // root of tree
-        ancestors.set(parent);
+    private int parent(BitSet ancestors, int v) {
+        v = uf.find(v);
+        ancestors.set(v);
+        int parent = uf.find(even[v]);
+        if (parent == v)
+            return v; // root of tree
+        ancestors.set(parent); //NOT NEEDED? We do not need to track odd ancestors?
         return uf.find(odd[parent]);
     }
 
 
 
     /**
-     * Augment all ancestors in the tree of vertex 'v'.
+     * Construct a path from vertex v to the root of its tree, and use the resulting path to augment the matching.
      *
-     * @param v the leaf to augment from
+     * @param v starting vertex (leaf in the tree)
      */
     private void augment(int v) {
         int n = buildPath(path, 0, v, nil);
@@ -402,47 +381,50 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     }
 
     /**
-     * Builds the path backwards from the specified 'start' vertex until the
-     * 'goal'. If the path reaches a blossom then the path through the blossom
+     * Builds the path backwards from the specified 'start' vertex to the
+     * 'end' vertex. If the path reaches a blossom then the path through the blossom
      * is lifted to the original graph.
      *
      * @param path  path storage
      * @param i     offset (in path)
      * @param start start vertex
-     * @param goal  end vertex
-     * @return the number of items set to the path[].
+     * @param end  end vertex
+     * @return the total length of the path.
      */
-    private int buildPath(int[] path, int i, int start, int goal) {
+    private int buildPath(int[] path, int i, int start, int end) {
         while (true) {
 
-            // lift the path through the contracted blossom
+            // Lift the path through the blossom. The buildPath method always starts from an even vertex. Vertices which were originally odd become even
+            // when they are contracted into a blossom. If we start constructing the path from such an odd vertex, we must 'lift' the path through the blossom.
+            // To lift the path through the blossom, we have to walk from odd node u in the direction of the bridge, cross the bridge, and then
+            // continue in the direction of the tree root.
             while (odd[start] != nil) {
 
                 Pair<Integer,Integer> bridge = bridges.get(start);
 
-                // add to the path from the bridge down to where 'start'
-                // is - we need to reverse it as we travel 'up' the blossom
-                // and then...
+                //From the start vertex u, walk in the direction of the bridge (v,w). The first edge encountered
+                //on the path from u to v is always a matched edge. Notice that the path from u to v leads away from the root of the tree. Since we only store
+                // pointers in the direction of the root, we have to compute a path from v to u, and reverse the resulting path.
                 int j = buildPath(path, i, bridge.getFirst(), start);
                 reverse(path, i, j - 1);
                 i = j;
 
-                // ... we travel down the other side of the bridge
+                //walk from the other side of the bridge up in the direction of the root.
                 start = bridge.getSecond();
             }
-            path[i++] = start;
+            path[i++] = start; //even vertex
 
             // root of the tree
             if (matching.isExposed(start))
                 return i;
 
-            path[i++] = matching.other(start);
+            path[i++] = matching.opposite(start); //odd vertex
 
-            // end of recursive
-            if (path[i - 1] == goal)
+            // base case
+            if (path[i - 1] == end)
                 return i;
 
-            start = odd[path[i - 1]];
+            start = odd[path[i - 1]]; //even vertex
         }
     }
 
@@ -460,7 +442,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             if(matching.isExposed(vx))
                 continue;
             V v =vertices.get(vx);
-            V w = vertices.get(matching.other(vx));
+            V w = vertices.get(matching.opposite(vx));
             edges.add(graph.getEdge(v,w));
         }
 
@@ -477,8 +459,8 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * 2 * m(G) = min_{X} ( |V(G)| + |X| - o(G-X) ), where m(G) is the size of the matching, X a subset of vertices,
      * G-X the induced graph on vertex set V(G)\X, and o(G) the number of connected components of odd cardinality in graph G.<br>
      * Note: to compute this bound, we do not iterate over all possible subsets X (this would be too expensive). Instead, X is
-     * computed as a by-product of Edmonds algorithm. Consequently, the runtime of this method equals the time required to compute a single
-     * augmenting path in the graph.
+     * computed as a by-product of Edmonds algorithm. Consequently, the runtime of this method equals the time required to test for the
+     * existence of an augmenting path.
      * @param matching matching
      * @return true if the matching is maximum, false otherwise.
      */
@@ -546,7 +528,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         /**
          * For a given vertex v and matched edge (v,w), this function returns vertex w.
          */
-        int other(int v) {
+        int opposite(int v) {
             assert isMatched(v);
             return match[v];
         }
@@ -561,8 +543,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     }
 
     /**
-     * Efficient implementation of a fixed size queue for integers. Enough space is allocated for
-     * every vertex in the graph.
+     * Efficient implementation of a fixed size queue for integers.
      */
     private static final class FixedSizeQueue{
         private final int[] vs;
@@ -581,7 +562,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         /**
          * Add an element to the queue.
          *
-         * @param e integer
+         * @param e element
          */
         void enqueue(int e) {
             vs[n++] = e;
@@ -599,7 +580,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         /**
          * Check if the queue has any items.
          *
-         * @return the queue is empty
+         * @return true if the queue is empty
          */
         boolean empty() {
             return i == n;
@@ -619,7 +600,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
     }
 
-    /** Utility function to reverse a section of a fixed size array */
+    /** Utility function to reverse part of an array */
     static void reverse(int[] path, int i, int j) {
         while (i < j) {
             int tmp = path[i];

@@ -47,6 +47,20 @@ import java.util.stream.IntStream;
 public final class EdmondsMaxCardinalityMatchingTest
     extends TestCase
 {
+    public void testGraph15(){
+        //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{5,1}, {4,3}, {0,6}, {4,2}, {2,1}, {3,6}, {5,0}])
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7));
+
+        int[][] edges={{5,1}, {4,3}, {0,6}, {4,2}, {2,1}, {3,6}, {5,0}};
+        for(int[] edge : edges)
+            g.addEdge(edge[0], edge[1]);
+
+        // compute max match
+        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+        Matching<Integer, DefaultEdge> match = matcher.getMatching();
+    }
+
     public void testGraph14(){
         //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{2,0}, {2,6}, {4,6}, {4,3}, {6,7}, {3,6}, {5,0}, {2,5}, {3,7}, {2,4}])
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
