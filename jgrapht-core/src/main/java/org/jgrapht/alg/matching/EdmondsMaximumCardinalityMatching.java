@@ -17,12 +17,6 @@
  */
 package org.jgrapht.alg.matching;
 
-//TODO: Remove need to inverse paths
-//TODO: do not exhaustively iterate over all exposed nodes to find a max non-perfect matching. Instead, shrink the graph
-//TODO: track exposed nodes
-//TODO: remove unnecessary code
-//TODO: add comments to code and proper references
-
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
@@ -36,39 +30,52 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Maximum matching in general graphs using Edmond's Blossom Algorithm. This
- * implementation was adapted D Eppstein's python code (<a
- * href="http://www.ics.uci.edu/~eppstein/PADS/CardinalityMatching.py">src</a>)
- * which provides efficient tree traversal and handling of blossoms. The
- * implementation may be quite daunting as a general introduction to the ideas.
- * Personally I found <a href="http://www.keithschwarz.com/interesting/">Keith
- * Schwarz</a> version very informative when starting to understand the
- * workings. <p/>
+ * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in undirected graphs.
+ * A matching in a graph G(V,E) is a subset of edges M such that no two edges in M have a vertex in common. A matching
+ * has at most 1/2|V| edges. A node v in G is matched by matching M, if M contains an edge incident to v. A matching is perfect if all nodes are
+ * matched. By definition, a perfect matching consists of exactly 1/2|V| edges. This algorithm will return a perfect matching if one exists.
+ * If no perfect matching exists, then the largest (non-perfect) matching is returned instead. This algorithm does NOT compute a maximum weight matching.
+ * <p>
+ * To compute a maximum cardinality matching, at most n augmenting path computations are performed. Each augmenting path computation takes O(m alpha(m,n)) time,
+ * where alpha(m,n) is an inverse of the Ackerman function, n is the number of vertices, and m the number of edges. This results in a total runtime complexity of
+ * O(nm alpha(m,n)). In practise, the number of augmenting path computations performed is far smaller than n, since an efficient heuristic is used
+ * to compute a near-optimal initial solution. This implementation is highly efficient: a maximum matching in a graph of 2000 vertices and 1.5 million edges is
+ * calculated in a few milliseconds on a desktop computer.<br>
+ * The runtime complexity of this implementation could be improved to O(nm) when the UnionFind data structure used in this implementation is replaced by the linear-time
+ * set union data structure proposed in:
+ * Gabow, H.N., Tarjan, R.E. A linear-time algorithm for a special case of disjoint set union. Proc. Fifteenth Annual ACM Symposium on Theory of Computing, 1982, pp. 246-251.
  *
- * An asymptotically better algorithm is described by Micali and Vazirani (1980)
- * and is similar to bipartite matching (<a href="http://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm">Hopkroft-Karp</a>)
- * where by multiple augmenting paths are discovered at once. In general though
- * this version is very fast - particularly if given an existing matching to
- * start from. Even the very simple ArbitraryMatching eliminates many
- * loop iterations particularly at the start when all length 1 augmenting paths
- * are discovered.
+ * Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity
+ * of O(n^4). This implementation however follows more closely the description provided in Tarjan, R.E. Data Structures and Network Algorithms. Society for Industrial and Applied Mathematics, 1983, chapter 9.
+ * In addition, the following sources were used for the implementation:
+ *
+ * <ul>
+ *     <li><a
+ * href="https://github.com/johnmay/beam/blob/master/core/src/main/java/uk/ac/ebi/beam/MaximumMatching.java">Java implementation by John Mayfield</a></li>
+ *     <li><a href="http://www.keithschwarz.com/interesting/code/?dir=edmonds-matching">Java implementation by Keith Schwarz</a></li>
+ *     <li><a href="http://www.boost.org/doc/libs/1_38_0/libs/graph/doc/maximum_matching.html">C++ implementation Boost library</a></li>
+ *     <li>Cook, W.J., Cunningham, W.H., Pulleyblank, W.R., Schrijver, A. Combinatorial Optimization. Wiley 1997, chapter 5</li>
+ *     <li><a href="https://arxiv.org/pdf/1611.07541.pdf">Gabow, H.N. Data Structures for Weighted Matching and Extensions to b-matching and f-factors, 2016</a></li>
+ * </ul>
+ * <p>
+ * For future reference - A more efficient algorithm than the one implemented in this class exists:
+ * Micali, S., Vazirani, V. An O(sqrt(n)m) algorithm for finding maximum matching in general graphs. Proc. 21st Ann. Symp. on Foundations of Computer Science, IEEE, 1980, pp. 17–27.
+ * This is the most efficient algorithm known for computing maximum cardinality matchings in general graphs. More details on this algorithm can be found in:
+ * <ul>
+ *     <li><a href="http://research.microsoft.com/apps/video/dl.aspx?id=171055">Presentation from Vazirani 'Dispelling an Old Myth about an Ancient Algorithm'</a></li>
+ *     <li><a href="https://arxiv.org/abs/1210.4594">Vazirani, V. A Simplification of the MV Matching Algorithm and its Proof, 2013</a></li>
+ * </ul>
  *
  * @author Joris Kinable
- * @see <a href="http://en.wikipedia.org/wiki/Blossom_algorithm">Blossom
- *      algorithm, Wikipedia</a>
- * @see <a href="http://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm">Hopkroft-Karp,
- *      Wikipedia</a>
- * @see <a href="http://research.microsoft.com/apps/video/dl.aspx?id=171055">Presentation
- *      from Vazirani on his and Micali O(|E| * sqrt(|V|)) algorithm</a>
  */
-public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
+public class EdmondsMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<V, E> {
 
     public final boolean DEBUG=false;
 
     /* The graph we are matching on. */
     private final Graph<V,E> graph;
     /* (Heuristic) matching algorithm used to compute an initial feasible solution */
-    private MatchingAlgorithm<V,E> initializer;
+    private final MatchingAlgorithm<V,E> initializer;
 
     /* Ordered list of vertices */
     private List<V> vertices;
@@ -112,19 +119,18 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     /**
      * Constructs a new instance of the algorithm. {@link GreedyMaxCardinalityMatching} is used to quickly generate a
      * near optimal initial solution.
-     * @param graph graph
+     * @param graph undirected graph (graph does not have to be simple)
      */
-    public EdmondsMaxCardinalityMatching(Graph<V,E> graph) {
-//        this(graph, null);
-        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
+    public EdmondsMaximumCardinalityMatching(Graph<V,E> graph) {
+        this(graph, new GreedyMaxCardinalityMatching<>(graph, false));
     }
 
     /**
      * Constructs a new instance of the algorithm.
-     * @param graph graph
+     * @param graph undirected graph (graph does not have to be simple)
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal) initial feasible solution.
      */
-    public EdmondsMaxCardinalityMatching(Graph<V,E> graph, MatchingAlgorithm<V,E> initializer) {
+    public EdmondsMaximumCardinalityMatching(Graph<V,E> graph, MatchingAlgorithm<V,E> initializer) {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer=initializer;
     }
@@ -149,14 +155,14 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         this.queue = new FixedSizeQueue(vertices.size());
         this.uf = new UnionFind<>(vertexIndexMap.values());
 
-        // tmp storage of paths in the algorithm
+        // temp storage of paths in the algorithm
         path = new int[vertices.size()];
         vAncestors = new BitSet(vertices.size());
         wAncestors = new BitSet(vertices.size());
     }
 
     /**
-     * Calculates an initial feasible.
+     * Calculates an initial feasible matching.
      * @param initializer algorithm used to compute the initial matching
      */
     private void warmStart(MatchingAlgorithm<V,E> initializer){
@@ -171,11 +177,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
 
     /**
-     * Find an augmenting path an alternate it's matching. If an augmenting path
-     * was found then the search must be restarted. If a blossom was detected
-     * the blossom is contracted and the search continues.
+     * Search for an augmenting path.
      *
-     * @return an augmenting path was found
+     * @return true if an augmenting path was found, false otherwise
      */
     private boolean augment() {
 
@@ -194,16 +198,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
             even[root] = root;
             queue.enqueue(root);
 
-//            thisTree=new HashSet<>();
-//            thisTree.add(root);
-
             if(DEBUG) System.out.println("\ngrowing path from "+root);
 
-            // queue every isExposed vertex and place in the
-            // even level (level = 0)
-
-
-            // for each 'free' vertex, start a bfs search
+            // for each exposed vertex, start a bfs search
             while (!queue.empty()) {
                 int v = queue.poll(); //Even vertex
 
@@ -212,23 +209,19 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
                     if(DEBUG) System.out.println("checking edge ("+v+","+w+")");
 
-                    // the endpoints of the edge are both at even levels in the
-                    // forest - this means it is either an augmenting path or
-                    // a blossom
+                    // vertex w is even: we may have encountered a blossom.
                     if (even[uf.find(w)] != nil) { //w is an even vertex
                         // if v and w belong to the same blossom, the edge has been shrunken away and we can ignore it.
-                        // if not, we found a new blossom.
-                        if (!uf.connected(v, w)) {
-//                            if(!thisTree.contains(w)) {
-//                                throw new RuntimeException("trying to create blossom with even node from other tree. This tree: "+thisTree);
-//                            }
+                        // if not, we found a new blossom. We do not need to check whether v and w belong to the same tree since
+                        // each tree is fully grown before we continue growing a new tree. Consequently, vertex w can only belong
+                        // to the same tree as v.
+                        if (!uf.connected(v, w))
                             blossom(v, w); //Create a new blossom using bridge edge (v,w)
-                        }
                     }
 
-                    // add the edge to the forest if is not already and extend
-                    // the tree with this isMatched edge
-                    else if (odd[w] == nil) { //w is an odd vertex or is an unreached vertex
+                    // vertex w is either odd or unreached. If it is unreached, we have found an augmenting path. If it is odd,
+                    // we can grow the tree.
+                    else if (odd[w] == nil) { //w is odd or unreached
 
                         if(matching.isExposed(w)){ //w is unreached: we found an augmenting path
                             if(DEBUG) System.out.println("found augmenting path after adding edge ("+v+","+w+")");
@@ -237,16 +230,14 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
                             matching.match(v, w);
                             return true;
                         }
+                        //w is an odd vertex: grow the tree
                         odd[w] = v;
-                        int u = matching.opposite(w);
+                        int u = matching.opposite(w); //even vertex
 
                         if(DEBUG) System.out.println("growing tree ("+v+","+w+","+u+")");
 
                         even[u] = w;
-//                        if(thisTree.contains(u))
-//                            throw new RuntimeException("adding even node again 1");
-                        queue.enqueue(u); //CHECK WHETHER u has been added to the queue already?
-//                        thisTree.add(u);
+                        queue.enqueue(u); //continue growing the tree from u
                     }
                 }
             }
@@ -268,7 +259,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         //Compute the base of the blossom. Let p1, p2 be the paths from the root of the tree to v resp. w. The base vertex
         //is the last vertex p1 and p2 have in common. In a blossom, the base vertex is unique in the sense that it is
         //the only vertex incident to 2 unmatched edges.
-        int base=lowestCommonAncestor(v, w);
+        int base=nearestCommonAncestor(v, w);
 
         if(DEBUG) System.out.println("Found blossom. base: "+base+" bridge: ("+v+","+w+")");
         //Compute resp the left leg (v to base) and right leg (w to base) of the blossom.
@@ -281,17 +272,17 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
 
         //Blossoms are efficiently stored in a UnionFind data structure uf. Ideally, uf.find(x) for some vertex x returns
         //the base u of the blossom containing x. However, when uf uses rank compression, it cannot be guaranteed that the vertex
-        // returned is indeed the base of the blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to ensure
+        //returned is indeed the base of the blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to ensure
         //that the predecessor of the blossom's representative is the predecessor of the actual base vertex.
         even[uf.find(base)] = even[base];
     }
 
     /**
-     * Creates the blossom 'supports' for the specified blossom 'bridge' edge
-     * (v, w). We travel down each side to the base of the blossom ('base')
-     * collapsing vertices and point any 'odd' vertices to the correct 'bridge'
-     * edge. We do this by indexing the birdie to each vertex in the 'bridges'
-     * map.
+     * This method creates one side of the blossom: the path from vertex v to the base of the blossom.
+     * The vertices encountered on this path are grouped together (union). The odd vertices are added to the
+     * processing queue (odd vertices in a blossom become even) and a pointer to the bridge (v,w) is stored for each odd vertex.
+     * Notice the orientation of the bridge: the first vertex of the bridge returned by bridge.get(x) is always on the same side of the
+     * blossom as x.
      *
      * @param v    an endpoint of the blossom bridge
      * @param w    another endpoint of the blossom bridge
@@ -303,7 +294,6 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         int u=v;
         while (v != base){
             uf.union(v, u);
-
             u = even[v]; //odd vertex
             this.bridges.put(u, bridge);
             queue.enqueue(u);
@@ -312,57 +302,49 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
     }
 
-    private int lowestCommonAncestor(int v, int w)
+    /**
+     * Computes the base of the blossom formed by bridge edge (v,w). The base vertex is the nearest common ancestor of v and w.
+     * @param v one side of the bridge
+     * @param w other side of the bridge
+     * @return base of the blossom
+     */
+    private int nearestCommonAncestor(int v, int w)
     {
         vAncestors.clear();
+        vAncestors.set(uf.find(v));
         wAncestors.clear();
+        wAncestors.set(uf.find(w));
 
-        // walk back along the trees filling up 'vAncestors' and 'wAncestors'
-        // with the vertices in the tree -  vCurr and wCurr are the 'even' parents
-        // from v/w along the tree
-        int counter=0;
+        // Walk back from v and w in the direction of the root of the tree, until their paths intersect.
         while (true) {
-            if(counter>vertices.size())
-                throw new RuntimeException("counter exceeded2");
 
-            v = parent(vAncestors, v);
-            w = parent(wAncestors, w);
+            v = parent(v);
+            vAncestors.set(v);
+            w = parent(w);
+            wAncestors.set(w);
 
-            // v and w lead to the same root - we have found a blossom. We
-            // travelled all the way down the tree thus vand w) are
-            // the base of the blossom
-            if (v == w) {
+            // vertex v is an ancestor of w, so v much be the base of the blossom
+            if (wAncestors.get(v)) {
                 return v;
             }
-            // the current vertex in 'v' can be found in w's ancestors they must
-            // share a root - we have found a blossom whose base is 'v'
-            else if (wAncestors.get(v)) {
-                return v;
-            }
-
-            // the current vertex in 'w' can be found in v's ancestors they must
-            // share a root, we have found a blossom whose base is 'w'
+            // vertex w is an ancestor of v, so w much be the base of the blossom
             else if (vAncestors.get(w)) {
                 return w;
             }
-            counter++;
         }
     }
 
     /**
      * Compute the nearest even ancestor of even node v. If v is the root of a tree, then this method returns v itself.
      *
-     * @param ancestors temporary set which records
      * @param v      even vertex
      * @return the nearest even ancestor of v
      */
-    private int parent(BitSet ancestors, int v) {
-        v = uf.find(v);
-        ancestors.set(v);
-        int parent = uf.find(even[v]);
+    private int parent(int v) {
+        v = uf.find(v); //even vertex
+        int parent = uf.find(even[v]); //odd vertex, or v if v is the root of its tree
         if (parent == v)
             return v; // root of tree
-        ancestors.set(parent); //NOT NEEDED? We do not need to track odd ancestors?
         return uf.find(odd[parent]);
     }
 
@@ -381,8 +363,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     }
 
     /**
-     * Builds the path backwards from the specified 'start' vertex to the
-     * 'end' vertex. If the path reaches a blossom then the path through the blossom
+     * Builds the path backwards from the specified start vertex to the end vertex. If the path reaches a blossom then the path through the blossom
      * is lifted to the original graph.
      *
      * @param path  path storage
@@ -428,6 +409,11 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
         }
     }
 
+    /**
+     * Returns a matching of maximum cardinality. Each time this method is invoked, the matching is computed from scratch.
+     * Consequently, it is possible to make changes to the graph and to re-invoke this method on the altered graph.
+     * @return a matching of maximum cardinality.
+     */
     @Override
     public Matching<V, E> getMatching() {
         this.init();
@@ -459,8 +445,9 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
      * 2 * m(G) = min_{X} ( |V(G)| + |X| - o(G-X) ), where m(G) is the size of the matching, X a subset of vertices,
      * G-X the induced graph on vertex set V(G)\X, and o(G) the number of connected components of odd cardinality in graph G.<br>
      * Note: to compute this bound, we do not iterate over all possible subsets X (this would be too expensive). Instead, X is
-     * computed as a by-product of Edmonds algorithm. Consequently, the runtime of this method equals the time required to test for the
-     * existence of an augmenting path.
+     * computed as a by-product of Edmonds' algorithm. Consequently, the runtime of this method equals the time required to test for the
+     * existence of a single augmenting path.<br>
+     * This method does NOT check whether the matching is valid.
      * @param matching matching
      * @return true if the matching is maximum, false otherwise.
      */
@@ -601,7 +588,7 @@ public class EdmondsMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V, 
     }
 
     /** Utility function to reverse part of an array */
-    static void reverse(int[] path, int i, int j) {
+    private void reverse(int[] path, int i, int j) {
         while (i < j) {
             int tmp = path[i];
             path[i] = path[j];

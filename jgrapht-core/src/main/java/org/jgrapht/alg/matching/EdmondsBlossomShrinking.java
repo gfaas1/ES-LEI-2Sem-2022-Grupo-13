@@ -32,7 +32,7 @@ import org.jgrapht.util.*;
  *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
- * @deprecated In favor of {@link org.jgrapht.alg.matching.EdmondsMaxCardinalityMatching}.
+ * @deprecated In favor of the more efficient {@link EdmondsMaximumCardinalityMatching} implementation.
  */
 @Deprecated
 public class EdmondsBlossomShrinking<V, E>

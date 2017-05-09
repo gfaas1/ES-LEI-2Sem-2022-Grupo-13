@@ -107,7 +107,7 @@ public class MaxCardinalityMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsMaxCardinalityMatching<>(graph);
+            return new EdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 

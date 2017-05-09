@@ -447,7 +447,7 @@ g.addEdge(5,8);
         DefaultEdge e1112 = g.addEdge(vs[11], vs[12]);
 
         MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinkingImproved<>(g);
-//        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatching<>(g);
+//        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
 
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
 
@@ -477,7 +477,7 @@ g.addEdge(5,8);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
 //                    assertTrue(matcher.isMaximumMatching(m1));
 
-                    MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<Integer, DefaultEdge>(graph);
+                    MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<Integer, DefaultEdge>(graph);
                     Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
                     if (m1.getEdges().size() != m2.getEdges().size())
                         throw new RuntimeException("weird, weights don't match");
@@ -505,7 +505,7 @@ g.addEdge(5,8);
             this.verifyMatching(graph, m, m.getEdges().size());
 
 
-            MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<Integer, DefaultEdge>(graph);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<Integer, DefaultEdge>(graph);
             Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
             assertEquals(m.getEdges().size(), m2.getEdges().size());
 
@@ -634,7 +634,7 @@ g.addEdge(5,8);
 //        Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 //        generator.generateGraph(graph, vertexFactory, null);
 //        MatchingAlgorithm<Integer, DefaultEdge> matcher1 = new EdmondsBlossomShrinkingImproved<>(graph);
-//        MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaxCardinalityMatching<>(graph);
+//        MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<>(graph);
 //        Matching<Integer, DefaultEdge> m1=matcher1.getMatching();
 //        Matching<Integer, DefaultEdge> m2=matcher2.getMatching();
 //
