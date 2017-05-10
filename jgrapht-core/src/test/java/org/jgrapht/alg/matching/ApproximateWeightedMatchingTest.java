@@ -331,6 +331,23 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    public void testSelfLoop(){
+        WeightedPseudograph<Integer, DefaultWeightedEdge> g =
+                new WeightedPseudograph<>(DefaultWeightedEdge.class);
+
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3));
+        Graphs.addEdge(g, 0, 1, 4.0);
+        Graphs.addEdge(g, 1, 2, 1.0);
+        Graphs.addEdge(g, 2, 3, 8.0);
+        Graphs.addEdge(g, 3, 0, 3.0);
+        Graphs.addEdge(g, 3, 3, 100.0);
+
+        MatchingAlgorithm<Integer, DefaultWeightedEdge> mm = getApproximationAlgorithm(g);
+        Matching<Integer, DefaultWeightedEdge> m = mm.getMatching();
+
+        assertTrue(isMatching(g, m));
+    }
+
     public void testBnGraph()
     {
         // create graphs which have a perfect matching
@@ -379,7 +396,7 @@ public abstract class ApproximateWeightedMatchingTest
             }
             matched.add(target);
         }
-        return true;
+        return matched.size() == m.getEdges().size() * 2;
     }
 
 }

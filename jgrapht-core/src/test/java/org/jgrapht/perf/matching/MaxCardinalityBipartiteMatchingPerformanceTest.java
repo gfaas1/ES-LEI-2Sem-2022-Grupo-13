@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,9 +20,9 @@ package org.jgrapht.perf.matching;
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.matching.*;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
+import org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching;
+import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.IntegerVertexFactory;
 import org.jgrapht.graph.Pseudograph;
@@ -32,14 +32,15 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A small benchmark comparing matching algorithms.
+ * A small benchmark comparing matching algorithms for bipartite graphs.
  * 
- * @author Dimitrios Michail
+ * @author Joris Kinable
  */
-public class MaxCardinalityMatchingPerformanceTest
+public class MaxCardinalityBipartiteMatchingPerformanceTest
     extends TestCase
 {
 
@@ -51,65 +52,57 @@ public class MaxCardinalityMatchingPerformanceTest
     {
         public static final long SEED = 13l;
 
-        private GraphGenerator<Integer, DefaultEdge, Integer> generator = null;
+        private GnpRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator = null;
         private Graph<Integer, DefaultEdge> graph;
+        private Collection<Integer> firstPartition;
+        private Collection<Integer> secondPartition;
 
         abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver(
-            Graph<Integer, DefaultEdge> graph);
+            Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition);
 
         @Setup(Level.Iteration)
         public void setup()
         {
             if (generator == null) {
                 // lazily construct generator
-                generator = new GnpRandomGraphGenerator<>(
-                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
+                generator = new GnpRandomBipartiteGraphGenerator<>(
+                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_VERTICES_COUNT/2, PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
             graph = new Pseudograph<>(DefaultEdge.class);
-
             generator.generateGraph(graph, new IntegerVertexFactory(0), null);
+            firstPartition=generator.getFirstPartition();
+            secondPartition=generator.getSecondPartition();
         }
 
         @Benchmark
         public void run()
         {
             long time=System.currentTimeMillis();
-            MatchingAlgorithm.Matching m =createSolver(graph).getMatching();
+            MatchingAlgorithm.Matching m =createSolver(graph, firstPartition, secondPartition).getMatching();
             time=System.currentTimeMillis()-time;
             System.out.println("time: "+time+" obj :"+m.getEdges().size()+" vertices: "+graph.vertexSet().size()+" edges: "+graph.edgeSet().size());
         }
     }
 
 
-    public static class EdmondsBlossomShrinkingBenchmark
-        extends RandomGraphBenchmarkBase
-    {
-        @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
-        {
-            return new EdmondsBlossomShrinking<>(graph);
-        }
-    }
-
-    public static class EdmondsMaxCardinalityMatchingBenchmark
+    public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark
             extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
         {
             return new EdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 
-    public static class EdmondsMaxCardinalityMatchingBaseLineComparisonBenchmark
+    public static class HopcroftKarpBipartiteMatchingBenchmark
             extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
         {
-            //return new EdmondsMaxCardinalityMatchingBaseLineComparison<>(graph, new GreedyMaximumCardinalityMatching<>(graph, false));
-            return new EdmondsMaxCardinalityMatchingBaseLineComparison<>(graph, null);
+            return new HopcroftKarpBipartiteMatching<>(graph, firstPartition, secondPartition);
         }
     }
 
@@ -117,14 +110,10 @@ public class MaxCardinalityMatchingPerformanceTest
         throws RunnerException
     {
         Options opt = new OptionsBuilder()
-//                .include(
-//                        ".*" + EdmondsBlossomShrinkingBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsMaxCardinalityMatchingBenchmark.class.getSimpleName() + ".*")
+                    ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsMaxCardinalityMatchingBaseLineComparisonBenchmark.class.getSimpleName() + ".*")
-//            .include(
-//                    ".*" + EdmondsBlossomShrinkingWarmstartBenchmark.class.getSimpleName() + ".*")
+                ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

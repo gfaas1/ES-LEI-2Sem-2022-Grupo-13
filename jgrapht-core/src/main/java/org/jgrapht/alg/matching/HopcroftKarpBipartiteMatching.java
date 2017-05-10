@@ -23,14 +23,14 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 
 /**
- * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum matching in
- * an undirected simple bipartite graph. The algorithm runs in O(|E|*√|V|) time. The original
+ * This class is an implementation of the Hopcroft-Karp algorithm which finds a maximum cardinality matching in
+ * an undirected simple bipartite graph. To compute a maximum cardinality matching in general (non-bipartite) graphs,
+ * use {@link EdmondsMaximumCardinalityMatching} instead.
+ * The algorithm runs in O(|E|*√|V|) time. The original
  * algorithm is described in: Hopcroft, John E.; Karp, Richard M. (1973), "An n5/2 algorithm for
  * maximum matchings in bipartite graphs", SIAM Journal on Computing 2 (4): 225–231,
  * doi:10.1137/0202019 A coarse overview of the algorithm is given in:
- * http://en.wikipedia.org/wiki/Hopcroft-Karp_algorithm Note: the behavior of this class is
- * undefined when the input isn't a bipartite graph, i.e. when there are edges within a single
- * partition!
+ * http://en.wikipedia.org/wiki/Hopcroft-Karp_algorithm
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,8 +41,8 @@ public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
-    private Set<? extends V> partition1; // Partitions of bipartite graph
-    private Set<? extends V> partition2;
+    private Collection<? extends V> partition1; // Partitions of bipartite graph
+    private Collection<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
 
     private Set<V> unmatchedVertices1; // Set which contains the isExposed
@@ -57,7 +57,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      * @param partition1 the first partition of the vertex set
      * @param partition2 the second partition of the vertex set
      */
-    public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
+    public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Collection<V> partition1, Collection<V> partition2)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = partition1;
@@ -151,7 +151,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      * newly matched vertices. This method updates the edges which are part of the existing matching
      * with the new augmenting path. As a result, the size of the matching increases with 1.
      *
-     * @param augmentingPath
+     * @param augmentingPath augmenting path
      */
     private void symmetricDifference(LinkedList<V> augmentingPath)
     {

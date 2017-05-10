@@ -48,6 +48,9 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
     private final int n2;
     private final int m;
 
+    private Map<Integer, V> partitionA;
+    private Map<Integer, V> partitionB;
+
     /**
      * Create a new random bipartite graph generator. The generator uses the G(n, m) model when n =
      * n1 + n2 and the bipartite graph has one partition with size n1 and one partition with size
@@ -125,14 +128,14 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
 
-        Map<Integer, V> partitionA = new HashMap<>(n1);
+        partitionA = new HashMap<>(n1);
         for (int i = 0; i < n1; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
             partitionA.put(i, v);
         }
 
-        Map<Integer, V> partitionB = new HashMap<>(n2);
+        partitionB = new HashMap<>(n2);
         for (int i = 0; i < n2; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
@@ -192,6 +195,22 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
             }
         }
 
+    }
+
+    /**
+     * Returns the first partition of vertices in the bipartite graph.
+     * @return one partition of the bipartite graph
+     */
+    public Collection<V> getFirstPartition(){
+        return partitionA.values();
+    }
+
+    /**
+     * Returns the second partitions of vertices in the bipartite graph.
+     * @return one partition of the bipartite graph
+     */
+    public Collection<V> getSecondPartition(){
+        return partitionB.values();
     }
 
 }

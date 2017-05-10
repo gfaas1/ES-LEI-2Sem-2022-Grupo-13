@@ -25,7 +25,7 @@ import org.jgrapht.alg.util.*;
 
 /**
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
- * is a 1/2-approximation algorithm and runs in O(n + m log n) where n is the number of vertices and
+ * is a 1/2-approximation algorithm and runs in O(m + m log n) where n is the number of vertices and
  * m is the number of edges of the graph. This implementation accepts directed and undirected graphs
  * which may contain self-loops and multiple edges. There is no assumption on the edge weights, i.e.
  * they can also be negative or zero.
@@ -98,8 +98,12 @@ public class GreedyWeightedMatching<V, E>
         // (the lambda uses e1 and e2 in the reverse order on purpose)
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
         Collections.sort(
-            allEdges,
-            (e1, e2) -> comparator.compare(graph.getEdgeWeight(e2), graph.getEdgeWeight(e1)));
+                allEdges,
+                (e1, e2) -> {
+                    double degreeE1=graph.degreeOf(graph.getEdgeSource(e1))+graph.degreeOf(graph.getEdgeTarget(e1));
+                    double degreeE2=graph.degreeOf(graph.getEdgeSource(e2))+graph.degreeOf(graph.getEdgeTarget(e2));
+                    return comparator.compare(graph.getEdgeWeight(e2)/degreeE2, graph.getEdgeWeight(e1)/degreeE1);
+                });
 
         double matchingWeight = 0d;
         Set<E> matching = new HashSet<>();

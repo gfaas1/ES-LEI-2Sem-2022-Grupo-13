@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
  * has at most 1/2|V| edges. A node v in G is matched by matching M if M contains an edge incident to v. A matching is perfect if all nodes are
  * matched. By definition, a perfect matching consists of exactly 1/2|V| edges. This algorithm will return a perfect matching if one exists.
  * If no perfect matching exists, then the largest (non-perfect) matching is returned instead. This algorithm does NOT compute a maximum weight matching.
+ * In the special case that the input graph is bipartite, consider using {@link HopcroftKarpBipartiteMatching} instead.
  * <p>
  * To compute a maximum cardinality matching, at most n augmenting path computations are performed. Each augmenting path computation takes O(m alpha(m,n)) time,
  * where alpha(m,n) is an inverse of the Ackerman function, n is the number of vertices, and m the number of edges. This results in a total runtime complexity of

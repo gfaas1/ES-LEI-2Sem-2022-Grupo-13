@@ -26,15 +26,15 @@ import java.util.*;
 
 /**
  * A simple class which computes a random, maximum cardinality matching. The algorithm can run in two modes: sorted or
- * not sorted.
- * When not sorted, the matching is obtained by iterating through the edges and adding an edge if it doesn't conflict with the edges
+ * unsorted.
+ * When unsorted, the matching is obtained by iterating through the edges and adding an edge if it doesn't conflict with the edges
  * already in the matching. When sorted, the edges are first sorted by the sum of degrees of their endpoints. After that, the algorithm
  * proceeds in the same manner. Running this algorithm in sorted mode can sometimes produce better results, albeit at the cost of some
  * additional computational overhead.
  * <p>
  * Independent of the mode, the resulting matching is maximal, and is therefore guaranteed to contain at least half of the edges
  * that a maximum matching has (1/2 approximation).
- * Runtime complexity: O(m) when the edges are not sorted, O(m log n) otherwise, where n is the number of vertices,
+ * Runtime complexity: O(m) when the edges are not sorted, O(m+m log n) otherwise, where n is the number of vertices,
  * and m the number of edges.
  *
  *
@@ -75,7 +75,7 @@ public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<
             for(E e : allEdges){
                 V v =graph.getEdgeSource(e);
                 V w = graph.getEdgeTarget(e);
-                if(!matched.contains(v) && !matched.contains(w)){
+                if(v != w && !matched.contains(v) && !matched.contains(w)){
                     edges.add(e);
                     matched.add(v);
                     matched.add(w);
@@ -89,7 +89,7 @@ public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<
 
                 for (E e : graph.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(graph, e, v);
-                    if (!matched.contains(w)) {
+                    if (v != w && !matched.contains(w)) {
                         edges.add(e);
                         matched.add(v);
                         matched.add(w);

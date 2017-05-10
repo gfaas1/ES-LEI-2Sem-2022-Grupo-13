@@ -129,15 +129,6 @@ public class UnionFind<T>
             return;
         }
 
-        //TEMP: tempory disable ranking. this guarantees that after the union, the representative of the resulting set is find(element1).
-//        if(1==1){
-//            parentMap.put(parent2, parent1);
-//            count--;
-//            return;
-//        }
-
-        //END TEMP
-
         int rank1 = rankMap.get(parent1);
         int rank2 = rankMap.get(parent2);
         if (rank1 > rank2) {
@@ -190,7 +181,7 @@ public class UnionFind<T>
 
     /**
      * Returns a string representation of this data structure. Each component is represented as {v:v_1,v_2,v_3,...v_n}, where
-     * v is the representative element of the set.
+     * v is the representative of the set.
      * @return string representation of this data structure
      */
     public String toString(){

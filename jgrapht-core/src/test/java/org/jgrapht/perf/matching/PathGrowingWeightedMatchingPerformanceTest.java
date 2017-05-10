@@ -114,13 +114,13 @@ public class PathGrowingWeightedMatchingPerformanceTest
         }
     }
 
-    public static class EdmondsBlossomShrinkingRandomGraphBenchmark
+    public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark
         extends RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new EdmondsBlossomShrinking<>(graph);
+            return new EdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 
@@ -135,7 +135,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     .getSimpleName() + ".*")
             .include(".*" + GreedyWeightedMatchingRandomGraphBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsBlossomShrinkingRandomGraphBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaximumCardinalityMatchingRandomGraphBenchmark.class.getSimpleName() + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

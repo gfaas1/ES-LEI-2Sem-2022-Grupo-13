@@ -22,6 +22,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
+import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.*;
@@ -214,7 +215,31 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(matcher.getMatching()));
     }
 
-    public void testRandomGraphs(){
+    public void testRandomBipartiteGraphs(){
+        Random random=new Random(1);
+        int vertices=100;
+
+        for(int k=0; k<100; k++) {
+            int edges=random.nextInt(maxEdges(vertices)/2);
+            GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator = new GnmRandomBipartiteGraphGenerator<>(vertices, vertices/2, edges, 0);
+            IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+            generator.generateGraph(graph, vertexFactory, null);
+
+            EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher1 = new EdmondsMaximumCardinalityMatching<>(graph);
+            Matching<Integer, DefaultEdge> m1 = matcher1.getMatching();
+            assertTrue(matcher1.isMaximumMatching(m1));
+            this.verifyMatching(graph, m1, m1.getEdges().size());
+
+            HopcroftKarpBipartiteMatching<Integer, DefaultEdge> matcher2 = new HopcroftKarpBipartiteMatching<>(graph, generator.getFirstPartition(), generator.getSecondPartition());
+            Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
+
+            assertEquals(m1.getEdges().size(), m2.getEdges().size());
+        }
+    }
+
+    public void testRandomGraphsLarge(){
         Random random=new Random(1);
         int vertices=100;
 
@@ -360,6 +385,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         }
         assertEquals(m.getWeight(), weight, 0.0000001);
         assertEquals(cardinality, m.getEdges().size());
+        assertEquals(m.getEdges().size()*2,matched.size()); //Ensure that there are no self-loops
 
         EdmondsMaximumCardinalityMatching<V, E> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         assertTrue(matcher.isMaximumMatching(m));
