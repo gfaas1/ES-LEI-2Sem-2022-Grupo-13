@@ -466,7 +466,7 @@ public class VertexCoverTest
     protected boolean isCover(Graph<Integer, DefaultEdge> g, VertexCover<Integer> vertexCover)
     {
         Set<DefaultEdge> uncoveredEdges = new HashSet<>(g.edgeSet());
-        for (Integer v : vertexCover.getVertices())
+        for (Integer v : vertexCover)
             uncoveredEdges.removeAll(g.edgesOf(v));
 
         return uncoveredEdges.isEmpty();

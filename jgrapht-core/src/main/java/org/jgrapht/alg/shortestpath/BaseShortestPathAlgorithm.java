@@ -105,9 +105,7 @@ abstract class BaseShortestPathAlgorithm<V, E>
     protected final GraphPath<V, E> createEmptyPath(V source, V sink)
     {
         if (source.equals(sink)) {
-            return new GraphWalk<>(
-                graph, source, sink, Collections.singletonList(source), Collections.emptyList(),
-                0d);
+            return GraphWalk.singletonWalk(graph, source, 0d);
         } else {
             return null;
         }

@@ -66,7 +66,7 @@ public interface MatchingAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface Matching<V, E>
+    interface Matching<V, E> extends Iterable<E>
     {
         /**
          * Returns the graph over which this matching is defined.
@@ -104,8 +104,17 @@ public interface MatchingAlgorithm<V, E>
          * @return true if the matching is perfect. By definition, a perfect matching consists of exactly 1/2|V| edges,
          * and the number of vertices in the graph must be even.
          */
-        default boolean isPerfect(){
-            return getEdges().size()==getGraph().vertexSet().size()/2.0;
+        default boolean isPerfect() {
+            return getEdges().size() == getGraph().vertexSet().size() / 2.0;
+        }
+
+       /**
+        * Returns an iterator over the edges in the matching.
+        * @return iterator over the edges in the matching.
+        */
+        @Override
+        default Iterator<E> iterator(){
+            return getEdges().iterator();
         }
     }
 
