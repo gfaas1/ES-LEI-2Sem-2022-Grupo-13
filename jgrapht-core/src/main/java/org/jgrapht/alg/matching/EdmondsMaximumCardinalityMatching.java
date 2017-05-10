@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in undirected graphs.
  * A matching in a graph G(V,E) is a subset of edges M such that no two edges in M have a vertex in common. A matching
- * has at most 1/2|V| edges. A node v in G is matched by matching M, if M contains an edge incident to v. A matching is perfect if all nodes are
+ * has at most 1/2|V| edges. A node v in G is matched by matching M if M contains an edge incident to v. A matching is perfect if all nodes are
  * matched. By definition, a perfect matching consists of exactly 1/2|V| edges. This algorithm will return a perfect matching if one exists.
  * If no perfect matching exists, then the largest (non-perfect) matching is returned instead. This algorithm does NOT compute a maximum weight matching.
  * <p>
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * The runtime complexity of this implementation could be improved to O(nm) when the UnionFind data structure used in this implementation is replaced by the linear-time
  * set union data structure proposed in:
  * Gabow, H.N., Tarjan, R.E. A linear-time algorithm for a special case of disjoint set union. Proc. Fifteenth Annual ACM Symposium on Theory of Computing, 1982, pp. 246-251.
- *
+ * <p>
  * Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity
  * of O(n^4). This implementation however follows more closely the description provided in Tarjan, R.E. Data Structures and Network Algorithms. Society for Industrial and Applied Mathematics, 1983, chapter 9.
  * In addition, the following sources were used for the implementation:
@@ -117,12 +117,12 @@ public class EdmondsMaximumCardinalityMatching<V,E> implements MatchingAlgorithm
 
 
     /**
-     * Constructs a new instance of the algorithm. {@link GreedyMaxCardinalityMatching} is used to quickly generate a
+     * Constructs a new instance of the algorithm. {@link GreedyMaximumCardinalityMatching} is used to quickly generate a
      * near optimal initial solution.
      * @param graph undirected graph (graph does not have to be simple)
      */
     public EdmondsMaximumCardinalityMatching(Graph<V,E> graph) {
-        this(graph, new GreedyMaxCardinalityMatching<>(graph, false));
+        this(graph, new GreedyMaximumCardinalityMatching<>(graph, false));
     }
 
     /**
@@ -189,8 +189,6 @@ public class EdmondsMaximumCardinalityMatching<V,E> implements MatchingAlgorithm
         uf.reset();
         bridges.clear();
         queue.clear();
-
-
 
         for (int root = 0; root < vertices.size(); root++) {
             if(matching.isMatched(root)) //Only grow trees from exposed nodes
@@ -262,11 +260,11 @@ public class EdmondsMaximumCardinalityMatching<V,E> implements MatchingAlgorithm
         int base=nearestCommonAncestor(v, w);
 
         if(DEBUG) System.out.println("Found blossom. base: "+base+" bridge: ("+v+","+w+")");
-        //Compute resp the left leg (v to base) and right leg (w to base) of the blossom.
+        //Compute resp the left side (v to base) and right side (w to base) of the blossom.
         blossomSupports(v, w, base);
         blossomSupports(w, v, base);
 
-        //To complete the blossom, combine the left and the right leg.
+        //To complete the blossom, combine the left and the right sides.
         uf.union(v, base);
         uf.union(w, base);
 
@@ -479,8 +477,6 @@ public class EdmondsMaximumCardinalityMatching<V,E> implements MatchingAlgorithm
         Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
         List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
         long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
-
-//        System.out.println("matching size: "+matching.getEdges().size()+" tutte: "+((graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0));
 
         return matching.getEdges().size() == (graph.vertexSet().size()+oddVertices.size()-nrOddCardinalityComponents)/2.0;
     }

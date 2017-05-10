@@ -30,10 +30,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Tests for GreedyMaxCardinalityMatching
+ * Tests for GreedyMaximumCardinalityMatching
  * @author Joris Kinable
  */
-public class GreedyMaxCardinalityMatchingTest extends TestCase{
+public class GreedyMaximumCardinalityMatchingTest extends TestCase{
 
 
     /**
@@ -47,7 +47,7 @@ public class GreedyMaxCardinalityMatchingTest extends TestCase{
 
         for(int i=0; i<100; i++){
             generator.generateGraph(graph, vertexFactory, null);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaxCardinalityMatching<>(graph, false);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaximumCardinalityMatching<>(graph, false);
             MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
 
             Set<Integer> matched = new HashSet<>();
@@ -78,7 +78,7 @@ public class GreedyMaxCardinalityMatchingTest extends TestCase{
 
         for(int i=0; i<1; i++){
             generator.generateGraph(graph, vertexFactory, null);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaxCardinalityMatching<>(graph, true);
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaximumCardinalityMatching<>(graph, true);
             MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
 
             Set<Integer> matched = new HashSet<>();

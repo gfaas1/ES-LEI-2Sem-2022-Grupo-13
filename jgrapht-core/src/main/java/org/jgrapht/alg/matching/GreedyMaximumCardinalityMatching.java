@@ -40,18 +40,18 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class GreedyMaxCardinalityMatching<V,E> implements MatchingAlgorithm<V,E>{
+public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<V,E>{
 
     private final Graph<V,E> graph;
     private final boolean sort;
 
 
     /**
-     * Creates a new GreedyMaxCardinalityMatching instance.
+     * Creates a new GreedyMaximumCardinalityMatching instance.
      * @param graph graph
      * @param sort sort the edges prior to starting the greedy algorithm
      */
-    public GreedyMaxCardinalityMatching(Graph<V, E> graph, boolean sort) {
+    public GreedyMaximumCardinalityMatching(Graph<V, E> graph, boolean sort) {
         this.graph = GraphTests.requireUndirected(graph);
         this.sort=sort;
     }

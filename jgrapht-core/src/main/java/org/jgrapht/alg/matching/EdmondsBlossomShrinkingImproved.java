@@ -81,7 +81,7 @@ public class EdmondsBlossomShrinkingImproved<V, E>
      */
     public EdmondsBlossomShrinkingImproved(Graph<V, E> graph)
     {
-//        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
+//        this(graph, new GreedyMaximumCardinalityMatching<V, E>(graph, false));
         this(graph, null);
     }
 

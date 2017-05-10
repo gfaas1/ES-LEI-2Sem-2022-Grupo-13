@@ -114,7 +114,7 @@ public class EdmondsMaxCardinalityMatchingBackup<V,E> implements MatchingAlgorit
 
     public EdmondsMaxCardinalityMatchingBackup(Graph<V, E> graph) {
         this(graph, null);
-//        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
+//        this(graph, new GreedyMaximumCardinalityMatching<V, E>(graph, false));
     }
 
     public EdmondsMaxCardinalityMatchingBackup(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer) {

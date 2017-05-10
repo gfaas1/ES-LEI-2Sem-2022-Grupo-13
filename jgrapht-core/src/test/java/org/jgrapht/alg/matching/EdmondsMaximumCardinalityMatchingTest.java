@@ -17,14 +17,9 @@
  */
 package org.jgrapht.alg.matching;
 
-import ilog.concert.IloException;
-import ilog.concert.IloIntVar;
-import ilog.concert.IloLinearIntExpr;
-import ilog.cplex.IloCplex;
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
@@ -32,13 +27,11 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * .Tests for EdmondsMaximumCardinalityMatching
+ * Tests for EdmondsMaximumCardinalityMatching
  *
  * @author Joris Kinable
- * @since Jan 24, 2012
  */
 public final class EdmondsMaximumCardinalityMatchingTest
     extends TestCase
@@ -52,7 +45,6 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 3);
@@ -69,7 +61,6 @@ public final class EdmondsMaximumCardinalityMatchingTest
 
         assertEquals(6, g.edgeSet().size());
 
-        // compute max match
         EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 2);
@@ -85,9 +76,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
+        assertTrue(matcher.isMaximumMatching(match));
     }
 
     public void testGraph14(){
@@ -99,9 +90,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
+        assertTrue(matcher.isMaximumMatching(match));
     }
 
     public void testGraph13(){
@@ -113,9 +104,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
+        assertTrue(matcher.isMaximumMatching(match));
     }
 
     public void testGraph12(){
@@ -127,9 +118,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
+        assertTrue(matcher.isMaximumMatching(match));
     }
 
 
@@ -142,32 +133,13 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for(int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
+        assertTrue(matcher.isMaximumMatching(match));
     }
 
 
-    public void testUFBug2(){
-        //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,3}, {6,2}, {6,0}, {0,2}, {0,3}, {5,2}, {5,4}, {6,1}, {5,1}])
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6));
-        g.addEdge(4,3);
-        g.addEdge(6,2);
-        g.addEdge(6,0);
-        g.addEdge(0,2);
-        g.addEdge(0,3);
-        g.addEdge(5,2);
-        g.addEdge(5,4);
-        g.addEdge(6,1);
-        g.addEdge(5,1);
-
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-    }
-
-    public void testIsMaximumMatching(){
+    public void testIsMaximumMatching4(){
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(1,2,3,4));
 
@@ -192,7 +164,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertFalse(matcher.isMaximumMatching(m2));
     }
 
-    public void testIsMaximum3(){
+    public void testIsMaximumMatching3(){
         //graph: ([0, 1, 2, 3, 4, 5, 6], [{4,0}, {2,3}, {2,0}, {2,5}, {2,6}, {0,1}])
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
@@ -254,207 +226,49 @@ public final class EdmondsMaximumCardinalityMatchingTest
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             generator.generateGraph(graph, vertexFactory, null);
             EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(graph);
-//            EdmondsMaxCardinalityMatchingBaseLineComparison<Integer, DefaultEdge> matcher = new EdmondsMaxCardinalityMatchingBaseLineComparison<>(graph);
 
             Matching<Integer, DefaultEdge> m = matcher.getMatching();
             this.verifyMatching(graph, m, m.getEdges().size());
-//            assertTrue(matcher.isMaximumMatching(m));
+            assertTrue(matcher.isMaximumMatching(m));
         }
     }
-
-    public void testRandomGraphs2(){
-        int counter=0;
-        Random random=new Random(0);
-
-        for(int k=0; k<100000; k++) {
-            int vertices=100;
-            int edges=random.nextInt(maxEdges(vertices)/2);
-            GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator<>(vertices, edges, 0);
-            IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
-
-            for (int i = 0; i < 1; i++) {
-                counter++;
-                Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-                generator.generateGraph(graph, vertexFactory, null);
-                EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(graph);
-
-                Matching<Integer, DefaultEdge> m = matcher.getMatching();
-                System.out.println("completed: " + counter+" vertices: "+graph.vertexSet().size()+" edges: "+graph.edgeSet().size());
-
-                if (!matcher.isMaximumMatching(m)) {
-                    System.out.println("is not a maximum matching. edges: "+graph.edgeSet().size());
-                    System.out.println(graph);
-                    System.out.println("matching: "+m);
-                    throw new RuntimeException("is not a maximum matching");
-//                    Matching<Integer, DefaultEdge> bf = getOptimalMatching(graph);
-//                    if (bf.getEdges().size() != m.getEdges().size()) {
-//                        System.out.println("found matching which is not maximum. Cardinality: " + m.getEdges().size());
-//                        System.out.println("bf matching cardinality: " + bf.getEdges().size());
-//                        throw new RuntimeException("error: matching not maximum");
-//                    }
-                }
-            }
-        }
-        System.out.println("finished");
-    }
-
-
-    public void testOne()
-    {
-        // create an undirected graph
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        Integer v1 = 1;
-        Integer v2 = 2;
-        Integer v3 = 3;
-        Integer v4 = 4;
-
-        g.addVertex(v1);
-        g.addVertex(v2);
-        g.addVertex(v3);
-        g.addVertex(v4);
-
-        DefaultEdge e12 = g.addEdge(v1, v2);
-        DefaultEdge e34 = g.addEdge(v3, v4);
-
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-        assertEquals(2, match.getEdges().size());
-        assertTrue(match.getEdges().contains(e12));
-        assertTrue(match.getEdges().contains(e34));
-    }
-
-    public void testCrash()
-    {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        Integer v1 = 1;
-        Integer v2 = 2;
-        Integer v3 = 3;
-        Integer v4 = 4;
-        Integer v5 = 5;
-
-        g.addVertex(v1);
-        g.addVertex(v2);
-        g.addVertex(v3);
-        g.addVertex(v4);
-        g.addVertex(v5);
-
-        DefaultEdge e12 = g.addEdge(v1, v2);
-        DefaultEdge e34 = g.addEdge(v3, v4);
-
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-
-        assertEquals(2, match.getEdges().size());
-
-        assertTrue(match.getEdges().contains(e12));
-        assertTrue(match.getEdges().contains(e34));
-    }
-
-    public void testCrash2()
-    {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-
-        Integer vs[] = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-
-        for (int i = 1; i < 14; ++i) {
-            g.addVertex(vs[i]);
-        }
-
-        DefaultEdge e12 = g.addEdge(vs[1], vs[2]);
-        DefaultEdge e34 = g.addEdge(vs[3], vs[4]);
-        DefaultEdge e56 = g.addEdge(vs[5], vs[6]);
-        DefaultEdge e78 = g.addEdge(vs[7], vs[8]);
-        DefaultEdge e910 = g.addEdge(vs[9], vs[10]);
-        DefaultEdge e1112 = g.addEdge(vs[11], vs[12]);
-
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-
-        assertEquals(6, match.getEdges().size());
-
-        assertTrue(match.getEdges().contains(e12));
-        assertTrue(match.getEdges().contains(e34));
-        assertTrue(match.getEdges().contains(e56));
-        assertTrue(match.getEdges().contains(e78));
-        assertTrue(match.getEdges().contains(e910));
-        assertTrue(match.getEdges().contains(e1112));
-    }
-
-//    public void testRandomGraphs(){
-//        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
-//        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-//        Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-//
-//        for(int i=0; i<100; i++){
-//            System.out.println("completed: "+i);
-//            generator.generateGraph(graph, vertexFactory, null);
-//            MatchingAlgorithm<Integer, DefaultEdge> matcher1 = new EdmondsBlossomShrinking<>(graph);
-//            MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<>(graph);
-//
-//            long time1=System.currentTimeMillis();
-//            Matching<Integer, DefaultEdge> m1=matcher1.getMatching();
-//            time1=System.currentTimeMillis()-time1;
-//            System.out.println("time 1: "+time1);
-//            long time2=System.currentTimeMillis();
-//            Matching<Integer, DefaultEdge> m2=matcher2.getMatching();
-//            time2=System.currentTimeMillis()-time2;
-//            System.out.println("time 2: "+time2);
-//            assertTrue(m1.getEdges().size()==m2.getEdges().size());
-//
-//        }
-//    }
 
     public void testRandomGraphsSmall(){
-        System.out.println("starting");
-        for(int n=4; n<20; n++) {
-//        int n=5;
+        for(int n=4; n<12; n++) {
             for(int m=5; m<maxEdges(n); m++) {
-                GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator(n, m);
+                GraphGenerator<Integer, DefaultEdge, Integer> generator = new GnmRandomGraphGenerator<>(n, m);
 
-                for (int i = 0; i < 2000; i++) {
-                    System.out.println("completed: " + i);
-                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
+                for (int i = 0; i < 25; i++) {
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
                     IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
                     generator.generateGraph(graph, vertexFactory, null);
-                    System.out.println("graph: " + graph);
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(graph);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
                     assertTrue(matcher.isMaximumMatching(m1));
-
-//                    MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<Integer, DefaultEdge>(graph);
-//                    Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
-//                    if (m1.getEdges().size() != m2.getEdges().size())
-//                        throw new RuntimeException("weird, weights don't match");
-
                 }
             }
         }
     }
 
-    public void testGraphs(){
-        testGraph1();
-        testGraph2();
-        testGraph3();
-        testGraph4();
-        testGraph5();
-        testGraph6();
-        testGraph7();
-        testGraph8();
-        testGraph9();
-        testGraph10();
-    }
+//    public void testGraphs(){
+//        testGraph1();
+//        testGraph2();
+//        testGraph3();
+//        testGraph4();
+//        testGraph5();
+//        testGraph6();
+//        testGraph7();
+//        testGraph8();
+//        testGraph9();
+//        testGraph10();
+//    }
 
     public void testGraph1(){
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
         int[][] edges={{97,22},{56,105},{89,132},{117,25},{83,106},{171,49},{162,138},{90,120},{152,33},{47,81},{70,191},{23,142},{80,53},{106,111},{7,9},{11,71},{186,177},{196,28},{55,106},{134,89},{178,123},{109,169},{104,27},{162,42},{102,164},{51,92},{26,10},{141,165},{107,164},{41,2},{125,46},{189,59},{68,104},{161,36},{154,143},{129,92},{139,110},{43,76},{197,1},{118,38},{6,53},{123,62},{125,55},{183,81},{67,120},{54,57},{34,25},{156,171},{139,49},{108,142},{54,184},{124,199},{82,191},{23,85},{181,71},{154,102},{69,98},{131,52},{36,33},{146,160},{114,75},{92,137},{172,31},{188,25},{123,119},{178,21},{96,97},{72,118},{34,106},{175,185},{138,121},{185,183},{46,62},{135,25},{66,21},{194,109},{125,123},{62,181},{198,156},{99,34},{87,174},{165,45},{114,125},{164,101},{9,36},{102,146},{138,189},{159,117},{78,69},{50,66},{27,63},{122,107},{151,11},{58,34},{77,195},{122,186},{84,98},{171,91},{19,33},{41,16},{81,40},{87,7},{65,4},{178,155},{130,106},{131,42},{174,71},{30,103},{186,83},{108,185},{112,77},{62,56},{198,34},{4,17},{182,139},{159,25},{96,9},{192,38},{187,104},{27,157}};
         for(int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(graph);
+        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher = new EdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 58);
     }
 
@@ -559,112 +373,12 @@ public final class EdmondsMaximumCardinalityMatchingTest
         }
         assertEquals(m.getWeight(), weight, 0.0000001);
         assertEquals(cardinality, m.getEdges().size());
+
+        EdmondsMaximumCardinalityMatching<V, E> matcher = new EdmondsMaximumCardinalityMatching<>(g);
+        assertTrue(matcher.isMaximumMatching(m));
     }
 
-//    public void testRandomGraphs2(){
-//        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 150);
-//        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-//        Graph<Integer, DefaultEdge> graph=new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
-//        generator.generateGraph(graph, vertexFactory, null);
-//        MatchingAlgorithm<Integer, DefaultEdge> matcher1 = new EdmondsBlossomShrinking<>(graph);
-//        MatchingAlgorithm<Integer, DefaultEdge> matcher2 = new EdmondsMaximumCardinalityMatching<>(graph);
-//        Matching<Integer, DefaultEdge> m1=matcher1.getMatching();
-//        Matching<Integer, DefaultEdge> m2=matcher2.getMatching();
-//
-//        String edges="int[][] edges={";
-//        for(DefaultEdge e : graph.edgeSet()){
-//            edges+="{"+graph.getEdgeSource(e)+","+graph.getEdgeTarget(e)+"},";
-//        }
-//        edges+="};";
-//        System.out.println(edges);
-//        System.out.println("edges in matching: "+m1.getEdges().size());
-//        assertTrue(m1.getEdges().size()==m2.getEdges().size());
-//        System.out.println("m1: "+m1.getEdges().size());
-//        System.out.println("m2: "+m2.getEdges().size());
-//    }
-
-    private Matching<Integer, DefaultEdge> bruteforceMatching(Graph<Integer,DefaultEdge> graph){
-        Matching<Integer, DefaultEdge> best=new MatchingAlgorithm.MatchingImpl<>(graph, Collections.emptySet(), 0);
-
-        PowerSet<DefaultEdge> ps=new PowerSet<>(graph.edgeSet());
-        for(Set<DefaultEdge> edges : ps){
-            if(edges.size() <= best.getEdges().size())
-                continue;
-
-            Matching<Integer, DefaultEdge> m = new MatchingAlgorithm.MatchingImpl<>(graph, edges, edges.size());
-            Set<Integer> matched = new HashSet<>();
-            boolean matchingIsFeasible=true;
-            for (DefaultEdge e : m.getEdges()) {
-                Integer source = graph.getEdgeSource(e);
-                Integer target = graph.getEdgeTarget(e);
-                if (matched.contains(source)) {
-                    matchingIsFeasible=false;
-                    break;
-                }
-                matched.add(source);
-                if (matched.contains(target)) {
-                    matchingIsFeasible=false;
-                    break;
-                }
-                matched.add(target);
-            }
-            if(matchingIsFeasible)
-                best=m;
-        }
-        return best;
-    }
-
-    public class PowerSet<E> implements Iterator<Set<E>>,Iterable<Set<E>>{
-        private E[] arr = null;
-        private BitSet bset = null;
-
-        @SuppressWarnings("unchecked")
-        public PowerSet(Set<E> set)
-        {
-            arr = (E[])set.toArray();
-            bset = new BitSet(arr.length + 1);
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !bset.get(arr.length);
-        }
-
-        @Override
-        public Set<E> next() {
-            Set<E> returnSet = new HashSet<>();
-            for(int i = 0; i < arr.length; i++)
-            {
-                if(bset.get(i))
-                    returnSet.add(arr[i]);
-            }
-            //increment bset
-            for(int i = 0; i < bset.size(); i++)
-            {
-                if(!bset.get(i))
-                {
-                    bset.set(i);
-                    break;
-                }else
-                    bset.clear(i);
-            }
-
-            return returnSet;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not Supported!");
-        }
-
-        @Override
-        public Iterator<Set<E>> iterator() {
-            return this;
-        }
-
-    }
-
-    public static int maxEdges(int n){
+    private static int maxEdges(int n){
         if (n % 2 == 0) {
             return Math.multiplyExact(n / 2, n - 1);
         } else {
@@ -672,84 +386,4 @@ public final class EdmondsMaximumCardinalityMatchingTest
         }
     }
 
-    public <V,E> double bestBound(Graph<V,E> graph){
-        double bestBound=Integer.MAX_VALUE;
-        for(Set<V> subset : new PowerSet<>(graph.vertexSet())){
-            if(subset.size()==graph.vertexSet().size()|| subset.isEmpty())
-                continue;
-
-            Set<V> otherVertices=graph.vertexSet().stream().filter(v -> !subset.contains(v)).collect(Collectors.toSet());
-            Graph<V,E> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
-            List<Set<V>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
-            long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
-            double bound=(graph.vertexSet().size() + subset.size() - nrOddCardinalityComponents)/2.0;
-            if(bound < bestBound){
-                System.out.println("updating bound: bound: "+bound+" best bound: "+bestBound);
-                System.out.println("subset: "+subset);
-                System.out.println("othervertices: "+otherVertices);
-                System.out.println("subgraph: "+subgraph);
-                System.out.println("connected comp: "+connectedComponents);
-                System.out.println("nrOddCardinalityComponents "+nrOddCardinalityComponents);
-                bestBound=bound;
-            }
-        }
-
-        return bestBound;
-    }
-
-    public double bound(Graph<Integer,DefaultEdge> graph){
-        Set<Integer> subset=new HashSet<>(Arrays.asList(5));
-        Set<Integer> otherVertices=graph.vertexSet().stream().filter(v -> !subset.contains(v)).collect(Collectors.toSet());
-        Graph<Integer,DefaultEdge> subgraph=new AsSubgraph<>(graph, otherVertices, null); //Induced subgraph defined on all vertices which are not odd.
-        List<Set<Integer>> connectedComponents=new ConnectivityInspector<>(subgraph).connectedSets();
-        long nrOddCardinalityComponents=connectedComponents.stream().filter(s -> s.size()%2==1).count();
-        double bound=(graph.vertexSet().size() + subset.size() - nrOddCardinalityComponents)/2.0;
-        System.out.println("updating bound: bound: "+bound+" best bound: "+bound);
-        System.out.println("subset: "+subset);
-        System.out.println("othervertices: "+otherVertices);
-        System.out.println("subgraph: "+subgraph);
-        System.out.println("connected comp: "+connectedComponents);
-        System.out.println("nrOddCardinalityComponents "+nrOddCardinalityComponents);
-        return bound;
-    }
-
-    public <V,E> Matching<V,E> getOptimalMatching(Graph<V,E> graph){
-        Matching<V, E> m=null;
-        try {
-            IloCplex cplex=new IloCplex();
-            cplex.setOut(null);
-
-
-            //Create variables
-            Map<E, IloIntVar> varMap=new HashMap<>();
-            for(E e : graph.edgeSet()){
-                varMap.put(e, cplex.boolVar());
-            }
-
-            //Create objective
-            IloLinearIntExpr obj=cplex.linearIntExpr();
-            for(IloIntVar var : varMap.values())
-                obj.addTerm(1, var);
-            cplex.addMaximize(obj);
-
-            //Create constraints
-            for(V v : graph.vertexSet()){
-                IloLinearIntExpr expr=cplex.linearIntExpr();
-                for(E e : graph.edgesOf(v))
-                    expr.addTerm(1, varMap.get(e));
-                cplex.addLe(expr, 1);
-            }
-
-            cplex.solve();
-            Set<E> edges=new HashSet<>();
-            for(E e : graph.edgeSet())
-                if(cplex.getValue(varMap.get(e))>0.00001)
-                    edges.add(e);
-            m=new MatchingAlgorithm.MatchingImpl<>(graph, edges, edges.size());
-            cplex.end();
-        } catch (IloException e) {
-            e.printStackTrace();
-        }
-        return m;
-    }
 }

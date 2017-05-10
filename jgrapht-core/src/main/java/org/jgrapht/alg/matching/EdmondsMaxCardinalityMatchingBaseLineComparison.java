@@ -112,7 +112,7 @@ public class EdmondsMaxCardinalityMatchingBaseLineComparison<V,E> implements Mat
 
     public EdmondsMaxCardinalityMatchingBaseLineComparison(Graph<V, E> graph) {
         this(graph, null);
-//        this(graph, new GreedyMaxCardinalityMatching<V, E>(graph, false));
+//        this(graph, new GreedyMaximumCardinalityMatching<V, E>(graph, false));
     }
 
     public EdmondsMaxCardinalityMatchingBaseLineComparison(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer) {
