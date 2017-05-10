@@ -37,6 +37,8 @@ import java.util.*;
  * Runtime complexity: O(m) when the edges are not sorted, O(m+m log n) otherwise, where n is the number of vertices,
  * and m the number of edges.
  *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author Joris Kinable
  */

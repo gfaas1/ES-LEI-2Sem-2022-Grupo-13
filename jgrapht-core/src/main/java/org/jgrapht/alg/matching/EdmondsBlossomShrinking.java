@@ -55,6 +55,11 @@ public class EdmondsBlossomShrinking<V, E>
         this(graph, null);
     }
 
+    /**
+     * Construct an instance of the Edmonds blossom shrinking algorithm.
+     * @param graph the input graph
+     * @param initializer algorithm to compute initial feasible solution
+     */
     public EdmondsBlossomShrinking(Graph<V, E> graph, MatchingAlgorithm<V,E> initializer)
     {
         this.graph = GraphTests.requireUndirected(graph);

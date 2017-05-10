@@ -180,8 +180,8 @@ public class UnionFind<T>
     }
 
     /**
-     * Returns a string representation of this data structure. Each component is represented as {v:v_1,v_2,v_3,...v_n}, where
-     * v is the representative of the set.
+     * Returns a string representation of this data structure. Each component is represented as {v_i:v_1,v_2,v_3,...v_n}, where
+     * v_i is the representative of the set.
      * @return string representation of this data structure
      */
     public String toString(){

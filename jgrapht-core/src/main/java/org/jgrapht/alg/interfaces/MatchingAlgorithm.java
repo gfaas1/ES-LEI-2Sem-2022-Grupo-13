@@ -111,7 +111,8 @@ public interface MatchingAlgorithm<V, E>
 
     /**
      * A default implementation of the matching interface.
-     *
+
+     * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
     class MatchingImpl<V,E>
@@ -127,6 +128,7 @@ public interface MatchingAlgorithm<V, E>
         /**
          * Construct a new instance
          *
+         * @param graph graph on which the matching is defined
          * @param edges the edges of the matching
          * @param weight the weight of the matching
          */
