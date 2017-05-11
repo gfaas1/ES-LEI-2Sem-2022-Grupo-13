@@ -173,8 +173,6 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             vertexIndexMap.put(vertices.get(i), i);
         this.matching = new SimpleMatching(vertices.size());
         this.matchedVertices = 0;
-        if (initializer != null)
-            this.warmStart(initializer);
 
         this.even = new int[vertices.size()];
         this.odd = new int[vertices.size()];
@@ -224,7 +222,6 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                 continue;
             even[root] = root;
             queue.enqueue(root);
-
             // for each exposed vertex, start a bfs search
             while (!queue.empty()) {
                 int v = queue.poll(); // Even vertex
@@ -253,6 +250,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                             matching.match(v, w);
                             return true;
                         }
+
                         // w is an odd vertex: grow the tree
                         odd[w] = v;
                         int u = matching.opposite(w); // even vertex
@@ -456,6 +454,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     public Matching<V, E> getMatching()
     {
         this.init();
+        if (initializer != null)
+            this.warmStart(initializer);
 
         // Continuously augment the matching until augmentation is no longer possible.
         while (matchedVertices < graph.vertexSet().size() - 1 && augment()) {

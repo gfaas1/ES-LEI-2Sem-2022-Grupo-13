@@ -22,6 +22,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Unit test for the FlowBasedMaximumCardinalityBipartiteMatching class
@@ -34,7 +35,7 @@ public class FlowBasedMaximumCardinalityBipartiteMatchingTest
 {
 
     @Override
-    public MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(Graph<Integer, DefaultEdge> graph, Collection<Integer> partition1, Collection<Integer> partition2) {
+    public MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(Graph<Integer, DefaultEdge> graph, Set<Integer> partition1, Set<Integer> partition2) {
         return new FlowBasedMaximumCardinalityBipartiteMatching<>(graph, partition1, partition2);
     }
 }

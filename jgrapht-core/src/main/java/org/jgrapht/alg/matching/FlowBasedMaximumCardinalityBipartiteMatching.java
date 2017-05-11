@@ -24,7 +24,7 @@ import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 import java.util.*;
 
@@ -46,7 +46,7 @@ public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements Matchi
     /* Mapping of a vertex to their unique position in the ordered list of vertices */
     private Map<V, Integer> vertexIndexMap;
 
-    public FlowBasedMaximumCardinalityBipartiteMatching(Graph<V, E> graph, Collection<V> partition1, Collection<V> partition2) {
+    public FlowBasedMaximumCardinalityBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1=partition1;
         this.partition2=partition2;
@@ -54,12 +54,13 @@ public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements Matchi
 
     private void init(){
         vertices = new ArrayList<>();
-        vertices.addAll(graph.vertexSet());
+        vertices.addAll(partition1);
+        vertices.addAll(partition2);
         vertexIndexMap = new HashMap<>();
         for (int i = 0; i < vertices.size(); i++)
             vertexIndexMap.put(vertices.get(i), i);
 
-        workingGraph=new SimpleGraph<>(DefaultEdge.class);
+        workingGraph=new SimpleDirectedGraph<>(DefaultEdge.class);
         workingGraph.addVertex(source);
         workingGraph.addVertex(sink);
         Graphs.addAllVertices(workingGraph, vertexIndexMap.values());
@@ -77,8 +78,17 @@ public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements Matchi
             V u=graph.getEdgeSource(e);
             V v=graph.getEdgeTarget(e);
 
-            if(u != v) //ignore self loops
-                workingGraph.addEdge(vertexIndexMap.get(u), vertexIndexMap.get(v));
+            int ux=vertexIndexMap.get(u);
+            int vx=vertexIndexMap.get(v);
+
+            if(ux != vx) { //ignore self loops
+                if(ux > vx){ //ensure that all edges point from the source partition to the sink partition
+                    int swap=ux;
+                    ux=vx;
+                    vx=swap;
+                }
+                workingGraph.addEdge(ux, vx);
+            }
         }
     }
 
@@ -92,7 +102,7 @@ public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements Matchi
         MaximumFlowAlgorithm.MaximumFlow<DefaultEdge> maximumFlow=maximumFlowAlgorithm.getMaximumFlow(source, sink);
         Map<DefaultEdge, Double> flow=maximumFlow.getFlow();
 
-        Set<E> matchedEdges=new LinkedHashSet<E>();
+        Set<E> matchedEdges=new LinkedHashSet<>();
         //All edges with non-zero flow (excluding edges incident to the source/sink vertex) are matched edges
         for(DefaultEdge e : flow.keySet()){
             if(flow.get(e)==0)
@@ -103,6 +113,6 @@ public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements Matchi
                 matchedEdges.add(graph.getEdge(vertices.get(u), vertices.get(v)));
         }
 
-        return new MatchingImpl<V, E>(graph, matchedEdges, matchedEdges.size());
+        return new MatchingImpl<>(graph, matchedEdges, matchedEdges.size());
     }
 }

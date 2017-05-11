@@ -37,7 +37,7 @@ import java.util.stream.IntStream;
 public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
 
     public abstract MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(
-            Graph<Integer, DefaultEdge> graph, Collection<Integer> partition1, Collection<Integer> partition2);
+            Graph<Integer, DefaultEdge> graph, Set<Integer> partition1, Set<Integer> partition2);
 
     /**
      * Random test graph 1
@@ -109,6 +109,37 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         assertEquals(Collections.EMPTY_SET, bmMatching.getEdges());
     }
 
+    public void testGraph1(){
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
+        Graphs.addAllVertices(graph, partition1);
+        Graphs.addAllVertices(graph, partition2);
+        int[][] edges={{5,8}, {4,9}, {2,7}, {6,9}, {1,9}};
+        for(int[] edge : edges)
+            graph.addEdge(edge[0],edge[1]);
+
+        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        System.out.println(matching);
+        assertEquals(3, matching.getEdges().size());
+    }
+
+    public void testGraph2(){
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
+        Graphs.addAllVertices(graph, partition1);
+        Graphs.addAllVertices(graph, partition2);
+        int[][] edges={{5,8}, {4,9}, {2,7}, {6,9}, {1,9}, {0,8}, {3,7}, {1,7}};
+        for(int[] edge : edges)
+            graph.addEdge(edge[0],edge[1]);
+
+        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        this.verifyMatching(graph, matching, matching.getEdges().size());
+    }
+
     /**
      * Issue 233 instance
      */
@@ -134,7 +165,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
 
     public void testRandomBipartiteGraphs(){
         Random random=new Random(1);
-        int vertices=100;
+        int vertices=7;
 
         for(int k=0; k<100; k++) {
             int edges=random.nextInt(maxEdges(vertices)/2);
@@ -144,14 +175,9 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             generator.generateGraph(graph, vertexFactory, null);
 
-            EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher1 = new EdmondsMaximumCardinalityMatching<>(graph);
-            MatchingAlgorithm.Matching<Integer, DefaultEdge> m1 = matcher1.getMatching();
-            assertTrue(matcher1.isMaximumMatching(m1));
-
-            MatchingAlgorithm<Integer, DefaultEdge> matcher2 = getMatchingAlgorithm(graph, generator.getFirstPartition(), generator.getSecondPartition());
-            MatchingAlgorithm.Matching<Integer, DefaultEdge> m2 = matcher2.getMatching();
-            assertEquals(m1.getEdges().size(), m2.getEdges().size());
-            this.verifyMatching(graph, m2, m2.getEdges().size());
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(graph, generator.getFirstPartition(), generator.getSecondPartition());
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m = matcher.getMatching();
+            this.verifyMatching(graph, m, m.getEdges().size());
         }
     }
 
@@ -174,7 +200,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         assertEquals(m.getEdges().size()*2,matched.size()); //Ensure that there are no self-loops
 
         EdmondsMaximumCardinalityMatching<V, E> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-        assertTrue(matcher.isMaximumMatching(m));
+        assertTrue(matcher.isMaximumMatching(m)); //Certify that the matching is indeed maximum
     }
 
     private static int maxEdges(int n){
