@@ -22,6 +22,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
 import org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching;
+import org.jgrapht.alg.matching.FlowBasedMaximumCardinalityBipartiteMatching;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.IntegerVertexFactory;
@@ -106,6 +107,16 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
+    public static class MaxFlowBipartiteMatchingBenchmark
+            extends RandomGraphBenchmarkBase
+    {
+        @Override
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
+        {
+            return new FlowBasedMaximumCardinalityBipartiteMatching<>(graph, firstPartition, secondPartition);
+        }
+    }
+
     public void testRandomGraphBenchmark()
         throws RunnerException
     {
@@ -114,6 +125,8 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
                     ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
                 ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+            .include(
+                    ".*" + MaxFlowBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

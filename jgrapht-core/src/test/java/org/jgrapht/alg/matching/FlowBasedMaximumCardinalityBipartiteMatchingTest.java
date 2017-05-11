@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,28 +17,24 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultEdge;
 
-import junit.framework.*;
+import java.util.Collection;
 
 /**
- * Unit test for the HopcroftKarpBipartiteMatching class
+ * Unit test for the FlowBasedMaximumCardinalityBipartiteMatching class
  * 
  * @author Joris Kinable
  *
  */
-public class HopcroftKarpBipartiteMatchingTest
+public class FlowBasedMaximumCardinalityBipartiteMatchingTest
     extends MaximumCardinalityBipartiteMatchingTest
 {
 
     @Override
     public MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(Graph<Integer, DefaultEdge> graph, Collection<Integer> partition1, Collection<Integer> partition2) {
-        return new HopcroftKarpBipartiteMatching<>(graph, partition1, partition2);
+        return new FlowBasedMaximumCardinalityBipartiteMatching<>(graph, partition1, partition2);
     }
 }
