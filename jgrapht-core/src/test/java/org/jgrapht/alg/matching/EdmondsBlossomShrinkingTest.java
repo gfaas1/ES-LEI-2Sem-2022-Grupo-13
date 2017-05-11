@@ -146,53 +146,6 @@ public final class EdmondsBlossomShrinkingTest
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
     }
 
-    public void testUFBug7(){
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
-        DefaultEdge e1=g.addEdge(0,1);
-        g.addEdge(1,2);
-        g.addEdge(0,2);
-        DefaultEdge e2=g.addEdge(2,3);
-        g.addEdge(3,4);
-        g.addEdge(4,5);
-        DefaultEdge e3=g.addEdge(5,6);
-        g.addEdge(6,7);
-        g.addEdge(6,8);
-        DefaultEdge e4=g.addEdge(7,8);
-        g.addEdge(1,7);
-
-        Matching init=new MatchingImpl<>(g, new HashSet<>(Arrays.asList(e1, e2, e3, e4)), 4);
-
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g, () -> init);
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-    }
-
-    public void testUFBug6(){
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
-        g.addEdge(0,1);
-        g.addEdge(0,2);
-        DefaultEdge e1=g.addEdge(1,3);
-        DefaultEdge e2=g.addEdge(2,4);
-        g.addEdge(3,5);
-        DefaultEdge e3=g.addEdge(5,7);
-        g.addEdge(3,7);
-        g.addEdge(5,6);
-        g.addEdge(4,6);
-        g.addEdge(4,8);
-        DefaultEdge e4=g.addEdge(6,8);
-
-        g.addEdge(2,9);
-        g.addEdge(9,10);
-
-        Matching init=new MatchingImpl<>(g, new HashSet<>(Arrays.asList(e1, e2, e3, e4)), 4);
-
-        // compute max match
-        MatchingAlgorithm<Integer, DefaultEdge> matcher = new EdmondsBlossomShrinking<>(g, () -> init);
-        Matching<Integer, DefaultEdge> match = matcher.getMatching();
-    }
-
     public void testUFBug5(){
         //good graph to check correctness of all checks
         //graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{0,4}, {4,2}, {5,7}, {6,7}, {3,5}, {1,3}, {7,4}, {1,4}, {4,6}, {0,7}, {0,2}, {3,0}])

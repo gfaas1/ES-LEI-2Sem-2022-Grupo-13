@@ -44,7 +44,7 @@ public class UnionFind<T>
      * 
      * @param elements the initial elements to include (each element in a singleton set).
      */
-    public UnionFind(Collection<T> elements)
+    public UnionFind(Set<T> elements)
     {
         parentMap = new LinkedHashMap<>();
         rankMap = new HashMap<>();
@@ -148,7 +148,7 @@ public class UnionFind<T>
      * @param element2 second element
      * @return true if element1 and element2 are contained in the same set, false otherwise.
      */
-    public boolean connected(T element1, T element2){
+    public boolean inSameSet(T element1, T element2){
         return find(element1).equals(find(element2));
     }
 
@@ -156,7 +156,8 @@ public class UnionFind<T>
      * Returns the number of sets. Initially, all items are in their own set. The smallest number of sets equals one.
      * @return the number of sets
      */
-    public int count() {
+    public int numberOfSets() {
+        assert count >= 1 && count <= parentMap.keySet().size();
         return count;
     }
 

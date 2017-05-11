@@ -128,14 +128,14 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
 
-        partitionA = new HashMap<>(n1);
+        partitionA = new LinkedHashMap<>(n1);
         for (int i = 0; i < n1; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
             partitionA.put(i, v);
         }
 
-        partitionB = new HashMap<>(n2);
+        partitionB = new LinkedHashMap<>(n2);
         for (int i = 0; i < n2; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
@@ -150,7 +150,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // check if graph is directed
         final boolean isDirected = target.getType().isDirected();
 
-        int maxAllowedEdges = Integer.MAX_VALUE;
+        int maxAllowedEdges;
         try {
             if (isDirected) {
                 maxAllowedEdges = Math.multiplyExact(2, Math.multiplyExact(n1, n2));
@@ -201,16 +201,16 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
      * Returns the first partition of vertices in the bipartite graph.
      * @return one partition of the bipartite graph
      */
-    public Collection<V> getFirstPartition(){
-        return partitionA.values();
+    public Set<V> getFirstPartition(){
+        return new LinkedHashSet<>(partitionA.values());
     }
 
     /**
      * Returns the second partitions of vertices in the bipartite graph.
      * @return one partition of the bipartite graph
      */
-    public Collection<V> getSecondPartition(){
-        return partitionB.values();
+    public Set<V> getSecondPartition(){
+        return new LinkedHashSet<>(partitionB.values());
     }
 
 }

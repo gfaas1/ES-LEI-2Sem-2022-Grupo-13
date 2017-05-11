@@ -46,41 +46,41 @@ public class UnionFindTest
         }
         UnionFind<String> uf = new UnionFind<String>(set);
         assertEquals(5, uf.size());
-        assertEquals(5, uf.count());
+        assertEquals(5, uf.numberOfSets());
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[1]);
-        assertEquals(4, uf.count());
+        assertEquals(4, uf.numberOfSets());
         union(sets, strs[0], strs[1]);
         testIdentical(strs, sets, uf);
-        assertTrue(uf.connected("aaa", "bbb"));
-        assertFalse(uf.connected("bbb", "ccc"));
+        assertTrue(uf.inSameSet("aaa", "bbb"));
+        assertFalse(uf.inSameSet("bbb", "ccc"));
 
         uf.union(strs[2], strs[3]);
-        assertEquals(3, uf.count());
+        assertEquals(3, uf.numberOfSets());
         union(sets, strs[2], strs[3]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
-        assertEquals(2, uf.count());
+        assertEquals(2, uf.numberOfSets());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[2], strs[4]);
-        assertEquals(2, uf.count());
+        assertEquals(2, uf.numberOfSets());
         union(sets, strs[2], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.union(strs[0], strs[4]);
-        assertEquals(1, uf.count());
+        assertEquals(1, uf.numberOfSets());
         union(sets, strs[0], strs[4]);
         testIdentical(strs, sets, uf);
 
         uf.addElement("fff");
-        assertEquals(2, uf.count());
+        assertEquals(2, uf.numberOfSets());
         assertEquals(6, uf.size());
         uf.reset();
-        assertEquals(6, uf.count());
+        assertEquals(6, uf.numberOfSets());
     }
 
     private void union(ArrayList<ArrayList<String>> sets, String a, String b)

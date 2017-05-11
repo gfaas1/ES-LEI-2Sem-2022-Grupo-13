@@ -68,6 +68,7 @@ public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<
     public Matching<V, E> getMatching() {
         Set<V> matched = new HashSet<>();
         Set<E> edges = new LinkedHashSet<>();
+        double cost=0;
 
         if(sort){
             // sort edges in increasing order of the total degree of their endpoints
@@ -77,10 +78,11 @@ public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<
             for(E e : allEdges){
                 V v =graph.getEdgeSource(e);
                 V w = graph.getEdgeTarget(e);
-                if(v != w && !matched.contains(v) && !matched.contains(w)){
+                if(!v.equals(w) && !matched.contains(v) && !matched.contains(w)){
                     edges.add(e);
                     matched.add(v);
                     matched.add(w);
+                    cost+=graph.getEdgeWeight(e);
                 }
             }
         }else {
@@ -91,16 +93,17 @@ public class GreedyMaximumCardinalityMatching<V,E> implements MatchingAlgorithm<
 
                 for (E e : graph.edgesOf(v)) {
                     V w = Graphs.getOppositeVertex(graph, e, v);
-                    if (v != w && !matched.contains(w)) {
+                    if (!v.equals(w) && !matched.contains(w)) {
                         edges.add(e);
                         matched.add(v);
                         matched.add(w);
+                        cost+=graph.getEdgeWeight(e);
                         break;
                     }
                 }
             }
         }
-        return new MatchingImpl<>(graph, edges, edges.stream().mapToDouble(graph::getEdgeWeight).sum());
+        return new MatchingImpl<>(graph, edges, cost);
     }
 
     private class EdgeDegreeComparator implements Comparator<E>{
