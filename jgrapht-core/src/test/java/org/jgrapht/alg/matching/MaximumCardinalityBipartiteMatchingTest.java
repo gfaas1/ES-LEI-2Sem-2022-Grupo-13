@@ -121,7 +121,6 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
 
         MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
         MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
-        System.out.println(matching);
         assertEquals(3, matching.getEdges().size());
     }
 
@@ -165,7 +164,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
 
     public void testRandomBipartiteGraphs(){
         Random random=new Random(1);
-        int vertices=7;
+        int vertices=100;
 
         for(int k=0; k<100; k++) {
             int edges=random.nextInt(maxEdges(vertices)/2);

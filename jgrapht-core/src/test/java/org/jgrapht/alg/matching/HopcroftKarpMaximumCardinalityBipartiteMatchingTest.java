@@ -17,28 +17,24 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.DefaultEdge;
 
-import junit.framework.*;
+import java.util.Set;
 
 /**
- * Unit test for the HopcroftKarpBipartiteMatching class
+ * Unit test for the HopcroftKarpMaximumCardinalityBipartiteMatching class
  * 
  * @author Joris Kinable
  *
  */
-public class HopcroftKarpBipartiteMatchingTest
+public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest
     extends MaximumCardinalityBipartiteMatchingTest
 {
 
     @Override
     public MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(Graph<Integer, DefaultEdge> graph, Set<Integer> partition1, Set<Integer> partition2) {
-        return new HopcroftKarpBipartiteMatching<>(graph, partition1, partition2);
+        return new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, partition1, partition2);
     }
 }

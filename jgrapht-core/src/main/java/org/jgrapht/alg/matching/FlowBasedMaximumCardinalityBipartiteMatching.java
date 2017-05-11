@@ -34,8 +34,8 @@ import java.util.*;
 public class FlowBasedMaximumCardinalityBipartiteMatching<V,E> implements MatchingAlgorithm<V,E> {
 
     private final Graph<V,E> graph;
-    private final Collection<V> partition1;
-    private final Collection<V> partition2;
+    private final Set<V> partition1;
+    private final Set<V> partition2;
 
     private Graph<Integer, DefaultEdge> workingGraph;
     private final int source=-1;

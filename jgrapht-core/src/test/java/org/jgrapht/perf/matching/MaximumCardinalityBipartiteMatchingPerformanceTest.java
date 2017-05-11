@@ -42,12 +42,12 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author Joris Kinable
  */
-public class MaxCardinalityBipartiteMatchingPerformanceTest
+public class MaximumCardinalityBipartiteMatchingPerformanceTest
     extends TestCase
 {
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
-    public static final double PERF_BENCHMARK_EDGES_PROP = 0.7;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 100;
+    public static final double PERF_BENCHMARK_EDGES_PROP = 0.9;
 
     @State(Scope.Benchmark)
     private static abstract class RandomGraphBenchmarkBase
@@ -112,7 +112,7 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
             extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
         {
             return new FlowBasedMaximumCardinalityBipartiteMatching<>(graph, firstPartition, secondPartition);
         }
@@ -125,8 +125,8 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
             .include(
                     ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-            .include(
+                    ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+                .include(
                     ".*" + MaxFlowBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
