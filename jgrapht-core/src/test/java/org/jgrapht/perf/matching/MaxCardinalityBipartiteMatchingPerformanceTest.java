@@ -33,6 +33,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,11 +55,11 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
 
         private GnpRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator = null;
         private Graph<Integer, DefaultEdge> graph;
-        private Collection<Integer> firstPartition;
-        private Collection<Integer> secondPartition;
+        private Set<Integer> firstPartition;
+        private Set<Integer> secondPartition;
 
         abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver(
-            Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition);
+            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition);
 
         @Setup(Level.Iteration)
         public void setup()
@@ -90,7 +91,7 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
             extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
         {
             return new EdmondsMaximumCardinalityMatching<>(graph);
         }
@@ -100,7 +101,7 @@ public class MaxCardinalityBipartiteMatchingPerformanceTest
             extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Collection<Integer> firstPartition, Collection<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
         {
             return new HopcroftKarpBipartiteMatching<>(graph, firstPartition, secondPartition);
         }

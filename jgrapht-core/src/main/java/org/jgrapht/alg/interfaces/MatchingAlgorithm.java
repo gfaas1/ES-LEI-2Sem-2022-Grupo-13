@@ -95,7 +95,8 @@ public interface MatchingAlgorithm<V, E>
          * @return true if vertex v is incident to an edge in this matching.
          */
         default boolean isMatched(V v){
-            return getGraph().edgesOf(v).stream().anyMatch(getEdges()::contains);
+            Set<E> edges=getEdges();
+            return getGraph().edgesOf(v).stream().anyMatch(edges::contains);
         }
 
         /**

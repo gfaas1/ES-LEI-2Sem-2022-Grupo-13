@@ -41,8 +41,8 @@ public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
-    private Collection<? extends V> partition1; // Partitions of bipartite graph
-    private Collection<? extends V> partition2;
+    private Set<? extends V> partition1; // Partitions of bipartite graph
+    private Set<? extends V> partition2;
     private Set<E> matching; // Set containing the matchings
 
     private Set<V> unmatchedVertices1; // Set which contains the exposed
@@ -57,7 +57,7 @@ public class HopcroftKarpBipartiteMatching<V, E>
      * @param partition1 the first partition of the vertex set
      * @param partition2 the second partition of the vertex set
      */
-    public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Collection<V> partition1, Collection<V> partition2)
+    public HopcroftKarpBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = partition1;

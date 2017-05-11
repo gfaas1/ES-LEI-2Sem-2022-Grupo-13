@@ -180,7 +180,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         this.odd = new int[vertices.size()];
 
         this.queue = new FixedSizeQueue(vertices.size());
-        this.uf = new UnionFind<>(vertexIndexMap.values());
+        this.uf = new UnionFind<>(new HashSet<>(vertexIndexMap.values()));
 
         // temp storage of paths in the algorithm
         path = new int[vertices.size()];
@@ -239,7 +239,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                         // check whether v and w belong to the same tree since each tree is fully
                         // grown before we continue growing a new tree. Consequently, vertex w
                         // can only belong to the same tree as v.
-                        if (!uf.connected(v, w))
+                        if (!uf.inSameSet(v, w))
                             blossom(v, w); // Create a new blossom using bridge edge (v,w)
                     }
 
@@ -463,15 +463,18 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         }
 
         Set<E> edges = new LinkedHashSet<>();
+        double cost=0;
         for (int vx = 0; vx < vertices.size(); vx++) {
             if (matching.isExposed(vx))
                 continue;
             V v = vertices.get(vx);
             V w = vertices.get(matching.opposite(vx));
-            edges.add(graph.getEdge(v, w));
+            E edge=graph.getEdge(v, w);
+            edges.add(edge);
+            cost += 0.5*graph.getEdgeWeight(edge);
         }
 
-        return new MatchingImpl<>(graph, edges, edges.size());
+        return new MatchingImpl<>(graph, edges, cost);
     }
 
     /**
@@ -538,8 +541,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             connectedComponents.stream().filter(s -> s.size() % 2 == 1).count();
 
         return matching
-            .getEdges()
-            .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
+                .getEdges()
+                .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
                 / 2.0;
     }
 

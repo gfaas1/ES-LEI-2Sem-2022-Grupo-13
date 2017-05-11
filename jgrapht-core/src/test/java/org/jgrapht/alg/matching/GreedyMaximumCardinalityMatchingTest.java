@@ -41,7 +41,7 @@ public class GreedyMaximumCardinalityMatchingTest extends TestCase{
      * Not sorted
      */
     public void testRandomGraphs(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
+        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator<>(200, 120);
         IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
 
@@ -72,7 +72,7 @@ public class GreedyMaximumCardinalityMatchingTest extends TestCase{
      * Sorted.
      */
     public void testRandomGraphs2(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator(200, 120);
+        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator<>(200, 120);
         IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
         Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
 

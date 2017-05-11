@@ -32,14 +32,13 @@ import org.jgrapht.util.*;
  *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
- * @deprecated In favor of the more efficient {@link EdmondsMaximumCardinalityMatching} implementation.
+ * @deprecated Deprecated in favor of the more efficient {@link EdmondsMaximumCardinalityMatching}.
  */
 @Deprecated
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
-    private final MatchingAlgorithm<V,E> initializer;
     private Map<V, V> match;
     private Map<V, V> path;
     private Map<V, V> contracted;
@@ -52,29 +51,7 @@ public class EdmondsBlossomShrinking<V, E>
      */
     public EdmondsBlossomShrinking(Graph<V, E> graph)
     {
-        this(graph, null);
-    }
-
-    /**
-     * Construct an instance of the Edmonds blossom shrinking algorithm.
-     * @param graph the input graph
-     * @param initializer algorithm to compute initial feasible solution
-     */
-    public EdmondsBlossomShrinking(Graph<V, E> graph, MatchingAlgorithm<V,E> initializer)
-    {
         this.graph = GraphTests.requireUndirected(graph);
-        this.initializer=initializer;
-    }
-
-    private void warmStart(MatchingAlgorithm<V,E> initializer){
-        Matching<V,E> initialSolution=initializer.getMatching();
-        System.out.println("warmstart: "+initialSolution.getWeight());
-        for(E e : initialSolution.getEdges()){
-            V u=graph.getEdgeSource(e);
-            V v=graph.getEdgeTarget(e);
-            match.put(u, v);
-            match.put(v, u);
-        }
     }
 
     /**
@@ -83,13 +60,21 @@ public class EdmondsBlossomShrinking<V, E>
     @Override
     public Matching<V, E> getMatching()
     {
-        Set<E> edges = new ArrayUnenforcedSet<>();
+        Set<E> edges = findMatch();
+        return new MatchingImpl<>(graph,edges, edges.size());
+    }
+
+    /**
+     * Runs the algorithm on the input graph and returns the match edge set.
+     *
+     * @return set of edges
+     */
+    private Set<E> findMatch()
+    {
+        Set<E> result = new ArrayUnenforcedSet<>();
         match = new HashMap<>();
         path = new HashMap<>();
         contracted = new HashMap<>();
-
-        if(initializer != null)
-            this.warmStart(initializer);
 
         for (V i : graph.vertexSet()) {
             // Any augmenting path should start with _exposed_ vertex
@@ -112,10 +97,10 @@ public class EdmondsBlossomShrinking<V, E>
             v -> {
                 seen.add(v);
                 seen.add(match.get(v));
-                edges.add(graph.getEdge(v, match.get(v)));
+                result.add(graph.getEdge(v, match.get(v)));
             });
 
-        return new MatchingImpl<>(graph, edges, edges.size());
+        return result;
     }
 
     private V findPath(V root)
@@ -135,10 +120,16 @@ public class EdmondsBlossomShrinking<V, E>
         while (!q.isEmpty()) {
             V v = q.remove();
 
-            for (V to : Graphs.neighborListOf(graph, v)) {
+            for (E e : graph.edgesOf(v)) {
+                V to = graph.getEdgeSource(e);
 
-                if ((contracted.get(v).equals(contracted.get(to))) || to.equals(match.get(v)))
+                if (to.equals(v)) {
+                    to = graph.getEdgeTarget(e);
+                }
+
+                if ((contracted.get(v).equals(contracted.get(to))) || to.equals(match.get(v))) {
                     continue;
+                }
 
                 // Check whether we've hit a 'blossom'
                 if ((to.equals(root))
@@ -154,7 +145,7 @@ public class EdmondsBlossomShrinking<V, E>
                     graph
                         .vertexSet().stream()
                         .filter(
-                            i -> blossom.contains(contracted.get(i)))
+                            i -> contracted.containsKey(i) && blossom.contains(contracted.get(i)))
                         .forEach(i -> {
                             contracted.put(i, stem);
                             if (!used.contains(i)) {
@@ -188,7 +179,7 @@ public class EdmondsBlossomShrinking<V, E>
             blossom.add(contracted.get(match.get(v)));
             path.put(v, child);
             child = match.get(v);
-            v = path.get(child);
+            v = path.get(match.get(v));
         }
     }
 
@@ -198,14 +189,16 @@ public class EdmondsBlossomShrinking<V, E>
         for (;;) {
             a = contracted.get(a);
             seen.add(a);
-            if (!match.containsKey(a)) //We've reached the root of the tree
+            if (!match.containsKey(a)) {
                 break;
+            }
             a = path.get(match.get(a));
         }
         for (;;) {
             b = contracted.get(b);
-            if (seen.contains(b))
+            if (seen.contains(b)) {
                 return b;
+            }
             b = path.get(match.get(b));
         }
     }
