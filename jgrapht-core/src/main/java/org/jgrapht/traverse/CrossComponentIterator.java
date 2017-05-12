@@ -160,7 +160,7 @@ public abstract class CrossComponentIterator<V, E, D>
             }
 
             Iterator<V> it = isCrossComponentTraversal()?entireGraphVertexIterator:startVertexIterator;
-            while (it.hasNext()) {
+            while (it!=null && it.hasNext()) {
                 V v = it.next();
 
                 if (!isSeenVertex(v)) {

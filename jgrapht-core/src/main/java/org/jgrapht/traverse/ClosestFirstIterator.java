@@ -108,7 +108,7 @@ public class ClosestFirstIterator<V, E>
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
-        this(g, Collections.singletonList(startVertex), radius);
+        this(g, startVertex==null?null:Collections.singletonList(startVertex), radius);
     }
 
     /**
