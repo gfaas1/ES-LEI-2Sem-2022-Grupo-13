@@ -23,6 +23,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
 import org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching;
 import org.jgrapht.alg.matching.FlowBasedMaximumCardinalityBipartiteMatching;
+import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.IntegerVertexFactory;
@@ -46,8 +47,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     extends TestCase
 {
 
-    public static final int PERF_BENCHMARK_VERTICES_COUNT = 100;
-    public static final double PERF_BENCHMARK_EDGES_PROP = 0.9;
+    public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
+    public static final double PERF_BENCHMARK_EDGES_PROP = 0.7;
 
     @State(Scope.Benchmark)
     private static abstract class RandomGraphBenchmarkBase
@@ -108,6 +109,16 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
+    public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
+            extends RandomGraphBenchmarkBase
+    {
+        @Override
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
+        {
+            return new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, firstPartition, secondPartition);
+        }
+    }
+
     public static class MaxFlowBipartiteMatchingBenchmark
             extends RandomGraphBenchmarkBase
     {
@@ -124,11 +135,13 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         Options opt = new OptionsBuilder()
             .include(
                     ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+//            .include(
+//                    ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
-                    ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-                .include(
-                    ".*" + MaxFlowBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-            .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
+                    ".*" + HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+//                .include(
+//                    ".*" + MaxFlowBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+                .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 
         new Runner(opt).run();

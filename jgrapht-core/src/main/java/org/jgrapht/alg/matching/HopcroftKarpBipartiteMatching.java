@@ -36,7 +36,9 @@ import org.jgrapht.alg.interfaces.*;
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
+ * @deprecated Deprecated in favor of {@link HopcroftKarpMaximumCardinalityBipartiteMatching}
  */
+@Deprecated
 public class HopcroftKarpBipartiteMatching<V, E>
     implements MatchingAlgorithm<V, E>
 {
