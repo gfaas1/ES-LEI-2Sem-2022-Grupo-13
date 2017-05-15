@@ -20,7 +20,7 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.matching.util.FixedSizeQueue;
+import org.jgrapht.alg.util.FixedSizeIntegerQueue;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
     private int[] dist;
 
     /* queue used for breadth first search */
-    private FixedSizeQueue queue;
+    private FixedSizeIntegerQueue queue;
 
     /**
      * Constructs a new instance of the Hopcroft Karp bipartite matching algorithm
@@ -102,7 +102,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
 
         matching = new int[vertices.size() + 1];
         dist = new int[partition1.size()+1];
-        queue = new FixedSizeQueue(vertices.size());
+        queue = new FixedSizeIntegerQueue(vertices.size());
     }
 
     /**

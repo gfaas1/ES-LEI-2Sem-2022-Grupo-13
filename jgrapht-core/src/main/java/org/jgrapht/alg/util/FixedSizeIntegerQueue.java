@@ -15,16 +15,16 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.matching.util;
+package org.jgrapht.alg.util;
 
 /**
  * Primitive but efficient implementation of a fixed size queue for integers.
- * Note: this queue is not implemented as a ring, so at most N enqueue operations are allowed in the queue's life
- * span, where N is the maximum capacity of the queue!
+ * Note: this queue is not implemented as a ring, so at most N enqueue operations are allowed, where N is
+ * the maximum capacity of the queue! After that, queue.clear() must be invoked.
  *
  * @author Joris Kinable
  */
-public final class FixedSizeQueue
+public final class FixedSizeIntegerQueue
 {
     /* Storage array for the elements in the queue */
     private final int[] vs;
@@ -38,7 +38,7 @@ public final class FixedSizeQueue
      *
      * @param capacity size of the queue
      */
-    public FixedSizeQueue(int capacity)
+    public FixedSizeIntegerQueue(int capacity)
     {
         assert capacity > 0;
         vs = new int[capacity];
@@ -74,6 +74,14 @@ public final class FixedSizeQueue
     public boolean isEmpty()
     {
         return i == n;
+    }
+
+    /**
+     * Returns the number of items in the queue.
+     * @return number of items in the queue
+     */
+    public int size(){
+        return n-i;
     }
 
     /** Empty the queue. */

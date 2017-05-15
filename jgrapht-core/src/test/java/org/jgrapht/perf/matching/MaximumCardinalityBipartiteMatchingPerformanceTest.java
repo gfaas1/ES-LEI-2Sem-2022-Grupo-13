@@ -22,7 +22,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
 import org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching;
-import org.jgrapht.alg.matching.FlowBasedMaximumCardinalityBipartiteMatching;
 import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
@@ -34,7 +33,6 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -119,28 +117,14 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
-    public static class MaxFlowBipartiteMatchingBenchmark
-            extends RandomGraphBenchmarkBase
-    {
-        @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
-        {
-            return new FlowBasedMaximumCardinalityBipartiteMatching<>(graph, firstPartition, secondPartition);
-        }
-    }
-
     public void testRandomGraphBenchmark()
         throws RunnerException
     {
         Options opt = new OptionsBuilder()
             .include(
                     ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-//            .include(
-//                    ".*" + HopcroftKarpBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
                     ".*" + HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-//                .include(
-//                    ".*" + MaxFlowBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
                 .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

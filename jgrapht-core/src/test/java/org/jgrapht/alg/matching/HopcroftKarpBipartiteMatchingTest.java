@@ -33,6 +33,7 @@ import junit.framework.*;
  * @author Joris Kinable
  *
  */
+@Deprecated
 public class HopcroftKarpBipartiteMatchingTest
     extends MaximumCardinalityBipartiteMatchingTest
 {

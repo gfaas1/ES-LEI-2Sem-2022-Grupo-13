@@ -110,7 +110,7 @@ public class PathGrowingWeightedMatchingPerformanceTest
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
         {
-            return new GreedyWeightedMatching<>(graph);
+            return new GreedyWeightedMatching<>(graph, false);
         }
     }
 

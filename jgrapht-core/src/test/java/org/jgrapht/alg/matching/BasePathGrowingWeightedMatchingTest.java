@@ -111,7 +111,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
             Matching<Integer, DefaultWeightedEdge> m2 = alg2.getMatching();
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg3 = new EdmondsMaximumCardinalityMatching<>(g);
             Matching<Integer, DefaultWeightedEdge> m3 = alg3.getMatching();
-            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 = new GreedyWeightedMatching<>(g);
+            MatchingAlgorithm<Integer, DefaultWeightedEdge> alg4 = new GreedyWeightedMatching<>(g, false);
             Matching<Integer, DefaultWeightedEdge> m4 = alg4.getMatching();
 
             assertTrue(isMatching(g, m1));

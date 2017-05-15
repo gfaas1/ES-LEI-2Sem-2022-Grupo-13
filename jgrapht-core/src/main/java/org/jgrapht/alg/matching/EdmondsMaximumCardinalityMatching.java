@@ -22,7 +22,7 @@ import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.matching.util.FixedSizeQueue;
+import org.jgrapht.alg.util.FixedSizeIntegerQueue;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.AsSubgraph;
@@ -120,7 +120,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     private static final int NIL = -1;
 
     /** Queue of 'even' (exposed) vertices */
-    private FixedSizeQueue queue;
+    private FixedSizeIntegerQueue queue;
 
     /** Union-Find to store blossoms. */
     private UnionFind<Integer> uf;
@@ -178,7 +178,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         this.even = new int[vertices.size()];
         this.odd = new int[vertices.size()];
 
-        this.queue = new FixedSizeQueue(vertices.size());
+        this.queue = new FixedSizeIntegerQueue(vertices.size());
         this.uf = new UnionFind<>(new HashSet<>(vertexIndexMap.values()));
 
         // temp storage of paths in the algorithm
