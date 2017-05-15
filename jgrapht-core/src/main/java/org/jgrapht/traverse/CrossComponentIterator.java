@@ -67,7 +67,7 @@ public abstract class CrossComponentIterator<V, E, D>
     /**
      * The current vertex.
      */
-    private V currentStartVertex;
+    private V startVertex;
 
     /**
      * The connected component state
@@ -109,7 +109,7 @@ public abstract class CrossComponentIterator<V, E, D>
      * @param startVertices the vertices iteration to be started.
      *
      * @throws IllegalArgumentException if <code>g==null</code> or does not contain
-     *         <code>currentStartVertex</code>
+     *         <code>startVertex</code>
      */
     public CrossComponentIterator(Graph<V, E> g, Iterable<V> startVertices)
     {
@@ -123,11 +123,6 @@ public abstract class CrossComponentIterator<V, E, D>
             this.crossComponentTraversal = true;
         } else {
             this.crossComponentTraversal = false;
-            for (V v : startVertices) {
-                if (!graph.containsVertex(v)) {
-                    throw new IllegalArgumentException("graph must contain the start vertex");
-                }
-            }
             this.startVertexIterator = startVertices.iterator();
         }
 
@@ -137,9 +132,12 @@ public abstract class CrossComponentIterator<V, E, D>
         Iterator<V> it = crossComponentTraversal?entireGraphVertexIterator:startVertexIterator;
         // pick a start vertex if possible
         if (it.hasNext()) {
-            this.currentStartVertex = it.next();
+            this.startVertex = it.next();
+            if (!graph.containsVertex(startVertex)) {
+                throw new IllegalArgumentException("graph must contain the start vertex");
+            }
         } else {
-            this.currentStartVertex = null;
+            this.startVertex = null;
         }
 
     }
@@ -147,7 +145,7 @@ public abstract class CrossComponentIterator<V, E, D>
     @Override
     public boolean hasNext()
     {
-        if (currentStartVertex != null) {
+        if (startVertex != null) {
             encounterStartVertex();
         }
 
@@ -162,7 +160,9 @@ public abstract class CrossComponentIterator<V, E, D>
             Iterator<V> it = isCrossComponentTraversal()?entireGraphVertexIterator:startVertexIterator;
             while (it!=null && it.hasNext()) {
                 V v = it.next();
-
+                if (!graph.containsVertex(v)) {
+                    throw new IllegalArgumentException("graph must contain the start vertex");
+                }
                 if (!isSeenVertex(v)) {
                     encounterVertex(v, null);
                     state = CCS_BEFORE_COMPONENT;
@@ -180,7 +180,7 @@ public abstract class CrossComponentIterator<V, E, D>
     @Override
     public V next()
     {
-        if (currentStartVertex != null) {
+        if (startVertex != null) {
             encounterStartVertex();
         }
 
@@ -314,8 +314,8 @@ public abstract class CrossComponentIterator<V, E, D>
 
     private void encounterStartVertex()
     {
-        encounterVertex(currentStartVertex, null);
-        currentStartVertex = null;
+        encounterVertex(startVertex, null);
+        startVertex = null;
     }
 
 }
