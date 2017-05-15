@@ -31,6 +31,12 @@ import java.util.*;
  * which may contain self-loops and multiple edges.
  * To compute a maximum cardinality matching in general (non-bipartite) graphs, use {@link EdmondsMaximumCardinalityMatching} instead.
  *
+ * <p>
+ * The Hopcroft Karp matching algorithm computes augmenting paths of increasing length, until no augmenting
+ * path exists in the graph. At each iteration, the algorithm runs a Breadth First Search from the exposed (free)
+ * vertices, until an augmenting path is found. Next, a Depth First Search is performed to find all
+ * (vertex disjoint) augmenting paths of the same length. The matching is augmented along all discovered
+ * augmenting paths simultaneously.
  *
  * <p>
  * The original algorithm is described in: Hopcroft, John E.; Karp, Richard M. (1973), "An n5/2 algorithm for
