@@ -22,6 +22,7 @@ import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.matching.util.FixedSizeQueue;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.UnionFind;
 import org.jgrapht.graph.AsSubgraph;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  * perfect matching if one exists. If no perfect matching exists, then the largest (non-perfect)
  * matching is returned instead. This algorithm does NOT compute a maximum weight matching. In the
  * special case that the input graph is bipartite, consider using
- * {@link HopcroftKarpBipartiteMatching} instead.
+ * {@link HopcroftKarpMaximumCardinalityBipartiteMatching} instead.
  * <p>
  * To compute a maximum cardinality matching, at most n augmenting path computations are performed.
  * Each augmenting path computation takes O(m alpha(m,n)) time, where alpha(m,n) is an inverse of
@@ -223,7 +224,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             even[root] = root;
             queue.enqueue(root);
             // for each exposed vertex, start a bfs search
-            while (!queue.empty()) {
+            while (!queue.isEmpty()) {
                 int v = queue.poll(); // Even vertex
 
                 for (V wOrig : Graphs.neighborListOf(graph, vertices.get(v))) {
@@ -593,71 +594,6 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         {
             match[u] = v;
             match[v] = u;
-        }
-    }
-
-    /**
-     * Efficient implementation of a fixed size queue for integers.
-     */
-    private static final class FixedSizeQueue
-    {
-        private final int[] vs;
-        private int i = 0;
-        private int n = 0;
-
-        /**
-         * Create a queue of size n.
-         *
-         * @param n size of the queue
-         */
-        private FixedSizeQueue(int n)
-        {
-            vs = new int[n];
-        }
-
-        /**
-         * Add an element to the queue.
-         *
-         * @param e element
-         */
-        void enqueue(int e)
-        {
-            vs[n++] = e;
-        }
-
-        /**
-         * Poll the first element from the queue.
-         *
-         * @return the first element.
-         */
-        int poll()
-        {
-            return vs[i++];
-        }
-
-        /**
-         * Check if the queue has any items.
-         *
-         * @return true if the queue is empty
-         */
-        boolean empty()
-        {
-            return i == n;
-        }
-
-        /** Empty the queue. */
-        void clear()
-        {
-            i = 0;
-            n = 0;
-        }
-
-        public String toString()
-        {
-            String s = "";
-            for (int j = i; j < n; j++)
-                s += vs[j] + " ";
-            return s;
         }
     }
 

@@ -20,13 +20,15 @@ package org.jgrapht.alg.matching;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
+import org.jgrapht.alg.matching.util.FixedSizeQueue;
 
 import java.util.*;
 
 /**
  * Implementation of the well-known Hopcroft Karp algorithm to compute a matching of maximum cardinality in a bipartite graph.
- * To compute a maximum cardinality matching in general (non-bipartite) graphs, use {@link EdmondsMaximumCardinalityMatching} instead.
  * The algorithm runs in O(|E|*√|V|) time.
+ * To compute a maximum cardinality matching in general (non-bipartite) graphs, use {@link EdmondsMaximumCardinalityMatching} instead.
+ *
  *
  * <p>
  * The original algorithm is described in: Hopcroft, John E.; Karp, Richard M. (1973), "An n5/2 algorithm for
@@ -54,7 +56,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
     /* Number of matched vertices i partition 1. */
     private int matchedVertices;
 
-    /* Dummy vertex */
+    /* Dummy vertex. All vertices are initially matched against this dummy vertex */
     private final int DUMMY = 0;
     /* Infinity */
     private final int INF = Integer.MAX_VALUE;
@@ -86,6 +88,9 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
         }
     }
 
+    /**
+     * Initialize data structures
+     */
     private void init() {
         vertices = new ArrayList<>();
         vertices.add(null);
@@ -127,7 +132,6 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
      */
     private boolean bfs()
     {
-//        System.out.println("BFS");
         queue.clear();
 
         for (int u = 1; u <= partition1.size(); u++)
@@ -137,33 +141,29 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
             }else //Set distance of all matched vertices to INF
                 dist[u] = INF;
         dist[DUMMY] = INF;
-//        System.out.println("init:\n\tmatching: "+Arrays.toString(matching)+"\n\tdist: "+Arrays.toString(dist));
 
-        while (!queue.empty()){
+        while (!queue.isEmpty()){
             int u = queue.poll();
             if (dist[u] < dist[DUMMY])
                 for (V vOrig : Graphs.neighborListOf(graph, vertices.get(u))) {
                     int v=vertexIndexMap.get(vOrig);
-//                    System.out.println("processing edge (v,u): ("+u+","+v+")");
                     if (dist[matching[v]] == INF) {
                         dist[matching[v]] = dist[u] + 1;
                         queue.enqueue(matching[v]);
                     }
                 }
         }
-//        System.out.println("bfs finished:\n\tmatching: "+Arrays.toString(matching)+"\n\tdist: "+Arrays.toString(dist));
-//        System.out.println("BFS returning: "+(dist[DUMMY] != INF));
         return dist[DUMMY] != INF; //Return true if an augmenting path is found
     }
 
     /**
-     * Find all vertex disjoint augmenting paths of length dist[DUMMY].
+     * Find all vertex disjoint augmenting paths of length dist[DUMMY]. To find paths of dist[DUMMY] length,
+     * we simply follow nodes that are 1 distance increments away from each other.
      * @param u vertex from which the DFS is started
      * @return true if an augmenting path from vertex u was found, false otherwise
      */
     private boolean dfs(int u)
     {
-//        System.out.println("DFS from vertex: "+u);
         if (u != DUMMY){
             for (V vOrig : Graphs.neighborListOf(graph, vertices.get(u))) {
                 int v = vertexIndexMap.get(vOrig);
@@ -171,11 +171,10 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
                     if (dfs(matching[v])) {
                         matching[v] = u;
                         matching[u] = v;
-                        matchedVertices++;
                         return true;
                     }
             }
-
+            //No augmenting path has been found. Set distance of u to INF to ensure that u isn't visited again.
             dist[u] = INF;
             return false;
         }
@@ -191,7 +190,8 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
             //Greedily search for vertex disjoint augmenting paths
             for (int v = 1; v <= partition1.size() && matchedVertices < partition1.size(); v++)
                 if (matching[v] == DUMMY) //v is unmatched
-                    dfs(v);
+                    if(dfs(v))
+                        matchedVertices++;
         }
         assert matchedVertices <= partition1.size();
 
@@ -202,70 +202,5 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
             }
         }
         return new MatchingImpl<>(graph, edges, edges.size());
-    }
-
-    /**
-     * Efficient implementation of a fixed size queue for integers.
-     */
-    private static final class FixedSizeQueue
-    {
-        private final int[] vs;
-        private int i = 0;
-        private int n = 0;
-
-        /**
-         * Create a queue of size n.
-         *
-         * @param n size of the queue
-         */
-        private FixedSizeQueue(int n)
-        {
-            vs = new int[n];
-        }
-
-        /**
-         * Add an element to the queue.
-         *
-         * @param e element
-         */
-        void enqueue(int e)
-        {
-            vs[n++] = e;
-        }
-
-        /**
-         * Poll the first element from the queue.
-         *
-         * @return the first element.
-         */
-        int poll()
-        {
-            return vs[i++];
-        }
-
-        /**
-         * Check if the queue has any items.
-         *
-         * @return true if the queue is empty
-         */
-        boolean empty()
-        {
-            return i == n;
-        }
-
-        /** Empty the queue. */
-        void clear()
-        {
-            i = 0;
-            n = 0;
-        }
-
-        public String toString()
-        {
-            String s = "";
-            for (int j = i; j < n; j++)
-                s += vs[j] + " ";
-            return s;
-        }
     }
 }
