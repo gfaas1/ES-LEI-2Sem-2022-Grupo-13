@@ -18,6 +18,7 @@
 package org.jgrapht.alg.matching;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.alg.util.FixedSizeIntegerQueue;
@@ -26,7 +27,8 @@ import java.util.*;
 
 /**
  * Implementation of the well-known Hopcroft Karp algorithm to compute a matching of maximum cardinality in a bipartite graph.
- * The algorithm runs in O(|E|*√|V|) time.
+ * The algorithm runs in O(|E|*√|V|) time. This implementation accepts undirected graphs
+ * which may contain self-loops and multiple edges.
  * To compute a maximum cardinality matching in general (non-bipartite) graphs, use {@link EdmondsMaximumCardinalityMatching} instead.
  *
  *
@@ -70,13 +72,15 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V,E> implements Mat
     private FixedSizeIntegerQueue queue;
 
     /**
-     * Constructs a new instance of the Hopcroft Karp bipartite matching algorithm
-     * @param graph input graph
-     * @param partition1 the first partition of vertices
-     * @param partition2 the second partition of vertices
+     * Constructs a new instance of the Hopcroft Karp bipartite matching algorithm. The input graph must be bipartite.
+     * For efficiency reasons, this class does not check whether the input graph is bipartite. Invoking this class on
+     * a non-bipartite graph results in undefined behavior. To test whether a graph is bipartite, use {@link GraphTests#isBipartite(Graph)}.
+     * @param graph bipartite graph
+     * @param partition1 the first partition of vertices in the bipartite graph
+     * @param partition2 the second partition of vertices in the bipartite graph
      */
     public HopcroftKarpMaximumCardinalityBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
-        this.graph=graph;
+        this.graph= GraphTests.requireUndirected(graph);
 
         //Ensure that partition1 is smaller or equal in size compared to partition 2
         if(partition1.size() <= partition2.size()) {

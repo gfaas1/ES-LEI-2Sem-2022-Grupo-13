@@ -24,6 +24,7 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm;
 import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.IntegerVertexFactory;
+import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
@@ -160,6 +161,21 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         assertTrue(m.getEdges().contains(g.getEdge(1, 2)));
         assertTrue(m.getEdges().contains(g.getEdge(0, 3)));
         assertEquals(2, m.getEdges().size());
+    }
+
+    public void testPseudoGraph(){
+        Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
+        Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2));
+        Set<Integer> partition2 = new HashSet<>(Arrays.asList(3, 4, 5));
+        Graphs.addAllVertices(graph, partition1);
+        Graphs.addAllVertices(graph, partition2);
+        int[][] edges={{0,3}, {1,4}, {2,5}, {0,3}, {0,0}};
+        for(int[] edge : edges)
+            graph.addEdge(edge[0],edge[1]);
+
+        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        this.verifyMatching(graph, matching, 3);
     }
 
     public void testRandomBipartiteGraphs(){
