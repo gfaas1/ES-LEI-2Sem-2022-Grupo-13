@@ -26,7 +26,6 @@ import org.jgrapht.util.*;
 /**
  * Helper for {@link MaskSubgraph}.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 class MaskVertexSet<V>

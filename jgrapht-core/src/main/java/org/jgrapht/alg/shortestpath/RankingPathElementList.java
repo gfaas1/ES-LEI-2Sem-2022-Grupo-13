@@ -26,7 +26,6 @@ import org.jgrapht.graph.*;
 /**
  * List of simple paths in increasing order of weight.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 final class RankingPathElementList<V, E>

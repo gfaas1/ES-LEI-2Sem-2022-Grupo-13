@@ -26,7 +26,6 @@ import org.jgrapht.*;
  *
  * @param <V> the graph vertex type
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class ClassBasedVertexFactory<V>

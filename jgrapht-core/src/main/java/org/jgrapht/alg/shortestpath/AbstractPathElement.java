@@ -31,7 +31,6 @@ import org.jgrapht.*;
  * NOTE jvs 1-Jan-2008: This is an internal data structure for use in algorithms. For returning
  * paths to callers, use the public {@link GraphPath} interface instead.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 abstract class AbstractPathElement<V, E>

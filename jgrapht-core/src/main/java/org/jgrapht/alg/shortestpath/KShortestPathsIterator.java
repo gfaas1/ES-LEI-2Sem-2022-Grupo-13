@@ -24,7 +24,6 @@ import org.jgrapht.*;
 /**
  * Helper class for {@link KShortestPaths}.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 class KShortestPathsIterator<V, E>

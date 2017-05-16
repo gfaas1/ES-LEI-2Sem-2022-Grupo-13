@@ -22,7 +22,6 @@ import org.jgrapht.graph.*;
 /**
  * <img src="./Picture1.jpg">
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class Picture1Graph

@@ -20,7 +20,6 @@ package org.jgrapht.alg;
 import org.jgrapht.graph.*;
 
 /**
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class NotBiconnectedGraph

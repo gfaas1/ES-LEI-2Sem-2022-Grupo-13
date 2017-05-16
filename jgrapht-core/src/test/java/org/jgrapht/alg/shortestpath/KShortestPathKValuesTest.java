@@ -24,7 +24,6 @@ import org.jgrapht.util.*;
 import junit.framework.*;
 
 /**
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 public class KShortestPathKValuesTest

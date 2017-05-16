@@ -24,7 +24,6 @@ import org.jgrapht.*;
 /**
  * List of paths <code>AbstractPathElement</code> with same target vertex.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
