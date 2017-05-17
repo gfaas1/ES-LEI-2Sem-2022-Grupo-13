@@ -35,9 +35,9 @@ import org.jgrapht.graph.EdgeReversedGraph;
  * 
  * <p>
  * Computes the closeness centrality of each vertex of a graph. The closeness of a vertex x is
- * defined as the reciprocal of the farness, that is H(x)= 1 / \sum_{y \neq x} d(x,y), where d(x,y)
- * is the shortest path distance from x to y. When normalization is used, the score is multiplied by
- * n-1 where n is the total number of vertices in the graph. For more details see
+ * defined as the reciprocal of the fairness, that is \(H(x)= 1 / \sum_{y \neq x} d(x,y)\), where \(d(x,y)\)
+ * is the shortest path distance from \(x\) to \(y\). When normalization is used, the score is multiplied by
+ * \(n-1\) where \(n\) is the total number of vertices in the graph. For more details see
  * <a href="https://en.wikipedia.org/wiki/Closeness_centrality">wikipedia</a> and
  * <ul>
  * <li>Alex Bavelas. Communication patterns in task-oriented groups. J. Acoust. Soc. Am,
@@ -55,8 +55,8 @@ import org.jgrapht.graph.EdgeReversedGraph;
  * 
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
- * whether the graph has edges with negative edge weights. Thus, the running time is either O(n (m +
- * n logn)) or O(n^3) respectively, where n is the number of vertices and m the number of edges of
+ * whether the graph has edges with negative edge weights. Thus, the running time is either \(O(n (m +n \log_n))\) or
+ * \(O(n^3)\) respectively, where \(n\) is the number of vertices and \(m\) the number of edges of
  * the graph.
  * 
  * @param <V> the graph vertex type

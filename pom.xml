@@ -122,6 +122,8 @@
 						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
+						<header>&apos;&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</header>
+						<additionalparam>--allow-script-in-comments</additionalparam>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
