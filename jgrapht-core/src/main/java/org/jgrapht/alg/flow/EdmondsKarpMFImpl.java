@@ -25,9 +25,9 @@ import org.jgrapht.alg.util.extension.*;
 /**
  * This class computes a maximum flow in a <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> using
  * <a href = "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp algorithm</a>.
- * Given is a weighted directed graph $G(V,E)$ with vertex set $V$ and edge set $E$. Each edge $e\in E$ has an associated
+ * Given is a weighted directed or undirected graph $G(V,E)$ with vertex set $V$ and edge set $E$. Each edge $e\in E$ has an associated
  * non-negative capacity $u_e$. The maximum flow problem involves finding a feasible flow from a source vertex $s$ to a sink vertex
- * $t$ which is maximum. The amount of flow $f_e$ through any arc $e$ cannot exceed capacity $u_e$.
+ * $t$ which is maximum. The amount of flow $f_e$ through any edge $e$ cannot exceed capacity $u_e$.
  * Moreover, flow conservation must hold: the sum of flows entering a node must equal the sum of flows exiting that node,
  * except for the source and the sink nodes.
  * <p>
@@ -39,7 +39,11 @@ import org.jgrapht.alg.util.extension.*;
  * &amp;0\leq f_e \leq u_e &amp; \forall e\in E
  * \end{align}
  * \]
- * Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming arcs of vertex $i$.
+ * Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming edges of vertex $i$.
+ * <p>
+ * When the input graph is undirected, an edge $(i,j)$ is treated as two directed arcs: $(i,j)$ and $(j,i)$. In such a case,
+ * there is the additional restriction that the flow can only go in one direction: the flow either goes form $i$ to $j$,
+ * or from $j$ to $i$, but there cannot be a positive flow on $(i,j)$ and $(j,i)$ simultaneously.
  * <p>
  * The runtime complexity of this class is $O(nm^2)$, where $n$ is the number of vertices and $m$ the number of edges in the
  * graph. For a more efficient algorithm, consider using {@link PushRelabelMFImpl} instead.
