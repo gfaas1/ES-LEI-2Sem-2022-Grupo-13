@@ -39,7 +39,7 @@ import org.jgrapht.alg.util.extension.*;
  * &amp;0\leq f_{ij} \leq u_{ij} &amp; \forall (i,j)\in E
  * \end{align}
  * \]
- * Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming arc of vertex $i$.
+ * Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming arcs of vertex $i$.
  * <p>
  * The runtime complexity of this class is $O(nm^2)$, where $n$ is the number of vertices and $m$ the number of edges in the
  * graph. For a more efficient algorithm, consider using {@link PushRelabelMFImpl} instead.
