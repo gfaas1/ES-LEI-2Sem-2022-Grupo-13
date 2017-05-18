@@ -25,18 +25,18 @@ import org.jgrapht.alg.util.extension.*;
 /**
  * This class computes a maximum flow in a <a href = "http://en.wikipedia.org/wiki/Flow_network">flow network</a> using
  * <a href = "http://en.wikipedia.org/wiki/Edmonds-Karp_algorithm">Edmonds-Karp algorithm</a>.
- * Given is a weighted directed graph $G(V,E)$ with vertex set $V$ and edge set $E$. Each edge $(i,j)\in E$ has an associated
- * non-negative capacity $u_{ij}$. The maximum flow problem involves finding a feasible flow from a source vertex $s$ to a sink vertex
- * $t$ which is maximum. The amount of flow $f_{ij}$ through any edge $(i,j)$ cannot exceed capacity $u_{ij}$.
+ * Given is a weighted directed graph $G(V,E)$ with vertex set $V$ and edge set $E$. Each edge $e\in E$ has an associated
+ * non-negative capacity $u_e$. The maximum flow problem involves finding a feasible flow from a source vertex $s$ to a sink vertex
+ * $t$ which is maximum. The amount of flow $f_e$ through any arc $e$ cannot exceed capacity $u_e$.
  * Moreover, flow conservation must hold: the sum of flows entering a node must equal the sum of flows exiting that node,
  * except for the source and the sink nodes.
  * <p>
  * Mathematically, the maximum flow problem is stated as follows:
  * \[
  * \begin{align}
- * \max~&amp; \sum_{(i,j)\in \delta^+(s)}f_{ij} &amp;\\
- * \mbox{s.t. }&amp;\sum_{(j,i)\in \delta^-(i)} f_{ij}=\sum_{(i,j)\in \delta^+(i)} f_{ij} &amp; \forall i\in V\setminus\{s,t\}\\
- * &amp;0\leq f_{ij} \leq u_{ij} &amp; \forall (i,j)\in E
+ * \max~&amp; \sum_{e\in \delta^+(s)}f_e &amp;\\
+ * \mbox{s.t. }&amp;\sum_{e\in \delta^-(i)} f_e=\sum_{e\in \delta^+(i)} f_e &amp; \forall i\in V\setminus\{s,t\}\\
+ * &amp;0\leq f_e \leq u_e &amp; \forall e\in E
  * \end{align}
  * \]
  * Here $\delta^+(i)$ resp $\delta^-(i)$ denote resp the outgoing and incoming arcs of vertex $i$.
