@@ -55,7 +55,7 @@ import org.jgrapht.graph.EdgeReversedGraph;
  * 
  * <p>
  * Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending on
- * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m +n \log_n))$ or
+ * whether the graph has edges with negative edge weights. Thus, the running time is either $O(n (m +n \log n))$ or
  * $O(n^3)$ respectively, where $n$ is the number of vertices and $m$ the number of edges of
  * the graph.
  * 
