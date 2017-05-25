@@ -43,7 +43,13 @@ import org.jgrapht.graph.DirectedPseudograph;
  * Dijkstra's algorithm to be used on the transformed graph.
  * 
  * <p>
- * Running time is O(|V||E| + |V|^2 log|V|).
+ * Running time is $O(n m + n^2 \log n)$.
+ *
+ * <p>
+ * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
+ * provide a {@link VertexFactory}. Since the graph already contains vertices, care must be taken so
+ * that the provided vertex factory does not return nodes that are already contained in the original
+ * input graph.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -96,6 +102,9 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink)
@@ -112,6 +121,9 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
      */
     @Override
     public double getPathWeight(V source, V sink)
@@ -128,6 +140,9 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException in case the provided vertex factory creates vertices which
+     *         are already in the original graph
      */
     @Override
     public SingleSourcePaths<V, E> getPaths(V source)
@@ -225,10 +240,12 @@ public class JohnsonShortestPaths<V, E>
             Map<V, Pair<Double, E>> newDistanceAndPredecessorMap = new HashMap<>();
             for (V u : g.vertexSet()) {
                 Pair<Double, E> oldPair = distanceAndPredecessorMap.get(u);
-                Pair<Double, E> newPair = Pair.of(
-                    oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                    oldPair.getSecond());
-                newDistanceAndPredecessorMap.put(u, newPair);
+                if (oldPair != null) {
+                    Pair<Double, E> newPair = Pair.of(
+                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                        oldPair.getSecond());
+                    newDistanceAndPredecessorMap.put(u, newPair);
+                }
             }
 
             // store shortest path tree
