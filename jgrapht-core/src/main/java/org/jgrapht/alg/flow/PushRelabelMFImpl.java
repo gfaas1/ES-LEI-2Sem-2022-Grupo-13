@@ -208,8 +208,8 @@ public class PushRelabelMFImpl<V, E>
             for (;;) {
                 for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
                     if (isAdmissible(ex)) {
-                        if ((ex.getTarget().prototype != sink)
-                            && (ex.getTarget().prototype != source))
+                        if ((! ex.getTarget().prototype.equals(sink))
+                            && (! ex.getTarget().prototype.equals(source)))
                         {
                             active.offer(ex.getTarget());
                         }
