@@ -98,6 +98,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
     private void readGraph6(Graph<V, E> g, String g6) throws ImportException {
         bytes = g6.getBytes();
+        validateInput();
         byteIndex = bitIndex = 0;
 
         //Number of vertices n
@@ -114,7 +115,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
         for (int j = 1; j < n; j++) {
             for (int i = 0; i < j; i++) {
-                int bit = getBit();
+                int bit = getBits(1);
                 if (bit == 1) {
 
                     V from= map.get(i);
@@ -131,9 +132,8 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
     }
 
     private void readSparse6(Graph<V, E> g, String s6) throws ImportException {
-//    this.test();
-
         bytes = s6.getBytes();
+        validateInput();
         byteIndex = bitIndex = 0;
 
         //Number of vertices n
@@ -155,8 +155,8 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
         //The remaining bytes encode a sequence b[0] x[0] b[1] x[1] b[2] x[2] ... b[m] x[m]
         //Read blocks. In decoding, an incomplete (b,x) pair at the end is discarded.
-        while (hasBlock(1 + k)) {
-            int b = getBit(); //Read x[i]
+        while (hasBits(1 + k)) {
+            int b = getBits(1); //Read x[i]
             int x = getBits(k); //Read b[i]
 
             if(b==1)
@@ -183,27 +183,22 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
     private byte[] bytes;
     private int byteIndex, bitIndex=0;
 
+    private void validateInput() throws ImportException {
+        for(byte b : bytes)
+            if(b < 63 || b > 126)
+                throw new ImportException("Graph string seems to be corrupt. Illegal character detected");
+    }
+
     private int getNumberOfVertices() throws ImportException {
         //Determine whether the number of vertices is encoded in 1, 4 or 8 bytes.
-        int c;
-
-        //If the first 2 bytes are equal to 126, the number of vertices is encoded in the first 8 bytes.
         if(bytes.length > 8 && bytes[0] == 126 && bytes[1]==126) {
-            this.getByte(); //Strip the first 2 garbage bytes
-            this.getByte();
-            c = 6;
+            byteIndex+=2; //Strip the first 2 garbage bytes
+            return getBits(36);
         }else if(bytes.length > 4 && bytes[0] == 126) {
-            this.getByte(); //Strip the first garbage byte
-            c = 3;
+            byteIndex++; //Strip the first garbage byte
+            return getBits(18);
         }else
-            c=1;
-
-        int value=0;
-        for(int j=0; j<c; j++){
-            value = (value << 6) + getByte();
-        }
-        System.out.println("value: "+value);
-        return value;
+            return getBits(6);
     }
 
 
@@ -212,46 +207,10 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      * @param k bits
      * @return true if a data block of k bits is available
      */
-    private boolean hasBlock(int k) {
+    private boolean hasBits(int k) {
         return (byteIndex + (bitIndex + k - 1) / 6) < bytes.length;
     }
 
-    /**
-     * Converts the next byte of data to an integer
-     * @return the next byte of data
-     */
-    private int getByte() throws ImportException {
-        assert (byteIndex < bytes.length);
-        if(bytes[byteIndex] < 63 || bytes[byteIndex] > 126)
-            throw new ImportException("Graph string seems to be corrupt. Illegal character detected");
-
-        byte c = bytes[byteIndex];
-        byteIndex++;
-        return c-63;
-    }
-
-    /**
-     * Returns the next bit of data
-     * @return the next bit of data
-     */
-    private int getBit() throws ImportException {
-        assert (byteIndex < bytes.length);
-
-        byte c = bytes[byteIndex];
-        if(c < 63 || c > 126)
-            throw new ImportException("Graph string seems to be corrupt. Illegal character detected");
-
-        c -= 63;
-        c >>= (5 - bitIndex);
-
-        bitIndex++;
-        if (bitIndex == 6) { //Advance to the next byte
-            byteIndex++;
-            bitIndex = 0;
-        }
-
-        return (c & 0x01);
-    }
 
     /**
      * Converts the next k bits of data to an integer
@@ -259,11 +218,42 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      * @return the next k bits of data represented by an integer
      */
     private int getBits(int k) throws ImportException {
-        int v = 0;
-        for (int i = 0; i < k; i++) {
-            v <<= 1;
-            v += getBit();
+        int value=0;
+        //Read minimum{bits we need, remaining bits in current byte}
+        if(bitIndex > 0 || k < 6){
+            int x=Math.min(k, 6-bitIndex);
+                int mask = (1 << x) - 1;
+                int y = (bytes[byteIndex]-63) >> (6 - bitIndex - x);
+                y &= mask;
+                value = (value << k) + y;
+                k -= x;
+                bitIndex = bitIndex + x;
+                if(bitIndex == 6){
+                    byteIndex++;
+                    bitIndex=0;
+                }
         }
-        return v;
+
+        //Read blocks of 6 bits at a time
+        int blocks=k/6;
+        for (int j = 0; j < blocks; j++) {
+            value = (value << 6) + bytes[byteIndex]-63;
+            byteIndex++;
+            k -= 6;
+        }
+
+        //Read remaining bits
+        if(k>0){
+            int y=bytes[byteIndex]-63;
+            y=y >> (6-k);
+            value=(value << k) + y;
+            bitIndex=k;
+        }
+
+        return value;
+    }
+
+    private String getBitString(int i){
+        return String.format("%8s", Integer.toBinaryString(i & 0xFF)).replace(' ', '0');
     }
 }

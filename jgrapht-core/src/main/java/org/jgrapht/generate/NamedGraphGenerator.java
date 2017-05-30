@@ -5,6 +5,10 @@ import org.jgrapht.VertexFactory;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +24,7 @@ public class NamedGraphGenerator<V,E> {
         this.vertexFactory=vertexFactory;
     }
 
+    //-------------Holt Graph-----------//
     public static Graph<Integer, DefaultEdge> holtGraph(){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
         new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateHoltGraph(g);
@@ -33,6 +38,24 @@ public class NamedGraphGenerator<V,E> {
 
     }
 
+
+    //-------------Klein7RegularGraph-----------//
+
+//    public static Graph<Integer, DefaultEdge> klein7RegularGraph(){
+//        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+//        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateKlein7RegularGraph(g);
+//        return g;
+//    }
+//
+//    public <V,E> void generateKlein7RegularGraph(Graph<V,E> targetGraph){
+//        GraphImporter<V, E> importer = new Graph6Sparse6Importer<>(
+//                (l, a) -> vertexFactory.createVertex(), (f, t, l, a) -> targetGraph.getEdgeFactory().createEdge(f, t));
+//        String g6 = "ZBXzr|}^z~TTitjLth|dmkrmsl|if}TmbJMhrJX]YfFyTbmsseztKTvyhDvw\n";
+//        Reader reader=new InputStreamReader(new ByteArrayInputStream(g6.getBytes(StandardCharsets.UTF_8)), "UTF-8");
+//        importer.importGraph(targetGraph, reader);
+//    }
+
+    //--------------Helper methods-----------------/
     private void addEdge(Graph<V,E> targetGraph, int i, int j){
         System.out.println("adding: ("+i+","+j);
         if(!vertexMap.containsKey(i)) {
