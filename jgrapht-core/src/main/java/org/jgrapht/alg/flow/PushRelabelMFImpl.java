@@ -197,12 +197,13 @@ public class PushRelabelMFImpl<V, E>
      */
     public double calculateMaximumFlow(V source, V sink)
     {
+        System.out.println("calculateMaximumFlow") ;
         init(source, sink);
-
+System.out.println("init done");
         Queue<VertexExtension> active = new ArrayDeque<>();
-
+System.out.println("active created") ;
         initialize(getVertexExtension(source), getVertexExtension(sink), active);
-
+System.out.println("initialize done") ;
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
             for (;;) {
@@ -241,14 +242,14 @@ public class PushRelabelMFImpl<V, E>
                 }
             }
         }
-
+System.out.println("while done") ;
         // Calculate the max flow that reaches the sink. There may be more efficient ways to do
         // this.
         for (E e : network.edgesOf(sink)) {
             AnnotatedFlowEdge edge = edgeExtensionManager.getExtension(e);
             maxFlowValue += (directedGraph ? edge.flow : edge.flow + edge.getInverse().flow);
         }
-
+System.out.println("for done");
         if (DIAGNOSTIC_ENABLED) {
             diagnostic.dump();
         }
