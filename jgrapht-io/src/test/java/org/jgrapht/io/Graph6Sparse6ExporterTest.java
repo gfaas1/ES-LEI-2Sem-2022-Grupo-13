@@ -50,6 +50,15 @@ public class Graph6Sparse6ExporterTest {
     }
 
     @Test
+    public void testGraphWithoutEdges() throws UnsupportedEncodingException, ExportException {
+        Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
+        orig.addVertex(0);
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        System.out.println("rest: "+res);
+        //assertEquals(":Fa@x^\n", res);
+    }
+
+    @Test
     public void testExampleGraph() throws UnsupportedEncodingException, ExportException {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(orig, Arrays.asList(0,1,2,3,4,5,6));

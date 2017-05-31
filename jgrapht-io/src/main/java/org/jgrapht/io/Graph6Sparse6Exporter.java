@@ -147,12 +147,14 @@ public class Graph6Sparse6Exporter<V,E>
         //Pad right hand side with '1's to fill the last byte. This may not be the 'correct' way of padding as
         //described in the sparse6 format descr, but I couldn't make sense of the description. This seems to work fine.
         System.out.println("bitindex before padding: "+bitIndex);
-        int padding=6-bitIndex;
-        for(int i=0; i<padding; i++) {
-            System.out.println("pad. bitindex: "+bitIndex);
-            writeBit(true);
+        if(bitIndex != 0) {
+            int padding = 6 - bitIndex;
+            for (int i = 0; i < padding; i++) {
+                System.out.println("pad. bitindex: " + bitIndex);
+                writeBit(true);
+            }
+            writeByte(); //pash the last byte
         }
-        writeByte(); //pash the last byte
 
     }
 
