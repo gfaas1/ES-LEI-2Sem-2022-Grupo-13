@@ -131,27 +131,27 @@ public class NamedGraphGeneratorTest {
     }
 
     @Test
-    public void testBlanusaFirstSnarkGraphGraph(){
+    public void testBlanusaFirstSnarkGraph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.blanusaFirstSnarkGraph();
         this.validateBasics(g, 18, 27, 4, 4, 5);
         assertTrue(GraphTests.isCubic(g));
     }
 
     @Test
-    public void testBlanusaSecondSnarkGraphGraph(){
+    public void testBlanusaSecondSnarkGraph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.blanusaSecondSnarkGraph();
         this.validateBasics(g, 18, 27, 4, 4, 5);
         assertTrue(GraphTests.isCubic(g));
     }
 
     @Test
-    public void testDoubleStarSnarkGraphGraph(){
+    public void testDoubleStarSnarkGraph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.doubleStarSnarkGraph();
         this.validateBasics(g, 30, 45, 4, 4, 6);
     }
 
     @Test
-    public void testBrinkmannGraphGraph(){
+    public void testBrinkmannGraph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.brinkmannGraph();
         this.validateBasics(g, 21, 42, 3, 3, 5);
         assertTrue(GraphTests.isEulerian(g));
@@ -164,11 +164,126 @@ public class NamedGraphGeneratorTest {
     }
 
     @Test
-    public void testChvatalGraphGraph(){
+    public void testChvatalGraph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.chvatalGraph();
         this.validateBasics(g, 12, 24, 2, 2, 4);
         assertTrue(GraphTests.isEulerian(g));
     }
+
+    @Test
+    public void testKittellGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.kittellGraph();
+        this.validateBasics(g, 23, 63, 3, 4, 3);
+    }
+
+    @Test
+    public void testCoxeterGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.coxeterGraph();
+        this.validateBasics(g, 28, 42, 4, 4, 7);
+        assertTrue(GraphTests.isCubic(g));
+    }
+
+    @Test
+    public void testEllinghamHorton78Graph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.ellinghamHorton78Graph();
+        this.validateBasics(g, 78, 117, 7, 13, 6);
+        assertTrue(GraphTests.isCubic(g));
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
+    public void testErreraGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.erreraGraph();
+        this.validateBasics(g, 17, 45, 3, 4, 3);
+    }
+
+    @Test
+    public void testFranklinGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.franklinGraph();
+        this.validateBasics(g, 12, 18, 3, 3, 4);
+        assertTrue(GraphTests.isCubic(g));
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
+    public void testFrughtGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.fruchtGraph();
+        this.validateBasics(g, 12, 18, 3, 4, 3);
+        assertTrue(GraphTests.isCubic(g));
+    }
+
+    @Test
+    public void testGoldnerHararyGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.goldnerHararyGraph();
+        this.validateBasics(g, 11, 27, 2, 2, 3);
+    }
+
+    @Test
+    public void testHeawoodGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.heawoodGraph();
+        this.validateBasics(g, 14, 21, 3, 3, 6);
+        assertTrue(GraphTests.isCubic(g));
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
+    public void testHerschelGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.herschelGraph();
+        this.validateBasics(g, 11, 18, 3, 4, 4);
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
+    public void testHoffmanGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.hoffmanGraph();
+        this.validateBasics(g, 16, 32, 3, 4, 4);
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
+    public void testKrackhardtKiteGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.krackhardtKiteGraph();
+        this.validateBasics(g, 10, 18, 2, 4, 3);
+    }
+
+    @Test
+    public void testKlein3RegularGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.klein3RegularGraph();
+        this.validateBasics(g, 56, 84, 6, 6, 7);
+        assertTrue(GraphTests.isCubic(g));
+    }
+
+    @Test
+    public void testKlein7RegularGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.klein7RegularGraph();
+        this.validateBasics(g, 24, 84, 3, 3, 3);
+    }
+
+    @Test
+    public void testMoserSpindleGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.moserSpindleGraph();
+        this.validateBasics(g, 7, 11, 2, 2, 3);
+    }
+
+    @Test
+    public void testPoussinGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.poussinGraph();
+        this.validateBasics(g, 15, 39, 3, 3, 3);
+    }
+
+    @Test
+    public void testSchläfliGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.schläfliGraph();
+        this.validateBasics(g, 27, 216, 2, 2, 3);
+    }
+
+    @Test
+    public void testThomsenGraph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.schläfliGraph();
+        this.validateBasics(g, 6, 9, 2, 2, 4);
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
 
     private <V,E> void validateBasics(Graph<V, E> g, int vertices, int edges, int radius, int diameter, int girt){
         assertEquals(vertices, g.vertexSet().size());
