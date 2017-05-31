@@ -15,16 +15,15 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.cycle.TarjanSimpleCycles;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,6 +32,25 @@ import static org.junit.Assert.assertEquals;
  * @author Joris Kinable
  */
 public class GraphMetricsTest {
+
+    private final double EPSILON=0.000000001;
+
+    @Test
+    public void testGraphDiameter(){
+        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addEdgeWithVertices(g, 0, 1, 10);
+        Graphs.addEdgeWithVertices(g, 1, 0, 12);
+        double diameter=GraphMetrics.getDiameter(g);
+        assertEquals(12.0, diameter, EPSILON);
+
+    }
+
+    @Test
+    public void testGraphRadius(){
+        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+        double radius=GraphMetrics.getRadius(g);
+        assertEquals(0.0, radius, EPSILON);
+    }
 
     @Test
     public void testGraphGirthAcyclic(){
@@ -182,7 +200,7 @@ public class GraphMetricsTest {
             gen.generateGraph(graph, new IntegerVertexFactory(), null);
 
             TarjanSimpleCycles<Integer, DefaultEdge> tarjanSimpleCycles=new TarjanSimpleCycles<>(graph);
-            int minCycle=tarjanSimpleCycles.findSimpleCycles().stream().mapToInt(c -> c.size()).min().orElse(Integer.MAX_VALUE);
+            int minCycle=tarjanSimpleCycles.findSimpleCycles().stream().mapToInt(List::size).min().orElse(Integer.MAX_VALUE);
 
             assertEquals(minCycle, GraphMetrics.getGirth(graph));
         }

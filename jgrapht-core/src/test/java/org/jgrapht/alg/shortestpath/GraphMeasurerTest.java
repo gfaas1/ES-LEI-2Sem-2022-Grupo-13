@@ -29,11 +29,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for GraphDistanceMetrics
+ * Tests for GraphMeasurer
  *
  * @author Joris Kinable
  */
-public class GraphDistanceMetricsTest {
+public class GraphMeasurerTest {
 
     private final double EPSILON=0.000000001;
 
@@ -66,7 +66,7 @@ public class GraphDistanceMetricsTest {
         Graph<Integer,DefaultEdge> g1=getGraph1();
         List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs=Arrays.asList(new FloydWarshallShortestPaths<>(g1), new JohnsonShortestPaths<>(g1, new IntegerVertexFactory(7)));
         for(ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
-            GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g1, spAlg);
+            GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
             assertEquals(3.0, vertexEccentricity.get(0), EPSILON);
             assertEquals(2.0, vertexEccentricity.get(1), EPSILON);
@@ -83,7 +83,7 @@ public class GraphDistanceMetricsTest {
         Graph<Integer,DefaultEdge> g2=getGraph2();
         List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs=Arrays.asList(new FloydWarshallShortestPaths<>(g2), new JohnsonShortestPaths<>(g2, new IntegerVertexFactory(7)));
         for(ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
-            GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g2, spAlg);
+            GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
             assertEquals(3.0, vertexEccentricity.get(0), EPSILON);
             assertEquals(2.0, vertexEccentricity.get(1), EPSILON);
@@ -98,7 +98,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testDiameterEmptyGraph(){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
         double diameter=gdm.getDiameter();
         assertEquals(0.0, diameter, EPSILON);
     }
@@ -107,7 +107,7 @@ public class GraphDistanceMetricsTest {
     public void testDiameterDisconnectedGraph(){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(0,1));
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
         double diameter=gdm.getDiameter();
         assertTrue(Double.isInfinite(diameter));
     }
@@ -116,7 +116,7 @@ public class GraphDistanceMetricsTest {
     public void testDiameterDirectedGraph1(){
         Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(g, 0, 1, 10);
-        GraphDistanceMetrics<Integer, DefaultWeightedEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultWeightedEdge> gdm=new GraphMeasurer<>(g);
         double diameter=gdm.getDiameter();
         assertTrue(Double.isInfinite(diameter));
     }
@@ -126,7 +126,7 @@ public class GraphDistanceMetricsTest {
         Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(g, 0, 1, 10);
         Graphs.addEdgeWithVertices(g, 1, 0, 12);
-        GraphDistanceMetrics<Integer, DefaultWeightedEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultWeightedEdge> gdm=new GraphMeasurer<>(g);
         double diameter=gdm.getDiameter();
         assertEquals(12.0, diameter, EPSILON);
     }
@@ -134,7 +134,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testRadiusEmptyGraph(){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
         double radius=gdm.getRadius();
         assertEquals(0.0, radius, EPSILON);
     }
@@ -143,7 +143,7 @@ public class GraphDistanceMetricsTest {
     public void testRadiusDisconnectedGraph(){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
         Graphs.addAllVertices(g, Arrays.asList(0,1));
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
         double radius=gdm.getRadius();
         assertTrue(Double.isInfinite(radius));
     }
@@ -151,7 +151,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testGraphCenterG1(){
         Graph<Integer,DefaultEdge> g1=getGraph1();
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g1);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1);
         Set<Integer> graphCenter1=gdm.getGraphCenter();
         assertEquals(new HashSet<>(Collections.singletonList(1)), graphCenter1);
     }
@@ -159,7 +159,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testGraphCenterG2(){
         Graph<Integer,DefaultEdge> g2=getGraph2();
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g2);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2);
         Set<Integer> graphCenter2=gdm.getGraphCenter();
         assertEquals(new HashSet<>(Arrays.asList(1,5)), graphCenter2);
     }
@@ -167,7 +167,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testGraphPeripheryG1(){
         Graph<Integer,DefaultEdge> g1=getGraph1();
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g1);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1);
         Set<Integer> graphPeriphery1=gdm.getGraphPeriphery();
         assertEquals(new HashSet<>(Arrays.asList(4,6)), graphPeriphery1);
     }
@@ -175,7 +175,7 @@ public class GraphDistanceMetricsTest {
     @Test
     public void testGraphPeripheryG2(){
         Graph<Integer,DefaultEdge> g2=getGraph2();
-        GraphDistanceMetrics<Integer, DefaultEdge> gdm=new GraphDistanceMetrics<>(g2);
+        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2);
         Set<Integer> graphPeriphery2=gdm.getGraphPeriphery();
         assertEquals(new HashSet<>(Arrays.asList(0,2,3,4,6)), graphPeriphery2);
     }

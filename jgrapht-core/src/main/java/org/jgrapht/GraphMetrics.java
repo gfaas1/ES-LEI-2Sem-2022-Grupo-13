@@ -15,9 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht;
 
-import org.jgrapht.Graph;
+import org.jgrapht.alg.DirectedNeighborIndex;
+import org.jgrapht.alg.NeighborIndex;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
 
 import java.util.*;
 
@@ -26,7 +28,44 @@ import java.util.*;
  *
  * @author Joris Kinable
  */
-public class GraphMetrics {
+public abstract class GraphMetrics {
+
+    /**
+     * Compute the <a href="http://mathworld.wolfram.com/GraphDiameter.html">diameter</a> of the graph. The diameter of
+     * a graph is defined as $\max_{v\in V}\epsilon(v)$, where $\epsilon(v)$ is the eccentricity of vertex $v$. In other
+     * words, this method computes the 'longest shortest path'.
+     * Two special cases exist. If the graph has no vertices, the diameter is 0. If the graph is disconnected, the
+     * diameter is {@link Double#POSITIVE_INFINITY}.
+     * <p>
+     * For more fine-grained control over this method, or if you need additional distance metrics such as the graph
+     * radius, consider using {@link org.jgrapht.alg.shortestpath.GraphMeasurer} instead.
+     *
+     * @param graph input graph
+     * @param <V> graph vertex type
+     * @param <E> graph edge type
+     * @return the diameter of the graph.
+     */
+    public static <V,E> double getDiameter(Graph<V,E> graph){
+        return new GraphMeasurer<>(graph).getDiameter();
+    }
+
+    /**
+     * Compute the <a href="http://mathworld.wolfram.com/GraphRadius.html">radius</a> of the graph. The radius of a graph
+     * is defined as $\min_{v\in V}\epsilon(v)$, where $\epsilon(v)$ is the eccentricity of vertex $v$.
+     * Two special cases exist. If the graph has no vertices, the radius is 0. If the graph is disconnected, the
+     * diameter is {@link Double#POSITIVE_INFINITY}.
+     * <p>
+     * For more fine-grained control over this method, or if you need additional distance metrics such as the graph
+     * diameter, consider using {@link org.jgrapht.alg.shortestpath.GraphMeasurer} instead.
+     *
+     * @param graph input graph
+     * @param <V> graph vertex type
+     * @param <E> graph edge type
+     * @return the diameter of the graph.
+     */
+    public static <V,E> double getRadius(Graph<V,E> graph){
+        return new GraphMeasurer<>(graph).getDiameter();
+    }
 
     /**
      * Compute the <a href="http://mathworld.wolfram.com/Girth.html">girth</a> of the graph. The girth of a graph is

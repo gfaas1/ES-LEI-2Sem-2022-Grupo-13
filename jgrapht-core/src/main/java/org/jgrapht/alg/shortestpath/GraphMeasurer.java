@@ -24,14 +24,15 @@ import org.jgrapht.alg.util.ToleranceDoubleComparator;
 import java.util.*;
 
 /**
- * Collection of distance metrics. A summary of various distance metrics can be found <a href="https://en.wikipedia.org/wiki/Distance_(graph_theory)">here</a>.
+ * Algorithm class which computes a number of distance related metrics.
+ * A summary of various distance metrics can be found <a href="https://en.wikipedia.org/wiki/Distance_(graph_theory)">here</a>.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Joris Kinable
  */
-public class GraphDistanceMetrics<V,E> {
+public class GraphMeasurer<V,E> {
 
     /* Input graph */
     private final Graph<V,E> graph;
@@ -47,22 +48,22 @@ public class GraphDistanceMetrics<V,E> {
 
 
     /**
-     * Constructs a new instance of GraphDistanceMetrics. {@link FloydWarshallShortestPaths} is used as the default
+     * Constructs a new instance of GraphMeasurer. {@link FloydWarshallShortestPaths} is used as the default
      * shortest path algorithm.
      * @param graph input graph
      */
-    public GraphDistanceMetrics(Graph<V,E> graph){
+    public GraphMeasurer(Graph<V, E> graph){
         this(graph, new FloydWarshallShortestPaths<V, E>(graph));
     }
 
     /**
-     * Constructs a new instance of GraphDistanceMetrics.
+     * Constructs a new instance of GraphMeasurer.
      * @param graph input graph
      * @param shortestPathAlgorithm shortest path algorithm used to compute shortest paths between all pairs of vertices.
      *                              Recommended algorithms are: {@link org.jgrapht.alg.shortestpath.JohnsonShortestPaths} (Runtime complexity: $O(|V||E| + |V|^2 log|V|)$) or
      *                              {@link org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths} (Runtime complexity: $O(|V|^3)$.
      */
-    public GraphDistanceMetrics(Graph<V,E> graph, ShortestPathAlgorithm<V,E> shortestPathAlgorithm){
+    public GraphMeasurer(Graph<V, E> graph, ShortestPathAlgorithm<V, E> shortestPathAlgorithm){
         this.graph=graph;
         this.shortestPathAlgorithm=shortestPathAlgorithm;
     }

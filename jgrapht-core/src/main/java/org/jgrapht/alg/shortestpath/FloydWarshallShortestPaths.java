@@ -87,7 +87,7 @@ public class FloydWarshallShortestPaths<V, E>
      * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
      *         contains no vertices, return {@link Double#NaN}. If there is no path between any two
      *         vertices, return {@link Double#POSITIVE_INFINITY}.
-     * @deprecated deprecated in favor of {@link GraphDistanceMetrics#getDiameter()}
+     * @deprecated deprecated in favor of {@link GraphMeasurer#getDiameter()}
      */
     @Deprecated
     public double getDiameter()
