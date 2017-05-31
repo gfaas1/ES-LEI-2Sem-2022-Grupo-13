@@ -27,6 +27,7 @@ import org.jgrapht.alg.cycle.*;
  * 
  * @author Barak Naveh
  * @author Dimitrios Michail
+ * @author Joris Kinable
  */
 public abstract class GraphTests
 {
@@ -284,6 +285,21 @@ public abstract class GraphTests
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Tests whether a graph is <a href="http://mathworld.wolfram.com/CubicGraph.html">cubic</a>. A graph is cubic
+     * if all vertices have degree 3.
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is cubic, false otherwise
+     */
+    public static <V, E> boolean isCubic(Graph<V, E> graph){
+        for(V v : graph.vertexSet())
+            if(graph.degreeOf(v) != 3)
+                return false;
         return true;
     }
 
