@@ -1,0 +1,155 @@
+/*
+ * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
+package org.jgrapht.io;
+
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.generate.NamedGraphGenerator;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.SimpleGraph;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Tests for Graph6Sparse6Exporter
+ *
+ * @author Joris Kinable
+ */
+public class Graph6Sparse6ExporterTest {
+
+    //-------------------Sparse6 tests--------------------
+
+    @Test
+    public void testEmptyGraph() throws UnsupportedEncodingException, ExportException {
+        Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        System.out.println("rest: "+res);
+        //assertEquals(":Fa@x^\n", res);
+    }
+
+    @Test
+    public void testExampleGraph() throws UnsupportedEncodingException, ExportException {
+        Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(orig, Arrays.asList(0,1,2,3,4,5,6));
+        orig.addEdge(0, 1);
+        orig.addEdge(0, 2);
+        orig.addEdge(1, 2);
+        orig.addEdge(5,6);
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        assertEquals(":Fa@x^\n", res);
+    }
+
+    @Test
+    public void testGraph1a() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.petersenGraph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    @Test
+    public void testGraph2a() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.ellinghamHorton78Graph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    @Test
+    public void testGraph3a() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.klein3RegularGraph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    @Test
+    public void testPseudoGraph() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(orig, Arrays.asList(0,1,2));
+        orig.addEdge(0,1);
+        orig.addEdge(0,1);
+        orig.addEdge(1,2);
+        orig.addEdge(2,0);
+        orig.addEdge(2,2);
+
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    //-------------------Graph6 tests--------------------
+
+    @Test
+    public void testGraph1b() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.petersenGraph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    @Test
+    public void testGraph2b() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.ellinghamHorton78Graph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    @Test
+    public void testGraph3b() throws UnsupportedEncodingException, ExportException, ImportException {
+        Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.klein3RegularGraph();
+        String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
+        Graph<Integer, DefaultEdge> g = importGraph(res);
+        this.compare(orig, g);
+    }
+
+    //-------------------helper methods--------------------
+
+    private <V,E> String exportGraph(Graph<V,E> g, Graph6Sparse6Exporter.Format format) throws UnsupportedEncodingException, ExportException {
+        Graph6Sparse6Exporter<V, E> exporter=new Graph6Sparse6Exporter<>(format);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        return new String(os.toByteArray(), "UTF-8");
+    }
+
+    private Graph<Integer,DefaultEdge> importGraph(String g6) throws ImportException {
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph6Sparse6Importer<Integer, DefaultEdge> importer = new Graph6Sparse6Importer<>(
+                (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+        importer.importGraph(g, g6);
+        return g;
+    }
+
+    private <V,E> void compare(Graph<V,E> orig, Graph<V,E> g){
+        assertEquals(orig.vertexSet().size(), g.vertexSet().size());
+        assertEquals(orig.edgeSet().size(), g.edgeSet().size());
+        for(E e : orig.edgeSet()){
+            V u=orig.getEdgeSource(e);
+            V v=orig.getEdgeTarget(e);
+            assertTrue(g.containsEdge(u,v));
+        }
+    }
+}

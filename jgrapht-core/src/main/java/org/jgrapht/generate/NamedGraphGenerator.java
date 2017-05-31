@@ -18,19 +18,10 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,20 +74,8 @@ public class NamedGraphGenerator<V,E> {
         return g;
     }
     public void generateGeneralizedPetersenGraph(Graph<V,E> targetGraph, int n, int k){
-        List<V> verticesU=new ArrayList<>(n);
-        List<V> verticesV=new ArrayList<>(n);
-        for(int i=0; i<n; i++){
-            verticesU.add(vertexFactory.createVertex());
-            verticesV.add(vertexFactory.createVertex());
-        }
-        Graphs.addAllVertices(targetGraph, verticesU);
-        Graphs.addAllVertices(targetGraph, verticesV);
-
-        for(int i=0; i<n; i++){
-            targetGraph.addEdge(verticesU.get(i), verticesU.get((i+1)%n));
-            targetGraph.addEdge(verticesU.get(i), verticesV.get(i));
-            targetGraph.addEdge(verticesV.get(i), verticesV.get((i+k)%n));
-        }
+        GeneralizedPetersenGraphGenerator<V,E> gpgg=new GeneralizedPetersenGraphGenerator<>(n, k);
+        gpgg.generateGraph(targetGraph, vertexFactory, null);
     }
 
     //-------------Petersen Graph-----------//
@@ -204,7 +183,7 @@ public class NamedGraphGenerator<V,E> {
      * @return Möbius-Kantor Graph
      */
     public static Graph<Integer, DefaultEdge> möbiusKantorGraph(){
-        return generalizedPetersenGraph(12,5);
+        return generalizedPetersenGraph(8,3);
     }
     /**
      * Generates a <a href="http://mathworld.wolfram.com/Moebius-KantorGraph.html">Möbius-Kantor Graph</a>.
@@ -243,27 +222,15 @@ public class NamedGraphGenerator<V,E> {
         this.addEdge(targetGraph, 3, 4);
     }
 
-    //-------------Friendship Graph-----------//
-    public static Graph<Integer, DefaultEdge> friendshipGraph(int n){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateFriendshipGraph(g, n);
-        return g;
-    }
-    public void generateFriendshipGraph(Graph<V,E> targetGraph, int n){
-        for(int i=0; i<n; i++){
-           this.addEdge(targetGraph, 0, 2*i+1);
-           this.addEdge(targetGraph, 0, 2*i+2);
-           this.addEdge(targetGraph, 2*i+1, 2*i+2);
-        }
-    }
-
     //-------------Butterfly Graph-----------//
     /**
      * @see #generateButterflyGraph
      * @return Butterfly Graph
      */
     public static Graph<Integer, DefaultEdge> butterflyGraph(){
-        return friendshipGraph(2);
+        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateButterflyGraph(g);
+        return g;
     }
     /**
      * Generates a <a href="http://mathworld.wolfram.com/ButterflyGraph.html">Butterfly Graph</a>.
@@ -274,7 +241,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateButterflyGraph(Graph<V,E> targetGraph){
-        generateFriendshipGraph(targetGraph, 2);
+        new WindmillGraphsGenerator<V,E>(WindmillGraphsGenerator.Mode.DUTCHWINDMILL, 2, 3).generateGraph(targetGraph, vertexFactory, null);
     }
 
     //-------------Claw Graph-----------//
@@ -296,55 +263,6 @@ public class NamedGraphGenerator<V,E> {
      */
     public void generateClawGraph(Graph<V,E> targetGraph){
         new StarGraphGenerator<V, E>(4).generateGraph(targetGraph, this.vertexFactory, null);
-    }
-
-    //-------------Windmill Graph-----------//
-    public static Graph<Integer, DefaultEdge> windmillGraph(int m, int n){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateWindmillGraph(g, m, n);
-        return g;
-    }
-    public void generateWindmillGraph(Graph<V,E> targetGraph, int m, int n){
-        if(m<2 || n < 2)
-            throw new IllegalArgumentException("parameters m and n are supposed to be larger or equal to 2");
-
-        V center=addVertex(targetGraph, 0);
-        List<V> sub=new ArrayList<>(n);
-
-        for(int i=0; i<m; i++){ //m copies of complete graph Kn
-            sub.clear();
-            sub.add(center);
-            for(int j=1; j<n; j++)
-                sub.add(addVertex(targetGraph, targetGraph.vertexSet().size()));
-
-            for(int r=0; r<sub.size()-1; r++)
-                for(int s=r+1; s<sub.size(); s++)
-                    targetGraph.addEdge(sub.get(r), sub.get(s));
-        }
-    }
-
-    //-------------Dutch Windmill Graph-----------//
-    public static Graph<Integer, DefaultEdge> dutchWindmillGraph(int m, int n){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateWindmillGraph(g, m, n);
-        return g;
-    }
-    public void generateDutchWindmillGraph(Graph<V,E> targetGraph, int m, int n){
-        if(m<2 || n < 3)
-            throw new IllegalArgumentException("Invalid parameters. Required: m>=2, and n>=3");
-
-        V center=addVertex(targetGraph, 0);
-        List<V> sub=new ArrayList<>(n);
-
-        for(int i=0; i<m; i++){ //m copies of cycle graph Cn
-            sub.clear();
-            sub.add(center);
-            for(int j=1; j<n; j++)
-                sub.add(addVertex(targetGraph, targetGraph.vertexSet().size()));
-
-            for(int r=0; r<sub.size(); r++)
-                targetGraph.addEdge(sub.get(r), sub.get((r+1)%n));
-        }
     }
 
     //-------------Bucky ball Graph-----------//
@@ -470,7 +388,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateBidiakisCubeGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -493,7 +411,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateBlanusaFirstSnarkGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -516,7 +434,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateBlanusaSecondSnarkGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -539,7 +457,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateDoubleStarSnarkGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -562,7 +480,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateBrinkmannGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -585,7 +503,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateGossetGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -608,7 +526,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateChvatalGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -632,7 +550,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateKittellGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -655,7 +573,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateCoxeterGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -678,7 +596,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateEllinghamHorton78Graph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -701,7 +619,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateErreraGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -724,7 +642,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateFranklinGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -747,7 +665,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateFruchtGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -771,7 +689,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateGoldnerHararyGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -794,7 +712,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateHeawoodGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -818,7 +736,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateHerschelGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -841,7 +759,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateHoffmanGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -864,7 +782,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateKrackhardtKiteGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -887,7 +805,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateKlein3RegularGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -910,7 +828,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateKlein7RegularGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -933,7 +851,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateMoserSpindleGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -956,7 +874,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generatePoussinGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -979,7 +897,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateSchläfliGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }
@@ -1003,7 +921,7 @@ public class NamedGraphGenerator<V,E> {
      *        existing elements
      */
     public void generateThomsenGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
+        int[][] edges={};
         for(int[] edge : edges)
             addEdge(targetGraph, edge[0], edge[1]);
     }

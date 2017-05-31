@@ -108,9 +108,52 @@ public class Graph6Sparse6Exporter<V,E>
     }
 
     private void writeSparse6(Graph<V, E> g, List<V> vertices) throws IOException {
+        int[][] edges=new int[g.edgeSet().size()][2];
+        int index=0;
+        for(int i=0; i<vertices.size()-1; i++){
+            for(int j=i; j<vertices.size(); j++){
+                if(g.containsEdge(vertices.get(i), vertices.get(j))) {
+                    edges[index][0] = i;
+                    edges[index][1] = j;
+                    index++;
+                }
+            }
+        }
+
         //sparse6 format always starts with ":"
-        byteArrayOutputStream.write(Character.getNumericValue(':'));
+        byteArrayOutputStream.write(":".getBytes());
         writeNumberOfVertices(vertices.size());
+        //number of bits needed to represent n-1 in binary
+        int k = (int) Math.ceil(Math.log(vertices.size()) / Math.log(2));
+
+        int m=0;
+        int v=0;
+        while(m < edges.length){
+            if(edges[m][1] > v+1){
+                writeBit(true);
+                writeIntInKBits(edges[m][1], k);
+                v = edges[m][1];
+            }else if(edges[m][1] == v + 1){
+                writeBit(true);
+                writeIntInKBits(edges[m][0], k);
+                v++;
+                m++;
+            }else{
+                writeBit(false);
+                writeIntInKBits(edges[m][0], k);
+                m++;
+            }
+        }
+        //Pad right hand side with '1's to fill the last byte. This may not be the 'correct' way of padding as
+        //described in the sparse6 format descr, but I couldn't make sense of the description. This seems to work fine.
+        System.out.println("bitindex before padding: "+bitIndex);
+        int padding=6-bitIndex;
+        for(int i=0; i<padding; i++) {
+            System.out.println("pad. bitindex: "+bitIndex);
+            writeBit(true);
+        }
+        writeByte(); //pash the last byte
+
     }
 
     private void writeGraph6(Graph<V, E> g, List<V> vertices) throws IOException {
@@ -148,6 +191,10 @@ public class Graph6Sparse6Exporter<V,E>
     private byte currentByte;
     private int bitIndex;
 
+    private void writeIntInKBits(int number, int k){
+        for(int i=k-1; i>=0; i--)
+            writeBit((number & (1 << i)) != 0);
+    }
     private void writeBit(boolean bit){
         if(bitIndex == 6)
             writeByte();
@@ -160,5 +207,6 @@ public class Graph6Sparse6Exporter<V,E>
         byteArrayOutputStream.write(currentByte+63);
         currentByte=0;
         bitIndex=0;
+        System.out.println("push");
     }
 }
