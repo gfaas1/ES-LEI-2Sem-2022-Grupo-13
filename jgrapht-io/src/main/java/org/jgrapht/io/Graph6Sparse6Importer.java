@@ -22,7 +22,6 @@ import org.jgrapht.Graph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,10 +98,13 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
     /**
      * Import the graph represented by a String in graph6 or sparse6 encoding.
      * @param g the graph
-     * @param g6 String representation of a graph either in graph6 or sparse6 format
+     * @param g6 String representation of a graph either in graph6 or sparse6 format. WARNING: a g6/s6 string may contain
+     *           backslashes '\'. Escaping is required when invoking this method directly. E.g. <pre><code>importgraph(g,":?@MnDA\oi")</code></pre> may
+     *           result in undefined behavior. This should have been: <pre><code>importgraph(g,":?@MnDA\\oi")</code></pre>
      * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     public void importGraph(Graph<V, E> g, String g6) throws ImportException {
+
         g6=g6.replace("\n", "").replace("\r", ""); //strip off any new line characters
         //Strip header. By default we assume the input Format is GRAPH6, unless stated otherwise
         if(g6.startsWith(":")) {
@@ -157,22 +159,6 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
                 }
             }
         }
-//        for (int j = 1; j < vertexIndexMap.size(); j++) {
-//            for (int i = 0; i < j; i++) {
-//                int bit = getBits(1);
-//                if (bit == 1) {
-//
-//                    V from= vertexIndexMap.get(i);
-//                    V to = vertexIndexMap.get(j);
-//                    String label = "e_" + i + "_" + j;
-//                    E e = edgeProvider.buildEdge(from, to, label, new HashMap<>());
-//                    g.addEdge(from, to, e);
-//
-//                    if (g.getType().isWeighted())
-//                        g.setEdgeWeight(e, defaultWeight);
-//                }
-//            }
-//        }
     }
 
     private void readSparse6(Graph<V, E> g, Map<Integer, V> vertexIndexMap) throws ImportException {
@@ -180,12 +166,15 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
         //number of bits needed to represent n-1 in binary
         int k = (int) Math.ceil(Math.log(n) / Math.log(2));
+
         //Current vertex
         int v = 0;
 
         //The remaining bytes encode a sequence b[0] x[0] b[1] x[1] b[2] x[2] ... b[m] x[m]
         //Read blocks. In decoding, an incomplete (b,x) pair at the end is discarded.
-        while (hasBits(1 + k)) {
+        int dataBits=bytes.length*6-(byteIndex*6+bitIndex);
+        while(dataBits >= 1+k){ //while there's data remaining
+
             int b = getBits(1); //Read x[i]
             int x = getBits(k); //Read b[i]
 
@@ -198,7 +187,6 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
             if (x > v)
                 v = x;
             else {
-                System.out.println("adding edge: (x,v): ("+x+","+v+")");
                 V from= vertexIndexMap.get(x);
                 V to = vertexIndexMap.get(v);
                 String label = "e_" + x + "_" + v;
@@ -208,7 +196,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
                 if (g.getType().isWeighted())
                     g.setEdgeWeight(e, defaultWeight);
             }
-            System.out.println("v: "+v+" x: "+x);
+            dataBits-=1+k;
         }
     }
 
@@ -229,7 +217,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      */
     private int getNumberOfVertices() throws ImportException {
         //Determine whether the number of vertices is encoded in 1, 4 or 8 bytes.
-        int n=0;
+        int n;
         if(bytes.length > 8 && bytes[0] == 126 && bytes[1]==126) {
             byteIndex+=2; //Strip the first 2 garbage bytes
             n= getBits(36);
@@ -248,17 +236,6 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
         return n;
     }
-
-
-    /**
-     * Check whether there is another block of k bits data available
-     * @param k bits
-     * @return true if a data block of k bits is available
-     */
-    private boolean hasBits(int k) {
-        return (byteIndex + (bitIndex + k - 1) / 6) < bytes.length;
-    }
-
 
     /**
      * Converts the next k bits of data to an integer
@@ -297,7 +274,6 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
             value=(value << k) + y;
             bitIndex=k;
         }
-
         return value;
     }
 

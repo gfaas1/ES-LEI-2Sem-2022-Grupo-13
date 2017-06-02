@@ -30,9 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for Graph6Sparse6Exporter
@@ -74,9 +72,7 @@ public class Graph6Sparse6ExporterTest {
     @Test
     public void testGraph1a() throws UnsupportedEncodingException, ExportException, ImportException {
         Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.petersenGraph();
-        System.out.println(orig.edgeSet());
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("res: "+res);
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
     }
@@ -85,7 +81,6 @@ public class Graph6Sparse6ExporterTest {
     public void testGraph2a() throws UnsupportedEncodingException, ExportException, ImportException {
         Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.ellinghamHorton78Graph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("res: "+res);
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
     }
@@ -94,7 +89,6 @@ public class Graph6Sparse6ExporterTest {
     public void testGraph3a() throws UnsupportedEncodingException, ExportException, ImportException {
         Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.klein3RegularGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("res: "+res);
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
     }
@@ -110,7 +104,6 @@ public class Graph6Sparse6ExporterTest {
         orig.addEdge(2,2);
 
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("res: "+res);
 
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
@@ -144,7 +137,6 @@ public class Graph6Sparse6ExporterTest {
     public void testGraph2b() throws UnsupportedEncodingException, ExportException, ImportException {
         Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.ellinghamHorton78Graph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
-        System.out.println("res: "+res);
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
     }
@@ -191,27 +183,17 @@ public class Graph6Sparse6ExporterTest {
     private <V,E> void compare(Graph<V,E> orig, Graph<V,E> g){
         assertEquals(orig.vertexSet().size(), g.vertexSet().size());
         assertEquals(orig.edgeSet().size(), g.edgeSet().size());
-//        for(E e : orig.edgeSet()){
-//            V u=orig.getEdgeSource(e);
-//            V v=orig.getEdgeTarget(e);
-//            assertTrue(g.containsEdge(u,v));
-//        }
 
         //The original and output graph cannot be compared 1:1 since sparse6/graph6 encodings do not preserve vertex labels
         //Testing for graph isomorphism is hard, so we compare characteristics.
-        int[] degeeVectorOrig=new int[orig.vertexSet().size()];
+        int[] degeeVectorOrig=new int[orig.edgeSet().size()];
         for(V v : orig.vertexSet())
             degeeVectorOrig[orig.degreeOf(v)]++;
 
-        int[] degeeVectorG=new int[g.vertexSet().size()];
+        int[] degeeVectorG=new int[g.edgeSet().size()];
         for(V v : g.vertexSet())
             degeeVectorG[g.degreeOf(v)]++;
 
         //ADD graph diameter, radius and girth checks
-
-//        System.out.println(Arrays.toString(degeeVectorOrig));
-//        System.out.println(Arrays.toString(degeeVectorG));
-//        assertArrayEquals(degeeVectorOrig, degeeVectorG);
-//        System.out.println("finished comp");
     }
 }
