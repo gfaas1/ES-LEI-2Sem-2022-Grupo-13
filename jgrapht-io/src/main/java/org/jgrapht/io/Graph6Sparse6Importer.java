@@ -22,6 +22,7 @@ import org.jgrapht.Graph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +103,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      * @throws ImportException in case any error occurs, such as I/O or parse error
      */
     public void importGraph(Graph<V, E> g, String g6) throws ImportException {
+        g6=g6.replace("\n", "").replace("\r", ""); //strip off any new line characters
         //Strip header. By default we assume the input Format is GRAPH6, unless stated otherwise
         if(g6.startsWith(":")) {
             g6=g6.substring(1, g6.length());
@@ -134,6 +136,10 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
     }
 
     private void readGraph6(Graph<V, E> g, Map<Integer, V> vertexIndexMap) throws ImportException {
+        //check whether there's enough data
+        int requiredBytes= (int) Math.ceil(vertexIndexMap.size()*(vertexIndexMap.size()-1)/12.0);
+        if(bytes.length < requiredBytes)
+            throw new ImportException("Graph string seems to be corrupt. Not enough data to read graph6 graph");
         //Read the upper triangle of the adjacency matrix of G
         for (int i = 0; i < vertexIndexMap.size()-1; i++) {
             for (int j = i+1; j < vertexIndexMap.size(); j++) {
@@ -212,8 +218,8 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      */
     private void validateInput() throws ImportException {
         for(byte b : bytes)
-            if(b < 63 || b > 126)
-                throw new ImportException("Graph string seems to be corrupt. Illegal character detected");
+            if (b < 63 || b > 126)
+                throw new ImportException("Graph string seems to be corrupt. Illegal character detected: " + b);
     }
 
     /**
@@ -223,14 +229,24 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      */
     private int getNumberOfVertices() throws ImportException {
         //Determine whether the number of vertices is encoded in 1, 4 or 8 bytes.
+        int n=0;
         if(bytes.length > 8 && bytes[0] == 126 && bytes[1]==126) {
             byteIndex+=2; //Strip the first 2 garbage bytes
-            return getBits(36);
+            n= getBits(36);
+            if(n < 258048)
+                throw new ImportException("Graph string seems to be corrupt. Invalid number of vertices.");
         }else if(bytes.length > 4 && bytes[0] == 126) {
             byteIndex++; //Strip the first garbage byte
-            return getBits(18);
-        }else
-            return getBits(6);
+            n= getBits(18);
+            if(n < 63 || n > 258047)
+                throw new ImportException("Graph string seems to be corrupt. Invalid number of vertices.");
+        }else {
+            n = getBits(6);
+            if(n < 0 || n > 62)
+                throw new ImportException("Graph string seems to be corrupt. Invalid number of vertices.");
+        }
+
+        return n;
     }
 
 

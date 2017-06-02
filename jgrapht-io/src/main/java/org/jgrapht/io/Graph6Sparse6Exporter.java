@@ -21,9 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -111,12 +108,14 @@ public class Graph6Sparse6Exporter<V,E>
         System.out.println("writesparse");
         int[][] edges=new int[g.edgeSet().size()][2];
         int index=0;
-        for(int i=0; i<vertices.size()-1; i++){
+        for(int i=0; i<vertices.size(); i++){
             for(int j=i; j<vertices.size(); j++){
                 if(g.containsEdge(vertices.get(i), vertices.get(j))) {
-                    edges[index][0] = i;
-                    edges[index][1] = j;
-                    index++;
+                    for(int p=0; p<g.getAllEdges(vertices.get(i), vertices.get(j)).size(); p++) {
+                        edges[index][0] = i;
+                        edges[index][1] = j;
+                        index++;
+                    }
                 }
             }
         }
@@ -148,14 +147,11 @@ public class Graph6Sparse6Exporter<V,E>
         }
         //Pad right hand side with '1's to fill the last byte. This may not be the 'correct' way of padding as
         //described in the sparse6 format descr, but I couldn't make sense of the description. This seems to work fine.
-        System.out.println("bitindex before padding: "+bitIndex);
         if(bitIndex != 0) {
             int padding = 6 - bitIndex;
-            for (int i = 0; i < padding; i++) {
-                System.out.println("pad. bitindex: " + bitIndex);
+            for (int i = 0; i < padding; i++)
                 writeBit(true);
-            }
-            writeByte(); //pash the last byte
+            writeByte(); //push the last byte
         }
 
     }
@@ -176,19 +172,13 @@ public class Graph6Sparse6Exporter<V,E>
             byteArrayOutputStream.write(n+63);
         else if(n <= 258047){
             //write number in 4 bytes
-            byteArrayOutputStream.write(126);
-            byte[] bytes = ByteBuffer.allocate(3).putInt(n).array();
-            for(int i=0; i<bytes.length; i++)
-                bytes[i]+=+63;
-            byteArrayOutputStream.write(bytes);
+            writeIntInKBits(63,6);
+            writeIntInKBits(n, 18);
         }else{
             //write number in 8 bytes
-            byteArrayOutputStream.write(126);
-            byteArrayOutputStream.write(126);
-            byte[] bytes = ByteBuffer.allocate(6).putInt(n).array();
-            for(int i=0; i<bytes.length; i++)
-                bytes[i]+=+63;
-            byteArrayOutputStream.write(bytes);
+            writeIntInKBits(63,6);
+            writeIntInKBits(63,6);
+            writeIntInKBits(n, 36);
         }
     }
 
@@ -208,9 +198,9 @@ public class Graph6Sparse6Exporter<V,E>
     }
 
     private void writeByte(){
+        System.out.println("currentbyte: "+(currentByte+63));
         byteArrayOutputStream.write(currentByte+63);
         currentByte=0;
         bitIndex=0;
-        System.out.println("push");
     }
 }

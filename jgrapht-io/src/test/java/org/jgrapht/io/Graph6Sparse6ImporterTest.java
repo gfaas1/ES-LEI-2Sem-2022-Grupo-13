@@ -19,7 +19,9 @@ package org.jgrapht.io;
 
 import junit.framework.TestCase;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.VertexFactory;
+import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.*;
 import org.junit.Test;
 
@@ -28,9 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for Graph6Sparse6Importer
+ * Sparse6/Graph6 strings are generated with Sage Math engine
  *
  * @author Joris Kinable
  */
@@ -77,6 +84,27 @@ public class Graph6Sparse6ImporterTest extends TestCase{
     }
 
     @Test
+    public void pseudoGraph() throws ImportException{
+        //Klein7RegularGraph
+        String input = ":B_`V";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        Graph<Integer, DefaultEdge> orig=new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(orig, Arrays.asList(0,1,2));
+        orig.addEdge(0,1);
+        orig.addEdge(0,1);
+        orig.addEdge(1,2);
+        orig.addEdge(2,2);
+        orig.addEdge(2,0);
+
+        this.compare(orig, graph);
+
+    }
+    @Test
     public void testNumberVertices1()
             throws ImportException
     {
@@ -105,7 +133,82 @@ public class Graph6Sparse6ImporterTest extends TestCase{
     }
 
     @Test
-    public void testSparse61()
+    public void testGraph6a()
+            throws ImportException
+    {
+        //Klein7RegularGraph
+        String input = "WzK[WgIOT@Wq_A?NALPAq?{GDASCCXO?l?OJAGOY_D@__wb";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
+    }
+
+    @Test
+    public void testGraph6b()
+            throws ImportException
+    {
+        //ellinghamHorton78Graph
+        String input = "~?@MhEGHC?AG?_PO@?Ga?GA???C??G??G??C??P???G@?G_??????P????_??AG??O@???@C??A?G?????????C????@?????G?????_????P?????@?????G????????????P??????C?????AG????A?G?????_???????H???????G???????_??????@???????@????????_??????AG???????@?????_?@C????????????????AG????????C????????P???????A?G????????G_?????C??G_???????????????????_?????????G?????C???@??????????_?????@????G?????A???????????????_??????????@????@?????AG??????????C????G?????G@?AG@????????????????@??o??????CW????????????C?W?????????????I???????????c?G";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
+    }
+
+    @Test
+    public void testGraph6c()
+            throws ImportException
+    {
+        //goldnerHararyGraph
+        String input = "JntIBcPEA~_";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
+    }
+
+    @Test
+    public void testGraph6d()
+            throws ImportException
+    {
+        //buckyBallGraph
+        String input = "{R??OKGPG??@AA??_???@@?GO?G?????CAGA?OGO??????@???O??C@_??O??G?@?????????W???D????OS??????????????O@????@BG???????????_???_??????@B??@???_??O???g?????????????C????C???????C?W?A????C??_????D_???????????????_????C????????_?@??????O?g??????@@O?A?????????????C?C?_??????A????????OQ????????@O????????B";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
+    }
+
+    @Test
+    public void testGraph6f()
+            throws ImportException
+    {
+        //heawoodGraph
+        String input = "MhEGHC@AI?_PC@_G_";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        this.compare(NamedGraphGenerator.heawoodGraph(), graph);
+    }
+
+    @Test
+    public void testSparse6a()
             throws ImportException
     {
         //Klein7RegularGraph
@@ -116,178 +219,92 @@ public class Graph6Sparse6ImporterTest extends TestCase{
                 new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 DefaultEdge.class, false);
 
-        assertEquals(24, graph.vertexSet().size());
-        assertEquals(84, graph.edgeSet().size());
-
-        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-        for (int[] edge : edges)
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
+        this.compare(NamedGraphGenerator.klein7RegularGraph(), graph);
     }
 
     @Test
-    public void testSparse62()
+    public void testSparse6b()
             throws ImportException
     {
-        //TruncatedTetrahedralGraph
-        String input = ":K`ESwC_EOyDl\\\\MCi\n";
+        //ellinghamHorton78Graph
+        String input = ":~?@M_GEA_w?C`WGEaOOGaWWI_OmGBGKL`w}OcXINCxQGCPUWCp]WdPeOEh[Zc`q^Fh}_gXwagyAfGaYfhAa^IYEgIyqlji}ojREqfa{rlbCtljKvjbatMYWv_Jq|hBy{hSAdn{M\\\\OCRAeRtEa_wVlSHBhagjkBgzpCY}OSr";
 
         Graph<Integer,
                 DefaultEdge> graph = readGraph(
                 new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 DefaultEdge.class, false);
 
-        assertEquals(24, graph.vertexSet().size());
-        assertEquals(84, graph.edgeSet().size());
-
-        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-        for (int[] edge : edges)
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
+        this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), graph);
     }
 
     @Test
-    public void testSparse63()
+    public void testSparse6c()
             throws ImportException
     {
-        //HarborthGraph
-        String input = ":s_OGKI?@_?g[QABAo__YEFCp@?iIEbqHWuWLbbh?}[OfcXpGhNHdYPY_SgdYX]pZkfJPuo[lfZHys^mFcDs}`pG{UNNgoHC}DIgrI[qjMhTyDQrQlVydrBYmWkn\n";
+        //goldnerHararyGraph
+        String input = ":J`E?POAMHGpCKsrrHCXAeM`N";
 
         Graph<Integer,
                 DefaultEdge> graph = readGraph(
                 new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 DefaultEdge.class, false);
 
-        assertEquals(52, graph.vertexSet().size());
-        assertEquals(104, graph.edgeSet().size());
-
-        //diameter: 9, radius 6, girth 3
-        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-        for (int[] edge : edges)
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
+        this.compare(NamedGraphGenerator.goldnerHararyGraph(), graph);
     }
 
     @Test
-    public void testSparse64()
+    public void testSparse6d()
             throws ImportException
     {
-        //HarborthGraph
-        String input = ":s_OGKI?@_?g[QABAo__YEFCp@?iIEbqHWuWLbbh?}[OfcXpGhNHdYPY_SgdYX]pZkfJPuo[lfZHys^mFcDs}`pG{UNNgoHC}DIgrI[qjMhTyDQrQlVydrBYmWkn\n";
+        //buckyBallGraph
+        String input = ":{`?GGIKCa`gcCIGdag_iXNFPPsK`RHP`PIMMHtqtM]VKShXiyZMUBTWw]pDcDpAa`XI}@IeghHyXPjTV[IlXLTQtay@ooWUUT_qtkU[vSucLmJ]Aw_MVV";
 
         Graph<Integer,
                 DefaultEdge> graph = readGraph(
                 new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 DefaultEdge.class, false);
 
-        assertEquals(52, graph.vertexSet().size());
-        assertEquals(104, graph.edgeSet().size());
-
-        //diameter: 9, radius 6, girth 3
+        this.compare(NamedGraphGenerator.buckyBallGraph(), graph);
     }
 
-
-//    @Test
-//    public void testSparse64()
-//            throws ImportException
-//    {
-//        //HallJankoGraph
-//        String input = (":~?@c__E@?g?A?w?A@GCA_?CA`OWF`W?EAW?@?_OD@_[GAgcIaGGB@OcIA"
-//        "wCE@o_K_?GB@?WGAouC@OsN_?GB@O[GB`A@@_e?@OgLB_{Q_?GC@O[GAOs"
-//        "OCWGBA?kKBPA@?_[KB_{OCPKT`o_RD`]A?o[HBOwODW?DA?cIB?wRDP[X`"
-//        "ogKB_{QD@]B@o_KBPWXE`mC@o_JB?{PDPq@?oWGA_{OCPKTDp_YEwCA@_c"
-//        "IBOwOC`OX_OGB@?WPDPcYFg?C@_gKBp?SE@cYF`{_`?SGAOoOC`_\\FwCE"
-//        "A?gKBO{QD@k[FqI??_OFA_oQE@k\\Fq?`GgCB@pGRD@_XFP{a_?SE@ocIA"
-//        "ooNCPOUEqU@?oODA?cJB_{UEqYC@_kLC@CREPk]GAGbHgCA@?SMBpCSD`["
-//        "YFq?`Ga]BA?gPC`KSD`_\\Fa?cHWGB@?[IAooPD`[WF@s^HASeIg?@@OcP"
-//        "C`KYF@w^GQ[h`O[HAooMC@CQCpSVEPk\\GaSeIG?FA?kLB_{OC`OVE@cYG"
-//        "QUA@?WLBp?PC`KVEqKgJg?DA?sMBpCSDP[WEQKfIay@?_KD@_[GC`SUE@k"
-//        "[FaKdHa[k_?OLC@CRD@WVEpo^HAWfIAciIqoo_?CB@?kMCpOUE`o\\GAKg"
-//        "IQgq_?GD@_[GB?{OCpWVE@cYFACaHAWhJR?q_?CC@_kKBpC\\GACdHa[kJ"
-//        "a{o_?CA?oOFBpGRD@o\\GaKdIQonKrOt_?WHA`?PC`KTD`k]FqSeIaolJr"
-//        "CqLWCA@OkKCPGRDpcYGAKdIAgjJAsmJr?t__OE@ogJB_{XEps`HA[gIQwn"
-//        "KWKGAOoMBpGUE`k[Fa?aHqckJbSuLw?@?_SHA_kLC@OTFPw^GaOkLg?B@?"
-//        "[HA_{PDP_XFaCbHa[gIqooKRWx_?CFBpOTE@cZFPw^GACcHQgoKrSvMwWG"
-//        "BOwQCp_YFP{`HASfJAwnKRSx_OSSDP[WEq?aGqSfIQsoKR_zNWCE@o_HA_"
-//        "sREPg^GAGcHQWfIAciKbOxNg?A@__IAooMC`KTD`g\\GAKcIasoKrOtLb["
-//        "wMbyCA?cKBp?TD`[WE`s^GQGbHqcjJrK{NRw~_oODA?sNC@CQCpOZF@s]G"
-//        "QOfIaolJrGsLbk}_?OFA_sRD@SVE`k[HQcjJa{qLb[xMb|?_OOFA?cIAos"
-//        "RDP_ZFa?aGqOfIAsuMbk{Ns@@OsQAA_sPDPWXE`o\\FqKdIQkkJrCuLr_x"
-//        "Mro}NsDAPG?@@OWFApKUE@o`IQolKRKsLrc|NsQC@OWGAOgJCpOWE`o_GQ"
-//        "KiIqwnKr_~OcLCPS]A?oWHA_oMBpKSDP[\\FagjKBWxMbk{OSQ@@O_IAoo"
-//        "LBpCSD`g\\FaGbHQWgIQgmKRKwMRl?PgGC@OWHB@KSE@c[FqCaGqSeIAkk"
-//        "KBCqLBSuMBpGQWCA@?cKBOwRDPWVE@k^GqOfJr?pKbKtLrs}OSHDQwKIBO"
-//        "wPD@WWEQ?`HQWfIQglKBOtLbo}Ns@@OsTE_?kLCpWWHA[gIqomKBGwMRgz"
-//        "NBw~OSPDPc\\H_?CFAOoLCPSVE`o\\GAOeJAwpKbKtMrx?Qcq??OKFA?gJ"
-//        "B`?QDpcYEpo]FqKfIAgjJB?qKr_{NS@A__SE@o_HBO{PC`OTD`{_HaciIq"
-//        "{vMbt?OcPFQCeB@?SKBOwRD@SXE`k[FPw`HQ_lKRKxNRxBPC\\HQclK_?K"
-//        "EB?sOC`OTDa?`GqWgJRCrNBw~OSHFQStMRtDQ_?KC@OoQE`k_GaOdHa[gI"
-//        "q{tMBg|Nb|?OcPMSDDQSwCB@_cJB_{OCpOVFP{dHa[jJQwqKrk}NsHBQCd"
-//        "MRtMA?oSEA_wPDp_YEpo]GAOeIq{pLBk}NsLEQCtNTDU??OKEA_oLC@[[G"
-//        "aKnKBOtLbk~OCPFQStNSDLSTgGKC@GSD`[WEpw_GQGcIAciJAwpKb_xMbk"
-//        "~QShJRc|R`_wNCPcZF@s^GAGbHA_hJR?qKrOvMRg|NsDEPsxTTgCB@?gJB"
-//        "?sMC@CUDp_]FqCaHQcjJQwtLrhCPS\\IRCtQTw?B@?SHA_wPC`_aGqOiJa"
-//        "{oKRKvMRpFQChKRtXVUTi??ocNC@KUE@cYFaGdHa_mJrKsLb[yMro|OcXI"
-//        "RdPTTddZaOgJB@?UEPk[FQCfIaolJrSvMBczNR|AOsXFQCtOTtaB@?WGAP"
-//        "?TEPo\\GAGdHqgmKBCqLR[xMb|?PC`HQs|TTt`XUtu@?o[HB?sNCPGXF@{"
-//        "_GQKcIqolJb_yNCLDPs`MRtDRTTdYUwSEA?kLB`CWF@s]FqGgIqooLRgzN"
-//        "RxFQSlMSDDQTDXVUTi@?_KDAOoLBpKUEQOfIa{oLB_xMrt?Os\\HQcpMST"
-//        "HSTtl[VT}A@ocJBOwSD`_XEpo_Ha_mJrKtLbgzNSTGQspLRtDUUDp\\WG["
-//        "HB`CQCp[WFQGgIQgkJQ{rLbc{Nc@APsdLRt@PSt\\WUtt_Wn")+"\n";
-//
-//        Graph<Integer,
-//                DefaultEdge> graph = readGraph(
-//                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
-//                DefaultEdge.class, false);
-//
-//        assertEquals(24, graph.vertexSet().size());
-//        assertEquals(84, graph.edgeSet().size());
-//
-//        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-//        for (int[] edge : edges)
-//            assertTrue(graph.containsEdge(edge[0], edge[1]));
-//    }
-
     @Test
-    public void testGraph61()
+    public void testSparse6f()
             throws ImportException
     {
-        //SchlaefliGraph
-        String input = "ZBXzr|}^z~TTitjLth|dmkrmsl|if}TmbJMhrJX]YfFyTbmsseztKTvyhDvw\n";
+        //heawoodGraph
+        String input = ":M`ESwCjGtyGaeqhj_`f";
 
         Graph<Integer,
                 DefaultEdge> graph = readGraph(
                 new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 DefaultEdge.class, false);
 
-        assertEquals(24, graph.vertexSet().size());
-        assertEquals(84, graph.edgeSet().size());
-
-        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-        for (int[] edge : edges)
-            assertTrue(graph.containsEdge(edge[0], edge[1]));
+        this.compare(NamedGraphGenerator.heawoodGraph(), graph);
     }
 
-//    @Test
-//    public void testGraph62()
-//            throws ImportException
-//    {
-//        //GossetGraph
-//        String input = ('w~~~~rt{~Z\\ZxnvYZYmlfrb}|hDuhLlcmmMNf_^zzQGNYcP\\kcRZbaJjoNBx{'+
-//                '?N~o^}?A`}F_Kbbm_[QZ\\_]Cj\\oN_dm{BzB{?]WIMM@tPQRYBYRPIuAyJgQv?'+
-//                '|Bxb_M[kWIR@jTQcciDjShXCkFMgpwqBKxeKoS`TYqdTCcKtkdKwWQXrbEZ@OdU'+
-//                'mITZ@_e[{KXn?YPABzvY?IcO`zvYg@caC\\zlf?BaGR]zb{?@wOjv`~w??N_n_~'+
-//                '~w???^_^~~{')
-//
-//        Graph<Integer,
-//                DefaultEdge> graph = readGraph(
-//                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
-//                DefaultEdge.class, false);
-//
-//        assertEquals(24, graph.vertexSet().size());
-//        assertEquals(84, graph.edgeSet().size());
-//
-//        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-//        for (int[] edge : edges)
-//            assertTrue(graph.containsEdge(edge[0], edge[1]));
-//    }
 
+
+
+    private <V,E> void compare(Graph<V,E> orig, Graph<V,E> g){
+        assertEquals(orig.vertexSet().size(), g.vertexSet().size());
+        assertEquals(orig.edgeSet().size(), g.edgeSet().size());
+
+        //The original and output graph cannot be compared 1:1 since sparse6/graph6 encodings do not preserve vertex labels
+        //Testing for graph isomorphism is hard, so we compare characteristics.
+        int[] degeeVectorOrig=new int[orig.vertexSet().size()];
+        for(V v : orig.vertexSet())
+            degeeVectorOrig[orig.degreeOf(v)]++;
+
+        int[] degeeVectorG=new int[g.vertexSet().size()];
+        for(V v : g.vertexSet())
+            degeeVectorG[g.degreeOf(v)]++;
+
+        //ADD tests for diameter, radius, girth
+
+//        System.out.println(Arrays.toString(degeeVectorOrig));
+//        System.out.println(Arrays.toString(degeeVectorG));
+//        assertArrayEquals(degeeVectorOrig, degeeVectorG);
+//        System.out.println("finished comp");
+    }
 
 }

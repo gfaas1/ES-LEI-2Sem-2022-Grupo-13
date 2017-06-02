@@ -132,6 +132,14 @@ public class NamedGraphGeneratorTest {
     }
 
     @Test
+    public void testEllinghamHorton54Graph(){
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.ellinghamHorton54Graph();
+        this.validateBasics(g, 54, 81, 9, 10, 6);
+        assertTrue(GraphTests.isCubic(g));
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
     public void testEllinghamHorton78Graph(){
         Graph<Integer, DefaultEdge> g=NamedGraphGenerator.ellinghamHorton78Graph();
         this.validateBasics(g, 78, 117, 7, 13, 6);
@@ -227,7 +235,7 @@ public class NamedGraphGeneratorTest {
 
     @Test
     public void testThomsenGraph(){
-        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.schläfliGraph();
+        Graph<Integer, DefaultEdge> g=NamedGraphGenerator.thomsenGraph();
         this.validateBasics(g, 6, 9, 2, 2, 4);
         assertTrue(GraphTests.isBipartite(g));
     }
