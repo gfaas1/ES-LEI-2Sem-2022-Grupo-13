@@ -159,10 +159,30 @@ public class Graph6Sparse6ImporterTest extends TestCase{
         assertEquals(52, graph.vertexSet().size());
         assertEquals(104, graph.edgeSet().size());
 
-//        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
-//        for (int[] edge : edges)
-//            assertTrue(graph.containsEdge(edge[0], edge[1]));
+        //diameter: 9, radius 6, girth 3
+        int[][] edges = { {0,1}, {0,2}, {1,2}, {5,6} };
+        for (int[] edge : edges)
+            assertTrue(graph.containsEdge(edge[0], edge[1]));
     }
+
+    @Test
+    public void testSparse64()
+            throws ImportException
+    {
+        //HarborthGraph
+        String input = ":s_OGKI?@_?g[QABAo__YEFCp@?iIEbqHWuWLbbh?}[OfcXpGhNHdYPY_SgdYX]pZkfJPuo[lfZHys^mFcDs}`pG{UNNgoHC}DIgrI[qjMhTyDQrQlVydrBYmWkn\n";
+
+        Graph<Integer,
+                DefaultEdge> graph = readGraph(
+                new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
+                DefaultEdge.class, false);
+
+        assertEquals(52, graph.vertexSet().size());
+        assertEquals(104, graph.edgeSet().size());
+
+        //diameter: 9, radius 6, girth 3
+    }
+
 
 //    @Test
 //    public void testSparse64()

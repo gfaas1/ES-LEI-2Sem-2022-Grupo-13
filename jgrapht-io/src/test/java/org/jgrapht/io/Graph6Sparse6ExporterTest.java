@@ -45,17 +45,16 @@ public class Graph6Sparse6ExporterTest {
     public void testEmptyGraph() throws UnsupportedEncodingException, ExportException {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("rest: "+res);
-        //assertEquals(":Fa@x^\n", res);
+        assertEquals(":?", res);
     }
 
     @Test
     public void testGraphWithoutEdges() throws UnsupportedEncodingException, ExportException {
         Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
         orig.addVertex(0);
+        orig.addVertex(1);
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        System.out.println("rest: "+res);
-        //assertEquals(":Fa@x^\n", res);
+        assertEquals(":A", res);
     }
 
     @Test
@@ -67,7 +66,7 @@ public class Graph6Sparse6ExporterTest {
         orig.addEdge(1, 2);
         orig.addEdge(5,6);
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
-        assertEquals(":Fa@x^\n", res);
+        assertEquals(":Fa@x^", res);
     }
 
     @Test
@@ -90,6 +89,7 @@ public class Graph6Sparse6ExporterTest {
     public void testGraph3a() throws UnsupportedEncodingException, ExportException, ImportException {
         Graph<Integer, DefaultEdge> orig= NamedGraphGenerator.klein3RegularGraph();
         String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
+        System.out.println("res: "+res);
         Graph<Integer, DefaultEdge> g = importGraph(res);
         this.compare(orig, g);
     }

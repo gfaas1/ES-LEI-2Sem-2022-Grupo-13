@@ -103,11 +103,12 @@ public class Graph6Sparse6Exporter<V,E>
             e.printStackTrace();
         }
         PrintWriter out = new PrintWriter(writer);
-        out.println(g6);
+        out.print(g6);
         out.flush();
     }
 
     private void writeSparse6(Graph<V, E> g, List<V> vertices) throws IOException {
+        System.out.println("writesparse");
         int[][] edges=new int[g.edgeSet().size()][2];
         int index=0;
         for(int i=0; i<vertices.size()-1; i++){
@@ -119,6 +120,7 @@ public class Graph6Sparse6Exporter<V,E>
                 }
             }
         }
+        System.out.println("edges: "+Arrays.deepToString(edges));
 
         //sparse6 format always starts with ":"
         byteArrayOutputStream.write(":".getBytes());
