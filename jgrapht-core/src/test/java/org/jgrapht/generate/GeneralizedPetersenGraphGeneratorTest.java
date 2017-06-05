@@ -18,7 +18,9 @@
 package org.jgrapht.generate;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
 import org.jgrapht.GraphTests;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.IntegerVertexFactory;
 import org.jgrapht.graph.SimpleGraph;
@@ -93,9 +95,9 @@ public class GeneralizedPetersenGraphGeneratorTest {
     private <V,E> void validateBasics(Graph<V, E> g, int vertices, int edges, int radius, int diameter, int girt){
         assertEquals(vertices, g.vertexSet().size());
         assertEquals(edges, g.edgeSet().size());
-//        GraphMeasurer<V,E> gm = new GraphMeasurer();
-//        assertEquals(radius, gm.getRadius());
-//        assertEquals(diameter, gm.getDiameter());
-//        assertEquals(girt, GraphMetrics.getGirth(g));
+        GraphMeasurer<V,E> gm = new GraphMeasurer<>(g);
+        assertEquals(radius, gm.getRadius(), 0.00000001);
+        assertEquals(diameter, gm.getDiameter(),0.00000001);
+        assertEquals(girt, GraphMetrics.getGirth(g),0.00000001);
     }
 }
