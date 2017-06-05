@@ -249,6 +249,89 @@ public class GraphTestsTest
     }
 
     @Test
+    public void testIsForest1(){
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        assertFalse(GraphTests.isForest(g));
+        g.addVertex(1);
+        assertTrue(GraphTests.isForest(g));
+        g.addVertex(2);
+        assertTrue(GraphTests.isForest(g));
+        g.addEdge(1,2);
+        assertTrue(GraphTests.isForest(g));
+        g.addEdge(1, 2);
+        assertFalse(GraphTests.isForest(g));
+    }
+
+    @Test
+    public void testIsForest2(){
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        StarGraphGenerator<Integer, DefaultEdge> gen=new StarGraphGenerator<>(10);
+        IntegerVertexFactory factory=new IntegerVertexFactory();
+        gen.generateGraph(g, factory, null);
+        gen.generateGraph(g, factory, null);
+        assertTrue(GraphTests.isForest(g));
+    }
+
+    @Test
+    public void testIsOverfull(){
+        assertFalse(GraphTests.isOverfull(NamedGraphGenerator.clawGraph()));
+        assertTrue(GraphTests.isOverfull(NamedGraphGenerator.doyleGraph()));
+
+        Graph<Integer, DefaultEdge> k6 = new Pseudograph<>(DefaultEdge.class);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen=new CompleteGraphGenerator<>(6);
+        gen.generateGraph(k6, new IntegerVertexFactory(), null);
+        assertFalse(GraphTests.isOverfull(k6));
+
+        Graph<Integer, DefaultEdge> k7 = new Pseudograph<>(DefaultEdge.class);
+        gen=new CompleteGraphGenerator<>(7);
+        gen.generateGraph(k7, new IntegerVertexFactory(), null);
+        assertTrue(GraphTests.isOverfull(k7));
+    }
+
+    @Test
+    public void isSplit1(){
+        assertFalse(GraphTests.isSplit(NamedGraphGenerator.petersenGraph()));
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        assertFalse(GraphTests.isSplit(g));
+        g.addVertex(0);
+        assertTrue(GraphTests.isSplit(g));
+        Graphs.addAllVertices(g, Arrays.asList(1,2,3,4));
+        //clique
+        g.addEdge(0,1);
+        g.addEdge(1,2);
+        g.addEdge(2,0);
+        //independent set
+        g.addEdge(3,1);
+        g.addEdge(3,2);
+        g.addEdge(4,1);
+        assertTrue(GraphTests.isSplit(g));
+        g.addEdge(3,4);
+        assertTrue(GraphTests.isSplit(g));
+    }
+
+    @Test
+    public void isSplit2(){
+        //Create some random split graphs.
+        Random rand = new Random(0);
+        CompleteGraphGenerator<Integer, DefaultEdge> gen=new CompleteGraphGenerator<>(6);
+
+        for(int inst=0; inst<5; inst++) {
+            //1. create a clique
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            gen.generateGraph(g, new IntegerVertexFactory(0), null);
+
+            //2. add a number of vertices (the independent set) and connect some of these vertices with vertices in the clique.
+            for(int j=6; j<12; j++){
+                g.addVertex(j);
+                for(int i=0; i<6; i++)
+                    if(rand.nextBoolean())
+                        g.addEdge(i, j);
+            }
+            assertTrue(GraphTests.isSplit(g));
+        }
+    }
+
+    @Test
     public void testBipartite1()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
