@@ -32,6 +32,9 @@ import java.util.Map;
  * Several special cases of the generalized Petersen graph are predefined in the {@link NamedGraphGenerator}.
  *
  * @author Joris Kinable
+ *
+ * @param <V> graph vertex type
+ * @param <E> graph edge type
  */
 public class GeneralizedPetersenGraphGenerator<V, E>
         implements GraphGenerator<V, E, V> {

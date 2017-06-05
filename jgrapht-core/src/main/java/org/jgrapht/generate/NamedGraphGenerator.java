@@ -27,13 +27,21 @@ import java.util.Map;
 
 /**
  * Collection of commonly used named graphs
+ *
  * @author Joris Kinable
+ *
+ * @param <V> graph vertex type
+ * @param <E> graph edge type
  */
 public class NamedGraphGenerator<V,E> {
 
     private VertexFactory<V> vertexFactory;
     private Map<Integer, V> vertexMap;
 
+    /**
+     * Constructs a new generator for named graphs
+     * @param vertexFactory factory for vertices
+     */
     public NamedGraphGenerator(VertexFactory<V> vertexFactory){
         this.vertexFactory=vertexFactory;
         vertexMap=new HashMap<>();
@@ -75,13 +83,19 @@ public class NamedGraphGenerator<V,E> {
     }
 
     //-------------Generalized Petersen Graph-----------//
+
+    /**
+     * @see GeneralizedPetersenGraphGenerator
+     * @param n Generalized Petersen graphs $GP(n,k)$
+     * @param k Generalized Petersen graphs $GP(n,k)$
+     * @return Generalized Petersen Graph
+     */
     public static Graph<Integer, DefaultEdge> generalizedPetersenGraph(int n, int k){
         Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
         new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateGeneralizedPetersenGraph(g, n, k);
         return g;
     }
-    public void generateGeneralizedPetersenGraph(Graph<V,E> targetGraph, int n, int k){
-        vertexMap.clear();
+    private void generateGeneralizedPetersenGraph(Graph<V,E> targetGraph, int n, int k){
         GeneralizedPetersenGraphGenerator<V,E> gpgg=new GeneralizedPetersenGraphGenerator<>(n, k);
         gpgg.generateGraph(targetGraph, vertexFactory, null);
     }
@@ -1001,6 +1015,9 @@ public class NamedGraphGenerator<V,E> {
         targetGraph.addEdge(u, v);
     }
 
+    /**
+     * Creates vertices of the type Integer
+     */
     public static class IntegerVertexFactory implements VertexFactory<Integer>
     {
         private int counter = 0;

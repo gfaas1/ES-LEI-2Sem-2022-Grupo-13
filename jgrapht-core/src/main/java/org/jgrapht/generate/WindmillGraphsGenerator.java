@@ -38,6 +38,9 @@ import java.util.Map;
  * Friendship graph, denoted by $F_m$.
  *
  * @author Joris Kinable
+ *
+ * @param <V> graph vertex type
+ * @param <E> graph edge type
  */
 public class WindmillGraphsGenerator<V, E>
         implements GraphGenerator<V, E, V> {

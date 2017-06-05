@@ -38,10 +38,16 @@ import java.util.*;
  * a much larger storage size for dense graphs.
  *
  * @author Joris Kinable
+ *
+ * @param <V> graph vertex type
+ * @param <E> graph edge type
  */
 public class Graph6Sparse6Exporter<V,E>
         implements GraphExporter<V, E>{
 
+    /**
+     * Format type: graph6 (g6) or sparse6(s6)
+     */
     public enum Format{GRAPH6, SPARSE6}
 
     private Format format;

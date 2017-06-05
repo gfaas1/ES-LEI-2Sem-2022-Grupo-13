@@ -35,6 +35,9 @@ import java.util.Map;
  * graphs do not.
  *
  * @author Joris Kinable
+ *
+ * @param <V> graph vertex type
+ * @param <E> graph edge type
  */
 public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implements GraphImporter<V,E>{
 
