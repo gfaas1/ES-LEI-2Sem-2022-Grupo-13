@@ -17,10 +17,9 @@
  */
 package org.jgrapht.io;
 
-import junit.framework.TestCase;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
 import org.jgrapht.Graphs;
-import org.jgrapht.VertexFactory;
 import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.*;
 import org.junit.Test;
@@ -29,8 +28,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for Graph6Sparse6Importer
@@ -38,7 +37,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Joris Kinable
  */
-public class Graph6Sparse6ImporterTest extends TestCase{
+public class Graph6Sparse6ImporterTest{
 
     public <E> Graph<Integer, E> readGraph(
             InputStream in, Class<? extends E> edgeClass, boolean weighted)
@@ -321,7 +320,11 @@ public class Graph6Sparse6ImporterTest extends TestCase{
         for(V v : g.vertexSet())
             degeeVectorG[g.degreeOf(v)]++;
 
-        //ADD tests for diameter, radius, girth
+        assertTrue(Arrays.equals(degeeVectorOrig, degeeVectorG));
+
+        assertEquals(GraphMetrics.getRadius(orig), GraphMetrics.getRadius(g), 0.00000001);
+        assertEquals(GraphMetrics.getDiameter(orig), GraphMetrics.getDiameter(g),0.00000001);
+        assertEquals(GraphMetrics.getGirth(orig), GraphMetrics.getGirth(g),0.00000001);
     }
 
 }

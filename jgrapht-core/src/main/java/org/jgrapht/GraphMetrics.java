@@ -64,7 +64,7 @@ public abstract class GraphMetrics {
      * @return the diameter of the graph.
      */
     public static <V,E> double getRadius(Graph<V,E> graph){
-        return new GraphMeasurer<>(graph).getDiameter();
+        return new GraphMeasurer<>(graph).getRadius();
     }
 
     /**

@@ -18,6 +18,7 @@
 package org.jgrapht.io;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphMetrics;
 import org.jgrapht.Graphs;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.NamedGraphGenerator;
@@ -31,6 +32,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for Graph6Sparse6Exporter
@@ -194,6 +196,10 @@ public class Graph6Sparse6ExporterTest {
         for(V v : g.vertexSet())
             degeeVectorG[g.degreeOf(v)]++;
 
-        //ADD graph diameter, radius and girth checks
+        assertTrue(Arrays.equals(degeeVectorOrig, degeeVectorG));
+
+        assertEquals(GraphMetrics.getRadius(orig), GraphMetrics.getRadius(g), 0.00000001);
+        assertEquals(GraphMetrics.getDiameter(orig), GraphMetrics.getDiameter(g),0.00000001);
+        assertEquals(GraphMetrics.getGirth(orig), GraphMetrics.getGirth(g),0.00000001);
     }
 }
