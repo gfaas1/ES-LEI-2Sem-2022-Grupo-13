@@ -42,7 +42,7 @@ import java.util.*;
 public class Graph6Sparse6Exporter<V,E>
         implements GraphExporter<V, E>{
 
-    public enum Format{GRAPH6, SPARSE6};
+    public enum Format{GRAPH6, SPARSE6}
 
     private Format format;
 
@@ -51,7 +51,6 @@ public class Graph6Sparse6Exporter<V,E>
     /**
      * The default format used by the exporter.
      */
-    //TODO: instead of selecting a default format, the exporter should choose the most efficient format to export a particular graph.
     public static final Format DEFAULT_GRAPH6SPARSE6_FORMAT = Format.GRAPH6;
 
     /**
@@ -76,13 +75,15 @@ public class Graph6Sparse6Exporter<V,E>
     @Override
     public void exportGraph(Graph<V, E> g, Writer writer) throws ExportException {
         GraphTests.requireUndirected(g);
-        if(format == Format.GRAPH6 && (g.getType().isMultigraph() || g.getType().isPseudograph()))
-            System.out.println("WARNING: your input graph supports parallel edges, but your selected output format (graph6) does not! Parallel edges will be ignored!");
+        if(format == Format.GRAPH6 && !GraphTests.isSimple(g))
+            throw new ExportException("Graphs exported in graph6 format cannot contain loops or multiple edges.");
 
         //Map all vertices to a unique integer
         List<V> vertices = new ArrayList<>(g.vertexSet());
 
         byteArrayOutputStream = new ByteArrayOutputStream();
+        currentByte=0;
+        bitIndex=0;
 
         try {
             if (format == Format.SPARSE6)
@@ -107,8 +108,8 @@ public class Graph6Sparse6Exporter<V,E>
     private void writeSparse6(Graph<V, E> g, List<V> vertices) throws IOException {
         int[][] edges=new int[g.edgeSet().size()][2];
         int index=0;
-        for(int i=0; i<vertices.size(); i++){
-            for(int j=i; j<vertices.size(); j++){
+        for(int j=0; j<vertices.size(); j++){
+            for(int i=0; i<=j; i++){
                 if(g.containsEdge(vertices.get(i), vertices.get(j))) {
                     for(int p=0; p<g.getAllEdges(vertices.get(i), vertices.get(j)).size(); p++) {
                         edges[index][0] = i;
@@ -144,7 +145,7 @@ public class Graph6Sparse6Exporter<V,E>
             }
         }
         //Pad right hand side with '1's to fill the last byte. This may not be the 'correct' way of padding as
-        //described in the sparse6 format descr, but I couldn't make sense of the description. This seems to work fine.
+        //described in the sparse6 format descr, but it's hard to make sense of the sparse6 description. This seems to work fine.
         if(bitIndex != 0) {
             int padding = 6 - bitIndex;
             for (int i = 0; i < padding; i++)
@@ -156,10 +157,10 @@ public class Graph6Sparse6Exporter<V,E>
 
     private void writeGraph6(Graph<V, E> g, List<V> vertices) throws IOException {
         writeNumberOfVertices(vertices.size());
-        //Write the upper triangle of the adjacency matrix of G as a bit vector x of length n(n-1)/2,
+        //Write the lower triangle of the adjacency matrix of G as a bit vector x of length n(n-1)/2,
         //using the ordering (0,1),(0,2),(1,2),(0,3),(1,3),(2,3),...,(n-1,n).
-        for(int i=0; i<vertices.size()-1; i++)
-            for(int j=i+1; j<vertices.size(); j++)
+        for(int i=0; i<vertices.size(); i++)
+            for(int j=0; j<i; j++)
                 writeBit(g.containsEdge(vertices.get(i), vertices.get(j)));
         writeByte(); //Finish writing the last byte
     }

@@ -105,7 +105,7 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
      */
     public void importGraph(Graph<V, E> g, String g6) throws ImportException {
 
-        g6=g6.replace("\n", "").replace("\r", ""); //strip off any new line characters
+        g6=g6.replace("\n", "").replace("\r", ""); //remove any new line characters
         //Strip header. By default we assume the input Format is GRAPH6, unless stated otherwise
         if(g6.startsWith(":")) {
             g6=g6.substring(1, g6.length());
@@ -139,12 +139,12 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
 
     private void readGraph6(Graph<V, E> g, Map<Integer, V> vertexIndexMap) throws ImportException {
         //check whether there's enough data
-        int requiredBytes= (int) Math.ceil(vertexIndexMap.size()*(vertexIndexMap.size()-1)/12.0);
+        int requiredBytes= (int) Math.ceil(vertexIndexMap.size()*(vertexIndexMap.size()-1)/12.0)+byteIndex;
         if(bytes.length < requiredBytes)
             throw new ImportException("Graph string seems to be corrupt. Not enough data to read graph6 graph");
-        //Read the upper triangle of the adjacency matrix of G
-        for (int i = 0; i < vertexIndexMap.size()-1; i++) {
-            for (int j = i+1; j < vertexIndexMap.size(); j++) {
+        //Read the lower triangle of the adjacency matrix of G
+        for (int i = 0; i < vertexIndexMap.size(); i++) {
+            for (int j = 0; j < i; j++) {
                 int bit = getBits(1);
                 if (bit == 1) {
 
