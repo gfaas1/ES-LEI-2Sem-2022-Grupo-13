@@ -24,6 +24,7 @@ Changes to JGraphT in each version:
     - Revised `GraphWalk`; added additional input checks, additional functionality such as reverse and concat, added verification and factory methods. (contributed by Joris Kinable)
     - Made several algorithm return objects iterable. (contributed by Joris Kinable)
     - Support latex math notation in Javadoc (contributed by Joris Kinable)
+    - Allow CrossComponentIterator to start from a collection of startVertices (contributed by Patrick Sharp)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
