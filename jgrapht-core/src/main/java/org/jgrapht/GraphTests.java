@@ -266,7 +266,7 @@ public abstract class GraphTests
         }
 
         for (V v : graph.vertexSet()) {
-            Set<? extends V> otherPartition;
+            Collection<? extends V> otherPartition;
             if (firstPartition.contains(v)) {
                 otherPartition = secondPartition;
             } else if (secondPartition.contains(v)) {

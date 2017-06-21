@@ -146,7 +146,7 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     }
 
-    private static Matching<WeightedEdge> match(
+    private static Matching<V, WeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)
     {
         List<? extends V> first = firstPartition.subList(0, partitionCardinality);

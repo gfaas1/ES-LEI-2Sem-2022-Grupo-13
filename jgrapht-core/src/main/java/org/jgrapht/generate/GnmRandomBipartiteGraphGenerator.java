@@ -48,6 +48,9 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
     private final int n2;
     private final int m;
 
+    private Map<Integer, V> partitionA;
+    private Map<Integer, V> partitionB;
+
     /**
      * Create a new random bipartite graph generator. The generator uses the G(n, m) model when n =
      * n1 + n2 and the bipartite graph has one partition with size n1 and one partition with size
@@ -125,14 +128,14 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // create vertices
         int previousVertexSetSize = target.vertexSet().size();
 
-        Map<Integer, V> partitionA = new HashMap<>(n1);
+        partitionA = new LinkedHashMap<>(n1);
         for (int i = 0; i < n1; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
             partitionA.put(i, v);
         }
 
-        Map<Integer, V> partitionB = new HashMap<>(n2);
+        partitionB = new LinkedHashMap<>(n2);
         for (int i = 0; i < n2; i++) {
             V v = vertexFactory.createVertex();
             target.addVertex(v);
@@ -147,7 +150,7 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
         // check if graph is directed
         final boolean isDirected = target.getType().isDirected();
 
-        int maxAllowedEdges = Integer.MAX_VALUE;
+        int maxAllowedEdges;
         try {
             if (isDirected) {
                 maxAllowedEdges = Math.multiplyExact(2, Math.multiplyExact(n1, n2));
@@ -192,6 +195,30 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
             }
         }
 
+    }
+
+    /**
+     * Returns the first partition of vertices in the bipartite graph. This partition is guaranteed to be smaller than or equal
+     * in size to the second partition.
+     * @return one partition of the bipartite graph
+     */
+    public Set<V> getFirstPartition(){
+        if(partitionA.size() <= partitionB.size())
+            return new LinkedHashSet<>(partitionA.values());
+        else
+            return new LinkedHashSet<>(partitionB.values());
+    }
+
+    /**
+     * Returns the second partitions of vertices in the bipartite graph. This partition is guaranteed to be larger than or equal
+     * in size to the first partition.
+     * @return one partition of the bipartite graph
+     */
+    public Set<V> getSecondPartition(){
+        if(partitionB.size() >= partitionA.size())
+            return new LinkedHashSet<>(partitionB.values());
+        else
+            return new LinkedHashSet<>(partitionA.values());
     }
 
 }
