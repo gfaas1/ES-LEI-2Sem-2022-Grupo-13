@@ -34,7 +34,7 @@ public class GreedyWeightedMatchingTest
     public MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph)
     {
-        return new GreedyWeightedMatching<>(graph);
+        return new GreedyWeightedMatching<>(graph, false);
     };
 
 }

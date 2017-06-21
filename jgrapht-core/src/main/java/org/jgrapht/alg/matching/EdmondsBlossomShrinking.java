@@ -32,7 +32,9 @@ import org.jgrapht.util.*;
  *
  * @author Alejandro R. Lopez del Huerto
  * @since Jan 24, 2012
+ * @deprecated Deprecated in favor of the more efficient {@link EdmondsMaximumCardinalityMatching}.
  */
+@Deprecated
 public class EdmondsBlossomShrinking<V, E>
     implements MatchingAlgorithm<V, E>
 {
@@ -56,10 +58,10 @@ public class EdmondsBlossomShrinking<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Matching<E> getMatching()
+    public Matching<V, E> getMatching()
     {
         Set<E> edges = findMatch();
-        return new MatchingImpl<>(edges, edges.size());
+        return new MatchingImpl<>(graph,edges, edges.size());
     }
 
     /**
