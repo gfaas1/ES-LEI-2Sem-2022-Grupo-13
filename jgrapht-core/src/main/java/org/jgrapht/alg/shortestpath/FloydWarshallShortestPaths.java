@@ -47,7 +47,6 @@ public class FloydWarshallShortestPaths<V, E>
     private final List<V> vertices;
     private final Map<V, Integer> vertexIndices;
 
-    private int nShortestPaths = 0;
     private double diameter = Double.NaN;
     private double[][] d = null;
     private Object[][] backtrace = null;
@@ -77,6 +76,17 @@ public class FloydWarshallShortestPaths<V, E>
     public int getShortestPathsCount()
     {
         lazyCalculateMatrix();
+
+        // count shortest paths
+        int n=vertices.size();
+        int nShortestPaths = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && Double.isFinite(d[i][j])) {
+                    nShortestPaths++;
+                }
+            }
+        }
 
         return nShortestPaths;
     }
@@ -297,16 +307,6 @@ public class FloydWarshallShortestPaths<V, E>
                         d[i][j] = ik_kj;
                         backtrace[i][j] = backtrace[i][k];
                     }
-                }
-            }
-        }
-
-        // count shortest paths
-        nShortestPaths = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j && Double.isFinite(d[i][j])) {
-                    nShortestPaths++;
                 }
             }
         }
