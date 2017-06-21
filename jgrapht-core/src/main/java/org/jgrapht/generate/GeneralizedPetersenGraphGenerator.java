@@ -59,8 +59,8 @@ public class GeneralizedPetersenGraphGenerator<V, E>
 
     @Override
     public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap) {
-        List<V> verticesU=new ArrayList<>(n);
-        List<V> verticesV=new ArrayList<>(n);
+        List<V> verticesU=new ArrayList<>(n); //Polygon vertices
+        List<V> verticesV=new ArrayList<>(n); //Star vertices
         for(int i=0; i<n; i++){
             verticesU.add(vertexFactory.createVertex());
             verticesV.add(vertexFactory.createVertex());

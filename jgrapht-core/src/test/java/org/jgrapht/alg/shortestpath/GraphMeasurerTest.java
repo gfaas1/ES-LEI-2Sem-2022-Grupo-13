@@ -20,6 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.*;
 import org.junit.Test;
 

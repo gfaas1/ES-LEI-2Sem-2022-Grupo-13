@@ -243,12 +243,12 @@ public class NamedGraphGeneratorTest {
     }
 
 
-    private <V,E> void validateBasics(Graph<V, E> g, int vertices, int edges, int radius, int diameter, double girt){
+    private <V,E> void validateBasics(Graph<V, E> g, int vertices, int edges, int radius, int diameter, double girth){
         assertEquals(vertices, g.vertexSet().size());
         assertEquals(edges, g.edgeSet().size());
         GraphMeasurer<V,E> gm = new GraphMeasurer<>(g);
         assertEquals(radius, gm.getRadius(), 0.00000001);
         assertEquals(diameter, gm.getDiameter(),0.00000001);
-        assertEquals(girt, GraphMetrics.getGirth(g),0.00000001);
+        assertEquals(girth, GraphMetrics.getGirth(g),0.00000001);
     }
 }

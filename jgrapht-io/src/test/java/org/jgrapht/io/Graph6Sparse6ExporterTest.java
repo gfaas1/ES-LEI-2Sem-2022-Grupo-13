@@ -20,6 +20,7 @@ package org.jgrapht.io;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMetrics;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
@@ -116,7 +117,7 @@ public class Graph6Sparse6ExporterTest {
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp=new GnpRandomGraphGenerator<>(40, .55, 0, true);
         for(int i=0; i<20; i++){
             Graph<Integer, DefaultEdge> orig=new Pseudograph<>(DefaultEdge.class);
-            gnp.generateGraph(orig, new NamedGraphGenerator.IntegerVertexFactory(), null);
+            gnp.generateGraph(orig, new IntegerVertexFactory(), null);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
 
@@ -156,7 +157,7 @@ public class Graph6Sparse6ExporterTest {
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp=new GnpRandomGraphGenerator<>(40, .55, 0);
         for(int i=0; i<20; i++){
             Graph<Integer, DefaultEdge> orig=new SimpleGraph<>(DefaultEdge.class);
-            gnp.generateGraph(orig, new NamedGraphGenerator.IntegerVertexFactory(), null);
+            gnp.generateGraph(orig, new IntegerVertexFactory(), null);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
 

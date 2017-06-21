@@ -18,6 +18,7 @@
 package org.jgrapht;
 
 import org.jgrapht.alg.cycle.TarjanSimpleCycles;
+import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;

@@ -19,6 +19,7 @@ package org.jgrapht.generate;
 
 import org.jgrapht.Graph;
 import org.jgrapht.VertexFactory;
+import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -378,20 +379,6 @@ public class NamedGraphGenerator<V,E> {
             addEdge(targetGraph, i, i-6);
         addEdge(targetGraph, 6, 5);
     }
-    ///////////////////////////////////////////////
-
-    //-------------Hall-Janko Graph-----------//
-    /* Graph has 1800 edges: too big to include as edge array. Need sparse6 dependency
-    public static Graph<Integer, DefaultEdge> hallJankoGraph(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory()).generateHallJankoGraph(g);
-        return g;
-    }
-    public void generateHallJankoGraph(Graph<V,E> targetGraph){
-        int[][] edges=;
-        for(int[] edge : edges)
-            addEdge(targetGraph, edge[0], edge[1]);
-    }*/
 
     //-------------Bidiakis cube Graph-----------//
     /**
@@ -1014,20 +1001,4 @@ public class NamedGraphGenerator<V,E> {
         V v = addVertex(targetGraph, j);
         targetGraph.addEdge(u, v);
     }
-
-    /**
-     * Creates vertices of the type Integer
-     */
-    public static class IntegerVertexFactory implements VertexFactory<Integer>
-    {
-        private int counter = 0;
-
-        @Override
-        public Integer createVertex()
-        {
-            return counter++;
-        }
-
-    }
-
 }
