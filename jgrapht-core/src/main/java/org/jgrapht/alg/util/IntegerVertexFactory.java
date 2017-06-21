@@ -30,11 +30,18 @@ public class IntegerVertexFactory
 {
     private int counter = 0;
 
+    /**
+     * Constructs a new IntegerVertexFactory. The first vertex returned has value 0.
+     */
     public IntegerVertexFactory()
     {
         this(0);
     }
 
+    /**
+     * Constructs a new IntegerVertexFactory.
+     * @param counter Starting value of the first vertex returned.
+     */
     public IntegerVertexFactory(int counter)
     {
         this.counter = counter;
