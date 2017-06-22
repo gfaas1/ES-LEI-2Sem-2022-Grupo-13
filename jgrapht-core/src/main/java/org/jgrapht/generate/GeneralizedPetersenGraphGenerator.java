@@ -37,10 +37,19 @@ import java.util.Map;
  * @param <E> graph edge type
  */
 public class GeneralizedPetersenGraphGenerator<V, E>
-        implements GraphGenerator<V, E, V> {
+        implements GraphGenerator<V, E, List<V>> {
 
     private final int n;
     private final int k;
+
+    /**
+     * Key used to access the star polygon vertices in the resultMap
+     */
+    public final String STAR="star";
+    /**
+     * Key used to access the regular polygon vertices in the resultMap
+     */
+    public final String REGULAR="regular";
 
     /**
      * Constructs a GeneralizedPetersenGraphGenerator used to generate a Generalized Petersen graphs $GP(n,k)$.
@@ -57,10 +66,20 @@ public class GeneralizedPetersenGraphGenerator<V, E>
         this.k=k;
     }
 
+    /**
+     * Generates the Generalized Petersen Graph
+     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
+     *        result will be a disconnected graph since generated elements will not be connected to
+     *        existing elements
+     * @param vertexFactory called to produce new vertices
+     * @param resultMap if non-null, the resultMap contains a mapping from the key "star" to a list of vertices constituting
+     *                  the star polygon, as well as a key "regular" which maps to a list of vertices constituting the
+     *                  regular polygon.
+     */
     @Override
-    public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap) {
-        List<V> verticesU=new ArrayList<>(n); //Polygon vertices
-        List<V> verticesV=new ArrayList<>(n); //Star vertices
+    public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, List<V>> resultMap) {
+        List<V> verticesU=new ArrayList<>(n); //Regular polygon vertices
+        List<V> verticesV=new ArrayList<>(n); //Star polygon vertices
         for(int i=0; i<n; i++){
             verticesU.add(vertexFactory.createVertex());
             verticesV.add(vertexFactory.createVertex());
@@ -72,6 +91,10 @@ public class GeneralizedPetersenGraphGenerator<V, E>
             target.addEdge(verticesU.get(i), verticesU.get((i+1)%n));
             target.addEdge(verticesU.get(i), verticesV.get(i));
             target.addEdge(verticesV.get(i), verticesV.get((i+k)%n));
+        }
+        if(resultMap != null){
+            resultMap.put(REGULAR, verticesU);
+            resultMap.put(STAR, verticesV);
         }
     }
 }
