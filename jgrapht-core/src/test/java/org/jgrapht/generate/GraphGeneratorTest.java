@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.*;
 import org.junit.*;
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2018, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2017, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,12 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
-
-import org.jgrapht.Graph;
-import org.jgrapht.graph.EdgeReversedGraph;
+package org.jgrapht.alg.connectivity;
 
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 /**
  * Computes strongly connected components of a directed graph. The algorithm is implemented after
@@ -38,9 +38,7 @@ import java.util.*;
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @since Feb 2, 2005
- * @deprecated Moved to package org.jgrapht.connectivity
  */
-@Deprecated
 public class KosarajuStrongConnectivityInspector<V, E>
     extends AbstractStrongConnectivityInspector<V, E>
 {

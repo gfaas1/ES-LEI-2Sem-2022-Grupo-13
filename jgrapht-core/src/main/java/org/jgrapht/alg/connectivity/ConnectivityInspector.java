@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,14 +15,15 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.connectivity;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.event.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.event.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.traverse.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified
@@ -36,7 +37,7 @@ import org.jgrapht.traverse.*;
  * </p>
  *
  * <p>
- * The inspector is also a {@link GraphListener}. If added as a listener to the
+ * The inspector is also a {@link org.jgrapht.event.GraphListener}. If added as a listener to the
  * inspected graph, the inspector will amend internal cached results instead of recomputing them. It
  * is efficient when a few modifications are applied to a large graph. If many modifications are
  * expected it will not be efficient due to added overhead on graph update operations. If inspector
@@ -49,9 +50,7 @@ import org.jgrapht.traverse.*;
  * @author Barak Naveh
  * @author John V. Sichi
  * @since Aug 6, 2003
- * @deprecated Moved to package org.jgrapht.connectivity
  */
-@Deprecated
 public class ConnectivityInspector<V, E>
     implements GraphListener<V, E>
 {
@@ -70,13 +69,11 @@ public class ConnectivityInspector<V, E>
     public ConnectivityInspector(Graph<V, E> g)
     {
         init();
+        GraphTests.requireDirectedOrUndirected(g);
         if (g.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(g);
-        } else if (g.getType().isUndirected()) {
+        } else
             this.graph = g;
-        } else {
-            throw new IllegalArgumentException(GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
-        }
     }
 
     /**
