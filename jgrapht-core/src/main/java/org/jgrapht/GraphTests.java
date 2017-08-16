@@ -195,7 +195,7 @@ public abstract class GraphTests
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
 
-        return new ConnectivityInspector<>(graph).isGraphConnected();
+        return new ConnectivityInspector<>(graph).isConnected();
     }
 
     /**
@@ -238,7 +238,7 @@ public abstract class GraphTests
     public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph)
     {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
-        return new ConnectivityInspector<>(graph).isGraphConnected();
+        return new ConnectivityInspector<>(graph).isConnected();
     }
 
     /**
