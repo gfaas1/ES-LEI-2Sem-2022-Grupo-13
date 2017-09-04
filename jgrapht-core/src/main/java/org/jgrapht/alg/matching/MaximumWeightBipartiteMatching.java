@@ -17,6 +17,7 @@
  */
 package org.jgrapht.alg.matching;
 
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,16 +35,15 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.util.FibonacciHeap;
-import org.jgrapht.util.FibonacciHeapNode;
+import org.jgrapht.util.GenericFibonacciHeap;
 
 /**
  * Maximum weight matching in bipartite graphs.
  * 
  * <p>
  * Running time is O(n(m+nlogn)) where n is the number of vertices and m the number of edges of the
- * input graph.
+ * input graph. Uses exact arithmetic and produces a certificate of optimality in the form of a
+ * tight vertex potential function.
  * 
  * <p>
  * This is the algorithm described in the
@@ -61,23 +61,24 @@ public class MaximumWeightBipartiteMatching<V, E>
     private final Graph<V, E> graph;
     private final Set<V> partition1;
     private final Set<V> partition2;
-    private final Comparator<Double> comparator;
+
+    private final Comparator<BigDecimal> comparator;
 
     // vertex potentials
-    private Map<V, Double> pot;
+    private Map<V, BigDecimal> pot;
     // the matched edge of a vertex, also used to check if a vertex is free
     private Map<V, E> matchedEdge;
 
     // shortest path related data structures
-    private FibonacciHeap<V> heap;
+    private GenericFibonacciHeap<BigDecimal, V> heap;
     private Set<V> isInHeap;
-    private Map<V, FibonacciHeapNode<V>> nodeInHeap;
+    private Map<V, GenericFibonacciHeap<BigDecimal, V>.Node> nodeInHeap;
     private Map<V, E> pred;
-    private Map<V, Double> dist;
+    private Map<V, BigDecimal> dist;
 
     // the actual result
     private Set<E> matching;
-    private double matchingWeight;
+    private BigDecimal matchingWeight;
 
     /**
      * Constructor.
@@ -89,25 +90,10 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     public MaximumWeightBipartiteMatching(Graph<V, E> graph, Set<V> partition1, Set<V> partition2)
     {
-        this(graph, partition1, partition2, ToleranceDoubleComparator.DEFAULT_EPSILON);
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param graph the input graph
-     * @param partition1 the first partition of the vertex set
-     * @param partition2 the second partition of the vertex set
-     * @param epsilon tolerance when comparing floating point values
-     * @throws IllegalArgumentException if the graph is not undirected
-     */
-    public MaximumWeightBipartiteMatching(
-        Graph<V, E> graph, Set<V> partition1, Set<V> partition2, double epsilon)
-    {
         this.graph = GraphTests.requireUndirected(graph);
         this.partition1 = Objects.requireNonNull(partition1, "Partition 1 cannot be null");
         this.partition2 = Objects.requireNonNull(partition2, "Partition 2 cannot be null");
-        this.comparator = new ToleranceDoubleComparator(epsilon);
+        this.comparator = Comparator.<BigDecimal> naturalOrder();
     }
 
     /**
@@ -128,26 +114,26 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         // initialize result
         matching = new LinkedHashSet<>();
-        matchingWeight = 0d;
+        matchingWeight = BigDecimal.ZERO;
 
         // empty graph
         if (graph.edgeSet().isEmpty()) {
-            return new MatchingImpl<>(graph, matching, matchingWeight);
+            return new MatchingImpl<>(graph, matching, matchingWeight.doubleValue());
         }
 
         // initialize
         pot = new HashMap<>();
         dist = new HashMap<>();
         matchedEdge = new HashMap<>();
-        heap = new FibonacciHeap<>();
+        heap = new GenericFibonacciHeap<>(comparator);
         isInHeap = new HashSet<>();
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
         graph.vertexSet().stream().forEach(v -> {
-            pot.put(v, 0d);
+            pot.put(v, BigDecimal.ZERO);
             nodeInHeap.put(v, null);
             pred.put(v, null);
-            dist.put(v, 0d);
+            dist.put(v, BigDecimal.ZERO);
         });
 
         // run simple heuristic
@@ -160,7 +146,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             }
         }
 
-        return new MatchingImpl<>(graph, matching, matchingWeight);
+        return new MatchingImpl<>(graph, matching, matchingWeight.doubleValue());
     }
 
     /**
@@ -172,13 +158,33 @@ public class MaximumWeightBipartiteMatching<V, E>
      * 
      * @return the vertex potentials
      */
-    public Map<V, Double> getPotentials()
+    public Map<V, BigDecimal> getPotentials()
     {
         if (pot == null) {
             return Collections.emptyMap();
         } else {
             return Collections.unmodifiableMap(pot);
         }
+    }
+
+    /**
+     * Get the weight of the matching.
+     * 
+     * @return the weight of the matching
+     */
+    public BigDecimal getMatchingWeight()
+    {
+        return matchingWeight;
+    }
+
+    /**
+     * Get the matching edges.
+     * 
+     * @return the matching edges
+     */
+    public Set<E> getMatchingEdges()
+    {
+        return Collections.unmodifiableSet(matching);
     }
 
     /**
@@ -189,10 +195,10 @@ public class MaximumWeightBipartiteMatching<V, E>
      */
     private void augment(V a)
     {
-        dist.put(a, 0d);
+        dist.put(a, BigDecimal.ZERO);
         V bestInA = a;
-        double minA = pot.get(a);
-        double delta;
+        BigDecimal minA = pot.get(a);
+        BigDecimal delta;
 
         Deque<V> reachedA = new ArrayDeque<>();
         reachedA.push(a);
@@ -203,20 +209,22 @@ public class MaximumWeightBipartiteMatching<V, E>
         for (E e1 : graph.edgesOf(a1)) {
             if (!matching.contains(e1)) {
                 V b1 = Graphs.getOppositeVertex(graph, e1, a1);
-                double db1 = dist.get(a1) + (pot.get(a1) + pot.get(b1) - graph.getEdgeWeight(e1));
+                BigDecimal db1 = dist.get(a1).add(pot.get(a1)).add(pot.get(b1)).subtract(
+                    BigDecimal.valueOf(graph.getEdgeWeight(e1)));
+
                 if (pred.get(b1) == null) {
                     dist.put(b1, db1);
                     pred.put(b1, e1);
                     reachedB.push(b1);
-                    FibonacciHeapNode<V> node = new FibonacciHeapNode<>(b1);
+
+                    GenericFibonacciHeap<BigDecimal, V>.Node node = heap.insert(db1, b1);
                     nodeInHeap.put(b1, node);
-                    heap.insert(node, db1);
                     isInHeap.add(b1);
                 } else {
                     if (comparator.compare(db1, dist.get(b1)) < 0) {
                         dist.put(b1, db1);
                         pred.put(b1, e1);
-                        heap.decreaseKey(nodeInHeap.get(b1), db1);
+                        nodeInHeap.get(b1).decreaseKey(db1);
                     }
                 }
             }
@@ -227,7 +235,7 @@ public class MaximumWeightBipartiteMatching<V, E>
              * select from priority queue the node b with minimal distance db
              */
             V b = null;
-            double db = 0d;
+            BigDecimal db = BigDecimal.ZERO;
             if (!heap.isEmpty()) {
                 b = heap.removeMin().getData();
                 isInHeap.remove(b);
@@ -253,30 +261,32 @@ public class MaximumWeightBipartiteMatching<V, E>
                     reachedA.push(a1);
                     dist.put(a1, db);
 
-                    if (comparator.compare(db + pot.get(a1), minA) < 0) {
+                    if (comparator.compare(db.add(pot.get(a1)), minA) < 0) {
                         bestInA = a1;
-                        minA = db + pot.get(a1);
+                        minA = db.add(pot.get(a1));
                     }
 
                     // relax all edges out of a1
                     for (E e1 : graph.edgesOf(a1)) {
                         if (!matching.contains(e1)) {
                             V b1 = Graphs.getOppositeVertex(graph, e1, a1);
-                            double db1 = dist.get(a1)
-                                + (pot.get(a1) + pot.get(b1) - graph.getEdgeWeight(e1));
+                            BigDecimal db1 =
+                                dist.get(a1).add(pot.get(a1)).add(pot.get(b1)).subtract(
+                                    BigDecimal.valueOf(graph.getEdgeWeight(e1)));
                             if (pred.get(b1) == null) {
                                 dist.put(b1, db1);
                                 pred.put(b1, e1);
                                 reachedB.push(b1);
-                                FibonacciHeapNode<V> node = new FibonacciHeapNode<>(b1);
+
+                                GenericFibonacciHeap<BigDecimal, V>.Node node =
+                                    heap.insert(db1, b1);
                                 nodeInHeap.put(b1, node);
-                                heap.insert(node, db1);
                                 isInHeap.add(b1);
                             } else {
                                 if (comparator.compare(db1, dist.get(b1)) < 0) {
                                     dist.put(b1, db1);
                                     pred.put(b1, e1);
-                                    heap.decreaseKey(nodeInHeap.get(b1), db1);
+                                    nodeInHeap.get(b1).decreaseKey(db1);
                                 }
                             }
                         }
@@ -289,25 +299,25 @@ public class MaximumWeightBipartiteMatching<V, E>
         while (!reachedA.isEmpty()) {
             V v = reachedA.pop();
             pred.put(v, null);
-            double potChange = delta - dist.get(v);
-            if (comparator.compare(potChange, 0d) <= 0) {
+            BigDecimal potChange = delta.subtract(dist.get(v));
+            if (comparator.compare(potChange, BigDecimal.ZERO) <= 0) {
                 continue;
             }
-            pot.put(v, pot.get(v) - potChange);
+            pot.put(v, pot.get(v).subtract(potChange));
         }
 
         while (!reachedB.isEmpty()) {
             V v = reachedB.pop();
             pred.put(v, null);
             if (isInHeap.contains(v)) {
-                heap.delete(nodeInHeap.get(v));
+                nodeInHeap.get(v).delete();
             }
             nodeInHeap.put(v, null);
-            double potChange = delta - dist.get(v);
-            if (comparator.compare(potChange, 0d) <= 0) {
+            BigDecimal potChange = delta.subtract(dist.get(v));
+            if (comparator.compare(potChange, BigDecimal.ZERO) <= 0) {
                 continue;
             }
-            pot.put(v, pot.get(v) + potChange);
+            pot.put(v, pot.get(v).add(potChange));
         }
     }
 
@@ -328,22 +338,22 @@ public class MaximumWeightBipartiteMatching<V, E>
         }
 
         for (E e : matched) {
-            double w = graph.getEdgeWeight(e);
+            BigDecimal w = BigDecimal.valueOf(graph.getEdgeWeight(e));
             V s = graph.getEdgeSource(e);
             V t = graph.getEdgeTarget(e);
             matchedEdge.remove(s);
             matchedEdge.remove(t);
-            matchingWeight -= w;
+            matchingWeight.subtract(w);
             matching.remove(e);
         }
 
         for (E e : free) {
-            double w = graph.getEdgeWeight(e);
+            BigDecimal w = BigDecimal.valueOf(graph.getEdgeWeight(e));
             V s = graph.getEdgeSource(e);
             V t = graph.getEdgeTarget(e);
             matchedEdge.put(s, e);
             matchedEdge.put(t, e);
-            matchingWeight += w;
+            matchingWeight.add(w);
             matching.add(e);
         }
     }
@@ -352,10 +362,10 @@ public class MaximumWeightBipartiteMatching<V, E>
     {
         for (V v : partition1) {
             E maxEdge = null;
-            double maxWeight = 0d;
+            BigDecimal maxWeight = BigDecimal.ZERO;
 
             for (E e : graph.edgesOf(v)) {
-                double w = graph.getEdgeWeight(e);
+                BigDecimal w = BigDecimal.valueOf(graph.getEdgeWeight(e));
                 if (comparator.compare(w, maxWeight) > 0) {
                     maxWeight = w;
                     maxEdge = e;
@@ -367,7 +377,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                 V u = Graphs.getOppositeVertex(graph, maxEdge, v);
                 if (!matchedEdge.containsKey(u)) {
                     matching.add(maxEdge);
-                    matchingWeight += graph.getEdgeWeight(maxEdge);
+                    matchingWeight = matchingWeight.add(maxWeight);
                     matchedEdge.put(v, maxEdge);
                     matchedEdge.put(u, maxEdge);
                 }

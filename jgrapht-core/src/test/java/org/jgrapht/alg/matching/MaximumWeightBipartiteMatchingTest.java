@@ -20,6 +20,8 @@ package org.jgrapht.alg.matching;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -207,7 +209,8 @@ public class MaximumWeightBipartiteMatchingTest
             MaximumWeightBipartiteMatching<Integer, DefaultWeightedEdge> alg =
                 new MaximumWeightBipartiteMatching<>(g, partitionA, partitionB);
             Matching<DefaultWeightedEdge> matching = alg.getMatching();
-            Map<Integer, Double> pot = alg.getPotentials();
+            Map<Integer, BigDecimal> pot = alg.getPotentials();
+            Comparator<BigDecimal> comparator = Comparator.<BigDecimal> naturalOrder();
 
             // assert matching
             Map<Integer, Integer> degree = new HashMap<>();
@@ -226,30 +229,31 @@ public class MaximumWeightBipartiteMatchingTest
 
             // assert non-negative potentials
             for (Integer v : g.vertexSet()) {
-                assertTrue(pot.get(v) >= 0d);
+                assertTrue(comparator.compare(pot.get(v), BigDecimal.ZERO) >= 0);
             }
 
             // assert non-negative reduced cost for edges
             for (DefaultWeightedEdge e : g.edgeSet()) {
                 Integer s = g.getEdgeSource(e);
                 Integer t = g.getEdgeTarget(e);
-                double w = g.getEdgeWeight(e);
-                //System.out.println("c(e) = " + w + ", pot(s)+pot(t) = " + (pot.get(s) + pot.get(t)));
-                assertTrue(w <= pot.get(s) + pot.get(t));
+                BigDecimal w = BigDecimal.valueOf(g.getEdgeWeight(e));
+                // System.out.println("c(e) = " + w + ", pot(s)+pot(t) = " + (pot.get(s) +
+                // pot.get(t)));
+                assertTrue(comparator.compare(w, pot.get(s).add(pot.get(t))) <= 0);
             }
 
             // assert tight edges in matching
             for (DefaultWeightedEdge e : matching.getEdges()) {
                 Integer s = g.getEdgeSource(e);
                 Integer t = g.getEdgeTarget(e);
-                double w = g.getEdgeWeight(e);
-                assertEquals(w, pot.get(s) + pot.get(t), 1e-9);
+                BigDecimal w = BigDecimal.valueOf(g.getEdgeWeight(e));
+                assertTrue(comparator.compare(w, pot.get(s).add(pot.get(t))) == 0);
             }
 
             // assert free nodes have zero potential
             for (Integer v : g.vertexSet()) {
                 if (degree.get(v) == 0) {
-                    assertEquals(pot.get(v), 0d, 1e-9);
+                    assertEquals(pot.get(v), BigDecimal.ZERO);
                 }
             }
 
