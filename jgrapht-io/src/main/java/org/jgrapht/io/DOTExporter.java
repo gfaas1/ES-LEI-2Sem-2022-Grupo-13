@@ -19,6 +19,7 @@ package org.jgrapht.io;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
@@ -50,6 +51,7 @@ public class DOTExporter<V, E>
     private ComponentNameProvider<E> edgeLabelProvider;
     private ComponentAttributeProvider<V> vertexAttributeProvider;
     private ComponentAttributeProvider<E> edgeAttributeProvider;
+    private Map<String, String> graphAttributes;
 
     /**
      * Constructs a new DOTExporter object with an integer name provider for the vertex IDs and null
@@ -135,6 +137,7 @@ public class DOTExporter<V, E>
         this.edgeAttributeProvider = edgeAttributeProvider;
         this.graphIDProvider =
             (graphIDProvider == null) ? any -> DEFAULT_GRAPH_ID : graphIDProvider;
+        this.graphAttributes = new HashMap<>();
     }
 
     /**
@@ -170,6 +173,17 @@ public class DOTExporter<V, E>
         }
         header += " " + graphId + " {";
         out.println(header);
+
+        // graph attributes
+        for(Entry<String, String> attr: graphAttributes.entrySet()) {
+            out.print(indent);
+            out.print(attr.getKey());
+            out.print('=');
+            out.print(attr.getValue());
+            out.println(";");
+        }
+
+        // vertex set
         for (V v : g.vertexSet()) {
             out.print(indent + getVertexID(v));
 
@@ -186,6 +200,7 @@ public class DOTExporter<V, E>
             out.println(";");
         }
 
+        // edge set
         for (E e : g.edgeSet()) {
             String source = getVertexID(g.getEdgeSource(e));
             String target = getVertexID(g.getEdgeTarget(e));
@@ -208,6 +223,30 @@ public class DOTExporter<V, E>
         out.println("}");
 
         out.flush();
+    }
+
+    /**
+     * Clear a graph attribute.
+     *
+     * @param key the graph attribute key
+     */
+    public void removeGraphAttribute(String key)
+    {
+        Objects.requireNonNull(key, "Graph attribute key cannot be null");
+        graphAttributes.remove(key);
+    }
+
+    /**
+     * Set a graph attribute.
+     *
+     * @param key the graph attribute key
+     * @param value the graph attribute value
+     */
+    public void putGraphAttribute(String key, String value)
+    {
+        Objects.requireNonNull(key, "Graph attribute key cannot be null");
+        Objects.requireNonNull(value, "Graph attribute value cannot be null");
+        graphAttributes.put(key, value);
     }
 
     private void renderAttributes(PrintWriter out, String labelName, Map<String, String> attributes)

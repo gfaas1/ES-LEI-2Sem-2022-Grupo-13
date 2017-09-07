@@ -50,6 +50,19 @@ public class DOTExporterTest
     private static final String UNDIRECTED = "graph G {" + NL + "  1 [ label=\"a\" ];" + NL
         + "  2 [ x=\"y\" ];" + NL + "  3;" + NL + "  1 -- 2;" + NL + "  3 -- 1;" + NL + "}" + NL;
 
+    // @formatter:off
+    private static final String UNDIRECTED_WITH_GRAPH_ATTRIBUTES =
+        "graph G {" + NL +
+        "  overlap=false;" + NL +
+        "  splines=true;" + NL +
+        "  1;" + NL +
+        "  2;" + NL +
+        "  3;" + NL +
+        "  1 -- 2;" + NL +
+        "  3 -- 1;" + NL +
+        "}" + NL;
+    // @formatter:on
+
     // ~ Methods ----------------------------------------------------------------
 
     public void testUndirected()
@@ -57,6 +70,7 @@ public class DOTExporterTest
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
+        testUndirectedWithGraphAttributes(new Multigraph<>(DefaultEdge.class), false);
     }
 
     private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
@@ -96,6 +110,30 @@ public class DOTExporterTest
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals((strict) ? "strict " + UNDIRECTED : UNDIRECTED, res);
+    }
+
+    private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict)
+        throws UnsupportedEncodingException, ExportException
+    {
+        g.addVertex(V1);
+        g.addVertex(V2);
+        g.addEdge(V1, V2);
+        g.addVertex(V3);
+        g.addEdge(V3, V1);
+
+        DOTExporter<String, DefaultEdge> exporter =
+            new DOTExporter<>(new IntegerComponentNameProvider<>(), null, null, null, null);
+
+        exporter.putGraphAttribute("overlap", "false");
+        exporter.putGraphAttribute("splines", "true");
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(g, os);
+        String res = new String(os.toByteArray(), "UTF-8");
+        assertEquals(
+            (strict) ? "strict " + UNDIRECTED_WITH_GRAPH_ATTRIBUTES
+                : UNDIRECTED_WITH_GRAPH_ATTRIBUTES,
+            res);
     }
 
     public void testValidNodeIDs()
