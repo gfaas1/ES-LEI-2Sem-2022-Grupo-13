@@ -41,7 +41,7 @@ import org.jgrapht.util.GenericFibonacciHeap;
  * Maximum weight matching in bipartite graphs.
  * 
  * <p>
- * Running time is O(n(m+nlogn)) where n is the number of vertices and m the number of edges of the
+ * Running time is $O(n(m+n \log n))$ where n is the number of vertices and m the number of edges of the
  * input graph. Uses exact arithmetic and produces a certificate of optimality in the form of a
  * tight vertex potential function.
  * 

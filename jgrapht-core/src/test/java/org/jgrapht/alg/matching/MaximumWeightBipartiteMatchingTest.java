@@ -237,8 +237,6 @@ public class MaximumWeightBipartiteMatchingTest
                 Integer s = g.getEdgeSource(e);
                 Integer t = g.getEdgeTarget(e);
                 BigDecimal w = BigDecimal.valueOf(g.getEdgeWeight(e));
-                // System.out.println("c(e) = " + w + ", pot(s)+pot(t) = " + (pot.get(s) +
-                // pot.get(t)));
                 assertTrue(comparator.compare(w, pot.get(s).add(pot.get(t))) <= 0);
             }
 

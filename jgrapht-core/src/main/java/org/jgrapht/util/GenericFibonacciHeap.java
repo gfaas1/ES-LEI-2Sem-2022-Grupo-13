@@ -63,6 +63,8 @@ public class GenericFibonacciHeap<K, T>
 
     /**
      * Constructs an empty heap.
+     *
+     * @param comparator the comparator for key comparisons
      */
     public GenericFibonacciHeap(Comparator<K> comparator)
     {
@@ -74,7 +76,7 @@ public class GenericFibonacciHeap<K, T>
      * otherwise.
      *
      * <p>
-     * Running time: O(1) actual
+     * Running time: $O(1)$ actual
      *
      * @return true if the heap is empty, false otherwise
      */
@@ -98,10 +100,10 @@ public class GenericFibonacciHeap<K, T>
      *
      * <p>
      * Running time: O(1) actual
-     * </p>
      *
-     * @param key key
-     * @param data value associated with the key
+     * @param key the key
+     * @param data the value
+     * @return The new heap node
      */
     public Node insert(K key, T data)
     {
@@ -137,7 +139,6 @@ public class GenericFibonacciHeap<K, T>
      *
      * <p>
      * Running time: O(1) actual
-     * </p>
      *
      * @return heap node with the smallest key
      */
@@ -151,8 +152,7 @@ public class GenericFibonacciHeap<K, T>
      * consolidated, if necessary.
      *
      * <p>
-     * Running time: O(log n) amortized
-     * </p>
+     * Running time: $O(\log n)$ amortized
      *
      * @return node with the smallest key
      */
@@ -215,8 +215,7 @@ public class GenericFibonacciHeap<K, T>
      * heap.
      *
      * <p>
-     * Running time: O(1) actual
-     * </p>
+     * Running time: $O(1)$ actual
      *
      * @return number of elements in the heap
      */
@@ -231,11 +230,11 @@ public class GenericFibonacciHeap<K, T>
      * same comparator, otherwise the behavior is undefined.
      *
      * <p>
-     * Running time: O(1) actual
-     * </p>
+     * Running time: $O(1)$ actual
      *
      * @param h1 first heap
      * @param h2 second heap
+     * @param <K> type of key stored in the heap
      * @param <T> type of data stored in the heap
      *
      * @return new heap containing h1 and h2
@@ -326,7 +325,6 @@ public class GenericFibonacciHeap<K, T>
      *
      * <p>
      * Running time: O(log n); O(1) excluding the recursion
-     * </p>
      *
      * @param y node to perform cascading cut on
      */
@@ -454,7 +452,6 @@ public class GenericFibonacciHeap<K, T>
      *
      * <p>
      * Running time: O(1)
-     * </p>
      *
      * @param x child of y to be removed from y's child list
      * @param y parent of x about to lose a child
@@ -493,7 +490,6 @@ public class GenericFibonacciHeap<K, T>
      *
      * <p>
      * Running time: O(1) actual
-     * </p>
      *
      * @param y node to become child
      * @param x node to become parent
@@ -576,7 +572,7 @@ public class GenericFibonacciHeap<K, T>
          * @param key the key of this node
          * @param data data for this node
          */
-        public Node(K key, T data)
+        Node(K key, T data)
         {
             this.key = key;
             this.data = data;
@@ -613,16 +609,15 @@ public class GenericFibonacciHeap<K, T>
         }
 
         /**
-         * Decreases the key value for a heap node, given the new value to take on. The structure of
+         * Decreases the key value. The structure of
          * the heap may be changed and will not be consolidated.
          *
          * <p>
-         * Running time: O(1) amortized
-         * </p>
+         * Running time: $O(1)$ amortized
          *
          * @param k new key value for node x
          *
-         * @exception IllegalArgumentException Thrown if k is larger than x.key value.
+         * @exception IllegalArgumentException thrown if k is larger than the current key
          */
         public void decreaseKey(K k)
         {
