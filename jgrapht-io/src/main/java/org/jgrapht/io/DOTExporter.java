@@ -137,7 +137,7 @@ public class DOTExporter<V, E>
         this.edgeAttributeProvider = edgeAttributeProvider;
         this.graphIDProvider =
             (graphIDProvider == null) ? any -> DEFAULT_GRAPH_ID : graphIDProvider;
-        this.graphAttributes = new HashMap<>();
+        this.graphAttributes = new LinkedHashMap<>();
     }
 
     /**
