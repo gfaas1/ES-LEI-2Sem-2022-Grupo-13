@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.0.2** (under development):
+- **version 1.1.0** (under development):
     - Added ID descripter to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
     - Deleted all previously deprecated methods and general cleanup (contributed by Joris Kinable)
     - Moved all importers/exporters from org.jgrapht.ext to org.jgrapht.io. This change allows users to use importers/exporters without the dependency on the various visualization libraries. (contributed by Dimitrios Michail)
