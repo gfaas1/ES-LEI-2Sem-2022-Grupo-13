@@ -34,6 +34,7 @@ Changes to JGraphT in each version:
     - Added GraphMeasurer class to compute graph diameter, radius, vertex eccentricity, graph center and graph periphery (contributed by Joris Kinable)
     - Added GraphMetrics which computes general graph metrics; added method to compute the girth of a graph (contributed by Joris Kinable)
     - Added GraphTests: isCubic, isOverfull, isForest, isSplit (contributed by Joris Kinable)
+    - Added basic support for graph attributes in DOTExporter (contributed by Dimitrios Michail)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
