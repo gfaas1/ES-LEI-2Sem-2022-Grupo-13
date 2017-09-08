@@ -166,9 +166,9 @@ public class MaximumWeightBipartiteMatchingTest
     @Test
     public void testRandomInstances()
     {
-        testRandomInstance(new Random(), 100, 0.7, 5);
-        testRandomInstance(new Random(), 100, 0.8, 5);
-        testRandomInstance(new Random(), 1000, 0.8, 5);
+        Random rng = new Random();
+        testRandomInstance(rng, 100, 0.8, 1);
+        testRandomInstance(rng, 1000, 0.8, 1);
     }
 
     private void testRandomInstance(Random rng, int n, double p, int repeat)
@@ -208,7 +208,7 @@ public class MaximumWeightBipartiteMatchingTest
             // compute maximum weight matching
             MaximumWeightBipartiteMatching<Integer, DefaultWeightedEdge> alg =
                 new MaximumWeightBipartiteMatching<>(g, partitionA, partitionB);
-            Matching<DefaultWeightedEdge> matching = alg.getMatching();
+            Matching<Integer, DefaultWeightedEdge> matching = alg.getMatching();
             Map<Integer, BigDecimal> pot = alg.getPotentials();
             Comparator<BigDecimal> comparator = Comparator.<BigDecimal> naturalOrder();
 
