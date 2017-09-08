@@ -58,7 +58,7 @@ import org.jgrapht.graph.DirectedPseudograph;
  * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-        extends BaseShortestPathAlgorithm<V, E>
+    extends BaseShortestPathAlgorithm<V, E>
 {
     private Map<V, SingleSourcePaths<V, E>> paths;
     private VertexFactory<V> vertexFactory;
@@ -230,7 +230,7 @@ public class JohnsonShortestPaths<V, E>
         for (V v : g.vertexSet()) {
             // execute Dijkstra
             DijkstraClosestFirstIterator<V, E> it = new DijkstraClosestFirstIterator<>(
-                    newEdgeWeightsGraph, v, Double.POSITIVE_INFINITY);
+                newEdgeWeightsGraph, v, Double.POSITIVE_INFINITY);
             while (it.hasNext()) {
                 it.next();
             }
@@ -242,8 +242,8 @@ public class JohnsonShortestPaths<V, E>
                 Pair<Double, E> oldPair = distanceAndPredecessorMap.get(u);
                 if (oldPair != null) {
                     Pair<Double, E> newPair = Pair.of(
-                            oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                            oldPair.getSecond());
+                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                        oldPair.getSecond());
                     newDistanceAndPredecessorMap.put(u, newPair);
                 }
             }
