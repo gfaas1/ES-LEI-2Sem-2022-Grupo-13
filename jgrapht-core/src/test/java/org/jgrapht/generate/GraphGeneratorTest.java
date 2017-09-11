@@ -24,6 +24,11 @@ import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -32,7 +37,6 @@ import junit.framework.*;
  * @since Sep 17, 2003
  */
 public class GraphGeneratorTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -56,6 +60,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testEmptyGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new EmptyGraphGenerator<>(SIZE);
@@ -70,6 +75,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testLinearGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new LinearGraphGenerator<>(SIZE);
@@ -105,6 +111,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testRingGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new RingGraphGenerator<>(SIZE);
@@ -137,6 +144,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testCompleteGraphGenerator()
     {
         Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);
@@ -148,7 +156,8 @@ public class GraphGeneratorTest
         // complete graph with 10 vertices has 10*(10-1)/2 = 45 edges
         assertEquals(45, completeGraph.edgeSet().size());
     }
-    
+
+    @Test
     public void testCompleteGraphGeneratorWithDirectedGraph()
     {
         Graph<Object, DefaultEdge> completeGraph = new SimpleDirectedGraph<>(DefaultEdge.class);
@@ -164,6 +173,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testScaleFreeGraphGenerator()
     {
         Graph<Object, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -193,6 +203,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testCompleteBipartiteGraphGenerator()
     {
         Graph<Object, DefaultEdge> completeBipartiteGraph = new SimpleGraph<>(DefaultEdge.class);
@@ -210,6 +221,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testHyperCubeGraphGenerator()
     {
         Graph<Object, DefaultEdge> hyperCubeGraph = new SimpleGraph<>(DefaultEdge.class);
@@ -227,6 +239,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testStarGraphGenerator()
     {
         Map<String, Object> map = new HashMap<>();
@@ -243,6 +256,7 @@ public class GraphGeneratorTest
     /**
      * .
      */
+    @Test
     public void testGridGraphGenerator()
     {
         int rows = 3;

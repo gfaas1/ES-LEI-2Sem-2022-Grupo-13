@@ -25,6 +25,11 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.TypeUtil;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -33,11 +38,11 @@ import junit.framework.*;
  * @since Aug 6, 2005
  */
 public class GnmRandomGraphGeneratorTest
-    extends TestCase
 {
 
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnmRandomGraphGenerator<>(0, 0);
@@ -47,6 +52,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(0, g.edgeSet().size());
     }
 
+    @Test
     public void testZeroEdge()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnmRandomGraphGenerator<>(10, 0);
@@ -56,6 +62,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(0, g.edgeSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -71,6 +78,7 @@ public class GnmRandomGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -89,6 +97,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp1WithLoops()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -107,6 +116,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp1WithMultipleEdges()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -124,6 +134,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp1WithLoopsAndMultipleEdges()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -141,6 +152,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -158,6 +170,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp1WithLoops()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -175,6 +188,7 @@ public class GnmRandomGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testNotAllowedLoopsOrMultipleEdges()
     {
         try {
@@ -196,6 +210,7 @@ public class GnmRandomGraphGeneratorTest
         }
     }
 
+    @Test
     public void testEdgeLimitsDirected()
     {
         try {
@@ -223,6 +238,7 @@ public class GnmRandomGraphGeneratorTest
         gen4.generateGraph(g4, new IntegerVertexFactory(), null);
     }
 
+    @Test
     public void testEdgeLimitsUndirected()
     {
         try {
@@ -250,6 +266,7 @@ public class GnmRandomGraphGeneratorTest
         gen4.generateGraph(g4, new IntegerVertexFactory(), null);
     }
 
+    @Test
     public void testMaximumAllowedEdges()
     {
         // undirected graphs
@@ -325,6 +342,7 @@ public class GnmRandomGraphGeneratorTest
             GnmRandomGraphGenerator.computeMaximumAllowedEdges(200000, isDirected, false, false));
     }
 
+    @Test
     public void testCannotGuessGraphType()
     {
         try {
@@ -364,6 +382,7 @@ public class GnmRandomGraphGeneratorTest
         }
     }
 
+    @Test
     public void testGenerateDirectedGraph()
     {
         List<Graph<Integer, DefaultEdge>> graphArray = new ArrayList<>();
@@ -383,6 +402,7 @@ public class GnmRandomGraphGeneratorTest
 
     }
 
+    @Test
     public void testGenerateListenableUndirectedGraph()
     {
         List<Graph<Integer, DefaultEdge>> graphArray = new ArrayList<>();
@@ -401,6 +421,7 @@ public class GnmRandomGraphGeneratorTest
                 .compare(graphArray.get(1), graphArray.get(3)));
     }
 
+    @Test
     public void testBadVertexFactory()
     {
         GraphGenerator<String, DefaultEdge, String> randomGen =

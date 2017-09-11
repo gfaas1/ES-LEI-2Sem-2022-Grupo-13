@@ -22,6 +22,11 @@ import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -30,10 +35,10 @@ import junit.framework.*;
  * @since September 2016
  */
 public class GnpRandomBipartiteGraphGeneratorTest
-    extends TestCase
 {
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -44,6 +49,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(0, g.edgeSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -71,6 +77,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -89,6 +96,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -100,6 +108,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(32, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -116,6 +125,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -133,6 +143,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -144,6 +155,7 @@ public class GnpRandomBipartiteGraphGeneratorTest
         assertEquals(4 * 4, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
