@@ -35,13 +35,13 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 /**
  * Johnson's all pairs shortest paths algorithm.
- * 
+ *
  * <p>
  * Finds the shortest paths between all pairs of vertices in a sparse graph. Edge weights can be
  * negative, but no negative-weight cycles may exist. It first executes the Bellman-Ford algorithm
  * to compute a transformation of the input graph that removes all negative weights, allowing
  * Dijkstra's algorithm to be used on the transformed graph.
- * 
+ *
  * <p>
  * Running time is $O(n m + n^2 \log n)$.
  *
@@ -50,7 +50,7 @@ import org.jgrapht.graph.DirectedPseudograph;
  * provide a {@link VertexFactory}. Since the graph already contains vertices, care must be taken so
  * that the provided vertex factory does not return nodes that are already contained in the original
  * input graph.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -66,7 +66,7 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param vertexClass the graph vertex class
      */
@@ -77,7 +77,7 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param vertexFactory the vertex factory of the graph
      */
@@ -88,7 +88,7 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * Construct a new instance.
-     * 
+     *
      * @param graph the input graph
      * @param vertexFactory the vertex factory of the graph
      * @param epsilon tolerance when comparing floating point values
@@ -161,30 +161,29 @@ public class JohnsonShortestPaths<V, E>
         }
         GraphTests.requireDirectedOrUndirected(graph);
 
-        if (graph.getType().isDirected()) {
-            runDirected(graph);
-        } else {
-            runUndirected(graph);
-        }
+        boolean graphHasNegativeEdgeWeights=false;
+        for(E e : graph.edgeSet())
+            if(comparator.compare(graph.getEdgeWeight(e), 0.0) < 0){
+                graphHasNegativeEdgeWeights=true;
+                break;
+            }
+
+        if(graphHasNegativeEdgeWeights){
+            if(graph.getType().isUndirected())
+                throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
+            runWithNegativeEdgeWeights(graph);
+        }else
+            runWithPositiveEdgeWeights(graph);
     }
 
     /**
-     * Executes the algorithm for undirected graphs.
-     * 
+     * Graph has no edges with negative weights. Only perform the last step of Johnson's algorithm:
+     * run Dijkstra's algorithm from every vertex.
+     *
      * @param g the input graph
      */
-    private void runUndirected(Graph<V, E> g)
+    private void runWithPositiveEdgeWeights(Graph<V, E> g)
     {
-        /*
-         * Check that no negative edge weight exists, otherwise there is a negative-weight cycle.
-         */
-        for (E e : g.edgeSet()) {
-            double w = g.getEdgeWeight(e);
-            if (comparator.compare(w, 0.0) < 0) {
-                throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
-            }
-        }
-
         /*
          * Run Dijkstra for all vertices.
          */
@@ -196,11 +195,12 @@ public class JohnsonShortestPaths<V, E>
     }
 
     /**
-     * Executes the algorithm for directed graphs.
-     * 
+     * Graph contains edges with negative weights. Transform the input graph, thereby ensuring that
+     * there are no edges with negative weights. Then run Dijkstra's algorithm for all vertices.
+     *
      * @param g the input graph
      */
-    private void runDirected(Graph<V, E> g)
+    private void runWithNegativeEdgeWeights(Graph<V, E> g)
     {
         /*
          * Compute vertex weights using Bellman-Ford
@@ -256,13 +256,13 @@ public class JohnsonShortestPaths<V, E>
 
     /**
      * Compute vertex weights for edge re-weighting using Bellman-Ford.
-     * 
+     *
      * @param g the input graph
      * @return the vertex weights
      */
     private Map<V, Double> computeVertexWeights(Graph<V, E> g)
     {
-        GraphTests.requireDirected(g);
+        assert g.getType().isDirected();
 
         // create extra graph
         Graph<V, E> extraGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
@@ -285,7 +285,7 @@ public class JohnsonShortestPaths<V, E>
          * Union extra and input graph
          */
         Graph<V, E> unionGraph =
-            new AsGraphUnion<>(new AsWeightedGraph<>(extraGraph, zeroWeightFunction), g);
+                new AsGraphUnion<>(new AsWeightedGraph<>(extraGraph, zeroWeightFunction), g);
 
         /*
          * Run Bellman-Ford from new vertex
