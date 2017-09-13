@@ -36,6 +36,7 @@ Changes to JGraphT in each version:
     - Added GraphTests: isCubic, isOverfull, isForest, isSplit (contributed by Joris Kinable)
     - Added basic support for graph attributes in DOTExporter (contributed by Dimitrios Michail)
     - Added a generator which generates the complement graph of a given input graph (contributed by Joris Kinable)
+    - Performance improvement for Johnson's algorithm when a directed graph has no negative edge weights (contributed by Joris Kinable)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
