@@ -22,6 +22,11 @@ import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -30,10 +35,10 @@ import junit.framework.*;
  * @since September 2016
  */
 public class GnmRandomBipartiteGraphGeneratorTest
-    extends TestCase
 {
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -44,6 +49,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         assertEquals(0, g.edgeSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -65,6 +71,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnm1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -83,6 +90,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnm1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -100,6 +108,7 @@ public class GnmRandomBipartiteGraphGeneratorTest
         assertEquals(edges.length, g.edgeSet().size());
     }
 
+    @Test
     public void testGnmEdgesLimit()
     {
         try {

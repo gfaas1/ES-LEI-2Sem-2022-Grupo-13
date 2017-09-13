@@ -22,6 +22,11 @@ import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -30,11 +35,11 @@ import junit.framework.*;
  * @since September 2016
  */
 public class GnpRandomGraphGeneratorTest
-    extends TestCase
 {
 
     private static final long SEED = 5;
 
+    @Test
     public void testZeroNodes()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new GnpRandomGraphGenerator<>(0, 1d);
@@ -44,6 +49,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(0, g.vertexSet().size());
     }
 
+    @Test
     public void testBadParameters()
     {
         try {
@@ -65,6 +71,7 @@ public class GnpRandomGraphGeneratorTest
         }
     }
 
+    @Test
     public void testDirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -95,6 +102,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(18, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -106,6 +114,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(30, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -121,6 +130,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(3, g.edgeSet().size());
     }
 
+    @Test
     public void testDirectedGraphGnp4WithLoops()
     {
         final boolean allowLoops = true;
@@ -141,6 +151,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(7, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp1()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -162,6 +173,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(9, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -189,6 +201,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(15, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp3()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
@@ -205,6 +218,7 @@ public class GnpRandomGraphGeneratorTest
         assertEquals(4, g.edgeSet().size());
     }
 
+    @Test
     public void testUndirectedGraphGnp4WithLoops()
     {
         final boolean allowLoops = true;
