@@ -282,7 +282,7 @@ public class PatonCycleBase<V, E>
             }
         }
 
-        return new CycleBasisImpl<V, E>(cycles, totalLength, totalWeight);
+        return new CycleBasisImpl<V, E>(graph, cycles, totalLength, totalWeight);
     }
 }
 

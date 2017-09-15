@@ -19,8 +19,13 @@ package org.jgrapht.alg.interfaces;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.cycle.Cycles;
 
 /**
  * Allows to derive an undirected <a href="https://en.wikipedia.org/wiki/Cycle_basis">cycle
@@ -59,7 +64,7 @@ public interface CycleBasisAlgorithm<V, E>
     {
         /**
          * Return the set of cycles of the cycle basis.
-         * 
+         *
          * @return the set of cycles of the cycle basis
          */
         Set<List<E>> getCycles();
@@ -79,6 +84,13 @@ public interface CycleBasisAlgorithm<V, E>
          * @return the length of the cycles basis
          */
         double getWeight();
+
+        /**
+         * Return the set of cycles of the cycle basis.
+         *
+         * @return the set of cycles of the cycle basis
+         */
+        Set<GraphPath<V, E>> getCyclesAsGraphPaths();
     }
 
     /**
@@ -92,29 +104,33 @@ public interface CycleBasisAlgorithm<V, E>
     {
         private static final long serialVersionUID = -1420882459022219505L;
 
-        private Set<List<E>> cycles;
-        private int length;
-        private double weight;
+        private final Graph<V, E> graph;
+        private final Set<List<E>> cycles;
+        private Set<GraphPath<V, E>> graphPaths;
+        private final int length;
+        private final double weight;
 
         /**
          * Construct a new instance.
+         *
+         * @param graph the graph
          */
-        public CycleBasisImpl()
+        public CycleBasisImpl(Graph<V, E> graph)
         {
-            this.cycles = Collections.emptySet();
-            this.length = 0;
-            this.weight = 0d;
+            this(graph, Collections.emptySet(), 0, 0d);
         }
 
         /**
          * Construct a new instance.
-         * 
+         *
+         * @param graph the graph
          * @param cycles the cycles of the basis
          * @param length the length of the cycle basis
          * @param weight the weight of the cycle basis
          */
-        public CycleBasisImpl(Set<List<E>> cycles, int length, double weight)
+        public CycleBasisImpl(Graph<V, E> graph, Set<List<E>> cycles, int length, double weight)
         {
+            this.graph = graph;
             this.cycles = Collections.unmodifiableSet(cycles);
             this.length = length;
             this.weight = weight;
@@ -145,6 +161,22 @@ public interface CycleBasisAlgorithm<V, E>
         public double getWeight()
         {
             return weight;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<GraphPath<V, E>> getCyclesAsGraphPaths()
+        {
+            // lazily construct
+            if (graphPaths == null) {
+                graphPaths = new LinkedHashSet<>();
+                for (List<E> cycle : cycles) {
+                    graphPaths.add(Cycles.simpleCycleToGraphPath(graph, cycle));
+                }
+            }
+            return Collections.unmodifiableSet(graphPaths);
         }
 
     }

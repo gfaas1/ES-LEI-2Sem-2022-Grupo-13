@@ -98,7 +98,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
         }
 
         // return result
-        return new CycleBasisImpl<>(cycles, length, weight);
+        return new CycleBasisImpl<>(graph, cycles, length, weight);
     }
 
     /**
