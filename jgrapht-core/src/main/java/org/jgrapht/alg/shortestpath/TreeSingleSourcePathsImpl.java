@@ -130,7 +130,7 @@ public class TreeSingleSourcePathsImpl<V, E>
 
         V cur = targetVertex;
         Pair<Double, E> p = map.get(cur);
-        if (p == null) {
+        if (p == null || p.getFirst().equals(Double.POSITIVE_INFINITY)) {
             return null;
         }
 
