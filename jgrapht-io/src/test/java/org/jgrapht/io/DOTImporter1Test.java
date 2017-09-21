@@ -272,7 +272,7 @@ public class DOTImporter1Test
 
         Multigraph<String, DefaultEdge> result = new Multigraph<>(DefaultEdge.class);
 
-        Map<String, Map<String, String>> attrs = new HashMap<>();
+        Map<String, Map<String, Attribute>> attrs = new HashMap<>();
 
         VertexProvider<String> vp = (label, a) -> {
             attrs.put(label, a);
@@ -289,7 +289,7 @@ public class DOTImporter1Test
         assertEquals(1, result.vertexSet().size());
         String v = result.vertexSet().stream().findFirst().get();
         assertEquals("a", v);
-        assertEquals("------this------contains-------dashes------", attrs.get("a").get("label"));
+        assertEquals("------this------contains-------dashes------", attrs.get("a").get("label").getValue());
     }
 
     @Test
@@ -313,19 +313,19 @@ public class DOTImporter1Test
         for (TestVertex v : result.vertexSet()) {
             if ("1".equals(v.getId())) {
                 assertEquals("wrong number of attributes", 2, v.getAttributes().size());
-                assertEquals("Wrong attribute values", "bar", v.getAttributes().get("foo"));
-                assertEquals("Wrong attribute values", "bob", v.getAttributes().get("label"));
+                assertEquals("Wrong attribute values", "bar", v.getAttributes().get("foo").getValue());
+                assertEquals("Wrong attribute values", "bob", v.getAttributes().get("label").getValue());
             } else {
                 assertEquals("wrong number of attributes", 1, v.getAttributes().size());
-                assertEquals("Wrong attribute values", "fred", v.getAttributes().get("label"));
+                assertEquals("Wrong attribute values", "fred", v.getAttributes().get("label").getValue());
             }
         }
 
         for (TestEdge e : result.edgeSet()) {
             assertEquals("wrong id", "friend", e.getId());
             assertEquals("wrong number of attributes", 2, e.getAttributes().size());
-            assertEquals("Wrong attribute value", "wibble", e.getAttributes().get("foo"));
-            assertEquals("Wrong attribute value", "friend", e.getAttributes().get("label"));
+            assertEquals("Wrong attribute value", "wibble", e.getAttributes().get("foo").getValue());
+            assertEquals("Wrong attribute value", "friend", e.getAttributes().get("label").getValue());
         }
 
     }
@@ -473,7 +473,7 @@ public class DOTImporter1Test
             "wrong parsing", "node0", ((TestVertex) result.vertexSet().toArray()[0]).getId());
         assertEquals(
             "wrong parsing", "this \"label; \"contains an escaped semi colon",
-            ((TestVertex) result.vertexSet().toArray()[0]).getAttributes().get("label"));
+            ((TestVertex) result.vertexSet().toArray()[0]).getAttributes().get("label").getValue());
     }
 
     @Test
@@ -537,22 +537,8 @@ public class DOTImporter1Test
 
     private GraphImporter<String, DefaultEdge> buildImporter()
     {
-        return new DOTImporter<String, DefaultEdge>(new VertexProvider<String>()
-        {
-            @Override
-            public String buildVertex(String label, Map<String, String> attributes)
-            {
-                return label;
-            }
-        }, new EdgeProvider<String, DefaultEdge>()
-        {
-            @Override
-            public DefaultEdge buildEdge(
-                String from, String to, String label, Map<String, String> attributes)
-            {
-                return new DefaultEdge();
-            }
-        });
+        return new DOTImporter<String, DefaultEdge>(
+            (label, attributes) -> label, (from, to, label, attributes) -> new DefaultEdge());
     }
 
     private static class GraphWithID
@@ -575,7 +561,12 @@ public class DOTImporter1Test
             (label, attributes) -> label, (from, to, label, attributes) -> new DefaultEdge(), null,
             (component, attributes) -> {
                 if (component instanceof GraphWithID) {
-                    ((GraphWithID) component).id = attributes.getOrDefault("ID", "G");
+                    Attribute idAttribute = attributes.get("ID");
+                    String id = "G";
+                    if (idAttribute != null) { 
+                        id = idAttribute.getValue();
+                    }
+                    ((GraphWithID) component).id = id;
                 }
             });
     }
@@ -583,9 +574,9 @@ public class DOTImporter1Test
     private class TestVertex
     {
         String id;
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
-        public TestVertex(String id, Map<String, String> attributes)
+        public TestVertex(String id, Map<String, Attribute> attributes)
         {
             this.id = id;
             this.attributes = attributes;
@@ -596,7 +587,7 @@ public class DOTImporter1Test
             return id;
         }
 
-        public Map<String, String> getAttributes()
+        public Map<String, Attribute> getAttributes()
         {
             return attributes;
         }
@@ -615,9 +606,9 @@ public class DOTImporter1Test
         private static final long serialVersionUID = 1L;
 
         String id;
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
-        public TestEdge(String id, Map<String, String> attributes)
+        public TestEdge(String id, Map<String, Attribute> attributes)
         {
             super();
             this.id = id;
@@ -629,7 +620,7 @@ public class DOTImporter1Test
             return id;
         }
 
-        public Map<String, String> getAttributes()
+        public Map<String, Attribute> getAttributes()
         {
             return attributes;
         }

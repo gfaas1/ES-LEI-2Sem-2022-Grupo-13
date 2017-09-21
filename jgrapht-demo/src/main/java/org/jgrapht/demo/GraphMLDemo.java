@@ -22,7 +22,9 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.io.*;
+import org.jgrapht.io.AttributeType;
 import org.jgrapht.io.GraphMLExporter.*;
+
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
@@ -156,36 +158,22 @@ public final class GraphMLDemo
         // register additional name attribute for vertices and edges
         exporter.registerAttribute("name", AttributeCategory.ALL, AttributeType.STRING);
 
-        // create provider of vertex attributes
-        ComponentAttributeProvider<CustomVertex> vertexAttributeProvider =
-            new ComponentAttributeProvider<CustomVertex>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(CustomVertex v)
-                {
-                    Map<String, String> m = new HashMap<String, String>();
-                    if (v.getColor() != null) {
-                        m.put("color", v.getColor().toString());
-                    }
-                    m.put("name", "node-" + v.id);
-                    return m;
-                }
-            };
-        exporter.setVertexAttributeProvider(vertexAttributeProvider);
+        // register provider of vertex attributes
+        exporter.setVertexAttributeProvider(v -> {
+            Map<String, Attribute> m = new HashMap<>();
+            if (v.getColor() != null) {
+                m.put("color", DefaultAttribute.createAttribute(v.getColor().toString()));
+            }
+            m.put("name", DefaultAttribute.createAttribute("node-" + v.id));
+            return m;
+        });
 
-        // create provider of edge attributes
-        ComponentAttributeProvider<DefaultWeightedEdge> edgeAttributeProvider =
-            new ComponentAttributeProvider<DefaultWeightedEdge>()
-            {
-                @Override
-                public Map<String, String> getComponentAttributes(DefaultWeightedEdge e)
-                {
-                    Map<String, String> m = new HashMap<String, String>();
-                    m.put("name", e.toString());
-                    return m;
-                }
-            };
-        exporter.setEdgeAttributeProvider(edgeAttributeProvider);
+        // register provider of edge attributes
+        exporter.setEdgeAttributeProvider(e -> {
+            Map<String, Attribute> m = new HashMap<>();
+            m.put("name", DefaultAttribute.createAttribute(e.toString()));
+            return m;
+        });
 
         return exporter;
     }
@@ -199,12 +187,12 @@ public final class GraphMLDemo
         VertexProvider<CustomVertex> vertexProvider = new VertexProvider<CustomVertex>()
         {
             @Override
-            public CustomVertex buildVertex(String id, Map<String, String> attributes)
+            public CustomVertex buildVertex(String id, Map<String, Attribute> attributes)
             {
                 CustomVertex cv = new CustomVertex(id);
 
                 // read color from attributes
-                String color = attributes.get("color");
+                String color = attributes.get("color").getValue();
                 if (color != null) {
                     switch (color) {
                     case "black":
@@ -223,16 +211,7 @@ public final class GraphMLDemo
 
         // create edge provider
         EdgeProvider<CustomVertex, DefaultWeightedEdge> edgeProvider =
-            new EdgeProvider<CustomVertex, DefaultWeightedEdge>()
-            {
-                @Override
-                public DefaultWeightedEdge buildEdge(
-                    CustomVertex from, CustomVertex to, String label,
-                    Map<String, String> attributes)
-                {
-                    return new DefaultWeightedEdge();
-                }
-            };
+            (from, to, label, attributes) -> new DefaultWeightedEdge();
 
         // create GraphML importer
         GraphMLImporter<CustomVertex, DefaultWeightedEdge> importer =

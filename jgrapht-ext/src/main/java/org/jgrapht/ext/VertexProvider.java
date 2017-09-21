@@ -17,6 +17,8 @@
  */
 package org.jgrapht.ext;
 
+import java.util.Map;
+
 /**
  * Creates a Vertex of type V
  *
@@ -25,8 +27,17 @@ package org.jgrapht.ext;
  */
 @Deprecated
 public interface VertexProvider<V>
-    extends org.jgrapht.io.VertexProvider<V>
 {
+
+    /**
+     * Create a vertex
+     *
+     * @param id a unique identifier for the vertex
+     * @param attributes any other attributes of the vertex
+     * @return the vertex
+     */
+    V buildVertex(String id, Map<String, String> attributes);
+
 }
 
 // End VertexProvider.java

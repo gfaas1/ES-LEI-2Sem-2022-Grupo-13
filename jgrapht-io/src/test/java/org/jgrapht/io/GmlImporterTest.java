@@ -647,16 +647,16 @@ public class GmlImporterTest
         VertexProvider<String> vp = (id, attributes) -> {
             assertNotNull(attributes);
             if (Integer.parseInt(id) >= 4) {
-                assertEquals("Node\t\t?", attributes.get("label"));
+                assertEquals("Node\t\t?", attributes.get("label").getValue());
             } else {
-                assertEquals("Node\t\t" + id, attributes.get("label"));
+                assertEquals("Node\t\t" + id, attributes.get("label").getValue());
             }
             return id;
         };
         EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
             assertNotNull(attributes);
-            assertEquals("Edge " + from + "-" + to, attributes.get("label"));
-            assertEquals("Name " + from + to, attributes.get("name"));
+            assertEquals("Edge " + from + "-" + to, attributes.get("label").getValue());
+            assertEquals("Name " + from + to, attributes.get("name").getValue());
             return g.getEdgeFactory().createEdge(from, to);
         };
 

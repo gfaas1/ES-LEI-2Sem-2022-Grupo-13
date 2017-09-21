@@ -17,6 +17,8 @@
  */
 package org.jgrapht.ext;
 
+import java.util.Map;
+
 /**
  * Defines a provider of edges of type E
  *
@@ -27,8 +29,20 @@ package org.jgrapht.ext;
  */
 @Deprecated
 public interface EdgeProvider<V, E>
-    extends org.jgrapht.io.EdgeProvider<V, E>
 {
+
+    /**
+     * Construct an edge.
+     *
+     * @param from the source vertex
+     * @param to the target vertex
+     * @param label the label of the edge.
+     * @param attributes extra attributes for the edge.
+     *
+     * @return the edge
+     */
+    E buildEdge(V from, V to, String label, Map<String, String> attributes);
+
 }
 
 // End EdgeProvider.java

@@ -177,7 +177,7 @@ public class GmlImporter<V, E>
         private Integer sourceId;
         private Integer targetId;
         private Double weight;
-        private Map<String, String> attributes;
+        private Map<String, Attribute> attributes;
 
         // collected nodes and edges
         private Map<Integer, Node> nodes;
@@ -341,16 +341,16 @@ public class GmlImporter<V, E>
             String noQuotes = text.subSequence(1, text.length() - 1).toString();
             String unescapedText = StringEscapeUtils.unescapeJava(noQuotes);
 
-            attributes.put(key, unescapedText);
+            attributes.put(key, DefaultAttribute.createAttribute(unescapedText));
         }
 
     }
 
     private class Node
     {
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
-        public Node(Map<String, String> attributes)
+        public Node(Map<String, Attribute> attributes)
         {
             this.attributes = attributes;
         }
@@ -361,10 +361,10 @@ public class GmlImporter<V, E>
         Integer source;
         Integer target;
         Double weight;
-        Map<String, String> attributes;
+        Map<String, Attribute> attributes;
 
         public PartialEdge(
-            Integer source, Integer target, Double weight, Map<String, String> attributes)
+            Integer source, Integer target, Double weight, Map<String, Attribute> attributes)
         {
             this.source = source;
             this.target = target;

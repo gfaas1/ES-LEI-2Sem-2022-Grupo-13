@@ -18,6 +18,8 @@
 package org.jgrapht.ext;
 
 import java.io.Reader;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 
@@ -103,15 +105,18 @@ public class CSVImporter<V, E>
         switch (format) {
         case ADJACENCY_LIST:
             this.delegate = new org.jgrapht.io.CSVImporter<>(
-                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.ADJACENCY_LIST, delimiter);
+                delegateProvider(vertexProvider), delegateProvider(edgeProvider),
+                org.jgrapht.io.CSVFormat.ADJACENCY_LIST, delimiter);
             break;
         case EDGE_LIST:
             this.delegate = new org.jgrapht.io.CSVImporter<>(
-                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.EDGE_LIST, delimiter);
+                delegateProvider(vertexProvider), delegateProvider(edgeProvider),
+                org.jgrapht.io.CSVFormat.EDGE_LIST, delimiter);
             break;
         case MATRIX:
             this.delegate = new org.jgrapht.io.CSVImporter<>(
-                vertexProvider, edgeProvider, org.jgrapht.io.CSVFormat.MATRIX, delimiter);
+                delegateProvider(vertexProvider), delegateProvider(edgeProvider),
+                org.jgrapht.io.CSVFormat.MATRIX, delimiter);
             break;
         }
     }
@@ -242,6 +247,24 @@ public class CSVImporter<V, E>
         } catch (org.jgrapht.io.ImportException e) {
             throw new ImportException(e);
         }
+    }
+
+    private org.jgrapht.io.EdgeProvider<V, E> delegateProvider(EdgeProvider<V, E> edgeProvider)
+    {
+        return (from, to, label, attributes) -> {
+            return edgeProvider.buildEdge(
+                from, to, label, attributes.entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString())));
+        };
+    }
+
+    private org.jgrapht.io.VertexProvider<V> delegateProvider(VertexProvider<V> vertexProvider)
+    {
+        return (id, attributes) -> {
+            return vertexProvider.buildVertex(
+                id, attributes.entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString())));
+        };
     }
 
 }

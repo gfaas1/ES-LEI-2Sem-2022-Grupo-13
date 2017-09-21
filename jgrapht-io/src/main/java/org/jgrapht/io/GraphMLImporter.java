@@ -264,6 +264,7 @@ public class GraphMLImporter<V, E>
         private static final String KEY = "key";
         private static final String KEY_FOR = "for";
         private static final String KEY_ATTR_NAME = "attr.name";
+        private static final String KEY_ATTR_TYPE = "attr.type";
         private static final String KEY_ID = "id";
         private static final String DEFAULT = "default";
         private static final String DATA = "data";
@@ -303,15 +304,19 @@ public class GraphMLImporter<V, E>
 
                 // create attributes
                 Map<String, String> collectedAttributes = en.getValue().attributes;
-                Map<String, String> finalAttributes = new HashMap<String, String>();
+                Map<String, Attribute> finalAttributes = new HashMap<>();
 
                 for (Key validKey : nodeValidKeys.values()) {
                     String validId = validKey.id;
+                    AttributeType validType = validKey.type;
                     if (collectedAttributes.containsKey(validId)) {
-                        finalAttributes
-                            .put(validKey.attributeName, collectedAttributes.get(validId));
+                        finalAttributes.put(
+                            validKey.attributeName,
+                            new DefaultAttribute(collectedAttributes.get(validId), validType));
                     } else if (validKey.defaultValue != null) {
-                        finalAttributes.put(validKey.attributeName, validKey.defaultValue);
+                        finalAttributes.put(
+                            validKey.attributeName,
+                            new DefaultAttribute(validKey.defaultValue, validType));
                     }
                 }
 
@@ -356,16 +361,20 @@ public class GraphMLImporter<V, E>
 
                 // create attributes
                 Map<String, String> collectedAttributes = p.attributes;
-                Map<String, String> finalAttributes = new HashMap<String, String>();
+                Map<String, Attribute> finalAttributes = new HashMap<>();
 
                 for (Key validKey : edgeValidKeys.values()) {
                     String validId = validKey.id;
+                    AttributeType validType = validKey.type;
                     if (collectedAttributes.containsKey(validId)) {
-                        finalAttributes
-                            .put(validKey.attributeName, collectedAttributes.get(validId));
+                        finalAttributes.put(
+                            validKey.attributeName,
+                            new DefaultAttribute(collectedAttributes.get(validId), validType));
                     } else {
                         if (validKey.defaultValue != null) {
-                            finalAttributes.put(validKey.attributeName, validKey.defaultValue);
+                            finalAttributes.put(
+                                validKey.attributeName,
+                                new DefaultAttribute(validKey.defaultValue, validType));
                         }
                     }
                 }
@@ -378,8 +387,8 @@ public class GraphMLImporter<V, E>
                     if (finalAttributes.containsKey(edgeWeightAttributeName)) {
                         try {
                             graph.setEdgeWeight(
-                                e,
-                                Double.parseDouble(finalAttributes.get(edgeWeightAttributeName)));
+                                e, Double.parseDouble(
+                                    finalAttributes.get(edgeWeightAttributeName).getValue()));
                         } catch (NumberFormatException nfe) {
                             graph.setEdgeWeight(e, defaultSpecialEdgeWeight);
                         }
@@ -427,7 +436,11 @@ public class GraphMLImporter<V, E>
                 String keyId = findAttribute(KEY_ID, attributes);
                 String keyFor = findAttribute(KEY_FOR, attributes);
                 String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes);
+                String keyAttrType = findAttribute(KEY_ATTR_TYPE, attributes);
                 currentKey = new Key(keyId, keyAttrName, null, null);
+                if (keyAttrType != null) {
+                    currentKey.type = AttributeType.create(keyAttrType);
+                }
                 if (keyFor != null) {
                     switch (keyFor) {
                     case EDGE:
@@ -563,6 +576,7 @@ public class GraphMLImporter<V, E>
         String attributeName;
         String defaultValue;
         KeyTarget target;
+        AttributeType type;
 
         public Key(String id, String attributeName, String defaultValue, KeyTarget target)
         {
@@ -570,6 +584,7 @@ public class GraphMLImporter<V, E>
             this.attributeName = attributeName;
             this.defaultValue = defaultValue;
             this.target = target;
+            this.type = AttributeType.STRING;
         }
 
         public boolean isValid()

@@ -355,9 +355,10 @@ public class GraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        Map<String, Map<String, String>> vAttributes = new HashMap<String, Map<String, String>>();
-        Map<DefaultEdge, Map<String, String>> eAttributes =
-            new HashMap<DefaultEdge, Map<String, String>>();
+        Map<String, Map<String, Attribute>> vAttributes =
+            new HashMap<String, Map<String, Attribute>>();
+        Map<DefaultEdge, Map<String, Attribute>> eAttributes =
+            new HashMap<DefaultEdge, Map<String, Attribute>>();
         Graph<String, DefaultEdge> g =
             readGraph(input, DefaultEdge.class, false, false, vAttributes, eAttributes);
 
@@ -369,11 +370,18 @@ public class GraphMLImporterTest
         assertTrue(g.containsEdge("n0", "n2"));
         assertTrue(g.containsEdge("n0", "n1"));
         assertTrue(g.containsEdge("n1", "n2"));
-        assertEquals("green", vAttributes.get("n0").get("color"));
-        assertEquals("yellow", vAttributes.get("n1").get("color"));
-        assertEquals("blue", vAttributes.get("n2").get("color"));
-        assertEquals("2.0", eAttributes.get(g.getEdge("n0", "n2")).get("weight"));
-        assertEquals("1.0", eAttributes.get(g.getEdge("n0", "n1")).get("weight"));
+        assertEquals("green", vAttributes.get("n0").get("color").getValue());
+        assertEquals(AttributeType.STRING, vAttributes.get("n0").get("color").getType());
+        assertEquals("yellow", vAttributes.get("n1").get("color").getValue());
+        assertEquals(AttributeType.STRING, vAttributes.get("n1").get("color").getType());
+        assertEquals("blue", vAttributes.get("n2").get("color").getValue());
+        assertEquals(AttributeType.STRING, vAttributes.get("n2").get("color").getType());
+        assertEquals("2.0", eAttributes.get(g.getEdge("n0", "n2")).get("weight").getValue());
+        assertEquals(
+            AttributeType.DOUBLE, eAttributes.get(g.getEdge("n0", "n2")).get("weight").getType());
+        assertEquals("1.0", eAttributes.get(g.getEdge("n0", "n1")).get("weight").getValue());
+        assertEquals(
+            AttributeType.DOUBLE, eAttributes.get(g.getEdge("n0", "n1")).get("weight").getType());
         assertFalse(eAttributes.get(g.getEdge("n1", "n2")).containsKey("weight"));
     }
 
@@ -465,9 +473,10 @@ public class GraphMLImporterTest
 
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        Map<String, Map<String, String>> vAttributes = new HashMap<String, Map<String, String>>();
-        Map<DefaultWeightedEdge, Map<String, String>> eAttributes =
-            new HashMap<DefaultWeightedEdge, Map<String, String>>();
+        Map<String, Map<String, Attribute>> vAttributes =
+            new HashMap<String, Map<String, Attribute>>();
+        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
+            new HashMap<DefaultWeightedEdge, Map<String, Attribute>>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -527,9 +536,10 @@ public class GraphMLImporterTest
 
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-        Map<String, Map<String, String>> vAttributes = new HashMap<String, Map<String, String>>();
-        Map<DefaultWeightedEdge, Map<String, String>> eAttributes =
-            new HashMap<DefaultWeightedEdge, Map<String, String>>();
+        Map<String, Map<String, Attribute>> vAttributes =
+            new HashMap<String, Map<String, Attribute>>();
+        Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
+            new HashMap<DefaultWeightedEdge, Map<String, Attribute>>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -548,12 +558,12 @@ public class GraphMLImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("n0", "n1")));
         assertEquals(3.0, g.getEdgeWeight(g.getEdge("n1", "n2")));
 
-        assertEquals("3.0", vAttributes.get("n0").get("myvalue"));
-        assertEquals("3.0", vAttributes.get("n1").get("myvalue"));
-        assertEquals("3.0", vAttributes.get("n2").get("myvalue"));
+        assertEquals("3.0", vAttributes.get("n0").get("myvalue").getValue());
+        assertEquals("3.0", vAttributes.get("n1").get("myvalue").getValue());
+        assertEquals("3.0", vAttributes.get("n2").get("myvalue").getValue());
 
         assertFalse(vAttributes.get("n0").containsKey("onemore"));
-        assertEquals("value1", vAttributes.get("n1").get("onemore"));
+        assertEquals("value1", vAttributes.get("n1").get("onemore").getValue());
         assertFalse(vAttributes.get("n2").containsKey("onemore"));
         assertFalse(eAttributes.get(g.getEdge("n0", "n2")).containsKey("onemore"));
         assertFalse(eAttributes.get(g.getEdge("n0", "n1")).containsKey("onemore"));
@@ -874,30 +884,11 @@ public class GraphMLImporterTest
         final Graph<String, DefaultEdge> g =
             new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 
-        VertexProvider<String> vp = new VertexProvider<String>()
-        {
-            @Override
-            public String buildVertex(String label, Map<String, String> attributes)
-            {
-                return label;
-            }
-        };
-
-        EdgeProvider<String, DefaultEdge> ep = new EdgeProvider<String, DefaultEdge>()
-        {
-
-            @Override
-            public DefaultEdge buildEdge(
-                String from, String to, String label, Map<String, String> attributes)
-            {
-                return g.getEdgeFactory().createEdge(from, to);
-            }
-
-        };
-
         try {
-            GraphMLImporter<String, DefaultEdge> importer =
-                new GraphMLImporter<String, DefaultEdge>(vp, ep);
+            GraphMLImporter<String,
+                DefaultEdge> importer = new GraphMLImporter<>(
+                    (label, attributes) -> label,
+                    (from, to, label, attributes) -> g.getEdgeFactory().createEdge(from, to));
             importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (Exception e) {
@@ -910,8 +901,8 @@ public class GraphMLImporterTest
         throws ImportException
     {
         return readGraph(
-            input, edgeClass, directed, weighted, new HashMap<String, Map<String, String>>(),
-            new HashMap<E, Map<String, String>>());
+            input, edgeClass, directed, weighted, new HashMap<String, Map<String, Attribute>>(),
+            new HashMap<E, Map<String, Attribute>>());
     }
 
     public <E> Graph<String, E> readGraph(
@@ -919,8 +910,8 @@ public class GraphMLImporterTest
         throws ImportException
     {
         return readGraph(
-            input, edgeClass, directed, weighted, new HashMap<String, Map<String, String>>(),
-            new HashMap<E, Map<String, String>>());
+            input, edgeClass, directed, weighted, new HashMap<String, Map<String, Attribute>>(),
+            new HashMap<E, Map<String, Attribute>>());
     }
 
     public <E> Graph<String, E> readGraph(
@@ -943,8 +934,8 @@ public class GraphMLImporterTest
     }
 
     public <E> GraphMLImporter<String, E> createGraphImporter(
-        Graph<String, E> g, Map<String, Map<String, String>> vertexAttributes,
-        Map<E, Map<String, String>> edgeAttributes)
+        Graph<String, E> g, Map<String, Map<String, Attribute>> vertexAttributes,
+        Map<E, Map<String, Attribute>> edgeAttributes)
     {
         return createGraphImporter(g, (label, attributes) -> {
             vertexAttributes.put(label, attributes);
@@ -966,8 +957,8 @@ public class GraphMLImporterTest
 
     public <E> Graph<String, E> readGraph(
         String input, Class<? extends E> edgeClass, boolean directed, boolean weighted,
-        Map<String, Map<String, String>> vertexAttributes,
-        Map<E, Map<String, String>> edgeAttributes)
+        Map<String, Map<String, Attribute>> vertexAttributes,
+        Map<E, Map<String, Attribute>> edgeAttributes)
         throws ImportException
     {
         Graph<String, E> g;
@@ -993,8 +984,8 @@ public class GraphMLImporterTest
 
     public <E> Graph<String, E> readGraph(
         InputStream input, Class<? extends E> edgeClass, boolean directed, boolean weighted,
-        Map<String, Map<String, String>> vertexAttributes,
-        Map<E, Map<String, String>> edgeAttributes)
+        Map<String, Map<String, Attribute>> vertexAttributes,
+        Map<E, Map<String, Attribute>> edgeAttributes)
         throws ImportException
     {
         Graph<String, E> g;

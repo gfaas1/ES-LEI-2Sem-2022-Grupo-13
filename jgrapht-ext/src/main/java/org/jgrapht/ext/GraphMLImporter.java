@@ -18,6 +18,9 @@
 package org.jgrapht.ext;
 
 import java.io.*;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.jgrapht.*;
 
 /**
@@ -112,6 +115,8 @@ public class GraphMLImporter<V, E>
     implements GraphImporter<V, E>
 {
     private org.jgrapht.io.GraphMLImporter<V, E> delegate;
+    private VertexProvider<V> vertexProvider;
+    private EdgeProvider<V, E> edgeProvider;
 
     /**
      * Constructs a new importer.
@@ -121,7 +126,10 @@ public class GraphMLImporter<V, E>
      */
     public GraphMLImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
-        this.delegate = new org.jgrapht.io.GraphMLImporter<>(vertexProvider, edgeProvider);
+        this.vertexProvider = vertexProvider;
+        this.edgeProvider = edgeProvider;
+        this.delegate = new org.jgrapht.io.GraphMLImporter<>(
+            delegateProvider(vertexProvider), delegateProvider(edgeProvider));
     }
 
     /**
@@ -131,7 +139,7 @@ public class GraphMLImporter<V, E>
      */
     public VertexProvider<V> getVertexProvider()
     {
-        return (VertexProvider<V>) delegate.getVertexProvider();
+        return vertexProvider;
     }
 
     /**
@@ -141,7 +149,8 @@ public class GraphMLImporter<V, E>
      */
     public void setVertexProvider(VertexProvider<V> vertexProvider)
     {
-        delegate.setVertexProvider(vertexProvider);
+        this.vertexProvider = vertexProvider;
+        this.delegate.setVertexProvider(delegateProvider(vertexProvider));
     }
 
     /**
@@ -151,7 +160,7 @@ public class GraphMLImporter<V, E>
      */
     public EdgeProvider<V, E> getEdgeProvider()
     {
-        return (EdgeProvider<V, E>) delegate.getEdgeProvider();
+        return edgeProvider;
     }
 
     /**
@@ -161,7 +170,8 @@ public class GraphMLImporter<V, E>
      */
     public void setEdgeProvider(EdgeProvider<V, E> edgeProvider)
     {
-        delegate.setEdgeProvider(edgeProvider);
+        this.edgeProvider = edgeProvider;
+        this.delegate.setEdgeProvider(delegateProvider(edgeProvider));
     }
 
     /**
@@ -212,6 +222,24 @@ public class GraphMLImporter<V, E>
         } catch (org.jgrapht.io.ImportException e) {
             throw new ImportException("Failed to parse GraphML", e);
         }
+    }
+
+    private org.jgrapht.io.EdgeProvider<V, E> delegateProvider(EdgeProvider<V, E> edgeProvider)
+    {
+        return (from, to, label, attributes) -> {
+            return edgeProvider.buildEdge(
+                from, to, label, attributes.entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString())));
+        };
+    }
+
+    private org.jgrapht.io.VertexProvider<V> delegateProvider(VertexProvider<V> vertexProvider)
+    {
+        return (id, attributes) -> {
+            return vertexProvider.buildVertex(
+                id, attributes.entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString())));
+        };
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Wil Selwood and Contributors.
+ * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,23 +17,25 @@
  */
 package org.jgrapht.io;
 
-import java.util.*;
-
 /**
- * Creates a vertex.
- *
- * @param <V> the vertex type
+ * An attribute
+ * 
+ * @author Dimitrios Michail
  */
-public interface VertexProvider<V>
+public interface Attribute
 {
     /**
-     * Create a vertex
-     *
-     * @param id a unique identifier for the vertex
-     * @param attributes any other attributes of the vertex
-     * @return the vertex
+     * Get the value of the attribute
+     * 
+     * @return the value of the attribute
      */
-    V buildVertex(String id, Map<String, Attribute> attributes);
-}
+    String getValue();
 
-// End VertexProvider.java
+    /**
+     * Get the type of the attribute
+     * 
+     * @return the type of the attribute
+     */
+    AttributeType getType();
+
+}

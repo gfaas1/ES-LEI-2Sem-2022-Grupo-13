@@ -86,15 +86,15 @@ public class DOTExporterTest
             new ComponentAttributeProvider<String>()
             {
                 @Override
-                public Map<String, String> getComponentAttributes(String v)
+                public Map<String, Attribute> getComponentAttributes(String v)
                 {
-                    Map<String, String> map = new LinkedHashMap<>();
+                    Map<String, Attribute> map = new LinkedHashMap<>();
                     switch (v) {
                     case V1:
-                        map.put("label", "a");
+                        map.put("label", DefaultAttribute.createAttribute("a"));
                         break;
                     case V2:
-                        map.put("x", "y");
+                        map.put("x", DefaultAttribute.createAttribute("y"));
                         break;
                     default:
                         map = null;
