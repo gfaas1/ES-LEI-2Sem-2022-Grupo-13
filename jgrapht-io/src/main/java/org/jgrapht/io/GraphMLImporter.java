@@ -23,6 +23,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -120,8 +121,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * graph object.
  * 
  * <p>
- * The importer validates the input using the 1.0
- * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>.
+ * The importer by default validates the input using the 1.0
+ * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
+ * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -140,6 +142,8 @@ public class GraphMLImporter<V, E>
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
     private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
 
+    private boolean schemaValidation;
+
     /**
      * Constructs a new importer.
      * 
@@ -149,6 +153,7 @@ public class GraphMLImporter<V, E>
     public GraphMLImporter(VertexProvider<V> vertexProvider, EdgeProvider<V, E> edgeProvider)
     {
         super(vertexProvider, edgeProvider);
+        this.schemaValidation = true;
     }
 
     /**
@@ -172,6 +177,26 @@ public class GraphMLImporter<V, E>
             throw new IllegalArgumentException("Edge weight attribute name cannot be null");
         }
         this.edgeWeightAttributeName = edgeWeightAttributeName;
+    }
+
+    /**
+     * Whether the importer validates the input
+     * 
+     * @return true if the importer validates the input
+     */
+    public boolean isSchemaValidation()
+    {
+        return schemaValidation;
+    }
+
+    /**
+     * Set whether the importer should validate the input
+     * 
+     * @param schemaValidation value for schema validation
+     */
+    public void setSchemaValidation(boolean schemaValidation)
+    {
+        this.schemaValidation = schemaValidation;
     }
 
     /**
@@ -219,27 +244,30 @@ public class GraphMLImporter<V, E>
             SchemaFactory schemaFactory =
                 SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-            // load schema
-            InputStream xsdStream =
-                Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                    GRAPHML_SCHEMA_FILENAME);
-            if (xsdStream == null) {
-                throw new ImportException("Failed to locate GraphML xsd");
-            }
-            InputStream xlinkStream = Thread
-                .currentThread().getContextClassLoader().getResourceAsStream(XLINK_SCHEMA_FILENAME);
-            if (xlinkStream == null) {
-                throw new ImportException("Failed to locate XLink xsd");
-            }
-            Source[] sources = new Source[2];
-            sources[0] = new StreamSource(xlinkStream);
-            sources[1] = new StreamSource(xsdStream);
-            Schema schema = schemaFactory.newSchema(sources);
-
             // create parser
             SAXParserFactory spf = SAXParserFactory.newInstance();
+            if (schemaValidation) {
+                // load schema
+                InputStream xsdStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        GRAPHML_SCHEMA_FILENAME);
+                if (xsdStream == null) {
+                    throw new ImportException("Failed to locate GraphML xsd");
+                }
+                InputStream xlinkStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        XLINK_SCHEMA_FILENAME);
+                if (xlinkStream == null) {
+                    throw new ImportException("Failed to locate XLink xsd");
+                }
+                Source[] sources = new Source[2];
+                sources[0] = new StreamSource(xlinkStream);
+                sources[1] = new StreamSource(xsdStream);
+                Schema schema = schemaFactory.newSchema(sources);
+
+                spf.setSchema(schema);
+            }
             spf.setNamespaceAware(true);
-            spf.setSchema(schema);
             SAXParser saxParser = spf.newSAXParser();
 
             // create reader
@@ -301,10 +329,13 @@ public class GraphMLImporter<V, E>
 
             for (Entry<String, GraphElement> en : nodes.entrySet()) {
                 String nodeId = en.getKey();
+                if (nodeId == null) {
+                    throw new ImportException("Node id missing");
+                }
 
                 // create attributes
                 Map<String, String> collectedAttributes = en.getValue().attributes;
-                Map<String, Attribute> finalAttributes = new HashMap<>();
+                Map<String, Attribute> finalAttributes = new LinkedHashMap<>();
 
                 for (Key validKey : nodeValidKeys.values()) {
                     String validId = validKey.id;
@@ -312,11 +343,11 @@ public class GraphMLImporter<V, E>
                     if (collectedAttributes.containsKey(validId)) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute(collectedAttributes.get(validId), validType));
+                            new DefaultAttribute<>(collectedAttributes.get(validId), validType));
                     } else if (validKey.defaultValue != null) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute(validKey.defaultValue, validType));
+                            new DefaultAttribute<>(validKey.defaultValue, validType));
                     }
                 }
 
@@ -350,9 +381,15 @@ public class GraphMLImporter<V, E>
 
             // create edges
             for (GraphElement p : edges) {
+                if (p.id1 == null) {
+                    throw new ImportException("Edge source vertex missing");
+                }
                 V from = graphNodes.get(p.id1);
                 if (from == null) {
                     throw new ImportException("Source vertex " + p.id1 + " not found");
+                }
+                if (p.id2 == null) {
+                    throw new ImportException("Edge target vertex missing");
                 }
                 V to = graphNodes.get(p.id2);
                 if (to == null) {
@@ -361,7 +398,7 @@ public class GraphMLImporter<V, E>
 
                 // create attributes
                 Map<String, String> collectedAttributes = p.attributes;
-                Map<String, Attribute> finalAttributes = new HashMap<>();
+                Map<String, Attribute> finalAttributes = new LinkedHashMap<>();
 
                 for (Key validKey : edgeValidKeys.values()) {
                     String validId = validKey.id;
@@ -369,12 +406,12 @@ public class GraphMLImporter<V, E>
                     if (collectedAttributes.containsKey(validId)) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute(collectedAttributes.get(validId), validType));
+                            new DefaultAttribute<>(collectedAttributes.get(validId), validType));
                     } else {
                         if (validKey.defaultValue != null) {
                             finalAttributes.put(
                                 validKey.attributeName,
-                                new DefaultAttribute(validKey.defaultValue, validType));
+                                new DefaultAttribute<>(validKey.defaultValue, validType));
                         }
                     }
                 }
@@ -403,15 +440,15 @@ public class GraphMLImporter<V, E>
         public void startDocument()
             throws SAXException
         {
-            nodes = new HashMap<String, GraphElement>();
-            edges = new ArrayList<GraphElement>();
-            nodeValidKeys = new HashMap<String, Key>();
-            edgeValidKeys = new HashMap<String, Key>();
+            nodes = new HashMap<>();
+            edges = new ArrayList<>();
+            nodeValidKeys = new HashMap<>();
+            edgeValidKeys = new HashMap<>();
             insideDefault = false;
             insideData = false;
             currentKey = null;
             currentData = null;
-            currentGraphElement = new ArrayDeque<GraphElement>();
+            currentGraphElement = new ArrayDeque<>();
             currentGraphElement.push(new GraphElement("graphml"));
         }
 
@@ -621,14 +658,14 @@ public class GraphMLImporter<V, E>
         {
             this.id1 = id1;
             this.id2 = null;
-            this.attributes = new HashMap<String, String>();
+            this.attributes = new LinkedHashMap<String, String>();
         }
 
         public GraphElement(String id1, String id2)
         {
             this.id1 = id1;
             this.id2 = id2;
-            this.attributes = new HashMap<String, String>();
+            this.attributes = new LinkedHashMap<String, String>();
         }
     }
 
