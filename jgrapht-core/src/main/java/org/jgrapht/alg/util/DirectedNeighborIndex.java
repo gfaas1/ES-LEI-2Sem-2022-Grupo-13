@@ -15,12 +15,11 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.util;
 
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.NeighborIndex.*;
 import org.jgrapht.event.*;
 
 /**
@@ -40,12 +39,15 @@ import org.jgrapht.event.*;
  *
  * @author Charles Fry
  * @since Dec 13, 2005
+ * 
+ * @deprecated Use {@link org.jgrapht.alg.util.NeighborCache} instead.
  */
+@Deprecated
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, Neighbors<V>> predecessorMap = new HashMap<>();
-    private Map<V, Neighbors<V>> successorMap = new HashMap<>();
+    private Map<V, NeighborCache.Neighbors<V>> predecessorMap = new HashMap<>();
+    private Map<V, NeighborCache.Neighbors<V>> successorMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**
@@ -180,21 +182,21 @@ public class DirectedNeighborIndex<V, E>
         successorMap.remove(e.getVertex());
     }
 
-    private Neighbors<V> getPredecessors(V v)
+    private NeighborCache.Neighbors<V> getPredecessors(V v)
     {
-        Neighbors<V> neighbors = predecessorMap.get(v);
+        NeighborCache.Neighbors<V> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<>(Graphs.predecessorListOf(graph, v));
+            neighbors = new NeighborCache.Neighbors<>(Graphs.predecessorListOf(graph, v));
             predecessorMap.put(v, neighbors);
         }
         return neighbors;
     }
 
-    private Neighbors<V> getSuccessors(V v)
+    private NeighborCache.Neighbors<V> getSuccessors(V v)
     {
-        Neighbors<V> neighbors = successorMap.get(v);
+        NeighborCache.Neighbors<V> neighbors = successorMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<>(Graphs.successorListOf(graph, v));
+            neighbors = new NeighborCache.Neighbors<>(Graphs.successorListOf(graph, v));
             successorMap.put(v, neighbors);
         }
         return neighbors;

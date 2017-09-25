@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.util;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ import junit.framework.*;
  *
  * @author Charles Fry
  */
-public class NeighborIndexTest
+public class NeighborCacheTest
     extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
@@ -48,15 +48,15 @@ public class NeighborIndexTest
         ListenableGraph<String, Object> g =
             new DefaultListenableGraph<>(new SimpleGraph<>(Object.class));
 
+        NeighborCache<String, Object> cache = new NeighborCache<>(g);
+        g.addGraphListener(cache);
+        
         g.addVertex(V1);
         g.addVertex(V2);
 
         g.addEdge(V1, V2);
 
-        NeighborIndex<String, Object> index = new NeighborIndex<>(g);
-        g.addGraphListener(index);
-
-        Set<String> neighbors1 = index.neighborsOf(V1);
+        Set<String> neighbors1 = cache.neighborsOf(V1);
 
         assertEquals(1, neighbors1.size());
         assertEquals(true, neighbors1.contains(V2));
@@ -64,7 +64,7 @@ public class NeighborIndexTest
         g.addVertex(V3);
         g.addEdge(V3, V1);
 
-        Set<String> neighbors3 = index.neighborsOf(V3);
+        Set<String> neighbors3 = cache.neighborsOf(V3);
 
         assertEquals(2, neighbors1.size());
         assertEquals(true, neighbors1.contains(V3));
@@ -93,7 +93,7 @@ public class NeighborIndexTest
 
         g.addEdge(V1, V2);
 
-        DirectedNeighborIndex<String, Object> index = new DirectedNeighborIndex<>(g);
+        NeighborCache<String, Object> index = new NeighborCache<>(g);
         g.addGraphListener(index);
 
         Set<String> p = index.predecessorsOf(V1);
@@ -126,4 +126,4 @@ public class NeighborIndexTest
     }
 }
 
-// End NeighborIndexTest.java
+// End NeighborCacheTest.java

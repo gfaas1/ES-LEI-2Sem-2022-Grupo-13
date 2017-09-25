@@ -15,13 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.util;
 
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
-import org.jgrapht.util.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -44,11 +43,14 @@ import org.jgrapht.util.*;
  *
  * @author Charles Fry
  * @since Dec 13, 2005
+ * 
+ * @deprecated Use {@link org.jgrapht.alg.util.NeighborCache} instead.
  */
+@Deprecated
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, Neighbors<V>> neighborMap = new HashMap<>();
+    private Map<V, NeighborCache.Neighbors<V>> neighborMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**
@@ -153,79 +155,16 @@ public class NeighborIndex<V, E>
         neighborMap.remove(e.getVertex());
     }
 
-    private Neighbors<V> getNeighbors(V v)
+    private NeighborCache.Neighbors<V> getNeighbors(V v)
     {
-        Neighbors<V> neighbors = neighborMap.get(v);
+        NeighborCache.Neighbors<V> neighbors = neighborMap.get(v);
         if (neighbors == null) {
-            neighbors = new Neighbors<>(Graphs.neighborListOf(graph, v));
+            neighbors = new NeighborCache.Neighbors<>(Graphs.neighborListOf(graph, v));
             neighborMap.put(v, neighbors);
         }
         return neighbors;
     }
 
-    /**
-     * Stores cached neighbors for a single vertex. Includes support for live neighbor sets and
-     * duplicate neighbors.
-     */
-    static class Neighbors<V>
-    {
-        private Map<V, ModifiableInteger> neighborCounts = new LinkedHashMap<>();
-
-        // TODO could eventually make neighborSet modifiable, resulting
-        // in edge removals from the graph
-        private Set<V> neighborSet = Collections.unmodifiableSet(neighborCounts.keySet());
-
-        public Neighbors(Collection<V> neighbors)
-        {
-            // add all current neighbors
-            for (V neighbor : neighbors) {
-                addNeighbor(neighbor);
-            }
-        }
-
-        public void addNeighbor(V v)
-        {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                count = new ModifiableInteger(1);
-                neighborCounts.put(v, count);
-            } else {
-                count.increment();
-            }
-        }
-
-        public void removeNeighbor(V v)
-        {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                throw new IllegalArgumentException(
-                    "Attempting to remove a neighbor that wasn't present");
-            }
-
-            count.decrement();
-            if (count.getValue() == 0) {
-                neighborCounts.remove(v);
-            }
-        }
-
-        public Set<V> getNeighbors()
-        {
-            return neighborSet;
-        }
-
-        public List<V> getNeighborList()
-        {
-            List<V> neighbors = new ArrayList<>();
-            for (Map.Entry<V, ModifiableInteger> entry : neighborCounts.entrySet()) {
-                V v = entry.getKey();
-                int count = entry.getValue().intValue();
-                for (int i = 0; i < count; i++) {
-                    neighbors.add(v);
-                }
-            }
-            return neighbors;
-        }
-    }
 }
 
 // End NeighborIndex.java

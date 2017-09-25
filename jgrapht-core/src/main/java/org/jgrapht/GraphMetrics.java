@@ -17,8 +17,7 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.DirectedNeighborIndex;
-import org.jgrapht.alg.NeighborIndex;
+import org.jgrapht.alg.util.NeighborCache;
 import org.jgrapht.alg.shortestpath.GraphMeasurer;
 
 import java.util.*;
@@ -111,7 +110,7 @@ public abstract class GraphMetrics {
                     return 1;
 
         if(graph.getType().isUndirected()) {
-            NeighborIndex<V,E> neighborIndex=new NeighborIndex<>(graph);
+            NeighborCache<V, E> neighborIndex=new NeighborCache<>(graph);
 
             //Array which keeps track of the search tree structure to prevent revisiting parent nodes
             int[] parent=new int[vertices.size()];
@@ -155,7 +154,7 @@ public abstract class GraphMetrics {
                 } while (!queue.isEmpty() && 2 * (depthU + 1) - 1 < girth );
             }
         }else{ //Directed case
-            DirectedNeighborIndex<V,E> neighborIndex=new DirectedNeighborIndex<>(graph);
+            NeighborCache<V, E> neighborIndex = new NeighborCache<>(graph);
             for (int i = 0; i < vertices.size() - 1 && girth > 2; i++) {
 
                 //Reset data structures
