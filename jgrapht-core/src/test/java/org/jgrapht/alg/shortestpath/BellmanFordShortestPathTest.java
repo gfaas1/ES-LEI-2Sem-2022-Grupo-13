@@ -71,6 +71,19 @@ public class BellmanFordShortestPathTest
         assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e15 }), path);
     }
 
+    public void testNoPath()
+    {
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        g.addVertex("a");
+        g.addVertex("b");
+
+        BellmanFordShortestPath<String, DefaultWeightedEdge> alg = new BellmanFordShortestPath<>(g);
+        SingleSourcePaths<String, DefaultWeightedEdge> paths = alg.getPaths("a");
+        assertEquals(paths.getWeight("b"), Double.POSITIVE_INFINITY);
+        assertNull(paths.getPath("b"));
+    }
+
     public void testWikipediaExampleBellmanFord()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
