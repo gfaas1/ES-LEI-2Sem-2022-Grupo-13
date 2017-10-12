@@ -246,29 +246,41 @@ public class GmlImporter<V, E>
         {
             String key = ctx.ID().getText();
 
-            if (insideNode && level == 2 && key.equals(ID)) {
-                try {
-                    nodeId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
+            if (insideNode && level == 2) {
+                if (key.equals(ID)) {
+                    try {
+                        nodeId = Integer.parseInt(ctx.NUMBER().getText());
+                    } catch (NumberFormatException e) {
+                        // ignore error
+                    }
+                } else {
+                    attributes.put(key, parseNumberAttribute(ctx.NUMBER().getText()));
                 }
-            } else if (insideEdge && level == 2 && key.equals(SOURCE)) {
-                try {
-                    sourceId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
-            } else if (insideEdge && level == 2 && key.equals(TARGET)) {
-                try {
-                    targetId = Integer.parseInt(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
-                }
-            } else if (insideEdge && level == 2 && key.equals(WEIGHT)) {
-                try {
-                    weight = Double.parseDouble(ctx.NUMBER().getText());
-                } catch (NumberFormatException e) {
-                    // ignore error
+            } else if (insideEdge && level == 2) {
+                switch (key) {
+                case SOURCE:
+                    try {
+                        sourceId = Integer.parseInt(ctx.NUMBER().getText());
+                    } catch (NumberFormatException e) {
+                        // ignore error
+                    }
+                    break;
+                case TARGET:
+                    try {
+                        targetId = Integer.parseInt(ctx.NUMBER().getText());
+                    } catch (NumberFormatException e) {
+                        // ignore error
+                    }
+                    break;
+                case WEIGHT:
+                    try {
+                        weight = Double.parseDouble(ctx.NUMBER().getText());
+                    } catch (NumberFormatException e) {
+                        // ignore error
+                    }
+                    break;
+                default:
+                    attributes.put(key, parseNumberAttribute(ctx.NUMBER().getText()));
                 }
             }
         }
@@ -342,6 +354,26 @@ public class GmlImporter<V, E>
             String unescapedText = StringEscapeUtils.unescapeJava(noQuotes);
 
             attributes.put(key, DefaultAttribute.createAttribute(unescapedText));
+        }
+
+        private Attribute parseNumberAttribute(String value)
+        {
+            try {
+                return DefaultAttribute.createAttribute(Integer.parseInt(value, 10));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            try {
+                return DefaultAttribute.createAttribute(Long.parseLong(value, 10));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            try {
+                return DefaultAttribute.createAttribute(Double.parseDouble(value));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            return DefaultAttribute.createAttribute(value);
         }
 
     }
