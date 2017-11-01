@@ -92,20 +92,28 @@ public class UnionFind<T>
      *
      * @return The element representing the set the element is in.
      */
-    public T find(T element)
+    public T find(final T element)
     {
         if (!parentMap.containsKey(element)) {
             throw new IllegalArgumentException("element is not contained in this UnionFind data structure: "+element);
         }
 
-        T parent = parentMap.get(element);
-        if (parent.equals(element)) {
-            return element;
+        T current = element;
+        while(true) {
+            T parent = parentMap.get(current);
+            if (parent.equals(current)) { break; }
+            current = parent;
+        }
+        final T root = current;
+
+        current = element;
+        while (!current.equals(root)) {
+            T parent = parentMap.get(current);
+            parentMap.put(current, root);
+            current = parent;
         }
 
-        T newParent = find(parent);
-        parentMap.put(element, newParent);
-        return newParent;
+        return root;
     }
 
     /**
