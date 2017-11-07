@@ -59,9 +59,9 @@ public class GraphMLExporter<V, E>
     private int totalAttributes = 0;
 
     // special attributes
-    private static final String VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME = "Vertex Label";
+    private static final String VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME = "VertexLabel";
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
-    private static final String EDGE_LABEL_DEFAULT_ATTRIBUTE_NAME = "Edge Label";
+    private static final String EDGE_LABEL_DEFAULT_ATTRIBUTE_NAME = "EdgeLabel";
 
     private String vertexLabelAttributeName = VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME;
     private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;

@@ -329,8 +329,8 @@ public class GraphMLExporterTest
 				+ "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
 				+ "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" "
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
-				+ "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"Vertex Label\" attr.type=\"string\"/>" + NL
-				+ "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"Edge Label\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"vertex_label_key\" for=\"node\" attr.name=\"VertexLabel\" attr.type=\"string\"/>" + NL
+				+ "<key id=\"edge_label_key\" for=\"edge\" attr.name=\"EdgeLabel\" attr.type=\"string\"/>" + NL
 				+ "<key id=\"edge_weight_key\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\">" + NL
 				+ "<default>1.0</default>" + NL 
 				+ "</key>" + NL 
