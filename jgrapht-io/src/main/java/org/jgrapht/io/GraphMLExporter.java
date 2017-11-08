@@ -59,9 +59,9 @@ public class GraphMLExporter<V, E>
     private int totalAttributes = 0;
 
     // special attributes
-    private static final String VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME = "Vertex Label";
+    private static final String VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME = "VertexLabel";
     private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
-    private static final String EDGE_LABEL_DEFAULT_ATTRIBUTE_NAME = "Edge Label";
+    private static final String EDGE_LABEL_DEFAULT_ATTRIBUTE_NAME = "EdgeLabel";
 
     private String vertexLabelAttributeName = VERTEX_LABEL_DEFAULT_ATTRIBUTE_NAME;
     private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
@@ -155,37 +155,6 @@ public class GraphMLExporter<V, E>
         {
             return name;
         }
-    }
-
-    /**
-     * Denotes the type of a GraphML-Attribute.
-     */
-    public enum AttributeType
-    {
-        BOOLEAN("boolean"),
-        INT("int"),
-        LONG("long"),
-        FLOAT("float"),
-        DOUBLE("double"),
-        STRING("string");
-
-        private String name;
-
-        private AttributeType(String name)
-        {
-            this.name = name;
-        }
-
-        /**
-         * Get a string representation of the attribute type
-         * 
-         * @return the string representation of the attribute type
-         */
-        public String toString()
-        {
-            return name;
-        }
-
     }
 
     /**
@@ -577,7 +546,7 @@ public class GraphMLExporter<V, E>
             }
 
             // find vertex attributes
-            Map<String, String> vertexAttributes = null;
+            Map<String, Attribute> vertexAttributes = null;
             if (vertexAttributeProvider != null) {
                 vertexAttributes = vertexAttributeProvider.getComponentAttributes(v);
             }
@@ -594,7 +563,8 @@ public class GraphMLExporter<V, E>
                     String name = e.getKey();
                     String defaultValue = details.defaultValue;
                     if (vertexAttributes.containsKey(name)) {
-                        String value = vertexAttributes.get(name);
+                        Attribute attribute = vertexAttributes.get(name);
+                        String value = attribute.getValue();
                         if (defaultValue == null || !defaultValue.equals(value)) {
                             if (value != null) {
                                 writeData(handler, details.key, value);
@@ -640,7 +610,7 @@ public class GraphMLExporter<V, E>
             }
 
             // find edge attributes
-            Map<String, String> edgeAttributes = null;
+            Map<String, Attribute> edgeAttributes = null;
             if (edgeAttributeProvider != null) {
                 edgeAttributes = edgeAttributeProvider.getComponentAttributes(e);
             }
@@ -657,7 +627,8 @@ public class GraphMLExporter<V, E>
                     String name = entry.getKey();
                     String defaultValue = details.defaultValue;
                     if (edgeAttributes.containsKey(name)) {
-                        String value = edgeAttributes.get(name);
+                        Attribute attribute = edgeAttributes.get(name);
+                        String value = attribute.getValue();
                         if (defaultValue == null || !defaultValue.equals(value)) {
                             if (value != null) {
                                 writeData(handler, details.key, value);

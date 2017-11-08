@@ -252,7 +252,10 @@ public class DOTImporter<V, E>
                 try {
                     // notify graph updater
                     graphUpdater.update(
-                        graph, Collections.singletonMap(DEFAULT_GRAPH_ID_KEY, idPartial.getId()));
+                        graph,
+                        Collections.singletonMap(
+                            DEFAULT_GRAPH_ID_KEY,
+                            DefaultAttribute.createAttribute(idPartial.getId())));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
                 }
@@ -282,7 +285,7 @@ public class DOTImporter<V, E>
             State s = stack.pop();
             State child = s.children.peekFirst();
             if (child != null && child.attrs != null) {
-                Map<String, String> attrs = child.attrs;
+                Map<String, Attribute> attrs = child.attrs;
 
                 // update current scope
                 SubgraphScope scope = subgraphScopes.element();
@@ -347,7 +350,7 @@ public class DOTImporter<V, E>
                 if (child.ids != null && child.ids.size() == 1) {
                     s.put(child.ids.get(0), null);
                 } else if (child.ids != null && child.ids.size() >= 2) {
-                    s.put(child.ids.get(0), child.ids.get(1));
+                    s.put(child.ids.get(0), DefaultAttribute.createAttribute(child.ids.get(1)));
                 }
                 it.remove();
             }
@@ -376,7 +379,7 @@ public class DOTImporter<V, E>
             State s = stack.pop();
 
             // find attributes (last child)
-            Map<String, String> attrs = null;
+            Map<String, Attribute> attrs = null;
             State last = s.children.peekLast();
             if (last != null && last.attrs != null) {
                 attrs = last.attrs;
@@ -393,7 +396,7 @@ public class DOTImporter<V, E>
                     for (V sourceVertex : prev.getVertices()) {
                         for (V targetVertex : cur.getVertices()) {
                             // find default attributes
-                            Map<String, String> edgeAttrs =
+                            Map<String, Attribute> edgeAttrs =
                                 new HashMap<>(subgraphScopes.element().edgeAttrs);
                             // add extra attributes
                             if (attrs != null) {
@@ -401,8 +404,12 @@ public class DOTImporter<V, E>
                             }
 
                             try {
-                                E e = edgeProvider.buildEdge(
-                                    sourceVertex, targetVertex, edgeAttrs.get("label"), edgeAttrs);
+                                String edgeLabel = null;
+                                if (edgeAttrs.containsKey("label")) {
+                                    edgeLabel = edgeAttrs.get("label").toString();
+                                }
+                                E e = edgeProvider
+                                    .buildEdge(sourceVertex, targetVertex, edgeLabel, edgeAttrs);
                                 graph.addEdge(sourceVertex, targetVertex, e);
                             } catch (Exception e) {
                                 throw new IllegalArgumentException(
@@ -441,10 +448,12 @@ public class DOTImporter<V, E>
 
             // update attributes in current scope
             SubgraphScope scope = subgraphScopes.element();
-            scope.graphAttrs.put(key, value);
+            scope.graphAttrs.put(key, DefaultAttribute.createAttribute(value));
             if (subgraphScopes.size() == 1) {
                 try {
-                    graphUpdater.update(graph, Collections.singletonMap(key, value));
+                    graphUpdater.update(
+                        graph,
+                        Collections.singletonMap(key, DefaultAttribute.createAttribute(value)));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
                 }
@@ -475,7 +484,7 @@ public class DOTImporter<V, E>
             String nodeId = nodeIdPartialState.getId();
 
             // read attributes
-            Map<String, String> attrs = Collections.emptyMap();
+            Map<String, Attribute> attrs = Collections.emptyMap();
             if (it.hasNext()) {
                 attrs = it.next().attrs;
             }
@@ -485,7 +494,7 @@ public class DOTImporter<V, E>
             if (v == null) {
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
-                Map<String, String> defaultAttrs = new HashMap<>(scope.nodeAttrs);
+                Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
                 // append extra attributes
                 defaultAttrs.putAll(attrs);
                 try {
@@ -537,7 +546,7 @@ public class DOTImporter<V, E>
             if (v == null) {
                 SubgraphScope scope = subgraphScopes.element();
                 // find default attributes
-                Map<String, String> defaultAttrs = new HashMap<>(scope.nodeAttrs);
+                Map<String, Attribute> defaultAttrs = new HashMap<>(scope.nodeAttrs);
                 try {
                     v = vertexProvider.buildVertex(nodeId, defaultAttrs);
                 } catch (Exception e) {
@@ -588,9 +597,9 @@ public class DOTImporter<V, E>
         public void enterSubgraphStatement(DOTParser.SubgraphStatementContext ctx)
         {
             // Create new scope with inherited attributes
-            Map<String, String> defaultGraphAttrs = subgraphScopes.element().graphAttrs;
-            Map<String, String> defaultNodeAttrs = subgraphScopes.element().nodeAttrs;
-            Map<String, String> defaultEdgeAttrs = subgraphScopes.element().edgeAttrs;
+            Map<String, Attribute> defaultGraphAttrs = subgraphScopes.element().graphAttrs;
+            Map<String, Attribute> defaultNodeAttrs = subgraphScopes.element().nodeAttrs;
+            Map<String, Attribute> defaultEdgeAttrs = subgraphScopes.element().edgeAttrs;
             SubgraphScope newState = new SubgraphScope();
             newState.graphAttrs.putAll(defaultGraphAttrs);
             newState.nodeAttrs.putAll(defaultNodeAttrs);
@@ -705,7 +714,7 @@ public class DOTImporter<V, E>
     {
         LinkedList<State> children;
         List<String> ids;
-        Map<String, String> attrs;
+        Map<String, Attribute> attrs;
         List<V> vertices;
         SubgraphScope subgraph;
 
@@ -735,7 +744,7 @@ public class DOTImporter<V, E>
             this.ids.add(id);
         }
 
-        public void put(String key, String value)
+        public void put(String key, Attribute value)
         {
             if (this.attrs == null) {
                 this.attrs = new HashMap<>();
@@ -743,7 +752,7 @@ public class DOTImporter<V, E>
             this.attrs.put(key, value);
         }
 
-        public void putAll(Map<String, String> attrs)
+        public void putAll(Map<String, Attribute> attrs)
         {
             if (this.attrs == null) {
                 this.attrs = new HashMap<>();
@@ -775,9 +784,9 @@ public class DOTImporter<V, E>
      */
     private class SubgraphScope
     {
-        Map<String, String> graphAttrs;
-        Map<String, String> nodeAttrs;
-        Map<String, String> edgeAttrs;
+        Map<String, Attribute> graphAttrs;
+        Map<String, Attribute> nodeAttrs;
+        Map<String, Attribute> edgeAttrs;
         List<V> vertices;
 
         public SubgraphScope()

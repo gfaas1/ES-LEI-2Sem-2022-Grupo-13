@@ -191,7 +191,7 @@ public class DOTExporter<V, E>
             if (vertexLabelProvider != null) {
                 labelName = vertexLabelProvider.getName(v);
             }
-            Map<String, String> attributes = null;
+            Map<String, Attribute> attributes = null;
             if (vertexAttributeProvider != null) {
                 attributes = vertexAttributeProvider.getComponentAttributes(v);
             }
@@ -211,7 +211,7 @@ public class DOTExporter<V, E>
             if (edgeLabelProvider != null) {
                 labelName = edgeLabelProvider.getName(e);
             }
-            Map<String, String> attributes = null;
+            Map<String, Attribute> attributes = null;
             if (edgeAttributeProvider != null) {
                 attributes = edgeAttributeProvider.getComponentAttributes(e);
             }
@@ -249,26 +249,29 @@ public class DOTExporter<V, E>
         graphAttributes.put(key, value);
     }
 
-    private void renderAttributes(PrintWriter out, String labelName, Map<String, String> attributes)
+    private void renderAttributes(PrintWriter out, String labelName, Map<String, Attribute> attributes)
     {
-        if ((labelName == null) && (attributes == null)) {
+        if (labelName == null && attributes == null) {
             return;
         }
         out.print(" [ ");
-        if ((labelName == null)) {
-            labelName = attributes.get("label");
+        if (labelName == null) {
+            Attribute labelAttribute = attributes.get("label");
+            if (labelAttribute != null) { 
+                labelName = labelAttribute.getValue();
+            }
         }
         if (labelName != null) {
             out.print("label=\"" + labelName + "\" ");
         }
         if (attributes != null) {
-            for (Map.Entry<String, String> entry : attributes.entrySet()) {
+            for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
                 String name = entry.getKey();
                 if (name.equals("label")) {
                     // already handled by special case above
                     continue;
                 }
-                out.print(name + "=\"" + entry.getValue() + "\" ");
+                out.print(name + "=\"" + entry.getValue().getValue() + "\" ");
             }
         }
         out.print("]");

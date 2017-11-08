@@ -303,8 +303,7 @@ public class CSVImporter<V, E>
 
                 try {
                     String label = "e_" + source + "_" + target;
-                    E e = edgeProvider
-                        .buildEdge(source, target, label, new HashMap<String, String>());
+                    E e = edgeProvider.buildEdge(source, target, label, new HashMap<>());
                     graph.addEdge(source, target, e);
                 } catch (IllegalArgumentException e) {
                     throw new ParseCancellationException(
@@ -461,7 +460,8 @@ public class CSVImporter<V, E>
                 V target = vertices.get(targetName);
 
                 String label = "e_" + source + "_" + target;
-                E e = edgeProvider.buildEdge(source, target, label, new HashMap<String, String>());
+                E e =
+                    edgeProvider.buildEdge(source, target, label, new HashMap<>());
                 graph.addEdge(source, target, e);
 
                 if (weight != null) {

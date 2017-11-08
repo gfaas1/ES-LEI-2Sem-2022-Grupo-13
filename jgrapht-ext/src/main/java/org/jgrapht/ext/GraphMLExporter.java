@@ -147,7 +147,7 @@ public class GraphMLExporter<V, E>
     /**
      * Denotes the category of a GraphML-Attribute.
      * 
-     * @deprecated Use {@link org.jgrapht.io.GraphMLExporter.AttributeCategory} instead.
+     * @deprecated Use attribute support from {@link org.jgrapht.io.GraphMLExporter} instead.
      */
     @Deprecated
     public enum AttributeCategory
@@ -178,7 +178,7 @@ public class GraphMLExporter<V, E>
     /**
      * Denotes the type of a GraphML-Attribute.
      * 
-     * @deprecated Use {@link org.jgrapht.io.GraphMLExporter.AttributeType} instead.
+     * @deprecated Use attribute support from {@link org.jgrapht.io.GraphMLExporter} instead.
      */
     @Deprecated
     public enum AttributeType
