@@ -28,7 +28,6 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.DirectedNeighborIndex;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
@@ -42,7 +41,7 @@ import org.jgrapht.util.ModifiableInteger;
  *
  * <p>
  * Edge direction is ignored when evaluating neighbors; to take edge direction into account when
- * indexing neighbors, use {@link DirectedNeighborIndex}.
+ * indexing neighbors, use {@link org.jgrapht.alg.DirectedNeighborIndex}.
  *
  * <p>
  * A vertex's neighbors are cached the first time they are asked for (i.e. the index is built on
