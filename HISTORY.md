@@ -37,7 +37,8 @@ Changes to JGraphT in each version:
     - Added basic support for graph attributes in DOTExporter (contributed by Dimitrios Michail)
     - Added a generator which generates the complement graph of a given input graph (contributed by Joris Kinable)
     - Performance improvement for Johnson's algorithm when a directed graph has no negative edge weights (contributed by Joris Kinable)
-    - Fix `BellmanFordShortestPath` to return null instead of empty path
+    - Fix `BellmanFordShortestPath` to return null instead of empty path (contributed by Dimitrios Michail)
+    - Added type information in attributes for graph importers/exporters (contributed by Dimitrios Michail, per suggestion from Dimitrij Drus)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
