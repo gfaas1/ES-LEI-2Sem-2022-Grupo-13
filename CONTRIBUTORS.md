@@ -95,6 +95,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Skuratovich Sergey](https://github.com/SSNikolaevich)
 - [Martin Sturm](https://github.com/WorstCase00)
 - [Patrick Sharp](https://github.com/sharpTrick)
+- [Piotr Turski](https://github.com/piotrturski)
 
 (if we have missed your name on this list, please email us to get it fixed).
 

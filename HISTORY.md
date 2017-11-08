@@ -39,6 +39,7 @@ Changes to JGraphT in each version:
     - Performance improvement for Johnson's algorithm when a directed graph has no negative edge weights (contributed by Joris Kinable)
     - Fix `BellmanFordShortestPath` to return null instead of empty path (contributed by Dimitrios Michail)
     - Added type information in attributes for graph importers/exporters (contributed by Dimitrios Michail, per suggestion from Dimitrij Drus)
+    - Changed `UnionFind` from recursive to iterative (contributed by Piotr Turski)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
