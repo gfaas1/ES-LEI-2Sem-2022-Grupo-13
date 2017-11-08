@@ -17,22 +17,23 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
-import org.jgrapht.event.GraphVertexChangeEvent;
-import org.jgrapht.util.ModifiableInteger;
+import org.jgrapht.event.*;
+
 
 public class NeighborCache<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, Neighbors<V>> successors = new HashMap<>();
-    private Map<V, Neighbors<V>> predecessors = new HashMap<>();
-    private Map<V, Neighbors<V>> neighbors = new HashMap<>();
+    private Map<V, NeighborIndex.Neighbors<V>> successors = new HashMap<>();
+    private Map<V, NeighborIndex.Neighbors<V>> predecessors = new HashMap<>();
+    private Map<V, NeighborIndex.Neighbors<V>> neighbors = new HashMap<>();
     
     private Graph<V, E> graph;
 
@@ -43,20 +44,20 @@ public class NeighborCache<V, E>
 
     public Set<V> predecessorsOf(V v)
     {
-        return fetch(v, predecessors, k -> new Neighbors<>(Graphs.predecessorListOf(graph, v)));
+        return fetch(v, predecessors, k -> new NeighborIndex.Neighbors<>(Graphs.predecessorListOf(graph, v)));
     }
 
     public Set<V> successorsOf(V v)
     {
-        return fetch(v, successors, k -> new Neighbors<>(Graphs.successorListOf(graph, v)));
+        return fetch(v, successors, k -> new NeighborIndex.Neighbors<>(Graphs.successorListOf(graph, v)));
     }
 
     public Set<V> neighborsOf(V v)
     {
-        return fetch(v, neighbors, k -> new Neighbors<>(Graphs.neighborListOf(graph, v)));
+        return fetch(v, neighbors, k -> new NeighborIndex.Neighbors<>(Graphs.neighborListOf(graph, v)));
     }
     
-    private Set<V> fetch(V vertex, Map<V, Neighbors<V>> map, Function<V, Neighbors<V>> func)
+    private Set<V> fetch(V vertex, Map<V, NeighborIndex.Neighbors<V>> map, Function<V, NeighborIndex.Neighbors<V>> func)
     {
         return map.computeIfAbsent(vertex, func).getNeighbors();
     }
@@ -128,73 +129,4 @@ public class NeighborCache<V, E>
         neighbors.remove(e.getVertex());
     }
 
-    /**
-     * Stores cached neighbors for a single vertex. Includes support for live neighbor sets and
-     * duplicate neighbors.
-     */
-    static class Neighbors<V>
-    {
-        private Map<V, ModifiableInteger> neighborCounts = new LinkedHashMap<>();
-
-        // TODO could eventually make neighborSet modifiable, resulting
-        // in edge removals from the graph
-        private Set<V> neighborSet = Collections.unmodifiableSet(neighborCounts.keySet());
-
-        public Neighbors(Collection<V> neighbors)
-        {
-            // add all current neighbors
-            for (V neighbor : neighbors) {
-                addNeighbor(neighbor);
-            }
-        }
-
-        public void addNeighbor(V v)
-        {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                count = new ModifiableInteger(1);
-                neighborCounts.put(v, count);
-            } else {
-                count.increment();
-            }
-        }
-
-        public void removeNeighbor(V v)
-        {
-            ModifiableInteger count = neighborCounts.get(v);
-            if (count == null) {
-                throw new IllegalArgumentException(
-                    "Attempting to remove a neighbor that wasn't present");
-            }
-
-            count.decrement();
-            if (count.getValue() == 0) {
-                neighborCounts.remove(v);
-            }
-        }
-
-        public Set<V> getNeighbors()
-        {
-            return neighborSet;
-        }
-
-        public List<V> getNeighborList()
-        {
-            List<V> neighbors = new ArrayList<>();
-            for (Map.Entry<V, ModifiableInteger> entry : neighborCounts.entrySet()) {
-                V v = entry.getKey();
-                int count = entry.getValue().intValue();
-                for (int i = 0; i < count; i++) {
-                    neighbors.add(v);
-                }
-            }
-            return neighbors;
-        }
-        
-        @Override
-        public String toString()
-        {
-            return neighborSet.toString();
-        }
-    }
 }

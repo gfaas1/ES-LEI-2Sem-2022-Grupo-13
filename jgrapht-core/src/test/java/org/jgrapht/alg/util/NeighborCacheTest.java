@@ -17,12 +17,18 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
+
+import java.util.Set;
 
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
+import org.jgrapht.graph.SimpleGraph;
+import org.junit.Test;
 
 /**
  * .
@@ -30,7 +36,6 @@ import junit.framework.*;
  * @author Charles Fry
  */
 public class NeighborCacheTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -40,6 +45,7 @@ public class NeighborCacheTest
 
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testNeighborSet()
     {
         // We use Object instead of DefaultEdge for the edge type
@@ -50,7 +56,7 @@ public class NeighborCacheTest
 
         NeighborCache<String, Object> cache = new NeighborCache<>(g);
         g.addGraphListener(cache);
-        
+
         g.addVertex(V1);
         g.addVertex(V2);
 
@@ -84,6 +90,7 @@ public class NeighborCacheTest
         assertEquals(0, neighbors1.size());
     }
 
+    @Test
     public void testDirectedNeighborSet()
     {
         ListenableGraph<String, Object> g =
@@ -123,6 +130,50 @@ public class NeighborCacheTest
         g.removeVertex(V2);
 
         assertEquals(0, s.size());
+    }
+
+    @Test
+    public void testVertexRemoval()
+    {
+        ListenableGraph<String, DefaultEdge> graph =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
+
+        final String A = "A";
+        final String B = "B";
+        final String C = "C";
+        final String D = "D";
+
+        NeighborCache<String, DefaultEdge> cache = new NeighborCache<>(graph);
+
+        graph.addGraphListener(cache);
+
+        graph.addVertex(A);
+        graph.addVertex(B);
+        graph.addVertex(C);
+        graph.addVertex(D);
+
+        graph.addEdge(D, A);
+        graph.addEdge(D, B);
+        graph.addEdge(D, C);
+
+        Set<String> neighborsOfD = cache.neighborsOf(D);
+        Set<String> neighborsOfC = cache.neighborsOf(C);
+        Set<String> neighborsOfB = cache.neighborsOf(B);
+        Set<String> neighborsOfA = cache.neighborsOf(A);
+
+        assertThat(neighborsOfD, hasItems(A, B, C));
+        assertThat(neighborsOfA.size(), is(1));
+        assertThat(neighborsOfB.size(), is(1));
+        assertThat(neighborsOfC.size(), is(1));
+
+        graph.removeVertex(D);
+
+        assertTrue(neighborsOfD.isEmpty());
+
+        assertThat(neighborsOfA.size(), is(0));
+        assertThat(neighborsOfB.size(), is(0));
+        assertThat(neighborsOfC.size(), is(0));
+
     }
 }
 

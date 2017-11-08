@@ -15,24 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.util;
+package org.jgrapht.alg;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.DirectedNeighborIndex;
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
-import org.jgrapht.event.GraphVertexChangeEvent;
-import org.jgrapht.event.VertexSetListener;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.NeighborCache;
+import org.jgrapht.event.*;
 import org.jgrapht.util.ModifiableInteger;
 
 /**
@@ -57,7 +46,9 @@ import org.jgrapht.util.ModifiableInteger;
  * @author Charles Fry
  * @since Dec 13, 2005
  * 
+ * @deprecated Use {@link org.jgrapht.alg.util.NeighborCache} instead.
  */
+@Deprecated
 public class NeighborIndex<V, E>
     implements GraphListener<V, E>
 {

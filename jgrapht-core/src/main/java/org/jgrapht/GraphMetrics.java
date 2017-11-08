@@ -109,8 +109,9 @@ public abstract class GraphMetrics {
                 if(graph.containsEdge(v, v))
                     return 1;
 
+        NeighborCache<V, E> neighborIndex=new NeighborCache<>(graph);
+        
         if(graph.getType().isUndirected()) {
-            NeighborCache<V, E> neighborIndex=new NeighborCache<>(graph);
 
             //Array which keeps track of the search tree structure to prevent revisiting parent nodes
             int[] parent=new int[vertices.size()];
@@ -154,7 +155,6 @@ public abstract class GraphMetrics {
                 } while (!queue.isEmpty() && 2 * (depthU + 1) - 1 < girth );
             }
         }else{ //Directed case
-            NeighborCache<V, E> neighborIndex = new NeighborCache<>(graph);
             for (int i = 0; i < vertices.size() - 1 && girth > 2; i++) {
 
                 //Reset data structures

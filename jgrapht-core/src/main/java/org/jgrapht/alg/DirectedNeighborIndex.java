@@ -15,12 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.util;
+package org.jgrapht.alg;
 
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+import org.jgrapht.alg.NeighborIndex.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -46,8 +47,8 @@ import org.jgrapht.event.*;
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, NeighborCache.Neighbors<V>> predecessorMap = new HashMap<>();
-    private Map<V, NeighborCache.Neighbors<V>> successorMap = new HashMap<>();
+    private Map<V, Neighbors<V>> predecessorMap = new HashMap<>();
+    private Map<V, Neighbors<V>> successorMap = new HashMap<>();
     private Graph<V, E> graph;
 
     /**
@@ -182,21 +183,21 @@ public class DirectedNeighborIndex<V, E>
         successorMap.remove(e.getVertex());
     }
 
-    private NeighborCache.Neighbors<V> getPredecessors(V v)
+    private Neighbors<V> getPredecessors(V v)
     {
-        NeighborCache.Neighbors<V> neighbors = predecessorMap.get(v);
+        Neighbors<V> neighbors = predecessorMap.get(v);
         if (neighbors == null) {
-            neighbors = new NeighborCache.Neighbors<>(Graphs.predecessorListOf(graph, v));
+            neighbors = new Neighbors<>(Graphs.predecessorListOf(graph, v));
             predecessorMap.put(v, neighbors);
         }
         return neighbors;
     }
 
-    private NeighborCache.Neighbors<V> getSuccessors(V v)
+    private Neighbors<V> getSuccessors(V v)
     {
-        NeighborCache.Neighbors<V> neighbors = successorMap.get(v);
+        Neighbors<V> neighbors = successorMap.get(v);
         if (neighbors == null) {
-            neighbors = new NeighborCache.Neighbors<>(Graphs.successorListOf(graph, v));
+            neighbors = new Neighbors<>(Graphs.successorListOf(graph, v));
             successorMap.put(v, neighbors);
         }
         return neighbors;
