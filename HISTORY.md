@@ -40,6 +40,7 @@ Changes to JGraphT in each version:
     - Fix `BellmanFordShortestPath` to return null instead of empty path (contributed by Dimitrios Michail)
     - Added type information in attributes for graph importers/exporters (contributed by Dimitrios Michail, per suggestion from Dimitrij Drus)
     - Changed `UnionFind` from recursive to iterative (contributed by Piotr Turski)
+    - New `NeighborCache` replaces both `NeighborIndex` and `DirectedNeighborIndex`; this new class supports both directed and undirected graphs (contributed by Szabolcs Besenyei)
 
 - **version 1.0.1** (16-Jan-2017):
     - Deleted all previously deprecated methods (cleanup contributed by Joris Kinable and Dimitrios Michail)
