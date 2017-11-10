@@ -22,8 +22,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.NeighborCache;
 
 /**
  * Finds a minimum vertex cover in a undirected graph. The implementation relies on a recursive
@@ -70,7 +70,7 @@ public class RecursiveExactVCImpl<V, E>
      * view. As such, all operations can be simplified to bitset operations, which may improve the
      * algorithm's performance.
      **/
-    private NeighborIndex<V, E> neighborIndex;
+    private NeighborCache<V, E> neighborCache;
 
     /** Map for memoization **/
     private Map<BitSet, BitSetCover> memo;
@@ -109,7 +109,7 @@ public class RecursiveExactVCImpl<V, E>
         this.graph = GraphTests.requireUndirected(graph);
         memo = new HashMap<>();
         vertices = new ArrayList<>(graph.vertexSet());
-        neighborIndex = new NeighborIndex<>(graph);
+        neighborCache = new NeighborCache<>(graph);
         vertexIDDictionary = new HashMap<>();
         this.vertexWeightMap = vertexWeightMap;
         this.weighted = vertexWeightMap != null;
@@ -160,7 +160,7 @@ public class RecursiveExactVCImpl<V, E>
             index = visited.nextClearBit(index + 1))
         {
 
-            neighbors = new LinkedHashSet<>(neighborIndex.neighborsOf(vertices.get(index)));
+            neighbors = new LinkedHashSet<>(neighborCache.neighborsOf(vertices.get(index)));
             for (Iterator<V> it = neighbors.iterator(); it.hasNext();) // Exclude all visited
                                                                        // vertices
                 if (visited.get(vertexIDDictionary.get(it.next())))

@@ -20,8 +20,8 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.NeighborIndex.*;
 import org.jgrapht.event.*;
+import org.jgrapht.alg.NeighborIndex.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -40,7 +40,10 @@ import org.jgrapht.event.*;
  *
  * @author Charles Fry
  * @since Dec 13, 2005
+ * 
+ * @deprecated Use {@link org.jgrapht.alg.util.NeighborCache} instead.
  */
+@Deprecated
 public class DirectedNeighborIndex<V, E>
     implements GraphListener<V, E>
 {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by Charles Fry and Contributors.
+ * (C) Copyright 2017-2017, by Szabolcs Besenyei and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,69 +15,96 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.NeighborCache;
-import org.jgrapht.event.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
 import org.jgrapht.util.ModifiableInteger;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
  * {@link Graphs}, they are re-calculated at each invocation by walking a vertex's incident edges,
  * which becomes inordinately expensive when performed often.
- *
- * <p>
- * Edge direction is ignored when evaluating neighbors; to take edge direction into account when
- * indexing neighbors, use {@link DirectedNeighborIndex}.
- *
- * <p>
- * A vertex's neighbors are cached the first time they are asked for (i.e. the index is built on
- * demand). The index will only be updated automatically if it is added to the associated graph as a
- * listener. If it is added as a listener to a graph other than the one it indexes, results are
- * undefined.
- * </p>
- *
- * @param <V> the graph vertex type
- * @param <E> the graph edge type
- *
- * @author Charles Fry
- * @since Dec 13, 2005
  * 
- * @deprecated Use {@link org.jgrapht.alg.util.NeighborCache} instead.
+ * <p>
+ * The cache also keeps track of successors and predecessors for each vertex. This means that the
+ * result of the union of calling predecessorsOf(v) and successorsOf(v) is equal to the result of
+ * calling neighborsOf(v) for a given vertex v.
+ * 
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ * 
+ * @author Szabolcs Besenyei
+ * @since November 2017
  */
-@Deprecated
-public class NeighborIndex<V, E>
+public class NeighborCache<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, Neighbors<V>> neighborMap = new HashMap<>();
+    private Map<V, Neighbors<V>> successors = new HashMap<>();
+    private Map<V, Neighbors<V>> predecessors = new HashMap<>();
+    private Map<V, Neighbors<V>> neighbors = new HashMap<>();
+
     private Graph<V, E> graph;
 
     /**
-     * Creates a neighbor index for the specified undirected graph.
-     *
-     * @param g the graph for which a neighbor index is to be created.
+     * Constructor
+     * 
+     * @param graph the input graph
+     * @throws NullPointerException if the input graph is null
      */
-    public NeighborIndex(Graph<V, E> g)
+    public NeighborCache(Graph<V, E> graph)
     {
-        // no need to distinguish directedgraphs as we don't do traversals
-        graph = g;
+        this.graph = Objects.requireNonNull(graph);
     }
 
     /**
-     * Returns the set of vertices which are adjacent to a specified vertex. The returned set is
-     * backed by the index, and will be updated when the graph changes as long as the index has been
-     * added as a listener to the graph.
-     *
-     * @param v the vertex whose neighbors are desired
-     *
-     * @return all unique neighbors of the specified vertex
+     * Returns the unique predecessors of the given vertex if it exists in the cache, otherwise it
+     * is initialized.
+     * 
+     * @param v the given vertex
+     * @return the unique predecessors of the given vertex
+     */
+    public Set<V> predecessorsOf(V v)
+    {
+        return fetch(v, predecessors, k -> new Neighbors<>(Graphs.predecessorListOf(graph, v)));
+    }
+
+    /**
+     * Returns the unique successors of the given vertex if it exists in the cache, otherwise it is
+     * initialized.
+     * 
+     * @param v the given vertex
+     * @return the unique successors of the given vertex
+     */
+    public Set<V> successorsOf(V v)
+    {
+        return fetch(v, successors, k -> new Neighbors<>(Graphs.successorListOf(graph, v)));
+    }
+
+    /**
+     * Returns the unique neighbors of the given vertex if it exists in the cache, otherwise it is
+     * initialized.
+     * 
+     * @param v the given vertex
+     * @return the unique neighbors of the given vertex
      */
     public Set<V> neighborsOf(V v)
     {
-        return getNeighbors(v).getNeighbors();
+        return fetch(v, neighbors, k -> new Neighbors<>(Graphs.neighborListOf(graph, v)));
     }
 
     /**
@@ -85,7 +112,7 @@ public class NeighborIndex<V, E>
      * multigraph, vertices may appear more than once in the returned list. Because a list of
      * neighbors can not be efficiently maintained, it is reconstructed on every invocation, by
      * duplicating entries in the neighbor set. It is thus more efficient to use
-     * {@link #neighborsOf(Object)} unless duplicate neighbors are important.
+     * {@link #neighborsOf} unless duplicate neighbors are important.
      *
      * @param v the vertex whose neighbors are desired
      *
@@ -93,12 +120,19 @@ public class NeighborIndex<V, E>
      */
     public List<V> neighborListOf(V v)
     {
-        return getNeighbors(v).getNeighborList();
+        Neighbors<V> nbrs = neighbors.get(v);
+        if (nbrs == null) {
+            nbrs = new Neighbors<>(Graphs.neighborListOf(graph, v));
+            neighbors.put(v, nbrs);
+        }
+        return nbrs.getNeighborList();
     }
 
-    /**
-     * @see GraphListener#edgeAdded(GraphEdgeChangeEvent)
-     */
+    private Set<V> fetch(V vertex, Map<V, Neighbors<V>> map, Function<V, Neighbors<V>> func)
+    {
+        return map.computeIfAbsent(vertex, func).getNeighbors();
+    }
+
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
@@ -106,65 +140,58 @@ public class NeighborIndex<V, E>
         V source = graph.getEdgeSource(edge);
         V target = graph.getEdgeTarget(edge);
 
-        // if a map does not already contain an entry,
-        // then skip addNeighbor, since instantiating the map
-        // will take care of processing the edge (which has already
-        // been added)
-
-        if (neighborMap.containsKey(source)) {
-            getNeighbors(source).addNeighbor(target);
-        } else {
-            getNeighbors(source);
+        if (successors.containsKey(source)) {
+            successors.get(source).addNeighbor(target);
         }
-        if (neighborMap.containsKey(target)) {
-            getNeighbors(target).addNeighbor(source);
-        } else {
-            getNeighbors(target);
+
+        if (predecessors.containsKey(target)) {
+            predecessors.get(target).addNeighbor(source);
+        }
+
+        if (neighbors.containsKey(source)) {
+            neighbors.get(source).addNeighbor(target);
+        }
+
+        if (neighbors.containsKey(target)) {
+            neighbors.get(target).addNeighbor(source);
         }
     }
 
-    /**
-     * @see GraphListener#edgeRemoved(GraphEdgeChangeEvent)
-     */
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
-        if (neighborMap.containsKey(source)) {
-            neighborMap.get(source).removeNeighbor(target);
+
+        if (successors.containsKey(source)) {
+            successors.get(source).removeNeighbor(target);
         }
-        if (neighborMap.containsKey(target)) {
-            neighborMap.get(target).removeNeighbor(source);
+
+        if (predecessors.containsKey(target)) {
+            predecessors.get(target).removeNeighbor(source);
+        }
+
+        if (neighbors.containsKey(source)) {
+            neighbors.get(source).removeNeighbor(target);
+        }
+
+        if (neighbors.containsKey(target)) {
+            neighbors.get(target).removeNeighbor(source);
         }
     }
 
-    /**
-     * @see VertexSetListener#vertexAdded(GraphVertexChangeEvent)
-     */
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
-        // nothing to cache until there are edges
+        // Nothing to cache until there are edges
     }
 
-    /**
-     * @see VertexSetListener#vertexRemoved(GraphVertexChangeEvent)
-     */
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
-        neighborMap.remove(e.getVertex());
-    }
-
-    private Neighbors<V> getNeighbors(V v)
-    {
-        Neighbors<V> neighbors = neighborMap.get(v);
-        if (neighbors == null) {
-            neighbors = new Neighbors<>(Graphs.neighborListOf(graph, v));
-            neighborMap.put(v, neighbors);
-        }
-        return neighbors;
+        successors.remove(e.getVertex());
+        predecessors.remove(e.getVertex());
+        neighbors.remove(e.getVertex());
     }
 
     /**
@@ -229,7 +256,7 @@ public class NeighborIndex<V, E>
             }
             return neighbors;
         }
-        
+
         @Override
         public String toString()
         {
@@ -237,5 +264,3 @@ public class NeighborIndex<V, E>
         }
     }
 }
-
-// End NeighborIndex.java
