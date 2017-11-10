@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 20017-2017, by Szabolcs Besenyei and Contributors.
+ * (C) Copyright 2017-2017, by Szabolcs Besenyei and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,12 @@
  */
 package org.jgrapht.alg.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +33,7 @@ import org.jgrapht.Graphs;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.util.ModifiableInteger;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -48,9 +54,9 @@ import org.jgrapht.event.GraphVertexChangeEvent;
 public class NeighborCache<V, E>
     implements GraphListener<V, E>
 {
-    private Map<V, NeighborIndex.Neighbors<V>> successors = new HashMap<>();
-    private Map<V, NeighborIndex.Neighbors<V>> predecessors = new HashMap<>();
-    private Map<V, NeighborIndex.Neighbors<V>> neighbors = new HashMap<>();
+    private Map<V, Neighbors<V>> successors = new HashMap<>();
+    private Map<V, Neighbors<V>> predecessors = new HashMap<>();
+    private Map<V, Neighbors<V>> neighbors = new HashMap<>();
 
     private Graph<V, E> graph;
 
@@ -77,7 +83,7 @@ public class NeighborCache<V, E>
         return fetch(
             v,
             predecessors,
-            k -> new NeighborIndex.Neighbors<>(Graphs.predecessorListOf(graph, v)));
+            k -> new Neighbors<>(Graphs.predecessorListOf(graph, v)));
     }
 
     /**
@@ -92,7 +98,7 @@ public class NeighborCache<V, E>
         return fetch(
             v,
             successors,
-            k -> new NeighborIndex.Neighbors<>(Graphs.successorListOf(graph, v)));
+            k -> new Neighbors<>(Graphs.successorListOf(graph, v)));
     }
 
     /**
@@ -107,12 +113,33 @@ public class NeighborCache<V, E>
         return fetch(
             v,
             neighbors,
-            k -> new NeighborIndex.Neighbors<>(Graphs.neighborListOf(graph, v)));
+            k -> new Neighbors<>(Graphs.neighborListOf(graph, v)));
+    }
+
+    /**
+     * Returns a list of vertices which are adjacent to a specified vertex. If the graph is a
+     * multigraph, vertices may appear more than once in the returned list. Because a list of
+     * neighbors can not be efficiently maintained, it is reconstructed on every invocation, by
+     * duplicating entries in the neighbor set. It is thus more efficient to use
+     * {@link #neighborsOf} unless duplicate neighbors are important.
+     *
+     * @param v the vertex whose neighbors are desired
+     *
+     * @return all neighbors of the specified vertex
+     */
+    public List<V> neighborListOf(V v)
+    {
+        Neighbors<V> nbrs = neighbors.get(v);
+        if (nbrs == null) {
+            nbrs = new Neighbors<>(Graphs.neighborListOf(graph, v));
+            neighbors.put(v, nbrs);
+        }
+        return nbrs.getNeighborList();
     }
 
     private Set<V> fetch(V vertex,
-        Map<V, NeighborIndex.Neighbors<V>> map,
-        Function<V, NeighborIndex.Neighbors<V>> func)
+        Map<V, Neighbors<V>> map,
+        Function<V, Neighbors<V>> func)
     {
         return map.computeIfAbsent(vertex, func).getNeighbors();
     }
@@ -184,4 +211,73 @@ public class NeighborCache<V, E>
         neighbors.remove(e.getVertex());
     }
 
+    /**
+     * Stores cached neighbors for a single vertex. Includes support for live neighbor sets and
+     * duplicate neighbors.
+     */
+    static class Neighbors<V>
+    {
+        private Map<V, ModifiableInteger> neighborCounts = new LinkedHashMap<>();
+
+        // TODO could eventually make neighborSet modifiable, resulting
+        // in edge removals from the graph
+        private Set<V> neighborSet = Collections.unmodifiableSet(neighborCounts.keySet());
+
+        public Neighbors(Collection<V> neighbors)
+        {
+            // add all current neighbors
+            for (V neighbor : neighbors) {
+                addNeighbor(neighbor);
+            }
+        }
+
+        public void addNeighbor(V v)
+        {
+            ModifiableInteger count = neighborCounts.get(v);
+            if (count == null) {
+                count = new ModifiableInteger(1);
+                neighborCounts.put(v, count);
+            } else {
+                count.increment();
+            }
+        }
+
+        public void removeNeighbor(V v)
+        {
+            ModifiableInteger count = neighborCounts.get(v);
+            if (count == null) {
+                throw new IllegalArgumentException(
+                    "Attempting to remove a neighbor that wasn't present");
+            }
+
+            count.decrement();
+            if (count.getValue() == 0) {
+                neighborCounts.remove(v);
+            }
+        }
+
+        public Set<V> getNeighbors()
+        {
+            return neighborSet;
+        }
+
+        public List<V> getNeighborList()
+        {
+            List<V> neighbors = new ArrayList<>();
+            for (Map.Entry<V, ModifiableInteger> entry : neighborCounts.entrySet()) {
+                V v = entry.getKey();
+                int count = entry.getValue().intValue();
+                for (int i = 0; i < count; i++) {
+                    neighbors.add(v);
+                }
+            }
+            return neighbors;
+        }
+
+        @Override
+        public String toString()
+        {
+            return neighborSet.toString();
+        }
+    }
 }
