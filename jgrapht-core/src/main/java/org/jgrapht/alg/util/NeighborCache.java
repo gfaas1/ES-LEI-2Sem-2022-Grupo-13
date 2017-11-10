@@ -41,9 +41,9 @@ import org.jgrapht.util.ModifiableInteger;
  * which becomes inordinately expensive when performed often.
  * 
  * <p>
- * The cache also keeps track of successors and predecessors for each vertex.
- * This means that the result of the union of calling predecessorsOf(v) and successorsOf(v) is 
- * equal to the result of calling neighborsOf(v) for a given vertex v.
+ * The cache also keeps track of successors and predecessors for each vertex. This means that the
+ * result of the union of calling predecessorsOf(v) and successorsOf(v) is equal to the result of
+ * calling neighborsOf(v) for a given vertex v.
  * 
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -80,10 +80,7 @@ public class NeighborCache<V, E>
      */
     public Set<V> predecessorsOf(V v)
     {
-        return fetch(
-            v,
-            predecessors,
-            k -> new Neighbors<>(Graphs.predecessorListOf(graph, v)));
+        return fetch(v, predecessors, k -> new Neighbors<>(Graphs.predecessorListOf(graph, v)));
     }
 
     /**
@@ -95,10 +92,7 @@ public class NeighborCache<V, E>
      */
     public Set<V> successorsOf(V v)
     {
-        return fetch(
-            v,
-            successors,
-            k -> new Neighbors<>(Graphs.successorListOf(graph, v)));
+        return fetch(v, successors, k -> new Neighbors<>(Graphs.successorListOf(graph, v)));
     }
 
     /**
@@ -110,10 +104,7 @@ public class NeighborCache<V, E>
      */
     public Set<V> neighborsOf(V v)
     {
-        return fetch(
-            v,
-            neighbors,
-            k -> new Neighbors<>(Graphs.neighborListOf(graph, v)));
+        return fetch(v, neighbors, k -> new Neighbors<>(Graphs.neighborListOf(graph, v)));
     }
 
     /**
@@ -137,9 +128,7 @@ public class NeighborCache<V, E>
         return nbrs.getNeighborList();
     }
 
-    private Set<V> fetch(V vertex,
-        Map<V, Neighbors<V>> map,
-        Function<V, Neighbors<V>> func)
+    private Set<V> fetch(V vertex, Map<V, Neighbors<V>> map, Function<V, Neighbors<V>> func)
     {
         return map.computeIfAbsent(vertex, func).getNeighbors();
     }
@@ -153,25 +142,18 @@ public class NeighborCache<V, E>
 
         if (successors.containsKey(source)) {
             successors.get(source).addNeighbor(target);
-        } else {
-            successorsOf(source);
         }
 
         if (predecessors.containsKey(target)) {
             predecessors.get(target).addNeighbor(source);
-        } else {
-            predecessorsOf(target);
         }
 
         if (neighbors.containsKey(source)) {
             neighbors.get(source).addNeighbor(target);
-        } else {
-            neighborsOf(source);
         }
+
         if (neighbors.containsKey(target)) {
             neighbors.get(target).addNeighbor(source);
-        } else {
-            neighborsOf(target);
         }
     }
 
@@ -192,6 +174,7 @@ public class NeighborCache<V, E>
         if (neighbors.containsKey(source)) {
             neighbors.get(source).removeNeighbor(target);
         }
+
         if (neighbors.containsKey(target)) {
             neighbors.get(target).removeNeighbor(source);
         }

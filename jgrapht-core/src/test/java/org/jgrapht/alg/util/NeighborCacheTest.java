@@ -28,7 +28,9 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.SimpleGraph;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * .
@@ -42,6 +44,9 @@ public class NeighborCacheTest
     private static final String V1 = "v1";
     private static final String V2 = "v2";
     private static final String V3 = "v3";
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -174,6 +179,50 @@ public class NeighborCacheTest
         assertThat(neighborsOfB.size(), is(0));
         assertThat(neighborsOfC.size(), is(0));
 
+    }
+
+    @Test
+    public void testNeighborListCreation()
+    {
+        ListenableGraph<String, DefaultEdge> graph =
+            new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
+
+        final String A = "A";
+        final String B = "B";
+        final String C = "C";
+        final String D = "D";
+
+        NeighborCache<String, DefaultEdge> cache = new NeighborCache<>(graph);
+
+        graph.addGraphListener(cache);
+
+        graph.addVertex(A);
+        graph.addVertex(B);
+        graph.addVertex(C);
+        graph.addVertex(D);
+
+        graph.addEdge(D, A);
+        graph.addEdge(D, B);
+        graph.addEdge(D, C);
+
+        assertThat(cache.neighborListOf(B), hasItems(D));
+        assertThat(cache.neighborListOf(B).size(), is(1));
+
+        graph.addEdge(A, B);
+
+        assertThat(cache.neighborListOf(B), hasItems(A, D));
+        assertThat(cache.neighborListOf(B).size(), is(2));
+
+        graph.removeEdge(D, B);
+
+        assertThat(cache.neighborListOf(B), hasItems(A));
+        assertThat(cache.neighborListOf(B).size(), is(1));
+
+        graph.removeVertex(B);
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("no such vertex");
+        cache.neighborListOf(B);
     }
 }
 
