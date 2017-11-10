@@ -17,13 +17,10 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.Graph;
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
 
 /**
  * Importer which reads graphs in graph6 or sparse6 format. A description of the format can be found

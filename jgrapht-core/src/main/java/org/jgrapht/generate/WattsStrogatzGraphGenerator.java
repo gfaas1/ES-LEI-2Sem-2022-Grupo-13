@@ -17,15 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
+import org.jgrapht.*;
 
 /**
  * Watts-Strogatz small-world graph generator.

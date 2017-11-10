@@ -17,15 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
 /**
  * A degeneracy ordering iterator.

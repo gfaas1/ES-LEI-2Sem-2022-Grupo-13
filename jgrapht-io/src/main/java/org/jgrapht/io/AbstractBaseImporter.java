@@ -17,9 +17,9 @@
  */
 package org.jgrapht.io;
 
-import java.util.Objects;
+import java.util.*;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * Base implementation for a graph importer.

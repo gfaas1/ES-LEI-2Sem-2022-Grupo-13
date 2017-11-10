@@ -41,7 +41,8 @@ public interface SpanningTreeAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    interface SpanningTree<E> extends Iterable<E>
+    interface SpanningTree<E>
+        extends Iterable<E>
     {
         /**
          * Returns the weight of the spanning tree.
@@ -59,10 +60,12 @@ public interface SpanningTreeAlgorithm<E>
 
         /**
          * Returns an iterator over the edges in the spanning tree.
+         * 
          * @return iterator over the edges in the spanning tree.
          */
         @Override
-        default Iterator<E> iterator(){
+        default Iterator<E> iterator()
+        {
             return getEdges().iterator();
         }
     }

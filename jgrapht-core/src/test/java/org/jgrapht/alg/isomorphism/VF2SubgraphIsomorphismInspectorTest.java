@@ -609,8 +609,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-12: not connected graphs of different size */
 
-        Graph<Integer, DefaultEdge> dg6v4enc =
-            new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg6v4enc = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         dg6v4enc.addVertex(0);
         dg6v4enc.addVertex(1);
@@ -624,8 +623,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         dg6v4enc.addEdge(3, 1);
         dg6v4enc.addEdge(4, 5);
 
-        Graph<Integer, DefaultEdge> dg5v4enc =
-            new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg5v4enc = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         dg5v4enc.addVertex(6);
         dg5v4enc.addVertex(7);

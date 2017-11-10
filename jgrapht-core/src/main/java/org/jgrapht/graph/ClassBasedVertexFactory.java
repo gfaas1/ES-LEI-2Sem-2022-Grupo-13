@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
+import java.io.*;
 
 import org.jgrapht.*;
 

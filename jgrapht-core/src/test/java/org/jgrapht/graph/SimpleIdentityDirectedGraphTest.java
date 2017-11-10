@@ -90,7 +90,7 @@ public class SimpleIdentityDirectedGraphTest
         {
             return new DirectedSpecifics<>(this, new IdentityHashMap<>());
         }
-        
+
     }
 
     // ~ Instance fields --------------------------------------------------------
@@ -583,8 +583,7 @@ public class SimpleIdentityDirectedGraphTest
     {
         init();
 
-        Graph<Holder<String>, DefaultEdge> g =
-            new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
+        Graph<Holder<String>, DefaultEdge> g = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         Graph<Holder<String>, DefaultEdge> r = new EdgeReversedGraph<>(g);
 
         g.addVertex(v1);
@@ -611,8 +610,7 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     private void verifyReversal(
-        Graph<Holder<String>, DefaultEdge> g, Graph<Holder<String>, DefaultEdge> r,
-        DefaultEdge e)
+        Graph<Holder<String>, DefaultEdge> g, Graph<Holder<String>, DefaultEdge> r, DefaultEdge e)
     {
         assertTrue(r.containsVertex(v1));
         assertTrue(r.containsVertex(v2));

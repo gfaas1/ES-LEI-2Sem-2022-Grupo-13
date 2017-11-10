@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.traverse.DegeneracyOrderingIterator;
+import org.jgrapht.*;
+import org.jgrapht.traverse.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot and degeneracy ordering.

@@ -17,27 +17,17 @@
  */
 package org.jgrapht.perf.graph;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedAcyclicGraph;
-import org.jgrapht.graph.DirectedAcyclicGraphTest.LongVertexFactory;
-import org.jgrapht.graph.DirectedAcyclicGraphTest.RepeatableRandomGraphGenerator;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.options.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * A somewhat frivolous test of the performance difference between doing a full cycle detection

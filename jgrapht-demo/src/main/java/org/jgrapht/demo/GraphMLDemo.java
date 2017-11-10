@@ -21,12 +21,10 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.io.*;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.GraphMLExporter.*;
-
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.io.*;
+import org.jgrapht.io.GraphMLExporter.*;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in

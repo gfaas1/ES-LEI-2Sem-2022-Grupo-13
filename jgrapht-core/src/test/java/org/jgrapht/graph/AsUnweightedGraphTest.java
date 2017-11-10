@@ -54,8 +54,7 @@ public class AsUnweightedGraphTest
             new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         constructWeighted(directed);
 
-        Graph<String, DefaultWeightedEdge> unweighted =
-            new AsUnweightedGraph<>(directed);
+        Graph<String, DefaultWeightedEdge> unweighted = new AsUnweightedGraph<>(directed);
         checkView(directed, unweighted);
     }
 

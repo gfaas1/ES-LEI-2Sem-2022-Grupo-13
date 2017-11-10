@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.GraphBuilder;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 
 /**

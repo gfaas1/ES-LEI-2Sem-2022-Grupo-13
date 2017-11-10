@@ -22,7 +22,7 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
-import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 

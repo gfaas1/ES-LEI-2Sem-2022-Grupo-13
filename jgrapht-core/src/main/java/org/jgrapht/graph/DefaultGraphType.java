@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
+import java.io.*;
 
-import org.jgrapht.GraphType;
+import org.jgrapht.*;
 
 /**
  * Default implementation of the graph type.

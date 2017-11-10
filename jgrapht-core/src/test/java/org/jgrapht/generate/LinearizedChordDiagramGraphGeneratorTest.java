@@ -20,16 +20,10 @@ package org.jgrapht.generate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.Multigraph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * Tests for {@link LinearizedChordDiagramGraphGenerator}.

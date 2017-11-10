@@ -17,14 +17,10 @@
  */
 package org.jgrapht.ext;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
+import org.jgrapht.*;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).

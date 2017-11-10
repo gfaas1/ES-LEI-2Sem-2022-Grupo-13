@@ -17,41 +17,44 @@
  */
 package org.jgrapht.alg.matching;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import java.util.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * Tests for GreedyMaximumCardinalityMatching
+ * 
  * @author Joris Kinable
  */
-public class GreedyMaximumCardinalityMatchingTest extends TestCase{
-
+public class GreedyMaximumCardinalityMatchingTest
+    extends TestCase
+{
 
     /**
-     * Generate a number of random graphs, find a random matching and check whether the matching returned is valid.
-     * Not sorted
+     * Generate a number of random graphs, find a random matching and check whether the matching
+     * returned is valid. Not sorted
      */
-    public void testRandomGraphs(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator<>(200, 120);
-        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-        Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
+    public void testRandomGraphs()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+            new GnmRandomGraphGenerator<>(200, 120);
+        IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        for(int i=0; i<100; i++){
+        for (int i = 0; i < 100; i++) {
             generator.generateGraph(graph, vertexFactory, null);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaximumCardinalityMatching<>(graph, false);
-            MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
+            MatchingAlgorithm<Integer, DefaultEdge> matcher =
+                new GreedyMaximumCardinalityMatching<>(graph, false);
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m = matcher.getMatching();
 
             Set<Integer> matched = new HashSet<>();
-            double weight=0;
+            double weight = 0;
             for (DefaultEdge e : m.getEdges()) {
                 Integer source = graph.getEdgeSource(e);
                 Integer target = graph.getEdgeTarget(e);
@@ -68,21 +71,24 @@ public class GreedyMaximumCardinalityMatchingTest extends TestCase{
     }
 
     /**
-     * Generate a number of random graphs, find a random matching and check whether the matching returned is valid.
-     * Sorted.
+     * Generate a number of random graphs, find a random matching and check whether the matching
+     * returned is valid. Sorted.
      */
-    public void testRandomGraphs2(){
-        GraphGenerator<Integer, DefaultEdge, Integer> generator=new GnmRandomGraphGenerator<>(200, 120);
-        IntegerVertexFactory vertexFactory=new IntegerVertexFactory();
-        Graph<Integer, DefaultEdge> graph=new SimpleGraph<>(DefaultEdge.class);
+    public void testRandomGraphs2()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> generator =
+            new GnmRandomGraphGenerator<>(200, 120);
+        IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        for(int i=0; i<1; i++){
+        for (int i = 0; i < 1; i++) {
             generator.generateGraph(graph, vertexFactory, null);
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = new GreedyMaximumCardinalityMatching<>(graph, true);
-            MatchingAlgorithm.Matching<Integer, DefaultEdge> m=matcher.getMatching();
+            MatchingAlgorithm<Integer, DefaultEdge> matcher =
+                new GreedyMaximumCardinalityMatching<>(graph, true);
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m = matcher.getMatching();
 
             Set<Integer> matched = new HashSet<>();
-            double weight=0;
+            double weight = 0;
             for (DefaultEdge e : m.getEdges()) {
                 Integer source = graph.getEdgeSource(e);
                 Integer target = graph.getEdgeTarget(e);

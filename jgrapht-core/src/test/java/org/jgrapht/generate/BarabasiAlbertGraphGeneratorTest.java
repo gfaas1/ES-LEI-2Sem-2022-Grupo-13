@@ -20,12 +20,10 @@ package org.jgrapht.generate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * Tests for {@link BarabasiAlbertGraphGenerator}.
@@ -113,7 +111,7 @@ public class BarabasiAlbertGraphGeneratorTest
 
         assertEquals(20, g.vertexSet().size());
     }
-    
+
     @Test
     public void testUndirectedWithGraphWhichAlreadyHasSomeVertices()
     {
@@ -127,6 +125,5 @@ public class BarabasiAlbertGraphGeneratorTest
 
         assertEquals(11, g.vertexSet().size());
     }
-    
 
 }

@@ -17,23 +17,12 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.event.GraphEdgeChangeEvent;
-import org.jgrapht.event.GraphListener;
-import org.jgrapht.event.GraphVertexChangeEvent;
-import org.jgrapht.util.ModifiableInteger;
+import org.jgrapht.*;
+import org.jgrapht.event.*;
+import org.jgrapht.util.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from

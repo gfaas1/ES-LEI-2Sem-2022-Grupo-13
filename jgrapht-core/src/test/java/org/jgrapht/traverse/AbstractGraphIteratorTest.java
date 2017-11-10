@@ -49,7 +49,8 @@ public abstract class AbstractGraphIteratorTest
         doDirectedGraphTest(iterator);
     }
 
-    public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator){
+    public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
+    {
 
         result = new StringBuffer();
 

@@ -17,57 +17,62 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * Tests for GraphMeasurer
  *
  * @author Joris Kinable
  */
-public class GraphMeasurerTest {
+public class GraphMeasurerTest
+{
 
-    private final double EPSILON=0.000000001;
+    private final double EPSILON = 0.000000001;
 
-    private Graph<Integer, DefaultEdge> getGraph1(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6));
-        g.addEdge(0,1);
-        g.addEdge(1,2);
-        g.addEdge(1,3);
-        g.addEdge(1,5);
-        g.addEdge(3,4);
-        g.addEdge(5,6);
+    private Graph<Integer, DefaultEdge> getGraph1()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(1, 5);
+        g.addEdge(3, 4);
+        g.addEdge(5, 6);
         return g;
     }
 
-    private Graph<Integer, DefaultEdge> getGraph2(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0,1,2,3,4,5,6));
-        g.addEdge(0,1);
-        g.addEdge(1,2);
-        g.addEdge(1,3);
-        g.addEdge(1,4);
-        g.addEdge(1,5);
-        g.addEdge(5,6);
+    private Graph<Integer, DefaultEdge> getGraph2()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(1, 4);
+        g.addEdge(1, 5);
+        g.addEdge(5, 6);
         return g;
     }
 
     @Test
-    public void testVertexEccentricityG1(){
-        Graph<Integer,DefaultEdge> g1=getGraph1();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs=Arrays.asList(new FloydWarshallShortestPaths<>(g1), new JohnsonShortestPaths<>(g1, new IntegerVertexFactory(7)));
-        for(ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
-            GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1, spAlg);
+    public void testVertexEccentricityG1()
+    {
+        Graph<Integer, DefaultEdge> g1 = getGraph1();
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
+            new FloydWarshallShortestPaths<>(g1),
+            new JohnsonShortestPaths<>(g1, new IntegerVertexFactory(7)));
+        for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
+            GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
             assertEquals(3.0, vertexEccentricity.get(0), EPSILON);
             assertEquals(2.0, vertexEccentricity.get(1), EPSILON);
@@ -80,11 +85,14 @@ public class GraphMeasurerTest {
     }
 
     @Test
-    public void testVertexEccentricityG2(){
-        Graph<Integer,DefaultEdge> g2=getGraph2();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs=Arrays.asList(new FloydWarshallShortestPaths<>(g2), new JohnsonShortestPaths<>(g2, new IntegerVertexFactory(7)));
-        for(ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
-            GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2, spAlg);
+    public void testVertexEccentricityG2()
+    {
+        Graph<Integer, DefaultEdge> g2 = getGraph2();
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
+            new FloydWarshallShortestPaths<>(g2),
+            new JohnsonShortestPaths<>(g2, new IntegerVertexFactory(7)));
+        for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
+            GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
             assertEquals(3.0, vertexEccentricity.get(0), EPSILON);
             assertEquals(2.0, vertexEccentricity.get(1), EPSILON);
@@ -97,88 +105,100 @@ public class GraphMeasurerTest {
     }
 
     @Test
-    public void testDiameterEmptyGraph(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
-        double diameter=gdm.getDiameter();
+    public void testDiameterEmptyGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g);
+        double diameter = gdm.getDiameter();
         assertEquals(0.0, diameter, EPSILON);
     }
 
     @Test
-    public void testDiameterDisconnectedGraph(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0,1));
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
-        double diameter=gdm.getDiameter();
+    public void testDiameterDisconnectedGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1));
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g);
+        double diameter = gdm.getDiameter();
         assertTrue(Double.isInfinite(diameter));
     }
 
     @Test
-    public void testDiameterDirectedGraph1(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testDiameterDirectedGraph1()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(g, 0, 1, 10);
-        GraphMeasurer<Integer, DefaultWeightedEdge> gdm=new GraphMeasurer<>(g);
-        double diameter=gdm.getDiameter();
+        GraphMeasurer<Integer, DefaultWeightedEdge> gdm = new GraphMeasurer<>(g);
+        double diameter = gdm.getDiameter();
         assertTrue(Double.isInfinite(diameter));
     }
 
     @Test
-    public void testDiameterDirectedGraph2(){
-        Graph<Integer, DefaultWeightedEdge> g=new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testDiameterDirectedGraph2()
+    {
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(g, 0, 1, 10);
         Graphs.addEdgeWithVertices(g, 1, 0, 12);
-        GraphMeasurer<Integer, DefaultWeightedEdge> gdm=new GraphMeasurer<>(g);
-        double diameter=gdm.getDiameter();
+        GraphMeasurer<Integer, DefaultWeightedEdge> gdm = new GraphMeasurer<>(g);
+        double diameter = gdm.getDiameter();
         assertEquals(12.0, diameter, EPSILON);
     }
 
     @Test
-    public void testRadiusEmptyGraph(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
-        double radius=gdm.getRadius();
+    public void testRadiusEmptyGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g);
+        double radius = gdm.getRadius();
         assertEquals(0.0, radius, EPSILON);
     }
 
     @Test
-    public void testRadiusDisconnectedGraph(){
-        Graph<Integer, DefaultEdge> g=new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0,1));
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g);
-        double radius=gdm.getRadius();
+    public void testRadiusDisconnectedGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(g, Arrays.asList(0, 1));
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g);
+        double radius = gdm.getRadius();
         assertTrue(Double.isInfinite(radius));
     }
 
     @Test
-    public void testGraphCenterG1(){
-        Graph<Integer,DefaultEdge> g1=getGraph1();
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1);
-        Set<Integer> graphCenter1=gdm.getGraphCenter();
+    public void testGraphCenterG1()
+    {
+        Graph<Integer, DefaultEdge> g1 = getGraph1();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
+        Set<Integer> graphCenter1 = gdm.getGraphCenter();
         assertEquals(new HashSet<>(Collections.singletonList(1)), graphCenter1);
     }
 
     @Test
-    public void testGraphCenterG2(){
-        Graph<Integer,DefaultEdge> g2=getGraph2();
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2);
-        Set<Integer> graphCenter2=gdm.getGraphCenter();
-        assertEquals(new HashSet<>(Arrays.asList(1,5)), graphCenter2);
+    public void testGraphCenterG2()
+    {
+        Graph<Integer, DefaultEdge> g2 = getGraph2();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
+        Set<Integer> graphCenter2 = gdm.getGraphCenter();
+        assertEquals(new HashSet<>(Arrays.asList(1, 5)), graphCenter2);
     }
 
     @Test
-    public void testGraphPeripheryG1(){
-        Graph<Integer,DefaultEdge> g1=getGraph1();
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g1);
-        Set<Integer> graphPeriphery1=gdm.getGraphPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(4,6)), graphPeriphery1);
+    public void testGraphPeripheryG1()
+    {
+        Graph<Integer, DefaultEdge> g1 = getGraph1();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
+        Set<Integer> graphPeriphery1 = gdm.getGraphPeriphery();
+        assertEquals(new HashSet<>(Arrays.asList(4, 6)), graphPeriphery1);
     }
 
     @Test
-    public void testGraphPeripheryG2(){
-        Graph<Integer,DefaultEdge> g2=getGraph2();
-        GraphMeasurer<Integer, DefaultEdge> gdm=new GraphMeasurer<>(g2);
-        Set<Integer> graphPeriphery2=gdm.getGraphPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(0,2,3,4,6)), graphPeriphery2);
+    public void testGraphPeripheryG2()
+    {
+        Graph<Integer, DefaultEdge> g2 = getGraph2();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
+        Set<Integer> graphPeriphery2 = gdm.getGraphPeriphery();
+        assertEquals(new HashSet<>(Arrays.asList(0, 2, 3, 4, 6)), graphPeriphery2);
     }
 
 }

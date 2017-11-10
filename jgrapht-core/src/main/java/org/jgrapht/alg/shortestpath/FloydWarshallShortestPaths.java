@@ -28,10 +28,10 @@ import org.jgrapht.util.*;
  * 
  * <p>
  * The <a href="http://en.wikipedia.org/wiki/Floyd-Warshall_algorithm"> Floyd-Warshall algorithm</a>
- * finds all shortest paths (all $n^2$ of them) in $O(n^3)$ time. Note that during construction time,
- * no computations are performed! All computations are
- * performed the first time one of the member methods of this class is invoked. The results are
- * stored, so all subsequent calls to the same method are computationally efficient.
+ * finds all shortest paths (all $n^2$ of them) in $O(n^3)$ time. Note that during construction
+ * time, no computations are performed! All computations are performed the first time one of the
+ * member methods of this class is invoked. The results are stored, so all subsequent calls to the
+ * same method are computationally efficient.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -78,7 +78,7 @@ public class FloydWarshallShortestPaths<V, E>
         lazyCalculateMatrix();
 
         // count shortest paths
-        int n=vertices.size();
+        int n = vertices.size();
         int nShortestPaths = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {

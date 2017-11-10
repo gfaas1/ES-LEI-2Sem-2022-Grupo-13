@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Defines a provider of edges of type E

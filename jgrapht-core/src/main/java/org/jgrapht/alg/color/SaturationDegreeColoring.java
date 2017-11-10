@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.Array;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * The Dsatur greedy coloring algorithm.
@@ -53,8 +48,7 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
  * possible improvements in the running time.
  * <ul>
  * <li>J. S. Turner. Almost all k-colorable graphs are easy to color. Journal of Algorithms.
- * 9(1):63--82, 1988.
- * </li>
+ * 9(1):63--82, 1988.</li>
  * </ul>
  *
  * @param <V> the graph vertex type

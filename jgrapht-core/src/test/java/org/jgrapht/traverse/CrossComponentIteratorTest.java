@@ -17,21 +17,22 @@
  */
 package org.jgrapht.traverse;
 
+import java.util.*;
+
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
-
-import java.util.Arrays;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
  * {@link org.jgrapht.traverse.DepthFirstIterator} classes.
  *
- * @author Patrick Sharp (I pretty much just ripped off Liviu Rau's code from AbstractGraphIteratorTest)
+ * @author Patrick Sharp (I pretty much just ripped off Liviu Rau's code from
+ *         AbstractGraphIteratorTest)
  * @since May 15, 2017
  */
 public abstract class CrossComponentIteratorTest
-        extends AbstractGraphIteratorTest
+    extends AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -48,7 +49,8 @@ public abstract class CrossComponentIteratorTest
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
-        AbstractGraphIterator<String, DefaultWeightedEdge> iterator = createIterator(graph, Arrays.asList("orphan", "7", "3"));
+        AbstractGraphIterator<String, DefaultWeightedEdge> iterator =
+            createIterator(graph, Arrays.asList("orphan", "7", "3"));
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
@@ -65,7 +67,8 @@ public abstract class CrossComponentIteratorTest
         assertEquals(getExpectedCCFinishString(), listener.getFinishString());
     }
 
-    public void testDirectedGraphNullConstructors(){
+    public void testDirectedGraphNullConstructors()
+    {
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
         doDirectedGraphTest(createIterator(graph, (String) null));
         doDirectedGraphTest(createIterator(graph, (Iterable<String>) null));
@@ -82,10 +85,8 @@ public abstract class CrossComponentIteratorTest
         return "";
     }
 
-
-
     abstract AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
-            Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex);
+        Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex);
 
     // ~ Inner Classes ----------------------------------------------------------
 
@@ -95,7 +96,7 @@ public abstract class CrossComponentIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-            implements TraversalListener<String, E>
+        implements TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;
@@ -109,29 +110,28 @@ public abstract class CrossComponentIteratorTest
         public void connectedComponentFinished(ConnectedComponentTraversalEvent e)
         {
             switch (componentNumber) {
-                case 1:
-                    assertEquals(getExpectedCCStr1(), result.toString());
-                    assertEquals(1, numComponentVertices);
+            case 1:
+                assertEquals(getExpectedCCStr1(), result.toString());
+                assertEquals(1, numComponentVertices);
 
-                    break;
+                break;
 
-                case 2:
-                    assertEquals(getExpectedCCStr2(), result.toString());
-                    assertEquals(5, numComponentVertices);
+            case 2:
+                assertEquals(getExpectedCCStr2(), result.toString());
+                assertEquals(5, numComponentVertices);
 
-                    break;
+                break;
 
-                case 3:
-                    assertEquals(getExpectedCCStr3(), result.toString());
-                    assertEquals(4, numComponentVertices);
+            case 3:
+                assertEquals(getExpectedCCStr3(), result.toString());
+                assertEquals(4, numComponentVertices);
 
-                    break;
+                break;
 
+            default:
+                assertFalse();
 
-                default:
-                    assertFalse();
-
-                    break;
+                break;
             }
 
             numComponentVertices = 0;

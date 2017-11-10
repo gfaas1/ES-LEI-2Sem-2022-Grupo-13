@@ -37,8 +37,7 @@ public abstract class MinimumSourceSinkCutTest
         Graph<Integer, DefaultWeightedEdge> network);
 
     private void runTestDirected(
-        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
-        double expectedCutWeight)
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink, double expectedCutWeight)
     {
         network.addVertex(source);
         network.addVertex(sink);
@@ -55,9 +54,9 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     void verifyDirected(
-        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
-        double expectedCutWeight, double cutWeight, Set<Integer> sourcePartition,
-        Set<Integer> sinkPartition, Set<DefaultWeightedEdge> cutEdges)
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink, double expectedCutWeight,
+        double cutWeight, Set<Integer> sourcePartition, Set<Integer> sinkPartition,
+        Set<DefaultWeightedEdge> cutEdges)
     {
 
         assertEquals(expectedCutWeight, cutWeight);
@@ -81,8 +80,7 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     private void runTestUndirected(
-        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
-        double expectedCutWeight)
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink, double expectedCutWeight)
     {
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> mc = createSolver(network);
         double cutWeight = mc.calculateMinCut(source, sink);
@@ -96,9 +94,9 @@ public abstract class MinimumSourceSinkCutTest
     }
 
     void verifyUndirected(
-        Graph<Integer, DefaultWeightedEdge> network, int source, int sink,
-        double expectedCutWeight, double cutWeight, Set<Integer> sourcePartition,
-        Set<Integer> sinkPartition, Set<DefaultWeightedEdge> cutEdges)
+        Graph<Integer, DefaultWeightedEdge> network, int source, int sink, double expectedCutWeight,
+        double cutWeight, Set<Integer> sourcePartition, Set<Integer> sinkPartition,
+        Set<DefaultWeightedEdge> cutEdges)
     {
 
         assertEquals(expectedCutWeight, cutWeight);

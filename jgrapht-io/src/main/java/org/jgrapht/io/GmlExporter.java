@@ -20,7 +20,7 @@ package org.jgrapht.io;
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.*;
 import org.jgrapht.*;
 
 /**

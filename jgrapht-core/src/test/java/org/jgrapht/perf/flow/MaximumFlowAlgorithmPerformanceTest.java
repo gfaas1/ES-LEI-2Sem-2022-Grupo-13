@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.openjdk.jmh.annotations.*;

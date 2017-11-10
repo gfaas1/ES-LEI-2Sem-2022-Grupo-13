@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Type to handle updates to a component when an import gets more information about it after it has

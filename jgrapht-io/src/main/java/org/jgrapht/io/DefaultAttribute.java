@@ -17,7 +17,7 @@
  */
 package org.jgrapht.io;
 
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Default implementation of an attribute.

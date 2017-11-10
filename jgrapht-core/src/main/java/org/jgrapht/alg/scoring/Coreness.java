@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.jgrapht.*;

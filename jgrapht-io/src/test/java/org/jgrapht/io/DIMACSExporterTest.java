@@ -25,9 +25,6 @@ import java.io.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.DIMACSExporter;
-import org.jgrapht.io.DIMACSFormat;
-import org.jgrapht.io.ExportException;
 import org.junit.*;
 
 /**

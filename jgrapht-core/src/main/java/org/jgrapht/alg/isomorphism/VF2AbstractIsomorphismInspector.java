@@ -60,22 +60,24 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
     {
         GraphType type1 = graph1.getType();
         GraphType type2 = graph2.getType();
-        if (type1.isPseudograph() || type1.isMultigraph() || type2.isMultigraph() || type2.isPseudograph()) { 
+        if (type1.isPseudograph() || type1.isMultigraph() || type2.isMultigraph()
+            || type2.isPseudograph())
+        {
             throw new UnsupportedOperationException(
                 "graphs with multiple " + "edges are not supported");
         }
 
-        if (type1.isMixed() || type2.isMixed()) { 
-            throw new UnsupportedOperationException(
-                "mixed graphs not supported");
+        if (type1.isMixed() || type2.isMixed()) {
+            throw new UnsupportedOperationException("mixed graphs not supported");
         }
-        
-        if (type1.isUndirected() && type2.isDirected() || 
-            type1.isDirected() && type2.isUndirected()) { 
+
+        if (type1.isUndirected() && type2.isDirected()
+            || type1.isDirected() && type2.isUndirected())
+        {
             throw new IllegalArgumentException(
                 "can not match directed with " + "undirected graphs");
         }
-            
+
         this.graph1 = graph1;
         this.graph2 = graph2;
         this.vertexComparator = vertexComparator;

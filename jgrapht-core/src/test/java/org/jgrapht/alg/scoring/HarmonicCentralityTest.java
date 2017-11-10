@@ -19,14 +19,10 @@ package org.jgrapht.alg.scoring;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * Unit tests for harmonic centrality.

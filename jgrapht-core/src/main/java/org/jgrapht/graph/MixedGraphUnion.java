@@ -17,9 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;

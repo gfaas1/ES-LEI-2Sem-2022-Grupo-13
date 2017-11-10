@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg;
 
-
-import junit.framework.*;
-import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  */
@@ -68,7 +68,8 @@ public class TransitiveClosureTest
 
     public void testNoVerticesDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
 
         TransitiveClosure.INSTANCE.closeDirectedAcyclicGraph(graph);
 
@@ -77,7 +78,8 @@ public class TransitiveClosureTest
 
     public void testEmptyDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
         int n = 10;
         EmptyGraphGenerator<Integer, DefaultEdge> gen = new EmptyGraphGenerator<>(n);
         gen.generateGraph(graph, new IntegerVertexFactory(), null);
@@ -89,8 +91,10 @@ public class TransitiveClosureTest
 
     public void testCompleteBipartiteDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
-        CompleteBipartiteGraphGenerator<Integer, DefaultEdge> gen = new CompleteBipartiteGraphGenerator<>(5, 5);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
+        CompleteBipartiteGraphGenerator<Integer, DefaultEdge> gen =
+            new CompleteBipartiteGraphGenerator<>(5, 5);
         gen.generateGraph(graph, new IntegerVertexFactory(), null);
 
         TransitiveClosure.INSTANCE.closeDirectedAcyclicGraph(graph);
@@ -100,7 +104,8 @@ public class TransitiveClosureTest
 
     public void testLinearGraphForDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
         int n = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(n);
         gen.generateGraph(graph, new IntegerVertexFactory(), null);

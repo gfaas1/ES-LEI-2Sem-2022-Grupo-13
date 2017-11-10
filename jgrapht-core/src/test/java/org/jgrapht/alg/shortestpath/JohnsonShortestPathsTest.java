@@ -20,23 +20,14 @@ package org.jgrapht.alg.shortestpath;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * @author Dimitrios Michail
@@ -59,21 +50,21 @@ public class JohnsonShortestPathsTest
     public void testIssue408()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0,1,2,3,4,5,6));
-        graph.addEdge(0,1);
-        graph.addEdge(1,2);
-        graph.addEdge(2,3);
-        graph.addEdge(3,0);
+        Graphs.addAllVertices(graph, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
 
-        graph.addEdge(4,5);
-        graph.addEdge(5,6);
-        graph.addEdge(6,4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 4);
 
         JohnsonShortestPaths<Integer, DefaultEdge> sp =
             new JohnsonShortestPaths<>(graph, new IntegerVertexFactory(7));
 
-        assertEquals(2.0, sp.getPathWeight(0,2), 0.0);
-        assertEquals(1.0, sp.getPathWeight(4,5), 0.0);
+        assertEquals(2.0, sp.getPathWeight(0, 2), 0.0);
+        assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
         assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
     }
 

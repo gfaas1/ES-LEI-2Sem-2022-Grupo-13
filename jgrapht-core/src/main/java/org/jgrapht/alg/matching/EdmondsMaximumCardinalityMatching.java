@@ -17,18 +17,14 @@
  */
 package org.jgrapht.alg.matching;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.FixedSizeIntegerQueue;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.UnionFind;
-import org.jgrapht.graph.AsSubgraph;
-
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
 
 /**
  * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in
@@ -464,15 +460,15 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         }
 
         Set<E> edges = new LinkedHashSet<>();
-        double cost=0;
+        double cost = 0;
         for (int vx = 0; vx < vertices.size(); vx++) {
             if (matching.isExposed(vx))
                 continue;
             V v = vertices.get(vx);
             V w = vertices.get(matching.opposite(vx));
-            E edge=graph.getEdge(v, w);
+            E edge = graph.getEdge(v, w);
             edges.add(edge);
-            cost += 0.5*graph.getEdgeWeight(edge);
+            cost += 0.5 * graph.getEdgeWeight(edge);
         }
 
         return new MatchingImpl<>(graph, edges, cost);
@@ -542,8 +538,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             connectedComponents.stream().filter(s -> s.size() % 2 == 1).count();
 
         return matching
-                .getEdges()
-                .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
+            .getEdges()
+            .size() == (graph.vertexSet().size() + oddVertices.size() - nrOddCardinalityComponents)
                 / 2.0;
     }
 

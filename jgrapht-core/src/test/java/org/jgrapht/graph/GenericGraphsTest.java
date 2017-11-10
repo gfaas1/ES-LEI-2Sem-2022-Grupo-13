@@ -18,8 +18,7 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
+import org.jgrapht.graph.specifics.*;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -122,10 +121,10 @@ public class GenericGraphsTest
         assertEquals(2, g.degreeOf(v1));
         assertEquals(2, g.degreeOf(v2));
     }
-    
+
     /*
-     * Test added in order to check that old style specifics override still works.
-     * Safely remove after next-release.
+     * Test added in order to check that old style specifics override still works. Safely remove
+     * after next-release.
      */
     @Deprecated
     public void testOldStyleSpecificsOverride()

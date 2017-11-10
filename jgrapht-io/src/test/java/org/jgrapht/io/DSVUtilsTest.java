@@ -17,8 +17,6 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.io.DSVUtils;
-
 import junit.framework.*;
 
 /**

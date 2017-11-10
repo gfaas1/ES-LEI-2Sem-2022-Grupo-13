@@ -380,8 +380,8 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * <p>
-     * Note that this operation might by expensive as it currently involves copying the vertex sets of
-     * the two underlying graphs.
+     * Note that this operation might by expensive as it currently involves copying the vertex sets
+     * of the two underlying graphs.
      */
     @Override
     public Set<V> vertexSet()

@@ -17,7 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * IntrusiveEdge extension for weighted edges. IntrusiveWeightedEdge encapsulates the internals for

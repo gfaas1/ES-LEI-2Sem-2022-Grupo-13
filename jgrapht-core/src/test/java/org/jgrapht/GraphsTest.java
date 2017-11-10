@@ -51,8 +51,7 @@ public class GraphsTest
     public void removeVertex_vertexNotFound()
     {
 
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+        Graph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -110,8 +109,7 @@ public class GraphsTest
     public void removeVertex00()
     {
 
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+        Graph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -158,8 +156,7 @@ public class GraphsTest
     public void removeVertex01()
     {
 
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+        Graph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";
@@ -195,8 +192,7 @@ public class GraphsTest
     public void removeVertex02()
     {
 
-        Graph<String, TestEdge> graph =
-            new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
+        Graph<String, TestEdge> graph = new DefaultDirectedGraph<String, TestEdge>(TestEdge.class);
 
         String a = "A";
         String b = "B";

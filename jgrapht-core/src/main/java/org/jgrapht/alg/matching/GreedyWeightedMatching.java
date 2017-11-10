@@ -25,25 +25,27 @@ import org.jgrapht.alg.util.*;
 
 /**
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
- * runs in O(m + m log n) where n is the number of vertices and
- * m is the number of edges of the graph. This implementation accepts directed and undirected graphs
- * which may contain self-loops and multiple edges. There is no assumption on the edge weights, i.e.
- * they can also be negative or zero.
+ * runs in O(m + m log n) where n is the number of vertices and m is the number of edges of the
+ * graph. This implementation accepts directed and undirected graphs which may contain self-loops
+ * and multiple edges. There is no assumption on the edge weights, i.e. they can also be negative or
+ * zero.
  * 
  * <p>
- * This algorithm can be run in two modes: with and without edge cost normalization. Without normalization,
- * the algorithm first orders the edge set in non-increasing order of
- * weights and then greedily constructs a maximal cardinality matching out of the edges with
- * positive weight. A maximal cardinality matching (not to be confused with maximum cardinality) is
- * a matching that cannot be increased in cardinality without removing an edge first. The resulting
- * matching is guaranteed to be a 1/2-Approximation. <br>
- * With normalization, the edges are sorted in non-increasing order of their normalized costs c(u,v)/(d(u)+d(v)) instead,
- * after which the algorithm proceeds in the same manner. Here, c(u,v) is the cost of edge (u,v), and
- * d(u) resp d(v) are the degrees of vertices u resp v.
- * Running this algorithm in normalized mode often (but not always!) produces a better result than running
- * the algorithm without normalization. <i>Note however that the normalized version does NOT produce a
- * 1/2-approximation</i>. See <a href="https://mathoverflow.net/questions/269526/is-greedy-matching-algorithm-with-normalized-edge-weights-a-2-approximation/269760#269760">this proof for details.</a>
- * The runtime complexity remains the same, independent of whether normalization is used.
+ * This algorithm can be run in two modes: with and without edge cost normalization. Without
+ * normalization, the algorithm first orders the edge set in non-increasing order of weights and
+ * then greedily constructs a maximal cardinality matching out of the edges with positive weight. A
+ * maximal cardinality matching (not to be confused with maximum cardinality) is a matching that
+ * cannot be increased in cardinality without removing an edge first. The resulting matching is
+ * guaranteed to be a 1/2-Approximation. <br>
+ * With normalization, the edges are sorted in non-increasing order of their normalized costs
+ * c(u,v)/(d(u)+d(v)) instead, after which the algorithm proceeds in the same manner. Here, c(u,v)
+ * is the cost of edge (u,v), and d(u) resp d(v) are the degrees of vertices u resp v. Running this
+ * algorithm in normalized mode often (but not always!) produces a better result than running the
+ * algorithm without normalization. <i>Note however that the normalized version does NOT produce a
+ * 1/2-approximation</i>. See <a href=
+ * "https://mathoverflow.net/questions/269526/is-greedy-matching-algorithm-with-normalized-edge-weights-a-2-approximation/269760#269760">this
+ * proof for details.</a> The runtime complexity remains the same, independent of whether
+ * normalization is used.
  *
  * <p>
  * For more information about approximation algorithms for the maximum weight matching problem in
@@ -96,7 +98,7 @@ public class GreedyWeightedMatching<V, E>
         }
         this.graph = graph;
         this.comparator = new ToleranceDoubleComparator(epsilon);
-        this.normalizeEdgeCosts=normalizeEdgeCosts;
+        this.normalizeEdgeCosts = normalizeEdgeCosts;
     }
 
     /**
@@ -110,14 +112,18 @@ public class GreedyWeightedMatching<V, E>
         // sort edges in non-decreasing order of weight
         // (the lambda uses e1 and e2 in the reverse order on purpose)
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
-        if(normalizeEdgeCosts) {
+        if (normalizeEdgeCosts) {
             allEdges.sort((e1, e2) -> {
-                double degreeE1 = graph.degreeOf(graph.getEdgeSource(e1)) + graph.degreeOf(graph.getEdgeTarget(e1));
-                double degreeE2 = graph.degreeOf(graph.getEdgeSource(e2)) + graph.degreeOf(graph.getEdgeTarget(e2));
-                return comparator.compare(graph.getEdgeWeight(e2) / degreeE2, graph.getEdgeWeight(e1) / degreeE1);
+                double degreeE1 = graph.degreeOf(graph.getEdgeSource(e1))
+                    + graph.degreeOf(graph.getEdgeTarget(e1));
+                double degreeE2 = graph.degreeOf(graph.getEdgeSource(e2))
+                    + graph.degreeOf(graph.getEdgeTarget(e2));
+                return comparator.compare(
+                    graph.getEdgeWeight(e2) / degreeE2, graph.getEdgeWeight(e1) / degreeE1);
             });
-        }else{
-            allEdges.sort((e1, e2) -> comparator.compare(graph.getEdgeWeight(e2), graph.getEdgeWeight(e1)));
+        } else {
+            allEdges.sort(
+                (e1, e2) -> comparator.compare(graph.getEdgeWeight(e2), graph.getEdgeWeight(e1)));
         }
 
         double matchingWeight = 0d;

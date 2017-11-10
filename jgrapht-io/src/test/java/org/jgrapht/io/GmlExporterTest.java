@@ -21,8 +21,6 @@ import java.io.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GmlExporter;
 
 import junit.framework.*;
 

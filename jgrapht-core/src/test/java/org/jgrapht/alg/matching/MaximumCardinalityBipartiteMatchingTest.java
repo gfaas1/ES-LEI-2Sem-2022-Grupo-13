@@ -17,28 +17,28 @@
  */
 package org.jgrapht.alg.matching;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.*;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+
+import junit.framework.*;
 
 /**
  * Test class for maximum cardinality bipartite matching algorithms
+ * 
  * @author Joris Kinable
  */
-public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
+public abstract class MaximumCardinalityBipartiteMatchingTest
+    extends TestCase
+{
 
     public abstract MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(
-            Graph<Integer, DefaultEdge> graph, Set<Integer> partition1, Set<Integer> partition2);
+        Graph<Integer, DefaultEdge> graph, Set<Integer> partition1, Set<Integer> partition2);
 
     /**
      * Random test graph 1
@@ -56,8 +56,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         DefaultEdge e20 = graph.addEdge(partition1.get(2), partition2.get(0));
 
         MatchingAlgorithm<Integer, DefaultEdge> bm =
-                getMatchingAlgorithm(
-                        graph, new HashSet<>(partition1), new HashSet<>(partition2));
+            getMatchingAlgorithm(graph, new HashSet<>(partition1), new HashSet<>(partition2));
         List<DefaultEdge> l1 = Arrays.asList(e11, e02, e20);
         Set<DefaultEdge> matching = new HashSet<>(l1);
         MatchingAlgorithm.Matching<Integer, DefaultEdge> bmMatching = bm.getMatching();
@@ -84,8 +83,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         DefaultEdge e55 = graph.addEdge(partition1.get(5), partition2.get(5));
 
         MatchingAlgorithm<Integer, DefaultEdge> bm =
-                getMatchingAlgorithm(
-                        graph, new HashSet<>(partition1), new HashSet<>(partition2));
+            getMatchingAlgorithm(graph, new HashSet<>(partition1), new HashSet<>(partition2));
         MatchingAlgorithm.Matching<Integer, DefaultEdge> bmMatching = bm.getMatching();
         assertEquals(6, bmMatching.getEdges().size(), 0);
         List<DefaultEdge> l1 = Arrays.asList(e21, e13, e00, e42, e34, e55);
@@ -104,39 +102,43 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
         MatchingAlgorithm<Integer, DefaultEdge> bm =
-                getMatchingAlgorithm(
-                        graph, new HashSet<>(partition1), new HashSet<>(partition2));
+            getMatchingAlgorithm(graph, new HashSet<>(partition1), new HashSet<>(partition2));
         MatchingAlgorithm.Matching<Integer, DefaultEdge> bmMatching = bm.getMatching();
         assertEquals(Collections.EMPTY_SET, bmMatching.getEdges());
     }
 
-    public void testGraph1(){
+    public void testGraph1()
+    {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
         Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
-        int[][] edges={{5,8}, {4,9}, {2,7}, {6,9}, {1,9}};
-        for(int[] edge : edges)
-            graph.addEdge(edge[0],edge[1]);
+        int[][] edges = { { 5, 8 }, { 4, 9 }, { 2, 7 }, { 6, 9 }, { 1, 9 } };
+        for (int[] edge : edges)
+            graph.addEdge(edge[0], edge[1]);
 
-        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+            getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = matcher.getMatching();
         assertEquals(3, matching.getEdges().size());
     }
 
-    public void testGraph2(){
+    public void testGraph2()
+    {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
         Set<Integer> partition2 = new HashSet<>(Arrays.asList(7, 8, 9));
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
-        int[][] edges={{5,8}, {4,9}, {2,7}, {6,9}, {1,9}, {0,8}, {3,7}, {1,7}};
-        for(int[] edge : edges)
-            graph.addEdge(edge[0],edge[1]);
+        int[][] edges =
+            { { 5, 8 }, { 4, 9 }, { 2, 7 }, { 6, 9 }, { 1, 9 }, { 0, 8 }, { 3, 7 }, { 1, 7 } };
+        for (int[] edge : edges)
+            graph.addEdge(edge[0], edge[1]);
 
-        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+            getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = matcher.getMatching();
         this.verifyMatching(graph, matching, matching.getEdges().size());
     }
 
@@ -156,48 +158,55 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         g.addEdge(0, 3);
         g.addEdge(1, 2);
 
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> m = getMatchingAlgorithm(g, left, right)
-                        .getMatching();
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> m =
+            getMatchingAlgorithm(g, left, right).getMatching();
         assertTrue(m.getEdges().contains(g.getEdge(1, 2)));
         assertTrue(m.getEdges().contains(g.getEdge(0, 3)));
         assertEquals(2, m.getEdges().size());
     }
 
-    public void testPseudoGraph(){
+    public void testPseudoGraph()
+    {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         Set<Integer> partition1 = new HashSet<>(Arrays.asList(0, 1, 2));
         Set<Integer> partition2 = new HashSet<>(Arrays.asList(3, 4, 5));
         Graphs.addAllVertices(graph, partition1);
         Graphs.addAllVertices(graph, partition2);
-        int[][] edges={{0,3}, {1,4}, {2,5}, {0,3}, {0,0}};
-        for(int[] edge : edges)
-            graph.addEdge(edge[0],edge[1]);
+        int[][] edges = { { 0, 3 }, { 1, 4 }, { 2, 5 }, { 0, 3 }, { 0, 0 } };
+        for (int[] edge : edges)
+            graph.addEdge(edge[0], edge[1]);
 
-        MatchingAlgorithm<Integer, DefaultEdge> matcher=getMatchingAlgorithm(graph, partition1, partition2);
-        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching=matcher.getMatching();
+        MatchingAlgorithm<Integer, DefaultEdge> matcher =
+            getMatchingAlgorithm(graph, partition1, partition2);
+        MatchingAlgorithm.Matching<Integer, DefaultEdge> matching = matcher.getMatching();
         this.verifyMatching(graph, matching, 3);
     }
 
-    public void testRandomBipartiteGraphs(){
-        Random random=new Random(1);
-        int vertices=100;
+    public void testRandomBipartiteGraphs()
+    {
+        Random random = new Random(1);
+        int vertices = 100;
 
-        for(int k=0; k<100; k++) {
-            int edges=random.nextInt(maxEdges(vertices)/2);
-            GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator = new GnmRandomBipartiteGraphGenerator<>(vertices, vertices/2, edges, 0);
+        for (int k = 0; k < 100; k++) {
+            int edges = random.nextInt(maxEdges(vertices) / 2);
+            GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
+                new GnmRandomBipartiteGraphGenerator<>(vertices, vertices / 2, edges, 0);
 
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
             generator.generateGraph(graph, new IntegerVertexFactory(), null);
 
-            MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(graph, generator.getFirstPartition(), generator.getSecondPartition());
+            MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(
+                graph, generator.getFirstPartition(), generator.getSecondPartition());
             MatchingAlgorithm.Matching<Integer, DefaultEdge> m = matcher.getMatching();
             this.verifyMatching(graph, m, m.getEdges().size());
         }
     }
 
-    private <V,E> void verifyMatching(Graph<V,E> g, MatchingAlgorithm.Matching<V,E> m, int cardinality){
+    private <V,
+        E> void verifyMatching(Graph<V, E> g, MatchingAlgorithm.Matching<V, E> m, int cardinality)
+    {
         Set<V> matched = new HashSet<>();
-        double weight=0;
+        double weight = 0;
         for (E e : m.getEdges()) {
             V source = g.getEdgeSource(e);
             V target = g.getEdgeTarget(e);
@@ -211,13 +220,16 @@ public abstract class MaximumCardinalityBipartiteMatchingTest extends TestCase{
         }
         assertEquals(m.getWeight(), weight, 0.0000001);
         assertEquals(cardinality, m.getEdges().size());
-        assertEquals(m.getEdges().size()*2,matched.size()); //Ensure that there are no self-loops
+        assertEquals(m.getEdges().size() * 2, matched.size()); // Ensure that there are no
+                                                               // self-loops
 
-        EdmondsMaximumCardinalityMatching<V, E> matcher = new EdmondsMaximumCardinalityMatching<>(g);
-        assertTrue(matcher.isMaximumMatching(m)); //Certify that the matching is indeed maximum
+        EdmondsMaximumCardinalityMatching<V, E> matcher =
+            new EdmondsMaximumCardinalityMatching<>(g);
+        assertTrue(matcher.isMaximumMatching(m)); // Certify that the matching is indeed maximum
     }
 
-    private static int maxEdges(int n){
+    private static int maxEdges(int n)
+    {
         if (n % 2 == 0) {
             return Math.multiplyExact(n / 2, n - 1);
         } else {

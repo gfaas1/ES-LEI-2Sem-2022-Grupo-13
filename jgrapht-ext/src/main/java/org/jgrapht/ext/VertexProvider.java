@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Creates a Vertex of type V

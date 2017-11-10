@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.Random;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
  * Coloring tests

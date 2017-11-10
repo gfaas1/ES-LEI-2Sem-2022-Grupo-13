@@ -58,7 +58,7 @@ public class AsWeightedGraph<V, E>
     implements WeightedGraph<V, E>, Serializable
 {
     private static final long serialVersionUID = 6408608293216853184L;
-    
+
     private final Map<E, Double> weightMap;
 
     /**

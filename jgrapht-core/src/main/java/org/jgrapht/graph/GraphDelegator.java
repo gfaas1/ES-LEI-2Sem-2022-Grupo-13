@@ -47,7 +47,7 @@ public class GraphDelegator<V, E>
     implements Graph<V, E>, Serializable
 {
     private static final long serialVersionUID = -215068279981825448L;
-    
+
     /**
      * The graph to which operations are delegated.
      */

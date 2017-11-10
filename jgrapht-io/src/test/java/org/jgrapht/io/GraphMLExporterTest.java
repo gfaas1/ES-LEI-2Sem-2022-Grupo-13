@@ -17,20 +17,15 @@
  */
 package org.jgrapht.io;
 
-import java.io.ByteArrayOutputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.custommonkey.xmlunit.XMLAssert;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.GraphMLExporter.AttributeCategory;
+import org.custommonkey.xmlunit.*;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.io.GraphMLExporter.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * @author Trevor Harmon

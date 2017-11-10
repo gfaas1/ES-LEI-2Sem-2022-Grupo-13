@@ -147,7 +147,7 @@ public class Subgraph<V, E, G extends Graph<V, E>>
     {
         return g;
     }
-    
+
 }
 
 // End Subgraph.java

@@ -17,24 +17,20 @@
  */
 package org.jgrapht.perf.matching;
 
-import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.alg.matching.EdmondsMaximumCardinalityMatching;
-import org.jgrapht.alg.matching.HopcroftKarpBipartiteMatching;
-import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
+import java.util.*;
+import java.util.concurrent.*;
 
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.matching.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.options.*;
+
+import junit.framework.*;
 
 /**
  * A small benchmark comparing matching algorithms for bipartite graphs.
@@ -59,7 +55,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         private Set<Integer> secondPartition;
 
         abstract MatchingAlgorithm<Integer, DefaultEdge> createSolver(
-            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition);
+            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
+            Set<Integer> secondPartition);
 
         @Setup(Level.Iteration)
         public void setup()
@@ -67,53 +64,63 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
             if (generator == null) {
                 // lazily construct generator
                 generator = new GnpRandomBipartiteGraphGenerator<>(
-                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_VERTICES_COUNT/2, PERF_BENCHMARK_EDGES_PROP, SEED);
+                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_VERTICES_COUNT / 2,
+                    PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
             graph = new Pseudograph<>(DefaultEdge.class);
             generator.generateGraph(graph, new IntegerVertexFactory(0), null);
-            firstPartition=generator.getFirstPartition();
-            secondPartition=generator.getSecondPartition();
+            firstPartition = generator.getFirstPartition();
+            secondPartition = generator.getSecondPartition();
         }
 
         @Benchmark
         public void run()
         {
-            long time=System.currentTimeMillis();
-            MatchingAlgorithm.Matching m =createSolver(graph, firstPartition, secondPartition).getMatching();
-            time=System.currentTimeMillis()-time;
-            System.out.println("time: "+time+" obj :"+m.getEdges().size()+" vertices: "+graph.vertexSet().size()+" edges: "+graph.edgeSet().size());
+            long time = System.currentTimeMillis();
+            MatchingAlgorithm.Matching m =
+                createSolver(graph, firstPartition, secondPartition).getMatching();
+            time = System.currentTimeMillis() - time;
+            System.out.println(
+                "time: " + time + " obj :" + m.getEdges().size() + " vertices: "
+                    + graph.vertexSet().size() + " edges: " + graph.edgeSet().size());
         }
     }
 
-
     public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark
-            extends RandomGraphBenchmarkBase
+        extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(
+            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
+            Set<Integer> secondPartition)
         {
             return new EdmondsMaximumCardinalityMatching<>(graph);
         }
     }
 
     public static class HopcroftKarpBipartiteMatchingBenchmark
-            extends RandomGraphBenchmarkBase
+        extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(
+            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
+            Set<Integer> secondPartition)
         {
             return new HopcroftKarpBipartiteMatching<>(graph, firstPartition, secondPartition);
         }
     }
 
     public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
-            extends RandomGraphBenchmarkBase
+        extends RandomGraphBenchmarkBase
     {
         @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition, Set<Integer> secondPartition)
+        MatchingAlgorithm<Integer, DefaultEdge> createSolver(
+            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
+            Set<Integer> secondPartition)
         {
-            return new HopcroftKarpMaximumCardinalityBipartiteMatching<>(graph, firstPartition, secondPartition);
+            return new HopcroftKarpMaximumCardinalityBipartiteMatching<>(
+                graph, firstPartition, secondPartition);
         }
     }
 
@@ -122,10 +129,11 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     {
         Options opt = new OptionsBuilder()
             .include(
-                    ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaxCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
             .include(
-                    ".*" + HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark.class.getSimpleName() + ".*")
-                .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
+                ".*" + HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark.class
+                    .getSimpleName() + ".*")
+            .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 
         new Runner(opt).run();

@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
+import java.util.*;
+
 import org.jgrapht.*;
 import org.jgrapht.util.*;
-
-import java.util.Collections;
 
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly
@@ -92,8 +92,6 @@ public class ClosestFirstIterator<V, E>
         this(g, startVertices, Double.POSITIVE_INFINITY);
     }
 
-
-
     /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertex and will be limited to the subset of the connected
@@ -108,14 +106,14 @@ public class ClosestFirstIterator<V, E>
      */
     public ClosestFirstIterator(Graph<V, E> g, V startVertex, double radius)
     {
-        this(g, startVertex==null?null:Collections.singletonList(startVertex), radius);
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex), radius);
     }
 
     /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertices and will be limited to the subset of the connected
-     * component which includes those vertices and their reachable via paths of weighted length less than
-     * or equal to the specified radius. The specified start vertex may not be <code>
+     * component which includes those vertices and their reachable via paths of weighted length less
+     * than or equal to the specified radius. The specified start vertex may not be <code>
      * null</code>.
      *
      * @param g the graph to be iterated.

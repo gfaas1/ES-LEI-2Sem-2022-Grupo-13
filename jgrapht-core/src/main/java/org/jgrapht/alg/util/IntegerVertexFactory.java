@@ -40,6 +40,7 @@ public class IntegerVertexFactory
 
     /**
      * Constructs a new IntegerVertexFactory.
+     * 
      * @param counter Starting value of the first vertex returned.
      */
     public IntegerVertexFactory(int counter)

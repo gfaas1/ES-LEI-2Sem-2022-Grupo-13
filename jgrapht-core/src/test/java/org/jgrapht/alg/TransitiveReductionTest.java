@@ -279,8 +279,7 @@ public class TransitiveReductionTest
         assertArrayEquals(expected_transitively_reduced_matrix, actual_transitively_reduced_matrix);
     }
 
-    static private Graph<Integer, DefaultEdge> fromMatrixToDirectedGraph(
-        final int[][] matrix)
+    static private Graph<Integer, DefaultEdge> fromMatrixToDirectedGraph(final int[][] matrix)
     {
         final SimpleDirectedGraph<Integer, DefaultEdge> graph =
             new SimpleDirectedGraph<>(DefaultEdge.class);
@@ -298,8 +297,7 @@ public class TransitiveReductionTest
         return graph;
     }
 
-    private int[][] fromDirectedGraphToMatrix(
-        final Graph<Integer, DefaultEdge> directedGraph)
+    private int[][] fromDirectedGraphToMatrix(final Graph<Integer, DefaultEdge> directedGraph)
     {
         final List<Integer> vertices = new ArrayList<>(directedGraph.vertexSet());
         final int n = vertices.size();

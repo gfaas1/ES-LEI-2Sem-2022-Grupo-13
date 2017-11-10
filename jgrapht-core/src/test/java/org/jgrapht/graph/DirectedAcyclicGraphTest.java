@@ -24,25 +24,13 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.traverse.TopologicalOrderIterator;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.traverse.*;
+import org.junit.*;
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.

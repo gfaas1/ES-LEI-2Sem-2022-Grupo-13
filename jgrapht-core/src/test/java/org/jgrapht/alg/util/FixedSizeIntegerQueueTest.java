@@ -17,16 +17,20 @@
  */
 package org.jgrapht.alg.util;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * Tests for FixedSizeIntegerQueue
+ * 
  * @author Joris Kinable
  */
-public class FixedSizeIntegerQueueTest extends TestCase {
+public class FixedSizeIntegerQueueTest
+    extends TestCase
+{
 
-    public void testQueue(){
-        FixedSizeIntegerQueue queue=new FixedSizeIntegerQueue(10);
+    public void testQueue()
+    {
+        FixedSizeIntegerQueue queue = new FixedSizeIntegerQueue(10);
         assertTrue(queue.isEmpty());
         assertEquals(0, queue.size());
 
@@ -34,8 +38,8 @@ public class FixedSizeIntegerQueueTest extends TestCase {
         assertFalse(queue.isEmpty());
         assertEquals(1, queue.size());
 
-        int v=queue.poll();
-        assertEquals(1,v);
+        int v = queue.poll();
+        assertEquals(1, v);
         assertTrue(queue.isEmpty());
         assertEquals(0, queue.size());
 

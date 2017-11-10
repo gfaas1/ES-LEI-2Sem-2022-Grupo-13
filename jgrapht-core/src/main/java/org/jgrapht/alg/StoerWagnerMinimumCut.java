@@ -52,7 +52,7 @@ public class StoerWagnerMinimumCut<V, E>
     public StoerWagnerMinimumCut(Graph<V, E> graph)
     {
         GraphTests.requireUndirected(graph, "Graph must be undirected");
-        
+
         if (graph.vertexSet().size() < 2) {
             throw new IllegalArgumentException("Graph has less than 2 vertices");
         }

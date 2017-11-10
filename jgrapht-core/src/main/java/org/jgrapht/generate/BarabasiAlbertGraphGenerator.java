@@ -17,16 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
+import org.jgrapht.*;
 
 /**
  * Barabási-Albert growth and preferential attachment graph generator.

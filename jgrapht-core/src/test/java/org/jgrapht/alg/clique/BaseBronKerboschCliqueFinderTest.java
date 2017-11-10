@@ -19,20 +19,14 @@ package org.jgrapht.alg.clique;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximalCliqueEnumerationAlgorithm;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * .

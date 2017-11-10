@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DirectedAcyclicGraph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.traverse.TopologicalOrderIterator;
+import java.util.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
 /**
  * Constructs the transitive closure of the input graph.

@@ -21,10 +21,6 @@ import java.io.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.io.CSVExporter;
-import org.jgrapht.io.CSVFormat;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.ImportException;
 
 import junit.framework.*;
 

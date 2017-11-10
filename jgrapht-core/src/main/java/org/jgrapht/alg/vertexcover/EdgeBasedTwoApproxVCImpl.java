@@ -75,7 +75,7 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
         Set<V> cover = new LinkedHashSet<>();
 
         // G'=(V',E') <-- G(V,E)
-        Graph<V,E> sg = new AsSubgraph<>(graph, null, null);
+        Graph<V, E> sg = new AsSubgraph<>(graph, null, null);
 
         // while E' is non-empty
         while (!sg.edgeSet().isEmpty()) {

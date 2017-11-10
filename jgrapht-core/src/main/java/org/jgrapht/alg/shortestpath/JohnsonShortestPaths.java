@@ -17,21 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.alg.util.ToleranceDoubleComparator;
-import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
 
 /**
  * Johnson's all pairs shortest paths algorithm.
@@ -161,18 +151,18 @@ public class JohnsonShortestPaths<V, E>
         }
         GraphTests.requireDirectedOrUndirected(graph);
 
-        boolean graphHasNegativeEdgeWeights=false;
-        for(E e : graph.edgeSet())
-            if(comparator.compare(graph.getEdgeWeight(e), 0.0) < 0){
-                graphHasNegativeEdgeWeights=true;
+        boolean graphHasNegativeEdgeWeights = false;
+        for (E e : graph.edgeSet())
+            if (comparator.compare(graph.getEdgeWeight(e), 0.0) < 0) {
+                graphHasNegativeEdgeWeights = true;
                 break;
             }
 
-        if(graphHasNegativeEdgeWeights){
-            if(graph.getType().isUndirected())
+        if (graphHasNegativeEdgeWeights) {
+            if (graph.getType().isUndirected())
                 throw new RuntimeException(GRAPH_CONTAINS_A_NEGATIVE_WEIGHT_CYCLE);
             runWithNegativeEdgeWeights(graph);
-        }else
+        } else
             runWithPositiveEdgeWeights(graph);
     }
 
@@ -285,7 +275,7 @@ public class JohnsonShortestPaths<V, E>
          * Union extra and input graph
          */
         Graph<V, E> unionGraph =
-                new AsGraphUnion<>(new AsWeightedGraph<>(extraGraph, zeroWeightFunction), g);
+            new AsGraphUnion<>(new AsWeightedGraph<>(extraGraph, zeroWeightFunction), g);
 
         /*
          * Run Bellman-Ford from new vertex

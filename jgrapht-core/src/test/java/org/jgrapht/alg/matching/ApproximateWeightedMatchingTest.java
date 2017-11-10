@@ -331,9 +331,10 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
-    public void testSelfLoop(){
+    public void testSelfLoop()
+    {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3));
         Graphs.addEdge(g, 0, 1, 4.0);

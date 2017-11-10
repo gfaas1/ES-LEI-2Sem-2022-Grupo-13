@@ -161,6 +161,7 @@ public enum CSVFormat
 
     /**
      * Parameters that affect the behavior of CVS importers/exporters.
+     * 
      * @deprecated Use {@link org.jgrapht.io.CSVFormat.Parameter} instead.
      */
     @Deprecated

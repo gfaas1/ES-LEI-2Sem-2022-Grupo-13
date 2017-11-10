@@ -17,12 +17,10 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 /**
  * A strong connectivity inspector algorithm.

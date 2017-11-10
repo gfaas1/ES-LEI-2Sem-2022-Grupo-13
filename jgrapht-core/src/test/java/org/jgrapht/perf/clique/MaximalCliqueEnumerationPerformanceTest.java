@@ -17,32 +17,19 @@
  */
 package org.jgrapht.perf.clique;
 
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.clique.BronKerboschCliqueFinder;
-import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
-import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.SimpleGraph;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.jgrapht.*;
+import org.jgrapht.alg.clique.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.options.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
 /**
  * A small benchmark comparing maximal clique enumeration algorithms.

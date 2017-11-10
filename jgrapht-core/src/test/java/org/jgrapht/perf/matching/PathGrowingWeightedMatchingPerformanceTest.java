@@ -135,7 +135,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     .getSimpleName() + ".*")
             .include(".*" + GreedyWeightedMatchingRandomGraphBenchmark.class.getSimpleName() + ".*")
             .include(
-                ".*" + EdmondsMaximumCardinalityMatchingRandomGraphBenchmark.class.getSimpleName() + ".*")
+                ".*" + EdmondsMaximumCardinalityMatchingRandomGraphBenchmark.class.getSimpleName()
+                    + ".*")
             .mode(Mode.SingleShotTime).timeUnit(TimeUnit.MILLISECONDS).warmupIterations(5)
             .measurementIterations(10).forks(1).shouldFailOnError(true).shouldDoGC(true).build();
 

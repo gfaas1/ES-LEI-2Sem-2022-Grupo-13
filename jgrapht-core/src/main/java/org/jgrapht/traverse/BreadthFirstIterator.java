@@ -17,10 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import org.jgrapht.*;
 
 /**
  * A breadth-first iterator for a directed or undirected graph.

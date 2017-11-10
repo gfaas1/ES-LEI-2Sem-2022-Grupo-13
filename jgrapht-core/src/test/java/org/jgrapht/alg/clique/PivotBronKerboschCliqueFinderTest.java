@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 /**
  * .

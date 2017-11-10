@@ -136,7 +136,7 @@ public class TransitiveReduction
     public <V, E> void reduce(final Graph<V, E> directedGraph)
     {
         GraphTests.requireDirected(directedGraph, "Graph must be directed");
-        
+
         final List<V> vertices = new ArrayList<>(directedGraph.vertexSet());
 
         final int n = vertices.size();

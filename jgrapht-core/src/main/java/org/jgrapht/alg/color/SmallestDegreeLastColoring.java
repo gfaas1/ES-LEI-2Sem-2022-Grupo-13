@@ -17,16 +17,10 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.Array;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 
 /**
  * The smallest degree last greedy coloring algorithm.

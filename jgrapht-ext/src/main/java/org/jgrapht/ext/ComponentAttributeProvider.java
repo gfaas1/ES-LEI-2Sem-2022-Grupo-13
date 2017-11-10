@@ -17,7 +17,7 @@
  */
 package org.jgrapht.ext;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Provides display attributes for vertices and/or edges in a graph.

@@ -6,7 +6,7 @@
 #Details about the formatter config file: http://help.eclipse.org/neon/topic/org.eclipse.jdt.doc.user/tasks/tasks-232.htm?cp=1_3_10_1
 
 #Path to eclipse. Needs eclipse Neon or newer.
-eclipse_path=/opt/eclipse/java-neon/eclipse/eclipse
+eclipse_path=/opt/eclipse/eclipse
 #Path to Java
 java_path=/usr/lib/jvm/java-8-oracle/bin/java
 #

@@ -127,9 +127,9 @@ public class FastLookupUndirectedSpecifics<V, E>
         // Add edge to touchingVerticesToEdgeMap for the UnorderedPair {u,v}
         Pair<V, V> vertexPair = new UnorderedPair<>(source, target);
         ArrayUnenforcedSet<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
-        if(edgeSet != null)
+        if (edgeSet != null)
             edgeSet.add(e);
-        else{
+        else {
             edgeSet = new ArrayUnenforcedSet<>();
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);

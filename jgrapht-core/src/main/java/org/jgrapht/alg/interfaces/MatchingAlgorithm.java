@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.Graph;
-
 import java.io.*;
 import java.util.*;
+
+import org.jgrapht.*;
 
 /**
  * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
@@ -66,7 +66,8 @@ public interface MatchingAlgorithm<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    interface Matching<V, E> extends Iterable<E>
+    interface Matching<V, E>
+        extends Iterable<E>
     {
         /**
          * Returns the graph over which this matching is defined.
@@ -91,49 +92,55 @@ public interface MatchingAlgorithm<V, E>
 
         /**
          * Returns true if vertex v is incident to an edge in this matching.
+         * 
          * @param v vertex
          * @return true if vertex v is incident to an edge in this matching.
          */
-        default boolean isMatched(V v){
-            Set<E> edges=getEdges();
+        default boolean isMatched(V v)
+        {
+            Set<E> edges = getEdges();
             return getGraph().edgesOf(v).stream().anyMatch(edges::contains);
         }
 
         /**
-         * Returns true if the matching is a perfect matching. A matching is perfect if every vertex in the graph
-         * is incident to an edge in the matching.
-         * @return true if the matching is perfect. By definition, a perfect matching consists of exactly 1/2|V| edges,
-         * and the number of vertices in the graph must be even.
+         * Returns true if the matching is a perfect matching. A matching is perfect if every vertex
+         * in the graph is incident to an edge in the matching.
+         * 
+         * @return true if the matching is perfect. By definition, a perfect matching consists of
+         *         exactly 1/2|V| edges, and the number of vertices in the graph must be even.
          */
-        default boolean isPerfect() {
+        default boolean isPerfect()
+        {
             return getEdges().size() == getGraph().vertexSet().size() / 2.0;
         }
 
-       /**
-        * Returns an iterator over the edges in the matching.
-        * @return iterator over the edges in the matching.
-        */
+        /**
+         * Returns an iterator over the edges in the matching.
+         * 
+         * @return iterator over the edges in the matching.
+         */
         @Override
-        default Iterator<E> iterator(){
+        default Iterator<E> iterator()
+        {
             return getEdges().iterator();
         }
     }
 
     /**
      * A default implementation of the matching interface.
-
+     * 
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class MatchingImpl<V,E>
-        implements Matching<V,E>, Serializable
+    class MatchingImpl<V, E>
+        implements Matching<V, E>, Serializable
     {
         private static final long serialVersionUID = 4767675421846527768L;
 
-        private Graph<V,E> graph;
+        private Graph<V, E> graph;
         private Set<E> edges;
         private double weight;
-        private Set<V> matchedVertices=null;
+        private Set<V> matchedVertices = null;
 
         /**
          * Construct a new instance
@@ -142,15 +149,16 @@ public interface MatchingAlgorithm<V, E>
          * @param edges the edges of the matching
          * @param weight the weight of the matching
          */
-        public MatchingImpl(Graph<V,E> graph, Set<E> edges, double weight)
+        public MatchingImpl(Graph<V, E> graph, Set<E> edges, double weight)
         {
-            this.graph=graph;
+            this.graph = graph;
             this.edges = edges;
             this.weight = weight;
         }
 
         @Override
-        public Graph<V, E> getGraph() {
+        public Graph<V, E> getGraph()
+        {
             return graph;
         }
 
@@ -176,10 +184,11 @@ public interface MatchingAlgorithm<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean isMatched(V v) {
-            if(matchedVertices == null){ //lazily index the vertices that have been matched
-                matchedVertices=new HashSet<>();
-                for(E e : edges) {
+        public boolean isMatched(V v)
+        {
+            if (matchedVertices == null) { // lazily index the vertices that have been matched
+                matchedVertices = new HashSet<>();
+                for (E e : edges) {
                     matchedVertices.add(graph.getEdgeSource(e));
                     matchedVertices.add(graph.getEdgeTarget(e));
                 }

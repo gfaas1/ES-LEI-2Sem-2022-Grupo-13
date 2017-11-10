@@ -17,11 +17,11 @@
  */
 package org.jgrapht.ext;
 
-import java.io.Reader;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.Graph;
+import org.jgrapht.*;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.

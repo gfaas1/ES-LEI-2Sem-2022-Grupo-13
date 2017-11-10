@@ -102,22 +102,27 @@ public class ClosestFirstIteratorTest
     }
 
     @Override
-    String getExpectedCCStr1() {
+    String getExpectedCCStr1()
+    {
         return "orphan";
     }
 
     @Override
-    String getExpectedCCStr2() {
+    String getExpectedCCStr2()
+    {
         return "orphan,7,9,4,8,2";
     }
 
     @Override
-    String getExpectedCCStr3() {
+    String getExpectedCCStr3()
+    {
         return "orphan,7,9,4,8,2,3,5,6,1";
     }
 
     @Override
-    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex) {
+    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
+        Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex)
+    {
         return new ClosestFirstIterator<>(g, startVertex);
     }
 }

@@ -17,14 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.util.TypeUtil;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
 
 /**
  * A base implementation for the intrusive edges specifics.
@@ -40,7 +37,7 @@ abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge>
     implements Serializable
 {
     private static final long serialVersionUID = -7498268216742485L;
-    
+
     protected Map<E, IE> edgeMap;
     protected transient Set<E> unmodifiableEdgeSet = null;
 

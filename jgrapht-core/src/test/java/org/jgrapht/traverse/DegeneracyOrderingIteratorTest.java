@@ -20,16 +20,12 @@ package org.jgrapht.traverse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.Arrays;
+import java.util.*;
 
-import org.jgrapht.Graphs;
-import org.jgrapht.event.ConnectedComponentTraversalEvent;
-import org.jgrapht.event.EdgeTraversalEvent;
-import org.jgrapht.event.TraversalListener;
-import org.jgrapht.event.VertexTraversalEvent;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.event.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * Tests for {@link DegeneracyOrderingIterator}.

@@ -20,23 +20,13 @@ package org.jgrapht.alg.tour;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * @author Dimitrios Michail

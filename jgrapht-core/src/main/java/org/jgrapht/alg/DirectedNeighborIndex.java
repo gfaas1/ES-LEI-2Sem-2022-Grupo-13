@@ -20,8 +20,8 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.event.*;
 import org.jgrapht.alg.NeighborIndex.*;
+import org.jgrapht.event.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from

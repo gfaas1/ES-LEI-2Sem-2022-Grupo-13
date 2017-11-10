@@ -17,8 +17,8 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * An interface for the set of intrusive edges of a graph.

@@ -17,9 +17,7 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The alias method for sampling from a discrete probability distribution.

@@ -23,7 +23,7 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.NeighborCache;
+import org.jgrapht.alg.util.*;
 
 /**
  * Finds a minimum vertex cover in a undirected graph. The implementation relies on a recursive
@@ -207,7 +207,7 @@ public class RecursiveExactVCImpl<V, E>
             indexNextVertex + 1, visitedRightBranch, accumulatedWeight + weight);
         List<Integer> neighborsIndices =
             neighbors.stream().map(vertexIDDictionary::get).collect(Collectors.toList());
-        rightCover.addAllVertices(neighborsIndices,weight);
+        rightCover.addAllVertices(neighborsIndices, weight);
 
         // Left branch (vertex v is added to the cover, and we solve for G_{v}):
         BitSet visitedLeftBranch = (BitSet) visited.clone();
@@ -239,9 +239,9 @@ public class RecursiveExactVCImpl<V, E>
      */
     private double getWeight(Collection<V> vertices)
     {
-        if (weighted) { 
+        if (weighted) {
             return vertices.stream().map(vertexWeightMap::get).reduce(0d, Double::sum);
-        } else { 
+        } else {
             return vertices.size();
         }
     }

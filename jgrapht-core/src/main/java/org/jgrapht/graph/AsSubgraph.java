@@ -93,7 +93,7 @@ public class AsSubgraph<V, E>
     implements Serializable
 {
     private static final long serialVersionUID = -1471811754881775298L;
-    
+
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
 

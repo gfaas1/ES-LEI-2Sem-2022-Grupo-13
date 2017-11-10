@@ -27,8 +27,8 @@ public class SubgraphIsomorphismTestUtils
     private static boolean DEBUG = false;
 
     public static boolean allMatchingsCorrect(
-        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2,
-        Graph<Integer, DefaultEdge> g1, Graph<Integer, DefaultEdge> g2)
+        VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2, Graph<Integer, DefaultEdge> g1,
+        Graph<Integer, DefaultEdge> g2)
     {
         showLog(">> ");
         boolean isCorrect = true;
@@ -115,8 +115,7 @@ public class SubgraphIsomorphismTestUtils
         return g2;
     }
 
-    public static Graph<Integer, DefaultEdge> randomGraph(
-        int vertexCount, int edgeCount, long seed)
+    public static Graph<Integer, DefaultEdge> randomGraph(int vertexCount, int edgeCount, long seed)
     {
         Integer[] vertexes = new Integer[vertexCount];
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);

@@ -45,7 +45,7 @@ public class AsUnmodifiableGraph<V, E>
     implements Serializable
 {
     private static final long serialVersionUID = -8186686968362705760L;
-    
+
     private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
     /**

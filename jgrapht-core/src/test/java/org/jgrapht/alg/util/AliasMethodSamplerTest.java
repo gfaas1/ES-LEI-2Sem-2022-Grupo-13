@@ -19,10 +19,9 @@ package org.jgrapht.alg.util;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Random;
+import java.util.*;
 
-import org.jgrapht.alg.util.AliasMethodSampler;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Test {@link AliasMethodSampler}.

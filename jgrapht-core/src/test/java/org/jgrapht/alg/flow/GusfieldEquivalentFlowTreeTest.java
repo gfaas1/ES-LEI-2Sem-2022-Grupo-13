@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 
 /**

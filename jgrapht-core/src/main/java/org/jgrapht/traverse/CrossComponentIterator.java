@@ -17,11 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.event.ConnectedComponentTraversalEvent;
-
 import java.util.*;
+
+import org.jgrapht.*;
+import org.jgrapht.event.*;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.
@@ -57,7 +56,6 @@ public abstract class CrossComponentIterator<V, E, D>
      * Iterator which provides start vertices for cross-component iteration.
      */
     private Iterator<V> entireGraphVertexIterator = null;
-
 
     /**
      * Iterator which provides start vertices for specified start vertices.
@@ -97,7 +95,7 @@ public abstract class CrossComponentIterator<V, E, D>
      */
     public CrossComponentIterator(Graph<V, E> g, V startVertex)
     {
-        this(g, startVertex==null?null:Collections.singletonList(startVertex));
+        this(g, startVertex == null ? null : Collections.singletonList(startVertex));
     }
 
     /**
@@ -129,7 +127,7 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize start vertex
          */
-        Iterator<V> it = crossComponentTraversal?entireGraphVertexIterator:startVertexIterator;
+        Iterator<V> it = crossComponentTraversal ? entireGraphVertexIterator : startVertexIterator;
         // pick a start vertex if possible
         if (it.hasNext()) {
             this.startVertex = it.next();
@@ -157,8 +155,9 @@ public abstract class CrossComponentIterator<V, E, D>
                 }
             }
 
-            Iterator<V> it = isCrossComponentTraversal()?entireGraphVertexIterator:startVertexIterator;
-            while (it!=null && it.hasNext()) {
+            Iterator<V> it =
+                isCrossComponentTraversal() ? entireGraphVertexIterator : startVertexIterator;
+            while (it != null && it.hasNext()) {
                 V v = it.next();
                 if (!graph.containsVertex(v)) {
                     throw new IllegalArgumentException("graph must contain the start vertex");

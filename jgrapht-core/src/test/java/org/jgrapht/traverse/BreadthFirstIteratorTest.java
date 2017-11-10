@@ -60,22 +60,27 @@ public class BreadthFirstIteratorTest
     }
 
     @Override
-    String getExpectedCCStr1() {
+    String getExpectedCCStr1()
+    {
         return "orphan";
     }
 
     @Override
-    String getExpectedCCStr2() {
+    String getExpectedCCStr2()
+    {
         return "orphan,7,8,9,2,4";
     }
 
     @Override
-    String getExpectedCCStr3() {
+    String getExpectedCCStr3()
+    {
         return "orphan,7,8,9,2,4,3,5,6,1";
     }
 
     @Override
-    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex) {
+    AbstractGraphIterator<String, DefaultWeightedEdge> createIterator(
+        Graph<String, DefaultWeightedEdge> g, Iterable<String> startVertex)
+    {
         return new BreadthFirstIterator<>(g, startVertex);
     }
 }

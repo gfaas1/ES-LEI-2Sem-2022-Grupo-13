@@ -19,18 +19,16 @@ package org.jgrapht.alg.util;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Set;
+import java.util.*;
 
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultListenableGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+import org.junit.rules.*;
 
 /**
  * .

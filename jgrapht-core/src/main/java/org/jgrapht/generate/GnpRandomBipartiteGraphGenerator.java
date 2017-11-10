@@ -172,24 +172,28 @@ public class GnpRandomBipartiteGraphGenerator<V, E>
     }
 
     /**
-     * Returns the first partition of vertices in the bipartite graph. This partition is guaranteed to be smaller than or equal
-     * in size to the second partition.
+     * Returns the first partition of vertices in the bipartite graph. This partition is guaranteed
+     * to be smaller than or equal in size to the second partition.
+     * 
      * @return one partition of the bipartite graph
      */
-    public Set<V> getFirstPartition(){
-        if(partitionA.size() <= partitionB.size())
+    public Set<V> getFirstPartition()
+    {
+        if (partitionA.size() <= partitionB.size())
             return new LinkedHashSet<>(partitionA.values());
         else
             return new LinkedHashSet<>(partitionB.values());
     }
 
     /**
-     * Returns the second partitions of vertices in the bipartite graph. This partition is guaranteed to be larger than or equal
-     * in size to the first partition.
+     * Returns the second partitions of vertices in the bipartite graph. This partition is
+     * guaranteed to be larger than or equal in size to the first partition.
+     * 
      * @return one partition of the bipartite graph
      */
-    public Set<V> getSecondPartition(){
-        if(partitionB.size() >= partitionA.size())
+    public Set<V> getSecondPartition()
+    {
+        if (partitionB.size() >= partitionA.size())
             return new LinkedHashSet<>(partitionB.values());
         else
             return new LinkedHashSet<>(partitionA.values());

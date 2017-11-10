@@ -17,14 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximalCliqueEnumerationAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
 /**
  * Base implementation of the Bron-Kerbosch algorithm.
