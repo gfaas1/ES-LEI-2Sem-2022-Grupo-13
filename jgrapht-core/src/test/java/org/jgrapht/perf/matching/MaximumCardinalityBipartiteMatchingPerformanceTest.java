@@ -99,18 +99,6 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
-    public static class HopcroftKarpBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
-    {
-        @Override
-        MatchingAlgorithm<Integer, DefaultEdge> createSolver(
-            Graph<Integer, DefaultEdge> graph, Set<Integer> firstPartition,
-            Set<Integer> secondPartition)
-        {
-            return new HopcroftKarpBipartiteMatching<>(graph, firstPartition, secondPartition);
-        }
-    }
-
     public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
         extends RandomGraphBenchmarkBase
     {

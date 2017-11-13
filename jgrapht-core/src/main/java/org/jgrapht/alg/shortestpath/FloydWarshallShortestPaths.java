@@ -92,35 +92,6 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Compute the diameter of the graph.
-     * 
-     * @return the diameter (longest of all the shortest paths) computed for the graph. If the graph
-     *         contains no vertices, return {@link Double#NaN}. If there is no path between any two
-     *         vertices, return {@link Double#POSITIVE_INFINITY}.
-     * @deprecated deprecated in favor of {@link GraphMeasurer#getDiameter()}
-     */
-    @Deprecated
-    public double getDiameter()
-    {
-        lazyCalculateMatrix();
-
-        if (!Double.isNaN(diameter)) {
-            return diameter;
-        }
-
-        int n = vertices.size();
-        if (n > 0) {
-            diameter = 0.0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    diameter = Double.max(diameter, d[i][j]);
-                }
-            }
-        }
-        return diameter;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

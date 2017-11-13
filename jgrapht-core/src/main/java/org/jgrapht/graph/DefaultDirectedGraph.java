@@ -34,7 +34,6 @@ import org.jgrapht.graph.builder.*;
  */
 public class DefaultDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
-    implements DirectedGraph<V, E>
 {
     private static final long serialVersionUID = -2066644490824847621L;
 
@@ -95,40 +94,6 @@ public class DefaultDirectedGraph<V, E>
         EdgeFactory<V, E> ef)
     {
         return new GraphBuilder<>(new DefaultDirectedGraph<>(ef));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param edgeClass class on which to base factory for edges
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(Class)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
-            Class<? extends E> edgeClass)
-    {
-        return new DirectedGraphBuilder<>(new DefaultDirectedGraph<>(edgeClass));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DefaultDirectedGraph<V, E>, ?> builder(
-            EdgeFactory<V, E> ef)
-    {
-        return new DirectedGraphBuilder<>(new DefaultDirectedGraph<>(ef));
     }
 }
 
