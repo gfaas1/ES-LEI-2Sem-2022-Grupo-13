@@ -49,7 +49,7 @@ public class MaximalCliqueEnumerationPerformanceTest
         public static final long SEED = 13l;
 
         private GraphGenerator<Integer, DefaultEdge, Integer> generator = null;
-        private UndirectedGraph<Integer, DefaultEdge> graph;
+        private Graph<Integer, DefaultEdge> graph;
 
         abstract Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph);
 

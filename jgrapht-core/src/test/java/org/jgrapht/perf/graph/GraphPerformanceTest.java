@@ -229,7 +229,7 @@ public class GraphPerformanceTest
         }
 
         @Override
-        protected Specifics<V, E> createSpecifics()
+        protected Specifics<V, E> createSpecifics(boolean directed)
         {
             return new DirectedSpecifics<>(this);
         }

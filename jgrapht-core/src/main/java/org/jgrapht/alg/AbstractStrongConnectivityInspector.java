@@ -38,7 +38,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
 {
     protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;
-    protected List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs;
+    protected List<Graph<V, E>> stronglyConnectedSubgraphs;
 
     public AbstractStrongConnectivityInspector(Graph<V, E> graph)
     {
@@ -58,28 +58,17 @@ abstract class AbstractStrongConnectivityInspector<V, E>
     }
 
     @Override
-    @Deprecated
-    public List<DirectedSubgraph<V, E>> stronglyConnectedSubgraphs()
+    public List<Graph<V, E>> getStronglyConnectedComponents()
     {
         if (stronglyConnectedSubgraphs == null) {
             List<Set<V>> sets = stronglyConnectedSets();
             stronglyConnectedSubgraphs = new ArrayList<>(sets.size());
 
             for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(new DirectedSubgraph<>(graph, set, null));
+                stronglyConnectedSubgraphs.add(new AsSubgraph<V, E>(graph, set, null));
             }
         }
         return stronglyConnectedSubgraphs;
-    }
-
-    @Override
-    public List<Graph<V, E>> getStronglyConnectedComponents()
-    {
-        List<Graph<V, E>> result = new ArrayList<>();
-        for (DirectedSubgraph<V, E> dsg : stronglyConnectedSubgraphs()) {
-            result.add(dsg);
-        }
-        return result;
     }
 
     @Override

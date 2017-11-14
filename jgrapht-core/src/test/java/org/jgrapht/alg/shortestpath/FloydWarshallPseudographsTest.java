@@ -132,9 +132,9 @@ public class FloydWarshallPseudographsTest
         SingleSourcePaths<Integer, DefaultWeightedEdge> t1 = fw.getPaths(1);
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());
-        assertEquals(Arrays.asList(g.getEdgeSource(e12_1)), t1.getPath(1).getVertexList());
+        assertEquals(Collections.singletonList(g.getEdgeSource(e12_1)), t1.getPath(1).getVertexList());
         assertEquals(-5d, t1.getWeight(2), 1e-9);
-        assertEquals(Arrays.asList(e12_1), t1.getPath(2).getEdgeList());
+        assertEquals(Collections.singletonList(e12_1), t1.getPath(2).getEdgeList());
         assertEquals(-10d, t1.getWeight(3), 1e-9);
         assertEquals(Arrays.asList(e12_1, e23_3), t1.getPath(3).getEdgeList());
         assertEquals(-110d, t1.getWeight(4), 1e-9);
@@ -145,9 +145,9 @@ public class FloydWarshallPseudographsTest
         assertNull(t2.getPath(1));
         assertEquals(0d, t2.getWeight(2), 1e-9);
         assertTrue(t2.getPath(2).getEdgeList().isEmpty());
-        assertEquals(Arrays.asList(g.getEdgeSource(e23_1)), t2.getPath(2).getVertexList());
+        assertEquals(Collections.singletonList(g.getEdgeSource(e23_1)), t2.getPath(2).getVertexList());
         assertEquals(-5d, t2.getWeight(3), 1e-9);
-        assertEquals(Arrays.asList(e23_3), t2.getPath(3).getEdgeList());
+        assertEquals(Collections.singletonList(e23_3), t2.getPath(3).getEdgeList());
         assertEquals(-105d, t2.getWeight(4), 1e-9);
         assertEquals(Arrays.asList(e23_3, e34_1), t2.getPath(4).getEdgeList());
 
@@ -159,7 +159,7 @@ public class FloydWarshallPseudographsTest
         assertEquals(0d, t3.getWeight(3), 1e-9);
         assertTrue(t3.getPath(3).getEdgeList().isEmpty());
         assertEquals(-100d, t3.getWeight(4), 1e-9);
-        assertEquals(Arrays.asList(e34_1), t3.getPath(4).getEdgeList());
+        assertEquals(Collections.singletonList(e34_1), t3.getPath(4).getEdgeList());
 
         SingleSourcePaths<Integer, DefaultWeightedEdge> t4 = fw.getPaths(4);
         assertNull(t4.getPath(1));
@@ -168,8 +168,6 @@ public class FloydWarshallPseudographsTest
         assertEquals(0d, t4.getWeight(4), 1e-9);
         assertTrue(t4.getPath(4).getEdgeList().isEmpty());
 
-        // test diameter
-        assertEquals(Double.POSITIVE_INFINITY, fw.getDiameter(), 1e-9);
         // test shortest path count
         assertEquals(6, fw.getShortestPathsCount());
 
