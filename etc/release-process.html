@@ -197,7 +197,7 @@ all existing deprecated methods.
   this release, you'll need to make sure you've already created and published your own key.
   For details, see <a href="http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven/"> here</a>
 <li> To rebuild the full release package after it has been pushed to github, you can run git checkout jgrapht-1.0.0 
-  (the tag you published for the release), and then run mvn package.
+  (the tag you published for the release), and then run mvn clean; mvn javadoc:aggregate; mvn package.
   
 </ol>
 
