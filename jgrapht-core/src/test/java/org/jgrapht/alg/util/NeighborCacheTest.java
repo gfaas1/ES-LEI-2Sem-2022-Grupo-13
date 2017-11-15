@@ -222,6 +222,7 @@ public class NeighborCacheTest
         exception.expectMessage("no such vertex");
         cache.neighborListOf(B);
     }
+
 }
 
 // End NeighborCacheTest.java

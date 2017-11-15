@@ -125,9 +125,10 @@ public class NeighborCache<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        E edge = e.getEdge();
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
+        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+
+        V source = e.getEdgeSource();
+        V target = e.getEdgeTarget();
 
         if (successors.containsKey(source)) {
             successors.get(source).addNeighbor(target);
@@ -149,6 +150,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
+        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
 
@@ -178,6 +181,8 @@ public class NeighborCache<V, E>
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
+        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+
         successors.remove(e.getVertex());
         predecessors.remove(e.getVertex());
         neighbors.remove(e.getVertex());
