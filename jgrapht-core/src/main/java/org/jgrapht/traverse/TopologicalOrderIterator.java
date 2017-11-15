@@ -77,52 +77,6 @@ public class TopologicalOrderIterator<V, E>
     /**
      * Construct a topological order iterator.
      * 
-     * Creates a new topological order iterator over the directed graph specified, with a
-     * user-supplied queue implementation to allow customized control over tie-breaking in case of
-     * partial order. Traversal will start at one of the graph's <i>sources</i>. See the definition
-     * of source at <a href="http://mathworld.wolfram.com/Source.html">
-     * http://mathworld.wolfram.com/Source.html</a>.
-     *
-     * @param graph the directed graph to be iterated.
-     * @param queue queue to use for tie-break in case of partial order (e.g. a PriorityQueue can be
-     *        used to break ties according to vertex priority); must be initially empty
-     * @deprecated in favor of {@link #TopologicalOrderIterator(Graph, Comparator)}
-     */
-    @Deprecated
-    public TopologicalOrderIterator(Graph<V, E> graph, Queue<V> queue)
-    {
-        super(graph);
-        GraphTests.requireDirected(graph);
-
-        this.queue = Objects.requireNonNull(queue, "Queue must not be null");
-        if (!queue.isEmpty()) {
-            throw new IllegalArgumentException("Queue must be empty");
-        }
-
-        // count in-degrees
-        this.inDegreeMap = new HashMap<>();
-        for (V v : graph.vertexSet()) {
-            int d = 0;
-            for (E e : graph.incomingEdgesOf(v)) {
-                V u = Graphs.getOppositeVertex(graph, e, v);
-                if (v.equals(u)) {
-                    throw new IllegalArgumentException(GRAPH_IS_NOT_A_DAG);
-                }
-                d++;
-            }
-            inDegreeMap.put(v, new ModifiableInteger(d));
-            if (d == 0) {
-                queue.offer(v);
-            }
-        }
-
-        // record vertices count
-        this.remainingVertices = graph.vertexSet().size();
-    }
-
-    /**
-     * Construct a topological order iterator.
-     * 
      * <p>
      * Traversal will start at one of the graph's <i>sources</i>. See the definition of source at
      * <a href="http://mathworld.wolfram.com/Source.html">

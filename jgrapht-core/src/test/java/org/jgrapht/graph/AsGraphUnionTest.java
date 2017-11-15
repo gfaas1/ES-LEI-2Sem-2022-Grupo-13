@@ -291,29 +291,23 @@ public class AsGraphUnionTest
         weightMap.put(edge, 20.0);
         Graph<Integer, DefaultWeightedEdge> g2Masked = new AsWeightedGraph<>(g2, weightMap);
 
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionSum =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
+        Graph<Integer, DefaultWeightedEdge> graphUnionSum =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SUM);
         assertEquals(30.0, graphUnionSum.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionFirst =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
+        Graph<Integer, DefaultWeightedEdge> graphUnionFirst =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.FIRST);
         assertEquals(10.0, graphUnionFirst.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionSecond =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
+        Graph<Integer, DefaultWeightedEdge> graphUnionSecond =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.SECOND);
         assertEquals(20.0, graphUnionSecond.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMax =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMax =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MAX);
         assertEquals(20.0, graphUnionMax.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMin =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMin =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MIN);
         assertEquals(10.0, graphUnionMin.getEdgeWeight(edge));
-        GraphUnion<Integer, DefaultWeightedEdge,
-            Graph<Integer, DefaultWeightedEdge>> graphUnionMult =
-                new GraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
+        Graph<Integer, DefaultWeightedEdge> graphUnionMult =
+                new AsGraphUnion<>(g1, g2Masked, WeightCombiner.MULT);
         assertEquals(200.0, graphUnionMult.getEdgeWeight(edge));
 
         assertEquals(10.0, g1.getEdgeWeight(edge));

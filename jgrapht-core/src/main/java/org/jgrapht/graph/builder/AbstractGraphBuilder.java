@@ -279,21 +279,6 @@ public abstract class AbstractGraphBuilder<V, E, G extends Graph<V, E>,
      * @return the built unmodifiable graph.
      *
      * @see #build()
-     * @deprecated In favor of {@link #buildAsUnmodifiable()}.
-     */
-    @Deprecated
-    public UnmodifiableGraph<V, E> buildUnmodifiable()
-    {
-        return new UnmodifiableGraph<>(this.graph);
-    }
-
-    /**
-     * Build an unmodifiable version graph. Calling any method (including this method) on this
-     * builder object after calling this method is undefined behaviour.
-     *
-     * @return the built unmodifiable graph.
-     *
-     * @see #build()
      */
     public Graph<V, E> buildAsUnmodifiable()
     {

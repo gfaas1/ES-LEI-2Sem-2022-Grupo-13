@@ -100,9 +100,9 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+        List<Graph<String, DefaultEdge>> subgraphs =
+            inspector.getStronglyConnectedComponents();
+        for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
             StrongConnectivityAlgorithm<String, DefaultEdge> ci =
@@ -154,9 +154,9 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+        List<Graph<String, DefaultEdge>> subgraphs =
+            inspector.getStronglyConnectedComponents();
+        for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
             StrongConnectivityAlgorithm<String, DefaultEdge> ci =
@@ -208,10 +208,10 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<DirectedSubgraph<String, DefaultEdge>> subgraphs =
-            inspector.stronglyConnectedSubgraphs();
+        List<Graph<String, DefaultEdge>> subgraphs =
+            inspector.getStronglyConnectedComponents();
 
-        for (DirectedSubgraph<String, DefaultEdge> sg : subgraphs) {
+        for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
             StrongConnectivityAlgorithm<String, DefaultEdge> ci =
@@ -233,9 +233,9 @@ public class StrongConnectivityAlgorithmTest
 
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);
-        Set<Set<Integer>> expected = new HashSet<>();
+        List<Set<Integer>> expected = new ArrayList<>();
         expected.add(graph.vertexSet());
-        assertEquals(expected, new HashSet<>(sc.stronglyConnectedSets()));
+        assertEquals(expected, sc.stronglyConnectedSets());
     }
 
     public void testCondensation()

@@ -182,7 +182,7 @@ public class DefaultDirectedGraphTest
         }
 
         @Override
-        protected DirectedSpecifics<V, E> createSpecifics()
+        protected Specifics<V, E> createSpecifics(boolean directed)
         {
             return new FastLookupDirectedSpecifics<>(
                 this, new LinkedHashMap<>(), v -> new LinkedHashSet<>());

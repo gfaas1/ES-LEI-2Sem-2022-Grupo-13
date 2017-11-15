@@ -28,7 +28,6 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class SimpleWeightedGraphMatrixGenerator<V, E>
-    extends WeightedGraphGeneratorAdapter<V, E, V>
     implements GraphGenerator<V, E, V>
 {
     protected List<V> vertices;
@@ -88,19 +87,6 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
                 }
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated Not needed since {@link WeightedGraph} is deprecated.
-     */
-    @Override
-    @Deprecated
-    public void generateGraph(
-        WeightedGraph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
-    {
-        generateGraph((Graph<V, E>) target, vertexFactory, resultMap);
     }
 }
 

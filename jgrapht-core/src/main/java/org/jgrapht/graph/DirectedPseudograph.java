@@ -32,7 +32,6 @@ import org.jgrapht.graph.builder.*;
  */
 public class DirectedPseudograph<V, E>
     extends AbstractBaseGraph<V, E>
-    implements DirectedGraph<V, E>
 {
     private static final long serialVersionUID = -7461248851245878913L;
 
@@ -93,40 +92,6 @@ public class DirectedPseudograph<V, E>
         EdgeFactory<V, E> ef)
     {
         return new GraphBuilder<>(new DirectedPseudograph<>(ef));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param edgeClass class on which to base factory for edges
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(Class)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
-            Class<? extends E> edgeClass)
-    {
-        return new DirectedGraphBuilder<>(new DirectedPseudograph<>(edgeClass));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated In favor of {@link #createBuilder(EdgeFactory)}.
-     */
-    @Deprecated
-    public static <V,
-        E> DirectedGraphBuilderBase<V, E, ? extends DirectedPseudograph<V, E>, ?> builder(
-            EdgeFactory<V, E> ef)
-    {
-        return new DirectedGraphBuilder<>(new DirectedPseudograph<>(ef));
     }
 }
 

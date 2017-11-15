@@ -18,7 +18,6 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.specifics.*;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -122,21 +121,6 @@ public class GenericGraphsTest
         assertEquals(2, g.degreeOf(v2));
     }
 
-    /*
-     * Test added in order to check that old style specifics override still works. Safely remove
-     * after next-release.
-     */
-    @Deprecated
-    public void testOldStyleSpecificsOverride()
-    {
-        DeprecatedSpecificsTestGraph g = new DeprecatedSpecificsTestGraph();
-        g.addVertex("1");
-        g.addVertex("2");
-        g.addEdge("1", "2");
-        assertTrue(g.containsEdge("2", "1"));
-        assertTrue(g.containsEdge("1", "2"));
-    }
-
     /**
      * .
      */
@@ -185,27 +169,6 @@ public class GenericGraphsTest
         public EquivGraph()
         {
             super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, true, true, false);
-        }
-    }
-
-    /*
-     * Graph added for test to check for backward compatibility on specifics override. Safely remove
-     * after next-release.
-     */
-    @Deprecated
-    static class DeprecatedSpecificsTestGraph
-        extends Pseudograph<String, DefaultEdge>
-    {
-        private static final long serialVersionUID = 8647217182401022498L;
-
-        public DeprecatedSpecificsTestGraph()
-        {
-            super(DefaultEdge.class);
-        }
-
-        protected Specifics<String, DefaultEdge> createSpecifics()
-        {
-            return new FastLookupUndirectedSpecifics<>(this);
         }
     }
 

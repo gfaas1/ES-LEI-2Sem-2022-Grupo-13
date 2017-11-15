@@ -36,29 +36,12 @@ public interface MatchingAlgorithm<V, E>
      */
     double DEFAULT_EPSILON = 1e-9;
 
-    /*
-     * TODO after next release: Rename computeMatching() to getMatching() and deprecate
-     * computeMatching().
-     */
-
     /**
      * Compute a matching for a given graph.
      *
      * @return a matching
      */
     Matching<V, E> getMatching();
-
-    /**
-     * Compute a matching for a given graph.
-     * 
-     * @return a matching
-     * @deprecated This method has been renamed to {@link #getMatching()}
-     */
-    @Deprecated
-    default Matching<V, E> computeMatching()
-    {
-        return getMatching();
-    }
 
     /**
      * A graph matching.
