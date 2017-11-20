@@ -17,18 +17,22 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 
-import javax.swing.*;
+import javax.swing.JApplet;
+import javax.swing.JFrame;
 
-import org.jgraph.*;
-import org.jgraph.graph.*;
-import org.jgrapht.*;
-import org.jgrapht.ext.*;
-import org.jgrapht.graph.*;
-// resolve ambiguity
+import org.jgraph.JGraph;
+import org.jgraph.graph.AttributeMap;
+import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.GraphConstants;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
+import org.jgrapht.graph.DirectedMultigraph;
 
 /**
  * A demo applet that shows how to use JGraph to visualize JGraphT graphs.
@@ -40,10 +44,10 @@ public class JGraphAdapterDemo
     extends JApplet
 {
     private static final long serialVersionUID = 3256444702936019250L;
+
     private static final Color DEFAULT_BG_COLOR = Color.decode("#FAFBFF");
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
-    //
     private JGraphModelAdapter<String, DefaultEdge> jgAdapter;
 
     /**
@@ -73,7 +77,7 @@ public class JGraphAdapterDemo
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-            new ListenableDirectedMultigraph<>(DefaultEdge.class);
+            new DefaultListenableGraph<>(new DirectedMultigraph<>(DefaultEdge.class));
 
         // create a visualization using JGraph, via an adapter
         jgAdapter = new JGraphModelAdapter<>(g);
@@ -144,19 +148,6 @@ public class JGraphAdapterDemo
         jgAdapter.edit(cellAttr, null, null, null);
     }
 
-    /**
-     * A listenable directed multigraph that allows loops and parallel edges.
-     */
-    private static class ListenableDirectedMultigraph<V, E>
-        extends DefaultListenableGraph<V, E>
-    {
-        private static final long serialVersionUID = 1L;
-
-        ListenableDirectedMultigraph(Class<E> edgeClass)
-        {
-            super(new DirectedMultigraph<>(edgeClass));
-        }
-    }
 }
 
 // End JGraphAdapterDemo.java

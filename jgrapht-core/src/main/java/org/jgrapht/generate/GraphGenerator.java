@@ -17,9 +17,10 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.Map;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.VertexFactory;
 
 /**
  * An interface for generating new graph structures.
@@ -51,6 +52,20 @@ public interface GraphGenerator<V, E, T>
      */
     void generateGraph(
         Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap);
+
+    /**
+     * Generate a graph structure.
+     *
+     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
+     *        result will be a disconnected graph since generated elements will not be connected to
+     *        existing elements
+     * @param vertexFactory called to produce new vertices
+     */
+    default void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
+    {
+        generateGraph(target, vertexFactory, null);
+    }
+
 }
 
 // End GraphGenerator.java
