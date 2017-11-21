@@ -328,7 +328,7 @@ public class DOTImporter1Test
     {
         testGarbage(
             "",
-            "Failed to import DOT graph: line 1:0 mismatched input '' expecting {GRAPH, DIGRAPH}");
+            "Failed to import DOT graph: line 1:0 mismatched input '' expecting {STRICT, GRAPH, DIGRAPH}");
     }
 
     @Test
