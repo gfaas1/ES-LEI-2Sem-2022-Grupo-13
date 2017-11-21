@@ -6,6 +6,7 @@ Changes to JGraphT in each version:
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Updated demos (contributed by Dimitrios Michail)
     - Added assertions to NeighborCache (contributed by Joris Kinable)
+    - Upgraded Antlr version to 4.7 (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
