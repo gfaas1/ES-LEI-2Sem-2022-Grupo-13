@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +40,12 @@ import org.jgrapht.util.GenericFibonacciHeap;
  * Maximum weight matching in bipartite graphs.
  * 
  * <p>
- * Running time is $O(n(m+n \log n))$ where n is the number of vertices and m the number of edges of the
- * input graph. Uses exact arithmetic and produces a certificate of optimality in the form of a
+ * Running time is $O(n(m+n \log n))$ where n is the number of vertices and m the number of edges of
+ * the input graph. Uses exact arithmetic and produces a certificate of optimality in the form of a
  * tight vertex potential function.
  * 
  * <p>
- * This is the algorithm described in the
+ * This is the algorithm and implementation described in the
  * <a href="https://people.mpi-inf.mpg.de/~mehlhorn/LEDAbook.html">LEDA book</a>. See the LEDA
  * Platform of Combinatorial and Geometric Computing, Cambridge University Press, 1999.
  * 
@@ -71,7 +70,6 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     // shortest path related data structures
     private GenericFibonacciHeap<BigDecimal, V> heap;
-    private Set<V> isInHeap;
     private Map<V, GenericFibonacciHeap<BigDecimal, V>.Node> nodeInHeap;
     private Map<V, E> pred;
     private Map<V, BigDecimal> dist;
@@ -126,12 +124,10 @@ public class MaximumWeightBipartiteMatching<V, E>
         dist = new HashMap<>();
         matchedEdge = new HashMap<>();
         heap = new GenericFibonacciHeap<>(comparator);
-        isInHeap = new HashSet<>();
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
         graph.vertexSet().stream().forEach(v -> {
             pot.put(v, BigDecimal.ZERO);
-            nodeInHeap.put(v, null);
             pred.put(v, null);
             dist.put(v, BigDecimal.ZERO);
         });
@@ -178,16 +174,6 @@ public class MaximumWeightBipartiteMatching<V, E>
     }
 
     /**
-     * Get the matching edges.
-     * 
-     * @return the matching edges
-     */
-    public Set<E> getMatchingEdges()
-    {
-        return Collections.unmodifiableSet(matching);
-    }
-
-    /**
      * Augment from a particular node. The algorithm always looks for augmenting paths from nodes in
      * partition1. In the following code partition1 is A and partition2 is B.
      * 
@@ -219,7 +205,6 @@ public class MaximumWeightBipartiteMatching<V, E>
 
                     GenericFibonacciHeap<BigDecimal, V>.Node node = heap.insert(db1, b1);
                     nodeInHeap.put(b1, node);
-                    isInHeap.add(b1);
                 } else {
                     if (comparator.compare(db1, dist.get(b1)) < 0) {
                         dist.put(b1, db1);
@@ -238,7 +223,7 @@ public class MaximumWeightBipartiteMatching<V, E>
             BigDecimal db = BigDecimal.ZERO;
             if (!heap.isEmpty()) {
                 b = heap.removeMin().getData();
-                isInHeap.remove(b);
+                nodeInHeap.remove(b);
                 db = dist.get(b);
             }
 
@@ -281,7 +266,6 @@ public class MaximumWeightBipartiteMatching<V, E>
                                 GenericFibonacciHeap<BigDecimal, V>.Node node =
                                     heap.insert(db1, b1);
                                 nodeInHeap.put(b1, node);
-                                isInHeap.add(b1);
                             } else {
                                 if (comparator.compare(db1, dist.get(b1)) < 0) {
                                     dist.put(b1, db1);
@@ -309,10 +293,9 @@ public class MaximumWeightBipartiteMatching<V, E>
         while (!reachedB.isEmpty()) {
             V v = reachedB.pop();
             pred.put(v, null);
-            if (isInHeap.contains(v)) {
-                nodeInHeap.get(v).delete();
+            if (nodeInHeap.containsKey(v)) {
+                nodeInHeap.remove(v).delete();
             }
-            nodeInHeap.put(v, null);
             BigDecimal potChange = delta.subtract(dist.get(v));
             if (comparator.compare(potChange, BigDecimal.ZERO) <= 0) {
                 continue;
