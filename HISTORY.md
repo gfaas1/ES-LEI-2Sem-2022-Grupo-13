@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
     - Updated demos (contributed by Dimitrios Michail)
     - Added assertions to NeighborCache (contributed by Joris Kinable)
     - Upgraded Antlr version to 4.7 (contributed by Dimitrios Michail)
+    - Rewrote `MaximumWeightBipartiteMatching` with exact arithmetic, introducing a `GenericFibonacciHeap` (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
