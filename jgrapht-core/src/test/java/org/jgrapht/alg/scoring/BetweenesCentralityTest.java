@@ -30,12 +30,40 @@ import org.junit.*;
 public class BetweenesCentralityTest
 {
 
+    @Test(expected = NullPointerException.class)
+    public void testNullGraph()
+    {
+        Graph<Integer, DefaultEdge> g = null;
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);     
+        bc.getScores();
+    }
+    
+    @Test
+    public void testEmptyGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);     
+        Map<Integer, Double> scores = bc.getScores();
+        assertTrue(scores.isEmpty());
+    }
+    
+    @Test
+    public void testSingletonGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        g.addVertex(0);
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);     
+        Map<Integer, Double> scores = bc.getScores();
+        assertEquals(0.0, scores.get(0), 0.0);
+    }
+    
     @Test
     public void testUnweighted1()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted1();
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);        
-        assertGraph1(bc);
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph1(scores);
     }
     
     @Test
@@ -43,15 +71,17 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted1(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph1(bc);
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph1(scores);
     }
     
     @Test
     public void testUnweighted2()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted2();
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);        
-        assertGraph2(bc);
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);    
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph2(scores);
     }
     
     @Test
@@ -59,7 +89,8 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted2(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph2(bc);
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph2(scores);
         
     }
     
@@ -68,7 +99,8 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = createUnweighted3();
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph3(bc);        
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph3(scores);        
         
     }
     
@@ -77,7 +109,8 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted3(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph3(bc);        
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph3(scores);        
         
     }
     
@@ -86,7 +119,8 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = createUnweighted4();
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph4(bc);        
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph4(scores);        
         
     }
     
@@ -95,7 +129,8 @@ public class BetweenesCentralityTest
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted4(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph4(bc);        
+        Map<Integer, Double> scores = bc.getScores();
+        assertGraph4(scores);        
         
     }
     
@@ -104,7 +139,8 @@ public class BetweenesCentralityTest
     {
         Graph<String, DefaultWeightedEdge> g = createWeighted5();
         VertexScoringAlgorithm<String, Double> bc = new BetweenesCentrality<>(g);
-        assertGraph5(bc);        
+        Map<String, Double> scores = bc.getScores();
+        assertGraph5(scores);        
         
     }
     
@@ -248,62 +284,62 @@ public class BetweenesCentralityTest
         }        
     }
 
-    private void assertGraph3(VertexScoringAlgorithm<Integer, Double> scores) {
-        assertEquals(0.0, scores.getVertexScore(1), 0.0);
-        assertEquals(1.5, scores.getVertexScore(2), 0.0);
-        assertEquals(1.0, scores.getVertexScore(3), 0.0);
-        assertEquals(4.5, scores.getVertexScore(4), 0.0);
-        assertEquals(3.0, scores.getVertexScore(5), 0.0);
-        assertEquals(0.0, scores.getVertexScore(6), 0.0);
+    private void assertGraph3(Map<Integer, Double> scores) {
+        assertEquals(0.0, scores.get(1), 0.0);
+        assertEquals(1.5, scores.get(2), 0.0);
+        assertEquals(1.0, scores.get(3), 0.0);
+        assertEquals(4.5, scores.get(4), 0.0);
+        assertEquals(3.0, scores.get(5), 0.0);
+        assertEquals(0.0, scores.get(6), 0.0);
     }
     
-    private void assertGraph4(VertexScoringAlgorithm<Integer, Double> scores) {
-        assertEquals(0.0, scores.getVertexScore(1), 0.0);
-        assertEquals(3.5, scores.getVertexScore(2), 0.0);
-        assertEquals(1.0, scores.getVertexScore(3), 0.0);
-        assertEquals(1.0, scores.getVertexScore(4), 0.0);
-        assertEquals(0.5, scores.getVertexScore(5), 0.0);
+    private void assertGraph4(Map<Integer, Double> scores) {
+        assertEquals(0.0, scores.get(1), 0.0);
+        assertEquals(3.5, scores.get(2), 0.0);
+        assertEquals(1.0, scores.get(3), 0.0);
+        assertEquals(1.0, scores.get(4), 0.0);
+        assertEquals(0.5, scores.get(5), 0.0);
     }
     
-    private void assertGraph5(VertexScoringAlgorithm<String, Double> scores) {
-        assertEquals(0.0, scores.getVertexScore("A"), 0.0);
-        assertEquals(3.0, scores.getVertexScore("B"), 0.0);
-        assertEquals(6.0, scores.getVertexScore("C"), 0.0);
-        assertEquals(10.0, scores.getVertexScore("D"), 0.0);
-        assertEquals(5.0, scores.getVertexScore("E"), 0.0);
-        assertEquals(5.0, scores.getVertexScore("F"), 0.0);
-        assertEquals(1.0, scores.getVertexScore("G"), 0.0);
+    private void assertGraph5(Map<String, Double> scores) {
+        assertEquals(0.0, scores.get("A"), 0.0);
+        assertEquals(3.0, scores.get("B"), 0.0);
+        assertEquals(6.0, scores.get("C"), 0.0);
+        assertEquals(10.0, scores.get("D"), 0.0);
+        assertEquals(5.0, scores.get("E"), 0.0);
+        assertEquals(5.0, scores.get("F"), 0.0);
+        assertEquals(1.0, scores.get("G"), 0.0);
     }
     
-    private void assertGraph1(VertexScoringAlgorithm<Integer, Double> scores) {
+    private void assertGraph1(Map<Integer, Double> scores) {
         
-        assertEquals(3.0, scores.getVertexScore(1), 0.0);
-        assertEquals(0.0, scores.getVertexScore(2), 0.0);
-        assertEquals(3.0, scores.getVertexScore(3), 0.0);
-        assertEquals(15.0, scores.getVertexScore(4), 0.0);
-        assertEquals(6.0, scores.getVertexScore(5), 0.0);
-        assertEquals(6.0, scores.getVertexScore(6), 0.0);
-        assertEquals(7.0, scores.getVertexScore(7), 0.0);
-        assertEquals(0.0, scores.getVertexScore(8), 0.0);
-        assertEquals(0.0, scores.getVertexScore(9), 0.0);
+        assertEquals(3.0, scores.get(1), 0.0);
+        assertEquals(0.0, scores.get(2), 0.0);
+        assertEquals(3.0, scores.get(3), 0.0);
+        assertEquals(15.0, scores.get(4), 0.0);
+        assertEquals(6.0, scores.get(5), 0.0);
+        assertEquals(6.0, scores.get(6), 0.0);
+        assertEquals(7.0, scores.get(7), 0.0);
+        assertEquals(0.0, scores.get(8), 0.0);
+        assertEquals(0.0, scores.get(9), 0.0);
     }
     
-    private void assertGraph2(VertexScoringAlgorithm<Integer, Double> scores) {
-        assertEquals(43.0, scores.getVertexScore(0), 0.0);
-        assertEquals(25.0, scores.getVertexScore(1), 0.0);
-        assertEquals(70.0, scores.getVertexScore(2), 0.0);
-        assertEquals(40.0, scores.getVertexScore(3), 0.0);
-        assertEquals(13.0, scores.getVertexScore(4), 0.0);
-        assertEquals(0.0, scores.getVertexScore(5), 0.0);
-        assertEquals(0.0, scores.getVertexScore(6), 0.0);
-        assertEquals(36.0, scores.getVertexScore(7), 0.0);
-        assertEquals(0.0, scores.getVertexScore(8), 0.0);
-        assertEquals(0.0, scores.getVertexScore(9), 0.0);
-        assertEquals(0.0, scores.getVertexScore(10), 0.0);
-        assertEquals(0.0, scores.getVertexScore(11), 0.0);
-        assertEquals(0.0, scores.getVertexScore(12), 0.0);
-        assertEquals(0.0, scores.getVertexScore(13), 0.0);
-        assertEquals(0.0, scores.getVertexScore(14), 0.0);
+    private void assertGraph2(Map<Integer, Double> scores) {
+        assertEquals(43.0, scores.get(0), 0.0);
+        assertEquals(25.0, scores.get(1), 0.0);
+        assertEquals(70.0, scores.get(2), 0.0);
+        assertEquals(40.0, scores.get(3), 0.0);
+        assertEquals(13.0, scores.get(4), 0.0);
+        assertEquals(0.0, scores.get(5), 0.0);
+        assertEquals(0.0, scores.get(6), 0.0);
+        assertEquals(36.0, scores.get(7), 0.0);
+        assertEquals(0.0, scores.get(8), 0.0);
+        assertEquals(0.0, scores.get(9), 0.0);
+        assertEquals(0.0, scores.get(10), 0.0);
+        assertEquals(0.0, scores.get(11), 0.0);
+        assertEquals(0.0, scores.get(12), 0.0);
+        assertEquals(0.0, scores.get(13), 0.0);
+        assertEquals(0.0, scores.get(14), 0.0);
     }
     
     private Graph<Integer, DefaultEdge> createUnweighted1()
