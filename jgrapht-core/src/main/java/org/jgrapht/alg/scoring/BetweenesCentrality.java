@@ -18,7 +18,6 @@
 package org.jgrapht.alg.scoring;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -243,7 +242,7 @@ public class BetweenesCentrality<V, E>
         implements MyQueue<V, Double>
     {
 
-        Queue<V> delegate = new LinkedBlockingQueue<>();
+        Queue<V> delegate = new ArrayDeque<>();
 
         @Override
         public void insert(V t, Double d)
