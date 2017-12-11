@@ -8,33 +8,38 @@ import org.jgrapht.graph.GraphWalk;
 import java.util.*;
 
 /**
- * TODO: update docs
- *
- * A dp algorithm for the TSP problem.
+ * A dynamic programming algorithm for the TSP problem.
  *
  * <p>
  * The travelling salesman problem (TSP) asks the following question: "Given a list of cities and
  * the distances between each pair of cities, what is the shortest possible route that visits each
- * city exactly once and returns to the origin city?". In the metric TSP, the intercity distances
- * satisfy the triangle inequality.
+ * city exactly once and returns to the origin city?".
  *
+ * <p>
+ * This is an implementation of the Held-Karp algorithm which returns a Hamiltonian tour.
+ * The implementation requires the input graph to contain at least one vertex.
+ * The running time is O(2^|V|×|V|) and it takes O(2^|V|×|V|) extra memory.
  *
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">wikipedia</a> for more
- * details.
+ * details about TSP.
+ *
+ * <p>
+ * See <a href="https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm">wikipedia</a> for more
+ * details about the dp algorithm.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Alexandru Valeanu
  */
-public class NaiveTSP<V, E>
+public class HeldKarpTSP<V, E>
         implements TSPAlgorithm<V, E> {
 
     /**
      * Construct a new instance
      */
-    public NaiveTSP() {
+    public HeldKarpTSP() {
     }
 
     private void printState(int state, int n){
@@ -90,6 +95,12 @@ public class NaiveTSP<V, E>
             throw new IllegalArgumentException("Graph contains no vertices");
         }
 
+        if (n == 1){
+            V startNode = graph.vertexSet().iterator().next();
+            return new GraphWalk<>(graph, startNode, startNode, Collections.singletonList(startNode), null, 0);
+        }
+
+        // W[u, v] = the cost of the minimum weight between u and v
         double[][] W = new double[n][n];
         for (int i = 0; i < n; i++) {
             Arrays.fill(W[i], Double.MAX_VALUE);
@@ -97,6 +108,8 @@ public class NaiveTSP<V, E>
 
         /*
          * Normalize the graph
+         *   map each vertex to an integer (using a HashMap)
+         *   keep the reverse mapping  (using an ArrayList)
          */
         Map<V, Integer> mapToInt = new HashMap<>();
         List<V> mapToV = new ArrayList<>();
@@ -105,12 +118,14 @@ public class NaiveTSP<V, E>
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
 
+            // map 'source' if no mapping exists
             if (!mapToInt.containsKey(source)){
                 mapToInt.put(source, newNode);
                 mapToV.add(source);
                 newNode++;
             }
 
+            // map 'target' if no mapping exists
             if (!mapToInt.containsKey(target)){
                 mapToInt.put(target, newNode);
                 mapToV.add(target);
@@ -120,23 +135,31 @@ public class NaiveTSP<V, E>
             int u = mapToInt.get(source);
             int v = mapToInt.get(target);
 
+            // use Math.min in case we deal with a multigraph
             W[u][v] = Math.min(W[u][v], graph.getEdgeWeight(e));
 
+            // If the graph is undirected we need to also consider the reverse edge
             if (graph.getType().isUndirected())
                 W[v][u] = Math.min(W[v][u], graph.getEdgeWeight(e));
         }
 
+        // C[prevNode, state] = the minimum cost of a tour that ends in prevNode and contains all
+        //                      nodes in the bitmask state
         double[][] C = new double[n][1 << n];
         for (int i = 0; i < n; i++) {
             Arrays.fill(C[i], Double.MIN_VALUE);
         }
 
+        // start the tour from node 0 (because the tour is a cycle the start vertex does not matter)
         double tourWeight = memo(0, 1, C, W);
 
         // check if there is no tour
         if (tourWeight == Double.MAX_VALUE)
             return null;
 
+        /*
+         * Reconstruct the tour
+         */
         List<V> vertexList = new ArrayList<>(n);
         List<E> edgeList = new ArrayList<>(n);
 
@@ -161,6 +184,7 @@ public class NaiveTSP<V, E>
             lastNode = nextNode;
         }
 
+        // add start vertex
         vertexList.add(mapToV.get(0));
         edgeList.add(graph.getEdge(mapToV.get(lastNode), mapToV.get(0)));
 
