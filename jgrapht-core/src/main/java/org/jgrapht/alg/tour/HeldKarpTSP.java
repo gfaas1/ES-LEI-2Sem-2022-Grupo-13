@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2017-2017, by Alexandru Valeanu and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
@@ -18,7 +35,7 @@ import java.util.*;
  * <p>
  * This is an implementation of the Held-Karp algorithm which returns a Hamiltonian tour.
  * The implementation requires the input graph to contain at least one vertex.
- * The running time is O(2^|V|×|V|) and it takes O(2^|V|×|V|) extra memory.
+ * The running time is $O(2^{|V|} \times |V|^2)$ and it takes $O(2^{|V|} \times |V|)$ extra memory.
  *
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">wikipedia</a> for more
