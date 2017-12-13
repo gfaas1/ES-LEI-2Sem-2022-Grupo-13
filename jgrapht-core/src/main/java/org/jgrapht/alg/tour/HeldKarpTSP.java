@@ -33,7 +33,7 @@ import java.util.*;
  * city exactly once and returns to the origin city?".
  *
  * <p>
- * This is an implementation of the Held-Karp algorithm which returns a Hamiltonian tour.
+ * This is an implementation of the Held-Karp algorithm which returns a minimum-cost Hamiltonian tour.
  * The implementation requires the input graph to contain at least one vertex.
  * The running time is $O(2^{|V|} \times |V|^2)$ and it takes $O(2^{|V|} \times |V|)$ extra memory.
  *
@@ -98,10 +98,10 @@ public class HeldKarpTSP<V, E>
     }
 
     /**
-     * Computes a Hamiltonian tour.
+     * Computes a minimum-cost Hamiltonian tour.
      *
      * @param graph the input graph
-     * @return a tour
+     * @return a minimum-cost tour if one exists, null otherwise
      * @throws IllegalArgumentException if the graph contains no vertices
      */
     @Override
