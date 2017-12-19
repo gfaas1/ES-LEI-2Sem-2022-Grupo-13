@@ -9,6 +9,7 @@ Changes to JGraphT in each version:
     - Upgraded Antlr version to 4.7 (contributed by Dimitrios Michail)
     - Rewrote `MaximumWeightBipartiteMatching` with exact arithmetic, introducing a `GenericFibonacciHeap` (contributed by Dimitrios Michail)
     - Updated jmh to jdk9 compatible version; updated xmlunit to 2.x (contributed by Dimitrios Michail)
+    - Fixed FastLookup specifics to init edge container capacity to 1 (suggested by shevek, contributed by Joris Kinable)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
