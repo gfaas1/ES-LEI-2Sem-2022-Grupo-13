@@ -67,11 +67,22 @@ public class BetweenesCentralityTest
     }
     
     @Test
-    public void testWeighted1()
+    public void testAsWeighted1()
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted1(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
+        assertGraph1(scores);
+    }
+    
+    @Test
+    public void testNormalization()
+    {
+        Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted1(), new HashMap<>());
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g, true);
+        Map<Integer, Double> scores = new HashMap<>(bc.getScores());
+        int n = g.vertexSet().size();            
+        scores.forEach((v, score) -> scores.put(v, score * ((n - 1) * (n - 2))));
         assertGraph1(scores);
     }
     
@@ -85,16 +96,6 @@ public class BetweenesCentralityTest
     }
     
     @Test
-    public void testWeighted2()
-    {
-        Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted2(), new HashMap<>());
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        Map<Integer, Double> scores = bc.getScores();
-        assertGraph2(scores);
-        
-    }
-    
-    @Test
     public void testUnweighted3()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted3();
@@ -105,29 +106,9 @@ public class BetweenesCentralityTest
     }
     
     @Test
-    public void testWeighted3()
-    {
-        Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted3(), new HashMap<>());
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        Map<Integer, Double> scores = bc.getScores();
-        assertGraph3(scores);        
-        
-    }
-    
-    @Test
     public void testUnweighted4()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted4();
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
-        Map<Integer, Double> scores = bc.getScores();
-        assertGraph4(scores);        
-        
-    }
-    
-    @Test
-    public void testWeighted4()
-    {
-        Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted4(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweenesCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertGraph4(scores);        

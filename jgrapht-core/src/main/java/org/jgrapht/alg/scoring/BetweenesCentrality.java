@@ -55,14 +55,14 @@ public class BetweenesCentrality<V, E>
     implements VertexScoringAlgorithm<V, Double>
 {
 
-    // TODO
-    // test and compare to other techniques
-    // add negative weights support
-
-    /**
+   /**
      * Underlying graph
      */
     private final Graph<V, E> graph;
+    /**
+     * Whether to normalize scores
+     */
+    private final boolean normalize;
     /**
      * The actual scores
      */
@@ -75,9 +75,22 @@ public class BetweenesCentrality<V, E>
      */
     public BetweenesCentrality(Graph<V, E> graph)
     {
+        this(graph, false);
+    }
+    
+    /**
+     * Construct a new instance.
+     * 
+     * @param graph the input graph
+     * @param normalize whether to normalize by dividing the closeness by (n-1)*(n-2), where n is the
+     *        number of vertices of the graph
+     */
+    public BetweenesCentrality(Graph<V, E> graph, boolean normalize)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
 
         this.scores = null;
+        this.normalize = normalize;
     }
 
     /**
@@ -121,7 +134,12 @@ public class BetweenesCentrality<V, E>
         // For undirected graph, divide scores by two as each shortest path
         // considered twice.
         if (!this.graph.getType().isDirected()) {
-            this.scores.forEach((v, score) -> this.scores.put(v, score = score / 2));
+            this.scores.forEach((v, score) -> this.scores.put(v, score / 2));
+        }
+        
+        if (normalize) {
+            int n = this.graph.vertexSet().size();            
+            this.scores.forEach((v, score) -> this.scores.put(v, score / ((n - 1) * (n - 2))));
         }
     }
 
@@ -186,7 +204,7 @@ public class BetweenesCentrality<V, E>
             if (!w.equals(s)) {
                 this.scores.put(w, this.scores.get(w) + dependency.get(w));
             }
-        }
+        }        
     }
 
     private interface MyQueue<T, D>
