@@ -28,7 +28,7 @@ import org.jgrapht.util.*;
  * 
  * <p>
  * Computes the betweenes centrality of each vertex of a graph. The betweenness centrality of a node
- * <math>v</math> is given by the expression: $g(v)= \sum_{s \neq v \neq
+ * $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
  * t}\frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the total number of shortest paths
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
  * $v$. For more details see
