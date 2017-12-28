@@ -24,10 +24,10 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.util.*;
 
 /**
- * Betweenes centrality.
+ * Betweenness centrality.
  * 
  * <p>
- * Computes the betweenes centrality of each vertex of a graph. The betweenness centrality of a node
+ * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a node
  * $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
  * t}\frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the total number of shortest paths
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
@@ -51,7 +51,7 @@ import org.jgrapht.util.*;
  * @author Assaf Mizrachi
  * @since December 2017
  */
-public class BetweenesCentrality<V, E>
+public class BetweennessCentrality<V, E>
     implements VertexScoringAlgorithm<V, Double>
 {
 
@@ -73,7 +73,7 @@ public class BetweenesCentrality<V, E>
      * 
      * @param graph the input graph
      */
-    public BetweenesCentrality(Graph<V, E> graph)
+    public BetweennessCentrality(Graph<V, E> graph)
     {
         this(graph, false);
     }
@@ -85,7 +85,7 @@ public class BetweenesCentrality<V, E>
      * @param normalize whether to normalize by dividing the closeness by (n-1)*(n-2), where n is the
      *        number of vertices of the graph
      */
-    public BetweenesCentrality(Graph<V, E> graph, boolean normalize)
+    public BetweennessCentrality(Graph<V, E> graph, boolean normalize)
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
 
@@ -138,15 +138,18 @@ public class BetweenesCentrality<V, E>
         }
         
         if (normalize) {
-            int n = this.graph.vertexSet().size();            
-            this.scores.forEach((v, score) -> this.scores.put(v, score / ((n - 1) * (n - 2))));
+            int n = this.graph.vertexSet().size();         
+            int normalizationFactor = (n - 1) * (n - 2);       
+            if (normalizationFactor != 0) {
+                this.scores.forEach((v, score) -> this.scores.put(v, score / normalizationFactor));
+            }
         }
     }
 
     private void compute(V s)
     {
         // initialize
-        Stack<V> stack = new Stack<>();
+        ArrayDeque<V> stack = new ArrayDeque<>();
         Map<V, List<V>> predecessors = new HashMap<>();
         this.graph.vertexSet().forEach(w -> predecessors.put(w, new ArrayList<>()));
 
