@@ -33,7 +33,7 @@ import java.util.*;
  * city exactly once and returns to the origin city?".
  *
  * <p>
- * This is an implementation of the Held-Karp algorithm which returns a minimum-cost Hamiltonian tour.
+ * This is an implementation of the Held-Karp algorithm which returns a optimal, minimum-cost Hamiltonian tour.
  * The implementation requires the input graph to contain at least one vertex.
  * The running time is $O(2^{|V|} \times |V|^2)$ and it takes $O(2^{|V|} \times |V|)$ extra memory.
  *
@@ -43,7 +43,7 @@ import java.util.*;
  *
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm">wikipedia</a> for more
- * details about the dp algorithm.
+ * details about the dynamic programming algorithm.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
