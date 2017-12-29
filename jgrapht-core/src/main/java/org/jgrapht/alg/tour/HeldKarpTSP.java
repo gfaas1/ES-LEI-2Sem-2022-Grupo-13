@@ -123,29 +123,29 @@ public class HeldKarpTSP<V, E>
          *   map each vertex to an integer (using a HashMap)
          *   keep the reverse mapping  (using an ArrayList)
          */
-        Map<V, Integer> mapToInt = new HashMap<>();
-        List<V> mapToV = new ArrayList<>();
+        Map<V, Integer> vertexMap = new HashMap<>();
+        List<V> indexList = new ArrayList<>();
         int newNode = 0;
         for (E e: graph.edgeSet()){
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
 
             // map 'source' if no mapping exists
-            if (!mapToInt.containsKey(source)){
-                mapToInt.put(source, newNode);
-                mapToV.add(source);
+            if (!vertexMap.containsKey(source)){
+                vertexMap.put(source, newNode);
+                indexList.add(source);
                 newNode++;
             }
 
             // map 'target' if no mapping exists
-            if (!mapToInt.containsKey(target)){
-                mapToInt.put(target, newNode);
-                mapToV.add(target);
+            if (!vertexMap.containsKey(target)){
+                vertexMap.put(target, newNode);
+                indexList.add(target);
                 newNode++;
             }
 
-            int u = mapToInt.get(source);
-            int v = mapToInt.get(target);
+            int u = vertexMap.get(source);
+            int v = vertexMap.get(target);
 
             // use Math.min in case we deal with a multigraph
             W[u][v] = Math.min(W[u][v], graph.getEdgeWeight(e));
@@ -178,7 +178,7 @@ public class HeldKarpTSP<V, E>
         int lastNode = 0;
         int lastState = 1 << lastNode;
 
-        vertexList.add(mapToV.get(lastNode));
+        vertexList.add(indexList.get(lastNode));
 
         for (int step = 1; step < n; step++) {
             int nextNode = -1;
@@ -190,16 +190,16 @@ public class HeldKarpTSP<V, E>
             }
 
             assert nextNode != -1;
-            vertexList.add(mapToV.get(nextNode));
-            edgeList.add(graph.getEdge(mapToV.get(lastNode), mapToV.get(nextNode)));
+            vertexList.add(indexList.get(nextNode));
+            edgeList.add(graph.getEdge(indexList.get(lastNode), indexList.get(nextNode)));
             lastState ^= 1 << nextNode;
             lastNode = nextNode;
         }
 
         // add start vertex
-        vertexList.add(mapToV.get(0));
-        edgeList.add(graph.getEdge(mapToV.get(lastNode), mapToV.get(0)));
+        vertexList.add(indexList.get(0));
+        edgeList.add(graph.getEdge(indexList.get(lastNode), indexList.get(0)));
 
-        return new GraphWalk<>(graph, mapToV.get(0), mapToV.get(0), vertexList, edgeList, tourWeight);
+        return new GraphWalk<>(graph, indexList.get(0), indexList.get(0), vertexList, edgeList, tourWeight);
     }
 }
