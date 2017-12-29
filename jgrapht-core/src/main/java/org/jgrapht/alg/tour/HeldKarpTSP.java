@@ -176,7 +176,7 @@ public class HeldKarpTSP<V, E>
         List<E> edgeList = new ArrayList<>(n);
 
         int lastNode = 0;
-        int lastState = 1 << lastNode;
+        int lastState = 1;
 
         vertexList.add(indexList.get(lastNode));
 
