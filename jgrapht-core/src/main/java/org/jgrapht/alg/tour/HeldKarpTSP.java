@@ -93,6 +93,7 @@ public class HeldKarpTSP<V, E>
      * @param graph the input graph
      * @return a minimum-cost tour if one exists, null otherwise
      * @throws IllegalArgumentException if the graph contains no vertices
+     * @throws IllegalArgumentException if the graph contains more than 32 vertices
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
