@@ -59,16 +59,6 @@ public class HeldKarpTSP<V, E>
     public HeldKarpTSP() {
     }
 
-    private void printState(int state, int n){
-        System.out.printf("State %d: ", state);
-        for (int i = 0; i < n; i++) {
-            if (((state >> i) & 1) > 0){
-                System.out.printf("%d ", i);
-            }
-        }
-        System.out.println();
-    }
-
     private double memo(int previousNode, int state, double[][] C, double[][] W){
         // have we seen this state before?
         if (C[previousNode][state] != Double.MIN_VALUE)
