@@ -102,6 +102,10 @@ public class HeldKarpTSP<V, E>
             throw new IllegalArgumentException("Graph contains no vertices");
         }
 
+        if (n > 31){
+            throw new IllegalArgumentException("Graph contains more than 31 vertices");
+        }
+
         if (n == 1){
             V startNode = graph.vertexSet().iterator().next();
             return new GraphWalk<>(graph, startNode, startNode, Collections.singletonList(startNode), null, 0);
