@@ -36,7 +36,7 @@ import org.jgrapht.util.*;
  * 
  * The algorithm is based on 
  * <ul>
- * <li>randes, Ulrik (2001). "A faster algorithm for betweenness centrality". 
+ * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". 
  * Journal of Mathematical Sociology. 25 (2): 163–177.</li>
  * </ul>
  *
