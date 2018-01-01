@@ -126,7 +126,8 @@ public class BetweennessCentrality<V, E>
     private void compute()
     {
         // initialize result container
-        initScores();
+        this.scores = new HashMap<>();
+        this.graph.vertexSet().forEach(v -> this.scores.put(v, 0.0));
 
         // compute for each source
         this.graph.vertexSet().forEach(s -> compute(s));
@@ -289,11 +290,5 @@ public class BetweennessCentrality<V, E>
             return delegate.isEmpty();
         }
 
-    }
-
-    private void initScores()
-    {
-        this.scores = new HashMap<>();
-        this.graph.vertexSet().forEach(v -> this.scores.put(v, 0.0));
     }
 }
