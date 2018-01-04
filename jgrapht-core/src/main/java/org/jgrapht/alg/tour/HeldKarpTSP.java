@@ -125,23 +125,20 @@ public class HeldKarpTSP<V, E>
          */
         Map<V, Integer> vertexMap = new HashMap<>();
         List<V> indexList = new ArrayList<>();
-        int newNode = 0;
         for (E e: graph.edgeSet()){
             V source = graph.getEdgeSource(e);
             V target = graph.getEdgeTarget(e);
 
             // map 'source' if no mapping exists
             if (!vertexMap.containsKey(source)){
-                vertexMap.put(source, newNode);
+                vertexMap.put(source, vertexMap.size());
                 indexList.add(source);
-                newNode++;
             }
 
             // map 'target' if no mapping exists
             if (!vertexMap.containsKey(target)){
-                vertexMap.put(target, newNode);
+                vertexMap.put(target, vertexMap.size());
                 indexList.add(target);
-                newNode++;
             }
 
             int u = vertexMap.get(source);
