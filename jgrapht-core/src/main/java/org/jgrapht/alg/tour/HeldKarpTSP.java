@@ -93,7 +93,7 @@ public class HeldKarpTSP<V, E>
      * @param graph the input graph
      * @return a minimum-cost tour if one exists, null otherwise
      * @throws IllegalArgumentException if the graph contains no vertices
-     * @throws IllegalArgumentException if the graph contains more than 32 vertices
+     * @throws IllegalArgumentException if the graph contains more than 31 vertices
      */
     @Override
     public GraphPath<V, E> getTour(Graph<V, E> graph) {
@@ -104,7 +104,10 @@ public class HeldKarpTSP<V, E>
         }
 
         if (n > 31){
-            throw new IllegalArgumentException("Graph contains more than 31 vertices");
+            throw new IllegalArgumentException("\"The internal representation of the dynamic programming state " +
+                    "space cannot represent graphs containing more than 31 vertices. " +
+                    "The runtime complexity of this implementation, O(2^|V| x |V|^2),  makes it unsuitable " +
+                    "for graphs with more than 31 vertices.\"");
         }
 
         if (n == 1){
