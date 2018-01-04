@@ -104,10 +104,10 @@ public class HeldKarpTSP<V, E>
         }
 
         if (n > 31){
-            throw new IllegalArgumentException("\"The internal representation of the dynamic programming state " +
+            throw new IllegalArgumentException("The internal representation of the dynamic programming state " +
                     "space cannot represent graphs containing more than 31 vertices. " +
                     "The runtime complexity of this implementation, O(2^|V| x |V|^2),  makes it unsuitable " +
-                    "for graphs with more than 31 vertices.\"");
+                    "for graphs with more than 31 vertices.");
         }
 
         if (n == 1){
