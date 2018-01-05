@@ -13,6 +13,7 @@ Changes to JGraphT in each version:
     - Made `IntrusiveEdgesSpecifics` interface public and optimized add call sequence (suggested by shevek, contributed by Dimitrios Michail)
     - Fixed deprecation of Class.newInstance for Java 9; cleaned up GraphTests (contributed by Dimitrios Michail)
     - Fixed PathValidator interface to use GraphPath (contributed by Assaf Mizrachi)
+    - Added Held-Karp dynamic programming algorithm for TSP (contributed by Alexandru Văleanu)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
