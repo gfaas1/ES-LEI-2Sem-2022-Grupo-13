@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
     - Fixed deprecation of Class.newInstance for Java 9; cleaned up GraphTests (contributed by Dimitrios Michail)
     - Fixed PathValidator interface to use GraphPath (contributed by Assaf Mizrachi)
     - Added Held-Karp dynamic programming algorithm for TSP (contributed by Alexandru Văleanu)
+    - Added fundamental cycle basis implementations (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
