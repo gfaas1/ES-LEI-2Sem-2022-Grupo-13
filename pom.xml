@@ -66,6 +66,11 @@
 				<artifactId>jgrapht-ext</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jgrapht-adapter-guava</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>jgrapht-demo</artifactId>
@@ -166,6 +171,7 @@
 		<module>jgrapht-core</module>
 		<module>jgrapht-io</module>
 		<module>jgrapht-ext</module>
+		<module>jgrapht-adapter-guava</module>
 		<module>jgrapht-demo</module>
 		<module>jgrapht-dist</module>
 	</modules>
