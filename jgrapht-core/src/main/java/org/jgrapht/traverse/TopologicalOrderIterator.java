@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2017, by Marden Neubert and Contributors.
+ * (C) Copyright 2004-2018, by Marden Neubert and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

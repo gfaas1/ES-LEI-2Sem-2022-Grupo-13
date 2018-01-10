@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2017, by Christian Hammer and Contributors.
+ * (C) Copyright 2004-2018, by Christian Hammer and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2012-2017, by Vladimir Kostyukov and Contributors.
+ * (C) Copyright 2012-2018, by Vladimir Kostyukov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
