@@ -15,6 +15,7 @@ Changes to JGraphT in each version:
     - Fixed PathValidator interface to use GraphPath (contributed by Assaf Mizrachi)
     - Added Held-Karp dynamic programming algorithm for TSP (contributed by Alexandru Văleanu)
     - Added fundamental cycle basis implementations (contributed by Dimitrios Michail)
+    - Added `BetweennessCentrality` scoring algorithm (contributed by Assaf Mizrachi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
