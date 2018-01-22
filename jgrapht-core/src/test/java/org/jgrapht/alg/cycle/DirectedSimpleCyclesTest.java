@@ -48,10 +48,29 @@ public class DirectedSimpleCyclesTest
         testAlgorithm(hawickJamesFinder);
     }
 
+    @Test
+    public void testWeightedGraph()
+    {
+        TiernanSimpleCycles<Integer, DefaultWeightedEdge> tiernanFinder =
+            new TiernanSimpleCycles<>();
+        TarjanSimpleCycles<Integer, DefaultWeightedEdge> tarjanFinder = new TarjanSimpleCycles<>();
+        JohnsonSimpleCycles<Integer, DefaultWeightedEdge> johnsonFinder =
+            new JohnsonSimpleCycles<>();
+        SzwarcfiterLauerSimpleCycles<Integer, DefaultWeightedEdge> szwarcfiterLauerFinder =
+            new SzwarcfiterLauerSimpleCycles<>();
+        HawickJamesSimpleCycles<Integer, DefaultWeightedEdge> hawickJamesFinder =
+            new HawickJamesSimpleCycles<>();
+
+        testAlgorithmWithWeightedGraph(tiernanFinder);
+        testAlgorithmWithWeightedGraph(tarjanFinder);
+        testAlgorithmWithWeightedGraph(johnsonFinder);
+        testAlgorithmWithWeightedGraph(szwarcfiterLauerFinder);
+        testAlgorithmWithWeightedGraph(hawickJamesFinder);
+    }
+
     private void testAlgorithm(DirectedSimpleCycles<Integer, DefaultEdge> finder)
     {
-        Graph<Integer, DefaultEdge> graph =
-            new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -71,7 +90,7 @@ public class DirectedSimpleCyclesTest
         checkResult(finder, 5);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            graph = new DefaultDirectedGraph<>(DefaultEdge.class);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }
@@ -85,7 +104,45 @@ public class DirectedSimpleCyclesTest
         }
     }
 
-    private void checkResult(DirectedSimpleCycles<Integer, DefaultEdge> finder, int size)
+    private void testAlgorithmWithWeightedGraph(
+        DirectedSimpleCycles<Integer, DefaultWeightedEdge> finder)
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        for (int i = 0; i < 7; i++) {
+            graph.addVertex(i);
+        }
+        finder.setGraph(graph);
+        graph.addEdge(0, 0);
+        checkResult(finder, 1);
+        graph.addEdge(1, 1);
+        checkResult(finder, 2);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 0);
+        checkResult(finder, 3);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+        checkResult(finder, 4);
+        graph.addEdge(6, 6);
+        checkResult(finder, 5);
+
+        for (int size = 1; size <= MAX_SIZE; size++) {
+            graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            for (int i = 0; i < size; i++) {
+                graph.addVertex(i);
+            }
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    graph.addEdge(i, j);
+                }
+            }
+            finder.setGraph(graph);
+            checkResult(finder, RESULTS[size]);
+        }
+    }
+
+    private <E> void checkResult(DirectedSimpleCycles<Integer, E> finder, int size)
     {
         assertTrue(finder.findSimpleCycles().size() == size);
     }

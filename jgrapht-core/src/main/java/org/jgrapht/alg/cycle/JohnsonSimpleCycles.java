@@ -132,7 +132,6 @@ public class JohnsonSimpleCycles<V, E>
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     private Object[] findMinSCSG(int startIndex)
     {
         // Per Johnson : "adjacency structure of strong
@@ -165,8 +164,7 @@ public class JohnsonSimpleCycles<V, E>
         }
 
         // build a graph for the SCC found
-        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(
-            new ClassBasedEdgeFactory<>((Class<? extends E>) DefaultEdge.class));
+        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(graph.getEdgeFactory());
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }
