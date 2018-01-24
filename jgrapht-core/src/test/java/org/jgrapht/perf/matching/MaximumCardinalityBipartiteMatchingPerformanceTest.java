@@ -78,7 +78,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         public void run()
         {
             long time = System.currentTimeMillis();
-            MatchingAlgorithm.Matching m =
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m =
                 createSolver(graph, firstPartition, secondPartition).getMatching();
             time = System.currentTimeMillis() - time;
             System.out.println(

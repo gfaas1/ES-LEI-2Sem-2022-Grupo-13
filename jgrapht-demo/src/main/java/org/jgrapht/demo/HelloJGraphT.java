@@ -60,7 +60,7 @@ public final class HelloJGraphT
      */
     private static Graph<URL, DefaultEdge> createHrefGraph()
     {
-        Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<URL, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
 
         try {
             URL amazon = new URL("http://www.amazon.com");

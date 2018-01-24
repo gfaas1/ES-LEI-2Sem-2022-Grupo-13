@@ -87,7 +87,7 @@ public class SubgraphIsomorphismTestUtils
         Graph<Integer, DefaultEdge> g1, int vertexCount, long seed)
     {
         Map<Integer, Integer> map = new HashMap<>();
-        Graph<Integer, DefaultEdge> g2 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g2 = new DirectedGraph<>(DefaultEdge.class);
         Set<Integer> vertexSet = g1.vertexSet();
         int n = vertexSet.size();
 
@@ -118,7 +118,7 @@ public class SubgraphIsomorphismTestUtils
     public static Graph<Integer, DefaultEdge> randomGraph(int vertexCount, int edgeCount, long seed)
     {
         Integer[] vertexes = new Integer[vertexCount];
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
 
         for (int i = 0; i < vertexCount; i++)
             g.addVertex(vertexes[i] = i);

@@ -52,8 +52,9 @@ public interface GraphType
     boolean isMixed();
 
     /**
-     * Returns <code>true</code> if and only if multiple edges are allowed in this graph. The
-     * meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.
+     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph.
+     * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
+     * v2.
      *
      * @return <code>true</code> if and only if multiple edges are allowed.
      */

@@ -62,7 +62,7 @@ public class GraphGeneratorTest
     public void testEmptyGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new EmptyGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, vertexFactory, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -77,7 +77,7 @@ public class GraphGeneratorTest
     public void testLinearGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new LinearGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, vertexFactory, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -113,7 +113,7 @@ public class GraphGeneratorTest
     public void testRingGraphGenerator()
     {
         GraphGenerator<Object, DefaultEdge, Object> gen = new RingGraphGenerator<>(SIZE);
-        Graph<Object, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
         Map<String, Object> resultMap = new HashMap<>();
         gen.generateGraph(g, vertexFactory, resultMap);
         assertEquals(SIZE, g.vertexSet().size());
@@ -174,7 +174,7 @@ public class GraphGeneratorTest
     @Test
     public void testScaleFreeGraphGenerator()
     {
-        Graph<Object, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
         ScaleFreeGraphGenerator<Object, DefaultEdge> generator = new ScaleFreeGraphGenerator<>(500);
         generator.generateGraph(graph, vertexFactory, null);
         ConnectivityInspector<Object, DefaultEdge> inspector = new ConnectivityInspector<>(graph);
@@ -193,7 +193,7 @@ public class GraphGeneratorTest
         }
 
         generator = new ScaleFreeGraphGenerator<>(0);
-        Graph<Object, DefaultEdge> empty = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> empty = new DirectedGraph<>(DefaultEdge.class);
         generator.generateGraph(empty, vertexFactory, null);
         assertTrue("non-empty graph generated", empty.vertexSet().size() == 0);
     }
@@ -288,7 +288,7 @@ public class GraphGeneratorTest
 
         // validating a directed and undirected graph
         Graph<String, String> directedGridGraph =
-            new DefaultDirectedGraph<>(new StringEdgeFactory());
+            new DirectedGraph<>(new StringEdgeFactory());
         generator.generateGraph(directedGridGraph, new StringVertexFactory(), resultMap);
         validateGridGraphGenerator(rows, cols, directedGridGraph, resultMap);
 

@@ -97,7 +97,7 @@ public class NeighborCacheTest
     public void testDirectedNeighborSet()
     {
         ListenableGraph<String, Object> g =
-            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(Object.class));
+            new DefaultListenableGraph<>(new DirectedGraph<>(Object.class));
         g.addVertex(V1);
         g.addVertex(V2);
 

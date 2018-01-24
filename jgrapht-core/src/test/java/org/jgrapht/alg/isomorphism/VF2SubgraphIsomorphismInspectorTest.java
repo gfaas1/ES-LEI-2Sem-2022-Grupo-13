@@ -37,7 +37,7 @@ public class VF2SubgraphIsomorphismInspectorTest
     public void testGraphTypes()
     {
 
-        Graph<Integer, DefaultEdge> dg1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg1 = new DirectedGraph<>(DefaultEdge.class);
 
         dg1.addVertex(1);
         dg1.addVertex(2);
@@ -423,8 +423,8 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-1: graph and subgraph empty */
 
-        Graph<Integer, DefaultEdge> dg0v = new DefaultDirectedGraph<>(DefaultEdge.class),
-            dg0v2 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg0v = new DirectedGraph<>(DefaultEdge.class),
+            dg0v2 = new DirectedGraph<>(DefaultEdge.class);
 
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf1 =
             new VF2SubgraphIsomorphismInspector<>(dg0v, dg0v2);
@@ -433,7 +433,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-2: graph non-empty, subgraph empty */
 
-        Graph<Integer, DefaultEdge> dg4v3e = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg4v3e = new DirectedGraph<>(DefaultEdge.class);
 
         dg4v3e.addVertex(1);
         dg4v3e.addVertex(2);
@@ -458,7 +458,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-4: graph non-empty, subgraph single vertex */
 
-        Graph<Integer, DefaultEdge> dg1v = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg1v = new DirectedGraph<>(DefaultEdge.class);
 
         dg1v.addVertex(5);
 
@@ -486,7 +486,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-6: subgraph with vertices, but no edges */
 
-        Graph<Integer, DefaultEdge> dg3v0e = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg3v0e = new DirectedGraph<>(DefaultEdge.class);
 
         dg3v0e.addVertex(5);
         dg3v0e.addVertex(6);
@@ -499,7 +499,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-7: graph and subgraph with vertices, but no edges */
 
-        Graph<Integer, DefaultEdge> dg2v0e = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg2v0e = new DirectedGraph<>(DefaultEdge.class);
 
         dg2v0e.addVertex(1);
         dg2v0e.addVertex(2);
@@ -523,7 +523,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-8: graph no edges, subgraph contains single edge */
 
-        Graph<Integer, DefaultEdge> dg2v1e = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg2v1e = new DirectedGraph<>(DefaultEdge.class);
 
         dg2v1e.addVertex(5);
         dg2v1e.addVertex(6);
@@ -539,7 +539,7 @@ public class VF2SubgraphIsomorphismInspectorTest
          * ECD-9: complete graphs of different size, graph smaller than subgraph
          */
 
-        Graph<Integer, DefaultEdge> dg5c = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg5c = new DirectedGraph<>(DefaultEdge.class);
 
         dg5c.addVertex(0);
         dg5c.addVertex(1);
@@ -558,7 +558,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         dg5c.addEdge(2, 4);
         dg5c.addEdge(3, 4);
 
-        Graph<Integer, DefaultEdge> dg4c = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg4c = new DirectedGraph<>(DefaultEdge.class);
 
         dg4c.addVertex(0);
         dg4c.addVertex(1);
@@ -609,7 +609,7 @@ public class VF2SubgraphIsomorphismInspectorTest
 
         /* ECD-12: not connected graphs of different size */
 
-        Graph<Integer, DefaultEdge> dg6v4enc = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg6v4enc = new DirectedGraph<>(DefaultEdge.class);
 
         dg6v4enc.addVertex(0);
         dg6v4enc.addVertex(1);
@@ -623,7 +623,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         dg6v4enc.addEdge(3, 1);
         dg6v4enc.addEdge(4, 5);
 
-        Graph<Integer, DefaultEdge> dg5v4enc = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> dg5v4enc = new DirectedGraph<>(DefaultEdge.class);
 
         dg5v4enc.addVertex(6);
         dg5v4enc.addVertex(7);
@@ -694,8 +694,8 @@ public class VF2SubgraphIsomorphismInspectorTest
          *
          */
 
-        Graph<Integer, DefaultEdge> g3 = new DefaultDirectedGraph<>(DefaultEdge.class),
-            g4 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g3 = new DirectedGraph<>(DefaultEdge.class),
+            g4 = new DirectedGraph<>(DefaultEdge.class);
 
         g3.addVertex(0);
         g3.addVertex(1);

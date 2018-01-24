@@ -31,7 +31,9 @@ import org.jgrapht.graph.builder.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
+ * @deprecated In favor of {@link DirectedGraph}
  */
+@Deprecated
 public class DefaultDirectedGraph<V, E>
     extends AbstractBaseGraph<V, E>
 {

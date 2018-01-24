@@ -46,7 +46,7 @@ public class EqualsAndHashCodeTest
      */
     public void testDefaultDirectedGraph()
     {
-        Graph<String, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g1 = new DirectedGraph<>(DefaultEdge.class);
         g1.addVertex(v1);
         g1.addVertex(v2);
         g1.addVertex(v3);
@@ -55,7 +55,7 @@ public class EqualsAndHashCodeTest
         DefaultEdge e23 = g1.addEdge(v2, v3);
         DefaultEdge e31 = g1.addEdge(v3, v1);
 
-        Graph<String, DefaultEdge> g2 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g2 = new DirectedGraph<>(DefaultEdge.class);
         g2.addVertex(v4);
         g2.addVertex(v3);
         g2.addVertex(v2);
@@ -64,7 +64,7 @@ public class EqualsAndHashCodeTest
         g2.addEdge(v2, v3, e23);
         g2.addEdge(v1, v2, e12);
 
-        Graph<String, DefaultEdge> g3 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g3 = new DirectedGraph<>(DefaultEdge.class);
         g3.addVertex(v4);
         g3.addVertex(v3);
         g3.addVertex(v2);
@@ -120,21 +120,21 @@ public class EqualsAndHashCodeTest
      */
     public void testGraphsWithNonIntrusiveEdge()
     {
-        Graph<String, String> g1 = new DefaultDirectedGraph<>(String.class);
+        Graph<String, String> g1 = new DirectedGraph<>(String.class);
         g1.addVertex(v1);
         g1.addVertex(v2);
         g1.addVertex(v3);
         g1.addEdge(v1, v2, v1 + v2);
         g1.addEdge(v3, v1, v3 + v1);
 
-        Graph<String, String> g2 = new DefaultDirectedGraph<>(String.class);
+        Graph<String, String> g2 = new DirectedGraph<>(String.class);
         g2.addVertex(v3);
         g2.addVertex(v2);
         g2.addVertex(v1);
         g2.addEdge(v3, v1, v3 + v1);
         g2.addEdge(v1, v2, v1 + v2);
 
-        Graph<String, String> g3 = new DefaultDirectedGraph<>(String.class);
+        Graph<String, String> g3 = new DirectedGraph<>(String.class);
         g3.addVertex(v3);
         g3.addVertex(v2);
         g3.addVertex(v1);

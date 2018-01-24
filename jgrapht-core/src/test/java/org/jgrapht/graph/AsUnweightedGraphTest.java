@@ -50,8 +50,8 @@ public class AsUnweightedGraphTest
      */
     public void testDirected()
     {
-        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> directed =
-            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        DirectedWeightedGraph<String, DefaultWeightedEdge> directed =
+            new DirectedWeightedGraph<>(DefaultWeightedEdge.class);
         constructWeighted(directed);
 
         Graph<String, DefaultWeightedEdge> unweighted = new AsUnweightedGraph<>(directed);

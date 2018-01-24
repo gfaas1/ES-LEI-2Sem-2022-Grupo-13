@@ -102,7 +102,7 @@ public class DepthFirstIteratorTest
      */
     public void testBug1169182()
     {
-        Graph<String, DefaultEdge> dg = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> dg = new DirectedGraph<>(DefaultEdge.class);
 
         String a = "A";
         String b = "B";

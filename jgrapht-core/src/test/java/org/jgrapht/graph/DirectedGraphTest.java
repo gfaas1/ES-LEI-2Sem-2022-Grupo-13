@@ -28,7 +28,7 @@ import org.jgrapht.graph.specifics.*;
  * @author Barak Naveh
  * @since Aug 9, 2003
  */
-public class DefaultDirectedGraphTest
+public class DirectedGraphTest
     extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------

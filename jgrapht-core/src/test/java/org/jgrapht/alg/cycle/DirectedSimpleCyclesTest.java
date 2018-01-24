@@ -51,7 +51,7 @@ public class DirectedSimpleCyclesTest
     private void testAlgorithm(DirectedSimpleCycles<Integer, DefaultEdge> finder)
     {
         Graph<Integer, DefaultEdge> graph =
-            new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            new DirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -71,7 +71,7 @@ public class DirectedSimpleCyclesTest
         checkResult(finder, 5);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new DefaultDirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            graph = new DirectedGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }

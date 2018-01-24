@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2018-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,40 +21,46 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A directed weighted graph. A directed weighted graph is a non-simple directed graph in which
- * multiple edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
- * weights on its edges.
+ * An undirected graph. An undirected graph is a non-simple undirected graph in which multiple edges
+ * between any two vertices are <i>not</i> permitted, but loops are.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
- *
- * @see DefaultDirectedGraph
- * @deprecated In favor of {@link DirectedWeightedGraph}
  */
-@Deprecated
-public class DefaultDirectedWeightedGraph<V, E>
-    extends DefaultDirectedGraph<V, E>
+public class UndirectedGraph<V, E>
+    extends AbstractBaseGraph<V, E>
 {
-    private static final long serialVersionUID = -4867672646995721544L;
+    private static final long serialVersionUID = -2066644490824847621L;
 
     /**
-     * Creates a new directed weighted graph.
+     * Creates a new undirected graph.
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public DefaultDirectedWeightedGraph(Class<? extends E> edgeClass)
+    public UndirectedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
 
     /**
-     * Creates a new directed weighted graph with the specified edge factory.
+     * Creates a new undirected graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      */
-    public DefaultDirectedWeightedGraph(EdgeFactory<V, E> ef)
+    public UndirectedGraph(EdgeFactory<V, E> ef)
     {
-        super(ef, true);
+        this(ef, false);
+    }
+
+    /**
+     * Creates a new undirected graph with the specified edge factory.
+     *
+     * @param weighted if true the graph supports edge weights
+     * @param ef the edge factory of the new graph.
+     */
+    public UndirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
+    {
+        super(ef, false, false, true, weighted);
     }
 
     /**
@@ -65,11 +71,10 @@ public class DefaultDirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
-            Class<? extends E> edgeClass)
+    public static <V, E> GraphBuilder<V, E, ? extends UndirectedGraph<V, E>> createBuilder(
+        Class<? extends E> edgeClass)
     {
-        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(edgeClass));
+        return new GraphBuilder<>(new UndirectedGraph<>(edgeClass));
     }
 
     /**
@@ -81,11 +86,10 @@ public class DefaultDirectedWeightedGraph<V, E>
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
+        E> GraphBuilder<V, E, ? extends UndirectedGraph<V, E>> createBuilder(EdgeFactory<V, E> ef)
     {
-        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(ef));
+        return new GraphBuilder<>(new UndirectedGraph<>(ef));
     }
 }
 
-// End DefaultDirectedWeightedGraph.java
+// End DefaultDirectedGraph.java

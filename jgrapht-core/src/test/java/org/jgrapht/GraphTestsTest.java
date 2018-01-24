@@ -38,7 +38,7 @@ public class GraphTestsTest
     @Test
     public void testIsEmpty()
     {
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isEmpty(g));
         g.addVertex(1);
         assertTrue(GraphTests.isEmpty(g));
@@ -54,7 +54,7 @@ public class GraphTestsTest
     public void testIsSimple()
     {
         // test empty
-        Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = new DirectedGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isSimple(g1));
 
         Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(DefaultEdge.class);
@@ -89,7 +89,7 @@ public class GraphTestsTest
     @Test
     public void testHasSelfLoops()
     {
-        Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = new DirectedGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.hasSelfLoops(g1));
 
         Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(DefaultEdge.class);
@@ -117,7 +117,7 @@ public class GraphTestsTest
     @Test
     public void testHasMultipleEdges()
     {
-        Graph<Integer, DefaultEdge> g1 = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g1 = new DirectedGraph<>(DefaultEdge.class);
         Assert.assertFalse(GraphTests.hasMultipleEdges(g1));
 
         Graph<Integer, DefaultEdge> g2 = new SimpleGraph<>(DefaultEdge.class);
@@ -156,7 +156,7 @@ public class GraphTestsTest
     @Test
     public void testIsCompleteDirected()
     {
-        Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
         assertTrue(GraphTests.isComplete(g));
         g.addVertex(1);
         assertTrue(GraphTests.isComplete(g));

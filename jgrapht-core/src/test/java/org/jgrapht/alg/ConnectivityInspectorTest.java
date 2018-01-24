@@ -96,7 +96,7 @@ public class ConnectivityInspectorTest
     public void testDirectedGraph()
     {
         ListenableGraph<String, DefaultEdge> g =
-            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
+            new DefaultListenableGraph<>(new DirectedGraph<>(DefaultEdge.class));
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);

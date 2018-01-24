@@ -67,7 +67,7 @@ public class JGraphXAdapterDemo
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
+            new DefaultListenableGraph<>(new DirectedGraph<>(DefaultEdge.class));
 
         // create a visualization using JGraph, via an adapter
         jgxAdapter = new JGraphXAdapter<>(g);
