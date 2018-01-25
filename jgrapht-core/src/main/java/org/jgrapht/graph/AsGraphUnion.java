@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,7 +30,7 @@ import org.jgrapht.util.*;
  * Read-only union of two graphs: G<sub>1</sub> and G<sub>2</sub>. If G<sub>1</sub> =
  * (V<sub>1</sub>, E<sub>1</sub>) and G<sub>2</sub> = (V<sub>2</sub>, E<sub>2</sub>) then their
  * union G = (V, E), where V is the union of V<sub>1</sub> and V<sub>2</sub>, and E is the union of
- * E<sub>1</sub> and E<sub>1</sub>. A {@link WeightCombiner} in order to calculate edge weights.
+ * E<sub>1</sub> and E<sub>2</sub>. A {@link WeightCombiner} in order to calculate edge weights.
  * 
  * @param <V> the vertex type
  * @param <E> the edge type

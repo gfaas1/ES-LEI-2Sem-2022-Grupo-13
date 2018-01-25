@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -142,7 +142,7 @@ public class TwoApproxMetricTSPTest
         new TwoApproxMetricTSP<String, DefaultWeightedEdge>().getTour(g);
     }
 
-    private static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)
+    static <V, E> void assertHamiltonian(Graph<V, E> g, GraphPath<V, E> path)
     {
         List<V> tourVertices = path.getVertexList();
         List<E> tourEdges = path.getEdgeList();

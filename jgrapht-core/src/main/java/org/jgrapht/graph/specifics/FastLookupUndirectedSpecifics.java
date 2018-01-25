@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2015-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -130,7 +130,7 @@ public class FastLookupUndirectedSpecifics<V, E>
         if (edgeSet != null)
             edgeSet.add(e);
         else {
-            edgeSet = new ArrayUnenforcedSet<>();
+            edgeSet = new ArrayUnenforcedSet<>(1);
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
         }
