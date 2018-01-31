@@ -3,3 +3,5 @@ jdk:
   - oraclejdk8
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
+after_success:
+  - mvn deploy -DskipTests=true --settings snapshot-settings.xml
