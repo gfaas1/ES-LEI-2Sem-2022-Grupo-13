@@ -97,6 +97,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Patrick Sharp](https://github.com/sharpTrick)
 - [Piotr Turski](https://github.com/piotrturski)
 - [Alexandru Văleanu](https://github.com/AlexandruValeanu)
+- [Davide Cavestro](https://github.com/davidecavestro)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
