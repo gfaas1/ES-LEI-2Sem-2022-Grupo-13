@@ -18,6 +18,7 @@ Changes to JGraphT in each version:
     - Added `BetweennessCentrality` scoring algorithm (contributed by Assaf Mizrachi)
     - Automatically publish snapshots after successful Travis CI builds (contributed by Davide Cavestro)
     - Implemented method findLcas() in NaiveLcaFinder (contributed by Alexandru Văleanu)
+    - Added `MultiObjectiveShortestPathAlgorithm` interface and first implementation `MartinShortestPath` (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
