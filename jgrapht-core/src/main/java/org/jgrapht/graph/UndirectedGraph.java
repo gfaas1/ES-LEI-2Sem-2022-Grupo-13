@@ -21,7 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * An undirected graph. An undirected graph is a non-simple undirected graph in which multiple edges
+ * An undirected graph. An undirected graph is a non-simple undirected graph in which multiple (parallel) edges
  * between any two vertices are <i>not</i> permitted, but loops are.
  *
  * @param <V> the graph vertex type

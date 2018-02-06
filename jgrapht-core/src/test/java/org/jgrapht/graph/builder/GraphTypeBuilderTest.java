@@ -43,7 +43,7 @@ public class GraphTypeBuilderTest
         Graph<Integer,
             DefaultEdge> graph = GraphTypeBuilder
                 .<Integer, DefaultEdge> directed().allowingMultipleEdges(true)
-                .allowingSelfLoops(true).edgeClass(DefaultEdge.class).build();
+                .allowingSelfLoops(true).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
@@ -57,7 +57,7 @@ public class GraphTypeBuilderTest
             .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
             .edgeFactory(
                 new ClassBasedEdgeFactory<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class))
-            .build();
+            .buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
@@ -70,7 +70,7 @@ public class GraphTypeBuilderTest
         Graph<Integer,
             DefaultEdge> graph = GraphTypeBuilder
                 .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-                .vertexClass(Integer.class).edgeClass(DefaultEdge.class).build();
+                .vertexClass(Integer.class).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
@@ -83,7 +83,7 @@ public class GraphTypeBuilderTest
         Graph<Integer,
             DefaultEdge> graph = GraphTypeBuilder
                 .<Integer, DefaultEdge> undirected().allowingMultipleEdges(true)
-                .allowingSelfLoops(false).edgeClass(DefaultEdge.class).build();
+                .allowingSelfLoops(false).edgeClass(DefaultEdge.class).buildGraph();
         assertTrue(graph.getType().isUndirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertFalse(graph.getType().isAllowingSelfLoops());
@@ -94,7 +94,7 @@ public class GraphTypeBuilderTest
     public void testGraphTypeBuilderFromGraph()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graph<Integer, DefaultEdge> graph1 = GraphTypeBuilder.asGraph(graph).build();
+        Graph<Integer, DefaultEdge> graph1 = GraphTypeBuilder.asGraph(graph).buildGraph();
 
         assertTrue(graph1.getType().isUndirected());
         assertTrue(graph1.getType().isAllowingMultipleEdges());

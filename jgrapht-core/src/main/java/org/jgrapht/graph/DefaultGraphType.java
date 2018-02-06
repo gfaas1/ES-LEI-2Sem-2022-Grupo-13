@@ -27,13 +27,15 @@ import org.jgrapht.*;
  * <p>
  * The graph type describes various properties of a graph such as whether it is directed, undirected
  * or mixed, whether it contain self-loops (edges with the same source and target vertices), whether
- * it contain parallel-edges (multiple edges with the same source and target) and whether it is
+ * it contain multiple (parallel) edges (edges with the same source and target) and whether it is
  * weighted or not.
  * 
  * @author Dimitrios Michail
  */
 public class DefaultGraphType
-    implements GraphType, Serializable
+    implements
+    GraphType,
+    Serializable
 {
     private static final long serialVersionUID = 4291049312119347474L;
 

@@ -25,11 +25,49 @@ import org.jgrapht.util.TypeUtil;
 
 /**
  * A builder class for the hierarchy of {@link Graph}s that the library provides.
+ *
+ * <p>The following example creates a directed graph which allows multiple (parallel) edges 
+ * and self-loops:  
+ * <blockquote><pre>
+ * Graph&lt;Integer, DefaultEdge&gt; g = 
+ *   GraphTypeBuilder.&lt;Integer, DefaultEdge&gt; directed()
+ *                   .allowingMultipleEdges(true)
+ *                   .allowingSelfLoops(true)
+ *                   .edgeClass(DefaultEdge.class)
+ *                   .buildGraph();
+ * </pre></blockquote>
+ * 
+ * Similarly one could get a weighted multigraph by using:
+ * <blockquote><pre>
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g = 
+ *   GraphTypeBuilder.&lt;Integer, DefaultWeightedEdge&gt; undirected()
+ *                   .allowingMultipleEdges(true)
+ *                   .allowingSelfLoops(false)
+ *                   .edgeClass(DefaultWeightedEdge.class)
+ *                   .weighted(true)
+ *                   .buildGraph();
+ * </pre></blockquote>
+ * 
+ * <p>The builder also provides the ability to construct a graph from another graph such as:
+ * <blockquote><pre>
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g1 = 
+ *   GraphTypeBuilder.&lt;Integer, DefaultWeightedEdge&gt; undirected()
+ *                   .allowingMultipleEdges(true)
+ *                   .allowingSelfLoops(false)
+ *                   .edgeClass(DefaultWeightedEdge.class)
+ *                   .weighted(true)
+ *                   .buildGraph();
+ *                   
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g2 = GraphTypeBuilder.asGraph(g1).buildGraph();                   
+ * </pre></blockquote>
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * 
+ * @see GraphType
+ * @see GraphBuilder
  */
 public final class GraphTypeBuilder<V, E>
 {
@@ -104,7 +142,8 @@ public final class GraphTypeBuilder<V, E>
     }
 
     /**
-     * Create a graph type builder which will create the same graph type as the parameter graph.
+     * Create a graph type builder which will create the same graph type as the parameter graph. The
+     * new graph will use the same edge factory as the input graph.
      * 
      * @param graph a graph
      * @return a type builder
@@ -160,7 +199,7 @@ public final class GraphTypeBuilder<V, E>
      * @param edgeFactory the edge factory to use
      * @return the graph type builder
      * @param <V1> the graph vertex type
-     * @param <E1> the graph edge type 
+     * @param <E1> the graph edge type
      */
     public <V1 extends V,
         E1 extends E> GraphTypeBuilder<V1, E1> edgeFactory(EdgeFactory<V1, E1> edgeFactory)
@@ -188,7 +227,7 @@ public final class GraphTypeBuilder<V, E>
      * 
      * @param edgeClass the edge class
      * @return the graph type builder
-     * @param <E1> the graph edge type 
+     * @param <E1> the graph edge type
      */
     public <E1 extends E> GraphTypeBuilder<V, E1> edgeClass(Class<E1> edgeClass)
     {
@@ -198,13 +237,33 @@ public final class GraphTypeBuilder<V, E>
     }
 
     /**
+     * Build the graph type.
+     * 
+     * @return a graph type
+     */
+    public GraphType buildType()
+    {
+        DefaultGraphType.Builder typeBuilder = new DefaultGraphType.Builder();
+        if (directed && undirected) {
+            typeBuilder = typeBuilder.mixed();
+        } else if (directed) {
+            typeBuilder = typeBuilder.directed();
+        } else if (undirected) {
+            typeBuilder = typeBuilder.undirected();
+        }
+        return typeBuilder
+            .allowMultipleEdges(allowingMultipleEdges).allowSelfLoops(allowingSelfLoops)
+            .weighted(weighted).build();
+    }
+
+    /**
      * Build the graph and acquire a {@link GraphBuilder} in order to add vertices and edges.
      * 
      * @return a graph builder
      */
-    public GraphBuilder<V, E, Graph<V, E>> toGraphBuilder()
+    public GraphBuilder<V, E, Graph<V, E>> buildGraphBuilder()
     {
-        return new GraphBuilder<V, E, Graph<V, E>>(build());
+        return new GraphBuilder<V, E, Graph<V, E>>(buildGraph());
     }
 
     /**
@@ -214,7 +273,7 @@ public final class GraphTypeBuilder<V, E>
      * @throws IllegalArgumentException if the edge factory is missing
      * @throws UnsupportedOperationException in case a graph type is not supported
      */
-    public Graph<V, E> build()
+    public Graph<V, E> buildGraph()
     {
         if (directed && undirected) {
             throw new UnsupportedOperationException("Mixed graphs are not supported");

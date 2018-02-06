@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A weighted pseudograph. A weighted pseudograph is a non-simple undirected graph in which both
- * graph loops and multiple edges are permitted. The edges of a weighted pseudograph have weights.
+ * graph loops and multiple (parallel) edges are permitted. The edges of a weighted pseudograph have weights.
  * If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.

@@ -30,7 +30,7 @@ import org.jgrapht.*;
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
  * <p>
- * This implementation of the VF2 algorithm does not support graphs with multiple edges.
+ * This implementation of the VF2 algorithm does not support graphs with multiple (parallel) edges.
  *
  * @param <V> the type of the vertices
  * @param <E> the type of the edges

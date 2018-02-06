@@ -23,7 +23,7 @@ package org.jgrapht;
  * <p>
  * The graph type describes various properties of a graph such as whether it is directed/undirected
  * or mixed, whether it contain self-loops (edges with the same source and target vertices), whether
- * it contain parallel-edges (multiple edges with the same source and target) and whether it is
+ * it contain multiple (parallel) edges (multiple edges with the same source and target) and whether it is
  * weighted or not.
  * 
  * @author Dimitrios Michail
@@ -56,7 +56,7 @@ public interface GraphType
      * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
      * v2.
      *
-     * @return <code>true</code> if and only if multiple edges are allowed.
+     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
      */
     boolean isAllowingMultipleEdges();
 

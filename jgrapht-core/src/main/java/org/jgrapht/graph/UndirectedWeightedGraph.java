@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A undirected weighted graph. An undirected weighted graph is a non-simple undirected graph in
- * which multiple edges between any two vertices are <i>not</i> permitted, but loops are. The edges
+ * which multiple (parallel) edges between any two vertices are <i>not</i> permitted, but loops are. The edges
  * of a weighted undirected graph have weights.
  * 
  * @param <V> the graph vertex type

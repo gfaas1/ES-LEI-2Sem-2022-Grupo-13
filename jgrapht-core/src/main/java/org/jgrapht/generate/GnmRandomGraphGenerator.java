@@ -36,7 +36,7 @@ import org.jgrapht.graph.*;
  * 
  * <p>
  * The implementation creates the vertices and then randomly chooses an edge and tries to add it. If
- * the add fails for any reason (an edge already exists and multiple edges are not allowed) it will
+ * the add fails for any reason (an edge already exists and multiple (parallel) edges are not allowed) it will
  * just choose another and try again. The performance therefore varies significantly based on the
  * probability of successfully constructing an acceptable edge.
  * 
@@ -75,7 +75,7 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Create a new G(n, M) random graph generator. The generator does not create self-loops or
-     * multiple edges between the same two vertices.
+     * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
      * @param m the number of edges
@@ -87,7 +87,7 @@ public class GnmRandomGraphGenerator<V, E>
 
     /**
      * Create a new G(n, M) random graph generator. The generator does not create self-loops or
-     * multiple edges between the same two vertices.
+     * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
      * @param m the number of edges
@@ -105,7 +105,7 @@ public class GnmRandomGraphGenerator<V, E>
      * @param m the number of edges
      * @param seed seed for the random number generator
      * @param loops whether the generated graph may contain loops
-     * @param multipleEdges whether the generated graph many contain multiple edges between the same
+     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges between the same
      *        two vertices
      */
     public GnmRandomGraphGenerator(int n, int m, long seed, boolean loops, boolean multipleEdges)
@@ -120,7 +120,7 @@ public class GnmRandomGraphGenerator<V, E>
      * @param m the number of edges
      * @param rng the random number generator
      * @param loops whether the generated graph may contain loops
-     * @param multipleEdges whether the generated graph many contain multiple edges between the same
+     * @param multipleEdges whether the generated graph many contain multiple (parallel) edges between the same
      *        two vertices
      */
     public GnmRandomGraphGenerator(int n, int m, Random rng, boolean loops, boolean multipleEdges)
@@ -148,7 +148,7 @@ public class GnmRandomGraphGenerator<V, E>
      * @throws IllegalArgumentException if the number of edges, passed in the constructor, cannot be
      *         created on a graph of the concrete type with the specified number of vertices
      * @throws IllegalArgumentException if the graph does not support a requested feature such as
-     *         self-loops or multiple edges
+     *         self-loops or multiple (parallel) edges
      */
     @Override
     public void generateGraph(
@@ -255,7 +255,7 @@ public class GnmRandomGraphGenerator<V, E>
      * @param n number of nodes
      * @param isDirected whether the graph is directed or not
      * @param createLoops if loops are allowed
-     * @param createMultipleEdges if multiple edges are allowed
+     * @param createMultipleEdges if multiple (parallel) edges are allowed
      * @return the number of maximum edges
      */
     static <V, E> int computeMaximumAllowedEdges(

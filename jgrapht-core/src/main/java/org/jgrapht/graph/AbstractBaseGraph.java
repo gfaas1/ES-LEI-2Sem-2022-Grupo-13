@@ -72,7 +72,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      * @param directed if true the graph will be directed, otherwise undirected
-     * @param allowMultipleEdges whether to allow multiple edges or not.
+     * @param allowMultipleEdges whether to allow multiple (parallel) edges or not.
      * @param allowLoops whether to allow edges that are self-loops or not.
      * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
      *
@@ -117,10 +117,10 @@ public abstract class AbstractBaseGraph<V, E>
     }
 
     /**
-     * Returns <code>true</code> if and only if multiple edges are allowed in this graph. The
+     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph. The
      * meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.
      *
-     * @return <code>true</code> if and only if multiple edges are allowed.
+     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
      */
     public boolean isAllowingMultipleEdges()
     {

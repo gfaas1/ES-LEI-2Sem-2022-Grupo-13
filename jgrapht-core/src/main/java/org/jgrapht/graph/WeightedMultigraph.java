@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
- * are permitted, but multiple edges between any two vertices are. The edges of a weighted
+ * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a weighted
  * multigraph have weights. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.

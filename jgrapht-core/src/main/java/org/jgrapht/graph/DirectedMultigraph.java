@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A directed multigraph. A directed multigraph is a non-simple directed graph in which no loops are
- * permitted, but multiple edges between any two vertices are.
+ * permitted, but multiple (parallel) edges between any two vertices are.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

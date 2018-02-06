@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A pseudograph. A pseudograph is a non-simple undirected graph in which both graph loops and
- * multiple edges are permitted. If you're unsure about pseudographs, see:
+ * multiple (parallel) edges are permitted. If you're unsure about pseudographs, see:
  * <a href="http://mathworld.wolfram.com/Pseudograph.html">
  * http://mathworld.wolfram.com/Pseudograph.html</a>.
  * 

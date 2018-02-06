@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A directed weighted graph. A directed weighted graph is a non-simple directed graph in which
- * multiple edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
+ * multiple (parallel) edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
  * weights on its edges.
  *
  * @param <V> the graph vertex type

@@ -20,16 +20,22 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 
 /**
- * A builder class for {@link Graph}.
+ * A builder class for {@link Graph}. This is a helper class which helps adding vertices and edges
+ * into an already constructed graph instance.
+ * 
+ * <p>
+ * See {@link GraphTypeBuilder} for a builder of the actual graph instance.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @param <G> type of the resulting graph
  * 
  * @author Andrew Chen
+ * @see GraphTypeBuilder
  */
 public class GraphBuilder<V, E, G extends Graph<V, E>>
-    extends AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
+    extends
+    AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
 {
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.

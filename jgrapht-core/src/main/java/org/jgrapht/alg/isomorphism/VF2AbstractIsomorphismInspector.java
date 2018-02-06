@@ -36,7 +36,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public abstract class VF2AbstractIsomorphismInspector<V, E>
-    implements IsomorphismInspector<V, E>
+    implements
+    IsomorphismInspector<V, E>
 {
     protected Graph<V, E> graph1, graph2;
 
@@ -60,15 +61,13 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
     {
         GraphType type1 = graph1.getType();
         GraphType type2 = graph2.getType();
-        if (type1.isPseudograph() || type1.isMultigraph() || type2.isMultigraph()
-            || type2.isPseudograph())
-        {
-            throw new UnsupportedOperationException(
-                "graphs with multiple " + "edges are not supported");
+        if (type1.isAllowingMultipleEdges() || type2.isAllowingMultipleEdges()) {
+            throw new IllegalArgumentException(
+                "graphs with multiple (parallel) edges are not supported");
         }
 
         if (type1.isMixed() || type2.isMixed()) {
-            throw new UnsupportedOperationException("mixed graphs not supported");
+            throw new IllegalArgumentException("mixed graphs not supported");
         }
 
         if (type1.isUndirected() && type2.isDirected()
