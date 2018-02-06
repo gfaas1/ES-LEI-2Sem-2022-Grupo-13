@@ -20,6 +20,7 @@ Changes to JGraphT in each version:
     - Implemented method findLcas() in NaiveLcaFinder (contributed by Alexandru Văleanu)
     - Added `MultiObjectiveShortestPathAlgorithm` interface and first implementation `MartinShortestPath` (contributed by Dimitrios Michail)
     - Added `TwoOptHeuristicTSP` (contributed by Dimitrios Michail)
+    - Fixed bug in `JohnsonSimpleCycles` with custom edge type (spotted by fredshevek, fix contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
