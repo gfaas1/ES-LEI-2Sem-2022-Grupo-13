@@ -37,7 +37,8 @@ import org.jgrapht.graph.*;
  * @author Nikolay Ognyanov
  */
 public class JohnsonSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;
@@ -79,6 +80,9 @@ public class JohnsonSimpleCycles<V, E>
     public JohnsonSimpleCycles(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
+        if (GraphTests.hasMultipleEdges(graph)) {
+            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
+        }
     }
 
     /**
@@ -103,6 +107,9 @@ public class JohnsonSimpleCycles<V, E>
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
+        if (GraphTests.hasMultipleEdges(graph)) {
+            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
+        }
     }
 
     /**
@@ -176,8 +183,9 @@ public class JohnsonSimpleCycles<V, E>
         }
         for (V v : minSCC) {
             for (V w : minSCC) {
-                if (graph.containsEdge(v, w)) {
-                    resultGraph.addEdge(v, w);
+                E edge = graph.getEdge(v, w);
+                if (edge != null) {
+                    resultGraph.addEdge(v, w, edge);
                 }
             }
         }
