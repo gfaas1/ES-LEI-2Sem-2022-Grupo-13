@@ -18,8 +18,8 @@
 package org.jgrapht.alg;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedGraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
@@ -170,7 +170,7 @@ public class NaiveLcaFinderTest
     @Test
     public void testTwoLcas(){
 
-        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
 
         g.addVertex("a");
         g.addVertex("b");
