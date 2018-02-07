@@ -210,7 +210,7 @@ public class AsUndirectedGraphTest
     @Override
     protected void setUp()
     {
-        directed = new DirectedGraph<>(DefaultEdge.class);
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
         undirected = new AsUndirectedGraph<>(directed);
 
         directed.addVertex(v1);

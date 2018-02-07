@@ -21,17 +21,15 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A directed weighted graph. A directed weighted graph is a non-simple directed graph in which
- * multiple (parallel) edges between any two vertices are <i>not</i> permitted, but loops are. The graph has
- * weights on its edges.
+ * The default implementation of a directed weighted graph. A default directed weighted graph is a
+ * non-simple directed graph in which multiple (parallel) edges between any two vertices are
+ * <i>not</i> permitted, but loops are. The graph has weights on its edges.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @see DefaultDirectedGraph
- * @deprecated In favor of {@link DirectedWeightedGraph}
  */
-@Deprecated
 public class DefaultDirectedWeightedGraph<V, E>
     extends DefaultDirectedGraph<V, E>
 {

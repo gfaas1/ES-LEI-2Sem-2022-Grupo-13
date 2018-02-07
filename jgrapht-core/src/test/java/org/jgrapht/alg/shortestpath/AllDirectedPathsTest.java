@@ -128,7 +128,7 @@ public class AllDirectedPathsTest
 
     private static Graph<String, DefaultEdge> toyGraph()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         graph.addVertex(I1);
         graph.addVertex(I2);
         graph.addVertex(A);

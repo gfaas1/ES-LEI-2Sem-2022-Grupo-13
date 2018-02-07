@@ -458,8 +458,8 @@ public interface Graph<V, E>
 
     /**
      * Get the graph type. The graph type can be used to query for additional metadata such as
-     * whether the graph supports directed or undirected edges, self-loops, parallel-edges, weights,
-     * etc.
+     * whether the graph supports directed or undirected edges, self-loops, multiple (parallel)
+     * edges, weights, etc.
      * 
      * @return the graph type
      */

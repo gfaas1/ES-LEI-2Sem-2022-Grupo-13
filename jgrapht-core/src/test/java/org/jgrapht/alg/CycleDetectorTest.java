@@ -77,7 +77,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithCycle()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
 
         Set<String> cyclicSet = new HashSet<>();
@@ -99,7 +99,7 @@ public class CycleDetectorTest
      */
     public void testDirectedWithDoubledCycle()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         // build the graph: vertex order is chosen specifically
         // to exercise old bug-cases in CycleDetector
@@ -128,7 +128,7 @@ public class CycleDetectorTest
     @SuppressWarnings("unchecked")
     public void testDirectedWithoutCycle()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         createGraph(g);
         g.removeVertex(V2);
 
@@ -164,8 +164,8 @@ public class CycleDetectorTest
 
     public void testVertexEquals()
     {
-        DirectedGraph<String, DefaultEdge> graph =
-            new DirectedGraph<>(DefaultEdge.class);
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
         assertEquals(0, graph.edgeSet().size());
 
         String vertexA = "A";

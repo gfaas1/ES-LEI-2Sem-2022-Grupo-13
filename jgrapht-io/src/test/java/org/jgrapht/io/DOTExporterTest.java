@@ -139,14 +139,14 @@ public class DOTExporterTest
         List<String> validVertices =
             Arrays.asList("-9.78", "-.5", "12", "a", "12", "abc_78", "\"--34asdf\"");
         for (String vertex : validVertices) {
-            Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+            Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
             graph.addVertex(vertex);
             exporter.exportGraph(graph, new ByteArrayOutputStream());
         }
 
         List<String> invalidVertices = Arrays.asList("2test", "--4", "foo-bar", "", "t:32");
         for (String vertex : invalidVertices) {
-            Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+            Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
             graph.addVertex(vertex);
 
             try {

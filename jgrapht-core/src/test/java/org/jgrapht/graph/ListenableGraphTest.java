@@ -176,7 +176,7 @@ public class ListenableGraphTest
         init();
 
         ListenableGraph<Object, DefaultWeightedEdge> g = new DefaultListenableGraph<>(
-            new DirectedWeightedGraph<>(DefaultWeightedEdge.class));
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class));
 
         GraphListener<Object, DefaultWeightedEdge> listener = new MyGraphListener<>();
         g.addGraphListener(listener);

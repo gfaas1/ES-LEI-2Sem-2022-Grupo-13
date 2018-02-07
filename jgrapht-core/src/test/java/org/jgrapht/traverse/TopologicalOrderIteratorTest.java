@@ -39,7 +39,7 @@ public class TopologicalOrderIteratorTest
     @Test
     public void testRecipe()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         String[] v = new String[9];
 
@@ -100,7 +100,7 @@ public class TopologicalOrderIteratorTest
     @Test
     public void testEmptyGraph()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         Iterator<String> iter = new TopologicalOrderIterator<>(graph);
         assertFalse(iter.hasNext());
     }
@@ -108,7 +108,7 @@ public class TopologicalOrderIteratorTest
     @Test
     public void testGraph1()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2", "v3", "v4", "v5"));
         graph.addEdge("v0", "v1");
@@ -138,7 +138,7 @@ public class TopologicalOrderIteratorTest
     @Test
     public void testGraphWithPartialOrder()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2", "v3", "v4", "v5"));
         graph.addEdge("v0", "v1");
@@ -214,7 +214,7 @@ public class TopologicalOrderIteratorTest
     @Test(expected = IllegalArgumentException.class)
     public void testWithSelfLoops()
     {
-        Graph<String, DefaultEdge> graph = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList("v0", "v1", "v2"));
         graph.addEdge("v0", "v1");

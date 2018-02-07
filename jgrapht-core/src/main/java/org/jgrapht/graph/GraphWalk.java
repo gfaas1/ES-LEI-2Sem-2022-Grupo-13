@@ -33,6 +33,8 @@ import org.jgrapht.*;
  *
  * <p>
  * See <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
+ * 
+ * <p>
  * GraphWalk is the default implementation of {@link GraphPath}.
  *
  * <p>

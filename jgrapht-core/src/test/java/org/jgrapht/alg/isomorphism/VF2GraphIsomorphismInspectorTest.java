@@ -70,8 +70,8 @@ public class VF2GraphIsomorphismInspectorTest
         /*
          * 1 ---> 2 <--- 3
          */
-        DirectedGraph<Integer, DefaultEdge> g2 =
-            new DirectedGraph<>(DefaultEdge.class);
+        DefaultDirectedGraph<Integer, DefaultEdge> g2 =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
 
         g2.addVertex(1);
         g2.addVertex(2);

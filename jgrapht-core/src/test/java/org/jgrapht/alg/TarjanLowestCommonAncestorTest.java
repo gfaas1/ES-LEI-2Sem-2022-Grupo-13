@@ -30,7 +30,7 @@ public class TarjanLowestCommonAncestorTest
     @Test
     public void testBinaryTree()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         g.addVertex("a");
         g.addVertex("b");
@@ -51,7 +51,7 @@ public class TarjanLowestCommonAncestorTest
     @Test
     public void testNonBinaryTree()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         g.addVertex("a");
         g.addVertex("b");
@@ -101,7 +101,7 @@ public class TarjanLowestCommonAncestorTest
     @Test
     public void testOneNode()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex("a");
         Assert.assertEquals("a", new TarjanLowestCommonAncestor<>(g).calculate("a", "a", "a"));
     }

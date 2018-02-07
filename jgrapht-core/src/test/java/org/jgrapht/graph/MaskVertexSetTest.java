@@ -41,7 +41,7 @@ public class MaskVertexSetTest
     @Override
     protected void setUp()
     {
-        directed = new DirectedGraph<>(DefaultEdge.class);
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);

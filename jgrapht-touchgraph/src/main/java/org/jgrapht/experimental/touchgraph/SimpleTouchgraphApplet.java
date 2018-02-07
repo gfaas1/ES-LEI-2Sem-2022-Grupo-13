@@ -48,7 +48,7 @@ public class SimpleTouchgraphApplet
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";

@@ -26,40 +26,42 @@ import org.jgrapht.util.TypeUtil;
 /**
  * A builder class for the hierarchy of {@link Graph}s that the library provides.
  *
- * <p>The following example creates a directed graph which allows multiple (parallel) edges 
- * and self-loops:  
- * <blockquote><pre>
- * Graph&lt;Integer, DefaultEdge&gt; g = 
- *   GraphTypeBuilder.&lt;Integer, DefaultEdge&gt; directed()
- *                   .allowingMultipleEdges(true)
- *                   .allowingSelfLoops(true)
- *                   .edgeClass(DefaultEdge.class)
- *                   .buildGraph();
- * </pre></blockquote>
+ * <p>
+ * The following example creates a directed graph which allows multiple (parallel) edges and
+ * self-loops: <blockquote>
  * 
- * Similarly one could get a weighted multigraph by using:
- * <blockquote><pre>
- * Graph&lt;Integer, DefaultWeightedEdge&gt; g = 
- *   GraphTypeBuilder.&lt;Integer, DefaultWeightedEdge&gt; undirected()
- *                   .allowingMultipleEdges(true)
- *                   .allowingSelfLoops(false)
- *                   .edgeClass(DefaultWeightedEdge.class)
- *                   .weighted(true)
- *                   .buildGraph();
- * </pre></blockquote>
+ * <pre>
+ * Graph&lt;Integer,
+ *     DefaultEdge&gt; g = GraphTypeBuilder
+ *         .&lt;Integer, DefaultEdge&gt; directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+ *         .edgeClass(DefaultEdge.class).buildGraph();
+ * </pre>
  * 
- * <p>The builder also provides the ability to construct a graph from another graph such as:
- * <blockquote><pre>
- * Graph&lt;Integer, DefaultWeightedEdge&gt; g1 = 
- *   GraphTypeBuilder.&lt;Integer, DefaultWeightedEdge&gt; undirected()
- *                   .allowingMultipleEdges(true)
- *                   .allowingSelfLoops(false)
- *                   .edgeClass(DefaultWeightedEdge.class)
- *                   .weighted(true)
- *                   .buildGraph();
- *                   
- * Graph&lt;Integer, DefaultWeightedEdge&gt; g2 = GraphTypeBuilder.asGraph(g1).buildGraph();                   
- * </pre></blockquote>
+ * </blockquote>
+ * 
+ * Similarly one could get a weighted multigraph by using: <blockquote>
+ * 
+ * <pre>
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g = GraphTypeBuilder
+ *     .&lt;Integer, DefaultWeightedEdge&gt; undirected().allowingMultipleEdges(true)
+ *     .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * The builder also provides the ability to construct a graph from another graph such as:
+ * <blockquote>
+ * 
+ * <pre>
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g1 = GraphTypeBuilder
+ *     .&lt;Integer, DefaultWeightedEdge&gt; undirected().allowingMultipleEdges(true)
+ *     .allowingSelfLoops(false).edgeClass(DefaultWeightedEdge.class).weighted(true).buildGraph();
+ * 
+ * Graph&lt;Integer, DefaultWeightedEdge&gt; g2 = GraphTypeBuilder.asGraph(g1).buildGraph();
+ * </pre>
+ * 
+ * </blockquote>
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -294,9 +296,9 @@ public final class GraphTypeBuilder<V, E>
                 }
             } else if (allowingSelfLoops) {
                 if (weighted) {
-                    return new DirectedWeightedGraph<>(edgeFactory);
+                    return new DefaultDirectedWeightedGraph<>(edgeFactory);
                 } else {
-                    return new DirectedGraph<>(edgeFactory);
+                    return new DefaultDirectedGraph<>(edgeFactory);
                 }
 
             } else {
@@ -321,9 +323,9 @@ public final class GraphTypeBuilder<V, E>
                 }
             } else if (allowingSelfLoops) {
                 if (weighted) {
-                    return new UndirectedWeightedGraph<>(edgeFactory);
+                    return new DefaultUndirectedWeightedGraph<>(edgeFactory);
                 } else {
-                    return new UndirectedGraph<>(edgeFactory);
+                    return new DefaultUndirectedGraph<>(edgeFactory);
                 }
 
             } else {

@@ -21,15 +21,17 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A undirected weighted graph. An undirected weighted graph is a non-simple undirected graph in
- * which multiple (parallel) edges between any two vertices are <i>not</i> permitted, but loops are. The edges
- * of a weighted undirected graph have weights.
+ * The default implementation of an undirected weighted graph. A default undirected weighted graph
+ * is a non-simple undirected graph in which multiple (parallel) edges between any two vertices are
+ * <i>not</i> permitted, but loops are. The edges of a weighted undirected graph have weights.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @see DefaultUndirectedGraph
  */
-public class UndirectedWeightedGraph<V, E>
-    extends UndirectedGraph<V, E>
+public class DefaultUndirectedWeightedGraph<V, E>
+    extends DefaultUndirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1008165881690129042L;
 
@@ -38,7 +40,7 @@ public class UndirectedWeightedGraph<V, E>
      *
      * @param ef the edge factory of the new graph.
      */
-    public UndirectedWeightedGraph(EdgeFactory<V, E> ef)
+    public DefaultUndirectedWeightedGraph(EdgeFactory<V, E> ef)
     {
         super(ef, true);
     }
@@ -48,7 +50,7 @@ public class UndirectedWeightedGraph<V, E>
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public UndirectedWeightedGraph(Class<? extends E> edgeClass)
+    public DefaultUndirectedWeightedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
@@ -61,10 +63,11 @@ public class UndirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends UndirectedWeightedGraph<V, E>> createBuilder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
     {
-        return new GraphBuilder<>(new UndirectedWeightedGraph<>(edgeClass));
+        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(edgeClass));
     }
 
     /**
@@ -75,9 +78,10 @@ public class UndirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends UndirectedWeightedGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
     {
-        return new GraphBuilder<>(new UndirectedWeightedGraph<>(ef));
+        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(ef));
     }
 }

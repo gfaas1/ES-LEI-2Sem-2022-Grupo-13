@@ -100,7 +100,7 @@ public class GenericGraphsTest
 
     public void testAlissaHacker()
     {
-        Graph<String, CustomEdge> g = new DirectedGraph<>(CustomEdge.class);
+        Graph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addEdge("a", "b");
@@ -127,7 +127,7 @@ public class GenericGraphsTest
     @Override
     protected void setUp()
     {
-        objectGraph = new DirectedGraph<>(DefaultEdge.class);
+        objectGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
         fooFooGraph = new SimpleGraph<>(FooEdge.class);
         barBarGraph = new SimpleGraph<>(BarEdge.class);
     }

@@ -65,7 +65,7 @@ public class StrongConnectivityAlgorithmTest
      */
     public void testStronglyConnected1(Class<?> strongConnectivityAlgorithm)
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -118,7 +118,7 @@ public class StrongConnectivityAlgorithmTest
      */
     public void testStronglyConnected2(Class<?> strongConnectivityAlgorithm)
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -172,7 +172,7 @@ public class StrongConnectivityAlgorithmTest
      */
     public void testStronglyConnected3(Class<?> strongConnectivityAlgorithm)
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -224,7 +224,7 @@ public class StrongConnectivityAlgorithmTest
 
     public void testStronglyConnected4(Class<?> strongConnectivityAlgorithm)
     {
-        DirectedGraph<Integer, String> graph = new DirectedGraph<>((from, to) -> {
+        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>((from, to) -> {
             return (from + "->" + to).intern();
         });
 
@@ -240,7 +240,7 @@ public class StrongConnectivityAlgorithmTest
 
     public void testCondensation()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -264,7 +264,7 @@ public class StrongConnectivityAlgorithmTest
 
     public void testCondensation2()
     {
-        Graph<String, DefaultEdge> g = new DirectedGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
