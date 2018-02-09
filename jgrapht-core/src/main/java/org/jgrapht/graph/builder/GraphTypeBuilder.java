@@ -133,7 +133,7 @@ public final class GraphTypeBuilder<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static <V, E> GraphTypeBuilder<V, E> asGraphType(GraphType type)
+    public static <V, E> GraphTypeBuilder<V, E> forGraphType(GraphType type)
     {
         GraphTypeBuilder<V, E> builder = new GraphTypeBuilder<>(
             type.isDirected() || type.isMixed(), type.isUndirected() || type.isMixed());
@@ -152,9 +152,9 @@ public final class GraphTypeBuilder<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    public static <V, E> GraphTypeBuilder<V, E> asGraph(Graph<V, E> graph)
+    public static <V, E> GraphTypeBuilder<V, E> forGraph(Graph<V, E> graph)
     {
-        GraphTypeBuilder<V, E> builder = asGraphType(graph.getType());
+        GraphTypeBuilder<V, E> builder = forGraphType(graph.getType());
         builder.edgeFactory = graph.getEdgeFactory();
         return builder;
     }

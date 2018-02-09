@@ -94,7 +94,7 @@ public class GraphTypeBuilderTest
     public void testGraphTypeBuilderFromGraph()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graph<Integer, DefaultEdge> graph1 = GraphTypeBuilder.asGraph(graph).buildGraph();
+        Graph<Integer, DefaultEdge> graph1 = GraphTypeBuilder.forGraph(graph).buildGraph();
 
         assertTrue(graph1.getType().isUndirected());
         assertTrue(graph1.getType().isAllowingMultipleEdges());
