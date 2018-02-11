@@ -79,6 +79,7 @@
 				</executions>
 				<configuration>
 					<instructions>
+						<Automatic-Module-Name>org.jgrapht.core</Automatic-Module-Name>
 						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors (see
 							http://sourceforge.net/projects/jgrapht/)</Bundle-Vendor>
 					</instructions>
