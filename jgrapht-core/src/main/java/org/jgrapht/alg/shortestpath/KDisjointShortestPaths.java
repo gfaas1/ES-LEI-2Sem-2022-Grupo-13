@@ -62,8 +62,11 @@ import org.jgrapht.graph.*;
  * (edges and weights) during the path computation.
  * 
  * <p>
- * For further reference, see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">Farabi Iqbal, Fernando A. Kuipers - 
- * "Disjoint Paths In Networks"</a> which was the main reference for the code of this class.
+ * The algorithm is based on:
+ * <ul>
+ * Iqbal, F. and Kuipers, F. A. 2015. <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
+ * Disjoint Paths in Networks.</a> Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
+ * </ul>
  * 
  * @see BellmanFordShortestPath
  *
