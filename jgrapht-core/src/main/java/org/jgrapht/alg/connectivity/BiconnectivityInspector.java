@@ -41,7 +41,7 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
  * <p>
  * The inspector methods work in a lazy fashion: no computations are performed unless immediately
- * necessary. Computation are done once and results and cached within this class for future need.
+ * necessary. Computation are done once and results are cached within this class for future need.
  * The core of this class is built around a recursive Depth-first search.
  *
  *
