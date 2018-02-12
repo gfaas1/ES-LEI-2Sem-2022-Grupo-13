@@ -22,6 +22,7 @@ Changes to JGraphT in each version:
     - Added `TwoOptHeuristicTSP` (contributed by Dimitrios Michail)
     - Fixed bug in `JohnsonSimpleCycles` with custom edge type (spotted by fredshevek, fix contributed by Dimitrios Michail)
     - Added Automatic-Module Names to the various jgrapht modules to support modularization in JDK 9 (contributed by Mark Raynsford)
+    - Added `GraphTypeBuilder` (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
