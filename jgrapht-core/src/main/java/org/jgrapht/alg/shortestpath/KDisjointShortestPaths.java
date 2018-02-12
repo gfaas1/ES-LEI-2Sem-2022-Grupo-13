@@ -43,9 +43,11 @@ import org.jgrapht.graph.*;
  *  </ol>
  * </ol>
  * <p>
- * The algorithm is based on the Suurballe (later extended by Bhandari) algorithm, so is to find an
- * Edge-disjoint shortest paths. In order to find a Vertex-disjoint shortest paths use the
- * following transformation:
+ * The algorithm is based on the Suurballe & Tarjan (later extended by Bhandari) algorithm, so is to find an
+ * Edge-disjoint shortest paths. It is using Bhandari approach for negating the edges (and assigning negative cost) 
+ * of the last found shortest path in each iteration rather than the removing them and modifying the cost of all the
+ * edge used by Suurballe.
+ * In order to find a Vertex-disjoint shortest paths you may use the following transformation:
  * <br>
  * For each vertex V and a set of incoming edges E_in(V) and outgoing edges E_out(V):
  * <ol>
@@ -62,16 +64,16 @@ import org.jgrapht.graph.*;
  * (edges and weights) during the path computation.
  * 
  * <p>
- * The algorithm is based on:
+ * For further reference see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
+ * Disjoint Paths in Networks </a> which was the main reference for the code of this class:
  * <ul>
- * Iqbal, F. and Kuipers, F. A. 2015. <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
- * Disjoint Paths in Networks.</a> Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
+ * Iqbal, F. and Kuipers, F. A. 2015. Disjoint Paths in Networks. Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
  * </ul>
  * 
  * @see BellmanFordShortestPath
  *
  * @author Assaf Mizrachi
- * @since September 11, 2016
+ * @since February 12, 2018
  * 
  * @param <V> Vertex
  * @param <E> Edge
