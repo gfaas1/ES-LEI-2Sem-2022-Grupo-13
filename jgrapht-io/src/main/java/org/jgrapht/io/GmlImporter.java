@@ -113,7 +113,7 @@ public class GmlImporter<V, E>
             ThrowingErrorListener errorListener = new ThrowingErrorListener();
 
             // create lexer
-            GmlLexer lexer = new GmlLexer(new ANTLRInputStream(input));
+            GmlLexer lexer = new GmlLexer(CharStreams.fromReader(input));
             lexer.removeErrorListeners();
             lexer.addErrorListener(errorListener);
 

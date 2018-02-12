@@ -27,7 +27,7 @@ import org.jgrapht.alg.util.*;
  * The greedy algorithm for computing a maximum weight matching in an arbitrary graph. The algorithm
  * runs in O(m + m log n) where n is the number of vertices and m is the number of edges of the
  * graph. This implementation accepts directed and undirected graphs which may contain self-loops
- * and multiple edges. There is no assumption on the edge weights, i.e. they can also be negative or
+ * and multiple (parallel) edges. There is no assumption on the edge weights, i.e. they can also be negative or
  * zero.
  * 
  * <p>

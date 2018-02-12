@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A directed weighted pseudograph. A directed weighted pseudograph is a non-simple directed graph
- * in which both graph loops and multiple edges are permitted, and edges have weights.
+ * in which both graph loops and multiple (parallel) edges are permitted, and edges have weights.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

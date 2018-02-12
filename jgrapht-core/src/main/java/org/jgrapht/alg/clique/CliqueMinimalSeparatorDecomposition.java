@@ -88,8 +88,8 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
 
     /**
      * Setup a clique minimal separator decomposition on undirected graph <code>
-     * g</code>. Loops and multiple edges are removed, i.e. the graph is transformed to a simple
-     * graph.
+     * g</code>. Loops and multiple (parallel) edges are removed, i.e. the graph is transformed to a
+     * simple graph.
      *
      * @param g The graph to decompose.
      */

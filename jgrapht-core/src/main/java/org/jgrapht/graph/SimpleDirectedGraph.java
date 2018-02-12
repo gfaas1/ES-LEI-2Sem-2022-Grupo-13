@@ -22,7 +22,7 @@ import org.jgrapht.graph.builder.*;
 
 /**
  * A simple directed graph. A simple directed graph is a directed graph in which neither multiple
- * edges between any two vertices nor loops are permitted.
+ * (parallel) edges between any two vertices nor loops are permitted.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

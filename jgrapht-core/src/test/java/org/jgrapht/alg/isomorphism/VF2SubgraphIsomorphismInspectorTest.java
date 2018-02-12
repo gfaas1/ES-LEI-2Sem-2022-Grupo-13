@@ -66,40 +66,32 @@ public class VF2SubgraphIsomorphismInspectorTest
         pg1.addEdge(1, 2);
 
         /* GT-0 test graph=null */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt0 =
-                new VF2SubgraphIsomorphismInspector<>(null, sg1);
-            Assert.fail("Expected UnsupportedOperationException");
+            new VF2SubgraphIsomorphismInspector<>(null, sg1);
+            Assert.fail("Expected NullPointerException");
         } catch (NullPointerException ex) {
         }
 
         /* GT-1: multigraphs */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt1 =
-                new VF2SubgraphIsomorphismInspector<>(mg1, mg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(mg1, mg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-2: pseudographs */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt2 =
-                new VF2SubgraphIsomorphismInspector<>(pg1, pg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(pg1, pg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-3: simple graphs */
-
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt3 =
             new VF2SubgraphIsomorphismInspector<>(sg1, sg1);
         assertEquals(true, gt3.getMappings().hasNext());
 
         /* GT-4: directed graphs */
-
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt4 =
             new VF2SubgraphIsomorphismInspector<>(dg1, dg1);
         assertEquals("[1=1 2=2]", gt4.getMappings().next().toString());
@@ -107,53 +99,42 @@ public class VF2SubgraphIsomorphismInspectorTest
         /* GT-5: simple graph + multigraph */
 
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt5 =
-                new VF2SubgraphIsomorphismInspector<>(sg1, mg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(sg1, mg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-6: simple graph + pseudograph */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt6 =
-                new VF2SubgraphIsomorphismInspector<>(sg1, pg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(sg1, pg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-7: directed graph + multigraph */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt7 =
-                new VF2SubgraphIsomorphismInspector<>(dg1, mg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(dg1, mg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-8: directed graph + pseudograph */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt8 =
-                new VF2SubgraphIsomorphismInspector<>(dg1, pg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(dg1, pg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-9: pseudograph + multigraph */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt9 =
-                new VF2SubgraphIsomorphismInspector<>(pg1, mg1);
-            Assert.fail("Expected UnsupportedOperationException");
-        } catch (UnsupportedOperationException ex) {
+            new VF2SubgraphIsomorphismInspector<>(pg1, mg1);
+            Assert.fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
         }
 
         /* GT-10: simple graph + directed graph */
-
         try {
-            @SuppressWarnings("unused") VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> gt10 =
-                new VF2SubgraphIsomorphismInspector<>(sg1, dg1);
+            new VF2SubgraphIsomorphismInspector<>(sg1, dg1);
             Assert.fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException ex) {
         }

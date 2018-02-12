@@ -47,7 +47,6 @@ public class FloydWarshallShortestPaths<V, E>
     private final List<V> vertices;
     private final Map<V, Integer> vertexIndices;
 
-    private double diameter = Double.NaN;
     private double[][] d = null;
     private Object[][] backtrace = null;
     private Object[][] lastHopMatrix = null;

@@ -56,7 +56,7 @@ public abstract class GraphTests
     }
 
     /**
-     * Check if a graph is simple. A graph is simple if it has no self-loops and multiple edges.
+     * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel) edges.
      * 
      * @param graph a graph
      * @param <V> the graph vertex type

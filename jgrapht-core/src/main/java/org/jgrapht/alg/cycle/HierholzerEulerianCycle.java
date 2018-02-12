@@ -29,8 +29,8 @@ import org.jgrapht.util.*;
 /**
  * An implementation of Hierholzer's algorithm for finding an Eulerian cycle in Eulerian graphs. The
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
- * edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the edge set of
- * the graph.
+ * (parallel) edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the
+ * edge set of the graph.
  * 
  * <p>
  * See the <a href="https://en.wikipedia.org/wiki/Eulerian_path">Wikipedia article</a> for details
@@ -46,7 +46,8 @@ import org.jgrapht.util.*;
  * @since October 2016
  */
 public class HierholzerEulerianCycle<V, E>
-    implements EulerianCycleAlgorithm<V, E>
+    implements
+    EulerianCycleAlgorithm<V, E>
 {
     /*
      * The input graph.

@@ -21,12 +21,9 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A directed graph. A default directed graph is a non-simple directed graph in which multiple edges
- * between any two vertices are <i>not</i> permitted, but loops are.
- *
- * <p>
- * prefixed 'Default' to avoid name collision with the DirectedGraph interface.
- * </p>
+ * The default implementation of a directed graph. A default directed graph is a non-simple directed
+ * graph in which multiple (parallel) edges between any two vertices are <i>not</i> permitted, but
+ * loops are.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

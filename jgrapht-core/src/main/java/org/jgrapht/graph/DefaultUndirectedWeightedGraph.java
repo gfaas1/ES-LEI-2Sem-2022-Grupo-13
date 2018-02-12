@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ * (C) Copyright 2018-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,36 +21,36 @@ import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
 
 /**
- * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
- * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a weighted
- * multigraph have weights. If you're unsure about multigraphs, see:
- * <a href="http://mathworld.wolfram.com/Multigraph.html">
- * http://mathworld.wolfram.com/Multigraph.html</a>.
+ * The default implementation of an undirected weighted graph. A default undirected weighted graph
+ * is a non-simple undirected graph in which multiple (parallel) edges between any two vertices are
+ * <i>not</i> permitted, but loops are. The edges of a weighted undirected graph have weights.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @see DefaultUndirectedGraph
  */
-public class WeightedMultigraph<V, E>
-    extends Multigraph<V, E>
+public class DefaultUndirectedWeightedGraph<V, E>
+    extends DefaultUndirectedGraph<V, E>
 {
-    private static final long serialVersionUID = -6009321659287373874L;
+    private static final long serialVersionUID = -1008165881690129042L;
 
     /**
-     * Creates a new weighted multigraph with the specified edge factory.
+     * Creates a new weighted undirected graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
      */
-    public WeightedMultigraph(EdgeFactory<V, E> ef)
+    public DefaultUndirectedWeightedGraph(EdgeFactory<V, E> ef)
     {
         super(ef, true);
     }
 
     /**
-     * Creates a new weighted multigraph.
+     * Creates a new weighted undirected graph.
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public WeightedMultigraph(Class<? extends E> edgeClass)
+    public DefaultUndirectedWeightedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<>(edgeClass));
     }
@@ -63,10 +63,11 @@ public class WeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
     {
-        return new GraphBuilder<>(new WeightedMultigraph<>(edgeClass));
+        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(edgeClass));
     }
 
     /**
@@ -77,11 +78,10 @@ public class WeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
     {
-        return new GraphBuilder<>(new WeightedMultigraph<>(ef));
+        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(ef));
     }
 }
-
-// End WeightedMultigraph.java

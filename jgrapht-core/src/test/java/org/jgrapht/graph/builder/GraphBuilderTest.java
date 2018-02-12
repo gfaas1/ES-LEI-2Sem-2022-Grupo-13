@@ -15,12 +15,16 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.graph;
+package org.jgrapht.graph.builder;
 
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.Pseudograph;
 
 public class GraphBuilderTest
     extends EnhancedTestCase
