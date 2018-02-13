@@ -38,6 +38,7 @@ public class BellmanFordShortestPathTest
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testUndirected()
     {
         SingleSourcePaths<String, DefaultWeightedEdge> tree;
