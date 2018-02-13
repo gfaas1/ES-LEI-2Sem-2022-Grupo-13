@@ -20,6 +20,10 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -29,17 +33,15 @@ import org.jgrapht.graph.*;
  * @since Jul 30, 2003
  */
 public abstract class AbstractGraphIteratorTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
     StringBuffer result;
 
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * .
      */
+    @Test
     public void testDirectedGraph()
     {
 
@@ -164,7 +166,7 @@ public abstract class AbstractGraphIteratorTest
                 break;
 
             default:
-                assertFalse();
+                Assert.fail("Should not get here.");
 
                 break;
             }

@@ -26,6 +26,10 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the Clique Minimal Separator Decomposition.
@@ -33,7 +37,6 @@ import junit.framework.*;
  * @author Florian Buenzli <fbuenzli@student.ethz.ch>
  */
 public class CliqueMinimalSeparatorDecompositionTest
-    extends TestCase
 {
 
     /**
@@ -42,6 +45,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * |/|<br>
      * o-o<br></code>
      */
+    @Test
     public void testSimpleGraph1()
     {
         SimpleGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -94,6 +98,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * |/|<br>
      * o-o<br></code>
      */
+    @Test
     public void testPseudograph1()
     {
         Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -151,6 +156,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * | |<br>
      * o-o<br></code>
      */
+    @Test
     public void testSimpleGraph2()
     {
         SimpleGraph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -191,6 +197,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * Figure 1, DOI:10.3390/a3020197 <a href="http://www.mdpi.com/1999-4893/3/2/197">
      * http://www.mdpi.com/1999-4893/3/2/197</a>
      */
+    @Test
     public void testBerry2010()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -285,6 +292,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * <a href="http://www.sciencedirect.com/science/article/pii/0012365X85900512">
      * http://www.sciencedirect.com/science/article/pii/0012365X85900512</a>
      */
+    @Test
     public void testTarjan1985()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -377,6 +385,7 @@ public class CliqueMinimalSeparatorDecompositionTest
      * <p>
      * <img src="CliqueMinimalSeparatorDecomposition1.jpg" />
      */
+    @Test
     public void testGraph1()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -507,6 +516,7 @@ public class CliqueMinimalSeparatorDecompositionTest
     /**
      * Test random graphs. You may change the number of vertices and edges.
      */
+    @Test
     public void testRandomGraphs()
     {
         int rounds = 42;

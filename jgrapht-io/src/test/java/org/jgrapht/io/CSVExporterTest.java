@@ -23,6 +23,9 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * .
@@ -30,7 +33,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class CSVExporterTest
-    extends TestCase
 {
     // ~ Static fields/initializers
     // ---------------------------------------------
@@ -142,6 +144,7 @@ public class CSVExporterTest
     // ~ Methods
     // ----------------------------------------------------------------
 
+    @Test
     public void testUndirectedEdgeList()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -164,6 +167,7 @@ public class CSVExporterTest
         assertEquals(UNDIRECTED_EDGE_LIST, w.toString());
     }
 
+    @Test
     public void testDirectedEdgeList()
     {
         Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
@@ -186,6 +190,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_EDGE_LIST, w.toString());
     }
 
+    @Test
     public void testDirectedAdjacencyList()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -213,6 +218,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_ADJACENCY_LIST, w.toString());
     }
 
+    @Test
     public void testUndirectedAdjacencyList()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -240,6 +246,7 @@ public class CSVExporterTest
         assertEquals(UNDIRECTED_ADJACENCY_LIST, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNodeId()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -267,6 +274,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NODEID, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNoNodeId()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -293,6 +301,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NO_NODEID, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroMissingEdges()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -321,6 +330,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NODEID_ZERO_NO_EDGE, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroMissingEdges()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -348,6 +358,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroMissingEdgesWeighted()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -380,6 +391,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NO_NODEID_ZERO_NO_EDGE_WEIGHTED, w.toString());
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdWeighted()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -411,6 +423,7 @@ public class CSVExporterTest
         assertEquals(DIRECTED_MATRIX_NO_NODEID_WEIGHTED, w.toString());
     }
 
+    @Test
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {

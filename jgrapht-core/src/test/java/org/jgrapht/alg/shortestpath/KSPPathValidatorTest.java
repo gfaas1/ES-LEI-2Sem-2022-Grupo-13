@@ -26,6 +26,11 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link KShortestPaths} class using {@link PathValidator}.
@@ -34,12 +39,12 @@ import junit.framework.*;
  *
  */
 public class KSPPathValidatorTest
-    extends TestCase
 {
 
     /**
      * Testing that using path validator that denies all requests finds no paths.
      */
+    @Test
     public void testBlockAll()
     {
         int size = 5;
@@ -62,6 +67,7 @@ public class KSPPathValidatorTest
     /**
      * Testing that using path validator that accepts all requests finds full paths.
      */
+    @Test
     public void testAllowAll()
     {
         int size = 5;
@@ -85,6 +91,7 @@ public class KSPPathValidatorTest
     /**
      * Testing a ring with only single path allowed between two vertices.
      */
+    @Test
     public void testRing()
     {
         int size = 10;
@@ -115,6 +122,7 @@ public class KSPPathValidatorTest
      * Testing a graph where the validator denies the request to go on an edge which cutting it
      * makes the graph disconnected
      */
+    @Test
     public void testDisconnected()
     {
         int cliqueSize = 5;
@@ -155,6 +163,7 @@ public class KSPPathValidatorTest
      * new edge is (i, i+1). 
      * v
      */
+    @Test
     public void testGraphPath()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> line = buildLineGraph(10);
@@ -191,7 +200,7 @@ public class KSPPathValidatorTest
                 assertEquals(0, partialPath.getStartVertex().intValue());
                 assertEquals(index + 1, partialPath.getVertexList().size());
                 assertEquals(expectedVertices, partialPath.getVertexList());
-                assertEquals((double) index, partialPath.getWeight());
+                assertEquals((double) index, partialPath.getWeight(),0);
 
                 index++;
                 return true;

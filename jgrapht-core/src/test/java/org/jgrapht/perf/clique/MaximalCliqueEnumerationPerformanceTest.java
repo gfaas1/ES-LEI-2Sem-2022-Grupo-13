@@ -25,6 +25,7 @@ import org.jgrapht.alg.clique.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
@@ -37,7 +38,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class MaximalCliqueEnumerationPerformanceTest
-    extends TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 75;
@@ -107,6 +107,7 @@ public class MaximalCliqueEnumerationPerformanceTest
         }
     }
 
+    @Test
     public void testMaximalCliqueRandomGraphBenchmark()
         throws RunnerException
     {

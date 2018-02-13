@@ -23,13 +23,17 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * 
  * @author Dimitrios Michail
  */
 public class CSVImporterTest
-    extends TestCase
 {
     private static final String NL = System.getProperty("line.separator");
 
@@ -66,6 +70,7 @@ public class CSVImporterTest
         return g;
     }
 
+    @Test
     public void testEdgeListDirectedUnweighted()
         throws ImportException
     {
@@ -91,6 +96,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
     }
 
+    @Test
     public void testEdgeListDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -116,6 +122,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "1"));
     }
 
+    @Test
     public void testAdjacencyListDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -149,6 +156,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("4", "6"));
     }
 
+    @Test
     public void testEdgeListWithStringsDirectedUnweightedWithSemicolon()
         throws ImportException
     {
@@ -174,6 +182,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("who;;", "'john doe'"));
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdgeWeighted()
         throws ImportException
     {
@@ -224,6 +233,7 @@ public class CSVImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "5")), 0.0001);
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdWeighted()
         throws ImportException
     {
@@ -273,6 +283,7 @@ public class CSVImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("5", "5")), 0.0001);
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdZeroNoEdge()
         throws ImportException
     {
@@ -311,6 +322,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("5", "5"));
     }
 
+    @Test
     public void testDirectedMatrixNoNodeId()
         throws ImportException
     {
@@ -349,6 +361,7 @@ public class CSVImporterTest
 
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdge()
         throws ImportException
     {
@@ -390,6 +403,7 @@ public class CSVImporterTest
 
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffled()
         throws ImportException
     {
@@ -430,6 +444,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "E"));
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeWeightedShuffledZeroWeightsAsDouble()
         throws ImportException
     {
@@ -474,6 +489,7 @@ public class CSVImporterTest
         assertTrue(g.containsEdge("E", "E"));
     }
 
+    @Test
     public void testDoubleOnUnweighted()
         throws ImportException
     {
@@ -500,6 +516,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testWrongHeaderNodeIds()
         throws ImportException
     {
@@ -526,6 +543,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testDirectedMatrixNoNodeIdMissingEntries()
         throws ImportException
     {
@@ -550,6 +568,7 @@ public class CSVImporterTest
         }
     }
 
+    @Test
     public void testDirectedMatrixNodeIdZeroNoEdgeShuffledAndTabDelimiter()
         throws ImportException
     {

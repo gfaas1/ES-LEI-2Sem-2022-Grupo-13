@@ -26,6 +26,7 @@ import org.jgrapht.alg.matching.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
@@ -38,7 +39,6 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public class MaximumCardinalityBipartiteMatchingPerformanceTest
-    extends TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
@@ -112,6 +112,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
+    @Test
     public void testRandomGraphBenchmark()
         throws RunnerException
     {

@@ -21,13 +21,15 @@ import java.util.*;
 
 import org.jgrapht.graph.*;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Robby McKilliam
  */
 public class StoerWagnerMinimumCutTest
-    extends TestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -40,17 +42,10 @@ public class StoerWagnerMinimumCutTest
     private String v7 = "v7";
     private String v8 = "v8";
 
-    // ~ Constructors -----------------------------------------------------------
-
-    public StoerWagnerMinimumCutTest()
-    {
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * Test of mergeVertices method, of class StoerWagnerMinimumCut.
      */
+    @Test
     public void testMinCut14()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> g =
@@ -80,6 +75,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of mergeVertices method, of class StoerWagnerMinimumCut.
      */
+    @Test
     public void testMinCutDisconnected()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> g =
@@ -105,6 +101,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut when a 0-weight edge exists.
      */
+    @Test
     public void testMinCut0Weight()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> g =
@@ -152,6 +149,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut when a <1-weight edge exists.
      */
+    @Test
     public void testMinCutSmallWeight()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> g =
@@ -185,6 +183,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on a Multigraph.
      */
+    @Test
     public void testMinCutMultigraph()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> g =
@@ -215,6 +214,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on an unweighted graph
      */
+    @Test
     public void testMinCutUnweighted()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -247,6 +247,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on empty and small graphs
      */
+    @Test
     public void testMinCutEmpty()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -263,6 +264,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on empty and small graphs
      */
+    @Test
     public void testMinCutSingleton()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -280,6 +282,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on empty and small graphs
      */
+    @Test
     public void testMinCutDoubleton()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -302,6 +305,7 @@ public class StoerWagnerMinimumCutTest
     /**
      * Test of StoerWagnerMinimumCut on empty and small graphs
      */
+    @Test
     public void testMinCutSmall()
     {
         SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);

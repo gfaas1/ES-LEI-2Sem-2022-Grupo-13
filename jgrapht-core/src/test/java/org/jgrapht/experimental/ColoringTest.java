@@ -22,6 +22,9 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * .
@@ -29,13 +32,13 @@ import junit.framework.*;
  * @author Michael Behrisch
  */
 public class ColoringTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
+    @Test
     public void testBacktrackColoring()
     {
         Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);

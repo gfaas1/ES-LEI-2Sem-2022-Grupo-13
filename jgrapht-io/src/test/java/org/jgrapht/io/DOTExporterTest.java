@@ -24,6 +24,10 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -31,7 +35,6 @@ import junit.framework.*;
  * @author Trevor Harmon
  */
 public class DOTExporterTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -59,6 +62,7 @@ public class DOTExporterTest
 
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testUndirected()
         throws UnsupportedEncodingException, ExportException
     {
@@ -130,6 +134,7 @@ public class DOTExporterTest
             res);
     }
 
+    @Test
     public void testValidNodeIDs()
         throws ExportException
     {
@@ -158,6 +163,7 @@ public class DOTExporterTest
         }
     }
 
+    @Test
     public void testDifferentGraphID()
         throws UnsupportedEncodingException, ExportException
     {

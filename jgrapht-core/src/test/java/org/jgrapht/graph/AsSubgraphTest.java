@@ -21,7 +21,10 @@ import java.util.*;
 
 import org.jgrapht.*;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Unit test for {@link AsSubgraph} class.
@@ -30,7 +33,6 @@ import junit.framework.*;
  * @since Sep 21, 2004
  */
 public class AsSubgraphTest
-    extends TestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -39,21 +41,10 @@ public class AsSubgraphTest
     private String v3 = "v3";
     private String v4 = "v4";
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public AsSubgraphTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * .
      */
+    @Test
     public void testInducedSubgraphListener()
     {
         Graph<String, DefaultEdge> g = init(true);
@@ -71,6 +62,7 @@ public class AsSubgraphTest
     /**
      * Tests Subgraph.
      */
+    @Test
     public void testSubgraph()
     {
         Graph<String, DefaultEdge> g = init(false);
@@ -101,6 +93,7 @@ public class AsSubgraphTest
     /**
      * .
      */
+    @Test
     public void testSubgraphListener()
     {
         Graph<String, DefaultEdge> g = init(true);
@@ -138,6 +131,7 @@ public class AsSubgraphTest
         return g;
     }
 
+    @Test
     public void testInducedSubgraphUnderlyingEdgeAddition()
     {
         ListenableGraph<Object, DefaultEdge> baseGraph =
@@ -154,6 +148,7 @@ public class AsSubgraphTest
         assertFalse(subgraph.containsEdge(v1, v2));
     }
 
+    @Test
     public void testEdges()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -189,6 +184,7 @@ public class AsSubgraphTest
         assertEquals(10, g.edgeSet().size());
     }
 
+    @Test
     public void testNonValidVerticesFilter()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -210,6 +206,7 @@ public class AsSubgraphTest
         assertEquals(2, sg.vertexSet().size());
     }
 
+    @Test
     public void testNonValidEdgesFilter()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -236,6 +233,7 @@ public class AsSubgraphTest
         assertEquals(5, sg.vertexSet().size());
     }
 
+    @Test
     public void testInOutEdgesUndirected()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -288,6 +286,7 @@ public class AsSubgraphTest
         assertEquals(4, sg.outDegreeOf(4));
     }
 
+    @Test
     public void testInOutEdgesDirected()
     {
         Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
@@ -320,7 +319,7 @@ public class AsSubgraphTest
         assertEquals(4, sg.degreeOf(4));
 
         assertEquals(new HashSet<>(), sg.incomingEdgesOf(1));
-        assertEquals(new HashSet<>(Arrays.asList(e12)), sg.incomingEdgesOf(2));
+        assertEquals(new HashSet<>(Collections.singletonList(e12)), sg.incomingEdgesOf(2));
         assertEquals(new HashSet<>(Arrays.asList(e13, e23)), sg.incomingEdgesOf(3));
         assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e44)), sg.incomingEdgesOf(4));
 
@@ -332,7 +331,7 @@ public class AsSubgraphTest
         assertEquals(new HashSet<>(Arrays.asList(e12, e13)), sg.outgoingEdgesOf(1));
         assertEquals(new HashSet<>(Arrays.asList(e24_1, e24_2, e23)), sg.outgoingEdgesOf(2));
         assertEquals(new HashSet<>(), sg.outgoingEdgesOf(3));
-        assertEquals(new HashSet<>(Arrays.asList(e44)), sg.outgoingEdgesOf(4));
+        assertEquals(new HashSet<>(Collections.singletonList(e44)), sg.outgoingEdgesOf(4));
 
         assertEquals(2, sg.outDegreeOf(1));
         assertEquals(3, sg.outDegreeOf(2));

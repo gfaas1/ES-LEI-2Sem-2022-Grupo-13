@@ -28,6 +28,10 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test cases for the GabowStrongConnectivityInspector. Tests are identical to the tests for the
@@ -37,7 +41,6 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public class StrongConnectivityAlgorithmTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -50,6 +53,7 @@ public class StrongConnectivityAlgorithmTest
     // ~ Instance fields --------------------------------------------------------
 
     //
+    @Test
     public void testStrongConnectivityClasses()
     {
         Class<?>[] strongConnectivityAlgorithmClasses =
@@ -240,6 +244,7 @@ public class StrongConnectivityAlgorithmTest
         assertEquals(expected, sc.stronglyConnectedSets());
     }
 
+    @Test
     public void testCondensation()
     {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -264,6 +269,7 @@ public class StrongConnectivityAlgorithmTest
             condensation.toString());
     }
 
+    @Test
     public void testCondensation2()
     {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);

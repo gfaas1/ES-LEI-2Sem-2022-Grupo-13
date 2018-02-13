@@ -27,9 +27,12 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MinimumSpanningTreeTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +57,7 @@ public class MinimumSpanningTreeTest
 
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testKruskal()
     {
 
@@ -68,6 +72,7 @@ public class MinimumSpanningTreeTest
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
+    @Test
     public void testPrim()
     {
         testMinimumSpanningTreeBuilding(
@@ -81,6 +86,7 @@ public class MinimumSpanningTreeTest
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
+    @Test
     public void testBoruvska()
     {
         testMinimumSpanningTreeBuilding(
@@ -94,6 +100,7 @@ public class MinimumSpanningTreeTest
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
+    @Test
     public void testRandomInstances()
     {
         final Random rng = new Random(33);
@@ -129,7 +136,7 @@ public class MinimumSpanningTreeTest
     protected <V, E> void testMinimumSpanningTreeBuilding(
         final SpanningTree<E> mst, final Collection<E> edgeSet, final double weight)
     {
-        assertEquals(weight, mst.getWeight());
+        assertEquals(weight, mst.getWeight(),0);
         assertTrue(mst.getEdges().containsAll(edgeSet));
     }
 

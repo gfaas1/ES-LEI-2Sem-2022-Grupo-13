@@ -26,6 +26,10 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for GreedyMaximumCardinalityMatching
@@ -33,13 +37,13 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public class GreedyMaximumCardinalityMatchingTest
-    extends TestCase
 {
 
     /**
      * Generate a number of random graphs, find a random matching and check whether the matching
      * returned is valid. Not sorted
      */
+    @Test
     public void testRandomGraphs()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
@@ -74,6 +78,7 @@ public class GreedyMaximumCardinalityMatchingTest
      * Generate a number of random graphs, find a random matching and check whether the matching
      * returned is valid. Sorted.
      */
+    @Test
     public void testRandomGraphs2()
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =

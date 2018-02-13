@@ -18,6 +18,11 @@
 package org.jgrapht.alg.util;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for FixedSizeIntegerQueue
@@ -25,9 +30,9 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public class FixedSizeIntegerQueueTest
-    extends TestCase
 {
 
+    @Test
     public void testQueue()
     {
         FixedSizeIntegerQueue queue = new FixedSizeIntegerQueue(10);

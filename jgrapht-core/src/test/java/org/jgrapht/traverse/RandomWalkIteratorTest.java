@@ -23,6 +23,9 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link RandomWalkIterator} class.
@@ -31,12 +34,12 @@ import org.jgrapht.graph.*;
  *
  */
 public class RandomWalkIteratorTest
-    extends EnhancedTestCase
 {
 
     /**
      * Tests empty graph
      */
+    @Test
     public void testEmptyGraph()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -47,6 +50,7 @@ public class RandomWalkIteratorTest
     /**
      * Tests single node graph
      */
+    @Test
     public void testSingleNode()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -60,6 +64,7 @@ public class RandomWalkIteratorTest
     /**
      * Tests iterator does not have more elements after reaching sink vertex.
      */
+    @Test
     public void testSink()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -87,6 +92,7 @@ public class RandomWalkIteratorTest
     /**
      * Tests iterator is exhausted after maxSteps
      */
+    @Test
     public void testExhausted()
     {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -114,6 +120,7 @@ public class RandomWalkIteratorTest
     /**
      * Test deterministic walk using directed ring graph.
      */
+    @Test
     public void testDeterministic()
     {
         Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);

@@ -20,12 +20,16 @@ package org.jgrapht.util;
 import java.util.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PrefetchIteratorTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testIteratorInterface()
     {
         Iterator<Integer> iterator = new IterateFrom1To99();
@@ -43,6 +47,7 @@ public class PrefetchIteratorTest
         assertTrue(exceptionThrown instanceof NoSuchElementException);
     }
 
+    @Test
     public void testEnumInterface()
     {
         Enumeration<Integer> enumuration = new IterateFrom1To99();

@@ -20,6 +20,11 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A unit test for the AsWeightedGraph view and the AsDirectedWeightedGraph view.
@@ -28,7 +33,6 @@ import org.jgrapht.*;
  * @author Joris Kinable
  */
 public class AsWeightedGraphTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -43,7 +47,7 @@ public class AsWeightedGraphTest
 
     // ~ Methods ----------------------------------------------------------------
 
-    @Override
+    @Before
     public void setUp()
     {
         // Create a weighted, undirected graph
@@ -95,6 +99,7 @@ public class AsWeightedGraphTest
 
     /*** Unweighted graphs ***/
 
+    @Test
     public void testUnweightedGraphs()
     {
         this.testUnweightedGraph(unweightedGraph);
@@ -111,22 +116,23 @@ public class AsWeightedGraphTest
         Map<DefaultEdge, Double> weightMap = new HashMap<>();
         weightMap.put(e1, 9.0);
 
-        assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT,0);
 
         Graph<String, DefaultEdge> graphView;
         graphView = new AsWeightedGraph<>(graph, weightMap);
 
-        assertEquals(graphView.getEdgeWeight(e1), 9.0);
-        assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT);
-        assertEquals(graphView.getEdgeWeight(e3), Graph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graphView.getEdgeWeight(e1), 9.0,0);
+        assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT,0);
+        assertEquals(graphView.getEdgeWeight(e3), Graph.DEFAULT_EDGE_WEIGHT,0);
 
         graphView.setEdgeWeight(e2, 5.0);
-        assertEquals(graphView.getEdgeWeight(e2), 5.0);
-        assertEquals(graph.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT);
+        assertEquals(graphView.getEdgeWeight(e2), 5.0,0);
+        assertEquals(graph.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT,0);
     }
 
     /*** Weighted graphs ***/
 
+    @Test
     public void testWeightedGraphs()
     {
         this.testWeightedGraph(weightedGraph);
@@ -147,18 +153,17 @@ public class AsWeightedGraphTest
         Graph<String, DefaultWeightedEdge> graphView;
         graphView = new AsWeightedGraph<>(graph, weightMap);
 
-        assertEquals(graphView.getEdgeWeight(e1), 9.0);
-        assertEquals(graphView.getEdgeWeight(e2), 2.0);
-        assertEquals(graphView.getEdgeWeight(e3), 8.0);
+        assertEquals(graphView.getEdgeWeight(e1), 9.0,0);
+        assertEquals(graphView.getEdgeWeight(e2), 2.0,0);
+        assertEquals(graphView.getEdgeWeight(e3), 8.0,0);
 
         graphView.setEdgeWeight(e2, 5.0);
-        assertEquals(graphView.getEdgeWeight(e2), 5.0);
-        assertEquals(graph.getEdgeWeight(e2), 5.0);
+        assertEquals(graphView.getEdgeWeight(e2), 5.0,0);
+        assertEquals(graph.getEdgeWeight(e2), 5.0,0);
 
         try {
             graphView.getEdgeWeight(null);
-            // should not get here
-            assertFalse();
+            Assert.fail();// should not get here
         } catch (NullPointerException ex) {
             // expected, swallow
         }

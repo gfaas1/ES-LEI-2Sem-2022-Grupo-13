@@ -23,6 +23,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
@@ -38,7 +39,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
-    extends TestCase
 {
     @State(Scope.Benchmark)
     public static class DynamicCycleDetectorRandomGraphBenchmark
@@ -148,6 +148,7 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
         }
     }
 
+    @Test
     public void testDirectedAcyclicGraphVSStaticGraphRandomGraphBenchmark()
         throws RunnerException
     {

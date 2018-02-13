@@ -28,6 +28,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.specifics.*;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;
@@ -44,8 +45,6 @@ import junit.framework.*;
  * multiple graphs. Not sure how to achieve that through the JMH framework.
  */
 public class GraphPerformanceTest
-    extends
-    TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
@@ -200,6 +199,7 @@ public class GraphPerformanceTest
         }
     }
 
+    @Test
     public void testRandomGraphBenchmark()
         throws RunnerException
     {

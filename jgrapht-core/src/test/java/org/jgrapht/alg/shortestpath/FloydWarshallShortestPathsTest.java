@@ -25,15 +25,18 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Tom Larkworthy
  */
 public class FloydWarshallShortestPathsTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testCompareWithDijkstra()
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
@@ -133,6 +136,7 @@ public class FloydWarshallShortestPathsTest
         assertEquals(path.getEndVertex(), path.getVertexList().get(path.getLength()));
     }
 
+    @Test
     public void testWeightedEdges()
     {
         SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> weighted =
@@ -150,7 +154,7 @@ public class FloydWarshallShortestPathsTest
         assertEquals(Collections.singletonList(edge), path.getEdgeList());
         assertEquals("a", path.getStartVertex());
         assertEquals("b", path.getEndVertex());
-        assertEquals(5.0, path.getWeight());
+        assertEquals(5.0, path.getWeight(),0);
         assertEquals(weighted, path.getGraph());
         List<String> vertexPath = path.getVertexList();
         assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));

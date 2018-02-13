@@ -22,6 +22,10 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -43,6 +47,7 @@ public abstract class CrossComponentIteratorTest
     /**
      * .
      */
+    @Test
     public void testDirectedGraphViaCCI()
     {
         result = new StringBuffer();
@@ -67,6 +72,7 @@ public abstract class CrossComponentIteratorTest
         assertEquals(getExpectedCCFinishString(), listener.getFinishString());
     }
 
+    @Test
     public void testDirectedGraphNullConstructors()
     {
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
@@ -129,7 +135,7 @@ public abstract class CrossComponentIteratorTest
                 break;
 
             default:
-                assertFalse();
+                Assert.fail("Should not get here.");
 
                 break;
             }

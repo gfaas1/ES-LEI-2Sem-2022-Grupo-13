@@ -28,6 +28,7 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+import org.junit.Test;
 import org.openjdk.jmh.runner.*;
 
 import junit.framework.*;
@@ -38,7 +39,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class MinimumSpanningTreePerformanceTest
-    extends TestCase
 {
     private static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
     private static final double PERF_BENCHMARK_EDGES_PROP = 0.5;
@@ -132,6 +132,7 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
+    @Test
     public void testBenchmark()
         throws RunnerException
     {

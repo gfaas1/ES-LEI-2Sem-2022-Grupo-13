@@ -22,6 +22,10 @@ import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * .
@@ -29,7 +33,6 @@ import junit.framework.*;
  * @author Barak Naveh
  */
 public class ConnectivityInspectorTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -94,6 +97,7 @@ public class ConnectivityInspectorTest
     /**
      * .
      */
+    @Test
     public void testDirectedGraph()
     {
         ListenableGraph<String, DefaultEdge> g =
@@ -117,6 +121,7 @@ public class ConnectivityInspectorTest
     /**
      * .
      */
+    @Test
     public void testIsGraphConnected()
     {
         Pseudograph<String, DefaultEdge> g = create();

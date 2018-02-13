@@ -22,6 +22,11 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -58,6 +63,7 @@ public class BellmanFordShortestPathTest
         return new BellmanFordShortestPath<>(g).getPaths(src).getPath(dest).getEdgeList();
     }
 
+    @Test
     public void testWithNegativeEdges()
     {
         Graph<String, DefaultWeightedEdge> g = createWithBias(true);
@@ -65,12 +71,13 @@ public class BellmanFordShortestPathTest
         List<DefaultWeightedEdge> path;
 
         path = findPathBetween(g, V1, V4);
-        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e13, e34 }), path);
+        assertEquals(Arrays.asList(e13, e34), path);
 
         path = findPathBetween(g, V1, V5);
-        assertEquals(Arrays.asList(new DefaultWeightedEdge[] { e15 }), path);
+        assertEquals(Arrays.asList(e15), path);
     }
 
+    @Test
     public void testNoPath()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -80,10 +87,11 @@ public class BellmanFordShortestPathTest
 
         BellmanFordShortestPath<String, DefaultWeightedEdge> alg = new BellmanFordShortestPath<>(g);
         SingleSourcePaths<String, DefaultWeightedEdge> paths = alg.getPaths("a");
-        assertEquals(paths.getWeight("b"), Double.POSITIVE_INFINITY);
+        assertEquals(paths.getWeight("b"), Double.POSITIVE_INFINITY,0);
         assertNull(paths.getPath("b"));
     }
 
+    @Test
     public void testWikipediaExampleBellmanFord()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -114,6 +122,7 @@ public class BellmanFordShortestPathTest
         assertEquals(0d, paths.getPath("z").getWeight(), 1e-9);
     }
 
+    @Test
     public void testNegativeCycleDetection()
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -143,6 +152,7 @@ public class BellmanFordShortestPathTest
         }
     }
 
+    @Test
     public void testNegativeEdgeUndirectedGraph()
     {
         WeightedPseudograph<String, DefaultWeightedEdge> g =

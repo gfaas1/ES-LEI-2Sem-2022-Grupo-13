@@ -25,9 +25,12 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.Pseudograph;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GraphBuilderTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -40,8 +43,7 @@ public class GraphBuilderTest
     private String v7 = "v7";
     private String v8 = "v8";
 
-    // ~ Methods ----------------------------------------------------------------
-
+    @Test
     public void testAddVertex()
     {
         Graph<String, DefaultEdge> g =
@@ -53,6 +55,7 @@ public class GraphBuilderTest
         assertTrue(g.vertexSet().containsAll(Arrays.asList(v1, v2, v3)));
     }
 
+    @Test
     public void testAddEdge()
     {
         DefaultWeightedEdge e1 = new DefaultWeightedEdge();
@@ -77,10 +80,11 @@ public class GraphBuilderTest
         assertTrue(g.containsEdge(v1, v8));
         assertEquals(e1, g.getEdge(v1, v7));
         assertEquals(e2, g.getEdge(v1, v8));
-        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)));
-        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)));
+        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)),0);
+        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)),0);
     }
 
+    @Test
     public void testAddGraph()
     {
         Graph<String,
@@ -99,6 +103,7 @@ public class GraphBuilderTest
         assertTrue(g2.containsEdge(v1, v4));
     }
 
+    @Test
     public void testRemoveVertex()
     {
         Graph<String, DefaultEdge> g1 =
@@ -115,6 +120,7 @@ public class GraphBuilderTest
         assertTrue(g2.containsEdge(v1, v3));
     }
 
+    @Test
     public void testRemoveEdge()
     {
         DefaultEdge e = new DefaultEdge();
@@ -134,13 +140,14 @@ public class GraphBuilderTest
         assertTrue(g2.containsEdge(v3, v4));
     }
 
+    @Test
     public void testAddVertexPseudograph()
     {
         Pseudograph<String, DefaultEdge> g = Pseudograph
             .<String, DefaultEdge> createBuilder(DefaultEdge.class).addVertex(v1).build();
         assertEquals(1, g.vertexSet().size());
         assertEquals(0, g.edgeSet().size());
-        assertTrue(g.vertexSet().containsAll(Arrays.asList(v1)));
+        assertTrue(g.vertexSet().containsAll(Collections.singletonList(v1)));
     }
 
 }
