@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 
-import org.jgrapht.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Inspects a graph for the biconnectivity property. See {@link BlockCutpointGraph} for more
@@ -29,7 +31,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @since July 5, 2007
+ * @deprecated Moved to package org.jgrapht.connectivity
  */
+@Deprecated
 public class BiconnectivityInspector<V, E>
 {
     private BlockCutpointGraph<V, E> blockCutpointGraph;

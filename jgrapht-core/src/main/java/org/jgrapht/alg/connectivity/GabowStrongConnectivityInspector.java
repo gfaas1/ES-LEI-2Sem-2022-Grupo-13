@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2018, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2017, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,11 +15,18 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.connectivity;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * Computes the strongly connected components of a directed graph. The implemented algorithm follows
@@ -31,9 +38,7 @@ import org.jgrapht.*;
  *
  * @author Sarah Komla-Ebri
  * @since September, 2013
- * @deprecated Moved to package org.jgrapht.connectivity
  */
-@Deprecated
 public class GabowStrongConnectivityInspector<V, E>
     extends AbstractStrongConnectivityInspector<V, E>
 {

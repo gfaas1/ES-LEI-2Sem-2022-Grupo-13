@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
@@ -178,7 +178,7 @@ public class GraphGeneratorTest
         ScaleFreeGraphGenerator<Object, DefaultEdge> generator = new ScaleFreeGraphGenerator<>(500);
         generator.generateGraph(graph, vertexFactory, null);
         ConnectivityInspector<Object, DefaultEdge> inspector = new ConnectivityInspector<>(graph);
-        assertTrue("generated graph is not connected", inspector.isGraphConnected());
+        assertTrue("generated graph is not connected", inspector.isConnected());
 
         try {
             new ScaleFreeGraphGenerator<>(-50);

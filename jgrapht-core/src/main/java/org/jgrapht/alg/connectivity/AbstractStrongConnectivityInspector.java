@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2018, by Christian Soltenborn and Contributors.
+ * (C) Copyright 2005-2017, by Christian Soltenborn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,13 +15,20 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.connectivity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
+import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
  * Base implementation of the strongly connected components algorithm.
@@ -32,9 +39,7 @@ import org.jgrapht.graph.*;
  * @author Christian Soltenborn
  * @author Christian Hammer
  * @author Dimitrios Michail
- * @deprecated Moved to package org.jgrapht.connectivity
  */
-@Deprecated
 abstract class AbstractStrongConnectivityInspector<V, E>
     implements StrongConnectivityAlgorithm<V, E>
 {
@@ -67,7 +72,7 @@ abstract class AbstractStrongConnectivityInspector<V, E>
             stronglyConnectedSubgraphs = new ArrayList<>(sets.size());
 
             for (Set<V> set : sets) {
-                stronglyConnectedSubgraphs.add(new AsSubgraph<V, E>(graph, set, null));
+                stronglyConnectedSubgraphs.add(new AsSubgraph<>(graph, set, null));
             }
         }
         return stronglyConnectedSubgraphs;
