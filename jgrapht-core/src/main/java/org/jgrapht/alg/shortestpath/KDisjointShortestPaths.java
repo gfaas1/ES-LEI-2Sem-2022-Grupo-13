@@ -99,13 +99,19 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      *            number of disjoint paths between the start vertex and an end
      *            vertex.
      *
-     * @throws NullPointerException
-     *             if the specified graph or startVertex is <code>null</code>.
      * @throws IllegalArgumentException
      *             if nPaths is negative or 0.
+     * @throws IllegalArgumentException 
+     *             if the graph is null.
+     * @throws IllegalArgumentException 
+     *             if the graph is undirected.
      */
     public KDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
-        assertKShortestPathsFinder(graph, nPaths);
+        
+        GraphTests.requireDirected(graph);           
+        if (nPaths <= 0) {
+            throw new IllegalArgumentException("nPaths must be positive value");
+        }
 
         this.graph = graph;
         this.nPaths = nPaths;
@@ -122,16 +128,27 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      * @throws IllegalArgumentException if the graph does not contain the startVertex or the
      *         endVertex
      * @throws IllegalArgumentException if the startVertex and the endVertex are the same vertices
-     * @throws IllegalArgumentException if the graph is undirected.
+     * @throws IllegalArgumentException if the startVertex or the endVertex is null
      */
     @Override
     public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex)
     {
-        assertGetPaths(startVertex, endVertex);
-        //ensure we have directed weighted graph
-        if (! this.graph.getType().isDirected()) {
-            throw new IllegalArgumentException("Graph must be directed");
+        if (endVertex == null) {
+            throw new IllegalArgumentException("endVertex is null");
         }
+        if (startVertex == null) {
+            throw new IllegalArgumentException("startVertex is null");
+        }
+        if (endVertex.equals(startVertex)) {
+            throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
+        }
+        if (! this.graph.vertexSet().contains(startVertex)) {
+            throw new IllegalArgumentException("graph must contain the start vertex!");
+        }
+        if (! this.graph.vertexSet().contains(endVertex)) {
+            throw new IllegalArgumentException("graph must contain the end vertex!");
+        }
+        
         this.graph = new AsWeightedGraph<>(graph, new HashMap<>());
 
         GraphPath<V, E> currentPath;
@@ -148,7 +165,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
             }            
         } while (currentPath != null && cPaths <= this.nPaths);
 
-        return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : null;
+        return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
     }
 
     /**
@@ -289,30 +306,6 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
             }
         }
         
-    }
-
-    private void assertGetPaths( V startVertex, V endVertex) {
-        if (endVertex == null) {
-            throw new NullPointerException("endVertex is null");
-        }
-        if (startVertex == null) {
-            throw new NullPointerException("startVertex is null");
-        }
-        if (endVertex.equals(startVertex)) {
-            throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
-        }
-        if (!this.graph.vertexSet().contains(endVertex)) {
-            throw new IllegalArgumentException("Graph must contain the end vertex!");
-        }
-    }
-
-    private void assertKShortestPathsFinder(Graph<V, E> graph, int nPaths) {
-        if (graph == null) {
-            throw new NullPointerException("graph is null");
-        }        
-        if (nPaths <= 0) {
-            throw new NullPointerException("nPaths is negative or 0");
-        }
     }
     
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex) {
