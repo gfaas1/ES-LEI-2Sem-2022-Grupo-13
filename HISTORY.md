@@ -25,6 +25,7 @@ Changes to JGraphT in each version:
     - Added `GraphTypeBuilder` (contributed by Dimitrios Michail)
     - Reimplemented BiconnectivityInspector with additional functionality such as computing bridges and working on multiple graph types (contributed by Joris Kinable)
     - Revised BlockCutpointGraph and added additional tests (contributed by Joris Kinable)
+    - Removed old JUnit 3 dependencies (contributed by Joris Kinable)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
