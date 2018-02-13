@@ -19,6 +19,9 @@ package org.jgrapht.traverse;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for ClosestFirstIterator.
@@ -34,6 +37,7 @@ public class ClosestFirstIteratorTest
     /**
      * .
      */
+    @Test
     public void testRadius()
     {
         result = new StringBuffer();
@@ -58,6 +62,7 @@ public class ClosestFirstIteratorTest
     /**
      * .
      */
+    @Test
     public void testNoStart()
     {
         result = new StringBuffer();

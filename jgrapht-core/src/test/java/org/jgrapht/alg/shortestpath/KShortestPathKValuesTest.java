@@ -22,12 +22,14 @@ import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @since July 5, 2007
  */
 public class KShortestPathKValuesTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -46,6 +48,7 @@ public class KShortestPathKValuesTest
         }
     }
 
+    @Test
     public void testMaxSizeValueCompleteGraph6()
     {
         KShortestPathCompleteGraph6 graph = new KShortestPathCompleteGraph6();
@@ -62,6 +65,7 @@ public class KShortestPathKValuesTest
         }
     }
 
+    @Test
     public void testNbReturnedPaths()
     {
         KShortestPathCompleteGraph4 kSPCompleteGraph4 = new KShortestPathCompleteGraph4();

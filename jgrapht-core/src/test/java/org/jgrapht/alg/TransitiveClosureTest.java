@@ -22,14 +22,18 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  */
 public class TransitiveClosureTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testLinearGraph()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> graph =
@@ -48,6 +52,7 @@ public class TransitiveClosureTest
         }
     }
 
+    @Test
     public void testRingGraph()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> graph =
@@ -66,6 +71,7 @@ public class TransitiveClosureTest
         }
     }
 
+    @Test
     public void testNoVerticesDag()
     {
         DirectedAcyclicGraph<Integer, DefaultEdge> graph =
@@ -76,6 +82,7 @@ public class TransitiveClosureTest
         assertEquals(0, graph.edgeSet().size());
     }
 
+    @Test
     public void testEmptyDag()
     {
         DirectedAcyclicGraph<Integer, DefaultEdge> graph =
@@ -89,6 +96,7 @@ public class TransitiveClosureTest
         assertEquals(0, graph.edgeSet().size());
     }
 
+    @Test
     public void testCompleteBipartiteDag()
     {
         DirectedAcyclicGraph<Integer, DefaultEdge> graph =
@@ -102,6 +110,7 @@ public class TransitiveClosureTest
         assertEquals(25, graph.edgeSet().size());
     }
 
+    @Test
     public void testLinearGraphForDag()
     {
         DirectedAcyclicGraph<Integer, DefaultEdge> graph =

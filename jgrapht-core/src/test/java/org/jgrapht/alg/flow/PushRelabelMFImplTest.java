@@ -20,6 +20,9 @@ package org.jgrapht.alg.flow;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class PushRelabelMFImplTest
     extends MaximumFlowAlgorithmTest
@@ -32,6 +35,7 @@ public class PushRelabelMFImplTest
         return new PushRelabelMFImpl<>(network);
     }
 
+    @Test
     public void testPushRelabelWithNonIdenticalNode() {
         SimpleDirectedGraph<String,DefaultEdge> g1 = new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class) ;
 
@@ -51,6 +55,6 @@ public class PushRelabelMFImplTest
         String sourceFlow = "v" + new String("v3").substring(1) ;
         String sinkFlow = "v0" ;
         double flow = mf1.calculateMaximumFlow(sourceFlow,sinkFlow);
-        assertEquals(0.0, flow);
+        assertEquals(0.0, flow,0);
     }
 }

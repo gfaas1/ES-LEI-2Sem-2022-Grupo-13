@@ -24,6 +24,11 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * .
@@ -32,7 +37,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class DIMACSImporterTest
-    extends TestCase
 {
 
     public <E> Graph<Integer, E> readGraph(
@@ -60,6 +64,7 @@ public class DIMACSImporterTest
     /**
      * Read and parse an actual instance
      */
+    @Test
     public void testReadDIMACSInstance()
         throws ImportException
     {
@@ -79,6 +84,7 @@ public class DIMACSImporterTest
     /**
      * Read and parse an weighted instance
      */
+    @Test
     public void testReadWeightedDIMACSInstance()
         throws ImportException
     {
@@ -102,6 +108,7 @@ public class DIMACSImporterTest
         }
     }
 
+    @Test
     public void testReadDIMACSShortestPathFormat()
         throws ImportException
     {
@@ -128,6 +135,7 @@ public class DIMACSImporterTest
         }
     }
 
+    @Test
     public void testWrongDIMACSInstance1()
         throws ImportException
     {
@@ -146,6 +154,7 @@ public class DIMACSImporterTest
         }
     }
 
+    @Test
     public void testWrongDIMACSInstance2()
         throws ImportException
     {
@@ -164,6 +173,7 @@ public class DIMACSImporterTest
         }
     }
 
+    @Test
     public void testWrongDIMACSInstance3()
         throws ImportException
     {
@@ -182,6 +192,7 @@ public class DIMACSImporterTest
         }
     }
 
+    @Test
     public void testWrongDIMACSInstance4()
         throws ImportException
     {

@@ -23,6 +23,11 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * .
@@ -30,7 +35,6 @@ import junit.framework.*;
  * @author John V. Sichi
  */
 public class CycleDetectorTest
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -75,6 +79,7 @@ public class CycleDetectorTest
     /**
      * .
      */
+    @Test
     public void testDirectedWithCycle()
     {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -97,6 +102,7 @@ public class CycleDetectorTest
     /**
      * .
      */
+    @Test
     public void testDirectedWithDoubledCycle()
     {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -126,6 +132,7 @@ public class CycleDetectorTest
      * .
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testDirectedWithoutCycle()
     {
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
@@ -162,6 +169,7 @@ public class CycleDetectorTest
         }
     }
 
+    @Test
     public void testVertexEquals()
     {
         DefaultDirectedGraph<String, DefaultEdge> graph =

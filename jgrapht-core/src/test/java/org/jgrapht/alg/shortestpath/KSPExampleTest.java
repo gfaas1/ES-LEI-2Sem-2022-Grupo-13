@@ -20,12 +20,15 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class KSPExampleTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
+    @Test
     public void testFourReturnedPathsJGraphT()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
@@ -37,6 +40,7 @@ public class KSPExampleTest
         assertEquals(3, ksp.getPaths(sourceVertex, targetVertex).size());
     }
 
+    @Test
     public void testThreeReturnedPathsJGraphT()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
@@ -49,6 +53,7 @@ public class KSPExampleTest
         assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
     }
 
+    @Test
     public void testTwoReturnedPathsJGraphT()
     {
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();

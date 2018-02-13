@@ -26,8 +26,9 @@ import org.jgrapht.graph.*;
 
 import junit.framework.*;
 
+import static org.junit.Assert.assertTrue;
+
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase
-    extends TestCase
 {
 
     protected Graph<Integer, DefaultWeightedEdge> constructDirectedGraph(

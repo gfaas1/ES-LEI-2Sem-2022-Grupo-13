@@ -23,6 +23,10 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -31,7 +35,6 @@ import junit.framework.*;
  **/
 
 public class AllDirectedPathsTest
-    extends TestCase
 {
     private static final String I1 = "I1";
     private static final String I2 = "I2";
@@ -44,6 +47,7 @@ public class AllDirectedPathsTest
     private static final String O1 = "O1";
     private static final String O2 = "O2";
 
+    @Test
     public void testSmallExampleGraph()
     {
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
@@ -62,6 +66,7 @@ public class AllDirectedPathsTest
         assertEquals("Toy network should have correct number of simple paths", 7, allPaths.size());
     }
 
+    @Test
     public void testTrivialPaths()
     {
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
@@ -80,6 +85,7 @@ public class AllDirectedPathsTest
             "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
     }
 
+    @Test
     public void testCycleBehavior()
     {
         Graph<String, DefaultEdge> toyGraph = toyGraph();
@@ -109,6 +115,7 @@ public class AllDirectedPathsTest
             allPathsWithoutCycle.size());
     }
 
+    @Test
     public void testMustBoundIfNonSimplePaths()
     {
         // Goofy hack to test for an exception

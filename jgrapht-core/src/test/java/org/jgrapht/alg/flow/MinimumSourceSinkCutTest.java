@@ -23,6 +23,10 @@ import java.util.stream.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Joris Kinable
@@ -59,7 +63,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight);
+        assertEquals(expectedCutWeight, cutWeight,0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -76,7 +80,7 @@ public abstract class MinimumSourceSinkCutTest
                         && sinkPartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum());
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
     }
 
     private void runTestUndirected(
@@ -99,7 +103,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight);
+        assertEquals(expectedCutWeight, cutWeight,0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -116,14 +120,15 @@ public abstract class MinimumSourceSinkCutTest
                         ^ sourcePartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum());
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
 
     }
 
+    @Test
     public void testProblematicCase()
     {
         Graph<Integer, DefaultWeightedEdge> network =
-            new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(network, 1, 2, 0);
         Graphs.addEdgeWithVertices(network, 1, 4, 1);
         Graphs.addEdgeWithVertices(network, 1, 5, 1);
@@ -135,61 +140,73 @@ public abstract class MinimumSourceSinkCutTest
         runTestUndirected(network, 1, 6, 0);
     }
 
+    @Test
     public void testDirectedN0()
     {
         runTestDirected(getDirectedN0(), 1, 4, 5.0);
     }
 
+    @Test
     public void testDirectedN1()
     {
         runTestDirected(getDirectedN1(), 1, 4057218, 0.0);
     }
 
+    @Test
     public void testDirectedN2()
     {
         runTestDirected(getDirectedN2(), 3, 6, 2.0);
     }
 
+    @Test
     public void testDirectedN3()
     {
         runTestDirected(getDirectedN3(), 5, 6, 4.0);
     }
 
+    @Test
     public void testDirectedN4()
     {
         runTestDirected(getDirectedN4(), 1, 4, 2000000000.0);
     }
 
+    @Test
     public void testDirectedN6()
     {
         runTestDirected(getDirectedN6(), 1, 50, 20.0);
     }
 
+    @Test
     public void testDirectedN7()
     {
         runTestDirected(getDirectedN7(), 1, 50, 31.0);
     }
 
+    @Test
     public void testDirectedN8()
     {
         runTestDirected(getDirectedN8(), 0, 5, 23.0);
     }
 
+    @Test
     public void testDirectedN9()
     {
         runTestDirected(getDirectedN9(), 0, 8, 22.0);
     }
 
+    @Test
     public void testDirectedN10()
     {
         runTestDirected(getDirectedN10(), 1, 99, 173.0);
     }
 
+    @Test
     public void testDirectedN11()
     {
         runTestDirected(getDirectedN11(), 1, 99, 450.0);
     }
 
+    @Test
     public void testDirectedN12()
     {
         runTestDirected(getDirectedN12(), 1, 99, 203.0);
@@ -197,46 +214,55 @@ public abstract class MinimumSourceSinkCutTest
 
     /*************** TEST CASES FOR UNDIRECTED GRAPHS ***************/
 
+    @Test
     public void testUndirectedN1()
     {
         runTestUndirected(getUndirectedN1(), 0, 8, 28);
     }
 
+    @Test
     public void testUndirectedN2()
     {
         runTestUndirected(getUndirectedN2(), 1, 4, 93);
     }
 
+    @Test
     public void testUndirectedN3()
     {
         runTestUndirected(getUndirectedN3(), 1, 49, 104);
     }
 
+    @Test
     public void testUndirectedN4()
     {
         runTestUndirected(getUndirectedN4(), 1, 99, 634);
     }
 
+    @Test
     public void testUndirectedN5()
     {
         runTestUndirected(getUndirectedN5(), 1, 49, 112);
     }
 
+    @Test
     public void testUndirectedN6()
     {
         runTestUndirected(getUndirectedN6(), 1, 69, 194);
     }
 
+    @Test
     public void testUndirectedN7()
     {
         runTestUndirected(getUndirectedN7(), 1, 69, 33);
     }
 
+    @Test
     public void testUndirectedN8()
     {
         runTestUndirected(getUndirectedN8(), 1, 99, 501);
     }
 
+    @Test
     public void testUndirectedN9()
     {
         runTestUndirected(getUndirectedN9(), 1, 2, 0);

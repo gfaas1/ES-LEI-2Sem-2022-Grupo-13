@@ -21,6 +21,11 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A unit test for directed multigraph.
@@ -29,7 +34,6 @@ import org.jgrapht.graph.specifics.*;
  * @since Aug 9, 2003
  */
 public class DirectedGraphTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -42,6 +46,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testEdgeSetFactory()
     {
         DirectedMultigraph<String, DefaultEdge> g =
@@ -69,6 +74,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testEdgeOrderDeterminism()
     {
         Graph<String, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
@@ -98,6 +104,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testEdgesOf()
     {
         Graph<String, DefaultEdge> g = createMultiTriangle();
@@ -110,6 +117,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testInDegreeOf()
     {
         Graph<String, DefaultEdge> g = createMultiTriangle();
@@ -122,6 +130,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testOutDegreeOf()
     {
         Graph<String, DefaultEdge> g = createMultiTriangle();
@@ -134,6 +143,7 @@ public class DirectedGraphTest
     /**
      * .
      */
+    @Test
     public void testVertexOrderDeterminism()
     {
         Graph<String, DefaultEdge> g = createMultiTriangle();

@@ -29,6 +29,7 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
+import org.junit.Test;
 import org.openjdk.jmh.runner.*;
 
 import junit.framework.*;
@@ -40,7 +41,6 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public class DijkstraShortestPathPerformanceTest
-    extends TestCase
 {
     private static final int PERF_BENCHMARK_VERTICES_COUNT = 250;
     private static final double PERF_BENCHMARK_EDGES_PROP = 0.3;
@@ -222,6 +222,7 @@ public class DijkstraShortestPathPerformanceTest
         }
     }
 
+    @Test
     public void testBenchmark()
         throws RunnerException
     {

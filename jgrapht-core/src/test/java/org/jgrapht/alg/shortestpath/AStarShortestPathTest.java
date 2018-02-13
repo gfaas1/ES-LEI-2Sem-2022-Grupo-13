@@ -22,6 +22,9 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Test class for AStarShortestPath implementation
@@ -30,7 +33,6 @@ import junit.framework.*;
  * @since Aug 21, 2015
  */
 public class AStarShortestPathTest
-    extends TestCase
 {
     private final String[] labyrinth1 =
         { ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
@@ -110,6 +112,7 @@ public class AStarShortestPathTest
     /**
      * Test on a graph with a path from the source node to the target node.
      */
+    @Test
     public void testLabyrinth1()
     {
         this.readLabyrinth(labyrinth1);
@@ -136,6 +139,7 @@ public class AStarShortestPathTest
     /**
      * Test on a graph where there is no path from the source node to the target node.
      */
+    @Test
     public void testLabyrinth2()
     {
         this.readLabyrinth(labyrinth2);
@@ -154,6 +158,7 @@ public class AStarShortestPathTest
      * query the shortest path, which is simply the cheapest edge between (A,B) plus the cheapest
      * edge between (B,C). The admissible heuristic in this test is not important.
      */
+    @Test
     public void testMultiGraph()
     {
         WeightedMultigraph<Node, DefaultWeightedEdge> multigraph =
@@ -179,6 +184,7 @@ public class AStarShortestPathTest
         assertTrue(aStarShortestPath.isConsistentHeuristic(new ManhattanDistance()));
     }
 
+    @Test
     public void testInconsistentHeuristic()
     {
         Graph<Integer, DefaultWeightedEdge> g =

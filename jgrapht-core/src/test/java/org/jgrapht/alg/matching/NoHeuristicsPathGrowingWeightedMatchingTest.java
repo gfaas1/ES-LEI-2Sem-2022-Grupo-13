@@ -24,6 +24,10 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for the PathGrowingWeightedMatching without heuristics algorithm
@@ -42,6 +46,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     };
 
     @Override
+    @Test
     public void testGraph1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -73,6 +78,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testSelfLoops()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -105,6 +111,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void test3over4Approximation()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -133,6 +140,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testMultiGraph()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -171,6 +179,7 @@ public class NoHeuristicsPathGrowingWeightedMatchingTest
     }
 
     @Override
+    @Test
     public void testDirected()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =

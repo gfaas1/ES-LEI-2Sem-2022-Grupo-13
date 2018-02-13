@@ -23,6 +23,9 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * .
@@ -30,7 +33,6 @@ import junit.framework.*;
  * @author John V. Sichi
  */
 public abstract class ShortestPathTestCase
-    extends TestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -54,6 +56,7 @@ public abstract class ShortestPathTestCase
     /**
      * .
      */
+    @Test
     public void testPathBetween()
     {
         List<DefaultWeightedEdge> path;

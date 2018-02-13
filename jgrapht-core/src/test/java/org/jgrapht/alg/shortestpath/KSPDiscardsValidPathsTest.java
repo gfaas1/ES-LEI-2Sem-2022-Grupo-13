@@ -20,9 +20,11 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class KSPDiscardsValidPathsTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -30,6 +32,7 @@ public class KSPDiscardsValidPathsTest
      * Example with a biconnected graph but not 3-connected. With a graph not 3-connected, the start
      * vertex and the end vertex can be disconnected by 2 paths.
      */
+    @Test
     public void testNot3connectedGraph()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;
@@ -81,6 +84,7 @@ public class KSPDiscardsValidPathsTest
      * 2-connected. With a graph not 2-connected, the start vertex and the end vertex can be
      * disconnected by 1 path.
      */
+    @Test
     public void testBrunoMaoili()
     {
         WeightedMultigraph<String, DefaultWeightedEdge> graph;

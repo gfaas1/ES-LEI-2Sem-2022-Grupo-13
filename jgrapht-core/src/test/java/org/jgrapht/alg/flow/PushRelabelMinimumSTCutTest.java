@@ -22,6 +22,9 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Joris Kinable
@@ -36,6 +39,7 @@ public class PushRelabelMinimumSTCutTest
         return new PushRelabelMFImpl<>(network);
     }
 
+    @Test
     public void testDisconnected1()
     {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -54,9 +58,10 @@ public class PushRelabelMinimumSTCutTest
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 5);
-        assertEquals(0d, cutWeight);
+        assertEquals(0d, cutWeight,0);
     }
 
+    @Test
     public void testDisconnected2()
     {
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
@@ -66,9 +71,10 @@ public class PushRelabelMinimumSTCutTest
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 2);
-        assertEquals(0d, cutWeight);
+        assertEquals(0d, cutWeight,0);
     }
 
+    @Test
     public void testRandomDirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {
@@ -94,6 +100,7 @@ public class PushRelabelMinimumSTCutTest
         }
     }
 
+    @Test
     public void testRandomUndirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {

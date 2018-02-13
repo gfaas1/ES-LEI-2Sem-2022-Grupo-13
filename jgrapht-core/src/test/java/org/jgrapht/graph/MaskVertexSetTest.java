@@ -20,6 +20,12 @@ package org.jgrapht.graph;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for MaskVertexSet.
@@ -27,7 +33,6 @@ import org.jgrapht.*;
  * @author Andrew Gainer-Dewar
  */
 public class MaskVertexSetTest
-    extends EnhancedTestCase
 {
     private Graph<String, DefaultEdge> directed;
     private String v1 = "v1";
@@ -38,8 +43,8 @@ public class MaskVertexSetTest
 
     private MaskVertexSet<String> testMaskVertexSet;
 
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
     {
         directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -54,6 +59,7 @@ public class MaskVertexSetTest
         testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), v -> v == v1);
     }
 
+    @Test
     public void testContains()
     {
         assertFalse(testMaskVertexSet.contains(v1));
@@ -62,11 +68,13 @@ public class MaskVertexSetTest
         assertFalse(testMaskVertexSet.contains(e1));
     }
 
+    @Test
     public void testSize()
     {
         assertEquals(3, testMaskVertexSet.size());
     }
 
+    @Test
     public void testIterator()
     {
         Iterator<String> it = testMaskVertexSet.iterator();

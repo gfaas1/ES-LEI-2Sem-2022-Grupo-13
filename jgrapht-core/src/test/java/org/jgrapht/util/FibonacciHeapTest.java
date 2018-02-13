@@ -20,13 +20,16 @@ package org.jgrapht.util;
 import java.util.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class FibonacciHeapTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
     // in honor of sf.net bug #1845376
+    @Test
     public void testAddRemoveOne()
     {
         String s = "A";
@@ -40,6 +43,7 @@ public class FibonacciHeapTest
         assertTrue(h.isEmpty());
     }
 
+    @Test
     public void testGrowReplaceShrink()
     {
         Random r = new Random();
@@ -69,6 +73,7 @@ public class FibonacciHeapTest
         assertEquals(0.0, t, 0.00001);
     }
 
+    @Test
     public void testValidReinsert()
     {
         FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
@@ -96,6 +101,7 @@ public class FibonacciHeapTest
         assertTrue(h.isEmpty());
     }
 
+    @Test
     public void testBadReinsert()
     {
         FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
@@ -118,6 +124,7 @@ public class FibonacciHeapTest
         }
     }
 
+    @Test
     public void testBadDecreaseKey()
     {
         FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");
@@ -144,6 +151,7 @@ public class FibonacciHeapTest
         }
     }
 
+    @Test
     public void testBadDelete()
     {
         FibonacciHeapNode<String> n1 = new FibonacciHeapNode<>("1");

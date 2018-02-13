@@ -28,18 +28,18 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.GraphMLExporter.AttributeCategory;
+import org.junit.Test;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 /**
  * @author Trevor Harmon
  * @author Dimitrios Michail
  */
 public class GraphMLExporterTest
-    extends
-    TestCase
 {
     // ~ Static fields/initializers
     // ---------------------------------------------
@@ -53,6 +53,7 @@ public class GraphMLExporterTest
     // ~ Methods
     // ----------------------------------------------------------------
 
+    @Test
     public void testUndirected()
         throws Exception
     {
@@ -90,6 +91,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeighted()
         throws Exception
     {
@@ -131,6 +133,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testDirected()
         throws Exception
     {
@@ -169,6 +172,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedUnweightedWithWeights()
         throws Exception
     {
@@ -210,6 +214,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithWeights()
         throws Exception
     {
@@ -254,6 +259,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testUndirectedWeightedWithCustomNameWeights()
         throws Exception
     {
@@ -300,6 +306,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
+    @Test
     public void testNoRegisterWeightAttribute()
         throws Exception
     {
@@ -312,6 +319,7 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testRegisterWeightAttribute()
         throws Exception
     {
@@ -325,6 +333,7 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testNoAlreadyRegisteredAttributeAsWeightName()
         throws Exception
     {
@@ -338,6 +347,7 @@ public class GraphMLExporterTest
         }
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndLabels()
         throws Exception
     {
@@ -413,6 +423,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndLabelsAndCustomNames()
         throws Exception
     {
@@ -490,6 +501,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
+    @Test
     public void testUndirectedWeightedWithWeightsAndColor()
         throws Exception
     {
@@ -602,6 +614,7 @@ public class GraphMLExporterTest
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
     }
 
+    @Test
     public void testUndirectedWeightedWithNullComponentProvider()
         throws Exception
     {

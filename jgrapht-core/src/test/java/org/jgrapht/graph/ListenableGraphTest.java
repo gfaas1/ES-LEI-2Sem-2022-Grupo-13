@@ -21,6 +21,11 @@ import org.jgrapht.*;
 import org.jgrapht.event.*;
 
 import junit.framework.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for {@link ListenableGraph} class.
@@ -29,7 +34,6 @@ import junit.framework.*;
  * @since Aug 3, 2003
  */
 public class ListenableGraphTest
-    extends TestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -38,21 +42,10 @@ public class ListenableGraphTest
     Object lastAddedVertex;
     Object lastRemovedVertex;
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public ListenableGraphTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * Tests GraphListener listener.
      */
+    @Test
     public void testGraphListener()
     {
         init();
@@ -112,6 +105,7 @@ public class ListenableGraphTest
     /**
      * Tests VertexSetListener listener.
      */
+    @Test
     public void testVertexSetListener()
     {
         init();
@@ -171,6 +165,7 @@ public class ListenableGraphTest
     /**
      * Tests that the combination of weights plus listener works.
      */
+    @Test
     public void testListenableDirectedWeightedGraph()
     {
         init();
@@ -194,12 +189,12 @@ public class ListenableGraphTest
 
         DefaultWeightedEdge e = g.addEdge(v1, v2);
         g.setEdgeWeight(e, 10.0);
-        assertEquals(10.0, g.getEdgeWeight(e));
+        assertEquals(10.0, g.getEdgeWeight(e),0);
         assertEquals(e, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
     }
 
-    private void init()
+    public void init()
     {
         lastAddedEdge = null;
         lastAddedVertex = null;

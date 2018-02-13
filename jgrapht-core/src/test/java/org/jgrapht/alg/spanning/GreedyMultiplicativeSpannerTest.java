@@ -23,13 +23,17 @@ import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
 import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Dimitrios Michail
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpannerTest
-    extends TestCase
 {
 
     // ~ Static fields/initializers
@@ -163,6 +167,7 @@ public class GreedyMultiplicativeSpannerTest
         }
     }
 
+    @Test
     public void testGraph1()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -212,6 +217,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
+    @Test
     public void testGraph1WithLoops()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -237,6 +243,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
+    @Test
     public void testGraph1WithMultipleEdges()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -262,6 +269,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 2, spanner3);
     }
 
+    @Test
     public void testGraph2()
     {
         Graph<String, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -331,6 +339,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, 100, spanner7);
     }
 
+    @Test
     public void testGraph3()
     {
         WeightedPseudograph<String, DefaultWeightedEdge> g =
@@ -354,6 +363,7 @@ public class GreedyMultiplicativeSpannerTest
         runTest(g, Integer.MAX_VALUE, spanner3);
     }
 
+    @Test
     public void testNegativeWeightsGraph()
     {
         WeightedPseudograph<String, DefaultWeightedEdge> g =
