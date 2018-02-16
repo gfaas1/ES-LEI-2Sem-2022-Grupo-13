@@ -86,6 +86,24 @@ We have also started auto-publishing SNAPSHOT builds for every successful commit
   <version>1.1.1-SNAPSHOT</version>
 ```
 
+and make sure the snapshot repository is enabled:
+
+```
+<repositories>
+        <repository>
+            <id>maven-snapshots</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+```
+
 ## Upgrading Versions ##
 
 To help upgrading, JGraphT maintains a one-version-backwards compatibility. While this compatibility is not a hard promise, it is generally respected. (This policy was not followed for the jump from `0.6.0` to `0.7.0` due to the pervasive changes required for generics.) You can upgrade via:
