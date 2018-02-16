@@ -90,18 +90,18 @@ and make sure the snapshot repository is enabled:
 
 ```
 <repositories>
-        <repository>
-            <id>maven-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+  <repository>
+    <id>maven-snapshots</id>
+    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    <layout>default</layout>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+</repositories>
 ```
 
 ## Upgrading Versions ##
