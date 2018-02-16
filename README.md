@@ -78,6 +78,14 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
   <version>1.1.0</version>
 ```
 
+We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
+
+```
+  <groupId>org.jgrapht</groupId>
+  <artifactId>jgrapht-core</artifactId>
+  <version>1.1.1-SNAPSHOT</version>
+```
+
 ## Upgrading Versions ##
 
 To help upgrading, JGraphT maintains a one-version-backwards compatibility. While this compatibility is not a hard promise, it is generally respected. (This policy was not followed for the jump from `0.6.0` to `0.7.0` due to the pervasive changes required for generics.) You can upgrade via:
