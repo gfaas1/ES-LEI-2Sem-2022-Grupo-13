@@ -31,7 +31,7 @@ import static org.junit.Assert.fail;
 /**
  * Test cases for the AllDirectedPaths algorithm.
  *
- * @author Andrew Gainer-Dewar
+ * @author Andrew Gainer-Dewar, Google LLC
  **/
 
 public class AllDirectedPathsTest
@@ -73,16 +73,20 @@ public class AllDirectedPathsTest
 
         Set<String> sources = new HashSet<>();
         sources.add(I1);
+	sources.add(A);
 
         Set<String> targets = new HashSet<>();
         targets.add(I1);
         targets.add(A);
 
         List<GraphPath<String, DefaultEdge>> allPaths =
-            pathFindingAlg.getAllPaths(sources, targets, true, null);
+            pathFindingAlg.getAllPaths(sources, targets, true, 1);
 
         assertEquals(
-            "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
+            "Toy network should have correct number of trivial simple paths", 3, allPaths.size());
+	assertEquals(Arrays.asList(A), allPaths.get(0).getVertexList());
+	assertEquals(Arrays.asList(I1), allPaths.get(1).getVertexList());
+	assertEquals(Arrays.asList(I1, A), allPaths.get(2).getVertexList());
     }
 
     @Test
