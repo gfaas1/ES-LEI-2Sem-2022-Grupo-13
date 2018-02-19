@@ -23,7 +23,7 @@ Changes to JGraphT in each version:
     - Fixed bug in `JohnsonSimpleCycles` with custom edge type (spotted by fredshevek, fix contributed by Dimitrios Michail)
     - Added Automatic-Module Names to the various jgrapht modules to support modularization in JDK 9 (contributed by Mark Raynsford)
     - Added `GraphTypeBuilder` (contributed by Dimitrios Michail)
-    - Reimplemented BiconnectivityInspector with additional functionality such as computing bridges and working on multiple graph types (contributed by Joris Kinable)
+    - Reimplemented BiconnectivityInspector with additional functionality such as computing bridges and articulation points.  BiconnectivityInspector now works on multiple graph types (contributed by Joris Kinable)
     - Revised BlockCutpointGraph and added additional tests (contributed by Joris Kinable)
     - Removed old JUnit 3 dependencies (contributed by Joris Kinable)
 
