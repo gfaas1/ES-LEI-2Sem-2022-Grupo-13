@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2018-2018, by Assaf Mizrachi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2016, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,34 +15,14 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------------
- * .java
- * -------------------------
- * (C) Copyright 2007-2016, by France Telecom
- *
- * Original Author: Assaf Mizrachi and Contributors.
- * Contributor(s):
- *
- * $Id$
- *
- * Changes
- * -------
- * 11-Sep-2016 : Initial revision (AM);
- *
- */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.List;
+import java.util.*;
 
-import org.jgrapht.EnhancedTestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.generate.RingGraphGenerator;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
 /**
  * 
@@ -265,15 +241,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
     public void testLinear() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
-            
-            private int i = 1;
-            
-            @Override
-            public Integer createVertex() {
-                return i++;
-            }
-        }, null);
+        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
         KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 20);
@@ -293,15 +261,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
     public void testRing() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new VertexFactory<Integer>() {
-            
-            private int i = 1;
-            
-            @Override
-            public Integer createVertex() {
-                return i++;
-            }
-        }, null);
+        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
         KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 10);
