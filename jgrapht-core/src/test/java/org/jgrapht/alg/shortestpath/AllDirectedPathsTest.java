@@ -69,11 +69,11 @@ public class AllDirectedPathsTest
     @Test
     public void testTrivialPaths()
     {
+        // Verify fix for http://github.com/jgrapht/jgrapht/issues/234.
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
         Set<String> sources = new HashSet<>();
         sources.add(I1);
-	sources.add(A);
 
         Set<String> targets = new HashSet<>();
         targets.add(I1);
@@ -83,10 +83,29 @@ public class AllDirectedPathsTest
             pathFindingAlg.getAllPaths(sources, targets, true, 1);
 
         assertEquals(
-            "Toy network should have correct number of trivial simple paths", 3, allPaths.size());
-	assertEquals(Arrays.asList(A), allPaths.get(0).getVertexList());
-	assertEquals(Arrays.asList(I1), allPaths.get(1).getVertexList());
-	assertEquals(Arrays.asList(I1, A), allPaths.get(2).getVertexList());
+            "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
+	assertEquals(Arrays.asList(I1), allPaths.get(0).getVertexList());
+	assertEquals(Arrays.asList(I1, A), allPaths.get(1).getVertexList());
+    }
+
+    @Test
+    public void testLengthOnePaths()
+    {
+        // Verify fix for http://github.com/jgrapht/jgrapht/issues/441.
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+	graph.addVertex("A");
+	graph.addVertex("B");
+	graph.addEdge("B", "A");
+
+	AllDirectedPaths<String, DefaultEdge> all = new AllDirectedPaths<>(graph);
+	List<GraphPath<String, DefaultEdge>> allPaths =
+	    all.getAllPaths(graph.vertexSet(), graph.vertexSet(), true, graph.edgeSet().size());
+
+        assertEquals(3, allPaths.size());
+	assertEquals(Arrays.asList("A"), allPaths.get(0).getVertexList());
+	assertEquals(Arrays.asList("B"), allPaths.get(1).getVertexList());
+	assertEquals(Arrays.asList("B", "A"), allPaths.get(2).getVertexList());
     }
 
     @Test

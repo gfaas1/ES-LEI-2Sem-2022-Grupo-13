@@ -226,9 +226,9 @@ public class AllDirectedPaths<V, E>
             }
         }
 
-	if (maxPathLength != null && maxPathLength == 0) {
-	    return completePaths;
-	}
+        if (maxPathLength != null && maxPathLength == 0) {
+            return completePaths;
+        }
 
         // Walk through the queue of incomplete paths
         for (List<E> incompletePath; (incompletePath = incompletePaths.poll()) != null;) {
