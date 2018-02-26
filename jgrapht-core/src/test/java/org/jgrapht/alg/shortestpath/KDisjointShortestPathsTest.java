@@ -17,6 +17,10 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import static org.junit.Assert.*;
+
+import org.junit.*;
+
 import java.util.*;
 
 import org.jgrapht.*;
@@ -30,7 +34,7 @@ import org.jgrapht.graph.*;
  * 
  * @author Assaf Mizrachi
  */
-public class KDisjointShortestPathsTest extends EnhancedTestCase {
+public class KDisjointShortestPathsTest {
 
         
     /**
@@ -40,6 +44,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * ---------------
      * {@literal 1 --> 2}
      */
+    @Test
     public void testSinglePath() {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
@@ -57,7 +62,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         assertEquals(2, pathList.get(0).getVertexList().size());
         assertTrue(pathList.get(0).getVertexList().contains(1));
         assertTrue(pathList.get(0).getVertexList().contains(2));
-        assertEquals(pathList.get(0).getWeight(), 8.0);
+        assertEquals(pathList.get(0).getWeight(), 8.0, 0.0);
     }
     
     /**
@@ -73,6 +78,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * {@literal 2 --> 3}
      * 
      */
+    @Test
     public void testTwoDisjointPaths() {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
@@ -90,8 +96,8 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         assertEquals(1, pathList.get(0).getLength());
         assertEquals(2, pathList.get(1).getLength());
         
-        assertEquals(1.0, pathList.get(0).getWeight());
-        assertEquals(2.0, pathList.get(1).getWeight());
+        assertEquals(1.0, pathList.get(0).getWeight(), 0.0);
+        assertEquals(2.0, pathList.get(1).getWeight(), 0.0);
         
         assertTrue(pathList.get(0).getEdgeList().contains(e13));
         
@@ -121,6 +127,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * {@literal 2 --> 3}, w=3
      * 
      */
+    @Test
     public void testTwoDisjointPaths2() {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
@@ -153,8 +160,8 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         assertEquals(2, pathList.size());
         assertEquals(3, pathList.get(0).getLength());
         assertEquals(3, pathList.get(1).getLength());
-        assertEquals(3.0, pathList.get(0).getWeight());
-        assertEquals(6.0, pathList.get(1).getWeight());
+        assertEquals(3.0, pathList.get(0).getWeight(), 0.0);
+        assertEquals(6.0, pathList.get(1).getWeight(), 0.0);
         
         assertTrue(pathList.get(0).getEdgeList().contains(e12));
         assertTrue(pathList.get(0).getEdgeList().contains(e26));
@@ -187,7 +194,40 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
      * {@literal 2 --> 3}, w=1
      * {@literal 3 --> 4}, w=1
      */
+    @Test
     public void testThreeDisjointPaths() {
+        Graph<Integer, DefaultWeightedEdge> graph = createThreeDisjointPathsGraph();
+        
+        DefaultWeightedEdge e12 = graph.getEdge(1, 2);
+        DefaultWeightedEdge e25 = graph.getEdge(2, 5);
+        DefaultWeightedEdge e13 = graph.getEdge(1, 3);
+        DefaultWeightedEdge e35 = graph.getEdge(3, 5);
+        DefaultWeightedEdge e14 = graph.getEdge(1, 4);
+        DefaultWeightedEdge e45 = graph.getEdge(4, 5);
+        
+        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
+        assertEquals(3, pathList.size());
+        assertEquals(2, pathList.get(0).getLength());
+        assertEquals(2, pathList.get(1).getLength());
+        assertEquals(2, pathList.get(2).getLength());
+        
+        assertEquals(5.0, pathList.get(0).getWeight(), 0.0);
+        assertEquals(7.0, pathList.get(1).getWeight(), 0.0);
+        assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
+        
+        assertTrue(pathList.get(0).getEdgeList().contains(e14));
+        assertTrue(pathList.get(0).getEdgeList().contains(e45));
+        
+        assertTrue(pathList.get(1).getEdgeList().contains(e12));
+        assertTrue(pathList.get(1).getEdgeList().contains(e25));                       
+        
+        assertTrue(pathList.get(2).getEdgeList().contains(e13));
+        assertTrue(pathList.get(2).getEdgeList().contains(e35));
+    }
+    
+    private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraph() {
         DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);        
         graph.addVertex(1);
         graph.addVertex(2);
@@ -213,31 +253,24 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         graph.setEdgeWeight(e23, 1);
         graph.setEdgeWeight(e34, 1);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        return graph;
+    }
+    
+    @Test
+    public void testGraphIsNotChanged() {
+        Graph<Integer, DefaultWeightedEdge> source = createThreeDisjointPathsGraph();
+        Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(source.getEdgeFactory());
+        Graphs.addGraph(destination, source);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
-        assertEquals(3, pathList.size());
-        assertEquals(2, pathList.get(0).getLength());
-        assertEquals(2, pathList.get(1).getLength());
-        assertEquals(2, pathList.get(2).getLength());
+        new KDisjointShortestPaths<>(source, 5).getPaths(1, 5);
         
-        assertEquals(5.0, pathList.get(0).getWeight());
-        assertEquals(7.0, pathList.get(1).getWeight());
-        assertEquals(9.0, pathList.get(2).getWeight());
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e14));
-        assertTrue(pathList.get(0).getEdgeList().contains(e45));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e12));
-        assertTrue(pathList.get(1).getEdgeList().contains(e25));                       
-        
-        assertTrue(pathList.get(2).getEdgeList().contains(e13));
-        assertTrue(pathList.get(2).getEdgeList().contains(e35));
+        assertEquals(destination, source);
     }
     
     /**
      * Only single disjoint path should exist on the line
      */
+    @Test
     public void testLinear() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
@@ -248,7 +281,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         
         assertEquals(1, pathList.size());
         assertEquals(19, pathList.get(0).getLength());
-        assertEquals(19.0, pathList.get(0).getWeight());
+        assertEquals(19.0, pathList.get(0).getWeight(), 0.0);
         
         for (int i = 1; i < 21; i++) {
             assertTrue(pathList.get(0).getVertexList().contains(i));
@@ -258,6 +291,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
     /**
      * Exactly single disjoint path should exist on the ring
      */
+    @Test
     public void testRing() {
         Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
@@ -268,7 +302,7 @@ public class KDisjointShortestPathsTest extends EnhancedTestCase {
         
         assertEquals(1, pathList.size());
         assertEquals(9, pathList.get(0).getLength());
-        assertEquals(9.0, pathList.get(0).getWeight());
+        assertEquals(9.0, pathList.get(0).getWeight(), 0.0);
         
         for (int i = 1; i < 10; i++) {
             assertTrue(pathList.get(0).getVertexList().contains(i));
