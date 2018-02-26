@@ -82,7 +82,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
     /**
      * Graph on which shortest paths are searched.
      */
-    private Graph<V, E> graph;
+    private Graph<V, E> workingGraph;
 
     private List<List<E>> pathList;
 
@@ -93,8 +93,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      * vertex and others vertices.
      *
      * @param graph
-     *            graph on which shortest paths are searched. Note: graph will
-     *            be modified (edges and weights) during the path computation.
+     *            graph on which shortest paths are searched.
      * @param nPaths
      *            number of disjoint paths between the start vertex and an end
      *            vertex.
@@ -107,13 +106,18 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      *             if the graph is undirected.
      */
     public KDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
-        
-        GraphTests.requireDirected(graph);           
+                         
         if (nPaths <= 0) {
-            throw new IllegalArgumentException("nPaths must be positive value");
+            throw new IllegalArgumentException("Number of paths must be positive");
         }
 
-        this.graph = graph;
+        GraphTests.requireDirected(graph);
+        if (graph.getType().isWeighted()) {
+            this.workingGraph = new DefaultDirectedWeightedGraph<>(graph.getEdgeFactory());
+        } else {
+            this.workingGraph = new AsWeightedGraph<>(graph, new HashMap<>());
+        }
+        Graphs.addGraph(workingGraph, graph);
         this.nPaths = nPaths;
     }
     
@@ -142,14 +146,12 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         if (endVertex.equals(startVertex)) {
             throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
         }
-        if (! this.graph.vertexSet().contains(startVertex)) {
+        if (! workingGraph.vertexSet().contains(startVertex)) {
             throw new IllegalArgumentException("graph must contain the start vertex!");
         }
-        if (! this.graph.vertexSet().contains(endVertex)) {
+        if (! workingGraph.vertexSet().contains(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }
-        
-        this.graph = new AsWeightedGraph<>(graph, new HashMap<>());
 
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
@@ -157,7 +159,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         int cPaths = 1;
         do {
             setUp(cPaths);
-            bellmanFordShortestPath = new BellmanFordShortestPath<>(this.graph);
+            bellmanFordShortestPath = new BellmanFordShortestPath<>(workingGraph);
             currentPath = bellmanFordShortestPath.getPath(startVertex, endVertex);
             if (currentPath != null) {
                 cPaths++;                
@@ -185,11 +187,11 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         E reversedEdge;
         //replace previous path edges with reversed edges with negative weight
         for (E originalEdge : this.pathList.get(cPath - 2)) {
-            source = graph.getEdgeSource(originalEdge);
-            target = graph.getEdgeTarget(originalEdge);
-            graph.removeEdge(originalEdge);    
-            reversedEdge = graph.addEdge(target, source);
-            graph.setEdgeWeight(reversedEdge, - graph.getEdgeWeight(originalEdge));
+            source = workingGraph.getEdgeSource(originalEdge);
+            target = workingGraph.getEdgeTarget(originalEdge);
+            workingGraph.removeEdge(originalEdge);    
+            reversedEdge = workingGraph.addEdge(target, source);
+            workingGraph.setEdgeWeight(reversedEdge, - workingGraph.getEdgeWeight(originalEdge));
         }
     }
     
@@ -240,7 +242,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
                     Iterator<E> pathIter = path.iterator();
                     while (pathIter.hasNext()) {
                         E edge = pathIter.next();
-                        if (graph.getEdgeSource(edge).equals(nextHop) || graph.getEdgeTarget(edge).equals(nextHop)) {
+                        if (workingGraph.getEdgeSource(edge).equals(nextHop) || workingGraph.getEdgeTarget(edge).equals(nextHop)) {
                             nextEdge = edge;
                             //remove edge so it will not be used again in any other path.
                             pathIter.remove();
@@ -256,8 +258,8 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
                     throw new IllegalArgumentException("Could not find a path from start to end vertex");
                 }
                 mergedPath.add(nextEdge);
-                nextHop = graph.getEdgeSource(nextEdge).equals(nextHop) ? 
-                        graph.getEdgeTarget(nextEdge) : graph.getEdgeSource(nextEdge);
+                nextHop = workingGraph.getEdgeSource(nextEdge).equals(nextHop) ? 
+                    workingGraph.getEdgeTarget(nextEdge) : workingGraph.getEdgeSource(nextEdge);
             }
             //path is ready, wrap it up.
             graphPaths.add(createGraphPath(mergedPath, startVertex, endVertex));
@@ -290,11 +292,11 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
                     while (path2Iter.hasNext()) {
                         e2 = path2Iter.next();
                         //graph is directed, checking both options.
-                        if ((graph.getEdgeSource(e1).equals(graph.getEdgeSource(e2)) &&
-                                graph.getEdgeTarget(e1).equals(graph.getEdgeTarget(e2))) ||
+                        if ((workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeSource(e2)) &&
+                            workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeTarget(e2))) ||
                                 
-                                (graph.getEdgeSource(e1).equals(graph.getEdgeTarget(e2)) &&
-                                        graph.getEdgeTarget(e1).equals(graph.getEdgeSource(e2)))) {
+                                (workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeTarget(e2)) &&
+                                    workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeSource(e2)))) {
                             found = true;
                             path2Iter.remove();
                         }
@@ -311,9 +313,9 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex) {
         double weight = 0;
         for (E edge : edgeList) {
-            weight += graph.getEdgeWeight(edge);
+            weight += workingGraph.getEdgeWeight(edge);
         }
-        return new GraphWalk<>(graph, startVertex, endVertex, edgeList, weight);
+        return new GraphWalk<>(workingGraph, startVertex, endVertex, edgeList, weight);
     }
     
 }
