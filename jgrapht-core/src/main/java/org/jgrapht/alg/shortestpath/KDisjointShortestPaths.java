@@ -156,20 +156,22 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
         BellmanFordShortestPath<V, E> bellmanFordShortestPath;
-        int cPaths = 1;
+        int cPath = 1;
         do {
-            setUp(cPaths);
+            if (cPath > 1) {
+                prepare(this.pathList.get(cPath - 2));
+            }                       
             bellmanFordShortestPath = new BellmanFordShortestPath<>(workingGraph);
             currentPath = bellmanFordShortestPath.getPath(startVertex, endVertex);
             if (currentPath != null) {
-                cPaths++;                
+                cPath++;                
                 pathList.add(currentPath.getEdgeList());
             }            
-        } while (currentPath != null && cPaths <= this.nPaths);
+        } while (currentPath != null && cPath <= this.nPaths);
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
     }
-
+    
     /**
      * Prepares the graph for a search of the next path:
      * Replacing the edges of the previous path with reversed edges
@@ -177,16 +179,13 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      * 
      * @param cPath the number of the next path to search 
      */
-    private void setUp(int cPath) {
-        //no setup for first path
-        if (cPath == 1) {
-            return;
-        }
+    private void prepare(List<E> previousPath) {
         
         V source, target;
         E reversedEdge;
+        
         //replace previous path edges with reversed edges with negative weight
-        for (E originalEdge : this.pathList.get(cPath - 2)) {
+        for (E originalEdge : previousPath) {
             source = workingGraph.getEdgeSource(originalEdge);
             target = workingGraph.getEdgeTarget(originalEdge);
             workingGraph.removeEdge(originalEdge);    
