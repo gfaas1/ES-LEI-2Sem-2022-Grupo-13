@@ -156,18 +156,19 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
         BellmanFordShortestPath<V, E> bellmanFordShortestPath;
-        int cPath = 1;
-        do {
+        
+        for (int cPath = 1; cPath <= this.nPaths; cPath++) {
             if (cPath > 1) {
                 prepare(this.pathList.get(cPath - 2));
             }                       
             bellmanFordShortestPath = new BellmanFordShortestPath<>(workingGraph);
             currentPath = bellmanFordShortestPath.getPath(startVertex, endVertex);
             if (currentPath != null) {
-                cPath++;                
                 pathList.add(currentPath.getEdgeList());
-            }            
-        } while (currentPath != null && cPath <= this.nPaths);
+            } else {
+                break;
+            }
+        }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
     }
