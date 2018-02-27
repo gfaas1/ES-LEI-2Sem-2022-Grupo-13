@@ -66,6 +66,62 @@ public class KDisjointShortestPathsTest {
     }
     
     /**
+     * Tests two disjoint paths traversing common vertex.
+     * 
+     * Expected path 1
+     * ---------------
+     * {@literal 1 --> 2 --> 3 --> 4 --> 5}
+     * 
+     * Expected path 2
+     * ---------------
+     * {@literal 1 --> 7 --> 3 --> 6 --> 5}
+     * 
+     */
+    @Test
+    public void testTwoDisjointPathsJointNode() {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);        
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addVertex(5);
+        graph.addVertex(6);
+        graph.addVertex(7);
+        DefaultWeightedEdge e12 = graph.addEdge(1, 2);
+        DefaultWeightedEdge e17 = graph.addEdge(1, 7);
+        DefaultWeightedEdge e23 = graph.addEdge(2, 3);
+        DefaultWeightedEdge e73 = graph.addEdge(7, 3);
+        DefaultWeightedEdge e34 = graph.addEdge(3, 4);
+        DefaultWeightedEdge e36 = graph.addEdge(3, 6);
+        DefaultWeightedEdge e45 = graph.addEdge(4, 5);
+        DefaultWeightedEdge e65 = graph.addEdge(6, 5);
+        
+        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
+        
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
+        
+        assertEquals(2, pathList.size());
+        
+        assertEquals(4, pathList.get(0).getLength());
+        assertEquals(4, pathList.get(1).getLength());
+        
+        assertEquals(4.0, pathList.get(0).getWeight(), 0.0);
+        assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
+        
+        assertTrue(pathList.get(0).getEdgeList().contains(e12));
+        assertTrue(pathList.get(0).getEdgeList().contains(e23));
+        assertTrue(pathList.get(0).getEdgeList().contains(e34));
+        assertTrue(pathList.get(0).getEdgeList().contains(e45));
+        
+        assertTrue(pathList.get(1).getEdgeList().contains(e17));
+        assertTrue(pathList.get(1).getEdgeList().contains(e73));
+        assertTrue(pathList.get(1).getEdgeList().contains(e36));
+        assertTrue(pathList.get(1).getEdgeList().contains(e65));
+        
+                
+    }
+    
+    /**
      * Tests two disjoint paths from 1 to 3
      * 
      * Edges expected in path 1

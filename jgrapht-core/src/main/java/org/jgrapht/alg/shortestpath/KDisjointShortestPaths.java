@@ -18,6 +18,7 @@
 package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -226,45 +227,56 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      * @param endVertex the end vertex
      * 
      * @return list of disjoint paths from start to end.
-     */
+     */    
     private List<GraphPath<V, E>> mergePaths(V startVertex, V endVertex) {
-        List<GraphPath<V, E>> graphPaths = new ArrayList<GraphPath<V, E>>();
-        for (int i = 0; i < this.pathList.size(); i++) {            
-            V nextHop = startVertex;
-            List<E> mergedPath = new ArrayList<E>();
-            while (! nextHop.equals(endVertex)) {
-                E nextEdge = null;
-                //search an edge connecting current and next hops at any of the paths
-                //once it is found, add it to the current (merged) path and remove it
-                //from the original path so it will not be used anymore.
-                for (List<E> path : pathList) {
-                    boolean connectionFound = false;
-                    Iterator<E> pathIter = path.iterator();
-                    while (pathIter.hasNext()) {
-                        E edge = pathIter.next();
-                        if (workingGraph.getEdgeSource(edge).equals(nextHop) || workingGraph.getEdgeTarget(edge).equals(nextHop)) {
-                            nextEdge = edge;
-                            //remove edge so it will not be used again in any other path.
-                            pathIter.remove();
-                            connectionFound = true;
-                            break;
-                        }
-                    }
-                    if (connectionFound) {
-                        break;
-                    }
+        List<ArrayDeque<E>> pathsQueueList = new ArrayList<ArrayDeque<E>>(this.pathList.size());
+        this.pathList.forEach(path -> pathsQueueList.add(new ArrayDeque<>()));
+        List<E> allEdges = flatPathListOrdered();
+        Iterator<E> iter = allEdges.iterator();
+        while (iter.hasNext()) {
+            E edge = iter.next();
+            for (ArrayDeque<E> path : pathsQueueList) {
+                if (path.isEmpty()) {
+                    path.add(edge);
+                    break;
+                } 
+                
+                if (this.workingGraph.getEdgeSource(edge).equals(this.workingGraph.getEdgeTarget(path.peekLast()))) {
+                    path.add(edge);
+                    break;
                 }
-                if (nextEdge == null) {
-                    throw new IllegalArgumentException("Could not find a path from start to end vertex");
-                }
-                mergedPath.add(nextEdge);
-                nextHop = workingGraph.getEdgeSource(nextEdge).equals(nextHop) ? 
-                    workingGraph.getEdgeTarget(nextEdge) : workingGraph.getEdgeSource(nextEdge);
             }
-            //path is ready, wrap it up.
-            graphPaths.add(createGraphPath(mergedPath, startVertex, endVertex));
         }
-        return graphPaths;
+        
+        return pathsQueueList
+            .stream()
+            .map(pathQueue -> createGraphPath(new ArrayList<>(pathQueue), startVertex, endVertex))
+            .collect(Collectors.toList());
+    }
+    
+    /**
+     * Flattens pathList to list of edges ordered (ascending) according to their
+     * distance (i.e. number of hops) from the source.
+     * 
+     * @return list of all paths edges.
+     */
+    private List<E> flatPathListOrdered() {
+        List<E> flatListOrdered = new ArrayList<>();
+        int maxSize = 0;
+        for (List<E> list : this.pathList) {
+            if (list.size() > maxSize) {
+                maxSize = list.size();
+            }
+        }
+        
+        for (int i = 0; i < maxSize; i++) {
+            for (List<E> list : this.pathList) {
+                if (i < list.size()) {
+                    flatListOrdered.add(list.get(i));
+                }
+            }
+        }
+        return flatListOrdered;
     }
     
     /**
