@@ -142,7 +142,7 @@ public class ChordalGraphInspectorTest {
      * Test on the chordal pseudograph
      */
     @Test
-    public void chordalGraphRecognitionTest5(){
+    public void chordalGraphRecognitionTest5() {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -160,7 +160,7 @@ public class ChordalGraphInspectorTest {
      * Test of non-chordal pseudograph (cycle 2-3-4-5-2)
      */
     @Test
-    public void chordalGraphRecognitionTest6(){
+    public void chordalGraphRecognitionTest6() {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -323,5 +323,47 @@ public class ChordalGraphInspectorTest {
         graph.addEdge(10, 1);
         graph.addEdge(10, 2);
         assertFalse("Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order", inspector.isPerfectEliminationOrder(graph, order));
+    }
+
+    /**
+     * Tests proper creation of bucket list and removal of vertices from it
+     */
+    @Test
+    public void bucketListTest1() {
+        List<String> vertices = Arrays.asList("a", "b", "c", "d", "e");
+        BucketList<String> bucketList = new BucketList<>(vertices);
+        assertTrue(bucketList.containsBucketWith("a"));
+        assertTrue(bucketList.containsBucketWith("b"));
+        assertTrue(bucketList.containsBucketWith("c"));
+        assertTrue(bucketList.containsBucketWith("d"));
+        assertTrue(bucketList.containsBucketWith("e"));
+        String vertex1 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex1));
+        String vertex2 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex2));
+        String vertex3 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex3));
+        String vertex4 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex4));
+        String vertex5 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex5));
+    }
+
+    /**
+     * Tests proper updating of a vertex label and retrieval of the vertex with lexicographically largest label
+     */
+    @Test
+    public void bucketListTest2() {
+        List<Integer> vertices = Arrays.asList(0, 1, 2, 3, 4);
+        BucketList<Integer> bucketList = new BucketList<>(vertices);
+        int vertex1 = bucketList.poll();
+        assertFalse(bucketList.containsBucketWith(vertex1));
+        int vertex2 = (vertex1 + 1) % 5;
+        assertTrue(bucketList.containsBucketWith(vertex2));
+        bucketList.updateLabel(vertex2, 5);
+        assertTrue(bucketList.containsBucketWith(vertex2));
+        int vertex3 = bucketList.poll();
+        assertTrue(vertex3 == vertex2);
+        assertFalse(bucketList.containsBucketWith(vertex3));
     }
 }
