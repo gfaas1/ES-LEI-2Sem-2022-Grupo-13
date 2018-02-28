@@ -31,7 +31,7 @@ public class ChordalGraphInspectorTest {
      * 3--4 <br>
      */
     @Test
-    public void chordalGraphRecognitionTest1() {
+    public void testChordalGraphRecognition1() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -50,7 +50,7 @@ public class ChordalGraphInspectorTest {
      * 1-2-3-1  and 4-5-6-4<br>
      */
     @Test
-    public void chordalGraphRecognitionTest2() {
+    public void testChordalGraphRecognition2() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -71,7 +71,7 @@ public class ChordalGraphInspectorTest {
      * Test on chordal connected graph with 10 vertices
      */
     @Test
-    public void chordalGraphRecognitionTest3() {
+    public void testChordalGraphRecognition3() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -107,7 +107,7 @@ public class ChordalGraphInspectorTest {
      * Test on graph with 4-vertex cycle: 1-2-3-4-1
      */
     @Test
-    public void chordalGraphRecognitionTest4() {
+    public void testChordalGraphRecognition4() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -142,7 +142,7 @@ public class ChordalGraphInspectorTest {
      * Test on the chordal pseudograph
      */
     @Test
-    public void chordalGraphRecognitionTest5() {
+    public void testChordalGraphRecognition5() {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -160,7 +160,7 @@ public class ChordalGraphInspectorTest {
      * Test of non-chordal pseudograph (cycle 2-3-4-5-2)
      */
     @Test
-    public void chordalGraphRecognitionTest6() {
+    public void testChordalGraphRecognition6() {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -186,7 +186,7 @@ public class ChordalGraphInspectorTest {
      * Second test with chord 2-4 added, so that the graph becomes chordal
      */
     @Test
-    public void perfectEliminationOrderRecognitionTest1() {
+    public void testPerfectEliminationOrderRecognition1() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 4, 3);
         for (Integer v : order) {
@@ -212,7 +212,7 @@ public class ChordalGraphInspectorTest {
      * ............10 <br>
      */
     @Test
-    public void perfectEliminationOrderRecognitionTest2() {
+    public void testPerfectEliminationOrderRecognition2() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         for (Integer v : order) {
@@ -241,7 +241,7 @@ public class ChordalGraphInspectorTest {
      * Test on big chordal graph with valid perfect elimination order
      */
     @Test
-    public void perfectEliminationOrderRecognitionTest3() {
+    public void testPerfectEliminationOrderRecognition3() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         for (Integer v : order) {
@@ -276,7 +276,7 @@ public class ChordalGraphInspectorTest {
      * Test on chordal graph with invalid perfect elimination order
      */
     @Test
-    public void perfectEliminationOrderRecognitionTest4() {
+    public void testPerfectEliminationOrderRecognition4() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 5, 6, 4, 3);
         graph.addVertex(1);
@@ -301,7 +301,7 @@ public class ChordalGraphInspectorTest {
      * Test on graph with 5-vertex cycle 2-4-6-8-10-2 with no chords
      */
     @Test
-    public void perfectEliminationOrderRecognitionTest5() {
+    public void testPerfectEliminationOrderRecognition5() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         for (Integer v : order) {
@@ -329,7 +329,7 @@ public class ChordalGraphInspectorTest {
      * Tests proper creation of bucket list and removal of vertices from it
      */
     @Test
-    public void bucketListTest1() {
+    public void testBucketList1() {
         List<String> vertices = Arrays.asList("a", "b", "c", "d", "e");
         BucketList<String> bucketList = new BucketList<>(vertices);
         assertTrue(bucketList.containsBucketWith("a"));
@@ -353,7 +353,7 @@ public class ChordalGraphInspectorTest {
      * Tests proper updating of a vertex label and retrieval of the vertex with lexicographically largest label
      */
     @Test
-    public void bucketListTest2() {
+    public void testBucketList2() {
         List<Integer> vertices = Arrays.asList(0, 1, 2, 3, 4);
         BucketList<Integer> bucketList = new BucketList<>(vertices);
         int vertex1 = bucketList.poll();
@@ -367,3 +367,4 @@ public class ChordalGraphInspectorTest {
         assertFalse(bucketList.containsBucketWith(vertex3));
     }
 }
+
