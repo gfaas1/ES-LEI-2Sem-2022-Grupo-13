@@ -291,15 +291,14 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
         E e1, e2;
         boolean found;
         //removing overlapping edges
-        for (List<E> path1 : pathList) {
+        for (int i = 0; i < pathList.size(); i++) {
+            List<E> path1 = pathList.get(i);
             path1Iter = path1.iterator();
             while (path1Iter.hasNext()) {
                 e1 = path1Iter.next();
                 found = false;
-                for (List<E> path2 : pathList) {
-                    if (path2 == path1) {
-                        continue;
-                    }
+                for (int j = i + 1; j < pathList.size(); j++) {
+                    List<E> path2 = pathList.get(j);
                     path2Iter = path2.iterator();
                     while (path2Iter.hasNext()) {
                         e2 = path2Iter.next();
