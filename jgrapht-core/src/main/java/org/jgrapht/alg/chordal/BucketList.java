@@ -244,7 +244,7 @@ public class BucketList<V> {
         /**
          * Checks whether this bucket is empty.
          *
-         * @return {@tt true} if this bucket doesn't contain any elements, otherwise false.
+         * @return <tt>true</tt> if this bucket doesn't contain any elements, otherwise false.
          */
         public boolean isEmpty() {
             return vertices.size() == 0;
@@ -258,13 +258,5 @@ public class BucketList<V> {
             this.next = next;
         }
 
-
-        public Bucket getPrev() {
-            return prev;
-        }
-
-        public void setPrev(Bucket prev) {
-            this.prev = prev;
-        }
     }
 }
