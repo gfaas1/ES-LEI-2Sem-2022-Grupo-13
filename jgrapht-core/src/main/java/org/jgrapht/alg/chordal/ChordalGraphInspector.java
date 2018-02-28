@@ -9,8 +9,8 @@ import java.util.*;
 /**
  * Implementation of the lexicographical breadth-first search algorithm for chordal graph recognition.
  *
- * <p>Chordal graph is defined as a graph, whose all induced cycles are of length &lt= 3.
- * Induced cycles are also called chordless. In other words, every cycle of length &gt= 4 in the graph
+ * <p>Chordal graph is defined as a graph, whose all induced cycles are of length &lt;= 3.
+ * Induced cycles are also called chordless. In other words, every cycle of length &gt;= 4 in the graph
  * has at least one chord between the vertices on this cycle.</p>
  *
  * <p>For more information on the topic see the following
