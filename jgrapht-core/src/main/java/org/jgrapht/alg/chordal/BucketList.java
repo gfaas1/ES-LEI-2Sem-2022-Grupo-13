@@ -47,7 +47,7 @@ public class BucketList<V> {
 
     /**
      * Retrieves element from head bucket by invoking {@link Bucket#poll()}.
-     * <p>
+     *
      * <p>Removes the head bucket if it becomes empty after the operation.</p>
      *
      * @return vertex returned by {@link Bucket#poll()} invoked on head bucket
@@ -67,12 +67,14 @@ public class BucketList<V> {
     /**
      * Updates the label of the {@code vertex} and puts it to the appropriate bucket
      *
-     * @param vertex             the vertex whose label has to be updated
-     * @param lastSelectedVertex the index to append to the {@code label} of {@code vertex}
-     * @implNote Retrieves the {@code vertex} from the bucket is was previously in and adds it
+     * <p>Retrieves the {@code vertex} from the bucket is was previously in and adds it
      * to the bucket whose label is a concatenation of the label of the {@code vertex}
      * and {@code lastSelectedVertex}. Creates new bucket is needed. Removes initial bucket if it
-     * is empty after this operation.
+     * is empty after this operation.</p>
+     *
+     * @param vertex             the vertex whose label has to be updated
+     * @param lastSelectedVertex the index to append to the {@code label} of {@code vertex}
+     *
      */
     public void updateLabel(V vertex, int lastSelectedVertex) {
         Bucket vertexBucket = bucketMap.get(vertex);
