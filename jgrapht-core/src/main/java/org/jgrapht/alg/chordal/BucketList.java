@@ -48,7 +48,7 @@ public class BucketList<V> {
     /**
      * Retrieves element from head bucket by invoking {@link Bucket#poll()}.
      *
-     * <p>Removes the head bucket if it becomes empty after the operation.</p>
+     * Removes the head bucket if it becomes empty after the operation.
      *
      * @return vertex returned by {@link Bucket#poll()} invoked on head bucket
      */
@@ -67,10 +67,10 @@ public class BucketList<V> {
     /**
      * Updates the label of the {@code vertex} and puts it to the appropriate bucket
      *
-     * <p>Retrieves the {@code vertex} from the bucket is was previously in and adds it
+     * Retrieves the {@code vertex} from the bucket is was previously in and adds it
      * to the bucket whose label is a concatenation of the label of the {@code vertex}
      * and {@code lastSelectedVertex}. Creates new bucket is needed. Removes initial bucket if it
-     * is empty after this operation.</p>
+     * is empty after this operation.
      *
      * @param vertex             the vertex whose label has to be updated
      * @param lastSelectedVertex the index to append to the {@code label} of {@code vertex}
