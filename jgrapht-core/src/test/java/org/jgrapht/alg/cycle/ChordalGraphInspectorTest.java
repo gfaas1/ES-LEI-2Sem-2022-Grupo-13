@@ -15,9 +15,10 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.chordal;
+package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.cycle.ChordalGraphInspector;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
@@ -199,11 +200,29 @@ public class ChordalGraphInspectorTest {
     }
 
     /**
+     * Basic test for {@link ChordalGraphInspector#isPerfectEliminationOrder(Graph, List)}
+     */
+    @Test
+    public void testPerfectEliminationOrderRecognition1() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        List<Integer> order = Arrays.asList(1, 2, 3, 4);
+        for (Integer v : order) {
+            graph.addVertex(v);
+        }
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+        assertFalse(inspector.isPerfectEliminationOrder(graph, order));
+    }
+
+    /**
      * First test on 4-vertex cycle: 1-2-3-4-1 <br>
      * Second test with chord 2-4 added, so that the graph becomes chordal
      */
     @Test
-    public void testPerfectEliminationOrderRecognition1() {
+    public void testPerfectEliminationOrderRecognition2() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 4, 3);
         for (Integer v : order) {
@@ -223,13 +242,13 @@ public class ChordalGraphInspectorTest {
      * .......5<br>
      * ...../.|.\<br>
      * ....4--3--6--7<br>
-     * ....|./.|..|.\.|<br>
+     * ....|./.|.|\.|<br>
      * ....1--2..9--8<br>
      * ...........\.|<br>
      * ............10 <br>
      */
     @Test
-    public void testPerfectEliminationOrderRecognition2() {
+    public void testPerfectEliminationOrderRecognition3() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         for (Integer v : order) {
@@ -258,7 +277,7 @@ public class ChordalGraphInspectorTest {
      * Test on big chordal graph with valid perfect elimination order
      */
     @Test
-    public void testPerfectEliminationOrderRecognition3() {
+    public void testPerfectEliminationOrderRecognition4() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         for (Integer v : order) {
@@ -293,7 +312,7 @@ public class ChordalGraphInspectorTest {
      * Test on chordal graph with invalid perfect elimination order
      */
     @Test
-    public void testPerfectEliminationOrderRecognition4() {
+    public void testPerfectEliminationOrderRecognition5() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 5, 6, 4, 3);
         graph.addVertex(1);
@@ -318,7 +337,7 @@ public class ChordalGraphInspectorTest {
      * Test on graph with 5-vertex cycle 2-4-6-8-10-2 with no chords
      */
     @Test
-    public void testPerfectEliminationOrderRecognition5() {
+    public void testPerfectEliminationOrderRecognition6() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         List<Integer> order = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         for (Integer v : order) {
@@ -342,46 +361,5 @@ public class ChordalGraphInspectorTest {
         assertFalse("Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order", inspector.isPerfectEliminationOrder(graph, order));
     }
 
-    /**
-     * Tests proper creation of bucket list and removal of vertices from it
-     */
-    @Test
-    public void testBucketList1() {
-        List<String> vertices = Arrays.asList("a", "b", "c", "d", "e");
-        BucketList<String> bucketList = new BucketList<>(vertices);
-        assertTrue(bucketList.containsBucketWith("a"));
-        assertTrue(bucketList.containsBucketWith("b"));
-        assertTrue(bucketList.containsBucketWith("c"));
-        assertTrue(bucketList.containsBucketWith("d"));
-        assertTrue(bucketList.containsBucketWith("e"));
-        String vertex1 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex1));
-        String vertex2 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex2));
-        String vertex3 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex3));
-        String vertex4 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex4));
-        String vertex5 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex5));
-    }
-
-    /**
-     * Tests proper updating of a vertex label and retrieval of the vertex with lexicographically largest label
-     */
-    @Test
-    public void testBucketList2() {
-        List<Integer> vertices = Arrays.asList(0, 1, 2, 3, 4);
-        BucketList<Integer> bucketList = new BucketList<>(vertices);
-        int vertex1 = bucketList.poll();
-        assertFalse(bucketList.containsBucketWith(vertex1));
-        int vertex2 = (vertex1 + 1) % 5;
-        assertTrue(bucketList.containsBucketWith(vertex2));
-        bucketList.updateLabel(vertex2, 5);
-        assertTrue(bucketList.containsBucketWith(vertex2));
-        int vertex3 = bucketList.poll();
-        assertTrue(vertex3 == vertex2);
-        assertFalse(bucketList.containsBucketWith(vertex3));
-    }
 }
 

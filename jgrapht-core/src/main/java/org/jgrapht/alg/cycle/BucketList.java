@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.chordal;
+package org.jgrapht.alg.cycle;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ import java.util.*;
  * @see ChordalGraphInspector
  * @since 1.8
  */
-public class BucketList<V> {
+class BucketList<V> {
     /**
      * Bucket with the vertices that have lexicographically largest label assigned to them
      */
@@ -40,11 +40,11 @@ public class BucketList<V> {
     private Map<V, Bucket> bucketMap;
 
     /**
-     * Creates a <code>BucketList</code> with a single bucket with all specified <code>vertices</code> in that bucket
+     * Creates a <code>BucketList</code> with a single bucket with all specified {@code vertices} in that bucket
      *
-     * @param vertices the graph vertex type
+     * @param vertices the vertices of the graph, that should be stored in a {@code head} bucket
      */
-    public BucketList(Collection<V> vertices) {
+    BucketList(Collection<V> vertices) {
         head = new Bucket(vertices);
         bucketMap = new HashMap<>();
         for (V vertex : vertices) {
@@ -64,7 +64,7 @@ public class BucketList<V> {
 
     /**
      * Retrieves element from head bucket by invoking {@link Bucket#poll()}.
-     *
+     * <p>
      * Removes the head bucket if it becomes empty after the operation.
      *
      * @return vertex returned by {@link Bucket#poll()} invoked on head bucket
@@ -82,45 +82,42 @@ public class BucketList<V> {
     }
 
     /**
-     * Updates the label of the {@code vertex} and puts it to the appropriate bucket
+     * For every bucket B in this {@code BucketList}, which contains vertices from the set {@code vertices},
+     * creates a new {@code Bucket} B' and moves all vertices from B to B', that at the same time contained in {@code vertices}
+     * Bucket B' becomes previous to B. For every such {@code Bucket} B only one {@code Bucket} B' is created.
+     * If some bucket B becomes empty after this operation, it is remove from the data structure.
      *
-     * Retrieves the {@code vertex} from the bucket is was previously in and adds it
-     * to the bucket whose label is a concatenation of the label of the {@code vertex}
-     * and {@code lastSelectedVertex}. Creates new bucket is needed. Removes initial bucket if it
-     * is empty after this operation.
-     *
-     * @param vertex             the vertex whose label has to be updated
-     * @param lastSelectedVertex the index to append to the {@code label} of {@code vertex}
-     *
+     * @param vertices the vertices, that should be moved to new Buckets
      */
-    public void updateLabel(V vertex, int lastSelectedVertex) {
-        Bucket vertexBucket = bucketMap.get(vertex);
-        if (vertexBucket.prev == null ||
-                !vertexBucket.prev.equalLabel(vertexBucket.label, lastSelectedVertex)) {
-            Bucket newBucket = new Bucket(vertexBucket.label, lastSelectedVertex);
-            newBucket.addVertex(vertex);
-            bucketMap.put(vertex, newBucket);
-            newBucket.insertBefore(vertexBucket);
-            if (head == vertexBucket) {
-                head = newBucket;
+    public void updateBuckets(Set<V> vertices) {
+        Set<Bucket> visitedBuckets = new HashSet<>();
+        for (V vertex : vertices) {
+            Bucket bucket = bucketMap.get(vertex);
+            if (visitedBuckets.contains(bucket)) {
+                bucket.prev.addVertex(vertex);
+                bucketMap.put(vertex, bucket.prev);
+            } else {
+                visitedBuckets.add(bucket);
+                Bucket newBucket = new Bucket(vertex);
+                newBucket.insertBefore(bucket);
+                bucketMap.put(vertex, newBucket);
+                if (head == bucket) {
+                    head = newBucket;
+                }
             }
-        } else {
-            vertexBucket.prev.addVertex(vertex);
-            bucketMap.put(vertex, vertexBucket.prev);
-        }
-        vertexBucket.removeVertex(vertex);
-        if (vertexBucket.isEmpty()) {
-            if (vertexBucket == head) {
-                head = vertexBucket.next;
+            bucket.removeVertex(vertex);
+            if (bucket.isEmpty()) {
+                visitedBuckets.remove(bucket);
+                bucket.removeSelf();
             }
-            vertexBucket.removeSelf();
         }
     }
 
     /**
-     * Plays the role of a bucket with vertices in the lexicographical breadth-first search. Encapsulates operations
-     * of addition and removal of vertices to the bucket, removing a bucket from the data structure and comparing its
-     * label with
+     * Plays the role of the container of vertices. All vertices stored in bucket have identical label.
+     * <p>
+     * Encapsulates operations of addition and removal of vertices from the bucket, removal of a bucket from the data
+     * structure.
      */
     private class Bucket {
         /**
@@ -131,11 +128,6 @@ public class BucketList<V> {
          * Reference of the bucket with lexicographically larger label
          */
         private Bucket prev;
-        /**
-         * Label of this bucket. Represented as an array of indices of all neighbours of vertices in this bucket,
-         * that have already been visited and now aren't stored in any bucket in this data structure.
-         */
-        private int[] label;
         /**
          * Set of vertices currently stored in this bucket
          */
@@ -148,30 +140,12 @@ public class BucketList<V> {
          * @param vertices vertices to store in this bucket
          */
         Bucket(Collection<V> vertices) {
-            this.label = new int[0];
             this.vertices = new HashSet<>(vertices);
         }
 
-        /**
-         * Creates an empty bucket with a label represented as the concatenation of
-         * {@code baseLabel} and {@code lastSelectedVertex}. Used to create new buckets
-         * at the time of the lexical being in process.
-         *
-         * @param baseLabel          first part of the final label
-         * @param lastSelectedVertex last part of the final label
-         */
-        Bucket(int[] baseLabel, int lastSelectedVertex) {
-            this.label = new int[baseLabel.length + 1];
-            System.arraycopy(baseLabel, 0, label, 0, baseLabel.length);
-            label[label.length - 1] = lastSelectedVertex;
+        Bucket(V vertex) {
             this.vertices = new HashSet<>();
-        }
-
-        @Override
-        public String toString() {
-            return "Bucket{" + "label=" + Arrays.toString(label) +
-                    ", vertices=" + vertices +
-                    '}';
+            vertices.add(vertex);
         }
 
         /**
@@ -215,28 +189,6 @@ public class BucketList<V> {
         }
 
         /**
-         * Compares the label of this bucket with the concatenation of the {@code baseLabel}
-         * and {@code lastSelectedVertex}.
-         *
-         * @param baseLabel          first part of the label
-         * @param lastSelectedVertex last element of the label
-         * @return true if the label of this bucket is equal to the concatenation of {@code baseLabel}
-         * and {@code lastSelectedVertex}, otherwise false.
-         */
-        boolean equalLabel(int[] baseLabel, int lastSelectedVertex) {
-            if (baseLabel.length != label.length - 1) {
-                return false;
-            } else {
-                for (int i = 0; i < baseLabel.length; i++) {
-                    if (baseLabel[i] != label[i]) {
-                        return false;
-                    }
-                }
-                return lastSelectedVertex == label[baseLabel.length];
-            }
-        }
-
-        /**
          * Adds the {@code vertex} to this bucket
          *
          * @param vertex the vertex to add
@@ -268,14 +220,5 @@ public class BucketList<V> {
         public boolean isEmpty() {
             return vertices.size() == 0;
         }
-
-        public Bucket getNext() {
-            return next;
-        }
-
-        public void setNext(Bucket next) {
-            this.next = next;
-        }
-
     }
 }

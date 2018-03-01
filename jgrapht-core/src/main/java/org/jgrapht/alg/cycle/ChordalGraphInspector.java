@@ -15,20 +15,19 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.chordal;
+package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
-import org.jgrapht.alg.util.Pair;
+import org.jgrapht.Graphs;
 
 import java.util.*;
 
 /**
  * Implementation of the lexicographical breadth-first search algorithm for chordal graph recognition.
  * <p>
- * Chordal graph is defined as a graph, whose all induced cycles are of length &lt;= 3.
- * Induced cycles are also called chordless. In other words, every cycle of length &gt;= 4 in the graph
- * has at least one chord between the vertices on this cycle.
+ * A chordal graph is one in which all cycles of four or more vertices have a chord, which is an edge that
+ * is not part of the cycle but connects two vertices of the cycle.
  * <p>
  * For more information on the topic see the following
  * <a href="http://www.cse.iitd.ac.in/~naveen/courses/CSL851/uwaterloo.pdf">article</a>:
@@ -56,7 +55,7 @@ public class ChordalGraphInspector<V, E> {
     }
 
     /**
-     * Performs lexicographical breadth-first search on the {@code graph} and returns its vertices in the order,
+     * Performs lexicographical breadth-first search on the {@code graph} and returns its vertices in the order
      * in which they where visited by the algorithms
      *
      * @param graph the graph to perform algorithm ons
@@ -68,13 +67,9 @@ public class ChordalGraphInspector<V, E> {
             List<V> lexBfsOrder = new ArrayList<>(vertexSet.size());
             BucketList<V> bucketList = new BucketList<>(vertexSet);
             while (lexBfsOrder.size() < vertexSet.size()) {
-                int vertexNum = vertexSet.size() - lexBfsOrder.size();
                 V vertex = bucketList.poll();
                 lexBfsOrder.add(vertex);
-                Set<V> unvisitedNeighbours = getUnvisitedNeighbours(graph, bucketList, vertex);
-                for (V unvisitedNeighbour : unvisitedNeighbours) {
-                    bucketList.updateLabel(unvisitedNeighbour, vertexNum);
-                }
+                bucketList.updateBuckets(getUnvisitedNeighbours(graph, bucketList, vertex));
             }
             return lexBfsOrder;
         } else {
@@ -87,18 +82,16 @@ public class ChordalGraphInspector<V, E> {
      *
      * @param graph      the graph, on which LexBFS is performed
      * @param bucketList data structure, that backs the algorithm up
-     * @param vertex     the vertex, whose neighbours are explored
-     * @return the set of yet unvisited neighbours of the {@code vertex}
+     * @param vertex     the vertex, whose neighbours are being explored
+     * @return neighbours of {@code vertex} which have yet to be visited by lexicographical bfs
      */
     private Set<V> getUnvisitedNeighbours(Graph<V, E> graph, BucketList<V> bucketList, V vertex) {
         Set<V> unmapped = new HashSet<>();
         Set<E> edges = graph.edgesOf(vertex);
         for (E edge : edges) {
-            V source = graph.getEdgeSource(edge);
-            V target = graph.getEdgeTarget(edge);
-            V dest = source.equals(vertex) ? target : source;
-            if (bucketList.containsBucketWith(dest)) {
-                unmapped.add(dest);
+            V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
+            if (bucketList.containsBucketWith(oppositeVertex)) {
+                unmapped.add(oppositeVertex);
             }
         }
         return unmapped;
@@ -106,7 +99,7 @@ public class ChordalGraphInspector<V, E> {
 
     /**
      * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
-     * Returns false, is {@code graph} isn't chordal.
+     * Returns false, if {@code graph} isn't chordal.
      *
      * @param graph       the graph whose vertices are put in {@code vertexOrder}
      * @param vertexOrder the sequence of vertices of {@code graph}
@@ -130,7 +123,7 @@ public class ChordalGraphInspector<V, E> {
 
     /**
      * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
-     * Returns false, is {@code graph} isn't chordal.
+     * Returns false, if {@code graph} isn't chordal.
      *
      * @param graph       the graph whose vertices are put in {@code vertexOrder}
      * @param vertexOrder the sequence of vertices of {@code graph}
@@ -139,23 +132,18 @@ public class ChordalGraphInspector<V, E> {
      * perfect elimination order
      */
     private boolean isPerfectEliminationOrder(Graph<V, E> graph, List<V> vertexOrder, Map<V, Integer> map) {
-        Set<Pair<V, V>> testEdges = new HashSet<>();
         for (V vertex : vertexOrder) {
             Set<V> predecessors = getPredecessors(graph, map, vertex);
             if (predecessors.size() > 0) {
-                V maxPredecessor = Collections.min(predecessors, Comparator.comparingInt(map::get));
+                V maxPredecessor = Collections.max(predecessors, Comparator.comparingInt(map::get));
                 for (V predecessor : predecessors) {
                     if (predecessor.equals(maxPredecessor)) {
                         continue;
                     }
-                    testEdges.add(new Pair<>(maxPredecessor, predecessor));
+                    if (!graph.containsEdge(predecessor, maxPredecessor)) {
+                        return false;
+                    }
                 }
-                testEdges.add(new Pair<>(maxPredecessor, vertex));
-            }
-        }
-        for (Pair<V, V> edge : testEdges) {
-            if (!graph.containsEdge(edge.getFirst(), edge.getSecond())) {
-                return false;
             }
         }
         return true;
@@ -175,12 +163,10 @@ public class ChordalGraphInspector<V, E> {
         Integer vertexPosition = map.get(vertex);
         Set<E> edges = graph.edgesOf(vertex);
         for (E edge : edges) {
-            V source = graph.getEdgeSource(edge);
-            V target = graph.getEdgeTarget(edge);
-            V dest = source.equals(vertex) ? target : source;
-            Integer destPosition = map.get(dest);
+            V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
+            Integer destPosition = map.get(oppositeVertex);
             if (destPosition < vertexPosition) {
-                predecessors.add(dest);
+                predecessors.add(oppositeVertex);
             }
         }
         return predecessors;
