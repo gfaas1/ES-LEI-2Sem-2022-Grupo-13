@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 /**
  * Create a synchronized (thread-safe) Graph backed by the specified Graph. In order to guarantee
@@ -81,29 +80,42 @@ public class AsSynchronizedGraph<V, E>
     // A set encapsulating backing edgeSet.
     private transient AsSynchronizedIterateOnCopySet<E> allEdgesSet = null;
 
-    // A map caching for incomingEdges operation.
-    private transient Map<V, Set<E>> incomingEdgesMap = new HashMap<>();
-
-    // A map caching for outgoingEdges operation.
-    private transient Map<V, Set<E>> outgoingEdgesMap = new HashMap<>();
-
-    // A map caching for edgesOf operation.
-    private transient Map<V, Set<E>> edgesOfMap = new HashMap<>();
+    private transient CacheStrategy<V, E> c;
 
     private transient Graph<V, E> delegate;
 
 
     /**
      * Constructor for AsSynchronizedGeaph with strategy of not caching the copies for
-     * <code>edgesOf</code>, <code>incomingEdgesOf</code>, <code>outgoingEdgesOf</code>
+     * <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
      *
      * @param g the backing graph (the delegate).
      */
     public AsSynchronizedGraph(Graph<V, E> g)
     {
         super(g);
-        this.mutex = this;
+        mutex = this;
         this.delegate = g;
+        c = new NoCache();
+    }
+
+    /**
+     * Constructor for AsSynchronizedGeaph with specified cache strategy for <code>edgesOf</code>,
+     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     *
+     * @param g the backing graph (the delegate).
+     * @param c specified cache strategy, if <tt>true</tt>, cache will be used for those method,
+     *          otherwise cache will not be used.
+     */
+    public AsSynchronizedGraph(Graph<V, E> g, boolean c)
+    {
+        super(g);
+        mutex = this;
+        this.delegate = g;
+        if (c)
+            this.c = new CacheAccess();
+        else
+            this.c = new NoCache();
     }
 
     /**
@@ -137,10 +149,9 @@ public class AsSynchronizedGraph<V, E>
     public E addEdge(V sourceVertex, V targetVertex)
     {
         synchronized (mutex) {
-            E e = super.addEdge(sourceVertex, targetVertex);
-            if (e != null) {
-                edgeModified(sourceVertex, targetVertex);
-            }
+            E e = c.addEdge(sourceVertex, targetVertex);
+            if (e != null)
+                edgeSetModified();
             return e;
         }
     }
@@ -152,11 +163,11 @@ public class AsSynchronizedGraph<V, E>
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         synchronized (mutex) {
-             if (super.addEdge(sourceVertex, targetVertex, e)) {
-                 edgeModified(sourceVertex, targetVertex);
+             if (c.addEdge(sourceVertex, targetVertex, e)) {
+                 edgeSetModified();
                  return true;
              }
-            return false;
+             return false;
         }
     }
 
@@ -226,7 +237,9 @@ public class AsSynchronizedGraph<V, E>
     public Set<E> edgeSet()
     {
         synchronized (mutex) {
-            return getAllEdgesSet();
+            if (allEdgesSet != null)
+                return allEdgesSet;
+            return allEdgesSet = new AsSynchronizedIterateOnCopySet<>(super.edgeSet());
         }
     }
 
@@ -237,12 +250,7 @@ public class AsSynchronizedGraph<V, E>
     public Set<E> edgesOf(V vertex)
     {
         synchronized (mutex) {
-            Set<E> st = edgesOfMap.get(vertex);
-            if (st != null)
-                return st;
-            st = copySet(super.edgesOf(vertex));
-            edgesOfMap.put(vertex, st);
-            return st;
+            return c.edgesOf(vertex);
         }
     }
 
@@ -264,11 +272,7 @@ public class AsSynchronizedGraph<V, E>
     public Set<E> incomingEdgesOf(V vertex)
     {
         synchronized (mutex) {
-            Set<E> st = incomingEdgesMap.get(vertex);
-            if (st != null) return st;
-            st = copySet(super.incomingEdgesOf(vertex));
-            incomingEdgesMap.put(vertex, st);
-            return st;
+            return c.incomingEdgesOf(vertex);
         }
     }
 
@@ -290,11 +294,7 @@ public class AsSynchronizedGraph<V, E>
     public Set<E> outgoingEdgesOf(V vertex)
     {
         synchronized (mutex) {
-            Set<E> st = outgoingEdgesMap.get(vertex);
-            if (st != null) return st;
-            st = copySet(super.outgoingEdgesOf(vertex));
-            outgoingEdgesMap.put(vertex, st);
-            return st;
+            return c.outgoingEdgesOf(vertex);
         }
     }
 
@@ -335,10 +335,8 @@ public class AsSynchronizedGraph<V, E>
     public boolean removeEdge(E e)
     {
         synchronized (mutex) {
-            V source = super.getEdgeSource(e);
-            V target = super.getEdgeTarget(e);
-            if (super.removeEdge(e)) {
-                edgeModified(source, target);
+            if (c.removeEdge(e)) {
+                edgeSetModified();
                 return true;
             }
             return false;
@@ -352,10 +350,9 @@ public class AsSynchronizedGraph<V, E>
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         synchronized (mutex) {
-            E e = super.removeEdge(sourceVertex, targetVertex);
-            if (e != null) {
-                edgeModified(sourceVertex, targetVertex);
-            }
+            E e = c.removeEdge(sourceVertex, targetVertex);
+            if (e != null)
+                edgeSetModified();
             return e;
         }
     }
@@ -367,12 +364,9 @@ public class AsSynchronizedGraph<V, E>
     public boolean removeVertex(V v)
     {
         synchronized (mutex) {
-            if (super.removeVertex(v)) {
-                vertexSetModified();
+            if (c.removeVertex(v)) {
                 edgeSetModified();
-                incomingEdgesMap.clear();
-                outgoingEdgesMap.clear();
-                edgesOfMap.clear();
+                vertexSetModified();
                 return true;
             }
             return false;
@@ -397,7 +391,9 @@ public class AsSynchronizedGraph<V, E>
     public Set<V> vertexSet()
     {
         synchronized (mutex) {
-            return getAllVerticesSet();
+            if (allVerticesSet != null)
+                return allVerticesSet;
+            return allVerticesSet = new AsSynchronizedIterateOnCopySet<>(super.vertexSet());
         }
     }
 
@@ -446,6 +442,32 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
+     * Return whether the graph uses cache for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
+     * <code>outgoingEdgesOf</code> methods.
+     * @return <tt>true</tt> if cache is in use, <tt>false</tt> if cache is not in use.
+     */
+    public boolean useCache()
+    {
+        return c.getClass() == CacheAccess.class;
+    }
+
+    /**
+     * Set the cache strategy for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
+     * <code>outgoingEdgesOf</code> methods.
+     * @param c the cache strategy, if <tt>true</tt>, cache will be used for those methods, otherwise
+     *          cache will not be used.
+     */
+    public void setCache(boolean c)
+    {
+        if (c == useCache())
+            return;
+        if (c)
+            this.c = new CacheAccess();
+        else
+            this.c = new NoCache();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -483,49 +505,6 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Clear the copies which the edge to be added or removed can effect.
-     *
-     * @param sourceVertex source vertex of the modified edge.
-     * @param targetVertex target vertex of the modified edge.
-     */
-    private void edgeModified(V sourceVertex, V targetVertex)
-    {
-        outgoingEdgesMap.remove(sourceVertex);
-        incomingEdgesMap.remove(targetVertex);
-        edgesOfMap.remove(sourceVertex);
-        edgesOfMap.remove(targetVertex);
-        edgeSetModified();
-        if (!super.getType().isDirected()) {
-            outgoingEdgesMap.remove(targetVertex);
-            incomingEdgesMap.remove(sourceVertex);
-        }
-    }
-
-    /**
-     * Get backing backing graph's vertexSet wrapped in AsSynchronizedIterateOnCopySet.
-     *
-     * @return backing backing graph's vertexSet wrapped in AsSynchronizedIterateOnCopySet.
-     */
-    private Set<V> getAllVerticesSet() {
-        if (allVerticesSet != null) {
-            return allVerticesSet;
-        }
-        return allVerticesSet = new AsSynchronizedIterateOnCopySet<>(super.vertexSet());
-    }
-
-    /**
-     * Get backing backing graph's edgeSet wrapped in AsSynchronizedIterateOnCopySet.
-     *
-     * @return backing backing graph's edgeSet wrapped in AsSynchronizedIterateOnCopySet.
-     */
-    private Set<E> getAllEdgesSet() {
-        if (allEdgesSet != null) {
-            return allEdgesSet;
-        }
-        return allEdgesSet = new AsSynchronizedIterateOnCopySet<>(super.edgeSet());
-    }
-
-    /**
      * Inform allVerticesSet that the backing data has be modified.
      */
     private void vertexSetModified()
@@ -534,12 +513,14 @@ public class AsSynchronizedGraph<V, E>
             allVerticesSet.modified();
     }
 
+    /**
+     * Inform allEdgesSet that the backing data has be modified.
+     */
     private void edgeSetModified()
     {
         if (allEdgesSet != null)
             allEdgesSet.modified();
     }
-
 
     /**
      * Create a synchronized (thread-safe) and unmodifiable Set backed by the specified Set. In order
@@ -844,7 +825,265 @@ public class AsSynchronizedGraph<V, E>
         }
     }
 
+    /**
+     * An interface for cache strategy of AsSynchronizedGraph's <code>edgesOf</code>,
+     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     */
+    private interface CacheStrategy<V, E>
+    {
+        /**
+         * Add an edge into AsSynchronizedGraph's backing graph.
+         */
+        E addEdge(V sourceVertex, V targetVertex);
 
+        /**
+         * Add an edge into AsSynchronizedGraph's backing graph.
+         */
+        boolean addEdge(V sourceVertex, V targetVertex, E e);
+
+        /**
+         * Get all edges touching the specified vertex in AsSynchronizedGraph's backing graph.
+         */
+        Set<E> edgesOf(V vertex);
+
+        /**
+         * Get a set of all edges in AsSynchronizedGraph's backing graph incoming into the specified
+         * vertex.
+         */
+        Set<E> incomingEdgesOf(V vertex);
+
+        /**
+         * Get a set of all edges in AsSynchronizedGraph's backing graph outgoing from the specified
+         * vertex.
+         */
+        Set<E> outgoingEdgesOf(V vertex);
+
+        /**
+         * Remove the specified edge from AsSynchronizedGraph's backing.
+         */
+        boolean removeEdge(E e);
+
+        /**
+         * Remove an edge from AsSynchronizedGraph's backing.
+         */
+        E removeEdge(V sourceVertex, V targetVertex);
+
+        /**
+         * Remove the specified edge from AsSynchronizedGraph's backing.
+         */
+        boolean removeVertex(V v);
+    }
+
+    /**
+     * Don't use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code>
+     * and <code>outgoingEdgesOf</code> methods.
+     */
+    private class NoCache
+        implements CacheStrategy<V, E>
+    {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E addEdge(V sourceVertex, V targetVertex) {
+            return AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean addEdge(V sourceVertex, V targetVertex, E e) {
+            return AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex, e);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> edgesOf(V vertex) {
+            return copySet(AsSynchronizedGraph.super.edgesOf(vertex));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> incomingEdgesOf(V vertex) {
+            return copySet(AsSynchronizedGraph.super.incomingEdgesOf(vertex));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> outgoingEdgesOf(V vertex) {
+            return copySet(AsSynchronizedGraph.super.outgoingEdgesOf(vertex));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean removeEdge(E e) {
+            return AsSynchronizedGraph.super.removeEdge(e);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E removeEdge(V sourceVertex, V targetVertex) {
+            return AsSynchronizedGraph.super.removeEdge(sourceVertex, targetVertex);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean removeVertex(V v) {
+            return AsSynchronizedGraph.super.removeVertex(v);
+        }
+    }
+
+    /**
+     * Use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code>
+     * and <code>outgoingEdgesOf</code> methods.
+     */
+    private class CacheAccess
+        implements CacheStrategy<V, E>
+    {
+
+        // A map caching for incomingEdges operation.
+        private transient Map<V, Set<E>> incomingEdgesMap = new HashMap<>();
+
+        // A map caching for outgoingEdges operation.
+        private transient Map<V, Set<E>> outgoingEdgesMap = new HashMap<>();
+
+        // A map caching for edgesOf operation.
+        private transient Map<V, Set<E>> edgesOfMap = new HashMap<>();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E addEdge(V sourceVertex, V targetVertex) {
+            E e = AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex);
+            if (e != null)
+                edgeModified(sourceVertex, targetVertex);
+            return e;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean addEdge(V sourceVertex, V targetVertex, E e) {
+            if (AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex, e)) {
+                edgeModified(sourceVertex, targetVertex);
+                return true;
+            }
+            return false;
+        }
+
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> edgesOf(V vertex) {
+            Set<E> s = edgesOfMap.get(vertex);
+            if (s != null)
+                return s;
+            s = copySet(AsSynchronizedGraph.super.edgesOf(vertex));
+            edgesOfMap.put(vertex, s);
+            return s;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> incomingEdgesOf(V vertex) {
+            Set<E> s = incomingEdgesMap.get(vertex);
+            if (s != null)
+                return s;
+            s = copySet(AsSynchronizedGraph.super.incomingEdgesOf(vertex));
+            incomingEdgesMap.put(vertex, s);
+            return s;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> outgoingEdgesOf(V vertex) {
+            Set<E> s = outgoingEdgesMap.get(vertex);
+            if (s != null)
+                return s;
+            s = copySet(AsSynchronizedGraph.super.outgoingEdgesOf(vertex));
+            outgoingEdgesMap.put(vertex, s);
+            return s;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean removeEdge(E e) {
+            V sourceVertex = getEdgeSource(e);
+            V targetVertex = getEdgeTarget(e);
+            if (AsSynchronizedGraph.super.removeEdge(e)) {
+                edgeModified(sourceVertex, targetVertex);
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E removeEdge(V sourceVertex, V targetVertex) {
+            E e = AsSynchronizedGraph.super.removeEdge(sourceVertex, targetVertex);
+            if (e != null)
+                edgeModified(sourceVertex, targetVertex);
+            return e;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean removeVertex(V v) {
+            if (AsSynchronizedGraph.super.removeVertex(v)) {
+                edgesOfMap.clear();
+                incomingEdgesMap.clear();
+                outgoingEdgesMap.clear();
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Clear the copies which the edge to be added or removed can effect.
+         *
+         * @param sourceVertex source vertex of the modified edge.
+         * @param targetVertex target vertex of the modified edge.
+         */
+        private void edgeModified(V sourceVertex, V targetVertex)
+        {
+            outgoingEdgesMap.remove(sourceVertex);
+            incomingEdgesMap.remove(targetVertex);
+            edgesOfMap.remove(sourceVertex);
+            edgesOfMap.remove(targetVertex);
+            if (!AsSynchronizedGraph.super.getType().isDirected()) {
+                outgoingEdgesMap.remove(targetVertex);
+                incomingEdgesMap.remove(sourceVertex);
+            }
+        }
+    }
 }
 
 // End AsSynchronizedGraph.java
