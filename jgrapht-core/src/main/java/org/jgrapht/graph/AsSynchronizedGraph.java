@@ -1,4 +1,22 @@
+/*
+ * (C) Copyright 2003-2018, by CHEN Kui and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.graph;
+
 import java.io.*;
 import java.lang.*;
 import java.util.*;
@@ -11,26 +29,29 @@ import org.jgrapht.util.*;
  * accomplished through the returned Graph.
  *
  * <p>
- * It is imperative that the user manually synchronize on {@link EdgeFactory} when creating edges.
- * Failure to follow this advice may result in non-deterministic behavior.
+ * User need to manually synchronize on {@link EdgeFactory} if creating an edge need to access
+ * critical resources. Failure to follow this advice may result in non-deterministic behavior.
  * </p>
  *
  * <p>
- * The Graph guarantee that all operations on the returned Set does not affect the backing Graph.
- * For <code>edgeSet</code> and <code>vertexSet</code> method, the Graph will return
- * {@link AsSynchronizedIterateOnCopySet} wrapping backing Graph's backing Set. For other
- * Set-returned method, the Graph will return a new {@link java.util.LinkedHashSet} wrapped in
- * <code>java.util.Collections.UnmodifiableSet</code> containing all elements from Set returned by backing Graph.
+ * For all methods returning a Set, the Graph guarantee that all operations on the returned Set does
+ * not affect the backing Graph. For <code>edgeSet</code> and <code>vertexSet</code> methods, the
+ * returned Set is backed by the backing graph but unmodified, so changes to the graph are reflected
+ * in the set. And when users get the Set's <code>Iterator</code>, <code>Spliterator</code>,
+ * <code>Stream</code> or <code>ParallelStream</code>, the Set will copy itself and return the copy's
+ * <code>Iterator</code>, <code>Spliterator</code>, <code>Stream</code> or <code>ParallelStream</code>.
+ * For <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods,
+ * the returned Set is a copy of backing Graph's return. User can decide whether to cache those
+ * copies. If user decide to cache those copies and the backing graph's changes don't effect them,
+ * those copies will be returned in the next time the method is called . If the backing graph's
+ * changes effect them, they will be removed from cache and re-created in the next time the method is
+ * called. If user decide to not cache those copies, the graph will create the copies every time the
+ * method is called. For other methods returning a Set, the Set is just the backing Graph's return.
  * </p>
  *
  * <p>
- * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
- * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
- * serializable if the backing graph is serializable.
- * </p>
- *
- * <p>
- * The created set will be serializable if the backing set is serializable.
+ * This graph will pass the hashCode and equals operations through to the backing graph and will be
+ * serializable if the backing set is serializable.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -41,7 +62,7 @@ import org.jgrapht.util.*;
  *
  */
 
-public class AsSynchronizedGeaph<V, E>
+public class AsSynchronizedGraph<V, E>
     extends GraphDelegator<V, E>
     implements Graph<V, E>, Serializable
 {
@@ -66,16 +87,20 @@ public class AsSynchronizedGeaph<V, E>
     // A map caching for edgesOf operation.
     private transient Map<V, Set<E>> edgesOfMap = new HashMap<>();
 
+    private transient Graph<V, E> delegate;
+
 
     /**
-     * Constructor for AsSynchronizedGeaph.
+     * Constructor for AsSynchronizedGeaph with strategy of not caching the copies for
+     * <code>edgesOf</code>, <code>incomingEdgesOf</code>, <code>outgoingEdgesOf</code>
      *
      * @param g the backing graph (the delegate).
      */
-    public AsSynchronizedGeaph(Graph<V, E> g)
+    public AsSynchronizedGraph(Graph<V, E> g)
     {
         super(g);
         this.mutex = this;
+        this.delegate = g;
     }
 
     /**
@@ -144,6 +169,16 @@ public class AsSynchronizedGeaph<V, E>
                 return true;
             }
             return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsEdge(V sourceVertex, V targetVertex) {
+        synchronized (mutex) {
+            return containsEdge(sourceVertex, targetVertex);
         }
     }
 
@@ -264,6 +299,36 @@ public class AsSynchronizedGeaph<V, E>
      * {@inheritDoc}
      */
     @Override
+    public boolean removeAllEdges(Collection<? extends E> edges) {
+        synchronized (mutex) {
+            return super.removeAllEdges(edges);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<E> removeAllEdges(V sourceVertex, V targetVertex) {
+        synchronized (mutex) {
+            return super.removeAllEdges(sourceVertex, targetVertex);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean removeAllVertices(Collection<? extends V> vertices) {
+        synchronized (mutex) {
+            return super.removeAllVertices(vertices);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean removeEdge(E e)
     {
         synchronized (mutex) {
@@ -374,6 +439,30 @@ public class AsSynchronizedGeaph<V, E>
     {
         synchronized (mutex) {
             super.setEdgeWeight(e, weight);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode()
+    {
+        synchronized (mutex) {
+            return delegate.hashCode();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        synchronized (this) {
+            return delegate.equals(o);
         }
     }
 
