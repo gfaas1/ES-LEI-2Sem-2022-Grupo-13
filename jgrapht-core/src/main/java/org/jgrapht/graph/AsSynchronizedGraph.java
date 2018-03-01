@@ -181,7 +181,7 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean containsEdge(V sourceVertex, V targetVertex) {
         synchronized (mutex) {
-            return containsEdge(sourceVertex, targetVertex);
+            return super.containsEdge(sourceVertex, targetVertex);
         }
     }
 
@@ -510,7 +510,7 @@ public class AsSynchronizedGraph<V, E>
         if (allVerticesSet != null) {
             return allVerticesSet;
         }
-        return allVerticesSet = new AsSynchronizedIterateOnCopySet<>(super.vertexSet(), mutex);
+        return allVerticesSet = new AsSynchronizedIterateOnCopySet<>(super.vertexSet());
     }
 
     /**
@@ -522,7 +522,7 @@ public class AsSynchronizedGraph<V, E>
         if (allEdgesSet != null) {
             return allEdgesSet;
         }
-        return allEdgesSet = new AsSynchronizedIterateOnCopySet<>(super.edgeSet(), mutex);
+        return allEdgesSet = new AsSynchronizedIterateOnCopySet<>(super.edgeSet());
     }
 
     /**
@@ -570,7 +570,7 @@ public class AsSynchronizedGraph<V, E>
      * @since Feb 23, 2018
      */
 
-    public class AsSynchronizedIterateOnCopySet<E>
+    private class AsSynchronizedIterateOnCopySet<E>
             implements Set<E>, Serializable
     {
         private static final long serialVersionUID = -102323563687847936L;
@@ -587,18 +587,7 @@ public class AsSynchronizedGraph<V, E>
          * Constructor for AsSynchronizedIterateOnCopySet.
          * @param s the backing graph.
          */
-        public AsSynchronizedIterateOnCopySet(Set<E> s)
-        {
-            set = Objects.requireNonNull(s, "s must not be null");
-            copy = null;
-        }
-
-        /**
-         * Constructor for AsSynchronizedIterateOnCopySet.
-         * @param s the backing graph.
-         * @param _mutex the object on which to synchronize.
-         */
-        public AsSynchronizedIterateOnCopySet(Set<E> s, Object _mutex)
+        private AsSynchronizedIterateOnCopySet(Set<E> s)
         {
             set = Objects.requireNonNull(s, "s must not be null");
             copy = null;
@@ -677,13 +666,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean add(E e)
         {
-            synchronized (mutex) {
-                if (set.add(e)) {
-                    modified();
-                    return true;
-                }
-                return false;
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
@@ -692,13 +675,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean remove(Object o)
         {
-            synchronized (mutex) {
-                if (set.remove(o)) {
-                    modified();
-                    return true;
-                }
-                return false;
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
@@ -718,21 +695,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean addAll(Collection<? extends E> c)
         {
-            synchronized (mutex) {
-                try {
-                    if (set.addAll(c)) {
-                        modified();
-                        return true;
-                    }
-                    return false;
-                } catch (UnsupportedOperationException e) {
-                    throw e;
-                } catch (Exception e) {
-                    modified();
-                    throw e;
-                }
-
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
@@ -741,20 +704,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean retainAll(Collection<?> c)
         {
-            synchronized (mutex) {
-                try {
-                    if (set.retainAll(c)) {
-                        modified();
-                        return true;
-                    }
-                    return false;
-                } catch (UnsupportedOperationException e) {
-                    throw e;
-                } catch (Exception e) {
-                    modified();
-                    throw e;
-                }
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
@@ -763,20 +713,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean removeAll(Collection<?> c)
         {
-            synchronized (mutex) {
-                try {
-                    if (set.removeAll(c)) {
-                        modified();
-                        return true;
-                    }
-                    return false;
-                } catch (UnsupportedOperationException e) {
-                    throw e;
-                } catch (Exception e) {
-                    modified();
-                    throw e;
-                }
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
@@ -785,10 +722,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public void clear()
         {
-            synchronized (mutex) {
-                set.clear();
-                modified();
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
 
@@ -810,20 +744,7 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean removeIf(Predicate<? super E> filter)
         {
-            synchronized (mutex) {
-                try {
-                    if (set.removeIf(filter)) {
-                        modified();
-                        return true;
-                    }
-                    return false;
-                } catch (UnsupportedOperationException e) {
-                    throw e;
-                } catch (Exception e) {
-                    modified();
-                    throw e;
-                }
-            }
+            throw new UnsupportedOperationException("the Set is unmodifiable");
         }
 
         /**
