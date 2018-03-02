@@ -26,7 +26,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test class AsSynchronizedIterateOnCopySet.
+ * Test class AsSynchronizedGraph.
  *
  * @author CHEN Kui
  */
