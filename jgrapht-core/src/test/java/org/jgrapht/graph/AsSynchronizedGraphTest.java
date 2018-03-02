@@ -20,6 +20,7 @@ public class AsSynchronizedGraphTest
     Vector<Integer> vertices;
     Vector<DefaultEdge> edges;
     Graph<Integer, DefaultEdge> g;
+
     @Test
     public void testaddVertex()
     {
@@ -42,7 +43,8 @@ public class AsSynchronizedGraphTest
     }
 
     @Test
-    public void testAddEdge() {
+    public void testAddEdge()
+    {
         g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), true);
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
@@ -75,7 +77,8 @@ public class AsSynchronizedGraphTest
     }
 
     @Test
-    public void testRemoveEdge() {
+    public void testRemoveEdge()
+    {
         g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), true);
         edges = new Vector<>();
         TestSuite ts = new ActiveTestSuite();
@@ -197,7 +200,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testScenario()
     {
-        g = new AsSynchronizedGraph<>(new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class), false);
+        g = new AsSynchronizedGraph<>(new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class));
         TestSuite ts = new ActiveTestSuite();
         order1 = new ArrayList<>();
         order2 = new ArrayList<>();
@@ -348,7 +351,8 @@ public class AsSynchronizedGraphTest
             g.removeEdge(s, t);
         }
     }
-    private int iteratorCnt(Iterator it) {
+    private int iteratorCnt(Iterator it)
+    {
         int count = 0;
         while (it.hasNext()) {
             it.next();
