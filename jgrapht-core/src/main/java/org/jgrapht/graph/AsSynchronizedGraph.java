@@ -27,10 +27,10 @@ import org.jgrapht.*;
 /**
  * Create a synchronized (thread-safe) Graph backed by the specified Graph. In order to guarantee
  * serial access, it is critical that <strong>all</strong> access to the backing Graph is
- * accomplished through the returned Graph.
+ * accomplished through the created Graph.
  *
  * <p>
- * Users need to manually synchronize on {@link EdgeFactory} if creating an edge need to access
+ * Users need to manually synchronize on {@link EdgeFactory} if creating an edge needs to access
  * critical resources. Failure to follow this advice may result in non-deterministic behavior.
  * </p>
  *
@@ -38,7 +38,7 @@ import org.jgrapht.*;
  * For all methods returning a Set, the Graph guarantee that all operations on the returned Set does
  * not affect the backing Graph. For <code>edgeSet</code> and <code>vertexSet</code> methods, the
  * returned Set is backed by the backing graph but unmodifiable, so changes to the graph are reflected
- * in the set. And when users get the Set's <code>Iterator</code>, <code>Spliterator</code>,
+ * in the set. And when users get returned Set's <code>Iterator</code>, <code>Spliterator</code>,
  * <code>Stream</code> or <code>ParallelStream</code>, the Set will copy itself and return the copy's
  * <code>Iterator</code>, <code>Spliterator</code>, <code>Stream</code> or <code>ParallelStream</code>.
  * For <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods,
@@ -52,8 +52,8 @@ import org.jgrapht.*;
  * </p>
  *
  * <p>
- * This graph will pass the hashCode and equals operations through to the backing graph and will be
- * serializable if the backing set is serializable.
+ * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is equal
+ * to another Graph if they are the same Graph or the backing Graph is equal to the other Graph.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -69,7 +69,6 @@ public class AsSynchronizedGraph<V, E>
     implements Graph<V, E>, Serializable
 {
     private static final long serialVersionUID = 5144561442831050752L;
-
 
     // Object on which to synchronize
     private final Object mutex;
@@ -126,7 +125,7 @@ public class AsSynchronizedGraph<V, E>
     {
         synchronized (mutex) {
             return
-                copySet(super.getAllEdges(sourceVertex, targetVertex));
+                super.getAllEdges(sourceVertex, targetVertex);
         }
     }
 
@@ -190,7 +189,8 @@ public class AsSynchronizedGraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public boolean containsEdge(V sourceVertex, V targetVertex) {
+    public boolean containsEdge(V sourceVertex, V targetVertex)
+    {
         synchronized (mutex) {
             return super.containsEdge(sourceVertex, targetVertex);
         }
@@ -302,7 +302,8 @@ public class AsSynchronizedGraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public boolean removeAllEdges(Collection<? extends E> edges) {
+    public boolean removeAllEdges(Collection<? extends E> edges)
+    {
         synchronized (mutex) {
             return super.removeAllEdges(edges);
         }
@@ -312,7 +313,8 @@ public class AsSynchronizedGraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public Set<E> removeAllEdges(V sourceVertex, V targetVertex) {
+    public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
+    {
         synchronized (mutex) {
             return super.removeAllEdges(sourceVertex, targetVertex);
         }
@@ -322,7 +324,8 @@ public class AsSynchronizedGraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public boolean removeAllVertices(Collection<? extends V> vertices) {
+    public boolean removeAllVertices(Collection<? extends V> vertices)
+    {
         synchronized (mutex) {
             return super.removeAllVertices(vertices);
         }
@@ -525,7 +528,7 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Create a synchronized (thread-safe) and unmodifiable Set backed by the specified Set. In order
      * to guarantee serial access, it is critical that <strong>all</strong> access to the backing
-     * Set is accomplished through the returned Set.
+     * Set is accomplished through the created Set.
      *
      * <p>
      * When users get this Set's <code>Iterator</code>, <code>Spliterator</code>, <code>Stream</code>
@@ -536,8 +539,8 @@ public class AsSynchronizedGraph<V, E>
      * </p>
      *
      * <p>
-     * The created set's hashCode is equal to the backing set's hashCode. And the created set is equal
-     * to anther set if they are the same set or the backing set is equal to another set.
+     * The created Set's hashCode is equal to the backing Set's hashCode. And the created Set is equal
+     * to another set if they are the same Set or the backing Set is equal to the other Set.
      * </p>
      *
      * <p>
@@ -749,7 +752,8 @@ public class AsSynchronizedGraph<V, E>
          */
         @SuppressWarnings("unchecked")
         @Override
-        public Stream<E> stream() {
+        public Stream<E> stream()
+        {
             return getCopy().stream();
         }
 
@@ -762,7 +766,8 @@ public class AsSynchronizedGraph<V, E>
          */
         @SuppressWarnings("unchecked")
         @Override
-        public Stream<E> parallelStream() {
+        public Stream<E> parallelStream()
+        {
             return getCopy().parallelStream();
         }
 
@@ -773,7 +778,8 @@ public class AsSynchronizedGraph<V, E>
          * backing object, false otherwise.
          */
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(Object o)
+        {
             if (this == o)
                 return true;
             synchronized (mutex) {
@@ -786,7 +792,8 @@ public class AsSynchronizedGraph<V, E>
          * @return the backing set's hashcode.
          */
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             synchronized (mutex) {
                 return set.hashCode();
             }
@@ -797,7 +804,8 @@ public class AsSynchronizedGraph<V, E>
          * @return the backing set's toString result.
          */
         @Override
-        public String toString() {
+        public String toString()
+        {
             synchronized (mutex) {
                 return set.toString();
             }
@@ -820,7 +828,8 @@ public class AsSynchronizedGraph<V, E>
          * If the backing set is modified, call this method to let this set knows the backing set's
          * copy need to update.
          */
-        public void modified() {
+        public void modified()
+        {
             copy = null;
         }
     }
@@ -886,7 +895,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public E addEdge(V sourceVertex, V targetVertex) {
+        public E addEdge(V sourceVertex, V targetVertex)
+        {
             return AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex);
         }
 
@@ -894,7 +904,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean addEdge(V sourceVertex, V targetVertex, E e) {
+        public boolean addEdge(V sourceVertex, V targetVertex, E e)
+        {
             return AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex, e);
         }
 
@@ -902,7 +913,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> edgesOf(V vertex) {
+        public Set<E> edgesOf(V vertex)
+        {
             return copySet(AsSynchronizedGraph.super.edgesOf(vertex));
         }
 
@@ -910,7 +922,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> incomingEdgesOf(V vertex) {
+        public Set<E> incomingEdgesOf(V vertex)
+        {
             return copySet(AsSynchronizedGraph.super.incomingEdgesOf(vertex));
         }
 
@@ -918,7 +931,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> outgoingEdgesOf(V vertex) {
+        public Set<E> outgoingEdgesOf(V vertex)
+        {
             return copySet(AsSynchronizedGraph.super.outgoingEdgesOf(vertex));
         }
 
@@ -926,7 +940,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean removeEdge(E e) {
+        public boolean removeEdge(E e)
+        {
             return AsSynchronizedGraph.super.removeEdge(e);
         }
 
@@ -934,7 +949,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public E removeEdge(V sourceVertex, V targetVertex) {
+        public E removeEdge(V sourceVertex, V targetVertex)
+        {
             return AsSynchronizedGraph.super.removeEdge(sourceVertex, targetVertex);
         }
 
@@ -942,7 +958,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean removeVertex(V v) {
+        public boolean removeVertex(V v)
+        {
             return AsSynchronizedGraph.super.removeVertex(v);
         }
     }
@@ -968,7 +985,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public E addEdge(V sourceVertex, V targetVertex) {
+        public E addEdge(V sourceVertex, V targetVertex)
+        {
             E e = AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex);
             if (e != null)
                 edgeModified(sourceVertex, targetVertex);
@@ -979,7 +997,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean addEdge(V sourceVertex, V targetVertex, E e) {
+        public boolean addEdge(V sourceVertex, V targetVertex, E e)
+        {
             if (AsSynchronizedGraph.super.addEdge(sourceVertex, targetVertex, e)) {
                 edgeModified(sourceVertex, targetVertex);
                 return true;
@@ -992,7 +1011,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> edgesOf(V vertex) {
+        public Set<E> edgesOf(V vertex)
+        {
             Set<E> s = edgesOfMap.get(vertex);
             if (s != null)
                 return s;
@@ -1005,7 +1025,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> incomingEdgesOf(V vertex) {
+        public Set<E> incomingEdgesOf(V vertex)
+        {
             Set<E> s = incomingEdgesMap.get(vertex);
             if (s != null)
                 return s;
@@ -1018,7 +1039,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public Set<E> outgoingEdgesOf(V vertex) {
+        public Set<E> outgoingEdgesOf(V vertex)
+        {
             Set<E> s = outgoingEdgesMap.get(vertex);
             if (s != null)
                 return s;
@@ -1031,7 +1053,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean removeEdge(E e) {
+        public boolean removeEdge(E e)
+        {
             V sourceVertex = getEdgeSource(e);
             V targetVertex = getEdgeTarget(e);
             if (AsSynchronizedGraph.super.removeEdge(e)) {
@@ -1045,7 +1068,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public E removeEdge(V sourceVertex, V targetVertex) {
+        public E removeEdge(V sourceVertex, V targetVertex)
+        {
             E e = AsSynchronizedGraph.super.removeEdge(sourceVertex, targetVertex);
             if (e != null)
                 edgeModified(sourceVertex, targetVertex);
@@ -1056,7 +1080,8 @@ public class AsSynchronizedGraph<V, E>
          * {@inheritDoc}
          */
         @Override
-        public boolean removeVertex(V v) {
+        public boolean removeVertex(V v)
+        {
             if (AsSynchronizedGraph.super.removeVertex(v)) {
                 edgesOfMap.clear();
                 incomingEdgesMap.clear();
