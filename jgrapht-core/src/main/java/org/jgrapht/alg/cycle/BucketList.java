@@ -21,16 +21,19 @@ import java.util.*;
 
 /**
  * Data structure for performing lexicographical breadth-first search.
- * Allows to add and retrieve vertices from buckets, update their labels
+ * Allows to add and retrieve vertices from buckets, update their buckets after a new
+ * vertex has been added to the LexBFS order. As stated in the {@link ChordalityInspector},
+ * labels aren't used explicitly, which results in time and space optimization.
+ *
  *
  * @param <V> the graph vertex type
  * @author Timofey Chudakov
- * @see ChordalGraphInspector
+ * @see ChordalityInspector
  * @since 1.8
  */
 class BucketList<V> {
     /**
-     * Bucket with the vertices that have lexicographically largest label assigned to them
+     * Bucket with the vertices that have lexicographically largest label.
      */
     private Bucket head;
     /**
@@ -83,11 +86,12 @@ class BucketList<V> {
 
     /**
      * For every bucket B in this {@code BucketList}, which contains vertices from the set {@code vertices},
-     * creates a new {@code Bucket} B' and moves all vertices from B to B', that at the same time contained in {@code vertices}
-     * Bucket B' becomes previous to B. For every such {@code Bucket} B only one {@code Bucket} B' is created.
-     * If some bucket B becomes empty after this operation, it is remove from the data structure.
+     * creates a new {@code Bucket} B' and moves all vertices from B to B', that are at the same time contained
+     * in the {@code vertices}. Bucket B' becomes previous to B. For every such {@code Bucket} B only
+     * one {@code Bucket} B' is created. If some bucket B becomes empty after this operation, it is
+     * removed from the data structure.
      *
-     * @param vertices the vertices, that should be moved to new Buckets
+     * @param vertices the vertices, that should be moved to new buckets
      */
     public void updateBuckets(Set<V> vertices) {
         Set<Bucket> visitedBuckets = new HashSet<>();
@@ -114,7 +118,8 @@ class BucketList<V> {
     }
 
     /**
-     * Plays the role of the container of vertices. All vertices stored in bucket have identical label.
+     * Plays the role of the container of vertices. All vertices stored in bucket have identical label. Labels
+     * aren't used directly.
      * <p>
      * Encapsulates operations of addition and removal of vertices from the bucket, removal of a bucket from the data
      * structure.
@@ -134,8 +139,7 @@ class BucketList<V> {
         private Set<V> vertices;
 
         /**
-         * Creates a new bucket with all {@code vertices} and an empty label.
-         * Is used to create the first bucket with all vertices of a graph
+         * Creates a new bucket with all {@code vertices} stored in it.
          *
          * @param vertices vertices to store in this bucket
          */
@@ -143,6 +147,11 @@ class BucketList<V> {
             this.vertices = new HashSet<>(vertices);
         }
 
+        /**
+         * Creates a new Bucket with a single {@code vertex} in it.
+         *
+         * @param vertex the vertex to store in this bucket.
+         */
         Bucket(V vertex) {
             this.vertices = new HashSet<>();
             vertices.add(vertex);
