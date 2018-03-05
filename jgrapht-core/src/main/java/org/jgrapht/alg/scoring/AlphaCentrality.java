@@ -116,11 +116,11 @@ public final class AlphaCentrality<V, E>
      * 
      * @param g the input graph
      * @param dampingFactor the damping factor
-     * @param exogenousFactormap the exogenous factor map
+     * @param exogenousFactorFunction ToDoubleFunction a provider of exogenous factors per vertex
      */
-    public AlphaCentrality(Graph<V, E> g, double dampingFactor, Map<V, Double> exogenousFactormap)
+    public AlphaCentrality(Graph<V, E> g, double dampingFactor, ToDoubleFunction<V> exogenousFactorFunction)
     {
-        this(g, dampingFactor, exogenousFactormap, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
+        this(g, dampingFactor, exogenousFactorFunction, MAX_ITERATIONS_DEFAULT, TOLERANCE_DEFAULT);
     }
 
     /**
@@ -141,12 +141,12 @@ public final class AlphaCentrality<V, E>
      * 
      * @param g the input graph
      * @param dampingFactor the damping factor
-     * @param exogenousFactormap the exogenous factor map
+     * @param exogenousFactorFunction ToDoubleFunction a provider of exogenous factors per vertex
      * @param maxIterations the maximum number of iterations to perform
      */
-    public AlphaCentrality(Graph<V, E> g, double dampingFactor, Map<V, Double> exogenousFactormap, int maxIterations)
+    public AlphaCentrality(Graph<V, E> g, double dampingFactor, ToDoubleFunction<V> exogenousFactorFunction, int maxIterations)
     {
-        this(g, dampingFactor, exogenousFactormap, maxIterations, TOLERANCE_DEFAULT);
+        this(g, dampingFactor, exogenousFactorFunction, maxIterations, TOLERANCE_DEFAULT);
     }
 
     /**
@@ -164,15 +164,9 @@ public final class AlphaCentrality<V, E>
         this.g = g;
         this.scores = new HashMap<>();
 
-        Map<V, Double> exofactor = new HashMap<>();
-        for (V v : g.vertexSet()) {
-            exofactor.put(v, exogenousFactor);
-            }
-
-        if(validate(dampingFactor, maxIterations, tolerance)){
-            ToDoubleFunction<V> exofactorFunction = (v) -> exogenousFactor;
-            run(dampingFactor, exofactorFunction, maxIterations, tolerance);
-        }
+        validate(dampingFactor, maxIterations, tolerance);
+        ToDoubleFunction<V> exofactorFunction = (v) -> exogenousFactor;
+        run(dampingFactor, exofactorFunction, maxIterations, tolerance);
     }
 
     /**
@@ -180,20 +174,18 @@ public final class AlphaCentrality<V, E>
      * 
      * @param g the input graph
      * @param dampingFactor the damping factor
-     * @param exogenousFactormap the exogenous factor map
+     * @param exogenousFactorFunction ToDoubleFunction a provider of exogenous factors per vertex
      * @param maxIterations the maximum number of iterations to perform
      * @param tolerance the calculation will stop if the difference of AlphaCentrality values between
      *        iterations change less than this value
      */
-    public AlphaCentrality(Graph<V, E> g, double dampingFactor, Map<V, Double> exogenousFactormap, int maxIterations, double tolerance)
+    public AlphaCentrality(Graph<V, E> g, double dampingFactor, ToDoubleFunction<V> exogenousFactorFunction, int maxIterations, double tolerance)
     {
         this.g = g;
         this.scores = new HashMap<>();
 
-        if(validate(dampingFactor, maxIterations, tolerance)){
-            ToDoubleFunction<V> exofactorFunction = (v) -> exogenousFactormap.get(v);
-            run(dampingFactor, exofactorFunction, maxIterations, tolerance);
-        }
+        validate(dampingFactor, maxIterations, tolerance);
+        run(dampingFactor, exogenousFactorFunction, maxIterations, tolerance);
     }
 
     /**
@@ -218,7 +210,7 @@ public final class AlphaCentrality<V, E>
     }
 
     /*Checks for the valid values of the parameters*/
-    private boolean validate(double dampingFactor, int maxIterations, double tolerance)
+    private void validate(double dampingFactor, int maxIterations, double tolerance)
     {
         if (maxIterations <= 0) {
             throw new IllegalArgumentException("Maximum iterations must be positive");
@@ -231,7 +223,6 @@ public final class AlphaCentrality<V, E>
         if (tolerance <= 0.0) {
             throw new IllegalArgumentException("Tolerance not valid, must be positive");
         }
-        return true;
     }
 
     private void run(double dampingFactor, ToDoubleFunction<V> exofactorFunction, int maxIterations, double tolerance)
@@ -242,7 +233,7 @@ public final class AlphaCentrality<V, E>
         double initScore = 1.0d / totalVertices;
         for (V v : g.vertexSet()) {
             scores.put(v, initScore);
-            }
+        }
 
         // run AlphaCentrality
         Map<V, Double> nextScores = new HashMap<>();
