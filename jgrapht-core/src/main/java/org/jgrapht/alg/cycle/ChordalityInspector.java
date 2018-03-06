@@ -208,7 +208,7 @@ public class ChordalityInspector<V, E> {
         }
         return predecessors;
     }
-    
+
 }
 
 
