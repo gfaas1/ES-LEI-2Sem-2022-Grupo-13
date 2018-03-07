@@ -136,7 +136,6 @@ public class AsSynchronizedGraph<V, E>
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -191,7 +190,6 @@ public class AsSynchronizedGraph<V, E>
             return super.containsEdge(sourceVertex, targetVertex);
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -490,7 +488,6 @@ public class AsSynchronizedGraph<V, E>
         }
     }
 
-
     /**
      * Create a unmodifiable copy of the set.
      *
@@ -702,7 +699,6 @@ public class AsSynchronizedGraph<V, E>
         {
             throw new UnsupportedOperationException(UNMODIFIABLE);
         }
-
 
         /**
          * {@inheritDoc}
@@ -1015,7 +1011,6 @@ public class AsSynchronizedGraph<V, E>
             }
             return false;
         }
-
 
         /**
          * {@inheritDoc}
