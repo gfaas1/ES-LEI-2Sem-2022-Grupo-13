@@ -749,7 +749,6 @@ public class AsSynchronizedGraph<V, E>
          * its source.
          * @return a possibly parallel <code>Stream</code> with the backing set's unmodifiable copy
          * as its source.
-         * It is allowable for this method to return a sequential stream.
          */
         @Override
         public Stream<E> parallelStream()
@@ -866,7 +865,7 @@ public class AsSynchronizedGraph<V, E>
         E removeEdge(V sourceVertex, V targetVertex);
 
         /**
-         * Remove the specified edge from AsSynchronizedGraph's backing graph.
+         * Remove the specified vertex from AsSynchronizedGraph's backing graph.
          */
         boolean removeVertex(V v);
 
