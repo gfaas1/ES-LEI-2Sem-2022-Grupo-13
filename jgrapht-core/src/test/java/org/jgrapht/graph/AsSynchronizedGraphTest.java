@@ -21,7 +21,6 @@ import java.util.*;
 import junit.extensions.*;
 import junit.framework.*;
 import junit.textui.*;
-import org.jgrapht.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -32,12 +31,12 @@ import static org.junit.Assert.*;
  */
 public class AsSynchronizedGraphTest
 {
-    Vector<Integer> vertices;
-    Vector<DefaultEdge> edges;
-    Graph<Integer, DefaultEdge> g;
+    private Vector<Integer> vertices;
+    private Vector<DefaultEdge> edges;
+    private AsSynchronizedGraph<Integer, DefaultEdge> g;
 
     @Test
-    public void testaddVertex()
+    public void testAddVertex()
     {
         TestSuite ts = new ActiveTestSuite();
         vertices = new Vector<>();
@@ -70,7 +69,7 @@ public class AsSynchronizedGraphTest
             e.target = (i + 1)%1000;
             edges.add(e);
         }
-        ArrayList<DefaultEdge> list = new ArrayList(edges);
+        ArrayList<DefaultEdge> list = new ArrayList<>(edges);
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 20; i++) {
             ts.addTest(new TestThread("addEdge"));
@@ -183,9 +182,9 @@ public class AsSynchronizedGraphTest
         assertEquals(2, iteratorCnt(g.edgesOf(2).iterator()));
         assertEquals(2, g.outgoingEdgesOf(2).size());
         assertEquals(2, g.incomingEdgesOf(2).size());
-        assertFalse(((AsSynchronizedGraph) g).useCache());
-        ((AsSynchronizedGraph) g).setCache(true);
-        assertTrue(((AsSynchronizedGraph) g).useCache());
+        assertFalse(g.isCacheEnabled());
+        g.setCache(true);
+        assertTrue(g.isCacheEnabled());
         g.addEdge(2, 4);
         assertEquals(3, g.edgesOf(2).size());
         assertEquals(3, iteratorCnt(g.edgesOf(2).iterator()));
@@ -208,10 +207,10 @@ public class AsSynchronizedGraphTest
 
     }
 
-    ArrayList<Order> order1;
-    ArrayList<Order> order2;
-    ArrayList<Order> order3;
-    ArrayList<Order> order4;
+    private ArrayList<Order> order1;
+    private ArrayList<Order> order2;
+    private ArrayList<Order> order3;
+    private ArrayList<Order> order4;
     @Test
     public void testScenario()
     {
@@ -243,7 +242,7 @@ public class AsSynchronizedGraphTest
         ts.addTest(new TestThread("thread3"));
         ts.addTest(new TestThread("thread4"));
         TestRunner.run(ts);
-        assertFalse(((AsSynchronizedGraph) g).useCache());
+        assertFalse(g.isCacheEnabled());
         assertEquals(60, g.vertexSet().size());
         assertEquals(60, iteratorCnt(g.vertexSet().iterator()));
         for (int i = 0; i < 60; i++)
@@ -275,18 +274,16 @@ public class AsSynchronizedGraphTest
         assertEquals(19, g.edgesOf(41).size());
 
     }
-    private int createOrder(ArrayList<Order> list, int start, int end, boolean add)
+    private void createOrder(ArrayList<Order> list, int start, int end, boolean add)
     {
-        int t = 0;
         for (int i = start; i < end - 1; i++) {
-            for (int j = i + 1; j < end; j++) { t++;
+            for (int j = i + 1; j < end; j++) {
                 if (add)
                     list.add(new AddE(i, j, new DefaultEdge()));
                 else
                     list.add(new RmE(i, j));
             }
         }
-        return t;
     }
     private interface Order
     {
@@ -332,7 +329,7 @@ public class AsSynchronizedGraphTest
         @Override
         public void execute()
         {
-            ((AsSynchronizedGraph) g).setCache(!((AsSynchronizedGraph) g).useCache());
+            g.setCache(!g.isCacheEnabled());
         }
     }
     private class RmV
@@ -498,7 +495,6 @@ public class AsSynchronizedGraphTest
             }
         }
     }
-
 }
 
 // End AsSynchronizedGraphTest.java
