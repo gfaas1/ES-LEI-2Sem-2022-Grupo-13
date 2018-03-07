@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Pratik Tibrewal and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,6 +30,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Unit tests for AlphaCentrality
  * 
+ * @author Dimitrios Michail
  * @author Pratik Tibrewal
  */
 public class AlphaCentralityTest

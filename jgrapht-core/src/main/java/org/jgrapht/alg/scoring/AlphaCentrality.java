@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018-2018, by Pratik Tibrewal and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,6 +33,15 @@ import org.jgrapht.alg.interfaces.*;
  * </p>
  * 
  * <p>
+ * To implement EigenVector Centrality, call AlphaCentrality by passing the value of exogenous factor as zero.
+ * Further description of EigenVector Centrality can be found in 
+ * <a href="https://en.wikipedia.org/wiki/Eigenvector_centrality">wikipedia</a>.
+ * To implement Katz Centrality, call AlphaCentrality by passing a non-zero scalar exogenous factor value.
+ * Further description of Katz Centrality can be found in  
+ * <a href="https://en.wikipedia.org/wiki/Katz_centrality">wikipedia</a>.
+ * </p>
+ *
+ * <p>
  * This is a simple iterative implementation of AlphaCentrality which stops after a given number of
  * iterations or if the AlphaCentrality values between two iterations do not change more than a predefined
  * value.
@@ -48,6 +57,7 @@ import org.jgrapht.alg.interfaces.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
+ * @author Dimitrios Michail
  * @author Pratik Tibrewal
  * @since February 2018
  */
