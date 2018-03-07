@@ -1096,7 +1096,7 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Clear the copies which the edge to be added or removed can effect.
+         * Clear the copies which the edge to be added or removed can affect.
          *
          * @param sourceVertex source vertex of the modified edge.
          * @param targetVertex target vertex of the modified edge.
