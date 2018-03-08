@@ -875,6 +875,35 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Diamond Graph-----------//
+    /**
+     * @see #generateDiamondGraph
+     * @return Diamond Graph
+     */
+    public static Graph<Integer, DefaultEdge> diamondGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateDiamondGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Diamond_graph">Diamond Graph</a>. 
+     * The Diamond graph has 4 vertices and 5 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateDiamondGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 2 }, { 2, 3 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Ellingham-Horton 54 Graph-----------//
     /**
      * @see #generateEllinghamHorton54Graph

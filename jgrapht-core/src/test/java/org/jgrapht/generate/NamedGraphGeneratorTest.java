@@ -148,6 +148,13 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
+    public void testDiamondGraph()
+    {
+        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.diamondGraph();
+        this.validateBasics(g, 4, 5, 1, 2, 3);
+    }
+
+    @Test
     public void testEllinghamHorton54Graph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.ellinghamHorton54Graph();
