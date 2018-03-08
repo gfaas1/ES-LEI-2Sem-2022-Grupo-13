@@ -173,6 +173,15 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
+    public void testFolkmanGraph()
+    {
+        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.folkmanGraph();
+        this.validateBasics(g, 20, 40, 3, 4, 4);
+        assertTrue(GraphTests.isBipartite(g));
+        assertTrue(GraphTests.isEulerian(g));
+    }
+
+    @Test
     public void testFranklinGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.franklinGraph();
