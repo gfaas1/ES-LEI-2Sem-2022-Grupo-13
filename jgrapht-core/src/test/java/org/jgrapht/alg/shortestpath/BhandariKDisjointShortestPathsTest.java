@@ -30,11 +30,11 @@ import org.jgrapht.graph.*;
 
 /**
  * 
- * Tests for the {@link KDisjointShortestPaths} class.
+ * Tests for the {@link BhandariKDisjointShortestPaths} class.
  * 
  * @author Assaf Mizrachi
  */
-public class KDisjointShortestPathsTest {
+public class BhandariKDisjointShortestPathsTest {
 
         
     /**
@@ -51,7 +51,7 @@ public class KDisjointShortestPathsTest {
         graph.addVertex(2);
         DefaultWeightedEdge edge = graph.addEdge(1, 2);
         graph.setEdgeWeight(edge, 8);
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 2);
         assertEquals(1, pathList.size());
         assertEquals(1, pathList.get(0).getLength());
@@ -96,7 +96,7 @@ public class KDisjointShortestPathsTest {
         DefaultWeightedEdge e45 = graph.addEdge(4, 5);
         DefaultWeightedEdge e65 = graph.addEdge(6, 5);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
         
@@ -143,7 +143,7 @@ public class KDisjointShortestPathsTest {
         DefaultWeightedEdge e12 = graph.addEdge(1, 2);
         DefaultWeightedEdge e23 = graph.addEdge(2, 3);
         DefaultWeightedEdge e13 = graph.addEdge(1, 3);
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 3);
         
@@ -210,7 +210,7 @@ public class KDisjointShortestPathsTest {
         graph.setEdgeWeight(e26, 1);
         graph.setEdgeWeight(e64, 1);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
         assertEquals(2, pathList.size());
@@ -261,7 +261,7 @@ public class KDisjointShortestPathsTest {
         DefaultWeightedEdge e14 = graph.getEdge(1, 4);
         DefaultWeightedEdge e45 = graph.getEdge(4, 5);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
         assertEquals(3, pathList.size());
@@ -318,7 +318,7 @@ public class KDisjointShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(source.getEdgeFactory());
         Graphs.addGraph(destination, source);
         
-        new KDisjointShortestPaths<>(source, 5).getPaths(1, 5);
+        new BhandariKDisjointShortestPaths<>(source, 5).getPaths(1, 5);
         
         assertEquals(destination, source);
     }
@@ -332,7 +332,7 @@ public class KDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 20);
         
         assertEquals(1, pathList.size());
@@ -353,7 +353,7 @@ public class KDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        KDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new KDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 10);
         
         assertEquals(1, pathList.size());

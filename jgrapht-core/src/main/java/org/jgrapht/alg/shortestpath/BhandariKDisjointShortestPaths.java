@@ -25,61 +25,32 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 /**
- * The algorithm determines the k <em>disjoint</em> shortest simple paths in increasing order of
+ * An implementation of Bhandari algorithm for finding K edge-<em>disjoint</em> shortest paths.
+ * The algorithm determines the k disjoint shortest simple paths in increasing order of
  * weight. Weights can be negative (but no negative cycle is allowed). Only directed simple graphs
- * are allowed. 
- * <br>
- * An undirected graph can be transformed to a directed simple graph using the following
- * transformation:
- * <br>
- * For each pair of vertices V, U and an undirected edge {@literal E:V<-->U} with weight W:
- * <ol>
- * <li> Create vertices V_in, V_out, U_in and U_out
- * <li> Create edges:
- *     <ol>
- *     <li> {@literal V_out-->U_in}, weight = W;
- *  <li> {@literal U_out-->V_in}, weight = W;
- *  <li> {@literal V_in-->V_out}, weight = 0;
- *  <li> {@literal U_in-->U_out}, weight = 0;
- *  </ol>
- * </ol>
- * <p>
- * The algorithm is based on the Suurballe & Tarjan (later extended by Bhandari) algorithm, so is to find an
- * Edge-disjoint shortest paths. It is using Bhandari approach for negating the edges (and assigning negative cost) 
- * of the last found shortest path in each iteration rather than the removing them and modifying the cost of all the
- * edge used by Suurballe.
- * In order to find a Vertex-disjoint shortest paths you may use the following transformation:
- * <br>
- * For each vertex V and a set of incoming edges E_in(V) and outgoing edges E_out(V):
- * <ol>
- * <li> Create vertex V_in
- * <li> For every edge {@literal e:u-->V}, weight=W in E_in(V), create an edge {@literal e_in:u-->V_in}, weight=W
- * <li> Create vertex V_out
- * <li> For every edge {@literal e:V-->u}, weight=W in E_out(V), create an edge {@literal e_out:V_out-->u}, weight=W
- * <li> Create an edge {@literal e_internal:V_in-->V_out} with weight=0.
- * </ol>
+ * are allowed.
  *
  * <p>
  * The algorithm is running k sequential Bellman-Ford iterations to find the shortest path at each step.
- * Hence, yielding a complexity of k*O(Bellman-Ford). Also, note that the provided graph is to be modified
- * (edges and weights) during the path computation.
+ * Hence, yielding a complexity of k*O(Bellman-Ford).
  * 
  * <p>
  * For further reference see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
  * Disjoint Paths in Networks </a> which was the main reference for the code of this class:
  * <ul>
+ * <li>
+ * Bhandari, Ramesh 1999. Survivable networks: algorithms for diverse routing. 477. Springer. p. 46. ISBN 0-7923-8381-8.
+ * <li>
  * Iqbal, F. and Kuipers, F. A. 2015. Disjoint Paths in Networks. Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
  * </ul>
  * 
- * @see BellmanFordShortestPath
- *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @author Assaf Mizrachi
  * @since February 12, 2018
- * 
- * @param <V> Vertex
- * @param <E> Edge
  */
-public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E> {
+public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E> {
     /**
      * Graph on which shortest paths are searched.
      */
@@ -106,7 +77,7 @@ public class KDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E
      * @throws IllegalArgumentException 
      *             if the graph is undirected.
      */
-    public KDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
+    public BhandariKDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
                          
         if (nPaths <= 0) {
             throw new IllegalArgumentException("Number of paths must be positive");
