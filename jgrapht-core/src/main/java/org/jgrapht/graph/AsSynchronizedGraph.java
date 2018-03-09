@@ -101,7 +101,7 @@ public class AsSynchronizedGraph<V, E>
      * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
      *        will be used for those methods, otherwise cache will not be used.
      */
-    public AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled)
+    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled)
     {
         super(g);
         mutex = this;
@@ -111,6 +111,17 @@ public class AsSynchronizedGraph<V, E>
             cacheStrategy = new NoCache();
         allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), mutex);
         allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), mutex);
+    }
+
+    /**
+     * Constructor for AsSynchronizedGraph with specified properties.
+     *
+     * @param g the backing graph (the delegate)
+     * @param params specified properties for AsSynchronizedGraph to be created
+     */
+    public AsSynchronizedGraph(Graph<V, E> g, SynchronizedGraphParams params)
+    {
+        this(g, params.isCacheEnable());
     }
 
     /**
@@ -449,18 +460,21 @@ public class AsSynchronizedGraph<V, E>
     /**
      * Set the cache strategy for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
      * <code>outgoingEdgesOf</code> methods.
+     *
      * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
      *        will be used for those methods, otherwise cache will not be used.
+     * @return the AsSynchronizedGraph
      */
-    public void setCache(boolean cacheEnabled)
+    public AsSynchronizedGraph<V, E> setCache(boolean cacheEnabled)
     {
         synchronized (mutex) {
             if (cacheEnabled == isCacheEnabled())
-                return;
+                return this;
             if (cacheEnabled)
                 cacheStrategy = new CacheAccess();
             else
                 cacheStrategy = new NoCache();
+            return this;
         }
     }
 

@@ -31,16 +31,16 @@ import static org.junit.Assert.*;
  */
 public class AsSynchronizedGraphTest
 {
-    private Vector<Integer> vertices;
-    private Vector<DefaultEdge> edges;
+    private ArrayList<Integer> vertices;
+    private ArrayList<DefaultEdge> edges;
     private AsSynchronizedGraph<Integer, DefaultEdge> g;
 
     @Test
     public void testAddVertex()
     {
         TestSuite ts = new ActiveTestSuite();
-        vertices = new Vector<>();
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), true);
+        vertices = new ArrayList<>();
+        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
         for (int i = 0; i < 1000; i++)
             vertices.add(i);
         for (int i = 0; i < 20; i++)
@@ -59,10 +59,10 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddEdge()
     {
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), true);
+        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
-        edges = new Vector<>();
+        edges = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             DefaultEdge e = g.getEdgeFactory().createEdge(i, (i + 1)%1000);
             e.source = i;
@@ -93,8 +93,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveEdge()
     {
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), true);
-        edges = new Vector<>();
+        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
+        edges = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 1000; i++) {
             g.addVertex(i);
@@ -121,8 +121,9 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveVertex()
     {
-        g = new AsSynchronizedGraph<>(new DirectedPseudograph<>(DefaultEdge.class), true);
-        vertices = new Vector<>();
+        g = new AsSynchronizedGraph<>(new DirectedPseudograph<>(DefaultEdge.class),
+                new SynchronizedGraphParams().cacheEnable());
+        vertices = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {
             g.addVertex(i);
@@ -155,7 +156,8 @@ public class AsSynchronizedGraphTest
     @Test
     public void testOthers()
     {
-        g = new AsSynchronizedGraph<>(new Pseudograph<>(DefaultEdge.class), false);
+        g = new AsSynchronizedGraph<>(new Pseudograph<>(DefaultEdge.class),
+                new SynchronizedGraphParams().cacheDisable());
         Set<Integer> vertSet = g.vertexSet();
         Set<DefaultEdge> edgeSet = g.edgeSet();
         g.addVertex(1);
