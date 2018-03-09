@@ -1484,6 +1484,37 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Tietze Graph-----------//
+    /**
+     * @see #generateTietzeGraph
+     * @return Tietze Graph
+     */
+    public static Graph<Integer, DefaultEdge> tietzeGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateTietzeGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Tietze's_graph">Tietze Graph</a>. The
+     * Tietze Graph is an undirected cubic graph with 12 vertices and 18 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateTietzeGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 8 }, { 0, 9 }, { 1, 2 }, { 1, 5 }, { 2, 3 }, { 2, 7 },
+            { 3, 4 }, { 3, 10 }, { 4, 5 }, { 4, 8 }, { 5, 6 }, { 6, 7 }, { 6, 11 }, { 7, 8 },
+            { 9, 10 }, { 9, 11 }, { 10, 11 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Thomsen Graph-----------//
     /**
      * @see #generateThomsenGraph

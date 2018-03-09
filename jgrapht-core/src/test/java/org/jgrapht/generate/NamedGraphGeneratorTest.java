@@ -281,6 +281,14 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
+    public void testTietzeGraph()
+    {
+        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.tietzeGraph();
+        this.validateBasics(g, 12, 18, 3, 3, 3);
+        assertTrue(GraphTests.isCubic(g));
+    }
+
+    @Test
     public void testThomsenGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.thomsenGraph();
