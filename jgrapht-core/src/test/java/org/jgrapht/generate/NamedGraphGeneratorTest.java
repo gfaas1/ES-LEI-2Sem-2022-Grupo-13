@@ -267,6 +267,15 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
+    public void testPappusGraph()
+    {
+        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.pappusGraph();
+        this.validateBasics(g, 18, 27, 4, 4, 6);
+        assertTrue(GraphTests.isCubic(g));
+        assertTrue(GraphTests.isBipartite(g));
+    }
+
+    @Test
     public void testPoussinGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.poussinGraph();

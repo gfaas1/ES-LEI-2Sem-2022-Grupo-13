@@ -1393,6 +1393,38 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Pappus Graph-----------//
+    /**
+     * @see #generatePappusGraph
+     * @return Pappus Graph
+     */
+    public static Graph<Integer, DefaultEdge> pappusGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generatePappusGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Pappus_graph">Pappus Graph</a>. The
+     * Pappus Graph is a bipartite 3-regular undirected graph with 18 vertices and 27 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generatePappusGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 5 }, { 0, 6 }, { 1, 2 }, { 1, 7 }, { 2, 3 }, { 2, 8 },
+            { 3, 4 }, { 3, 9 }, { 4, 5 }, { 4, 10 }, { 5, 11 }, { 6, 13 }, { 6, 17 }, { 7, 12 },
+            { 7, 14 }, { 8, 13 }, { 8, 15 }, { 9, 14 }, { 9, 16 }, { 10, 15 }, { 10, 17 }, { 11, 12 },
+            { 11, 16 }, { 12, 15 }, { 13, 16 }, { 14, 17 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // -------------Poussin Graph-----------//
     /**
      * @see #generatePoussinGraph
