@@ -1578,6 +1578,44 @@ public class NamedGraphGenerator<V, E>
             addEdge(targetGraph, edge[0], edge[1]);
     }
 
+    // -------------Tutte Graph-----------//
+    /**
+     * @see #generateTutteGraph
+     * @return Tutte Graph
+     */
+    public static Graph<Integer, DefaultEdge> tutteGraph()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        new NamedGraphGenerator<Integer, DefaultEdge>(new IntegerVertexFactory())
+            .generateTutteGraph(g);
+        return g;
+    }
+
+    /**
+     * Generates the <a href="https://en.wikipedia.org/wiki/Tutte_graph">Tutte Graph</a>. The
+     * Tutte Graph is a 3-regular graph with 46 vertices and 69 edges.
+     * 
+     * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
+     *        the result will be a disconnected graph since generated elements will not be connected
+     *        to existing elements
+     */
+    public void generateTutteGraph(Graph<V, E> targetGraph)
+    {
+        vertexMap.clear();
+        int[][] edges = { { 0, 1 }, { 0, 16 }, { 0, 31 }, { 1, 2 }, { 1, 4 }, { 2, 3 }, { 2, 5 },
+            { 3, 4 }, { 3, 7 }, { 4, 9 }, { 5, 6 }, { 5, 10 }, { 6, 7 }, { 6, 11 }, { 7, 8 },
+            { 8, 9 }, { 8, 12 }, { 9, 15 }, { 10, 11 }, { 10, 13 }, { 11, 12 }, { 12, 14 }, 
+            { 13, 14 }, { 13, 30 }, { 14, 15 }, { 15, 43 }, { 16, 17 }, { 16, 19 }, { 17, 18 }, 
+            { 17, 20 }, { 18, 19 }, { 18, 22 }, { 19, 24 }, { 20, 21 }, { 20, 25 }, { 21, 22 }, 
+            { 21, 26 }, { 22, 23 }, { 23, 24 }, { 23, 27 }, { 24, 30 }, { 25, 26 }, { 25, 28 }, 
+            { 26, 27 }, { 27, 29 }, { 28, 29 }, { 28, 45 }, { 29, 30 }, { 31, 32 }, { 31, 34 }, 
+            { 32, 33 }, { 32, 35 }, { 33, 34 }, { 33, 37 }, { 34, 39 }, { 35, 36 }, { 35, 40 }, 
+            { 36, 37 }, { 36, 41 }, { 37, 38 }, { 38, 39 }, { 38, 42 }, { 39, 45 }, { 40, 41 }, 
+            { 40, 43 }, { 41, 42 }, { 42, 44 }, { 43, 44 }, { 44, 45 } };
+        for (int[] edge : edges)
+            addEdge(targetGraph, edge[0], edge[1]);
+    }
+
     // --------------Helper methods-----------------/
     private V addVertex(Graph<V, E> targetGraph, int i)
     {
