@@ -86,11 +86,7 @@ public class AsSynchronizedGraph<V, E>
      */
     public AsSynchronizedGraph(Graph<V, E> g)
     {
-        super(g);
-        mutex = this;
-        cacheStrategy = new NoCache();
-        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), mutex);
-        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), mutex);
+        this(g, false);
     }
 
     /**
