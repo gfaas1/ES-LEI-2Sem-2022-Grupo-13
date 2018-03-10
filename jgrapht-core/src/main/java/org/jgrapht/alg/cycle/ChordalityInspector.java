@@ -20,92 +20,147 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.traverse.LexicographicalBfsIterator;
+import org.jgrapht.traverse.MaximumCardinalityIterator;
 
 import java.util.*;
 
 /**
  * Implementation of the lexicographical breadth-first search algorithm for chordal graph recognition.
  * <p>
- * A chordal graph is one in which all cycles of four or more vertices have a chord, which is an edge that
+ * A <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal graph</a> is one in which all cycles of four or more vertices have a chord, which is an edge that
  * is not part of the cycle but connects two vertices of the cycle.
  * <p>
- * For more information on the topic see the following
- * <a href="http://www.cse.iitd.ac.in/~naveen/courses/CSL851/uwaterloo.pdf">article</a>:
- * <i>"CS 762: Graph-theoretic algorithms.
- * Lecture notes of a graduate course. University of Waterloo. Fall 1999, Winter 2002, Winter 2004."</i>
+ * A graph is chordal iff its the vertices can be arranged into a perfect elimination order. Perfect elimination
+ * order isn't unique. Both maximum cardinality search and lexicographical breadth-first search produces this order.
+ * As a result, chordality inspection can be performed in two way. Here it is done by default via MCS,
+ * because it outperforms LexBFS by a constant factor in practice. Nevertheless, lexicographical breadth-first
+ * order can be obtained via {@link ChordalityInspector#getLexicographicalBfsOrder()}.
  * <p>
- * Terminology in this implementation is consistent with the one in the article. The implementation is based
- * also on the information from this article. Nevertheless, there is one important difference: in this implementation
- * vertex labels aren't used directly. Instead, the fact that the bucket, which results from moving vertices from particular
- * bucket to a new one, should be placed right before the initial bucket, is exploited. This results in time
- * and space optimization. This operation is handled by {@link BucketList}
- * <p>
- * Lexicographical BFS runs in O(|V| + |E|). Checking whether given order is the perfect elimination order
+ * Both lexicographical BFS and maximum cardinality search run in O(|V| + |E|). Checking whether given order is the perfect elimination order
  * via {@link ChordalityInspector#isPerfectEliminationOrder(List)} takes O(|V| + |E|) as well. So,
- * overall time complexity of method {@link ChordalityInspector#isChordal()} is O(|V| + |E|).
+ * overall time complexity of the method {@link ChordalityInspector#isChordal()} is O(|V| + |E|).
  *
- * @param <V> the graph vertex type
- * @param <E> the graph edge type
+ * @param <V> the graph vertex type.
+ * @param <E> the graph edge type.
  * @author Timofey Chudakov
- * @see BucketList
+ * @see LexicographicalBfsIterator
+ * @see MaximumCardinalityIterator
  */
 public class ChordalityInspector<V, E> {
     /**
-     * The inspected graph
+     * The inspected graph.
      */
     private Graph<V, E> graph;
     /**
-     * Vertices of {@code graph} in order returned by {@link ChordalityInspector#getLexicographicalBfsOrder()}
+     * Contains true if the graph is chordal, otherwise false. Is null before the first call to the
+     * {@link ChordalityInspector#isChordal()}.
+     */
+    private Boolean chordal = null;
+
+    /**
+     * Vertices of the {@code graph} in a maximum cardinality order.
+     */
+    private List<V> mcsOrder;
+    /**
+     * Vertices of the {@code graph} in a lexicographical breadth-first order.
      */
     private List<V> lexBfsOrder;
 
+
     /**
-     * Creates a chordality inspector for {@code graph}
+     * Creates a chordality inspector for {@code graph}.
      *
-     * @param graph the graph for which a chordality inspector to be created
+     * @param graph the graph for which a chordality inspector to be created.
      */
     public ChordalityInspector(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph);
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         }
+
     }
 
     /**
      * Checks whether the inspected graph is chordal. Note: Every time this method is invoked, LexBFS order is recomputed.
      *
-     * @return true if this graph is chordal, otherwise false
+     * @return true if this graph is chordal, otherwise false.
      */
     public boolean isChordal() {
-        this.lexBfsOrder = recomputeLexicographicalBfsOrder();
-        return isPerfectEliminationOrder(lexBfsOrder);
+        if (chordal == null) {
+            mcsOrder = mcs();
+            chordal = isPerfectEliminationOrder(mcsOrder);
+        }
+        return chordal;
     }
 
+
     /**
-     * Either computes LexBFS order, if it hasn't yet been computed, or returns the most recently computed
-     * LexBFS order.
+     * Lazily computes lexicographical breadth-first order of the inspected graph.
      *
-     * @return the vertices of the {@code graph} in the order, that was computed most recently
+     * @return the vertices of the {@code graph} in the lexicographical breadth-first order.
      */
     public List<V> getLexicographicalBfsOrder() {
         if (lexBfsOrder == null) {
-            this.lexBfsOrder = recomputeLexicographicalBfsOrder();
+            lexBfsOrder = lexBfs();
         }
         return lexBfsOrder;
+    }
+
+    /**
+     * Lazily computed maximum cardinality order of the inspected graph.
+     *
+     * @return the vertices of the {@code graph} in the maximum cardinality order.
+     */
+    public List<V> getMaximumCardinalityOrder() {
+        if (mcsOrder == null) {
+            mcsOrder = mcs();
+        }
+        return mcsOrder;
+    }
+
+    /**
+     * Computes maximum cardinality order via {@link MaximumCardinalityIterator}.
+     *
+     * @return the order produced by the {@link MaximumCardinalityIterator}.
+     */
+    private List<V> mcs() {
+        int vertexNum = graph.vertexSet().size();
+        List<V> order = new ArrayList<>(vertexNum);
+        MaximumCardinalityIterator<V, E> maximumCardinalityIterator = new MaximumCardinalityIterator<>(graph);
+        for (int i = 0; i < vertexNum; i++) {
+            order.add(maximumCardinalityIterator.next());
+        }
+        return order;
+    }
+
+    /**
+     * Computes lexicographical breadth-first order via {@link LexicographicalBfsIterator}.
+     *
+     * @return the order produced by the {@link LexicographicalBfsIterator}.
+     */
+    private List<V> lexBfs() {
+        int vertexNum = graph.vertexSet().size();
+        List<V> order = new ArrayList<>(vertexNum);
+        LexicographicalBfsIterator<V, E> iterator = new LexicographicalBfsIterator<>(graph);
+        for (int i = 0; i < vertexNum; i++) {
+            order.add(iterator.next());
+        }
+        return order;
     }
 
     /**
      * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order with
      * respect to the inspected graph. Returns false, if the inspected graph isn't chordal.
      *
-     * @param vertexOrder the sequence of vertices of {@code graph}
+     * @param vertexOrder the sequence of vertices of {@code graph}.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order
+     * perfect elimination order.
      */
     public boolean isPerfectEliminationOrder(List<V> vertexOrder) {
         Set<V> graphVertices = graph.vertexSet();
         if (graphVertices.size() == vertexOrder.size() && graphVertices.containsAll(vertexOrder)) {
-            Map<V, Integer> map = new HashMap<>();
+            Map<V, Integer> map = new HashMap<>(vertexOrder.size());
             int i = 0;
             for (V vertex : vertexOrder) {
                 map.put(vertex, i);
@@ -121,10 +176,11 @@ public class ChordalityInspector<V, E> {
      * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
      * Returns false, if the inspected graph isn't chordal.
      *
-     * @param vertexOrder the sequence of vertices of {@code graph}
-     * @param map         maps every vertex in {@code graph} to its position in {@code vertexOrder}, is used for constant-time lookups
+     * @param vertexOrder the sequence of vertices of {@code graph}.
+     * @param map         maps every vertex in {@code graph} to its position in {@code vertexOrder}, is used for
+     *                    constant-time lookups.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order
+     * perfect elimination order.
      */
     private boolean isPerfectEliminationOrder(List<V> vertexOrder, Map<V, Integer> map) {
         for (V vertex : vertexOrder) {
@@ -132,10 +188,7 @@ public class ChordalityInspector<V, E> {
             if (predecessors.size() > 0) {
                 V maxPredecessor = Collections.max(predecessors, Comparator.comparingInt(map::get));
                 for (V predecessor : predecessors) {
-                    if (predecessor.equals(maxPredecessor)) {
-                        continue;
-                    }
-                    if (!graph.containsEdge(predecessor, maxPredecessor)) {
+                    if (!predecessor.equals(maxPredecessor) && !graph.containsEdge(predecessor, maxPredecessor)) {
                         return false;
                     }
                 }
@@ -144,56 +197,14 @@ public class ChordalityInspector<V, E> {
         return true;
     }
 
-    /**
-     * Invalidates previously computed LexBFS order and computes it again. After the invocation
-     * of this method the method {@link ChordalityInspector#getLexicographicalBfsOrder()} will return
-     * newly computed LexBFS order.
-     *
-     * @return computed LexBFS order
-     */
-    private List<V> recomputeLexicographicalBfsOrder() {
-        Set<V> vertexSet = graph.vertexSet();
-        if (vertexSet.size() > 0) {
-            List<V> lexBfsOrder = new ArrayList<>(vertexSet.size());
-            BucketList<V> bucketList = new BucketList<>(vertexSet);
-            for (int i = 0; i < vertexSet.size(); i++) {
-                V vertex = bucketList.poll();
-                lexBfsOrder.add(vertex);
-                bucketList.updateBuckets(getUnvisitedNeighbours(bucketList, vertex));
-            }
-            return lexBfsOrder;
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    /**
-     * Returns yet unvisited by the lexicographical breadth-first search neighbours of the {@code vertex}
-     * in the inspected graph
-     *
-     * @param bucketList data structure, that backs the algorithm up
-     * @param vertex     the vertex, whose neighbours are being explored
-     * @return neighbours of {@code vertex} which have yet to be visited by lexicographical BFS
-     */
-    private Set<V> getUnvisitedNeighbours(BucketList<V> bucketList, V vertex) {
-        Set<V> unmapped = new HashSet<>();
-        Set<E> edges = graph.edgesOf(vertex);
-        for (E edge : edges) {
-            V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
-            if (bucketList.containsBucketWith(oppositeVertex)) {
-                unmapped.add(oppositeVertex);
-            }
-        }
-        return unmapped;
-    }
 
     /**
      * Returns the predecessors of {@code vertex} in the order defined by {@code map}. More precisely,
-     * returns those of {@code vertex}, whose mapped index in {@code map} is less then the index of {@code vertex}
+     * returns those of {@code vertex}, whose mapped index in {@code map} is less then the index of {@code vertex}.
      *
-     * @param map    defines the mapping of vertices in {@code graph} to their indices in order
-     * @param vertex the vertex whose predecessors in order are to be returned
-     * @return the predecessors of {@code vertex} in order defines by {@code map}
+     * @param map    defines the mapping of vertices in {@code graph} to their indices in order.
+     * @param vertex the vertex whose predecessors in order are to be returned.
+     * @return the predecessors of {@code vertex} in order defines by {@code map}.
      */
     private Set<V> getPredecessors(Map<V, Integer> map, V vertex) {
         Set<V> predecessors = new HashSet<>();
