@@ -20,7 +20,6 @@ package org.jgrapht.traverse;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.cycle.ChordalityInspector;
 
 import java.util.*;
 
@@ -28,7 +27,7 @@ import java.util.*;
  * A lexicographical breadth-first iterator for an undirected graph.
  * <p>
  * Every vertex has an implicit label (they aren't used explicitly in order to reduce time and memory complexity).
- * When a vertex is returned by this iterator, its index is the number of vertices in this graph minus number
+ * When some vertex is returned by this iterator, its index is the number of vertices in this graph minus number
  * of already returned vertices. For a given vertex v its label is a concatenation of indices of already returned vertices,
  * that were also its neighbours, with some separator between them. For example, 7#4#3 is a valid vertex label.
  * <p>
@@ -122,7 +121,6 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
      * vertex has been added to the LexBFS order. Labels aren't used explicitly, which results in time and space optimization.
      *
      * @author Timofey Chudakov
-     * @see ChordalityInspector
      * @since 1.8
      */
     class BucketList {
@@ -326,3 +324,5 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
     }
 }
+
+

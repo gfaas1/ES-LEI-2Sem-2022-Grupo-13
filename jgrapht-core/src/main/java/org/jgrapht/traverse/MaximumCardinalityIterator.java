@@ -53,7 +53,7 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
      */
     private ArrayList<Set<V>> buckets;
     /**
-     * Map for mapping every vertex to the cardinality of its neighbours, that have been already visited.
+     * Maps every vertex to its cardinality.
      */
     private Map<V, Integer> cardinalityMap;
 
@@ -64,21 +64,23 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
      */
     public MaximumCardinalityIterator(Graph<V, E> graph) {
         super(graph);
-        GraphTests.requireUndirected(graph);
-        buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
-        buckets.set(0, new HashSet<>(graph.vertexSet()));
-        cardinalityMap = new HashMap<>(graph.vertexSet().size());
-        for (V v : graph.vertexSet()) {
-            cardinalityMap.put(v, 0);
-        }
-        maxCardinality = 0;
         remainingVertices = graph.vertexSet().size();
+        if (remainingVertices > 0) {
+            GraphTests.requireUndirected(graph);
+            buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
+            buckets.set(0, new HashSet<>(graph.vertexSet()));
+            cardinalityMap = new HashMap<>(graph.vertexSet().size());
+            for (V v : graph.vertexSet()) {
+                cardinalityMap.put(v, 0);
+            }
+            maxCardinality = 0;
+        }
     }
 
     /**
-     * Checks whether there exist unvisited vertices.
+     * Checks whether there exists unvisited vertex.
      *
-     * @return true if there exist unvisited vertices.
+     * @return true if there exists unvisited vertex.
      */
     @Override
     public boolean hasNext() {
@@ -86,11 +88,11 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
     }
 
     /**
-     * Returns a vertex with the maximum cardinality of visited neighbours among other unvisited vertices.
+     * Returns a vertex with the maximum cardinality.
      * Updates cardinalities of its unvisited neighbours. Ensures that {@code maxCardinality} contains the
      * maximum index of non-empty set in {@code buckets}.
      *
-     * @return the vertex with the maximum cardinality of visited neighbours.
+     * @return the vertex with the maximum cardinality.
      */
     @Override
     public V next() {
@@ -114,7 +116,7 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
     }
 
     /**
-     * Increments the cardinalities of the neighbours of {@code vertex} by 1. Is the maximum cardinality
+     * Increments the cardinalities of the neighbours of the {@code vertex} by 1. If the maximum cardinality
      * increases, increments {@code maxCardinality} by 1.
      *
      * @param vertex the vertex whose neighbours are to be updated.
@@ -146,3 +148,5 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
         }
     }
 }
+
+

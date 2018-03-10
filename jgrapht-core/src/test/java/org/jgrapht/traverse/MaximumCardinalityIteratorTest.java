@@ -17,8 +17,152 @@
  */
 package org.jgrapht.traverse;
 
-import static org.junit.Assert.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultUndirectedGraph;
+import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MaximumCardinalityIteratorTest {
+
+    /**
+     * Tests iterator on empty graph.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void testMaximumCardinalityIterator1() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+
+        assertFalse(iterator.hasNext());
+
+        iterator.next();
+    }
+
+    /**
+     * Tests iterator on basic invariants.
+     */
+    @Test
+    public void testMaximumCardinalityIterator2() {
+        Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("a");
+        graph.addVertex("b");
+        graph.addVertex("c");
+        graph.addVertex("d");
+        graph.addEdge("a", "b");
+        graph.addEdge("b", "c");
+        graph.addEdge("b", "d");
+        graph.addEdge("c", "d");
+        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        Set<String> returned = new HashSet<>();
+
+        assertTrue(iterator.hasNext());
+        String vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(graph.vertexSet().equals(returned));
+
+        assertFalse(iterator.hasNext());
+    }
+
+    /**
+     * Tests iterator on disconnected graph.
+     */
+    @Test
+    public void testMaximumCardinalityIterator3(){
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        Set<Integer> returned = new HashSet<>();
+
+        assertTrue(iterator.hasNext());
+        Integer vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(graph.vertexSet().equals(returned));
+
+        assertFalse(iterator.hasNext());
+    }
+
+    /**
+     * Tests iterator on pseudograph.
+     */
+    @Test
+    public void testMaximumCardinalityIterator4(){
+        Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("a");
+        graph.addVertex("b");
+        graph.addVertex("c");
+        graph.addEdge("a", "a");
+        graph.addEdge("a", "b");
+        graph.addEdge("a", "b");
+        graph.addEdge("a", "c");
+        graph.addEdge("a", "c");
+        graph.addEdge("b", "c");
+        graph.addEdge("b", "c");
+        graph.addEdge("c", "c");
+        graph.addEdge("c", "c");
+        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        Set<String> returned = new HashSet<>();
+
+        assertTrue(iterator.hasNext());
+        String vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(iterator.hasNext());
+        vertex = iterator.next();
+        returned.add(vertex);
+        assertTrue(graph.containsVertex(vertex));
+
+        assertTrue(graph.vertexSet().equals(returned));
+
+        assertFalse(iterator.hasNext());
+    }
 
 }
