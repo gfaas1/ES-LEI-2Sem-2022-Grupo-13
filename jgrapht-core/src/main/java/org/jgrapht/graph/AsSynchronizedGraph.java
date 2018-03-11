@@ -49,6 +49,14 @@ import org.jgrapht.*;
  * time the method is called. For other methods returning a Set, the Set is just the backing Graph's
  * return.
  * </p>
+
+ * <p>
+ * If users want to get something more about the graph through the vertex or edge may be removed by
+ * other threads, fail with an {@link IllegalArgumentException} will be caused. Therefore, calling
+ * the remove methods concurrently with a typical algorithm is likely to cause the algorithm to fail
+ * with an {@link IllegalArgumentException}. So really the main concurrent read/write use case is
+ * add-only.
+ * </p>
  *
  * <p>
  * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is equal
