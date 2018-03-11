@@ -26,17 +26,18 @@ import java.util.*;
 /**
  * A lexicographical breadth-first iterator for an undirected graph.
  * <p>
- * Every vertex has an implicit label (they aren't used explicitly in order to reduce time and memory complexity).
- * When some vertex is returned by this iterator, its index is the number of vertices in this graph minus number
- * of already returned vertices. For a given vertex v its label is a concatenation of indices of already returned vertices,
- * that were also its neighbours, with some separator between them. For example, 7#4#3 is a valid vertex label.
+ * Every vertex has an implicit label (they aren't used explicitly in order to reduce time and
+ * memory complexity). When some vertex is returned by this iterator, its index is the number of
+ * vertices in this graph minus number of already returned vertices. For a given vertex v its label
+ * is a concatenation of indices of already returned vertices, that were also its neighbours, with
+ * some separator between them. For example, 7#4#3 is a valid vertex label.
  * <p>
- * Iterator chooses vertex with lexicographically largest label and returns it. It breaks ties arbitrarily.
- * For more information on lexicographical BFS see the following papers:
- * <a href="https://pdfs.semanticscholar.org/d4b5/a492f781f23a30773841ec79c46d2ec2eb9c.pdf">
- * <i>Lexicographic Breadth First Search – A Survey</i></a> and
- * <a href="http://www.cse.iitd.ac.in/~naveen/courses/CSL851/uwaterloo.pdf"><i>CS 762: Graph-theoretic algorithms.
- * Lecture notes of a graduate course. University of Waterloo</i></a>.
+ * Iterator chooses vertex with lexicographically largest label and returns it. It breaks ties
+ * arbitrarily. For more information on lexicographical BFS see the following papers: <a
+ * href="https://pdfs.semanticscholar.org/d4b5/a492f781f23a30773841ec79c46d2ec2eb9c.pdf">
+ * <i>Lexicographic Breadth First Search – A Survey</i></a> and <a
+ * href="http://www.cse.iitd.ac.in/~naveen/courses/CSL851/uwaterloo.pdf"><i>CS 762: Graph-theoretic
+ * algorithms. Lecture notes of a graduate course. University of Waterloo</i></a>.
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
@@ -116,9 +117,9 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
     }
 
     /**
-     * Data structure for performing lexicographical breadth-first search.
-     * Allows to add and retrieve vertices from buckets, update their buckets after a new
-     * vertex has been added to the LexBFS order. Labels aren't used explicitly, which results in time and space optimization.
+     * Data structure for performing lexicographical breadth-first search. Allows to add and retrieve
+     * vertices from buckets, update their buckets after a new vertex has been added to the LexBFS
+     * order. Labels aren't used explicitly, which results in time and space optimization.
      *
      * @author Timofey Chudakov
      * @since 1.8
@@ -129,13 +130,14 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
          */
         private Bucket head;
         /**
-         * Map for mapping vertices to buckets they are currently in.
-         * Is used for finding the bucket of the vertex in constant time.
+         * Map for mapping vertices to buckets they are currently in. Is used for finding the bucket of
+         * the vertex in constant time.
          */
         private Map<V, Bucket> bucketMap;
 
         /**
-         * Creates a <code>BucketList</code> with a single bucket with all specified {@code vertices} in that bucket.
+         * Creates a <code>BucketList</code> with a single bucket with all specified {@code vertices} in
+         * that bucket.
          *
          * @param vertices the vertices of the graph, that should be stored in a {@code head} bucket.
          */
@@ -150,8 +152,10 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         /**
          * Checks whether there exists a bucket with the specified <code>vertex</code>.
          *
-         * @param vertex the vertex whose presence in some {@code Bucket} in this {@code BucketList} is checked.
-         * @return <tt>true</tt> if there exists a bucket with {@code vertex} in it, otherwise <tt>false</tt>.
+         * @param vertex the vertex whose presence in some {@code Bucket} in this {@code BucketList} is
+         *               checked.
+         * @return <tt>true</tt> if there exists a bucket with {@code vertex} in it, otherwise
+         * <tt>false</tt>.
          */
         boolean containsBucketWith(V vertex) {
             return bucketMap.containsKey(vertex);
@@ -160,7 +164,7 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         /**
          * Retrieves element from the head bucket by invoking {@link Bucket#poll()}.
          * <p>
-         * Removes the head bucket if it becomes empty after the operation.
+         * <p>Removes the head bucket if it becomes empty after the operation.
          *
          * @return vertex returned by {@link Bucket#poll()} invoked on head bucket.
          */
@@ -177,12 +181,11 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
 
         /**
-         * For every bucket B in this {@code BucketList}, which contains vertices from the set {@code vertices},
-         * creates a new {@code Bucket} B' and moves vertices from B to B' according to the
-         * following rule: $B' = B\cap vertices$ and $B = B\backslash vertices$.
-         * For every such {@code Bucket} B only
-         * one {@code Bucket} B' is created. If some bucket B becomes empty after this operation, it is
-         * removed from the data structure.
+         * For every bucket B in this {@code BucketList}, which contains vertices from the set {@code
+         * vertices}, creates a new {@code Bucket} B' and moves vertices from B to B' according to the
+         * following rule: $B' = B\cap vertices$ and $B = B\backslash B'$. For every such {@code Bucket} B only one {@code Bucket}
+         * B' is created. If some bucket B becomes empty after this operation, it is removed from the
+         * data structure.
          *
          * @param vertices the vertices, that should be moved to new buckets.
          */
@@ -211,11 +214,11 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
 
         /**
-         * Plays the role of the container of vertices. All vertices stored in bucket have identical label. Labels
-         * aren't used explicitly.
+         * Plays the role of the container of vertices. All vertices stored in bucket have identical
+         * label. Labels aren't used explicitly.
          * <p>
-         * Encapsulates operations of addition and removal of vertices from the bucket, removal of a bucket from the data
-         * structure.
+         * <p>Encapsulates operations of addition and removal of vertices from the bucket, removal of a
+         * bucket from the data structure.
          */
         private class Bucket {
             /**
@@ -324,5 +327,3 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
     }
 }
-
-
