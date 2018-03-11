@@ -51,8 +51,8 @@ import org.jgrapht.*;
  * </p>
 
  * <p>
- * If users want to get something more about the graph through the vertex or edge may be removed by
- * other threads, fail with an {@link IllegalArgumentException} will be caused. Therefore, calling
+ * If users want to get something more about the graph through the vertex or edge that may be removed
+ * by other threads, fail with an {@link IllegalArgumentException} will be caused. Therefore, calling
  * the remove methods concurrently with a typical algorithm is likely to cause the algorithm to fail
  * with an {@link IllegalArgumentException}. So really the main concurrent read/write use case is
  * add-only.
