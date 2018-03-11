@@ -29,6 +29,7 @@ Changes to JGraphT in each version:
     - Fixed bug with maxPathLength equal to 1 in AllDirectedPaths (contributed by Andrew Gainer-Dewar)
     - Allow digits as non-leading character in DOTUtils#isValidID (contributed by Mariusz Smykuła)
     - Escape quotes in identifiers in `DOTExporter` (contributed by Mariusz Smykuła)
+    - Added `AlphaCentrality` (contributed by Pratik Tibrewal)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
