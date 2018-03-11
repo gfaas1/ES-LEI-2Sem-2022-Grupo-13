@@ -1,4 +1,3 @@
-
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
@@ -81,6 +80,9 @@ public class ChordalityInspector<V, E> {
 
     /**
      * Lazily computes lexicographical breadth-first order of the inspected graph.
+     * Note: chordality of the {@code graph} is tested with the {@link MaximumCardinalityIterator} by default.
+     * As the result, LexBFS order is computed only after the first invocation of this method.
+     * If the case of modifications, this method returns order for the most recent version of the {@code graph}.
      *
      * @return the vertices of the {@code graph} in the lexicographical breadth-first order.
      */
