@@ -251,7 +251,7 @@ public class DinicMFImpl<V, E> extends MaximumFlowAlgorithmBase<V, E>
     {
 
         /**
-         * Pointer on the first "not deleted"(we do not delete an edge explicitly, rather moving pointer forward) edge.
+         * Stores index of the first unexplored edge from current vertex.
          */
         int index;
 
