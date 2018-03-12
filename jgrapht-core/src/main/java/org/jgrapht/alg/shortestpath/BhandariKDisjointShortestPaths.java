@@ -54,11 +54,13 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
     /**
      * Graph on which shortest paths are searched.
      */
-    private Graph<V, E> workingGraph;
+    private final Graph<V, E> workingGraph;
 
     private List<List<E>> pathList;
 
     private int nPaths;
+    
+    private Set<E> overlappingEdges;
 
     /**
      * Creates an object to calculate k disjoint shortest paths between the start
@@ -163,7 +165,9 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
             target = workingGraph.getEdgeTarget(originalEdge);
             workingGraph.removeEdge(originalEdge);    
             reversedEdge = workingGraph.addEdge(target, source);
-            workingGraph.setEdgeWeight(reversedEdge, - workingGraph.getEdgeWeight(originalEdge));
+            if (reversedEdge != null) {
+                workingGraph.setEdgeWeight(reversedEdge, - workingGraph.getEdgeWeight(originalEdge));
+            }
         }
     }
     
@@ -179,7 +183,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      */
     private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex) {
         //first we need to remove overlapping edges.        
-        removeOverlappingEdges();
+        findOverlappingEdges();
         
         //now we might be left with path fragments (not necessarily leading from start to end).
         //We need to merge them to valid paths.
@@ -199,26 +203,31 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * 
      * @return list of disjoint paths from start to end.
      */    
-    private List<GraphPath<V, E>> mergePaths(V startVertex, V endVertex) {
+    private List<GraphPath<V, E>> mergePaths(V startVertex, V endVertex)
+    {
         List<ArrayDeque<E>> pathsQueueList = new ArrayList<ArrayDeque<E>>(this.pathList.size());
         this.pathList.forEach(path -> pathsQueueList.add(new ArrayDeque<>()));
-        List<E> allEdges = flatPathListOrdered();
-        Iterator<E> iter = allEdges.iterator();
-        while (iter.hasNext()) {
-            E edge = iter.next();
+        ArrayDeque<E> allEdges = new ArrayDeque<>(flatPathListOrdered());
+        while (! allEdges.isEmpty()) {
+            E edge = allEdges.pop();
+            if (this.overlappingEdges.contains(edge)) {
+                continue;
+            }
             for (ArrayDeque<E> path : pathsQueueList) {
                 if (path.isEmpty()) {
                     path.add(edge);
                     break;
-                } 
-                
-                if (this.workingGraph.getEdgeSource(edge).equals(this.workingGraph.getEdgeTarget(path.peekLast()))) {
+                }
+
+                if (this.workingGraph
+                    .getEdgeSource(edge).equals(this.workingGraph.getEdgeTarget(path.peekLast())))
+                {
                     path.add(edge);
                     break;
                 }
             }
         }
-        
+
         return pathsQueueList
             .stream()
             .map(pathQueue -> createGraphPath(new ArrayList<>(pathQueue), startVertex, endVertex))
@@ -257,10 +266,11 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * to end vertex.
      * 
      */
-    private void removeOverlappingEdges() {
+    private void findOverlappingEdges() {
         Iterator<E> path1Iter, path2Iter;
         E e1, e2;
         boolean found;
+        this.overlappingEdges = new HashSet<>();
         //removing overlapping edges
         for (int i = 0; i < pathList.size(); i++) {
             List<E> path1 = pathList.get(i);
@@ -280,12 +290,12 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
                                 (workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeTarget(e2)) &&
                                     workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeSource(e2)))) {
                             found = true;
-                            path2Iter.remove();
+                            this.overlappingEdges.add(e2);
                         }
                     }
                 }
                 if (found) {
-                    path1Iter.remove();
+                    this.overlappingEdges.add(e1);
                 }
             }
         }
