@@ -188,18 +188,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 20, 40, 3, 4, 4);
         assertTrue(GraphTests.isBipartite(g));
         assertTrue(GraphTests.isEulerian(g));
-
-        VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf =
-            new VF2GraphIsomorphismInspector<>(g, g);
-
-        Iterator<GraphMapping<Integer, DefaultEdge>> iter = vf.getMappings();
-        int count=0;
-        while(iter.hasNext())
-        {
-            count++;
-            iter.next();
-        }
-        assertEquals(count,3840);
+        validateIsomorphism(g, 3840);
     }
 
     @Test
@@ -336,5 +325,20 @@ public class NamedGraphGeneratorTest
         assertEquals(radius, gm.getRadius(), 0.00000001);
         assertEquals(diameter, gm.getDiameter(), 0.00000001);
         assertEquals(girth, GraphMetrics.getGirth(g), 0.00000001);
+    }
+
+    private void validateIsomorphism( Graph<Integer, DefaultEdge> g, int value)
+    {
+        VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf =
+            new VF2GraphIsomorphismInspector<>(g, g);
+
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter = vf.getMappings();
+        int count=0;
+        while(iter.hasNext())
+        {
+            count++;
+            iter.next();
+        }
+        assertEquals(count, value);
     }
 }
