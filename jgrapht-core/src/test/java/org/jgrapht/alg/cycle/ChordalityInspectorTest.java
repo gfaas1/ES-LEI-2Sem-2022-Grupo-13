@@ -36,31 +36,11 @@ import static org.junit.Assert.*;
 public class ChordalityInspectorTest {
 
     /**
-     * Tests whether repeated calls to the {@link ChordalityInspector#getMaximumCardinalityOrder()} return
-     * the same order.
-     */
-    @Test
-    public void testGetMaximumCardinalityOrder(){
-        Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        graph.addVertex("a");
-        graph.addVertex("b");
-        graph.addVertex("c");
-        graph.addEdge("a", "b");
-        graph.addEdge("a", "c");
-        graph.addEdge("b", "c");
-        ChordalityInspector<String, DefaultEdge> inspector = new ChordalityInspector<>(graph);
-        List<String> order1 = inspector.getMaximumCardinalityOrder();
-        graph.removeVertex("a");
-        List<String> order2 = inspector.getMaximumCardinalityOrder();
-        assertEquals(order1, order2);
-    }
-
-    /**
-     * Tests whether repeated calls to the {@link ChordalityInspector#getLexicographicalBfsOrder()} return
+     * Tests whether repeated calls to the {@link ChordalityInspector#getOrder()} return
      * the same vertex order.
      */
     @Test
-    public void testGetLexicographicalBfsOrder() {
+    public void testGetOrder() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -72,9 +52,9 @@ public class ChordalityInspectorTest {
         graph.addEdge(2, 4);
         graph.addEdge(3, 4);
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
-        List<Integer> order1 = inspector.getLexicographicalBfsOrder();
+        List<Integer> order1 = inspector.getOrder();
         graph.removeVertex(1);
-        List<Integer> order2 = inspector.getLexicographicalBfsOrder();
+        List<Integer> order2 = inspector.getOrder();
         assertEquals(order1, order2);
     }
 

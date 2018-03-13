@@ -30,7 +30,7 @@ import java.util.Set;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class LexicographicalBfsIteratorTest {
+public class LexBreadthFirstIteratorTest {
 
     /**
      * Tests iterator on empty graph.
@@ -38,7 +38,7 @@ public class LexicographicalBfsIteratorTest {
     @Test(expected = NoSuchElementException.class)
     public void testLexicographicalBfsIterator1() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        LexicographicalBfsIterator<Integer, DefaultEdge> iterator = new LexicographicalBfsIterator<>(graph);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
 
         assertFalse(iterator.hasNext());
 
@@ -58,7 +58,7 @@ public class LexicographicalBfsIteratorTest {
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(3, 4);
-        LexicographicalBfsIterator<Integer, DefaultEdge> iterator = new LexicographicalBfsIterator<>(graph);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -96,7 +96,7 @@ public class LexicographicalBfsIteratorTest {
         graph.addVertex("b");
         graph.addVertex("c");
         graph.addVertex("d");
-        LexicographicalBfsIterator<String, DefaultEdge> iterator = new LexicographicalBfsIterator<>(graph);
+        LexBreadthFirstIterator<String, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
 
         Set<String> returned = new HashSet<>();
 
@@ -143,7 +143,7 @@ public class LexicographicalBfsIteratorTest {
         graph.addEdge(2,3);
         graph.addEdge(3,3);
         graph.addEdge(3,3);
-        LexicographicalBfsIterator<Integer, DefaultEdge> iterator = new LexicographicalBfsIterator<>(graph);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());

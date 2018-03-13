@@ -46,29 +46,29 @@ import java.util.*;
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
  * @author Timofey Chudakov
- * @since 1.8
+ * @author March 2018
  */
-public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E> {
+public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
 
     /**
      * Reference to the {@code BucketList} that contains unvisited vertices.
      */
     private BucketList bucketList;
+
     /**
-     * Number of unvisited vertices.
+     * Contains current vertex of the {@code graph}.
      */
-    private int remainingVertices;
+    private V current;
 
     /**
      * Creates new lexicographical breadth-first iterator for {@code graph}.
      *
      * @param graph the graph to be iterated.
      */
-    public LexicographicalBfsIterator(Graph<V, E> graph) {
+    public LexBreadthFirstIterator(Graph<V, E> graph) {
         super(graph);
         GraphTests.requireUndirected(graph);
         bucketList = new BucketList(graph.vertexSet());
-        remainingVertices = graph.vertexSet().size();
     }
 
     /**
@@ -78,23 +78,67 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
      */
     @Override
     public boolean hasNext() {
-        return remainingVertices > 0;
+        if (current != null) {
+            return true;
+        }
+        current = advance();
+        if (current != null && nListeners != 0) {
+            fireVertexTraversed(createVertexTraversalEvent(current));
+        }
+        return current != null;
     }
 
     /**
-     * Returns a vertex with the lexicographically largest label, breaking ties arbitrarily.
-     * Recomputes cardinalities of its unvisited neighbours.
+     * Returns the next vertex in the ordering.
      *
-     * @return vertex with the lexicographically largest label.
+     * @return the next vertex in the ordering.
      */
     @Override
     public V next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
+        V result = current;
+        current = null;
+        if (nListeners != 0) {
+            fireVertexFinished(createVertexTraversalEvent(result));
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Always returns true since this iterator doesn't care about connected components.
+     */
+    @Override
+    public boolean isCrossComponentTraversal() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Trying to disable the cross components nature of this iterator will result into throwing a
+     * {@link IllegalArgumentException}.
+     */
+    @Override
+    public void setCrossComponentTraversal(boolean crossComponentTraversal) {
+        if (!crossComponentTraversal) {
+            throw new IllegalArgumentException("Iterator is always cross-component");
+        }
+    }
+
+    /**
+     * Retrieves vertex from the {@code bucketList} and returns it.
+     *
+     * @return the vertex retrieved from the {@code bucketList}.
+     */
+    private V advance() {
         V vertex = bucketList.poll();
-        bucketList.updateBuckets(getUnvisitedNeighbours(vertex));
-        --remainingVertices;
+        if (vertex != null) {
+            bucketList.updateBuckets(getUnvisitedNeighbours(vertex));
+        }
         return vertex;
     }
 
@@ -122,7 +166,7 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
      * order. Labels aren't used explicitly, which results in time and space optimization.
      *
      * @author Timofey Chudakov
-     * @since 1.8
+     * @since March 2018
      */
     class BucketList {
         /**
@@ -136,10 +180,9 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         private Map<V, Bucket> bucketMap;
 
         /**
-         * Creates a <code>BucketList</code> with a single bucket with all specified {@code vertices} in
-         * that bucket.
+         * Creates a {@code BucketList} with a single bucket and all specified {@code vertices} in it.
          *
-         * @param vertices the vertices of the graph, that should be stored in a {@code head} bucket.
+         * @param vertices the vertices of the graph, that should be stored in the {@code head} bucket.
          */
         BucketList(Collection<V> vertices) {
             head = new Bucket(vertices);
@@ -150,7 +193,7 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
 
         /**
-         * Checks whether there exists a bucket with the specified <code>vertex</code>.
+         * Checks whether there exists a bucket with the specified {@code vertex}.
          *
          * @param vertex the vertex whose presence in some {@code Bucket} in this {@code BucketList} is
          *               checked.
@@ -162,30 +205,36 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
 
         /**
-         * Retrieves element from the head bucket by invoking {@link Bucket#poll()}.
+         * Retrieves element from the head bucket by invoking {@link Bucket#poll()} or
+         * null if this {@code BucketList} is empty.
          * <p>
-         * <p>Removes the head bucket if it becomes empty after the operation.
+         * Removes the head bucket if it becomes empty after the operation.
          *
-         * @return vertex returned by {@link Bucket#poll()} invoked on head bucket.
+         * @return vertex returned by {@link Bucket#poll()} invoked on head bucket or
+         * null if this {@code BucketList} is empty.
          */
         V poll() {
-            V res = head.poll();
-            bucketMap.remove(res);
-            if (head.isEmpty()) {
-                head = head.next;
-                if (head != null) {
-                    head.prev = null;
+            if (bucketMap.size() > 0) {
+                V res = head.poll();
+                bucketMap.remove(res);
+                if (head.isEmpty()) {
+                    head = head.next;
+                    if (head != null) {
+                        head.prev = null;
+                    }
                 }
+                return res;
+            } else {
+                return null;
             }
-            return res;
         }
 
         /**
          * For every bucket B in this {@code BucketList}, which contains vertices from the set {@code
          * vertices}, creates a new {@code Bucket} B' and moves vertices from B to B' according to the
-         * following rule: $B' = B\cap vertices$ and $B = B\backslash B'$. For every such {@code Bucket} B only one {@code Bucket}
-         * B' is created. If some bucket B becomes empty after this operation, it is removed from the
-         * data structure.
+         * following rule: $B' = B\cap vertices$ and $B = B\backslash B'$. For every such {@code Bucket}
+         * B only one {@code Bucket} B' is created. If some bucket B becomes empty after this operation,
+         * it is removed from the data structure.
          *
          * @param vertices the vertices, that should be moved to new buckets.
          */
@@ -214,10 +263,10 @@ public class LexicographicalBfsIterator<V, E> extends AbstractGraphIterator<V, E
         }
 
         /**
-         * Plays the role of the container of vertices. All vertices stored in bucket have identical
+         * Plays the role of the container of vertices. All vertices stored in a bucket have identical
          * label. Labels aren't used explicitly.
          * <p>
-         * <p>Encapsulates operations of addition and removal of vertices from the bucket, removal of a
+         * Encapsulates operations of addition and removal of vertices from the bucket and removal of a
          * bucket from the data structure.
          */
         private class Bucket {

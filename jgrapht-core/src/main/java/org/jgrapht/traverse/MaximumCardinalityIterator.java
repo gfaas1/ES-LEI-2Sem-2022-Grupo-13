@@ -24,7 +24,7 @@ import org.jgrapht.Graphs;
 import java.util.*;
 
 /**
- * A maximum cardinality iterator for an undirected graph.
+ * A maximum cardinality search iterator for an undirected graph.
  * <p>
  * For every vertex in graph its cardinality is defined as the number of its neighbours, which
  * have been already visited by this iterator. Iterator chooses vertex with the maximum cardinality,
@@ -37,7 +37,7 @@ import java.util.*;
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
- * @author Timofey Chudakov
+ * @author March 2018
  */
 public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E> {
     /**
@@ -48,6 +48,10 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
      * Number of unvisited vertices.
      */
     private int remainingVertices;
+    /**
+     * Contains current vertex.
+     */
+    private V current;
     /**
      * Disjoint sets of vertices of the graph, indexed by the cardinalities of already visited neighbours.
      */
@@ -84,35 +88,112 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
      */
     @Override
     public boolean hasNext() {
-        return remainingVertices > 0;
+        if (current != null) {
+            return true;
+        }
+        current = advance();
+        if (current != null && nListeners != 0) {
+            fireVertexTraversed(createVertexTraversalEvent(current));
+        }
+        return current != null;
     }
 
     /**
-     * Returns a vertex with the maximum cardinality.
-     * Updates cardinalities of its unvisited neighbours. Ensures that {@code maxCardinality} contains the
-     * maximum index of non-empty set in {@code buckets}.
+     * Returns the next vertex in the ordering.
      *
-     * @return the vertex with the maximum cardinality.
+     * @return the next vertex in the ordering.
      */
     @Override
     public V next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-
-        Set<V> bucket = buckets.get(maxCardinality);
-        V vertex = bucket.iterator().next();
-        bucket.remove(vertex);
-        cardinalityMap.remove(vertex);
-        if (bucket.isEmpty()) {
-            buckets.set(maxCardinality, null);
-            do {
-                --maxCardinality;
-            } while (maxCardinality >= 0 && buckets.get(maxCardinality) == null);
+        V result = current;
+        current = null;
+        if (nListeners != 0) {
+            fireVertexFinished(createVertexTraversalEvent(result));
         }
-        updateNeighbours(vertex);
-        --remainingVertices;
-        return vertex;
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Always returns true since this iterator doesn't care about connected components.
+     */
+    @Override
+    public boolean isCrossComponentTraversal() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Trying to disable the cross components nature of this iterator will result into throwing a
+     * {@link IllegalArgumentException}.
+     */
+    @Override
+    public void setCrossComponentTraversal(boolean crossComponentTraversal) {
+        if (!crossComponentTraversal) {
+            throw new IllegalArgumentException("Iterator is always cross-component");
+        }
+    }
+
+    /**
+     * Retrieves a vertex from the {@code buckets} with the maximum cardinality and returns it.
+     *
+     * @return vertex retrieved from {@code buckets}.
+     */
+    private V advance() {
+        if (remainingVertices > 0) {
+            Set<V> bucket = buckets.get(maxCardinality);
+            V vertex = bucket.iterator().next();
+            removeFromBucket(vertex);
+            if (bucket.isEmpty()) {
+                buckets.set(maxCardinality, null);
+                do {
+                    --maxCardinality;
+                } while (maxCardinality >= 0 && buckets.get(maxCardinality) == null);
+            }
+            updateNeighbours(vertex);
+            --remainingVertices;
+            return vertex;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Removes {@code vertex} from the bucket it was contained in.
+     *
+     * @param vertex the vertex, which has to be removed from the bucket it was contained in.
+     * @return the cardinality of the removed vertex or -1, if the vertex wasn't contained in any bucket.
+     */
+    private int removeFromBucket(V vertex) {
+        if (cardinalityMap.containsKey(vertex)) {
+            int cardinality = cardinalityMap.get(vertex);
+            buckets.get(cardinality).remove(vertex);
+            cardinalityMap.remove(vertex);
+            if (buckets.get(cardinality).isEmpty()) {
+                buckets.set(cardinality, null);
+            }
+            return cardinality;
+        }
+        return -1;
+    }
+
+    /**
+     * Adds the {@code vertex} to the bucket with the given {@code cardinality}.
+     *
+     * @param vertex      the vertex, which has to be added to the the bucket.
+     * @param cardinality the cardinality of the destination bucket.
+     */
+    private void addToBucket(V vertex, int cardinality) {
+        cardinalityMap.put(vertex, cardinality);
+        if (buckets.get(cardinality) == null) {
+            buckets.set(cardinality, new HashSet<>());
+        }
+        buckets.get(cardinality).add(vertex);
     }
 
     /**
@@ -127,18 +208,7 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
             V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
             if (cardinalityMap.containsKey(opposite) && !processed.contains(opposite)) {
                 processed.add(opposite);
-                int cardinality = cardinalityMap.get(opposite);
-
-                cardinalityMap.put(opposite, cardinality + 1);
-                buckets.get(cardinality).remove(opposite);
-                if (buckets.get(cardinality).isEmpty()) {
-                    buckets.set(cardinality, null);
-                }
-
-                if (buckets.get(cardinality + 1) == null) {
-                    buckets.set(cardinality + 1, new HashSet<>());
-                }
-                buckets.get(cardinality + 1).add(opposite);
+                addToBucket(opposite, removeFromBucket(opposite) + 1);
             }
         }
         if (maxCardinality < graph.vertexSet().size()
