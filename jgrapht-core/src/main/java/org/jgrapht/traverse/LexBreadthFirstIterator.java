@@ -46,7 +46,7 @@ import java.util.*;
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
  * @author Timofey Chudakov
- * @author March 2018
+ * @since March 2018
  */
 public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
 

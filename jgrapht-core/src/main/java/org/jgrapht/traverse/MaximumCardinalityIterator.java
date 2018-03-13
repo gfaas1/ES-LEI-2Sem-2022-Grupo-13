@@ -37,7 +37,8 @@ import java.util.*;
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
- * @author March 2018
+ * @author Timofey Chudakov
+ * @since March 2018
  */
 public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E> {
     /**

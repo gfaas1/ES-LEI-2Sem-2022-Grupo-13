@@ -20,7 +20,7 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.traverse.AbstractGraphIterator;
+import org.jgrapht.traverse.GraphIterator;
 import org.jgrapht.traverse.LexBreadthFirstIterator;
 import org.jgrapht.traverse.MaximumCardinalityIterator;
 
@@ -29,7 +29,7 @@ import java.util.*;
 /**
  * Allows testing chordality of a graph. The inspected {@code graph} is specified at construction time
  * and cannot be modified. Currently chordality of a graph is tested via {@link MaximumCardinalityIterator}
- * by default. When {@link ChordalityInspector#LEX_BFS} is specified as a second constructor parameter, this
+ * by default. When {@link IterationOrder#LEX_BFS} is specified as a second constructor parameter, this
  * {@code ChordalityInspector} uses {@link LexBreadthFirstIterator} to compute perfect elimination order.
  * <p>
  * A <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal graph</a> is one in which all cycles of
@@ -46,21 +46,15 @@ import java.util.*;
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
- * @author March 2018
+ * @author Timofey Chudakov
  * @see LexBreadthFirstIterator
  * @see MaximumCardinalityIterator
+ * @since March 2018
  */
 public class ChordalityInspector<V, E> {
     /**
-     * Specifies {@link MaximumCardinalityIterator} as an internal iterator for this inspector.
+     * The inspected graph.
      */
-    public static final int MCS = 0;
-    /**
-     * Specifies {@link LexBreadthFirstIterator} as an internal iterator for this inspector.
-     */
-    public static final int LEX_BFS = 1;
-
-    /** The inspected graph.*/
     private Graph<V, E> graph;
     /**
      * Contains true if the graph is chordal, otherwise false. Is null before the first call to the
@@ -74,8 +68,7 @@ public class ChordalityInspector<V, E> {
     /**
      * Iterator used for producing perfect elimination order.
      */
-    private AbstractGraphIterator<V, E> orderIterator;
-
+    private GraphIterator<V, E> orderIterator;
     /**
      * Creates a chordality inspector for {@code graph}, which uses {@link MaximumCardinalityIterator}
      * as a default iterator.
@@ -83,27 +76,25 @@ public class ChordalityInspector<V, E> {
      * @param graph the graph for which a chordality inspector to be created.
      */
     public ChordalityInspector(Graph<V, E> graph) {
-        this(graph, MCS);
+        this(graph, IterationOrder.MCS);
     }
 
     /**
      * Creates a chordality inspector for {@code graph}, which uses as iterator defined by the second
      * parameter as an internal iterator.
      *
-     * @param graph the graph for which a chordality inspector to be created.
-     * @param algorithm the constant, which defines iterator to be used by this {@code ChordalityInspector}.
+     * @param graph          the graph for which a chordality inspector to be created.
+     * @param iterationOrder the constant, which defines iterator to be used by this {@code ChordalityInspector}.
      */
-    public ChordalityInspector(Graph<V, E> graph, int algorithm) {
+    public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder) {
         this.graph = Objects.requireNonNull(graph);
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         }
-        if (algorithm == MCS) {
+        if (iterationOrder == IterationOrder.MCS) {
             this.orderIterator = new MaximumCardinalityIterator<>(graph);
-        } else if(algorithm == LEX_BFS){
+        } else {
             this.orderIterator = new LexBreadthFirstIterator<>(graph);
-        }else{
-            throw new IllegalArgumentException("Invalid algorithm specified");
         }
     }
 
@@ -159,7 +150,7 @@ public class ChordalityInspector<V, E> {
      * @return computed order.
      */
     private List<V> lazyComputeOrder() {
-        if(order == null){
+        if (order == null) {
             int vertexNum = graph.vertexSet().size();
             order = new ArrayList<>(vertexNum);
             for (int i = 0; i < vertexNum; i++) {
@@ -213,6 +204,13 @@ public class ChordalityInspector<V, E> {
             }
         }
         return predecessors;
+    }
+
+    /**
+     * Specifies internal iterator type.
+     */
+    public enum IterationOrder {
+        MCS, LEX_BFS,
     }
 }
 

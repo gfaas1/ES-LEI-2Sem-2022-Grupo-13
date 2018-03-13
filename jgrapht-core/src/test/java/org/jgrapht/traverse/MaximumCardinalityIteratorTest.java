@@ -29,6 +29,11 @@ import java.util.Set;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests for the {@link MaximumCardinalityIterator}
+ *
+ * @author Timofey Chudakov
+ */
 public class MaximumCardinalityIteratorTest {
 
     /**

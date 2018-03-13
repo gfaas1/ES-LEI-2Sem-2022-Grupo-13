@@ -30,6 +30,11 @@ import java.util.Set;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests for the {@link LexBreadthFirstIterator}
+ *
+ * @author Timofey Chudakov
+ */
 public class LexBreadthFirstIteratorTest {
 
     /**
