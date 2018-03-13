@@ -188,7 +188,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 20, 40, 3, 4, 4);
         assertTrue(GraphTests.isBipartite(g));
         assertTrue(GraphTests.isEulerian(g));
-        validateIsomorphism(g, 3840);
+        validateAutomorphismCount(g, 3840);
     }
 
     @Test
@@ -327,7 +327,7 @@ public class NamedGraphGeneratorTest
         assertEquals(girth, GraphMetrics.getGirth(g), 0.00000001);
     }
 
-    private void validateIsomorphism( Graph<Integer, DefaultEdge> g, int value)
+    private void validateAutomorphismCount( Graph<Integer, DefaultEdge> g, int value)
     {
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf =
             new VF2GraphIsomorphismInspector<>(g, g);
