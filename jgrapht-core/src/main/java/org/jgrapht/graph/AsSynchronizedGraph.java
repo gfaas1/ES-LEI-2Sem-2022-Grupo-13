@@ -56,7 +56,27 @@ import org.jgrapht.*;
  * the remove methods concurrently with a typical algorithm is likely to cause the algorithm to fail
  * with an {@link IllegalArgumentException}. So really the main concurrent read/write use case is
  * add-only.
+ * <br>
+ * eg: If threadA tries to get all edges touching a certain vertex after threadB removes the vertex,
+ * the algorithm will be interrupted by {@link IllegalArgumentException}.
  * </p>
+ * <pre>
+ *      Thread threadA = new Thread(() -&gt; {
+ *          Set vertices = graph.vertexSet();
+ *          for (Object v : vertices) {
+ *              // {@link IllegalArgumentException} may be thrown since other threads may have removed the vertex.
+ *              Set edges = graph.edgesOf(v);
+ *              doOtherThings();
+ *          }
+ *      });
+ *      Thread threadB = new Thread(() -&gt; {
+ *          Set vertices = graph.vertexSet();
+ *          for (Object v : vertices) {
+ *              if (someCondition)
+ *                  graph.removeVertex(v);
+ *          }
+ *      });
+ * </pre>
  *
  * <p>
  * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is equal

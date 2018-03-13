@@ -18,7 +18,7 @@
 package org.jgrapht.graph;
 
 /**
- * The SynchronizedGraph Params describes the properties of a AsSynchronizedGraph to be created such
+ * The SynchronizedGraph Params describes the properties of a synchronized graph being created such
  * as whether it uses cache.
  *
  * @author CHEN Kui
@@ -37,8 +37,7 @@ public class SynchronizedGraphParams
     }
 
     /**
-     * Make the AsSynchronizedGraph to be created <strong>not</strong> use cache for <code>edgesOf</code>,
-     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     * Request a synchronized graph without caching.
      *
      * @return the SynchronizedGraphParams
      */
@@ -49,8 +48,7 @@ public class SynchronizedGraphParams
     }
 
     /**
-     * Make the AsSynchronizedGraph to be created use cache for <code>edgesOf</code>,
-     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     * Request a synchronized graph with caching.
      *
      * @return the SynchronizedGraphParams
      */
@@ -61,7 +59,7 @@ public class SynchronizedGraphParams
     }
 
     /**
-     * Return whether a cache will be used for AsSynchronizedGraph to be created.
+     * Return whether a cache will be used for the synchronized graph being created.
      *
      * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be use
      */

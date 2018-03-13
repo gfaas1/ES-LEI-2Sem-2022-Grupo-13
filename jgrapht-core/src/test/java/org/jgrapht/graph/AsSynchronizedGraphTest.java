@@ -44,7 +44,7 @@ public class AsSynchronizedGraphTest
         for (int i = 0; i < 1000; i++)
             vertices.add(i);
         for (int i = 0; i < 20; i++)
-            ts.addTest(new TestThread("vertex"));
+            ts.addTest(new TestThread("addVertex"));
         TestRunner.run(ts);
         assertEquals(1000, g.vertexSet().size());
         for (int i = 0; i < 1000; i++) {
@@ -206,13 +206,13 @@ public class AsSynchronizedGraphTest
         assertEquals(3, g.edgeSet().size());
         assertEquals(3, g.incomingEdgesOf(2).size());
         assertEquals(3, g.outgoingEdgesOf(2).size());
-
     }
 
     private ArrayList<Order> order1;
     private ArrayList<Order> order2;
     private ArrayList<Order> order3;
     private ArrayList<Order> order4;
+    volatile private Vector<ArrayList<Order> > ordersList;
     @Test
     public void testScenario()
     {
@@ -239,10 +239,13 @@ public class AsSynchronizedGraphTest
         for (int i = 30; i < 60; i++)
             order4.add(new AddV(i));
         createOrder(order4, 30, 60, true);  // add 435 edges
-        ts.addTest(new TestThread("thread1"));
-        ts.addTest(new TestThread("thread2"));
-        ts.addTest(new TestThread("thread3"));
-        ts.addTest(new TestThread("thread4"));
+        ordersList = new Vector<>();
+        ordersList.add(order1);
+        ordersList.add(order2);
+        ordersList.add(order3);
+        ordersList.add(order4);
+        for (int i = 0; i < 4; i++)
+            ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertFalse(g.isCacheEnabled());
         assertEquals(60, g.vertexSet().size());
@@ -266,16 +269,19 @@ public class AsSynchronizedGraphTest
         for (int i = 30; i < 40; i++)   // rm 10 vertices
             order3.add(new RmV(i));
         ts = new ActiveTestSuite();
-        ts.addTest(new TestThread("thread1"));
-        ts.addTest(new TestThread("thread2"));
-        ts.addTest(new TestThread("thread3"));
+        ordersList.clear();
+        ordersList.add(order1);
+        ordersList.add(order2);
+        ordersList.add(order3);
+        for (int i = 0; i < 3; i++)
+            ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertEquals(38, g.vertexSet().size());
         assertEquals(190, g.edgeSet().size());
         assertEquals(0, g.edgesOf(2).size());
         assertEquals(19, g.edgesOf(41).size());
-
     }
+
     private void createOrder(ArrayList<Order> list, int start, int end, boolean add)
     {
         for (int i = start; i < end - 1; i++) {
@@ -375,13 +381,13 @@ public class AsSynchronizedGraphTest
         return count;
     }
     public class TestThread
-            extends TestCase
+        extends TestCase
     {
         public TestThread(String s)
         {
             super(s);
         }
-        public void vertex()
+        public void addVertex()
         {
             while (true) {
                 int id;
@@ -452,42 +458,10 @@ public class AsSynchronizedGraphTest
                 g.removeVertex(c);
             }
         }
-        public void thread1()
+        public void runAsThread()
         {
-            for (Order o : order1) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                o.execute();
-            }
-        }
-        public void thread2()
-        {
-            for (Order o : order2) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                o.execute();
-            }
-        }
-        public void thread3()
-        {
-            for (Order o : order3) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                o.execute();
-            }
-        }
-        public void thread4()
-        {
-            for (Order o : order4) {
+            List<Order> orders = ordersList.remove(0);
+            for (Order o : orders) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
