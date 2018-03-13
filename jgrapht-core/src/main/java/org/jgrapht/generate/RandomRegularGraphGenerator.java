@@ -67,19 +67,17 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
         if (n < 0) {
             throw new IllegalArgumentException("number of nodes must be non-negative");
         }
-        else if (d < 0) {
+        if (d < 0) {
             throw new IllegalArgumentException("degree of nodes must be non-negative");
         }
-        else if (d > n) {
+        if (d > n) {
             throw new IllegalArgumentException("degree of nodes must be smaller than or equal to number of nodes");
         }
-        else if ((n * d) % 2 != 0) {
+        if ((n * d) % 2 != 0) {
             throw new IllegalArgumentException("value 'n * k' must be even");
         }
-        else {
-            this.n = n;
-            this.d = d;
-        }
+        this.n = n;
+        this.d = d;
     }
 
     /**
@@ -94,13 +92,13 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
     @Override
     public void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap) {
 
-        // directed case
-        if (target.getType().isDirected()) {
+        // directed/mixed case
+        if (!target.getType().isUndirected()) {
             throw new IllegalArgumentException("target graph must be undirected");
         }
 
         // simple case
-        else if (target.getType().isSimple()) {
+        if (target.getType().isSimple()) {
             // no nodes or zero degree case
             if (this.n == 0 || this.d == 0) {
                 EmptyGraphGenerator<V, E> emptyGraphGenerator = new EmptyGraphGenerator<>(this.n);
@@ -191,14 +189,14 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
                         toRemoveFromS.add(edge);
                         if (target.degreeOf(u) == this.d) {
                             for (Map.Entry<V, V> e : S) {
-                                if (e.getKey() == u || e.getValue() == u) {
+                                if (e.getKey().equals(u) || e.getValue().equals(u)) {
                                     toRemoveFromS.add(e);
                                 }
                             }
                         }
                         if (target.degreeOf(v) == this.d) {
                             for (Map.Entry<V, V> e : S) {
-                                if (e.getKey() == v || e.getValue() == v) {
+                                if (e.getKey().equals(v) || e.getValue().equals(v)) {
                                     toRemoveFromS.add(e);
                                 }
                             }
@@ -209,14 +207,14 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
 
                 // update S
                 S.removeAll(toRemoveFromS);
-                toRemoveFromS = new HashSet<>();
+                toRemoveFromS.clear();
             }
         }
     }
 
 
     private void generateNonSimpleRegularGraph(Graph<V, E> target, VertexFactory<V> vertexFactory) {
-        List<V> vertices = new ArrayList<>();
+        List<V> vertices = new ArrayList<>(this.n * this.d);
         for (int i = 0; i < this.n; i++) {
             V vertex = vertexFactory.createVertex();
             target.addVertex(vertex);

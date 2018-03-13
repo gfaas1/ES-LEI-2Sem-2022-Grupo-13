@@ -35,42 +35,32 @@ import org.junit.Test;
  */
 public class RandomRegularGraphGeneratorTest {
 
-    @Test
-    public void testBadInputParameters() {
-        try {
-            new RandomRegularGraphGenerator<>(-10, 1);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new RandomRegularGraphGenerator<>(10, -1);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new RandomRegularGraphGenerator<>(10, 15);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new RandomRegularGraphGenerator<>(5, 3);
-            fail("Bad parameter");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeN() {
+        new RandomRegularGraphGenerator<>(-10, 1);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeD() {
+        new RandomRegularGraphGenerator<>(10, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDGreaterThanN() {
+        new RandomRegularGraphGenerator<>(10, 15);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testOddDTimesN() {
+        new RandomRegularGraphGenerator<>(5, 3);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
     public void testDirectedGraph() {
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(10, 2);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        try {
-            gen.generateGraph(g, new IntegerVertexFactory(0), null);
-            fail("Directed graph");
-        } catch (IllegalArgumentException e) {
-        }
+        gen.generateGraph(g, new IntegerVertexFactory(0), null);
     }
 
     @Test
