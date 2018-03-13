@@ -41,6 +41,7 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.doyleGraph();
         this.validateBasics(g, 27, 54, 3, 3, 5);
         assertTrue(GraphTests.isEulerian(g));
+        validateAutomorphismCount(g, 54);
     }
 
     @Test
@@ -71,6 +72,7 @@ public class NamedGraphGeneratorTest
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.clebschGraph();
         this.validateBasics(g, 16, 40, 2, 2, 4);
+        validateAutomorphismCount(g, 1920);
     }
 
     @Test
@@ -120,7 +122,7 @@ public class NamedGraphGeneratorTest
     }
 
     @Test
-    public void testGossetGraphGraph()
+    public void testGossetGraph()
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.gossetGraph();
         this.validateBasics(g, 56, 756, 3, 3, 3);
@@ -147,6 +149,7 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.coxeterGraph();
         this.validateBasics(g, 28, 42, 4, 4, 7);
         assertTrue(GraphTests.isCubic(g));
+        validateAutomorphismCount(g, 336);
     }
 
     @Test
@@ -163,6 +166,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 54, 81, 9, 10, 6);
         assertTrue(GraphTests.isCubic(g));
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 32);
     }
 
     @Test
@@ -172,6 +176,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 78, 117, 7, 13, 6);
         assertTrue(GraphTests.isCubic(g));
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 16);
     }
 
     @Test
@@ -198,6 +203,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 12, 18, 3, 3, 4);
         assertTrue(GraphTests.isCubic(g));
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 48);
     }
 
     @Test
@@ -222,6 +228,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 14, 21, 3, 3, 6);
         assertTrue(GraphTests.isCubic(g));
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 336);
     }
 
     @Test
@@ -230,6 +237,7 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.herschelGraph();
         this.validateBasics(g, 11, 18, 3, 4, 4);
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 12);
     }
 
     @Test
@@ -238,6 +246,7 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.hoffmanGraph();
         this.validateBasics(g, 16, 32, 3, 4, 4);
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 48);
     }
 
     @Test
@@ -253,6 +262,7 @@ public class NamedGraphGeneratorTest
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.klein3RegularGraph();
         this.validateBasics(g, 56, 84, 6, 6, 7);
         assertTrue(GraphTests.isCubic(g));
+        validateAutomorphismCount(g, 336);
     }
 
     @Test
@@ -260,6 +270,7 @@ public class NamedGraphGeneratorTest
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.klein7RegularGraph();
         this.validateBasics(g, 24, 84, 3, 3, 3);
+        validateAutomorphismCount(g, 336);
     }
 
     @Test
@@ -267,6 +278,7 @@ public class NamedGraphGeneratorTest
     {
         Graph<Integer, DefaultEdge> g = NamedGraphGenerator.moserSpindleGraph();
         this.validateBasics(g, 7, 11, 2, 2, 3);
+        validateAutomorphismCount(g, 8);
     }
 
     @Test
@@ -276,6 +288,7 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 18, 27, 4, 4, 6);
         assertTrue(GraphTests.isCubic(g));
         assertTrue(GraphTests.isBipartite(g));
+        validateAutomorphismCount(g, 216);
     }
 
     @Test
