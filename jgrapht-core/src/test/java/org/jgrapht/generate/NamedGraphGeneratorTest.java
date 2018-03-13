@@ -21,7 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.jgrapht.*;
+import java.util.*;
 import org.jgrapht.alg.shortestpath.*;
+import org.jgrapht.alg.isomorphism.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
@@ -186,6 +188,18 @@ public class NamedGraphGeneratorTest
         this.validateBasics(g, 20, 40, 3, 4, 4);
         assertTrue(GraphTests.isBipartite(g));
         assertTrue(GraphTests.isEulerian(g));
+
+        VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf =
+            new VF2GraphIsomorphismInspector<>(g, g);
+
+        Iterator<GraphMapping<Integer, DefaultEdge>> iter = vf.getMappings();
+        int count=0;
+        while(iter.hasNext())
+        {
+            count++;
+            iter.next();
+        }
+        assertEquals(count,3840);
     }
 
     @Test
