@@ -32,6 +32,7 @@ Changes to JGraphT in each version:
     - Added `AlphaCentrality` (contributed by Pratik Tibrewal)
     - Fixed bug in AbstractBaseGraph where degreeOf() method would create vertex instead of throwing an exception (spotted and fixed by Yimismi)
     - Added Folkman, Diamond, Tietze, Pappus and Tutte named graphs (contributed by Pratik Tibrewal)
+    - Add automorphism count verification to NamedGraphGeneratorTest (contributed by Pratik Tibrewal)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
