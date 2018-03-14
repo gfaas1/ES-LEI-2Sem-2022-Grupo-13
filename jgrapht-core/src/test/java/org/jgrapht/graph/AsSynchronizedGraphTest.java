@@ -212,7 +212,7 @@ public class AsSynchronizedGraphTest
     private ArrayList<Order> order2;
     private ArrayList<Order> order3;
     private ArrayList<Order> order4;
-    volatile private Vector<ArrayList<Order> > ordersList;
+    private Vector<ArrayList<Order> > ordersList;
     @Test
     public void testScenario()
     {
@@ -244,7 +244,7 @@ public class AsSynchronizedGraphTest
         ordersList.add(order2);
         ordersList.add(order3);
         ordersList.add(order4);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < ordersList.size(); i++)
             ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertFalse(g.isCacheEnabled());
@@ -273,7 +273,7 @@ public class AsSynchronizedGraphTest
         ordersList.add(order1);
         ordersList.add(order2);
         ordersList.add(order3);
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < ordersList.size(); i++)
             ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertEquals(38, g.vertexSet().size());
