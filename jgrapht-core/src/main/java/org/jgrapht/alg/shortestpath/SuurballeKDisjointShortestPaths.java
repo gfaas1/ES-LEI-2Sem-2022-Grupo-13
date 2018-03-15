@@ -86,8 +86,8 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
         }
 
         GraphTests.requireDirected(graph);
-        if (GraphTests.hasMultipleEdges(graph)) {
-            throw new IllegalArgumentException("Graph must not contain multiple edges");
+        if (! GraphTests.isSimple(graph)) {
+            throw new IllegalArgumentException("Graph must be simple");
         }
         this.graph = graph;               
         this.nPaths = nPaths;
