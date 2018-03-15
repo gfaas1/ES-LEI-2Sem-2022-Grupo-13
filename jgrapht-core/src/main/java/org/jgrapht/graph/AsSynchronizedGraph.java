@@ -20,14 +20,15 @@ package org.jgrapht.graph;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import java.util.concurrent.locks.*;
 import java.util.function.*;
 import java.util.stream.*;
 import org.jgrapht.*;
 
 /**
- * Create a synchronized (thread-safe) Graph backed by the specified Graph. In order to guarantee
- * serial access, it is critical that <strong>all</strong> access to the backing Graph is
- * accomplished through the created Graph.
+ * Create a synchronized (thread-safe) Graph backed by the specified Graph. This Graph is designed
+ * to read and write mutually exclusive. In order to guarantee serial access, it is critical that
+ * <strong>all</strong> access to the backing Graph is accomplished through the created Graph.
  *
  * <p>
  * Users need to manually synchronize on {@link EdgeFactory} if creating an edge needs to access
@@ -97,8 +98,7 @@ public class AsSynchronizedGraph<V, E>
 {
     private static final long serialVersionUID = 5144561442831050752L;
 
-    // Object on which to synchronize
-    private final Object mutex;
+    private final ReadWriteLock readWriteLock;
 
     // A set encapsulating backing vertexSet.
     private transient CopyOnDemandSet<V> allVerticesSet;
@@ -130,13 +130,13 @@ public class AsSynchronizedGraph<V, E>
     private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled)
     {
         super(g);
-        mutex = this;
+        readWriteLock = new ReentrantReadWriteLock();
         if (cacheEnabled)
             cacheStrategy = new CacheAccess();
         else
             cacheStrategy = new NoCache();
-        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), mutex);
-        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), mutex);
+        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
+        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
     }
 
     /**
@@ -156,9 +156,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
-            return
-                super.getAllEdges(sourceVertex, targetVertex);
+        readWriteLock.readLock().lock();
+        try {
+            return super.getAllEdges(sourceVertex, targetVertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -168,9 +170,13 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.getEdge(sourceVertex, targetVertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
+            
     }
 
     /**
@@ -179,11 +185,14 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             E e = cacheStrategy.addEdge(sourceVertex, targetVertex);
             if (e != null)
                 edgeSetModified();
             return e;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -193,12 +202,15 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
              if (cacheStrategy.addEdge(sourceVertex, targetVertex, e)) {
                  edgeSetModified();
                  return true;
              }
              return false;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -208,12 +220,15 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean addVertex(V v)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             if (super.addVertex(v)) {
                 vertexSetModified();
                 return true;
             }
             return false;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -223,8 +238,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean containsEdge(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.containsEdge(sourceVertex, targetVertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -234,8 +252,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean containsEdge(E e)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.containsEdge(e);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -245,8 +266,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean containsVertex(V v)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.containsVertex(v);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -256,8 +280,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.degreeOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -267,9 +294,7 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> edgeSet()
     {
-        synchronized (mutex) {
-            return allEdgesSet;
-        }
+        return allEdgesSet;
     }
 
     /**
@@ -278,8 +303,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> edgesOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return cacheStrategy.edgesOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -289,8 +317,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public int inDegreeOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.inDegreeOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -300,8 +331,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return cacheStrategy.incomingEdgesOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -311,8 +345,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public int outDegreeOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.outDegreeOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -322,8 +359,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return cacheStrategy.outgoingEdgesOf(vertex);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -333,8 +373,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean removeAllEdges(Collection<? extends E> edges)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             return super.removeAllEdges(edges);
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -344,8 +387,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> removeAllEdges(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             return super.removeAllEdges(sourceVertex, targetVertex);
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -355,8 +401,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean removeAllVertices(Collection<? extends V> vertices)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             return super.removeAllVertices(vertices);
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -366,12 +415,15 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean removeEdge(E e)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             if (cacheStrategy.removeEdge(e)) {
                 edgeSetModified();
                 return true;
             }
             return false;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -381,11 +433,14 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public E removeEdge(V sourceVertex, V targetVertex)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             E e = cacheStrategy.removeEdge(sourceVertex, targetVertex);
             if (e != null)
                 edgeSetModified();
             return e;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -395,13 +450,16 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public boolean removeVertex(V v)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             if (cacheStrategy.removeVertex(v)) {
                 edgeSetModified();
                 vertexSetModified();
                 return true;
             }
             return false;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -411,8 +469,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public String toString()
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.toString();
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -422,9 +483,7 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<V> vertexSet()
     {
-        synchronized (mutex) {
-            return allVerticesSet;
-        }
+        return allVerticesSet;
     }
 
     /**
@@ -433,8 +492,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public V getEdgeSource(E e)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.getEdgeSource(e);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -444,8 +506,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public V getEdgeTarget(E e)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.getEdgeTarget(e);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -455,8 +520,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public double getEdgeWeight(E e)
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return super.getEdgeWeight(e);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -466,8 +534,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public void setEdgeWeight(E e, double weight)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             super.setEdgeWeight(e, weight);
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -478,8 +549,11 @@ public class AsSynchronizedGraph<V, E>
      */
     public boolean isCacheEnabled()
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return cacheStrategy.isCacheEnabled();
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -493,7 +567,8 @@ public class AsSynchronizedGraph<V, E>
      */
     public AsSynchronizedGraph<V, E> setCache(boolean cacheEnabled)
     {
-        synchronized (mutex) {
+        readWriteLock.writeLock().lock();
+        try {
             if (cacheEnabled == isCacheEnabled())
                 return this;
             if (cacheEnabled)
@@ -501,6 +576,8 @@ public class AsSynchronizedGraph<V, E>
             else
                 cacheStrategy = new NoCache();
             return this;
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -510,8 +587,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public int hashCode()
     {
-        synchronized (mutex) {
+        readWriteLock.readLock().lock();
+        try {
             return getDelegate().hashCode();
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -523,8 +603,11 @@ public class AsSynchronizedGraph<V, E>
     {
         if (this == o)
             return true;
-        synchronized (this) {
+        readWriteLock.readLock().lock();
+        try {
             return getDelegate().equals(o);
+        } finally {
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -591,21 +674,20 @@ public class AsSynchronizedGraph<V, E>
         // Backing set's unmodifiable copy. If null, needs to be recomputed on next access.
         private transient Set<E> copy;
 
-        // A set encapsulating backing vertexSet.
-        final Object mutex;
+        final ReadWriteLock readWriteLock;
 
         private static final String UNMODIFIABLE = "this set is unmodifiable";
 
         /**
          * Constructor for CopyOnDemandSet.
          * @param s the backing set.
-         * @param mutex object on which to synchronize.
+         * @param readWriteLock the ReadWriteLock on which to locked
          */
-        private CopyOnDemandSet(Set<E> s, Object mutex)
+        private CopyOnDemandSet(Set<E> s, ReadWriteLock readWriteLock)
         {
             set = Objects.requireNonNull(s, "s must not be null");
             copy = null;
-            this.mutex = mutex;
+            this.readWriteLock = readWriteLock;
         }
 
         /**
@@ -614,8 +696,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public int size()
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.size();
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -625,8 +710,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean isEmpty()
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.isEmpty();
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -636,8 +724,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean contains(Object o)
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.contains(o);
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -659,8 +750,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public Object[] toArray()
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.toArray();
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -670,8 +764,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public <T> T[] toArray(T[] a)
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.toArray(a);
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -699,8 +796,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public boolean containsAll(Collection<?> c)
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.containsAll(c);
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -747,8 +847,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public void forEach(Consumer<? super E> action)
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 set.forEach(action);
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -807,8 +910,11 @@ public class AsSynchronizedGraph<V, E>
         {
             if (this == o)
                 return true;
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.equals(o);
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -819,8 +925,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public int hashCode()
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.hashCode();
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -831,8 +940,11 @@ public class AsSynchronizedGraph<V, E>
         @Override
         public String toString()
         {
-            synchronized (mutex) {
+            readWriteLock.readLock().lock();
+            try {
                 return set.toString();
+            } finally {
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -842,10 +954,13 @@ public class AsSynchronizedGraph<V, E>
          */
         private Set<E> getCopy()
         {
-            synchronized (mutex) {
+            readWriteLock.writeLock().lock();
+            try {
                 if (copy != null)
                     return copy;
                 return Collections.unmodifiableSet(new LinkedHashSet<>(set));
+            } finally {
+                readWriteLock.writeLock().unlock();
             }
         }
 
@@ -855,9 +970,7 @@ public class AsSynchronizedGraph<V, E>
          */
         private void modified()
         {
-            synchronized (mutex) {
-                copy = null;
-            }
+            copy = null;
         }
     }
 
