@@ -534,9 +534,21 @@ public class BhandariKDisjointShortestPathsTest {
         Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(source.getEdgeFactory());
         Graphs.addGraph(destination, source);
         
+        Map<DefaultWeightedEdge, Double> originalWeightMap = new HashMap<>();
+        for (DefaultWeightedEdge e : source.edgeSet()) {
+            originalWeightMap.put(e, source.getEdgeWeight(e));
+        }
+        
         new BhandariKDisjointShortestPaths<>(source, 5).getPaths(1, 5);
         
         assertEquals(destination, source);
+        
+        Map<DefaultWeightedEdge, Double> weightMap = new HashMap<>();
+        for (DefaultWeightedEdge e : source.edgeSet()) {
+            weightMap.put(e, source.getEdgeWeight(e));
+        }
+        
+        assertEquals(originalWeightMap, weightMap);
     }
     
     /**
