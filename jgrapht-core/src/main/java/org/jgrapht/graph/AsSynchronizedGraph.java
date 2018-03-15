@@ -98,7 +98,7 @@ public class AsSynchronizedGraph<V, E>
 {
     private static final long serialVersionUID = 5144561442831050752L;
 
-    private final ReadWriteLock readWriteLock;
+    private final ReentrantReadWriteLock readWriteLock;
 
     // A set encapsulating backing vertexSet.
     private transient CopyOnDemandSet<V> allVerticesSet;
@@ -110,27 +110,30 @@ public class AsSynchronizedGraph<V, E>
 
     /**
      * Constructor for AsSynchronizedGraph with strategy of not caching the copies for
-     * <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     * <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods
+     * and non-fair mode for thread-access.
      *
-     * @param g the backing graph (the delegate).
+     * @param g the backing graph (the delegate)
      */
     public AsSynchronizedGraph(Graph<V, E> g)
     {
-        this(g, false);
+        this(g, false, false);
     }
 
     /**
      * Constructor for AsSynchronizedGraph with specified cache strategy for <code>edgesOf</code>,
-     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods.
+     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods and specified fairness
+     * policy for thread-access.
      *
-     * @param g the backing graph (the delegate).
+     * @param g the backing graph (the delegate)
      * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
-     *        will be used for those methods, otherwise cache will not be used.
+     *        will be used for those methods, otherwise cache will not be used
+     * @param fair fairness policy for thread-access
      */
-    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled)
+    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled, boolean fair)
     {
         super(g);
-        readWriteLock = new ReentrantReadWriteLock();
+        readWriteLock = new ReentrantReadWriteLock(fair);
         if (cacheEnabled)
             cacheStrategy = new CacheAccess();
         else
@@ -147,7 +150,7 @@ public class AsSynchronizedGraph<V, E>
      */
     public AsSynchronizedGraph(Graph<V, E> g, SynchronizedGraphParams params)
     {
-        this(g, params.isCacheEnable());
+        this(g, params.isCacheEnable(), params.isFair());
     }
 
     /**

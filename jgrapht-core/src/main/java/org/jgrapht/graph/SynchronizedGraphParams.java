@@ -19,7 +19,7 @@ package org.jgrapht.graph;
 
 /**
  * The SynchronizedGraph Params describes the properties of a synchronized graph being created such
- * as whether it uses cache.
+ * as whether it uses cache, fair mode for thread-access.
  *
  * @author CHEN Kui
  * @since Mar 9, 2018
@@ -27,23 +27,26 @@ package org.jgrapht.graph;
 public class SynchronizedGraphParams
 {
     private boolean cacheEnable;
+    private boolean fair;
 
     /**
-     * Constructor for SynchronizedGraphParams with cacheDisable.
+     * Constructor for SynchronizedGraphParams with cacheDisable and non-fair mode.
      */
     public SynchronizedGraphParams()
     {
         cacheEnable = false;
+        fair = false;
     }
 
     /**
-     * Request a synchronized graph without caching.
+     * Request a synchronized graph using non-fair mode without caching.
      *
      * @return the SynchronizedGraphParams
      */
     public SynchronizedGraphParams cacheDisable()
     {
         cacheEnable = false;
+        fair = false;
         return this;
     }
 
@@ -65,5 +68,34 @@ public class SynchronizedGraphParams
      */
     public boolean isCacheEnable() {
         return cacheEnable;
+    }
+
+    /**
+     * Request a synchronized graph with fair mode.
+     * @return the SynchronizedGraphParams
+     */
+    public SynchronizedGraphParams setFair()
+    {
+        fair = true;
+        return this;
+    }
+
+    /**
+     * Request a synchronized graph with non-fair mode.
+     * @return the SynchronizedGraphParams
+     */
+    public SynchronizedGraphParams setNonfair()
+    {
+        fair = false;
+        return this;
+    }
+
+    /**
+     *
+     * @return <tt>true</tt> if constructed as fair mode, <tt>false</tt> if non-fair
+     */
+    public boolean isFair()
+    {
+        return fair;
     }
 }
