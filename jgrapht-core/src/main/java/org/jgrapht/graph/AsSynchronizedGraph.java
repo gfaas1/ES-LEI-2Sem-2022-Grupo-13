@@ -27,8 +27,9 @@ import org.jgrapht.*;
 
 /**
  * Create a synchronized (thread-safe) Graph backed by the specified Graph. This Graph is designed
- * to read and write mutually exclusive. In order to guarantee serial access, it is critical that
- * <strong>all</strong> access to the backing Graph is accomplished through the created Graph.
+ * to support concurrent reads which are mutually exclusive with writes. In order to guarantee serial
+ * access, it is critical that <strong>all</strong> access to the backing Graph is accomplished
+ * through the created Graph.
  *
  * <p>
  * Users need to manually synchronize on {@link EdgeFactory} if creating an edge needs to access
@@ -117,30 +118,9 @@ public class AsSynchronizedGraph<V, E>
      */
     public AsSynchronizedGraph(Graph<V, E> g)
     {
-        this(g, false, false);
+        this(g, new SynchronizedGraphParams());
     }
 
-    /**
-     * Constructor for AsSynchronizedGraph with specified cache strategy for <code>edgesOf</code>,
-     * <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods and specified fairness
-     * policy for thread-access.
-     *
-     * @param g the backing graph (the delegate)
-     * @param cacheEnabled a flag whether to use cache for those methods, if <tt>true</tt>, cache
-     *        will be used for those methods, otherwise cache will not be used
-     * @param fair fairness policy for thread-access
-     */
-    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnabled, boolean fair)
-    {
-        super(g);
-        readWriteLock = new ReentrantReadWriteLock(fair);
-        if (cacheEnabled)
-            cacheStrategy = new CacheAccess();
-        else
-            cacheStrategy = new NoCache();
-        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
-        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
-    }
 
     /**
      * Constructor for AsSynchronizedGraph with specified properties.
@@ -150,7 +130,15 @@ public class AsSynchronizedGraph<V, E>
      */
     public AsSynchronizedGraph(Graph<V, E> g, SynchronizedGraphParams params)
     {
-        this(g, params.isCacheEnable(), params.isFair());
+        super(g);
+        readWriteLock = new ReentrantReadWriteLock(params.isFair());
+        if (params.isCacheEnable())
+            cacheStrategy = new CacheAccess();
+        else
+            cacheStrategy = new NoCache();
+        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
+        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
+
     }
 
     /**
@@ -227,6 +215,8 @@ public class AsSynchronizedGraph<V, E>
         try {
             if (super.addVertex(v)) {
                 vertexSetModified();
+                inDegreeOf(v);
+                outDegreeOf(v);
                 return true;
             }
             return false;
@@ -306,11 +296,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> edgesOf(V vertex)
     {
-        readWriteLock.readLock().lock();
+        readWriteLock.writeLock().lock();
         try {
             return cacheStrategy.edgesOf(vertex);
         } finally {
-            readWriteLock.readLock().unlock();
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -334,11 +324,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        readWriteLock.readLock().lock();
+        readWriteLock.writeLock().lock();
         try {
             return cacheStrategy.incomingEdgesOf(vertex);
         } finally {
-            readWriteLock.readLock().unlock();
+            readWriteLock.writeLock().unlock();
         }
     }
 
@@ -362,11 +352,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        readWriteLock.readLock().lock();
+        readWriteLock.writeLock().lock();
         try {
             return cacheStrategy.outgoingEdgesOf(vertex);
         } finally {
-            readWriteLock.readLock().unlock();
+            readWriteLock.writeLock().unlock();
         }
     }
 

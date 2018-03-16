@@ -19,7 +19,7 @@ package org.jgrapht.graph;
 
 /**
  * The SynchronizedGraph Params describes the properties of a synchronized graph being created such
- * as whether it uses cache, fair mode for thread-access.
+ * as whether it uses cache and fair mode.
  *
  * @author CHEN Kui
  * @since Mar 9, 2018
