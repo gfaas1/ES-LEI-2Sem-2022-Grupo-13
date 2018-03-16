@@ -138,6 +138,11 @@ public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
         V vertex = bucketList.poll();
         if (vertex != null) {
             bucketList.updateBuckets(getUnvisitedNeighbours(vertex));
+            if(nListeners != 0){
+                for(E edge : graph.outgoingEdgesOf(vertex)){
+                    fireEdgeTraversed(createEdgeTraversalEvent(edge));
+                }
+            }
         }
         return vertex;
     }

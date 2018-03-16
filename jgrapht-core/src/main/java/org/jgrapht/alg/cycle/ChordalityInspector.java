@@ -36,8 +36,9 @@ import java.util.*;
  * four or more vertices have a chord, which is an edge that is not part of the cycle but connects two vertices
  * of the cycle.
  * <p>
- * A graph is chordal iff its the vertices can be arranged into a perfect elimination order. Perfect elimination
- * order isn't unique. Both maximum cardinality search and lexicographical breadth-first search produces this order.
+ * A graph is chordal iff its the vertices can be arranged into a perfect elimination order. More than one perfect
+ * elimination order may exist for a given graph. Either maximum cardinality search or lexicographical breadth-first
+ * search can be used to produce such an order.
  * <p>
  * Both lexicographical BFS and maximum cardinality search run in $\mathcal{O}(|V| + |E|)$. Checking whether given order
  * is the perfect elimination order via {@link ChordalityInspector#isPerfectEliminationOrder(List)} takes
@@ -69,6 +70,7 @@ public class ChordalityInspector<V, E> {
      * Iterator used for producing perfect elimination order.
      */
     private GraphIterator<V, E> orderIterator;
+
     /**
      * Creates a chordality inspector for {@code graph}, which uses {@link MaximumCardinalityIterator}
      * as a default iterator.
@@ -80,10 +82,10 @@ public class ChordalityInspector<V, E> {
     }
 
     /**
-     * Creates a chordality inspector for {@code graph}, which uses as iterator defined by the second
+     * Creates a chordality inspector for {@code graph}, which uses an iterator defined by the second
      * parameter as an internal iterator.
      *
-     * @param graph          the graph for which a chordality inspector to be created.
+     * @param graph          the graph for which a chordality inspector is to be created.
      * @param iterationOrder the constant, which defines iterator to be used by this {@code ChordalityInspector}.
      */
     public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder) {
@@ -112,12 +114,12 @@ public class ChordalityInspector<V, E> {
     }
 
     /**
-     * Returns the computed vertex order. In the case the inspected graph chordal, returned order
+     * Returns the computed vertex order. In the case where inspected graph is chordal, returned order
      * is a perfect elimination order.
      *
      * @return computed vertex order.
      */
-    public List<V> getOrder() {
+    public List<V> getSearchOrder() {
         return lazyComputeOrder();
     }
 
@@ -204,6 +206,19 @@ public class ChordalityInspector<V, E> {
             }
         }
         return predecessors;
+    }
+
+    /**
+     * Returns the type of iterator used in this {@code ChordalityInspector}
+     *
+     * @return the type of iterator used in this {@code ChordalityInspector}
+     */
+    public IterationOrder getIterationOrder() {
+        if (orderIterator instanceof LexBreadthFirstIterator) {
+            return IterationOrder.LEX_BFS;
+        } else {
+            return IterationOrder.MCS;
+        }
     }
 
     /**

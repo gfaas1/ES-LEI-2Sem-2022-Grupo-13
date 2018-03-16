@@ -22,6 +22,8 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,10 +35,31 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
+@RunWith(Parameterized.class)
 public class ChordalityInspectorTest {
+    private ChordalityInspector.IterationOrder iterationOrder;
+
+    public ChordalityInspectorTest(ChordalityInspector.IterationOrder iterationOrder) {
+        this.iterationOrder = iterationOrder;
+    }
+
+    @Parameterized.Parameters
+    public static Object[] params() {
+        return new Object[]{ChordalityInspector.IterationOrder.MCS, ChordalityInspector.IterationOrder.LEX_BFS};
+    }
 
     /**
-     * Tests whether repeated calls to the {@link ChordalityInspector#getOrder()} return
+     * Tests usage of the correct iteration order
+     */
+    @Test
+    public void testIterationOrder() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph, iterationOrder);
+        assertEquals(inspector.getIterationOrder(), iterationOrder);
+    }
+
+    /**
+     * Tests whether repeated calls to the {@link ChordalityInspector#getSearchOrder()} return
      * the same vertex order.
      */
     @Test
@@ -51,10 +74,10 @@ public class ChordalityInspectorTest {
         graph.addEdge(2, 3);
         graph.addEdge(2, 4);
         graph.addEdge(3, 4);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
-        List<Integer> order1 = inspector.getOrder();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph, iterationOrder);
+        List<Integer> order1 = inspector.getSearchOrder();
         graph.removeVertex(1);
-        List<Integer> order2 = inspector.getOrder();
+        List<Integer> order2 = inspector.getSearchOrder();
         assertEquals(order1, order2);
     }
 
@@ -76,7 +99,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(2, 3);
         graph.addEdge(2, 4);
         graph.addEdge(3, 4);
-        assertTrue(new ChordalityInspector<>(graph).isChordal());
+        assertTrue(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -98,7 +121,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(4, 5);
         graph.addEdge(5, 6);
         graph.addEdge(6, 4);
-        assertTrue(new ChordalityInspector<>(graph).isChordal());
+        assertTrue(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -134,7 +157,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(10, 1);
         graph.addEdge(3, 7);
         graph.addEdge(1, 7);
-        assertTrue(new ChordalityInspector<>(graph).isChordal());
+        assertTrue(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -169,7 +192,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(8, 5);
         graph.addEdge(5, 7);
         graph.addEdge(6, 8);
-        assertFalse(new ChordalityInspector<>(graph).isChordal());
+        assertFalse(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -187,7 +210,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(1, 3);
         graph.addEdge(3, 1);
         graph.addEdge(2, 3);
-        assertTrue(new ChordalityInspector<>(graph).isChordal());
+        assertTrue(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -212,7 +235,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(3, 4);
         graph.addEdge(4, 5);
         graph.addEdge(5, 2);
-        assertFalse(new ChordalityInspector<>(graph).isChordal());
+        assertFalse(new ChordalityInspector<>(graph, iterationOrder).isChordal());
     }
 
     /**
@@ -230,7 +253,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(1, 4);
         graph.addEdge(2, 4);
         graph.addEdge(3, 4);
-        assertFalse(new ChordalityInspector<>(graph).isPerfectEliminationOrder(order));
+        assertFalse(new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
     }
 
     /**
@@ -248,7 +271,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(1, 4);
         graph.addEdge(2, 3);
         graph.addEdge(3, 4);
-        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph, iterationOrder);
         assertFalse("Not a perfect elimination order: cycle 1->2->3->4->1 has non chord", inspector.isPerfectEliminationOrder(order));
         graph.addEdge(2, 4);
         assertTrue("Valid perfect elimination order: no induced cycles of length > 3", inspector.isPerfectEliminationOrder(order));
@@ -287,7 +310,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(8, 9);
         graph.addEdge(8, 10);
         graph.addEdge(9, 10);
-        assertTrue(new ChordalityInspector<>(graph).isPerfectEliminationOrder(order));
+        assertTrue(new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
     }
 
     /**
@@ -323,7 +346,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(10, 11);
         graph.addEdge(11, 12);
         assertTrue("Valid perfect elimination order",
-                new ChordalityInspector<>(graph).isPerfectEliminationOrder(order));
+                new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
     }
 
     /**
@@ -349,7 +372,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(4, 6);
         graph.addEdge(5, 6);
         assertFalse("Graph is chordal, order isn't perfect elimination order",
-                new ChordalityInspector<>(graph).isPerfectEliminationOrder(order));
+                new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
     }
 
     /**
@@ -378,7 +401,7 @@ public class ChordalityInspectorTest {
         graph.addEdge(10, 1);
         graph.addEdge(10, 2);
         assertFalse("Cycle 2->4->6->8->10->2 has no chords => no perfect elimination order",
-                new ChordalityInspector<>(graph).isPerfectEliminationOrder(order));
+                new ChordalityInspector<>(graph, iterationOrder).isPerfectEliminationOrder(order));
     }
 
 }

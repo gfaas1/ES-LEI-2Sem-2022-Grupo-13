@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -35,6 +36,31 @@ import static org.junit.Assert.assertTrue;
  * @author Timofey Chudakov
  */
 public class MaximumCardinalityIteratorTest {
+
+
+    @Test
+    public void testEvents() {
+        Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("a");
+        graph.addVertex("b");
+        graph.addVertex("c");
+        graph.addVertex("d");
+        graph.addEdge("a", "b");
+        graph.addEdge("b", "c");
+        graph.addEdge("c", "a");
+        graph.addEdge("b", "d");
+        LexBreadthFirstIteratorTest.MyTraversalListener<String, DefaultEdge> listener =
+                new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        iterator.addTraversalListener(listener);
+        for(int i = 0; i < 4; i++){
+            iterator.next();
+        }
+        assertEquals(graph.vertexSet(), listener.verticesTraversed);
+        assertEquals(graph.vertexSet(), listener.verticesFinished);
+        assertEquals(graph.edgeSet(), listener.edgesTraversed);
+    }
+
 
     /**
      * Tests iterator on empty graph.
@@ -95,7 +121,7 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on disconnected graph.
      */
     @Test
-    public void testMaximumCardinalityIterator3(){
+    public void testMaximumCardinalityIterator3() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -133,7 +159,7 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on pseudograph.
      */
     @Test
-    public void testMaximumCardinalityIterator4(){
+    public void testMaximumCardinalityIterator4() {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex("a");
         graph.addVertex("b");

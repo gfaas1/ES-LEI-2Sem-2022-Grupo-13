@@ -206,6 +206,9 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
     private void updateNeighbours(V vertex) {
         Set<V> processed = new HashSet<>();
         for (E edge : graph.edgesOf(vertex)) {
+            if(nListeners != 0){
+                fireEdgeTraversed(createEdgeTraversalEvent(edge));
+            }
             V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
             if (cardinalityMap.containsKey(opposite) && !processed.contains(opposite)) {
                 processed.add(opposite);

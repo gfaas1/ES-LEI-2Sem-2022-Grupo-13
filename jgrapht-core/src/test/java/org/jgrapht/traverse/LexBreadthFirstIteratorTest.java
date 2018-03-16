@@ -18,6 +18,9 @@
 package org.jgrapht.traverse;
 
 import org.jgrapht.Graph;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.TraversalListenerAdapter;
+import org.jgrapht.event.VertexTraversalEvent;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
@@ -27,6 +30,7 @@ import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +40,32 @@ import static org.junit.Assert.assertTrue;
  * @author Timofey Chudakov
  */
 public class LexBreadthFirstIteratorTest {
+
+    /**
+     * Tests basic properties of events
+     */
+    @Test
+    public void testEvents() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        MyTraversalListener<Integer, DefaultEdge> listener = new MyTraversalListener<>(graph);
+        iterator.addTraversalListener(listener);
+        for (int i = 0; i < 4; i++) {
+            iterator.next();
+        }
+        assertEquals(graph.vertexSet(), listener.verticesTraversed);
+        assertEquals(graph.vertexSet(), listener.verticesFinished);
+        assertEquals(graph.edgeSet(), listener.edgesTraversed);
+    }
 
     /**
      * Tests iterator on empty graph.
@@ -95,7 +125,7 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator on disconnected graph.
      */
     @Test
-    public void testLexicographicalBfsIterator3(){
+    public void testLexicographicalBfsIterator3() {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex("a");
         graph.addVertex("b");
@@ -134,20 +164,20 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator on pseudograph.
      */
     @Test
-    public void testLexicographicalBfsIterator4(){
+    public void testLexicographicalBfsIterator4() {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
-        graph.addEdge(1,1);
-        graph.addEdge(1,2);
-        graph.addEdge(1,2);
-        graph.addEdge(1,3);
-        graph.addEdge(1,3);
-        graph.addEdge(2,3);
-        graph.addEdge(2,3);
-        graph.addEdge(3,3);
-        graph.addEdge(3,3);
+        graph.addEdge(1, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 3);
+        graph.addEdge(3, 3);
         LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
@@ -169,7 +199,38 @@ public class LexBreadthFirstIteratorTest {
         assertTrue(graph.vertexSet().equals(returned));
 
         assertFalse(iterator.hasNext());
+    }
 
+    /**
+     * TraversalListener for testing basic events invariants.
+     */
+    static class MyTraversalListener<V, E> extends TraversalListenerAdapter<V, E> {
+        Set<V> verticesTraversed = new HashSet<>();
+        Set<V> verticesFinished = new HashSet<>();
+        Set<E> edgesTraversed = new HashSet<>();
+        Graph<V, E> graph;
+
+        MyTraversalListener(Graph<V, E> graph) {
+            this.graph = graph;
+        }
+
+        @Override
+        public void edgeTraversed(EdgeTraversalEvent<E> e) {
+            assertTrue(graph.containsEdge(e.getEdge()));
+            edgesTraversed.add(e.getEdge());
+        }
+
+        @Override
+        public void vertexTraversed(VertexTraversalEvent<V> e) {
+            assertTrue(graph.containsVertex(e.getVertex()));
+            verticesTraversed.add(e.getVertex());
+        }
+
+        @Override
+        public void vertexFinished(VertexTraversalEvent<V> e) {
+            assertTrue(graph.containsVertex(e.getVertex()));
+            verticesFinished.add(e.getVertex());
+        }
     }
 }
 
