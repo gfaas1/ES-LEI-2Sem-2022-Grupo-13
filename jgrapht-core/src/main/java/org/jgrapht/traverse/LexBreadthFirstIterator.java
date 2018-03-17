@@ -42,6 +42,8 @@ import java.util.*;
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
  * undefined.
+ * <p>
+ * Note: only vertex events are fired by this iterator.
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
@@ -138,11 +140,6 @@ public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
         V vertex = bucketList.poll();
         if (vertex != null) {
             bucketList.updateBuckets(getUnvisitedNeighbours(vertex));
-            if(nListeners != 0){
-                for(E edge : graph.outgoingEdgesOf(vertex)){
-                    fireEdgeTraversed(createEdgeTraversalEvent(edge));
-                }
-            }
         }
         return vertex;
     }

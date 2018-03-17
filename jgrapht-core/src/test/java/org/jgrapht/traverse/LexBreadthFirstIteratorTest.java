@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 public class LexBreadthFirstIteratorTest {
 
     /**
-     * Tests basic properties of events
+     * Tests basic properties of events fired by {@code LexBreadthFirstIterator}
      */
     @Test
     public void testEvents() {
@@ -64,7 +64,6 @@ public class LexBreadthFirstIteratorTest {
         }
         assertEquals(graph.vertexSet(), listener.verticesTraversed);
         assertEquals(graph.vertexSet(), listener.verticesFinished);
-        assertEquals(graph.edgeSet(), listener.edgesTraversed);
     }
 
     /**
@@ -207,17 +206,10 @@ public class LexBreadthFirstIteratorTest {
     static class MyTraversalListener<V, E> extends TraversalListenerAdapter<V, E> {
         Set<V> verticesTraversed = new HashSet<>();
         Set<V> verticesFinished = new HashSet<>();
-        Set<E> edgesTraversed = new HashSet<>();
         Graph<V, E> graph;
 
         MyTraversalListener(Graph<V, E> graph) {
             this.graph = graph;
-        }
-
-        @Override
-        public void edgeTraversed(EdgeTraversalEvent<E> e) {
-            assertTrue(graph.containsEdge(e.getEdge()));
-            edgesTraversed.add(e.getEdge());
         }
 
         @Override

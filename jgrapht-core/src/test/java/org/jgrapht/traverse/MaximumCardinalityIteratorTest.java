@@ -38,6 +38,9 @@ import static org.junit.Assert.assertTrue;
 public class MaximumCardinalityIteratorTest {
 
 
+    /**
+     * Tests basic properties of events fired by {@code LexBreadthFirstIterator}.
+     */
     @Test
     public void testEvents() {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
@@ -58,7 +61,6 @@ public class MaximumCardinalityIteratorTest {
         }
         assertEquals(graph.vertexSet(), listener.verticesTraversed);
         assertEquals(graph.vertexSet(), listener.verticesFinished);
-        assertEquals(graph.edgeSet(), listener.edgesTraversed);
     }
 
 

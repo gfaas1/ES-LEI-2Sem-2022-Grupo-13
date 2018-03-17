@@ -34,6 +34,8 @@ import java.util.*;
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
  * undefined.
+ * <p>
+ * Note: only vertex events are fired by this iterator.
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
@@ -206,9 +208,6 @@ public class MaximumCardinalityIterator<V, E> extends AbstractGraphIterator<V, E
     private void updateNeighbours(V vertex) {
         Set<V> processed = new HashSet<>();
         for (E edge : graph.edgesOf(vertex)) {
-            if(nListeners != 0){
-                fireEdgeTraversed(createEdgeTraversalEvent(edge));
-            }
             V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
             if (cardinalityMap.containsKey(opposite) && !processed.contains(opposite)) {
                 processed.add(opposite);
