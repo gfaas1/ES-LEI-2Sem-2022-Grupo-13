@@ -20,6 +20,7 @@ package org.jgrapht.graph;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -138,7 +139,10 @@ public class AsSynchronizedGraph<V, E>
             cacheStrategy = new NoCache();
         allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
         allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
-
+        for (V v : allVerticesSet) {
+            inDegreeOf(v);
+            outDegreeOf(v);
+        }
     }
 
     /**
@@ -296,11 +300,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> edgesOf(V vertex)
     {
-        readWriteLock.writeLock().lock();
+        readWriteLock.readLock().lock();
         try {
             return cacheStrategy.edgesOf(vertex);
         } finally {
-            readWriteLock.writeLock().unlock();
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -324,11 +328,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        readWriteLock.writeLock().lock();
+        readWriteLock.readLock().lock();
         try {
             return cacheStrategy.incomingEdgesOf(vertex);
         } finally {
-            readWriteLock.writeLock().unlock();
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -352,11 +356,11 @@ public class AsSynchronizedGraph<V, E>
     @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        readWriteLock.writeLock().lock();
+        readWriteLock.readLock().lock();
         try {
             return cacheStrategy.outgoingEdgesOf(vertex);
         } finally {
-            readWriteLock.writeLock().unlock();
+            readWriteLock.readLock().unlock();
         }
     }
 
@@ -947,13 +951,17 @@ public class AsSynchronizedGraph<V, E>
          */
         private Set<E> getCopy()
         {
-            readWriteLock.writeLock().lock();
+            readWriteLock.readLock().lock();
             try {
                 if (copy != null)
                     return copy;
-                return Collections.unmodifiableSet(new LinkedHashSet<>(set));
+                synchronized (this) {
+                    if (copy != null)
+                        return copy;
+                    return copy = Collections.unmodifiableSet(new LinkedHashSet<>(set));
+                }
             } finally {
-                readWriteLock.writeLock().unlock();
+                readWriteLock.readLock().unlock();
             }
         }
 
@@ -1023,6 +1031,7 @@ public class AsSynchronizedGraph<V, E>
         boolean isCacheEnabled();
     }
 
+//    private
     /**
      * Don't use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code>
      * and <code>outgoingEdgesOf</code> methods.
@@ -1124,13 +1133,13 @@ public class AsSynchronizedGraph<V, E>
         private static final long serialVersionUID = -18262921841829294L;
 
         // A map caching for incomingEdges operation.
-        private transient Map<V, Set<E>> incomingEdgesMap = new HashMap<>();
+        private final transient Map<V, Set<E>> incomingEdgesMap = new ConcurrentHashMap<>();
 
         // A map caching for outgoingEdges operation.
-        private transient Map<V, Set<E>> outgoingEdgesMap = new HashMap<>();
+        private final transient Map<V, Set<E>> outgoingEdgesMap = new ConcurrentHashMap<>();
 
         // A map caching for edgesOf operation.
-        private transient Map<V, Set<E>> edgesOfMap = new HashMap<>();
+        private final transient Map<V, Set<E>> edgesOfMap = new ConcurrentHashMap<>();
 
         /**
          * {@inheritDoc}
