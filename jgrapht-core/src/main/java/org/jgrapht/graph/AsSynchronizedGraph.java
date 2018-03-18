@@ -1175,8 +1175,13 @@ public class AsSynchronizedGraph<V, E>
             Set<E> s = edgesOfMap.get(vertex);
             if (s != null)
                 return s;
-            s = copySet(AsSynchronizedGraph.super.edgesOf(vertex));
-            edgesOfMap.put(vertex, s);
+            synchronized (edgesOfMap) {
+                s = edgesOfMap.get(vertex);
+                if (s != null)
+                    return s;
+                s = copySet(AsSynchronizedGraph.super.edgesOf(vertex));
+                edgesOfMap.put(vertex, s);
+            }
             return s;
         }
 
@@ -1189,8 +1194,13 @@ public class AsSynchronizedGraph<V, E>
             Set<E> s = incomingEdgesMap.get(vertex);
             if (s != null)
                 return s;
-            s = copySet(AsSynchronizedGraph.super.incomingEdgesOf(vertex));
-            incomingEdgesMap.put(vertex, s);
+            synchronized (incomingEdgesMap) {
+                s = incomingEdgesMap.get(vertex);
+                if (s != null)
+                    return s;
+                s = copySet(AsSynchronizedGraph.super.incomingEdgesOf(vertex));
+                incomingEdgesMap.put(vertex, s);
+            }
             return s;
         }
 
@@ -1203,9 +1213,14 @@ public class AsSynchronizedGraph<V, E>
             Set<E> s = outgoingEdgesMap.get(vertex);
             if (s != null)
                 return s;
-            s = copySet(AsSynchronizedGraph.super.outgoingEdgesOf(vertex));
-            outgoingEdgesMap.put(vertex, s);
-            return s;
+            synchronized (outgoingEdgesMap) {
+                s = outgoingEdgesMap.get(vertex);
+                if (s != null)
+                    return s;
+                s = copySet(AsSynchronizedGraph.super.outgoingEdgesOf(vertex));
+                outgoingEdgesMap.put(vertex, s);
+                return s;
+            }
         }
 
         /**
