@@ -149,7 +149,7 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
 
         while (!isDRegular(target)) {
             // initialize target graph
-            target.removeAllEdges(target.edgeSet());
+            target.removeAllEdges(new HashSet<>(target.edgeSet()));
 
             // set of candidate edges
             Set<Map.Entry<V, V>> S = new HashSet<>();
