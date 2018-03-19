@@ -1393,7 +1393,7 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         *Return whether fair model will be used for the synchronized graph being built.
+         * Return whether fair model will be used for the synchronized graph being built.
          *
          * @return <tt>true</tt> if constructed as fair mode, <tt>false</tt> if non-fair
          */
