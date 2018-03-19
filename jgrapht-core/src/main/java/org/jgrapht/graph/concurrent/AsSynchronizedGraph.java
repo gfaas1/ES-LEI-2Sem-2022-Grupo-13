@@ -140,6 +140,8 @@ public class AsSynchronizedGraph<V, E>
             cacheStrategy = new NoCache();
         allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
         allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
+
+        // Ensure that the underlying data structure is completely constructed. For some of Set are built lazily in underlying data structure.
         for (V v : allVerticesSet) {
             inDegreeOf(v);
             outDegreeOf(v);
@@ -220,6 +222,8 @@ public class AsSynchronizedGraph<V, E>
         try {
             if (super.addVertex(v)) {
                 vertexSetModified();
+
+                // Ensure that the underlying data structure is completely constructed. For some of Set are built lazily in underlying data structure.
                 inDegreeOf(v);
                 outDegreeOf(v);
                 return true;
