@@ -15,12 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.graph;
+package org.jgrapht.graph.concurrent;
 
 import java.util.*;
 import junit.extensions.*;
 import junit.framework.*;
 import junit.textui.*;
+import org.jgrapht.graph.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -34,17 +35,23 @@ public class AsSynchronizedGraphTest
     private ArrayList<Integer> vertices;
     private ArrayList<DefaultEdge> edges;
     private AsSynchronizedGraph<Integer, DefaultEdge> g;
+    private Vector<ArrayList<Order> > ordersList;
 
     @Test
     public void testAddVertex()
     {
+        g = new AsSynchronizedGraph.Builder().build(new SimpleGraph<>(DefaultEdge.class));
+        ordersList = new Vector<>();
+        for (int i = 0; i < 20; i++) {
+            ordersList.add(new ArrayList<>());
+        }
+        for (int i = 0; i < 1000; i++) {
+            int index = (int)(Math.random()*ordersList.size());
+            ordersList.get(index).add(new AddV(i));
+        }
         TestSuite ts = new ActiveTestSuite();
-        vertices = new ArrayList<>();
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
-        for (int i = 0; i < 1000; i++)
-            vertices.add(i);
-        for (int i = 0; i < 20; i++)
-            ts.addTest(new TestThread("addVertex"));
+        for (int i = 0; i < ordersList.size(); i++)
+            ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertEquals(1000, g.vertexSet().size());
         for (int i = 0; i < 1000; i++) {
@@ -59,21 +66,23 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddEdge()
     {
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
+        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        ArrayList<DefaultEdge> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
-        edges = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            DefaultEdge e = g.getEdgeFactory().createEdge(i, (i + 1)%1000);
-            e.source = i;
-            e.target = (i + 1)%1000;
-            edges.add(e);
-        }
-        ArrayList<DefaultEdge> list = new ArrayList<>(edges);
-        TestSuite ts = new ActiveTestSuite();
+        ordersList = new Vector<>();
         for (int i = 0; i < 20; i++) {
-            ts.addTest(new TestThread("addEdge"));
+            ordersList.add(new ArrayList<>());
         }
+        for (int i = 0; i < 1000; i++) {
+            int index = (int)(Math.random()*ordersList.size());
+            DefaultEdge e = new DefaultEdge();
+            ordersList.get(index).add(new AddE(i, (i + 1)%1000,  e));
+            list.add(e);
+        }
+        TestSuite ts = new ActiveTestSuite();
+        for (int i = 0; i < ordersList.size(); i++)
+            ts.addTest(new TestThread("runAsThread"));
         TestRunner.run(ts);
         assertEquals(1000, g.edgeSet().size());
         for (int i = 0; i < 1000; i++)
@@ -93,7 +102,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveEdge()
     {
-        g = new AsSynchronizedGraph<>(new SimpleGraph<>(DefaultEdge.class), new SynchronizedGraphParams().cacheEnable());
+        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
         edges = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 1000; i++) {
@@ -101,8 +110,6 @@ public class AsSynchronizedGraphTest
         }
         for (int i = 0; i < 1000; i++) {
             DefaultEdge e = new DefaultEdge();
-            e.target = i;
-            e.source = (i + 1)%1000;
             g.addEdge(i, (i + 1)%1000, e);
             edges.add(e);
         }
@@ -121,8 +128,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveVertex()
     {
-        g = new AsSynchronizedGraph<>(new DirectedPseudograph<>(DefaultEdge.class),
-                new SynchronizedGraphParams().cacheEnable());
+        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
         vertices = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {
@@ -156,8 +162,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testOthers()
     {
-        g = new AsSynchronizedGraph<>(new Pseudograph<>(DefaultEdge.class),
-                new SynchronizedGraphParams().cacheDisable());
+        g = new AsSynchronizedGraph.Builder().cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
         Set<Integer> vertSet = g.vertexSet();
         Set<DefaultEdge> edgeSet = g.edgeSet();
         g.addVertex(1);
@@ -208,20 +213,15 @@ public class AsSynchronizedGraphTest
         assertEquals(3, g.outgoingEdgesOf(2).size());
     }
 
-    private ArrayList<Order> order1;
-    private ArrayList<Order> order2;
-    private ArrayList<Order> order3;
-    private ArrayList<Order> order4;
-    private Vector<ArrayList<Order> > ordersList;
     @Test
     public void testScenario()
     {
         g = new AsSynchronizedGraph<>(new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class));
         TestSuite ts = new ActiveTestSuite();
-        order1 = new ArrayList<>();
-        order2 = new ArrayList<>();
-        order3 = new ArrayList<>();
-        order4 = new ArrayList<>();
+        ArrayList<Order> order1 = new ArrayList<>();
+        ArrayList<Order> order2 = new ArrayList<>();
+        ArrayList<Order> order3 = new ArrayList<>();
+        ArrayList<Order> order4 = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             order1.add(new AddV(i));
         createOrder(order1, 2, 9, true);    // add 21 edges
@@ -321,8 +321,6 @@ public class AsSynchronizedGraphTest
             this.e = e;
             this.s = s;
             this.t = t;
-            this.e.source = s;
-            this.e.target = t;
         }
 
         @Override
@@ -403,24 +401,6 @@ public class AsSynchronizedGraphTest
                     e.printStackTrace();
                 }
                 g.addVertex(id);
-            }
-        }
-        public void addEdge()
-        {
-            while (true) {
-                DefaultEdge e;
-                synchronized (edges) {
-                    if (edges.size() != 0)
-                        e = edges.remove(0);
-                    else
-                        return;
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                g.addEdge((int)e.getSource(), (int)e.getTarget(), e);
             }
         }
         public void removeEdge()
