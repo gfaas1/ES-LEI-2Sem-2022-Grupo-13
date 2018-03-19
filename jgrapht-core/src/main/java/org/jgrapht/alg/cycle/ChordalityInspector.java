@@ -70,6 +70,10 @@ public class ChordalityInspector<V, E> {
      * Iterator used for producing perfect elimination order.
      */
     private GraphIterator<V, E> orderIterator;
+    /**
+     * Stores the type of iterator used by this {@code ChordalityInspector}.
+     */
+    private final IterationOrder iterationOrder;
 
     /**
      * Creates a chordality inspector for {@code graph}, which uses {@link MaximumCardinalityIterator}
@@ -90,6 +94,7 @@ public class ChordalityInspector<V, E> {
      */
     public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder) {
         this.graph = Objects.requireNonNull(graph);
+        this.iterationOrder = iterationOrder;
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         }
@@ -214,11 +219,7 @@ public class ChordalityInspector<V, E> {
      * @return the type of iterator used in this {@code ChordalityInspector}
      */
     public IterationOrder getIterationOrder() {
-        if (orderIterator instanceof LexBreadthFirstIterator) {
-            return IterationOrder.LEX_BFS;
-        } else {
-            return IterationOrder.MCS;
-        }
+        return iterationOrder;
     }
 
     /**
