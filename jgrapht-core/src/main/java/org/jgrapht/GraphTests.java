@@ -480,6 +480,22 @@ public abstract class GraphTests
     }
 
     /**
+     * Checks whether a graph is chordal. A <a href="https://en.wikipedia.org/wiki/Chordal_graph">
+     * chordal graph</a> is one in which all cycles of four or more vertices have a chord, which
+     * is an edge that is not part of the cycle but connects two vertices of the cycle.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true if the graph is chordal, false otherwise
+     * @see ChordalityInspector#isChordal()
+     */
+    public static <V, E> boolean isChordal(Graph<V, E> graph){
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new ChordalityInspector<>(graph).isChordal();
+    }
+
+    /**
      * Checks that the specified graph is directed and throws a customized
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.

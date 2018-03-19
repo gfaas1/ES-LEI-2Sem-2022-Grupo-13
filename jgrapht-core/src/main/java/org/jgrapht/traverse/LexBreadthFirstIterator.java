@@ -33,9 +33,11 @@ import java.util.*;
  * some separator between them. For example, 7#4#3 is a valid vertex label.
  * <p>
  * Iterator chooses vertex with lexicographically largest label and returns it. It breaks ties
- * arbitrarily. For more information on lexicographical BFS see the following papers: <a
- * href="https://pdfs.semanticscholar.org/d4b5/a492f781f23a30773841ec79c46d2ec2eb9c.pdf">
- * <i>Lexicographic Breadth First Search – A Survey</i></a> and <a
+ * arbitrarily. For more information on lexicographical BFS see the following article:
+ * Corneil D.G. (2004) <a href="https://pdfs.semanticscholar.org/d4b5/a492f781f23a30773841ec79c46d2ec2eb9c.pdf">
+ * <i>Lexicographic Breadth First Search – A Survey</i></a>. In: Hromkovič J., Nagl M.,
+ * Westfechtel B. (eds) Graph-Theoretic Concepts in Computer Science. WG 2004. Lecture Notes in
+ * Computer Science, vol 3353. Springer, Berlin, Heidelberg; and the following paper:<a
  * href="http://www.cse.iitd.ac.in/~naveen/courses/CSL851/uwaterloo.pdf"><i>CS 762: Graph-theoretic
  * algorithms. Lecture notes of a graduate course. University of Waterloo</i></a>.
  * <p>

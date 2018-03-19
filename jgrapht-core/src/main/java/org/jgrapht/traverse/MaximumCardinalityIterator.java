@@ -28,7 +28,8 @@ import java.util.*;
  * <p>
  * For every vertex in graph its cardinality is defined as the number of its neighbours, which
  * have been already visited by this iterator. Iterator chooses vertex with the maximum cardinality,
- * breaking ties arbitrarily. For more information of maximum cardinality search see
+ * breaking ties arbitrarily. For more information of maximum cardinality search see:
+ * Berry, A., Blair, J., Heggernes, P. et al. Algorithmica (2004) 39: 287. https://doi.org/10.1007/s00453-004-1084-3
  * <a href="http://www.ii.uib.no/~pinar/MCS-M.pdf"><i>Maximum Cardinality Search for Computing Minimal Triangulations</i></a>.
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
