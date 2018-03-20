@@ -55,7 +55,9 @@ public class ClosestFirstIterator<V, E>
     private boolean initialized = false;
 
     /**
-     * Creates a new closest-first iterator for the specified graph.
+     * Creates a new closest-first iterator for the specified graph.  Iteration
+     * will start at an arbitrary vertex and will not be limited, that is, will
+     * be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
      */
@@ -79,10 +81,13 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
-     * Creates a new closest-first iterator for the specified graph. Iteration will start at the
-     * specified start vertices and will be limited to the connected component that includes those
-     * vertices. If the specified start vertex is <code>null</code>, iteration will start at an
-     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
+     * Creates a new closest-first iterator for the specified graph. Iteration
+     * will start at the specified start vertices and will be limited to the
+     * subset of the graph reachable from those vertices.
+     * Iteration order is based on minimum distance from any of the
+     * start vertices, regardless of the order in which the start vertices are
+     * supplied.  Because of this, the entire traversal is treated as if it
+     * were over a single connected component with respect to events fired.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
@@ -111,8 +116,8 @@ public class ClosestFirstIterator<V, E>
 
     /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
-     * start at the specified start vertices and will be limited to the subset of the connected
-     * components which include those vertices and is reachable via paths of weighted length less
+     * start at the specified start vertices and will be limited to the subset of the graph
+     * reachable from those vertices via paths of weighted length less
      * than or equal to the specified radius. The specified collection of start
      * vertices may not be <code>null</code>.  Iteration order is based on minimum
      * distance from any of the start vertices, regardless of the order in
