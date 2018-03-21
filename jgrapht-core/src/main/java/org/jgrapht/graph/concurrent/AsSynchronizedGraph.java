@@ -1332,7 +1332,6 @@ public class AsSynchronizedGraph<V, E>
         public Builder cacheDisable()
         {
             cacheEnable = false;
-            fair = false;
             return this;
         }
 
