@@ -47,6 +47,12 @@ import java.util.*;
  * is the perfect elimination order via {@link ChordalityInspector#isPerfectEliminationOrder(List)} takes
  * $\mathcal{O}(|V| + |E|)$ as well. Finding  hole of the graph, if it isn't chordal, takes O(|V| + |E|).
  * So, overall time complexity of the method {@link ChordalityInspector#isChordal()} is $\mathcal{O}(|V| + |E|)$.
+ *<p>
+ * Of the graph is chordal, there exist efficient for following problems: graph coloring problem,
+ * maximum independent set problem and maximum clique problem. The implementations in this {@code ChordalityInspector}
+ * run in $\mathcal{O}(|V| + |E|)$.
+ * <p>
+ * All the information about the inspected {@code graph} is computed lazily.
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
@@ -94,7 +100,7 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     private Set<V> maximumIndependentSet;
 
     /**
-     * List of all maximal cliques of the inspected {@code graph}.
+     * A maximum clique of the inspected {@code graph}.
      */
     private Set<V> maximumClique;
 
@@ -135,7 +141,7 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      * @return true if this graph is chordal, otherwise false.
      */
     public boolean isChordal() {
-        if (chordal == null) {
+        if (!isComputed()) {
             order = lazyComputeOrder();
             chordal = isPerfectEliminationOrder(order, true);
         }
@@ -175,18 +181,6 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order with
-     * respect to the inspected graph. Returns false, if the inspected graph isn't chordal.
-     *
-     * @param vertexOrder the sequence of vertices of the {@code graph}.
-     * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order, otherwise false.
-     */
-    public boolean isPerfectEliminationOrder(List<V> vertexOrder) {
-        return isPerfectEliminationOrder(vertexOrder, false);
-    }
-
-    /**
      * Returns a coloring of the inspected {@code graph}. If the graph isn't
      * chordal, returns null.
      *
@@ -215,6 +209,18 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     public Set<V> getMaximumClique() {
         return lazyComputeMaximumClique();
+    }
+
+    /**
+     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order with
+     * respect to the inspected graph. Returns false, if the inspected graph isn't chordal.
+     *
+     * @param vertexOrder the sequence of vertices of the {@code graph}.
+     * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
+     * perfect elimination order, otherwise false.
+     */
+    public boolean isPerfectEliminationOrder(List<V> vertexOrder) {
+        return isPerfectEliminationOrder(vertexOrder, false);
     }
 
     /**
