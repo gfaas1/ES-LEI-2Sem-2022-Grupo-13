@@ -47,7 +47,7 @@ import java.util.*;
  * is the perfect elimination order via {@link ChordalityInspector#isPerfectEliminationOrder(List)} takes
  * $\mathcal{O}(|V| + |E|)$ as well. Finding  hole of the graph, if it isn't chordal, takes O(|V| + |E|).
  * So, overall time complexity of the method {@link ChordalityInspector#isChordal()} is $\mathcal{O}(|V| + |E|)$.
- *<p>
+ * <p>
  * Of the graph is chordal, there exist efficient for following problems: graph coloring problem,
  * maximum independent set problem and maximum clique problem. The implementations in this {@code ChordalityInspector}
  * run in $\mathcal{O}(|V| + |E|)$.
@@ -310,7 +310,7 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     private Set<V> lazyComputeMaximumClique() {
         if (maximumClique == null) {
-            if(!isComputed()){
+            if (!isComputed()) {
                 isChordal();
             }
             if (chordal) {
@@ -334,20 +334,38 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order with
-     * respect to the inspected graph. Returns false, if the inspected graph isn't chordal. If
-     * {@code computeHole} is true and the inspected graph isn't chordal, computes some chordless
-     * cycle in the inspected {@code graph}.
+     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
+     * Returns false, if the inspected graph isn't chordal.
      *
-     * @param vertexOrder the sequence of vertices of the {@code graph}.
+     * @param vertexOrder the sequence of vertices of {@code graph}.
      * @param computeHole tells whether to compute the hole if the graph isn't chordal.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order, otherwise false.
+     * perfect elimination order.
      */
     private boolean isPerfectEliminationOrder(List<V> vertexOrder, boolean computeHole) {
         Set<V> graphVertices = graph.vertexSet();
         if (graphVertices.size() == vertexOrder.size() && graphVertices.containsAll(vertexOrder)) {
-            return isPerfectEliminationOrder(vertexOrder, getVertexInOrder(vertexOrder), computeHole);
+            Map<V, Integer> vertexInOrder = getVertexInOrder(vertexOrder);
+            for (V vertex : vertexOrder) {
+                Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
+                if (predecessors.size() > 0) {
+                    V maxPredecessor = Collections.max(predecessors, Comparator.comparingInt(vertexInOrder::get));
+                    for (V predecessor : predecessors) {
+                        if (!predecessor.equals(maxPredecessor) && !graph.containsEdge(predecessor, maxPredecessor)) {
+                            if (computeHole) {
+                                int position = vertexInOrder.get(vertex);
+                                Set<V> subgraph = new HashSet<>(position + 1);
+                                for (int i = 0; i <= position; i++) {
+                                    subgraph.add(order.get(i));
+                                }
+                                findHole(predecessor, vertex, maxPredecessor, subgraph);
+                            }
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         } else {
             return false;
         }
@@ -367,39 +385,6 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
             vertexInOrder.put(vertex, i++);
         }
         return vertexInOrder;
-    }
-
-    /**
-     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
-     * Returns false, if the inspected graph isn't chordal.
-     *
-     * @param vertexOrder   the sequence of vertices of {@code graph}.
-     * @param vertexInOrder maps every vertex in {@code graph} to its position in {@code vertexOrder}.
-     * @param computeHole   tells whether to compute the hole if the graph isn't chordal.
-     * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order.
-     */
-    private boolean isPerfectEliminationOrder(List<V> vertexOrder, Map<V, Integer> vertexInOrder, boolean computeHole) {
-        for (V vertex : vertexOrder) {
-            Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
-            if (predecessors.size() > 0) {
-                V maxPredecessor = Collections.max(predecessors, Comparator.comparingInt(vertexInOrder::get));
-                for (V predecessor : predecessors) {
-                    if (!predecessor.equals(maxPredecessor) && !graph.containsEdge(predecessor, maxPredecessor)) {
-                        if (computeHole) {
-                            int position = vertexInOrder.get(vertex);
-                            Set<V> subgraph = new HashSet<>(position + 1);
-                            for (int i = 0; i <= position; i++) {
-                                subgraph.add(order.get(i));
-                            }
-                            findHole(predecessor, vertex, maxPredecessor, subgraph);
-                        }
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     /**
