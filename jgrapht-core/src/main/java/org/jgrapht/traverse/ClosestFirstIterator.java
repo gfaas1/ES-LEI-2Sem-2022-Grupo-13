@@ -60,7 +60,11 @@ public class ClosestFirstIterator<V, E>
      * be able to traverse all the graph.
      *
      * @param g the graph to be iterated.
+     *
+     * @deprecated this constructor never made much sense, since distance is
+     * defined with respect to one or more start vertices
      */
+    @Deprecated
     public ClosestFirstIterator(Graph<V, E> g)
     {
         this(g, (V) null);
