@@ -38,6 +38,7 @@ Changes to JGraphT in each version:
     - Removed redundant parameter from `TypeUtil.uncheckedCast` method (contributed by Konstantinos Karatsenidis)
     - Removed recursion from `NaiveLcaFinder.findLca` method (contributed by Konstantinos Karatsenidis)
     - Added `AsSynchronizedGraph` in new package `org.jgrapht.graph.concurrent` (contributed by Chen Kui)
+    - Fixed bug with `ClosestFirstIterator` when given multiple start vertices (repro by shevek, fixed by John Sichi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
