@@ -1305,7 +1305,7 @@ public class AsSynchronizedGraph<V, E>
         private boolean fair;
 
         /**
-         * Construct a new Builder with cacheDisable and non-fair mode.
+         * Construct a new Builder non-fair mode and cache disabled.
          */
         public Builder()
         {
@@ -1316,7 +1316,7 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Construct a new Builder.
          *
-         * @param graph the graph to base the builder
+         * @param graph the graph on which to base the builder
          */
         public Builder(AsSynchronizedGraph graph)
         {
@@ -1325,7 +1325,7 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Request a synchronized graph using non-fair mode without caching.
+         * Request a synchronized graph without caching.
          *
          * @return the Builder
          */
@@ -1368,6 +1368,7 @@ public class AsSynchronizedGraph<V, E>
 
         /**
          * Request a synchronized graph with non-fair mode.
+         *
          * @return the SynchronizedGraphParams
          */
         public Builder setNonfair()
@@ -1377,7 +1378,7 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Return whether fair model will be used for the synchronized graph being built.
+         * Return whether fair mode will be used for the synchronized graph being built.
          *
          * @return <tt>true</tt> if constructed as fair mode, <tt>false</tt> if non-fair
          */

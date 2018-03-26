@@ -395,11 +395,6 @@ public class AsSynchronizedGraphTest
                     else
                         return;
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 g.addVertex(id);
             }
         }
@@ -413,11 +408,6 @@ public class AsSynchronizedGraphTest
                     else
                         return;
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
                 g.removeEdge(e);
             }
         }
@@ -430,11 +420,6 @@ public class AsSynchronizedGraphTest
                         c = vertices.remove(0);
                     else return;
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 g.removeVertex(c);
             }
         }
@@ -442,11 +427,6 @@ public class AsSynchronizedGraphTest
         {
             List<Order> orders = ordersList.remove(0);
             for (Order o : orders) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 o.execute();
             }
         }
