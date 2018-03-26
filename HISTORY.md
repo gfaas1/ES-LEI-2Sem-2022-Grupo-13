@@ -36,6 +36,7 @@ Changes to JGraphT in each version:
     - Removed old JGraph dependency, updated JGraphX to version 3.4.1.3, minor revision of `JGraphXAdapterDemo` (contributed by John Sichi)
     - Added `ChordalityInspector`, `LexBreadthFirstIterator`, and `MaximumCardinalityIterator` (contributed by Timofey Chudakov)
     - Removed redundant parameter from `TypeUtil.uncheckedCast` method (contributed by Konstantinos Karatsenidis)
+    - Removed recursion from `NaiveLcaFinder.findLca` method (contributed by Konstantinos Karatsenidis)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
