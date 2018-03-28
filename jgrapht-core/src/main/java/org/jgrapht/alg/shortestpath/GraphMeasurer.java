@@ -160,7 +160,7 @@ public class GraphMeasurer<V, E>
 
     /**
      * Compute the graph pseudo-periphery.
-     * The periphery of a graph is the set of all pseudo-peripheral vertices.
+     * The pseudo-periphery of a graph is the set of all pseudo-peripheral vertices.
      * A vertex u is pseudo-peripheral, if for each vertex v with $d(u,v) = \epsilon(u)$ holds $\epsilon(u) = \epsilon(v)$.
      *
      * @return the graph pseudo-periphery
