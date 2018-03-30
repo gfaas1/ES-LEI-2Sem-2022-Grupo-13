@@ -518,10 +518,17 @@ public abstract class GraphTests
         if (!graph.getType().isSimple() || n < 3)
             return false;
 
-        for (V v: graph.vertexSet())
-            for (V w: graph.vertexSet())
+        List<V> vertexList = new ArrayList<>(graph.vertexSet());
+
+        for (int i = 0; i < vertexList.size(); i++) {
+            for (int j = i + 1; j < vertexList.size(); j++) {
+                V v = vertexList.get(i);
+                V w = vertexList.get(j);
+
                 if (!v.equals(w) && !graph.containsEdge(v, w) && graph.degreeOf(v) + graph.degreeOf(w) < n)
                     return false;
+            }
+        }
 
         return true;
     }
