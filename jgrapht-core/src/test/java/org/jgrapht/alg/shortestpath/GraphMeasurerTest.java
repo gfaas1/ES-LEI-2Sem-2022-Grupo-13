@@ -17,21 +17,22 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.graph.*;
+import org.junit.Test;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for GraphMeasurer
  *
- * @author Joris Kinable
+ * @author Joris Kinable, Alexandru Valeanu
  */
 public class GraphMeasurerTest
 {
@@ -61,6 +62,38 @@ public class GraphMeasurerTest
         g.addEdge(1, 4);
         g.addEdge(1, 5);
         g.addEdge(5, 6);
+        return g;
+    }
+
+    private Graph<Integer, DefaultEdge> getGraph3()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleWeightedGraph<>(DefaultEdge.class);
+
+        Random random = new Random(12345678);
+
+        final int N = 100;
+        final int M = 100000;
+
+        for (int i = 0; i < N; i++){
+            g.addVertex(i);
+        }
+
+        for (int i = 0; i < N - 1; i++){
+            g.addEdge(i, i + 1);
+            g.setEdgeWeight(g.getEdge(i, i + 1), 50 + random.nextInt(50));
+        }
+
+        for (int i = N - 1; i < M; i++){
+            int u = random.nextInt(N);
+            int v = random.nextInt(N);
+
+            if (u != v){
+                g.addEdge(u, v);
+                g.setEdgeWeight(g.getEdge(u, v), 100 + random.nextInt(200));
+            }
+
+        }
+
         return g;
     }
 
@@ -201,4 +234,31 @@ public class GraphMeasurerTest
         assertEquals(new HashSet<>(Arrays.asList(0, 2, 3, 4, 6)), graphPeriphery2);
     }
 
+    @Test
+    public void testGraphPseudoPeripheryG1()
+    {
+        Graph<Integer, DefaultEdge> g1 = getGraph1();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1);
+        Set<Integer> graphPseudoPeriphery1 = gdm.getGraphPseudoPeriphery();
+        assertEquals(new HashSet<>(Arrays.asList(4, 6)), graphPseudoPeriphery1);
+    }
+
+    @Test
+    public void testGraphPseudoPeripheryG2()
+    {
+        Graph<Integer, DefaultEdge> g2 = getGraph2();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2);
+        Set<Integer> graphPseudoPeriphery2 = gdm.getGraphPseudoPeriphery();
+        assertEquals(new HashSet<>(Arrays.asList(0, 2, 3, 4, 6)), graphPseudoPeriphery2);
+    }
+
+    @Test
+    public void testGraphPseudoPeripheryG3()
+    {
+        Graph<Integer, DefaultEdge> g3 = getGraph3();
+        GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g3);
+        Set<Integer> graphPseudoPeriphery3 = gdm.getGraphPseudoPeriphery();
+        assertEquals(new HashSet<>(Arrays.asList(6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46,
+                48, 51, 53, 60, 61, 63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)), graphPseudoPeriphery3);
+    }
 }
