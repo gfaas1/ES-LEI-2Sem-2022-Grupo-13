@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2018, by Joris Kinable, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -161,7 +161,10 @@ public class GraphMeasurer<V, E>
     /**
      * Compute the graph pseudo-periphery.
      * The pseudo-periphery of a graph is the set of all pseudo-peripheral vertices.
-     * A vertex u is pseudo-peripheral, if for each vertex v with $d(u,v) = \epsilon(u)$ holds $\epsilon(u) = \epsilon(v)$.
+     * A pseudo-peripheral vertex $v$ has the property that for any vertex $u$, if $v$ is as far away from $u$ as possible,
+     * then $u$ is as far away from $v$ as possible. Formally, a vertex $u$ is pseudo-peripheral, if for each
+     * vertex $v$ with $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is
+     * the eccentricity of vertex $u$.
      *
      * @return the graph pseudo-periphery
      */
