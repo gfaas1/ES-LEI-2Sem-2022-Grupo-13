@@ -131,7 +131,7 @@ public class GraphMeasurer<V, E>
     {
         computeEccentricityMap();
         Set<V> graphCenter = new LinkedHashSet<>();
-        ToleranceDoubleComparator comp = new ToleranceDoubleComparator(0.000000001);
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             if (comp.compare(entry.getValue(), radius) == 0)
                 graphCenter.add(entry.getKey());
@@ -150,7 +150,7 @@ public class GraphMeasurer<V, E>
     {
         computeEccentricityMap();
         Set<V> graphPeriphery = new LinkedHashSet<>();
-        ToleranceDoubleComparator comp = new ToleranceDoubleComparator(0.000000001);
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             if (comp.compare(entry.getValue(), diameter) == 0)
                 graphPeriphery.add(entry.getKey());
@@ -172,7 +172,7 @@ public class GraphMeasurer<V, E>
     {
         computeEccentricityMap();
         Set<V> graphPseudoPeriphery = new LinkedHashSet<>();
-        ToleranceDoubleComparator comp = new ToleranceDoubleComparator(0.000000001);
+        ToleranceDoubleComparator comp = new ToleranceDoubleComparator();
 
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             V u = entry.getKey();
