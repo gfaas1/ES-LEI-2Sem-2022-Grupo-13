@@ -119,22 +119,12 @@ public class PalmerHamiltonianCycleTest {
     }
 
     /**
-     * Test with 500 randomly generated graphs (fixed seed).
-     * Method of generation: randomly add edges while the graph doesn't have Ore's property
-     */
-    @Test
-    public void testRandomGraphsFixedSeed(){
-        testRandomGraphs(new Random(0xDEAD));
-        testRandomGraphs(new Random());
-    }
-
-    /**
      * Test with 500 randomly generated graphs.
      * Method of generation: randomly add edges while the graph doesn't have Ore's property
      */
     @Test
     public void testRandomGraphs(){
-        testRandomGraphs(new Random());
+        testRandomGraphs(new Random(0xC0FFEE));
     }
 
     private void testRandomGraphs2(Random random){
@@ -183,15 +173,6 @@ public class PalmerHamiltonianCycleTest {
     @Test
     public void testRandomGraphs2FixedSeed(){
         testRandomGraphs2(new Random(0xBEEF));
-    }
-
-    /**
-     * Test with 500 randomly generated graphs.
-     * Method of generation: make sure that each node has (n+1)/2 neighbours
-     */
-    @Test
-    public void testRandomGraphs2(){
-        testRandomGraphs2(new Random());
     }
 
     private static Graph<Integer, DefaultEdge> bigGraph = new SimpleGraph<>(DefaultEdge.class);
