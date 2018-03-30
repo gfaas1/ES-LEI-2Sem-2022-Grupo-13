@@ -27,7 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition.
+ * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition. Ore gave a sufficient condition
+ * for a graph to be Hamiltonian, essentially stating that a graph with sufficiently many edges must contain a Hamilton cycle.
+ *
+ * Specifically, Ore's theorem considers the sum of the degrees of pairs of non-adjacent vertices:
+ * if every such pair has a sum that at least equals the total number of vertices in the graph, then the graph is Hamiltonian.
  *
  * <p>
  *     A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit, is a graph cycle
