@@ -18,7 +18,6 @@
 package org.jgrapht.graph.concurrent;
 
 import java.io.*;
-import java.lang.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
@@ -967,12 +966,12 @@ public class AsSynchronizedGraph<V, E>
         {
             readWriteLock.readLock().lock();
             try {
-                Set tempCopy = copy;
+                Set<E> tempCopy = copy;
                 if (tempCopy == null) {
                     synchronized (this) {
                         tempCopy = copy;
                         if (tempCopy == null) {
-                            copy = tempCopy = new LinkedHashSet(set);
+                            copy = tempCopy = new LinkedHashSet<>(set);
                         }
                     }
                 }
@@ -1297,9 +1296,12 @@ public class AsSynchronizedGraph<V, E>
     /**
      * A builder for {@link AsSynchronizedGraph}.
      *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     *
      * @author CHEN Kui
      */
-    public static class Builder
+    public static class Builder<V, E>
     {
         private boolean cacheEnable;
         private boolean fair;
@@ -1318,7 +1320,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @param graph the graph on which to base the builder
          */
-        public Builder(AsSynchronizedGraph graph)
+        public Builder(AsSynchronizedGraph<V, E> graph)
         {
             this.cacheEnable = graph.isCacheEnabled();
             this.fair = graph.isFair();
@@ -1329,7 +1331,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder cacheDisable()
+        public Builder<V,E> cacheDisable()
         {
             cacheEnable = false;
             return this;
@@ -1340,7 +1342,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the Builder
          */
-        public Builder cacheEnable()
+        public Builder<V,E> cacheEnable()
         {
             cacheEnable = true;
             return this;
@@ -1360,7 +1362,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the SynchronizedGraphParams
          */
-        public Builder setFair()
+        public Builder<V,E> setFair()
         {
             fair = true;
             return this;
@@ -1371,7 +1373,7 @@ public class AsSynchronizedGraph<V, E>
          *
          * @return the SynchronizedGraphParams
          */
-        public Builder setNonfair()
+        public Builder<V,E> setNonfair()
         {
             fair = false;
             return this;
@@ -1391,11 +1393,9 @@ public class AsSynchronizedGraph<V, E>
          * Build the AsSynchronizedGraph.
          *
          * @param graph the backing graph (the delegate)
-         * @param <V> the graph vertex type
-         * @param <E> the graph edge type
          * @return the AsSynchronizedGraph
          */
-        public <V, E> AsSynchronizedGraph build(Graph<V, E> graph)
+        public AsSynchronizedGraph<V,E> build(Graph<V, E> graph)
         {
             return new AsSynchronizedGraph<>(graph, cacheEnable, fair);
         }
