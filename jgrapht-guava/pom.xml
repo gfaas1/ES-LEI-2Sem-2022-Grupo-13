@@ -6,8 +6,8 @@
 		<artifactId>jgrapht</artifactId>
 		<version>1.1.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>jgrapht-adapter-guava</artifactId>
-	<name>JGraphT - Adapter Guava</name>
+	<artifactId>jgrapht-guava</artifactId>
+	<name>JGraphT - Guava Adapter</name>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -39,7 +39,7 @@
 						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 							<manifestEntries>
 								<!-- Use unique OSGi bundle symbolic name for uber artifact. Otherwise 
-									e.g. jgrapht-ext-1.0.0.jar and jgrapht-ext-1.0.0-uber.jar could not be deployed 
+									e.g. jgrapht-guava-x.y.z.jar and jgrapht-guava-x.y.z-uber.jar could not be deployed 
 									to the same P2 repository. -->
 								<Bundle-SymbolicName>org.jgrapht.guava.uber</Bundle-SymbolicName>
 							</manifestEntries>
@@ -47,7 +47,6 @@
 					</transformers>
 					<shadedArtifactAttached>true</shadedArtifactAttached>
 					<shadedClassifierName>uber</shadedClassifierName>
-					<!-- <finalName>${project.artifactId}-${project.version}-uber</finalName> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -79,15 +78,7 @@
 				</executions>
 				<configuration>
 					<instructions>
-						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors (see
-							http://sourceforge.net/projects/jgrapht/)</Bundle-Vendor>
-						<!-- JGraph (source code at https://github.com/jgraph/legacy-jgraph5.git) 
-							is legacy and it does not have a Maven based build. Therefore it is unlikely 
-							that JGraph will be osgified. To be able to nevertheless use the jgraph-ext 
-							bundle in an OSGi context, we tell the maven bundle plugin to mark the JGraph 
-							dependencies as optional. Consequences: When using jgrapht-ext in an OSGi 
-							context you can not use one of it's classes which require packages from JGraph 
-							(org.jgraph.*). Otherwise you will get ClassNotFoundExceptions. -->
+						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
 						<Import-Package>org.jgraph.*;resolution:=optional,*</Import-Package>
 					</instructions>
 				</configuration>
@@ -102,7 +93,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.6-jre</version>
+            <version>24.1-jre</version>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>

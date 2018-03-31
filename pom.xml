@@ -68,7 +68,7 @@
 			</dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>jgrapht-adapter-guava</artifactId>
+                <artifactId>jgrapht-guava</artifactId>
                 <version>${project.version}</version>
             </dependency>
 			<dependency>
@@ -122,13 +122,13 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>3.0.0</version>
 					<configuration>
 						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
+                        <additionalJOption>--allow-script-in-comments</additionalJOption>
 						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,http://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;</header>
-						<additionalparam>--allow-script-in-comments</additionalparam>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -171,7 +171,7 @@
 		<module>jgrapht-core</module>
 		<module>jgrapht-io</module>
 		<module>jgrapht-ext</module>
-		<module>jgrapht-adapter-guava</module>
+		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
 		<module>jgrapht-dist</module>
 	</modules>
@@ -190,12 +190,12 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-checkstyle-plugin</artifactId>
-						<version>2.17</version>
+						<version>3.0.0</version>
 						<dependencies>
 							<dependency>
 								<groupId>com.puppycrawl.tools</groupId>
 								<artifactId>checkstyle</artifactId>
-								<version>7.1.1</version>
+								<version>8.8</version>
 							</dependency>
 						</dependencies>
 						<executions>

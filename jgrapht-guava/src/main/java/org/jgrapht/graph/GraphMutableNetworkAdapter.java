@@ -21,7 +21,6 @@ import java.io.Serializable;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.util.TypeUtil;
 
 import com.google.common.graph.Graphs;
@@ -39,14 +38,12 @@ import com.google.common.graph.MutableNetwork;
  * @param <E> the graph edge type
  */
 public class GraphMutableNetworkAdapter<V, E>
-    extends
-    BaseNetworkAdapter<V, E, MutableNetwork<V, E>>
-    implements
-    Graph<V, E>,
-    Cloneable,
-    Serializable
+    extends BaseNetworkAdapter<V, E, MutableNetwork<V, E>>
+    implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -4058590598220152069L;
+
+    protected static final String GRAPH_IS_UNWEIGHTED = "Graph is unweighted";
 
     /**
      * Create a new network adapter.
@@ -150,7 +147,7 @@ public class GraphMutableNetworkAdapter<V, E>
     @Override
     public void setEdgeWeight(E e, double weight)
     {
-        throw new UnsupportedOperationException("Graph is unweighted");
+        throw new UnsupportedOperationException(GRAPH_IS_UNWEIGHTED);
     }
 
     /**
@@ -166,7 +163,7 @@ public class GraphMutableNetworkAdapter<V, E>
     public Object clone()
     {
         try {
-            GraphMutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
+            GraphMutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;

@@ -37,11 +37,8 @@ import com.google.common.graph.ImmutableNetwork;
  * @param <E> the graph edge type
  */
 public class WeightedGraphImmutableNetworkAdapter<V, E>
-    extends
-    GraphImmutableNetworkAdapter<V, E>
-    implements
-    Cloneable,
-    Serializable
+    extends GraphImmutableNetworkAdapter<V, E>
+    implements Cloneable, Serializable
 {
     private static final long serialVersionUID = -2536810479875607753L;
 
@@ -118,8 +115,7 @@ public class WeightedGraphImmutableNetworkAdapter<V, E>
     @Override
     public Object clone()
     {
-        WeightedGraphImmutableNetworkAdapter<V, E> newGraph =
-            TypeUtil.uncheckedCast(super.clone(), null);
+        WeightedGraphImmutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
         newGraph.weights = new HashMap<>(this.weights);
         return newGraph;
     }

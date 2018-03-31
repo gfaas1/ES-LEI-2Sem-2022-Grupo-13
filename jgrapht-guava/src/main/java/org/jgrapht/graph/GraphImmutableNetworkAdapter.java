@@ -134,7 +134,7 @@ public class GraphImmutableNetworkAdapter<V, E>
     {
         try {
             GraphImmutableNetworkAdapter<V, E> newGraph =
-                TypeUtil.uncheckedCast(super.clone(), null);
+                TypeUtil.uncheckedCast(super.clone());
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;
