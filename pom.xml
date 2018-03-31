@@ -127,7 +127,7 @@
 						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
-                        <additionalJOption>--allow-script-in-comments</additionalJOption>
+						<additionalJOption>--allow-script-in-comments</additionalJOption>
 						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,http://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;</header>
 					</configuration>
 				</plugin>
