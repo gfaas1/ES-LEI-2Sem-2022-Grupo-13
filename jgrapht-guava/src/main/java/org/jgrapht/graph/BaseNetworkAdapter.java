@@ -52,7 +52,7 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     protected transient Set<E> unmodifiableEdgeSet = null;
 
     protected EdgeFactory<V, E> edgeFactory;
-    protected N network;
+    protected transient N network;
 
     /**
      * Create a new network adapter.

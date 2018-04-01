@@ -21,6 +21,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -49,14 +53,14 @@ public class GraphMutableNetworkAdapterTest
             DefaultEdge> g = new GraphMutableNetworkAdapter<>(
                 NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
-        
+
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
         assertTrue(g.getType().isDirected());
         assertFalse(g.getType().isUndirected());
         assertFalse(g.getType().isWeighted());
         assertTrue(g.getType().isAllowingCycles());
-        
+
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");
@@ -118,14 +122,14 @@ public class GraphMutableNetworkAdapterTest
             DefaultEdge> g = new GraphMutableNetworkAdapter<>(
                 NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
-        
+
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
         assertFalse(g.getType().isDirected());
         assertTrue(g.getType().isUndirected());
         assertFalse(g.getType().isWeighted());
         assertTrue(g.getType().isAllowingCycles());
-        
+
         g.addVertex("v1");
         g.addVertex("v2");
         g.addVertex("v3");
@@ -177,6 +181,126 @@ public class GraphMutableNetworkAdapterTest
         assertEquals(new HashSet<>(Arrays.asList(e23_1, e23_2)), g.outgoingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.outgoingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf("v5"));
+    }
+
+    /**
+     * Tests serialization
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization()
+        throws Exception
+    {
+        Graph<String,
+            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+                NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
+                DefaultEdge.class);
+
+        assertTrue(g.getType().isAllowingMultipleEdges());
+        assertTrue(g.getType().isAllowingSelfLoops());
+        assertTrue(g.getType().isDirected());
+        assertFalse(g.getType().isUndirected());
+        assertFalse(g.getType().isWeighted());
+        assertTrue(g.getType().isAllowingCycles());
+
+        g.addVertex("v1");
+        g.addVertex("v2");
+        g.addVertex("v3");
+        g.addVertex("v4");
+        g.addVertex("v5");
+        g.addEdge("v1", "v2");
+        g.addEdge("v2", "v3");
+        g.addEdge("v2", "v3");
+        g.addEdge("v2", "v4");
+        g.addEdge("v4", "v4");
+        g.addEdge("v5", "v5");
+        g.addEdge("v5", "v2");
+        g.addEdge("v5", "v5");
+
+        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) serializeAndDeserialize(g);
+
+        assertTrue(g2.getType().isAllowingMultipleEdges());
+        assertTrue(g2.getType().isAllowingSelfLoops());
+        assertTrue(g2.getType().isDirected());
+        assertFalse(g2.getType().isUndirected());
+        assertFalse(g2.getType().isWeighted());
+        assertTrue(g2.getType().isAllowingCycles());
+        assertTrue(g2.containsVertex("v1"));
+        assertTrue(g2.containsVertex("v2"));
+        assertTrue(g2.containsVertex("v3"));
+        assertTrue(g2.containsVertex("v4"));
+        assertTrue(g2.containsVertex("v5"));
+        assertTrue(g2.vertexSet().size() == 5);
+        assertTrue(g2.edgeSet().size() == 8);
+        assertTrue(g2.containsEdge("v1", "v2"));
+        assertTrue(g2.containsEdge("v2", "v3"));
+        assertTrue(g2.containsEdge("v2", "v4"));
+        assertTrue(g2.containsEdge("v4", "v4"));
+        assertTrue(g2.containsEdge("v5", "v5"));
+        assertTrue(g2.containsEdge("v5", "v2"));
+
+        assertEquals(g.toString(), g2.toString());
+    }
+    
+    /**
+     * Tests serialization
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization1()
+        throws Exception
+    {
+        Graph<String,
+            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+                NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+                DefaultEdge.class);
+
+        assertFalse(g.getType().isAllowingMultipleEdges());
+        assertTrue(g.getType().isAllowingSelfLoops());
+        assertFalse(g.getType().isDirected());
+        assertTrue(g.getType().isUndirected());
+        assertFalse(g.getType().isWeighted());
+        assertTrue(g.getType().isAllowingCycles());
+
+        g.addVertex("v1");
+        g.addVertex("v2");
+        g.addVertex("v3");
+        g.addEdge("v1", "v2");
+        g.addEdge("v2", "v3");
+        g.addEdge("v3", "v3");
+
+        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) serializeAndDeserialize(g);
+
+        assertFalse(g2.getType().isAllowingMultipleEdges());
+        assertTrue(g2.getType().isAllowingSelfLoops());
+        assertFalse(g2.getType().isDirected());
+        assertTrue(g2.getType().isUndirected());
+        assertFalse(g2.getType().isWeighted());
+        assertTrue(g2.getType().isAllowingCycles());
+        assertTrue(g2.containsVertex("v1"));
+        assertTrue(g2.containsVertex("v2"));
+        assertTrue(g2.containsVertex("v3"));
+        assertTrue(g2.vertexSet().size() == 3);
+        assertTrue(g2.edgeSet().size() == 3);
+        assertTrue(g2.containsEdge("v1", "v2"));
+        assertTrue(g2.containsEdge("v2", "v3"));
+        assertTrue(g2.containsEdge("v3", "v3"));
+    }
+
+    private Object serializeAndDeserialize(Object obj)
+        throws Exception
+    {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bout);
+
+        out.writeObject(obj);
+        out.flush();
+
+        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(bin);
+
+        obj = in.readObject();
+        return obj;
     }
 
 }

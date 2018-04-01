@@ -17,6 +17,9 @@
  */
 package org.jgrapht.graph;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,7 @@ import org.jgrapht.GraphType;
 import org.jgrapht.util.TypeUtil;
 
 import com.google.common.graph.MutableNetwork;
+import com.google.common.graph.NetworkBuilder;
 
 /**
  * A weighted graph adapter class using Guava's {@link MutableNetwork}.
@@ -117,6 +121,35 @@ public class WeightedGraphMutableNetworkAdapter<V, E>
         WeightedGraphMutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
         newGraph.weights = new HashMap<>(this.weights);
         return newGraph;
+    }
+
+    private void writeObject(ObjectOutputStream oos)
+        throws IOException
+    {
+        oos.defaultWriteObject();
+        SerializationUtils.writeGraphTypeToStream(getType(), oos);
+        SerializationUtils.writeGraphToStream(this, oos);
+    }
+
+    private void readObject(ObjectInputStream ois)
+        throws ClassNotFoundException, IOException
+    {
+        ois.defaultReadObject();
+
+        GraphType type = SerializationUtils.readGraphTypeFromStream(ois);
+        if (type.isMixed()) {
+            throw new IOException("Mixed graphs not yet supported");
+        }
+
+        this.network = type.isDirected()
+            ? NetworkBuilder
+                .directed().allowsParallelEdges(type.isAllowingSelfLoops())
+                .allowsSelfLoops(type.isAllowingSelfLoops()).build()
+            : NetworkBuilder
+                .undirected().allowsParallelEdges(type.isAllowingSelfLoops())
+                .allowsSelfLoops(type.isAllowingSelfLoops()).build();
+
+        SerializationUtils.readGraphFromStream(this, ois);
     }
 
 }

@@ -17,6 +17,9 @@
  */
 package org.jgrapht.graph;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.jgrapht.EdgeFactory;
@@ -26,6 +29,7 @@ import org.jgrapht.util.TypeUtil;
 
 import com.google.common.graph.Graphs;
 import com.google.common.graph.ImmutableNetwork;
+import com.google.common.graph.NetworkBuilder;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableNetwork}.
@@ -133,8 +137,7 @@ public class GraphImmutableNetworkAdapter<V, E>
     public Object clone()
     {
         try {
-            GraphImmutableNetworkAdapter<V, E> newGraph =
-                TypeUtil.uncheckedCast(super.clone());
+            GraphImmutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;
@@ -146,6 +149,40 @@ public class GraphImmutableNetworkAdapter<V, E>
             e.printStackTrace();
             throw new RuntimeException();
         }
+    }
+
+    private void writeObject(ObjectOutputStream oos)
+        throws IOException
+    {
+        oos.defaultWriteObject();
+        SerializationUtils.writeGraphTypeToStream(getType(), oos);
+        SerializationUtils.writeGraphToStream(this, oos);
+    }
+
+    private void readObject(ObjectInputStream ois)
+        throws ClassNotFoundException, IOException
+    {
+        ois.defaultReadObject();
+
+        GraphType type = SerializationUtils.readGraphTypeFromStream(ois);
+        if (type.isMixed()) {
+            throw new IOException("Mixed graphs not yet supported");
+        }
+
+        // read graph as mutable
+        GraphMutableNetworkAdapter<V, E> mutableGraph = new GraphMutableNetworkAdapter<>(
+            type.isDirected()
+                ? NetworkBuilder
+                    .directed().allowsParallelEdges(type.isAllowingMultipleEdges())
+                    .allowsSelfLoops(type.isAllowingSelfLoops()).build()
+                : NetworkBuilder
+                    .undirected().allowsParallelEdges(type.isAllowingMultipleEdges())
+                    .allowsSelfLoops(type.isAllowingSelfLoops()).build(),
+            this.edgeFactory);
+        SerializationUtils.readGraphFromStream(mutableGraph, ois);
+
+        // setup the immutable copy
+        this.network = ImmutableNetwork.copyOf(Graphs.copyOf(mutableGraph.network));
     }
 
 }
