@@ -10,11 +10,11 @@ import org.jgrapht.graph.DefaultUndirectedGraph;
 import java.util.*;
 
 public class WeakChordalityInspector<V, E> {
+    private final int n;
     private Graph<V, E> graph;
     private Map<V, Integer> vertices;
     private Map<Integer, V> indices;
     private Boolean weaklyChordal;
-    private final int n;
 
     public WeakChordalityInspector(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph);
@@ -31,18 +31,19 @@ public class WeakChordalityInspector<V, E> {
         graph.addVertex(2);
         graph.addVertex(3);
         graph.addVertex(4);
-        graph.addEdge(1,2);
-        graph.addEdge(2,3);
-        graph.addEdge(3,4);
-        graph.addEdge(1,4);
-        graph.addEdge(1,3);
-        graph.addEdge(2,4);
-        ArrayList<Pair<Integer, Integer>> separator = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(2, 1), new Pair<>(3, 1)));
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(1, 4);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        ArrayList<Pair<Integer, Integer>> separator = new ArrayList<>(
+                Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(2, 1), new Pair<>(3, 1)));
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         System.out.println(inspector.computeCoConnectedComponents(separator));
     }
 
-    private void test2(){
+    private void test2() {
         ArrayList<Pair<Integer, Integer>> sep1 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(2, 1), new Pair<>(3, 1)));
         ArrayList<Pair<Integer, Integer>> sep2 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(3, 1)));
         ArrayList<Pair<Integer, Integer>> sep3 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1)));
@@ -88,11 +89,11 @@ public class WeakChordalityInspector<V, E> {
         System.out.println(indices);
     }
 
-    /*public boolean isWeaklyChordal() {
+    public boolean isWeaklyChordal() {
         return lazyComputeWeakChordality();
-    }*/
+    }
 
-    /*private boolean lazyComputeWeakChordality() {
+    private boolean lazyComputeWeakChordality() {
         if (weaklyChordal == null) {
             List<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
             Set<E> processed = new HashSet<>();
@@ -106,9 +107,9 @@ public class WeakChordalityInspector<V, E> {
 
             if (separators.size() > 0) {
                 int separatorsNum = 1;
-                ArrayList<Pair<V, Integer>> original = separators.get(0);
-                ArrayList<ArrayList<V>> coConnectedComponents = computeCoConnectedComponents(original);
-                for (ArrayList<Pair<V, Integer>> separator : separators) {
+                ArrayList<Pair<Integer, Integer>> original = separators.get(0);
+                ArrayList<ArrayList<Integer>> coConnectedComponents = computeCoConnectedComponents(original);
+                for (ArrayList<Pair<Integer, Integer>> separator : separators) {
                     if (!equalSeparators(original, separator)) {
                         original = separator;
                         ++separatorsNum;
@@ -119,7 +120,7 @@ public class WeakChordalityInspector<V, E> {
                             coConnectedComponents = computeCoConnectedComponents(original);
                         }
                     }
-                    for (ArrayList<V> coConnectedComponent : coConnectedComponents) {
+                    for (ArrayList<Integer> coConnectedComponent : coConnectedComponents) {
                         if (!checkCondition(coConnectedComponent, separator)) {
                             weaklyChordal = false;
                             break;
@@ -133,7 +134,7 @@ public class WeakChordalityInspector<V, E> {
 
         }
         return weaklyChordal;
-    }*/
+    }
 
     List<ArrayList<Pair<Integer, Integer>>> computeSeparators(E edge) {
         V a = graph.getEdgeSource(edge);
@@ -220,12 +221,12 @@ public class WeakChordalityInspector<V, E> {
         separators.addAll(bigQueue);
     }
 
-    private boolean compareSeparators(ArrayList<Pair<Integer, Integer>> sep1, ArrayList<Pair<Integer, Integer>> sep2) {
+    private boolean equalSeparators(Map<Integer, Integer> sep1, Map<Integer, Integer> sep2) {
         if (sep1.size() != sep2.size()) {
             return false;
         } else {
-            for (int i = 0; i < sep1.size(); i++) {
-                if (!sep1.get(i).getFirst().equals(sep2.get(i).getFirst())) {
+            for(Map.Entry<Integer, Integer> entry : sep1.entrySet()){
+                if(!sep2.containsKey(entry.getKey())){
                     return false;
                 }
             }
@@ -233,28 +234,28 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
-    ArrayList<ArrayList<Integer>> computeCoConnectedComponents(ArrayList<Pair<Integer, Integer>> separator) {
+    ArrayList<ArrayList<Integer>> computeCoConnectedComponents(Map<Integer, Integer> separator) {
         ArrayList<ArrayList<Integer>> coConnectedComponents = new ArrayList<>();
         ArrayList<Set<Integer>> vList = new ArrayList<>(Collections.nCopies(n, null));
         ArrayList<Integer> vLabels = new ArrayList<>(Collections.nCopies(n, 0));
         Set<Integer> v0 = new HashSet<>(separator.size());
-        separator.forEach(pair-> v0.add(pair.getFirst()));
+        separator.forEach((key, value) -> v0.add(key));
         vList.set(0, v0);
         int minLabel = 0;
-        while(v0.size() > 0){
+        while (v0.size() > 0) {
             ArrayList<Integer> coConnectedComponent = new ArrayList<>();
-            do{
-                while(!vList.get(minLabel).isEmpty()){
+            do {
+                while (!vList.get(minLabel).isEmpty()) {
                     Integer vertex = vList.get(minLabel).iterator().next();
                     vList.get(minLabel).remove(vertex);
                     coConnectedComponent.add(vertex);
                     vLabels.set(vertex, -1);
-                    for(E edge : graph.edgesOf(indices.get(vertex))){
+                    for (E edge : graph.edgesOf(indices.get(vertex))) {
                         Integer opposite = vertices.get(Graphs.getOppositeVertex(graph, edge, indices.get(vertex)));
                         Integer oppLabel = vLabels.get(opposite);
-                        if(oppLabel != -1){
+                        if (oppLabel != -1) {
                             vList.get(oppLabel).remove(opposite);
-                            if(vList.get(oppLabel + 1) == null){
+                            if (vList.get(oppLabel + 1) == null) {
                                 vList.set(oppLabel + 1, new HashSet<>());
                             }
                             vList.get(oppLabel + 1).add(opposite);
@@ -263,9 +264,9 @@ public class WeakChordalityInspector<V, E> {
                     }
                 }
                 ++minLabel;
-            }while(minLabel != coConnectedComponent.size());
+            } while (minLabel != coConnectedComponent.size());
             Set<Integer> bucket = vList.get(minLabel);
-            for(Integer vertex : bucket){
+            for (Integer vertex : bucket) {
                 vLabels.set(vertex, 0);
                 vList.get(0).add(vertex);
             }
@@ -276,7 +277,19 @@ public class WeakChordalityInspector<V, E> {
         return coConnectedComponents;
     }
 
-    private boolean checkCondition(ArrayList<V> connectedComponent, ArrayList<Pair<Integer, Integer>> separator) {
+    private boolean checkCondition(ArrayList<Integer> connectedComponent, Map<Integer, Integer> separator) {
+        int label = 0;
+        for (Integer vertex : connectedComponent) {
+            if (separator.get(vertex) != 3) {
+                if (label != 0) {
+                    if (label != separator.get(vertex)) {
+                        return false;
+                    }
+                } else {
+                    label = separator.get(vertex);
+                }
+            }
+        }
         return false;
     }
 }
