@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2018, by Timofey Chudakov and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
+ * either
+ *
+ * (a) the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation, or (at your option) any
+ * later version.
+ *
+ * or (per the licensee's choosing)
+ *
+ * (b) the terms of the Eclipse Public License v1.0 as published by
+ * the Eclipse Foundation.
+ */
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
@@ -7,14 +24,57 @@ import org.jgrapht.graph.AsUndirectedGraph;
 
 import java.util.*;
 
+/**
+ * Allows testing weak chordality of a graph. The inspected {@code graph} is specified at the construction time
+ * and cannot be modified. When the graph is externally modified, the behaviour of the {@code WeakChordalityInspector}
+ * is unpredictable. Note: weak chordality of the graph is computed only once and then the same value is returned.
+ * <p>
+ * A graph is called <a href="http://www.graphclasses.org/classes/gc_14.html">weakly chordal</a> if it and its
+ * complement don't have chordless cycles of length greater then 4. A chord is an edge that is not a part of a
+ * cycle but connects two vertices of the cycle. For more information on weakly chordal graph recognition see:
+ * Lars Severin Skeide (2002) <a href="http://www.ii.uib.no/~skeide/rec_wcg.pdf"><i>Recognizing weakly chordal
+ * graphs</i></a>. Candidate Scientist Thesis in Informatics. Department of Informatics, University of Bergen, Norway.
+ * The terminology in this implementation is consistent with one used in the paper.
+ * <p>
+ * The running time complexity of the algorithm if $\mathcal{O}(|E|^2)$ and the space complexity is also $\mathcal{O}(|E|^2)$
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * @author Timofey Chudakov
+ * @since April 2018
+ */
 public class WeakChordalityInspector<V, E> {
+    /**
+     * Vertex number
+     */
     private final int n;
+    /**
+     * Edge number
+     */
     private final int m;
+    /**
+     * The inspected graph
+     */
     private Graph<V, E> graph;
+    /**
+     * Bijective mapping of vertices onto $\left[0,n-1\right]$
+     */
     private Map<V, Integer> vertices;
+    /**
+     * Inverse of the bijective mapping of vertices onto $\left[0,n-1\right]$
+     */
     private Map<Integer, V> indices;
-    private Boolean weaklyChordal;
+    /**
+     * Contains true if the graph is weakly chordal, otherwise false. Is null before the first call to the
+     * {@link WeakChordalityInspector#isWeaklyChordal()}.
+     */
+    private Boolean weaklyChordal = null;
 
+    /**
+     * Creates a weak chordality inspector for the {@code graph}
+     *
+     * @param graph the inspected {@code graph}
+     */
     public WeakChordalityInspector(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph);
         if (graph.getType().isDirected()) {
@@ -22,10 +82,13 @@ public class WeakChordalityInspector<V, E> {
         }
         n = graph.vertexSet().size();
         m = graph.edgeSet().size();
-        init();
+        initMappings();
     }
 
-    private void init() {
+    /**
+     * Initializes the mappings of the vertices
+     */
+    private void initMappings() {
         vertices = new HashMap<>(n);
         indices = new HashMap<>(n);
         int i = 0;
@@ -35,10 +98,21 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    /**
+     * Check whether the inspected {@code graph} is weakly chordal.
+     * Note: this value is computed lazily.
+     *
+     * @return true, if the inspected {@code graph} is weakly chordal, otherwise false.
+     */
     public boolean isWeaklyChordal() {
         return lazyComputeWeakChordality();
     }
 
+    /**
+     * Lazily tests the weak chordality of the {@code graph} and returns the computed value.
+     *
+     * @return true, if the inspected {@code graph} is weakly chordal, otherwise false.
+     */
     private boolean lazyComputeWeakChordality() {
         if (weaklyChordal == null) {
             ArrayList<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
@@ -74,7 +148,16 @@ public class WeakChordalityInspector<V, E> {
         return weaklyChordal;
     }
 
-    List<ArrayList<Pair<Integer, Integer>>> computeSeparators(E edge) {
+    /**
+     * Computes all minimal separators in the neighbourhood of the {@code edge} and returns them.
+     * This is done via depth-first search. Following colouring is used: 2 (black) - already visited vertex,
+     * 1 (red) - vertex in the neighbourhood of the {@code edge}, 1 (white) - unvisited vertex. The result can
+     * contain duplicates.
+     *
+     * @param edge the edge, whose neighbourhood is being explored
+     * @return computed minimal separators in the neighbourhood of the {@code edge}
+     */
+    private List<ArrayList<Pair<Integer, Integer>>> computeSeparators(E edge) {
         V source = graph.getEdgeSource(edge);
         V target = graph.getEdgeTarget(edge);
         if (source != target) {
@@ -123,6 +206,16 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    /**
+     * Visits the {@code vertex}. Adds to the bucket of the {code vertex} in the {@code vInSeparators} a reference
+     * to the {@code separator} for all red vertices in the neighbourhood of the {@code vertex}. Recursively visits
+     * all white vertices in the neighbourhood.
+     *
+     * @param vertex        the currently visited vertex
+     * @param dfsArr        the depth-first vertex labeling
+     * @param separator     the separator, to which all found red vertices will be added
+     * @param vInSeparators the list of buckets, which contains references to separators vertices belong to
+     */
     private void dfsVisit(V vertex, ArrayList<Byte> dfsArr, ArrayList<Pair<Integer, Integer>> separator,
                           ArrayList<ArrayList<ArrayList<Pair<Integer, Integer>>>> vInSeparators) {
         int vertexIndex = vertices.get(vertex);
@@ -138,6 +231,15 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    /**
+     * Computes the labeling of the neighbourhood of the vertices {@code source} and {@code target}.
+     * Vertex from the neighbourhood is labeled with "1" if it sees only {@code source}, "2" is it sees
+     * only {@code target}, and "3" if it sees both vertices.
+     *
+     * @param source the vertex, whose neighbourhood is being labeled
+     * @param target another vertex, whose neighbourhood is being labeled
+     * @return the computed labeling with the respect to the rule described above
+     */
     private ArrayList<Integer> getLabeling(V source, V target) {
         ArrayList<Integer> labeling = new ArrayList<>(Collections.nCopies(n, null));
         for (E edge : graph.edgesOf(source)) {
@@ -154,6 +256,11 @@ public class WeakChordalityInspector<V, E> {
         return labeling;
     }
 
+    /**
+     * Sorts the {@code separators} using bucket sort
+     *
+     * @param separators the list of separators to be sorted
+     */
     private void sortSeparatorsList(List<ArrayList<Pair<Integer, Integer>>> separators) {
         Queue<ArrayList<Pair<Integer, Integer>>> mainQueue = new LinkedList<>();
         int maxSeparatorLength = 0;
@@ -185,6 +292,13 @@ public class WeakChordalityInspector<V, E> {
         separators.addAll(mainQueue);
     }
 
+    /**
+     * Compares two separators for equality. Labeling of the vertices in the separators isn't considered
+     *
+     * @param sep1 first separator
+     * @param sep2 second separator
+     * @return true, if the separators are equal, false otherwise
+     */
     private boolean equalSeparators(ArrayList<Pair<Integer, Integer>> sep1, ArrayList<Pair<Integer, Integer>> sep2) {
         if (sep1.size() != sep2.size()) {
             for (int i = 0; i < sep1.size(); i++) {
@@ -198,6 +312,13 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    /**
+     * Computes the connected components of the complement of the graph induces by the vertices of the {@code separator}.
+     * They are also called "coconnected components". The running time is $\mathcal{O}(|V| + |E|)$.
+     *
+     * @param separator the separators, whose coconnected components are computed
+     * @return the coconected of the {@code separator}
+     */
     private ArrayList<ArrayList<Integer>> computeCoConnectedComponents(ArrayList<Pair<Integer, Integer>> separator) {
         ArrayList<ArrayList<Integer>> coConnectedComponents = new ArrayList<>();
 
@@ -241,21 +362,47 @@ public class WeakChordalityInspector<V, E> {
         return coConnectedComponents;
     }
 
+    /**
+     * Moves the {@code vertex} to the next bucket.
+     *
+     * @param vertex         the vertex to be moved
+     * @param vertexLabel    the label of the {@code vertex}
+     * @param bucketsByLabel the buckets, in which vertices are stored
+     * @param labels         the labels of the vertices
+     */
     private void putToNextBucket(Integer vertex, Integer vertexLabel, ArrayList<Set<Integer>> bucketsByLabel, ArrayList<Integer> labels) {
         bucketsByLabel.get(vertexLabel).remove(vertex);
         bucketsByLabel.get(vertexLabel + 1).add(vertex);
         labels.set(vertex, vertexLabel + 1);
     }
 
+    /**
+     * Moves all vertices from the bucket with label {@code minLabel} to the bucket with label 0. Clears the
+     * bucket with label {@code minLabel}. Updates the labeling accordingly.
+     *
+     * @param bucketsByLabel the buckets vertices are stored in
+     * @param labels         the labels of the vertices
+     * @param minLabel       the minimum value of the non-empty bucket
+     */
     private void reload(ArrayList<Set<Integer>> bucketsByLabel, ArrayList<Integer> labels, int minLabel) {
-        Set<Integer> bucket = bucketsByLabel.get(minLabel);
-        for (Integer vertex : bucket) {
-            labels.set(vertex, 0);
-            bucketsByLabel.get(0).add(vertex);
+        if(minLabel != 0){
+            Set<Integer> bucket = bucketsByLabel.get(minLabel);
+            for (Integer vertex : bucket) {
+                labels.set(vertex, 0);
+                bucketsByLabel.get(0).add(vertex);
+            }
+            bucket.clear();
         }
-        bucket.clear();
     }
 
+    /**
+     * For a given coconnected component of the {@code separator} checks whether every vertex in it is seen
+     * by al least one vertex on the edge that is separated by the {@code separator}
+     *
+     * @param coConnectedComponents the set of the coconected components of the {@code separator}
+     * @param separator             minimal separator of some edge in the {@code graph}
+     * @return true if the condition described above holds, false otherwise
+     */
     private boolean checkLabels(ArrayList<ArrayList<Integer>> coConnectedComponents, ArrayList<Pair<Integer, Integer>> separator) {
         ArrayList<Integer> vertexLabels = new ArrayList<>(Collections.nCopies(n, null));
         for (Pair<Integer, Integer> vertexAndLabel : separator) {
