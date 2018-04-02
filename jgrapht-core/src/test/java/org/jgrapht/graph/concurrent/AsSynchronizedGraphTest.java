@@ -40,7 +40,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddVertex()
     {
-        g = new AsSynchronizedGraph.Builder().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().build(new SimpleGraph<>(DefaultEdge.class));
         ordersList = new Vector<>();
         for (int i = 0; i < 20; i++) {
             ordersList.add(new ArrayList<>());
@@ -66,7 +66,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testAddEdge()
     {
-        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
         ArrayList<DefaultEdge> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++)
             g.addVertex(i);
@@ -102,7 +102,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveEdge()
     {
-        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new SimpleGraph<>(DefaultEdge.class));
         edges = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 1000; i++) {
@@ -128,7 +128,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testRemoveVertex()
     {
-        g = new AsSynchronizedGraph.Builder().cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheEnable().build(new DirectedPseudograph<>(DefaultEdge.class));
         vertices = new ArrayList<>();
         TestSuite ts = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {
@@ -162,7 +162,7 @@ public class AsSynchronizedGraphTest
     @Test
     public void testOthers()
     {
-        g = new AsSynchronizedGraph.Builder().cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().cacheDisable().build(new Pseudograph<>(DefaultEdge.class));
         Set<Integer> vertSet = g.vertexSet();
         Set<DefaultEdge> edgeSet = g.edgeSet();
         g.addVertex(1);
@@ -293,14 +293,17 @@ public class AsSynchronizedGraphTest
             }
         }
     }
+    
     private interface Order
     {
         void execute();
     }
+    
     private class AddV
         implements Order
     {
         int vertex;
+        
         public AddV(int v)
         {
             vertex = v;
@@ -311,11 +314,13 @@ public class AsSynchronizedGraphTest
             g.addVertex(vertex);
         }
     }
+    
     private class AddE
         implements Order
     {
         DefaultEdge e;
         int s, t;
+        
         public AddE(int s, int t, DefaultEdge e)
         {
             this.e = e;
@@ -329,6 +334,7 @@ public class AsSynchronizedGraphTest
             g.addEdge(s, t, e);
         }
     }
+    
     private class SetCache
         implements Order
     {
@@ -338,10 +344,12 @@ public class AsSynchronizedGraphTest
             g.setCache(!g.isCacheEnabled());
         }
     }
+    
     private class RmV
         implements Order
     {
         int v;
+        
         public RmV(int v)
         {
             this.v = v;
@@ -353,10 +361,12 @@ public class AsSynchronizedGraphTest
             g.removeVertex(v);
         }
     }
+    
     private class RmE
         implements Order
     {
         int s, t;
+        
         public RmE(int s, int t)
         {
             this.s = s;
@@ -369,7 +379,8 @@ public class AsSynchronizedGraphTest
             g.removeEdge(s, t);
         }
     }
-    private int iteratorCnt(Iterator it)
+    
+    private <K> int iteratorCnt(Iterator<K> it)
     {
         int count = 0;
         while (it.hasNext()) {
@@ -378,6 +389,7 @@ public class AsSynchronizedGraphTest
         }
         return count;
     }
+    
     public class TestThread
         extends TestCase
     {
@@ -385,6 +397,7 @@ public class AsSynchronizedGraphTest
         {
             super(s);
         }
+        
         public void addVertex()
         {
             while (true) {
@@ -398,6 +411,7 @@ public class AsSynchronizedGraphTest
                 g.addVertex(id);
             }
         }
+        
         public void removeEdge()
         {
             while (true) {
@@ -411,6 +425,7 @@ public class AsSynchronizedGraphTest
                 g.removeEdge(e);
             }
         }
+        
         public void removeVertex()
         {
             while (true) {
@@ -423,6 +438,7 @@ public class AsSynchronizedGraphTest
                 g.removeVertex(c);
             }
         }
+        
         public void runAsThread()
         {
             List<Order> orders = ordersList.remove(0);
