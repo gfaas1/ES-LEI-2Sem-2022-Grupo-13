@@ -4,13 +4,12 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
 
 import java.util.*;
 
 public class WeakChordalityInspector<V, E> {
     private final int n;
+    private final int m;
     private Graph<V, E> graph;
     private Map<V, Integer> vertices;
     private Map<Integer, V> indices;
@@ -22,71 +21,18 @@ public class WeakChordalityInspector<V, E> {
             this.graph = new AsUndirectedGraph<>(graph);
         }
         n = graph.vertexSet().size();
+        m = graph.edgeSet().size();
         init();
     }
 
-    public static void main(String[] args) {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        graph.addEdge(1, 4);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 4);
-        ArrayList<Pair<Integer, Integer>> separator = new ArrayList<>(
-                Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(2, 1), new Pair<>(3, 1)));
-        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
-        System.out.println(inspector.computeCoConnectedComponents(separator));
-    }
-
-    private void test2() {
-        ArrayList<Pair<Integer, Integer>> sep1 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(2, 1), new Pair<>(3, 1)));
-        ArrayList<Pair<Integer, Integer>> sep2 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(3, 1)));
-        ArrayList<Pair<Integer, Integer>> sep3 = new ArrayList<>(Arrays.asList(new Pair<>(0, 1), new Pair<>(1, 1)));
-        ArrayList<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>(Arrays.asList(sep1, sep2, sep3));
-        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(new DefaultUndirectedGraph<>(DefaultEdge.class));
-        inspector.sortSeparatorsList(separators);
-        System.out.println(separators);
-    }
-
-    private void test1() {
-        Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        graph.addVertex("a");
-        graph.addVertex("b");
-        graph.addVertex("c");
-        graph.addVertex("d");
-        graph.addVertex("e");
-        graph.addVertex("f");
-        graph.addVertex("g");
-        graph.addVertex("i");
-        graph.addVertex("j");
-        graph.addVertex("k");
-        graph.addEdge("a", "d");
-        graph.addEdge("b", "d");
-        graph.addEdge("c", "d");
-        graph.addEdge("d", "e");
-        DefaultEdge edge = graph.addEdge("e", "f");
-        graph.addEdge("f", "g");
-        graph.addEdge("g", "i");
-        graph.addEdge("g", "j");
-        WeakChordalityInspector<String, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
-        System.out.println(inspector.computeSeparators(edge));
-    }
-
     private void init() {
-        vertices = new HashMap<>(graph.vertexSet().size());
-        indices = new HashMap<>(graph.vertexSet().size());
+        vertices = new HashMap<>(n);
+        indices = new HashMap<>(n);
         int i = 0;
         for (V v : graph.vertexSet()) {
             indices.put(i, v);
             vertices.put(v, i++);
         }
-        System.out.println(vertices);
-        System.out.println(indices);
     }
 
     public boolean isWeaklyChordal() {
@@ -95,17 +41,13 @@ public class WeakChordalityInspector<V, E> {
 
     private boolean lazyComputeWeakChordality() {
         if (weaklyChordal == null) {
-            List<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
-            Set<E> processed = new HashSet<>();
+            ArrayList<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
             for (E edge : graph.edgeSet()) {
-                if (processed.contains(edge)) {
-                    processed.add(edge);
-                    separators.addAll(computeSeparators(edge));
-                }
+                separators.addAll(computeSeparators(edge));
             }
-            sortSeparatorsList(separators);
 
             if (separators.size() > 0) {
+                sortSeparatorsList(separators);
                 int separatorsNum = 1;
                 ArrayList<Pair<Integer, Integer>> original = separators.get(0);
                 ArrayList<ArrayList<Integer>> coConnectedComponents = computeCoConnectedComponents(original);
@@ -113,180 +55,223 @@ public class WeakChordalityInspector<V, E> {
                     if (!equalSeparators(original, separator)) {
                         original = separator;
                         ++separatorsNum;
-                        if (graph.vertexSet().size() + graph.edgeSet().size() < separatorsNum) {
+                        if (n + m < separatorsNum) {
                             weaklyChordal = false;
                             break;
                         } else {
                             coConnectedComponents = computeCoConnectedComponents(original);
                         }
                     }
-                    for (ArrayList<Integer> coConnectedComponent : coConnectedComponents) {
-                        if (!checkCondition(coConnectedComponent, separator)) {
-                            weaklyChordal = false;
-                            break;
-                        }
+                    if (!checkLabels(coConnectedComponents, separator)) {
+                        weaklyChordal = false;
+                        break;
                     }
-
                 }
             } else {
                 weaklyChordal = true;
             }
-
         }
         return weaklyChordal;
     }
 
     List<ArrayList<Pair<Integer, Integer>>> computeSeparators(E edge) {
-        V a = graph.getEdgeSource(edge);
-        V b = graph.getEdgeTarget(edge);
-        Map<V, Integer> labeling = new HashMap<>(graph.edgesOf(a).size());
-        graph.edgesOf(a).forEach(e -> {
-            labeling.put(Graphs.getOppositeVertex(graph, e, a), 1);
-        });
-        graph.edgesOf(b).forEach(e -> {
-            V opposite = Graphs.getOppositeVertex(graph, e, b);
-            if (labeling.containsKey(opposite)) {
-                labeling.put(opposite, 3);
-            } else {
-                labeling.put(opposite, 2);
-            }
-        });
+        V source = graph.getEdgeSource(edge);
+        V target = graph.getEdgeTarget(edge);
+        if (source != target) {
+            int sourceIndex = vertices.get(source);
+            int targetIndex = vertices.get(target);
 
-        ArrayList<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
-        Map<V, Character> dfsMap = new HashMap<>();
-        for (V vertex : graph.vertexSet()) {
-            if (labeling.containsKey(vertex)) {
-                dfsMap.put(vertex, 'r');
-            } else {
-                dfsMap.put(vertex, 'w');
+            ArrayList<Integer> labeling = getLabeling(source, target);
+            ArrayList<ArrayList<Pair<Integer, Integer>>> separators = new ArrayList<>();
+            ArrayList<ArrayList<ArrayList<Pair<Integer, Integer>>>> vInSeparator =
+                    new ArrayList<>(n);
+            for (int i = 0; i < n; i++) {
+                vInSeparator.add(new ArrayList<>());
             }
-        }
-        dfsMap.put(a, 'b');
-        dfsMap.put(b, 'b');
 
-        for (V vertex : graph.vertexSet()) {
-            if (dfsMap.get(vertex) == 'w') {
-                ArrayList<Pair<Integer, Integer>> separator = new ArrayList<>();
-                dfsVisit(vertex, dfsMap, separator, labeling);
-                if (separator.size() > 0) {
-                    separators.add(separator);
-                    separator.sort(Comparator.comparingInt(Pair::getFirst));
+            //0 - unvisited (white), 1 - neighbour of the edge (red), 2 - visited (black)
+            ArrayList<Byte> dfsArr = new ArrayList<>(Collections.nCopies(n, (byte) -1));
+            for (V vertex : graph.vertexSet()) {
+                int vertexIndex = vertices.get(vertex);
+                if (labeling.get(vertexIndex) != null) {
+                    dfsArr.set(vertexIndex, (byte) 1);
+                } else {
+                    dfsArr.set(vertexIndex, (byte) 0);
                 }
             }
+            dfsArr.set(sourceIndex, (byte) 2);
+            dfsArr.set(targetIndex, (byte) 2);
+
+            for (V vertex : graph.vertexSet()) {
+                int vertexIndex = vertices.get(vertex);
+                if (dfsArr.get(vertexIndex) == 0) {
+                    ArrayList<Pair<Integer, Integer>> separator = new ArrayList<>();
+                    separators.add(separator);
+                    dfsVisit(vertex, dfsArr, separator, vInSeparator);
+                }
+            }
+            for (int vertex = 0; vertex < n; vertex++) {
+                ArrayList<ArrayList<Pair<Integer, Integer>>> listOfSeparators = vInSeparator.get(vertex);
+                for (ArrayList<Pair<Integer, Integer>> separator : listOfSeparators) {
+                    separator.add(new Pair<>(vertex, labeling.get(vertex)));
+                }
+            }
+
+            return separators;
+        } else {
+            return new ArrayList<>();
         }
-
-        return separators;
     }
 
-    private void dfsVisit(V vertex, Map<V, Character> map, ArrayList<Pair<Integer, Integer>> separator, Map<V, Integer> labeling) {
-        map.put(vertex, 'b');
-        graph.edgesOf(vertex).forEach(e -> {
-            V opposite = Graphs.getOppositeVertex(graph, e, vertex);
-            if (map.get(opposite) == 'w') {
-                dfsVisit(opposite, map, separator, labeling);
-            } else if (map.get(opposite) == 'r') {
-                separator.add(new Pair<>(vertices.get(opposite), labeling.get(opposite)));
+    private void dfsVisit(V vertex, ArrayList<Byte> dfsArr, ArrayList<Pair<Integer, Integer>> separator,
+                          ArrayList<ArrayList<ArrayList<Pair<Integer, Integer>>>> vInSeparators) {
+        int vertexIndex = vertices.get(vertex);
+        dfsArr.set(vertexIndex, (byte) 2);
+        for (E edge : graph.edgesOf(vertex)) {
+            V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
+            int oppositeIndex = vertices.get(opposite);
+            if (dfsArr.get(oppositeIndex) == 0) {
+                dfsVisit(opposite, dfsArr, separator, vInSeparators);
+            } else if (dfsArr.get(oppositeIndex) == 1) {
+                vInSeparators.get(oppositeIndex).add(separator);
             }
-        });
+        }
     }
 
-    void sortSeparatorsList(List<ArrayList<Pair<Integer, Integer>>> separators) {
-        LinkedList<ArrayList<Pair<Integer, Integer>>> bigQueue = new LinkedList<>();
-        int k = 0;
+    private ArrayList<Integer> getLabeling(V source, V target) {
+        ArrayList<Integer> labeling = new ArrayList<>(Collections.nCopies(n, null));
+        for (E edge : graph.edgesOf(source)) {
+            labeling.set(vertices.get(Graphs.getOppositeVertex(graph, edge, source)), 1);
+        }
+        for (E edge : graph.edgesOf(target)) {
+            Integer oppositeIndex = vertices.get(Graphs.getOppositeVertex(graph, edge, target));
+            if (labeling.get(oppositeIndex) != null) {
+                labeling.set(oppositeIndex, 3);
+            } else {
+                labeling.set(oppositeIndex, 2);
+            }
+        }
+        return labeling;
+    }
+
+    private void sortSeparatorsList(List<ArrayList<Pair<Integer, Integer>>> separators) {
+        Queue<ArrayList<Pair<Integer, Integer>>> mainQueue = new LinkedList<>();
+        int maxSeparatorLength = 0;
         for (ArrayList<Pair<Integer, Integer>> separator : separators) {
-            if (separator.size() > k) {
-                k = separator.size();
+            if (separator.size() > maxSeparatorLength) {
+                maxSeparatorLength = separator.size();
             }
-            bigQueue.add(separator);
+            mainQueue.add(separator);
         }
         separators.clear();
-        ArrayList<LinkedList<ArrayList<Pair<Integer, Integer>>>> queues = new ArrayList<>(4);
-        for (int i = 0; i < 4; i++) {
+        ArrayList<Queue<ArrayList<Pair<Integer, Integer>>>> queues = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
             queues.add(new LinkedList<>());
         }
-        for (int i = 0; i < k; i++) {
-            while (!bigQueue.isEmpty()) {
-                ArrayList<Pair<Integer, Integer>> separator = bigQueue.remove();
+        for (int i = 0; i < maxSeparatorLength; i++) {
+            while (!mainQueue.isEmpty()) {
+                ArrayList<Pair<Integer, Integer>> separator = mainQueue.remove();
                 if (i >= separator.size()) {
                     separators.add(separator);
                 } else {
-                    queues.get(separator.get(i).getFirst()).add(separator);
+                    queues.get(separator.get(separator.size() - i - 1).getFirst()).add(separator);
                 }
             }
-            for (LinkedList<ArrayList<Pair<Integer, Integer>>> queue : queues) {
-                bigQueue.addAll(queue);
+            for (Queue<ArrayList<Pair<Integer, Integer>>> queue : queues) {
+                mainQueue.addAll(queue);
                 queue.clear();
             }
         }
-        separators.addAll(bigQueue);
+        separators.addAll(mainQueue);
     }
 
-    private boolean equalSeparators(Map<Integer, Integer> sep1, Map<Integer, Integer> sep2) {
+    private boolean equalSeparators(ArrayList<Pair<Integer, Integer>> sep1, ArrayList<Pair<Integer, Integer>> sep2) {
         if (sep1.size() != sep2.size()) {
-            return false;
-        } else {
-            for(Map.Entry<Integer, Integer> entry : sep1.entrySet()){
-                if(!sep2.containsKey(entry.getKey())){
+            for (int i = 0; i < sep1.size(); i++) {
+                if (!sep2.get(i).getFirst().equals(sep1.get(i).getFirst())) {
                     return false;
                 }
             }
             return true;
+        } else {
+            return false;
         }
     }
 
-    ArrayList<ArrayList<Integer>> computeCoConnectedComponents(Map<Integer, Integer> separator) {
+    private ArrayList<ArrayList<Integer>> computeCoConnectedComponents(ArrayList<Pair<Integer, Integer>> separator) {
         ArrayList<ArrayList<Integer>> coConnectedComponents = new ArrayList<>();
-        ArrayList<Set<Integer>> vList = new ArrayList<>(Collections.nCopies(n, null));
-        ArrayList<Integer> vLabels = new ArrayList<>(Collections.nCopies(n, 0));
-        Set<Integer> v0 = new HashSet<>(separator.size());
-        separator.forEach((key, value) -> v0.add(key));
-        vList.set(0, v0);
+
+        ArrayList<Set<Integer>> bucketsByLabel = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            bucketsByLabel.add(new HashSet<>());
+        }
+        ArrayList<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
+        Set<Integer> unvisited = new HashSet<>(separator.size());
+        separator.forEach(pair -> {
+            unvisited.add(pair.getFirst());
+            labels.set(pair.getFirst(), 0);
+        });
+        bucketsByLabel.set(0, unvisited);
         int minLabel = 0;
-        while (v0.size() > 0) {
+
+        while (unvisited.size() > 0) {
             ArrayList<Integer> coConnectedComponent = new ArrayList<>();
             do {
-                while (!vList.get(minLabel).isEmpty()) {
-                    Integer vertex = vList.get(minLabel).iterator().next();
-                    vList.get(minLabel).remove(vertex);
+                while (!bucketsByLabel.get(minLabel).isEmpty()) {
+                    Integer vertex = bucketsByLabel.get(minLabel).iterator().next();
+                    bucketsByLabel.get(minLabel).remove(vertex);
                     coConnectedComponent.add(vertex);
-                    vLabels.set(vertex, -1);
+                    labels.set(vertex, -1);
+
                     for (E edge : graph.edgesOf(indices.get(vertex))) {
                         Integer opposite = vertices.get(Graphs.getOppositeVertex(graph, edge, indices.get(vertex)));
-                        Integer oppLabel = vLabels.get(opposite);
-                        if (oppLabel != -1) {
-                            vList.get(oppLabel).remove(opposite);
-                            if (vList.get(oppLabel + 1) == null) {
-                                vList.set(oppLabel + 1, new HashSet<>());
-                            }
-                            vList.get(oppLabel + 1).add(opposite);
-                            vLabels.set(opposite, oppLabel + 1);
+                        Integer oppositeLabel = labels.get(opposite);
+                        if (oppositeLabel != -1) {
+                            putToNextBucket(opposite, oppositeLabel, bucketsByLabel, labels);
                         }
                     }
                 }
                 ++minLabel;
             } while (minLabel != coConnectedComponent.size());
-            Set<Integer> bucket = vList.get(minLabel);
-            for (Integer vertex : bucket) {
-                vLabels.set(vertex, 0);
-                vList.get(0).add(vertex);
-            }
-            bucket.clear();
+            reload(bucketsByLabel, labels, minLabel);
+
             coConnectedComponents.add(coConnectedComponent);
             minLabel = 0;
         }
         return coConnectedComponents;
     }
 
-    private boolean checkCondition(ArrayList<Integer> connectedComponent, Map<Integer, Integer> separator) {
-        int label = 0;
-        for (Integer vertex : connectedComponent) {
-            if (separator.get(vertex) != 3) {
-                if (label != 0) {
-                    if (label != separator.get(vertex)) {
-                        return false;
+    private void putToNextBucket(Integer vertex, Integer vertexLabel, ArrayList<Set<Integer>> bucketsByLabel, ArrayList<Integer> labels) {
+        bucketsByLabel.get(vertexLabel).remove(vertex);
+        bucketsByLabel.get(vertexLabel + 1).add(vertex);
+        labels.set(vertex, vertexLabel + 1);
+    }
+
+    private void reload(ArrayList<Set<Integer>> bucketsByLabel, ArrayList<Integer> labels, int minLabel) {
+        Set<Integer> bucket = bucketsByLabel.get(minLabel);
+        for (Integer vertex : bucket) {
+            labels.set(vertex, 0);
+            bucketsByLabel.get(0).add(vertex);
+        }
+        bucket.clear();
+    }
+
+    private boolean checkLabels(ArrayList<ArrayList<Integer>> coConnectedComponents, ArrayList<Pair<Integer, Integer>> separator) {
+        ArrayList<Integer> vertexLabels = new ArrayList<>(Collections.nCopies(n, null));
+        for (Pair<Integer, Integer> vertexAndLabel : separator) {
+            vertexLabels.set(vertexAndLabel.getFirst(), vertexAndLabel.getSecond());
+        }
+        for (ArrayList<Integer> coConnectedComponent : coConnectedComponents) {
+            int label = 0;
+            for (Integer vertex : coConnectedComponent) {
+                if (vertexLabels.get(vertex) != 3) {
+                    if (label != 0) {
+                        if (label != vertexLabels.get(vertex)) {
+                            return false;
+                        }
+                    } else {
+                        label = vertexLabels.get(vertex);
                     }
-                } else {
-                    label = separator.get(vertex);
                 }
             }
         }
