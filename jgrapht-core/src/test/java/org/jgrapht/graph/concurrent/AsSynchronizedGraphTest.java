@@ -341,7 +341,9 @@ public class AsSynchronizedGraphTest
         @Override
         public void execute()
         {
-            g.setCache(!g.isCacheEnabled());
+            synchronized (g) {
+                g.setCache(!g.isCacheEnabled());
+            }
         }
     }
     
