@@ -67,7 +67,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.5.0</version>				
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -78,8 +78,8 @@
 				</executions>
 				<configuration>
 					<instructions>
+						<Automatic-Module-Name>org.jgrapht.guava</Automatic-Module-Name>
 						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
-						<Import-Package>org.jgraph.*;resolution:=optional,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

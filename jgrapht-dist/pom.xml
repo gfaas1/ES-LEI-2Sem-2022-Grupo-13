@@ -48,6 +48,16 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-demo</artifactId>
 		</dependency>
 	</dependencies>
@@ -56,6 +66,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>				
 				<executions>
 					<execution>
 						<id>assembly</id>

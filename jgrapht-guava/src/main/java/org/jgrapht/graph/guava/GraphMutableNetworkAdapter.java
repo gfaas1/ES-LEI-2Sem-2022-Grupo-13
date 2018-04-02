@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.graph;
+package org.jgrapht.graph.guava;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,6 +25,7 @@ import java.io.Serializable;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
+import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.util.TypeUtil;
 
 import com.google.common.graph.Graphs;

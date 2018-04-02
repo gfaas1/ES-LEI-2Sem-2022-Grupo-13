@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.graph;
+package org.jgrapht.graph.guava;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.guava.GraphImmutableNetworkAdapter;
 import org.junit.Test;
 
 import com.google.common.graph.ImmutableNetwork;
