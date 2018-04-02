@@ -158,7 +158,7 @@ public class GraphMutableNetworkAdapter<V, E>
     /**
      * Returns a shallow copy of this graph instance. Neither edges nor vertices are cloned.
      *
-     * @return a shallow copy of this set.
+     * @return a shallow copy of this graph.
      *
      * @throws RuntimeException in case the clone is not supported
      *
@@ -186,7 +186,7 @@ public class GraphMutableNetworkAdapter<V, E>
         throws IOException
     {
         oos.defaultWriteObject();
-        SerializationUtils.writeGraphTypeToStream(getType(), oos);
+        oos.writeObject(getType());
         SerializationUtils.writeGraphToStream(this, oos);
     }
 
@@ -195,18 +195,14 @@ public class GraphMutableNetworkAdapter<V, E>
     {
         ois.defaultReadObject();
 
-        GraphType type = SerializationUtils.readGraphTypeFromStream(ois);
+        GraphType type = (GraphType) ois.readObject();
         if (type.isMixed()) {
             throw new IOException("Mixed graphs not yet supported");
         }
 
-        this.network = type.isDirected()
-            ? NetworkBuilder
-                .directed().allowsParallelEdges(type.isAllowingMultipleEdges())
-                .allowsSelfLoops(type.isAllowingSelfLoops()).build()
-            : NetworkBuilder
-                .undirected().allowsParallelEdges(type.isAllowingMultipleEdges())
-                .allowsSelfLoops(type.isAllowingSelfLoops()).build();
+        this.network = (type.isDirected() ? NetworkBuilder.directed() : NetworkBuilder.undirected())
+            .allowsParallelEdges(type.isAllowingMultipleEdges())
+            .allowsSelfLoops(type.isAllowingSelfLoops()).build();
 
         SerializationUtils.readGraphFromStream(this, ois);
     }

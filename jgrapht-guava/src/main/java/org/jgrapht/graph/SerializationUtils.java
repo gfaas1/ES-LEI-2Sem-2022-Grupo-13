@@ -22,7 +22,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
 
 /**
  * Helper class for serialization of graphs.
@@ -34,55 +33,6 @@ import org.jgrapht.GraphType;
  */
 class SerializationUtils
 {
-
-    /**
-     * Write a graph type to an object stream.
-     * 
-     * @param type the graph type
-     * @param oos the object stream
-     * @throws IOException in case any I/O error occurs
-     */
-    static <V, E> void writeGraphTypeToStream(GraphType type, ObjectOutputStream oos)
-        throws IOException
-    {
-        oos.writeBoolean(type.isDirected());
-        oos.writeBoolean(type.isUndirected());
-        oos.writeBoolean(type.isAllowingMultipleEdges());
-        oos.writeBoolean(type.isAllowingSelfLoops());
-        oos.writeBoolean(type.isWeighted());
-    }
-
-    /**
-     * Read a graph type from an object stream
-     * 
-     * @param ois the input stream
-     * @return the graph type
-     * @throws IOException in case any I/O error occurs
-     */
-    static GraphType readGraphTypeFromStream(ObjectInputStream ois)
-        throws IOException
-    {
-        boolean directed = ois.readBoolean();
-        boolean undirected = ois.readBoolean();
-        boolean allowsMultipleEdges = ois.readBoolean();
-        boolean allowsSelfLoops = ois.readBoolean();
-        boolean weighted = ois.readBoolean();
-
-        DefaultGraphType.Builder b;
-        if (directed && undirected) {
-            b = new DefaultGraphType.Builder().mixed();
-        } else if (directed) {
-            b = new DefaultGraphType.Builder().directed();
-        } else if (undirected) {
-            b = new DefaultGraphType.Builder().undirected();
-        } else {
-            throw new IllegalArgumentException();
-        }
-
-        return b
-            .allowMultipleEdges(allowsMultipleEdges).allowSelfLoops(allowsSelfLoops)
-            .weighted(weighted).build();
-    }
 
     /**
      * Write the vertices and edges of a graph to an object stream.

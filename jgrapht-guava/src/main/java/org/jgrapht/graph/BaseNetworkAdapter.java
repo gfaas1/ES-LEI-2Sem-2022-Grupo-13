@@ -103,15 +103,10 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public GraphType getType()
     {
-        if (network.isDirected()) {
-            return new DefaultGraphType.Builder()
-                .directed().weighted(false).allowMultipleEdges(network.allowsParallelEdges())
+        return (network.isDirected() ? new DefaultGraphType.Builder().directed()
+            : new DefaultGraphType.Builder().undirected())
+                .weighted(false).allowMultipleEdges(network.allowsParallelEdges())
                 .allowSelfLoops(network.allowsSelfLoops()).build();
-        } else {
-            return new DefaultGraphType.Builder()
-                .undirected().weighted(false).allowMultipleEdges(network.allowsParallelEdges())
-                .allowSelfLoops(network.allowsSelfLoops()).build();
-        }
     }
 
     @Override

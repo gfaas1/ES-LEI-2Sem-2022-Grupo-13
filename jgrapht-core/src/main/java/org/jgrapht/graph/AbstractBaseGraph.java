@@ -258,7 +258,7 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Returns a shallow copy of this graph instance. Neither edges nor vertices are cloned.
      *
-     * @return a shallow copy of this set.
+     * @return a shallow copy of this graph.
      *
      * @throws RuntimeException in case the clone is not supported
      *

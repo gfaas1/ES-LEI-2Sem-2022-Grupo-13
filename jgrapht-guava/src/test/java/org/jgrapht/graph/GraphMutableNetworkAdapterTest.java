@@ -21,16 +21,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.GraphMutableNetworkAdapter;
 import org.junit.Test;
 
 import com.google.common.graph.NetworkBuilder;
@@ -217,7 +211,7 @@ public class GraphMutableNetworkAdapterTest
         g.addEdge("v5", "v2");
         g.addEdge("v5", "v5");
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -269,7 +263,7 @@ public class GraphMutableNetworkAdapterTest
         g.addEdge("v2", "v3");
         g.addEdge("v3", "v3");
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -285,22 +279,6 @@ public class GraphMutableNetworkAdapterTest
         assertTrue(g2.containsEdge("v1", "v2"));
         assertTrue(g2.containsEdge("v2", "v3"));
         assertTrue(g2.containsEdge("v3", "v3"));
-    }
-
-    private Object serializeAndDeserialize(Object obj)
-        throws Exception
-    {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
-
-        out.writeObject(obj);
-        out.flush();
-
-        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bin);
-
-        obj = in.readObject();
-        return obj;
     }
 
 }

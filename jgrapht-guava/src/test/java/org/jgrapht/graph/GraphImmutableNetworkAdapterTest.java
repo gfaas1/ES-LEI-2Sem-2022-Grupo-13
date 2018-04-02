@@ -22,15 +22,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 import org.junit.Test;
 
 import com.google.common.graph.ImmutableNetwork;
@@ -217,7 +212,7 @@ public class GraphImmutableNetworkAdapterTest
         assertTrue(g.getType().isAllowingCycles());
         assertFalse(g.getType().isModifiable());
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -242,23 +237,6 @@ public class GraphImmutableNetworkAdapterTest
         assertTrue(g2.containsEdge("v5", "v2"));
 
         assertEquals(g.toString(), g2.toString());
-    }
-   
-
-    private Object serializeAndDeserialize(Object obj)
-        throws Exception
-    {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
-
-        out.writeObject(obj);
-        out.flush();
-
-        ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bin);
-
-        obj = in.readObject();
-        return obj;
     }
 
 }
