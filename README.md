@@ -67,6 +67,7 @@ The files below make up the table of contents for a release distribution archive
     - `checker-compat-qual-x.y.z.jar` Guava dependency
     - `error_prone_annotations-x.y.z.jar` Guava dependency
     - `jsr305-x.y.z.jar` Guava dependency
+    - `j2objc-annotations-x.y.jar` Guava dependency
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
