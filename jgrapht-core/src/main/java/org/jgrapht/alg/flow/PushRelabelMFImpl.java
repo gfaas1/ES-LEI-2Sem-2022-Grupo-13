@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.extension.ExtensionFactory;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.alg.util.extension.*;
+import java.util.*;
 
 /**
  * <p>
@@ -43,10 +43,10 @@ import org.jgrapht.alg.util.extension.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Alexey Kudinkin
+ * @author Alexey Kudinkin, Alexandru Valeanu
  */
 public class PushRelabelMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+        extends MaximumFlowAlgorithmBase<V, E>
 {
     // Diagnostic
 
@@ -57,7 +57,10 @@ public class PushRelabelMFImpl<V, E>
 
     // Label pruning helpers
 
-    private Map<Integer, Integer> labeling;
+    private int[] labeling;
+
+    private Queue<VertexExtension> active;
+    private Set<VertexExtension> inQueue;
 
     boolean flowBack;
 
@@ -65,7 +68,7 @@ public class PushRelabelMFImpl<V, E>
 
     /**
      * Construct a new push-relabel algorithm.
-     * 
+     *
      * @param network the network
      */
     public PushRelabelMFImpl(Graph<V, E> network)
@@ -75,7 +78,7 @@ public class PushRelabelMFImpl<V, E>
 
     /**
      * Construct a new push-relabel algorithm.
-     * 
+     *
      * @param network the network
      * @param epsilon tolerance used when comparing floating-point values
      */
@@ -83,19 +86,26 @@ public class PushRelabelMFImpl<V, E>
     {
         super(network, epsilon);
 
-        this.vertexExtensionsFactory = () -> new VertexExtension();
+        this.vertexExtensionsFactory = VertexExtension::new;
 
-        this.edgeExtensionsFactory = () -> new AnnotatedFlowEdge();
+        this.edgeExtensionsFactory = AnnotatedFlowEdge::new;
 
         if (DIAGNOSTIC_ENABLED) {
             this.diagnostic = new PushRelabelDiagnostic();
         }
     }
 
+    private void enqueue(VertexExtension vx){
+        if (!inQueue.contains(vx)){
+            inQueue.add(vx);
+            active.add(vx);
+        }
+    }
+
     /**
      * Prepares all data structures to start a new invocation of the Maximum Flow or Minimum Cut
      * algorithms
-     * 
+     *
      * @param source source
      * @param sink sink
      */
@@ -103,20 +113,21 @@ public class PushRelabelMFImpl<V, E>
     {
         super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
-        this.labeling = new HashMap<>();
+        this.labeling = new int[network.vertexSet().size() * 2 + 1];
         this.flowBack = false;
     }
 
     /**
      * Initialization
-     * 
+     *
      * @param source the source
      * @param sink the sink
      * @param active resulting queue with all active vertices
      */
-    public void initialize(
-        VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
+    public void initialize(VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
     {
+        this.active = active;
+
         source.label = network.vertexSet().size();
         source.excess = Double.POSITIVE_INFINITY;
 
@@ -126,7 +137,7 @@ public class PushRelabelMFImpl<V, E>
             pushFlowThrough(ex, ex.capacity);
 
             if (ex.getTarget().prototype != sink.prototype) {
-                active.offer(ex.<VertexExtension> getTarget());
+                enqueue(ex.getTarget());
             }
         }
     }
@@ -165,11 +176,7 @@ public class PushRelabelMFImpl<V, E>
         // flow back to the source
         for (V v : network.vertexSet()) {
             VertexExtension vx = getVertexExtension(v);
-            if (!labeling.containsKey(vx.label)) {
-                labeling.put(vx.label, 1);
-            } else {
-                labeling.put(vx.label, labeling.get(vx.label) + 1);
-            }
+            labeling[vx.label]++;
         }
 
         if (DIAGNOSTIC_ENABLED) {
@@ -199,19 +206,21 @@ public class PushRelabelMFImpl<V, E>
     {
         init(source, sink);
 
-        Queue<VertexExtension> active = new ArrayDeque<>();
+        this.active = new ArrayDeque<>();
+        this.inQueue = new HashSet<>();
 
         initialize(getVertexExtension(source), getVertexExtension(sink), active);
 
         while (!active.isEmpty()) {
             VertexExtension ux = active.poll();
+            inQueue.remove(ux);
             for (;;) {
                 for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
                     if (isAdmissible(ex)) {
                         if ((! ex.getTarget().prototype.equals(sink))
-                            && (! ex.getTarget().prototype.equals(source)))
+                                && (! ex.getTarget().prototype.equals(source)))
                         {
-                            active.offer(ex.getTarget());
+                            enqueue(ex.getTarget());
                         }
 
                         // Check whether we're rip off the excess
@@ -227,8 +236,8 @@ public class PushRelabelMFImpl<V, E>
                     break;
                 }
 
-                // Check whether we still have any vertices with the label '1'
-                if (!flowBack && !labeling.containsKey(0) && !labeling.containsKey(1)) {
+                // Check whether we still have any vertices with the labels <= '1'
+                if (!flowBack && labeling[0] == 0 && labeling[1] == 1) {
                     // This supposed to drastically improve performance cutting
                     // off the necessity to drive labels of all vertices up to
                     // value 'N' one-by-one not entailing eny effective
@@ -236,7 +245,13 @@ public class PushRelabelMFImpl<V, E>
                     // label <= 1 in the network & therefore no
                     // 'discharging-path' to the _sink_ also signalling that
                     // we're in the flow-back stage of the algorithm
-                    getVertexExtension(source).label = Collections.max(labeling.keySet()) + 1;
+
+                    for (int i = labeling.length - 1; i >= 0; i--)
+                        if (labeling[i] > 0){
+                            getVertexExtension(source).label = i + 1;
+                            break;
+                        }
+
                     flowBack = true;
                 }
             }
@@ -260,42 +275,20 @@ public class PushRelabelMFImpl<V, E>
     {
         assert (vx.hasExcess());
 
-        int min = Integer.MAX_VALUE;
+        labeling[vx.label]--;
+        vx.label = 2 * network.vertexSet().size();
+
         for (AnnotatedFlowEdge ex : vx.getOutgoing()) {
             if (ex.hasCapacity()) {
                 VertexExtension ux = ex.getTarget();
-                if (min > ux.label) {
-                    min = ux.label;
-                }
+                vx.label = Math.min(vx.label, ux.label + 1);
             }
         }
 
+        labeling[vx.label]++;
+
         if (DIAGNOSTIC_ENABLED) {
-            diagnostic.incrementRelabels(vx.label, min + 1);
-        }
-
-        assert (labeling.get(vx.label) > 0);
-        updateLabeling(vx, min + 1);
-
-        // Sanity
-        if (min != Integer.MAX_VALUE) {
-            vx.label = min + 1;
-        }
-
-    }
-
-    private void updateLabeling(VertexExtension vx, int l)
-    {
-        if (labeling.get(vx.label) == 1) {
-            labeling.remove(vx.label);
-        } else {
-            labeling.put(vx.label, labeling.get(vx.label) - 1);
-        }
-
-        if (!labeling.containsKey(l)) {
-            labeling.put(l, 1);
-        } else {
-            labeling.put(l, labeling.get(l) + 1);
+            diagnostic.incrementRelabels(vx.label, vx.label);
         }
     }
 
@@ -313,7 +306,7 @@ public class PushRelabelMFImpl<V, E>
 
     /**
      * Push flow through an edge.
-     * 
+     *
      * @param ex the edge
      * @param f the amount of flow to push through
      */
@@ -330,7 +323,7 @@ public class PushRelabelMFImpl<V, E>
     private boolean isAdmissible(AnnotatedFlowEdge e)
     {
         return e.hasCapacity() && (e
-            .<VertexExtension> getSource().label == (e.<VertexExtension> getTarget().label + 1));
+                .<VertexExtension> getSource().label == (e.<VertexExtension> getTarget().label + 1));
     }
 
     private VertexExtension getVertexExtension(V v)
@@ -389,7 +382,7 @@ public class PushRelabelMFImpl<V, E>
             System.out.println(labels);
 
             List<Map.Entry<Pair<Integer, Integer>, Integer>> relabelsSorted =
-                new ArrayList<>(relabels.entrySet());
+                    new ArrayList<>(relabels.entrySet());
 
             Collections.sort(relabelsSorted, (o1, o2) -> -(o1.getValue() - o2.getValue()));
 
@@ -399,10 +392,10 @@ public class PushRelabelMFImpl<V, E>
             System.out.println("            " + relabelsSorted);
 
             List<Map.Entry<Pair<V, V>, Integer>> dischargesSorted =
-                new ArrayList<>(discharges.entrySet());
+                    new ArrayList<>(discharges.entrySet());
 
             Collections
-                .sort(dischargesSorted, (one, other) -> -(one.getValue() - other.getValue()));
+                    .sort(dischargesSorted, (one, other) -> -(one.getValue() - other.getValue()));
 
             System.out.println("DISCHARGES  ");
             System.out.println("----------  ");
@@ -415,7 +408,7 @@ public class PushRelabelMFImpl<V, E>
      * Vertex extension for the push-relabel algorithm, which contains an additional label.
      */
     public class VertexExtension
-        extends VertexExtensionBase
+            extends VertexExtensionBase
     {
         private int label;
 
