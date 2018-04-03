@@ -26,7 +26,7 @@ import java.util.HashSet;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.guava.GraphMutableNetworkAdapter;
+import org.jgrapht.graph.guava.MutableNetworkAdapter;
 import org.junit.Test;
 
 import com.google.common.graph.NetworkBuilder;
@@ -36,7 +36,7 @@ import com.google.common.graph.NetworkBuilder;
  *
  * @author Dimitrios Michail
  */
-public class GraphMutableNetworkAdapterTest
+public class MutableNetworkAdapterTest
 {
 
     /**
@@ -46,7 +46,7 @@ public class GraphMutableNetworkAdapterTest
     public void testDirectedGraph()
     {
         Graph<String,
-            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+            DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
 
@@ -115,7 +115,7 @@ public class GraphMutableNetworkAdapterTest
     public void testUndirectedGraph()
     {
         Graph<String,
-            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+            DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
 
@@ -188,7 +188,7 @@ public class GraphMutableNetworkAdapterTest
         throws Exception
     {
         Graph<String,
-            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+            DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
 
@@ -247,7 +247,7 @@ public class GraphMutableNetworkAdapterTest
         throws Exception
     {
         Graph<String,
-            DefaultEdge> g = new GraphMutableNetworkAdapter<>(
+            DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
                 DefaultEdge.class);
 

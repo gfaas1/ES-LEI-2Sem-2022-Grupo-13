@@ -22,63 +22,49 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.util.TypeUtil;
 
+import com.google.common.graph.EndpointPair;
+import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.ImmutableNetwork;
-import com.google.common.graph.NetworkBuilder;
+import com.google.common.graph.ImmutableGraph;
+import com.google.common.graph.MutableGraph;
 
 /**
- * A graph adapter class using Guava's {@link ImmutableNetwork}.
+ * A graph adapter class using Guava's {@link ImmutableGraph}.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
- * @param <E> the graph edge type
  */
-public class GraphImmutableNetworkAdapter<V, E>
-    extends BaseNetworkAdapter<V, E, ImmutableNetwork<V, E>>
-    implements Graph<V, E>, Cloneable, Serializable
+public class ImmutableGraphAdapter<V>
+    extends BaseGraphAdapter<V, ImmutableGraph<V>>
+    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
-    private static final long serialVersionUID = -5620031296616832419L;
-
+    private static final long serialVersionUID = -6619929013881511474L;
+    
     protected static final String GRAPH_IS_IMMUTABLE = "Graph is immutable";
 
     /**
-     * Create a new network adapter.
+     * Create a new adapter.
      * 
-     * @param network the immutable network
-     * @param ef the edge factory of the new graph
+     * @param graph the graph
      */
-    public GraphImmutableNetworkAdapter(ImmutableNetwork<V, E> network, EdgeFactory<V, E> ef)
+    public ImmutableGraphAdapter(ImmutableGraph<V> graph)
     {
-        super(network, ef);
-    }
-
-    /**
-     * Create a new network adapter.
-     * 
-     * @param network the immutable network
-     * @param edgeClass class on which to base factory for edges
-     */
-    public GraphImmutableNetworkAdapter(
-        ImmutableNetwork<V, E> network, Class<? extends E> edgeClass)
-    {
-        this(network, new ClassBasedEdgeFactory<>(edgeClass));
+        super(graph);
     }
 
     @Override
-    public E addEdge(V sourceVertex, V targetVertex)
+    public EndpointPair<V> addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
     @Override
-    public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    public boolean addEdge(V sourceVertex, V targetVertex, EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
@@ -90,13 +76,13 @@ public class GraphImmutableNetworkAdapter<V, E>
     }
 
     @Override
-    public E removeEdge(V sourceVertex, V targetVertex)
+    public EndpointPair<V> removeEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
     @Override
-    public boolean removeEdge(E e)
+    public boolean removeEdge(EndpointPair<V> e)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
@@ -108,15 +94,9 @@ public class GraphImmutableNetworkAdapter<V, E>
     }
 
     @Override
-    public double getEdgeWeight(E e)
+    public void setEdgeWeight(EndpointPair<V> e, double weight)
     {
-        return Graph.DEFAULT_EDGE_WEIGHT;
-    }
-
-    @Override
-    public void setEdgeWeight(E e, double weight)
-    {
-        throw new UnsupportedOperationException("Graph is unweighted");
+        throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
 
     @Override
@@ -138,12 +118,11 @@ public class GraphImmutableNetworkAdapter<V, E>
     public Object clone()
     {
         try {
-            GraphImmutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
+            ImmutableGraphAdapter<V> newGraph = TypeUtil.uncheckedCast(super.clone());
 
-            newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;
             newGraph.unmodifiableEdgeSet = null;
-            newGraph.network = ImmutableNetwork.copyOf(Graphs.copyOf(this.network));
+            newGraph.graph = ImmutableGraph.copyOf(Graphs.copyOf(this.graph));
 
             return newGraph;
         } catch (CloneNotSupportedException e) {
@@ -156,31 +135,60 @@ public class GraphImmutableNetworkAdapter<V, E>
         throws IOException
     {
         oos.defaultWriteObject();
+
+        // write type
         oos.writeObject(getType());
-        SerializationUtils.writeGraphToStream(this, oos);
+
+        // write vertices
+        int n = vertexSet().size();
+        oos.writeInt(n);
+        for (V v : vertexSet()) {
+            oos.writeObject(v);
+        }
+
+        // write edges
+        int m = edgeSet().size();
+        oos.writeInt(m);
+        for (EndpointPair<V> e : edgeSet()) {
+            V u = e.nodeU();
+            V v = e.nodeV();
+            oos.writeObject(u);
+            oos.writeObject(v);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
         throws ClassNotFoundException, IOException
     {
         ois.defaultReadObject();
 
         GraphType type = (GraphType) ois.readObject();
-        if (type.isMixed()) {
-            throw new IOException("Mixed graphs not yet supported");
+        if (type.isMixed() || type.isAllowingMultipleEdges()) {
+            throw new IOException("Graph type not supported");
         }
 
-        // read graph as mutable
-        GraphMutableNetworkAdapter<V,
-            E> mutableGraph = new GraphMutableNetworkAdapter<>(
-                (type.isDirected() ? NetworkBuilder.directed() : NetworkBuilder.undirected())
-                    .allowsParallelEdges(type.isAllowingMultipleEdges())
-                    .allowsSelfLoops(type.isAllowingSelfLoops()).build(),
-                this.edgeFactory);
-        SerializationUtils.readGraphFromStream(mutableGraph, ois);
+        MutableGraph<V> mutableGraph =
+            (type.isDirected() ? GraphBuilder.directed() : GraphBuilder.undirected())
+                .allowsSelfLoops(type.isAllowingSelfLoops()).build();
+
+        // read vertices
+        int n = ois.readInt();
+        for (int i = 0; i < n; i++) {
+            V v = (V) ois.readObject();
+            mutableGraph.addNode(v);
+        }
+
+        // read edges
+        int m = ois.readInt();
+        for (int i = 0; i < m; i++) {
+            V s = (V) ois.readObject();
+            V t = (V) ois.readObject();
+            mutableGraph.putEdge(s, t);
+        }
 
         // setup the immutable copy
-        this.network = ImmutableNetwork.copyOf(Graphs.copyOf(mutableGraph.network));
+        this.graph = ImmutableGraph.copyOf(mutableGraph);
     }
 
 }

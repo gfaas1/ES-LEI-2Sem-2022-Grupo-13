@@ -169,7 +169,13 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public double getEdgeWeight(E e)
     {
-        return Graph.DEFAULT_EDGE_WEIGHT;
+        if (e == null) { 
+            throw new NullPointerException();
+        } else if (!network.edges().contains(e)) { 
+            throw new IllegalArgumentException("no such edge in graph: " + e.toString());
+        } else { 
+            return Graph.DEFAULT_EDGE_WEIGHT;
+        }
     }
 
     @Override

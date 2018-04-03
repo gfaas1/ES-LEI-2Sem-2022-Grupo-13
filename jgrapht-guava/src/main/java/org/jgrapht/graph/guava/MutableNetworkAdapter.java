@@ -43,12 +43,12 @@ import com.google.common.graph.NetworkBuilder;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class GraphMutableNetworkAdapter<V, E>
+public class MutableNetworkAdapter<V, E>
     extends BaseNetworkAdapter<V, E, MutableNetwork<V, E>>
     implements Graph<V, E>, Cloneable, Serializable
 {
-    private static final long serialVersionUID = -4058590598220152069L;
-
+    private static final long serialVersionUID = 7450826703235510224L;
+    
     protected static final String GRAPH_IS_UNWEIGHTED = "Graph is unweighted";
 
     /**
@@ -57,7 +57,7 @@ public class GraphMutableNetworkAdapter<V, E>
      * @param network the mutable network
      * @param ef the edge factory of the new graph
      */
-    public GraphMutableNetworkAdapter(MutableNetwork<V, E> network, EdgeFactory<V, E> ef)
+    public MutableNetworkAdapter(MutableNetwork<V, E> network, EdgeFactory<V, E> ef)
     {
         super(network, ef);
     }
@@ -68,7 +68,7 @@ public class GraphMutableNetworkAdapter<V, E>
      * @param network the mutable network
      * @param edgeClass class on which to base factory for edges
      */
-    public GraphMutableNetworkAdapter(MutableNetwork<V, E> network, Class<? extends E> edgeClass)
+    public MutableNetworkAdapter(MutableNetwork<V, E> network, Class<? extends E> edgeClass)
     {
         this(network, new ClassBasedEdgeFactory<>(edgeClass));
     }
@@ -169,7 +169,7 @@ public class GraphMutableNetworkAdapter<V, E>
     public Object clone()
     {
         try {
-            GraphMutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
+            MutableNetworkAdapter<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
 
             newGraph.edgeFactory = this.edgeFactory;
             newGraph.unmodifiableVertexSet = null;
@@ -187,10 +187,28 @@ public class GraphMutableNetworkAdapter<V, E>
         throws IOException
     {
         oos.defaultWriteObject();
+
+        // write type
         oos.writeObject(getType());
-        SerializationUtils.writeGraphToStream(this, oos);
+
+        // write vertices
+        int n = vertexSet().size();
+        oos.writeInt(n);
+        for (V v : vertexSet()) {
+            oos.writeObject(v);
+        }
+
+        // write edges
+        int m = edgeSet().size();
+        oos.writeInt(m);
+        for (E e : edgeSet()) {
+            oos.writeObject(getEdgeSource(e));
+            oos.writeObject(getEdgeTarget(e));
+            oos.writeObject(e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
         throws ClassNotFoundException, IOException
     {
@@ -198,14 +216,28 @@ public class GraphMutableNetworkAdapter<V, E>
 
         GraphType type = (GraphType) ois.readObject();
         if (type.isMixed()) {
-            throw new IOException("Mixed graphs not yet supported");
+            throw new IOException("Graph type not supported");
         }
 
         this.network = (type.isDirected() ? NetworkBuilder.directed() : NetworkBuilder.undirected())
             .allowsParallelEdges(type.isAllowingMultipleEdges())
             .allowsSelfLoops(type.isAllowingSelfLoops()).build();
 
-        SerializationUtils.readGraphFromStream(this, ois);
+        // read vertices
+        int n = ois.readInt();
+        for (int i = 0; i < n; i++) {
+            V v = (V) ois.readObject();
+            network.addNode(v);
+        }
+
+        // read edges
+        int m = ois.readInt();
+        for (int i = 0; i < m; i++) {
+            V s = (V) ois.readObject();
+            V t = (V) ois.readObject();
+            E e = (E) ois.readObject();
+            network.addEdge(s, t, e);
+        }
     }
 
 }

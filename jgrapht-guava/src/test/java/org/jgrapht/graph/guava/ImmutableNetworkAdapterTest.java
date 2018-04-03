@@ -27,7 +27,7 @@ import java.util.HashSet;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.guava.GraphImmutableNetworkAdapter;
+import org.jgrapht.graph.guava.ImmutableNetworkAdapter;
 import org.junit.Test;
 
 import com.google.common.graph.ImmutableNetwork;
@@ -39,7 +39,7 @@ import com.google.common.graph.NetworkBuilder;
  *
  * @author Dimitrios Michail
  */
-public class GraphImmutableNetworkAdapterTest
+public class ImmutableNetworkAdapterTest
 {
 
     /**
@@ -74,7 +74,7 @@ public class GraphImmutableNetworkAdapterTest
         network.addEdge("v5", "v5", e55_2);
 
         Graph<String, DefaultEdge> g =
-            new GraphImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
+            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -204,7 +204,7 @@ public class GraphImmutableNetworkAdapterTest
         network.addEdge("v5", "v5", e55_2);
 
         Graph<String, DefaultEdge> g =
-            new GraphImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
+            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
         
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
