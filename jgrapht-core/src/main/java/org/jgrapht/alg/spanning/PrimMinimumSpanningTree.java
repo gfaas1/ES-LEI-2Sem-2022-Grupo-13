@@ -31,7 +31,7 @@ import java.util.*;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Alexey Kudinkin
+ * @author Alexey Kudinkin, Alexandru Valeanu
  * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
