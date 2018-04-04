@@ -94,8 +94,8 @@ public class RandomRegularGraphGeneratorTest {
 
     @Test
     public void testSimpleGraph() {
-        int n = 10;
-        int d = 2;
+        int n = 100;
+        int d = 20;
         GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);

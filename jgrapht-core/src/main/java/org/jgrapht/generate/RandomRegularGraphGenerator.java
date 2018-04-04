@@ -28,7 +28,7 @@ import java.util.*;
  * A regular graph is a graph where each vertex has the same degree, i.e. the same number of neighbors.
  *
  * <p>
- * The algorithm for the simple case, proposed in [SW99] and extending the one for the non-simple case,
+ * The algorithm for the simple case, proposed in [SW99] and extending the one for the non-simple case [W99],
  * runs in expected $\mathcal{O}(nd^2)$ time.
  * It has been proved in [KV03] to sample from the space of random d-regular graphs
  * in a way which is asymptotically uniform at random when $d = \mathcal{O}(n^{1/3 - \epsilon})$.
@@ -41,6 +41,10 @@ import java.util.*;
  * [SW99] Steger, Angelika, and Nicholas C. Wormald.
  * "Generating random regular graphs quickly."
  * Combinatorics, Probability and Computing 8.4 (1999): 377-396.
+ *
+ * [W99] Wormald, Nicholas C.
+ * "Models of random regular graphs."
+ * London Mathematical Society Lecture Note Series (1999): 239-298.
  *
  * @author Emilio Cruciani
  * @since March 2018
@@ -149,9 +153,7 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
 
             // general case
             else {
-                generateSimpleRegularGraphAlgorithm1(target, vertexFactory);
-                // alternative (slower) method presented in [SW99]
-                // generateSimpleRegularGraphAlgorithm2(target, vertexFactory);
+                generateSimpleRegularGraph(target, vertexFactory);
             }
         }
 
@@ -161,11 +163,14 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
         }
     }
 
+
     // auxiliary method to check if there are remaining suitable edges
+    // used in generateSimpleRegularGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
     private boolean suitable(Set<Map.Entry<Integer, Integer>> edges, Map<Integer, Integer> potentialEdges) {
         if (potentialEdges.isEmpty()) {
             return true;
         }
+
         Object[] keys = potentialEdges.keySet().toArray();
         Arrays.sort(keys);
 
@@ -182,8 +187,9 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
         return false;
     }
 
+
     // auxiliary method to manage simple case
-    private void generateSimpleRegularGraphAlgorithm1(Graph<V, E> target, VertexFactory<V> vertexFactory) {
+    private void generateSimpleRegularGraph(Graph<V, E> target, VertexFactory<V> vertexFactory) {
         // integers to vertices
         List<V> vertices = new ArrayList<>(this.n);
         for (int i = 0; i < this.n; i++) {
@@ -244,92 +250,6 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
         // add edges to target
         for (Map.Entry<Integer, Integer> e : edges) {
             target.addEdge(vertices.get(e.getKey()), vertices.get(e.getValue()));
-        }
-    }
-
-
-    // auxiliary method to check regularity
-    private boolean isDRegular(Graph<V, E> target) {
-        for (V v : target.vertexSet()) {
-            if (target.degreeOf(v) != this.d) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // auxiliary method to manage simple case
-    private void generateSimpleRegularGraphAlgorithm2(Graph<V, E> target, VertexFactory<V> vertexFactory) {
-        // integers to vertices
-        List<V> vertices = new ArrayList<>(this.n);
-        for (int i = 0; i < this.n; i++) {
-            V vertex = vertexFactory.createVertex();
-            vertices.add(vertex);
-            target.addVertex(vertex);
-        }
-
-        while (!isDRegular(target)) {
-            // initialize target graph
-            target.removeAllEdges(new HashSet<>(target.edgeSet()));
-
-            // set of candidate edges
-            Set<Map.Entry<V, V>> S = new HashSet<>();
-            for (int i = 0; i < this.n; i++) {
-                for (int j = i + 1; j < this.n; j++) {
-                    V u = vertices.get(i);
-                    V v = vertices.get(j);
-                    S.add(new AbstractMap.SimpleImmutableEntry<>(u, v));
-                }
-            }
-
-            Set<Map.Entry<V, V>> toRemoveFromS = new HashSet<>();
-            while (!S.isEmpty()) {
-                // needed to normalize probabilities in [0,1]
-                double norm = 0.0;
-                for (Map.Entry<V, V> edge : S) {
-                    V u = edge.getKey();
-                    V v = edge.getValue();
-                    norm += (this.d - target.degreeOf(u)) * (this.d - target.degreeOf(v));
-                }
-
-                double r = rng.nextDouble();
-                double c = 0.0;  // cumulative probability
-                for (Map.Entry<V, V> edge : S) {
-                    V u = edge.getKey();
-                    V v = edge.getValue();
-
-                    // probability of picking edge (u, v)
-                    double p = (this.d - target.degreeOf(u)) * (this.d - target.degreeOf(v)) / norm;
-
-                    c += p;
-                    if (c >= r) {
-                        target.addEdge(u, v);
-
-                        // select edges to remove from S
-                        // cannot remove directly while iterating
-                        toRemoveFromS.add(edge);
-                        if (target.degreeOf(u) == this.d) {
-                            for (Map.Entry<V, V> e : S) {
-                                if (e.getKey().equals(u) || e.getValue().equals(u)) {
-                                    toRemoveFromS.add(e);
-                                }
-                            }
-                        }
-                        if (target.degreeOf(v) == this.d) {
-                            for (Map.Entry<V, V> e : S) {
-                                if (e.getKey().equals(v) || e.getValue().equals(v)) {
-                                    toRemoveFromS.add(e);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                // update S
-                S.removeAll(toRemoveFromS);
-                toRemoveFromS.clear();
-            }
         }
     }
 
