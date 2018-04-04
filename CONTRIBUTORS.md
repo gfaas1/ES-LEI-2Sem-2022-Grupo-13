@@ -101,8 +101,10 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Mark Raynsford](https://github.com/io7m)
 - [Mariusz Smykuła](https://github.com/mariuszs)
 - [Pratik Tibrewal](https://github.com/tibrewalpratik17)
-- [Yimismi](https://github.com/Yimismi)
+- [Chen Kui](https://github.com/Yimismi)
 - [Timofey Chudakov](https://github.com/Toptachamann)
+- [Konstantinos Karatsenidis](https://github.com/gate2k1)
+- [Kirill Vishnyakov](https://github.com/LightnessOfBeing)
 
 (if we have missed your name on this list, please email us to get it fixed).
 

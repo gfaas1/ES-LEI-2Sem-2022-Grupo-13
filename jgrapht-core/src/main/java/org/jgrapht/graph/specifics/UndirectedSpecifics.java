@@ -89,8 +89,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public void addVertex(V v)
     {
-        // add with a lazy edge container entry
-        vertexMapUndirected.put(v, null);
+        getEdgeContainer(v);
     }
 
     /**
@@ -261,7 +260,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * A lazy build of edge container for specified vertex.
+     * Get the edge container for a specified vertex.
      *
      * @param vertex a vertex in this graph
      *

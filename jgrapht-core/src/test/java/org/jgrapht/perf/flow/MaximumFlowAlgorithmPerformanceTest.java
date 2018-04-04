@@ -103,6 +103,17 @@ public class MaximumFlowAlgorithmPerformanceTest
         }
     }
 
+    public static class DinicMaximumFlowRandomGraphBenchmark
+        extends RandomGraphBenchmarkBase
+    {
+
+        @Override MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+            Graph<Integer, DefaultWeightedEdge> network)
+        {
+            return new DinicMFImpl<>(network);
+        }
+    }
+
     @Test
     public void testRandomGraphBenchmark()
         throws RunnerException
@@ -110,6 +121,7 @@ public class MaximumFlowAlgorithmPerformanceTest
         Options opt = new OptionsBuilder()
             .include(".*" + EdmondsKarpMaximumFlowRandomGraphBenchmark.class.getSimpleName() + ".*")
             .include(".*" + PushRelabelMaximumFlowRandomGraphBenchmark.class.getSimpleName() + ".*")
+            .include(".*" + DinicMaximumFlowRandomGraphBenchmark.class.getSimpleName() + ".*")
 
             .mode(Mode.AverageTime).timeUnit(TimeUnit.NANOSECONDS).warmupTime(TimeValue.seconds(1))
             .warmupIterations(3).measurementTime(TimeValue.seconds(1)).measurementIterations(5)
