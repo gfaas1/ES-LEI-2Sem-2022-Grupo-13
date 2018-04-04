@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
+import java.util.*;
 
 /**
  * An implementation of <a href="http://en.wikipedia.org/wiki/Prim's_algorithm"> Prim's
@@ -72,7 +72,7 @@ public class PrimMinimumSpanningTree<V, E>
 
             PriorityQueue<E> dangling = new PriorityQueue<>(
                 g.edgeSet().size(),
-                (lop, rop) -> Double.valueOf(g.getEdgeWeight(lop)).compareTo(g.getEdgeWeight(rop)));
+                    Comparator.comparingDouble(g::getEdgeWeight));
 
             dangling.addAll(g.edgesOf(root));
 
@@ -97,6 +97,91 @@ public class PrimMinimumSpanningTree<V, E>
                     {
                         dangling.add(e);
                     }
+                }
+            }
+        }
+
+        return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
+    }
+
+
+    /**
+     * Computes a spanning tree in $O(|V|^2)$ time.
+     *
+     * Note: This method is only recommended for dense graphs.
+     *
+     * @return a spanning tree
+     */
+    @SuppressWarnings("unchecked")
+    public SpanningTree<E> getSpanningTreeDense(){
+        Set<E> minimumSpanningTreeEdgeSet = new HashSet<>(g.vertexSet().size());
+        double spanningTreeWeight = 0d;
+
+        final int N = g.vertexSet().size();
+
+        /*
+         * Normalize the graph
+         *   map each vertex to an integer (using a HashMap)
+         *   keep the reverse mapping  (using an ArrayList)
+         */
+        Map<V, Integer> vertexMap = new HashMap<>();
+        List<V> indexList = new ArrayList<>();
+        for (E e: g.edgeSet()){
+            V source = g.getEdgeSource(e);
+            V target = g.getEdgeTarget(e);
+
+            // map 'source' if no mapping exists
+            if (!vertexMap.containsKey(source)){
+                vertexMap.put(source, vertexMap.size());
+                indexList.add(source);
+            }
+
+            // map 'target' if no mapping exists
+            if (!vertexMap.containsKey(target)){
+                vertexMap.put(target, vertexMap.size());
+                indexList.add(target);
+            }
+        }
+
+        boolean[] spanned = new boolean[N];
+        double[] distance = new double[N];
+        E[] edgeFromParent = (E[]) new Object[N];
+
+        Arrays.fill(distance, Double.MAX_VALUE);
+        distance[0] = 0;
+
+        for (int step = 0; step < N; step++) {
+            int u = -1;
+
+            for (int i = 0; i < N; i++) {
+                if (!spanned[i] && (u == -1 || distance[i] < distance[u]))
+                    u = i;
+            }
+
+            if (u == -1)
+                break;
+
+
+            V root = indexList.get(u);
+            spanned[u] = true;
+
+            if (edgeFromParent[u] != null) {
+                minimumSpanningTreeEdgeSet.add(edgeFromParent[u]);
+                spanningTreeWeight += g.getEdgeWeight(edgeFromParent[u]);
+            }
+
+            for (E e : g.edgesOf(root)) {
+                V target = g.getEdgeTarget(e);
+
+                if (target.equals(root))
+                    target = g.getEdgeSource(e);
+
+                int id = vertexMap.get(target);
+                double cost = g.getEdgeWeight(e);
+
+                if (!spanned[id] && distance[id] > cost) {
+                    distance[id] = cost;
+                    edgeFromParent[id] = e;
                 }
             }
         }

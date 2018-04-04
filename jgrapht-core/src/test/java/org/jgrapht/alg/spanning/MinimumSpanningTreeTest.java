@@ -17,17 +17,21 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.WeightedPseudograph;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,24 +40,24 @@ public class MinimumSpanningTreeTest
 {
     // ~ Static fields/initializers ---------------------------------------------
 
-    private static final String A = "A";
-    private static final String B = "B";
-    private static final String C = "C";
-    private static final String D = "D";
-    private static final String E = "E";
-    private static final String F = "F";
-    private static final String G = "G";
-    private static final String H = "H";
+    public static final String A = "A";
+    public static final String B = "B";
+    public static final String C = "C";
+    public static final String D = "D";
+    public static final String E = "E";
+    public static final String F = "F";
+    public static final String G = "G";
+    public static final String H = "H";
 
     // ~ Instance fields --------------------------------------------------------
 
-    private DefaultWeightedEdge AB;
-    private DefaultWeightedEdge AC;
-    private DefaultWeightedEdge BD;
-    private DefaultWeightedEdge DE;
-    private DefaultWeightedEdge EG;
-    private DefaultWeightedEdge GH;
-    private DefaultWeightedEdge FH;
+    public static DefaultWeightedEdge AB;
+    public static DefaultWeightedEdge AC;
+    public static DefaultWeightedEdge BD;
+    public static DefaultWeightedEdge DE;
+    public static DefaultWeightedEdge EG;
+    public static DefaultWeightedEdge GH;
+    public static DefaultWeightedEdge FH;
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -68,20 +72,6 @@ public class MinimumSpanningTreeTest
 
         testMinimumSpanningTreeBuilding(
             new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
-    }
-
-    @Test
-    public void testPrim()
-    {
-        testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleConnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, DE), 15.0);
-
-        testMinimumSpanningTreeBuilding(
-            new PrimMinimumSpanningTree<String, DefaultWeightedEdge>(
                 createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
             Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
@@ -133,14 +123,14 @@ public class MinimumSpanningTreeTest
         }
     }
 
-    protected <V, E> void testMinimumSpanningTreeBuilding(
+    public static <V, E>  void testMinimumSpanningTreeBuilding(
         final SpanningTree<E> mst, final Collection<E> edgeSet, final double weight)
     {
         assertEquals(weight, mst.getWeight(),0);
         assertTrue(mst.getEdges().containsAll(edgeSet));
     }
 
-    protected Graph<String, DefaultWeightedEdge> createSimpleDisconnectedWeightedGraph()
+    public static Graph<String, DefaultWeightedEdge> createSimpleDisconnectedWeightedGraph()
     {
 
         Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -174,7 +164,7 @@ public class MinimumSpanningTreeTest
         return g;
     }
 
-    protected Graph<String, DefaultWeightedEdge> createSimpleConnectedWeightedGraph()
+    public static Graph<String, DefaultWeightedEdge> createSimpleConnectedWeightedGraph()
     {
 
         Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
