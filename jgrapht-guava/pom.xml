@@ -60,8 +60,16 @@
 							<file>${main.basedir}/etc/licenses/apache-license-2.0.txt</file>
 						</transformer>
 						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-							<resource>META-INF/animal-shifter-annotations-license</resource>
-							<file>${main.basedir}/etc/licenses/MIT-license.txt</file>
+							<resource>META-INF/animal-sniffer-annotations-license</resource>
+							<file>${main.basedir}/etc/licenses/animal-sniffer-annotations-license.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/checker-compat-qual-license</resource>
+							<file>${main.basedir}/etc/licenses/checker-compat-qual-license.txt</file>
+						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+							<resource>META-INF/jsr305-license</resource>
+							<file>${main.basedir}/etc/licenses/jsr305-license.txt</file>
 						</transformer>
 						<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
                 			</transformer>

@@ -36,6 +36,10 @@ import com.google.common.graph.ValueGraphBuilder;
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph}.
  * 
+ * <p>
+ * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
+ * graph is weighted.
+ * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -46,7 +50,7 @@ public class ImmutableValueGraphAdapter<V, W>
     implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 2629294259825656044L;
-    
+
     protected static final String GRAPH_IS_IMMUTABLE = "Graph is immutable";
 
     /**

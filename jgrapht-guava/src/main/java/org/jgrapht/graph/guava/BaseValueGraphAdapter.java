@@ -47,7 +47,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     extends AbstractGraph<V, EndpointPair<V>>
     implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
-    private static final long serialVersionUID = -6742507788742087708L;
+    private static final long serialVersionUID = 3833510139696864917L;
 
     protected static final String LOOPS_NOT_ALLOWED = "loops not allowed";
 

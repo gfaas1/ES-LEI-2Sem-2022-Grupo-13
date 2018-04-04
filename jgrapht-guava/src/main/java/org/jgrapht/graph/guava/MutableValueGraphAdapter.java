@@ -38,10 +38,11 @@ import com.google.common.graph.ValueGraphBuilder;
  * A graph adapter class using Guava's {@link MutableValueGraph}.
  *
  * <p>
- * The class uses a converter from Guava's values to JGraphT's double weights. This is an one-way
- * conversion meaning that calling {@link #setEdgeWeight(EndpointPair, double)} will throw an
- * unsupported operation exception. Adjusting the weights can be done directly on the underlying
- * Guava {@link ValueGraph} and propagated upstream using the provided value converter.
+ * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
+ * graph is weighted. This is a one-way conversion meaning that calling
+ * {@link #setEdgeWeight(EndpointPair, double)} will throw an unsupported operation exception.
+ * Adjusting the weights can be done directly (by keeping an external reference) on the underlying
+ * {@link ValueGraph} and propagated upstream using the provided value converter.
  * 
  * @author Dimitrios Michail
  *
@@ -54,7 +55,7 @@ public class MutableValueGraphAdapter<V, W>
 {
     private static final long serialVersionUID = -5095044027783397573L;
 
-    protected W defaultValue;
+    protected final W defaultValue;
 
     /**
      * Create a new adapter.

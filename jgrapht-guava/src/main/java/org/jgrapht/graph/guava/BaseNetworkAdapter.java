@@ -44,7 +44,7 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     extends AbstractGraph<V, E>
     implements Graph<V, E>, Cloneable, Serializable
 {
-    private static final long serialVersionUID = -6742507788742087708L;
+    private static final long serialVersionUID = -6233085794632237761L;
 
     protected static final String LOOPS_NOT_ALLOWED = "loops not allowed";
 

@@ -20,11 +20,20 @@ package org.jgrapht.graph.guava;
 import java.io.Serializable;
 import java.util.function.ToDoubleFunction;
 
+import org.jgrapht.Graph;
+
 import com.google.common.graph.EndpointPair;
+import com.google.common.graph.ImmutableValueGraph;
 import com.google.common.graph.MutableValueGraph;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph} specialized with double values.
+ *
+ * <p>
+ * Each edge in {@link ImmutableValueGraph} is associated with a double value which is mapped to the
+ * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling methods
+ * {@link #getEdgeWeight(Object)} and {@link #setEdgeWeight(EndpointPair, double)} will get and set
+ * the value of an edge.
  *
  * @author Dimitrios Michail
  *
@@ -42,7 +51,9 @@ public class MutableDoubleValueGraphAdapter<V>
      */
     public MutableDoubleValueGraphAdapter(MutableValueGraph<V, Double> valueGraph)
     {
-        super(valueGraph, 1.0d, (ToDoubleFunction<Double> & Serializable) x -> x);
+        super(
+            valueGraph, Graph.DEFAULT_EDGE_WEIGHT,
+            (ToDoubleFunction<Double> & Serializable) x -> x);
     }
 
     @Override

@@ -20,10 +20,16 @@ package org.jgrapht.graph.guava;
 import java.io.Serializable;
 import java.util.function.ToDoubleFunction;
 
+import org.jgrapht.Graph;
 import com.google.common.graph.ImmutableValueGraph;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph} specialized with double values.
+ * 
+ * <p>
+ * Each edge in {@link ImmutableValueGraph} is associated with a double value which is mapped to the
+ * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling method 
+ * {@link #getEdgeWeight(Object)} will return the value of an edge.
  *
  * @author Dimitrios Michail
  *
