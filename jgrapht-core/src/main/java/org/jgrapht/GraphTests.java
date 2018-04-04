@@ -22,6 +22,7 @@ import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+import org.jgrapht.alg.cycle.WeakChordalityInspector;
 
 import java.util.*;
 import java.util.stream.Collectors;
