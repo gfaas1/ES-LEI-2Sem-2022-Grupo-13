@@ -17,26 +17,27 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.cycle.ChordalityInspector;
+import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+import org.jgrapht.alg.cycle.WeakChordalityInspector;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A collection of utilities to test for various graph properties.
- * 
+ *
  * @author Barak Naveh
  * @author Dimitrios Michail
  * @author Joris Kinable
  */
-public abstract class GraphTests
-{
+public abstract class GraphTests {
     private static final String GRAPH_CANNOT_BE_NULL = "Graph cannot be null";
     private static final String GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED =
-        "Graph must be directed or undirected";
+            "Graph must be directed or undirected";
     private static final String GRAPH_MUST_BE_UNDIRECTED = "Graph must be undirected";
     private static final String GRAPH_MUST_BE_DIRECTED = "Graph must be directed";
     private static final String FIRST_PARTITION_CANNOT_BE_NULL = "First partition cannot be null";
@@ -45,28 +46,26 @@ public abstract class GraphTests
     /**
      * Test whether a graph is empty. An empty graph on n nodes consists of n isolated vertices with
      * no edges.
-     * 
+     *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is empty, false otherwise
      */
-    public static <V, E> boolean isEmpty(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isEmpty(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return graph.edgeSet().isEmpty();
     }
 
     /**
      * Check if a graph is simple. A graph is simple if it has no self-loops and multiple (parallel) edges.
-     * 
+     *
      * @param graph a graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if a graph is simple, false otherwise
      */
-    public static <V, E> boolean isSimple(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isSimple(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
 
         GraphType type = graph.getType();
@@ -91,14 +90,13 @@ public abstract class GraphTests
     /**
      * Check if a graph has self-loops. A self-loop is an edge with the same source and target
      * vertices.
-     * 
+     *
      * @param graph a graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if a graph has self-loops, false otherwise
      */
-    public static <V, E> boolean hasSelfLoops(Graph<V, E> graph)
-    {
+    public static <V, E> boolean hasSelfLoops(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
 
         if (!graph.getType().isAllowingSelfLoops()) {
@@ -117,14 +115,13 @@ public abstract class GraphTests
     /**
      * Check if a graph has multiple edges (parallel edges), that is, whether the graph contains two
      * or more edges connecting the same pair of vertices.
-     * 
+     *
      * @param graph a graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if a graph has multiple edges, false otherwise
      */
-    public static <V, E> boolean hasMultipleEdges(Graph<V, E> graph)
-    {
+    public static <V, E> boolean hasMultipleEdges(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
 
         if (!graph.getType().isAllowingMultipleEdges()) {
@@ -149,14 +146,13 @@ public abstract class GraphTests
      * every pair of distinct vertices is connected by a unique edge. A complete directed graph is a
      * directed graph in which every pair of distinct vertices is connected by a pair of unique
      * edges (one in each direction).
-     * 
+     *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is complete, false otherwise
      */
-    public static <V, E> boolean isComplete(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isComplete(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         int n = graph.vertexSet().size();
         int allEdges;
@@ -179,75 +175,71 @@ public abstract class GraphTests
      * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
      * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
      * An empty graph is <i>not</i> considered connected.
-     * 
+     * <p>
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is connected, false otherwise
      * @see ConnectivityInspector
      */
-    public static <V, E> boolean isConnected(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isConnected(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new ConnectivityInspector<>(graph).isConnected();
     }
 
     /**
      * Tests if the inspected graph is biconnected. A biconnected graph is a connected graph on two or more vertices having no cutpoints.
-     *
+     * <p>
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link org.jgrapht.alg.connectivity.BiconnectivityInspector} directly.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is biconnected, false otherwise
      * @see org.jgrapht.alg.connectivity.BiconnectivityInspector
      */
-    public static <V, E> boolean isBiconnected(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isBiconnected(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new BiconnectivityInspector<>(graph).isBiconnected();
     }
 
     /**
      * Test whether a directed graph is weakly connected.
-     * 
+     * <p>
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link ConnectivityInspector} directly.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is weakly connected, false otherwise
      * @see ConnectivityInspector
      */
-    public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isWeaklyConnected(Graph<V, E> graph) {
         return isConnected(graph);
     }
 
     /**
      * Test whether a directed graph is strongly connected.
-     * 
+     * <p>
      * <p>
      * This method does not performing any caching, instead recomputes everything from scratch. In
      * case more control is required use {@link KosarajuStrongConnectivityInspector} directly.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is strongly connected, false otherwise
      * @see KosarajuStrongConnectivityInspector
      */
-    public static <V, E> boolean isStronglyConnected(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isStronglyConnected(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new KosarajuStrongConnectivityInspector<>(graph).isStronglyConnected();
     }
@@ -256,12 +248,11 @@ public abstract class GraphTests
      * Test whether an undirected graph is a tree.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is tree, false otherwise
      */
-    public static <V, E> boolean isTree(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isTree(Graph<V, E> graph) {
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
@@ -275,12 +266,11 @@ public abstract class GraphTests
      * tree graphs.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is forest, false otherwise
      */
-    public static <V, E> boolean isForest(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isForest(Graph<V, E> graph) {
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException(GRAPH_MUST_BE_UNDIRECTED);
         }
@@ -297,12 +287,11 @@ public abstract class GraphTests
      * maximum degree of the graph.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is overfull, false otherwise
      */
-    public static <V, E> boolean isOverfull(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isOverfull(Graph<V, E> graph) {
         int maxDegree = graph.vertexSet().stream().mapToInt(graph::degreeOf).max().getAsInt();
         return graph.edgeSet().size() > maxDegree * Math.floor(graph.vertexSet().size() / 2.0);
     }
@@ -319,19 +308,18 @@ public abstract class GraphTests
      * Survey. Philadelphia, PA: SIAM, 1999. for details.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is a split graph, false otherwise
      */
-    public static <V, E> boolean isSplit(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isSplit(Graph<V, E> graph) {
         requireUndirected(graph);
         if (!isSimple(graph) || graph.vertexSet().isEmpty())
             return false;
 
         List<Integer> degrees = new ArrayList<>(graph.vertexSet().size());
         degrees
-            .addAll(graph.vertexSet().stream().map(graph::degreeOf).collect(Collectors.toList()));
+                .addAll(graph.vertexSet().stream().map(graph::degreeOf).collect(Collectors.toList()));
         Collections.sort(degrees, Collections.reverseOrder()); // sort degrees descending order
         // Find m = \max_i \{d_i\geq i-1\}
         int m = 1;
@@ -350,22 +338,20 @@ public abstract class GraphTests
 
     /**
      * Test whether a graph is bipartite.
-     * 
+     *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is bipartite, false otherwise
      */
-    public static <V, E> boolean isBipartite(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isBipartite(Graph<V, E> graph) {
         if (isEmpty(graph)) {
             return true;
         }
         try {
             // at most n^2/4 edges
             if (Math.multiplyExact(4, graph.edgeSet().size()) > Math
-                .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size()))
-            {
+                    .multiplyExact(graph.vertexSet().size(), graph.vertexSet().size())) {
                 return false;
             }
         } catch (ArithmeticException e) {
@@ -401,17 +387,16 @@ public abstract class GraphTests
 
     /**
      * Test whether a partition of the vertices into two sets is a bipartite partition.
-     * 
-     * @param graph the input graph
-     * @param firstPartition the first vertices partition
+     *
+     * @param graph           the input graph
+     * @param firstPartition  the first vertices partition
      * @param secondPartition the second vertices partition
+     * @param <V>             the graph vertex type
+     * @param <E>             the graph edge type
      * @return true if the partition is a bipartite partition, false otherwise
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
      */
     public static <V, E> boolean isBipartitePartition(
-        Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition)
-    {
+            Graph<V, E> graph, Set<? extends V> firstPartition, Set<? extends V> secondPartition) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         Objects.requireNonNull(firstPartition, FIRST_PARTITION_CANNOT_BE_NULL);
         Objects.requireNonNull(secondPartition, SECOND_PARTITION_CANNOT_BE_NULL);
@@ -445,14 +430,13 @@ public abstract class GraphTests
     /**
      * Tests whether a graph is <a href="http://mathworld.wolfram.com/CubicGraph.html">cubic</a>. A
      * graph is cubic if all vertices have degree 3.
-     * 
+     *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is cubic, false otherwise
      */
-    public static <V, E> boolean isCubic(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isCubic(Graph<V, E> graph) {
         for (V v : graph.vertexSet())
             if (graph.degreeOf(v) != 3)
                 return false;
@@ -467,14 +451,12 @@ public abstract class GraphTests
      * containing an <a href="http://mathworld.wolfram.com/EulerianCycle.html">Eulerian cycle</a>.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     *
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is Eulerian, false otherwise
      * @see HierholzerEulerianCycle#isEulerian(Graph)
      */
-    public static <V, E> boolean isEulerian(Graph<V, E> graph)
-    {
+    public static <V, E> boolean isEulerian(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new HierholzerEulerianCycle<V, E>().isEulerian(graph);
     }
@@ -485,14 +467,40 @@ public abstract class GraphTests
      * is an edge that is not part of the cycle but connects two vertices of the cycle.
      *
      * @param graph the input graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return true if the graph is chordal, false otherwise
      * @see ChordalityInspector#isChordal()
      */
-    public static <V, E> boolean isChordal(Graph<V, E> graph){
+    public static <V, E> boolean isChordal(Graph<V, E> graph) {
         Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
         return new ChordalityInspector<>(graph).isChordal();
+    }
+
+    /**
+     * Checks whether a graph is <a href="http://www.graphclasses.org/classes/gc_14.html">weakly chordal</a>.
+     * <p>
+     * The following definitions are equivalent:
+     * <ol>
+     * <li> A graph is weakly chordal if it is (<a href="http://mathworld.wolfram.com/GraphAntihole.html">
+     * anti-hole</a>,<a href="http://mathworld.wolfram.com/GraphHole.html">hole</a>)-free. In other words,
+     * a graph is weakly chordal if it and its complement do not have
+     * <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> of length greater than 4.</li>
+     * <li> A 2-pair in a graph is a pair of non-adjacent vertices $x$, $y$ such that every chordless path has
+     * exactly two edges. A graph is weakly chordal if every connected
+     * <a href="https://en.wikipedia.org/wiki/Induced_subgraph">induced subgraph</a> $H$ that is not a complete
+     * graph, contains a 2-pair.</li>
+     * </ol>
+     *
+     * @param graph the input graph
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
+     * @return true if the graph is weakly chordal, false otherwise
+     * @see WeakChordalityInspector#isWeaklyChordal()
+     */
+    public static <V, E> boolean isWeaklyChordal(Graph<V, E> graph) {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new WeakChordalityInspector<>(graph).isWeaklyChordal();
     }
 
     /**
@@ -500,16 +508,15 @@ public abstract class GraphTests
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed and not null
+     * @param graph   the graph reference to check for beeing directed and not null
      * @param message detail message to be used in the event that an exception is thrown
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>     the graph vertex type
+     * @param <E>     the graph edge type
      * @return {@code graph} if directed and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is not directed
      */
-    public static <V, E> Graph<V, E> requireDirected(Graph<V, E> graph, String message)
-    {
+    public static <V, E> Graph<V, E> requireDirected(Graph<V, E> graph, String message) {
         if (graph == null)
             throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
         if (!graph.getType().isDirected()) {
@@ -524,14 +531,13 @@ public abstract class GraphTests
      * {@link NullPointerException} if it is.
      *
      * @param graph the graph reference to check for beeing directed and not null
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return {@code graph} if directed and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is not directed
      */
-    public static <V, E> Graph<V, E> requireDirected(Graph<V, E> graph)
-    {
+    public static <V, E> Graph<V, E> requireDirected(Graph<V, E> graph) {
         return requireDirected(graph, GRAPH_MUST_BE_DIRECTED);
     }
 
@@ -540,16 +546,15 @@ public abstract class GraphTests
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for being undirected and not null
+     * @param graph   the graph reference to check for being undirected and not null
      * @param message detail message to be used in the event that an exception is thrown
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>     the graph vertex type
+     * @param <E>     the graph edge type
      * @return {@code graph} if undirected and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is not undirected
      */
-    public static <V, E> Graph<V, E> requireUndirected(Graph<V, E> graph, String message)
-    {
+    public static <V, E> Graph<V, E> requireUndirected(Graph<V, E> graph, String message) {
         if (graph == null)
             throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
         if (!graph.getType().isUndirected()) {
@@ -564,14 +569,13 @@ public abstract class GraphTests
      * {@link NullPointerException} if it is.
      *
      * @param graph the graph reference to check for being undirected and not null
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return {@code graph} if undirected and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is not undirected
      */
-    public static <V, E> Graph<V, E> requireUndirected(Graph<V, E> graph)
-    {
+    public static <V, E> Graph<V, E> requireUndirected(Graph<V, E> graph) {
         return requireUndirected(graph, GRAPH_MUST_BE_UNDIRECTED);
     }
 
@@ -580,16 +584,15 @@ public abstract class GraphTests
      * {@link IllegalArgumentException} if it is not. Also checks that the graph reference is not
      * {@code null} and throws a {@link NullPointerException} if it is.
      *
-     * @param graph the graph reference to check for beeing directed or undirected and not null
+     * @param graph   the graph reference to check for beeing directed or undirected and not null
      * @param message detail message to be used in the event that an exception is thrown
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>     the graph vertex type
+     * @param <E>     the graph edge type
      * @return {@code graph} if directed and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is mixed
      */
-    public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph, String message)
-    {
+    public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph, String message) {
         if (graph == null)
             throw new NullPointerException(GRAPH_CANNOT_BE_NULL);
         if (!graph.getType().isDirected() && !graph.getType().isUndirected()) {
@@ -604,14 +607,13 @@ public abstract class GraphTests
      * {@link NullPointerException} if it is.
      *
      * @param graph the graph reference to check for beeing directed and not null
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
+     * @param <V>   the graph vertex type
+     * @param <E>   the graph edge type
      * @return {@code graph} if directed and not {@code null}
-     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws NullPointerException     if {@code graph} is {@code null}
      * @throws IllegalArgumentException if {@code graph} is mixed
      */
-    public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph)
-    {
+    public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph) {
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
     }
 

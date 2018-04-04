@@ -19,8 +19,9 @@ package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.VertexFactory;
+import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.CompleteGraphGenerator;
+import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
@@ -183,15 +184,129 @@ public class WeakChordalityInspectorTest {
     public void testIsWeaklyChordal9() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         CompleteGraphGenerator<Integer, DefaultEdge> generator = new CompleteGraphGenerator<>(50);
-        generator.generateGraph(graph, new VertexFactory<Integer>() {
-            private int number = 0;
-
-            @Override
-            public Integer createVertex() {
-                return number++;
-            }
-        });
+        generator.generateGraph(graph, new IntegerVertexFactory());
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
+        assertTrue(inspector.isWeaklyChordal());
+    }
+
+
+    @Test
+    public void testIsWeaklyChordal10() {
+        Graph<Integer, DefaultEdge> dodecahedron = NamedGraphGenerator.dodecahedronGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(dodecahedron);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal11() {
+        Graph<Integer, DefaultEdge> bull = NamedGraphGenerator.bullGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(bull);
+        assertTrue(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal12() {
+        Graph<Integer, DefaultEdge> buckyBall = NamedGraphGenerator.buckyBallGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(buckyBall);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal13() {
+        Graph<Integer, DefaultEdge> clebsch = NamedGraphGenerator.clebschGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(clebsch);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal14() {
+        Graph<Integer, DefaultEdge> grötzsch = NamedGraphGenerator.grötzschGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(grötzsch);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal15() {
+        Graph<Integer, DefaultEdge> bidiakis = NamedGraphGenerator.bidiakisCubeGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(bidiakis);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal16() {
+        Graph<Integer, DefaultEdge> blanusaFirstSnark = NamedGraphGenerator.blanusaFirstSnarkGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(blanusaFirstSnark);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal17() {
+        Graph<Integer, DefaultEdge> doubleStarSnark = NamedGraphGenerator.doubleStarSnarkGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(doubleStarSnark);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal18() {
+        Graph<Integer, DefaultEdge> brinkmann = NamedGraphGenerator.brinkmannGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(brinkmann);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal19() {
+        Graph<Integer, DefaultEdge> gosset = NamedGraphGenerator.gossetGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(gosset);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+
+    @Test
+    public void testIsWeaklyChordal20() {
+        Graph<Integer, DefaultEdge> chvatal = NamedGraphGenerator.chvatalGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(chvatal);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal21() {
+        Graph<Integer, DefaultEdge> kittell = NamedGraphGenerator.kittellGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(kittell);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal22() {
+        Graph<Integer, DefaultEdge> coxeter = NamedGraphGenerator.coxeterGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(coxeter);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal23() {
+        Graph<Integer, DefaultEdge> ellinghamHorton78 = NamedGraphGenerator.ellinghamHorton78Graph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(ellinghamHorton78);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal24() {
+        Graph<Integer, DefaultEdge> errera = NamedGraphGenerator.erreraGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(errera);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal25() {
+        Graph<Integer, DefaultEdge> folkman = NamedGraphGenerator.folkmanGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(folkman);
+        assertFalse(inspector.isWeaklyChordal());
+    }
+
+    @Test
+    public void testIsWeaklyChordal26() {
+        Graph<Integer, DefaultEdge> krackhardtKite = NamedGraphGenerator.krackhardtKiteGraph();
+        WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(krackhardtKite);
         assertTrue(inspector.isWeaklyChordal());
     }
 }
