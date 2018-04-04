@@ -126,21 +126,9 @@ public class PrimMinimumSpanningTree<V, E>
          */
         Map<V, Integer> vertexMap = new HashMap<>();
         List<V> indexList = new ArrayList<>();
-        for (E e: g.edgeSet()){
-            V source = g.getEdgeSource(e);
-            V target = g.getEdgeTarget(e);
-
-            // map 'source' if no mapping exists
-            if (!vertexMap.containsKey(source)){
-                vertexMap.put(source, vertexMap.size());
-                indexList.add(source);
-            }
-
-            // map 'target' if no mapping exists
-            if (!vertexMap.containsKey(target)){
-                vertexMap.put(target, vertexMap.size());
-                indexList.add(target);
-            }
+        for(V v : g.vertexSet()){
+            vertexMap.put(v,vertexMap.size());
+            indexList.add(v);
         }
 
         boolean[] spanned = new boolean[N];
