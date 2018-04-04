@@ -21,7 +21,9 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
@@ -155,7 +157,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     {
         return graph
             .predecessors(vertex).stream().map(other -> createEdge(other, vertex))
-            .collect(Collectors.toSet());
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
@@ -169,7 +171,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     {
         return graph
             .successors(vertex).stream().map(other -> createEdge(vertex, other))
-            .collect(Collectors.toSet());
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override

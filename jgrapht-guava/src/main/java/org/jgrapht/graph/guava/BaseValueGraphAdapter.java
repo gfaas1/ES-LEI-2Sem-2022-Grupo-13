@@ -22,7 +22,9 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.ToDoubleFunction;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
@@ -161,7 +163,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     {
         return valueGraph
             .predecessors(vertex).stream().map(other -> createEdge(other, vertex))
-            .collect(Collectors.toSet());
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
@@ -175,7 +177,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     {
         return valueGraph
             .successors(vertex).stream().map(other -> createEdge(vertex, other))
-            .collect(Collectors.toSet());
+            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
