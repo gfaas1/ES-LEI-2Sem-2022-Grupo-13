@@ -463,10 +463,8 @@ public class AsSynchronizedGraphTest
                 }
                 g.getLock().readLock().lock();
                 try {
-                    int x = 0;
                     for (DefaultEdge e : g.edgesOf(c)) {
                         assertTrue(g.containsEdge(e));
-                        x++;
                     }
                 } finally {
                     g.getLock().readLock().unlock();
