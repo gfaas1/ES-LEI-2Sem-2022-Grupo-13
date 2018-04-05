@@ -57,34 +57,14 @@
 			<outputDirectory>3rd-party-licenses</outputDirectory>
 		</file>
 		<file>
-			<source>${main.basedir}/etc/licenses/animal-sniffer-annotations-license.txt</source>
-			<outputDirectory>3rd-party-licenses</outputDirectory>
-			<destName>animal-sniffer-annotations-license.txt</destName>
-		</file>
-		<file>
-			<source>${main.basedir}/etc/licenses/checker-compat-qual-license.txt</source>
-			<outputDirectory>3rd-party-licenses</outputDirectory>
-			<destName>checker-compat-qual-license.txt</destName>
-		</file>
-		<file>
-			<source>${main.basedir}/etc/licenses/jsr305-license.txt</source>
-			<outputDirectory>3rd-party-licenses</outputDirectory>
-			<destName>jsr305-license.txt</destName>
-		</file>
-		<file>
-			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
-			<outputDirectory>3rd-party-licenses</outputDirectory>
-			<destName>j2objc-license.txt</destName>
-		</file>
-		<file>
-			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
-			<outputDirectory>3rd-party-licenses</outputDirectory>
-			<destName>errorprone-license.txt</destName>
-		</file>
-		<file>
 			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
 			<outputDirectory>3rd-party-licenses</outputDirectory>
 			<destName>guava-license.txt</destName>
+		</file>
+		<file>
+			<source>${main.basedir}/etc/licenses/apache-license-2.0.txt</source>
+			<outputDirectory>3rd-party-licenses</outputDirectory>
+			<destName>commons-lang3-license.txt</destName>
 		</file>
 	</files>
 
