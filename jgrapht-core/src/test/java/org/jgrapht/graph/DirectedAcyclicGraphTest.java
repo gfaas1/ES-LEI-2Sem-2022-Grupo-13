@@ -567,15 +567,13 @@ public class DirectedAcyclicGraphTest
 
         @Override
         public void generateGraph(
-            Graph<V, E> graph, VertexFactory<V> vertexFactory, Map<String, V> namedVerticesMap)
+            Graph<V, E> graph, Map<String, V> namedVerticesMap)
         {
             List<V> vertices = new ArrayList<>(numOfVertexes);
             Set<Integer> edgeGeneratorIds = new HashSet<>();
 
             for (int i = 0; i < numOfVertexes; i++) {
-                V vertex = vertexFactory.createVertex();
-                vertices.add(vertex);
-                graph.addVertex(vertex);
+                vertices.add(graph.addVertex());
             }
 
             for (int i = 0; i < numOfEdges; i++) {

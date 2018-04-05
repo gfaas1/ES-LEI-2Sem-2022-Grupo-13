@@ -19,6 +19,7 @@ package org.jgrapht.graph;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.*;
 
 import org.jgrapht.*;
@@ -92,10 +93,13 @@ public class AsSubgraph<V, E>
     extends AbstractGraph<V, E>
     implements Serializable
 {
+
     private static final long serialVersionUID = -1471811754881775298L;
 
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
+    private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH = "Cannot create new vertices from subgraph";
+    private static final String NOT_SUPPORTED_FROM_SUBGRAPH = "Not supported from subgraph";
 
     protected final Set<E> edgeSet = new LinkedHashSet<>();
     protected final Set<V> vertexSet = new LinkedHashSet<>();
@@ -188,11 +192,54 @@ public class AsSubgraph<V, E>
 
     /**
      * {@inheritDoc}
+     * 
+     * @deprecated Use suppliers instead
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return base.getEdgeFactory();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return base.getVertexSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
+    {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_FROM_SUBGRAPH);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return base.getEdgeSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public void setEdgeSupplier(Supplier<E> edgeSupplier)
+    {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_FROM_SUBGRAPH);        
     }
 
     /**
@@ -253,6 +300,12 @@ public class AsSubgraph<V, E>
         assert (base.getEdgeTarget(e) == targetVertex);
 
         return edgeSet.add(e);
+    }
+
+    @Override
+    public V addVertex()
+    {
+        throw new UnsupportedOperationException(CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH);
     }
 
     /**

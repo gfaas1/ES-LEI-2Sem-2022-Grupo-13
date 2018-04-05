@@ -115,19 +115,18 @@ public class BarabasiAlbertGraphGenerator<V, E>
      * Generates an instance.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Create complete graph with m0 nodes
          */
         Set<V> oldNodes = new HashSet<>(target.vertexSet());
         Set<V> newNodes = new HashSet<>();
-        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, vertexFactory, resultMap);
+        new CompleteGraphGenerator<V, E>(m0).generateGraph(target, resultMap);
         target.vertexSet().stream().filter(v -> !oldNodes.contains(v)).forEach(newNodes::add);
 
         List<V> nodes = new ArrayList<>(n * m);
@@ -143,9 +142,9 @@ public class BarabasiAlbertGraphGenerator<V, E>
          * Grow network with preferential attachment
          */
         for (int i = m0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V v = target.addVertex();
+            if (v == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
 
             List<V> newEndpoints = new ArrayList<>();

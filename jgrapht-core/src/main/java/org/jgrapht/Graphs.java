@@ -17,10 +17,14 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -30,6 +34,7 @@ import org.jgrapht.graph.*;
  */
 public abstract class Graphs
 {
+
     /**
      * Creates a new edge and adds it to the specified graph similarly to the
      * {@link Graph#addEdge(Object, Object)} method.
@@ -48,8 +53,7 @@ public abstract class Graphs
      */
     public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
-        EdgeFactory<V, E> ef = g.getEdgeFactory();
-        E e = ef.createEdge(sourceVertex, targetVertex);
+        E e = g.getEdgeSupplier().get();
 
         // we first create the edge and set the weight to make sure that
         // listeners will see the correct weight upon addEdge.

@@ -141,18 +141,17 @@ public class WattsStrogatzGraphGenerator<V, E>
      * Generates a small-world graph based on the Watts-Strogatz model.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         // special cases
         if (n == 0) {
             return;
         } else if (n == 1) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
             return;
         }
 
@@ -161,8 +160,8 @@ public class WattsStrogatzGraphGenerator<V, E>
         Map<V, List<E>> adj = new LinkedHashMap<>(n);
 
         for (int i = 0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
+            V v = target.addVertex();
+            if (v == null) {
                 throw new IllegalArgumentException("Invalid vertex factory");
             }
             ring.add(v);

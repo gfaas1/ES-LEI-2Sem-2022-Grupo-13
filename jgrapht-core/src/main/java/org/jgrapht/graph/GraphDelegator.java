@@ -19,6 +19,7 @@ package org.jgrapht.graph;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
 
@@ -63,6 +64,42 @@ public class GraphDelegator<V, E>
         super();
         delegate = Objects.requireNonNull(g, "g must not be null");
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return delegate.getVertexSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
+    {
+        delegate.setVertexSupplier(vertexSupplier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return delegate.getEdgeSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEdgeSupplier(Supplier<E> edgeSupplier)
+    {
+        delegate.setEdgeSupplier(edgeSupplier);
+    }
 
     /**
      * {@inheritDoc}
@@ -84,8 +121,10 @@ public class GraphDelegator<V, E>
 
     /**
      * {@inheritDoc}
+     * @deprecated Use suppliers instead 
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return delegate.getEdgeFactory();
@@ -109,6 +148,15 @@ public class GraphDelegator<V, E>
         return delegate.addEdge(sourceVertex, targetVertex, e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V addVertex()
+    {
+        return delegate.addVertex();
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -299,6 +347,7 @@ public class GraphDelegator<V, E>
     {
         return delegate;
     }
+
 }
 
 // End GraphDelegator.java

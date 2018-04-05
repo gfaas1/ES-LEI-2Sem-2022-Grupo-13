@@ -87,9 +87,14 @@ public class UndirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void addVertex(V v)
+    public boolean addVertex(V v)
     {
-        getEdgeContainer(v);
+        UndirectedEdgeContainer<V, E> ec = vertexMapUndirected.get(v);
+        if (ec == null) {
+            vertexMapUndirected.put(v, new UndirectedEdgeContainer<>(edgeSetFactory, v));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -180,7 +185,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        if (abstractBaseGraph.isAllowingLoops()) { // then we must count, and add loops twice
+        if (abstractBaseGraph.getType().isAllowingSelfLoops()) { // then we must count, and add loops twice
             int degree = 0;
             Set<E> edges = getEdgeContainer(vertex).vertexEdges;
 

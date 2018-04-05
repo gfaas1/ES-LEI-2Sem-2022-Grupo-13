@@ -313,6 +313,27 @@ public class DefaultGraphType
         }
 
         /**
+         * Construct a new Builder.
+         * 
+         * @param directed whether the graph contains directed edges
+         * @param undirected whether the graph contains undirected edges
+         */
+        public Builder(boolean directed, boolean undirected)
+        {
+            if (!directed && !undirected) {
+                throw new IllegalArgumentException(
+                    "At least one of directed or undirected must be true");
+            }
+            this.directed = directed;
+            this.undirected = undirected;
+            this.allowSelfLoops = true;
+            this.allowMultipleEdges = true;
+            this.weighted = false;
+            this.allowCycles = true;
+            this.modifiable = true;
+        }
+
+        /**
          * Set the type as directed.
          * 
          * @return the builder

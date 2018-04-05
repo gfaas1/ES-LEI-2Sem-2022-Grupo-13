@@ -18,6 +18,7 @@
 package org.jgrapht.generate;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
 
@@ -80,7 +81,7 @@ public class WheelGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -90,18 +91,23 @@ public class WheelGraphGenerator<V, E>
         // necessary since target may be initially non-empty, meaning we can't
         // rely on its vertex set after the rim is generated.
         final Collection<V> rim = new ArrayList<>();
-        VertexFactory<V> rimVertexFactory = () -> {
-            V vertex = vertexFactory.createVertex();
+        final Supplier<V> initialSupplier = target.getVertexSupplier();
+        Supplier<V> rimVertexSupplier = () -> {
+            V vertex = initialSupplier.get();
             rim.add(vertex);
-
             return vertex;
         };
-
+        // change the supplier
+        target.setVertexSupplier(rimVertexSupplier);
+        
         RingGraphGenerator<V, E> ringGenerator = new RingGraphGenerator<>(size - 1);
-        ringGenerator.generateGraph(target, rimVertexFactory, resultMap);
+        ringGenerator.generateGraph(target, resultMap);
+        
+        // restore the supplier
+        target.setVertexSupplier(initialSupplier);
+        
 
-        V hubVertex = vertexFactory.createVertex();
-        target.addVertex(hubVertex);
+        V hubVertex = target.addVertex();
 
         if (resultMap != null) {
             resultMap.put(HUB_VERTEX, hubVertex);

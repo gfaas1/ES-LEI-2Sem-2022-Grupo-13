@@ -128,12 +128,11 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
      * Generates a small-world graph.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Special cases
@@ -141,7 +140,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
         if (n == 0) {
             return;
         } else if (n == 1) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
             return;
         }
 
@@ -156,9 +155,9 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(n * n);
         for (int i = 0; i < n * n; i++) {
-            V v = vertexFactory.createVertex();
-            if (!target.addVertex(v)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V v = target.addVertex();
+            if (v == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
             nodes.add(v);
         }

@@ -276,10 +276,12 @@ public class GraphGeneratorTest
         class StringEdgeFactory
             implements EdgeFactory<String, String>
         {
+            int index = 1;
+            
             @Override
             public String createEdge(String sourceVertex, String targetVertex)
             {
-                return sourceVertex + '-' + targetVertex;
+                return String.valueOf(index++);
             }
         }
 

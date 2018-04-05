@@ -35,6 +35,40 @@ import org.jgrapht.VertexFactory;
  */
 public interface GraphGenerator<V, E, T>
 {
+
+    /**
+     * Generate a graph structure. The topology of the generated graph is dependent on the
+     * implementation. For graphs in which not all vertices share the same automorphism equivalence
+     * class, the generator may produce a labeling indicating the roles played by generated
+     * elements. This is the purpose of the resultMap parameter. For example, a generator for a
+     * wheel graph would designate a hub vertex. Role names used as keys in resultMap should be
+     * declared as public static final Strings by implementation classes.
+     *
+     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
+     *        result will be a disconnected graph since generated elements will not be connected to
+     *        existing elements
+     * @param resultMap if non-null, receives implementation-specific mappings from String roles to
+     *        graph elements (or collections of graph elements)
+     * 
+     * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
+     *         suppliers, in order to be able to create new vertices and edges
+     */
+    void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
+
+    /**
+     * Generate a graph structure.
+     *
+     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
+     *        result will be a disconnected graph since generated elements will not be connected to
+     *        existing elements
+     * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
+     *         suppliers, in order to be able to create new vertices and edges *
+     */
+    default void generateGraph(Graph<V, E> target)
+    {
+        generateGraph(target, (Map<String, T>) null);
+    }
+
     /**
      * Generate a graph structure. The topology of the generated graph is dependent on the
      * implementation. For graphs in which not all vertices share the same automorphism equivalence
@@ -49,9 +83,22 @@ public interface GraphGenerator<V, E, T>
      * @param vertexFactory called to produce new vertices
      * @param resultMap if non-null, receives implementation-specific mappings from String roles to
      *        graph elements (or collections of graph elements)
+     * @deprecated Use simpler methods
      */
-    void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap);
+    @Deprecated
+    default void generateGraph(
+        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap)
+    {
+        boolean wasNull = false;
+        if (vertexFactory != null && target.getVertexSupplier() == null) {
+            target.setVertexSupplier(vertexFactory::createVertex);
+            wasNull = true;
+        }
+        generateGraph(target, resultMap);
+        if (wasNull) {
+            target.setVertexSupplier(null);
+        }
+    }
 
     /**
      * Generate a graph structure.
@@ -60,7 +107,9 @@ public interface GraphGenerator<V, E, T>
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
      * @param vertexFactory called to produce new vertices
+     * @deprecated Use simpler methods 
      */
+    @Deprecated
     default void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
     {
         generateGraph(target, vertexFactory, null);

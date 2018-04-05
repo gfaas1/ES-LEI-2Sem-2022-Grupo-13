@@ -152,7 +152,7 @@ public class NaiveLcaFinder<V, E>
      * our search (we know that its ancestors won't be part of the SLCA(x, y) set).
      */
     @SuppressWarnings("unchecked")
-    private void doubleBfs(V a, V b, Set[] visitedSets){
+    private void doubleBfs(V a, V b, Set<V>[] visitedSets){
         Queue<V>[] queues = new Queue[2];
         queues[0] = new ArrayDeque<>();
         queues[1] = new ArrayDeque<>();
