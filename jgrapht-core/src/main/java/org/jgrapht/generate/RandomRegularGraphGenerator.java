@@ -171,13 +171,13 @@ public class RandomRegularGraphGenerator<V, E> implements GraphGenerator<V, E, V
             return true;
         }
 
-        Object[] keys = potentialEdges.keySet().toArray();
+        Integer[] keys = potentialEdges.keySet().toArray(new Integer[0]);
         Arrays.sort(keys);
 
         for (int i = 0; i < keys.length; i++) {
-            int s2 = (int) keys[i];
+            int s2 = keys[i];
             for (int j = 0; j < i; j++) {
-                int s1 = (int) keys[j];
+                int s1 = keys[j];
                 Map.Entry<Integer, Integer> e = new AbstractMap.SimpleImmutableEntry<>(s1, s2);
                 if (!edges.contains(e)) {
                     return true;
