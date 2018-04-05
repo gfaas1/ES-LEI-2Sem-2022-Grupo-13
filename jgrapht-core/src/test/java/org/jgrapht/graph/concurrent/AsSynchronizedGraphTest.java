@@ -282,6 +282,28 @@ public class AsSynchronizedGraphTest
         assertEquals(19, g.edgesOf(41).size());
     }
 
+    @Test
+    public void testCopyless()
+    {
+        g = new AsSynchronizedGraph.Builder<Integer, DefaultEdge>().setCopyless().build(
+            new Pseudograph<>(DefaultEdge.class));
+        vertices = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            g.addVertex(i);
+            vertices.add(i);
+        }
+        edges = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            DefaultEdge e = new DefaultEdge();
+            g.addEdge(i, (i + 1)%1000, e);
+            edges.add(e);
+        }
+        TestSuite ts = new ActiveTestSuite();
+        ts.addTest(new TestThread("verifyEdges"));
+        ts.addTest(new TestThread("removeEdge"));
+        TestRunner.run(ts);
+    }
+
     private void createOrder(ArrayList<Order> list, int start, int end, boolean add)
     {
         for (int i = start; i < end - 1; i++) {
@@ -428,6 +450,30 @@ public class AsSynchronizedGraphTest
             }
         }
         
+        public void verifyEdges()
+        {
+            while (true) {
+                int c;
+                synchronized (vertices) {
+                    if (vertices.size() > 10) {
+                        c = vertices.remove(0);
+                    } else {
+                        return;
+                    }
+                }
+                g.getLock().readLock().lock();
+                try {
+                    int x = 0;
+                    for (DefaultEdge e : g.edgesOf(c)) {
+                        assertTrue(g.containsEdge(e));
+                        x++;
+                    }
+                } finally {
+                    g.getLock().readLock().unlock();
+                }
+            }
+        }
+
         public void removeVertex()
         {
             while (true) {
