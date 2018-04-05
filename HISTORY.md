@@ -43,6 +43,7 @@ Changes to JGraphT in each version:
     - Added `PalmerHamiltonianCycle` which implements Palmer's exact algorithm to find Hamiltonian Cycles in undirected graphs. Added new interface `HamiltonianCycleAlgorithm`. (contributed by Alexandru Văleanu) 
     - Removed lazy instantiation of containers in edge specifics (contributed by Dimitrios Michail)
     - Added `DinicMFImpl` which implements Dinic's maximum flow algorithm (contributed by Kirill Vishnyakov)
+    - Optimized `PushRelabelMFImpl` implementation which drastically improves max flow computations on certain graphs. (contributed by Alexandru Văleanu) 
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
