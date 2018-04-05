@@ -130,5 +130,3 @@ public class PrimMinimumSpanningTreeDenseGraphs<V, E>
         public E edgeFromParent;
     }
 }
-
-// End PrimMinimumSpanningTree.java
