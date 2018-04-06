@@ -63,11 +63,6 @@ The files below make up the table of contents for a release distribution archive
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
     - `commons-lang3-x.y.jar` Apache Commons Lang library
     - `guava-x.y-jre.jar` Guava library
-    - `animal-sniffer-annotations-x.y.jar` Guava dependency
-    - `checker-compat-qual-x.y.z.jar` Guava dependency
-    - `error_prone_annotations-x.y.z.jar` Guava dependency
-    - `jsr305-x.y.z.jar` Guava dependency
-    - `j2objc-annotations-x.y.jar` Guava dependency
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
