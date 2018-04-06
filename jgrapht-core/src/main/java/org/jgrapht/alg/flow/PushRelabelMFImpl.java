@@ -21,6 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.extension.ExtensionFactory;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -57,14 +58,16 @@ public class PushRelabelMFImpl<V, E>
 
     // Label pruning helpers
 
-    private int[] labeling;
+    private int[] countHeight;
 
-    private Queue<VertexExtension> active;
-    private Set<VertexExtension> inQueue;
-
-    boolean flowBack;
+    private Queue<VertexExtension> activeVertices;
 
     private PushRelabelDiagnostic diagnostic;
+
+    // number of vertices
+    private final int N;
+
+    private final VertexExtension[] vertexExtension;
 
     /**
      * Construct a new push-relabel algorithm.
@@ -82,6 +85,7 @@ public class PushRelabelMFImpl<V, E>
      * @param network the network
      * @param epsilon tolerance used when comparing floating-point values
      */
+    @SuppressWarnings("unchecked")
     public PushRelabelMFImpl(Graph<V, E> network, double epsilon)
     {
         super(network, epsilon);
@@ -93,12 +97,15 @@ public class PushRelabelMFImpl<V, E>
         if (DIAGNOSTIC_ENABLED) {
             this.diagnostic = new PushRelabelDiagnostic();
         }
+
+        this.N = network.vertexSet().size();
+        this.vertexExtension = (VertexExtension[]) Array.newInstance(VertexExtension.class, N);
     }
 
     private void enqueue(VertexExtension vx){
-        if (!inQueue.contains(vx)){
-            inQueue.add(vx);
-            active.add(vx);
+        if (!vx.active && vx.hasExcess()){
+            vx.active = true;
+            activeVertices.add(vx);
         }
     }
 
@@ -113,8 +120,13 @@ public class PushRelabelMFImpl<V, E>
     {
         super.init(source, sink, vertexExtensionsFactory, edgeExtensionsFactory);
 
-        this.labeling = new int[network.vertexSet().size() * 2 + 1];
-        this.flowBack = false;
+        this.countHeight = new int[2 * N];
+
+        int id = 0;
+        for (V v: network.vertexSet()){
+            vertexExtension[id] = getVertexExtension(v);
+            id++;
+        }
     }
 
     /**
@@ -126,61 +138,24 @@ public class PushRelabelMFImpl<V, E>
      */
     public void initialize(VertexExtension source, VertexExtension sink, Queue<VertexExtension> active)
     {
-        this.active = active;
+        this.activeVertices = active;
 
-        source.label = network.vertexSet().size();
-        source.excess = Double.POSITIVE_INFINITY;
-
-        label(source, sink);
-
-        for (AnnotatedFlowEdge ex : source.getOutgoing()) {
-            pushFlowThrough(ex, ex.capacity);
-
-            if (ex.getTarget().prototype != sink.prototype) {
-                enqueue(ex.getTarget());
-            }
-        }
-    }
-
-    private void label(VertexExtension source, VertexExtension sink)
-    {
-        Set<VertexExtension> seen = new HashSet<>();
-        Queue<VertexExtension> q = new ArrayDeque<>();
-
-        q.offer(sink);
-
-        sink.label = 0;
-
-        seen.add(sink);
-        seen.add(source);
-
-        while (!q.isEmpty()) {
-            VertexExtension ux = q.poll();
-            for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
-                VertexExtension vx = ex.getTarget();
-                if (!seen.contains(vx)) {
-                    seen.add(vx);
-
-                    vx.label = ux.label + 1;
-                    q.add(vx);
-                }
-            }
+        for (int i = 0; i < N; i++) {
+            vertexExtension[i].excess = 0;
+            vertexExtension[i].height = 0;
+            vertexExtension[i].active = false;
         }
 
-        // NOTA BENE:
-        // count label frequencies
-        //
-        // This is part of label-pruning mechanic which
-        // targets to diminish all 'useless' relabels during
-        // "flow-back" phase of the algorithm pushing excess
-        // flow back to the source
-        for (V v : network.vertexSet()) {
-            VertexExtension vx = getVertexExtension(v);
-            labeling[vx.label]++;
-        }
+        source.height = N;
+        source.active = true;
+        sink.active = true;
 
-        if (DIAGNOSTIC_ENABLED) {
-            System.out.println("INIT LABELING " + labeling);
+        countHeight[N] = 1;
+        countHeight[0] = N - 1;
+
+        for (AnnotatedFlowEdge ex : source.getOutgoing()){
+            source.excess += ex.capacity;
+            dischargeEdge(ex);
         }
     }
 
@@ -206,55 +181,13 @@ public class PushRelabelMFImpl<V, E>
     {
         init(source, sink);
 
-        this.active = new ArrayDeque<>();
-        this.inQueue = new HashSet<>();
+        this.activeVertices = new ArrayDeque<>(N);
+        initialize(getVertexExtension(source), getVertexExtension(sink), this.activeVertices);
 
-        initialize(getVertexExtension(source), getVertexExtension(sink), active);
-
-        while (!active.isEmpty()) {
-            VertexExtension ux = active.poll();
-            inQueue.remove(ux);
-            for (;;) {
-                for (AnnotatedFlowEdge ex : ux.getOutgoing()) {
-                    if (isAdmissible(ex)) {
-                        if ((! ex.getTarget().prototype.equals(sink))
-                                && (! ex.getTarget().prototype.equals(source)))
-                        {
-                            enqueue(ex.getTarget());
-                        }
-
-                        // Check whether we're rip off the excess
-                        if (discharge(ex)) {
-                            break;
-                        }
-                    }
-                }
-
-                if (ux.hasExcess()) {
-                    relabel(ux);
-                } else {
-                    break;
-                }
-
-                // Check whether we still have any vertices with the labels <= '1'
-                if (!flowBack && labeling[0] == 0 && labeling[1] == 1) {
-                    // This supposed to drastically improve performance cutting
-                    // off the necessity to drive labels of all vertices up to
-                    // value 'N' one-by-one not entailing eny effective
-                    // discharge -- at this point there is no vertex with the
-                    // label <= 1 in the network & therefore no
-                    // 'discharging-path' to the _sink_ also signalling that
-                    // we're in the flow-back stage of the algorithm
-
-                    for (int i = labeling.length - 1; i >= 0; i--)
-                        if (labeling[i] > 0){
-                            getVertexExtension(source).label = i + 1;
-                            break;
-                        }
-
-                    flowBack = true;
-                }
-            }
+        while (!activeVertices.isEmpty()){
+            VertexExtension vx = activeVertices.poll();
+            vx.active = false;
+            discharge(vx);
         }
 
         // Calculate the max flow that reaches the sink. There may be more efficient ways to do
@@ -271,37 +204,33 @@ public class PushRelabelMFImpl<V, E>
         return maxFlowValue;
     }
 
-    private void relabel(VertexExtension vx)
-    {
-        assert (vx.hasExcess());
+    private void gapHeuristic(int k){
+        for (int i = 0; i < N; i++) {
+            if (vertexExtension[i].height >= k){
+                countHeight[vertexExtension[i].height]--;
+                vertexExtension[i].height = Math.max(vertexExtension[i].height, N + 1);
+                countHeight[vertexExtension[i].height]++;
 
-        labeling[vx.label]--;
-        vx.label = 2 * network.vertexSet().size();
-
-        for (AnnotatedFlowEdge ex : vx.getOutgoing()) {
-            if (ex.hasCapacity()) {
-                VertexExtension ux = ex.getTarget();
-                vx.label = Math.min(vx.label, ux.label + 1);
+                enqueue(vertexExtension[i]);
             }
-        }
-
-        labeling[vx.label]++;
-
-        if (DIAGNOSTIC_ENABLED) {
-            diagnostic.incrementRelabels(vx.label, vx.label);
         }
     }
 
-    private boolean discharge(AnnotatedFlowEdge ex)
+    private void dischargeEdge(AnnotatedFlowEdge ex)
     {
         VertexExtension ux = ex.getSource();
+        VertexExtension vx = ex.getTarget();
+        double delta = Math.min(ux.excess, ex.capacity - ex.flow);
+
+        if (ux.height <= vx.height || comparator.compare(delta, 0.0) <= 0)
+            return;
 
         if (DIAGNOSTIC_ENABLED) {
             diagnostic.incrementDischarges(ex);
         }
 
-        pushFlowThrough(ex, Math.min(ux.excess, ex.capacity - ex.flow));
-        return !ux.hasExcess();
+        pushFlowThrough(ex, delta);
+        enqueue(vx);
     }
 
     /**
@@ -320,14 +249,40 @@ public class PushRelabelMFImpl<V, E>
         super.pushFlowThrough(ex, f);
     }
 
-    private boolean isAdmissible(AnnotatedFlowEdge e)
-    {
-        return e.hasCapacity() && (e
-                .<VertexExtension> getSource().label == (e.<VertexExtension> getTarget().label + 1));
+    private void relabel(VertexExtension vx){
+        countHeight[vx.height]--;
+        vx.height = 2 * N;
+
+        for (AnnotatedFlowEdge ex : vx.getOutgoing()){
+            if (ex.hasCapacity()){
+                vx.height = Math.min(vx.height, ex.<VertexExtension>getTarget().height + 1);
+            }
+        }
+
+        countHeight[vx.height]++;
+        enqueue(vx);
+
+        if (DIAGNOSTIC_ENABLED){
+            diagnostic.incrementRelabels(vx.height, vx.height);
+        }
+    }
+
+    private void discharge(VertexExtension ux){
+        for (int i = 0; ux.hasExcess() && i < ux.getOutgoing().size(); i++) {
+            dischargeEdge(ux.getOutgoing().get(i));
+        }
+
+        if (ux.hasExcess()){
+            if (countHeight[ux.height] == 1)
+                gapHeuristic(ux.height);
+            else
+                relabel(ux);
+        }
     }
 
     private VertexExtension getVertexExtension(V v)
     {
+        assert vertexExtensionManager != null;
         return (VertexExtension) vertexExtensionManager.getExtension(v);
     }
 
@@ -370,11 +325,11 @@ public class PushRelabelMFImpl<V, E>
             for (V v : network.vertexSet()) {
                 VertexExtension vx = getVertexExtension(v);
 
-                if (!labels.containsKey(vx.label)) {
-                    labels.put(vx.label, 0);
+                if (!labels.containsKey(vx.height)) {
+                    labels.put(vx.height, 0);
                 }
 
-                labels.put(vx.label, labels.get(vx.label) + 1);
+                labels.put(vx.height, labels.get(vx.height) + 1);
             }
 
             System.out.println("LABELS  ");
@@ -405,12 +360,11 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /**
-     * Vertex extension for the push-relabel algorithm, which contains an additional label.
+     * Vertex extension for the push-relabel algorithm, which contains an additional height.
      */
-    public class VertexExtension
-            extends VertexExtensionBase
-    {
-        private int label;
+    public class VertexExtension extends VertexExtensionBase {
+        private int height;
+        private boolean active;
 
         private boolean hasExcess()
         {
@@ -420,7 +374,7 @@ public class PushRelabelMFImpl<V, E>
         @Override
         public String toString()
         {
-            return prototype.toString() + String.format(" { LBL: %d } ", label);
+            return prototype.toString() + String.format(" { HGT: %d } ", height);
         }
     }
 
