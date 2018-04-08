@@ -18,6 +18,7 @@
 package org.jgrapht.alg.spanning;
 
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 
 import java.lang.reflect.Array;
@@ -106,10 +107,7 @@ public class PrimMinimumSpanningTreeDenseGraphs<V, E>
             }
 
             for (E e : g.edgesOf(root)) {
-                V target = g.getEdgeTarget(e);
-
-                if (target.equals(root))
-                    target = g.getEdgeSource(e);
+                V target = Graphs.getOppositeVertex(g,e,root);
 
                 int id = vertexMap.get(target);
                 double cost = g.getEdgeWeight(e);

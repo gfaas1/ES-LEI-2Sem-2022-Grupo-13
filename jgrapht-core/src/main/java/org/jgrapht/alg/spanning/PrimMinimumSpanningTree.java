@@ -28,7 +28,7 @@ import java.util.*;
  * weighted undirected graph. The algorithm was developed by Czech mathematician V. Jarník and later
  * independently by computer scientist Robert C. Prim and rediscovered by E. Dijkstra.
  *
- * This implementation runs in $O(|E|log(|V|))$.
+ * This implementation relies on a priority queue, and runs in $O(|E|log(|V|))$.
  *
  * If your graph is dense consider using {@link PrimMinimumSpanningTreeDenseGraphs}.
  *
