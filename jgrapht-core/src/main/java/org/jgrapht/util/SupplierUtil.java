@@ -20,6 +20,9 @@ package org.jgrapht.util;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 /**
  * Helper class for suppliers.
  *
@@ -28,6 +31,23 @@ import java.util.function.Supplier;
 public class SupplierUtil
 {
 
+    /**
+     * Supplier for {@link DefaultEdge}. 
+     */
+    public static final Supplier<DefaultEdge> DEFAULT_EDGE_SUPPLIER =
+        createSupplier(DefaultEdge.class);
+    
+    /**
+     * Supplier for {@link DefaultWeightedEdge}. 
+     */
+    public static final Supplier<DefaultWeightedEdge> DEFAULT_WEIGHTED_EDGE_SUPPLIER =
+        createSupplier(DefaultWeightedEdge.class);
+    
+    /**
+     * Supplier for {@link Object}.
+     */
+    public static final Supplier<Object> OBJECT_SUPPLIER = createSupplier(Object.class);
+    
     /**
      * Create a supplier from a class which calls the default constructor.
      * 

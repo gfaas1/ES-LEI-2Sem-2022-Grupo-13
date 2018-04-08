@@ -51,7 +51,9 @@ public interface GraphGenerator<V, E, T>
      *        graph elements (or collections of graph elements)
      * 
      * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
-     *         suppliers, in order to be able to create new vertices and edges
+     *         suppliers, in order to be able to create new vertices and edges. 
+     *         Methods {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must
+     *         not return <code>null</code>.
      */
     void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
 
@@ -62,7 +64,7 @@ public interface GraphGenerator<V, E, T>
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
      * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
-     *         suppliers, in order to be able to create new vertices and edges *
+     *         suppliers, in order to be able to create new vertices and edges
      */
     default void generateGraph(Graph<V, E> target)
     {

@@ -118,7 +118,7 @@ public interface Graph<V, E>
      * to any other vertex in the graph. More formally, the graph must not contain any vertex
      * <code>v2</code> such that <code>v2.equals(v)</code>.
      * 
-     * @return the vertex supplier
+     * @return the vertex supplier or <code>null</code> if the graph has no such supplier
      */
     Supplier<V> getVertexSupplier();
 
@@ -156,7 +156,7 @@ public interface Graph<V, E>
      * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
      * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
      * 
-     * @return the edge supplier
+     * @return the edge supplier <code>null</code> if the graph has no such supplier
      */
     Supplier<E> getEdgeSupplier();
 

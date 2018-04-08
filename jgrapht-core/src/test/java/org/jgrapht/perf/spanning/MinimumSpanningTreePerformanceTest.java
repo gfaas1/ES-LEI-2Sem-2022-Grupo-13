@@ -29,6 +29,7 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.util.StopWatch;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -74,11 +75,11 @@ public class MinimumSpanningTreePerformanceTest
             }
 
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedDenseGraph =
-                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.denseGraph = weightedDenseGraph;
 
-            generatorDenseGraphs.generateGraph(weightedDenseGraph, new IntegerVertexFactory(), null);
+            generatorDenseGraphs.generateGraph(weightedDenseGraph);
 
             for (DefaultWeightedEdge e : weightedDenseGraph.edgeSet()) {
                 weightedDenseGraph.setEdgeWeight(e, rng.nextDouble());
@@ -93,11 +94,11 @@ public class MinimumSpanningTreePerformanceTest
             }
 
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedSparseGraph =
-                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.sparseGraph = weightedSparseGraph;
 
-            generatorSparseGraphs.generateGraph(weightedSparseGraph, new IntegerVertexFactory(), null);
+            generatorSparseGraphs .generateGraph(sparseGraph);
 
             for (DefaultWeightedEdge e : weightedSparseGraph.edgeSet()) {
                 weightedSparseGraph.setEdgeWeight(e, rng.nextDouble());

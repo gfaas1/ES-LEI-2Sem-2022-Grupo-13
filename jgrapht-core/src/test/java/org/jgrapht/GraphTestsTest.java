@@ -22,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 /**
@@ -334,11 +334,10 @@ public class GraphTestsTest
     @Test
     public void testIsForest2()
     {
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         StarGraphGenerator<Integer, DefaultEdge> gen = new StarGraphGenerator<>(10);
-        IntegerVertexFactory factory = new IntegerVertexFactory();
-        gen.generateGraph(g, factory, null);
-        gen.generateGraph(g, factory, null);
+        gen.generateGraph(g);
+        gen.generateGraph(g);
         assertTrue(GraphTests.isForest(g));
     }
 
@@ -348,14 +347,14 @@ public class GraphTestsTest
         assertFalse(GraphTests.isOverfull(NamedGraphGenerator.clawGraph()));
         assertTrue(GraphTests.isOverfull(NamedGraphGenerator.doyleGraph()));
 
-        Graph<Integer, DefaultEdge> k6 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> k6 = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(6);
-        gen.generateGraph(k6, new IntegerVertexFactory(), null);
+        gen.generateGraph(k6);
         assertFalse(GraphTests.isOverfull(k6));
 
-        Graph<Integer, DefaultEdge> k7 = new Pseudograph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> k7 = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen = new CompleteGraphGenerator<>(7);
-        gen.generateGraph(k7, new IntegerVertexFactory(), null);
+        gen.generateGraph(k7);
         assertTrue(GraphTests.isOverfull(k7));
     }
 
@@ -390,8 +389,8 @@ public class GraphTestsTest
 
         for (int inst = 0; inst < 5; inst++) {
             // 1. create a clique
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(0), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gen.generateGraph(g);
 
             // 2. add a number of vertices (the independent set) and connect some of these vertices
             // with vertices in the clique.
@@ -475,8 +474,8 @@ public class GraphTestsTest
         GnpRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
             new GnpRandomBipartiteGraphGenerator<>(10, 10, 0.8);
         for (int i = 0; i < 100; i++) {
-            Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-            generator.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(g);
             assertTrue(GraphTests.isBipartite(g));
         }
     }
