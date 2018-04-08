@@ -24,13 +24,13 @@ import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTreeDenseGraphs;
 import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.util.StopWatch;
 import org.junit.Test;
-import org.openjdk.jmh.runner.RunnerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,47 +41,78 @@ import java.util.function.Supplier;
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
  * 
- * @author Dimitrios Michail
+ * @author Dimitrios Michail, Alexandru Valeanu
  */
 public class MinimumSpanningTreePerformanceTest
 {
-    private static final int PERF_BENCHMARK_VERTICES_COUNT = 1000;
-    private static final double PERF_BENCHMARK_EDGES_PROP = 0.5;
+    private static final int PERF_BENCHMARK_VERTICES_COUNT_DENSE = 1000;
+    private static final double PERF_BENCHMARK_EDGES_PROP_DENSE = 0.5;
+
+    private static final int PERF_BENCHMARK_VERTICES_COUNT_SPARSE = 100_000;
+    private static final int PERF_BENCHMARK_EDGES_COUNT_SPARSE = 500_000;
+
     private static final int WARMUP_REPEAT = 5;
     private static final int REPEAT = 10;
-    private static final long SEED = 13l;
+    private static final long SEED = 13L;
 
     private static abstract class BenchmarkBase
     {
         protected Random rng = new Random(SEED);
-        protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator = null;
-        protected Graph<Integer, DefaultWeightedEdge> graph;
+        protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generatorSparseGraphs = null;
+        protected GraphGenerator<Integer, DefaultWeightedEdge, Integer> generatorDenseGraphs = null;
+        protected Graph<Integer, DefaultWeightedEdge> sparseGraph, denseGraph;
 
         abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> graph);
 
-        public void setup()
+        public void setupDense()
         {
-            if (generator == null) {
-                // lazily construct generator
-                generator = new GnpRandomGraphGenerator<>(
-                    PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, rng, false);
+            if (generatorDenseGraphs == null) {
+                // lazily construct generators
+                generatorDenseGraphs = new GnpRandomGraphGenerator<>(
+                    PERF_BENCHMARK_VERTICES_COUNT_DENSE, PERF_BENCHMARK_EDGES_PROP_DENSE, rng, false);
             }
 
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedGraph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            this.graph = weightedGraph;
+            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedDenseGraph =
+                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            this.denseGraph = weightedDenseGraph;
 
-            for (DefaultWeightedEdge e : weightedGraph.edgeSet()) {
-                weightedGraph.setEdgeWeight(e, rng.nextDouble());
+            generatorDenseGraphs.generateGraph(weightedDenseGraph, new IntegerVertexFactory(), null);
+
+            for (DefaultWeightedEdge e : weightedDenseGraph.edgeSet()) {
+                weightedDenseGraph.setEdgeWeight(e, rng.nextDouble());
             }
         }
 
-        public void run()
+        public void setupSparse(){
+            if (generatorSparseGraphs == null) {
+                // lazily construct generator
+                generatorSparseGraphs = new GnmRandomGraphGenerator<>(
+                        PERF_BENCHMARK_VERTICES_COUNT_SPARSE, PERF_BENCHMARK_EDGES_COUNT_SPARSE);
+            }
+
+            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedSparseGraph =
+                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+
+            this.sparseGraph = weightedSparseGraph;
+
+            generatorSparseGraphs.generateGraph(weightedSparseGraph, new IntegerVertexFactory(), null);
+
+            for (DefaultWeightedEdge e : weightedSparseGraph.edgeSet()) {
+                weightedSparseGraph.setEdgeWeight(e, rng.nextDouble());
+            }
+        }
+
+        public void runDense()
         {
-            SpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(graph);
+            SpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(denseGraph);
+            algo.getSpanningTree();
+        }
+
+        public void runSparse()
+        {
+            SpanningTreeAlgorithm<DefaultWeightedEdge> algo = createSolver(sparseGraph);
             algo.getSpanningTree();
         }
     }
@@ -116,7 +147,7 @@ public class MinimumSpanningTreePerformanceTest
         @Override
         public String toString()
         {
-            return "Prim Dense";
+            return "PrimDense";
         }
     }
 
@@ -155,22 +186,20 @@ public class MinimumSpanningTreePerformanceTest
     }
 
     @Test
-    public void testBenchmark()
-        throws RunnerException
-    {
-        System.out.println("Minimum Spanning Tree Benchmark");
+    public void testBenchmarkDenseGraphs() {
+        System.out.println("Minimum Spanning Tree Benchmark using dense graphs");
         System.out.println("-------------------------------");
         System.out.println(
-            "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT + ", p = "
-                + PERF_BENCHMARK_EDGES_PROP);
+            "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_DENSE + ", p = "
+                + PERF_BENCHMARK_VERTICES_COUNT_DENSE);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 
         List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
-        algFactory.add(() -> new PrimBenchmark());
-        algFactory.add(() -> new PrimDenseBenchmark());
-        algFactory.add(() -> new KruskalBenchmark());
-        algFactory.add(() -> new BoruvkaBenchmark());
+        algFactory.add(PrimBenchmark::new);
+        algFactory.add(PrimDenseBenchmark::new);
+        algFactory.add(KruskalBenchmark::new);
+        algFactory.add(BoruvkaBenchmark::new);
 
         for (Supplier<BenchmarkBase> alg : algFactory) {
 
@@ -182,18 +211,18 @@ public class MinimumSpanningTreePerformanceTest
 
             for (int i = 0; i < WARMUP_REPEAT; i++) {
                 System.out.print("-");
-                benchmark.setup();
-                benchmark.run();
+                benchmark.setupDense();
+                benchmark.runDense();
             }
             double avgGraphCreate = 0d;
             double avgExecution = 0d;
             for (int i = 0; i < REPEAT; i++) {
                 System.out.print("+");
                 watch.start();
-                benchmark.setup();
+                benchmark.setupDense();
                 avgGraphCreate += watch.getElapsed(TimeUnit.MILLISECONDS);
                 watch.start();
-                benchmark.run();
+                benchmark.runDense();
                 avgExecution += watch.getElapsed(TimeUnit.MILLISECONDS);
             }
             avgGraphCreate /= REPEAT;
@@ -203,7 +232,54 @@ public class MinimumSpanningTreePerformanceTest
             System.out
                 .printf("setup %.3f (ms) | execution %.3f (ms)\n", avgGraphCreate, avgExecution);
         }
+    }
 
+    @Test
+    public void testBenchmarkSparseGraphs() {
+        System.out.println("Minimum Spanning Tree Benchmark using sparse graphs");
+        System.out.println("-------------------------------");
+        System.out.println(
+                "Using G(n,M) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_SPARSE + ", M = "
+                        + PERF_BENCHMARK_EDGES_COUNT_SPARSE);
+        System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
+        System.out.println("Averaging results over " + REPEAT + " executions");
+
+        List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
+        algFactory.add(PrimBenchmark::new);
+        algFactory.add(KruskalBenchmark::new);
+        algFactory.add(BoruvkaBenchmark::new);
+
+        for (Supplier<BenchmarkBase> alg : algFactory) {
+
+            System.gc();
+            StopWatch watch = new StopWatch();
+
+            BenchmarkBase benchmark = alg.get();
+            System.out.printf("%-30s :", benchmark.toString());
+
+            for (int i = 0; i < WARMUP_REPEAT; i++) {
+                System.out.print("-");
+                benchmark.setupSparse();
+                benchmark.runSparse();
+            }
+            double avgGraphCreate = 0d;
+            double avgExecution = 0d;
+            for (int i = 0; i < REPEAT; i++) {
+                System.out.print("+");
+                watch.start();
+                benchmark.setupSparse();
+                avgGraphCreate += watch.getElapsed(TimeUnit.MILLISECONDS);
+                watch.start();
+                benchmark.runSparse();
+                avgExecution += watch.getElapsed(TimeUnit.MILLISECONDS);
+            }
+            avgGraphCreate /= REPEAT;
+            avgExecution /= REPEAT;
+
+            System.out.print(" -> ");
+            System.out
+                    .printf("setup %.3f (ms) | execution %.3f (ms)\n", avgGraphCreate, avgExecution);
+        }
     }
 
 }
