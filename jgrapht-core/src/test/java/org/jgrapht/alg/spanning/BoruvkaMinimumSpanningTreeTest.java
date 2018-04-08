@@ -21,10 +21,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class PrimMinimumSpanningTreeTest extends MinimumSpanningTreeTest{
+public class BoruvkaMinimumSpanningTreeTest extends MinimumSpanningTreeTest {
 
     @Override
     SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<String, DefaultWeightedEdge> network) {
-        return new PrimMinimumSpanningTree<>(network);
+        return new BoruvkaMinimumSpanningTree<>(network);
     }
 }

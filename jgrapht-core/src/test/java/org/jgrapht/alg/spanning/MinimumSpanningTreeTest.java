@@ -36,8 +36,10 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class MinimumSpanningTreeTest
-{
+public abstract class MinimumSpanningTreeTest {
+
+    abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<String, DefaultWeightedEdge> network);
+
     // ~ Static fields/initializers ---------------------------------------------
 
     public static final String A = "A";
@@ -62,32 +64,15 @@ public class MinimumSpanningTreeTest
     // ~ Methods ----------------------------------------------------------------
 
     @Test
-    public void testKruskal()
-    {
-
-        testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleConnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, DE), 15.0);
-
-        testMinimumSpanningTreeBuilding(
-            new KruskalMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+    public void testSimpleDisconnectedWeightedGraph(){
+        testMinimumSpanningTreeBuilding(createSolver(createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
+                Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
     @Test
-    public void testBoruvska()
-    {
-        testMinimumSpanningTreeBuilding(
-            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleConnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, DE), 15.0);
-
-        testMinimumSpanningTreeBuilding(
-            new BoruvkaMinimumSpanningTree<String, DefaultWeightedEdge>(
-                createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
-            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+    public void testSimpleConnectedWeightedGraph() {
+        testMinimumSpanningTreeBuilding(createSolver(createSimpleConnectedWeightedGraph()).getSpanningTree(),
+                Arrays.asList(AB, AC, BD, DE), 15.0);
     }
 
     @Test
@@ -95,8 +80,8 @@ public class MinimumSpanningTreeTest
     {
         final Random rng = new Random(33);
         final double edgeProbability = 0.5;
-        final int numberVertices = 100;
-        final int repeat = 10;
+        final int numberVertices = 200;
+        final int repeat = 100;
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gg =
             new GnpRandomGraphGenerator<Integer, DefaultWeightedEdge>(
@@ -135,10 +120,10 @@ public class MinimumSpanningTreeTest
 
         Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
-        /**
-         *
-         * A -- B E -- F | | | | C -- D G -- H
-         *
+        /*
+
+          A -- B E -- F | | | | C -- D G -- H
+
          */
 
         g.addVertex(A);
