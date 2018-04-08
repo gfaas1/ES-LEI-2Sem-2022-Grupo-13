@@ -383,10 +383,27 @@ public class WeakChordalityInspectorTest {
         assertNull(graphPath);
     }
 
+    /**
+     * Asserts that the specified {@code path} forms a hole or anti-hole in the {@code graph}
+     *
+     * @param graph the graph that should contain a hole or anti-hole
+     * @param path a path in the {@code graph}
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
     private <V, E> void assertIsHoleOrAntiHole(Graph<V, E> graph, GraphPath<V, E> path) {
         assertTrue(isHole(graph, path) || isAntiHole(graph, path));
     }
 
+    /**
+     * Checks whether specified {@code path} forms a hole in the {@code graph}
+     *
+     * @param graph the graph that should contain a hole
+     * @param path a path in the {@code graph}
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true is the {@code path} forms a hole in the {@code graph}, false otherwise
+     */
     private <V, E> boolean isHole(Graph<V, E> graph, GraphPath<V, E> path) {
         List<V> vertices = path.getVertexList();
         if (vertices.size() < 6 || !vertices.get(0).equals(vertices.get(vertices.size() - 1))) {
@@ -407,6 +424,15 @@ public class WeakChordalityInspectorTest {
         return true;
     }
 
+    /**
+     * Checks whether specified {@code path} forms an anti-hole in the {@code graph}
+     *
+     * @param graph the graph that should contain an anti-hole
+     * @param path a path in the {@code graph}
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return true is the {@code path} forms an anti-hole in the {@code graph}, false otherwise
+     */
     private <V, E> boolean isAntiHole(Graph<V, E> graph, GraphPath<V, E> path) {
         List<V> vertices = path.getVertexList();
         if (vertices.size() < 6 || !vertices.get(0).equals(vertices.get(vertices.size() - 1))) {

@@ -251,7 +251,7 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
      * multigraph vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#edgesOf(Object)} to traverse the graph.
      *
@@ -273,6 +273,15 @@ public abstract class Graphs
         return neighbors;
     }
 
+    /**
+     * Returns a set of vertices that are neighbors of a specified vertex.
+     *
+     * @param g the graph to look for neighbors in
+     * @param vertex the vertex to get the neighbors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a set of the vertices that are neighbors of the specified vertex
+     */
     public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
         Set<V> neighbors = new HashSet<>();
 
@@ -283,6 +292,17 @@ public abstract class Graphs
         return neighbors;
     }
 
+    /**
+     * Returns a set of vertices that are neighbors of the source of the specified edge or of the target of
+     * specified edge. The endpoints of the specified edge aren't included in the result.
+     *
+     * @param g the graph to look for neighbors in
+     * @param edge the edge to get the neighbors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a set of vertices that are neighbors of at least one endpoint of the specified edge. The endpoints
+     * of the specified edge aren't included in the result
+     */
     public static <V, E> Set<V> neighborhoodSetOf(Graph<V, E> g, E edge) {
         Set<V> neighborhood = new HashSet<>();
 
@@ -295,6 +315,8 @@ public abstract class Graphs
         for (E e : g.edgesOf(target)) {
             neighborhood.add(Graphs.getOppositeVertex(g, e, target));
         }
+        neighborhood.remove(source);
+        neighborhood.remove(target);
 
         return neighborhood;
     }
@@ -302,10 +324,10 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
      * graph is a multigraph, vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#incomingEdgesOf(Object)} to traverse the graph.
-     * 
+     *
      * @param g the graph to look for predecessors in
      * @param vertex the vertex to get the predecessors of
      * @param <V> the graph vertex type

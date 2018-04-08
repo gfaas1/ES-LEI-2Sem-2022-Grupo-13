@@ -22,13 +22,39 @@ import org.jgrapht.Graphs;
 
 import java.util.*;
 
+/**
+ * Allows obtaining all minimal <a href="https://en.wikipedia.org/wiki/Vertex_separator">vertex separators</a>
+ * in the neighborhood of some edge in the {@code graph}. A separator is called minimal, if no its proper subset
+ * is a separator in the graph.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class SeparatorFinder<V, E> {
+    /**
+     * The graph the search is performed on
+     */
     private Graph<V, E> graph;
 
+    /**
+     * Constructs a new SeparatorFinder for the specified {@code graph}
+     *
+     * @param graph the graph vertex separators are to be searched in
+     */
     public SeparatorFinder(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph);
     }
 
+    /**
+     * Computes and returns all minimal separators in the neighborhood of the {@code edge} in
+     * the {@code graph}. The result may contain duplicate separators.
+     * <p>
+     * Returns null if the {@code graph} doesn't contain the specified {@code edge}
+     *
+     * @param edge the edge, whose neighborhood is being explored
+     * @return the list of all minimal separators in the neighborhood of the {@code edge}.
+     * The resulted list may contain duplicates.
+     */
     public List<Set<V>> findSeparators(E edge) {
         if (graph.containsEdge(edge)) {
             List<Set<V>> separators = new ArrayList<>();
@@ -65,17 +91,17 @@ public class SeparatorFinder<V, E> {
     /**
      * Visits the {@code vertex}. Adds every encountered red vertex to the separator
      *
-     * @param vertex the currently visited vertex
-     * @param dfsMap the depth-first vertex labeling
+     * @param vertex    the currently visited vertex
+     * @param dfsMap    the depth-first vertex labeling
      * @param separator the separator, to which all found red vertices are added
      */
     private void dfsVisit(V vertex, Map<V, Byte> dfsMap, Set<V> separator) {
         dfsMap.put(vertex, (byte) 2);
 
-        for(V neighbor : Graphs.neighborListOf(graph, vertex)){
-            if(dfsMap.get(neighbor) == 0){
+        for (V neighbor : Graphs.neighborListOf(graph, vertex)) {
+            if (dfsMap.get(neighbor) == 0) {
                 dfsVisit(neighbor, dfsMap, separator);
-            }else if(dfsMap.get(neighbor) == 1){
+            } else if (dfsMap.get(neighbor) == 1) {
                 separator.add(neighbor);
             }
         }

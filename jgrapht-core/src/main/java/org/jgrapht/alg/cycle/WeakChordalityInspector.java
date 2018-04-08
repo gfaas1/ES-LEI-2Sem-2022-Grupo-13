@@ -57,7 +57,11 @@ import java.util.*;
  * <p>
  * Both the runtime complexity and space complexity of the algorithm implemented in this class is $\mathcal{O}(|E|^2)$.<br>
  * The inspected {@code graph} is specified at the construction time and cannot be modified.
- * When the graph is externally modified, the behavior of the {@code WeakChordalityInspector} is undefined.
+ * When the graph is modified externally, the behavior of the {@code WeakChordalityInspector} is undefined.
+ * <p>
+ * In the case the inspected graph in not weakly chordal, this inspector provides a certificate in the form
+ * of some hole or anti-hole. The running time of finding a hole is $\mathcal{O}(|V| + |E|)$ and of
+ * finding an anti-hole - $\mathcal{O}(|E|^2)$ in the worst case.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -95,7 +99,7 @@ public class WeakChordalityInspector<V, E> {
      */
     private SeparatorFinder<V, E> separatorFinder;
     /**
-     * Contains a hole or an anti-hole in the graph, if is isn't weakly chordal
+     * Contains a hole or an anti-hole of the graph, if it isn't weakly chordal
      */
     private GraphPath<V, E> certificate;
 
@@ -128,10 +132,6 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
-    private boolean isComputed() {
-        return weaklyChordal != null;
-    }
-
     /**
      * Check whether the inspected {@code graph} is weakly chordal.
      * Note: this value is computed lazily.
@@ -142,6 +142,12 @@ public class WeakChordalityInspector<V, E> {
         return lazyComputeWeakChordality();
     }
 
+    /**
+     * Computes and returns the certificate in the form of a hole or anti-hole in the inspected {@code graph}.
+     * Returns null if the inspected graph is weakly chordal. Note: certificate is computed lazily.
+     *
+     * @return a hole or anti-hole in the inspected {@code graph}, null if the {@code graph} is weakly chordal
+     */
     public GraphPath<V, E> getCertificate() {
         lazyComputeWeakChordality();
         return certificate;
@@ -164,7 +170,7 @@ public class WeakChordalityInspector<V, E> {
                 List<List<Integer>> coConnectedComponents = computeCoConnectedComponents(graph, original);
 
                 for (Pair<List<Pair<Integer, Integer>>, E> separator : globalSeparatorList) {
-                    if (!equalSeparators(original, separator.getFirst())) {
+                    if (unequalSeparators(original, separator.getFirst())) {
                         original = separator.getFirst();
                         ++separatorsNum;
                         if (n + m < separatorsNum) {
@@ -187,7 +193,7 @@ public class WeakChordalityInspector<V, E> {
                             targetInSeparator = t;
                         }
                         if (graph.containsEdge(sourceInSeparator, targetInSeparator)) {
-                            findAntiHole(sourceInSeparator, source, target, targetInSeparator);
+                            findAntiHole(source, targetInSeparator);
                         } else {
                             findHole(sourceInSeparator, source, target, targetInSeparator);
                         }
@@ -204,6 +210,13 @@ public class WeakChordalityInspector<V, E> {
         return weaklyChordal;
     }
 
+    /**
+     * Computes the global separator list of the {@code graph}. More precisely, for every edge $e$ in the
+     * $G = (V, E)$ computes list of minimal separators $S_e$ in the neighborhood of $e$ and then concatenates
+     * these lists. Note: the result may contain duplicates
+     *
+     * @return the list of minimal separators of every edge $e$ in the inspected graph
+     */
     private List<Pair<List<Pair<Integer, Integer>>, E>> computeGlobalSeparatorList() {
         List<Pair<List<Pair<Integer, Integer>>, E>> globalSeparatorList = new ArrayList<>();
         for (E edge : graph.edgeSet()) {
@@ -218,13 +231,14 @@ public class WeakChordalityInspector<V, E> {
     }
 
     /**
-     * Computes all minimal separators in the neighborhood of the {@code edge} and returns them.
-     * This is done via depth-first search. Following coloring is used: 2 (black) - already visited vertex,
-     * 1 (red) - vertex in the neighborhood of the {@code edge}, 1 (white) - unvisited vertex. The result can
-     * contain duplicates.
+     * Reformats the list o {@code separators} so that is can be conveniently used by this inspector.
+     * More precisely, in every separator from the list of minimal separators in the neighborhood of
+     * the {@code edge} substitutes all vertices for their indices in the numeration defined by {@code vertices}.
+     * Pairs every separator with the {@code edge}.
      *
-     * @param edge the edge, whose neighborhood is being explored
-     * @return computed minimal separators in the neighborhood of the {@code edge}
+     * @param separators the list of minimal separators in the neighborhood of the {@code edge}
+     * @param edge       the edge, which neighborhood contains minimal separators from {@code separators}
+     * @return the reformatted list of minimal separators
      */
     private List<Pair<List<Pair<Integer, Integer>>, E>> reformatSeparatorList(List<Set<V>> separators, E edge) {
         List<Integer> labeling = getLabeling(edge);
@@ -256,11 +270,11 @@ public class WeakChordalityInspector<V, E> {
     }
 
     /**
-     * Computes the labeling of the neighborhood of the vertices {@code source} and {@code target}.
-     * Vertex from the neighborhood is labeled with "1" if it sees only {@code source}, "2" is it sees
-     * only {@code target}, and "3" if it sees both vertices.
+     * Computes the labeling of the neighborhood of {@code edge} on the vertices {@code source} and
+     * {@code target}. Vertex from the neighborhood is labeled with "1" if it sees only {@code source},
+     * "2" is it sees only {@code target}, and "3" if it sees both vertices.
      *
-     * @param edge
+     * @param edge the edge, whose neighborhood is to be labeled
      * @return the computed labeling with the respect to the rule described above
      */
     private List<Integer> getLabeling(E edge) {
@@ -324,16 +338,16 @@ public class WeakChordalityInspector<V, E> {
      * @param sep2 second separator
      * @return true, if the separators are equal, false otherwise
      */
-    private boolean equalSeparators(List<Pair<Integer, Integer>> sep1, List<Pair<Integer, Integer>> sep2) {
+    private boolean unequalSeparators(List<Pair<Integer, Integer>> sep1, List<Pair<Integer, Integer>> sep2) {
         if (sep1.size() == sep2.size()) {
             for (int i = 0; i < sep1.size(); i++) {
                 if (!sep2.get(i).getFirst().equals(sep1.get(i).getFirst())) {
-                    return false;
+                    return true;
                 }
             }
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -422,7 +436,7 @@ public class WeakChordalityInspector<V, E> {
 
     /**
      * For a given coconnected component of the {@code separator} checks whether every vertex in it is seen
-     * by al least one vertex on the edge that is separated by the {@code separator}
+     * by al least one vertex of the edge that is separated by the {@code separator}
      *
      * @param coConnectedComponents the set of the coconected components of the {@code separator}
      * @param separator             minimal separator of some edge in the {@code graph}
@@ -452,11 +466,30 @@ public class WeakChordalityInspector<V, E> {
         return null;
     }
 
+    /**
+     * Finds a hole in the inspected {@code graph}. Vertices {@code sourceInSeparator}, {@code source},
+     * {@code target} and {@code targetInSeparator} belong to the computes hole. They are used to correctly
+     * find a hole in the inspected graph.
+     *
+     * @param sourceInSeparator vertex on the hole
+     * @param source            vertex on the hole
+     * @param target            vertex on the hole
+     * @param targetInSeparator vertex on the hole
+     */
     private void findHole(V sourceInSeparator, V source, V target, V targetInSeparator) {
         this.certificate = findHole(graph, sourceInSeparator, source, target, targetInSeparator);
     }
 
-    private void findAntiHole(V sourceInSeparator, V source, V target, V targetInSeparator) {
+    /**
+     * Finds an anti-hole in the inspected {@code graph}. Vertices {@code source} and {@code targetInSeparator}
+     * specify an edge, which belongs to the anti-hole in the complement of the {@code graph}. Then the hole
+     * in the complement of the graph is computed in the graph's complement in the same way a hole is
+     * computed in the {@code graph}.
+     *
+     * @param source            endpoint of the edge that belongs to the anti-hole
+     * @param targetInSeparator endpoint of the edge that belongs to the anti-hole
+     */
+    private void findAntiHole(V source, V targetInSeparator) {
         ComplementGraphGenerator<V, E> generator = new ComplementGraphGenerator<>(graph, false);
         Graph<V, E> complement = new Pseudograph<>(graph.getEdgeFactory());
         generator.generateGraph(complement);
@@ -476,7 +509,7 @@ public class WeakChordalityInspector<V, E> {
 
         Pair<Integer, Integer> pair;
         for (Pair<List<Pair<Integer, Integer>>, E> separator : reformatted) {
-            if (!equalSeparators(separator.getFirst(), original)) {
+            if (unequalSeparators(separator.getFirst(), original)) {
                 original = separator.getFirst();
                 coConnectedComponents = computeCoConnectedComponents(complement, separator.getFirst());
             }
@@ -495,6 +528,17 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    /**
+     * Finds a hole in the specified {@code graph}. Vertices {@code sourceInSeparator}, {@code source},
+     * {@code target} and {@code targetInSeparator} belong to the computes hole. They are used to correctly
+     * find a hole in the specified {@code graph}.
+     *
+     * @param sourceInSeparator vertex on the hole
+     * @param source            vertex on the hole
+     * @param target            vertex on the hole
+     * @param targetInSeparator vertex on the hole
+     * @return the computed hole on the {@code graph}
+     */
     private GraphPath<V, E> findHole(Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator) {
         Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {
@@ -511,7 +555,20 @@ public class WeakChordalityInspector<V, E> {
         return new GraphWalk<>(graph, cycle, 0);
     }
 
-    public void dfsVisit(V current, Map<V, Boolean> visited, List<V> cycle, Graph<V, E> graph, V tarInSep, V tar, V sour) {
+    /**
+     * Visits {@code vertex}, tries to recursively process vertices in the neighborhood of the {@code vertex}, that
+     * haven't been visited already and that aren't adjacent to the {@code tar} and {@code sour}. The latter condition
+     * is used to build a cycle, which later can be converted into a hole.
+     *
+     * @param current  the currently processed vertex
+     * @param visited  defines which vertices have been visited already
+     * @param cycle    a list of vertices that will form a cycle
+     * @param graph    the graph the search is performed on
+     * @param tarInSep the final endpoint of the cycle
+     * @param tar      the vertex, which can't be adjacent to the visited vertices
+     * @param sour     the vertex, which can't be adjacent to the visited vertices
+     */
+    private void dfsVisit(V current, Map<V, Boolean> visited, List<V> cycle, Graph<V, E> graph, V tarInSep, V tar, V sour) {
         visited.put(current, true);
         if (graph.containsEdge(current, tarInSep)) {
             cycle.add(tarInSep);
@@ -530,7 +587,19 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
-    public List<V> minimizeCycle(Graph<V, E> graph, List<V> cycle, V tar, V tarInSep, V sour, V sourInSep) {
+    /**
+     * Minimizes the {@code cycle} so that it contains a hole in the {@code graph}. Vertices {@code tar},
+     * {@code tarInSep}, {@code sour} and {@code sourInSep} belong to the final result.
+     *
+     * @param graph     the graph, which contains vertices from {@code cycle}
+     * @param cycle     the cycle to minimize
+     * @param tar       vertex, which should belong to the final result
+     * @param tarInSep  vertex, which should belong to the final result
+     * @param sour      vertex, which should belong to the final result
+     * @param sourInSep vertex, which should belong to the final result
+     * @return a list of vertices, which defines a hole in the {@code graph}
+     */
+    private List<V> minimizeCycle(Graph<V, E> graph, List<V> cycle, V tar, V tarInSep, V sour, V sourInSep) {
         List<V> minimizedCycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
         Set<V> forwardVertices = new HashSet<>(cycle);
         forwardVertices.remove(tar);
