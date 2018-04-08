@@ -18,9 +18,13 @@
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.Pair;
+import org.jgrapht.generate.ComplementGraphGenerator;
 import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.Pseudograph;
 
 import java.util.*;
 
@@ -86,6 +90,14 @@ public class WeakChordalityInspector<V, E> {
      * {@link WeakChordalityInspector#isWeaklyChordal()}.
      */
     private Boolean weaklyChordal = null;
+    /**
+     * For finding minimal separators
+     */
+    private SeparatorFinder<V, E> separatorFinder;
+    /**
+     * Contains a hole or an anti-hole in the graph, if is isn't weakly chordal
+     */
+    private GraphPath<V, E> certificate;
 
     /**
      * Creates a weak chordality inspector for the {@code graph}
@@ -97,6 +109,7 @@ public class WeakChordalityInspector<V, E> {
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         }
+        separatorFinder = new SeparatorFinder<>(graph);
         n = graph.vertexSet().size();
         m = graph.edgeSet().size();
         initMappings();
@@ -115,6 +128,10 @@ public class WeakChordalityInspector<V, E> {
         }
     }
 
+    private boolean isComputed() {
+        return weaklyChordal != null;
+    }
+
     /**
      * Check whether the inspected {@code graph} is weakly chordal.
      * Note: this value is computed lazily.
@@ -125,6 +142,11 @@ public class WeakChordalityInspector<V, E> {
         return lazyComputeWeakChordality();
     }
 
+    public GraphPath<V, E> getCertificate() {
+        lazyComputeWeakChordality();
+        return certificate;
+    }
+
     /**
      * Lazily tests the weak chordality of the {@code graph} and returns the computed value.
      *
@@ -132,36 +154,67 @@ public class WeakChordalityInspector<V, E> {
      */
     private boolean lazyComputeWeakChordality() {
         if (weaklyChordal == null) {
-            List<List<Pair<Integer, Integer>>> separators = new ArrayList<>();
-            for (E edge : graph.edgeSet()) {
-                separators.addAll(computeSeparators(edge));
-            }
+            List<Pair<List<Pair<Integer, Integer>>, E>> globalSeparatorList = computeGlobalSeparatorList();
 
-            if (separators.size() > 0) {
-                sortSeparatorsList(separators);
+            if (globalSeparatorList.size() > 0) {
+                Pair<Integer, Integer> pair;
+                sortSeparatorsList(globalSeparatorList);
                 int separatorsNum = 1;
-                List<Pair<Integer, Integer>> original = separators.get(0);
-                List<List<Integer>> coConnectedComponents = computeCoConnectedComponents(original);
-                for (List<Pair<Integer, Integer>> separator : separators) {
-                    if (!equalSeparators(original, separator)) {
-                        original = separator;
+                List<Pair<Integer, Integer>> original = globalSeparatorList.get(0).getFirst();
+                List<List<Integer>> coConnectedComponents = computeCoConnectedComponents(graph, original);
+
+                for (Pair<List<Pair<Integer, Integer>>, E> separator : globalSeparatorList) {
+                    if (!equalSeparators(original, separator.getFirst())) {
+                        original = separator.getFirst();
                         ++separatorsNum;
                         if (n + m < separatorsNum) {
                             return weaklyChordal = false;
                         } else {
-                            coConnectedComponents = computeCoConnectedComponents(original);
+                            coConnectedComponents = computeCoConnectedComponents(graph, original);
                         }
                     }
-                    if (!checkLabels(coConnectedComponents, separator)) {
+                    if ((pair = checkLabels(coConnectedComponents, separator.getFirst())) != null) {
+                        E holeFormer = separator.getSecond();
+                        V source = graph.getEdgeSource(holeFormer);
+                        V target = graph.getEdgeTarget(holeFormer);
+
+                        V sourceInSeparator = indices.get(pair.getFirst());
+                        V targetInSeparator = indices.get(pair.getSecond());
+
+                        if (!graph.containsEdge(source, sourceInSeparator)) {
+                            V t = sourceInSeparator;
+                            sourceInSeparator = targetInSeparator;
+                            targetInSeparator = t;
+                        }
+                        if (graph.containsEdge(sourceInSeparator, targetInSeparator)) {
+                            findAntiHole(sourceInSeparator, source, target, targetInSeparator);
+                        } else {
+                            findHole(sourceInSeparator, source, target, targetInSeparator);
+                        }
                         return weaklyChordal = false;
                     }
                 }
+
                 return weaklyChordal = true;
             } else {
+
                 return weaklyChordal = true;
             }
         }
         return weaklyChordal;
+    }
+
+    private List<Pair<List<Pair<Integer, Integer>>, E>> computeGlobalSeparatorList() {
+        List<Pair<List<Pair<Integer, Integer>>, E>> globalSeparatorList = new ArrayList<>();
+        for (E edge : graph.edgeSet()) {
+            V source = graph.getEdgeSource(edge);
+            V target = graph.getEdgeTarget(edge);
+            if (source != target) {
+                List<Set<V>> edgeSeparators = separatorFinder.findSeparators(edge);
+                globalSeparatorList.addAll(reformatSeparatorList(edgeSeparators, edge));
+            }
+        }
+        return globalSeparatorList;
     }
 
     /**
@@ -173,78 +226,33 @@ public class WeakChordalityInspector<V, E> {
      * @param edge the edge, whose neighborhood is being explored
      * @return computed minimal separators in the neighborhood of the {@code edge}
      */
-    private List<List<Pair<Integer, Integer>>> computeSeparators(E edge) {
-        V source = graph.getEdgeSource(edge);
-        V target = graph.getEdgeTarget(edge);
-        if (source != target) {
-            int sourceIndex = vertices.get(source);
-            int targetIndex = vertices.get(target);
-
-            List<Integer> labeling = getLabeling(source, target);
-            List<List<Pair<Integer, Integer>>> separators = new ArrayList<>();
-            List<List<List<Pair<Integer, Integer>>>> vInSeparator =
-                    new ArrayList<>(n);
-            for (int i = 0; i < n; i++) {
-                vInSeparator.add(new ArrayList<>());
-            }
-
-            //0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
-            List<Byte> dfsArr = new ArrayList<>(Collections.nCopies(n, (byte) -1));
-            for (V vertex : graph.vertexSet()) {
-                int vertexIndex = vertices.get(vertex);
-                if (labeling.get(vertexIndex) != null) {
-                    dfsArr.set(vertexIndex, (byte) 1);
-                } else {
-                    dfsArr.set(vertexIndex, (byte) 0);
-                }
-            }
-            dfsArr.set(sourceIndex, (byte) 2);
-            dfsArr.set(targetIndex, (byte) 2);
-
-            for (V vertex : graph.vertexSet()) {
-                int vertexIndex = vertices.get(vertex);
-                if (dfsArr.get(vertexIndex) == 0) {
-                    List<Pair<Integer, Integer>> separator = new ArrayList<>();
-                    separators.add(separator);
-                    dfsVisit(vertex, dfsArr, separator, vInSeparator);
-                }
-            }
-            for (int vertex = 0; vertex < n; vertex++) {
-                List<List<Pair<Integer, Integer>>> listOfSeparators = vInSeparator.get(vertex);
-                for (List<Pair<Integer, Integer>> separator : listOfSeparators) {
-                    separator.add(new Pair<>(vertex, labeling.get(vertex)));
-                }
-            }
-
-            return separators;
-        } else {
-            return new ArrayList<>();
+    private List<Pair<List<Pair<Integer, Integer>>, E>> reformatSeparatorList(List<Set<V>> separators, E edge) {
+        List<Integer> labeling = getLabeling(edge);
+        List<Pair<List<Pair<Integer, Integer>>, E>> reformattedSeparators = new ArrayList<>();
+        List<List<List<Pair<Integer, Integer>>>> vInSeparator =
+                new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            vInSeparator.add(new ArrayList<>());
         }
-    }
 
-    /**
-     * Visits the {@code vertex}. Adds to the bucket of the {code vertex} in the {@code vInSeparators} a reference
-     * to the {@code separator} for all red vertices in the neighborhood of the {@code vertex}. Recursively visits
-     * all white vertices in the neighborhood.
-     *
-     * @param vertex        the currently visited vertex
-     * @param dfsArr        the depth-first vertex labeling
-     * @param separator     the separator, to which all found red vertices will be added
-     * @param vInSeparators the list of buckets, which contains references to separators vertices belong to
-     */
-    private void dfsVisit(V vertex, List<Byte> dfsArr, List<Pair<Integer, Integer>> separator,
-                          List<List<List<Pair<Integer, Integer>>>> vInSeparators) {
-        int vertexIndex = vertices.get(vertex);
-        dfsArr.set(vertexIndex, (byte) 2);
-        for (E edge : graph.edgesOf(vertex)) {
-            V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
-            int oppositeIndex = vertices.get(opposite);
-            if (dfsArr.get(oppositeIndex) == 0) {
-                dfsVisit(opposite, dfsArr, separator, vInSeparators);
-            } else if (dfsArr.get(oppositeIndex) == 1) {
-                vInSeparators.get(oppositeIndex).add(separator);
+        for (Set<V> computedSeparator : separators) {
+            List<Pair<Integer, Integer>> reformattedSeparator = new ArrayList<>(computedSeparator.size());
+            reformattedSeparators.add(new Pair<>(reformattedSeparator, edge));
+            for (V vertex : computedSeparator) {
+                int vertexIndex = vertices.get(vertex);
+                vInSeparator.get(vertexIndex).add(reformattedSeparator);
             }
         }
+
+        for (int vertex = 0; vertex < n; vertex++) {
+            List<List<Pair<Integer, Integer>>> listOfSeparators = vInSeparator.get(vertex);
+            for (List<Pair<Integer, Integer>> separator : listOfSeparators) {
+                separator.add(new Pair<>(vertex, labeling.get(vertex)));
+            }
+        }
+
+        return reformattedSeparators;
+
     }
 
     /**
@@ -252,17 +260,18 @@ public class WeakChordalityInspector<V, E> {
      * Vertex from the neighborhood is labeled with "1" if it sees only {@code source}, "2" is it sees
      * only {@code target}, and "3" if it sees both vertices.
      *
-     * @param source the vertex, whose neighborhood is being labeled
-     * @param target another vertex, whose neighborhood is being labeled
+     * @param edge
      * @return the computed labeling with the respect to the rule described above
      */
-    private List<Integer> getLabeling(V source, V target) {
+    private List<Integer> getLabeling(E edge) {
+        V source = graph.getEdgeSource(edge);
+        V target = graph.getEdgeTarget(edge);
         List<Integer> labeling = new ArrayList<>(Collections.nCopies(n, null));
-        for (E edge : graph.edgesOf(source)) {
-            labeling.set(vertices.get(Graphs.getOppositeVertex(graph, edge, source)), 1);
+        for (E sourceEdge : graph.edgesOf(source)) {
+            labeling.set(vertices.get(Graphs.getOppositeVertex(graph, sourceEdge, source)), 1);
         }
-        for (E edge : graph.edgesOf(target)) {
-            Integer oppositeIndex = vertices.get(Graphs.getOppositeVertex(graph, edge, target));
+        for (E targetEdge : graph.edgesOf(target)) {
+            Integer oppositeIndex = vertices.get(Graphs.getOppositeVertex(graph, targetEdge, target));
             if (labeling.get(oppositeIndex) != null) {
                 labeling.set(oppositeIndex, 3);
             } else {
@@ -277,30 +286,30 @@ public class WeakChordalityInspector<V, E> {
      *
      * @param separators the list of separators to be sorted
      */
-    private void sortSeparatorsList(List<List<Pair<Integer, Integer>>> separators) {
-        Queue<List<Pair<Integer, Integer>>> mainQueue = new LinkedList<>();
+    private void sortSeparatorsList(List<Pair<List<Pair<Integer, Integer>>, E>> separators) {
+        Queue<Pair<List<Pair<Integer, Integer>>, E>> mainQueue = new LinkedList<>();
         int maxSeparatorLength = 0;
-        for (List<Pair<Integer, Integer>> separator : separators) {
-            if (separator.size() > maxSeparatorLength) {
-                maxSeparatorLength = separator.size();
+        for (Pair<List<Pair<Integer, Integer>>, E> separator : separators) {
+            if (separator.getFirst().size() > maxSeparatorLength) {
+                maxSeparatorLength = separator.getFirst().size();
             }
             mainQueue.add(separator);
         }
         separators.clear();
-        List<Queue<List<Pair<Integer, Integer>>>> queues = new ArrayList<>(n);
+        List<Queue<Pair<List<Pair<Integer, Integer>>, E>>> queues = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             queues.add(new LinkedList<>());
         }
         for (int i = 0; i < maxSeparatorLength; i++) {
             while (!mainQueue.isEmpty()) {
-                List<Pair<Integer, Integer>> separator = mainQueue.remove();
-                if (i >= separator.size()) {
+                Pair<List<Pair<Integer, Integer>>, E> separator = mainQueue.remove();
+                if (i >= separator.getFirst().size()) {
                     separators.add(separator);
                 } else {
-                    queues.get(separator.get(separator.size() - i - 1).getFirst()).add(separator);
+                    queues.get(separator.getFirst().get(separator.getFirst().size() - i - 1).getFirst()).add(separator);
                 }
             }
-            for (Queue<List<Pair<Integer, Integer>>> queue : queues) {
+            for (Queue<Pair<List<Pair<Integer, Integer>>, E>> queue : queues) {
                 mainQueue.addAll(queue);
                 queue.clear();
             }
@@ -316,7 +325,7 @@ public class WeakChordalityInspector<V, E> {
      * @return true, if the separators are equal, false otherwise
      */
     private boolean equalSeparators(List<Pair<Integer, Integer>> sep1, List<Pair<Integer, Integer>> sep2) {
-        if (sep1.size() != sep2.size()) {
+        if (sep1.size() == sep2.size()) {
             for (int i = 0; i < sep1.size(); i++) {
                 if (!sep2.get(i).getFirst().equals(sep1.get(i).getFirst())) {
                     return false;
@@ -335,7 +344,7 @@ public class WeakChordalityInspector<V, E> {
      * @param separator the separators, whose coconnected components are computed
      * @return the coconected of the {@code separator}
      */
-    private List<List<Integer>> computeCoConnectedComponents(List<Pair<Integer, Integer>> separator) {
+    private List<List<Integer>> computeCoConnectedComponents(Graph<V, E> graph, List<Pair<Integer, Integer>> separator) {
         List<List<Integer>> coConnectedComponents = new ArrayList<>();
 
         List<Set<Integer>> bucketsByLabel = new ArrayList<>(n);
@@ -419,25 +428,137 @@ public class WeakChordalityInspector<V, E> {
      * @param separator             minimal separator of some edge in the {@code graph}
      * @return true if the condition described above holds, false otherwise
      */
-    private boolean checkLabels(List<List<Integer>> coConnectedComponents, List<Pair<Integer, Integer>> separator) {
+    private Pair<Integer, Integer> checkLabels(List<List<Integer>> coConnectedComponents, List<Pair<Integer, Integer>> separator) {
         List<Integer> vertexLabels = new ArrayList<>(Collections.nCopies(n, null));
         for (Pair<Integer, Integer> vertexAndLabel : separator) {
             vertexLabels.set(vertexAndLabel.getFirst(), vertexAndLabel.getSecond());
         }
         for (List<Integer> coConnectedComponent : coConnectedComponents) {
             int label = 0;
+            Integer labelVertex = null;
             for (Integer vertex : coConnectedComponent) {
                 if (vertexLabels.get(vertex) != 3) {
                     if (label != 0) {
                         if (label != vertexLabels.get(vertex)) {
-                            return false;
+                            return new Pair<>(labelVertex, vertex);
                         }
                     } else {
                         label = vertexLabels.get(vertex);
+                        labelVertex = vertex;
                     }
                 }
             }
         }
-        return true;
+        return null;
+    }
+
+    private void findHole(V sourceInSeparator, V source, V target, V targetInSeparator) {
+        this.certificate = findHole(graph, sourceInSeparator, source, target, targetInSeparator);
+    }
+
+    private void findAntiHole(V sourceInSeparator, V source, V target, V targetInSeparator) {
+        ComplementGraphGenerator<V, E> generator = new ComplementGraphGenerator<>(graph, false);
+        Graph<V, E> complement = new Pseudograph<>(graph.getEdgeFactory());
+        generator.generateGraph(complement);
+
+        E cycleFormer = complement.getEdge(source, targetInSeparator);
+        V cycleSource = graph.getEdgeSource(cycleFormer);
+        V cycleTarget = graph.getEdgeTarget(cycleFormer);
+
+        SeparatorFinder<V, E> complementSeparatorFinder = new SeparatorFinder<>(complement);
+        List<Set<V>> separators = complementSeparatorFinder.findSeparators(cycleFormer);
+        List<Pair<List<Pair<Integer, Integer>>, E>> reformatted = reformatSeparatorList(separators, cycleFormer);
+
+        sortSeparatorsList(reformatted);
+
+        List<Pair<Integer, Integer>> original = reformatted.get(0).getFirst();
+        List<List<Integer>> coConnectedComponents = computeCoConnectedComponents(complement, original);
+
+        Pair<Integer, Integer> pair;
+        for (Pair<List<Pair<Integer, Integer>>, E> separator : reformatted) {
+            if (!equalSeparators(separator.getFirst(), original)) {
+                original = separator.getFirst();
+                coConnectedComponents = computeCoConnectedComponents(complement, separator.getFirst());
+            }
+            if ((pair = checkLabels(coConnectedComponents, separator.getFirst())) != null) {
+                V cycleSourceInSeparator = indices.get(pair.getFirst());
+                V cycleTargetInSeparator = indices.get(pair.getSecond());
+                if (!complement.containsEdge(cycleSourceInSeparator, cycleSource)) {
+                    V t = cycleSourceInSeparator;
+                    cycleSourceInSeparator = cycleTargetInSeparator;
+                    cycleTargetInSeparator = t;
+                }
+                this.certificate = findHole(complement, cycleSourceInSeparator, cycleSource,
+                        cycleTarget, cycleTargetInSeparator);
+                return;
+            }
+        }
+    }
+
+    private GraphPath<V, E> findHole(Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator) {
+        Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
+        for (V vertex : graph.vertexSet()) {
+            visited.put(vertex, false);
+        }
+        visited.put(targetInSeparator, true);
+        visited.put(target, true);
+        visited.put(source, true);
+
+        List<V> cycle = new ArrayList<>(Arrays.asList(targetInSeparator, target, source, sourceInSeparator));
+        dfsVisit(sourceInSeparator, visited, cycle, graph, targetInSeparator, target, source);
+        cycle = minimizeCycle(graph, cycle, target, targetInSeparator, source, sourceInSeparator);
+
+        return new GraphWalk<>(graph, cycle, 0);
+    }
+
+    public void dfsVisit(V current, Map<V, Boolean> visited, List<V> cycle, Graph<V, E> graph, V tarInSep, V tar, V sour) {
+        visited.put(current, true);
+        if (graph.containsEdge(current, tarInSep)) {
+            cycle.add(tarInSep);
+            return;
+        }
+        for (V vertex : Graphs.neighborListOf(graph, current)) {
+            if (!visited.get(vertex) && !graph.containsEdge(sour, vertex) && !graph.containsEdge(tar, vertex)) {
+                cycle.add(vertex);
+                dfsVisit(vertex, visited, cycle, graph, tarInSep, tar, sour);
+                if (cycle.get(cycle.size() - 1).equals(tarInSep)) {
+                    return;
+                } else {
+                    cycle.remove(cycle.size() - 1);
+                }
+            }
+        }
+    }
+
+    public List<V> minimizeCycle(Graph<V, E> graph, List<V> cycle, V tar, V tarInSep, V sour, V sourInSep) {
+        List<V> minimizedCycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
+        Set<V> forwardVertices = new HashSet<>(cycle);
+        forwardVertices.remove(tar);
+        forwardVertices.remove(sour);
+        forwardVertices.remove(sourInSep);
+
+        for (int i = 3; i < cycle.size() - 1; ) {
+            V current = cycle.get(i);
+            minimizedCycle.add(current);
+            forwardVertices.remove(current);
+
+            Set<V> currentForward = new HashSet<>();
+            for (V neighbor : Graphs.neighborListOf(graph, current)) {
+                if (forwardVertices.contains(neighbor)) {
+                    currentForward.add(neighbor);
+                }
+            }
+
+            for (V forwardVertex : currentForward) {
+                if (forwardVertices.contains(forwardVertex)) {
+                    do {
+                        forwardVertices.remove(cycle.get(i));
+                        i++;
+                    } while (i < cycle.size() && !cycle.get(i).equals(forwardVertex));
+                }
+            }
+        }
+        minimizedCycle.add(tarInSep);
+        return minimizedCycle;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,7 @@
 package org.jgrapht.alg.cycle;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.CompleteGraphGenerator;
@@ -27,8 +28,9 @@ import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class WeakChordalityInspectorTest {
 
@@ -40,6 +42,8 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
     /**
@@ -55,6 +59,8 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 3, 4);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
     /**
@@ -69,6 +75,8 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 3, 4);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
     /**
@@ -84,6 +92,9 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 5, 1);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(graph, graphPath);
     }
 
     /**
@@ -108,6 +119,9 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 5, 7);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(graph, graphPath);
     }
 
     /**
@@ -131,6 +145,8 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 4, 4);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
     /**
@@ -160,6 +176,9 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 9, 10);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(graph, graphPath);
     }
 
     /**
@@ -175,6 +194,9 @@ public class WeakChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 0, bound);
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(graph, graphPath);
     }
 
     /**
@@ -187,6 +209,8 @@ public class WeakChordalityInspectorTest {
         generator.generateGraph(graph, new IntegerVertexFactory());
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
 
@@ -195,6 +219,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> dodecahedron = NamedGraphGenerator.dodecahedronGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(dodecahedron);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(dodecahedron, graphPath);
     }
 
     @Test
@@ -202,6 +229,8 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> bull = NamedGraphGenerator.bullGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(bull);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
     }
 
     @Test
@@ -209,6 +238,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> buckyBall = NamedGraphGenerator.buckyBallGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(buckyBall);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(buckyBall, graphPath);
     }
 
     @Test
@@ -216,6 +248,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> clebsch = NamedGraphGenerator.clebschGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(clebsch);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(clebsch, graphPath);
     }
 
     @Test
@@ -223,6 +258,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> grötzsch = NamedGraphGenerator.grötzschGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(grötzsch);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(grötzsch, graphPath);
     }
 
     @Test
@@ -230,6 +268,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> bidiakis = NamedGraphGenerator.bidiakisCubeGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(bidiakis);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(bidiakis, graphPath);
     }
 
     @Test
@@ -237,6 +278,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> blanusaFirstSnark = NamedGraphGenerator.blanusaFirstSnarkGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(blanusaFirstSnark);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(blanusaFirstSnark, graphPath);
     }
 
     @Test
@@ -244,6 +288,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> doubleStarSnark = NamedGraphGenerator.doubleStarSnarkGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(doubleStarSnark);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(doubleStarSnark, graphPath);
     }
 
     @Test
@@ -251,6 +298,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> brinkmann = NamedGraphGenerator.brinkmannGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(brinkmann);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(brinkmann, graphPath);
     }
 
     @Test
@@ -258,6 +308,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> gosset = NamedGraphGenerator.gossetGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(gosset);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(gosset, graphPath);
     }
 
 
@@ -266,6 +319,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> chvatal = NamedGraphGenerator.chvatalGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(chvatal);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(chvatal, graphPath);
     }
 
     @Test
@@ -273,6 +329,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> kittell = NamedGraphGenerator.kittellGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(kittell);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(kittell, graphPath);
     }
 
     @Test
@@ -280,6 +339,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> coxeter = NamedGraphGenerator.coxeterGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(coxeter);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(coxeter, graphPath);
     }
 
     @Test
@@ -287,6 +349,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> ellinghamHorton78 = NamedGraphGenerator.ellinghamHorton78Graph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(ellinghamHorton78);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(ellinghamHorton78, graphPath);
     }
 
     @Test
@@ -294,6 +359,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> errera = NamedGraphGenerator.erreraGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(errera);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(errera, graphPath);
     }
 
     @Test
@@ -301,6 +369,9 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> folkman = NamedGraphGenerator.folkmanGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(folkman);
         assertFalse(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNotNull(graphPath);
+        assertIsHoleOrAntiHole(folkman, graphPath);
     }
 
     @Test
@@ -308,5 +379,51 @@ public class WeakChordalityInspectorTest {
         Graph<Integer, DefaultEdge> krackhardtKite = NamedGraphGenerator.krackhardtKiteGraph();
         WeakChordalityInspector<Integer, DefaultEdge> inspector = new WeakChordalityInspector<>(krackhardtKite);
         assertTrue(inspector.isWeaklyChordal());
+        GraphPath<Integer, DefaultEdge> graphPath = inspector.getCertificate();
+        assertNull(graphPath);
+    }
+
+    private <V, E> void assertIsHoleOrAntiHole(Graph<V, E> graph, GraphPath<V, E> path) {
+        assertTrue(isHole(graph, path) || isAntiHole(graph, path));
+    }
+
+    private <V, E> boolean isHole(Graph<V, E> graph, GraphPath<V, E> path) {
+        List<V> vertices = path.getVertexList();
+        if (vertices.size() < 6 || !vertices.get(0).equals(vertices.get(vertices.size() - 1))) {
+            return false;
+        }
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            if (!graph.containsEdge(vertices.get(i), vertices.get(i + 1))) {
+                return false;
+            }
+        }
+        for (int i = 0; i < vertices.size() - 2; i++) {
+            for (int j = 0; j < vertices.size() - 2; j++) {
+                if (Math.abs(i - j) > 1 && graph.containsEdge(vertices.get(i), vertices.get(j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private <V, E> boolean isAntiHole(Graph<V, E> graph, GraphPath<V, E> path) {
+        List<V> vertices = path.getVertexList();
+        if (vertices.size() < 6 || !vertices.get(0).equals(vertices.get(vertices.size() - 1))) {
+            return false;
+        }
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            if (graph.containsEdge(vertices.get(i), vertices.get(i + 1))) {
+                return false;
+            }
+        }
+        for (int i = 0; i < vertices.size() - 2; i++) {
+            for (int j = 0; j < vertices.size() - 2; j++) {
+                if (Math.abs(i - j) > 1 && !graph.containsEdge(vertices.get(i), vertices.get(j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

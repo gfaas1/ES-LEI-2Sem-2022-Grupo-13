@@ -17,10 +17,11 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.function.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -270,6 +271,32 @@ public abstract class Graphs
         }
 
         return neighbors;
+    }
+
+    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
+        Set<V> neighbors = new HashSet<>();
+
+        for (E e : g.edgesOf(vertex)) {
+            neighbors.add(Graphs.getOppositeVertex(g, e, vertex));
+        }
+
+        return neighbors;
+    }
+
+    public static <V, E> Set<V> neighborhoodSetOf(Graph<V, E> g, E edge) {
+        Set<V> neighborhood = new HashSet<>();
+
+        V source = g.getEdgeSource(edge);
+        V target = g.getEdgeTarget(edge);
+
+        for (E e : g.edgesOf(source)) {
+            neighborhood.add(Graphs.getOppositeVertex(g, e, source));
+        }
+        for (E e : g.edgesOf(target)) {
+            neighborhood.add(Graphs.getOppositeVertex(g, e, target));
+        }
+
+        return neighborhood;
     }
 
     /**
