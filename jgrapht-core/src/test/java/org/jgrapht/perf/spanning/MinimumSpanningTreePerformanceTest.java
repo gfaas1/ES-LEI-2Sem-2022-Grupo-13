@@ -17,21 +17,26 @@
  */
 package org.jgrapht.perf.spanning;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.spanning.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
+import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
+import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
+import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
+import org.jgrapht.alg.spanning.PrimMinimumSpanningTreeDenseGraphs;
+import org.jgrapht.alg.util.IntegerVertexFactory;
+import org.jgrapht.generate.GnpRandomGraphGenerator;
+import org.jgrapht.generate.GraphGenerator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.util.StopWatch;
 import org.junit.Test;
-import org.openjdk.jmh.runner.*;
+import org.openjdk.jmh.runner.RunnerException;
 
-import junit.framework.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
@@ -98,6 +103,23 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
+    public static class PrimDenseBenchmark
+            extends BenchmarkBase
+    {
+        @Override
+        SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+                Graph<Integer, DefaultWeightedEdge> graph)
+        {
+            return new PrimMinimumSpanningTreeDenseGraphs<>(graph);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Prim Dense";
+        }
+    }
+
     public static class KruskalBenchmark
         extends BenchmarkBase
     {
@@ -146,6 +168,7 @@ public class MinimumSpanningTreePerformanceTest
 
         List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
         algFactory.add(() -> new PrimBenchmark());
+        algFactory.add(() -> new PrimDenseBenchmark());
         algFactory.add(() -> new KruskalBenchmark());
         algFactory.add(() -> new BoruvkaBenchmark());
 
