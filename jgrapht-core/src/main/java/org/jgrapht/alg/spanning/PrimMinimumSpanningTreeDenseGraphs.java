@@ -87,31 +87,36 @@ public class PrimMinimumSpanningTreeDenseGraphs<V, E>
         vertices[0].distance = 0;
 
         for (int step = 0; step < N; step++) {
+            // u = 'closest' vertex  not yet spanned (close wrt to an already spanned vertex)
             int u = -1;
 
+            // for each vertex: check if it was not explored before and if is closer than the current u
             for (int i = 0; i < N; i++) {
                 if (!vertices[i].spanned && (u == -1 || vertices[i].distance < vertices[u].distance))
                     u = i;
             }
 
+            // if no 'u' was found then we can stop the algorithm
             if (u == -1)
                 break;
 
-
-            V root = indexList.get(u);
+            V p = indexList.get(u);
             vertices[u].spanned = true;
 
+            // Add the edge from its parent to the spanning tree (if it exists)
             if (vertices[u].edgeFromParent != null) {
                 minimumSpanningTreeEdgeSet.add(vertices[u].edgeFromParent);
                 spanningTreeWeight += g.getEdgeWeight(vertices[u].edgeFromParent);
             }
 
-            for (E e : g.edgesOf(root)) {
-                V target = Graphs.getOppositeVertex(g,e,root);
+            // update all (unspanned) neighbors of
+            for (E e : g.edgesOf(p)) {
+                V q = Graphs.getOppositeVertex(g, e, p);
 
-                int id = vertexMap.get(target);
+                int id = vertexMap.get(q);
                 double cost = g.getEdgeWeight(e);
 
+                // if the vertex is not explored and this is a better edge, then update the info
                 if (!vertices[id].spanned && vertices[id].distance > cost) {
                     vertices[id].distance = cost;
                     vertices[id].edgeFromParent = e;
