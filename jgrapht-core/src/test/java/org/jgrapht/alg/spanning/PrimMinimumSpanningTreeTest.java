@@ -24,7 +24,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 public class PrimMinimumSpanningTreeTest extends MinimumSpanningTreeTest{
 
     @Override
-    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<String, DefaultWeightedEdge> network) {
+    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
         return new PrimMinimumSpanningTree<>(network);
     }
 }
