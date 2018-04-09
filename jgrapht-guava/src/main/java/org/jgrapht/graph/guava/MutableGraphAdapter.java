@@ -33,6 +33,26 @@ import com.google.common.graph.MutableGraph;
 
 /**
  * A graph adapter class using Guava's {@link MutableGraph}.
+ * 
+ * <p>
+ * The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as
+ * adding or removing vertices and edges are reflected in the underlying graph.
+ *
+ * <p>
+ * See the example below on how to create such an adapter: <blockquote>
+ * 
+ * <pre>
+ * MutableGraph&lt;String&gt; mutableGraph =
+ *     GraphBuilder.directed().allowsSelfLoops(true).build();
+ * 
+ * mutableGraph.addNode("v1");
+ * mutableGraph.addNode("v2");
+ * mutableGraph.addEdge("v1", "v2");
+ * 
+ * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableGraphAdapter&lt;&gt;(mutableGraph);
+ * </pre>
+ * 
+ * </blockquote>
  *
  * @author Dimitrios Michail
  *

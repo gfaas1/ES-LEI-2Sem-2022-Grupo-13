@@ -36,6 +36,25 @@ import com.google.common.graph.NetworkBuilder;
 /**
  * A graph adapter class using Guava's {@link ImmutableNetwork}.
  * 
+ * <p>
+ * Since the underlying network is immutable, the resulting graph is unmodifiable.
+ * 
+ * <p>Example usage: <blockquote>
+ * 
+ * <pre>
+ * MutableNetwork&lt;String, DefaultEdge&gt; mutableNetwork =
+ *     NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
+ *     
+ * mutableNetwork.addNode("v1");
+ * 
+ * ImmutableNetworkGraph&lt;String, DefaultEdge&gt; immutableNetwork = ImmutableNetwork.copyOf(mutableNetwork);
+ * 
+ * Graph&lt;String, DefaultEdge&gt; graph =
+ *     new ImmutableNetworkAdapter&lt;&gt;(immutableNetwork, DefaultEdge.class);
+ * </pre>
+ * 
+ * </blockquote>
+ * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -46,7 +65,7 @@ public class ImmutableNetworkAdapter<V, E>
     implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 8776276294297681092L;
-    
+
     protected static final String GRAPH_IS_IMMUTABLE = "Graph is immutable";
 
     /**
@@ -66,8 +85,7 @@ public class ImmutableNetworkAdapter<V, E>
      * @param network the immutable network
      * @param edgeClass class on which to base factory for edges
      */
-    public ImmutableNetworkAdapter(
-        ImmutableNetwork<V, E> network, Class<? extends E> edgeClass)
+    public ImmutableNetworkAdapter(ImmutableNetwork<V, E> network, Class<? extends E> edgeClass)
     {
         this(network, new ClassBasedEdgeFactory<>(edgeClass));
     }

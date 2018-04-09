@@ -35,6 +35,27 @@ import com.google.common.graph.MutableGraph;
 /**
  * A graph adapter class using Guava's {@link ImmutableGraph}.
  * 
+ * <p>
+ * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying graph is
+ * immutable, the resulting graph is unmodifiable.
+ *
+ * <p>
+ * See the example below on how to create such an adapter: <blockquote>
+ * 
+ * <pre>
+ * MutableGraph&lt;String&gt; mutableGraph = GraphBuilder.directed().allowsSelfLoops(true).build();
+ * 
+ * mutableGraph.addNode("v1");
+ * mutableGraph.addNode("v2");
+ * mutableGraph.addEdge("v1", "v2");
+ * 
+ * ImmutableGraph&lt;String&gt; immutableGraph = ImmutableGraph.copyOf(mutableGraph);
+ * 
+ * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableGraphAdapter&lt;&gt;(immutableGraph);
+ * </pre>
+ * 
+ * </blockquote>
+ * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
@@ -44,7 +65,7 @@ public class ImmutableGraphAdapter<V>
     implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
 {
     private static final long serialVersionUID = -6619929013881511474L;
-    
+
     protected static final String GRAPH_IS_IMMUTABLE = "Graph is immutable";
 
     /**

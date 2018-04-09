@@ -36,13 +36,57 @@ import com.google.common.graph.ValueGraphBuilder;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph}.
+ * 
+ * <p>The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as 
+ * adding or removing vertices and edges are reflected in the underlying value graph.
  *
  * <p>
  * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
- * graph is weighted. This is a one-way conversion meaning that calling
- * {@link #setEdgeWeight(EndpointPair, double)} will throw an unsupported operation exception.
- * Adjusting the weights can be done directly (by keeping an external reference) on the underlying
- * {@link ValueGraph} and propagated upstream using the provided value converter.
+ * graph is weighted. Assume for example that the following class is the value type: <blockquote>
+ * 
+ * <pre>
+ * class MyValue
+ *     implements Serializable
+ * {
+ *     private double value;
+ *
+ *     public MyValue(double value)
+ *     {
+ *         this.value = value;
+ *     }
+ *
+ *     public double getValue()
+ *     {
+ *         return value;
+ *     }
+ * }
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * Then one could create an adapter using the following code: <blockquote>
+ * 
+ * <pre>
+ * MutableValueGraph&lt;String, MyValue&gt; valueGraph =
+ *     ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+ * valueGraph.addNode("v1");
+ * valueGraph.addNode("v2");
+ * valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
+ * 
+ * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new MutableValueGraphAdapter&lt;&gt;(
+ *     valueGraph, new MyValue(1.0), (ToDoubleFunction&lt;MyValue&gt; &amp; Serializable) MyValue::getValue);
+ * 
+ * double weight = graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")); // should return 5.0
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * This is a one-way conversion meaning that calling {@link #setEdgeWeight(EndpointPair, double)}
+ * will throw an unsupported operation exception. Adjusting the weights can be done directly (by
+ * keeping an external reference) on the underlying {@link MutableValueGraph} and calling
+ * {@link MutableValueGraph#putEdgeValue(Object, Object, Object)}. Changes on the values will be
+ * propagated upstream using the provided value converter.
  * 
  * @author Dimitrios Michail
  *

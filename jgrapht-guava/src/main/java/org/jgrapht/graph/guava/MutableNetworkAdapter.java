@@ -36,7 +36,24 @@ import com.google.common.graph.NetworkBuilder;
  * A graph adapter class using Guava's {@link MutableNetwork}.
  * 
  * <p>
- * Note that JGraphT's graph interface is the same as Guava's network interface.
+ * Changes in the adapter such as adding or removing vertices and edges are reflected in the
+ * underlying network.
+ * 
+ * Example usage: <blockquote>
+ * 
+ * <pre>
+ * MutableNetwork&lt;String, DefaultEdge&gt; mutableNetwork =
+ *     NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
+ * 
+ * Graph&lt;String, DefaultEdge&gt; graph =
+ *     new MutableNetworkAdapter&lt;&gt;(mutableNetwork, DefaultEdge.class);
+ * 
+ * graph.addVertex("v1");
+ * 
+ * System.out.println(mutableNetwork.nodes().contains("v1"));  // outputs true
+ * </pre>
+ * 
+ * </blockquote>
  * 
  * @author Dimitrios Michail
  *
@@ -48,7 +65,7 @@ public class MutableNetworkAdapter<V, E>
     implements Graph<V, E>, Cloneable, Serializable
 {
     private static final long serialVersionUID = 7450826703235510224L;
-    
+
     protected static final String GRAPH_IS_UNWEIGHTED = "Graph is unweighted";
 
     /**
