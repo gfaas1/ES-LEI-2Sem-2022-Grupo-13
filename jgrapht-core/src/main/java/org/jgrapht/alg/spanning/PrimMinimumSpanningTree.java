@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2018, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2013-2018, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -32,14 +32,13 @@ import java.util.*;
  * weighted undirected graph. The algorithm was developed by Czech mathematician V. Jarník and later
  * independently by computer scientist Robert C. Prim and rediscovered by E. Dijkstra.
  *
- * This implementation relies on a priority queue, and runs in $O(|E|log(|V|))$.
+ * This implementation relies on a Fibonacci heap, and runs in $O(|E| + |V|log(|V|))$.
  *
- * If your graph is dense consider using {@link PrimMinimumSpanningTreeDenseGraphs}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
- * @author Alexey Kudinkin, Alexandru Valeanu
+ * @author Alexandru Valeanu, Alexey Kudinkin
  * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
@@ -83,7 +82,6 @@ public class PrimMinimumSpanningTree<V, E>
 
         VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
         FibonacciHeapNode<VertexInfo>[] fibNodes = (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
-
         FibonacciHeap<VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
         for (int i = 0; i < N; i++) {
@@ -111,16 +109,18 @@ public class PrimMinimumSpanningTree<V, E>
             // update all (unspanned) neighbors of p
             for (E e : g.edgesOf(p)) {
                 V q = Graphs.getOppositeVertex(g, e, p);
-
                 int id = vertexMap.get(q);
-                double cost = g.getEdgeWeight(e);
 
-                // if the vertex is not explored and this is a better edge, then update the info
-                if (!vertices[id].spanned && vertices[id].distance > cost) {
-                    vertices[id].distance = cost;
-                    vertices[id].edgeFromParent = e;
+                // if the vertex is not explored and we found a better edge, then update the info
+                if (!vertices[id].spanned) {
+                    double cost = g.getEdgeWeight(e);
 
-                    fibonacciHeap.decreaseKey(fibNodes[id], cost);
+                    if (cost < vertices[id].distance){
+                        vertices[id].distance = cost;
+                        vertices[id].edgeFromParent = e;
+
+                        fibonacciHeap.decreaseKey(fibNodes[id], cost);
+                    }
                 }
             }
         }
@@ -135,5 +135,3 @@ public class PrimMinimumSpanningTree<V, E>
         public E edgeFromParent;
     }
 }
-
-// End PrimMinimumSpanningTree.java

@@ -22,7 +22,6 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
-import org.jgrapht.alg.spanning.PrimMinimumSpanningTreeDenseGraphs;
 import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
@@ -46,8 +45,8 @@ import java.util.function.Supplier;
  */
 public class MinimumSpanningTreePerformanceTest
 {
-    private static final int PERF_BENCHMARK_VERTICES_COUNT_DENSE = 1000;
-    private static final double PERF_BENCHMARK_EDGES_PROP_DENSE = 0.5;
+    private static final int PERF_BENCHMARK_VERTICES_COUNT_DENSE = 1500;
+    private static final double PERF_BENCHMARK_EDGES_PROP_DENSE = 0.65;
 
     private static final int PERF_BENCHMARK_VERTICES_COUNT_SPARSE = 100_000;
     private static final int PERF_BENCHMARK_EDGES_COUNT_SPARSE = 500_000;
@@ -135,23 +134,6 @@ public class MinimumSpanningTreePerformanceTest
         }
     }
 
-    public static class PrimDenseBenchmark
-            extends BenchmarkBase
-    {
-        @Override
-        SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
-                Graph<Integer, DefaultWeightedEdge> graph)
-        {
-            return new PrimMinimumSpanningTreeDenseGraphs<>(graph);
-        }
-
-        @Override
-        public String toString()
-        {
-            return "PrimDense";
-        }
-    }
-
     public static class KruskalBenchmark
         extends BenchmarkBase
     {
@@ -198,7 +180,6 @@ public class MinimumSpanningTreePerformanceTest
 
         List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
         algFactory.add(PrimBenchmark::new);
-        algFactory.add(PrimDenseBenchmark::new);
         algFactory.add(KruskalBenchmark::new);
         algFactory.add(BoruvkaBenchmark::new);
 
@@ -247,7 +228,6 @@ public class MinimumSpanningTreePerformanceTest
 
         List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
         algFactory.add(PrimBenchmark::new);
-        algFactory.add(PrimDenseBenchmark::new);
         algFactory.add(KruskalBenchmark::new);
         algFactory.add(BoruvkaBenchmark::new);
 
