@@ -45,6 +45,7 @@ Changes to JGraphT in each version:
     - Added `DinicMFImpl` which implements Dinic's maximum flow algorithm (contributed by Kirill Vishnyakov)
     - Optimized `PushRelabelMFImpl` implementation which drastically improves max flow computations on certain graphs. (contributed by Alexandru Văleanu) 
     - Added `RandomRegularGraphGenerator` (contributed by Emilio Cruciani)
+    - Reimplemented significantly faster version of Prim's minimum spanning tree algorithm using a FibonacciHeap (suggested by Joris Kinable, contributed by Alexandru Văleanu)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
