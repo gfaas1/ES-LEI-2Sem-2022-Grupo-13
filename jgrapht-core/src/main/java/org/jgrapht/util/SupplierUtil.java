@@ -18,6 +18,7 @@
 package org.jgrapht.util;
 
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.jgrapht.graph.DefaultEdge;
@@ -32,28 +33,28 @@ public class SupplierUtil
 {
 
     /**
-     * Supplier for {@link DefaultEdge}. 
+     * Supplier for {@link DefaultEdge}.
      */
     public static final Supplier<DefaultEdge> DEFAULT_EDGE_SUPPLIER =
         createSupplier(DefaultEdge.class);
-    
+
     /**
-     * Supplier for {@link DefaultWeightedEdge}. 
+     * Supplier for {@link DefaultWeightedEdge}.
      */
     public static final Supplier<DefaultWeightedEdge> DEFAULT_WEIGHTED_EDGE_SUPPLIER =
         createSupplier(DefaultWeightedEdge.class);
-    
+
     /**
      * Supplier for {@link Object}.
      */
     public static final Supplier<Object> OBJECT_SUPPLIER = createSupplier(Object.class);
-    
+
     /**
      * Create a supplier from a class which calls the default constructor.
      * 
      * @param clazz the class
      * @return the supplier
-     * @param <T> the type of results supplied by this supplier 
+     * @param <T> the type of results supplied by this supplier
      */
     public static <T> Supplier<T> createSupplier(Class<? extends T> clazz)
     {
@@ -86,10 +87,31 @@ public class SupplierUtil
     {
         return new IntegerSupplier(start);
     }
+    
+    /**
+     * Create a long supplier which returns a sequence starting from zero.
+     * 
+     * @return a long supplier
+     */
+    public static Supplier<Long> createLongSupplier()
+    {
+        return new LongSupplier(0);
+    }
 
     /**
-     * Create a string supplier which returns unique strings. The returns strings are 
-     * simply integers starting from zero.
+     * Create a long supplier which returns a sequence starting from a specific numbers.
+     * 
+     * @param start where to start the sequence
+     * @return a long supplier
+     */
+    public static Supplier<Long> createLongSupplier(long start)
+    {
+        return new LongSupplier(start);
+    }
+
+    /**
+     * Create a string supplier which returns unique strings. The returns strings are simply
+     * integers starting from zero.
      * 
      * @return a string supplier
      */
@@ -97,12 +119,22 @@ public class SupplierUtil
     {
         return new StringSupplier(0);
     }
-    
+
     /**
-     * Create a string supplier which returns unique strings. The returns strings are 
-     * simply integers starting from start.
+     * Create a string supplier which returns random UUIDs.
      * 
-     * @param start where to start the sequence 
+     * @return a string supplier
+     */
+    public static Supplier<String> createRandomUUIDStringSupplier()
+    {
+        return new RandomUUIDStringSupplier();
+    }
+
+    /**
+     * Create a string supplier which returns unique strings. The returns strings are simply
+     * integers starting from start.
+     * 
+     * @param start where to start the sequence
      * @return a string supplier
      */
     public static Supplier<String> createStringSupplier(int start)
@@ -114,7 +146,7 @@ public class SupplierUtil
         implements Supplier<Integer>, Serializable
     {
         private static final long serialVersionUID = -4714266728630636497L;
-        
+
         private int i = 0;
 
         public IntegerSupplier(int start)
@@ -128,14 +160,33 @@ public class SupplierUtil
             return i++;
         }
     }
+    
+    private static class LongSupplier
+        implements Supplier<Long>, Serializable
+    {
+        private static final long serialVersionUID = 4994477932143967277L;
+        
+        private long i = 0;
+
+        public LongSupplier(long start)
+        {
+            this.i = start;
+        }
+
+        @Override
+        public Long get()
+        {
+            return i++;
+        }
+    }
 
     private static class StringSupplier
         implements Supplier<String>, Serializable
     {
         private static final long serialVersionUID = -5025488316341437260L;
-        
+
         private int i = 0;
-        
+
         public StringSupplier(int start)
         {
             this.i = start;
@@ -145,6 +196,18 @@ public class SupplierUtil
         public String get()
         {
             return String.valueOf(i++);
+        }
+    }
+
+    private static class RandomUUIDStringSupplier
+        implements Supplier<String>, Serializable
+    {
+        private static final long serialVersionUID = -4636552536822031851L;
+
+        @Override
+        public String get()
+        {
+            return UUID.randomUUID().toString();
         }
     }
 

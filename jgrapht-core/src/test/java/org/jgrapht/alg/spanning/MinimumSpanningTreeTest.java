@@ -21,12 +21,12 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.graph.WeightedPseudograph;
+
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -88,8 +88,8 @@ public abstract class MinimumSpanningTreeTest {
 
         for (int i = 0; i < repeat; i++) {
             WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+                new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gg.generateGraph(g);
 
             for (DefaultWeightedEdge e : g.edgeSet()) {
                 g.setEdgeWeight(e, rng.nextDouble());
