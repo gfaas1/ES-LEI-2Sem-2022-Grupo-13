@@ -8,6 +8,9 @@
 	</parent>
 	<artifactId>jgrapht-core</artifactId>
 	<name>JGraphT - Core</name>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -68,7 +71,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -80,8 +83,7 @@
 				<configuration>
 					<instructions>
 						<Automatic-Module-Name>org.jgrapht.core</Automatic-Module-Name>
-						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors (see
-							http://sourceforge.net/projects/jgrapht/)</Bundle-Vendor>
+						<Bundle-Vendor>Barak Naveh, John V. Sichi and contributors</Bundle-Vendor>
 					</instructions>
 				</configuration>
 			</plugin>

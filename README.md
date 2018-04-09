@@ -51,15 +51,18 @@ The files below make up the table of contents for a release distribution archive
 - `license-LGPL.txt` GNU Lesser General Public License 2.1
 - `javadoc/` Javadoc documentation
 - `lib/` JGraphT libraries and dependencies:
-    - `antlr4-runtime-x.y.jar` ANTLR parser runtime
-    - `commons-lang3-x.y.jar` Apache Commons Lang library
     - `jgrapht-core-x.y.z.jar` core library
     - `jgrapht-demo-x.y.z.jar` demo classes
     - `jgrapht-ext-x.y.z.jar` extensions
     - `jgrapht-ext-x.y.z-uber.jar` all libraries rolled into one
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
     - `jgrapht-io-x.y.z-uber.jar` all libraries rolled into one
+    - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
+    - `jgrapht-guava-x.y.z-uber.jar` all libraries rolled into one
     - `jgraphx-a.b.c.jar` JGraphX dependency library
+    - `antlr4-runtime-x.y.jar` ANTLR parser runtime
+    - `commons-lang3-x.y.jar` Apache Commons Lang library
+    - `guava-x.y-jre.jar` Guava library
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
@@ -127,6 +130,7 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 - [JGraphX](http://www.jgraph.com/jgraph.html) is a graph visualizations and editing component (the successor to the older JGraph library). You need JGraphX only if you want to use the JGraphXAdapter to visualize the JGraphT graph interactively via JGraphX. JGraphX is licensed under the terms of the BSD license.
 - [Touchgraph](http://sourceforge.net/projects/touchgraph) is a graph visualization and layout component. You need Touchgraph only if you want to create graph visualizations using the JGraphT-to-Touchgraph converter. Touchgraph is licensed under the terms of an Apache-style License.
 - [ANTLR](http://www.antlr.org) is a parser generator.  It is used for reading text files containing graph representations, and is only required by the jgrapht-io module.  ANTLR v4 is licensed under the terms of the [BSD license](http://www.antlr.org/license.html).
+- [Guava](https://github.com/google/guava) is Google's core libraries for Java. You need Guava only if you are already using Guava's graph data-structures and wish to use our adapter classes in order to execute JGraphT's algorithms.
 
 ## Online Resources ##
 
