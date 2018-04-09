@@ -41,7 +41,8 @@ import java.util.function.Supplier;
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
  * 
- * @author Dimitrios Michail, Alexandru Valeanu
+ * @author Dimitrios Michail
+ * @author Alexandru Valeanu
  */
 public class MinimumSpanningTreePerformanceTest
 {
@@ -191,7 +192,7 @@ public class MinimumSpanningTreePerformanceTest
         System.out.println("-------------------------------");
         System.out.println(
             "Using G(n,p) random graph with n = " + PERF_BENCHMARK_VERTICES_COUNT_DENSE + ", p = "
-                + PERF_BENCHMARK_VERTICES_COUNT_DENSE);
+                + PERF_BENCHMARK_EDGES_PROP_DENSE);
         System.out.println("Warmup phase " + WARMUP_REPEAT + " executions");
         System.out.println("Averaging results over " + REPEAT + " executions");
 
@@ -246,6 +247,7 @@ public class MinimumSpanningTreePerformanceTest
 
         List<Supplier<BenchmarkBase>> algFactory = new ArrayList<>();
         algFactory.add(PrimBenchmark::new);
+        algFactory.add(PrimDenseBenchmark::new);
         algFactory.add(KruskalBenchmark::new);
         algFactory.add(BoruvkaBenchmark::new);
 
