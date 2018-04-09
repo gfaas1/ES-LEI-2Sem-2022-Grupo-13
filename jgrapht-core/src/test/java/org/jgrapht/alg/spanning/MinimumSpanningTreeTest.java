@@ -17,6 +17,13 @@
  */
 package org.jgrapht.alg.spanning;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
+
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
@@ -26,15 +33,8 @@ import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.graph.WeightedPseudograph;
-
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public abstract class MinimumSpanningTreeTest {
 
