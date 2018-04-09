@@ -44,6 +44,7 @@ Changes to JGraphT in each version:
     - Removed lazy instantiation of containers in edge specifics (contributed by Dimitrios Michail)
     - Added `DinicMFImpl` which implements Dinic's maximum flow algorithm (contributed by Kirill Vishnyakov)
     - Optimized `PushRelabelMFImpl` implementation which drastically improves max flow computations on certain graphs. (contributed by Alexandru Văleanu) 
+    - Added `RandomRegularGraphGenerator` (contributed by Emilio Cruciani)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
