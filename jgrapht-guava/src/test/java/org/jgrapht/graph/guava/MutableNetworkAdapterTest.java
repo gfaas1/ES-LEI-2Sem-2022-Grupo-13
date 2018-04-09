@@ -29,6 +29,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.guava.MutableNetworkAdapter;
 import org.junit.Test;
 
+import com.google.common.graph.MutableNetwork;
 import com.google.common.graph.NetworkBuilder;
 
 /**
@@ -39,6 +40,24 @@ import com.google.common.graph.NetworkBuilder;
 public class MutableNetworkAdapterTest
 {
 
+    /**
+     * Javadoc example
+     */
+    @Test
+    public void testExample1()
+    {
+        MutableNetwork<String, DefaultEdge> mutableNetwork = NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
+        
+        Graph<String,
+            DefaultEdge> graph = new MutableNetworkAdapter<>(
+                mutableNetwork,
+                DefaultEdge.class);
+
+        graph.addVertex("v1");
+        
+        assertTrue(mutableNetwork.nodes().contains("v1"));
+    }
+    
     /**
      * Test the most general version of the directed graph.
      */

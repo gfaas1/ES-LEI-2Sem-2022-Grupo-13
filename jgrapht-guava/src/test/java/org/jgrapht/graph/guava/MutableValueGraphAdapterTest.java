@@ -131,11 +131,55 @@ public class MutableValueGraphAdapterTest
         g.addEdge("v1", "v5");
         assertEquals(1.0d, g.getEdgeWeight(EndpointPair.ordered("v1", "v5")), 1e-9);
 
-        // check that the adapter is only one way
         g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 99.0);
         assertEquals(99.0d, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
     }
 
+    /**
+     * Example on javadoc
+     */
+    @Test
+    public void testExample()
+    {
+        MutableValueGraph<String, MyValue> valueGraph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        
+        valueGraph.addNode("v1");
+        valueGraph.addNode("v2");
+        valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
+        
+        Graph<String, EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
+                valueGraph, new MyValue(1.0),
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        
+        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
+        
+        valueGraph.putEdgeValue("v1", "v2", new MyValue(9.0));
+        
+        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 9.0, 1e-9);
+    }
+    
+    /**
+     * Example on javadoc
+     */
+    @Test
+    public void testExampleDoubleWeights()
+    {
+        MutableValueGraph<String, Double> graph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+
+        graph.addNode("v1");
+        graph.addNode("v2");
+        graph.putEdgeValue("v1", "v2", 3.0);
+
+        Graph<String, EndpointPair<String>> g = new MutableDoubleValueGraphAdapter<>(graph);
+
+        assertEquals(3.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
+        
+        g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 7.0);
+        
+        assertEquals(7.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
+    }
+    
     /**
      * Test the most general version of the directed graph.
      */
@@ -377,7 +421,6 @@ public class MutableValueGraphAdapterTest
     private static class MyValue
         implements Serializable
     {
-
         private static final long serialVersionUID = 1L;
 
         private double value;
@@ -391,7 +434,6 @@ public class MutableValueGraphAdapterTest
         {
             return value;
         }
-
     }
 
 }

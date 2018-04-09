@@ -130,6 +130,26 @@ public class ImmutableValueGraphAdapterTest
         }
     }
     
+    /**
+     * Example on javadoc
+     */
+    @Test
+    public void testExample()
+    {
+        MutableValueGraph<String, MyValue> mutableValueGraph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+        
+        mutableValueGraph.addNode("v1");
+        mutableValueGraph.addNode("v2");
+        mutableValueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
+        
+        ImmutableValueGraph<String, MyValue> immutableValueGraph = ImmutableValueGraph.copyOf(mutableValueGraph);
+        
+        Graph<String, EndpointPair<String>> graph = new ImmutableValueGraphAdapter<>(
+            immutableValueGraph, (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        
+        assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
+    }
+    
     
     /**
      * Test the most general version of the directed graph.
