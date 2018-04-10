@@ -21,6 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
+import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
@@ -59,7 +60,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> clique = inspector.getMaximumClique();
         assertNotNull(clique);
-        assertEquals(clique.size(), 0);
+        assertEquals(0, clique.size());
     }
 
     /**
@@ -78,6 +79,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> clique = inspector.getMaximumClique();
         assertNotNull(clique);
+        assertEquals(4, clique.size());
         assertIsClique(graph, clique);
     }
 
@@ -112,6 +114,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> clique = inspector.getMaximumClique();
         assertNotNull(clique);
+        assertEquals(2, clique.size());
         assertIsClique(graph, clique);
     }
 
@@ -125,7 +128,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> set = inspector.getMaximumIndependentSet();
         assertNotNull(set);
-        assertEquals(set.size(), 0);
+        assertEquals(0, set.size());
     }
 
     /**
@@ -143,7 +146,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> set = inspector.getMaximumIndependentSet();
         assertNotNull(set);
-        assertEquals(set.size(), 1);
+        assertEquals(1, set.size());
     }
 
     /**
@@ -183,7 +186,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> set = inspector.getMaximumIndependentSet();
         assertNotNull(set);
-        assertEquals(set.size(), 2);
+        assertEquals(2, set.size());
         assertIsIndependentSet(graph, set);
     }
 
@@ -196,9 +199,9 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         VertexColoringAlgorithm.Coloring<Integer> coloring = inspector.getColoring();
         assertNotNull(coloring);
-        assertEquals(coloring.getNumberColors(), 0);
-        assertEquals(coloring.getColors().size(), 0);
-        assertEquals(coloring.getColorClasses().size(), 0);
+        assertEquals(0, coloring.getNumberColors());
+        assertEquals(0, coloring.getColors().size());
+        assertEquals(0, coloring.getColorClasses().size());
     }
 
     /**
@@ -213,7 +216,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         VertexColoringAlgorithm.Coloring<Integer> coloring = inspector.getColoring();
         assertNotNull(coloring);
-        assertEquals(coloring.getNumberColors(), 3);
+        assertEquals(3, coloring.getNumberColors());
         assertIsColoring(graph, coloring);
     }
 
@@ -262,6 +265,7 @@ public class ChordalityInspectorTest {
         VertexColoringAlgorithm.Coloring<Integer> coloring = inspector.getColoring();
         assertNotNull(coloring);
         assertIsColoring(graph, coloring);
+        assertEquals(5, coloring.getNumberColors());
     }
 
     /**
@@ -286,6 +290,7 @@ public class ChordalityInspectorTest {
         VertexColoringAlgorithm.Coloring<Integer> coloring = inspector.getColoring();
         assertNotNull(coloring);
         assertIsColoring(graph, coloring);
+        assertEquals(3, coloring.getNumberColors());
     }
 
     /**
@@ -295,14 +300,14 @@ public class ChordalityInspectorTest {
     public void testIterationOrder() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph, iterationOrder);
-        assertEquals(inspector.getIterationOrder(), iterationOrder);
+        assertEquals(iterationOrder, inspector.getIterationOrder());
     }
 
     /**
      * Test on the big cycle
      */
     @Test
-    public void testGetHole() {
+    public void testGetChordlessCycle() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         int upperBound = 100;
         for (int i = 0; i < upperBound; i++) {
@@ -316,11 +321,11 @@ public class ChordalityInspectorTest {
     }
 
     /**
-     * Tests whether repeated calls to the {@link ChordalityInspector#getSearchOrder()} return
+     * Tests whether repeated calls to the {@link ChordalityInspector#getPerfectEliminationOrder()} return
      * the same vertex order.
      */
     @Test
-    public void testGetOrder() {
+    public void testPerfectEliminationOrder() {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
@@ -328,12 +333,23 @@ public class ChordalityInspectorTest {
         Graphs.addEdgeWithVertices(graph, 2, 4);
         Graphs.addEdgeWithVertices(graph, 3, 4);
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph, iterationOrder);
-        List<Integer> order1 = inspector.getSearchOrder();
+        List<Integer> order1 = inspector.getPerfectEliminationOrder();
         assertNull(inspector.getHole());
         graph.removeVertex(1);
-        List<Integer> order2 = inspector.getSearchOrder();
+        List<Integer> order2 = inspector.getPerfectEliminationOrder();
         assertEquals(order1, order2);
         assertNull(inspector.getHole());
+    }
+
+    /**
+     * Tests whether returned list is unmodifiable
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public void testUnmodifiableList() {
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
+        List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
+        perfectEliminationOrder.add(0);
     }
 
     /**
@@ -344,6 +360,8 @@ public class ChordalityInspectorTest {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         assertTrue(inspector.isChordal());
+        List<Integer> perfectEliminationOrder = inspector.getPerfectEliminationOrder();
+        assertNotNull(perfectEliminationOrder);
     }
 
     /**
@@ -363,6 +381,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         assertTrue(inspector.isChordal());
         assertNull(inspector.getHole());
+        assertNotNull(inspector.getPerfectEliminationOrder());
     }
 
     /**
@@ -381,6 +400,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         assertTrue(inspector.isChordal());
         assertNull(inspector.getHole());
+        assertNotNull(inspector.getPerfectEliminationOrder());
     }
 
     /**
@@ -409,6 +429,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         assertTrue(inspector.isChordal());
         assertNull(inspector.getHole());
+        assertNotNull(inspector.getPerfectEliminationOrder());
     }
 
     /**
@@ -440,6 +461,7 @@ public class ChordalityInspectorTest {
         GraphPath<Integer, DefaultEdge> path = inspector.getHole();
         assertNotNull(path);
         assertIsHole(graph, path);
+        assertNull(inspector.getPerfectEliminationOrder());
     }
 
     /**
@@ -457,6 +479,7 @@ public class ChordalityInspectorTest {
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         assertTrue(inspector.isChordal());
         assertNull(inspector.getHole());
+        assertNotNull(inspector.getPerfectEliminationOrder());
     }
 
     /**
@@ -481,7 +504,61 @@ public class ChordalityInspectorTest {
         GraphPath<Integer, DefaultEdge> path = inspector.getHole();
         assertNotNull(path);
         assertIsHole(graph, path);
+        assertNull(inspector.getPerfectEliminationOrder());
     }
+
+    /**
+     * Test for correct hole detection
+     */
+    @Test
+    public void testIsChordal8() {
+        Graph<Integer, DefaultEdge> ellinghamHorton78 = NamedGraphGenerator.ellinghamHorton78Graph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(ellinghamHorton78);
+        assertFalse(inspector.isChordal());
+        assertIsHole(ellinghamHorton78, inspector.getHole());
+    }
+
+    /**
+     * Test for correct hole detection
+     */
+    @Test
+    public void testIsChordal9() {
+        Graph<Integer, DefaultEdge> gosset = NamedGraphGenerator.gossetGraph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(gosset);
+        assertFalse(inspector.isChordal());
+        assertIsHole(gosset, inspector.getHole());
+    }
+
+    /**
+     * Test for correct hole detection
+     */
+    @Test
+    public void testIsChordal10() {
+        Graph<Integer, DefaultEdge> klein = NamedGraphGenerator.klein3RegularGraph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(klein);
+        assertFalse(inspector.isChordal());
+        assertIsHole(klein, inspector.getHole());
+    }
+
+    /**
+     * Test for correct hole detection
+     */
+    @Test
+    public void testIsChordal11() {
+        Graph<Integer, DefaultEdge> schläfli = NamedGraphGenerator.schläfliGraph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(schläfli);
+        assertFalse(inspector.isChordal());
+        assertIsHole(schläfli, inspector.getHole());
+    }
+
+    @Test
+    public void testIsChordal12() {
+        Graph<Integer, DefaultEdge> buckyBall = NamedGraphGenerator.buckyBallGraph();
+        ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(buckyBall);
+        assertFalse(inspector.isChordal());
+        assertIsHole(buckyBall, inspector.getHole());
+    }
+
 
     /**
      * Basic test for {@link ChordalityInspector#isPerfectEliminationOrder(List)}
@@ -683,7 +760,7 @@ public class ChordalityInspectorTest {
     }
 
     /**
-     * Checks whether {@code cycle} is a hole in graph {@code graph}
+     * Checks whether {@code cycle} is a hole in {@code graph}
      *
      * @param graph the tested graph.
      * @param path  the tested cycle.

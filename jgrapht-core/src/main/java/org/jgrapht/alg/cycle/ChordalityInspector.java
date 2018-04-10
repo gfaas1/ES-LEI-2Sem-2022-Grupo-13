@@ -30,35 +30,39 @@ import org.jgrapht.traverse.MaximumCardinalityIterator;
 import java.util.*;
 
 /**
- * Allows testing chordality of a graph. The inspected {@code graph} is specified at construction time
- * and cannot be modified. Currently chordality of a graph is tested via {@link MaximumCardinalityIterator}
- * by default. When {@link IterationOrder#LEX_BFS} is specified as a second constructor parameter, this
- * {@code ChordalityInspector} uses {@link LexBreadthFirstIterator} to compute perfect elimination order.
+ * Tests whether a graph is <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal</a>.
+ * A chordal graph is a simple graph in which all <a href="http://mathworld.wolfram.com/GraphCycle.html">
+ * cycles</a> of four or more vertices have a <a href="http://mathworld.wolfram.com/CycleChord.html">
+ * chord</a>. A chord is an edge that is not part of the cycle but connects two vertices of the cycle.
+ * A graph is chordal if and only if it has a
+ * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+ * perfect elimination order</a>. A perfect elimination order in a graph is an ordering of the vertices
+ * of the graph such that, for each vertex $v$, $v$ and the neighbors of $v$ that occur after $v$ in the
+ * order form a clique. This implementation uses either {@link MaximumCardinalityIterator} or
+ * {@link LexBreadthFirstIterator} to compute a perfect elimination order. The desired method
+ * is specified during construction time.
  * <p>
- * A <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal graph</a> is one in which all cycles of
- * four or more vertices have a chord, which is an edge that is not part of the cycle but connects two vertices
- * of the cycle.
+ * Chordal graphs are a subset of the <a href="http://mathworld.wolfram.com/PerfectGraph.html">
+ * perfect graphs</a>. They may be recognized in polynomial time, and several problems that are hard on
+ * other classes of graphs such as minimum vertex coloring or determining maximum cardinality cliques and
+ * independent set can be performed in polynomial time when the input is chordal.
  * <p>
- * A graph is chordal iff its the vertices can be arranged into a perfect elimination order. More than one perfect
- * elimination order may exist for a given graph. Either maximum cardinality search or lexicographical breadth-first
- * search can be used to produce such an order.
+ * All methods in this class run in $\mathcal{O}(|V| + |E|)$ time. Determining whether a graph is
+ * chordal takes $\mathcal{O}(|V| + |E|)$ time, independent of the algorithm ({@link MaximumCardinalityIterator}
+ * or {@link LexBreadthFirstIterator}) used to compute the perfect elimination order. Similarly, for chordal
+ * graphs, this class can determine a perfect elmination order, a minimum vertex coloring, a maximum cardinality
+ * clique, or an independent set in $\mathcal{O}(|V| + |E|)$ time. Finally, if the input graph is not chordal,
+ * this class can detect a chordless cycle in $\mathcal{O}(|V| + |E|)$ time.
  * <p>
- * Both lexicographical BFS and maximum cardinality search run in $\mathcal{O}(|V| + |E|)$. Checking whether given order
- * is the perfect elimination order via {@link ChordalityInspector#isPerfectEliminationOrder(List)} takes
- * $\mathcal{O}(|V| + |E|)$ as well. Finding  hole of the graph, if it isn't chordal, takes O(|V| + |E|).
- * So, overall time complexity of the method {@link ChordalityInspector#isChordal()} is $\mathcal{O}(|V| + |E|)$.
- * <p>
- * Of the graph is chordal, there exist efficient for following problems: graph coloring problem,
- * maximum independent set problem and maximum clique problem. The implementations in this {@code ChordalityInspector}
- * run in $\mathcal{O}(|V| + |E|)$.
- * <p>
- * All the information about the inspected {@code graph} is computed lazily.
+ * All the methods in this class are invoked in a lazy fashion, meaning that computations are only
+ * started once the method gets invoked.
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
- * @author Timofey Chudakov
  * @see LexBreadthFirstIterator
  * @see MaximumCardinalityIterator
+ *
+ * @author Timofey Chudakov
  * @since March 2018
  */
 public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
@@ -67,40 +71,41 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     private final IterationOrder iterationOrder;
     /**
+     * Iterator used for producing perfect elimination order.
+     */
+    private final GraphIterator<V, E> orderIterator;
+    /**
      * The inspected graph.
      */
-    private Graph<V, E> graph;
+    private final Graph<V, E> graph;
     /**
-     * Contains true if the graph is chordal, otherwise false. Is null before the first call to the
-     * {@link ChordalityInspector#isChordal()}.
+     * Contains true if the graph is chordal, otherwise false.
      */
-    private Boolean chordal = null;
+    private boolean chordal = false;
     /**
      * Order produced by {@code orderIterator}.
      */
     private List<V> order;
-    /**
-     * Iterator used for producing perfect elimination order.
-     */
-    private GraphIterator<V, E> orderIterator;
 
     /**
-     * A chordless cycle of the inspected {@code graph}.
+     * A hole contained in the inspected {@code graph}.
      */
     private GraphPath<V, E> hole;
 
     /**
-     * A coloring of the inspected {@code graph}.
+     * A minimum graph vertex coloring of the inspected {@code graph}.
+     * The number of colors used in the coloring equals the chromatic number of the input graph.
      */
     private Coloring<V> coloring;
 
     /**
-     * A maximum independent set of the inspected {@code graph}.
+     * A maximum cardinality independent set of the inspected {@code graph}.
      */
     private Set<V> maximumIndependentSet;
 
     /**
-     * A maximum clique of the inspected {@code graph}.
+     * A maximum cardinality clique of the inspected {@code graph}. The cardinality of this
+     * clique equals to the number of colors used for the minimum graph vertex coloring.
      */
     private Set<V> maximumClique;
 
@@ -122,12 +127,14 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      * @param iterationOrder the constant, which defines iterator to be used by this {@code ChordalityInspector}.
      */
     public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder) {
-        this.graph = Objects.requireNonNull(graph);
-        this.iterationOrder = iterationOrder;
-        this.hole = null;
+        Objects.requireNonNull(graph);
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
+        } else {
+            this.graph = graph;
         }
+        this.iterationOrder = iterationOrder;
+        this.hole = null;
         if (iterationOrder == IterationOrder.MCS) {
             this.orderIterator = new MaximumCardinalityIterator<>(graph);
         } else {
@@ -141,48 +148,46 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      * @return true if this graph is chordal, otherwise false.
      */
     public boolean isChordal() {
-        if (!isComputed()) {
-            order = lazyComputeOrder();
+        if (order == null) {
+            order = Collections.unmodifiableList(lazyComputeOrder());
             chordal = isPerfectEliminationOrder(order, true);
         }
         return chordal;
     }
 
     /**
-     * Checks whether the chordality of the {@code graph} has been computed already.
+     * Returns a <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * perfect elimination order</a> if one exists. The existence of a perfect elimination order
+     * certifies that the graph is chordal. This method returns null if the graph is not chordal.
      *
-     * @return true, if the chordality of the graph has been computed already, false otherwise.
+     * @return a perfect elimination order of a graph or null if graph is not chordal.
      */
-    public boolean isComputed() {
-        return chordal != null;
+    public List<V> getPerfectEliminationOrder() {
+        isChordal();
+        if (chordal) {
+            return order;
+        }
+        return null;
     }
 
     /**
-     * Returns the computed vertex order. In the case where inspected graph is chordal, returned order
-     * is a perfect elimination order.
+     * A graph which is not chordal, must contain a <a href="http://mathworld.wolfram.com/GraphHole.html">hole</a>
+     * (chordless cycle on 4 or more vertices). The existence of a hole certifies that the graph
+     * is not chordal. This method returns a chordless cycle if the graph is not chordal, or null if the
+     * graph is chordal.
      *
-     * @return computed vertex order.
-     */
-    public List<V> getSearchOrder() {
-        return lazyComputeOrder();
-    }
-
-    /**
-     * Returns some chordless cycle on 4 or more vertices of the {@code graph}.
-     * If the {@code graph} is chordal, returns null.
-     *
-     * @return chordless cycle of the {@code graph} if the graph isn't chordal, null otherwise.
+     * @return a hole if the {@code graph} is not chordal, or null if the graph is chordal.
      */
     public GraphPath<V, E> getHole() {
-        if (!isComputed()) {
-            isChordal();
-        }
+        isChordal();
+
         return hole;
     }
 
     /**
-     * Returns a coloring of the inspected {@code graph}. If the graph isn't
-     * chordal, returns null.
+     * Returns a <a href="http://mathworld.wolfram.com/MinimumVertexColoring.html">minimum vertex coloring</a>
+     * of the inspected {@code graph}. If the graph isn't chordal, returns null. The number of colors used in
+     * the coloring equals the chromatic number of the input graph.
      *
      * @return a coloring of the {@code graph} if it is chordal, null otherwise.
      */
@@ -192,8 +197,9 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Returns a maximum independent set of the inspected {@code graph}.
-     * If the graph isn't chordal, returns null.
+     * Returns a <a href = "http://mathworld.wolfram.com/MaximumIndependentVertexSet.html">
+     * maximum cardinality independent set</a> of the inspected {@code graph}. If the graph
+     * isn't chordal, returns null.
      *
      * @return a maximum independent set of the {@code graph} if it is chordal, false otherwise.
      */
@@ -202,8 +208,8 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Returns a maximum clique of the inspected {@code graph}. If the graph isn't chordal,
-     * returns null.
+     * Returns a <a href="http://mathworld.wolfram.com/MaximumClique.html">maximum cardinality clique</a>
+     * of the inspected {@code graph}. If the graph isn't chordal, returns null.
      *
      * @return a maximum clique of the {@code graph} if it is chordal, null otherwise.
      */
@@ -212,8 +218,9 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order with
-     * respect to the inspected graph. Returns false, if the inspected graph isn't chordal.
+     * Checks whether the vertices in the {@code vertexOrder} form a
+     * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * perfect elimination order</a> with respect to the inspected graph. Returns false otherwise.
      *
      * @param vertexOrder the sequence of vertices of the {@code graph}.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
@@ -246,25 +253,30 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     private Coloring<V> lazyComputeColoring() {
         if (coloring == null) {
-            if (!isComputed()) {
-                isChordal();
-            }
+            isChordal();
+
             if (chordal) {
                 Map<V, Integer> vertexColoring = new HashMap<>(order.size());
                 Map<V, Integer> vertexInOrder = getVertexInOrder(order);
                 for (V vertex : order) {
-                    vertexColoring.put(vertex, getPredecessors(vertexInOrder, vertex).stream().map(vertexColoring::get)
-                            .max(Integer::compareTo).orElse(-1) + 1);
+                    Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
+                    Set<Integer> predecessorColors = new HashSet<>(predecessors.size());
+                    predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
+
+                    // find the minimum unused color in the set of predecessors
+                    int minUnusedColor = 0;
+                    while (predecessorColors.contains(minUnusedColor)) {
+                        ++minUnusedColor;
+                    }
+                    vertexColoring.put(vertex, minUnusedColor);
                 }
-                int maxColor = order.stream().map(vertexColoring::get).max(Integer::compareTo).orElse(-1) + 1;
-                coloring = new ColoringImpl<>(vertexColoring, maxColor);
-                return coloring;
-            } else {
-                return null;
+                int maxColor = (int) vertexColoring.values().stream().distinct().count();
+                return coloring = new ColoringImpl<>(vertexColoring, maxColor);
             }
-        } else {
-            return coloring;
+            return null;
         }
+        return coloring;
+
     }
 
     /**
@@ -275,17 +287,21 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     private Set<V> lazyComputeMaximumIndependentSet() {
         if (maximumIndependentSet == null) {
-            if (!isComputed()) {
-                isChordal();
-            }
+            isChordal();
+
             if (chordal) {
+                // iterate the order from the end to the beginning
+                // chooses vertices, that don't have neighbors in the current independent set
+                // adds all its neighbors to the restricted set
+
                 Set<V> restricted = new HashSet<>();
-                Set<V> independent = new HashSet<>();
+                Set<V> maximumIndependentSet = new HashSet<>();
                 ListIterator<V> reverse = order.listIterator(order.size());
+
                 while (reverse.hasPrevious()) {
                     V previous = reverse.previous();
                     if (!restricted.contains(previous)) {
-                        independent.add(previous);
+                        maximumIndependentSet.add(previous);
                         for (E edge : graph.edgesOf(previous)) {
                             V opposite = Graphs.getOppositeVertex(graph, edge, previous);
                             if (!previous.equals(opposite)) {
@@ -294,13 +310,11 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
                         }
                     }
                 }
-                return maximumIndependentSet = independent;
-            } else {
-                return null;
+                return this.maximumIndependentSet = maximumIndependentSet;
             }
-        } else {
-            return maximumIndependentSet;
+            return null;
         }
+        return maximumIndependentSet;
     }
 
     /**
@@ -310,10 +324,11 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      */
     private Set<V> lazyComputeMaximumClique() {
         if (maximumClique == null) {
-            if (!isComputed()) {
-                isChordal();
-            }
+            isChordal();
+
             if (chordal) {
+                // finds the vertex with the maximum cardinality predecessor list
+
                 lazyComputeColoring();
                 Map<V, Integer> vertexInOrder = getVertexInOrder(order);
                 Map.Entry<V, Integer> maxEntry = coloring.getColors().entrySet().stream().max(
@@ -325,19 +340,19 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
                     maximumClique.add(maxEntry.getKey());
                     return maximumClique;
                 }
-            } else {
-                return null;
             }
-        } else {
-            return maximumClique;
+            return null;
         }
+        return maximumClique;
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} are in perfect elimination order.
-     * Returns false, if the inspected graph isn't chordal.
+     * Checks whether the vertices in the {@code vertexOrder} form a
+     * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * perfect elimination order</a> with respect to the inspected graph. Returns false otherwise.
+     * Computes a hole if the {@code computeHole} is true.
      *
-     * @param vertexOrder the sequence of vertices of {@code graph}.
+     * @param vertexOrder           the sequence of vertices of {@code graph}.
      * @param computeHole tells whether to compute the hole if the graph isn't chordal.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
      * perfect elimination order.
@@ -353,12 +368,9 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
                     for (V predecessor : predecessors) {
                         if (!predecessor.equals(maxPredecessor) && !graph.containsEdge(predecessor, maxPredecessor)) {
                             if (computeHole) {
-                                int position = vertexInOrder.get(vertex);
-                                Set<V> subgraph = new HashSet<>(position + 1);
-                                for (int i = 0; i <= position; i++) {
-                                    subgraph.add(order.get(i));
-                                }
-                                findHole(predecessor, vertex, maxPredecessor, subgraph);
+                                // predecessor, vertex and maxPredecessor are vertices, which lie consecutively on
+                                // some chordless cycle in the graph
+                                findHole(predecessor, vertex, maxPredecessor);
                             }
                             return false;
                         }
@@ -388,24 +400,30 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Computes a chordless cycle from the vertices of {@code subgraph} of the inspected {@code graph}
+     * Computes a hole from the vertices of {@code subgraph} of the inspected {@code graph}
      * with vertices {@code a}, {@code b} and {@code c} on this cycle (there must be no edge between
      * {@code a} and {@code c}.
      *
-     * @param a        vertex that belongs to the cycle
-     * @param b        vertex that belongs to the cycle
-     * @param c        vertex that belongs to the cycle
-     * @param subgraph vertices that define a subgraph of the {@code graph}, which
-     *                 contains chordless cycle.
+     * @param a vertex that belongs to the cycle
+     * @param b vertex that belongs to the cycle
+     * @param c vertex that belongs to the cycle
      */
-    private void findHole(V a, V b, V c, Set<V> subgraph) {
+    private void findHole(V a, V b, V c) {
+        // b is the first vertex in the order produced by the iterator whose predecessors don't form a clique.
+        // a and c are a pair of vertices, which are predecessors of b and are not adjacent. These three vertices
+        // belong to some chordless cycle in the G[S] where G[S] is a subgraph of G on vertices in
+        // S = {u : index_in_order(u) <= index_in_order(v)}.
+        // this method uses dfs to find any cycle in G, in which every vertex isn't adjacent to b, except for a and b.
+        // then it finds a chordless subcycle in linear time and returns it.
+
         List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
-        Map<V, Boolean> visited = new HashMap<>(subgraph.size());
-        for (V vertex : subgraph) {
+        Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
+        for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }
-
-        findCycle(cycle, visited, a, b, c);
+        visited.put(a, true);
+        visited.put(b, true);
+        dfsVisit(cycle, visited, a, b, c);
         cycle = minimizeCycle(cycle);
         hole = new GraphWalk<>(graph, cycle, 0);
     }
@@ -421,17 +439,16 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      * @param middle  the vertex, which must be adjacent onl
      * @param current currently examined vertex.
      */
-    private void findCycle(List<V> cycle, Map<V, Boolean> visited, V finish, V middle, V current) {
+    private void dfsVisit(List<V> cycle, Map<V, Boolean> visited, V finish, V middle, V current) {
         visited.put(current, true);
         for (E edge : graph.edgesOf(current)) {
             V opposite = Graphs.getOppositeVertex(graph, edge, current);
-            if ((visited.containsKey(opposite) && !visited.get(opposite) && !graph.containsEdge(opposite, middle)
-                    && !opposite.equals(middle)) || opposite.equals(finish)) {
+            if ((!visited.get(opposite) && !graph.containsEdge(opposite, middle)) || opposite.equals(finish)) {
                 cycle.add(opposite);
                 if (opposite.equals(finish)) {
                     return;
                 }
-                findCycle(cycle, visited, finish, middle, opposite);
+                dfsVisit(cycle, visited, finish, middle, opposite);
                 if (cycle.get(cycle.size() - 1).equals(finish)) {
                     return;
                 } else {
@@ -459,12 +476,15 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
             minimized.add(vertex);
             cycleVertices.remove(vertex);
             Set<V> forward = new HashSet<>();
+
+            // compute vertices with the higher index in the cycle
             for (E edge : graph.edgesOf(vertex)) {
                 V opposite = Graphs.getOppositeVertex(graph, edge, vertex);
                 if (cycleVertices.contains(opposite)) {
                     forward.add(opposite);
                 }
             }
+            // jump to the vertex with the highest index with respect to the current vertex
             for (V forwardVertex : forward) {
                 if (cycleVertices.contains(forwardVertex)) {
                     do {
