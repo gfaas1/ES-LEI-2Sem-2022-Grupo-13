@@ -35,7 +35,7 @@ import java.util.*;
  *
  * <p>
  *     This implementation is based on <i>On Implementing the Push—Relabel Method for the
- *     Maximum Flow Problem</i> by B. V. Cherkassky and A.V. Goldberg (Cherkassky, B. & Goldberg, A. Algorithmica (1997) 19: 390. https://doi.org/10.1007/PL00009180)
+ *     Maximum Flow Problem</i> by B. V. Cherkassky and A.V. Goldberg (Cherkassky, B. &amp; Goldberg, A. Algorithmica (1997) 19: 390. https://doi.org/10.1007/PL00009180)
  *     and <i>Introduction to Algorithms</i> (3rd Edition).
  * </p>
  *
