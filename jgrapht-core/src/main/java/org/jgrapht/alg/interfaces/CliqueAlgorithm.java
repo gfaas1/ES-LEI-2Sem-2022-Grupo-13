@@ -24,9 +24,11 @@ import java.util.Set;
 /**
  * Algorithm to compute a <a href="http://mathworld.wolfram.com/Clique.html">Clique</a> in a graph.
  *
+ * @param <V> vertex the graph vertex type
+ *
  * @author Joris Kinable
  */
-public interface CliqueAlgorithm<V,E> {
+public interface CliqueAlgorithm<V> {
 
     /**
      * Computes a clique.

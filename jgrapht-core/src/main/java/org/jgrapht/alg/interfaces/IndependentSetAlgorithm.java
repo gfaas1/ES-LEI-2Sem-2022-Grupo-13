@@ -24,9 +24,11 @@ import java.util.Set;
 /**
  * Algorithm to compute an <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent Set</a> in a graph.
  *
+ * @param <V> vertex the graph vertex type
+ *
  * @author Joris Kinable
  */
-public interface IndependentSetAlgorithm<V,E> {
+public interface IndependentSetAlgorithm<V> {
 
     /**
      * Computes an independent set; all vertices are considered to have equal weight.

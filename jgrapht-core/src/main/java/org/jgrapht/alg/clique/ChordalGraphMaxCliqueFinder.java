@@ -49,7 +49,7 @@ import java.util.*;
  * @author Timofey Chudakov
  * @since March 2018
  */
-public class ChordalGraphMaxCliqueFinder<V,E> implements CliqueAlgorithm{
+public class ChordalGraphMaxCliqueFinder<V,E> implements CliqueAlgorithm<V>{
 
     private final Graph<V,E> graph;
 
@@ -89,7 +89,7 @@ public class ChordalGraphMaxCliqueFinder<V,E> implements CliqueAlgorithm{
      */
     private void lazyComputeMaximumClique() {
         if (maximumClique == null && isChordal) {
-            ChordalGraphColoring<V,E> cgc=new ChordalGraphColoring<V, E>(graph);
+            ChordalGraphColoring<V,E> cgc= new ChordalGraphColoring<>(graph);
             VertexColoringAlgorithm.Coloring<V> coloring = cgc.getColoring();
             List<V> perfectEliminationOrder=cgc.getPerfectEliminationOrder();
             if (coloring == null) {
@@ -101,11 +101,11 @@ public class ChordalGraphMaxCliqueFinder<V,E> implements CliqueAlgorithm{
             Map.Entry<V, Integer> maxEntry = coloring.getColors().entrySet().stream().max(
                     Comparator.comparing(Map.Entry::getValue)).orElse(null);
             if (maxEntry == null) {
-                maximumClique = new CliqueImpl<V>(Collections.emptySet());
+                maximumClique = new CliqueImpl<>(Collections.emptySet());
             } else {
                 Set<V> cliqueSet= getPredecessors(vertexInOrder, maxEntry.getKey());
                 cliqueSet.add(maxEntry.getKey());
-                maximumClique=new CliqueImpl<V>(cliqueSet);
+                maximumClique= new CliqueImpl<>(cliqueSet);
             }
         }
     }

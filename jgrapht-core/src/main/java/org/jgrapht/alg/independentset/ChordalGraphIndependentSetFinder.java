@@ -47,7 +47,7 @@ import java.util.*;
  * @author Timofey Chudakov
  * @since March 2018
  */
-public class ChordalGraphIndependentSetFinder<V,E> implements IndependentSetAlgorithm<V,E> {
+public class ChordalGraphIndependentSetFinder<V,E> implements IndependentSetAlgorithm<V> {
 
     private final Graph<V,E> graph;
 
