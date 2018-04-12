@@ -15,14 +15,18 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.traverse.*;
+import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
+import org.jgrapht.traverse.DepthFirstIterator;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Performs cycle detection on a graph. The <i>inspected graph</i> is specified at construction time
@@ -33,9 +37,7 @@ import org.jgrapht.traverse.*;
  *
  * @author John V. Sichi
  * @since Sept 16, 2004
- * @deprecated  Moved to {@link org.jgrapht.alg.cycle.CycleDetector}
  */
-@Deprecated
 public class CycleDetector<V, E>
 {
     /**

@@ -20,7 +20,6 @@ package org.jgrapht.alg.cycle;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.traverse.GraphIterator;
@@ -48,24 +47,20 @@ import java.util.*;
  * independent set can be performed in polynomial time when the input is chordal.
  * <p>
  * All methods in this class run in $\mathcal{O}(|V| + |E|)$ time. Determining whether a graph is
- * chordal takes $\mathcal{O}(|V| + |E|)$ time, independent of the algorithm ({@link MaximumCardinalityIterator}
- * or {@link LexBreadthFirstIterator}) used to compute the perfect elimination order. Similarly, for chordal
- * graphs, this class can determine a perfect elmination order, a minimum vertex coloring, a maximum cardinality
- * clique, or an independent set in $\mathcal{O}(|V| + |E|)$ time. Finally, if the input graph is not chordal,
- * this class can detect a chordless cycle in $\mathcal{O}(|V| + |E|)$ time.
+ * chordal, as well as computing a perfect elimination order takes $\mathcal{O}(|V| + |E|)$ time, independent
+ * of the algorithm ({@link MaximumCardinalityIterator} or {@link LexBreadthFirstIterator}) used to compute
+ * the perfect elimination order.
  * <p>
  * All the methods in this class are invoked in a lazy fashion, meaning that computations are only
  * started once the method gets invoked.
  *
  * @param <V> the graph vertex type.
  * @param <E> the graph edge type.
- * @see LexBreadthFirstIterator
- * @see MaximumCardinalityIterator
  *
  * @author Timofey Chudakov
  * @since March 2018
  */
-public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
+public class ChordalityInspector<V, E>{
     /**
      * Stores the type of iterator used by this {@code ChordalityInspector}.
      */
@@ -91,23 +86,6 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
      * A hole contained in the inspected {@code graph}.
      */
     private GraphPath<V, E> hole;
-
-    /**
-     * A minimum graph vertex coloring of the inspected {@code graph}.
-     * The number of colors used in the coloring equals the chromatic number of the input graph.
-     */
-    private Coloring<V> coloring;
-
-    /**
-     * A maximum cardinality independent set of the inspected {@code graph}.
-     */
-    private Set<V> maximumIndependentSet;
-
-    /**
-     * A maximum cardinality clique of the inspected {@code graph}. The cardinality of this
-     * clique equals to the number of colors used for the minimum graph vertex coloring.
-     */
-    private Set<V> maximumClique;
 
     /**
      * Creates a chordality inspector for {@code graph}, which uses {@link MaximumCardinalityIterator}
@@ -185,39 +163,6 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
     }
 
     /**
-     * Returns a <a href="http://mathworld.wolfram.com/MinimumVertexColoring.html">minimum vertex coloring</a>
-     * of the inspected {@code graph}. If the graph isn't chordal, returns null. The number of colors used in
-     * the coloring equals the chromatic number of the input graph.
-     *
-     * @return a coloring of the {@code graph} if it is chordal, null otherwise.
-     */
-    @Override
-    public Coloring<V> getColoring() {
-        return lazyComputeColoring();
-    }
-
-    /**
-     * Returns a <a href = "http://mathworld.wolfram.com/MaximumIndependentVertexSet.html">
-     * maximum cardinality independent set</a> of the inspected {@code graph}. If the graph
-     * isn't chordal, returns null.
-     *
-     * @return a maximum independent set of the {@code graph} if it is chordal, false otherwise.
-     */
-    public Set<V> getMaximumIndependentSet() {
-        return lazyComputeMaximumIndependentSet();
-    }
-
-    /**
-     * Returns a <a href="http://mathworld.wolfram.com/MaximumClique.html">maximum cardinality clique</a>
-     * of the inspected {@code graph}. If the graph isn't chordal, returns null.
-     *
-     * @return a maximum clique of the {@code graph} if it is chordal, null otherwise.
-     */
-    public Set<V> getMaximumClique() {
-        return lazyComputeMaximumClique();
-    }
-
-    /**
      * Checks whether the vertices in the {@code vertexOrder} form a
      * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
      * perfect elimination order</a> with respect to the inspected graph. Returns false otherwise.
@@ -244,106 +189,6 @@ public class ChordalityInspector<V, E> implements VertexColoringAlgorithm<V> {
             }
         }
         return order;
-    }
-
-    /**
-     * Lazily computes the coloring of the graph. Returns null if the graph isn't chordal.
-     *
-     * @return coloring of the graph if it is chordal, null otherwise.
-     */
-    private Coloring<V> lazyComputeColoring() {
-        if (coloring == null) {
-            isChordal();
-
-            if (chordal) {
-                Map<V, Integer> vertexColoring = new HashMap<>(order.size());
-                Map<V, Integer> vertexInOrder = getVertexInOrder(order);
-                for (V vertex : order) {
-                    Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
-                    Set<Integer> predecessorColors = new HashSet<>(predecessors.size());
-                    predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
-
-                    // find the minimum unused color in the set of predecessors
-                    int minUnusedColor = 0;
-                    while (predecessorColors.contains(minUnusedColor)) {
-                        ++minUnusedColor;
-                    }
-                    vertexColoring.put(vertex, minUnusedColor);
-                }
-                int maxColor = (int) vertexColoring.values().stream().distinct().count();
-                return coloring = new ColoringImpl<>(vertexColoring, maxColor);
-            }
-            return null;
-        }
-        return coloring;
-
-    }
-
-    /**
-     * Lazily computes a maximum independent set of the inspected {@code graph}.
-     * If the graph isn't chordal, returns null.
-     *
-     * @return a maximum independent set of the {@code graph} if it is chordal, false otherwise.
-     */
-    private Set<V> lazyComputeMaximumIndependentSet() {
-        if (maximumIndependentSet == null) {
-            isChordal();
-
-            if (chordal) {
-                // iterate the order from the end to the beginning
-                // chooses vertices, that don't have neighbors in the current independent set
-                // adds all its neighbors to the restricted set
-
-                Set<V> restricted = new HashSet<>();
-                Set<V> maximumIndependentSet = new HashSet<>();
-                ListIterator<V> reverse = order.listIterator(order.size());
-
-                while (reverse.hasPrevious()) {
-                    V previous = reverse.previous();
-                    if (!restricted.contains(previous)) {
-                        maximumIndependentSet.add(previous);
-                        for (E edge : graph.edgesOf(previous)) {
-                            V opposite = Graphs.getOppositeVertex(graph, edge, previous);
-                            if (!previous.equals(opposite)) {
-                                restricted.add(opposite);
-                            }
-                        }
-                    }
-                }
-                return this.maximumIndependentSet = maximumIndependentSet;
-            }
-            return null;
-        }
-        return maximumIndependentSet;
-    }
-
-    /**
-     * Lazily computes some maximum clique of the {@code graph}. Returns null if the graph isn't chordal.
-     *
-     * @return @return a maximum clique of the {@code graph} if it is chordal, null otherwise.
-     */
-    private Set<V> lazyComputeMaximumClique() {
-        if (maximumClique == null) {
-            isChordal();
-
-            if (chordal) {
-                // finds the vertex with the maximum cardinality predecessor list
-
-                lazyComputeColoring();
-                Map<V, Integer> vertexInOrder = getVertexInOrder(order);
-                Map.Entry<V, Integer> maxEntry = coloring.getColors().entrySet().stream().max(
-                        Comparator.comparing(Map.Entry::getValue)).orElse(null);
-                if (maxEntry == null) {
-                    return new HashSet<>();
-                } else {
-                    maximumClique = getPredecessors(vertexInOrder, maxEntry.getKey());
-                    maximumClique.add(maxEntry.getKey());
-                    return maximumClique;
-                }
-            }
-            return null;
-        }
-        return maximumClique;
     }
 
     /**
