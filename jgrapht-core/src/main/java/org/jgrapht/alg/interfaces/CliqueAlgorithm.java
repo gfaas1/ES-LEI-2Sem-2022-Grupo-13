@@ -45,9 +45,9 @@ public interface CliqueAlgorithm<V,E> {
     {
 
         /**
-         * Returns the weight of the clique. When solving a minimum weight independent set
-         * problem, the weight returned is the sum of the weights of the vertices in the independent set. When
-         * solving the unweighted variant, the cardinality of the independent set is returned instead.
+         * Returns the weight of the clique. When solving a maximum weight clique
+         * problem, the weight returned is the sum of the weights of the vertices in the clique. When
+         * solving the unweighted variant, the cardinality of the clique is returned instead.
          *
          * @return weight of the independent set
          */
