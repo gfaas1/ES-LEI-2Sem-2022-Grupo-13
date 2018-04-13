@@ -165,6 +165,8 @@ public class WeakChordalityInspector<V, E> {
             if (globalSeparatorList.size() > 0) {
                 Pair<Integer, Integer> pair;
                 sortSeparatorsList(globalSeparatorList);
+
+                // Iterating over separators. Computing coconnected components only for distinct separators
                 int separatorsNum = 1;
                 List<Pair<Integer, Integer>> original = globalSeparatorList.get(0).getFirst();
                 List<List<Integer>> coConnectedComponents = computeCoConnectedComponents(graph, original);
@@ -180,6 +182,8 @@ public class WeakChordalityInspector<V, E> {
                         }
                     }
                     if ((pair = checkLabels(coConnectedComponents, separator.getFirst())) != null) {
+                        // Found a pair of vertices which has labels 1 and 2. This means the graph
+                        // isn't weakly chordal. Start detecting a hole
                         E holeFormer = separator.getSecond();
                         V source = graph.getEdgeSource(holeFormer);
                         V target = graph.getEdgeTarget(holeFormer);
@@ -361,8 +365,10 @@ public class WeakChordalityInspector<V, E> {
     private List<List<Integer>> computeCoConnectedComponents(Graph<V, E> graph, List<Pair<Integer, Integer>> separator) {
         List<List<Integer>> coConnectedComponents = new ArrayList<>();
 
-        List<Set<Integer>> bucketsByLabel = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
+        // Initializing buckets, labels and set of unvisited vertices. Every vertex in separator is put
+        // to bucket with label 0
+        List<Set<Integer>> bucketsByLabel = new ArrayList<>(separator.size());
+        for (int i = 0; i < separator.size(); i++) {
             bucketsByLabel.add(new HashSet<>());
         }
         List<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
@@ -377,6 +383,8 @@ public class WeakChordalityInspector<V, E> {
         while (unvisited.size() > 0) {
             List<Integer> coConnectedComponent = new ArrayList<>();
             do {
+                // When minLabel = coConnectedComponent.size(), we've visited all vertices in some
+                // coconnected component in the separator. If there exist unvisited vertices, we start again
                 while (!bucketsByLabel.get(minLabel).isEmpty()) {
                     Integer vertex = bucketsByLabel.get(minLabel).iterator().next();
                     bucketsByLabel.get(minLabel).remove(vertex);
@@ -424,7 +432,7 @@ public class WeakChordalityInspector<V, E> {
      * @param minLabel       the minimum value of the non-empty bucket
      */
     private void reload(List<Set<Integer>> bucketsByLabel, List<Integer> labels, int minLabel) {
-        if (minLabel != 0) {
+        if (minLabel != 0 && minLabel < bucketsByLabel.size()) {
             Set<Integer> bucket = bucketsByLabel.get(minLabel);
             for (Integer vertex : bucket) {
                 labels.set(vertex, 0);
@@ -490,6 +498,7 @@ public class WeakChordalityInspector<V, E> {
      * @param targetInSeparator endpoint of the edge that belongs to the anti-hole
      */
     private void findAntiHole(V source, V targetInSeparator) {
+        // Generating the complement of the inspected graph
         ComplementGraphGenerator<V, E> generator = new ComplementGraphGenerator<>(graph, false);
         Graph<V, E> complement = new Pseudograph<>(graph.getEdgeFactory());
         generator.generateGraph(complement);
@@ -498,6 +507,9 @@ public class WeakChordalityInspector<V, E> {
         V cycleSource = graph.getEdgeSource(cycleFormer);
         V cycleTarget = graph.getEdgeTarget(cycleFormer);
 
+        // For edge cycleFormer we need to find the separator, which contains vertices with labels 1 and 2
+        // After that the procedure of detecting a hole in the complement of the graph is identical
+        // to finding a hole in the graph itself
         SeparatorFinder<V, E> complementSeparatorFinder = new SeparatorFinder<>(complement);
         List<Set<V>> separators = complementSeparatorFinder.findSeparators(cycleFormer);
         List<Pair<List<Pair<Integer, Integer>>, E>> reformatted = reformatSeparatorList(separators, cycleFormer);
@@ -514,6 +526,7 @@ public class WeakChordalityInspector<V, E> {
                 coConnectedComponents = computeCoConnectedComponents(complement, separator.getFirst());
             }
             if ((pair = checkLabels(coConnectedComponents, separator.getFirst())) != null) {
+                // Found a pair of vertices with labels 1 and 2
                 V cycleSourceInSeparator = indices.get(pair.getFirst());
                 V cycleTargetInSeparator = indices.get(pair.getSecond());
                 if (!complement.containsEdge(cycleSourceInSeparator, cycleSource)) {
@@ -548,6 +561,7 @@ public class WeakChordalityInspector<V, E> {
         visited.put(target, true);
         visited.put(source, true);
 
+        // Obtaining some cycle, which can be minimized to a hole
         List<V> cycle = new ArrayList<>(Arrays.asList(targetInSeparator, target, source, sourceInSeparator));
         dfsVisit(sourceInSeparator, visited, cycle, graph, targetInSeparator, target, source);
         cycle = minimizeCycle(graph, cycle, target, targetInSeparator, source, sourceInSeparator);
@@ -611,6 +625,8 @@ public class WeakChordalityInspector<V, E> {
             minimizedCycle.add(current);
             forwardVertices.remove(current);
 
+            // Computing a set of vertices, which are adjacent to current and have greater index
+            // in the cycle than current
             Set<V> currentForward = new HashSet<>();
             for (V neighbor : Graphs.neighborListOf(graph, current)) {
                 if (forwardVertices.contains(neighbor)) {
@@ -618,6 +634,8 @@ public class WeakChordalityInspector<V, E> {
                 }
             }
 
+            // Jump to the forward vertex with the greatest index. Therefore we ensure, that
+            // the resulting cycle doesn't contain chords
             for (V forwardVertex : currentForward) {
                 if (forwardVertices.contains(forwardVertex)) {
                     do {
