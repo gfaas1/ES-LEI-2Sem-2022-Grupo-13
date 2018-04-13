@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.experimental;
+package org.jgrapht.alg.color;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 
 /**
  * Brown graph coloring algorithm.
@@ -29,98 +30,167 @@ import org.jgrapht.*;
  * 
  * @author Michael Behrisch
  */
-public class BrownBacktrackColoring<V, E>
+public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
 {
-    private final List<V> _vertices;
-    private final int[][] _neighbors;
-    private final Map<V, Integer> _vertexToPos;
+    private final Graph<V,E> graph;
+    private final List<V> vertexList; //list of all vertices
+    private final int[][] neighbors; //for every vertex v, neighbors[v] stores the neighbors of v
+    private final Map<V, Integer> indexMap; //assigned unique index to each vertex. maps to vertex list
 
-    private int[] _color;
-    private int[] _colorCount;
-    private BitSet[] _allowedColors;
-    private int _chi;
+    private int[] partialColorAssignment; //color assigned to a specific vertex
+    private int[] colorCount; //Number of colors used up to the ith vertex that has been colored
+    private BitSet[] allowedColors;
+    private int chi; //chromatic number
+
+    private int[] completeColorAssignment;
+    private Coloring<V> vertexColoring;
 
     /**
      * Construct a new Brown backtracking algorithm.
      * 
-     * @param g the input graph
+     * @param graph the input graph
      */
-    public BrownBacktrackColoring(final Graph<V, E> g)
+    public BrownBacktrackColoring(Graph<V, E> graph)
     {
-        final int numVertices = g.vertexSet().size();
-        _vertices = new ArrayList<>(numVertices);
-        _neighbors = new int[numVertices][];
-        _vertexToPos = new HashMap<>(numVertices);
-        for (V vertex : g.vertexSet()) {
-            _neighbors[_vertices.size()] = new int[g.edgesOf(vertex).size()];
-            _vertexToPos.put(vertex, _vertices.size());
-            _vertices.add(vertex);
+        this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
+        final int numVertices = graph.vertexSet().size();
+        vertexList = new ArrayList<>(numVertices);
+        neighbors = new int[numVertices][];
+        indexMap = new HashMap<>(numVertices);
+        for (V vertex : graph.vertexSet()) {
+            neighbors[vertexList.size()] = new int[graph.edgesOf(vertex).size()];
+            indexMap.put(vertex, vertexList.size());
+            vertexList.add(vertex);
         }
         for (int i = 0; i < numVertices; i++) {
             int nbIndex = 0;
-            final V vertex = _vertices.get(i);
-            for (E e : g.edgesOf(vertex)) {
-                _neighbors[i][nbIndex++] = _vertexToPos.get(Graphs.getOppositeVertex(g, e, vertex));
+            final V vertex = vertexList.get(i);
+            for (E e : graph.edgesOf(vertex)) {
+                neighbors[i][nbIndex++] = indexMap.get(Graphs.getOppositeVertex(graph, e, vertex));
             }
         }
     }
 
-    void recursiveColor(int pos)
+    private void recursiveColor(int pos)
     {
-        _colorCount[pos] = _colorCount[pos - 1];
-        _allowedColors[pos].set(0, _colorCount[pos] + 1);
-        for (int i = 0; i < _neighbors[pos].length; i++) {
-            final int nb = _neighbors[pos][i];
-            if (_color[nb] > 0) {
-                _allowedColors[pos].clear(_color[nb]);
+        colorCount[pos] = colorCount[pos - 1];
+        allowedColors[pos].set(0, colorCount[pos] + 1); //To color the ith vertex, one can use the number of colors needed to color the i-1th vertex plus 1
+        //Determine which colors have been used by the neighbors of the ith vertex
+        for (int i = 0; i < neighbors[pos].length; i++) {
+            final int nb = neighbors[pos][i];
+            if (partialColorAssignment[nb] > 0) {
+                allowedColors[pos].clear(partialColorAssignment[nb]);
             }
         }
-        for (int i = 1; (i <= _colorCount[pos]) && (_colorCount[pos] < _chi); i++) {
-            if (_allowedColors[pos].get(i)) {
-                _color[pos] = i;
-                if (pos < (_neighbors.length - 1)) {
+
+        //Try to assign each of the already used colors to vertex i. Prune search if partial coloring will never be better than chromatic number of best solution found thus far
+        for (int i = 1; (i <= colorCount[pos]) && (colorCount[pos] < chi); i++) {
+            if (allowedColors[pos].get(i)) { //Try all available colors for vertex i. A color is available if its not used by its neighbor
+                partialColorAssignment[pos] = i;
+                if (pos < (neighbors.length - 1)) { //If not all vertices have been colored, proceed with the next uncolored vertex
                     recursiveColor(pos + 1);
-                } else {
-                    _chi = _colorCount[pos];
+                } else { //Otherwise we have found a feasible coloring
+                    chi = colorCount[pos];
+                    System.out.println("chi1: "+chi+" "+Arrays.toString(partialColorAssignment));
+                    System.arraycopy(partialColorAssignment,0,completeColorAssignment,0, partialColorAssignment.length);
                 }
             }
         }
-        if ((_colorCount[pos] + 1) < _chi) {
-            _colorCount[pos]++;
-            _color[pos] = _colorCount[pos];
-            if (pos < (_neighbors.length - 1)) {
+        //consider using a new color for vertex i
+        if ((colorCount[pos] + 1) < chi) {
+            colorCount[pos]++;
+            partialColorAssignment[pos] = colorCount[pos];
+            if (pos < (neighbors.length - 1)) {
                 recursiveColor(pos + 1);
             } else {
-                _chi = _colorCount[pos];
+                chi = colorCount[pos];
+                System.out.println("chi2: "+chi+" "+Arrays.toString(partialColorAssignment));
+                System.arraycopy(partialColorAssignment,0,completeColorAssignment,0, partialColorAssignment.length);
             }
         }
-        _color[pos] = 0;
+        partialColorAssignment[pos] = 0;
     }
 
-    /**
-     * Get the coloring.
-     * 
-     * @param additionalData map which contains the color of each vertex
-     * @return the number of colors used
-     */
-    public Integer getResult(Map<V, Integer> additionalData)
-    {
-        _chi = _neighbors.length;
-        _color = new int[_neighbors.length];
-        _color[0] = 1;
-        _colorCount = new int[_neighbors.length];
-        _colorCount[0] = 1;
-        _allowedColors = new BitSet[_neighbors.length];
-        for (int i = 0; i < _neighbors.length; i++) {
-            _allowedColors[i] = new BitSet(1);
+
+    private void lazyComputeColoring(){
+        if(vertexColoring != null)
+            return;
+
+        chi = neighbors.length+1;
+        partialColorAssignment = new int[neighbors.length];
+        completeColorAssignment = new int[neighbors.length];
+        partialColorAssignment[0] = 1; //Prefix color of first vertex. Optimization: Could prefix all colors of largest clique
+        colorCount = new int[neighbors.length];
+        colorCount[0] = 1;
+        allowedColors = new BitSet[neighbors.length];
+        for (int i = 0; i < neighbors.length; i++) {
+            allowedColors[i] = new BitSet(1);
         }
         recursiveColor(1);
-        if (additionalData != null) {
-            for (int i = 0; i < _vertices.size(); i++) {
-                additionalData.put(_vertices.get(i), _color[i]);
+
+        Map<V,Integer> colorMap=new LinkedHashMap<>();
+        for (int i = 0; i < vertexList.size(); i++)
+            colorMap.put(vertexList.get(i), completeColorAssignment[i]);
+        vertexColoring = new ColoringImpl<>(colorMap,chi);
+    }
+
+    //////////////////Non recursive version
+    private void computeNonRecursiveColoring(){
+        partialColorAssignment = new int[neighbors.length];
+        completeColorAssignment = new int[neighbors.length];
+
+        colorCount = new int[neighbors.length];
+        colorCount[0] = 1;
+        allowedColors = new BitSet[neighbors.length];
+        for (int i = 0; i < neighbors.length; i++)
+            allowedColors[i] = new BitSet();
+
+
+        int start=0;
+        boolean back=false;
+        while(start >= 0){
+            back=false;
+            for(int i=start; i<graph.vertexSet().size(); i++){
+                if(start > i){
+                    //find uncolored vertex x of maximal degree of saturation
+                    //U=set of free colors, represented by a bitset
+                    allowedColors[x].set(0, colorCount[x] + 1); //To color the ith vertex, one can use the number of colors needed to color the i-1th vertex plus 1
+                }
+
+                if(!allowedColors[x].isEmpty()){ //test whether some color can be assigned to x
+                    int k=allowedColors[x].nextSetBit(0); //find next unused color
+                    partialColorAssignment[x]=k; //and assign it to x
+                    allowedColors[x].clear(k);
+
+                }else{
+                    start=i-1;
+                    back=true;
+                    break;
+                }
+                if(back){ //backtrack
+
+                }
+
             }
+
+
         }
-        return _chi;
+
+    }
+
+
+
+    //////////////////Non recursive version
+
+    public int getChromaticNumber(){
+        lazyComputeColoring();
+        return vertexColoring.getNumberColors();
+    }
+
+    @Override
+    public Coloring<V> getColoring() {
+        lazyComputeColoring();
+        return vertexColoring;
     }
 }
 
