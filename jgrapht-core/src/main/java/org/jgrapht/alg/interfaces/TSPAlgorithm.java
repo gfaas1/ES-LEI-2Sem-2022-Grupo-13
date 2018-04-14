@@ -33,7 +33,9 @@ import org.jgrapht.GraphPath;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated interface replaced by {@link HamiltonianCycleAlgorithm}
  */
+@Deprecated
 public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
 {
 

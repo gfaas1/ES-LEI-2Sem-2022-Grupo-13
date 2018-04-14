@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.Collection;
-import java.util.Iterator;
+import org.jgrapht.util.WeightedUnmodifiableSet;
+
 import java.util.Set;
 
 /**
- * Algorithm to compute a <a href="http://mathworld.wolfram.com/Clique.html">Clique</a> in a graph.
+ * Algorithm to compute a (weighted) <a href="http://mathworld.wolfram.com/Clique.html">Clique</a> in a graph.
  *
  * @param <V> vertex the graph vertex type
  *
@@ -57,112 +57,24 @@ public interface CliqueAlgorithm<V> {
     }
 
     /**
-     * Default implementation of a clique
+     * Default implementation of a (weighted) clique
      *
      * @param <V> the vertex type
      */
-    class CliqueImpl<V>
+    class CliqueImpl<V> extends WeightedUnmodifiableSet<V>
             implements Clique<V>
     {
-        protected Set<V> clique;
-        protected double weight;
+
+        private static final long serialVersionUID = -4336873008459736342L;
 
         public CliqueImpl(Set<V> clique)
         {
-            this.clique = clique;
-            this.weight = clique.size();
+            super(clique);
         }
 
         public CliqueImpl(Set<V> clique, double weight)
         {
-            this.clique = clique;
-            this.weight = weight;
-        }
-
-        /**
-         * Set the weight of the independent set
-         */
-        public void setWeight(){ this.weight=weight;}
-
-        @Override
-        public double getWeight()
-        {
-            return weight;
-        }
-
-
-        @Override
-        public String toString()
-        {
-            String s = "clique(" + this.getWeight() +
-                    "): " +
-                    this.clique.toString();
-            return s;
-        }
-
-        @Override
-        public int size() {
-            return clique.size();
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return clique.isEmpty();
-        }
-
-        @Override
-        public boolean contains(Object o) {
-            return false;
-        }
-
-        @Override
-        public Iterator<V> iterator() {
-            return clique.iterator();
-        }
-
-        @Override
-        public Object[] toArray() {
-            return clique.toArray();
-        }
-
-        @Override
-        public <T> T[] toArray(T[] a) {
-            return clique.toArray(a);
-        }
-
-        @Override
-        public boolean add(V v) {
-            return clique.add(v);
-        }
-
-        @Override
-        public boolean remove(Object o) {
-            return clique.remove(o);
-        }
-
-        @Override
-        public boolean containsAll(Collection<?> c) {
-            return clique.containsAll(c);
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends V> c) {
-            return clique.addAll(c);
-        }
-
-        @Override
-        public boolean retainAll(Collection<?> c) {
-            return clique.retainAll(c);
-        }
-
-        @Override
-        public boolean removeAll(Collection<?> c) {
-            return clique.removeAll(c);
-        }
-
-        @Override
-        public void clear() {
-            clique.clear();
+            super(clique,weight);
         }
     }
 }
