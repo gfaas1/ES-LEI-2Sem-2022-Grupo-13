@@ -18,6 +18,8 @@
 package org.jgrapht.alg.vertexcover;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -45,11 +47,84 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class BarYehudaEvenTwoApproxVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements MinimumWeightedVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
 {
 
+    private final Graph<V,E> graph;
+    private final Map<V, Double> vertexWeightMap;
+
+    /**
+     * Temporary constructor to ensure one-version-backwards-compatibility
+     * @deprecated this constructor will be removed in the next release
+     */
+    @Deprecated
+    public BarYehudaEvenTwoApproxVCImpl(){
+        graph=null;
+        vertexWeightMap=null;
+    }
+
+    /**
+     * Constructs a new BarYehudaEvenTwoApproxVCImpl instance where all vertices have uniform weights.
+     * @param graph input graph
+     */
+    public BarYehudaEvenTwoApproxVCImpl(Graph<V,E> graph) {
+        this.graph=GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+                .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new BarYehudaEvenTwoApproxVCImpl instance
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public BarYehudaEvenTwoApproxVCImpl(Graph<V,E> graph, Map<V, Double> vertexWeightMap) {
+        this.graph=GraphTests.requireUndirected(graph);
+        this.vertexWeightMap=Objects.requireNonNull(vertexWeightMap);
+    }
+
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCoverAlgorithm.VertexCover getVertexCover(){
+        Set<V> cover = new LinkedHashSet<>();
+        double weight = 0;
+        Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
+        Map<V, Double> W = new HashMap<>();
+        for (V v : graph.vertexSet())
+            W.put(v, vertexWeightMap.get(v));
+
+        // Main loop
+        Set<E> edgeSet = copy.edgeSet();
+        while (!edgeSet.isEmpty()) {
+            // Pick arbitrary edge
+            E e = edgeSet.iterator().next();
+            V p = copy.getEdgeSource(e);
+            V q = copy.getEdgeTarget(e);
+
+            if (W.get(p) <= W.get(q)) {
+                W.put(q, W.get(q) - W.get(p));
+                cover.add(p);
+                weight += vertexWeightMap.get(p);
+                copy.removeVertex(p);
+            } else {
+                W.put(p, W.get(p) - W.get(q));
+                cover.add(q);
+                weight += vertexWeightMap.get(q);
+                copy.removeVertex(q);
+            }
+        }
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
+    }
+
+    /**
+     *
+     * @param graph the input graph
+     * @param vertexWeightMap map containing non-negative weights for each vertex
+     * @return vertex cover
+     * @deprecated Replaced by {@link #getVertexCover()}
+     */
+    @Override
+    @Deprecated
+    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
         GraphTests.requireUndirected(graph);
 
@@ -81,6 +156,6 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
             }
         }
 
-        return new VertexCoverImpl<>(cover, weight);
+        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
 }

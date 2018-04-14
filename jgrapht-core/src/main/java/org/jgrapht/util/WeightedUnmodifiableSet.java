@@ -28,22 +28,22 @@ import java.util.Set;
  * The {@code hashCode()} and {@code equals()} methods are identical to those of a normal set, i.e. they are independent
  * of the {@code weight} of this class.
  *
- * @param <V> vertex type
+ * @param <E> element type
  *
  * @author Joris Kinable
  */
-public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serializable{
+public class WeightedUnmodifiableSet<E> extends AbstractSet<E> implements Serializable{
 
     private static final long serialVersionUID = -5913435131882975869L;
 
-    public final Set<V> backingSet;
+    public final Set<E> backingSet;
     public final double weight;
 
     /**
      * Constructs a WeightedUnmodifiableSet instance
      * @param backingSet underlying set
      */
-    public WeightedUnmodifiableSet(Set<V> backingSet){
+    public WeightedUnmodifiableSet(Set<E> backingSet){
         this.backingSet=backingSet;
         this.weight=backingSet.size();
     }
@@ -53,7 +53,7 @@ public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serial
      * @param backingSet underlying set
      * @param weight weight of the set
      */
-    public WeightedUnmodifiableSet(Set<V> backingSet, double weight){
+    public WeightedUnmodifiableSet(Set<E> backingSet, double weight){
         this.backingSet=backingSet;
         this.weight=weight;
     }
@@ -82,7 +82,7 @@ public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serial
     }
 
     @Override
-    public Iterator<V> iterator() {
+    public Iterator<E> iterator() {
         return backingSet.iterator();
     }
 
@@ -97,7 +97,7 @@ public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serial
     }
 
     @Override
-    public boolean add(V v) {
+    public boolean add(E v) {
         throw new UnsupportedOperationException("This set is unmodifiable");
     }
 
@@ -112,7 +112,7 @@ public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serial
     }
 
     @Override
-    public boolean addAll(Collection<? extends V> c) {
+    public boolean addAll(Collection<? extends E> c) {
         throw new UnsupportedOperationException("This set is unmodifiable");
     }
 
@@ -135,7 +135,7 @@ public class WeightedUnmodifiableSet<V> extends AbstractSet<V> implements Serial
     public boolean equals(Object o) {
         if(this == o) return true;
         if(!(o instanceof WeightedUnmodifiableSet)) return false;
-        @SuppressWarnings("unchecked") WeightedUnmodifiableSet<V> other= (WeightedUnmodifiableSet<V>) o;
+        @SuppressWarnings("unchecked") WeightedUnmodifiableSet<E> other= (WeightedUnmodifiableSet<E>) o;
         return this.backingSet.equals(other.backingSet);
     }
 

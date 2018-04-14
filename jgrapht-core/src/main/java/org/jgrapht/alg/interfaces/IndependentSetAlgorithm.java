@@ -47,7 +47,7 @@ public interface IndependentSetAlgorithm<V> {
     {
 
         /**
-         * Returns the weight of the independent set. When solving a minimum weight independent set
+         * Returns the weight of the independent set. When solving a weighted independent set
          * problem, the weight returned is the sum of the weights of the vertices in the independent set. When
          * solving the unweighted variant, the cardinality of the independent set is returned instead.
          *

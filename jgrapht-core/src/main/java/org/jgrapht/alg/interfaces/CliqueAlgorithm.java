@@ -47,7 +47,7 @@ public interface CliqueAlgorithm<V> {
     {
 
         /**
-         * Returns the weight of the clique. When solving a maximum weight clique
+         * Returns the weight of the clique. When solving a weighted clique
          * problem, the weight returned is the sum of the weights of the vertices in the clique. When
          * solving the unweighted variant, the cardinality of the clique is returned instead.
          *
