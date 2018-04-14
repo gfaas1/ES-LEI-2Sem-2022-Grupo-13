@@ -28,6 +28,8 @@ import java.util.*;
  * given graph.
  *
  * @param <E> edge the graph edge type
+ *
+ * @author Dimitrios Michail
  */
 public interface SpannerAlgorithm<E>
 {
@@ -45,7 +47,7 @@ public interface SpannerAlgorithm<E>
      * @param <E> the graph edge type
      */
     interface Spanner<E>
-        extends Iterable<E>
+        extends Set<E>
     {
 
         /**
@@ -59,14 +61,18 @@ public interface SpannerAlgorithm<E>
          * Set of edges of the graph spanner.
          * 
          * @return edge set of the spanner
+         * @deprecated No longer needed. A spanner is now a set of edges
          */
+        @Deprecated
         Set<E> getEdges();
 
         /**
          * Returns an iterator over the edges in the spanner.
          * 
          * @return iterator over the edges in the spanner.
+         * @deprecated No longer needed. A spanner is now a set of edges
          */
+        @Deprecated
         @Override
         default Iterator<E> iterator()
         {
@@ -105,12 +111,7 @@ public interface SpannerAlgorithm<E>
             super(edges, weight);
         }
 
-        @Override
-        public double getWeight()
-        {
-            return weight;
-        }
-
+        @Deprecated
         @Override
         public Set<E> getEdges()
         {

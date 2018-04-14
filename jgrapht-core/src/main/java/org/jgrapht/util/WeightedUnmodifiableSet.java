@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * Implementation of a weighted, unmodifiable set. This class can for instance be used to store a weighted vertex cover.
  * The {@code hashCode()} and {@code equals()} methods are identical to those of a normal set, i.e. they are independent
- * of the {@code weight} of this class.
+ * of the {@code weight} of this class. All methods are delegated to the underlying set.
  *
  * @param <E> element type
  *

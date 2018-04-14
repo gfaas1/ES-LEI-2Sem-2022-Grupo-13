@@ -22,7 +22,7 @@ import org.jgrapht.util.WeightedUnmodifiableSet;
 import java.util.Set;
 
 /**
- * Computes a (weighted) <a href="http://mathworld.wolfram.com/VertexCover.html"vertex cover</a> in an undirected graph. A vertex cover of a graph is a set of
+ * Computes a (weighted) <a href="http://mathworld.wolfram.com/VertexCover.html">vertex cover</a> in an undirected graph. A vertex cover of a graph is a set of
  * vertices such that each edge of the graph is incident to at least one vertex in the set. A
  * minimum vertex cover is a vertex cover having the smallest possible number of vertices for a
  * given graph. The size of a minimum vertex cover of a graph $G$ is known as the vertex cover number.
