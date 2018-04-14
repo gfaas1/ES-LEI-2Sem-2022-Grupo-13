@@ -15,14 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.vertexcover;
 
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.interfaces.MinimumVertexCoverAlgorithm.*;
-import org.jgrapht.alg.vertexcover.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
 
