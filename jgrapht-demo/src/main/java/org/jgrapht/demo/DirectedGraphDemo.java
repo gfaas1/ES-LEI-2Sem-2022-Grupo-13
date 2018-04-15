@@ -1,9 +1,8 @@
-/* 
- * Copyright (C) 2008-2018,  Minh Van Nguyen &lt; nguyenminh2@gmail.com&gt;
+/*
+ * (C) Copyright 2008-2018, by Minh Van Nguyen and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
- * DirectedGraphDemo.java --- demonstration of operations on directed graphs
  * This program and the accompanying materials are dual-licensed under
  * either
  *
@@ -15,23 +14,9 @@
  *
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
- * This program is free software; you can redistribute it and/or  modify
- * it under the terms of the GNU General Public License as published  by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
- package org.jgrapht.demo;
- 
+package org.jgrapht.demo;
  
 import java.util.*;
 
@@ -64,7 +49,7 @@ public class DirectedGraphDemo
     public static void main(String args[])
     {
         // constructs a directed graph with the specified vertices and edges
-        DefaultDirectedGraph<String, DefaultEdge> directedGraph =
+        Graph<String, DefaultEdge> directedGraph =
             new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
         directedGraph.addVertex("a");
         directedGraph.addVertex("b");
