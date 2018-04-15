@@ -26,6 +26,7 @@ import java.util.HashSet;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import com.google.common.graph.EndpointPair;
@@ -241,7 +242,7 @@ public class MutableGraphAdapterTest
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder
                     .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-                DefaultEdge.class);
+                    SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

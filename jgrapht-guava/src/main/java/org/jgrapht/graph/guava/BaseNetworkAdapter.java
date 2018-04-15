@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
@@ -51,19 +52,56 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     protected transient Set<V> unmodifiableVertexSet = null;
     protected transient Set<E> unmodifiableEdgeSet = null;
 
-    protected EdgeFactory<V, E> edgeFactory;
+    protected Supplier<V> vertexSupplier;
+    protected Supplier<E> edgeSupplier;
     protected transient N network;
 
     /**
      * Create a new network adapter.
      * 
      * @param network the mutable network
-     * @param ef the edge factory of the new graph
      */
-    public BaseNetworkAdapter(N network, EdgeFactory<V, E> ef)
+    public BaseNetworkAdapter(N network)
     {
-        this.edgeFactory = Objects.requireNonNull(ef);
+        this(network, null, null);
+    }
+
+    /**
+     * Create a new network adapter.
+     * 
+     * @param network the mutable network
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public BaseNetworkAdapter(N network, Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
         this.network = Objects.requireNonNull(network);
+    }
+
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return vertexSupplier;
+    }
+
+    @Override
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+    }
+
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return edgeSupplier;
+    }
+
+    @Override
+    public void setEdgeSupplier(Supplier<E> edgeSupplier)
+    {
+        this.edgeSupplier = edgeSupplier;
     }
 
     @Override
@@ -74,9 +112,10 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     }
 
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
     {
-        return edgeFactory;
+        return null;
     }
 
     @Override
@@ -169,11 +208,11 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     @Override
     public double getEdgeWeight(E e)
     {
-        if (e == null) { 
+        if (e == null) {
             throw new NullPointerException();
-        } else if (!network.edges().contains(e)) { 
+        } else if (!network.edges().contains(e)) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
-        } else { 
+        } else {
             return Graph.DEFAULT_EDGE_WEIGHT;
         }
     }

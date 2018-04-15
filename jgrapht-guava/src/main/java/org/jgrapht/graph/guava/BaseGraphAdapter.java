@@ -17,13 +17,14 @@
  */
 package org.jgrapht.graph.guava;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
+import java.util.function.Supplier;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
@@ -34,8 +35,8 @@ import org.jgrapht.graph.DefaultGraphType;
 import com.google.common.graph.EndpointPair;
 
 /**
- * A base abstract implementation for the graph adapter class using Guava's {@link Graph}. This
- * is a helper class in order to support both mutable and immutable graphs.
+ * A base abstract implementation for the graph adapter class using Guava's {@link Graph}. This is a
+ * helper class in order to support both mutable and immutable graphs.
  * 
  * @author Dimitrios Michail
  *
@@ -53,6 +54,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     protected transient Set<V> unmodifiableVertexSet = null;
     protected transient Set<EndpointPair<V>> unmodifiableEdgeSet = null;
 
+    protected Supplier<V> vertexSupplier;
+    protected Supplier<EndpointPair<V>> edgeSupplier;
     protected transient G graph;
 
     /**
@@ -62,7 +65,46 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
      */
     public BaseGraphAdapter(G graph)
     {
+        this(graph, null, null);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param graph the graph
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public BaseGraphAdapter(
+        G graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
         this.graph = Objects.requireNonNull(graph);
+    }
+
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return vertexSupplier;
+    }
+
+    @Override
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+    }
+
+    @Override
+    public Supplier<EndpointPair<V>> getEdgeSupplier()
+    {
+        return edgeSupplier;
+    }
+
+    @Override
+    public void setEdgeSupplier(Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        this.edgeSupplier = edgeSupplier;
     }
 
     @Override
@@ -78,9 +120,10 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     }
 
     @Override
+    @Deprecated
     public EdgeFactory<V, EndpointPair<V>> getEdgeFactory()
     {
-        return this::createEdge;
+        return null;
     }
 
     @Override
@@ -109,8 +152,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     {
         return (graph.isDirected() ? new DefaultGraphType.Builder().directed()
             : new DefaultGraphType.Builder().undirected())
-                .weighted(false).allowMultipleEdges(false)
-                .allowSelfLoops(graph.allowsSelfLoops()).build();
+                .weighted(false).allowMultipleEdges(false).allowSelfLoops(graph.allowsSelfLoops())
+                .build();
     }
 
     @Override
@@ -155,9 +198,8 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public Set<EndpointPair<V>> incomingEdgesOf(V vertex)
     {
-        return graph
-            .predecessors(vertex).stream().map(other -> createEdge(other, vertex))
-            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+        return graph.predecessors(vertex).stream().map(other -> createEdge(other, vertex)).collect(
+            collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
@@ -169,19 +211,18 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public Set<EndpointPair<V>> outgoingEdgesOf(V vertex)
     {
-        return graph
-            .successors(vertex).stream().map(other -> createEdge(vertex, other))
-            .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+        return graph.successors(vertex).stream().map(other -> createEdge(vertex, other)).collect(
+            collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
     public double getEdgeWeight(EndpointPair<V> e)
     {
-        if (e == null) { 
+        if (e == null) {
             throw new NullPointerException();
-        } else if (!graph.hasEdgeConnecting(e.nodeU(), e.nodeV())) { 
+        } else if (!graph.hasEdgeConnecting(e.nodeU(), e.nodeV())) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
-        } else { 
+        } else {
             return Graph.DEFAULT_EDGE_WEIGHT;
         }
     }
@@ -189,8 +230,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     @Override
     public Set<EndpointPair<V>> getAllEdges(V sourceVertex, V targetVertex)
     {
-        if (sourceVertex == null || targetVertex == null
-            || !graph.nodes().contains(sourceVertex)
+        if (sourceVertex == null || targetVertex == null || !graph.nodes().contains(sourceVertex)
             || !graph.nodes().contains(targetVertex))
         {
             return null;
@@ -202,7 +242,7 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     }
 
     /**
-     * Create an edge. 
+     * Create an edge.
      * 
      * @param s the source vertex
      * @param t the target vertex

@@ -91,6 +91,12 @@ public class ImmutableGraphAdapter<V>
     }
 
     @Override
+    public V addVertex()
+    {
+        throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
+    }
+    
+    @Override
     public boolean addVertex(V v)
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);

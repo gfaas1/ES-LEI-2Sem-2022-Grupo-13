@@ -27,6 +27,7 @@ import java.util.HashSet;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.guava.MutableNetworkAdapter;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import com.google.common.graph.MutableNetwork;
@@ -48,10 +49,7 @@ public class MutableNetworkAdapterTest
     {
         MutableNetwork<String, DefaultEdge> mutableNetwork = NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
         
-        Graph<String,
-            DefaultEdge> graph = new MutableNetworkAdapter<>(
-                mutableNetwork,
-                DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new MutableNetworkAdapter<>(mutableNetwork);
 
         graph.addVertex("v1");
         
@@ -67,7 +65,7 @@ public class MutableNetworkAdapterTest
         Graph<String,
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
-                DefaultEdge.class);
+                SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -136,7 +134,7 @@ public class MutableNetworkAdapterTest
         Graph<String,
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build(),
-                DefaultEdge.class);
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -209,7 +207,7 @@ public class MutableNetworkAdapterTest
         Graph<String,
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
-                DefaultEdge.class);
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -268,7 +266,7 @@ public class MutableNetworkAdapterTest
         Graph<String,
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-                DefaultEdge.class);
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
