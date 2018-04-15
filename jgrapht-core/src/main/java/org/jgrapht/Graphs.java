@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.EdgeReversedGraph;
@@ -48,12 +49,18 @@ public abstract class Graphs
      *
      * @return The newly created edge if added to the graph, otherwise <code>
      * null</code>.
+     * 
+     * @throws UnsupportedOperationException if the graph has no edge supplier
      *
      * @see Graph#addEdge(Object, Object)
      */
     public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
-        E e = g.getEdgeSupplier().get();
+        Supplier<E> edgeSupplier = g.getEdgeSupplier();
+        if (edgeSupplier == null) { 
+            throw new UnsupportedOperationException("Graph contains no edge supplier");
+        }
+        E e = edgeSupplier.get();
 
         // we first create the edge and set the weight to make sure that
         // listeners will see the correct weight upon addEdge.
