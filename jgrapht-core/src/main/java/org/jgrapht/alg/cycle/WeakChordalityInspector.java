@@ -35,12 +35,12 @@ import java.util.*;
  * to a maximal planar graph, see: <a href="http://mathworld.wolfram.com/TriangulatedGraph.html">
  * http://mathworld.wolfram.com/TriangulatedGraph.html</a>
  * <p>
- * The following definitions are equivalent:
+ * The following definitions of  are equivalent:
  * <ol>
- * <li> A graph is weakly chordal if it is (<a href="http://mathworld.wolfram.com/GraphAntihole.html">
- * anti-hole</a>,<a href="http://mathworld.wolfram.com/GraphHole.html">hole</a>)-free. In other words,
- * a graph is weakly chordal if it and its complement do not have
- * <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> of length greater than 4.</li>
+ * <li>
+ * A graph is weakly chordal (weakly triangulated) if neither it nor its complement
+ * contains a <a href="http://mathworld.wolfram.com/ChordlessCycle.html">chordless cycles</a> with
+ * five or more vertices.</li>
  * <li> A 2-pair in a graph is a pair of non-adjacent vertices $x$, $y$ such that every chordless path has
  * exactly two edges. A graph is weakly chordal if every connected
  * <a href="https://en.wikipedia.org/wiki/Induced_subgraph">induced subgraph</a> $H$ that is not a complete
