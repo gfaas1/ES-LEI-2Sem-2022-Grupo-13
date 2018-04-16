@@ -23,7 +23,7 @@ import java.util.*;
  * This class implements a Fibonacci heap data structure. Much of the code in this class is based on
  * the algorithms in the "Introduction to Algorithms" by Cormen, Leiserson, and Rivest in Chapter
  * 21. The amortized running time of most of these methods is $O(1)$, making it a very fast data
- * structure. Several have an actual running time of $O(1)$. removeMin() and delete() have O(log n)
+ * structure. Several have an actual running time of $O(1)$. removeMin() and delete() have $O(log n)$
  * amortized running times because they do the heap consolidation. If you attempt to store nodes in
  * this heap with key values of -Infinity (Double.NEGATIVE_INFINITY) the <code>delete()</code>
  * operation may fail to remove the correct element.
@@ -139,7 +139,7 @@ public class FibonacciHeap<T>
      * are nodes with key value $-\infty$.
      *
      * <p>
-     * Running time: O(log n) amortized
+     * Running time: $O(\log n)$ amortized
      * </p>
      *
      * @param x node to remove from heap

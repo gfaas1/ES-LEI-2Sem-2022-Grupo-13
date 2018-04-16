@@ -294,7 +294,7 @@ public class PushRelabelMFImpl<V, E>
     private void relabel(VertexExtension ux){
         int oldHeight = ux.height;
 
-        // Increase the height of u; u.h = 1 + min(v.h : (u, v) \in E_f)
+        // Increase the height of u; u.h = 1 + min(v.h : (u, v) in Ef)
 
         countHeight[ux.height]--;
         ux.height = 2 * N;
