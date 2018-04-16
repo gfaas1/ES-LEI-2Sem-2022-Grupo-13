@@ -56,9 +56,9 @@ public class TransitiveClosure
 
         Set<V> newEdgeTargets = new HashSet<>();
 
-        // At every iteration of the outer loop, we add a path of length 1
-        // between nodes that originally had a path of length 2. In the worst
-        // case, we need to make floor(log |V|) + 1 iterations. We stop earlier
+        // At every iteration of the outer loop, we add a path of length $1$
+        // between nodes that originally had a path of length $2$. In the worst
+        // case, we need to make floor($\log |V|$) + 1 iterations. We stop earlier
         // if there is no change to the output graph.
 
         int bound = computeBinaryLog(vertexSet.size());
@@ -96,7 +96,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes floor(log_2(n)) + 1
+     * Computes floor($\log_2 (n)$) $+ 1$
      */
     private int computeBinaryLog(int n)
     {
@@ -112,7 +112,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes the transitive closure of a directed acyclic graph in O(n*m)
+     * Computes the transitive closure of a directed acyclic graph in $O(nm)$
      *
      * @param graph - Graph to compute transitive closure for.
      * @param <V> the graph vertex type

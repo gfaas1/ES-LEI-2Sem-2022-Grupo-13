@@ -27,7 +27,7 @@ import org.jgrapht.graph.*;
  * 
  * <p>
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
- * model, such as the initial configuration of the first nodes, and whether the m links assigned to
+ * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned to
  * a new node are added one by one, or simultaneously, etc. The generator is described in the paper:
  * Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
  * 
@@ -38,8 +38,8 @@ import org.jgrapht.graph.*;
  * as {@link Pseudograph} or {@link DirectedPseudograph}.
  * 
  * <p>
- * The generator starts with a graph of one node and grows the network by adding n-1 additional
- * nodes. The additional nodes are added one by one and each of them is connected to m previously
+ * The generator starts with a graph of one node and grows the network by adding $n-1$ additional
+ * nodes. The additional nodes are added one by one and each of them is connected to $m$ previously
  * added nodes (or to itself with a small probability), where the probability of connecting to a
  * node is proportional to its degree.
  * 

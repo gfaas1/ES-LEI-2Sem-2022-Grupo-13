@@ -22,7 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * An algorithm which computes k-shortest paths between vertices.
+ * An algorithm which computes $k$-shortest paths between vertices.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

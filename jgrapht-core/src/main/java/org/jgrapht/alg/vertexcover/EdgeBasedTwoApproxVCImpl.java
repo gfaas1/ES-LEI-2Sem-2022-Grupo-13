@@ -74,21 +74,21 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 
-        // G'=(V',E') <-- G(V,E)
+        // $G'=(V',E')$ <-- $G(V,E)$
         Graph<V, E> sg = new AsSubgraph<>(graph, null, null);
 
-        // while E' is non-empty
+        // while $E'$ is non-empty
         while (!sg.edgeSet().isEmpty()) {
-            // let (u,v) be an arbitrary edge of E'
+            // let (u,v) be an arbitrary edge of $E'$
             E e = sg.edgeSet().iterator().next();
 
-            // C <-- C U {u,v}
+            // $C$ <-- C U {u,v}
             V u = graph.getEdgeSource(e);
             V v = graph.getEdgeTarget(e);
             cover.add(u);
             cover.add(v);
 
-            // remove from E' every edge incident on either u or v
+            // remove from $E'$ every edge incident on either $u$ or $v$
             sg.removeVertex(u);
             sg.removeVertex(v);
         }

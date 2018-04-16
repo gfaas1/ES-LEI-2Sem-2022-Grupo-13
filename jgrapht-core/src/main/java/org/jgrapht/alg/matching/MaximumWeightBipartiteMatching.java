@@ -175,7 +175,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     /**
      * Augment from a particular node. The algorithm always looks for augmenting paths from nodes in
-     * partition1. In the following code partition1 is A and partition2 is B.
+     * partition1. In the following code partition1 is $A$ and partition2 is $B$.
      * 
      * @param a the node
      */
@@ -190,7 +190,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         reachedA.push(a);
         Deque<V> reachedB = new ArrayDeque<>();
 
-        // relax all edges out of a1
+        // relax all edges out of $a_1$
         V a1 = a;
         for (E e1 : graph.edgesOf(a1)) {
             if (!matching.contains(e1)) {
@@ -217,7 +217,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         while (true) {
             /*
-             * select from priority queue the node b with minimal distance db
+             * select from priority queue the node $b$ with minimal distance $d_b$
              */
             V b = null;
             BigDecimal db = BigDecimal.ZERO;
@@ -251,7 +251,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                         minA = db.add(pot.get(a1));
                     }
 
-                    // relax all edges out of a1
+                    // relax all edges out of $a_1$
                     for (E e1 : graph.edgesOf(a1)) {
                         if (!matching.contains(e1)) {
                             V b1 = Graphs.getOppositeVertex(graph, e1, a1);
@@ -306,8 +306,8 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     private void augmentPathTo(V v)
     {
-        List<E> matched = new ArrayList<E>();
-        List<E> free = new ArrayList<E>();
+        List<E> matched = new ArrayList<>();
+        List<E> free = new ArrayList<>();
 
         E e1 = pred.get(v);
         while (e1 != null) {

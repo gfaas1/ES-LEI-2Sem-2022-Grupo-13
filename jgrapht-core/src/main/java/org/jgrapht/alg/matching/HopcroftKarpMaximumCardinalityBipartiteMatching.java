@@ -25,7 +25,7 @@ import org.jgrapht.alg.util.*;
 
 /**
  * Implementation of the well-known Hopcroft Karp algorithm to compute a matching of maximum
- * cardinality in a bipartite graph. The algorithm runs in O(|E|*√|V|) time. This implementation
+ * cardinality in a bipartite graph. The algorithm runs in $O(|E| \cdot \sqrt{|V|})$ time. This implementation
  * accepts undirected graphs which may contain self-loops and multiple edges. To compute a maximum
  * cardinality matching in general (non-bipartite) graphs, use
  * {@link EdmondsMaximumCardinalityMatching} instead.
@@ -153,7 +153,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
 
         for (int u = 1; u <= partition1.size(); u++)
             if (matching[u] == DUMMY) { // Add all unmatched vertices to the queue and set their
-                                        // distance to 0
+                                        // distance to $0$
                 dist[u] = 0;
                 queue.enqueue(u);
             } else // Set distance of all matched vertices to INF

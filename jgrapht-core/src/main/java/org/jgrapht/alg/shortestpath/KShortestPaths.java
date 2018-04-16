@@ -30,7 +30,7 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * The algorithm is a variant of the Bellman-Ford algorithm but instead of only storing the best
- * path it stores the "k" best paths at each pass, yielding a complexity of O(k*n*(m^2)) where m is
+ * path it stores the "k" best paths at each pass, yielding a complexity of $O(k \cdot n \cdot (m^2))$ where m is
  * the number of edges and n is the number of vertices.
  *
  * @param <V> the graph vertex type
