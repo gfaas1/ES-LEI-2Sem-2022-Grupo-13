@@ -56,9 +56,9 @@ public class TransitiveClosure
 
         Set<V> newEdgeTargets = new HashSet<>();
 
-        // At every iteration of the outer loop, we add a path of length $1$
-        // between nodes that originally had a path of length $2$. In the worst
-        // case, we need to make floor($\log |V|$) + 1 iterations. We stop earlier
+        // At every iteration of the outer loop, we add a path of length 1
+        // between nodes that originally had a path of length 2. In the worst
+        // case, we need to make floor(log |V|) + 1 iterations. We stop earlier
         // if there is no change to the output graph.
 
         int bound = computeBinaryLog(vertexSet.size());

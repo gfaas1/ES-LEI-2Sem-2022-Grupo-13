@@ -60,7 +60,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
 
     /* Input graph */
     private final Graph<V, E> network;
-    /* Set of vertices which are labeled 'odd' (set $T$ in the paper) */
+    /* Set of vertices which are labeled 'odd' (set T in the paper) */
     private Set<V> oddVertices;
     /* Algorithm used to calculate the Gomory-Hu Cut-tree */
     private final GusfieldGomoryHuCutTree<V, E> gusfieldGomoryHuCutTreeAlgorithm;
@@ -222,7 +222,7 @@ public class PadbergRaoOddMinimumCutset<V, E>
     {
         assert cluster.size() >= 2;
 
-        // Choose $2$ random odd nodes
+        // Choose 2 random odd nodes
         Iterator<V> iterator = cluster.iterator();
         V oddNode1 = iterator.next();
         V oddNode2 = iterator.next();

@@ -169,9 +169,9 @@ public class PathGrowingWeightedMatching<V, E>
             // find vertex arbitrarily
             V x = visibleVertex.stream().findAny().get();
 
-            // grow path from $x$
+            // grow path from x
             while (x != null) {
-                // first heaviest edge incident to vertex $x$ (among visible neighbors)
+                // first heaviest edge incident to vertex x (among visible neighbors)
                 double maxWeight = 0d;
                 E maxWeightedEdge = null;
                 V maxWeightedNeighbor = null;
@@ -189,7 +189,7 @@ public class PathGrowingWeightedMatching<V, E>
                     }
                 }
 
-                // add it to either $m_1$ or $m_2$, alternating between them
+                // add it to either m1 or m2, alternating between them
                 if (maxWeightedEdge != null) {
                     switch (i) {
                     case 1:
@@ -207,7 +207,7 @@ public class PathGrowingWeightedMatching<V, E>
                     i = 3 - i;
                 }
 
-                // remove $x$ and incident edges
+                // remove x and incident edges
                 visibleVertex.remove(x);
 
                 // go to next vertex
@@ -244,7 +244,7 @@ public class PathGrowingWeightedMatching<V, E>
             // grow path from x
             LinkedList<E> path = new LinkedList<>();
             while (x != null) {
-                // first heaviest edge incident to vertex $x$ (among visible neighbors)
+                // first heaviest edge incident to vertex x (among visible neighbors)
                 double maxWeight = 0d;
                 E maxWeightedEdge = null;
                 V maxWeightedNeighbor = null;
@@ -262,7 +262,7 @@ public class PathGrowingWeightedMatching<V, E>
                     }
                 }
 
-                // add edge to path and remove $x$
+                // add edge to path and remove x
                 if (maxWeightedEdge != null) {
                     path.add(maxWeightedEdge);
                 }

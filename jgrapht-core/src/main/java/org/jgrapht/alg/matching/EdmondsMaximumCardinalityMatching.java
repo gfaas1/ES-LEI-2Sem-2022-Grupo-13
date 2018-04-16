@@ -226,33 +226,33 @@ public class EdmondsMaximumCardinalityMatching<V, E>
                 for (V wOrig : Graphs.neighborListOf(graph, vertices.get(v))) {
                     int w = vertexIndexMap.get(wOrig);
 
-                    // vertex $w$ is even: we may have encountered a blossom.
-                    if (even[uf.find(w)] != NIL) { // $w$ is an even vertex
-                        // if $v$ and $w$ belong to the same blossom, the edge has been shrunken away
+                    // vertex w is even: we may have encountered a blossom.
+                    if (even[uf.find(w)] != NIL) { // w is an even vertex
+                        // if v and w belong to the same blossom, the edge has been shrunken away
                         // and we can ignore it. if not, we found a new blossom. We do not need to
-                        // check whether $v$ and $w$ belong to the same tree since each tree is fully
-                        // grown before we continue growing a new tree. Consequently, vertex $w$
-                        // can only belong to the same tree as $v$.
+                        // check whether v and w belong to the same tree since each tree is fully
+                        // grown before we continue growing a new tree. Consequently, vertex w
+                        // can only belong to the same tree as v.
                         if (!uf.inSameSet(v, w))
-                            blossom(v, w); // Create a new blossom using bridge edge $(v,w)$
+                            blossom(v, w); // Create a new blossom using bridge edge (v,w)
                     }
 
-                    // vertex $w$ is either odd or unreached. If it is unreached, we have found an
+                    // vertex w is either odd or unreached. If it is unreached, we have found an
                     // augmenting path. If it is odd, we can grow the tree.
-                    else if (odd[w] == NIL) { // $w$ is odd or unreached
+                    else if (odd[w] == NIL) { // w is odd or unreached
 
-                        if (matching.isExposed(w)) { // $w$ is unreached: we found an augmenting path
+                        if (matching.isExposed(w)) { // w is unreached: we found an augmenting path
                             augment(v);
                             augment(w);
                             matching.match(v, w);
                             return true;
                         }
 
-                        // $w$ is an odd vertex: grow the tree
+                        // w is an odd vertex: grow the tree
                         odd[w] = v;
                         int u = matching.opposite(w); // even vertex
                         even[u] = w;
-                        queue.enqueue(u); // continue growing the tree from $u$
+                        queue.enqueue(u); // continue growing the tree from u
                     }
                 }
             }
@@ -271,13 +271,13 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      */
     private void blossom(int v, int w)
     {
-        // Compute the base of the blossom. Let $p_1$, $p_2$ be the paths from the root of the tree to $v$
-        // resp. $w$. The base vertex is the last vertex $p_1$ and $p_2$ have in common. In a blossom, the
-        // base vertex is unique in the sense that it is the only vertex incident to $2$ unmatched
+        // Compute the base of the blossom. Let p_1, p_2 be the paths from the root of the tree to v
+        // resp. w. The base vertex is the last vertex p_1 and p_2 have in common. In a blossom, the
+        // base vertex is unique in the sense that it is the only vertex incident to 2 unmatched
         // edges.
         int base = nearestCommonAncestor(v, w);
 
-        // Compute resp the left side ($v$ to base) and right side ($w$ to base) of the blossom.
+        // Compute resp the left side (v to base) and right side (w to base) of the blossom.
         blossomSupports(v, w, base);
         blossomSupports(w, v, base);
 
@@ -285,17 +285,17 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         uf.union(v, base);
         uf.union(w, base);
 
-        // Blossoms are efficiently stored in a UnionFind data structure $uf$. Ideally, $uf.find(x)$ for
-        // some vertex $x$ returns the base $u$ of the blossom containing $x$. However, when $uf$ uses rank
+        // Blossoms are efficiently stored in a UnionFind data structure uf. Ideally, uf.find(x) for
+        // some vertex x returns the base u of the blossom containing x. However, when uf uses rank
         // compression, it cannot be guaranteed that the vertex returned is indeed the base of the
-        // blossom. In fact, it can be any vertex of the blossom containing $x$. We therefore have to
+        // blossom. In fact, it can be any vertex of the blossom containing x. We therefore have to
         // ensure that the predecessor of the blossom's representative is the predecessor of the
         // actual base vertex.
         even[uf.find(base)] = even[base];
     }
 
     /**
-     * This method creates one side of the blossom: the path from vertex v to the base of the
+     * This method creates one side of the blossom: the path from vertex $v$ to the base of the
      * blossom. The vertices encountered on this path are grouped together (union). The odd vertices
      * are added to the processing queue (odd vertices in a blossom become even) and a pointer to
      * the bridge $(v,w)$ is stored for each odd vertex. Notice the orientation of the bridge: the
@@ -345,11 +345,11 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             w = parent(w);
             wAncestors.set(w);
 
-            // vertex $v$ is an ancestor of $w$, so $v$ much be the base of the blossom
+            // vertex v is an ancestor of w, so v much be the base of the blossom
             if (wAncestors.get(v)) {
                 return v;
             }
-            // vertex $w$ is an ancestor of $v$, so $w$ much be the base of the blossom
+            // vertex w is an ancestor of v, so w much be the base of the blossom
             else if (vAncestors.get(w)) {
                 return w;
             }
@@ -366,7 +366,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     private int parent(int v)
     {
         v = uf.find(v); // even vertex
-        int parent = uf.find(even[v]); // odd vertex, or $v$ if v is the root of its tree
+        int parent = uf.find(even[v]); // odd vertex, or v if v is the root of its tree
         if (parent == v)
             return v; // root of tree
         return uf.find(odd[parent]);
@@ -404,18 +404,18 @@ public class EdmondsMaximumCardinalityMatching<V, E>
             // vertex. Vertices which were originally odd become even
             // when they are contracted into a blossom. If we start constructing the path from such
             // an odd vertex, we must 'lift' the path through the blossom.
-            // To lift the path through the blossom, we have to walk from odd node $u$ in the
+            // To lift the path through the blossom, we have to walk from odd node u in the
             // direction of the bridge, cross the bridge, and then
             // continue in the direction of the tree root.
             while (odd[start] != NIL) {
 
                 Pair<Integer, Integer> bridge = bridges.get(start);
 
-                // From the start vertex $u$, walk in the direction of the bridge $(v,w)$. The first
+                // From the start vertex u, walk in the direction of the bridge (v,w). The first
                 // edge encountered
-                // on the path from $u$ to $v$ is always a matched edge. Notice that the path from $u$ to
-                // $v$ leads away from the root of the tree. Since we only store
-                // pointers in the direction of the root, we have to compute a path from $v$ to $u$, and
+                // on the path from u to v is always a matched edge. Notice that the path from u to
+                // v leads away from the root of the tree. Since we only store
+                // pointers in the direction of the root, we have to compute a path from v to u, and
                 // reverse the resulting path.
                 int j = buildPath(path, i, bridge.getFirst(), start);
                 reverse(path, i, j - 1);
@@ -481,7 +481,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * {@link #getMatching()} method in this class is guaranteed to be maximum.
      * <p>
      * To attest whether the matching is maximum, we use the Tutte-Berge Formula which provides a
-     * tight bound on the cardinality of the matching. The Tutte-Berge Formula states: $m(G) = \frac{1}{2} \min_{X \subseteq V} ( |X| - c_{\text{odd}}(G - X) + |V|),
+     * tight bound on the cardinality of the matching. The Tutte-Berge Formula states:
+     * $m(G) = \frac{1}{2} \min_{X \subseteq V} ( |X| - c_{\text{odd}}(G - X) + |V|),
      * where $m(G)$ is the size of the matching, $X$ a subset of
      * vertices, $G-X$ the induced graph on vertex set $V(G) \setminus X$, and $c_{\text{odd}}(G)$ the number of connected
      * components of odd cardinality in graph $G$.<br>
@@ -517,11 +518,11 @@ public class EdmondsMaximumCardinalityMatching<V, E>
         // known as the
         // Edmonds-Gallai decomposition of a graph: it decomposes the graph into three disjoint sets
         // of vertices: odd, even, or free.
-        // Let $D(G)$ be the set of vertices such that for each $v$ in $D(G)$ there exists a maximum
-        // matching missing $v$. Let $A(G)$ be the set of vertices such that each $v$ in $A(G)$
-        // is a neighbor of $D(G)$, but is not contained in $D(G)$ itself. The set $A(G)$ attains the
+        // Let D(G) be the set of vertices such that for each v in D(G) there exists a maximum
+        // matching missing v. Let A(G) be the set of vertices such that each v in A(G)
+        // is a neighbor of D(G), but is not contained in D(G) itself. The set A(G) attains the
         // minimum in the Tutte-Berge Formula. It can be shown that
-        // $A(G)= \left{\text{vertices labeled odd in the Edmonds Blossomg-Shrinking algorithm}\right}$. Note: we only
+        // A(G)= {vertices labeled odd in the Edmonds Blossomg-Shrinking algorithm}. Note: we only
         // take odd vertices that are not consumed by blossoms (every blossom is even).
         Set<V> oddVertices = vertexIndexMap
             .values().stream().filter(vx -> odd[vx] != NIL && !bridges.containsKey(vx))

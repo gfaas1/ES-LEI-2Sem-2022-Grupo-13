@@ -153,7 +153,7 @@ public class HopcroftKarpMaximumCardinalityBipartiteMatching<V, E>
 
         for (int u = 1; u <= partition1.size(); u++)
             if (matching[u] == DUMMY) { // Add all unmatched vertices to the queue and set their
-                                        // distance to $0$
+                                        // distance to 0
                 dist[u] = 0;
                 queue.enqueue(u);
             } else // Set distance of all matched vertices to INF

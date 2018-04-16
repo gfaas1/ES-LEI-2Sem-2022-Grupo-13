@@ -146,10 +146,10 @@ public class FibonacciHeap<T>
      */
     public void delete(FibonacciHeapNode<T> x)
     {
-        // make $x$ as small as possible
+        // make x as small as possible
         decreaseKey(x, Double.NEGATIVE_INFINITY);
 
-        // remove the smallest, which decreases $n$ also
+        // remove the smallest, which decreases n also
         removeMin();
     }
 
@@ -550,7 +550,7 @@ public class FibonacciHeap<T>
             y.child = null;
         }
 
-        // add $x$ to root list of heap
+        // add x to root list of heap
         x.left = minNode;
         x.right = minNode.right;
         minNode.right = x;

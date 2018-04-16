@@ -154,12 +154,12 @@ public class BetweennessCentrality<V, E>
         Map<V, List<V>> predecessors = new HashMap<>();
         this.graph.vertexSet().forEach(w -> predecessors.put(w, new ArrayList<>()));
 
-        // Number of shortest paths from $s$ to $v$
+        // Number of shortest paths from s to v
         Map<V, Double> sigma = new HashMap<>();
         this.graph.vertexSet().forEach(t -> sigma.put(t, 0.0));
         sigma.put(s, 1.0);
 
-        // Distance (Weight) of the shortest path from $s$ to $v$
+        // Distance (Weight) of the shortest path from s to v
         Map<V, Double> distance = new HashMap<>();
         this.graph.vertexSet().forEach(t -> distance.put(t, Double.POSITIVE_INFINITY));
         distance.put(s, 0.0);
@@ -168,7 +168,7 @@ public class BetweennessCentrality<V, E>
             this.graph.getType().isWeighted() ? new WeightedQueue() : new UnweightedQueue();
         queue.insert(s, 0.0);
 
-        // 1. compute the length and the number of shortest paths between all $s$ to $v$
+        // 1. compute the length and the number of shortest paths between all s to v
         while (!queue.isEmpty()) {
             V v = queue.remove();
             stack.push(v);
@@ -180,12 +180,12 @@ public class BetweennessCentrality<V, E>
                     throw new IllegalArgumentException("Negative edge weight not allowed");
                 }
                 double d = distance.get(v) + eWeight;
-                // $w$ found for the first time?
+                // w found for the first time?
                 if (distance.get(w) == Double.POSITIVE_INFINITY) {
                     queue.insert(w, d);
                     distance.put(w, d);
                 }
-                // shortest path to $w$ via $v$?
+                // shortest path to w via v?
                 if (distance.get(w) >= d) {
                     queue.update(w, d);
                     sigma.put(w, sigma.get(w) + sigma.get(v));
@@ -195,10 +195,10 @@ public class BetweennessCentrality<V, E>
         }
 
         // 2. sum all pair dependencies.
-        // The pair-dependency of $s$ and $v$ in $w$
+        // The pair-dependency of s and v in w
         Map<V, Double> dependency = new HashMap<>();
         this.graph.vertexSet().forEach(v -> dependency.put(v, 0.0));
-        // $S$ returns vertices in order of non-increasing distance from $s$
+        // S returns vertices in order of non-increasing distance from s
         while (!stack.isEmpty()) {
             V w = stack.pop();
             for (V v : predecessors.get(w)) {

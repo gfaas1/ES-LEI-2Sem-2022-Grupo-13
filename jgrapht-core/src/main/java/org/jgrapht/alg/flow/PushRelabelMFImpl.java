@@ -66,7 +66,7 @@ public class PushRelabelMFImpl<V, E>
     private final ExtensionFactory<VertexExtension> vertexExtensionsFactory;
     private final ExtensionFactory<AnnotatedFlowEdge> edgeExtensionsFactory;
 
-    // countHeight[h] = number of vertices with height $h$
+    // countHeight[h] = number of vertices with height h
     private int[] countHeight;
 
     // queue of active vertices
@@ -247,10 +247,10 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        The basic operation PUSH(u, v) is applied if $u$ in an overflowing vertex (i.e. has excess)
-        and $u.height = v.height + 1$.
+        The basic operation PUSH(u, v) is applied if u in an overflowing vertex (i.e. has excess)
+        and u.height = v.height + 1.
 
-        The operation can be either saturating (if $ux.excess \geq ex.capacity - ex.flow)$ or
+        The operation can be either saturating (if ux.excess >= ex.capacity - ex.flow) or
         nonsaturating (otherwise).
      */
     private void push(AnnotatedFlowEdge ex)
@@ -259,7 +259,7 @@ public class PushRelabelMFImpl<V, E>
         VertexExtension vx = ex.getTarget();
         double delta = Math.min(ux.excess, ex.capacity - ex.flow);
 
-        // if $v$ is not downhill from $u$ or there is nothing to push (i.e. delta == 0) stop
+        // if v is not downhill from u or there is nothing to push (i.e. delta == 0) stop
         if (ux.height <= vx.height || comparator.compare(delta, 0.0) <= 0)
             return;
 
@@ -269,7 +269,7 @@ public class PushRelabelMFImpl<V, E>
 
         pushFlowThrough(ex, delta);
 
-        // check if we can 'activate' $v$
+        // check if we can 'activate' v
         enqueue(vx);
     }
 
@@ -284,17 +284,17 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        The basic operation RELABEL(u) is applied if $u$ is overflowing (i.e. has excess)
-        and if $u.height \leq v.height + 1$.
+        The basic operation RELABEL(u) is applied if u is overflowing (i.e. has excess)
+        and if u.height <= v.height + 1.
 
-        We can relabel an overflowing vertex $u$ if for every vertex $v$ for which there is
-        residual capacity from $u$ to $v$, flow cannot be pushed from $u$ to $v$ because $v$ is not
-        downhill from $u$.
+        We can relabel an overflowing vertex $u$ if for every vertex v for which there is
+        residual capacity from u to v, flow cannot be pushed from u to v because v is not
+        downhill from u.
      */
     private void relabel(VertexExtension ux){
         int oldHeight = ux.height;
 
-        // Increase the height of $u$; $u.h = 1 + \min(v.h : (u, v) \in E_f}$
+        // Increase the height of u; u.h = 1 + min(v.h : (u, v) \in E_f)
 
         countHeight[ux.height]--;
         ux.height = 2 * N;
@@ -310,9 +310,9 @@ public class PushRelabelMFImpl<V, E>
         if (USE_GAP_RELABELING_HEURISTIC){
             /*
                 The gap heuristic detects gaps in the height function.
-                If there is a height $0 < h < |V|$ for which there is no node $u$ such that
-                $u.height = h$, then any node $v$ with $h < v.height < |V|$ has been disconnected from sink
-                 and can be relabeled to $(|V| + 1)$.
+                If there is a height 0 < h < |V| for which there is no node u such that
+                u.height = h, then any node v with h < v.height < |V| has been disconnected from sink
+                 and can be relabeled to (|V| + 1).
              */
             if (0 < oldHeight && oldHeight < N && countHeight[oldHeight] == 0){
                 gapHeuristic(oldHeight);
@@ -377,19 +377,19 @@ public class PushRelabelMFImpl<V, E>
     }
 
     /*
-        An overflowing vertex $u$ is discharged by pushing all of its excess flow through
-        admissible edges to neighboring vertices, relabeling $u$ as necessary to cause edges
-        leaving $u$ to become admissible,
+        An overflowing vertex u is discharged by pushing all of its excess flow through
+        admissible edges to neighboring vertices, relabeling u as necessary to cause edges
+        leaving u to become admissible,
      */
     private void discharge(VertexExtension ux){
         while (ux.hasExcess()){
             // If there are no more edges
             if (ux.currentArc >= ux.getOutgoing().size()){
-                // then we relabel $u$
+                // then we relabel u
                 relabel(ux);
 
                 if (USE_GLOBAL_RELABELING_HEURISTIC){
-                    // If we already relabeled $|V|$ vertices, then we do a global relabeling
+                    // If we already relabeled |V| vertices, then we do a global relabeling
                     // Note:  Global relabelings are performed periodically
                     if ((++relabelCounter) == N) {
                         recomputeHeightsHeuristic();

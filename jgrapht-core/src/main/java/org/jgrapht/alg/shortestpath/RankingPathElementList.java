@@ -194,7 +194,7 @@ final class RankingPathElementList<V, E>
 
         boolean pathAdded = false;
 
-        // loop over the paths elements of the list at vertex $v$.
+        // loop over the paths elements of the list at vertex v.
         for (int vIndex = 0, yIndex = 0; vIndex < elementList.size(); vIndex++) {
             RankingPathElement<V, E> prevPathElement = elementList.get(vIndex);
 
@@ -207,7 +207,7 @@ final class RankingPathElementList<V, E>
             RankingPathElement<V, E> newPathElement =
                 new RankingPathElement<>(this.graph, prevPathElement, edge, newPathWeight);
 
-            // loop over the paths of the list at vertex $y$ from yIndex to the
+            // loop over the paths of the list at vertex y from yIndex to the
             // end.
             RankingPathElement<V, E> yPathElement = null;
             for (; yIndex < size(); yIndex++) {

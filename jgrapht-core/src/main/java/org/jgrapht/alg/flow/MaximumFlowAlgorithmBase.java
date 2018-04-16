@@ -180,7 +180,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
             backwardEdge = edgeExtensionManager.createExtension();
             backwardEdge.source = forwardEdge.target;
             backwardEdge.target = forwardEdge.source;
-            if (!directedGraph) { // Undirected graph: if $(u,v)$ exists, then so much $(v,u)$
+            if (!directedGraph) { // Undirected graph: if (u,v) exists, then so much (v,u)
                 backwardEdge.capacity = network.getEdgeWeight(backwardPrototype);
                 backwardEdge.prototype = backwardPrototype;
             }
@@ -210,17 +210,17 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
         assert ((comparator.compare(edge.flow, 0.0) == 0)
             || (comparator.compare(inverseEdge.flow, 0.0) == 0));
 
-        if (comparator.compare(inverseEdge.flow, flow) < 0) { // If $f_1 \geq f_2$
+        if (comparator.compare(inverseEdge.flow, flow) < 0) { // If f_1 >= f_2
             double flowDifference = flow - inverseEdge.flow;
 
             edge.flow += flowDifference;
-            edge.capacity -= inverseEdge.flow; // Capacity on edge $(u,v)$ PLUS flow on $(v,u)$ gives
-                                               // the MAXIMUM flow in the direction $(u,v)$ i.e
+            edge.capacity -= inverseEdge.flow; // Capacity on edge (u,v) PLUS flow on (v,u) gives
+                                               // the MAXIMUM flow in the direction (u,v) i.e
                                                // edge.weight in the graph 'network'.
 
             inverseEdge.flow = 0;
             inverseEdge.capacity += flowDifference;
-        } else { // If $f1 < f2$
+        } else { // If f1 < f2
             edge.capacity -= flow;
             inverseEdge.flow -= flow;
         }
@@ -454,7 +454,7 @@ public abstract class MaximumFlowAlgorithmBase<V, E>
      */
     protected void calculateSourcePartition()
     {
-        // the source partition contains all vertices reachable from $s$ in the residual graph
+        // the source partition contains all vertices reachable from s in the residual graph
         this.sourcePartition = new LinkedHashSet<>();
         Queue<VertexExtensionBase> processQueue = new LinkedList<>();
         processQueue.add(vertexExtensionManager.getExtension(getCurrentSource()));

@@ -110,7 +110,7 @@ public class GreedyWeightedMatching<V, E>
     public Matching<V, E> getMatching()
     {
         // sort edges in non-decreasing order of weight
-        // (the lambda uses $e_1$ and $e_2$ in the reverse order on purpose)
+        // (the lambda uses e1 and e2 in the reverse order on purpose)
         List<E> allEdges = new ArrayList<>(graph.edgeSet());
         if (normalizeEdgeCosts) {
             allEdges.sort((e1, e2) -> {

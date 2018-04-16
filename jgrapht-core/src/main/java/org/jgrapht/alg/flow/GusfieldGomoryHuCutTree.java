@@ -79,8 +79,8 @@ public class GusfieldGomoryHuCutTree<V, E>
     /* Data structures for computations */
     private List<V> vertexList = new ArrayList<>();
     private Map<V, Integer> indexMap = new HashMap<>();
-    private int[] p; // See vector $\vec{p}$ in the paper description
-    private double[] fl; // See vector $\vec{fl}$ in the paper description
+    private int[] p; // See vector p in the paper description
+    private double[] fl; // See vector fl in the paper description
 
     /* Matrix containing the flow values for every $s-t$ pair */
     private double[][] flowMatrix = null;
@@ -115,7 +115,7 @@ public class GusfieldGomoryHuCutTree<V, E>
      * Constructs a new GusfieldEquivalentFlowTree instance.
      * 
      * @param network input graph
-     * @param minimumSTCutAlgorithm algorithm used to compute the minimum $s-t$ cuts
+     * @param minimumSTCutAlgorithm algorithm used to compute the minimum s-t cuts
      */
     public GusfieldGomoryHuCutTree(
         Graph<V, E> network, MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm)
@@ -319,7 +319,7 @@ public class GusfieldGomoryHuCutTree<V, E>
             pathEdges.stream().min(Comparator.comparing(gomoryHuTree::getEdgeWeight)).orElseThrow(
                 () -> new RuntimeException("path is empty?!"));
 
-        // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of $2$
+        // Remove the selected edge from the gomoryHuTree graph. The resulting graph consists of 2
         // components
         V source = gomoryHuTree.getEdgeSource(cheapestEdge);
         V target = gomoryHuTree.getEdgeTarget(cheapestEdge);

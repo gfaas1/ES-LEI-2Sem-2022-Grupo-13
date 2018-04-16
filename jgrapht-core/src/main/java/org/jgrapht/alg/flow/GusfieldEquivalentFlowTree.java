@@ -69,16 +69,16 @@ public class GusfieldEquivalentFlowTree<V, E>
 
     /* Number of vertices in the graph */
     private final int N;
-    /* Algorithm used to computed the Maximum $s-t$ flows */
+    /* Algorithm used to computed the Maximum s-t flows */
     private final MinimumSTCutAlgorithm<V, E> minimumSTCutAlgorithm;
 
     /* Data structures for computations */
     private List<V> vertexList = new ArrayList<>();
     private Map<V, Integer> indexMap = new HashMap<>();
-    private int[] p; // See vector $vec{p}$ in the paper description
+    private int[] p; // See vector p in the paper description
     private int[] neighbors;
 
-    /* Matrix containing the flow values for every $s-t$ pair */
+    /* Matrix containing the flow values for every s-t pair */
     private double[][] flowMatrix = null;
 
     private V lastInvokedSource = null;

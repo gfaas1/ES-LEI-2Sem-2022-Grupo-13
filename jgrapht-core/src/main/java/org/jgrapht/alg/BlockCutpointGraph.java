@@ -197,11 +197,11 @@ public class BlockCutpointGraph<V, E>
                 this.stack.add(dfsEdge);
 
                 // minimum of the traverse orders of the "attach points" of
-                // the vertex $n$.
+                // the vertex n.
                 int minN = dfsVisit(n, s);
                 minS = Math.min(minN, minS);
                 if (minN >= getNumOrder(s)) {
-                    // $s$ is a cutpoint.
+                    // s is a cutpoint.
                     // it has a son whose "attach depth" is greater or equal.
                     biconnectedComponentFinished(s, n);
                 }
@@ -209,13 +209,13 @@ public class BlockCutpointGraph<V, E>
                 BCGEdge backwardEdge = new BCGEdge(s, n);
                 this.stack.add(backwardEdge);
 
-                // $n$ is an "attach point" of s. {s->n} is a backward edge.
+                // n is an "attach point" of s. {s->n} is a backward edge.
                 minS = Math.min(getNumOrder(n), minS);
             }
         }
 
         // minimum of the traverse orders of the "attach points" of
-        // the vertex $s$.
+        // the vertex s.
         return minS;
     }
 
@@ -247,8 +247,6 @@ public class BlockCutpointGraph<V, E>
     private class BCGEdge
         extends DefaultEdge
     {
-        /**
-         */
         private static final long serialVersionUID = -5115006161815760059L;
 
         private V source;

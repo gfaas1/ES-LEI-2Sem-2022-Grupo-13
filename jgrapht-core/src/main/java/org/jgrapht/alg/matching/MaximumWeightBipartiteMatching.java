@@ -126,7 +126,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         heap = new GenericFibonacciHeap<>(comparator);
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
-        graph.vertexSet().stream().forEach(v -> {
+        graph.vertexSet().forEach(v -> {
             pot.put(v, BigDecimal.ZERO);
             pred.put(v, null);
             dist.put(v, BigDecimal.ZERO);
@@ -190,7 +190,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         reachedA.push(a);
         Deque<V> reachedB = new ArrayDeque<>();
 
-        // relax all edges out of $a_1$
+        // relax all edges out of a1
         V a1 = a;
         for (E e1 : graph.edgesOf(a1)) {
             if (!matching.contains(e1)) {
@@ -217,7 +217,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
         while (true) {
             /*
-             * select from priority queue the node $b$ with minimal distance $d_b$
+             * select from priority queue the node b with minimal distance db
              */
             V b = null;
             BigDecimal db = BigDecimal.ZERO;
@@ -251,7 +251,7 @@ public class MaximumWeightBipartiteMatching<V, E>
                         minA = db.add(pot.get(a1));
                     }
 
-                    // relax all edges out of $a_1$
+                    // relax all edges out of a1
                     for (E e1 : graph.edgesOf(a1)) {
                         if (!matching.contains(e1)) {
                             V b1 = Graphs.getOppositeVertex(graph, e1, a1);

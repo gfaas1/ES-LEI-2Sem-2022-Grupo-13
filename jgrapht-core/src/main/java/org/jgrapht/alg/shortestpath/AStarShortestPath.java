@@ -67,7 +67,7 @@ public class AStarShortestPath<V, E>
     // List of closed nodes
     protected Set<V> closedList;
 
-    // Mapping of nodes to their g-scores ($g(x)$).
+    // Mapping of nodes to their g-scores (g(x)).
     protected Map<V, Double> gScoreMap;
 
     // Predecessor map: mapping of a node to an edge that leads to its

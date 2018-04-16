@@ -103,10 +103,10 @@ public class StoerWagnerMinimumCut<V, E>
      */
     protected void minimumCutPhase(Set<V> a)
     {
-        // The last and before last vertices added to $A$.
+        // The last and before last vertices added to A.
         Set<V> last = a, beforelast = null;
 
-        // queue contains vertices not in A ordered by max weight of edges to $A$.
+        // queue contains vertices not in A ordered by max weight of edges to A.
         PriorityQueue<VertexAndWeight> queue = new PriorityQueue<>();
 
         // Maps vertices to elements of queue
@@ -137,10 +137,10 @@ public class StoerWagnerMinimumCut<V, E>
                 Set<V> vc = Graphs.getOppositeVertex(workingGraph, e, v);
                 VertexAndWeight vcandw = dmap.get(vc);
                 if (vcandw != null) {
-                    queue.remove(vcandw); // this is $O(logn)$ but could be $O(1)$?
+                    queue.remove(vcandw); // this is O(log n) but could be O(1)?
                     vcandw.active = true;
                     vcandw.weight += workingGraph.getEdgeWeight(e);
-                    queue.add(vcandw); // this is $O(logn)$ but could be $O(1)$?
+                    queue.add(vcandw); // this is O(log n) but could be O(1)?
                 }
             }
         }

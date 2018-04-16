@@ -189,10 +189,10 @@ public class RecursiveExactVCImpl<V, E>
         // then that branch should be explored first! Futhermore, if the lower bound+accumulated
         // cost > upperBoundOnVertexCoverWeight, then we may prune.
 
-        // Create 2 branches ($N(v)$ denotes the set of neighbors of v. $G_{v}$ indicates the graph
+        // Create 2 branches (N(v) denotes the set of neighbors of v. G_{v} indicates the graph
         // obtained by removing vertex v and all vertices incident to it.):
 
-        // Right branch ($N(v)$ are added to the cover, and we solve for $G_{N(v) \cup v }$.):
+        // Right branch (N(v) are added to the cover, and we solve for G_{N(v) \cup v }$.):
         BitSet visitedRightBranch = (BitSet) visited.clone();
         visitedRightBranch.set(indexNextVertex);
         for (V v : neighbors)
@@ -205,7 +205,7 @@ public class RecursiveExactVCImpl<V, E>
             neighbors.stream().map(vertexIDDictionary::get).collect(Collectors.toList());
         rightCover.addAllVertices(neighborsIndices, weight);
 
-        // Left branch (vertex $v$ is added to the cover, and we solve for $G_{v}$):
+        // Left branch (vertex v is added to the cover, and we solve for G_{v}):
         BitSet visitedLeftBranch = (BitSet) visited.clone();
         visitedLeftBranch.set(indexNextVertex);
 

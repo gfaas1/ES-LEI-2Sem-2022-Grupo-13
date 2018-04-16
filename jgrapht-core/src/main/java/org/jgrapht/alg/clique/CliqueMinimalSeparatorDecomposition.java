@@ -112,7 +112,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             chordalGraph.addVertex(v);
         }
 
-        // initialize $g'$ as subgraph of graph (same vertices and edges)
+        // initialize g' as subgraph of graph (same vertices and edges)
         final Graph<V, E> gprime = copyAsSimpleGraph(graph);
         int s = -1;
         generators = new ArrayList<>();
@@ -132,14 +132,14 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
 
             s = vertexLabels.get(v);
 
-            // Mark $x$ reached and all other vertices of gprime unreached
+            // Mark x reached and all other vertices of gprime unreached
             HashSet<V> reached = new HashSet<>();
             reached.add(v);
 
-            // mark neighborhood of $x$ reached and add to reach(label(y))
+            // mark neighborhood of x reached and add to reach(label(y))
             HashMap<Integer, HashSet<V>> reach = new HashMap<>();
 
-            // mark $y$ reached and add $y$ to reach
+            // mark y reached and add y to reach
             for (V y : Y) {
                 reached.add(y);
                 addToReach(vertexLabels.get(y), y, reach);
@@ -150,7 +150,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
                     continue;
                 }
                 while (reach.get(j).size() > 0) {
-                    // remove a vertex $y$ from reach(j)
+                    // remove a vertex y from reach(j)
                     V y = reach.get(j).iterator().next();
                     reach.get(j).remove(y);
 
@@ -232,10 +232,10 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
 
         separators = new HashSet<>();
 
-        // initialize $g'$ as subgraph of graph (same vertices and edges)
+        // initialize g' as subgraph of graph (same vertices and edges)
         Graph<V, E> gprime = copyAsSimpleGraph(graph);
 
-        // initialize $h'$ as subgraph of chordalGraph (same vertices and edges)
+        // initialize h' as subgraph of chordalGraph (same vertices and edges)
         Graph<V, E> hprime = copyAsSimpleGraph(chordalGraph);
 
         atoms = new HashSet<>();
