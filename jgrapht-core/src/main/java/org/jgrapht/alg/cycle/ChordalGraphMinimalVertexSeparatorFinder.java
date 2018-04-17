@@ -47,7 +47,7 @@ import java.util.*;
  * of the base set $B$. The definitions of a base set and a minimal vertex separator in the context of
  * chordal graphs are equivalent.
  * <p>
- * For more information on the topic see: Kumar, P.Sreenivasa & Madhavan, C.E.Veni. (1998).
+ * For more information on the topic see: Kumar, P.Sreenivasa &amp; Madhavan, C.E.Veni. (1998).
  * <a href="https://www.sciencedirect.com/science/article/pii/S0166218X98001231?via%3Dihub">
  * Minimal vertex separators of chordal graphs</a>. Discrete Applied Mathematics.
  * 89. 155-168. 10.1016/S0166-218X(98)00123-1.
