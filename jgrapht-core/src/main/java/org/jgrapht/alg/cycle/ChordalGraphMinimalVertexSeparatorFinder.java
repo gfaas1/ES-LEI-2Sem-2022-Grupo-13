@@ -23,7 +23,8 @@ import org.jgrapht.Graphs;
 import java.util.*;
 
 /**
- * Allows obtaining a mapping of all minimal vertex separators of a graph to their multiplicities
+ * Allows obtaining a mapping of all <a href="https://en.wikipedia.org/wiki/Chordal_graph#Minimal_separators">
+ * minimal vertex separators</a> of a graph to their multiplicities
  * <p>
  * In the context of this implementation following definitions are used:
  * <ul>
