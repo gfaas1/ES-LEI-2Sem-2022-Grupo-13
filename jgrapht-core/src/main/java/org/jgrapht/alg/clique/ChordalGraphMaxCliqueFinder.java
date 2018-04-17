@@ -85,7 +85,7 @@ public class ChordalGraphMaxCliqueFinder<V,E> implements CliqueAlgorithm<V>{
     }
 
     /**
-     * Lazily computes some maximum clique of the {@code graph}. Returns null if the graph isn't chordal.
+     * Lazily computes some maximum clique of the {@code graph}.
      */
     private void lazyComputeMaximumClique() {
         if (maximumClique == null && isChordal) {

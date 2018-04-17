@@ -80,9 +80,6 @@ public class ChordalGraphIndependentSetFinder<V,E> implements IndependentSetAlgo
 
     /**
      * Lazily computes a maximum independent set of the inspected {@code graph}.
-     * If the graph isn't chordal, returns null.
-     *
-     * @return a maximum independent set of the {@code graph} if it is chordal, false otherwise.
      */
     private void lazyComputeMaximumIndependentSet() {
         if (maximumIndependentSet == null && chordalityInspector.isChordal()) {
@@ -107,7 +104,7 @@ public class ChordalGraphIndependentSetFinder<V,E> implements IndependentSetAlgo
                     }
                 }
             }
-            maximumIndependentSet=new IndependentSetImpl<V>(is);
+            maximumIndependentSet= new IndependentSetImpl<>(is);
         }
     }
 
