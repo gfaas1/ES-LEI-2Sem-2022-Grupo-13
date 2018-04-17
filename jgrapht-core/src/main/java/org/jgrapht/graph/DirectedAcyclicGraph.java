@@ -462,8 +462,8 @@ public class DirectedAcyclicGraph<V, E>
         List<V> topoDf = new ArrayList<>(df);
         List<V> topoDb = new ArrayList<>(db);
 
-        Collections.sort(topoDf, topoComparator);
-        Collections.sort(topoDb, topoComparator);
+        topoDf.sort(topoComparator);
+        topoDb.sort(topoComparator);
 
         // merge these suckers together in topological order
         SortedSet<Integer> availableTopoIndices = new TreeSet<>();

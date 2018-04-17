@@ -220,7 +220,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
     }
 
     /**
-     * Compute the unique decomposition of the input graph G (atoms of G). Implementation of
+     * Compute the unique decomposition of the input graph $G$ (atoms of $G$). Implementation of
      * algorithm Atoms as described in Berry et al. (2010), DOI:10.3390/a3020197,
      * <a href="http://www.mdpi.com/1999-4893/3/2/197"> http://www.mdpi.com/1999-4893/3/2/197</a>
      */
