@@ -582,7 +582,7 @@ public class WeakChordalityInspector<V, E> {
      */
     private List<V> findCycle(Map<V, Boolean> visited, Graph<V, E> graph, V tarInSep, V tar, V sour, V sourInSep) {
         List<V> cycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
-        LinkedList<V> stack = new LinkedList<>();
+        Deque<V> stack = new ArrayDeque<>();
         stack.add(sourInSep);
 
         while (!stack.isEmpty()) {

@@ -100,7 +100,7 @@ public class SeparatorFinder<V, E> {
      * @return the computed separator, which consists of all encountered red vertices
      */
     private Set<V> getSeparator(V startVertex, Map<V, Byte> dfsMap) {
-        LinkedList<V> stack = new LinkedList<>();
+        Deque<V> stack = new ArrayDeque<>();
         Set<V> separator = new HashSet<>();
         stack.add(startVertex);
 
