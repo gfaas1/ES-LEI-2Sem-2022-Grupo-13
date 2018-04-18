@@ -373,49 +373,56 @@ public class DirectedAcyclicGraph<V, E>
      * Depth first search forward, building up the set (df) of forward-connected vertices in the
      * Affected Region
      *
-     * @param vertex the vertex being visited
+     * @param initialVertex the vertex being visited
      * @param df the set we are populating with forward connected vertices in the Affected Region
      * @param visited a simple data structure that lets us know if we already visited a node with a
      *        given topo index
-     *
+     * 
      * @throws CycleFoundException if a cycle is discovered
      */
-    private void dfsF(V vertex, Set<V> df, VisitedStrategy visited, Region affectedRegion)
+    private void dfsF(V initialVertex, Set<V> df, VisitedStrategy visited, Region affectedRegion)
         throws CycleFoundException
     {
-        int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
+        Deque<V> vertices = new LinkedList<>();
+        vertices.push(initialVertex);
 
-        // Assumption: vertex is in the AR and so it will be in visited
-        visited.setVisited(topoIndex);
+        while (!vertices.isEmpty())
+        {
+            V vertex = vertices.pop();
+            int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
 
-        df.add(vertex);
+            // Assumption: vertex is in the AR and so it will be in visited
+            visited.setVisited(topoIndex);
 
-        for (E outEdge : outgoingEdgesOf(vertex)) {
-            V nextVertex = getEdgeTarget(outEdge);
-            Integer nextVertexTopoIndex = topoOrderMap.getTopologicalIndex(nextVertex);
+            df.add(vertex);
 
-            if (nextVertexTopoIndex == affectedRegion.finish) {
-                // reset visited
-                try {
-                    for (V visitedVertex : df) {
-                        visited.clearVisited(topoOrderMap.getTopologicalIndex(visitedVertex));
+            for (E outEdge : outgoingEdgesOf(vertex)) {
+                V nextVertex = getEdgeTarget(outEdge);
+                Integer nextVertexTopoIndex = topoOrderMap.getTopologicalIndex(nextVertex);
+
+                if (nextVertexTopoIndex == affectedRegion.finish) {
+                    // reset visited
+                    try {
+                        for (V visitedVertex : df) {
+                            visited.clearVisited(topoOrderMap.getTopologicalIndex(visitedVertex));
+                        }
+                    } catch (UnsupportedOperationException e) {
+                        // okay, fine, some implementations (ones that automatically
+                        // reset themselves out) don't work this way
                     }
-                } catch (UnsupportedOperationException e) {
-                    // okay, fine, some implementations (ones that automatically
-                    // reset themselves out) don't work this way
+                    throw new CycleFoundException();
                 }
-                throw new CycleFoundException();
-            }
 
-            /*
-             * Note, order of checks is important as we need to make sure the vertex is in the
-             * affected region before we check its visited status (otherwise we will be causing an
-             * ArrayIndexOutOfBoundsException).
-             */
-            if (affectedRegion.isIn(nextVertexTopoIndex)
-                && !visited.getVisited(nextVertexTopoIndex))
-            {
-                dfsF(nextVertex, df, visited, affectedRegion); // recurse
+                /*
+                 * Note, order of checks is important as we need to make sure the vertex is in the
+                 * affected region before we check its visited status (otherwise we will be causing an
+                 * ArrayIndexOutOfBoundsException).
+                 */
+                if (affectedRegion.isIn(nextVertexTopoIndex)
+                        && !visited.getVisited(nextVertexTopoIndex))
+                {
+                    vertices.push(nextVertex); // recurse
+                }
             }
         }
     }
@@ -424,34 +431,40 @@ public class DirectedAcyclicGraph<V, E>
      * Depth first search backward, building up the set (db) of back-connected vertices in the
      * Affected Region
      *
-     * @param vertex the vertex being visited
+     * @param initialVertex the vertex being visited
      * @param db the set we are populating with back-connected vertices in the AR
      * @param visited
      */
-    private void dfsB(V vertex, Set<V> db, VisitedStrategy visited, Region affectedRegion)
+    private void dfsB(V initialVertex, Set<V> db, VisitedStrategy visited, Region affectedRegion)
     {
-        // Assumption: vertex is in the AR and so we will get a topoIndex from
-        // the map
-        int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
-        visited.setVisited(topoIndex);
+        Deque<V> vertices = new LinkedList<>();
+        vertices.push(initialVertex);
 
-        db.add(vertex);
+        while (!vertices.isEmpty())
+        {
+            V vertex = vertices.pop();
+            // Assumption: vertex is in the AR and so we will get a topoIndex from
+            // the map
+            int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
+            visited.setVisited(topoIndex);
 
-        for (E inEdge : incomingEdgesOf(vertex)) {
-            V previousVertex = getEdgeSource(inEdge);
-            Integer previousVertexTopoIndex = topoOrderMap.getTopologicalIndex(previousVertex);
+            db.add(vertex);
 
-            /*
-             * Note, order of checks is important as we need to make sure the vertex is in the
-             * affected region before we check its visited status (otherwise we will be causing an
-             * ArrayIndexOutOfBoundsException).
-             */
-            if (affectedRegion.isIn(previousVertexTopoIndex)
-                && !visited.getVisited(previousVertexTopoIndex))
-            {
-                // if previousVertexTopoIndex != null, the vertex is in the
-                // Affected Region according to our topoIndexMap
-                dfsB(previousVertex, db, visited, affectedRegion);
+            for (E inEdge : incomingEdgesOf(vertex)) {
+                V previousVertex = getEdgeSource(inEdge);
+                Integer previousVertexTopoIndex = topoOrderMap.getTopologicalIndex(previousVertex);
+
+                /*
+                 * Note, order of checks is important as we need to make sure the vertex is in the
+                 * affected region before we check its visited status (otherwise we will be causing an
+                 * ArrayIndexOutOfBoundsException).
+                 */
+                if (affectedRegion.isIn(previousVertexTopoIndex)
+                        && !visited.getVisited(previousVertexTopoIndex)) {
+                    // if previousVertexTopoIndex != null, the vertex is in the
+                    // Affected Region according to our topoIndexMap
+                    vertices.push(previousVertex);
+                }
             }
         }
     }
