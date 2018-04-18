@@ -76,9 +76,11 @@ public class SeparatorFinder<V, E> {
 
             for (V vertex : graph.vertexSet()) {
                 if (dfsMap.get(vertex) == 0) {
-                    Set<V> separator = new HashSet<>();
-                    separators.add(separator);
-                    dfsVisit(vertex, dfsMap, separator);
+                    // possible to find one more separator
+                    Set<V> separator = getSeparator(vertex, dfsMap);
+                    if (!separator.isEmpty()) {
+                        separators.add(separator);
+                    }
                 }
             }
 
@@ -89,21 +91,34 @@ public class SeparatorFinder<V, E> {
     }
 
     /**
-     * Visits the {@code vertex}. Adds every encountered red vertex to the separator
+     * Performs iterative depth-first search starting from the {@code startVertex}. Adds every
+     * encountered red vertex to the resulting separator. Doesn't process red vertices. Marks
+     * all white vertices with black color.
      *
-     * @param vertex    the currently visited vertex
-     * @param dfsMap    the depth-first vertex labeling
-     * @param separator the separator, to which all found red vertices are added
+     * @param startVertex the vertex to start depth-first traversal from
+     * @param dfsMap      the depth-first vertex labeling
+     * @return the computed separator, which consists of all encountered red vertices
      */
-    private void dfsVisit(V vertex, Map<V, Byte> dfsMap, Set<V> separator) {
-        dfsMap.put(vertex, (byte) 2);
+    private Set<V> getSeparator(V startVertex, Map<V, Byte> dfsMap) {
+        LinkedList<V> stack = new LinkedList<>();
+        Set<V> separator = new HashSet<>();
+        stack.add(startVertex);
 
-        for (V neighbor : Graphs.neighborListOf(graph, vertex)) {
-            if (dfsMap.get(neighbor) == 0) {
-                dfsVisit(neighbor, dfsMap, separator);
-            } else if (dfsMap.get(neighbor) == 1) {
-                separator.add(neighbor);
+        while (!stack.isEmpty()) {
+            V currentVertex = stack.removeLast();
+            if (dfsMap.get(currentVertex) == 0) {
+                dfsMap.put(currentVertex, (byte) 2);
+                for (E edge : graph.edgesOf(currentVertex)) {
+                    V opposite = Graphs.getOppositeVertex(graph, edge, currentVertex);
+                    if (dfsMap.get(opposite) == 0) {
+                        stack.add(opposite);
+                    } else if (dfsMap.get(opposite) == 1) {
+                        separator.add(opposite); // found red vertex, which belongs to the separator
+                    }
+                }
             }
         }
+
+        return separator;
     }
 }

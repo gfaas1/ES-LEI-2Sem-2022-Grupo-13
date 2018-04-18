@@ -557,48 +557,61 @@ public class WeakChordalityInspector<V, E> {
         for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }
-        visited.put(targetInSeparator, true);
         visited.put(target, true);
         visited.put(source, true);
 
         // Obtaining some cycle, which can be minimized to a hole
-        List<V> cycle = new ArrayList<>(Arrays.asList(targetInSeparator, target, source, sourceInSeparator));
-        dfsVisit(sourceInSeparator, visited, cycle, graph, targetInSeparator, target, source);
+        List<V> cycle = findCycle(visited, graph, targetInSeparator, target, source, sourceInSeparator);
         cycle = minimizeCycle(graph, cycle, target, targetInSeparator, source, sourceInSeparator);
 
         return new GraphWalk<>(graph, cycle, 0);
     }
 
     /**
-     * Visits {@code vertex}, tries to recursively process vertices in the neighborhood of the {@code vertex}, that
-     * haven't been visited already and that aren't adjacent to the {@code tar} and {@code sour}. The latter condition
-     * is used to build a cycle, which later can be converted into a hole.
+     * Starts the iterative depth-first traversal from {@code sourInSep} vertex. Tries to build
+     * a cycle with the vertices, which aren't adjacent to the {@code tar} and {@code sour}. This
+     * condition is used in order to ensure that the cycle contains a hole, to which it is later minimized.
      *
-     * @param current  the currently processed vertex
-     * @param visited  defines which vertices have been visited already
-     * @param cycle    a list of vertices that will form a cycle
-     * @param graph    the graph the search is performed on
-     * @param tarInSep the final endpoint of the cycle
-     * @param tar      the vertex, which can't be adjacent to the visited vertices
-     * @param sour     the vertex, which can't be adjacent to the visited vertices
+     * @param visited   defines which vertices have been visited already
+     * @param graph     the graph the search is performed on
+     * @param tarInSep  the end point of the cycle
+     * @param tar       the vertex, which can't be adjacent to the vertices in the cycle
+     * @param sour      the vertex, which can't be adjacent to the vertices in the cycle
+     * @param sourInSep the vertex the search is started from
+     * @return the computed cycle, which contains a hole
      */
-    private void dfsVisit(V current, Map<V, Boolean> visited, List<V> cycle, Graph<V, E> graph, V tarInSep, V tar, V sour) {
-        visited.put(current, true);
-        if (graph.containsEdge(current, tarInSep)) {
-            cycle.add(tarInSep);
-            return;
-        }
-        for (V vertex : Graphs.neighborListOf(graph, current)) {
-            if (!visited.get(vertex) && !graph.containsEdge(sour, vertex) && !graph.containsEdge(tar, vertex)) {
-                cycle.add(vertex);
-                dfsVisit(vertex, visited, cycle, graph, tarInSep, tar, sour);
-                if (cycle.get(cycle.size() - 1).equals(tarInSep)) {
-                    return;
-                } else {
+    private List<V> findCycle(Map<V, Boolean> visited, Graph<V, E> graph, V tarInSep, V tar, V sour, V sourInSep) {
+        List<V> cycle = new ArrayList<>(Arrays.asList(tarInSep, tar, sour));
+        LinkedList<V> stack = new LinkedList<>();
+        stack.add(sourInSep);
+
+        while (!stack.isEmpty()) {
+            V currentVertex = stack.removeLast();
+            if (!visited.get(currentVertex)) {
+                visited.put(currentVertex, true);
+
+                // trying to advance cycle from current vertex
+                // removing all vertices from the head of the cycle, which aren't adjacent to the current vertex
+                while (!graph.containsEdge(cycle.get(cycle.size() - 1), currentVertex)) {
                     cycle.remove(cycle.size() - 1);
+                }
+                cycle.add(currentVertex);
+                if (tarInSep.equals(currentVertex)) {
+                    // the cycle is complete
+                    break;
+                } else {
+                    for (V neighbor : Graphs.neighborListOf(graph, currentVertex)) {
+                        // add a vertex to the stack if it hasn't been visited yet and it isn't adjacent to the
+                        // source vertex and (it isn't adjacent to the target vertex or it is targetInSeparator (the end of the cycle))
+                        if (!visited.get(neighbor) && !graph.containsEdge(sour, neighbor) &&
+                                (!graph.containsEdge(tar, neighbor) || neighbor.equals(tarInSep))) {
+                            stack.add(neighbor);
+                        }
+                    }
                 }
             }
         }
+        return cycle;
     }
 
     /**
