@@ -383,7 +383,7 @@ public class DirectedAcyclicGraph<V, E>
     private void dfsF(V initialVertex, Set<V> df, VisitedStrategy visited, Region affectedRegion)
         throws CycleFoundException
     {
-        Deque<V> vertices = new LinkedList<>();
+        Deque<V> vertices = new ArrayDeque<>();
         vertices.push(initialVertex);
 
         while (!vertices.isEmpty())
@@ -437,7 +437,7 @@ public class DirectedAcyclicGraph<V, E>
      */
     private void dfsB(V initialVertex, Set<V> db, VisitedStrategy visited, Region affectedRegion)
     {
-        Deque<V> vertices = new LinkedList<>();
+        Deque<V> vertices = new ArrayDeque<>();
         vertices.push(initialVertex);
 
         while (!vertices.isEmpty())
