@@ -40,7 +40,7 @@ public abstract class CrossComponentIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
+    StringBuilder result;
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -50,7 +50,7 @@ public abstract class CrossComponentIteratorTest
     @Test
     public void testDirectedGraphViaCCI()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 

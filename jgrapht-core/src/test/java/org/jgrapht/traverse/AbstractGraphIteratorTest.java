@@ -37,7 +37,7 @@ public abstract class AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
+    StringBuilder result;
 
     /**
      * .
@@ -52,7 +52,7 @@ public abstract class AbstractGraphIteratorTest
         doDirectedGraphTest(iterator);
     }
 
-    protected void collectResult(Iterator<String> iterator, StringBuffer result)
+    protected void collectResult(Iterator<String> iterator, StringBuilder result)
     {
         while (iterator.hasNext()) {
             result.append(iterator.next());
@@ -66,7 +66,7 @@ public abstract class AbstractGraphIteratorTest
     public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
     {
 
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);

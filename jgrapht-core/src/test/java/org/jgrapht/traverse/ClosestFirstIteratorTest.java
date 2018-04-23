@@ -41,7 +41,7 @@ public class ClosestFirstIteratorTest
     @Test
     public void testRadius()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
@@ -59,7 +59,7 @@ public class ClosestFirstIteratorTest
     @Test
     public void testNoStart()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
@@ -75,7 +75,7 @@ public class ClosestFirstIteratorTest
     @Test
     public void testMultipleStarts()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultEdge> graph =
             new DirectedPseudograph<>(DefaultEdge.class);
