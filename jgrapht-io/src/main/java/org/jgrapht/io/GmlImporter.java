@@ -200,7 +200,7 @@ public class GmlImporter<V, E>
         private Integer targetId;
         private Double weight;
         private Map<String, Attribute> attributes;
-        private StringBuffer stringBuffer;
+        private StringBuilder stringBuffer;
 
         // collected nodes and edges
         private Map<Integer, Node> nodes;
@@ -352,7 +352,7 @@ public class GmlImporter<V, E>
                 attributes = new HashMap<>();
             } else if (insideNode || insideEdge) { 
                 if (level == 2) { 
-                    stringBuffer = new StringBuffer();
+                    stringBuffer = new StringBuilder();
                     stringBuffer.append('[');
                 } else if (level >= 3) { 
                     stringBuffer.append(' ');
