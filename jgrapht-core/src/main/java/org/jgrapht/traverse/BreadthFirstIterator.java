@@ -122,12 +122,13 @@ public class BreadthFirstIterator<V, E>
     }
 
     /**
-     * Returns the edge connecting vertex $v$ to its parent in the BFS search tree, or null if $v$ is the root node.
+     * Returns the edge connecting vertex $v$ to its parent in the spanning tree formed by the BFS search,
+     * or null if $v$ is a root node.
      * This method can only be invoked on a vertex $v$ once the iterator has visited vertex $v$!
      * @param v vertex
-     * @return parent node of vertex $v$ in the BFS search tree, or null if $v$ is a root node
+     * @return edge connecting vertex $v$ in the BFS search tree to its parent, or null if $v$ is a root node
      */
-    public E getParentEdge(V v){
+    public E getSpanningTreeEdge(V v){
         assert getSeenData(v) != null;
         return getSeenData(v).edge;
     }

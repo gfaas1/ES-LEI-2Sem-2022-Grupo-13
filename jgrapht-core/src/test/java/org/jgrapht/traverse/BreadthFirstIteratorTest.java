@@ -116,12 +116,12 @@ public class BreadthFirstIteratorTest
         assertEquals(3, bfs.getDepth("e"));
         assertEquals(2, bfs.getDepth("z"));
 
-        assertNull(bfs.getParentEdge("a"));
-        assertEquals(e1, bfs.getParentEdge("b"));
-        assertEquals(e2, bfs.getParentEdge("c"));
-        assertEquals(e4, bfs.getParentEdge("d"));
-        assertEquals(e5, bfs.getParentEdge("e"));
-        assertEquals(e3, bfs.getParentEdge("z"));
+        assertNull(bfs.getSpanningTreeEdge("a"));
+        assertEquals(e1, bfs.getSpanningTreeEdge("b"));
+        assertEquals(e2, bfs.getSpanningTreeEdge("c"));
+        assertEquals(e4, bfs.getSpanningTreeEdge("d"));
+        assertEquals(e5, bfs.getSpanningTreeEdge("e"));
+        assertEquals(e3, bfs.getSpanningTreeEdge("z"));
 
         assertNull(bfs.getParent("a"));
         assertEquals("a", bfs.getParent("b"));
@@ -148,10 +148,10 @@ public class BreadthFirstIteratorTest
         assertEquals(2, bfs.getDepth(2));
         assertEquals(3, bfs.getDepth(3));
 
-        assertNull(bfs.getParentEdge(0));
-        assertEquals(e1, bfs.getParentEdge(1));
-        assertEquals(e2, bfs.getParentEdge(2));
-        assertEquals(e3, bfs.getParentEdge(3));
+        assertNull(bfs.getSpanningTreeEdge(0));
+        assertEquals(e1, bfs.getSpanningTreeEdge(1));
+        assertEquals(e2, bfs.getSpanningTreeEdge(2));
+        assertEquals(e3, bfs.getSpanningTreeEdge(3));
 
         assertNull(bfs.getParent(0));
         assertEquals(new Integer(0), bfs.getParent(1));
