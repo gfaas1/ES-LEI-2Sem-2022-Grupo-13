@@ -52,6 +52,7 @@ Changes to JGraphT in each version:
     - Expose lock as public for `AsSynchronizedGraph`, and add copyless access mode (contributed by John Sichi)
     - Handle nested structures in `GmlImporter` (suggested by Philippe Marchesseault, contributed by Dimitrios Michail)
     - Replaced StringBuffer with StringBuilder (contributed by John Sichi)
+    - Added search tree query methods to `BreadthFirstIterator` (contributed by Joris Kinable)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
