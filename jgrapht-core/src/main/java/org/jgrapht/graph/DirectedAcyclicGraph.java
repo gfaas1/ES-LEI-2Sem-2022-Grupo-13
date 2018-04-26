@@ -391,6 +391,10 @@ public class DirectedAcyclicGraph<V, E>
             V vertex = vertices.pop();
             int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
 
+            if (visited.getVisited(topoIndex)) {
+                continue;
+            }
+
             // Assumption: vertex is in the AR and so it will be in visited
             visited.setVisited(topoIndex);
 
@@ -446,6 +450,11 @@ public class DirectedAcyclicGraph<V, E>
             // Assumption: vertex is in the AR and so we will get a topoIndex from
             // the map
             int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
+
+            if (visited.getVisited(topoIndex)) {
+                continue;
+            }
+
             visited.setVisited(topoIndex);
 
             db.add(vertex);
