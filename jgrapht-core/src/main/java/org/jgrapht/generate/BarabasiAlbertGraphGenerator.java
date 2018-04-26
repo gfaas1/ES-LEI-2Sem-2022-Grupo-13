@@ -29,8 +29,8 @@ import org.jgrapht.*;
  * random networks. Science, 286:509-512, 1999.
  * 
  * <p>
- * The generator starts with a complete graph of m0 nodes and grows the network by adding n-m0
- * additional nodes. The additional nodes are added one by one and each of them is connected to m
+ * The generator starts with a complete graph of $m_0$ nodes and grows the network by adding $n - m_0$
+ * additional nodes. The additional nodes are added one by one and each of them is connected to $m$
  * previously added nodes, where the probability of connecting to a node is proportional to its
  * degree.
  * 

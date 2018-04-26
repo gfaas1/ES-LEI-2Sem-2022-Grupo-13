@@ -167,8 +167,8 @@ public class AsSubgraph<V, E>
     {
         if (containsVertex(sourceVertex) && containsVertex(targetVertex)) {
             return base
-                .getAllEdges(sourceVertex, targetVertex).stream().filter(e -> edgeSet.contains(e))
-                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+                .getAllEdges(sourceVertex, targetVertex).stream().filter(edgeSet::contains)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             return null;
         }
@@ -349,8 +349,8 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.edgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
-            Collectors.toCollection(() -> new LinkedHashSet<>()));
+        return base.edgesOf(vertex).stream().filter(edgeSet::contains).collect(
+            Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -368,7 +368,7 @@ public class AsSubgraph<V, E>
         if (baseType.isUndirected()) {
             int degree = 0;
             Iterator<E> it =
-                base.edgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).iterator();
+                base.edgesOf(vertex).stream().filter(edgeSet::contains).iterator();
             while (it.hasNext()) {
                 E e = it.next();
                 degree++;
@@ -390,8 +390,8 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.incomingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
-            Collectors.toCollection(() -> new LinkedHashSet<>()));
+        return base.incomingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
+            Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -415,8 +415,8 @@ public class AsSubgraph<V, E>
     {
         assertVertexExist(vertex);
 
-        return base.outgoingEdgesOf(vertex).stream().filter(e -> edgeSet.contains(e)).collect(
-            Collectors.toCollection(() -> new LinkedHashSet<>()));
+        return base.outgoingEdgesOf(vertex).stream().filter(edgeSet::contains).collect(
+            Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
@@ -539,11 +539,11 @@ public class AsSubgraph<V, E>
             vertexSet.addAll(base.vertexSet());
         } else {
             if (vertexFilter.size() > base.vertexSet().size()) {
-                base.vertexSet().stream().filter(v -> vertexFilter.contains(v)).forEach(
-                    v -> vertexSet.add(v));
+                base.vertexSet().stream().filter(vertexFilter::contains).forEach(
+                        vertexSet::add);
             } else {
                 vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
-                    v -> vertexSet.add(v));
+                        vertexSet::add);
             }
         }
 
@@ -554,7 +554,7 @@ public class AsSubgraph<V, E>
                 .filter(
                     e -> vertexSet.contains(base.getEdgeSource(e))
                         && vertexSet.contains(base.getEdgeTarget(e)))
-                .forEach(e -> edgeSet.add(e));
+                .forEach(edgeSet::add);
         } else {
             if (edgeFilter.size() > base.edgeSet().size()) {
                 base
@@ -562,7 +562,7 @@ public class AsSubgraph<V, E>
                     .filter(
                         e -> edgeFilter.contains(e) && vertexSet.contains(base.getEdgeSource(e))
                             && vertexSet.contains(base.getEdgeTarget(e)))
-                    .forEach(e -> edgeSet.add(e));
+                    .forEach(edgeSet::add);
             } else {
                 edgeFilter
                     .stream()
@@ -570,7 +570,7 @@ public class AsSubgraph<V, E>
                         e -> e != null && base.containsEdge(e)
                             && vertexSet.contains(base.getEdgeSource(e))
                             && vertexSet.contains(base.getEdgeTarget(e)))
-                    .forEach(e -> edgeSet.add(e));
+                    .forEach(edgeSet::add);
             }
         }
     }

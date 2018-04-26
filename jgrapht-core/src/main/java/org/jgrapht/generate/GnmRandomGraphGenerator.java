@@ -25,16 +25,16 @@ import java.util.Random;
 import org.jgrapht.Graph;
 
 /**
- * Create a random graph based on the G(n, M) Erdős–Rényi model. See the Wikipedia article for
+ * Create a random graph based on the $G(n, M)$ Erdős–Rényi model. See the Wikipedia article for
  * details and references about <a href="https://en.wikipedia.org/wiki/Random_graph">Random
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
  * 
  * <p>
- * In the G(n, M) model, a graph is chosen uniformly at random from the collection of all graphs
- * which have n nodes and M edges. For example, in the G(3, 2) model, each of the three possible
- * graphs on three vertices and two edges are included with probability 1/3.
+ * In the $G(n, M)$ model, a graph is chosen uniformly at random from the collection of all graphs
+ * which have $n$ nodes and $M$ edges. For example, in the $G(3, 2)$ model, each of the three possible
+ * graphs on three vertices and two edges are included with probability $\frac{1}{3}$.
  * 
  * <p>
  * The implementation creates the vertices and then randomly chooses an edge and tries to add it. If
@@ -46,14 +46,14 @@ import org.jgrapht.Graph;
  * The implementation tries to guess the number of allowed edges based on the following. If
  * self-loops or multiple edges are allowed and requested, the maximum number of edges is
  * {@link Integer#MAX_VALUE}. Otherwise the maximum for undirected graphs with n vertices is
- * n(n-1)/2 while for directed n(n-1). If the graph type cannot be determined (for example using
+ * $\frac{n(n-1)}{2}$ while for directed $n(n-1)$. If the graph type cannot be determined (for example using
  * adapter classes or user-created custom graph types) the generator assumes the graph is undirected
- * and therefore uses n(n-1)/2 as the maximum number of edges. If the user requests self-loops
+ * and therefore uses $\frac{n(n-1)}{2}$ as the maximum number of edges. If the user requests self-loops
  * and/or multiple edges and the graph type cannot be determined, the corresponding feature is
  * silently ignored.
  * 
  * <p>
- * For the G(n, p) model please see {@link GnpRandomGraphGenerator}.
+ * For the $G(n, p)$ model please see {@link GnpRandomGraphGenerator}.
  *
  * @author Assaf Lehr
  * @author Dimitrios Michail
@@ -76,7 +76,7 @@ public class GnmRandomGraphGenerator<V, E>
     private final boolean multipleEdges;
 
     /**
-     * Create a new G(n, M) random graph generator. The generator does not create self-loops or
+     * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
@@ -88,7 +88,7 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator. The generator does not create self-loops or
+     * Create a new $G(n, M)$ random graph generator. The generator does not create self-loops or
      * multiple (parallel) edges between the same two vertices.
      * 
      * @param n the number of nodes
@@ -101,7 +101,7 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator
+     * Create a new $G(n, M)$ random graph generator
      * 
      * @param n the number of nodes
      * @param m the number of edges
@@ -116,7 +116,7 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, M) random graph generator
+     * Create a new $G(n, M)$ random graph generator
      * 
      * @param n the number of nodes
      * @param m the number of edges
@@ -141,7 +141,7 @@ public class GnmRandomGraphGenerator<V, E>
     }
 
     /**
-     * Generates a random graph based on the G(n, M) model
+     * Generates a random graph based on the $G(n, M)$ model
      * 
      * @param target the target graph
      * @param resultMap not used by this generator, can be null

@@ -23,7 +23,7 @@ import org.jgrapht.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/HypercubeGraph.html">hyper cube graph</a> of
- * any size. This is a graph that can be represented by bit strings, so for an n-dimensial hypercube
+ * any size. This is a graph that can be represented by bit strings, so for an n-dimensional hypercube
  * each vertex resembles an n-length bit string. Then, two vertices are adjacent if and only if
  * their bitstring differ by exactly one element.
  * 
@@ -61,11 +61,11 @@ public class HyperCubeGraphGenerator<V, E>
             
             vertices.add(newVertex);
             if (resultMap != null) {
-                String s = Integer.toBinaryString(i);
+                StringBuilder s = new StringBuilder(Integer.toBinaryString(i));
                 while (s.length() < dim) {
-                    s = "0" + s;
+                    s.insert(0, "0");
                 }
-                resultMap.put(s, newVertex);
+                resultMap.put(s.toString(), newVertex);
             }
         }
 

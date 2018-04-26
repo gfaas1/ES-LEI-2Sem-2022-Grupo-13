@@ -25,19 +25,19 @@ import java.util.Random;
 import org.jgrapht.Graph;
 
 /**
- * Create a random graph based on the G(n, p) Erdős–Rényi model. See the Wikipedia article for
+ * Create a random graph based on the $G(n, p)$ Erdős–Rényi model. See the Wikipedia article for
  * details and references about <a href="https://en.wikipedia.org/wiki/Random_graph">Random
  * Graphs</a> and the
  * <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">Erdős–Rényi model</a>
  * .
  * 
  * <p>
- * In the G(n, p) model, a graph is constructed by connecting nodes randomly. Each edge is included
- * in the graph with probability p independent from every other edge. The complexity of the
- * generator is O(n^2) where n is the number of vertices.
+ * In the $G(n, p)$ model, a graph is constructed by connecting nodes randomly. Each edge is included
+ * in the graph with probability $p$ independent from every other edge. The complexity of the
+ * generator is $O(n^2)$ where $n$ is the number of vertices.
  * 
  * <p>
- * For the G(n, M) model please see {@link GnmRandomGraphGenerator}.
+ * For the $G(n, M)$ model please see {@link GnmRandomGraphGenerator}.
  *
  * @author Dimitrios Michail
  * @since September 2016
@@ -58,7 +58,7 @@ public class GnpRandomGraphGenerator<V, E>
     private final boolean loops;
 
     /**
-     * Create a new G(n, p) random graph generator. The generator does not create self-loops.
+     * Create a new $G(n, p)$ random graph generator. The generator does not create self-loops.
      * 
      * @param n the number of nodes
      * @param p the edge probability
@@ -69,7 +69,7 @@ public class GnpRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, p) random graph generator. The generator does not create self-loops.
+     * Create a new $G(n, p)$ random graph generator. The generator does not create self-loops.
      * 
      * @param n the number of nodes
      * @param p the edge probability
@@ -81,7 +81,7 @@ public class GnpRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, p) random graph generator.
+     * Create a new $G(n, p)$ random graph generator.
      * 
      * @param n the number of nodes
      * @param p the edge probability
@@ -94,7 +94,7 @@ public class GnpRandomGraphGenerator<V, E>
     }
 
     /**
-     * Create a new G(n, p) random graph generator.
+     * Create a new $G(n, p)$ random graph generator.
      * 
      * @param n the number of nodes
      * @param p the edge probability
@@ -116,7 +116,7 @@ public class GnpRandomGraphGenerator<V, E>
     }
 
     /**
-     * Generates a random graph based on the G(n, p) model.
+     * Generates a random graph based on the $G(n, p)$ model.
      * 
      * @param target the target graph
      * @param resultMap not used by this generator, can be null

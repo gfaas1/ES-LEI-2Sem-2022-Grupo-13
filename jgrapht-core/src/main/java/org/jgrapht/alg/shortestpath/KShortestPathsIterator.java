@@ -313,7 +313,7 @@ class KShortestPathsIterator<V, E>
      * Complexity =
      *
      * <ul>
-     * <li>O(<code>d(v)*k*(m+n)</code>) where <code>d(v)</code> is the outgoing degree of the
+     * <li>$O(d(v) \cdot k \cdot (m+n))$ where <code>d(v)</code> is the outgoing degree of the
      * specified vertex, <code>k</code> is the maximum number of shortest paths to compute,
      * <code>m</code> is the number of edges of the graph and <code>n</code> is the number of
      * vertices of the graph</li>

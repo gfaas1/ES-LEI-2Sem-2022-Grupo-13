@@ -72,6 +72,7 @@ The package `org.jgrapht.demo` includes small demo applications to help you get 
 To run the graph visualization demo from the downloaded release, try executing this command in the lib directory:
 
     java -jar jgrapht-demo-x.y.z.jar
+More information can be found on the [user pages](https://github.com/jgrapht/jgrapht/wiki#user-pages) of our wiki. Finally, all classes come with corresponding test classes. These test classes contain many examples.
 
 ## Using via Maven
 

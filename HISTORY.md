@@ -47,6 +47,14 @@ Changes to JGraphT in each version:
     - Added `RandomRegularGraphGenerator` (contributed by Emilio Cruciani)
     - Reimplemented significantly faster version of Prim's minimum spanning tree algorithm using a FibonacciHeap (suggested by Joris Kinable, contributed by Alexandru Văleanu)
     - Added new jgrapht-guava module containing adapters for package com.google.common.graph (contributed by Dimitrios Michail)
+    - Demo classes listed on our wiki page are now also included in our demo package (contributed by Vivek Talreja)
+    - Added missing math markup to javadoc in all classes (contributed by Kirill Vishnyakov)
+    - Expose lock as public for `AsSynchronizedGraph`, and add copyless access mode (contributed by John Sichi)
+    - Handle nested structures in `GmlImporter` (suggested by Philippe Marchesseault, contributed by Dimitrios Michail)
+    - Replaced StringBuffer with StringBuilder (contributed by John Sichi)
+    - Added search tree query methods to `BreadthFirstIterator` (contributed by Joris Kinable)
+    - Improved documentation of VF2 subgraph isomorphism algorithm (contributed by John Sichi)
+    - Removed recursion from DAG forward and backwards DFS methods (contributed by Gilles Gosuin)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)

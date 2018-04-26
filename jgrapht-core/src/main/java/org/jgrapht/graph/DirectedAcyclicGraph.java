@@ -28,7 +28,7 @@ import org.jgrapht.util.SupplierUtil;
 
 /**
  * A directed acyclic graph (DAG).
- * 
+ *
  * <p>
  * Implements a DAG that can be modified (vertices &amp; edges added and removed), is guaranteed to
  * remain acyclic, and provides fast topological order iteration. An attempt to add an edge which
@@ -44,7 +44,7 @@ import org.jgrapht.util.SupplierUtil;
  * notably in that the topological ordering is stored by default using two hash maps, which will
  * have some effects on the runtime, but also allow for vertex addition and removal. This storage
  * mechanism can be adjusted by subclasses.
- * 
+ *
  * <p>
  * The complexity of adding a new edge in the graph depends on the number of edges incident to the
  * "affected region", and should in general be faster than recomputing the whole topological
@@ -54,7 +54,7 @@ import org.jgrapht.util.SupplierUtil;
  * <p>
  * This class makes no claims to thread safety, and concurrent usage from multiple threads will
  * produce undefined results.
- * 
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
@@ -83,7 +83,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param edgeClass the edge class
      */
     public DirectedAcyclicGraph(Class<? extends E> edgeClass)
@@ -105,7 +105,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param edgeClass the edge class
      * @param weighted if true the graph will be weighted, otherwise not
      * @deprecated Use suppliers instead 
@@ -118,7 +118,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param ef the edge factory
      * @deprecated Use suppliers instead 
      */
@@ -130,7 +130,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param ef the edge factory
      * @param weighted if true the graph will be weighted, otherwise not
      * @deprecated Use suppliers instead 
@@ -143,7 +143,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     * 
+     *
      * @param ef the edge factory
      * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
      *        implementation to adjust the performance tradeoffs.
@@ -191,7 +191,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param edgeClass class on which to base factory for edges
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -219,7 +219,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Create a builder for this kind of graph.
-     * 
+     *
      * @param ef the edge factory of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
@@ -305,12 +305,12 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * The complexity of adding a new edge in the graph depends on the number of edges incident to
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
-     * 
+     *
      * @throws IllegalArgumentException if the edge would induce a cycle in the graph
      */
     @Override
@@ -331,12 +331,12 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * The complexity of adding a new edge in the graph depends on the number of edges incident to
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
-     * 
+     *
      * @throws IllegalArgumentException if the edge would induce a cycle in the graph
      */
     @Override
@@ -363,7 +363,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Get the ancestors of a vertex.
-     * 
+     *
      * @param vertex the vertex to get the ancestors of
      * @return {@link Set} of ancestors of a vertex
      */
@@ -385,7 +385,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Get the descendants of a vertex.
-     * 
+     *
      * @param vertex the vertex to get the descendants of
      * @return {@link Set} of descendants of a vertex
      */
@@ -406,7 +406,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Returns a topological order iterator.
-     * 
+     *
      * @return a topological order iterator
      */
     public Iterator<V> iterator()
@@ -416,7 +416,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Update as if a new edge is added.
-     * 
+     *
      * @param sourceVertex the source vertex
      * @param targetVertex the target vertex
      */
@@ -450,49 +450,60 @@ public class DirectedAcyclicGraph<V, E>
      * Depth first search forward, building up the set (df) of forward-connected vertices in the
      * Affected Region
      *
-     * @param vertex the vertex being visited
+     * @param initialVertex the vertex being visited
      * @param df the set we are populating with forward connected vertices in the Affected Region
      * @param visited a simple data structure that lets us know if we already visited a node with a
      *        given topo index
      *
      * @throws CycleFoundException if a cycle is discovered
      */
-    private void dfsF(V vertex, Set<V> df, VisitedStrategy visited, Region affectedRegion)
+    private void dfsF(V initialVertex, Set<V> df, VisitedStrategy visited, Region affectedRegion)
         throws CycleFoundException
     {
-        int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
+        Deque<V> vertices = new ArrayDeque<>();
+        vertices.push(initialVertex);
 
-        // Assumption: vertex is in the AR and so it will be in visited
-        visited.setVisited(topoIndex);
+        while (!vertices.isEmpty())
+        {
+            V vertex = vertices.pop();
+            int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
 
-        df.add(vertex);
-
-        for (E outEdge : outgoingEdgesOf(vertex)) {
-            V nextVertex = getEdgeTarget(outEdge);
-            Integer nextVertexTopoIndex = topoOrderMap.getTopologicalIndex(nextVertex);
-
-            if (nextVertexTopoIndex == affectedRegion.finish) {
-                // reset visited
-                try {
-                    for (V visitedVertex : df) {
-                        visited.clearVisited(topoOrderMap.getTopologicalIndex(visitedVertex));
-                    }
-                } catch (UnsupportedOperationException e) {
-                    // okay, fine, some implementations (ones that automatically
-                    // reset themselves out) don't work this way
-                }
-                throw new CycleFoundException();
+            if (visited.getVisited(topoIndex)) {
+                continue;
             }
 
-            /*
-             * Note, order of checks is important as we need to make sure the vertex is in the
-             * affected region before we check its visited status (otherwise we will be causing an
-             * ArrayIndexOutOfBoundsException).
-             */
-            if (affectedRegion.isIn(nextVertexTopoIndex)
-                && !visited.getVisited(nextVertexTopoIndex))
-            {
-                dfsF(nextVertex, df, visited, affectedRegion); // recurse
+            // Assumption: vertex is in the AR and so it will be in visited
+            visited.setVisited(topoIndex);
+
+            df.add(vertex);
+
+            for (E outEdge : outgoingEdgesOf(vertex)) {
+                V nextVertex = getEdgeTarget(outEdge);
+                Integer nextVertexTopoIndex = topoOrderMap.getTopologicalIndex(nextVertex);
+
+                if (nextVertexTopoIndex == affectedRegion.finish) {
+                    // reset visited
+                    try {
+                        for (V visitedVertex : df) {
+                            visited.clearVisited(topoOrderMap.getTopologicalIndex(visitedVertex));
+                        }
+                    } catch (UnsupportedOperationException e) {
+                        // okay, fine, some implementations (ones that automatically
+                        // reset themselves out) don't work this way
+                    }
+                    throw new CycleFoundException();
+                }
+
+                /*
+                 * Note, order of checks is important as we need to make sure the vertex is in the
+                 * affected region before we check its visited status (otherwise we will be causing an
+                 * ArrayIndexOutOfBoundsException).
+                 */
+                if (affectedRegion.isIn(nextVertexTopoIndex)
+                        && !visited.getVisited(nextVertexTopoIndex))
+                {
+                    vertices.push(nextVertex); // recurse
+                }
             }
         }
     }
@@ -501,34 +512,46 @@ public class DirectedAcyclicGraph<V, E>
      * Depth first search backward, building up the set (db) of back-connected vertices in the
      * Affected Region
      *
-     * @param vertex the vertex being visited
+     * @param initialVertex the vertex being visited
      * @param db the set we are populating with back-connected vertices in the AR
      * @param visited
      */
-    private void dfsB(V vertex, Set<V> db, VisitedStrategy visited, Region affectedRegion)
+    private void dfsB(V initialVertex, Set<V> db, VisitedStrategy visited, Region affectedRegion)
     {
-        // Assumption: vertex is in the AR and so we will get a topoIndex from
-        // the map
-        int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
-        visited.setVisited(topoIndex);
+        Deque<V> vertices = new ArrayDeque<>();
+        vertices.push(initialVertex);
 
-        db.add(vertex);
+        while (!vertices.isEmpty())
+        {
+            V vertex = vertices.pop();
+            // Assumption: vertex is in the AR and so we will get a topoIndex from
+            // the map
+            int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
 
-        for (E inEdge : incomingEdgesOf(vertex)) {
-            V previousVertex = getEdgeSource(inEdge);
-            Integer previousVertexTopoIndex = topoOrderMap.getTopologicalIndex(previousVertex);
+            if (visited.getVisited(topoIndex)) {
+                continue;
+            }
 
-            /*
-             * Note, order of checks is important as we need to make sure the vertex is in the
-             * affected region before we check its visited status (otherwise we will be causing an
-             * ArrayIndexOutOfBoundsException).
-             */
-            if (affectedRegion.isIn(previousVertexTopoIndex)
-                && !visited.getVisited(previousVertexTopoIndex))
-            {
-                // if previousVertexTopoIndex != null, the vertex is in the
-                // Affected Region according to our topoIndexMap
-                dfsB(previousVertex, db, visited, affectedRegion);
+            visited.setVisited(topoIndex);
+
+            db.add(vertex);
+
+            for (E inEdge : incomingEdgesOf(vertex)) {
+                V previousVertex = getEdgeSource(inEdge);
+                Integer previousVertexTopoIndex = topoOrderMap.getTopologicalIndex(previousVertex);
+
+                /*
+                 * Note, order of checks is important as we need to make sure the vertex is in the
+                 * affected region before we check its visited status (otherwise we will be causing an
+                 * ArrayIndexOutOfBoundsException).
+                 */
+                if (affectedRegion.isIn(previousVertexTopoIndex)
+                        && !visited.getVisited(previousVertexTopoIndex))
+                {
+                    // if previousVertexTopoIndex != null, the vertex is in the
+                    // Affected Region according to our topoIndexMap
+                    vertices.push(previousVertex);
+                }
             }
         }
     }
@@ -539,8 +562,8 @@ public class DirectedAcyclicGraph<V, E>
         List<V> topoDf = new ArrayList<>(df);
         List<V> topoDb = new ArrayList<>(db);
 
-        Collections.sort(topoDf, topoComparator);
-        Collections.sort(topoDb, topoComparator);
+        topoDf.sort(topoComparator);
+        topoDb.sort(topoComparator);
 
         // merge these suckers together in topological order
         SortedSet<Integer> availableTopoIndices = new TreeSet<>();
@@ -600,7 +623,7 @@ public class DirectedAcyclicGraph<V, E>
      * An interface for storing the topological ordering.
      *
      * @param <V> the graph vertex type
-     * 
+     *
      * @author Peter Giles
      */
     protected interface TopoOrderMap<V>
@@ -648,11 +671,11 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * A strategy for marking vertices as visited.
-     * 
+     *
      * <p>
      * Vertices are indexed by their topological index, to avoid using the vertex type in the
      * interface.
-     * 
+     *
      * @author Peter Giles
      */
     protected interface VisitedStrategy
@@ -695,7 +718,7 @@ public class DirectedAcyclicGraph<V, E>
     {
         /**
          * Create a new instance of {@link VisitedStrategy}.
-         * 
+         *
          * @param affectedRegion the affected region
          * @return a new instance of {@link VisitedStrategy} for the affected region
          */
@@ -855,7 +878,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Construct a new region.
-         * 
+         *
          * @param start the start of the region
          * @param finish the end of the region (inclusive)
          */
@@ -870,7 +893,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Get the size of the region.
-         * 
+         *
          * @return the size of the region
          */
         public int getSize()
@@ -880,7 +903,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Check if index is in the region.
-         * 
+         *
          * @param index the index to check
          * @return true if the index is in the region, false otherwise
          */
@@ -891,7 +914,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Get the start of the region.
-         * 
+         *
          * @return the start of the region
          */
         public int getStart()
@@ -901,7 +924,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Get the end of the region (inclusive).
-         * 
+         *
          * @return the end of the region (inclusive)
          */
         public int getFinish()
@@ -913,7 +936,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * A visited strategy which uses a {@link BitSet}.
-     * 
+     *
      * <p>
      * This implementation is close to the performance of {@link VisitedArrayListImpl}, with 1/8 the
      * memory usage.
@@ -976,7 +999,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * A visited strategy using an {@link ArrayList}.
-     * 
+     *
      * <p>
      * This implementation seems to offer the best performance in most cases. It grows the internal
      * ArrayList as needed to be as large as |AR|, so it will be more memory intensive than the
@@ -1049,7 +1072,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * A visited strategy using a {@link HashSet}.
-     * 
+     *
      * <p>
      * This implementation doesn't seem to perform as well, though I can imagine circumstances where
      * it should shine (lots and lots of vertices). It also should have the lowest memory footprint
@@ -1100,7 +1123,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * A visited strategy using an array.
-     * 
+     *
      * <p>
      * This implementation, somewhat to my surprise, is slower than the ArrayList version, probably
      * due to its reallocation of the underlying array for every topology reorder that is required.
@@ -1125,7 +1148,7 @@ public class DirectedAcyclicGraph<V, E>
 
         /**
          * Construct an empty instance for a region.
-         * 
+         *
          * @param region the region
          */
         public VisitedArrayImpl(Region region)
@@ -1180,7 +1203,7 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Comparator for vertices based on their topological ordering
-     * 
+     *
      * @author Peter Giles
      */
     private class TopoComparator
