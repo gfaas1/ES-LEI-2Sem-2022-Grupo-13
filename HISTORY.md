@@ -53,6 +53,7 @@ Changes to JGraphT in each version:
     - Handle nested structures in `GmlImporter` (suggested by Philippe Marchesseault, contributed by Dimitrios Michail)
     - Replaced StringBuffer with StringBuilder (contributed by John Sichi)
     - Added search tree query methods to `BreadthFirstIterator` (contributed by Joris Kinable)
+    - Improved documentation of VF2 subgraph isomorphism algorithm (contributed by John Sichi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
