@@ -107,6 +107,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Kirill Vishnyakov](https://github.com/LightnessOfBeing)
 - [Emilio Cruciani](https://github.com/ioemilio)
 - [Vivek Talreja](https://github.com/Vivek1012)
+- [Gilles Gosuin](https://github.com/gilles-gosuin)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
