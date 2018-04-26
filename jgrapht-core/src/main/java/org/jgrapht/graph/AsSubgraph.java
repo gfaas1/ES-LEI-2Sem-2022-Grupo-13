@@ -99,7 +99,6 @@ public class AsSubgraph<V, E>
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
     private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH = "Cannot create new vertices from subgraph";
-    private static final String NOT_SUPPORTED_FROM_SUBGRAPH = "Not supported from subgraph";
 
     protected final Set<E> edgeSet = new LinkedHashSet<>();
     protected final Set<V> vertexSet = new LinkedHashSet<>();
@@ -213,33 +212,11 @@ public class AsSubgraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
-    public void setVertexSupplier(Supplier<V> vertexSupplier)
-    {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_FROM_SUBGRAPH);
-    }
-
-    /**
-     * {@inheritDoc}
      */
     @Override
     public Supplier<E> getEdgeSupplier()
     {
         return base.getEdgeSupplier();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
-    public void setEdgeSupplier(Supplier<E> edgeSupplier)
-    {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_FROM_SUBGRAPH);        
     }
 
     /**

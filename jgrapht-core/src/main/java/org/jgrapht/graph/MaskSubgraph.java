@@ -268,33 +268,11 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
-    public void setVertexSupplier(Supplier<V> vertexSupplier)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);
-    }
-
-    /**
-     * {@inheritDoc}
      */
     @Override
     public Supplier<E> getEdgeSupplier()
     {
         return base.getEdgeSupplier();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
-    public void setEdgeSupplier(Supplier<E> edgeSupplier)
-    {
-        throw new UnsupportedOperationException(UNMODIFIABLE);        
     }
 
     /**

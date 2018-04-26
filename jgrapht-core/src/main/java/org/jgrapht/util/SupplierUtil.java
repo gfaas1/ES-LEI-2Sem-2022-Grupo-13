@@ -68,6 +68,26 @@ public class SupplierUtil
     }
 
     /**
+     * Create a default edge supplier.
+     * 
+     * @return a default edge supplier
+     */
+    public static Supplier<DefaultEdge> createDefaultEdgeSupplier()
+    {
+        return createSupplier(DefaultEdge.class);
+    }
+
+    /**
+     * Create a default weighted edge supplier.
+     * 
+     * @return a default weighted edge supplier
+     */
+    public static Supplier<DefaultWeightedEdge> createDefaultWeightedEdgeSupplier()
+    {
+        return createSupplier(DefaultWeightedEdge.class);
+    }
+
+    /**
      * Create an integer supplier which returns a sequence starting from zero.
      * 
      * @return an integer supplier
@@ -87,7 +107,7 @@ public class SupplierUtil
     {
         return new IntegerSupplier(start);
     }
-    
+
     /**
      * Create a long supplier which returns a sequence starting from zero.
      * 
@@ -160,12 +180,12 @@ public class SupplierUtil
             return i++;
         }
     }
-    
+
     private static class LongSupplier
         implements Supplier<Long>, Serializable
     {
         private static final long serialVersionUID = 4994477932143967277L;
-        
+
         private long i = 0;
 
         public LongSupplier(long start)

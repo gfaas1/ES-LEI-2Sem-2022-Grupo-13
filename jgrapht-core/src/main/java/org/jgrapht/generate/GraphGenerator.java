@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.jgrapht.VertexFactory;
+import org.jgrapht.graph.GraphDelegator;
 
 /**
  * An interface for generating new graph structures.
@@ -91,15 +92,13 @@ public interface GraphGenerator<V, E, T>
     default void generateGraph(
         Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap)
     {
-        boolean wasNull = false;
-        if (vertexFactory != null && target.getVertexSupplier() == null) {
-            target.setVertexSupplier(vertexFactory::createVertex);
-            wasNull = true;
+        /*
+         * Use delegator in order to switch supplier for backwards compatibility.
+         */
+        if (vertexFactory != null && target.getVertexSupplier() == null) { 
+            target = new GraphDelegator<>(target, vertexFactory::createVertex, null);
         }
         generateGraph(target, resultMap);
-        if (wasNull) {
-            target.setVertexSupplier(null);
-        }
     }
 
     /**

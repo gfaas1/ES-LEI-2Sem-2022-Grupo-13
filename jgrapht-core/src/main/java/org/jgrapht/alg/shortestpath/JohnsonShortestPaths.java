@@ -305,7 +305,7 @@ public class JohnsonShortestPaths<V, E>
         } else { 
             s = extraGraph.addVertex();
             if (s == null) { 
-                throw new IllegalArgumentException("Invalid vertex supplier");
+                throw new IllegalArgumentException("Invalid vertex supplier (does not return unique vertices on each call).");
             }
         }
 

@@ -161,29 +161,7 @@ public class AsGraphUnion<V, E>
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
-    public void setVertexSupplier(Supplier<V> vertexSupplier)
-    {
-        throw new UnsupportedOperationException(READ_ONLY);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
     public Supplier<E> getEdgeSupplier()
-    {
-        throw new UnsupportedOperationException(READ_ONLY);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
-     */
-    @Override
-    public void setEdgeSupplier(Supplier<E> edgeSupplier)
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }

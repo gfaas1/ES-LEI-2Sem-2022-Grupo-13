@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import org.jgrapht.*;
+import org.jgrapht.graph.GraphDelegator;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.
@@ -97,15 +98,10 @@ public class WheelGraphGenerator<V, E>
             rim.add(vertex);
             return vertex;
         };
-        // change the supplier
-        target.setVertexSupplier(rimVertexSupplier);
         
-        RingGraphGenerator<V, E> ringGenerator = new RingGraphGenerator<>(size - 1);
-        ringGenerator.generateGraph(target, resultMap);
+        Graph<V,E> targetWithRimVertexSupplier = new GraphDelegator<>(target, rimVertexSupplier, null);
         
-        // restore the supplier
-        target.setVertexSupplier(initialSupplier);
-        
+        new RingGraphGenerator<V,E>(size - 1).generateGraph(targetWithRimVertexSupplier, resultMap);
 
         V hubVertex = target.addVertex();
 

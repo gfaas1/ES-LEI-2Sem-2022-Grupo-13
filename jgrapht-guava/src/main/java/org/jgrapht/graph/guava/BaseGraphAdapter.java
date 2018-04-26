@@ -89,7 +89,23 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
         return vertexSupplier;
     }
 
-    @Override
+    /**
+     * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
+     * 
+     * <p>
+     * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
+     * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
+     * {@link Graph#addVertex(Object)} to add the vertex.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * 
+     * @param vertexSupplier the vertex supplier
+     */
     public void setVertexSupplier(Supplier<V> vertexSupplier)
     {
         this.vertexSupplier = vertexSupplier;
@@ -101,7 +117,23 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
         return edgeSupplier;
     }
 
-    @Override
+    /**
+     * Set the edge supplier that the graph uses whenever it needs to create new edges.
+     * 
+     * <p>
+     * A graph uses the edge supplier to create new edge objects whenever a user calls method
+     * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
+     * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the edge supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * 
+     * @param edgeSupplier the edge supplier
+     */
     public void setEdgeSupplier(Supplier<EndpointPair<V>> edgeSupplier)
     {
         this.edgeSupplier = edgeSupplier;
