@@ -38,7 +38,9 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class DefaultGraphType
-    implements GraphType, Serializable
+    implements
+    GraphType,
+    Serializable
 {
     private static final long serialVersionUID = 4291049312119347474L;
 
@@ -265,6 +267,14 @@ public class DefaultGraphType
         return new Builder()
             .directed().allowSelfLoops(false).allowMultipleEdges(true).allowCycles(false)
             .weighted(false).build();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "DefaultGraphType [directed=" + directed + ", undirected=" + undirected
+            + ", self-loops=" + selfLoops + ", multiple-edges=" + multipleEdges + ", weighted="
+            + weighted + ", allows-cycles=" + allowsCycles + ", modifiable=" + modifiable + "]";
     }
 
     /**
