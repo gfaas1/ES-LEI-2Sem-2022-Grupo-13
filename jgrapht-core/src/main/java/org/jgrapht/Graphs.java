@@ -283,42 +283,13 @@ public abstract class Graphs
      * @return a set of the vertices that are neighbors of the specified vertex
      */
     public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
-        Set<V> neighbors = new HashSet<>();
+        Set<V> neighbors = new LinkedHashSet<>();
 
         for (E e : g.edgesOf(vertex)) {
             neighbors.add(Graphs.getOppositeVertex(g, e, vertex));
         }
 
         return neighbors;
-    }
-
-    /**
-     * Returns a set of vertices that are neighbors of the source of the specified edge or of the target of
-     * specified edge. The endpoints of the specified edge aren't included in the result.
-     *
-     * @param g the graph to look for neighbors in
-     * @param edge the edge to get the neighbors of
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a set of vertices that are neighbors of at least one endpoint of the specified edge. The endpoints
-     * of the specified edge aren't included in the result
-     */
-    public static <V, E> Set<V> neighborhoodSetOf(Graph<V, E> g, E edge) {
-        Set<V> neighborhood = new HashSet<>();
-
-        V source = g.getEdgeSource(edge);
-        V target = g.getEdgeTarget(edge);
-
-        for (E e : g.edgesOf(source)) {
-            neighborhood.add(Graphs.getOppositeVertex(g, e, source));
-        }
-        for (E e : g.edgesOf(target)) {
-            neighborhood.add(Graphs.getOppositeVertex(g, e, target));
-        }
-        neighborhood.remove(source);
-        neighborhood.remove(target);
-
-        return neighborhood;
     }
 
     /**

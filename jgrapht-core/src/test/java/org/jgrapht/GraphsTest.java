@@ -445,23 +445,6 @@ public class GraphsTest
         Assert.assertEquals(new HashSet<>(Arrays.asList(2, 4)), neighborSet);
     }
 
-    @Test
-    public void testNeighborhoodSetOf(){
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addVertex(5);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        graph.addEdge(4, 5);
-        graph.addEdge(1,5);
-        Set<Integer> neighborSet = Graphs.neighborhoodSetOf(graph, graph.getEdge(1, 2));
-        Assert.assertEquals(new HashSet<>(Arrays.asList(3, 5)), neighborSet);
-    }
-
 }
 
 // End GraphsTest.java

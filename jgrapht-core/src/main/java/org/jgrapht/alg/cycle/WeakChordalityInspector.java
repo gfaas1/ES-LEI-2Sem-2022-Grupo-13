@@ -60,8 +60,9 @@ import java.util.*;
  * When the graph is modified externally, the behavior of the {@code WeakChordalityInspector} is undefined.
  * <p>
  * In the case the inspected graph in not weakly chordal, this inspector provides a certificate in the form
- * of some hole or anti-hole. The running time of finding a hole is $\mathcal{O}(|V| + |E|)$ and of
- * finding an anti-hole - $\mathcal{O}(|E|^2)$ in the worst case.
+ * of some <a href = "http://graphclasses.org/smallgraphs.html#holes">hole</a> or
+ * <a href="http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a>. The running time of finding
+ * a hole is $\mathcal{O}(|V| + |E|)$ and of finding an anti-hole - $\mathcal{O}(|E|^2)$ in the worst case.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -95,10 +96,6 @@ public class WeakChordalityInspector<V, E> {
      */
     private Boolean weaklyChordal = null;
     /**
-     * For finding minimal separators
-     */
-    private SeparatorFinder<V, E> separatorFinder;
-    /**
      * Contains a hole or an anti-hole of the graph, if it isn't weakly chordal
      */
     private GraphPath<V, E> certificate;
@@ -113,7 +110,6 @@ public class WeakChordalityInspector<V, E> {
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
         }
-        separatorFinder = new SeparatorFinder<>(graph);
         n = graph.vertexSet().size();
         m = graph.edgeSet().size();
         initMappings();
@@ -146,7 +142,9 @@ public class WeakChordalityInspector<V, E> {
      * Computes and returns the certificate in the form of a hole or anti-hole in the inspected {@code graph}.
      * Returns null if the inspected graph is weakly chordal. Note: certificate is computed lazily.
      *
-     * @return a hole or anti-hole in the inspected {@code graph}, null if the {@code graph} is weakly chordal
+     * @return a <a href="http://graphclasses.org/smallgraphs.html#holes">hole</a> or
+     * <a href="http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a> in the inspected
+     * {@code graph}, null if the {@code graph} is weakly chordal
      */
     public GraphPath<V, E> getCertificate() {
         lazyComputeWeakChordality();
@@ -227,7 +225,7 @@ public class WeakChordalityInspector<V, E> {
             V source = graph.getEdgeSource(edge);
             V target = graph.getEdgeTarget(edge);
             if (source != target) {
-                List<Set<V>> edgeSeparators = separatorFinder.findSeparators(edge);
+                List<Set<V>> edgeSeparators = findSeparators(graph, edge);
                 globalSeparatorList.addAll(reformatSeparatorList(edgeSeparators, edge));
             }
         }
@@ -336,11 +334,11 @@ public class WeakChordalityInspector<V, E> {
     }
 
     /**
-     * Compares two separators for equality. Labeling of the vertices in the separators isn't considered
+     * Compares two separators for inequality. Labeling of the vertices in the separators isn't considered
      *
      * @param sep1 first separator
      * @param sep2 second separator
-     * @return true, if the separators are equal, false otherwise
+     * @return true, if the separators are unequal, false otherwise
      */
     private boolean unequalSeparators(List<Pair<Integer, Integer>> sep1, List<Pair<Integer, Integer>> sep2) {
         if (sep1.size() == sep2.size()) {
@@ -510,8 +508,7 @@ public class WeakChordalityInspector<V, E> {
         // For edge cycleFormer we need to find the separator, which contains vertices with labels 1 and 2
         // After that the procedure of detecting a hole in the complement of the graph is identical
         // to finding a hole in the graph itself
-        SeparatorFinder<V, E> complementSeparatorFinder = new SeparatorFinder<>(complement);
-        List<Set<V>> separators = complementSeparatorFinder.findSeparators(cycleFormer);
+        List<Set<V>> separators = findSeparators(complement, cycleFormer);
         List<Pair<List<Pair<Integer, Integer>>, E>> reformatted = reformatSeparatorList(separators, cycleFormer);
 
         sortSeparatorsList(reformatted);
@@ -660,5 +657,105 @@ public class WeakChordalityInspector<V, E> {
         }
         minimizedCycle.add(tarInSep);
         return minimizedCycle;
+    }
+
+    /**
+     * Computes and returns all minimal separators in the neighborhood of the {@code edge} in
+     * the {@code graph}. The result may contain duplicate separators.
+     *
+     * @param graph the graph to search minimal separators in
+     * @param edge  the edge, whose neighborhood is being explored
+     * @return the list of all minimal separators in the neighborhood of the {@code edge}.
+     * The resulted list may contain duplicates.
+     */
+    private List<Set<V>> findSeparators(Graph<V, E> graph, E edge) {
+        List<Set<V>> separators = new ArrayList<>();
+        V source = graph.getEdgeSource(edge);
+        V target = graph.getEdgeTarget(edge);
+        Set<V> neighborhood = neighborhoodSetOf(graph, edge);
+        Map<V, Byte> dfsMap = new HashMap<>(graph.vertexSet().size());
+
+        //0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
+        for (V vertex : graph.vertexSet()) {
+            if (neighborhood.contains(vertex)) {
+                dfsMap.put(vertex, (byte) 1);
+            } else {
+                dfsMap.put(vertex, (byte) 0);
+            }
+        }
+        dfsMap.put(source, (byte) 2);
+        dfsMap.put(target, (byte) 2);
+
+        for (V vertex : graph.vertexSet()) {
+            if (dfsMap.get(vertex) == 0) {
+                // possible to find one more separator
+                Set<V> separator = getSeparator(graph, vertex, dfsMap);
+                if (!separator.isEmpty()) {
+                    separators.add(separator);
+                }
+            }
+        }
+
+        return separators;
+    }
+
+    /**
+     * Performs iterative depth-first search starting from the {@code startVertex} in the {@code graph}.
+     * Adds every encountered red vertex to the resulting separator. Doesn't process red vertices. Marks
+     * all white vertices with black color.
+     *
+     * @param graph       the graph dfs is performed on
+     * @param startVertex the vertex to start depth-first traversal from
+     * @param dfsMap      the depth-first vertex labeling
+     * @return the computed separator, which consists of all encountered red vertices
+     */
+    private Set<V> getSeparator(Graph<V, E> graph, V startVertex, Map<V, Byte> dfsMap) {
+        Deque<V> stack = new ArrayDeque<>();
+        Set<V> separator = new HashSet<>();
+        stack.add(startVertex);
+
+        while (!stack.isEmpty()) {
+            V currentVertex = stack.removeLast();
+            if (dfsMap.get(currentVertex) == 0) {
+                dfsMap.put(currentVertex, (byte) 2);
+                for (E edge : graph.edgesOf(currentVertex)) {
+                    V opposite = Graphs.getOppositeVertex(graph, edge, currentVertex);
+                    if (dfsMap.get(opposite) == 0) {
+                        stack.add(opposite);
+                    } else if (dfsMap.get(opposite) == 1) {
+                        separator.add(opposite); // found red vertex, which belongs to the separator
+                    }
+                }
+            }
+        }
+
+        return separator;
+    }
+
+    /**
+     * Returns a set of vertices that are neighbors of the source of the specified edge or of the target of
+     * specified edge. The endpoints of the specified edge aren't included in the result.
+     *
+     * @param g    the graph to look for neighbors in
+     * @param edge the edge to get the neighbors of
+     * @return a set of vertices that are neighbors of at least one endpoint of the specified edge. The endpoints
+     * of the specified edge aren't included in the result
+     */
+    private Set<V> neighborhoodSetOf(Graph<V, E> g, E edge) {
+        Set<V> neighborhood = new HashSet<>();
+
+        V source = g.getEdgeSource(edge);
+        V target = g.getEdgeTarget(edge);
+
+        for (E e : g.edgesOf(source)) {
+            neighborhood.add(Graphs.getOppositeVertex(g, e, source));
+        }
+        for (E e : g.edgesOf(target)) {
+            neighborhood.add(Graphs.getOppositeVertex(g, e, target));
+        }
+        neighborhood.remove(source);
+        neighborhood.remove(target);
+
+        return neighborhood;
     }
 }
