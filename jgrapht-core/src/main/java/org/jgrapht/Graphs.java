@@ -17,10 +17,11 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-import java.util.function.*;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 
-import org.jgrapht.graph.*;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -250,7 +251,7 @@ public abstract class Graphs
     /**
      * Returns a list of vertices that are the neighbors of a specified vertex. If the graph is a
      * multigraph vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#edgesOf(Object)} to traverse the graph.
      *
@@ -273,12 +274,31 @@ public abstract class Graphs
     }
 
     /**
+     * Returns a set of vertices that are neighbors of a specified vertex.
+     *
+     * @param g the graph to look for neighbors in
+     * @param vertex the vertex to get the neighbors of
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a set of the vertices that are neighbors of the specified vertex
+     */
+    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
+        Set<V> neighbors = new LinkedHashSet<>();
+
+        for (E e : g.edgesOf(vertex)) {
+            neighbors.add(Graphs.getOppositeVertex(g, e, vertex));
+        }
+
+        return neighbors;
+    }
+
+    /**
      * Returns a list of vertices that are the direct predecessors of a specified vertex. If the
      * graph is a multigraph, vertices may appear more than once in the returned list.
-     * 
+     *
      * <p>
      * The method uses {@link Graph#incomingEdgesOf(Object)} to traverse the graph.
-     * 
+     *
      * @param g the graph to look for predecessors in
      * @param vertex the vertex to get the predecessors of
      * @param <V> the graph vertex type
