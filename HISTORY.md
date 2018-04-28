@@ -57,6 +57,7 @@ Changes to JGraphT in each version:
     - Removed recursion from DAG forward and backwards DFS methods (contributed by Gilles Gosuin)
     - Implemented performance improvements for `GnmRandomGraphGenerator` and `GnpRandomGraphGenerator` (suggested by @Shevek, contributed by Dimitrios Michail)
     - Added `WeakChordalityInspector` to test whether a graph is weakly chordal (contributed by Timofey Chudakov)
+    - Fixed typo in `TreeSingleSourcePathsImpl` (contributed by Viktor Volkov)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
