@@ -135,7 +135,7 @@ public class TreeSingleSourcePathsImpl<V, E>
         }
 
         double weight = 0d;
-        while (p != null) {
+        while (p != null && !cur.equals(source)) {
             E e = p.getSecond();
             if (e == null) {
                 break;
