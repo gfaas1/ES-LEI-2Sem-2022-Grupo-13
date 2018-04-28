@@ -30,8 +30,8 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * The algorithm is a variant of the Bellman-Ford algorithm but instead of only storing the best
- * path it stores the "k" best paths at each pass, yielding a complexity of O(k*n*(m^2)) where m is
- * the number of edges and n is the number of vertices.
+ * path it stores the "k" best paths at each pass, yielding a complexity of $O(k \cdot n \cdot (m^2))$ where $m$ is
+ * the number of edges and $n$ is the number of vertices.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -123,7 +123,7 @@ public class KShortestPaths<V, E>
     }
 
     /**
-     * Returns the k shortest simple paths in increasing order of weight.
+     * Returns the $k$ shortest simple paths in increasing order of weight.
      *
      * @param startVertex source vertex of the calculated paths.
      * @param endVertex target vertex of the calculated paths.

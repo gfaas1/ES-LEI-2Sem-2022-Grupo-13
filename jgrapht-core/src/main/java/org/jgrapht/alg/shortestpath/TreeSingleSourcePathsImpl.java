@@ -33,7 +33,7 @@ import org.jgrapht.graph.*;
  * predecessor in the shortest path tree. In order to keep space to linear, the paths are recomputed
  * in each invocation of the {@link #getPath(Object)} method. The complexity of
  * {@link #getPath(Object)} is linear to the number of edges of the path while the complexity of
- * {@link #getWeight(Object)} is O(1).
+ * {@link #getWeight(Object)} is $O(1)$.
  * 
  * @author Dimitrios Michail
  *

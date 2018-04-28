@@ -52,7 +52,15 @@ import org.jgrapht.graph.*;
  * time the method is called. For other methods returning a Set, the Set is just the backing Graph's
  * return.
  * </p>
-
+ *
+ * <p>
+ * As an alternative, a <em>copyless mode</em> is supported.  When enabled,
+ * no collection copies are made at all (and hence the cache setting is
+ * ignored).  This requires the caller to explicitly synchronize iteration via
+ * the {@link #getLock} method.  This approach requires quite a bit of care on the
+ * part of the calling application, so it is disabled by default.
+ * </p>
+ *
  * <p>
  * Even though this graph implementation is thread-safe, callers should still be aware of potential
  * hazards from removal methods. If calling code obtains a reference to a vertex or edge from the
@@ -77,11 +85,19 @@ import org.jgrapht.graph.*;
  *      Thread threadB = new Thread(() -&gt; {
  *          Set vertices = graph.vertexSet();
  *          for (Object v : vertices) {
- *              if (someConditions)
+ *              if (someConditions) {
  *                  graph.removeVertex(v);
+ *              }
  *          }
  *      });
  * </pre>
+ *
+ * <p>
+ *
+ * One way to avoid the hazard noted above is for the calling
+ * application to explicitly synchronize all iterations using the {@link #getLock} method.
+ *
+ * </p>
  *
  * <p>
  * The created Graph's hashCode is equal to the backing set's hashCode. And the created Graph is equal
@@ -111,15 +127,14 @@ public class AsSynchronizedGraph<V, E>
     private CacheStrategy<V, E> cacheStrategy;
 
     /**
-     * Constructor for AsSynchronizedGraph with strategy of not caching the copies for
-     * <code>edgesOf</code>, <code>incomingEdgesOf</code> and <code>outgoingEdgesOf</code> methods
-     * and non-fair mode for thread-access.
+     * Constructor for AsSynchronizedGraph with default settings
+     * (cache disabled, non-fair mode, and copyless mode disabled).
      *
      * @param g the backing graph (the delegate)
      */
     public AsSynchronizedGraph(Graph<V, E> g)
     {
-        this(g, false, false);
+        this(g, false, false, false);
     }
 
     /**
@@ -127,18 +142,22 @@ public class AsSynchronizedGraph<V, E>
      *
      * @param g the backing graph (the delegate)
      * @param cacheEnable a flag describing whether a cache will be used
-     * @param fair a flag describing whether fair model will be used
+     * @param fair a flag describing whether fair mode will be used
+     * @param copyless a flag describing whether copyless mode will be used
      */
-    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnable, boolean fair)
+    private AsSynchronizedGraph(Graph<V, E> g, boolean cacheEnable, boolean fair, boolean copyless)
     {
         super(g);
         readWriteLock = new ReentrantReadWriteLock(fair);
-        if (cacheEnable)
+        if (copyless) {
+            cacheStrategy = new NoCopy();
+        } else if (cacheEnable) {
             cacheStrategy = new CacheAccess();
-        else
+        } else {
             cacheStrategy = new NoCache();
-        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock);
-        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock);
+        }
+        allEdgesSet = new CopyOnDemandSet<>(super.edgeSet(), readWriteLock, copyless);
+        allVerticesSet = new CopyOnDemandSet<>(super.vertexSet(), readWriteLock, copyless);
     }
 
     /**
@@ -549,6 +568,15 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
+     * Return whether copyless mode is used for collection-returning methods.
+     * @return <tt>true</tt> if the graph uses copyless mode, <tt>false</tt> otherwise
+     */
+    public boolean isCopyless()
+    {
+        return allVerticesSet.isCopyless();
+    }
+
+    /**
      * Set the cache strategy for <code>edgesOf</code>, <code>incomingEdgesOf</code> and
      * <code>outgoingEdgesOf</code> methods.
      *
@@ -631,12 +659,27 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
-     * Return whether fair mode will be used for the graph.
-     * @return <tt>true</tt> if the graph uses fair mode, <tt>false</tt> if non-fair model
+     * Return whether fair mode is used for synchronizing access to this graph.
+     * @return <tt>true</tt> if the graph uses fair mode, <tt>false</tt> if non-fair mode
      */
     public boolean isFair()
     {
         return readWriteLock.isFair();
+    }
+
+    /**
+     * Get the read/write lock used to synchronize all access to this graph.
+     * This can be used by calling applications to explicitly synchronize compound sequences
+     * of graph accessses.  The lock is reentrant, so the locks
+     * acquired internally by AsSynchronizedGraph will not interfere with the
+     * caller's acquired lock.  However, write methods <strong>MUST NOT</strong> be called while
+     * holding a read lock, otherwise a deadlock will occur.
+     *
+     * @return the reentrant read/write lock used to synchronize all access to this graph
+     */
+    public ReentrantReadWriteLock getLock()
+    {
+        return readWriteLock;
     }
 
     /**
@@ -646,7 +689,7 @@ public class AsSynchronizedGraph<V, E>
      *
      * <p>
      * When a traversal over the set is started via a method such as iterator(), a snapshot of the
-     * underlying set is copied for iteration purposes.
+     * underlying set is copied for iteration purposes (unless copyless mode is enabled).
      * </p>
      *
      * <p>
@@ -666,10 +709,14 @@ public class AsSynchronizedGraph<V, E>
     private static class CopyOnDemandSet<E>
             implements Set<E>, Serializable
     {
-        private static final long serialVersionUID = -102323563687847936L;
+        private static final long serialVersionUID = 5553953818148294283L;
 
         // Backing set.
         private Set<E> set;
+
+        // When this flag is set, the backing set is used directly rather than
+        // a copy.
+        private final boolean copyless;
 
         // Backing set's unmodifiable copy. If null, needs to be recomputed on next access.
         volatile private transient Set<E> copy;
@@ -682,12 +729,23 @@ public class AsSynchronizedGraph<V, E>
          * Constructor for CopyOnDemandSet.
          * @param s the backing set.
          * @param readWriteLock the ReadWriteLock on which to locked
+         * @param copyless whether copyless mode should be used
          */
-        private CopyOnDemandSet(Set<E> s, ReadWriteLock readWriteLock)
+        private CopyOnDemandSet(Set<E> s, ReadWriteLock readWriteLock, boolean copyless)
         {
             set = Objects.requireNonNull(s, "s must not be null");
             copy = null;
             this.readWriteLock = readWriteLock;
+            this.copyless = copyless;
+        }
+
+        /**
+         * Return whether copyless mode is used for iteration.
+         * @return <tt>true</tt> if the set uses copyless mode, <tt>false</tt> otherwise
+         */
+        public boolean isCopyless()
+        {
+            return copyless;
         }
 
         /**
@@ -949,11 +1007,16 @@ public class AsSynchronizedGraph<V, E>
         }
 
         /**
-         * Get the backing set's unmodifiable copy.
-         * @return the backing set's unmodifiable copy.
+         * Get the backing set's unmodifiable copy, or a direct reference to
+         * the backing set if in copyless mode.
+         *
+         * @return the backing set or its unmodifiable copy
          */
         private Set<E> getCopy()
         {
+            if (copyless) {
+                return set;
+            }
             readWriteLock.readLock().lock();
             try {
                 Set<E> tempCopy = copy;
@@ -1129,6 +1192,45 @@ public class AsSynchronizedGraph<V, E>
     }
 
     /**
+     * Disable cache as per <code>NoCache</code>, and also don't produce copies;
+     * instead, just directly return the results from the underlying graph.
+     * This requires the caller to explicitly synchronize iterations over these
+     * collections.
+     */
+    private class NoCopy
+        extends NoCache
+    {
+        private static final long serialVersionUID = -5046944235164395939L;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> edgesOf(V vertex)
+        {
+            return AsSynchronizedGraph.super.edgesOf(vertex);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> incomingEdgesOf(V vertex)
+        {
+            return AsSynchronizedGraph.super.incomingEdgesOf(vertex);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<E> outgoingEdgesOf(V vertex)
+        {
+            return AsSynchronizedGraph.super.outgoingEdgesOf(vertex);
+        }
+    }
+
+    /**
      * Use cache for AsSynchronizedGraph's <code>edgesOf</code>, <code>incomingEdgesOf</code>
      * and <code>outgoingEdgesOf</code> methods.
      */
@@ -1295,18 +1397,21 @@ public class AsSynchronizedGraph<V, E>
     {
         private boolean cacheEnable;
         private boolean fair;
+        private boolean copyless;
 
         /**
-         * Construct a new Builder non-fair mode and cache disabled.
+         * Construct a new Builder with non-fair mode, cache disabled, and
+         * copyless mode disabled.
          */
         public Builder()
         {
             cacheEnable = false;
             fair = false;
+            copyless = false;
         }
 
         /**
-         * Construct a new Builder.
+         * Construct a new Builder matching the settings of an existing graph.
          *
          * @param graph the graph on which to base the builder
          */
@@ -1314,6 +1419,7 @@ public class AsSynchronizedGraph<V, E>
         {
             this.cacheEnable = graph.isCacheEnabled();
             this.fair = graph.isFair();
+            this.copyless = graph.isCopyless();
         }
 
         /**
@@ -1341,10 +1447,42 @@ public class AsSynchronizedGraph<V, E>
         /**
          * Return whether a cache will be used for the synchronized graph being built.
          *
-         * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be use
+         * @return <tt>true</tt> if cache will be used, <tt>false</tt> if cache will not be used
          */
         public boolean isCacheEnable() {
             return cacheEnable;
+        }
+
+        /**
+         * Request a synchronized graph which does not return collection copies.
+         *
+         * @return the Builder
+         */
+        public Builder<V,E> setCopyless()
+        {
+            copyless = true;
+            return this;
+        }
+
+        /**
+         * Request a synchronized graph which returns collection copies.
+         *
+         * @return the Builder
+         */
+        public Builder<V,E> clearCopyless()
+        {
+            copyless = false;
+            return this;
+        }
+
+        /**
+         * Return whether copyless mode will be used for the synchronized graph being built.
+         *
+         * @return <tt>true</tt> if constructed as copyless, <tt>false</tt> otherwise
+         */
+        public boolean isCopyless()
+        {
+            return copyless;
         }
 
         /**
@@ -1387,7 +1525,7 @@ public class AsSynchronizedGraph<V, E>
          */
         public AsSynchronizedGraph<V,E> build(Graph<V, E> graph)
         {
-            return new AsSynchronizedGraph<>(graph, cacheEnable, fair);
+            return new AsSynchronizedGraph<>(graph, cacheEnable, fair, copyless);
         }
     }
 }

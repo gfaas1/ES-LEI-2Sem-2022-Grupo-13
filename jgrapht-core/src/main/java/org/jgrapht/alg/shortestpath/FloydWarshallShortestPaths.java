@@ -152,16 +152,16 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the first hop, i.e., the second node on the shortest path from a to b. Lookup time is
-     * O(1). If the shortest path from a to b is a,c,d,e,b, this method returns c. If the next
-     * invocation would query the first hop on the shortest path from c to b, vertex d would be
+     * Returns the first hop, i.e., the second node on the shortest path from $a$ to $b$. Lookup time is
+     * $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method returns $c$. If the next
+     * invocation would query the first hop on the shortest path from $c$ to $b$, vertex $d$ would be
      * returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the first vertex.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return next hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return next hop on the shortest path from a to b, or null when there exists no path from $a$
+     *         to $b$.
      */
     public V getFirstHop(V a, V b)
     {
@@ -179,17 +179,17 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     /**
-     * Returns the last hop, i.e., the second to last node on the shortest path from a to b. Lookup
-     * time is O(1). If the shortest path from a to b is a,c,d,e,b, this method returns e. If the
-     * next invocation would query the next hop on the shortest path from c to e, vertex d would be
+     * Returns the last hop, i.e., the second to last node on the shortest path from $a$ to $b$. Lookup
+     * time is $O(1)$. If the shortest path from $a$ to $b$ is $a,c,d,e,b$, this method returns $e$. If the
+     * next invocation would query the next hop on the shortest path from $c$ to $e$, vertex $d$ would be
      * returned, etc. This method is computationally cheaper than calling
      * {@link #getPath(Object, Object)} and then reading the vertex. The first invocation of this
      * method populates a last hop matrix.
      * 
      * @param a source vertex
      * @param b target vertex
-     * @return last hop on the shortest path from a to b, or null when there exists no path from a
-     *         to b.
+     * @return last hop on the shortest path from $a$ to $b$, or null when there exists no path from $a$
+     *         to $b$.
      */
     public V getLastHop(V a, V b)
     {

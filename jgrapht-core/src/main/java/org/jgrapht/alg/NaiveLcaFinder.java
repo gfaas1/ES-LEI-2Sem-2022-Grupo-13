@@ -26,10 +26,10 @@ import java.util.*;
  * Find the Lowest Common Ancestor of a directed graph.
  *
  * <p>
- * Find the LCA, defined as <i>Let G = (V, E) be a DAG, and let x, y ∈ V . Let G x,y be the subgraph
- * of G induced by the set of all common ancestors of x and y. Define SLCA (x, y) to be the set of
- * out-degree 0 nodes (leafs) in G x,y . The lowest common ancestors of x and y are the elements of
- * SLCA (x, y). This naive algorithm simply starts at a and b, recursing upwards to the root(s) of
+ * Find the LCA, defined as <i>Let $G = (V, E)$ be a DAG, and let $x, y \in V$ . Let $G x,y$ be the subgraph
+ * of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y) to be the set of
+ * out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$ are the elements of
+ * SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing upwards to the root(s) of
  * the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
  * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
  *
@@ -244,14 +244,14 @@ public class NaiveLcaFinder<V, E>
     }
 
     /**
-     * Return a single vertex that is both in x and y. If there is more than one then select the
-     * first element from the iterator returned from y, after all the elements of x have been
+     * Return a single vertex that is both in $x$ and $y$. If there is more than one then select the
+     * first element from the iterator returned from $y$, after all the elements of $x$ have been
      * removed. this allows an orderedSet to be passed in to give predictable results.
      *
      * @param x set containing vertex
      * @param y set containing vertex, which may be ordered to give predictable results
      *
-     * @return the first element of y that is also in x, or null if no such element
+     * @return the first element of $y$ that is also in $x$, or null if no such element
      */
     private V overlappingMember(Set<V> x, Set<V> y)
     {

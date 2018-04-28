@@ -28,7 +28,7 @@ import java.util.*;
  * <p>
  * <a href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm"> Push-relabel
  * maximum flow</a> algorithm designed by Andrew V. Goldberg and Robert Tarjan. Current
- * implementation complexity upper-bound is O(V^3). For more details see: <i>"A new approach to the
+ * implementation complexity upper-bound is $O(V^3)$. For more details see: <i>"A new approach to the
  * maximum flow problem"</i> by Andrew V. Goldberg and Robert Tarjan <i>STOC '86: Proceedings of the
  * eighteenth annual ACM symposium on Theory of computing</i>
  * </p>
@@ -40,8 +40,8 @@ import java.util.*;
  * </p>
  *
  * <p>
- * This class can also computes minimum s-t cuts. Effectively, to compute a minimum s-t cut, the
- * implementation first computes a minimum s-t flow, after which a BFS is run on the residual graph.
+ * This class can also computes minimum $s-t$ cuts. Effectively, to compute a minimum $s-t$ cut, the
+ * implementation first computes a minimum $s-t$ flow, after which a BFS is run on the residual graph.
  * </p>
  *
  * Note: even though the algorithm accepts any kind of graph, currently only Simple directed and
@@ -287,14 +287,14 @@ public class PushRelabelMFImpl<V, E>
         The basic operation RELABEL(u) is applied if u is overflowing (i.e. has excess)
         and if u.height <= v.height + 1.
 
-        We can relabel an overflowing vertex u if for every vertex v for which there is
+        We can relabel an overflowing vertex $u$ if for every vertex v for which there is
         residual capacity from u to v, flow cannot be pushed from u to v because v is not
         downhill from u.
      */
     private void relabel(VertexExtension ux){
         int oldHeight = ux.height;
 
-        // Increase the height of u; u.h = 1 + min{v.h : (u, v) ∈ Ef}
+        // Increase the height of u; u.h = 1 + min(v.h : (u, v) in Ef)
 
         countHeight[ux.height]--;
         ux.height = 2 * N;
