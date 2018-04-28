@@ -20,10 +20,12 @@ package org.jgrapht.alg.tour;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.GraphTests;
+import org.jgrapht.SlowTests;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -123,6 +125,7 @@ public class PalmerHamiltonianCycleTest {
      * Method of generation: randomly add edges while the graph doesn't have Ore's property
      */
     @Test
+    @Category(SlowTests.class)    
     public void testRandomGraphs(){
         testRandomGraphs(new Random(0xC0FFEE));
     }
@@ -171,6 +174,7 @@ public class PalmerHamiltonianCycleTest {
      * Method of generation: make sure that each node has (n+1)/2 neighbours
      */
     @Test
+    @Category(SlowTests.class)    
     public void testRandomGraphs2FixedSeed(){
         testRandomGraphs2(new Random(0xBEEF));
     }
@@ -209,6 +213,7 @@ public class PalmerHamiltonianCycleTest {
     }
 
     @Test
+    @Category(SlowTests.class)    
     public void testBigGraph() {
         GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(bigGraph);
 
