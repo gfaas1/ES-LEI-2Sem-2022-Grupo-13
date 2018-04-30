@@ -177,11 +177,6 @@ public class KShortestPaths<V, E>
     }
 
     @Override
-    public Iterator<GraphPath<V, E>> iterator(V startVertex, V endVertex, int k) {
-        return getPaths(startVertex, endVertex, k).iterator();
-    }
-
-    @Override
     public List<GraphPath<V, E>> getPaths(V source, V sink, int k)
     {
         this.nPaths = k;

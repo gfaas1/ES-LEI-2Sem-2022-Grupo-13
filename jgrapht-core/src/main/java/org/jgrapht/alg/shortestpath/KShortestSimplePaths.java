@@ -17,9 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -114,7 +116,7 @@ public class KShortestSimplePaths<V, E>
     }
 
     /**
-     * Returns an iterator of the $k$ shortest simple paths in increasing order of weight.
+     * Returns a list of the $k$ shortest simple paths in increasing order of weight.
      *
      * @param startVertex source vertex of the calculated paths.
      * @param endVertex target vertex of the calculated paths.
@@ -126,7 +128,7 @@ public class KShortestSimplePaths<V, E>
      * @throws IllegalArgumentException if k is negative or zero
      */
     @Override
-    public Iterator<GraphPath<V, E>> iterator(V startVertex, V endVertex, int k)
+    public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex, int k)
     {
         Objects.requireNonNull(startVertex, "Start vertex cannot be null");
         Objects.requireNonNull(endVertex, "End vertex cannot be null");
@@ -155,7 +157,7 @@ public class KShortestSimplePaths<V, E>
 
         RankingPathElementList<V, E> pathElements = iter.getPathElements(endVertex);
         if (pathElements == null) {
-            return Collections.<GraphPath<V, E>> emptyList().iterator();
+            return Collections.<GraphPath<V, E>> emptyList();
         } else {
             return pathElements
                 .stream()
@@ -163,7 +165,7 @@ public class KShortestSimplePaths<V, E>
                     e -> new GraphWalk<V, E>(
                         graph, startVertex, e.getVertex(), null, e.createEdgeListPath(),
                         e.getWeight()))
-                .map(w -> (GraphPath<V, E>) w).iterator();
+                .collect(Collectors.toCollection(ArrayList::new));
         }
     }
 
