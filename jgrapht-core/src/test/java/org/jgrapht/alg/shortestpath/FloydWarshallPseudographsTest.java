@@ -30,6 +30,7 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 
 /**
  * Test {@link FloydWarshallShortestPaths} on pseudo graphs.
@@ -40,6 +41,7 @@ public class FloydWarshallPseudographsTest
 {
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomGraphs()
     {
         final int tests = 20;

@@ -21,6 +21,7 @@ import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
 import static org.junit.Assert.assertTrue;
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
@@ -30,12 +31,14 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * Tests for {@link TwoOptHeuristicTSP}.
  * 
  * @author Dimitrios Michail
  */
+@Category(SlowTests.class)
 public class TwoOptHeuristicTSPTest
 {
 
