@@ -17,25 +17,25 @@
  */
 package org.jgrapht.perf.spanning;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GnpRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedPseudograph;
 import org.jgrapht.util.StopWatch;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.
@@ -74,11 +74,11 @@ public class MinimumSpanningTreePerformanceTest
             }
 
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedDenseGraph =
-                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.denseGraph = weightedDenseGraph;
 
-            generatorDenseGraphs.generateGraph(weightedDenseGraph, new IntegerVertexFactory(), null);
+            generatorDenseGraphs.generateGraph(weightedDenseGraph);
 
             for (DefaultWeightedEdge e : weightedDenseGraph.edgeSet()) {
                 weightedDenseGraph.setEdgeWeight(e, rng.nextDouble());
@@ -93,11 +93,11 @@ public class MinimumSpanningTreePerformanceTest
             }
 
             DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> weightedSparseGraph =
-                    new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             this.sparseGraph = weightedSparseGraph;
 
-            generatorSparseGraphs.generateGraph(weightedSparseGraph, new IntegerVertexFactory(), null);
+            generatorSparseGraphs .generateGraph(sparseGraph);
 
             for (DefaultWeightedEdge e : weightedSparseGraph.edgeSet()) {
                 weightedSparseGraph.setEdgeWeight(e, rng.nextDouble());

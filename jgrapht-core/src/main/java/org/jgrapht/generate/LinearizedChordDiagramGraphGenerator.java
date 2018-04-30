@@ -106,13 +106,12 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
      * Generates an instance.
      * 
      * @param target the target graph, which must allow self-loops and parallel edges
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      * @throws IllegalArgumentException if the graph does not allow self-loops or parallel edges
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Add nodes by maintaining a list with vertex multiplicity equal to its degree for sampling
@@ -121,9 +120,9 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
         List<V> nodes = new ArrayList<>(2 * n * m);
         for (int t = 0; t < n; t++) {
             // add node
-            V vt = vertexFactory.createVertex();
-            if (!target.addVertex(vt)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V vt = target.addVertex();
+            if (vt == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
 
             // add edges

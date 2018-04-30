@@ -19,13 +19,13 @@
 package org.jgrapht.alg.shortestpath;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -212,38 +212,26 @@ public class KSPPathValidatorTest
 
     private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size)
     {
-        SimpleGraph<String, DefaultEdge> clique = new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<String, DefaultEdge> clique = new SimpleGraph<>(SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<String, DefaultEdge> graphGenerator =
             new CompleteGraphGenerator<>(size);
-        graphGenerator.generateGraph(clique, new VertexFactory<String>()
-        {
-
-            private int index = 0;
-
-            @Override
-            public String createVertex()
-            {
-                return String.valueOf(index++);
-            }
-        }, null);
-
+        graphGenerator.generateGraph(clique);
         return clique;
     }
 
     private SimpleGraph<Integer, DefaultEdge> buildGraphForTestDisconnected(int size)
     {
-        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-
-        VertexFactory<Integer> vertexFactory = new IntegerVertexFactory();
+        Supplier<Integer> vSupplier = SupplierUtil.createIntegerSupplier();
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(vSupplier, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(size);
         // two complete graphs
-        SimpleGraph<Integer, DefaultEdge> east = new SimpleGraph<>(DefaultEdge.class);
-        completeGraphGenerator.generateGraph(east, vertexFactory, null);
+        SimpleGraph<Integer, DefaultEdge> east = new SimpleGraph<>(vSupplier, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        completeGraphGenerator.generateGraph(east);
 
-        SimpleGraph<Integer, DefaultEdge> west = new SimpleGraph<>(DefaultEdge.class);
-        completeGraphGenerator.generateGraph(west, vertexFactory, null);
+        SimpleGraph<Integer, DefaultEdge> west = new SimpleGraph<>(vSupplier, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        completeGraphGenerator.generateGraph(west);
 
         Graphs.addGraph(graph, east);
         Graphs.addGraph(graph, west);
@@ -255,17 +243,17 @@ public class KSPPathValidatorTest
 
     private SimpleGraph<Integer, DefaultEdge> buildRingGraph(int size)
     {
-        SimpleGraph<Integer, DefaultEdge> clique = new SimpleGraph<>(DefaultEdge.class);
+        SimpleGraph<Integer, DefaultEdge> clique = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         RingGraphGenerator<Integer, DefaultEdge> graphGenerator = new RingGraphGenerator<>(size);
-        graphGenerator.generateGraph(clique, new IntegerVertexFactory(), null);
+        graphGenerator.generateGraph(clique);
         return clique;
     }
     
     private SimpleDirectedGraph<Integer, DefaultEdge> buildLineGraph(int size)
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> line = new SimpleDirectedGraph<>(DefaultEdge.class);
+        SimpleDirectedGraph<Integer, DefaultEdge> line = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         LinearGraphGenerator<Integer, DefaultEdge> graphGenerator = new LinearGraphGenerator<>(size);
-        graphGenerator.generateGraph(line, new IntegerVertexFactory(), null);
+        graphGenerator.generateGraph(line);
         return line;
     }
 

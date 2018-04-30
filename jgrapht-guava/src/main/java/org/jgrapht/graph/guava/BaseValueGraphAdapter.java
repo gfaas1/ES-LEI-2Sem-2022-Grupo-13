@@ -17,14 +17,15 @@
  */
 package org.jgrapht.graph.guava;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
@@ -56,6 +57,8 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     protected transient Set<V> unmodifiableVertexSet = null;
     protected transient Set<EndpointPair<V>> unmodifiableEdgeSet = null;
 
+    protected Supplier<V> vertexSupplier;
+    protected Supplier<EndpointPair<V>> edgeSupplier;
     protected ToDoubleFunction<W> valueConverter;
     protected transient VG valueGraph;
 
@@ -67,8 +70,81 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      */
     public BaseValueGraphAdapter(VG valueGraph, ToDoubleFunction<W> valueConverter)
     {
+        this(valueGraph, valueConverter, null, null);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param valueGraph the mutable value graph
+     * @param valueConverter a function that converts a value to a double
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public BaseValueGraphAdapter(
+        VG valueGraph, ToDoubleFunction<W> valueConverter, Supplier<V> vertexSupplier,
+        Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
         this.valueGraph = Objects.requireNonNull(valueGraph);
         this.valueConverter = Objects.requireNonNull(valueConverter);
+    }
+
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return vertexSupplier;
+    }
+
+    /**
+     * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
+     * 
+     * <p>
+     * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
+     * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
+     * {@link Graph#addVertex(Object)} to add the vertex.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * 
+     * @param vertexSupplier the vertex supplier
+     */
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
+    {
+        this.vertexSupplier = vertexSupplier;
+    }
+
+    @Override
+    public Supplier<EndpointPair<V>> getEdgeSupplier()
+    {
+        return edgeSupplier;
+    }
+
+    /**
+     * Set the edge supplier that the graph uses whenever it needs to create new edges.
+     * 
+     * <p>
+     * A graph uses the edge supplier to create new edge objects whenever a user calls method
+     * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
+     * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the edge supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * 
+     * @param edgeSupplier the edge supplier
+     */
+    public void setEdgeSupplier(Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        this.edgeSupplier = edgeSupplier;
     }
 
     @Override
@@ -84,9 +160,10 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     }
 
     @Override
+    @Deprecated
     public EdgeFactory<V, EndpointPair<V>> getEdgeFactory()
     {
-        return this::createEdge;
+        return null;
     }
 
     @Override
@@ -216,7 +293,7 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
      * @param t the target vertex
      * @return the edge
      */
-    EndpointPair<V> createEdge(V s, V t)
+    final EndpointPair<V> createEdge(V s, V t)
     {
         return valueGraph.isDirected() ? EndpointPair.ordered(s, t) : EndpointPair.unordered(s, t);
     }

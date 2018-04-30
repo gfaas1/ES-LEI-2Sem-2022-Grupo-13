@@ -18,6 +18,7 @@
 package org.jgrapht.graph.guava;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 
 import org.jgrapht.Graph;
@@ -76,9 +77,23 @@ public class MutableDoubleValueGraphAdapter<V>
      */
     public MutableDoubleValueGraphAdapter(MutableValueGraph<V, Double> valueGraph)
     {
+        this(valueGraph, null, null);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param valueGraph the value graph
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public MutableDoubleValueGraphAdapter(
+        MutableValueGraph<V, Double> valueGraph, Supplier<V> vertexSupplier,
+        Supplier<EndpointPair<V>> edgeSupplier)
+    {
         super(
-            valueGraph, Graph.DEFAULT_EDGE_WEIGHT,
-            (ToDoubleFunction<Double> & Serializable) x -> x);
+            valueGraph, Graph.DEFAULT_EDGE_WEIGHT, (ToDoubleFunction<Double> & Serializable) x -> x,
+            vertexSupplier, edgeSupplier);
     }
 
     @Override

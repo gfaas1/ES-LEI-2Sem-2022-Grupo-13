@@ -107,19 +107,18 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
             throw new IllegalArgumentException("number of edges must be non-negative");
         }
         this.m = m;
-        this.rng = rng;
+        this.rng = Objects.requireNonNull(rng);
     }
 
     /**
      * Generates a random bipartite graph.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (n1 + n2 == 0) {
             return;
@@ -130,16 +129,12 @@ public class GnmRandomBipartiteGraphGenerator<V, E>
 
         partitionA = new LinkedHashMap<>(n1);
         for (int i = 0; i < n1; i++) {
-            V v = vertexFactory.createVertex();
-            target.addVertex(v);
-            partitionA.put(i, v);
+            partitionA.put(i, target.addVertex());
         }
 
         partitionB = new LinkedHashMap<>(n2);
         for (int i = 0; i < n2; i++) {
-            V v = vertexFactory.createVertex();
-            target.addVertex(v);
-            partitionB.put(i, v);
+            partitionB.put(i, target.addVertex());
         }
 
         if (target.vertexSet().size() != previousVertexSetSize + n1 + n2) {

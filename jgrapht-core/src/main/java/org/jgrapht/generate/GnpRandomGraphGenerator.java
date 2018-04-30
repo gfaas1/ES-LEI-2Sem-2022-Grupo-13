@@ -17,9 +17,12 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * Create a random graph based on the $G(n, p)$ Erdős–Rényi model. See the Wikipedia article for
@@ -109,7 +112,7 @@ public class GnpRandomGraphGenerator<V, E>
             throw new IllegalArgumentException("not valid probability of edge existence");
         }
         this.p = p;
-        this.rng = rng;
+        this.rng = Objects.requireNonNull(rng);
         this.createLoops = createLoops;
     }
 
@@ -117,12 +120,10 @@ public class GnpRandomGraphGenerator<V, E>
      * Generates a random graph based on the $G(n, p)$ model.
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         // special case
         if (n == 0) {
@@ -138,8 +139,7 @@ public class GnpRandomGraphGenerator<V, E>
         int previousVertexSetSize = target.vertexSet().size();
         Map<Integer, V> vertices = new HashMap<>(n);
         for (int i = 0; i < n; i++) {
-            V v = vertexFactory.createVertex();
-            target.addVertex(v);
+            V v = target.addVertex();
             vertices.put(i, v);
         }
 

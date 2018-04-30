@@ -20,11 +20,12 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,7 +33,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests for GraphMeasurer
  *
- * @author Joris Kinable, Alexandru Valeanu
+ * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public class GraphMeasurerTest
 {
@@ -41,8 +43,8 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph1()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0,7).forEach(i->g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -54,8 +56,8 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph2()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        Graphs.addAllVertices(g, Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0,7).forEach(i->g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -103,7 +105,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g1 = getGraph1();
         List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
             new FloydWarshallShortestPaths<>(g1),
-            new JohnsonShortestPaths<>(g1, new IntegerVertexFactory(7)));
+            new JohnsonShortestPaths<>(g1));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
@@ -123,7 +125,7 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g2 = getGraph2();
         List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
             new FloydWarshallShortestPaths<>(g2),
-            new JohnsonShortestPaths<>(g2, new IntegerVertexFactory(7)));
+            new JohnsonShortestPaths<>(g2));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();

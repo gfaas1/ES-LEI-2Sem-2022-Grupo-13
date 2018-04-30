@@ -22,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 
 import org.jgrapht.Graph;
@@ -37,7 +38,8 @@ import com.google.common.graph.ValueGraphBuilder;
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph}.
  * 
- * <p>The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as 
+ * <p>
+ * The adapter uses class {@link EndpointPair} to represent edges. Changes in the adapter such as
  * adding or removing vertices and edges are reflected in the underlying value graph.
  *
  * <p>
@@ -111,7 +113,23 @@ public class MutableValueGraphAdapter<V, W>
     public MutableValueGraphAdapter(
         MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter)
     {
-        super(valueGraph, valueConverter);
+        this(valueGraph, defaultValue, valueConverter, null, null);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param valueGraph the value graph
+     * @param defaultValue a default value to be used when creating new edges
+     * @param valueConverter a function that converts a value to a double
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public MutableValueGraphAdapter(
+        MutableValueGraph<V, W> valueGraph, W defaultValue, ToDoubleFunction<W> valueConverter,
+        Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        super(valueGraph, valueConverter, vertexSupplier, edgeSupplier);
         this.defaultValue = Objects.requireNonNull(defaultValue);
     }
 
@@ -171,6 +189,21 @@ public class MutableValueGraphAdapter<V, W>
 
         valueGraph.putEdgeValue(sourceVertex, targetVertex, defaultValue);
         return true;
+    }
+
+    @Override
+    public V addVertex()
+    {
+        if (vertexSupplier == null) {
+            throw new UnsupportedOperationException("The graph contains no vertex supplier");
+        }
+
+        V v = vertexSupplier.get();
+
+        if (valueGraph.addNode(v)) {
+            return v;
+        }
+        return null;
     }
 
     @Override
