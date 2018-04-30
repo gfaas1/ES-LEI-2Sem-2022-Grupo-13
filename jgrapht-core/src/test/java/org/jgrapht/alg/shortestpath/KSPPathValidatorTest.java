@@ -50,15 +50,16 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 1, Integer.MAX_VALUE, (partialPath, edge) -> false);
+            KShortestSimplePaths<String, DefaultEdge> ksp = new KShortestSimplePaths<>(
+                clique, Integer.MAX_VALUE, (partialPath, edge) -> false);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
+                int k = 1;
                 List<GraphPath<String, DefaultEdge>> paths =
-                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
+                    ksp.getPaths(String.valueOf(i), String.valueOf(j), k);
                 assertTrue(paths.isEmpty());
             }
         }
@@ -73,15 +74,15 @@ public class KSPPathValidatorTest
         int size = 5;
         SimpleGraph<String, DefaultEdge> clique = buildCliqueGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<String, DefaultEdge> ksp = new KShortestPaths<String, DefaultEdge>(
-                clique, 30, Integer.MAX_VALUE, (partialPath, edge) -> true);
+            KShortestSimplePaths<String, DefaultEdge> ksp = new KShortestSimplePaths<>(
+                clique, Integer.MAX_VALUE, (partialPath, edge) -> true);
 
             for (int j = 0; j < size; j++) {
                 if (j == i) {
                     continue;
                 }
                 List<GraphPath<String, DefaultEdge>> paths =
-                    ksp.getPaths(String.valueOf(i), String.valueOf(j));
+                    ksp.getPaths(String.valueOf(i), String.valueOf(j), 30);
                 assertNotNull(paths);
                 assertEquals(16, paths.size());
             }
@@ -97,8 +98,8 @@ public class KSPPathValidatorTest
         int size = 10;
         SimpleGraph<Integer, DefaultEdge> ring = buildRingGraph(size);
         for (int i = 0; i < size; i++) {
-            KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                ring, 2, Integer.MAX_VALUE, (partialPath, edge) -> {
+            KShortestSimplePaths<Integer, DefaultEdge> ksp = new KShortestSimplePaths<>(
+                ring, Integer.MAX_VALUE, (partialPath, edge) -> {
                     if (partialPath == null) {
                         return true;
                     }
@@ -111,7 +112,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j, 2);
                 assertNotNull(paths);
                 assertEquals(1, paths.size());
             }
@@ -129,8 +130,8 @@ public class KSPPathValidatorTest
         // generate graph of two cliques connected by single edge
         SimpleGraph<Integer, DefaultEdge> graph = buildGraphForTestDisconnected(cliqueSize);
         for (int i = 0; i < graph.vertexSet().size(); i++) {
-            KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(
-                graph, 100, Integer.MAX_VALUE, (partialPath, edge) -> {
+            KShortestSimplePaths<Integer, DefaultEdge> ksp = new KShortestSimplePaths<>(
+                graph, Integer.MAX_VALUE, (partialPath, edge) -> {
                     // accept all requests but the one to pass through the edge connecting
                     // the two cliques.
                     DefaultEdge connectingEdge = graph.getEdge(cliqueSize - 1, cliqueSize);
@@ -141,7 +142,7 @@ public class KSPPathValidatorTest
                 if (j == i) {
                     continue;
                 }
-                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j);
+                List<GraphPath<Integer, DefaultEdge>> paths = ksp.getPaths(i, j, 100);
                 if ((i < cliqueSize && j < cliqueSize) || (i >= cliqueSize && j >= cliqueSize)) {
                     // within the clique - path should exist
                     assertNotNull(paths);
@@ -167,8 +168,8 @@ public class KSPPathValidatorTest
     public void testGraphPath()
     {
         SimpleDirectedGraph<Integer, DefaultEdge> line = buildLineGraph(10);
-        KShortestPaths<Integer, DefaultEdge> ksp = new KShortestPaths<Integer, DefaultEdge>(line, 
-            Integer.MAX_VALUE, new PathValidator<Integer, DefaultEdge>()
+        KShortestSimplePaths<Integer, DefaultEdge> ksp = new KShortestSimplePaths<>(line, 
+            new PathValidator<Integer, DefaultEdge>()
         {
 
             int index = 0;
@@ -207,7 +208,7 @@ public class KSPPathValidatorTest
             }
         });
 
-        ksp.getPaths(0, 9);
+        ksp.getPaths(0, 9, Integer.MAX_VALUE);
     }
 
     private SimpleGraph<String, DefaultEdge> buildCliqueGraph(int size)

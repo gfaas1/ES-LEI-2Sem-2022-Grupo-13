@@ -33,10 +33,10 @@ public class KSPExampleTest
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
         String sourceVertex = "S";
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, 4);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(3, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(3, ksp.getPaths(sourceVertex, targetVertex, 4).size());
     }
 
     @Test
@@ -46,10 +46,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 3;
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex, nbPaths).size());
     }
 
     @Test
@@ -59,10 +59,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 2;
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex, nbPaths).size());
     }
 }
 
