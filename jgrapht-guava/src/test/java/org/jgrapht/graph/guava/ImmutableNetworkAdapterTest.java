@@ -74,7 +74,7 @@ public class ImmutableNetworkAdapterTest
         network.addEdge("v5", "v5", e55_2);
 
         Graph<String, DefaultEdge> g =
-            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
+            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network));
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -204,7 +204,7 @@ public class ImmutableNetworkAdapterTest
         network.addEdge("v5", "v5", e55_2);
 
         Graph<String, DefaultEdge> g =
-            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network), DefaultEdge.class);
+            new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network));
         
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

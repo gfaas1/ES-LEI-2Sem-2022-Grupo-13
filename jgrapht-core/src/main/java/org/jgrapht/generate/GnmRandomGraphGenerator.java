@@ -17,9 +17,12 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
 
 /**
  * Create a random graph based on the $G(n, M)$ Erdős–Rényi model. See the Wikipedia article for
@@ -129,7 +132,7 @@ public class GnmRandomGraphGenerator<V, E>
             throw new IllegalArgumentException("number of edges must be non-negative");
         }
         this.m = m;
-        this.rng = rng;
+        this.rng = Objects.requireNonNull(rng);
         this.loops = loops;
         this.multipleEdges = multipleEdges;
     }
@@ -138,7 +141,6 @@ public class GnmRandomGraphGenerator<V, E>
      * Generates a random graph based on the $G(n, M)$ model
      * 
      * @param target the target graph
-     * @param vertexFactory the vertex factory
      * @param resultMap not used by this generator, can be null
      * 
      * @throws IllegalArgumentException if the number of edges, passed in the constructor, cannot be
@@ -147,8 +149,7 @@ public class GnmRandomGraphGenerator<V, E>
      *         self-loops or multiple (parallel) edges
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         // special case
         if (n == 0) {
@@ -180,8 +181,7 @@ public class GnmRandomGraphGenerator<V, E>
         Map<Integer, V> vertices = new HashMap<>(n);
         int previousVertexSetSize = target.vertexSet().size();
         for (int i = 0; i < n; i++) {
-            V currVertex = vertexFactory.createVertex();
-            target.addVertex(currVertex);
+            V currVertex = target.addVertex();
             vertices.put(i, currVertex);
         }
 

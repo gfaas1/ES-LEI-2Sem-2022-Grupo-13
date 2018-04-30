@@ -22,6 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.*;
 
 /**
@@ -144,8 +145,10 @@ public class GreedyMultiplicativeSpanner<V, E>
 
         public UnweightedSpannerAlgorithm()
         {
-            spanner = new SimpleGraph<>(graph.getEdgeFactory());
-            touchedVertices = new ArrayDeque<>(graph.vertexSet().size());
+            spanner = GraphTypeBuilder
+                .<V, E> undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
+                .edgeSupplier(graph.getEdgeSupplier()).buildGraph();
+            touchedVertices = new ArrayDeque<V>(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 spanner.addVertex(v);
                 touchedVertices.push(v);

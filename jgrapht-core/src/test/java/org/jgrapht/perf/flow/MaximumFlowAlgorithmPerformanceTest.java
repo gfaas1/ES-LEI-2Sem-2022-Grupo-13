@@ -22,15 +22,13 @@ import java.util.concurrent.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 public class MaximumFlowAlgorithmPerformanceTest
 {
@@ -60,11 +58,9 @@ public class MaximumFlowAlgorithmPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
             SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
-                new SimpleDirectedWeightedGraph<>((sourceVertex, targetVertex) -> {
-                    return new DefaultWeightedEdge();
-                });
+                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
-            rgg.generateGraph(network, new IntegerVertexFactory(1), null);
+            rgg.generateGraph(network);
 
             solver = createSolver(network);
 

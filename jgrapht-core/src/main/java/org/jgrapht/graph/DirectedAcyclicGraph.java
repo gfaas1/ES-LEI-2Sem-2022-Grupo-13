@@ -17,12 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.traverse.*;
+import org.jgrapht.graph.builder.GraphBuilder;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.util.SupplierUtil;
 
 /**
  * A directed acyclic graph (DAG).
@@ -86,7 +88,19 @@ public class DirectedAcyclicGraph<V, E>
      */
     public DirectedAcyclicGraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass), false);
+    }
+    
+    /**
+     * Construct a directed acyclic graph.
+     *
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param weighted if true the graph will be weighted, otherwise not
+     */
+    public DirectedAcyclicGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
+    {
+        this(vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), weighted);
     }
 
     /**
@@ -94,17 +108,21 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @param edgeClass the edge class
      * @param weighted if true the graph will be weighted, otherwise not
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated
     public DirectedAcyclicGraph(Class<? extends E> edgeClass, boolean weighted)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass), weighted);
+        this(null, SupplierUtil.createSupplier(edgeClass), weighted);
     }
 
     /**
      * Construct a directed acyclic graph.
      *
      * @param ef the edge factory
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated
     public DirectedAcyclicGraph(EdgeFactory<V, E> ef)
     {
         this(ef, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), false);
@@ -115,7 +133,9 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @param ef the edge factory
      * @param weighted if true the graph will be weighted, otherwise not
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated
     public DirectedAcyclicGraph(EdgeFactory<V, E> ef, boolean weighted)
     {
         this(ef, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), weighted);
@@ -130,12 +150,38 @@ public class DirectedAcyclicGraph<V, E>
      * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
      *        the way this class stores the topological order.
      * @param weighted if true the graph will be weighted, otherwise not
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated
     protected DirectedAcyclicGraph(
         EdgeFactory<V, E> ef, VisitedStrategyFactory visitedStrategyFactory,
         TopoOrderMap<V> topoOrderMap, boolean weighted)
     {
         super(ef, weighted);
+        this.visitedStrategyFactory =
+            Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
+        this.topoOrderMap =
+            Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
+        this.topoComparator = new TopoComparator();
+    }
+    
+    /**
+     * Construct a directed acyclic graph.
+     * 
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
+     *        implementation to adjust the performance tradeoffs.
+     * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
+     *        the way this class stores the topological order.
+     * @param weighted if true the graph will be weighted, otherwise not
+     */
+    protected DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
+        VisitedStrategyFactory visitedStrategyFactory,
+        TopoOrderMap<V> topoOrderMap, boolean weighted)
+    {
+        super(vertexSupplier, edgeSupplier, weighted);
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
@@ -156,6 +202,20 @@ public class DirectedAcyclicGraph<V, E>
     {
         return new GraphBuilder<>(new DirectedAcyclicGraph<>(edgeClass));
     }
+    
+    /**
+     * Create a builder for this kind of graph.
+     * 
+     * @param edgeSupplier edge supplier for the edges
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return a builder for this kind of graph
+     */
+    public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
+        Supplier<E> edgeSupplier)
+    {
+        return new GraphBuilder<>(new DirectedAcyclicGraph<>(null, edgeSupplier, false));
+    }
 
     /**
      * Create a builder for this kind of graph.
@@ -164,7 +224,9 @@ public class DirectedAcyclicGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
+     * @deprecated Use suppliers instead 
      */
+    @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {
@@ -179,6 +241,21 @@ public class DirectedAcyclicGraph<V, E>
             .allowSelfLoops(false).allowCycles(false).build();
     }
 
+    @Override
+    public V addVertex()
+    {
+        V v = super.addVertex();
+        
+        if (v != null) { 
+            // add to the topological map
+            ++maxTopoIndex;
+            topoOrderMap.putVertex(maxTopoIndex, v);
+            ++topoModCount;
+        }
+        
+        return v;
+    }
+    
     @Override
     public boolean addVertex(V v)
     {

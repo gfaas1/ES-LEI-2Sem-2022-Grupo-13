@@ -39,29 +39,26 @@ public class HyperCubeGraphGenerator<V, E>
     private int dim;
 
     /**
-     * Creates a new HyperCubeGraphGenerator object.
+     * Creates a new generator
      *
-     * @param dim This is the dimension of the hypercube.
+     * @param dim the dimension of the hypercube
      */
     public HyperCubeGraphGenerator(int dim)
     {
         this.dim = dim;
     }
 
-    /**
-     * This will generate the hypercube graph
-     */
     @Override
     public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         // Vertices are created, and they are included in the resultmap as their
         // bitstring representation
         int order = (int) Math.pow(2, dim);
         LinkedList<V> vertices = new LinkedList<>();
         for (int i = 0; i < order; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+            V newVertex = target.addVertex();
+            
             vertices.add(newVertex);
             if (resultMap != null) {
                 StringBuilder s = new StringBuilder(Integer.toBinaryString(i));

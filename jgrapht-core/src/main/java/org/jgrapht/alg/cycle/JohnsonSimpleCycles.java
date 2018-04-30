@@ -21,7 +21,7 @@ import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -177,7 +177,11 @@ public class JohnsonSimpleCycles<V, E>
         }
 
         // build a graph for the SCC found
-        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(graph.getEdgeFactory());
+        Graph<V,
+            E> resultGraph = GraphTypeBuilder
+                .<V, E> directed().edgeSupplier(graph.getEdgeSupplier())
+                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(true).buildGraph();
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }

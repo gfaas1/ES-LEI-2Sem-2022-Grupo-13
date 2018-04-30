@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
@@ -42,8 +43,7 @@ import com.google.common.graph.MutableGraph;
  * See the example below on how to create such an adapter: <blockquote>
  * 
  * <pre>
- * MutableGraph&lt;String&gt; mutableGraph =
- *     GraphBuilder.directed().allowsSelfLoops(true).build();
+ * MutableGraph&lt;String&gt; mutableGraph = GraphBuilder.directed().allowsSelfLoops(true).build();
  * 
  * mutableGraph.addNode("v1");
  * mutableGraph.addNode("v2");
@@ -71,7 +71,20 @@ public class MutableGraphAdapter<V>
      */
     public MutableGraphAdapter(MutableGraph<V> graph)
     {
-        super(graph);
+        this(graph, null, null);
+    }
+
+    /**
+     * Create a new adapter.
+     * 
+     * @param graph the graph
+     * @param vertexSupplier the vertex supplier
+     * @param edgeSupplier the edge supplier
+     */
+    public MutableGraphAdapter(
+        MutableGraph<V> graph, Supplier<V> vertexSupplier, Supplier<EndpointPair<V>> edgeSupplier)
+    {
+        super(graph, vertexSupplier, edgeSupplier);
     }
 
     @Override
@@ -130,6 +143,21 @@ public class MutableGraphAdapter<V>
 
         graph.putEdge(sourceVertex, targetVertex);
         return true;
+    }
+
+    @Override
+    public V addVertex()
+    {
+        if (vertexSupplier == null) {
+            throw new UnsupportedOperationException("The graph contains no vertex supplier");
+        }
+
+        V v = vertexSupplier.get();
+
+        if (graph.addNode(v)) {
+            return v;
+        }
+        return null;
     }
 
     @Override
