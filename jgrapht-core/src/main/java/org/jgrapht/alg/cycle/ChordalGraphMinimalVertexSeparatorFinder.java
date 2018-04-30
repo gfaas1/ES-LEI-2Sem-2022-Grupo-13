@@ -45,16 +45,17 @@ import java.util.*;
  * $t = \sigma(v)$ such that $N(v, \sigma) = B$ and B is not a maximal clique in $G_{t-1}$.
  * The vertices which satisfy conditions described above are called <i>dependent vertices</i>
  * with respect to $\sigma$. The cardinality of the set of dependent vertices is called a multiplicity
- * of the base set $B$. The definitions of a base set and a minimal vertex separator in the context of
- * chordal graphs are equivalent.
+ * of the base set $B$. The multiplicity of a minimal vertex separator indicates the number of different
+ * pairs of vertices separated by it.The definitions of a base set and a minimal vertex separator in the
+ * context of chordal graphs are equivalent.
  * <p>
- * For more information on the topic see: Kumar, P.Sreenivasa &amp; Madhavan, C.E.Veni. (1998).
+ * For more information on the topic see: Kumar, P. Sreenivasa &amp; Madhavan, C. E. Veni. (1998).
  * <a href="https://www.sciencedirect.com/science/article/pii/S0166218X98001231?via%3Dihub">
  * Minimal vertex separators of chordal graphs</a>. Discrete Applied Mathematics.
  * 89. 155-168. 10.1016/S0166-218X(98)00123-1.
  * <p>
  * The running time of the algorithm is $\mathcal{O}(\omega(G)(|V| + |E|))$, where $\omega(G)$
- * is the size of the cardinality of a maximum clique of the graph $G$.
+ * is the size of a maximum clique of the graph $G$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -74,12 +75,15 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
     /**
      * A mapping of minimal separators to their multiplicities
      */
-    private Map<Set<V>, Integer> minimalSeparators;
+    private Map<Set<V>, Integer> minimalSeparatorsWithMultiplicities;
+    /**
+     * Set of minimal separators
+     */
+    private Set<Set<V>> minimalSeparators;
 
     /**
      * Creates new {@code ChordalGraphMinimalVertexSeparatorFinder} instance. The {@link ChordalityInspector}
-     * used in this implementation uses the default {@link org.jgrapht.traverse.MaximumCardinalityIterator}
-     * iterator
+     * used in this implementation uses the {@link org.jgrapht.traverse.MaximumCardinalityIterator} iterator
      *
      * @param graph the graph minimal separators to search in
      */
@@ -89,24 +93,36 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
     }
 
     /**
-     * Computes and returns a mapping of all minimal vertex separators of the {@code graph}
+     * Computes a set of all minimal separators of the {@code graph} and returns it.
+     * Returns null if the {@code graph} isn't chordal.
+     *
+     * @return computed set of all minimal separators, or null if the {@code graph} isn't chordal
+     */
+    public Set<Set<V>> getMinimalSeparators() {
+        lazyComputeMinimalSeparatorsWithMultiplicities();
+        return minimalSeparators;
+    }
+
+    /**
+     * Computes a mapping of all minimal vertex separators of the {@code graph}
      * and returns it. Returns null if the {@code graph} isn't chordal.
      *
      * @return computed mapping of all minimal separators to their multiplicities, or null if
      * the {@code graph} isn't chordal
      */
-    public Map<Set<V>, Integer> getMinimalSeparators() {
-        lazyComputeMinimalSeparators();
-        return minimalSeparators;
+    public Map<Set<V>, Integer> getMinimalSeparatorsWithMultiplicities() {
+        lazyComputeMinimalSeparatorsWithMultiplicities();
+        return minimalSeparatorsWithMultiplicities;
     }
 
     /**
-     * Lazy computes a mapping of all minimal vertex separators of the {@code graph}
+     * Lazy computes a set of all minimal separators and a mapping of all minimal vertex separators
      * to their multiplicities
      */
-    private void lazyComputeMinimalSeparators() {
-        if (minimalSeparators == null && chordalityInspector.isChordal()) {
-            minimalSeparators = new HashMap<>();
+    private void lazyComputeMinimalSeparatorsWithMultiplicities() {
+        if (minimalSeparatorsWithMultiplicities == null && chordalityInspector.isChordal()) {
+            minimalSeparatorsWithMultiplicities = new HashMap<>();
+            minimalSeparators = new HashSet<>();
             List<V> perfectEliminationOrder = chordalityInspector.getPerfectEliminationOrder();
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             Set<V> previous;
@@ -116,12 +132,13 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
                 current = getPredecessors(vertexInOrder, perfectEliminationOrder.get(i));
                 if (current.size() <= previous.size()) {
                     // current set is a minimal separator
-                    if (minimalSeparators.containsKey(current)) {
+                    if (minimalSeparatorsWithMultiplicities.containsKey(current)) {
                         // found another vertex dependent on current set
-                        minimalSeparators.put(current, minimalSeparators.get(current) + 1);
+                        minimalSeparatorsWithMultiplicities.put(current, minimalSeparatorsWithMultiplicities.get(current) + 1);
                     } else {
                         // vertex at position i is the first vertex dependent on current set
-                        minimalSeparators.put(current, 1);
+                        minimalSeparators.add(current);
+                        minimalSeparatorsWithMultiplicities.put(current, 1);
                     }
                 }
             }
