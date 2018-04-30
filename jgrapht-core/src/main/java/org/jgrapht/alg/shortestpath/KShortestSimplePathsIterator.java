@@ -22,11 +22,11 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * Helper class for {@link KShortestPaths}.
+ * Helper class for {@link KShortestSimplePaths}.
  *
  * @since July 5, 2007
  */
-class KShortestPathsIterator<V, E>
+class KShortestSimplePathsIterator<V, E>
     implements Iterator<Set<V>>
 {
     /**
@@ -86,7 +86,7 @@ class KShortestPathsIterator<V, E>
      * @param endVertex end vertex of the calculated paths.
      * @param maxSize number of paths stored at end vertex of the graph.
      */
-    public KShortestPathsIterator(Graph<V, E> graph, V startVertex, V endVertex, int maxSize)
+    public KShortestSimplePathsIterator(Graph<V, E> graph, V startVertex, V endVertex, int maxSize)
     {
         this(graph, startVertex, endVertex, maxSize, null);
     }
@@ -98,7 +98,7 @@ class KShortestPathsIterator<V, E>
      * @param maxSize number of paths stored at end vertex of the graph.
      * @param pathValidator the path validator to use
      */
-    public KShortestPathsIterator(
+    public KShortestSimplePathsIterator(
         Graph<V, E> graph, V startVertex, V endVertex, int maxSize,
         PathValidator<V, E> pathValidator)
     {
