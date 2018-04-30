@@ -76,10 +76,6 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
      * A mapping of minimal separators to their multiplicities
      */
     private Map<Set<V>, Integer> minimalSeparatorsWithMultiplicities;
-    /**
-     * Set of minimal separators
-     */
-    private Set<Set<V>> minimalSeparators;
 
     /**
      * Creates new {@code ChordalGraphMinimalVertexSeparatorFinder} instance. The {@link ChordalityInspector}
@@ -100,7 +96,7 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
      */
     public Set<Set<V>> getMinimalSeparators() {
         lazyComputeMinimalSeparatorsWithMultiplicities();
-        return minimalSeparators;
+        return minimalSeparatorsWithMultiplicities == null ? null : minimalSeparatorsWithMultiplicities.keySet();
     }
 
     /**
@@ -122,7 +118,6 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
     private void lazyComputeMinimalSeparatorsWithMultiplicities() {
         if (minimalSeparatorsWithMultiplicities == null && chordalityInspector.isChordal()) {
             minimalSeparatorsWithMultiplicities = new HashMap<>();
-            minimalSeparators = new HashSet<>();
             List<V> perfectEliminationOrder = chordalityInspector.getPerfectEliminationOrder();
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             Set<V> previous;
@@ -137,7 +132,6 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E> {
                         minimalSeparatorsWithMultiplicities.put(current, minimalSeparatorsWithMultiplicities.get(current) + 1);
                     } else {
                         // vertex at position i is the first vertex dependent on current set
-                        minimalSeparators.add(current);
                         minimalSeparatorsWithMultiplicities.put(current, 1);
                     }
                 }
