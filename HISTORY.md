@@ -62,6 +62,7 @@ Changes to JGraphT in each version:
     - Separate fast and slow tests, via mvn test vs verify (contributed by Dimitrios Michail)
     - Added `ChordalGraphMinimalVertexSeparatorFinder` for the detection of minimal vertex separators in chordal graphs (contributed by Timofey Chudakov)
     - Added suites for fast tests, integration tests and performance tests (contributed by John Sichi)
+    - Refactored `ChordalityInspector` and revised several interfaces (vertex cover, independent set, clique, etc) (contributed by Joris Kinable)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
