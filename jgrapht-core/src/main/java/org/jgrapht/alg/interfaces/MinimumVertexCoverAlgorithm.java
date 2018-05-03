@@ -34,7 +34,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  * 
  * @author Joris Kinable
+ * @deprecated replaced by {@link VertexCoverAlgorithm}
  */
+@Deprecated
 public interface MinimumVertexCoverAlgorithm<V, E>
 {
 
@@ -50,7 +52,9 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      * A vertex cover
      *
      * @param <V> the vertex type
+     * @deprecated Replaced by {@link org.jgrapht.alg.interfaces.VertexCoverAlgorithm.VertexCover}
      */
+    @Deprecated
     interface VertexCover<V>
         extends Iterable<V>
     {

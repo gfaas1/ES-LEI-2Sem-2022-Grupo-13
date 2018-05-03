@@ -15,11 +15,12 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.cycle;
 
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 
 import org.junit.Test;
@@ -149,7 +150,7 @@ public class CycleDetectorTest
     private void runTest(
         Graph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
-        CycleDetector<String, DefaultEdge> detector = new CycleDetector<>(g);
+        org.jgrapht.alg.CycleDetector<String, DefaultEdge> detector = new org.jgrapht.alg.CycleDetector<>(g);
 
         Set<String> emptySet = Collections.emptySet();
 
@@ -190,7 +191,7 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        CycleDetector<String, DefaultEdge> cycleDetector = new CycleDetector<>(graph);
+        org.jgrapht.alg.CycleDetector<String, DefaultEdge> cycleDetector = new org.jgrapht.alg.CycleDetector<>(graph);
         Set<String> cycleVertices = cycleDetector.findCycles();
 
         boolean foundCycle = cycleDetector.detectCyclesContainingVertex(vertexA);

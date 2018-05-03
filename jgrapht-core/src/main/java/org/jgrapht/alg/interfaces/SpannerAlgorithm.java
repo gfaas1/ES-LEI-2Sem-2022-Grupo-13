@@ -17,6 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
+import org.jgrapht.util.WeightedUnmodifiableSet;
+
 import java.io.*;
 import java.util.*;
 
@@ -26,6 +28,8 @@ import java.util.*;
  * given graph.
  *
  * @param <E> edge the graph edge type
+ *
+ * @author Dimitrios Michail
  */
 public interface SpannerAlgorithm<E>
 {
@@ -43,7 +47,7 @@ public interface SpannerAlgorithm<E>
      * @param <E> the graph edge type
      */
     interface Spanner<E>
-        extends Iterable<E>
+        extends Set<E>
     {
 
         /**
@@ -57,14 +61,18 @@ public interface SpannerAlgorithm<E>
          * Set of edges of the graph spanner.
          * 
          * @return edge set of the spanner
+         * @deprecated No longer needed. A spanner is now a set of edges
          */
+        @Deprecated
         Set<E> getEdges();
 
         /**
          * Returns an iterator over the edges in the spanner.
          * 
          * @return iterator over the edges in the spanner.
+         * @deprecated No longer needed. A spanner is now a set of edges
          */
+        @Deprecated
         @Override
         default Iterator<E> iterator()
         {
@@ -77,13 +85,20 @@ public interface SpannerAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    class SpannerImpl<E>
+    class SpannerImpl<E> extends WeightedUnmodifiableSet<E>
         implements Spanner<E>, Serializable
     {
         private static final long serialVersionUID = 5951646499902668516L;
 
-        private final double weight;
-        private final Set<E> edges;
+        /**
+         * Construct a new spanner
+         *
+         * @param edges the edges
+         */
+        public SpannerImpl(Set<E> edges)
+        {
+            super(edges);
+        }
 
         /**
          * Construct a new spanner
@@ -93,26 +108,20 @@ public interface SpannerAlgorithm<E>
          */
         public SpannerImpl(Set<E> edges, double weight)
         {
-            this.edges = edges;
-            this.weight = weight;
+            super(edges, weight);
         }
 
-        @Override
-        public double getWeight()
-        {
-            return weight;
-        }
-
+        @Deprecated
         @Override
         public Set<E> getEdges()
         {
-            return edges;
+            return this;
         }
 
         @Override
         public String toString()
         {
-            return "Spanner [weight=" + weight + ", edges=" + edges + "]";
+            return "Spanner [weight=" + weight + ", edges=" + this + "]";
         }
     }
 

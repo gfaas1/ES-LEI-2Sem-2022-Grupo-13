@@ -38,7 +38,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  * 
  * @author Joris Kinable
+ * @deprecated replaced by {@link VertexCoverAlgorithm}
  */
+@Deprecated
 public interface MinimumWeightedVertexCoverAlgorithm<V, E>
     extends MinimumVertexCoverAlgorithm<V, E>
 {
