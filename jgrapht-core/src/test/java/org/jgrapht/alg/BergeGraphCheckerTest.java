@@ -18,7 +18,7 @@
 package test.java.org.jgrapht.alg;
 import org.junit.Test;
 
-import main.java.org.jgrapht.alg.BergeGraphChecker;
+import org.jgrapht.alg.BergeGraphChecker;
 
 import static org.junit.Assert.*;
 
