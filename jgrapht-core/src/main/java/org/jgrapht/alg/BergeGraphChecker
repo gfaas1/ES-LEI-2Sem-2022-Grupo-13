@@ -15,7 +15,7 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package main.java.org.jgrapht.alg;
+package org.jgrapht.alg;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.generate.ComplementGraphGenerator;
 import org.jgrapht.graph.AsSubgraph;
@@ -202,6 +202,7 @@ public class BergeGraphChecker<V,E>{
 	 * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g contains no pyramid
 	 */
 	protected boolean containsPyramid(Graph<V,E> g){
+		 /*b3,*/ 
 		Set<Set<V>> visitedTriangles = new HashSet<Set<V>>();
 		for (E e1 : g.edgeSet()){
 			V b1= g.getEdgeSource(e1), b2= g.getEdgeTarget(e1);
@@ -625,8 +626,8 @@ public class BergeGraphChecker<V,E>{
 	 */
 	protected List<Set<V>> findAllAnticomponentsOfY(Graph<V,E> g, Set<V> Y){
 		Graph<V,E> target;
-		if (g.getType().isSimple()) target = new SimpleGraph<>(g.getEdgeFactory());
-		else target = new Multigraph<>(g.getEdgeFactory());
+		if (g.getType().isSimple()) target = new SimpleGraph<>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
+		else target = new Multigraph<>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
 		new ComplementGraphGenerator<>(g).generateGraph(target);
 		
 		return new ConnectivityInspector<V,E>(new AsSubgraph<V,E>(target,Y)).connectedSets();
@@ -654,16 +655,14 @@ public class BergeGraphChecker<V,E>{
 				if (v3==v2){
 					v3 = g.getEdgeSource(e23);
 				}
-				if (v3==v2||v1==v3) continue;
-				if (hasEdge(g,v2,v3)) continue;//TODO
+				if (v3==v2||v1==v3||hasEdge(g,v2,v3)) continue;
 				
 				for (E e34 : g.edgesOf(v3)){
 					V v4 = g.getEdgeTarget(e34);
 					if(v4==v3){
 						v4 = g.getEdgeSource(e34);
 					}
-					if (v4==v1||v4==v2||v4==v3) continue;
-					if (hasEdge(g,v4,v2)||hasEdge(g,v4,v1)) continue; //TODO
+					if (v4==v1||v4==v2||v4==v3||hasEdge(g,v4,v2)||hasEdge(g,v4,v1)) continue;
 					
 					Set<V> temp = new HashSet<V>();
 					temp.add(v1);
@@ -1008,8 +1007,8 @@ public class BergeGraphChecker<V,E>{
 	 */
 	public boolean isBerge(Graph<V,E> g){
 		Graph<V,E> complementGraph;
-		if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getEdgeFactory());
-		else complementGraph = new Multigraph<V,E>(g.getEdgeFactory());
+		if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
+		else complementGraph = new Multigraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
 		new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph);
 		
 		if (routine2(g)) {
