@@ -202,7 +202,6 @@ public class BergeGraphChecker<V,E>{
 	 * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g contains no pyramid
 	 */
 	protected boolean containsPyramid(Graph<V,E> g){
-		 /*b3,*/ 
 		Set<Set<V>> visitedTriangles = new HashSet<Set<V>>();
 		for (E e1 : g.edgeSet()){
 			V b1= g.getEdgeSource(e1), b2= g.getEdgeTarget(e1);
