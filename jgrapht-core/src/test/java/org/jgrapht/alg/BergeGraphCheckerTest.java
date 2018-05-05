@@ -18,17 +18,17 @@
 package org.jgrapht.alg;
 import org.junit.Test;
 
+
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.VertexFactory;
 import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.WheelGraphGenerator;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.util.SupplierUtil;
 
 public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 	private SimpleGraph<Integer,Integer> stimulus;
@@ -36,19 +36,13 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 	
 	
 	private void reset(){
-		stimulus= new SimpleGraph<Integer,Integer>(new EdgeFactory<Integer, Integer>(){
-			private int counter = 0;
-			@Override
-			public Integer createEdge(Integer arg0, Integer arg1) {
-				return counter++;
-			}
-		});
+		stimulus= new SimpleGraph<Integer,Integer>(SupplierUtil.createIntegerSupplier(),SupplierUtil.createIntegerSupplier(),false);
 	}
 
-	private int maximalNumberOfVertices = 18,
+	private int maximalNumberOfVertices = 30,
 			minimalNumberOfVertices = 14;
 	
-	private int repititionsPerTestCase = 1;
+	private int repititionsPerTestCase = 60;
 	
 
 	
@@ -103,6 +97,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 				stimulus.addEdge(15, 2);
 				stimulus.addEdge(10, 16);
 				stimulus.addEdge(16, 3);
+				//initAdjacency(stimulus);
 
 				assertEquals(true,containsPyramid(stimulus));
 				
@@ -141,6 +136,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		stimulus.addEdge(6, 7);
 		stimulus.addEdge(7, 8);
 		stimulus.addEdge(8, 4);
+		////initAdjacency(stimulus);
 		
 		assertEquals(true,containsJewel(stimulus));
 		
@@ -307,6 +303,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 	
 		*/
 
+		//initAdjacency(stimulus);
 		assertEquals(true,hasConfigurationType3(stimulus));
 
 		stimulus.addEdge(4, 7);
@@ -410,22 +407,15 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		while(repititions-->0){
 			int n1 = new Random().nextInt(maximalNumberOfVertices-minimalNumberOfVertices)/2+minimalNumberOfVertices/2,
 					n2 = maximalNumberOfVertices-n1;
+			//assertEquals(true,maximalNumberOfVertices>minimalNumberOfVertices);
 			
 			
 			int maximalNumberOfEdges = n1*n2;		
+			//assertEquals(true,maximalNumberOfEdges>minimalNumberOfEdges);
 			int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);	
 			
 			reset();
-			new GnmRandomBipartiteGraphGenerator<Integer,Integer>(n1,n2,numberOfEdges).generateGraph(stimulus, new VertexFactory<Integer>() {
-				
-				private int counter = 0;
-				
-				@Override
-				public Integer createVertex() {
-					
-					return counter++;
-				}
-			}, null);
+			new GnmRandomBipartiteGraphGenerator<Integer,Integer>(n1,n2,numberOfEdges).generateGraph(stimulus);
 			
 			assertEquals(true,isBerge(stimulus));
 		}
@@ -448,18 +438,8 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 					minimalNumberOfEdges = maximalNumberOfEdges-new Random().nextInt(maximalNumberOfEdges);		
 			assertEquals(true,maximalNumberOfEdges>minimalNumberOfEdges);	
 			reset();
-			new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus, new VertexFactory<Integer>() {
-				
-				private int counter = 0;
-				
-				@Override
-				public Integer createVertex() {
-					
-					return counter++;
-				}
-			}, null);
+			new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
 			
-			System.out.println(stimulus.vertexSet().size()+" Vertices="+stimulus.vertexSet()+", and "+stimulus.edgeSet().size()+" Edges="+stimulus.edgeSet());
 			
 			assertEquals(true,isBerge(stimulus));
 		}
@@ -476,19 +456,9 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 					minimalNumberOfEdges = maximalNumberOfEdges-new Random().nextInt(maximalNumberOfEdges);		
 			assertEquals(true,maximalNumberOfEdges>minimalNumberOfEdges);	
 			reset();
-			new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus, new VertexFactory<Integer>() {
-				
-				private int counter = 0;
-				
-				@Override
-				public Integer createVertex() {
-					
-					return counter++;
-				}
-			}, null);
+			new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
 			
-			System.out.println(stimulus.vertexSet().size()+" Vertices="+stimulus.vertexSet()+", and "+stimulus.edgeSet().size()+" Edges="+stimulus.edgeSet());
-
+			
 			assertEquals(false,isBerge(stimulus));
 		}
 	}
