@@ -18,8 +18,6 @@
 package org.jgrapht.alg;
 import org.junit.Test;
 
-import org.jgrapht.alg.BergeGraphChecker;
-
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
