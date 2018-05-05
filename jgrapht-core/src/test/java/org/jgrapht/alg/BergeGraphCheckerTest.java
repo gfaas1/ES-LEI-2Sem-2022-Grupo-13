@@ -47,10 +47,10 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		});
 	}
 
-	private int maximalNumberOfVertices = 30,
+	private int maximalNumberOfVertices = 18,
 			minimalNumberOfVertices = 14;
 	
-	private int repititionsPerTestCase = 60;
+	private int repititionsPerTestCase = 1;
 	
 
 	
@@ -105,7 +105,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 				stimulus.addEdge(15, 2);
 				stimulus.addEdge(10, 16);
 				stimulus.addEdge(16, 3);
-				//initAdjacency(stimulus);
 
 				assertEquals(true,containsPyramid(stimulus));
 				
@@ -144,7 +143,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		stimulus.addEdge(6, 7);
 		stimulus.addEdge(7, 8);
 		stimulus.addEdge(8, 4);
-		////initAdjacency(stimulus);
 		
 		assertEquals(true,containsJewel(stimulus));
 		
@@ -311,7 +309,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 	
 		*/
 
-		//initAdjacency(stimulus);
 		assertEquals(true,hasConfigurationType3(stimulus));
 
 		stimulus.addEdge(4, 7);
@@ -415,11 +412,9 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		while(repititions-->0){
 			int n1 = new Random().nextInt(maximalNumberOfVertices-minimalNumberOfVertices)/2+minimalNumberOfVertices/2,
 					n2 = maximalNumberOfVertices-n1;
-			//assertEquals(true,maximalNumberOfVertices>minimalNumberOfVertices);
 			
 			
 			int maximalNumberOfEdges = n1*n2;		
-			//assertEquals(true,maximalNumberOfEdges>minimalNumberOfEdges);
 			int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);	
 			
 			reset();
