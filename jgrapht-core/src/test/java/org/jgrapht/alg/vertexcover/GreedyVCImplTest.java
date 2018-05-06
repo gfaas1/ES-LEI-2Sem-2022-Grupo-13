@@ -31,6 +31,9 @@ import static org.junit.Assert.assertTrue;
 
 public class GreedyVCImplTest {
 
+    private GreedyVCImplTest(){
+    }
+
     public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph) {
         return new GreedyVCImpl<>(graph);
     }
