@@ -22,7 +22,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.Random;
-import org.jgrapht.alg.BergeGraphChecker;
 import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.WheelGraphGenerator;
 import org.jgrapht.graph.SimpleGraph;
