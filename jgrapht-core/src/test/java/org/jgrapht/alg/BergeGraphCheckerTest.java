@@ -21,17 +21,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
-
 import org.jgrapht.alg.BergeGraphChecker;
 import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.WheelGraphGenerator;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 
-public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
+public class BergeGraphCheckerTest{
     private SimpleGraph<Integer,Integer> stimulus;
     
     
@@ -99,10 +96,8 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
                 stimulus.addEdge(10, 16);
                 stimulus.addEdge(16, 3);
 
-                assertEquals(true,containsPyramid(stimulus));
+                assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
                 
-                stimulus.addEdge(4, 2);
-                assertEquals(false,containsPyramid(stimulus));
     }
     
     @Test
@@ -137,40 +132,12 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
         stimulus.addEdge(7, 8);
         stimulus.addEdge(8, 4);
         
-        assertEquals(true,containsJewel(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         
         stimulus.addEdge(1, 3);
-        assertEquals(false,containsJewel(stimulus));
+        assertEquals(true,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
     }
     
-    @Test
-    public void checkIsYXComplete(){
-        reset();
-        
-        stimulus.addVertex(1);
-        stimulus.addVertex(2);
-        stimulus.addVertex(3);
-        stimulus.addVertex(4);
-        
-        stimulus.addEdge(1, 4);
-        stimulus.addEdge(1, 2);
-        stimulus.addEdge(1, 3);
-        Set<Integer> X = new HashSet<Integer>();
-        X.add(2);
-        X.add(3);
-        X.add(4);
-        assertEquals(true,isYXComplete(stimulus,1,X));
-        
-        stimulus.removeEdge(1,4);
-        assertEquals(false,isYXComplete(stimulus,1,X));
-        stimulus.addEdge(1, 4);
-        
-        X.clear();
-        X.add(2);
-        X.add(1);
-        assertEquals(false,isYXComplete(stimulus,3,X));
-        
-    }
     
     @Test
     public void checkConfigurationType2(){
@@ -198,19 +165,11 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
         stimulus.addEdge(7, 8);
         stimulus.addEdge(4, 8);
         
-        assertEquals(true,hasConfigurationType2(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
 
         stimulus.addEdge(3, 6);
-        assertEquals(true,hasConfigurationType2(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         
-        stimulus.addEdge(7, 6);
-        
-        assertEquals(false, hasConfigurationType2(stimulus));
-        
-        
-        stimulus.removeEdge(3,6);
-        stimulus.removeEdge(4,8);
-        assertEquals(false, hasConfigurationType2(stimulus));
     }
     
     @Test
@@ -261,7 +220,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
          stimulus.addEdge(3,7);
          or
          stimulus.addEdge(4,7);
-!!         Note: one is to choose, otherwise it is a 5-Cycle        !!
          
          Optional edges if non-edge stimulus.addEdge(5,6);
          stimulus.addEdge(6,7);
@@ -298,10 +256,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     
         */
 
-        assertEquals(true,hasConfigurationType3(stimulus));
-
-        stimulus.addEdge(4, 7);
-        assertEquals(false,hasConfigurationType3(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -323,11 +278,11 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
         stimulus.addEdge(6, 7);
         stimulus.addEdge(7, 1);
         
-        assertEquals(true,containsCleanShortestOddHole(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         
         stimulus.addEdge(3, 7);
         stimulus.addEdge(4, 7);
-        assertEquals(false,containsCleanShortestOddHole(stimulus));
+        assertEquals(true,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -353,45 +308,15 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
         stimulus.addEdge(3, 8);
         stimulus.addEdge(8, 7);
         stimulus.addEdge(8, 5);
-        assertEquals(true,containsCleanShortestOddHole(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         
         stimulus.removeVertex(8);
-        assertEquals(true,containsCleanShortestOddHole(stimulus));
+        assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         
         
 
         
     }
-    
-    @Test
-    public void checkRoutine3(){
-        reset();
-        
-        stimulus.addVertex(1);//u
-        stimulus.addVertex(2);//v
-        stimulus.addVertex(3);
-        stimulus.addVertex(4);
-        
-        stimulus.addEdge(1, 2);
-        stimulus.addEdge(2, 3);
-        stimulus.addEdge(2, 4);
-        stimulus.addEdge(1, 3);
-        stimulus.addEdge(1, 4);
-        
-        Set<Set<Integer>> golden = new HashSet<Set<Integer>>();
-        Set<Integer> golden1 = new HashSet<Integer>(), golden2 = new HashSet<Integer>();
-        golden1.add(1);
-        golden1.add(2);
-        golden2.add(1);
-        golden2.add(2);
-        golden2.add(3);
-        golden2.add(4);
-        golden.add(golden1);
-        golden.add(golden2);
-        
-        assertEquals(golden,routine3(stimulus));
-    }
-    
     
     
     @Test
@@ -409,7 +334,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
             reset();
             new GnmRandomBipartiteGraphGenerator<Integer,Integer>(n1,n2,numberOfEdges).generateGraph(stimulus);
             
-            assertEquals(true,isBerge(stimulus));
+            assertEquals(true,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         }
         
         
@@ -430,7 +355,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
             new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
             
             
-            assertEquals(true,isBerge(stimulus));
+            assertEquals(true,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         }
         
         repititions=repititionsPerTestCase;
@@ -445,7 +370,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
             new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
             
             
-            assertEquals(false,isBerge(stimulus));
+            assertEquals(false,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
         }
     }
     
