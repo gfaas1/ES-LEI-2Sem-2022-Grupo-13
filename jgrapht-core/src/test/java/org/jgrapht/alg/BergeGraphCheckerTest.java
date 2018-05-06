@@ -39,10 +39,10 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		stimulus= new SimpleGraph<Integer,Integer>(SupplierUtil.createIntegerSupplier(),SupplierUtil.createIntegerSupplier(),false);
 	}
 
-	private int maximalNumberOfVertices = 30,
+	private int maximalNumberOfVertices = 17,
 			minimalNumberOfVertices = 14;
 	
-	private int repititionsPerTestCase = 60;
+	private int repititionsPerTestCase = 1;
 	
 
 	
@@ -97,7 +97,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 				stimulus.addEdge(15, 2);
 				stimulus.addEdge(10, 16);
 				stimulus.addEdge(16, 3);
-				//initAdjacency(stimulus);
 
 				assertEquals(true,containsPyramid(stimulus));
 				
@@ -136,7 +135,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		stimulus.addEdge(6, 7);
 		stimulus.addEdge(7, 8);
 		stimulus.addEdge(8, 4);
-		////initAdjacency(stimulus);
 		
 		assertEquals(true,containsJewel(stimulus));
 		
@@ -208,11 +206,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		
 		assertEquals(false, hasConfigurationType2(stimulus));
 		
-		stimulus.removeEdge(7,6);
-		stimulus.addEdge(2, 7);
-		assertEquals(false, hasConfigurationType2(stimulus));
 		
-		stimulus.removeEdge(2,7);
 		stimulus.removeEdge(3,6);
 		stimulus.removeEdge(4,8);
 		assertEquals(false, hasConfigurationType2(stimulus));
@@ -303,7 +297,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 	
 		*/
 
-		//initAdjacency(stimulus);
 		assertEquals(true,hasConfigurationType3(stimulus));
 
 		stimulus.addEdge(4, 7);
@@ -407,11 +400,9 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
 		while(repititions-->0){
 			int n1 = new Random().nextInt(maximalNumberOfVertices-minimalNumberOfVertices)/2+minimalNumberOfVertices/2,
 					n2 = maximalNumberOfVertices-n1;
-			//assertEquals(true,maximalNumberOfVertices>minimalNumberOfVertices);
 			
 			
 			int maximalNumberOfEdges = n1*n2;		
-			//assertEquals(true,maximalNumberOfEdges>minimalNumberOfEdges);
 			int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);	
 			
 			reset();
