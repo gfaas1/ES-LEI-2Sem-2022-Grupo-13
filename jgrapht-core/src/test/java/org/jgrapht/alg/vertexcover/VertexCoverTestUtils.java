@@ -19,11 +19,11 @@ package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
-import org.jgrapht.alg.util.IntegerVertexFactory;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.util.SupplierUtil;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -76,10 +76,11 @@ public class VertexCoverTestUtils {
      */
     static Graph<Integer, DefaultEdge> createRandomPseudoGraph(int vertices)
     {
-        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
+        Pseudograph<Integer, DefaultEdge> g = new Pseudograph<>(SupplierUtil.createIntegerSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> graphGenerator =
                 new GnmRandomGraphGenerator<>(vertices, rnd.nextInt(vertices / 2) + 1);
-        graphGenerator.generateGraph(g, new IntegerVertexFactory(), null);
+        graphGenerator.generateGraph(g);
         return g;
     }
 }

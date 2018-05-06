@@ -19,10 +19,12 @@ package org.jgrapht.alg.vertexcover;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.HashMap;
 
@@ -39,7 +41,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     // ------- Exact algorithms ------
 
     @Test
-    public void testExactMinimumWeightedCover1()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover1()
     {
         int[] weightArray = { 18, 16, 13, 14, 12, 0, 20, 11, 10, 10, 10, 6, 6, 12, 15, 6, 24, 2, 6,
                 6, 12, 7, 6, 11, 23, 3, 5, 23, 4, 24, 22, 17, 24, 7, 15, 14, 23, 12, 3, 18, 3, 20, 3, 5,
@@ -71,7 +74,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover2()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover2()
     {
         int[] weightArray = { 13, 11, 3, 5, 16, 0, 16, 16, 14, 25, 15, 23, 4, 12, 23, 20, 19, 12,
                 15, 18, 25, 15, 9, 2, 20, 6, 21, 17, 16, 21, 20, 9, 0, 23, 7, 24, 17, 15, 19, 12, 4, 13,
@@ -109,7 +113,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover3()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover3()
     {
         int[] weightArray = { 20, 15, 16, 0, 20, 7, 1, 25, 0, 23, 6, 7, 8, 11, 3, 18, 25, 12, 20,
                 18, 24, 10, 9, 25, 0, 9, 22, 18, 23, 17, 23, 3, 12, 8, 9, 21, 2, 0, 20, 0, 14, 6, 13,
@@ -141,7 +146,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover4()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover4()
     {
         int[] weightArray = { 0, 20, 10, 0, 0, 15, 18, 20, 12, 18, 1, 13, 1, 25, 14, 6, 10, 16, 18,
                 10, 12, 24, 22, 23, 3, 13, 9, 21, 5, 17, 22, 20, 13, 12, 22, 4, 5, 18, 0, 14, 25, 6, 1,
@@ -174,7 +180,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover5()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover5()
     {
         int[] weightArray = { 1, 10, 13, 17, 0, 25, 4, 15, 8, 14, 20, 23, 10, 2, 21, 10, 4, 18, 4,
                 20, 25, 5, 20, 19, 11, 15, 18, 8, 19, 3, 3, 24, 3, 8, 6, 12, 8, 12, 2, 8, 2, 1, 5, 23,
@@ -200,7 +207,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover6()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover6()
     {
         int[] weightArray = { 11, 11, 17, 25, 16, 9, 11, 5, 5, 18, 21, 3, 15, 12, 7, 14, 14, 10, 19,
                 12, 21, 17, 8, 0, 1, 3, 21, 8, 23, 0, 23, 7, 2, 1, 24, 18, 4, 25, 22, 6, 3, 10, 7, 4, 0,
@@ -236,7 +244,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover7()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover7()
     {
         int[] weightArray = { 24, 13, 20, 22, 17, 18, 14, 3, 10, 10, 3, 13, 25, 3, 24, 7, 12, 24,
                 20, 11, 11, 14, 10, 7, 16, 0, 20, 16, 25, 24, 4, 3, 23, 14, 5, 7, 21, 17, 25, 24, 9, 22,
@@ -276,7 +285,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover8()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover8()
     {
         int[] weightArray = { 19, 24, 0, 19, 17, 12, 15, 4, 22, 23, 6, 21, 19, 20, 3, 18, 22, 19, 2,
                 4, 19, 8, 23, 15, 21, 12, 4, 1, 21, 23, 11, 8, 18, 6, 11, 14, 0, 4, 11, 11, 22, 2, 1,
@@ -316,7 +326,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover9()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover9()
     {
         int[] weightArray = { 19, 0, 13, 1, 2, 18, 3, 17, 5, 13, 1, 17, 20, 7, 18, 21, 9, 13, 11,
                 23, 4, 8, 14, 22, 13, 10, 4, 17, 0, 8, 24, 6, 3, 3, 8, 25, 20, 4, 19, 19, 4, 11, 3, 2,
@@ -353,7 +364,8 @@ public abstract class WeightedVertexCoverExactTest extends VertexCoverExactTest 
     }
 
     @Test
-    public void testExactMinimumWeightedCover10()
+    @Category(SlowTests.class)
+    public void testExactMinimumCover10()
     {
         int[] weightArray = { 0, 12, 13, 7, 23, 21, 8, 20, 12, 21, 23, 1, 16, 13, 2, 9, 18, 24, 18,
                 13, 0, 13, 4, 12, 16, 23, 5, 13, 15, 14, 15, 18, 23, 17, 23, 9, 12, 0, 16, 21, 7, 13, 9,
