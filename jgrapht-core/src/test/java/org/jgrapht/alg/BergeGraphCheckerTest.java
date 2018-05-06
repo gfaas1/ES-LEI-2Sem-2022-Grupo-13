@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.jgrapht.alg.BergeGraphChecker;
 import org.jgrapht.generate.GnmRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.WheelGraphGenerator;
 import org.jgrapht.graph.SimpleGraph;
