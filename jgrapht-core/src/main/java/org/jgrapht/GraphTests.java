@@ -679,6 +679,19 @@ public abstract class GraphTests
     {
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
     }
+    
+    /**
+     * Checks that the specified graph is perfect.
+     * Due to the Strong Perfect Graph Theorem Berge Graphs are the same as perfect Graphs.
+     * 
+     * @param graph the graph reference to check for being perfect or not
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return {@code boolean} if {@code graph} is perfect
+     */
+    public static <V, E> boolean isPerfect(Graph<V,E> graph) {
+        return new BergeGraphChecker<V, E>().isBerge(graph);
+    }
 
 }
 
