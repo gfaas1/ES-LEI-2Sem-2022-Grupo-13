@@ -17,6 +17,7 @@
  */
 package org.jgrapht;
 
+import org.jgrapht.alg.BergeGraphChecker;
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
