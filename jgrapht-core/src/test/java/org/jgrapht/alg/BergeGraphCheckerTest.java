@@ -447,14 +447,6 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     	new NamedGraphGenerator<Integer, Integer>().generateDiamondGraph(stimulus);
     	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
     }
-
-    @Test
-    @Category(SlowTests.class)
-    public void checkFolkmanGraph() {
-    	reset();
-    	new NamedGraphGenerator<Integer, Integer>().generateFolkmanGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
-    }
     
     @Test
     @Category(SlowTests.class)
