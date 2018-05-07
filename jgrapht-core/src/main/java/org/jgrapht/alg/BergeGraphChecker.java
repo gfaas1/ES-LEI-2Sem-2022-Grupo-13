@@ -190,7 +190,18 @@ public class BergeGraphChecker<V,E>{
      * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g contains no pyramid
      */
     protected boolean containsPyramid(Graph<V,E> g){
-         /*b3,*/ 
+        /*
+         * A pyramid looks like this:
+         * 
+         *    b2-(T2)-m2-(S2)-s2
+         *   / |                \
+         * b1---(T1)-m1-(S1)-s1--a
+         *   \ |                /
+         *    b3-(T3)-m3-(S3)-s3
+         *    
+         *    Note that b1, b2, and b3 are connected and all names in parentheses are paths
+         * 
+         */
         Set<Set<V>> visitedTriangles = new HashSet<Set<V>>();
         for (E e1 : g.edgeSet()){
             V b1= g.getEdgeSource(e1), b2= g.getEdgeTarget(e1);
@@ -201,7 +212,7 @@ public class BergeGraphChecker<V,E>{
                     b3 = g.getEdgeTarget(e2);
                 if (b3==b1||b3==b2||!g.containsEdge(b2,b3)) continue;
                     
-                //Triangle detected
+                //Triangle detected for the pyramid base
                 Set<V> triangles = new HashSet<V>();
                 triangles.add(b1);
                 triangles.add(b2);
@@ -221,6 +232,7 @@ public class BergeGraphChecker<V,E>{
                         continue;
                     }
                     
+                    //aCandidate could now be the top of the pyramid
                     for (E e4 : g.edgesOf(aCandidate)){
                         V s1 = g.getEdgeSource(e4);
                         if (s1==aCandidate)
@@ -245,6 +257,7 @@ public class BergeGraphChecker<V,E>{
                                     continue;
                                 }
                                 
+                                //s1, s2, s3 could now be the closest vertices to the top vertex of the pyramid
                                 Set<V> M = new HashSet<V>(),M1 = new HashSet<V>(),M2 = new HashSet<V>(),M3 = new HashSet<V>();
                                 M.addAll(g.vertexSet());
                                 M.remove(b1);
@@ -267,6 +280,7 @@ public class BergeGraphChecker<V,E>{
                                                         T2=new HashMap<V,GraphPath<V,E>>(),
                                                         T3=new HashMap<V,GraphPath<V,E>>();
 
+                                //find paths which could be the edges of the pyramid
                                 for (V m1 : M){
                                     Set<V> validInterior = new HashSet<V>();
                                     validInterior.addAll(M);
@@ -343,7 +357,7 @@ public class BergeGraphChecker<V,E>{
                                     }
                                 }
                                 
-                                
+                                //Check if all edges of a pyramid are valid
                                 for (V m1 : S1.keySet()){
                                     GraphPath<V,E> P1 = P(g,S1.get(m1),T1.get(m1),M,m1,b1,b2,b3,s1,s2,s3);
                                     if (P1!=null){
@@ -442,6 +456,9 @@ public class BergeGraphChecker<V,E>{
      * @return Decides whether g contains a clean shortest odd hole
      */
     protected boolean containsCleanShortestOddHole(Graph<V,E> g){
+        /*
+         * Find 3 Paths which are an uneven odd hole when conjunct
+         */
         for (V u : g.vertexSet()){
             for (V v : g.vertexSet()){
                 if (u==v||g.containsEdge(u,v)) continue;
@@ -460,10 +477,12 @@ public class BergeGraphChecker<V,E>{
                     set.addAll(pvw.getVertexList());
                     set.addAll(pwu.getVertexList());
                     Graph<V,E> subg = new AsSubgraph<>(g,set);
+                    //Look for holes with more than 6 edges and uneven length
                     if (set.size()<7||subg.vertexSet().size()!=set.size()||subg.edgeSet().size()!=subg.vertexSet().size()||subg.vertexSet().size()%2==0) continue;
                     boolean isCircle=true;
                     for (V t : subg.vertexSet()){
-                        if (subg.edgesOf(t).size()!=2){
+                        //if in an induced subgraph a vertex has not 2 edges, it cannot be an odd hole
+                        if (subg.edgesOf(t).size()!=2){ 
                             isCircle=false;
                             break;
                         }
@@ -500,7 +519,7 @@ public class BergeGraphChecker<V,E>{
     /**
      * Checks whether the vertex set of a graph without a vertex set X contains a shortest odd hole. Running time: O(|V(g)|^4)
      * @param g Graph containing neither pyramid nor jewel
-     * @param X Subset of V(g)
+     * @param X Subset of V(g) and a possible Cleaner for an odd hole
      * @return Determines whether g has an odd hole such that X is a near-cleaner for it
      */
     protected boolean containsShortestOddHole(Graph<V,E> g,Set<V> X){
@@ -550,7 +569,7 @@ public class BergeGraphChecker<V,E>{
     /**
      * Checks whether a clean shortest odd hole is in g or whether X is a cleaner for an amenable shortest odd hole
      * @param g A graph, containing no pyramid or jewel
-     * @param X A subset X of V(g)
+     * @param X A subset X of V(g) and a possible Cleaner for an odd hole
      * @return Returns whether g has an odd hole or there is no shortest odd hole in C such that X is a near-cleaner for C.
      */
     protected boolean routine1(Graph<V,E> g,Set<V> X){
@@ -559,7 +578,7 @@ public class BergeGraphChecker<V,E>{
     
     
     /**
-     * Checks whether a graph has a configuration of type 1. A configuration of type 1 in g is a hole of length 5
+     * Checks whether a graph has a configuration of type T1. A configuration of type T1 in g is a hole of length 5
      * @param g A Graph
      * @return whether g contains a configuration of Type T1 (5-cycle)
      */
@@ -623,7 +642,7 @@ public class BergeGraphChecker<V,E>{
     }
     
     /**
-     * <p>Checks whether a graph is of configuration type 2. A configuration of type 2 in g is a sequence v1,v2,v3,v4,P,X such that:</p>
+     * <p>Checks whether a graph is of configuration type T2. A configuration of type T2 in g is a sequence v1,v2,v3,v4,P,X such that:</p>
      * <ul>
      * <li> v1-v2-v3-v4 is a path of g</li>
      * <li> X is an anticomponent of the set of all {v1,v2,v4}-complete vertices</li>
@@ -744,7 +763,7 @@ public class BergeGraphChecker<V,E>{
     }
     
     /**
-     * <p>Checks whether a graph is of configuration type 3. A configuration of type 3 in g is a sequence v1,...,v6,P,X such that</p>
+     * <p>Checks whether a graph is of configuration type T3. A configuration of type T3 in g is a sequence v1,...,v6,P,X such that</p>
      * <ul>
      * <li> v1,...,v6 are distinct vertices of g</li>
      * <li> v1v2,v3v4,v2v3,v3v5,v4v6 are edges, and v1v3,v2v4,v1v5,v2v5,v1v6,v2v6,v4v5 are non-edges</li>
@@ -1001,10 +1020,7 @@ public class BergeGraphChecker<V,E>{
         else complementGraph = new Multigraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
         new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph);
         
-        if (routine2(g)) {
-            return false;
-        }
-        if (routine2(complementGraph)) {
+        if (routine2(g)||routine2(complementGraph)) {
             return false;
         }
         
