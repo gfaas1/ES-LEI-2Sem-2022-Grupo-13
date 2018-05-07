@@ -190,7 +190,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
         
         //now we might be left with path fragments (not necessarily leading from start to end).
         //We need to merge them to valid paths.
-        List<GraphPath<V, E>> paths = mergePaths(startVertex, endVertex);
+        List<GraphPath<V, E>> paths = buildPaths(startVertex, endVertex);
         
         //sort paths by overall weight (ascending)
         Collections.sort(paths, Comparator.comparingDouble(GraphPath::getWeight));        
@@ -205,56 +205,45 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * @param endVertex the end vertex
      * 
      * @return list of disjoint paths from start to end.
-     */    
-    private List<GraphPath<V, E>> mergePaths(V startVertex, V endVertex)
+     */ 
+    private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex)
     {
-        List<ArrayDeque<E>> pathsQueueList = new ArrayList<ArrayDeque<E>>(this.pathList.size());
-        this.pathList.forEach(path -> pathsQueueList.add(new ArrayDeque<>()));
-        ArrayDeque<E> allEdges = new ArrayDeque<>(flatPathListOrdered());
-        while (! allEdges.isEmpty()) {
-            E edge = allEdges.pop();
-            if (this.overlappingEdges.contains(edge)) {
-                continue;
-            }
-            for (ArrayDeque<E> path : pathsQueueList) {
-                if (path.isEmpty()) {
-                    path.add(edge);
-                    break;
-                }
-
-                if (this.workingGraph
-                    .getEdgeSource(edge).equals(this.workingGraph.getEdgeTarget(path.peekLast())))
-                {
-                    path.add(edge);
-                    break;
-                }
-            }
-        }
-
-        return pathsQueueList
-            .stream()
-            .map(pathQueue -> createGraphPath(new ArrayList<>(pathQueue), startVertex, endVertex))
-            .collect(Collectors.toList());
-    }
-    
-    /**
-     * Flattens pathList to list of edges ordered (ascending) according to their
-     * distance (i.e. number of hops) from the source.
-     * 
-     * @return list of all paths edges.
-     */
-    private List<E> flatPathListOrdered() {
-        List<E> flatListOrdered = new ArrayList<>();
-        int maxSize = pathList.stream().mapToInt(List::size).max().getAsInt();
+        List<List<E>> paths = new ArrayList<>();
+        Map<V, ArrayDeque<E>> sourceToEdgeLookup = new HashMap<>();
+        Set<E> nonOverlappingEdges = pathList
+            .stream().flatMap(List::stream).filter(e -> !this.overlappingEdges.contains(e))
+            .collect(Collectors.toSet());
         
-        for (int i = 0; i < maxSize; i++) {
-            for (List<E> list : this.pathList) {
-                if (i < list.size()) {
-                    flatListOrdered.add(list.get(i));
+        for (E e : nonOverlappingEdges) {
+            V u = workingGraph.getEdgeSource(e);
+            if (u.equals(startVertex)) { // start of a new path
+                List<E> path = new ArrayList<>();
+                path.add(e);
+                paths.add(path);
+            } else { // some edge which is part of a path
+                if (! sourceToEdgeLookup.containsKey(u)) {
+                    sourceToEdgeLookup.put(u, new ArrayDeque<>());
+                } else {
+                    System.out.println("non empty queue");
                 }
+                sourceToEdgeLookup.get(u).add(e);
             }
         }
-        return flatListOrdered;
+
+        // Build the paths using the lookup table
+        for (List<E> path : paths) {
+            V v = workingGraph.getEdgeTarget(path.get(0));
+            while (! v.equals(endVertex)) {
+                E e = sourceToEdgeLookup.get(v).poll();
+                path.add(e);
+                v = workingGraph.getEdgeTarget(e);
+            }
+        }
+
+        return paths
+            .stream()
+            .map(path -> createGraphPath(new ArrayList<>(path), startVertex, endVertex))
+            .collect(Collectors.toList());
     }
     
     /**
