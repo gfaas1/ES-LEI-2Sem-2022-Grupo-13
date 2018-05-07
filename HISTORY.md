@@ -64,6 +64,7 @@ Changes to JGraphT in each version:
     - Added suites for fast tests, integration tests and performance tests (contributed by John Sichi)
     - Refactored `ChordalityInspector` and revised several interfaces (vertex cover, independent set, clique, etc) (contributed by Joris Kinable)
     - Minor improvements to `DOTExporter` (contributed by Dimitrios Michail)
+    - Added graph listener event for edge weight update (contributed by Dimitrios Michail)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
