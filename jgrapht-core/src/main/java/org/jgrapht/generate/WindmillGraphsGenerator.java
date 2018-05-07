@@ -41,7 +41,7 @@ public class WindmillGraphsGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
 
-    enum Mode
+    public enum Mode
     {
         WINDMILL,
         DUTCHWINDMILL
