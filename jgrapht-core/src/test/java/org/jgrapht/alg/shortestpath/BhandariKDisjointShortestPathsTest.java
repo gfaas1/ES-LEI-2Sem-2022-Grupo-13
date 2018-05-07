@@ -87,14 +87,14 @@ public class BhandariKDisjointShortestPathsTest {
         graph.addVertex(5);
         graph.addVertex(6);
         graph.addVertex(7);
-        DefaultWeightedEdge e12 = graph.addEdge(1, 2);
-        DefaultWeightedEdge e17 = graph.addEdge(1, 7);
-        DefaultWeightedEdge e23 = graph.addEdge(2, 3);
-        DefaultWeightedEdge e73 = graph.addEdge(7, 3);
-        DefaultWeightedEdge e34 = graph.addEdge(3, 4);
-        DefaultWeightedEdge e36 = graph.addEdge(3, 6);
-        DefaultWeightedEdge e45 = graph.addEdge(4, 5);
-        DefaultWeightedEdge e65 = graph.addEdge(6, 5);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 7);
+        graph.addEdge(2, 3);
+        graph.addEdge(7, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 6);
+        graph.addEdge(4, 5);
+        graph.addEdge(6, 5);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
         
@@ -102,22 +102,15 @@ public class BhandariKDisjointShortestPathsTest {
         
         assertEquals(2, pathList.size());
         
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 4, 5), 4);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(4, pathList.get(0).getLength());
-        assertEquals(4, pathList.get(1).getLength());
-        
         assertEquals(4.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 6, 5), 4);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(4, pathList.get(1).getLength());
         assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e12));
-        assertTrue(pathList.get(0).getEdgeList().contains(e23));
-        assertTrue(pathList.get(0).getEdgeList().contains(e34));
-        assertTrue(pathList.get(0).getEdgeList().contains(e45));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e17));
-        assertTrue(pathList.get(1).getEdgeList().contains(e73));
-        assertTrue(pathList.get(1).getEdgeList().contains(e36));
-        assertTrue(pathList.get(1).getEdgeList().contains(e65));
-        
                 
     }
     
@@ -140,27 +133,25 @@ public class BhandariKDisjointShortestPathsTest {
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
-        DefaultWeightedEdge e12 = graph.addEdge(1, 2);
-        DefaultWeightedEdge e23 = graph.addEdge(2, 3);
-        DefaultWeightedEdge e13 = graph.addEdge(1, 3);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(1, 3);
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 3);
         
         assertEquals(2, pathList.size());
         
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 3), 1);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(1, pathList.get(0).getLength());
-        assertEquals(2, pathList.get(1).getLength());
-        
         assertEquals(1.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 2, 3), 2);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(2, pathList.get(1).getLength());
         assertEquals(2.0, pathList.get(1).getWeight(), 0.0);
         
-        assertTrue(pathList.get(0).getEdgeList().contains(e13));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e12));
-        assertTrue(pathList.get(1).getEdgeList().contains(e23));
-        
-                
     }
     
     /**
@@ -214,19 +205,18 @@ public class BhandariKDisjointShortestPathsTest {
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        
         assertEquals(2, pathList.size());
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 6, 4), 3);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(3, pathList.get(0).getLength());
-        assertEquals(3, pathList.get(1).getLength());
         assertEquals(3.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 5, 3, 4), 6);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(3, pathList.get(1).getLength());
         assertEquals(6.0, pathList.get(1).getWeight(), 0.0);
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e12));
-        assertTrue(pathList.get(0).getEdgeList().contains(e26));
-        assertTrue(pathList.get(0).getEdgeList().contains(e64));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e15));
-        assertTrue(pathList.get(1).getEdgeList().contains(e53));
-        assertTrue(pathList.get(1).getEdgeList().contains(e34));
     }
     
     /**
@@ -280,19 +270,18 @@ public class BhandariKDisjointShortestPathsTest {
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        
         assertEquals(2, pathList.size());
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 6, 4), 5);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(3, pathList.get(0).getLength());
-        assertEquals(3, pathList.get(1).getLength());
         assertEquals(5.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 5, 3, 4), 7);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(3, pathList.get(1).getLength());
         assertEquals(7.0, pathList.get(1).getWeight(), 0.0);
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e12));
-        assertTrue(pathList.get(0).getEdgeList().contains(e26));
-        assertTrue(pathList.get(0).getEdgeList().contains(e64));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e15));
-        assertTrue(pathList.get(1).getEdgeList().contains(e53));
-        assertTrue(pathList.get(1).getEdgeList().contains(e34));
     }
     
     /**
@@ -346,19 +335,18 @@ public class BhandariKDisjointShortestPathsTest {
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        
         assertEquals(2, pathList.size());
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 6, 4), -1);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(3, pathList.get(0).getLength());
-        assertEquals(3, pathList.get(1).getLength());
         assertEquals(-1.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 5, 3, 4), -1);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(3, pathList.get(1).getLength());
         assertEquals(-1.0, pathList.get(1).getWeight(), 0.0);
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e12));
-        assertTrue(pathList.get(0).getEdgeList().contains(e26));
-        assertTrue(pathList.get(0).getEdgeList().contains(e64));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e15));
-        assertTrue(pathList.get(1).getEdgeList().contains(e53));
-        assertTrue(pathList.get(1).getEdgeList().contains(e34));
     }
     
     /**
@@ -429,19 +417,18 @@ public class BhandariKDisjointShortestPathsTest {
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        
         assertEquals(2, pathList.size());
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 6, 4), 5);
+        assertEquals(expectedP1, pathList.get(0));
         assertEquals(3, pathList.get(0).getLength());
-        assertEquals(3, pathList.get(1).getLength());
         assertEquals(5.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 5, 3, 4), 7);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(3, pathList.get(1).getLength());
         assertEquals(7.0, pathList.get(1).getWeight(), 0.0);
-        
-        assertTrue(pathList.get(0).getEdgeList().contains(e12));
-        assertTrue(pathList.get(0).getEdgeList().contains(e26));
-        assertTrue(pathList.get(0).getEdgeList().contains(e64));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e15));
-        assertTrue(pathList.get(1).getEdgeList().contains(e53));
-        assertTrue(pathList.get(1).getEdgeList().contains(e34));
     }
     
     /**
@@ -470,33 +457,34 @@ public class BhandariKDisjointShortestPathsTest {
     public void testThreeDisjointPaths() {
         Graph<Integer, DefaultWeightedEdge> graph = createThreeDisjointPathsGraph();
         
-        DefaultWeightedEdge e12 = graph.getEdge(1, 2);
-        DefaultWeightedEdge e25 = graph.getEdge(2, 5);
-        DefaultWeightedEdge e13 = graph.getEdge(1, 3);
-        DefaultWeightedEdge e35 = graph.getEdge(3, 5);
-        DefaultWeightedEdge e14 = graph.getEdge(1, 4);
-        DefaultWeightedEdge e45 = graph.getEdge(4, 5);
+        graph.getEdge(1, 2);
+        graph.getEdge(2, 5);
+        graph.getEdge(1, 3);
+        graph.getEdge(3, 5);
+        graph.getEdge(1, 4);
+        graph.getEdge(4, 5);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
         
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
-        assertEquals(3, pathList.size());
-        assertEquals(2, pathList.get(0).getLength());
-        assertEquals(2, pathList.get(1).getLength());
-        assertEquals(2, pathList.get(2).getLength());
         
+        assertEquals(3, pathList.size());
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 4, 5), 5);
+        assertEquals(expectedP1, pathList.get(0));
+        assertEquals(2, pathList.get(0).getLength());
         assertEquals(5.0, pathList.get(0).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 2, 5), 7);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(2, pathList.get(1).getLength());
         assertEquals(7.0, pathList.get(1).getWeight(), 0.0);
+        
+        GraphPath<Integer, DefaultWeightedEdge> expectedP3 = new GraphWalk<>(graph, Arrays.asList(1, 3, 5), 9);
+        assertEquals(expectedP3, pathList.get(2));
+        assertEquals(2, pathList.get(2).getLength());
         assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
         
-        assertTrue(pathList.get(0).getEdgeList().contains(e14));
-        assertTrue(pathList.get(0).getEdgeList().contains(e45));
-        
-        assertTrue(pathList.get(1).getEdgeList().contains(e12));
-        assertTrue(pathList.get(1).getEdgeList().contains(e25));                       
-        
-        assertTrue(pathList.get(2).getEdgeList().contains(e13));
-        assertTrue(pathList.get(2).getEdgeList().contains(e35));
     }
     
     private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraph() {

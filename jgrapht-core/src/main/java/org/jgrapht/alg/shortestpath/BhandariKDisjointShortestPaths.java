@@ -25,14 +25,14 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 
 /**
- * An implementation of Bhandari algorithm for finding K edge-<em>disjoint</em> shortest paths.
- * The algorithm determines the k disjoint shortest simple paths in increasing order of
+ * An implementation of Bhandari algorithm for finding $K$ edge-<em>disjoint</em> shortest paths.
+ * The algorithm determines the $k$ disjoint shortest simple paths in increasing order of
  * weight. Weights can be negative (but no negative cycle is allowed). Only directed simple graphs
  * are allowed.
  *
  * <p>
- * The algorithm is running k sequential Bellman-Ford iterations to find the shortest path at each step.
- * Hence, yielding a complexity of k*O(Bellman-Ford).
+ * The algorithm is running $k$ sequential Bellman-Ford iterations to find the shortest path at each step.
+ * Hence, yielding a complexity of $k$*O(Bellman-Ford).
  * 
  * <p>
  * For further reference see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
@@ -63,7 +63,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
     private Set<E> overlappingEdges;
 
     /**
-     * Creates an object to calculate k disjoint shortest paths between the start
+     * Creates an object to calculate $k$ disjoint shortest paths between the start
      * vertex and others vertices.
      *
      * @param graph
@@ -99,7 +99,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
     }
     
     /**
-     * Returns the k shortest simple paths in increasing order of weight.
+     * Returns the $k$ shortest simple paths in increasing order of weight.
      *
      * @param startVertex source vertex of the calculated paths.
      * @param endVertex target vertex of the calculated paths.
@@ -193,7 +193,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
         List<GraphPath<V, E>> paths = mergePaths(startVertex, endVertex);
         
         //sort paths by overall weight (ascending)
-        Collections.sort(paths, (o1, o2) -> Double.compare(o1.getWeight(), o2.getWeight()));        
+        Collections.sort(paths, Comparator.comparingDouble(GraphPath::getWeight));        
         return paths;
     }
     
@@ -245,12 +245,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      */
     private List<E> flatPathListOrdered() {
         List<E> flatListOrdered = new ArrayList<>();
-        int maxSize = 0;
-        for (List<E> list : this.pathList) {
-            if (list.size() > maxSize) {
-                maxSize = list.size();
-            }
-        }
+        int maxSize = pathList.stream().mapToInt(List::size).max().getAsInt();
         
         for (int i = 0; i < maxSize; i++) {
             for (List<E> list : this.pathList) {
@@ -270,28 +265,23 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * 
      */
     private void findOverlappingEdges() {
-        Iterator<E> path1Iter, path2Iter;
-        E e1, e2;
         boolean found;
         this.overlappingEdges = new HashSet<>();
+        V sourceE1, targetE1;
+        V sourceE2, targetE2;
         //removing overlapping edges
-        for (int i = 0; i < pathList.size(); i++) {
-            List<E> path1 = pathList.get(i);
-            path1Iter = path1.iterator();
-            while (path1Iter.hasNext()) {
-                e1 = path1Iter.next();
+        for (int i = 0; i < pathList.size() - 1; i++) {            
+            for (E e1 : pathList.get(i)) {
+                sourceE1 = workingGraph.getEdgeSource(e1);
+                targetE1 = workingGraph.getEdgeTarget(e1);
                 found = false;
                 for (int j = i + 1; j < pathList.size(); j++) {
-                    List<E> path2 = pathList.get(j);
-                    path2Iter = path2.iterator();
-                    while (path2Iter.hasNext()) {
-                        e2 = path2Iter.next();
+                    for (E e2 : pathList.get(j)) {
+                        sourceE2 = workingGraph.getEdgeSource(e2);
+                        targetE2 = workingGraph.getEdgeTarget(e2);
                         //graph is directed, checking both options.
-                        if ((workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeSource(e2)) &&
-                            workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeTarget(e2))) ||
-                                
-                                (workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeTarget(e2)) &&
-                                    workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeSource(e2)))) {
+                        if ((sourceE1.equals(sourceE2) && targetE1.equals(targetE2)) ||
+                                (sourceE1.equals(targetE2) && targetE1.equals(sourceE2))) {
                             found = true;
                             this.overlappingEdges.add(e2);
                         }
