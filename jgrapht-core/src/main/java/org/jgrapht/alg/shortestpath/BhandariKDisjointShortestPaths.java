@@ -68,7 +68,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      *
      * @param graph
      *            graph on which shortest paths are searched.
-     * @param nPaths
+     * @param k
      *            number of disjoint paths between the start vertex and an end
      *            vertex.
      *
@@ -79,9 +79,9 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * @throws IllegalArgumentException 
      *             if the graph is undirected.
      */
-    public BhandariKDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
+    public BhandariKDisjointShortestPaths(Graph<V, E> graph, int k) {
                          
-        if (nPaths <= 0) {
+        if (k <= 0) {
             throw new IllegalArgumentException("Number of paths must be positive");
         }
 
@@ -95,7 +95,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
             this.workingGraph = new AsWeightedGraph<>(graph, new HashMap<>());
         }
         Graphs.addGraph(workingGraph, graph);
-        this.nPaths = nPaths;
+        this.nPaths = k;
     }
     
     /**
@@ -148,6 +148,13 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
         }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
+    }
+    
+    @Override
+    public List<GraphPath<V, E>> getPaths(V source, V sink, int k)
+    {
+        this.nPaths = k;
+        return getPaths(source, sink);
     }
     
     /**
