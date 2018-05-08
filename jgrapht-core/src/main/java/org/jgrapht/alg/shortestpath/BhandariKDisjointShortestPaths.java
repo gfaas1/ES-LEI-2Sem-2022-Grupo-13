@@ -57,8 +57,6 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
     private final Graph<V, E> workingGraph;
 
     private List<List<E>> pathList;
-
-    private int nPaths;
     
     private Set<E> overlappingEdges;
 
@@ -66,11 +64,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * Creates an object to calculate $k$ disjoint shortest paths between the start
      * vertex and others vertices.
      *
-     * @param graph
-     *            graph on which shortest paths are searched.
-     * @param k
-     *            number of disjoint paths between the start vertex and an end
-     *            vertex.
+     * @param graph graph on which shortest paths are searched.
      *
      * @throws IllegalArgumentException
      *             if nPaths is negative or 0.
@@ -79,11 +73,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * @throws IllegalArgumentException 
      *             if the graph is undirected.
      */
-    public BhandariKDisjointShortestPaths(Graph<V, E> graph, int k) {
-                         
-        if (k <= 0) {
-            throw new IllegalArgumentException("Number of paths must be positive");
-        }
+    public BhandariKDisjointShortestPaths(Graph<V, E> graph) {                                 
 
         GraphTests.requireDirected(graph);
         if (! GraphTests.isSimple(graph)) {
@@ -95,7 +85,6 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
             this.workingGraph = new AsWeightedGraph<>(graph, new HashMap<>());
         }
         Graphs.addGraph(workingGraph, graph);
-        this.nPaths = k;
     }
     
     /**
@@ -110,10 +99,13 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      *         endVertex
      * @throws IllegalArgumentException if the startVertex and the endVertex are the same vertices
      * @throws IllegalArgumentException if the startVertex or the endVertex is null
-     */
+     */    
     @Override
-    public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex)
+    public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex, int k)
     {
+        if (k <= 0) {
+            throw new IllegalArgumentException("Number of paths must be positive");
+        }
         if (endVertex == null) {
             throw new IllegalArgumentException("endVertex is null");
         }
@@ -134,7 +126,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
         this.pathList = new ArrayList<>();
         BellmanFordShortestPath<V, E> bellmanFordShortestPath;
         
-        for (int cPath = 1; cPath <= this.nPaths; cPath++) {
+        for (int cPath = 1; cPath <= k; cPath++) {
             if (cPath > 1) {
                 prepare(this.pathList.get(cPath - 2));
             }                       
@@ -148,13 +140,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
         }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
-    }
-    
-    @Override
-    public List<GraphPath<V, E>> getPaths(V source, V sink, int k)
-    {
-        this.nPaths = k;
-        return getPaths(source, sink);
+        
     }
     
     /**

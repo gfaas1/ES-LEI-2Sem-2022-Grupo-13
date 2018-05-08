@@ -50,8 +50,8 @@ public class BhandariKDisjointShortestPathsTest {
         graph.addVertex(2);
         DefaultWeightedEdge edge = graph.addEdge(1, 2);
         graph.setEdgeWeight(edge, 8);
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 2, 5);
         assertEquals(1, pathList.size());
         assertEquals(1, pathList.get(0).getLength());
         assertTrue(pathList.get(0).getEdgeList().contains(edge));
@@ -95,9 +95,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.addEdge(4, 5);
         graph.addEdge(6, 5);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5, 2);
         
         assertEquals(2, pathList.size());
         
@@ -153,9 +153,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(1, 3);
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 3);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 3, 5);
         
         assertEquals(2, pathList.size());
         
@@ -219,9 +219,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.setEdgeWeight(e26, 1);
         graph.setEdgeWeight(e64, 1);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4, 5);
         
         assertEquals(2, pathList.size());
         
@@ -284,9 +284,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.setEdgeWeight(e26, 2);
         graph.setEdgeWeight(e64, 2);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4, 5);
         
         assertEquals(2, pathList.size());
         
@@ -349,9 +349,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.setEdgeWeight(e26, -3);
         graph.setEdgeWeight(e64,  3);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4, 5);
         
         assertEquals(2, pathList.size());
         
@@ -431,9 +431,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.setEdgeWeight(e62, 2);
         graph.setEdgeWeight(e46, 2);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 4, 5);
         
         assertEquals(2, pathList.size());
         
@@ -481,9 +481,9 @@ public class BhandariKDisjointShortestPathsTest {
         graph.getEdge(1, 4);
         graph.getEdge(4, 5);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 5);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5, 5);
         
         assertEquals(3, pathList.size());
         
@@ -544,7 +544,7 @@ public class BhandariKDisjointShortestPathsTest {
             originalWeightMap.put(e, source.getEdgeWeight(e));
         }
         
-        new BhandariKDisjointShortestPaths<>(source, 5).getPaths(1, 5);
+        new BhandariKDisjointShortestPaths<>(source).getPaths(1, 5, 5);
         
         assertEquals(destination, source);
         
@@ -565,8 +565,8 @@ public class BhandariKDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 20);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 20, 2);
         
         assertEquals(1, pathList.size());
         assertEquals(19, pathList.get(0).getLength());
@@ -586,8 +586,8 @@ public class BhandariKDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
-        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 10);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 10, 2);
         
         assertEquals(1, pathList.size());
         assertEquals(9, pathList.get(0).getLength());
@@ -607,10 +607,10 @@ public class BhandariKDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new CompleteGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
         for (int i = 2; i < 20; i++) {
-            List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, i);
+            List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, i, 2);
             assertEquals(2, pathList.size());
         }
     }
@@ -624,10 +624,10 @@ public class BhandariKDisjointShortestPathsTest {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new StarGraphGenerator<>(20);
         graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
         
-        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph, 2);
+        BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
         for (int i = 2; i < 20; i++) {
-            List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(i, 1);
+            List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(i, 1, 2);
             assertEquals(1, pathList.size());
         }
     }    
