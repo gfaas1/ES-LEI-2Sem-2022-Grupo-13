@@ -19,14 +19,13 @@ package org.jgrapht.alg.shortestpath;
 
 import static org.junit.Assert.*;
 
-import org.junit.*;
-
 import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
 /**
  * 
@@ -102,15 +101,33 @@ public class BhandariKDisjointShortestPathsTest {
         
         assertEquals(2, pathList.size());
         
-        GraphPath<Integer, DefaultWeightedEdge> expectedP1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 4, 5), 4);
-        assertEquals(expectedP1, pathList.get(0));
         assertEquals(4, pathList.get(0).getLength());
         assertEquals(4.0, pathList.get(0).getWeight(), 0.0);
-        
-        GraphPath<Integer, DefaultWeightedEdge> expectedP2 = new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 6, 5), 4);
-        assertEquals(expectedP2, pathList.get(1));
+                
         assertEquals(4, pathList.get(1).getLength());
         assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
+        
+        //We have four potential paths all must pass through the joint node #3
+        GraphPath<Integer, DefaultWeightedEdge> potetialP1_1 = new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 4, 5), 4);
+        GraphPath<Integer, DefaultWeightedEdge> potetialP1_2 = new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 6, 5), 4);
+        GraphPath<Integer, DefaultWeightedEdge> potetialP1_3 = new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 4, 5), 4);
+        GraphPath<Integer, DefaultWeightedEdge> potetialP1_4 = new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 6, 5), 4);
+        
+        if (pathList.get(0).equals(potetialP1_1)) {
+            assertEquals(potetialP1_4, pathList.get(1));
+        }         
+        else if (pathList.get(0).equals(potetialP1_2)) {
+            assertEquals(potetialP1_3, pathList.get(1));
+        } 
+        else if (pathList.get(0).equals(potetialP1_3)) {
+            assertEquals(potetialP1_2, pathList.get(1));
+        } 
+        else if (pathList.get(0).equals(potetialP1_4)) {
+            assertEquals(potetialP1_1, pathList.get(1));
+        } 
+        else {
+            fail("Unexpected path");
+        }
                 
     }
     
