@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,11 +22,12 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for EdmondsMaximumCardinalityMatching
@@ -34,9 +35,9 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public final class EdmondsMaximumCardinalityMatchingTest
-    extends TestCase
 {
 
+    @Test
     public void testDisconnectedGraph()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -53,6 +54,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testPseudoGraph()
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
@@ -71,6 +73,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testGraph15()
     {
         // graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{5,1}, {4,3}, {0,6}, {4,2}, {2,1}, {3,6}, {5,0}])
@@ -87,6 +90,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testGraph14()
     {
         // graph: ([0, 1, 2, 3, 4, 5, 6, 7], [{2,0}, {2,6}, {4,6}, {4,3}, {6,7}, {3,6}, {5,0},
@@ -105,6 +109,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testGraph13()
     {
         // graph: ([0, 1, 2, 3, 4], [{0,3}, {0,2}, {4,2}, {0,1}, {1,3}])
@@ -121,6 +126,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testGraph12()
     {
         // graph: ([0, 1, 2, 3], [{3,2}, {3,1}, {0,3}, {0,1}, {2,1}])
@@ -137,6 +143,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testGraph11()
     {
         // graph: ([0, 1, 2, 3], [])
@@ -153,6 +160,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testIsMaximumMatching4()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -182,6 +190,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertFalse(matcher.isMaximumMatching(m2));
     }
 
+    @Test
     public void testIsMaximumMatching3()
     {
         // graph: ([0, 1, 2, 3, 4, 5, 6], [{4,0}, {2,3}, {2,0}, {2,5}, {2,6}, {0,1}])
@@ -200,6 +209,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(match));
     }
 
+    @Test
     public void testIsMaximumMatching2()
     {
         // Graph contains one isolated vertex: 6
@@ -223,6 +233,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(m));
     }
 
+    @Test
     public void testIsMaximum1()
     {
         // graph: ([0, 1, 2, 3, 4, 5, 6], [{5,6}, {1,2}, {0,6}, {4,6}, {2,6}])
@@ -239,6 +250,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertTrue(matcher.isMaximumMatching(matcher.getMatching()));
     }
 
+    @Test
     public void testRandomGraphsLarge()
     {
         Random random = new Random(1);
@@ -248,10 +260,9 @@ public final class EdmondsMaximumCardinalityMatchingTest
             int edges = random.nextInt(maxEdges(vertices) / 2);
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
                 new GnmRandomGraphGenerator<>(vertices, edges, 0);
-            IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-            generator.generateGraph(graph, vertexFactory, null);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
             EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                 new EdmondsMaximumCardinalityMatching<>(graph);
 
@@ -261,6 +272,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         }
     }
 
+    @Test
     public void testRandomGraphsSmall()
     {
         for (int n = 4; n < 12; n++) {
@@ -269,9 +281,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
                     new GnmRandomGraphGenerator<>(n, m);
 
                 for (int i = 0; i < 25; i++) {
-                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-                    IntegerVertexFactory vertexFactory = new IntegerVertexFactory();
-                    generator.generateGraph(graph, vertexFactory, null);
+                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                    generator.generateGraph(graph);
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new EdmondsMaximumCardinalityMatching<>(graph);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
@@ -281,6 +292,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         }
     }
 
+    @Test
     public void testGraph1()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -311,6 +323,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 58);
     }
 
+    @Test
     public void testGraph2()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -562,6 +575,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
             assertTrue(m.isMatched(v));
     }
 
+    @Test
     public void testGraph3()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -698,6 +712,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 100);
     }
 
+    @Test
     public void testGraph4()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -788,6 +803,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 99);
     }
 
+    @Test
     public void testGraph5()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -866,6 +882,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 98);
     }
 
+    @Test
     public void testGraph6()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -932,6 +949,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 96);
     }
 
+    @Test
     public void testGraph7()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -991,6 +1009,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 91);
     }
 
+    @Test
     public void testGraph8()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -1041,6 +1060,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 86);
     }
 
+    @Test
     public void testGraph9()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -1083,6 +1103,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         verifyMatching(graph, matcher.getMatching(), 75);
     }
 
+    @Test
     public void testGraph10()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);

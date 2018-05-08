@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2007-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,10 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
+
 
 /**
  * A unit test for the AsUnweighted[Directed]Graph views.
@@ -25,7 +29,6 @@ import org.jgrapht.*;
  * @author John V. Sichi
  */
 public class AsUnweightedGraphTest
-    extends EnhancedTestCase
 {
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -36,18 +39,9 @@ public class AsUnweightedGraphTest
     // ~ Constructors -----------------------------------------------------------
 
     /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public AsUnweightedGraphTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
-    /**
      * .
      */
+    @Test
     public void testDirected()
     {
         DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> directed =
@@ -61,6 +55,7 @@ public class AsUnweightedGraphTest
     /**
      * .
      */
+    @Test
     public void testWeightedGraph()
     {
         Graph<String, DefaultWeightedEdge> undirected =
@@ -78,23 +73,23 @@ public class AsUnweightedGraphTest
         weighted.addVertex(v2);
         weighted.addVertex(v3);
         Graphs.addEdge(weighted, v1, v2, 3.0);
-        assertEquals(3.0, weighted.getEdgeWeight(weighted.getEdge(v1, v2)));
+        assertEquals(3.0, weighted.getEdgeWeight(weighted.getEdge(v1, v2)),0);
     }
 
     private void checkView(
         Graph<String, DefaultWeightedEdge> weighted, Graph<String, DefaultWeightedEdge> unweighted)
     {
         assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v1, v2)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v1, v2)),0);
 
         Graphs.addEdge(weighted, v2, v3, 5.0);
         assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v2, v3)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v2, v3)),0);
 
         unweighted.addEdge(v3, v1);
         assertEquals(
-            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v3, v1)));
-        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, weighted.getEdgeWeight(weighted.getEdge(v3, v1)));
+            Graph.DEFAULT_EDGE_WEIGHT, unweighted.getEdgeWeight(unweighted.getEdge(v3, v1)),0);
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, weighted.getEdgeWeight(weighted.getEdge(v3, v1)),0);
     }
 }
 

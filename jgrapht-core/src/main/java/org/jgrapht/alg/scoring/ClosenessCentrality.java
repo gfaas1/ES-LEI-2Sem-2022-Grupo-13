@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -96,7 +96,7 @@ public class ClosenessCentrality<V, E>
      * 
      * @param graph the input graph
      * @param incoming if true incoming paths are used, otherwise outgoing paths
-     * @param normalize whether to normalize by multiplying the closeness by n-1, where n is the
+     * @param normalize whether to normalize by multiplying the closeness by $n-1$, where $n$ is the
      *        number of vertices of the graph
      */
     public ClosenessCentrality(Graph<V, E> graph, boolean incoming, boolean normalize)

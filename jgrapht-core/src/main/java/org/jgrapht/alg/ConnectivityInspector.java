@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -36,7 +36,7 @@ import org.jgrapht.traverse.*;
  * </p>
  *
  * <p>
- * The inspector is also a {@link org.jgrapht.event.GraphListener}. If added as a listener to the
+ * The inspector is also a {@link GraphListener}. If added as a listener to the
  * inspected graph, the inspector will amend internal cached results instead of recomputing them. It
  * is efficient when a few modifications are applied to a large graph. If many modifications are
  * expected it will not be efficient due to added overhead on graph update operations. If inspector
@@ -49,7 +49,9 @@ import org.jgrapht.traverse.*;
  * @author Barak Naveh
  * @author John V. Sichi
  * @since Aug 6, 2003
+ * @deprecated Moved to package org.jgrapht.connectivity
  */
+@Deprecated
 public class ConnectivityInspector<V, E>
     implements GraphListener<V, E>
 {
@@ -78,7 +80,10 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Test if the inspected graph is connected. An empty graph is <i>not</i> considered connected.
+     * Test if the inspected graph is connected. A graph is connected when there is a path between every pair of
+     * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
+     * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
+     * An empty graph is <i>not</i> considered connected.
      *
      * @return <code>true</code> if and only if inspected graph is connected.
      */
@@ -138,8 +143,22 @@ public class ConnectivityInspector<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        init(); // for now invalidate cached results, in the future need to
-                // amend them.
+        V source=e.getEdgeSource();
+        V target=e.getEdgeTarget();
+        Set<V> sourceSet=connectedSetOf(source);
+        Set<V> targetSet=connectedSetOf(target);
+
+        //If source and target are in the same set, do nothing, otherwise, merge sets
+        if(sourceSet != targetSet){
+            Set<V> merge=new HashSet<>();
+            merge.addAll(sourceSet);
+            merge.addAll(targetSet);
+            connectedSets.remove(sourceSet);
+            connectedSets.remove(targetSet);
+            connectedSets.add(merge);
+            for(V v : merge)
+                vertexToConnectedSet.put(v, merge);
+        }
     }
 
     /**
@@ -149,32 +168,22 @@ public class ConnectivityInspector<V, E>
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
         init(); // for now invalidate cached results, in the future need to
-                // amend them.
+                // amend them. If the edge is a bridge, 2 components need to be split.
     }
 
     /**
-     * Tests if there is a path from the specified source vertex to the specified target vertices.
-     * For a directed graph, direction is ignored for this interpretation of path.
-     *
-     * <p>
-     * Note: Future versions of this method might not ignore edge directions for directed graphs.
-     * </p>
+     * Tests whether two vertices lay respectively in the same connected component (undirected graph), or in
+     * the same weakly connected component (directed graph).
      *
      * @param sourceVertex one end of the path.
      * @param targetVertex another end of the path.
      *
-     * @return <code>true</code> if and only if there is a path from the source vertex to the target
-     *         vertex.
+     * @return <code>true</code> if and only if the source and target vertex are in the same connected component (undirected graph),
+     * or in the same weakly connected component (directed graph).
      */
     public boolean pathExists(V sourceVertex, V targetVertex)
     {
-        /*
-         * TODO: Ignoring edge direction for directed graph may be confusing. For directed graphs,
-         * consider Dijkstra's algorithm.
-         */
-        Set<V> sourceSet = connectedSetOf(sourceVertex);
-
-        return sourceSet.contains(targetVertex);
+        return connectedSetOf(sourceVertex).contains(targetVertex);
     }
 
     /**
@@ -183,8 +192,10 @@ public class ConnectivityInspector<V, E>
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
-        init(); // for now invalidate cached results, in the future need to
-                // amend them.
+        Set<V> component=new HashSet<>();
+        component.add(e.getVertex());
+        connectedSets.add(component);
+        vertexToConnectedSet.put(e.getVertex(), component);
     }
 
     /**
@@ -194,7 +205,8 @@ public class ConnectivityInspector<V, E>
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
         init(); // for now invalidate cached results, in the future need to
-                // amend them.
+                // amend them. If the vertex is an articulation point, two
+                // components need to be split
     }
 
     private void init()
@@ -210,7 +222,7 @@ public class ConnectivityInspector<V, E>
 
             Set<V> vertexSet = graph.vertexSet();
 
-            if (vertexSet.size() > 0) {
+            if (!vertexSet.isEmpty()) {
                 BreadthFirstIterator<V, E> i = new BreadthFirstIterator<>(graph);
                 i.addTraversalListener(new MyTraversalListener());
 

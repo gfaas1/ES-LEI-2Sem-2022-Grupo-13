@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,11 +22,15 @@ import java.util.stream.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test class for maximum cardinality bipartite matching algorithms
@@ -34,7 +38,6 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public abstract class MaximumCardinalityBipartiteMatchingTest
-    extends TestCase
 {
 
     public abstract MatchingAlgorithm<Integer, DefaultEdge> getMatchingAlgorithm(
@@ -43,6 +46,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     /**
      * Random test graph 1
      */
+    @Test
     public void testBipartiteMatching1()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -67,6 +71,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     /**
      * Random test graph 2
      */
+    @Test
     public void testBipartiteMatching2()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -94,6 +99,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     /**
      * Find a maximum matching on a graph without edges
      */
+    @Test
     public void testEmptyMatching()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -107,6 +113,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         assertEquals(Collections.EMPTY_SET, bmMatching.getEdges());
     }
 
+    @Test
     public void testGraph1()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -124,6 +131,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         assertEquals(3, matching.getEdges().size());
     }
 
+    @Test
     public void testGraph2()
     {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -145,6 +153,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
     /**
      * Issue 233 instance
      */
+    @Test
     public void testBipartiteMatchingIssue233()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -165,6 +174,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         assertEquals(2, m.getEdges().size());
     }
 
+    @Test
     public void testPseudoGraph()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
@@ -182,6 +192,7 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
         this.verifyMatching(graph, matching, 3);
     }
 
+    @Test
     public void testRandomBipartiteGraphs()
     {
         Random random = new Random(1);
@@ -192,8 +203,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
             GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
                 new GnmRandomBipartiteGraphGenerator<>(vertices, vertices / 2, edges, 0);
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
 
             MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(
                 graph, generator.getFirstPartition(), generator.getSecondPartition());

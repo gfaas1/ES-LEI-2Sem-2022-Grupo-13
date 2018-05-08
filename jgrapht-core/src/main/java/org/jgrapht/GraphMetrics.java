@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -208,3 +208,5 @@ public abstract class GraphMetrics
         return girth;
     }
 }
+
+//End GraphMetrics.java

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,6 +22,7 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+import org.junit.Test;
 
 /**
  * @author Joris Kinable
@@ -36,6 +37,7 @@ public class EdmondsKarpMinimumSTCutTest
         return new EdmondsKarpMFImpl<>(network);
     }
 
+    @Test
     public void testRandomDirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {
@@ -61,6 +63,7 @@ public class EdmondsKarpMinimumSTCutTest
         }
     }
 
+    @Test
     public void testRandomUndirectedGraphs()
     {
         for (int test = 0; test < NR_RANDOM_TESTS; test++) {

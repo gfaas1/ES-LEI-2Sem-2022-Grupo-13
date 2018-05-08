@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by Carl Anderson and Contributors.
+ * (C) Copyright 2006-2018, by Carl Anderson and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -48,7 +48,7 @@ public class SimpleTouchgraphApplet
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
-        UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";

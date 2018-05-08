@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -27,7 +27,9 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  *
  * @since July 5, 2007
+ * @deprecated Use suppliers instead 
  */
+@Deprecated
 public class ClassBasedVertexFactory<V>
     implements VertexFactory<V>, Serializable
 {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -96,7 +96,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.source, null);
+        return TypeUtil.uncheckedCast(ie.source);
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.target, null);
+        return TypeUtil.uncheckedCast(ie.target);
     }
 
     /**

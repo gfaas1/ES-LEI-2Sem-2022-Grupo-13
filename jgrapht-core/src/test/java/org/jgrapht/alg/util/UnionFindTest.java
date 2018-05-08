@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Tom Conerly and Contributors.
+ * (C) Copyright 2010-2018, by Tom Conerly and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,11 @@ package org.jgrapht.alg.util;
 
 import java.util.*;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * .
@@ -27,13 +31,13 @@ import junit.framework.*;
  * @author Tom Conerly
  */
 public class UnionFindTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
+    @Test
     public void testUnionFind()
     {
         TreeSet<String> set = new TreeSet<String>();

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,9 +26,9 @@ import org.jgrapht.*;
  * A degeneracy ordering iterator.
  * 
  * <p>
- * The degeneracy of a graph G is the smallest value d such that every nonempty subgraph of G
- * contains a vertex of degree at most d. If a graph has degeneracy d, then it has a degeneracy
- * ordering, an ordering such that each vertex has d or fewer neighbors that come later in the
+ * The degeneracy of a graph $G $is the smallest value d such that every nonempty subgraph of $G$
+ * contains a vertex of degree at most $d.$ If a graph has degeneracy $d$, then it has a degeneracy
+ * ordering, an ordering such that each vertex has $d$ or fewer neighbors that come later in the
  * ordering.
  * 
  * <p>

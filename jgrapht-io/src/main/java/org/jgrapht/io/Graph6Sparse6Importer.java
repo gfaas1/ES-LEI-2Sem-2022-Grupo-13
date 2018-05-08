@@ -277,7 +277,4 @@ public class Graph6Sparse6Importer<V,E> extends AbstractBaseImporter<V,E> implem
         return value;
     }
 
-    private String getBitString(int i){
-        return String.format("%8s", Integer.toBinaryString(i & 0xFF)).replace(' ', '0');
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2005-2017, by Assaf Lehr and Contributors.
+ * (C) Copyright 2005-2018, by Assaf Lehr and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,7 +24,7 @@ import org.jgrapht.*;
 /**
  * Implementation of the GraphMapping interface. The performance of <code>
  * getVertex/EdgeCorrespondence</code> is based on the performance of the concrete Map class which
- * is passed in the constructor. For example, using {@link HashMap} will provide expected O(1)
+ * is passed in the constructor. For example, using {@link HashMap} will provide expected $O(1)$
  * performance.
  *
  * @param <V> the graph vertex type

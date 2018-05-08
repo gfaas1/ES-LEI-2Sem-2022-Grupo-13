@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by Carl Anderson and Contributors.
+ * (C) Copyright 2006-2018, by Carl Anderson and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *

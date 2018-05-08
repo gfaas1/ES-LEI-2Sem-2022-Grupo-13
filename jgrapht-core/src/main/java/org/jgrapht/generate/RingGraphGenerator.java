@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,7 +58,7 @@ public class RingGraphGenerator<V, E>
      */
     @Override
     public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+        Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -66,7 +66,7 @@ public class RingGraphGenerator<V, E>
 
         LinearGraphGenerator<V, E> linearGenerator = new LinearGraphGenerator<>(size);
         Map<String, V> privateMap = new HashMap<>();
-        linearGenerator.generateGraph(target, vertexFactory, privateMap);
+        linearGenerator.generateGraph(target, privateMap);
 
         V startVertex = privateMap.get(LinearGraphGenerator.START_VERTEX);
         V endVertex = privateMap.get(LinearGraphGenerator.END_VERTEX);

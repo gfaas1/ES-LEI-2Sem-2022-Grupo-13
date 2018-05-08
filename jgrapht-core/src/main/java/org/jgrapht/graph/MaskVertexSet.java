@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -52,7 +52,7 @@ class MaskVertexSet<V>
         if (!vertexSet.contains(o)) {
             return false;
         }
-        V v = TypeUtil.uncheckedCast(o, null);
+        V v = TypeUtil.uncheckedCast(o);
         return !mask.test(v);
     }
 

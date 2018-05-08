@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2018, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,6 +20,11 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
+import org.junit.Test;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -29,17 +34,15 @@ import org.jgrapht.graph.*;
  * @since Jul 30, 2003
  */
 public abstract class AbstractGraphIteratorTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
-
-    // ~ Methods ----------------------------------------------------------------
+    StringBuilder result;
 
     /**
      * .
      */
+    @Test
     public void testDirectedGraph()
     {
 
@@ -49,14 +52,8 @@ public abstract class AbstractGraphIteratorTest
         doDirectedGraphTest(iterator);
     }
 
-    public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
+    protected void collectResult(Iterator<String> iterator, StringBuilder result)
     {
-
-        result = new StringBuffer();
-
-        MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
-        iterator.addTraversalListener(listener);
-
         while (iterator.hasNext()) {
             result.append(iterator.next());
 
@@ -64,7 +61,17 @@ public abstract class AbstractGraphIteratorTest
                 result.append(',');
             }
         }
+    }
 
+    public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
+    {
+
+        result = new StringBuilder();
+
+        MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
+        iterator.addTraversalListener(listener);
+
+        collectResult(iterator, result);
         assertEquals(getExpectedStr2(), result.toString());
 
         assertEquals(getExpectedFinishString(), listener.getFinishString());
@@ -164,7 +171,7 @@ public abstract class AbstractGraphIteratorTest
                 break;
 
             default:
-                assertFalse();
+                Assert.fail("Should not get here.");
 
                 break;
             }

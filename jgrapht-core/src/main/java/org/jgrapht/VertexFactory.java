@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,7 +26,9 @@ package org.jgrapht;
  *
  * @author John V. Sichi
  * @since Sep 16, 2003
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public interface VertexFactory<V>
 {
     /**

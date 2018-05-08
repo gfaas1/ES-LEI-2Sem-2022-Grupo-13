@@ -8,6 +8,11 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class BasePathGrowingWeightedMatchingTest
     extends ApproximateWeightedMatchingTest
@@ -21,6 +26,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
     public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph);
 
+    @Test
     public void testDynamicProgrammingOnPaths()
     {
         // test 0
@@ -87,6 +93,7 @@ public abstract class BasePathGrowingWeightedMatchingTest
         assertTrue(matching3.contains(g.getEdge(10, 11)));
     }
 
+    @Test
     public void testApproximationFactorOnRandomInstances()
     {
         final int seed = 33;
@@ -100,8 +107,8 @@ public abstract class BasePathGrowingWeightedMatchingTest
 
         for (int i = 0; i < repeat; i++) {
             WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+                new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gg.generateGraph(g);
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);

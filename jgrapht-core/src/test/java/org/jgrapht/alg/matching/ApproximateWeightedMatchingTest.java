@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,10 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for the approximate weighted matching algorithms.
@@ -33,12 +36,12 @@ import junit.framework.*;
  * @author Dimitrios Michail
  */
 public abstract class ApproximateWeightedMatchingTest
-    extends TestCase
 {
 
     public abstract MatchingAlgorithm<Integer, DefaultWeightedEdge> getApproximationAlgorithm(
         Graph<Integer, DefaultWeightedEdge> graph);
 
+    @Test
     public void testPath1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -62,6 +65,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testPath2()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -84,6 +88,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -105,6 +110,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -126,6 +132,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testNegativeAndZeroEdges2()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -153,6 +160,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(m.getEdges().size() >= 2);
     }
 
+    @Test
     public void testGraph1()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -183,6 +191,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void test3over4Approximation()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -207,6 +216,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testSelfLoops()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -238,6 +248,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testMultiGraph()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -273,6 +284,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testDirected()
     {
         DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -307,6 +319,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testDisconnectedAndIsolatedVertices()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -331,6 +344,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testSelfLoop()
     {
         WeightedPseudograph<Integer, DefaultWeightedEdge> g =
@@ -349,6 +363,7 @@ public abstract class ApproximateWeightedMatchingTest
         assertTrue(isMatching(g, m));
     }
 
+    @Test
     public void testBnGraph()
     {
         // create graphs which have a perfect matching

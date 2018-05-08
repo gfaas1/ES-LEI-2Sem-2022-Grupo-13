@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -253,7 +253,7 @@ public abstract class AbstractGraph<V, E>
             return false;
         }
 
-        Graph<V, E> g = TypeUtil.uncheckedCast(obj, null);
+        Graph<V, E> g = TypeUtil.uncheckedCast(obj);
 
         if (!vertexSet().equals(g.vertexSet())) {
             return false;

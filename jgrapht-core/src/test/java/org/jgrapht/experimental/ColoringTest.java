@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2010-2017, by Michael Behrisch and Contributors.
+ * (C) Copyright 2010-2018, by Michael Behrisch and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,8 +20,11 @@ package org.jgrapht.experimental;
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 
-import junit.framework.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * .
@@ -29,20 +32,20 @@ import junit.framework.*;
  * @author Michael Behrisch
  */
 public class ColoringTest
-    extends TestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
+    @Test
     public void testBacktrackColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(6);
         completeGraphGenerator
-            .generateGraph(completeGraph, new ClassBasedVertexFactory<>(Object.class), null);
+            .generateGraph(completeGraph);
         BrownBacktrackColoring<Object, DefaultEdge> colorer =
             new BrownBacktrackColoring<>(completeGraph);
         assertEquals(new Integer(6), colorer.getResult(null));

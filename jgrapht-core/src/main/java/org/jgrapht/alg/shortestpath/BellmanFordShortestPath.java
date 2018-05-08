@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.*;
  * undirected graphs.
  *
  * <p>
- * The running time is O(|E||V|).
+ * The running time is $O(|E||V|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

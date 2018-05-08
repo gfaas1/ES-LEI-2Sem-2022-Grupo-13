@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -58,7 +58,7 @@ class MaskEdgeSet<V, E>
         if (!edgeSet.contains(o)) {
             return false;
         }
-        E e = TypeUtil.uncheckedCast(o, null);
+        E e = TypeUtil.uncheckedCast(o);
 
         return !edgeMask.test(e) && !vertexMask.test(graph.getEdgeSource(e))
             && !vertexMask.test(graph.getEdgeTarget(e));

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Sarah Komla-Ebri and Contributors.
+ * (C) Copyright 2013-2018, by Sarah Komla-Ebri and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -24,14 +24,16 @@ import org.jgrapht.*;
 /**
  * Computes the strongly connected components of a directed graph. The implemented algorithm follows
  * Cheriyan-Mehlhorn/Gabow's algorithm presented in Path-based depth-first search for strong and
- * biconnected components by Gabow (2000). The running time is order of O(|V|+|E|).
+ * biconnected components by Gabow (2000). The running time is order of $O(|V|+|E|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Sarah Komla-Ebri
  * @since September, 2013
+ * @deprecated Moved to package org.jgrapht.connectivity
  */
+@Deprecated
 public class GabowStrongConnectivityInspector<V, E>
     extends AbstractStrongConnectivityInspector<V, E>
 {

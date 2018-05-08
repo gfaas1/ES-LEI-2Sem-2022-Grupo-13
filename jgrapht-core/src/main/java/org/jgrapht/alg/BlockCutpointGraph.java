@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,10 +17,15 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import java.util.*;
 
 /**
  * Definition of a <a href="http://mathworld.wolfram.com/Block.html">block of a graph</a> in
@@ -30,21 +35,23 @@ import org.jgrapht.graph.*;
  * Resilience Metrics for Service-Oriented Networks</a>:
  *
  * <ul>
- * <li><b>Definition 4.5</b> Let G(V; E) be a connected undirected graph. The block-cut point graph
- * (BC graph) of G, denoted by GB(VB; EB), is the bipartite graph defined as follows. (a) VB has one
- * node corresponding to each block and one node corresponding to each cut point of G. (b) Each edge
- * fx; yg in EB joins a block node x to a cut point y if the block corresponding to x contains the
- * cut point node corresponding to y.</li>
- * <li><b>Lemma 4.4</b> Let G(V; E) be a connected undirected graph. (a) Each pair of blocks of G
- * share at most one node, and that node is a cutpoint. (b) The BC graph of G is a tree in which
- * each leaf node corresponds to a block of G.</li>
+ * <li><b>Definition 4.5</b> Let $G(V; E)$ be a connected undirected graph. The block-cut point graph
+ * ($BC$ graph) of $G$, denoted by $GB(VB; EB)$, is the bipartite graph defined as follows. (a) $VB$ has one
+ * node corresponding to each block and one node corresponding to each cut point of $G$. (b) Each edge
+ * $fx$; $yg$ in $EB$ joins a block node $x$ to a cut point $y$ if the block corresponding to $x$ contains the
+ * cut point node corresponding to $y$.</li>
+ * <li><b>Lemma 4.4</b> Let $G(V; E)$ be a connected undirected graph. (a) Each pair of blocks of $G$
+ * share at most one node, and that node is a cutpoint. (b) The $BC$ graph of $G$ is a tree in which
+ * each leaf node corresponds to a block of $G$.</li>
  * </ul>
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @since July 5, 2007
+ * @deprecated Moved to package org.jgrapht.connectivity
  */
+@Deprecated
 public class BlockCutpointGraph<V, E>
     extends SimpleGraph<Graph<V, E>, DefaultEdge>
 {
@@ -70,7 +77,7 @@ public class BlockCutpointGraph<V, E>
     private Map<V, Integer> vertex2numOrder = new HashMap<>();
 
     /**
-     * Running time = O(m) where m is the number of edges.
+     * Running time = $O(m)$ where m is the number of edges.
      * 
      * @param graph the input graph
      */
@@ -214,18 +221,13 @@ public class BlockCutpointGraph<V, E>
 
     /**
      * Returns the biconnected components containing the vertex. A vertex which is not a cutpoint is
-     * contained in exactly one component. A cutpoint is contained is at least 2 components.
+     * contained in exactly one component. A cutpoint is contained is at least $2$ components.
      *
      * @param vertex vertex in the initial graph.
      */
     private Set<Graph<V, E>> getBiconnectedSubgraphs(V vertex)
     {
-        Set<Graph<V, E>> biconnectedSubgraphs = this.vertex2biconnectedSubgraphs.get(vertex);
-        if (biconnectedSubgraphs == null) {
-            biconnectedSubgraphs = new HashSet<>();
-            this.vertex2biconnectedSubgraphs.put(vertex, biconnectedSubgraphs);
-        }
-        return biconnectedSubgraphs;
+        return this.vertex2biconnectedSubgraphs.computeIfAbsent(vertex, k -> new HashSet<>());
     }
 
     /**
@@ -234,13 +236,7 @@ public class BlockCutpointGraph<V, E>
     private int getNumOrder(V vertex)
     {
         assert (vertex != null);
-
-        Integer numOrder = this.vertex2numOrder.get(vertex);
-        if (numOrder == null) {
-            return 0;
-        } else {
-            return numOrder;
-        }
+        return this.vertex2numOrder.getOrDefault(vertex, 0);
     }
 
     private void setNumOrder(V vertex, int numOrder)
@@ -251,8 +247,6 @@ public class BlockCutpointGraph<V, E>
     private class BCGEdge
         extends DefaultEdge
     {
-        /**
-         */
         private static final long serialVersionUID = -5115006161815760059L;
 
         private V source;

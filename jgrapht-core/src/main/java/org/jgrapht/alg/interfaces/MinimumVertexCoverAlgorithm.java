@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,7 @@ import org.jgrapht.*;
  * Computes a vertex cover in an undirected graph. A vertex cover of a graph is a set of vertices
  * such that each edge of the graph is incident to at least one vertex in the set. A minimum vertex
  * cover is a vertex cover having the smallest possible number of vertices for a given graph. The
- * size of a minimum vertex cover of a graph G is known as the vertex cover number. A vertex cover
+ * size of a minimum vertex cover of a graph $G$ is known as the vertex cover number. A vertex cover
  * of minimum weight is a vertex cover where the sum of weights assigned to the individual vertices
  * in the cover has been minimized. The minimum vertex cover problem is a special case of the
  * minimum weighted vertex cover problem where all vertices have equal weight.
@@ -34,7 +34,9 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  * 
  * @author Joris Kinable
+ * @deprecated replaced by {@link VertexCoverAlgorithm}
  */
+@Deprecated
 public interface MinimumVertexCoverAlgorithm<V, E>
 {
 
@@ -50,7 +52,9 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      * A vertex cover
      *
      * @param <V> the vertex type
+     * @deprecated Replaced by {@link org.jgrapht.alg.interfaces.VertexCoverAlgorithm.VertexCover}
      */
+    @Deprecated
     interface VertexCover<V>
         extends Iterable<V>
     {
@@ -115,11 +119,9 @@ public interface MinimumVertexCoverAlgorithm<V, E>
         @Override
         public String toString()
         {
-            StringBuilder builder = new StringBuilder("Cover(");
-            builder.append(this.getWeight());
-            builder.append("): ");
-            builder.append(this.getVertices().toString());
-            return builder.toString();
+            return "Cover(" + this.getWeight() +
+                    "): " +
+                    this.getVertices().toString();
         }
     }
 }

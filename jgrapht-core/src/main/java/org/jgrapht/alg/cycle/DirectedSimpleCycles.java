@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2013-2017, by Nikolay Ognyanov and Contributors.
+ * (C) Copyright 2013-2018, by Nikolay Ognyanov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -36,7 +36,9 @@ public interface DirectedSimpleCycles<V, E>
      * Returns the graph on which the simple cycle search algorithm is executed by this object.
      *
      * @return The graph.
+     * @deprecated Since not really needed on the interface.
      */
+    @Deprecated
     Graph<V, E> getGraph();
 
     /**
@@ -44,17 +46,15 @@ public interface DirectedSimpleCycles<V, E>
      *
      * @param graph the graph.
      * @throws IllegalArgumentException if the argument is <code>null</code>.
+     * @deprecated Since not really needed on the interface. 
      */
+    @Deprecated
     void setGraph(Graph<V, E> graph);
 
     /**
-     * Finds the simple cycles of the graph.<br>
-     * Note that the full algorithm is executed on every call since the graph may have changed
-     * between calls.
+     * Find the simple cycles of the graph.
      *
-     * @return The list of all simple cycles. Possibly empty but never <code>
-     * null</code>.
-     * @throws IllegalArgumentException if the current graph is null.
+     * @return The list of all simple cycles. Possibly empty but never <code>null</code>.
      */
     List<List<V>> findSimpleCycles();
 }

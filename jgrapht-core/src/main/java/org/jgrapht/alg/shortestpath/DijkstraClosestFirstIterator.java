@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi, Dimitrios Michail and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi, Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -187,11 +187,9 @@ class DijkstraClosestFirstIterator<V, E>
             node = new FibonacciHeapNode<>(new QueueEntry(e, v));
             heap.insert(node, distance);
             seen.put(v, node);
-        } else {
-            if (distance < node.getKey()) {
-                heap.decreaseKey(node, distance);
-                node.getData().e = e;
-            }
+        } else if (distance < node.getKey()) {
+            heap.decreaseKey(node, distance);
+            node.getData().e = e;            
         }
     }
 

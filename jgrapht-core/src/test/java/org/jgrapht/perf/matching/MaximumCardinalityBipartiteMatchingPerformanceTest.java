@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,14 +23,13 @@ import java.util.concurrent.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
-
-import junit.framework.*;
 
 /**
  * A small benchmark comparing matching algorithms for bipartite graphs.
@@ -38,7 +37,6 @@ import junit.framework.*;
  * @author Joris Kinable
  */
 public class MaximumCardinalityBipartiteMatchingPerformanceTest
-    extends TestCase
 {
 
     public static final int PERF_BENCHMARK_VERTICES_COUNT = 2000;
@@ -68,8 +66,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
                     PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
-            graph = new Pseudograph<>(DefaultEdge.class);
-            generator.generateGraph(graph, new IntegerVertexFactory(0), null);
+            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
             firstPartition = generator.getFirstPartition();
             secondPartition = generator.getSecondPartition();
         }
@@ -78,7 +76,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         public void run()
         {
             long time = System.currentTimeMillis();
-            MatchingAlgorithm.Matching m =
+            MatchingAlgorithm.Matching<Integer, DefaultEdge> m =
                 createSolver(graph, firstPartition, secondPartition).getMatching();
             time = System.currentTimeMillis() - time;
             System.out.println(
@@ -112,6 +110,7 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
         }
     }
 
+    @Test
     public void testRandomGraphBenchmark()
         throws RunnerException
     {

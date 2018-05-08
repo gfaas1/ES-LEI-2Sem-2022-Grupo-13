@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,7 +20,8 @@ package org.jgrapht.alg.cycle;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
@@ -29,8 +30,8 @@ import org.jgrapht.util.*;
 /**
  * An implementation of Hierholzer's algorithm for finding an Eulerian cycle in Eulerian graphs. The
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
- * edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the edge set of
- * the graph.
+ * (parallel) edges. The running time is linear, i.e. $O(|E|)$ where $|E|$ is the cardinality of the
+ * edge set of the graph.
  * 
  * <p>
  * See the <a href="https://en.wikipedia.org/wiki/Eulerian_path">Wikipedia article</a> for details
@@ -46,7 +47,8 @@ import org.jgrapht.util.*;
  * @since October 2016
  */
 public class HierholzerEulerianCycle<V, E>
-    implements EulerianCycleAlgorithm<V, E>
+    implements
+    EulerianCycleAlgorithm<V, E>
 {
     /*
      * The input graph.
@@ -96,7 +98,7 @@ public class HierholzerEulerianCycle<V, E>
             }
             // check that at most one connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new ConnectivityInspector<V, E>(graph).connectedSets()) {
+            for (Set<V> component : new ConnectivityInspector<>(graph).connectedSets()) {
                 for (V v : component) {
                     if (graph.degreeOf(v) > 0) {
                         if (foundComponentWithEdges) {
@@ -118,7 +120,7 @@ public class HierholzerEulerianCycle<V, E>
             // check that at most one strongly connected component contains
             // edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
+            for (Set<V> component : new KosarajuStrongConnectivityInspector<>(graph)
                 .stronglyConnectedSets())
             {
                 for (V v : component) {
@@ -281,7 +283,7 @@ public class HierholzerEulerianCycle<V, E>
      * partial cycles from already visited vertices.
      * 
      * @param partialCycle the partial cycle
-     * @param partialCycleStartVertex the source vertex of the first edge in the partial cycle
+     * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
     private void updateGraphAndInsertLocations(
         Pair<EdgeNode, EdgeNode> partialCycle, VertexNode partialCycleSourceVertex)
@@ -490,7 +492,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            VertexNode other = TypeUtil.uncheckedCast(obj, null);
+            VertexNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.v, other.v);
         }
 
@@ -550,7 +552,7 @@ public class HierholzerEulerianCycle<V, E>
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            EdgeNode other = TypeUtil.uncheckedCast(obj, null);
+            EdgeNode other = TypeUtil.uncheckedCast(obj);
             return Objects.equals(this.e, other.e);
         }
 

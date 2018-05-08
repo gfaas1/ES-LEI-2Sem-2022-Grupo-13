@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2017, by HartmutBenz and Contributors.
+ * (C) Copyright 2006-2018, by HartmutBenz and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,11 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -25,7 +30,6 @@ import org.jgrapht.*;
  * @author Hartmut Benz
  */
 public class GenericGraphsTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -33,20 +37,7 @@ public class GenericGraphsTest
     Graph<FooVertex, FooEdge> fooFooGraph;
     Graph<BarVertex, BarEdge> barBarGraph;
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public GenericGraphsTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
-    // ~ Methods ---------------------------------------------------------------
-
+    @Test
     public void testLegalInsertStringGraph()
     {
         String v1 = "Vertex1";
@@ -56,6 +47,7 @@ public class GenericGraphsTest
         objectGraph.addEdge(v1, v2);
     }
 
+    @Test
     public void testLegalInsertFooGraph()
     {
         FooVertex v1 = new FooVertex();
@@ -74,6 +66,7 @@ public class GenericGraphsTest
         fooFooGraph.addEdge(vb1, vb2, new BarEdge());
     }
 
+    @Test
     public void testLegalInsertBarGraph()
     {
         BarVertex v1 = new BarVertex();
@@ -83,6 +76,7 @@ public class GenericGraphsTest
         barBarGraph.addEdge(v1, v2);
     }
 
+    @Test
     public void testLegalInsertFooBarGraph()
     {
         FooVertex v1 = new FooVertex();
@@ -98,6 +92,7 @@ public class GenericGraphsTest
         fooFooGraph.addEdge(v1, vb2);
     }
 
+    @Test
     public void testAlissaHacker()
     {
         Graph<String, CustomEdge> g = new DefaultDirectedGraph<>(CustomEdge.class);
@@ -109,6 +104,7 @@ public class GenericGraphsTest
         assertEquals("Alissa P. Hacker approves the edge from a to b", s);
     }
 
+    @Test
     public void testEqualButNotSameVertex()
     {
         EquivVertex v1 = new EquivVertex();
@@ -124,8 +120,8 @@ public class GenericGraphsTest
     /**
      * .
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
     {
         objectGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
         fooFooGraph = new SimpleGraph<>(FooEdge.class);
@@ -166,9 +162,9 @@ public class GenericGraphsTest
     {
         private static final long serialVersionUID = 8647217182401022498L;
 
-        public EquivGraph()
-        {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, true, true, false);
+        public EquivGraph() { 
+            super(SupplierUtil.createSupplier(EquivVertex.class), SupplierUtil.createSupplier(DefaultEdge.class), 
+                DefaultGraphType.directedPseudograph().asUnweighted());
         }
     }
 

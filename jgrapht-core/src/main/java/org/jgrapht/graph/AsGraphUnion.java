@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2009-2017, by Ilya Razenshteyn and Contributors.
+ * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,6 +19,7 @@ package org.jgrapht.graph;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
@@ -30,7 +31,7 @@ import org.jgrapht.util.*;
  * Read-only union of two graphs: G<sub>1</sub> and G<sub>2</sub>. If G<sub>1</sub> =
  * (V<sub>1</sub>, E<sub>1</sub>) and G<sub>2</sub> = (V<sub>2</sub>, E<sub>2</sub>) then their
  * union G = (V, E), where V is the union of V<sub>1</sub> and V<sub>2</sub>, and E is the union of
- * E<sub>1</sub> and E<sub>1</sub>. A {@link WeightCombiner} in order to calculate edge weights.
+ * E<sub>1</sub> and E<sub>2</sub>. A {@link WeightCombiner} in order to calculate edge weights.
  * 
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -134,9 +135,33 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * @throws UnsupportedOperationException always, since operation is unsupported
+     * @deprecated Use suppliers instead 
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
@@ -159,6 +184,17 @@ public class AsGraphUnion<V, E>
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public V addVertex()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }

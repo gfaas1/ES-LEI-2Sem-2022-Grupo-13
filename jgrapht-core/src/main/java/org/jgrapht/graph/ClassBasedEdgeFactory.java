@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,13 +23,21 @@ import org.jgrapht.*;
 
 /**
  * An {@link EdgeFactory} for producing edges by using a class as a factory.
+ * 
+ * <p>
+ * Note that when used inside a {@link Graph} the factory must always return a unique object on each
+ * call. This implementation calls the no-arguments constructor of the provided class. It is the
+ * user's responsibility to make sure that the no-arguments constructor creates unique objects.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @since Jul 14, 2003
+ * 
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public class ClassBasedEdgeFactory<V, E>
     implements EdgeFactory<V, E>, Serializable
 {
@@ -47,9 +55,6 @@ public class ClassBasedEdgeFactory<V, E>
         this.edgeClass = edgeClass;
     }
 
-    /**
-     * @see EdgeFactory#createEdge(Object, Object)
-     */
     @Override
     public E createEdge(V source, V target)
     {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.*;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A unit test for a cloning bug, adapted from a forum entry from Linda Buisman.
@@ -26,24 +31,12 @@ import org.jgrapht.*;
  * @since Oct 6, 2003
  */
 public class CloneTest
-    extends EnhancedTestCase
 {
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public CloneTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * Test graph cloning.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testCloneSpecificsBug()
     {
         SimpleGraph<String, DefaultEdge> g1 = new SimpleGraph<>(DefaultEdge.class);
@@ -71,6 +64,7 @@ public class CloneTest
     /**
      * Tests usage of {@link ParanoidGraph} for detecting broken vertex implementations.
      */
+    @Test
     public void testParanoidGraph()
     {
         BrokenVertex v1 = new BrokenVertex(1);
@@ -84,8 +78,7 @@ public class CloneTest
         try {
             pg.addVertex(v3);
 
-            // should not get here
-            assertFalse();
+            Assert.fail(); // should not get here
         } catch (IllegalArgumentException ex) {
             // expected, swallow
         }

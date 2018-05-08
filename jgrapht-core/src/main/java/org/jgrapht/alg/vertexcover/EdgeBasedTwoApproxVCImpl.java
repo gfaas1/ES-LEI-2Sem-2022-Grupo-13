@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Linda Buisman and Contributors.
+ * (C) Copyright 2003-2018, by Linda Buisman and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -40,8 +40,26 @@ import org.jgrapht.graph.*;
  * @since Nov 6, 2003
  */
 public class EdgeBasedTwoApproxVCImpl<V, E>
-    implements MinimumVertexCoverAlgorithm<V, E>
+    implements MinimumVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
 {
+
+    private final Graph<V,E> graph;
+
+    /**
+     * Temporary constructor to ensure one-version-backwards-compatibility
+     * @deprecated this constructor will be removed in the next release
+     */
+    @Deprecated
+    public EdgeBasedTwoApproxVCImpl(){
+        graph=null;
+    }
+    /**
+     * Constructs a new EdgeBasedTwoApproxVCImpl instance
+     * @param graph input graph
+     */
+    public EdgeBasedTwoApproxVCImpl(Graph<V,E> graph) {
+        this.graph=GraphTests.requireUndirected(graph);
+    }
 
     /**
      * Finds a 2-approximation for a minimal vertex cover of the specified graph. The algorithm
@@ -65,7 +83,56 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
      * @return a set of vertices which is a vertex cover for the specified graph.
      */
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph)
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover() {
+        // C <-- {}
+        Set<V> cover = new LinkedHashSet<>();
+
+        // G'=(V',E') <-- G(V,E)
+        Graph<V, E> sg = new AsSubgraph<>(graph, null, null);
+
+        // while E' is non-empty
+        while (!sg.edgeSet().isEmpty()) {
+            // let (u,v) be an arbitrary edge of E'
+            E e = sg.edgeSet().iterator().next();
+
+            // C <-- C U {u,v}
+            V u = graph.getEdgeSource(e);
+            V v = graph.getEdgeTarget(e);
+            cover.add(u);
+            cover.add(v);
+
+            // remove from E' every edge incident on either u or v
+            sg.removeVertex(u);
+            sg.removeVertex(v);
+        }
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover);
+    }
+
+    /**
+     * Finds a 2-approximation for a minimal vertex cover of the specified graph. The algorithm
+     * promises a cover that is at most double the size of a minimal cover. The algorithm takes
+     * O(|E|) time.
+     *
+     * Note: this class supports pseudo-graphs Runtime: O(|E|)
+     *
+     * Albeit the fact that this is a 2-approximation algorithm for vertex cover, its results are
+     * often of lower quality than the results produced by {@link BarYehudaEvenTwoApproxVCImpl} or
+     * {@link ClarksonTwoApproxVCImpl}.
+     *
+     * <p>
+     * For more details see Jenny Walter, CMPU-240: Lecture notes for Language Theory and
+     * Computation, Fall 2002, Vassar College,
+     * <a href="http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf">
+     * http://www.cs.vassar.edu/~walter/cs241index/lectures/PDF/approx.pdf</a>.
+     * </p>
+     *
+     *
+     * @return a set of vertices which is a vertex cover for the specified graph.
+     * @deprecated Replaced by {@link #getVertexCover()}
+     */
+    @Override
+    @Deprecated
+    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph)
     {
         if (!graph.getType().isUndirected()) {
             throw new IllegalArgumentException("graph must be undirected");
@@ -93,6 +160,6 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
             sg.removeVertex(v);
         }
 
-        return new VertexCoverImpl<>(cover, cover.size());
+        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(cover, cover.size());
     }
 }

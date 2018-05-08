@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2017-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,7 +17,8 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
 /**
  * An algorithm solving the
@@ -32,8 +33,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  *
  * @author Dimitrios Michail
+ * @deprecated interface replaced by {@link HamiltonianCycleAlgorithm}
  */
-public interface TSPAlgorithm<V, E>
+@Deprecated
+public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Alexey Kudinkin and Contributors.
+ * (C) Copyright 2015-2018, by Alexey Kudinkin and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,14 +17,18 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class PushRelabelMFImplTest
     extends MaximumFlowAlgorithmTest
 {
-
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
         Graph<Integer, DefaultWeightedEdge> network)
@@ -32,6 +36,7 @@ public class PushRelabelMFImplTest
         return new PushRelabelMFImpl<>(network);
     }
 
+    @Test
     public void testPushRelabelWithNonIdenticalNode() {
         SimpleDirectedGraph<String,DefaultEdge> g1 = new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class) ;
 
@@ -51,6 +56,6 @@ public class PushRelabelMFImplTest
         String sourceFlow = "v" + new String("v3").substring(1) ;
         String sinkFlow = "v0" ;
         double flow = mf1.calculateMaximumFlow(sourceFlow,sinkFlow);
-        assertEquals(0.0, flow);
+        assertEquals(0.0, flow,0);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2002-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2002-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -132,7 +132,7 @@ public class ModifiableInteger
         int thisVal = this.value;
         int anotherVal = anotherInteger.value;
 
-        return (thisVal < anotherVal) ? -1 : ((thisVal == anotherVal) ? 0 : 1);
+        return Integer.compare(thisVal, anotherVal);
     }
 
     /**

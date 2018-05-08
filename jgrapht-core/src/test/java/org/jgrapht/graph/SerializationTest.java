@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,7 +19,10 @@ package org.jgrapht.graph;
 
 import java.io.*;
 
-import org.jgrapht.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.
@@ -27,7 +30,6 @@ import org.jgrapht.*;
  * @author John V. Sichi
  */
 public class SerializationTest
-    extends EnhancedTestCase
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -35,22 +37,11 @@ public class SerializationTest
     private String v2 = "v2";
     private String v3 = "v3";
 
-    // ~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public SerializationTest(String name)
-    {
-        super(name);
-    }
-
-    // ~ Methods ----------------------------------------------------------------
-
     /**
      * Tests serialization of DirectedMultigraph.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testDirectedMultigraph()
         throws Exception
     {
@@ -77,6 +68,7 @@ public class SerializationTest
      * Tests serialization of DirectedAcyclicGraph
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testDirectedAcyclicGraph()
         throws Exception
     {

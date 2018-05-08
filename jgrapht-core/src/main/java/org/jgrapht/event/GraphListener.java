@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -48,6 +48,14 @@ public interface GraphListener<V, E>
      * @param e the edge event.
      */
     void edgeRemoved(GraphEdgeChangeEvent<V, E> e);
+    
+    /**
+     * Notifies that an edge weight has been updated.
+     * 
+     * @param e the edge event.
+     */
+    default void edgeWeightUpdated(GraphEdgeChangeEvent<V, E> e) {}
+
 }
 
 // End GraphListener.java

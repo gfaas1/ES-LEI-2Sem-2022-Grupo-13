@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Liviu Rau and Contributors.
+ * (C) Copyright 2003-2018, by Liviu Rau and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,6 +22,10 @@ import java.util.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -36,16 +40,17 @@ public abstract class CrossComponentIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
+    StringBuilder result;
 
     // ~ Methods ----------------------------------------------------------------
 
     /**
      * .
      */
+    @Test
     public void testDirectedGraphViaCCI()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
@@ -54,19 +59,13 @@ public abstract class CrossComponentIteratorTest
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals(getExpectedCCStr3(), result.toString());
 
         assertEquals(getExpectedCCFinishString(), listener.getFinishString());
     }
 
+    @Test
     public void testDirectedGraphNullConstructors()
     {
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
@@ -79,6 +78,11 @@ public abstract class CrossComponentIteratorTest
     abstract String getExpectedCCStr2();
 
     abstract String getExpectedCCStr3();
+
+    int getExpectedCCVertexCount1()
+    {
+        return 1;
+    }
 
     String getExpectedCCFinishString()
     {
@@ -112,7 +116,7 @@ public abstract class CrossComponentIteratorTest
             switch (componentNumber) {
             case 1:
                 assertEquals(getExpectedCCStr1(), result.toString());
-                assertEquals(1, numComponentVertices);
+                assertEquals(getExpectedCCVertexCount1(), numComponentVertices);
 
                 break;
 
@@ -129,7 +133,7 @@ public abstract class CrossComponentIteratorTest
                 break;
 
             default:
-                assertFalse();
+                Assert.fail("Should not get here.");
 
                 break;
             }

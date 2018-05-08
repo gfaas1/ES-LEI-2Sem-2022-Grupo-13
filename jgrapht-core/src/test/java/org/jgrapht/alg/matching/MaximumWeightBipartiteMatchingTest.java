@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2017, by Graeme Ahokas and Contributors.
+ * (C) Copyright 2015-2018, by Graeme Ahokas and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -30,11 +30,13 @@ import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.SlowTests;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class MaximumWeightBipartiteMatchingTest
 {
@@ -158,12 +160,14 @@ public class MaximumWeightBipartiteMatchingTest
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomInstancesFixedSeed()
     {
         testRandomInstance(new Random(17), 100, 0.7, 2);
     }
 
     @Test
+    @Category(SlowTests.class)
     public void testRandomInstances()
     {
         Random rng = new Random();

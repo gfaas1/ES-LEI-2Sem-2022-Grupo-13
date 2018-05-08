@@ -220,7 +220,7 @@ public class CSVImporter<V, E>
             ThrowingErrorListener errorListener = new ThrowingErrorListener();
 
             // create lexer
-            CSVLexer lexer = new CSVLexer(new ANTLRInputStream(input));
+            CSVLexer lexer = new CSVLexer(CharStreams.fromReader(input));
             lexer.setSep(delimiter);
             lexer.removeErrorListeners();
             lexer.addErrorListener(errorListener);
@@ -457,8 +457,7 @@ public class CSVImporter<V, E>
                 V target = vertices.get(targetName);
 
                 String label = "e_" + source + "_" + target;
-                E e =
-                    edgeProvider.buildEdge(source, target, label, new HashMap<>());
+                E e = edgeProvider.buildEdge(source, target, label, new HashMap<>());
                 graph.addEdge(source, target, e);
 
                 if (weight != null) {

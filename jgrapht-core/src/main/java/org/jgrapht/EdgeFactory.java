@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2017, by Barak Naveh and Contributors.
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -19,13 +19,24 @@ package org.jgrapht;
 
 /**
  * An edge factory used by graphs for creating new edges.
+ * 
+ * <p>
+ * A graph uses the edge factory to create new edge objects whenever a user calls method
+ * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then use
+ * method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
  *
+ * <p>
+ * Note that when used inside a {@link Graph} the edge factory must return unique objects on each
+ * call.
+ * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
  * @since Jul 14, 2003
+ * @deprecated Use suppliers instead
  */
+@Deprecated
 public interface EdgeFactory<V, E>
 {
     /**
@@ -35,7 +46,9 @@ public interface EdgeFactory<V, E>
      * @param targetVertex the target vertex.
      *
      * @return a new edge whose endpoints are the specified source and target vertices.
+     * @deprecated Use suppliers instead
      */
+    @Deprecated
     E createEdge(V sourceVertex, V targetVertex);
 }
 

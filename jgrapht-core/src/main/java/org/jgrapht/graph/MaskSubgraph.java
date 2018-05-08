@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2007-2017, by France Telecom and Contributors.
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -88,6 +88,15 @@ public class MaskSubgraph<V, E>
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V addVertex()
+    {
+        throw new UnsupportedOperationException(UNMODIFIABLE);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -239,11 +248,31 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
+     * @deprecated Use suppliers instead
      */
     @Override
+    @Deprecated
     public EdgeFactory<V, E> getEdgeFactory()
     {
         return base.getEdgeFactory();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return base.getVertexSupplier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
+    {
+        return base.getEdgeSupplier();
     }
 
     /**

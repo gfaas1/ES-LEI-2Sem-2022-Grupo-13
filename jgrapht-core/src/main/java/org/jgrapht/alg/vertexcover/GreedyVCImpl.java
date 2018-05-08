@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -18,6 +18,8 @@
 package org.jgrapht.alg.vertexcover;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -31,7 +33,7 @@ import org.jgrapht.alg.vertexcover.util.*;
  * <a href="http://mathworld.wolfram.com/VertexCover.html">
  * http://mathworld.wolfram.com/VertexCover.html</a>
  *
- * Note: this class supports pseudo-graphs Runtime: O(|E|*log|V|) This class produces often, but not
+ * Note: this class supports pseudo-graphs Runtime: $O(|E| \log |V|)$ This class produces often, but not
  * always, better solutions than the 2-approximation algorithms. Nevertheless, there are instances
  * where the solution is significantly worse. In those cases, consider using
  * {@link ClarksonTwoApproxVCImpl}.
@@ -44,10 +46,43 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @since Nov 6, 2003
  */
 public class GreedyVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>
+    implements MinimumWeightedVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
+
+    private final Graph<V,E> graph;
+    private final Map<V, Double> vertexWeightMap;
+
+    /**
+     * Temporary constructor to ensure one-version-backwards-compatibility
+     * @deprecated this constructor will be removed in the next release
+     */
+    @Deprecated
+    public GreedyVCImpl(){
+        graph=null;
+        vertexWeightMap=null;
+    }
+
+    /**
+     * Constructs a new GreedyVCImpl instance where all vertices have uniform weights.
+     * @param graph input graph
+     */
+    public GreedyVCImpl(Graph<V,E> graph) {
+        this.graph=GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = graph
+                .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+    }
+
+    /**
+     * Constructs a new GreedyVCImpl instance
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     */
+    public GreedyVCImpl(Graph<V,E> graph, Map<V, Double> vertexWeightMap) {
+        this.graph=GraphTests.requireUndirected(graph);
+        this.vertexWeightMap=Objects.requireNonNull(vertexWeightMap);
+    }
 
     /**
      * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the
@@ -55,12 +90,86 @@ public class GreedyVCImpl<V, E>
      * to the cover. Next vertex v and all edges incident to it are removed. The process repeats
      * until all vertices are covered. Runtime: O(|E|*log|V|)
      *
-     * @param graph input graph
-     * @param vertexWeightMap mapping of vertex weights
      * @return greedy solution
      */
     @Override
-    public VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover() {
+        Set<V> cover = new LinkedHashSet<>();
+        double weight = 0;
+
+        // Create working graph: for every vertex, create a RatioVertex which maintains its own list
+        // of neighbors
+        Map<V, RatioVertex<V>> vertexEncapsulationMap = new HashMap<>();
+        graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).forEach(
+                v -> vertexEncapsulationMap
+                        .put(v, new RatioVertex<>(vertexCounter++, v, vertexWeightMap.get(v))));
+
+        for (E e : graph.edgeSet()) {
+            V u = graph.getEdgeSource(e);
+            RatioVertex<V> ux = vertexEncapsulationMap.get(u);
+            V v = graph.getEdgeTarget(e);
+            RatioVertex<V> vx = vertexEncapsulationMap.get(v);
+            ux.addNeighbor(vx);
+            vx.addNeighbor(ux);
+
+            assert (ux.neighbors.get(vx) == vx.neighbors.get(
+                    ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+        }
+
+        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
+        workingGraph.addAll(vertexEncapsulationMap.values());
+        assert (workingGraph.size() == vertexEncapsulationMap
+                .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
+                + "vertices in working graph: " + workingGraph.size();
+
+        while (!workingGraph.isEmpty()) { // Continue until all edges are covered
+
+            // Find a vertex vx for which W(vx)/degree(vx) is minimal
+            RatioVertex<V> vx = workingGraph.pollFirst();
+            assert (workingGraph.parallelStream().allMatch(
+                    ux -> vx.getRatio() <= ux
+                            .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
+                    + vx + " WorkingGraph: " + workingGraph;
+
+            for (RatioVertex<V> nx : vx.neighbors.keySet()) {
+
+                if (nx == vx) // Ignore self loops
+                    continue;
+
+                workingGraph.remove(nx);
+
+                // Delete vx from nx' neighbor list. Delete nx from the graph and place it back,
+                // thereby updating the ordering of the graph
+                nx.removeNeighbor(vx);
+
+                if (nx.getDegree() > 0)
+                    workingGraph.add(nx);
+
+            }
+
+            // Update cover
+            cover.add(vx.v);
+            weight += vertexWeightMap.get(vx.v);
+            assert (workingGraph.parallelStream().noneMatch(
+                    ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+        }
+        return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
+    }
+
+    /**
+     * Finds a greedy solution to the minimum weighted vertex cover problem. At each iteration, the
+     * algorithm picks the vertex v with the smallest ratio {@code weight(v)/degree(v)} and adds it
+     * to the cover. Next vertex v and all edges incident to it are removed. The process repeats
+     * until all vertices are covered. Runtime: $O(|E| \log |V|)$
+     *
+     * @param graph input graph
+     * @param vertexWeightMap mapping of vertex weights
+     * @return greedy solution
+     * @deprecated replaced by {@link #getVertexCover()}
+     */
+    @Override
+    @Deprecated
+    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
         GraphTests.requireUndirected(graph);
 
@@ -82,12 +191,10 @@ public class GreedyVCImpl<V, E>
             ux.addNeighbor(vx);
             vx.addNeighbor(ux);
 
-            assert (ux.neighbors.get(vx) == vx.neighbors.get(
-                ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+            assert (ux.neighbors.get(vx) == vx.neighbors.get(ux)) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
-        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
-        workingGraph.addAll(vertexEncapsulationMap.values());
+        TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>(vertexEncapsulationMap.values());
         assert (workingGraph.size() == vertexEncapsulationMap
             .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
                 + "vertices in working graph: " + workingGraph.size();
@@ -124,7 +231,8 @@ public class GreedyVCImpl<V, E>
                 ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
 
-        return new VertexCoverImpl<>(cover, weight);
+        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
+
 
 }

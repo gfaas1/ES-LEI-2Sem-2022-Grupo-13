@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2016-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -134,7 +134,7 @@ public class RatioVertex<V>
             return true;
         else if (!(o instanceof RatioVertex))
             return false;
-        RatioVertex<V> other = TypeUtil.uncheckedCast(o, null);
+        RatioVertex<V> other = TypeUtil.uncheckedCast(o);
         return this.ID == other.ID;
     }
 

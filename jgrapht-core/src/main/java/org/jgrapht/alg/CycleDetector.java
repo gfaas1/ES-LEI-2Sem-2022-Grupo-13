@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2004-2017, by John V Sichi and Contributors.
+ * (C) Copyright 2004-2018, by John V Sichi and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,6 +20,7 @@ package org.jgrapht.alg;
 import java.util.*;
 
 import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.traverse.*;
 
@@ -32,7 +33,9 @@ import org.jgrapht.traverse.*;
  *
  * @author John V. Sichi
  * @since Sept 16, 2004
+ * @deprecated  Moved to {@link org.jgrapht.alg.cycle.CycleDetector}
  */
+@Deprecated
 public class CycleDetector<V, E>
 {
     /**
@@ -72,7 +75,7 @@ public class CycleDetector<V, E>
      *
      * @param v the vertex to test
      *
-     * @return true if v is on at least one cycle
+     * @return true if $v$ is on at least one cycle
      */
     public boolean detectCyclesContainingVertex(V v)
     {

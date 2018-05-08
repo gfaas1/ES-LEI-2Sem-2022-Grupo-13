@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2017-2017, by Joris Kinable and Contributors.
+ * (C) Copyright 2017-2018, by Joris Kinable and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -25,7 +25,7 @@ import org.jgrapht.alg.util.*;
 
 /**
  * Implementation of the well-known Hopcroft Karp algorithm to compute a matching of maximum
- * cardinality in a bipartite graph. The algorithm runs in O(|E|*√|V|) time. This implementation
+ * cardinality in a bipartite graph. The algorithm runs in $O(|E| \cdot \sqrt{|V|})$ time. This implementation
  * accepts undirected graphs which may contain self-loops and multiple edges. To compute a maximum
  * cardinality matching in general (non-bipartite) graphs, use
  * {@link EdmondsMaximumCardinalityMatching} instead.
