@@ -80,7 +80,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
             throw new IllegalArgumentException("Graph must be simple");
         }
         if (graph.getType().isWeighted()) {
-            this.workingGraph = new DefaultDirectedWeightedGraph<>(graph.getEdgeFactory());
+            this.workingGraph = new DefaultDirectedWeightedGraph<>(graph.getVertexSupplier(), graph.getEdgeSupplier());
         } else {
             this.workingGraph = new AsWeightedGraph<>(graph, new HashMap<>());
         }

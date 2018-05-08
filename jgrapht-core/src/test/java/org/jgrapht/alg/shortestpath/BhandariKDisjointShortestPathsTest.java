@@ -22,9 +22,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 /**
@@ -536,7 +536,7 @@ public class BhandariKDisjointShortestPathsTest {
     @Test
     public void testGraphIsNotChanged() {
         Graph<Integer, DefaultWeightedEdge> source = createThreeDisjointPathsGraph();
-        Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(source.getEdgeFactory());
+        Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(source.getVertexSupplier(), source.getEdgeSupplier());
         Graphs.addGraph(destination, source);
         
         Map<DefaultWeightedEdge, Double> originalWeightMap = new HashMap<>();
@@ -561,9 +561,11 @@ public class BhandariKDisjointShortestPathsTest {
      */
     @Test
     public void testLinear() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier()); 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new LinearGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
+        graphGenerator.generateGraph(graph);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 20, 2);
@@ -582,9 +584,11 @@ public class BhandariKDisjointShortestPathsTest {
      */
     @Test
     public void testRing() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new RingGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
+        graphGenerator.generateGraph(graph);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 10, 2);
@@ -603,9 +607,11 @@ public class BhandariKDisjointShortestPathsTest {
      */
     @Test
     public void testClique() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new CompleteGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
+        graphGenerator.generateGraph(graph);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
@@ -620,9 +626,11 @@ public class BhandariKDisjointShortestPathsTest {
      */
     @Test
     public void testStar() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);  
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(
+            SupplierUtil.createIntegerSupplier(1),
+            SupplierUtil.createDefaultWeightedEdgeSupplier());
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> graphGenerator = new StarGraphGenerator<>(20);
-        graphGenerator.generateGraph(graph, new IntegerVertexFactory(1), null);
+        graphGenerator.generateGraph(graph);
         
         BhandariKDisjointShortestPaths<Integer, DefaultWeightedEdge> alg = new BhandariKDisjointShortestPaths<>(graph);
         
