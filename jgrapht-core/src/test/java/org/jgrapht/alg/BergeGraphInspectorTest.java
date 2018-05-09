@@ -30,7 +30,7 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 
-public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
+public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer>{
     private SimpleGraph<Integer,Integer> stimulus;
     
     
@@ -395,14 +395,14 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkPetersenGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generatePetersenGraph(stimulus);
-    	assertEquals(false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals(false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkDodecahedronGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateDodecahedronGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -410,42 +410,50 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkMöbiusKantorGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkBullGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateBullGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkButterflyGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateButterflyGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkClawGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateClawGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkGrötzschGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateGrötzschGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkDiamondGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateDiamondGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
+    }
+
+    @Test
+    @Category(SlowTests.class)
+    public void checkFolkmanGraph() {
+    	reset();
+    	new NamedGraphGenerator<Integer, Integer>().generateFolkmanGraph(stimulus);
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -453,21 +461,21 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkFranklinGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateFranklinGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkFruchtGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateFruchtGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkGoldnerHararyGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateGoldnerHararyGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -475,7 +483,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkHeawoodGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateHeawoodGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -483,21 +491,29 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkHerschelGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateHerschelGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
+    }
+    
+    @Test
+    @Category(SlowTests.class)
+    public void checkHoffmanGraph() {
+    	reset();
+    	new NamedGraphGenerator<Integer, Integer>().generateHoffmanGraph(stimulus);
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkKrackhardtKiteGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateKrackhardtKiteGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkMoserSpindleGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateMoserSpindleGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
@@ -505,28 +521,28 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     public void checkPappusGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generatePappusGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkTietzeGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateTietzeGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkThomsenGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateThomsenGraph(stimulus);
-    	assertEquals( true, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( true, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
     public void checkTutteGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateTutteGraph(stimulus);
-    	assertEquals( false, new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals( false, new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     
@@ -535,7 +551,7 @@ public class BergeGraphCheckerTest extends BergeGraphChecker<Integer,Integer>{
     	reset();
         int numberOfVertices = new Random().nextInt(maximalNumberOfVertices-minimalNumberOfVertices)+minimalNumberOfVertices;
         new EmptyGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
-    	assertEquals(true,new BergeGraphChecker<Integer,Integer>().isBerge(stimulus));
+    	assertEquals(true,new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
     }
     
     @Test
