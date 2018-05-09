@@ -450,14 +450,6 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
 
     @Test
     @Category(SlowTests.class)
-    public void checkFolkmanGraph() {
-    	reset();
-    	new NamedGraphGenerator<Integer, Integer>().generateFolkmanGraph(stimulus);
-    	assertTrue(new BergeGraphInspector<Integer,Integer>().isBerge(stimulus));
-    }
-    
-    @Test
-    @Category(SlowTests.class)
     public void checkFranklinGraph() {
     	reset();
     	new NamedGraphGenerator<Integer, Integer>().generateFranklinGraph(stimulus);
