@@ -26,19 +26,38 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.generate.ComplementGraphGenerator;
 import org.jgrapht.graph.AsSubgraph;
+import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.SimpleGraph;
 
 
+
 /**
- * <p>Checker for Bergeness as described in the famous paper:
- * M. Chudnovsky, G. Cornuejols, X. Liu, P. Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
- * 
+ * <p>Tests whether a graph is <a href="http://mathworld.wolfram.com/PerfectGraph.html">perfect</a>. 
+ * A perfect graph, also known as a Berge graph, is a graph $G$ such that for every induced subgraph of $G$, 
+ * the clique number $\chi(G)$ equals the chromatic number $\omega(G)$, i.e.,  $\omega(G)=\chi(G)$. Another 
+ * characterization of perfect graphs is given by the Strong Perfect Graph Theorem 
+ * [M. Chudnovsky, N. Robertson, P. Seymour, R. Thomas. The strong perfect graph theorem Annals of Mathematics, vol 164(1): pp. 51–230, 2006]: 
+ * A graph $G$ is perfect if neither $G$ nor its complement $\overline{G}$ have an odd hole. 
+ * A hole in $G$ is an induced subgraph of $G$ that is a cycle of length at least four, and it is odd or even if it 
+ * has odd (or even, respectively) length.
+ * <p>
+ * Some special <a href="http://graphclasses.org/classes/gc_56.html">classes</a> of graphs are are known to be perfect, 
+ * e.g. Bipartite graphs and Chordal graphs. Testing whether a graph is resp. Bipartite or Chordal can be done efficiently 
+ * using {@link GraphTests#isBipartite} or {@link org.jgrapht.alg.cycle.ChordalityInspector}.
+ * <p>
+ * The implementation of this class is based on the paper: M. Chudnovsky, G. Cornuejols, X. Liu, P. Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
  * <p>Special Thanks to Maria Chudnovsky for her kind help.
+ * 
+ * <p>The runtime complexity of this implementation is $O(|V|^9|)$. This implementation is far more efficient than 
+ * simplistically testing whether graph  $G$ or its complement $\overline{G}$ have an odd cycle, because testing 
+ * whether one graph can be found as an induced subgraph of another is 
+ * <a href="https://en.wikipedia.org/wiki/Induced_subgraph_isomorphism_problem">known</a> to be NP-hard.
  * 
  * @author Philipp S. Kaesgen (pkaesgen@freenet.de)
  * @since 2018
@@ -46,7 +65,7 @@ import org.jgrapht.graph.SimpleGraph;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BergeGraphChecker<V,E>{
+public class BergeGraphInspector<V,E>{
     /**
      * Checks whether two paths which both intersect in the vertex m have another common vertex
      * @param g A Graph
@@ -99,35 +118,9 @@ public class BergeGraphChecker<V,E>{
         if (S!=null&&T!=null){
             if (s1==b1){
                 if (b1==m){
-                    return new GraphPath<V,E>(){
-    
-                        @Override
-                        public Graph<V, E> getGraph() {
-                            return g;
-                        }
-    
-                        @Override
-                        public V getStartVertex() {
-                            return g.getEdgeSource(getEdgeList().get(0));
-                        }
-    
-                        @Override
-                        public V getEndVertex() {
-                            return g.getEdgeTarget(getEdgeList().get(0));
-                        }
-    
-                        @Override
-                        public List<E> getEdgeList() {
-                            List<E> res = new LinkedList<E>();
-                            res.add(g.getEdge(s1, b1));
-                            res.add(g.getEdge(b1, s1));
-                            return res;
-                        }
-    
-                        @Override
-                        public double getWeight() {
-                            return 1;
-                        }};
+                    List<E> edgeList = new LinkedList<E>();
+                    edgeList.add(g.getEdge(s1, b1));
+                    return new GraphWalk<V,E>(g,s1,b1,edgeList,g.getEdgeWeight(edgeList.get(0)));
                 }
                 else{
                     return null;
@@ -146,27 +139,9 @@ public class BergeGraphChecker<V,E>{
                         List<E> edgeList =new LinkedList<E>();
                         edgeList.addAll(S.getEdgeList());
                         edgeList.addAll(T.getEdgeList());
-                        return new GraphPath<V,E>(){
-
-                            @Override
-                            public V getEndVertex() {
-                                return s1;
-                            }
-
-                            @Override
-                            public Graph<V, E> getGraph() {
-                                return g;
-                            }
-
-                            @Override
-                            public V getStartVertex() {
-                                return b1;
-                            }
-
-                            @Override
-                            public double getWeight() {
-                                return 0;
-                            }};//g, b1, s1, edgeList, 0)
+                        double weight = 0;
+                        for (E e : edgeList) weight+=g.getEdgeWeight(e);
+                        return new GraphWalk<V,E>(g, b1, s1, edgeList, weight);
                     }
                     else{
                         return null;
@@ -714,14 +689,12 @@ public class BergeGraphChecker<V,E>{
      * @return whether v has at least one neighbour in set
      */
     protected boolean hasANeighbour(Graph<V,E> g, Set<V> set, V v){
-        boolean res = false;
         for (V s : set){
             if (g.containsEdge(s,v)){
-                res = true;
-                break;
+                return true;
             }
         }
-        return res;
+        return false;
     }
     
     /**
@@ -1015,6 +988,7 @@ public class BergeGraphChecker<V,E>{
      * @return whether g is Berge and, thus, perfect
      */
     public boolean isBerge(Graph<V,E> g){
+        GraphTests.requireDirectedOrUndirected(g);
         Graph<V,E> complementGraph;
         if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
         else complementGraph = new Multigraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
