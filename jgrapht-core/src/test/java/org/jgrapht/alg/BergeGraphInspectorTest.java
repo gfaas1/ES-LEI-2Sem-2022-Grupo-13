@@ -176,7 +176,6 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         stimulus.addEdge(8, 4);
         
         assertTrue(containsJewel(stimulus));
-        assertTrue(verifyCertificate(getCertificate(stimulus)));
         
         
         stimulus.addEdge(1, 3);
@@ -465,15 +464,6 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         new NamedGraphGenerator<Integer, Integer>().generateDodecahedronGraph(stimulus);
         assertFalse(isBerge(stimulus));
         assertTrue(verifyCertificate(getCertificate(stimulus)));
-    }
-    
-    @Test
-    @Category(SlowTests.class)
-    public void checkMöbiusKantorGraph() {
-        reset();
-        new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
-        assertTrue(isBerge(stimulus));
-        assertFalse(verifyCertificate(getCertificate(stimulus)));
     }
     
     @Test
