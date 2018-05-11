@@ -42,8 +42,6 @@ public class WindmillGraphsGenerator<V, E>
 {
     /**
      * WINDMILL and DUTCHWINDMILL Modes for the Constructor
-     * @author Philipp
-     *
      */
     public enum Mode
     {
