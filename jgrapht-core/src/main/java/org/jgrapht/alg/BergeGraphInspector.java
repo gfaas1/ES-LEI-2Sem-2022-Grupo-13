@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
@@ -80,17 +79,7 @@ public class BergeGraphInspector<V,E>{
      * @return whether there is an edge except for m
      */
     protected boolean haveNoEdgeDisregardingM(Graph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
-        return s1.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-            @Override
-            public boolean test(V v1) {
-                return v1!=m&&s2.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-                    @Override
-                    public boolean test(V v2) {
-                        return v2!=m&&!g.containsEdge(v1,v2);
-                    }});
-            }});
+        return s1.getVertexList().stream().anyMatch(v1-> v1!=m&&s2.getVertexList().stream().anyMatch(v2->v2!=m&&!g.containsEdge(v1,v2)));
     }
     
     
@@ -134,31 +123,17 @@ public class BergeGraphInspector<V,E>{
         else{
             if (b1==m) return null;
             if (g.containsEdge(m,b2)||g.containsEdge(m,b3)||g.containsEdge(m,s2)||g.containsEdge(m,s3)||S==null||T==null) return null;
-            if (S.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-                @Override
-                public boolean test(V t) {
-                    return g.containsEdge(t,b2)||g.containsEdge(t,b3)||g.containsEdge(t,s2)||g.containsEdge(t,s3);
-                }})||
-                    T.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-                        @Override
-                        public boolean test(V t) {
-                            return t!=b1&&(g.containsEdge(t,b2)||g.containsEdge(t,b3)||g.containsEdge(t,s2)||g.containsEdge(t,s3));
-                        }})) return null;
+            if (S.getVertexList().stream().anyMatch(
+                    t->g.containsEdge(t,b2)||g.containsEdge(t,b3)||g.containsEdge(t,s2)||g.containsEdge(t,s3))||
+                    T.getVertexList().stream().anyMatch(
+                            t->t!=b1&&(g.containsEdge(t,b2)||g.containsEdge(t,b3)||g.containsEdge(t,s2)||g.containsEdge(t,s3)))
+                    ) return null;
             List<V> intersection=intersectGraphPaths(g,S,T);
             if (intersection.size()!=1||!intersection.contains(m)) return null;
-            if (S.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-                @Override
-                public boolean test(V s) {
-                    return s!=m&&T.getVertexList().stream().anyMatch(new Predicate<V>() {
-
-                        @Override
-                        public boolean test(V t) {
-                            return t!=m&&g.containsEdge(s,t);
-                        }});
-                }})) return null;
+            if (S.getVertexList().stream().anyMatch(
+                    s->s!=m&&T.getVertexList().stream().anyMatch(
+                            t->t!=m&&g.containsEdge(s,t)))
+                    ) return null;
             List<E> edgeList = new LinkedList<E>();
             edgeList.addAll(T.getEdgeList());
             edgeList.addAll(S.getEdgeList());
@@ -284,12 +259,7 @@ public class BergeGraphInspector<V,E>{
                                     for (V m1 : M){
                                         Set<V> validInterior = new HashSet<V>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(new Predicate<V>() {
-
-                                            @Override
-                                            public boolean test(V i) {
-                                                return g.containsEdge(i,b2)||g.containsEdge(i,s2)||g.containsEdge(i,b3)||g.containsEdge(i,s3);
-                                            }});
+                                        validInterior.removeIf(i->g.containsEdge(i,b2)||g.containsEdge(i,s2)||g.containsEdge(i,b3)||g.containsEdge(i,s3));
 
                                         validInterior.add(m1);
                                         validInterior.add(s1);
@@ -304,12 +274,7 @@ public class BergeGraphInspector<V,E>{
                                     for (V m2 : M){
                                         Set<V> validInterior = new HashSet<V>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(new Predicate<V>() {
-
-                                            @Override
-                                            public boolean test(V i) {
-                                                return g.containsEdge(i,b1)||g.containsEdge(i,s1)||g.containsEdge(i,b3)||g.containsEdge(i,s3);
-                                            }});
+                                        validInterior.removeIf(i-> g.containsEdge(i,b1)||g.containsEdge(i,s1)||g.containsEdge(i,b3)||g.containsEdge(i,s3));
                                         validInterior.add(m2);
                                         validInterior.add(s2);
                                         Graph<V,E> subg = new AsSubgraph<V,E>(g,validInterior);
@@ -323,12 +288,7 @@ public class BergeGraphInspector<V,E>{
                                     for (V m3 : M){
                                         Set<V> validInterior = new HashSet<V>();
                                         validInterior.addAll(M);
-                                        validInterior.removeIf(new Predicate<V>(){
-
-                                            @Override
-                                            public boolean test(V i) {
-                                                return g.containsEdge(i,b1)||g.containsEdge(i,s1)||g.containsEdge(i,b2)||g.containsEdge(i,s2);
-                                            }});
+                                        validInterior.removeIf(i-> g.containsEdge(i,b1)||g.containsEdge(i,s1)||g.containsEdge(i,b2)||g.containsEdge(i,s2));
                                         validInterior.add(m3);
                                         validInterior.add(s3);
                                        
@@ -522,12 +482,7 @@ public class BergeGraphInspector<V,E>{
                             subg.vertexSet().size()!=set.size()||
                             subg.edgeSet().size()!=subg.vertexSet().size()||
                             subg.vertexSet().size()%2==0||
-                            subg.vertexSet().stream().anyMatch(new Predicate<V>() {
-
-                                @Override
-                                public boolean test(V t) {
-                                    return subg.degreeOf(t)!=2;
-                                }})) 
+                            subg.vertexSet().stream().anyMatch(t-> subg.degreeOf(t)!=2)) 
                         continue;
                     
                     if (certify) {
@@ -679,12 +634,7 @@ public class BergeGraphInspector<V,E>{
      * @return whether y is X-complete
      */
     protected boolean isYXComplete(Graph<V,E> g, V y,Set<V> X){
-        return X.stream().allMatch(new Predicate<V>() {
-            @Override
-            public boolean test(V t) {
-                return g.containsEdge(t,y);
-            }
-        });
+        return X.stream().allMatch(t->g.containsEdge(t,y));
     }
     
     
@@ -795,13 +745,7 @@ public class BergeGraphInspector<V,E>{
      * @return whether v has at least one neighbour in set
      */
     protected boolean hasANeighbour(Graph<V,E> g, Set<V> set, V v){
-        return set.stream().anyMatch(new Predicate<V>() {
-
-            @Override
-            public boolean test(V s) {
-                return g.containsEdge(s,v);
-            }
-        });
+        return set.stream().anyMatch(s-> g.containsEdge(s,v));
     }
     
     /**
@@ -816,14 +760,7 @@ public class BergeGraphInspector<V,E>{
      */
     protected Set<V> findMaximalConnectedSubset(Graph<V,E> g, Set<V> X, V v1, V v2, V v5){
         Set<V> FPrime = new ConnectivityInspector<V,E>(g).connectedSetOf(v5);
-        FPrime.removeIf(new Predicate<V>() {
-
-            @Override
-            public boolean test(V t) {
-                return t!=v5&&isYXComplete(g, t, X)||v1==t||v2==t||g.containsEdge(v1,t)||g.containsEdge(v2,t);
-            }
-            
-        });
+        FPrime.removeIf(t-> t!=v5&&isYXComplete(g, t, X)||v1==t||v2==t||g.containsEdge(v1,t)||g.containsEdge(v2,t));
         return FPrime;
     }
     
@@ -835,13 +772,7 @@ public class BergeGraphInspector<V,E>{
      * @return whether v has a nonneighbour in X
      */
     protected boolean hasANonneighbourInX(Graph<V,E> g, V v, Set<V> X){
-        return X.stream().anyMatch(new Predicate<V>() {
-
-            @Override
-            public boolean test(V x) {
-                return !g.containsEdge(v,x);
-            }
-        });
+        return X.stream().anyMatch(x-> !g.containsEdge(v,x));
     }
     
     /**
@@ -955,12 +886,7 @@ public class BergeGraphInspector<V,E>{
      * @return The set of all {a,b}-complete vertices
      */
     protected Set<V> N(Graph<V,E> g, V a, V b){
-        return g.vertexSet().stream().filter(new Predicate<V>() {
-
-            @Override
-            public boolean test(V t) {
-                return g.containsEdge(t,a)&&g.containsEdge(t,b);
-            }}).collect(Collectors.toSet());
+        return g.vertexSet().stream().filter(t-> g.containsEdge(t,a)&&g.containsEdge(t,b)).collect(Collectors.toSet());
     }
     
     /**
@@ -1098,6 +1024,50 @@ public class BergeGraphInspector<V,E>{
         return res;
     }
     
+    /**
+     * Performs the Berge Recognition Algorithm.
+     * <p> First this algorithm is used to test whether g or its complement contain a jewel, a pyramid or a configuration of type
+     * 1, 2 or 3. If so, it is output that g is not Berge. If not, then every shortest odd hole in g is amenable. This asserted, the near-cleaner subsets
+     * of V(g) are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
+     * an odd hole is found, this checker will output that g is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
+     * and it will be proceeded as before. If again no odd hole is detected, g is Berge.
+     * 
+     * <p> A certificate can be obtained through the {@link BergeGraphInspector#getCertificate} method, if <code>computeCertificate</code> is <code>true</code>.
+     * <p> Running this method takes O(|V|^14) with certificate computation, and without O(|V|^9).
+     * @param g A graph
+     * @param computeCertificate toggles certificate computation
+     * @return whether g is Berge and, thus, perfect
+     */
+    public boolean isBerge(Graph<V,E> g, boolean computeCertificate){
+        GraphTests.requireDirectedOrUndirected(g);
+        Graph<V,E> complementGraph;
+        if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
+        else complementGraph = new Multigraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
+        new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph);
+        
+        certify = computeCertificate;
+        if (routine2(g)||routine2(complementGraph)) {
+            certify=false;
+            return false;
+        }
+        
+        for (Set<V> it : routine3(g)){
+            if (routine1(g,it)) {
+                certify=false;
+                return false;
+            }
+        }
+        
+        for (Set<V> it : routine3(complementGraph)){
+            if (routine1(complementGraph,it)){
+                certify=false;
+                return false;
+            }
+        }
+        certify=false;
+        return true;
+        
+    }    
     
     /**
      * Performs the Berge Recognition Algorithm.
@@ -1106,56 +1076,29 @@ public class BergeGraphInspector<V,E>{
      * of V(g) are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
      * an odd hole is found, this checker will output that g is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
      * and it will be proceeded as before. If again no odd hole is detected, g is Berge.
+     * 
+     * <p> This method by default does not compute a certificate. For obtaining a certificate, call {@link BergeGraphInspector#isBerge} with <code>computeCertificate=true</code>.
+     * <p> Running this method takes O(|V|^9).
      * @param g A graph
      * @return whether g is Berge and, thus, perfect
      */
     public boolean isBerge(Graph<V,E> g){
-        GraphTests.requireDirectedOrUndirected(g);
-        Graph<V,E> complementGraph;
-        if (g.getType().isSimple()) complementGraph = new SimpleGraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
-        else complementGraph = new Multigraph<V,E>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
-        new ComplementGraphGenerator<V,E>(g).generateGraph(complementGraph);
-        
-        if (routine2(g)||routine2(complementGraph)) {
-            return false;
-        }
-        
-        for (Set<V> it : routine3(g)){
-            if (routine1(g,it)) {
-                return false;
-            }
-        }
-        
-        for (Set<V> it : routine3(complementGraph)){
-            if (routine1(complementGraph,it)){
-                return false;
-            }
-        }
-        
-        return true;
-        
+         return this.isBerge(g,false);
     }
+    
+    
 
 
     /**
-     * Computes and returns the certificate in the form of a hole or anti-hole in the inspected graph.
+     * Returns the certificate in the form of a hole or anti-hole in the inspected graph, when the {@link BergeGraphInspector#isBerge} method is previously called with <code>computeCertificate=true</code>.
      * Returns null if the inspected graph is perfect.
      *
-     * @param g A graph
      * @return a <a href="http://graphclasses.org/smallgraphs.html#holes">hole</a> or
      * <a href="http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a> in the inspected
      * graph, null if the graph is perfect
      */
-    public GraphPath<V,E> getCertificate(Graph<V,E> g){
-        certificate = null;
-        certify = true;
-        
-        isBerge(g);
-        certify = false;
-        
+    public GraphPath<V,E> getCertificate(){
         return certificate;
-        
-        
     }
     
     
