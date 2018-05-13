@@ -26,7 +26,7 @@ import org.jgrapht.graph.*;
 
 /**
  * An implementation of Bhandari algorithm for finding $K$ edge-<em>disjoint</em> shortest paths.
- * The algorithm determines the $k$ disjoint shortest simple paths in increasing order of
+ * The algorithm determines the $k$ edge-disjoint shortest simple paths in increasing order of
  * weight. Weights can be negative (but no negative cycle is allowed). Only directed simple graphs
  * are allowed.
  *
@@ -34,14 +34,12 @@ import org.jgrapht.graph.*;
  * The algorithm is running $k$ sequential Bellman-Ford iterations to find the shortest path at each step.
  * Hence, yielding a complexity of $k$*O(Bellman-Ford).
  * 
- * <p>
- * For further reference see <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
- * Disjoint Paths in Networks </a> which was the main reference for the code of this class:
  * <ul>
  * <li>
  * Bhandari, Ramesh 1999. Survivable networks: algorithms for diverse routing. 477. Springer. p. 46. ISBN 0-7923-8381-8.
  * <li>
- * Iqbal, F. and Kuipers, F. A. 2015. Disjoint Paths in Networks. Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
+ * Iqbal, F. and Kuipers, F. A. 2015. <a href="https://www.nas.ewi.tudelft.nl/people/Fernando/papers/Wiley.pdf">
+ * Disjoint Paths in Networks </a>. Wiley Encyclopedia of Electrical and Electronics Engineering. 1–11.
  * </ul>
  * 
  * @param <V> the graph vertex type
@@ -148,7 +146,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * Replacing the edges of the previous path with reversed edges
      * with negative weight
      * 
-     * @param cPath the number of the next path to search 
+     * @param previousPath shortest path found on previous round. 
      */
     private void prepare(List<E> previousPath) {
         
@@ -173,6 +171,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * edges and merging them to valid paths (from start to end). Finally, we sort
      * them according to their weight.
      * 
+     * @param startVertex the start vertex
      * @param endVertex the end vertex
      * 
      * @return sorted list of disjoint paths from start vertex to end vertex.
@@ -195,6 +194,7 @@ public class BhandariKDisjointShortestPaths<V, E> implements KShortestPathAlgori
      * start to end vertex. Here we connect the path fragments to valid paths
      * (from start to end).
      * 
+     * @param startVertex the start vertex
      * @param endVertex the end vertex
      * 
      * @return list of disjoint paths from start to end.
