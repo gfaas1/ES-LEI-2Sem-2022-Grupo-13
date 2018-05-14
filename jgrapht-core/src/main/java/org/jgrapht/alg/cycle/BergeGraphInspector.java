@@ -70,18 +70,6 @@ public class BergeGraphInspector<V,E>{
     
     private GraphPath<V,E> certificate = null;
     private boolean certify = false;
-    /**
-     * Checks whether two paths which both intersect in the vertex m have another common vertex
-     * @param g A Graph
-     * @param s1 A Vertex
-     * @param s2 A Vertex
-     * @param m A Vertex
-     * @return whether there is an edge except for m
-     */
-    private boolean haveNoEdgeDisregardingM(Graph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
-        return s1.getVertexList().stream().anyMatch(v1-> v1!=m&&s2.getVertexList().stream().anyMatch(v2->v2!=m&&!g.containsEdge(v1,v2)));
-    }
-    
     
     /**
      * Lists the vertices which are covered by two paths
