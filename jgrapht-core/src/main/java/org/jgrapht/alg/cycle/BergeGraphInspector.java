@@ -68,7 +68,7 @@ import org.jgrapht.graph.SimpleGraph;
  */
 public class BergeGraphInspector<V,E>{
     
-    protected GraphPath<V,E> certificate = null;
+    private GraphPath<V,E> certificate = null;
     private boolean certify = false;
     /**
      * Checks whether two paths which both intersect in the vertex m have another common vertex
@@ -78,7 +78,7 @@ public class BergeGraphInspector<V,E>{
      * @param m A Vertex
      * @return whether there is an edge except for m
      */
-    protected boolean haveNoEdgeDisregardingM(Graph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
+    private boolean haveNoEdgeDisregardingM(Graph<V,E> g,GraphPath<V,E> s1, GraphPath<V,E> s2,V m){
         return s1.getVertexList().stream().anyMatch(v1-> v1!=m&&s2.getVertexList().stream().anyMatch(v2->v2!=m&&!g.containsEdge(v1,v2)));
     }
     
@@ -90,7 +90,7 @@ public class BergeGraphInspector<V,E>{
      * @param p2 A Path in g
      * @return Set of vertices covered by both p1 and p2 
      */
-    protected List<V> intersectGraphPaths(Graph<V,E> g,GraphPath<V,E> p1, GraphPath<V,E> p2){
+    private List<V> intersectGraphPaths(Graph<V,E> g,GraphPath<V,E> p1, GraphPath<V,E> p2){
         List<V> res = new LinkedList<V>();
         res.addAll(p1.getVertexList());
         res.retainAll(p2.getVertexList());
@@ -373,7 +373,7 @@ public class BergeGraphInspector<V,E>{
      * @param F A vertex subset of g
      * @return Components of F in g
      */
-    protected List<Set<V>> findAllComponents(Graph<V,E> g, Set<V> F){
+    private List<Set<V>> findAllComponents(Graph<V,E> g, Set<V> F){
         return new ConnectivityInspector<V,E>(new AsSubgraph<>(g,F)).connectedSets();
     }
     
@@ -511,7 +511,7 @@ public class BergeGraphInspector<V,E>{
      * @param X set of vertices which should not be in the graph
      * @return A Path in G\X
      */
-    protected GraphPath<V, E> getPathAvoidingX(Graph<V, E> g, V start, V end, Set<V> X){
+    private GraphPath<V, E> getPathAvoidingX(Graph<V, E> g, V start, V end, Set<V> X){
         Set<V> vertexSet = new HashSet<V>();
         vertexSet.addAll(g.vertexSet());
         vertexSet.removeAll(X);
@@ -582,7 +582,7 @@ public class BergeGraphInspector<V,E>{
      * @param X A subset X of V(g) and a possible Cleaner for an odd hole
      * @return Returns whether g has an odd hole or there is no shortest odd hole in C such that X is a near-cleaner for C.
      */
-    protected boolean routine1(Graph<V,E> g,Set<V> X){
+    private boolean routine1(Graph<V,E> g,Set<V> X){
         return containsCleanShortestOddHole(g)||containsShortestOddHole(g, X);    
     }
     
@@ -592,7 +592,7 @@ public class BergeGraphInspector<V,E>{
      * @param g A Graph
      * @return whether g contains a configuration of Type T1 (5-cycle)
      */
-    protected boolean hasConfigurationType1(Graph<V,E> g){
+    private boolean hasConfigurationType1(Graph<V,E> g){
         for (V v1 : g.vertexSet()){
             Set<V> temp = new ConnectivityInspector<V, E>(g).connectedSetOf(v1);
             for (V v2 : temp){
@@ -645,7 +645,7 @@ public class BergeGraphInspector<V,E>{
      * @param Y A set of vertices
      * @return List of anticomponents of Y in g
      */
-    protected List<Set<V>> findAllAnticomponentsOfY(Graph<V,E> g, Set<V> Y){
+    private List<Set<V>> findAllAnticomponentsOfY(Graph<V,E> g, Set<V> Y){
         Graph<V,E> target;
         if (g.getType().isSimple()) target = new SimpleGraph<>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
         else target = new Multigraph<>(g.getVertexSupplier(),g.getEdgeSupplier(),g.getType().isWeighted());
@@ -744,7 +744,7 @@ public class BergeGraphInspector<V,E>{
      * @param v A vertex
      * @return whether v has at least one neighbour in set
      */
-    protected boolean hasANeighbour(Graph<V,E> g, Set<V> set, V v){
+    private boolean hasANeighbour(Graph<V,E> g, Set<V> set, V v){
         return set.stream().anyMatch(s-> g.containsEdge(s,v));
     }
     
@@ -758,7 +758,7 @@ public class BergeGraphInspector<V,E>{
      * @param v5 A Vertex
      * @return The maximal connected vertex subset containing v5, no neighbours of v1 and v2, and no X-complete vertex except v5
      */
-    protected Set<V> findMaximalConnectedSubset(Graph<V,E> g, Set<V> X, V v1, V v2, V v5){
+    private Set<V> findMaximalConnectedSubset(Graph<V,E> g, Set<V> X, V v1, V v2, V v5){
         Set<V> FPrime = new ConnectivityInspector<V,E>(g).connectedSetOf(v5);
         FPrime.removeIf(t-> t!=v5&&isYXComplete(g, t, X)||v1==t||v2==t||g.containsEdge(v1,t)||g.containsEdge(v2,t));
         return FPrime;
@@ -771,7 +771,7 @@ public class BergeGraphInspector<V,E>{
      * @param X A set of vertices
      * @return whether v has a nonneighbour in X
      */
-    protected boolean hasANonneighbourInX(Graph<V,E> g, V v, Set<V> X){
+    private boolean hasANonneighbourInX(Graph<V,E> g, V v, Set<V> X){
         return X.stream().anyMatch(x-> !g.containsEdge(v,x));
     }
     
@@ -874,7 +874,7 @@ public class BergeGraphInspector<V,E>{
      * @param g A Graph
      * @return whether g contains a pyramid, a jewel, a T1, a T2, or a T3
      */
-    protected boolean routine2(Graph<V,E> g){
+    private boolean routine2(Graph<V,E> g){
         return containsPyramid(g)||containsJewel(g)||hasConfigurationType1(g)||hasConfigurationType2(g)||hasConfigurationType3(g);
     }
     
@@ -885,7 +885,7 @@ public class BergeGraphInspector<V,E>{
      * @param b A Vertex
      * @return The set of all {a,b}-complete vertices
      */
-    protected Set<V> N(Graph<V,E> g, V a, V b){
+    private Set<V> N(Graph<V,E> g, V a, V b){
         return g.vertexSet().stream().filter(t-> g.containsEdge(t,a)&&g.containsEdge(t,b)).collect(Collectors.toSet());
     }
     
@@ -896,7 +896,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return The cardinality of the largest anticomponent of N(a,b) that contains a nonneighbour of c (or 0, if c is N(a,b)-complete)
      */
-    protected int r(Graph<V,E> g, Set<V> Nab, V c){
+    private int r(Graph<V,E> g, Set<V> Nab, V c){
         if (isYXComplete(g,c,Nab)) return 0;
         List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, Nab);
         return anticomponents.stream().mapToInt(set->set.size()).max().getAsInt();
@@ -909,7 +909,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return A Set of vertices with cardinality greater r(a,b,c)
      */
-    protected Set<V> Y(Graph<V,E> g, Set<V> Nab, V c){
+    private Set<V> Y(Graph<V,E> g, Set<V> Nab, V c){
         int cutoff = r(g,Nab,c);
         List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, Nab);
         Set<V> res = new HashSet<V>();
@@ -928,7 +928,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return The anticomponent of N(a,b)+{c} containing c
      */
-    protected Set<V> W(Graph<V,E> g, Set<V> Nab, V c){
+    private Set<V> W(Graph<V,E> g, Set<V> Nab, V c){
         Set<V> temp = new HashSet<V>();
         temp.addAll(Nab);
         temp.add(c);
@@ -946,7 +946,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return A set of vertices
      */
-    protected Set<V> Z(Graph<V,E> g, Set<V> Nab, V c){
+    private Set<V> Z(Graph<V,E> g, Set<V> Nab, V c){
         Set<V> temp = new HashSet<V>();
         temp.addAll(Y(g,Nab,c));
         temp.addAll(W(g,Nab,c));
@@ -965,7 +965,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return The union of Y(a,b,c) and Z(a,b,c)
      */
-    protected Set<V> X(Graph<V,E> g, Set<V> Nab, V c){
+    private Set<V> X(Graph<V,E> g, Set<V> Nab, V c){
         Set<V> res = new HashSet<V>();
         res.addAll(Y(g,Nab,c));
         res.addAll(Z(g,Nab,c));
@@ -981,7 +981,7 @@ public class BergeGraphInspector<V,E>{
      * @param c A vertex
      * @return Assessement whether a,b,c is a relevant triple
      */
-    protected boolean isTripleRelevant(Graph<V,E> g, V a, V b, V c){
+    private boolean isTripleRelevant(Graph<V,E> g, V a, V b, V c){
         return a!=b&&!g.containsEdge(a,b)&&!N(g,a,b).contains(c);
     }
     
