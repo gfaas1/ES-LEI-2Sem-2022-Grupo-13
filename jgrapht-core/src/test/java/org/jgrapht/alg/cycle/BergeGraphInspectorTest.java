@@ -37,8 +37,9 @@ import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.util.SupplierUtil;
 
-public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer>{
+public class BergeGraphInspectorTest{
     private SimpleGraph<Integer,Integer> stimulus;
+    private BergeGraphInspector<Integer, Integer> dut = new BergeGraphInspector<>();
     
     
     
@@ -122,28 +123,28 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
                 stimulus.addEdge(3, 16);//16
                 stimulus.addEdge(16, 10);//17
 
-                assertTrue(containsPyramid(stimulus));
-				isBerge(stimulus,true);
-                assertTrue(verifyCertificate(getCertificate()));
+                assertTrue(dut.containsPyramid(stimulus));
+                dut.isBerge(stimulus,true);
+                assertTrue(verifyCertificate(dut.getCertificate()));
                 
                 stimulus.addEdge(8, 2);
-				isBerge(stimulus,true);
-                assertTrue(verifyCertificate(getCertificate()));
+                dut.isBerge(stimulus,true);
+                assertTrue(verifyCertificate(dut.getCertificate()));
                 
                 stimulus.removeEdge(8,2);
                 stimulus.addEdge(9, 3);
 
-				isBerge(stimulus,true);
-                assertTrue(verifyCertificate(getCertificate()));
+                dut.isBerge(stimulus,true);
+                assertTrue(verifyCertificate(dut.getCertificate()));
                 
                 stimulus.removeEdge(9,3);
                 stimulus.addEdge(10, 1);
 
-				isBerge(stimulus,true);
-                assertTrue(verifyCertificate(getCertificate()));
+                dut.isBerge(stimulus,true);
+                assertTrue(verifyCertificate(dut.getCertificate()));
                 
                 stimulus.addEdge(11, 2);
-                assertFalse(containsPyramid(stimulus));
+                assertFalse(dut.containsPyramid(stimulus));
 
                 
     }
@@ -180,13 +181,13 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         stimulus.addEdge(7, 8);
         stimulus.addEdge(8, 4);
         
-        assertTrue(containsJewel(stimulus));
-        isBerge(stimulus,true);
-        assertTrue(verifyCertificate(getCertificate()));
+        assertTrue(dut.containsJewel(stimulus));
+        dut.isBerge(stimulus,true);
+        assertTrue(verifyCertificate(dut.getCertificate()));
         
         
         stimulus.addEdge(1, 3);
-        assertFalse(containsJewel(stimulus));
+        assertFalse(dut.containsJewel(stimulus));
         
     }
     
@@ -206,16 +207,16 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         X.add(2);
         X.add(3);
         X.add(4);
-        assertTrue(isYXComplete(stimulus,1,X));
+        assertTrue(dut.isYXComplete(stimulus,1,X));
         
         stimulus.removeEdge(1,4);
-        assertFalse(isYXComplete(stimulus,1,X));
+        assertFalse(dut.isYXComplete(stimulus,1,X));
         stimulus.addEdge(1, 4);
         
         X.clear();
         X.add(2);
         X.add(1);
-        assertFalse(isYXComplete(stimulus,3,X));
+        assertFalse(dut.isYXComplete(stimulus,3,X));
         
     }
     
@@ -245,22 +246,22 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         stimulus.addEdge(7, 8);
         stimulus.addEdge(4, 8);
         
-        assertTrue(hasConfigurationType2(stimulus));
+        assertTrue(dut.hasConfigurationType2(stimulus));
         
 
         stimulus.addEdge(3, 6);
-        assertTrue(hasConfigurationType2(stimulus));
+        assertTrue(dut.hasConfigurationType2(stimulus));
         
         
         stimulus.addEdge(7, 6);
         
-        assertFalse( hasConfigurationType2(stimulus));
+        assertFalse( dut.hasConfigurationType2(stimulus));
         
         
         
         stimulus.removeEdge(3,6);
         stimulus.removeEdge(4,8);
-        assertFalse( hasConfigurationType2(stimulus));
+        assertFalse( dut.hasConfigurationType2(stimulus));
         
     }
     
@@ -349,11 +350,11 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     
         */
 
-        assertTrue(hasConfigurationType3(stimulus));
+        assertTrue(dut.hasConfigurationType3(stimulus));
         
 
         stimulus.addEdge(4, 7);
-        assertFalse(hasConfigurationType3(stimulus));
+        assertFalse(dut.hasConfigurationType3(stimulus));
         
     }
     
@@ -376,12 +377,12 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         stimulus.addEdge(6, 7);
         stimulus.addEdge(7, 1);
         
-        assertTrue(containsCleanShortestOddHole(stimulus));
+        assertTrue(dut.containsCleanShortestOddHole(stimulus));
         
         
         stimulus.addEdge(3, 7);
         stimulus.addEdge(4, 7);
-        assertFalse(containsCleanShortestOddHole(stimulus));
+        assertFalse(dut.containsCleanShortestOddHole(stimulus));
         
     }
     
@@ -408,7 +409,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         stimulus.addEdge(3, 8);
         stimulus.addEdge(8, 7);
         stimulus.addEdge(8, 5);
-        assertTrue(containsCleanShortestOddHole(stimulus));
+        assertTrue(dut.containsCleanShortestOddHole(stimulus));
         
         List<Integer> golden = new LinkedList<Integer>();
         golden.add(1);
@@ -420,7 +421,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
        // assertEquals(golden,certificate.getVertexList());
         
         stimulus.removeVertex(8);
-        assertTrue(containsCleanShortestOddHole(stimulus));
+        assertTrue(dut.containsCleanShortestOddHole(stimulus));
         
         
         
@@ -454,23 +455,23 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         golden.add(golden1);
         golden.add(golden2);
         
-        assertEquals(golden,routine3(stimulus));
+        assertEquals(golden,dut.routine3(stimulus));
     }
     
     @Test
     public void checkPetersenGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generatePetersenGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkDodecahedronGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateDodecahedronGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
@@ -478,48 +479,48 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     public void checkMöbiusKantorGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkBullGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateBullGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkButterflyGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateButterflyGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkClawGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateClawGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkGrötzschGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateGrötzschGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkDiamondGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateDiamondGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
 
     @Test
@@ -527,24 +528,24 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     public void checkFranklinGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateFranklinGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkFruchtGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateFruchtGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkGoldnerHararyGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateGoldnerHararyGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
@@ -552,8 +553,8 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     public void checkHeawoodGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateHeawoodGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
@@ -561,24 +562,24 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     public void checkHerschelGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateHerschelGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkKrackhardtKiteGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateKrackhardtKiteGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkMoserSpindleGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateMoserSpindleGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
@@ -586,32 +587,32 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     public void checkPappusGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generatePappusGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkTietzeGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateTietzeGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkThomsenGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateThomsenGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
     public void checkTutteGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateTutteGraph(stimulus);
-        assertFalse(isBerge(stimulus,true));
-        assertTrue(verifyCertificate(getCertificate()));
+        assertFalse(dut.isBerge(stimulus,true));
+        assertTrue(verifyCertificate(dut.getCertificate()));
     }
     
     
@@ -620,8 +621,8 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
         reset();
         int numberOfVertices = new Random().nextInt(maximalNumberOfVertices-minimalNumberOfVertices)+minimalNumberOfVertices;
         new EmptyGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
+        assertTrue(dut.isBerge(stimulus,true));
+        assertFalse(verifyCertificate(dut.getCertificate()));
     }
     
     @Test
@@ -640,7 +641,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
             reset();
             new GnmRandomBipartiteGraphGenerator<Integer,Integer>(n1,n2,numberOfEdges).generateGraph(stimulus);
             
-            assertTrue(isBerge(stimulus));
+            assertTrue(dut.isBerge(stimulus));
         }
         
         
@@ -662,7 +663,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
             new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
             
             
-            assertTrue(isBerge(stimulus));
+            assertTrue(dut.isBerge(stimulus));
         }
         
         repititions=repititionsPerTestCase;
@@ -677,7 +678,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
             new WheelGraphGenerator<Integer,Integer>(numberOfVertices).generateGraph(stimulus);
             
             
-            assertFalse(isBerge(stimulus));
+            assertFalse(dut.isBerge(stimulus));
         }
     }
     
@@ -693,7 +694,7 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
             new WindmillGraphsGenerator<Integer,Integer>(
                     WindmillGraphsGenerator.Mode.WINDMILL, m, numberOfVertices).generateGraph(stimulus);
             
-            assertTrue(isBerge(stimulus));
+            assertTrue(dut.isBerge(stimulus));
         }
     }
     
