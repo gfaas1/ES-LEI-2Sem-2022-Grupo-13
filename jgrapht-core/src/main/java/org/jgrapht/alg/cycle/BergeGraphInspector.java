@@ -112,7 +112,7 @@ public class BergeGraphInspector<V,E>{
      * @param s3 A vertex
      * @return The conjunct path of S and T
      */
-    protected GraphPath<V,E> P(Graph<V,E> g,GraphPath<V,E> S, GraphPath<V,E> T, Set<V> M, V m, V b1, V b2, V b3, V s1, V s2, V s3){
+    private GraphPath<V,E> P(Graph<V,E> g,GraphPath<V,E> S, GraphPath<V,E> T, Set<V> M, V m, V b1, V b2, V b3, V s1, V s2, V s3){
         if (s1==b1){
             if (b1==m){
                 List<E> edgeList = new LinkedList<E>();
@@ -182,7 +182,7 @@ public class BergeGraphInspector<V,E>{
      * @param g Graph
      * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g contains no pyramid
      */
-    protected boolean containsPyramid(Graph<V,E> g){
+    boolean containsPyramid(Graph<V,E> g){
         /*
          * A pyramid looks like this:
          * 
@@ -382,7 +382,7 @@ public class BergeGraphInspector<V,E>{
      * @param g Graph
      * @return Decides whether there is a jewel in g
      */
-    protected boolean containsJewel(Graph<V,E> g){
+    boolean containsJewel(Graph<V,E> g){
         for (V v2 : g.vertexSet()){
             for (V v3 : g.vertexSet()){
                 if (v2==v3||!g.containsEdge(v2,v3)) continue;
@@ -455,7 +455,7 @@ public class BergeGraphInspector<V,E>{
      * @param g Graph containing no pyramid or jewel
      * @return Decides whether g contains a clean shortest odd hole
      */
-    protected boolean containsCleanShortestOddHole(Graph<V,E> g){
+    boolean containsCleanShortestOddHole(Graph<V,E> g){
         /*
          * Find 3 Paths which are an uneven odd hole when conjunct
          */
@@ -527,7 +527,7 @@ public class BergeGraphInspector<V,E>{
      * @param X Subset of V(g) and a possible Cleaner for an odd hole
      * @return Determines whether g has an odd hole such that X is a near-cleaner for it
      */
-    protected boolean containsShortestOddHole(Graph<V,E> g,Set<V> X){
+    private boolean containsShortestOddHole(Graph<V,E> g,Set<V> X){
         for (V y1 : g.vertexSet()){
             if (X.contains(y1)) continue;
             
@@ -633,7 +633,7 @@ public class BergeGraphInspector<V,E>{
      * @param X Set of vertices
      * @return whether y is X-complete
      */
-    protected boolean isYXComplete(Graph<V,E> g, V y,Set<V> X){
+    boolean isYXComplete(Graph<V,E> g, V y,Set<V> X){
         return X.stream().allMatch(t->g.containsEdge(t,y));
     }
     
@@ -665,7 +665,7 @@ public class BergeGraphInspector<V,E>{
      * @param g A Graph
      * @return whether g contains a configuration of Type T2
      */
-    protected boolean hasConfigurationType2(Graph<V,E> g){
+    boolean hasConfigurationType2(Graph<V,E> g){
         for (V v1 : g.vertexSet()){
             for (V v2 : g.vertexSet()){
                 if (v1==v2||!g.containsEdge(v1,v2)) continue;
@@ -787,7 +787,7 @@ public class BergeGraphInspector<V,E>{
      * @param g A Graph
      * @return whether g contains a configuration of Type T3
      */
-    protected boolean hasConfigurationType3(Graph<V,E> g){
+    boolean hasConfigurationType3(Graph<V,E> g){
         for (V v1 : g.vertexSet()){
             for (V v2 : g.vertexSet()){
                 if (v1==v2||!g.containsEdge(v1,v2)) continue;
@@ -991,7 +991,7 @@ public class BergeGraphInspector<V,E>{
      * @param g A graph
      * @return possible near-cleaners
      */
-    protected Set<Set<V>> routine3(Graph<V,E> g){
+    Set<Set<V>> routine3(Graph<V,E> g){
         Set<Set<V>> NuvList = new HashSet<Set<V>>();
         for (V u : g.vertexSet()){
             for (V v : g.vertexSet()){
@@ -1026,11 +1026,11 @@ public class BergeGraphInspector<V,E>{
     
     /**
      * Performs the Berge Recognition Algorithm.
-     * <p> First this algorithm is used to test whether $G$ or its complement contain a jewel, a pyramid or a configuration of type
-     * 1, 2 or 3. If so, it is output that $G$ is not Berge. If not, then every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner subsets
-     * of $V(G)$ are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
-     * an odd hole is found, this checker will output that $G$ is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
-     * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
+     * <p> First this algorithm is used to test whether g or its complement contain a jewel, a pyramid or a configuration of type
+     * 1, 2 or 3. If so, it is output that g is not Berge. If not, then every shortest odd hole in g is amenable. This asserted, the near-cleaner subsets
+     * of V(g) are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
+     * an odd hole is found, this checker will output that g is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
+     * and it will be proceeded as before. If again no odd hole is detected, g is Berge.
      * 
      * <p> A certificate can be obtained through the {@link BergeGraphInspector#getCertificate} method, if <code>computeCertificate</code> is <code>true</code>.
      * <p> Running this method takes O(|V|^9), and computing the certificate takes O(|V|^5).
@@ -1071,11 +1071,11 @@ public class BergeGraphInspector<V,E>{
     
     /**
      * Performs the Berge Recognition Algorithm.
-     * <p> First this algorithm is used to test whether $G$ or its complement contain a jewel, a pyramid or a configuration of type
-     * 1, 2 or 3. If so, it is output that $G$ is not Berge. If not, then every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner subsets
-     * of $V(G)$ are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
-     * an odd hole is found, this checker will output that $G$ is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
-     * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
+     * <p> First this algorithm is used to test whether g or its complement contain a jewel, a pyramid or a configuration of type
+     * 1, 2 or 3. If so, it is output that g is not Berge. If not, then every shortest odd hole in g is amenable. This asserted, the near-cleaner subsets
+     * of V(g) are determined. For each of them in turn it is checked, if this subset is a near-cleaner and, thus, if there is an odd hole. If 
+     * an odd hole is found, this checker will output that g is not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
+     * and it will be proceeded as before. If again no odd hole is detected, g is Berge.
      * 
      * <p> This method by default does not compute a certificate. For obtaining a certificate, call {@link BergeGraphInspector#isBerge} with <code>computeCertificate=true</code>.
      * <p> Running this method takes O(|V|^9).
