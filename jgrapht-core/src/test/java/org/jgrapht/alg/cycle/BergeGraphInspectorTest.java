@@ -566,15 +566,6 @@ public class BergeGraphInspectorTest extends BergeGraphInspector<Integer,Integer
     }
     
     @Test
-    @Category(SlowTests.class)
-    public void checkHoffmanGraph() {
-        reset();
-        new NamedGraphGenerator<Integer, Integer>().generateHoffmanGraph(stimulus);
-        assertTrue(isBerge(stimulus,true));
-        assertFalse(verifyCertificate(getCertificate()));
-    }
-    
-    @Test
     public void checkKrackhardtKiteGraph() {
         reset();
         new NamedGraphGenerator<Integer, Integer>().generateKrackhardtKiteGraph(stimulus);
