@@ -20,6 +20,7 @@ package org.jgrapht;
 import org.jgrapht.alg.connectivity.BiconnectivityInspector;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.cycle.BergeGraphInspector;
 import org.jgrapht.alg.cycle.ChordalityInspector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.alg.cycle.WeakChordalityInspector;
@@ -678,6 +679,21 @@ public abstract class GraphTests
     public static <V, E> Graph<V, E> requireDirectedOrUndirected(Graph<V, E> graph)
     {
         return requireDirectedOrUndirected(graph, GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED);
+    }
+    
+    /**
+     * Checks that the specified graph is perfect.
+     * Due to the Strong Perfect Graph Theorem Berge Graphs are the same as perfect Graphs.
+     * The implementation of this method is delegated to {@link org.jgrapht.alg.cycle.BergeGraphInspector}
+     * 
+     * @param graph the graph reference to check for being perfect or not
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return {@code boolean} if {@code graph} is perfect
+     */
+    public static <V, E> boolean isPerfect(Graph<V,E> graph) {
+        Objects.requireNonNull(graph, GRAPH_CANNOT_BE_NULL);
+        return new BergeGraphInspector<V, E>().isBerge(graph);
     }
 
 }

@@ -40,8 +40,10 @@ import org.jgrapht.*;
 public class WindmillGraphsGenerator<V, E>
     implements GraphGenerator<V, E, V>
 {
-
-    enum Mode
+    /**
+     * WINDMILL and DUTCHWINDMILL Modes for the Constructor
+     */
+    public enum Mode
     {
         WINDMILL,
         DUTCHWINDMILL
