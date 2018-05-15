@@ -62,12 +62,13 @@ public abstract class Graphs
             throw new UnsupportedOperationException("Graph contains no edge supplier");
         }
         E e = edgeSupplier.get();
-
-        // we first create the edge and set the weight to make sure that
-        // listeners will see the correct weight upon addEdge.
-        g.setEdgeWeight(e, weight);
-
-        return g.addEdge(sourceVertex, targetVertex, e) ? e : null;
+        
+        if (g.addEdge(sourceVertex, targetVertex, e)) { 
+            g.setEdgeWeight(e, weight);
+            return e;
+        } else { 
+            return null;
+        }
     }
 
     /**
