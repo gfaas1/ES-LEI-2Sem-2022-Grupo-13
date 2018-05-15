@@ -65,6 +65,7 @@ public class SimpleGraphMLImporter<V, E>
 
     private boolean schemaValidation;
 
+    private Optional<BiConsumer<Pair<Graph<V, E>, String>, Attribute>> graphAttributeConsumer;
     private Optional<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumer;
     private Optional<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumer;
 
@@ -73,7 +74,7 @@ public class SimpleGraphMLImporter<V, E>
      */
     public SimpleGraphMLImporter()
     {
-        this(null, null);
+        this(null, null, null);
     }
 
     /**
@@ -83,16 +84,21 @@ public class SimpleGraphMLImporter<V, E>
      *        first argument a composite containing the graph vertex together with the attribute
      *        key. The second argument will be the actual attribute.
      * @param edgeAttributeConsumer consumer for edge attributes. The consumer will receive as a
-     *        first argument a composite containing the graph vertex together with the attribute
-     *        key. The second argument will be the actual attribute.
+     *        first argument a composite containing the graph edge together with the attribute key.
+     *        The second argument will be the actual attribute.
+     * @param graphAttributeConsumer consumer for graph attributes. The consumer will receive as a
+     *        first argument a composite containing the graph together with the attribute key. The
+     *        second argument will be the actual attribute.
      */
     public SimpleGraphMLImporter(
         BiConsumer<Pair<V, String>, Attribute> vertexAttributeConsumer,
-        BiConsumer<Pair<E, String>, Attribute> edgeAttributeConsumer)
+        BiConsumer<Pair<E, String>, Attribute> edgeAttributeConsumer,
+        BiConsumer<Pair<Graph<V, E>, String>, Attribute> graphAttributeConsumer)
     {
         this.schemaValidation = true;
         this.vertexAttributeConsumer = Optional.ofNullable(vertexAttributeConsumer);
         this.edgeAttributeConsumer = Optional.ofNullable(edgeAttributeConsumer);
+        this.graphAttributeConsumer = Optional.ofNullable(graphAttributeConsumer);
     }
 
     /**
@@ -189,14 +195,23 @@ public class SimpleGraphMLImporter<V, E>
         DefaultHandler
     {
         private static final String GRAPH = "graph";
+        private static final String GRAPH_ID = "id";
+        private static final String GRAPH_EDGE_DEFAULT = "edgedefault";
         private static final String NODE = "node";
         private static final String NODE_ID = "id";
         private static final String EDGE = "edge";
+        private static final String EDGE_ID = "id";
         private static final String EDGE_SOURCE = "source";
         private static final String EDGE_TARGET = "target";
+        private static final String ALL = "all";
         private static final String KEY = "key";
+        private static final String KEY_FOR = "for";
+        private static final String KEY_ATTR_NAME = "attr.name";
+        private static final String KEY_ATTR_TYPE = "attr.type";
+        private static final String KEY_ID = "id";
         private static final String DEFAULT = "default";
         private static final String DATA = "data";
+        private static final String DATA_KEY = "key";
 
         private Graph<V, E> graph;
         private Map<String, V> nodes;
@@ -210,6 +225,12 @@ public class SimpleGraphMLImporter<V, E>
         private V currentNode;
         private int insideEdge;
         private E currentEdge;
+        private Key currentKey;
+        private String currentDataKey;
+        private String currentDataValue;
+        private Map<String, Key> nodeValidKeys;
+        private Map<String, Key> edgeValidKeys;
+        private Map<String, Key> graphValidKeys;
 
         public GraphMLHandler(Graph<V, E> graph)
         {
@@ -229,6 +250,12 @@ public class SimpleGraphMLImporter<V, E>
             currentNode = null;
             insideEdge = 0;
             currentEdge = null;
+            currentKey = null;
+            currentDataKey = null;
+            currentDataValue = null;
+            nodeValidKeys = new HashMap<>();
+            edgeValidKeys = new HashMap<>();
+            graphValidKeys = new HashMap<>();
         }
 
         @Override
@@ -242,6 +269,10 @@ public class SimpleGraphMLImporter<V, E>
                         "This importer does not support nested graphs");
                 }
                 insideGraph++;
+                findAttribute(GRAPH_ID, attributes)
+                    .ifPresent(value -> notifyGraphAttribute(graph, GRAPH_ID, value));
+                findAttribute(GRAPH_EDGE_DEFAULT, attributes)
+                    .ifPresent(value -> notifyGraphAttribute(graph, GRAPH_EDGE_DEFAULT, value));
                 break;
             case NODE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -249,17 +280,15 @@ public class SimpleGraphMLImporter<V, E>
                         "Nodes cannot be inside other nodes or edges");
                 }
                 insideNode++;
-                String nodeId = Objects.requireNonNull(
-                    findAttribute(NODE_ID, attributes), "Node must have an identifier");
+                String nodeId = findAttribute(NODE_ID, attributes).orElseThrow(
+                    () -> new IllegalArgumentException("Node must have an identifier"));
                 V vertex = nodes.get(nodeId);
                 if (vertex == null) {
                     vertex = graph.addVertex();
                     nodes.put(nodeId, vertex);
                 }
                 currentNode = vertex;
-                vertexAttributeConsumer.ifPresent(
-                    c -> c.accept(
-                        Pair.of(currentNode, NODE_ID), DefaultAttribute.createAttribute(nodeId)));
+                notifyVertexAttribute(currentNode, NODE_ID, nodeId);
                 break;
             case EDGE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -267,33 +296,35 @@ public class SimpleGraphMLImporter<V, E>
                         "Edges cannot be inside other nodes or edges");
                 }
                 insideEdge++;
-                String sourceId = Objects
-                    .requireNonNull(findAttribute(EDGE_SOURCE, attributes), "Edge source missing");
-                String targetId = Objects
-                    .requireNonNull(findAttribute(EDGE_TARGET, attributes), "Edge target missing");
+                String sourceId = findAttribute(EDGE_SOURCE, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Edge source missing"));
+                String targetId = findAttribute(EDGE_TARGET, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Edge target missing"));
                 V source = nodes.computeIfAbsent(sourceId, k -> graph.addVertex());
                 V target = nodes.computeIfAbsent(targetId, k -> graph.addVertex());
                 currentEdge = graph.addEdge(source, target);
-                edgeAttributeConsumer.ifPresent(
-                    c -> c.accept(
-                        Pair.of(currentEdge, EDGE_SOURCE),
-                        DefaultAttribute.createAttribute(sourceId)));
-                edgeAttributeConsumer.ifPresent(
-                    c -> c.accept(
-                        Pair.of(currentEdge, EDGE_TARGET),
-                        DefaultAttribute.createAttribute(targetId)));
+                notifyEdgeAttribute(currentEdge, EDGE_SOURCE, sourceId);
+                notifyEdgeAttribute(currentEdge, EDGE_TARGET, targetId);
+                findAttribute(EDGE_ID, attributes)
+                    .ifPresent(value -> notifyEdgeAttribute(currentEdge, EDGE_ID, value));
                 break;
             case KEY:
                 insideKey++;
-                // TODO
+                String keyId = findAttribute(KEY_ID, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Key id missing"));
+                String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes)
+                    .orElseThrow(() -> new IllegalArgumentException("Key attribute name missing"));
+                currentKey = new Key(
+                    keyId, keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
+                        .map(AttributeType::create).orElse(AttributeType.STRING),
+                    findAttribute(KEY_FOR, attributes).orElse("ALL"));
                 break;
             case DEFAULT:
                 insideDefault++;
-                // TODO
                 break;
             case DATA:
                 insideData++;
-                // TODO
+                findAttribute(DATA_KEY, attributes).ifPresent(data -> currentDataKey = data);
                 break;
             default:
                 break;
@@ -318,12 +349,18 @@ public class SimpleGraphMLImporter<V, E>
                 break;
             case KEY:
                 insideKey--;
+                registerKey();
+                currentKey = null;
                 break;
             case DEFAULT:
                 insideDefault--;
                 break;
             case DATA:
-                insideData--;
+                if (--insideData == 0) {
+                    notifyData();
+                    currentDataValue = null;
+                    currentDataKey = null;
+                }
                 break;
             default:
                 break;
@@ -334,10 +371,9 @@ public class SimpleGraphMLImporter<V, E>
         public void characters(char ch[], int start, int length)
             throws SAXException
         {
-            /*
-             * if (insideDefault) { currentKey.defaultValue = new String(ch, start, length); } else
-             * if (insideData) { currentData.value = new String(ch, start, length); }
-             */
+            if (insideData == 1) {
+                currentDataValue = new String(ch, start, length);
+            }
         }
 
         @Override
@@ -359,15 +395,118 @@ public class SimpleGraphMLImporter<V, E>
             throw e;
         }
 
-        private String findAttribute(String localName, Attributes attributes)
+        private Optional<String> findAttribute(String localName, Attributes attributes)
         {
             for (int i = 0; i < attributes.getLength(); i++) {
                 String attrLocalName = attributes.getLocalName(i);
                 if (attrLocalName.equals(localName)) {
-                    return attributes.getValue(i);
+                    return Optional.ofNullable(attributes.getValue(i));
                 }
             }
-            return null;
+            return Optional.empty();
+        }
+
+        private void notifyVertexAttribute(V v, String key, String value)
+        {
+            if (value != null) {
+                vertexAttributeConsumer.ifPresent(
+                    c -> c.accept(Pair.of(v, key), DefaultAttribute.createAttribute(value)));
+            }
+        }
+
+        private void notifyEdgeAttribute(E e, String key, String value)
+        {
+            if (value != null) {
+                edgeAttributeConsumer.ifPresent(
+                    c -> c.accept(Pair.of(e, key), DefaultAttribute.createAttribute(value)));
+            }
+        }
+
+        private void notifyGraphAttribute(Graph<V, E> g, String key, String value)
+        {
+            if (value != null) {
+                graphAttributeConsumer.ifPresent(
+                    c -> c.accept(Pair.of(g, key), DefaultAttribute.createAttribute(value)));
+            }
+        }
+
+        private void notifyData()
+        {
+            if (currentDataKey == null || currentDataValue == null) {
+                return;
+            }
+
+            if (currentNode != null) {
+                Key key = nodeValidKeys.get(currentDataKey);
+                if (key != null) {
+                    vertexAttributeConsumer.ifPresent(
+                        c -> c.accept(
+                            Pair.of(currentNode, key.attributeName),
+                            new DefaultAttribute<>(currentDataValue, key.type)));
+                }
+            }
+            if (currentEdge != null) {
+                Key key = edgeValidKeys.get(currentDataKey);
+                if (key != null) {
+                    edgeAttributeConsumer.ifPresent(
+                        c -> c.accept(
+                            Pair.of(currentEdge, key.attributeName),
+                            new DefaultAttribute<>(currentDataValue, key.type)));
+                }
+            } 
+            if (graph != null) {
+                Key key = graphValidKeys.get(currentDataKey);
+                if (key != null) {
+                    graphAttributeConsumer.ifPresent(
+                        c -> c.accept(
+                            Pair.of(graph, key.attributeName),
+                            new DefaultAttribute<>(currentDataValue, key.type)));
+                }
+            }
+        }
+
+        private void registerKey()
+        {
+            if (currentKey.isValid()) {
+                switch (currentKey.target) {
+                case NODE:
+                    nodeValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case EDGE:
+                    edgeValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case GRAPH:
+                    graphValidKeys.put(currentKey.id, currentKey);
+                    break;
+                case ALL:
+                    nodeValidKeys.put(currentKey.id, currentKey);
+                    edgeValidKeys.put(currentKey.id, currentKey);
+                    graphValidKeys.put(currentKey.id, currentKey);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private static class Key
+    {
+        String id;
+        String attributeName;
+        String target;
+        AttributeType type;
+
+        public Key(String id, String attributeName, AttributeType type, String target)
+        {
+            this.id = id;
+            this.attributeName = attributeName;
+            this.type = type;
+            this.target = target;
+        }
+
+        public boolean isValid()
+        {
+            return id != null && attributeName != null && target != null;
         }
 
     }

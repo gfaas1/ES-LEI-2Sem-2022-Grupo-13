@@ -111,11 +111,14 @@ public class SimpleGraphMLImporterTest
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
         Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
+        Map<Pair<Graph<String, DefaultEdge>, String>, Attribute> graphAttrs = new HashMap<>();
 
         new SimpleGraphMLImporter<String, DefaultEdge>((k, v) -> {
             vertexAttrs.put(k, v);
         }, (k, v) -> {
             edgeAttrs.put(k, v);
+        }, (k, v) -> {
+            graphAttrs.put(k, v);
         }).importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         // check graph
@@ -177,9 +180,6 @@ public class SimpleGraphMLImporterTest
                     .undirected().weighted(false).allowingMultipleEdges(true)
                     .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
                     .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
-
-            Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
-            Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
 
             new SimpleGraphMLImporter<String, DefaultEdge>()
                 .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
