@@ -342,7 +342,7 @@ public class BergeGraphInspector<V, E>
                                         if (P1 == null)
                                             continue;
                                         Set<V> M2 = new HashSet<>();
-                                        M2.addAll(M2);
+                                        M2.addAll(M);
                                         M2.add(b2);
                                         for (V m2 : M) {
                                             GraphPath<V,
