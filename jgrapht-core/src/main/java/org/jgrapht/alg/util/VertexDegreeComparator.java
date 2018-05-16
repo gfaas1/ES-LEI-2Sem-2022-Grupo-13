@@ -36,7 +36,8 @@ import org.jgrapht.*;
  * @since Nov 6, 2003
  */
 public class VertexDegreeComparator<V, E>
-    implements Comparator<V>
+    implements
+    Comparator<V>
 {
 
     /**

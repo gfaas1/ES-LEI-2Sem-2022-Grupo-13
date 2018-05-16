@@ -36,7 +36,8 @@ import org.jgrapht.graph.GraphDelegator;
  * @since Sep 16, 2003
  */
 public class WheelGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the hub vertex.
@@ -81,8 +82,7 @@ public class WheelGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -98,10 +98,12 @@ public class WheelGraphGenerator<V, E>
             rim.add(vertex);
             return vertex;
         };
-        
-        Graph<V,E> targetWithRimVertexSupplier = new GraphDelegator<>(target, rimVertexSupplier, null);
-        
-        new RingGraphGenerator<V,E>(size - 1).generateGraph(targetWithRimVertexSupplier, resultMap);
+
+        Graph<V, E> targetWithRimVertexSupplier =
+            new GraphDelegator<>(target, rimVertexSupplier, null);
+
+        new RingGraphGenerator<V, E>(size - 1)
+            .generateGraph(targetWithRimVertexSupplier, resultMap);
 
         V hubVertex = target.addVertex();
 

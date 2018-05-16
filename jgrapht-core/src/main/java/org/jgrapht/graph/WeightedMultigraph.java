@@ -25,8 +25,8 @@ import org.jgrapht.util.SupplierUtil;
 
 /**
  * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops
- * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a weighted
- * multigraph have weights. If you're unsure about multigraphs, see:
+ * are permitted, but multiple (parallel) edges between any two vertices are. The edges of a
+ * weighted multigraph have weights. If you're unsure about multigraphs, see:
  * <a href="http://mathworld.wolfram.com/Multigraph.html">
  * http://mathworld.wolfram.com/Multigraph.html</a>.
  * 
@@ -34,7 +34,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class WeightedMultigraph<V, E>
-    extends Multigraph<V, E>
+    extends
+    Multigraph<V, E>
 {
     private static final long serialVersionUID = -6009321659287373874L;
 
@@ -56,9 +57,7 @@ public class WeightedMultigraph<V, E>
      */
     public WeightedMultigraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -74,7 +73,7 @@ public class WeightedMultigraph<V, E>
     {
         return new GraphBuilder<>(new WeightedMultigraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -88,12 +87,12 @@ public class WeightedMultigraph<V, E>
     {
         return new GraphBuilder<>(new WeightedMultigraph<>(null, edgeSupplier));
     }
-    
+
     /**
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public WeightedMultigraph(EdgeFactory<V, E> ef)
@@ -108,9 +107,9 @@ public class WeightedMultigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
-    @Deprecated    
+    @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
         EdgeFactory<V, E> ef)
     {

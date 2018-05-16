@@ -48,7 +48,8 @@ public class AllVariantsBronKerboschCliqueFinderTest
                 numberVertices, edgeProbability, rng, false);
 
         for (int i = 0; i < repeat; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             gg.generateGraph(g);
 
             Iterable<Set<Integer>> alg1 = new BronKerboschCliqueFinder<>(g);

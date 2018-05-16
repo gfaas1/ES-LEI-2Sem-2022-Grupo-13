@@ -219,7 +219,8 @@ public class TarjanLowestCommonAncestor<V, E>
 
     @SuppressWarnings("serial")
     private static final class MultiMap<V>
-        extends HashMap<V, Set<LcaRequestResponse<V>>>
+        extends
+        HashMap<V, Set<LcaRequestResponse<V>>>
     {
         public Set<LcaRequestResponse<V>> getOrCreate(V key)
         {

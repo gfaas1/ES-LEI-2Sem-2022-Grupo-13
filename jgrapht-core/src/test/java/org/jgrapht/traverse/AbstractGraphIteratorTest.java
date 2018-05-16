@@ -144,7 +144,8 @@ public abstract class AbstractGraphIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+        implements
+        TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;

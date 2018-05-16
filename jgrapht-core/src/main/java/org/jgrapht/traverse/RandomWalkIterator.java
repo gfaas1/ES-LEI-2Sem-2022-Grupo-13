@@ -50,7 +50,8 @@ import org.jgrapht.*;
  * @param <E> edge type
  */
 public class RandomWalkIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private V currentVertex;
     private final boolean isWeighted;

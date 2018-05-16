@@ -42,7 +42,8 @@ import org.jgrapht.util.*;
  * @since July 2016
  */
 public final class BidirectionalDijkstraShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private double radius;
 

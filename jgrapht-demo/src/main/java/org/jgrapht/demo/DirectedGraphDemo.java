@@ -17,7 +17,7 @@
  */
 
 package org.jgrapht.demo;
- 
+
 import java.util.*;
 
 import org.jgrapht.*;
@@ -45,7 +45,7 @@ public class DirectedGraphDemo
      *
      * @param args ignored.
      */
-    
+
     public static void main(String args[])
     {
         // constructs a directed graph with the specified vertices and edges
@@ -100,4 +100,3 @@ public class DirectedGraphDemo
         System.out.println(cPaths.getPath("i"));
     }
 }
-

@@ -34,22 +34,24 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class MaximumCardinalityIteratorTest {
-
+public class MaximumCardinalityIteratorTest
+{
 
     /**
      * Tests basic properties of events fired by {@code LexBreadthFirstIterator}.
      */
     @Test
-    public void testEvents() {
+    public void testEvents()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "b");
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "c", "a");
         Graphs.addEdgeWithVertices(graph, "b", "d");
         LexBreadthFirstIteratorTest.MyTraversalListener<String, DefaultEdge> listener =
-                new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+            new LexBreadthFirstIteratorTest.MyTraversalListener<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         iterator.addTraversalListener(listener);
         for (int i = 0; i < 4; i++) {
             iterator.next();
@@ -58,14 +60,15 @@ public class MaximumCardinalityIteratorTest {
         assertEquals(graph.vertexSet(), listener.verticesFinished);
     }
 
-
     /**
      * Tests iterator on empty graph.
      */
     @Test(expected = NoSuchElementException.class)
-    public void testMaximumCardinalityIterator1() {
+    public void testMaximumCardinalityIterator1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
 
         assertFalse(iterator.hasNext());
 
@@ -76,13 +79,15 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on basic invariants.
      */
     @Test
-    public void testMaximumCardinalityIterator2() {
+    public void testMaximumCardinalityIterator2()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "b");
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "b", "d");
         Graphs.addEdgeWithVertices(graph, "c", "d");
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<String> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -114,13 +119,15 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on disconnected graph.
      */
     @Test
-    public void testMaximumCardinalityIterator3() {
+    public void testMaximumCardinalityIterator3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
         graph.addVertex(4);
-        MaximumCardinalityIterator<Integer, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<Integer, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -152,7 +159,8 @@ public class MaximumCardinalityIteratorTest {
      * Tests iterator on pseudograph.
      */
     @Test
-    public void testMaximumCardinalityIterator4() {
+    public void testMaximumCardinalityIterator4()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, "a", "a");
         Graphs.addEdgeWithVertices(graph, "a", "b");
@@ -163,7 +171,8 @@ public class MaximumCardinalityIteratorTest {
         Graphs.addEdgeWithVertices(graph, "b", "c");
         Graphs.addEdgeWithVertices(graph, "c", "c");
         Graphs.addEdgeWithVertices(graph, "c", "c");
-        MaximumCardinalityIterator<String, DefaultEdge> iterator = new MaximumCardinalityIterator<>(graph);
+        MaximumCardinalityIterator<String, DefaultEdge> iterator =
+            new MaximumCardinalityIterator<>(graph);
         Set<String> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -187,4 +196,3 @@ public class MaximumCardinalityIteratorTest {
     }
 
 }
-

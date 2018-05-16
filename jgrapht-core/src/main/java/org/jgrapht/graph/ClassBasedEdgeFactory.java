@@ -39,7 +39,9 @@ import org.jgrapht.*;
  */
 @Deprecated
 public class ClassBasedEdgeFactory<V, E>
-    implements EdgeFactory<V, E>, Serializable
+    implements
+    EdgeFactory<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 3618135658586388792L;
 

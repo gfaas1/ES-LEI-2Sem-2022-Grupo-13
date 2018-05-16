@@ -24,9 +24,10 @@ import org.jgrapht.graph.*;
 
 /**
  * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and Wagner minimum cut
- * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time. This
- * implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer and F.
- * Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591, 1997.
+ * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time.
+ * This implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer
+ * and F. Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591,
+ * 1997.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -177,8 +178,8 @@ public class StoerWagnerMinimumCut<V, E>
     }
 
     /**
-     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex and
-     * the sum of its weights
+     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex
+     * and the sum of its weights
      * 
      * @param s the first vertex
      * @param t the second vertex
@@ -239,7 +240,8 @@ public class StoerWagnerMinimumCut<V, E>
      * Class for weighted vertices
      */
     protected class VertexAndWeight
-        implements Comparable<VertexAndWeight>
+        implements
+        Comparable<VertexAndWeight>
     {
         public Set<V> vertex;
         public Double weight;

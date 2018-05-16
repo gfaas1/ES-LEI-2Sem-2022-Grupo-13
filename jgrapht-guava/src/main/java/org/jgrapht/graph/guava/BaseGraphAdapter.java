@@ -44,8 +44,12 @@ import com.google.common.graph.EndpointPair;
  * @param <G> type of the underlying Guava's graph
  */
 public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Graph<V>>
-    extends AbstractGraph<V, EndpointPair<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, EndpointPair<V>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -6742507788742087708L;
 

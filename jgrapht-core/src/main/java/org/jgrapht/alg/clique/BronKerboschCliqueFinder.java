@@ -45,7 +45,8 @@ import org.jgrapht.*;
  * @author Ewgenij Proschak
  */
 public class BronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+    extends
+    BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.

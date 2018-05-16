@@ -32,7 +32,8 @@ import org.jgrapht.Graph;
  * @since Aug 10, 2003
  */
 public class GraphEdgeChangeEvent<V, E>
-    extends GraphChangeEvent
+    extends
+    GraphChangeEvent
 {
     private static final long serialVersionUID = -4421610303769803253L;
 
@@ -55,7 +56,7 @@ public class GraphEdgeChangeEvent<V, E>
      * Edge removed event. This event is fired after an edge is removed from a graph.
      */
     public static final int EDGE_REMOVED = 24;
-    
+
     /**
      * Edge weight updated event. This event is fired after an edge weight is updated in a graph.
      */
@@ -75,7 +76,7 @@ public class GraphEdgeChangeEvent<V, E>
      * The target vertex of the edge that this event is related to.
      */
     protected V edgeTarget;
-    
+
     /**
      * The weight of the edge that this event is related to.
      */
@@ -94,7 +95,7 @@ public class GraphEdgeChangeEvent<V, E>
     {
         this(eventSource, type, edge, edgeSource, edgeTarget, Graph.DEFAULT_EDGE_WEIGHT);
     }
-    
+
     /**
      * Constructor for GraphEdgeChangeEvent.
      *
@@ -105,7 +106,8 @@ public class GraphEdgeChangeEvent<V, E>
      * @param edgeTarget edge target vertex
      * @param edgeWeight edge weight
      */
-    public GraphEdgeChangeEvent(Object eventSource, int type, E edge, V edgeSource, V edgeTarget, double edgeWeight)
+    public GraphEdgeChangeEvent(
+        Object eventSource, int type, E edge, V edgeSource, V edgeTarget, double edgeWeight)
     {
         super(eventSource, type);
         this.edge = edge;
@@ -153,8 +155,7 @@ public class GraphEdgeChangeEvent<V, E>
     {
         return edgeWeight;
     }
-    
-    
+
 }
 
 // End GraphEdgeChangeEvent.java

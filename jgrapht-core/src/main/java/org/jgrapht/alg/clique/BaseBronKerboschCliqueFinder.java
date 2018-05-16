@@ -32,7 +32,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Ewgenij Proschak
  */
 abstract class BaseBronKerboschCliqueFinder<V, E>
-    implements MaximalCliqueEnumerationAlgorithm<V, E>
+    implements
+    MaximalCliqueEnumerationAlgorithm<V, E>
 {
     /**
      * The underlying graph

@@ -59,8 +59,8 @@ public class PatonCycleBaseTest
 
     private void testAlgorithm(UndirectedCycleBase<Integer, DefaultEdge> finder)
     {
-        SimpleGraph<Integer, DefaultEdge> graph =
-            new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -236,8 +236,7 @@ public class PatonCycleBaseTest
 
         for (int size = 1; size <= MAX_SIZE; size++) {
             graph = new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
-            finder =
-                new PatonCycleBase<Integer, DefaultEdge>(graph);
+            finder = new PatonCycleBase<Integer, DefaultEdge>(graph);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }

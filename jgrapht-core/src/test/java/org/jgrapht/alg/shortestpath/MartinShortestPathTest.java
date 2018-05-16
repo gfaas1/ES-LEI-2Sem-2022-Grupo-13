@@ -52,7 +52,8 @@ public class MartinShortestPathTest
         DefaultEdge e35 = g.addEdge(3, 5);
         DefaultEdge e45 = g.addEdge(4, 5);
 
-        DefaultEdgeFunction<DefaultEdge, double[]> f = new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
+        DefaultEdgeFunction<DefaultEdge, double[]> f =
+            new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
 
         f.set(e12, new double[] { 1.0, 5.0 });
         f.set(e13, new double[] { 4.0, 2.0 });
@@ -87,7 +88,8 @@ public class MartinShortestPathTest
         g.addVertex(1);
         g.addVertex(2);
 
-        DefaultEdgeFunction<DefaultEdge, double[]> f = new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
+        DefaultEdgeFunction<DefaultEdge, double[]> f =
+            new DefaultEdgeFunction<>(new double[] { 0.0, 0.0 });
 
         MultiObjectiveSingleSourcePaths<Integer, DefaultEdge> paths1 =
             new MartinShortestPath<>(g, f).getPaths(1);

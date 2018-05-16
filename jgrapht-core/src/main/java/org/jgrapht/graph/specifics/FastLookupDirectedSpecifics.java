@@ -35,7 +35,8 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class FastLookupDirectedSpecifics<V, E>
-    extends DirectedSpecifics<V, E>
+    extends
+    DirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 

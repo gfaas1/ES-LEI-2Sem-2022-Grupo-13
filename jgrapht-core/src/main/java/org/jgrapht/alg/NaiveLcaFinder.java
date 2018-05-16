@@ -26,12 +26,12 @@ import java.util.*;
  * Find the Lowest Common Ancestor of a directed graph.
  *
  * <p>
- * Find the LCA, defined as <i>Let $G = (V, E)$ be a DAG, and let $x, y \in V$ . Let $G x,y$ be the subgraph
- * of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y) to be the set of
- * out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$ are the elements of
- * SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing upwards to the root(s) of
- * the DAG. Wherever the recursion paths cross we have found our LCA.</i> from
- * http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
+ * Find the LCA, defined as <i>Let $G = (V, E)$ be a DAG, and let $x, y \in V$ . Let $G x,y$ be the
+ * subgraph of $G$ induced by the set of all common ancestors of $x$ and $y$. Define SLCA (x, y) to
+ * be the set of out-degree 0 nodes (leafs) in $G x,y$. The lowest common ancestors of $x$ and $y$
+ * are the elements of SLCA (x, y). This naive algorithm simply starts at $a$ and $b$, recursing
+ * upwards to the root(s) of the DAG. Wherever the recursion paths cross we have found our LCA.</i>
+ * from http://www.cs.sunysb.edu/~bender/pub/JALG05-daglca.pdf. The algorithm:
  *
  * <pre>
  * 1. Start at each of nodes you wish to find the lca for (a and b)
@@ -118,20 +118,18 @@ public class NaiveLcaFinder<V, E>
         if (visitedSets[0].size() < visitedSets[1].size()) {
             visitedSets[0].retainAll(visitedSets[1]);
             intersection = visitedSets[0];
-        }
-        else{
+        } else {
             visitedSets[1].retainAll(visitedSets[0]);
             intersection = visitedSets[1];
         }
 
         /*
-         * Find the set of all non-leaves by iterating through the
-         * set of common ancestors. When we encounter a node which is
-         * still part of the SLCA(a, b) we remove its parent(s).
+         * Find the set of all non-leaves by iterating through the set of common ancestors. When we
+         * encounter a node which is still part of the SLCA(a, b) we remove its parent(s).
          */
         Set<V> nonLeaves = new LinkedHashSet<>();
-        for (V node: intersection){
-            for (E edge: graph.incomingEdgesOf(node)) {
+        for (V node : intersection) {
+            for (E edge : graph.incomingEdgesOf(node)) {
                 if (graph.getEdgeTarget(edge).equals(node)) {
                     V source = graph.getEdgeSource(edge);
 
@@ -147,12 +145,13 @@ public class NaiveLcaFinder<V, E>
     }
 
     /**
-     * Perform a simultaneous bottom-up bfs from a and b, saving all visited nodes.
-     * Once a a node has been visited from both a and b, it is no longer expanded in
-     * our search (we know that its ancestors won't be part of the SLCA(x, y) set).
+     * Perform a simultaneous bottom-up bfs from a and b, saving all visited nodes. Once a a node
+     * has been visited from both a and b, it is no longer expanded in our search (we know that its
+     * ancestors won't be part of the SLCA(x, y) set).
      */
     @SuppressWarnings("unchecked")
-    private void doubleBfs(V a, V b, Set<V>[] visitedSets){
+    private void doubleBfs(V a, V b, Set<V>[] visitedSets)
+    {
         Queue<V>[] queues = new Queue[2];
         queues[0] = new ArrayDeque<>();
         queues[1] = new ArrayDeque<>();
@@ -187,7 +186,8 @@ public class NaiveLcaFinder<V, E>
      * members of sets aSeenSet and bSeenSet respectively, along with all elements on the paths from
      * every member of aSet and bSet
      */
-    private V findLca(Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
+    private V findLca(
+        Set<V> aSet, Set<V> bSet, LinkedHashSet<V> aSeenSet, LinkedHashSet<V> bSeenSet)
     {
         while (true) {
             // if there is no LCA...

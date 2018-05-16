@@ -54,7 +54,9 @@ import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
  * @author Nikolay Ognyanov
  */
 public class PatonCycleBase<V, E>
-    implements UndirectedCycleBase<V, E>, CycleBasisAlgorithm<V, E>
+    implements
+    UndirectedCycleBase<V, E>,
+    CycleBasisAlgorithm<V, E>
 {
     private Graph<V, E> graph;
 

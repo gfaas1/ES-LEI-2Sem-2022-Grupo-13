@@ -91,7 +91,7 @@ public class MutableValueGraphAdapterTest
             // ignore
         }
     }
-    
+
     /**
      * Test two ways values in special case where value type is double.
      */
@@ -141,23 +141,25 @@ public class MutableValueGraphAdapterTest
     @Test
     public void testExample()
     {
-        MutableValueGraph<String, MyValue> valueGraph = ValueGraphBuilder.directed().allowsSelfLoops(true).build();
-        
+        MutableValueGraph<String, MyValue> valueGraph =
+            ValueGraphBuilder.directed().allowsSelfLoops(true).build();
+
         valueGraph.addNode("v1");
         valueGraph.addNode("v2");
         valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
-        
-        Graph<String, EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
+
+        Graph<String,
+            EndpointPair<String>> graph = new MutableValueGraphAdapter<>(
                 valueGraph, new MyValue(1.0),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
-        
+
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
-        
+
         valueGraph.putEdgeValue("v1", "v2", new MyValue(9.0));
-        
+
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 9.0, 1e-9);
     }
-    
+
     /**
      * Example on javadoc
      */
@@ -174,12 +176,12 @@ public class MutableValueGraphAdapterTest
         Graph<String, EndpointPair<String>> g = new MutableDoubleValueGraphAdapter<>(graph);
 
         assertEquals(3.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
-        
+
         g.setEdgeWeight(EndpointPair.ordered("v1", "v2"), 7.0);
-        
+
         assertEquals(7.0, g.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 1e-9);
     }
-    
+
     /**
      * Test the most general version of the directed graph.
      */
@@ -419,7 +421,8 @@ public class MutableValueGraphAdapterTest
     }
 
     private static class MyValue
-        implements Serializable
+        implements
+        Serializable
     {
         private static final long serialVersionUID = 1L;
 

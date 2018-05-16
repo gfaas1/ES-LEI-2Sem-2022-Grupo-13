@@ -883,7 +883,8 @@ public class VF2SubgraphIsomorphismInspectorTest
     }
 
     private class VertexComp
-        implements Comparator<String>
+        implements
+        Comparator<String>
     {
         @Override
         public int compare(String o1, String o2)
@@ -896,7 +897,8 @@ public class VF2SubgraphIsomorphismInspectorTest
     }
 
     private class EdgeComp
-        implements Comparator<Integer>
+        implements
+        Comparator<Integer>
     {
         @Override
         public int compare(Integer o1, Integer o2)

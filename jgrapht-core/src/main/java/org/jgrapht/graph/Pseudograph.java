@@ -33,7 +33,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class Pseudograph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -7574564204896552581L;
 
@@ -95,7 +96,7 @@ public class Pseudograph<V, E>
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public Pseudograph(EdgeFactory<V, E> ef)
@@ -108,7 +109,7 @@ public class Pseudograph<V, E>
      *
      * @param weighted if true the graph supports edge weights
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public Pseudograph(EdgeFactory<V, E> ef, boolean weighted)
@@ -123,7 +124,7 @@ public class Pseudograph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V,

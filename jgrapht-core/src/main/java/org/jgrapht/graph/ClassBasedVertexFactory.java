@@ -27,11 +27,13 @@ import org.jgrapht.*;
  * @param <V> the graph vertex type
  *
  * @since July 5, 2007
- * @deprecated Use suppliers instead 
+ * @deprecated Use suppliers instead
  */
 @Deprecated
 public class ClassBasedVertexFactory<V>
-    implements VertexFactory<V>, Serializable
+    implements
+    VertexFactory<V>,
+    Serializable
 {
     private static final long serialVersionUID = 2023739507430993272L;
 

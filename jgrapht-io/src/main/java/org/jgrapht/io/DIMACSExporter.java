@@ -38,8 +38,10 @@ import org.jgrapht.*;
  * @since January 2017
  */
 public class DIMACSExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * The default format used by the exporter.

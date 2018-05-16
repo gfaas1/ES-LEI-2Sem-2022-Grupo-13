@@ -219,7 +219,9 @@ public class AllDirectedPaths<V, E>
                     completePaths.add(makePath(Collections.singletonList(edge)));
                 }
 
-                if (edgeMinDistancesFromTargets.containsKey(edge) && (maxPathLength == null || maxPathLength > 1)) {
+                if (edgeMinDistancesFromTargets.containsKey(edge)
+                    && (maxPathLength == null || maxPathLength > 1))
+                {
                     List<E> path = Collections.singletonList(edge);
                     incompletePaths.add(path);
                 }
@@ -247,9 +249,8 @@ public class AllDirectedPaths<V, E>
             for (E outEdge : graph.outgoingEdgesOf(leafNode)) {
                 // Proceed if the outgoing edge is marked and the mark
                 // is sufficiently small
-                if (edgeMinDistancesFromTargets.containsKey(outEdge)
-                    && ((maxPathLength == null) || ((edgeMinDistancesFromTargets.get(outEdge)
-                        + lengthSoFar) <= maxPathLength)))
+                if (edgeMinDistancesFromTargets.containsKey(outEdge) && ((maxPathLength == null)
+                    || ((edgeMinDistancesFromTargets.get(outEdge) + lengthSoFar) <= maxPathLength)))
                 {
                     List<E> newPath = new ArrayList<>(incompletePath);
                     newPath.add(outEdge);

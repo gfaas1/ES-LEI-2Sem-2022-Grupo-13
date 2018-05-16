@@ -44,8 +44,10 @@ import org.xml.sax.helpers.*;
  * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     // providers
     private ComponentNameProvider<V> vertexLabelProvider;

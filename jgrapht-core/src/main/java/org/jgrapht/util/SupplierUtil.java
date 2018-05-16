@@ -163,7 +163,9 @@ public class SupplierUtil
     }
 
     private static class IntegerSupplier
-        implements Supplier<Integer>, Serializable
+        implements
+        Supplier<Integer>,
+        Serializable
     {
         private static final long serialVersionUID = -4714266728630636497L;
 
@@ -182,7 +184,9 @@ public class SupplierUtil
     }
 
     private static class LongSupplier
-        implements Supplier<Long>, Serializable
+        implements
+        Supplier<Long>,
+        Serializable
     {
         private static final long serialVersionUID = 4994477932143967277L;
 
@@ -201,7 +205,9 @@ public class SupplierUtil
     }
 
     private static class StringSupplier
-        implements Supplier<String>, Serializable
+        implements
+        Supplier<String>,
+        Serializable
     {
         private static final long serialVersionUID = -5025488316341437260L;
 
@@ -220,7 +226,9 @@ public class SupplierUtil
     }
 
     private static class RandomUUIDStringSupplier
-        implements Supplier<String>, Serializable
+        implements
+        Supplier<String>,
+        Serializable
     {
         private static final long serialVersionUID = -4636552536822031851L;
 

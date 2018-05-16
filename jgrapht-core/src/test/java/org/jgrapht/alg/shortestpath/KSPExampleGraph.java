@@ -23,7 +23,8 @@ import org.jgrapht.graph.*;
  * <img src="./KSPExample.png">
  */
 public class KSPExampleGraph
-    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
+    extends
+    SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

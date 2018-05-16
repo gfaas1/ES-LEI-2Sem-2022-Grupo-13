@@ -104,7 +104,8 @@ public class KShortestPathKValuesTest
                 new KShortestSimplePaths<>(graph);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    assertEquals(finder.getPaths(sourceVertex, targetVertex, maxSize).size(), nbPaths);
+                    assertEquals(
+                        finder.getPaths(sourceVertex, targetVertex, maxSize).size(), nbPaths);
                 }
             }
         }

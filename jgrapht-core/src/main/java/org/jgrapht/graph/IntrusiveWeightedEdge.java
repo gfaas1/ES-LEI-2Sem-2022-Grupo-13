@@ -27,7 +27,8 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 class IntrusiveWeightedEdge
-    extends IntrusiveEdge
+    extends
+    IntrusiveEdge
 {
     private static final long serialVersionUID = 2890534758523920741L;
 

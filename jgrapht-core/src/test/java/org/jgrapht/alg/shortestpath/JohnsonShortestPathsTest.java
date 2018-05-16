@@ -71,7 +71,7 @@ public class JohnsonShortestPathsTest
         assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
         assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
     }
-    
+
     @Test
     public void testIssue408()
     {
@@ -99,7 +99,7 @@ public class JohnsonShortestPathsTest
         assertEquals(1.0, sp.getPathWeight(4, 5), 0.0);
         assertTrue(Double.isInfinite(sp.getPathWeight(3, 4)));
     }
-    
+
     @Test
     @Deprecated
     public void testWikipediaExampleDeprecated()
@@ -134,7 +134,7 @@ public class JohnsonShortestPathsTest
                 .directed().vertexSupplier(SupplierUtil.createStringSupplier())
                 .edgeClass(DefaultWeightedEdge.class).weighted(true).allowingMultipleEdges(true)
                 .allowingSelfLoops(true).buildGraph();
-        
+
         g.addVertex("w");
         g.addVertex("y");
         g.addVertex("x");
@@ -147,15 +147,12 @@ public class JohnsonShortestPathsTest
         g.setEdgeWeight(g.addEdge("y", "z"), 5);
         g.setEdgeWeight(g.addEdge("z", "y"), -3);
 
-        JohnsonShortestPaths<String, DefaultWeightedEdge> alg =
-            new JohnsonShortestPaths<>(g);
+        JohnsonShortestPaths<String, DefaultWeightedEdge> alg = new JohnsonShortestPaths<>(g);
         assertEquals(-1d, alg.getPathWeight("z", "w"), 1e-9);
         assertEquals(-4d, alg.getPathWeight("z", "y"), 1e-9);
         assertEquals(0, alg.getPathWeight("z", "z"), 1e-9);
         assertEquals(-7, alg.getPathWeight("z", "x"), 1e-9);
     }
-    
-    
 
     @Test
     public void testRandomGraphsCompareWithFloydWarshall()

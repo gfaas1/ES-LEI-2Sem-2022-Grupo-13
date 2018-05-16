@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 class VF2SubgraphMappingIterator<V, E>
-    extends VF2MappingIterator<V, E>
+    extends
+    VF2MappingIterator<V, E>
 {
     public VF2SubgraphMappingIterator(
         GraphOrdering<V, E> ordering1, GraphOrdering<V, E> ordering2,

@@ -35,7 +35,8 @@ import static org.junit.Assert.assertTrue;
  * @author Dimitrios Michail
  */
 public class NoHeuristicsPathGrowingWeightedMatchingTest
-    extends BasePathGrowingWeightedMatchingTest
+    extends
+    BasePathGrowingWeightedMatchingTest
 {
 
     @Override

@@ -27,30 +27,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition. Ore gave a sufficient condition
- * for a graph to be Hamiltonian, essentially stating that a graph with sufficiently many edges must contain a Hamilton cycle.
+ * Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition. Ore gave
+ * a sufficient condition for a graph to be Hamiltonian, essentially stating that a graph with
+ * sufficiently many edges must contain a Hamilton cycle.
  *
  * Specifically, Ore's theorem considers the sum of the degrees of pairs of non-adjacent vertices:
- * if every such pair has a sum that at least equals the total number of vertices in the graph, then the graph is Hamiltonian.
+ * if every such pair has a sum that at least equals the total number of vertices in the graph, then
+ * the graph is Hamiltonian.
  *
  * <p>
- *     A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit, is a graph cycle
- *     (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990, p. 196).
+ * A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit, is a
+ * graph cycle (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990,
+ * p. 196).
  * </p>
  *
  * <p>
- *     This is an implementation of the algorithm described by E. M. Palmer in his paper. The algorithm takes a simple
- *     graph that meets Ore's condition (see {@link GraphTests#hasOreProperty(Graph)}) and returns a Hamiltonian cycle.
- *     The algorithm runs in $O(|V|^2)$ time and uses $O(|V|)$ space.
+ * This is an implementation of the algorithm described by E. M. Palmer in his paper. The algorithm
+ * takes a simple graph that meets Ore's condition (see {@link GraphTests#hasOreProperty(Graph)})
+ * and returns a Hamiltonian cycle. The algorithm runs in $O(|V|^2)$ time and uses $O(|V|)$ space.
  * </p>
  *
  * <p>
- *     The original algorithm is described in: Palmer, E. M. (1997), "The hidden algorithm of Ore's theorem
- *     on Hamiltonian cycles", Computers &amp; Mathematics with Applications, 34 (11): 113–119,
- *     doi:10.1016/S0898-1221(97)00225-3
+ * The original algorithm is described in: Palmer, E. M. (1997), "The hidden algorithm of Ore's
+ * theorem on Hamiltonian cycles", Computers &amp; Mathematics with Applications, 34 (11): 113–119,
+ * doi:10.1016/S0898-1221(97)00225-3
  *
- *     See <a href="https://en.wikipedia.org/wiki/Ore%27s_theorem">wikipedia</a> for a short description of Ore's theorem
- *     and Palmer's algorithm.
+ * See <a href="https://en.wikipedia.org/wiki/Ore%27s_theorem">wikipedia</a> for a short description
+ * of Ore's theorem and Palmer's algorithm.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -58,11 +61,15 @@ import java.util.List;
  *
  * @author Alexandru Valeanu
  */
-public class PalmerHamiltonianCycle<V, E> implements HamiltonianCycleAlgorithm<V, E> {
+public class PalmerHamiltonianCycle<V, E>
+    implements
+    HamiltonianCycleAlgorithm<V, E>
+{
     /**
      * Construct a new instance
      */
-    public PalmerHamiltonianCycle() {
+    public PalmerHamiltonianCycle()
+    {
     }
 
     /**
@@ -74,7 +81,8 @@ public class PalmerHamiltonianCycle<V, E> implements HamiltonianCycleAlgorithm<V
      * @throws IllegalArgumentException if the graph doesn't meet Ore's condition
      * @see GraphTests#hasOreProperty(Graph)
      */
-    public GraphPath<V, E> getTour(Graph<V, E> graph) {
+    public GraphPath<V, E> getTour(Graph<V, E> graph)
+    {
         if (!GraphTests.hasOreProperty(graph))
             throw new IllegalArgumentException("Graph doesn't have Ore's property");
 
@@ -98,48 +106,54 @@ public class PalmerHamiltonianCycle<V, E> implements HamiltonianCycleAlgorithm<V
         do {
             changed = false;
 
-            // search for a gap (two consecutive vertices x and R[x] that are not adjacent in the graph)
+            // search for a gap (two consecutive vertices x and R[x] that are not adjacent in the
+            // graph)
             int x = 0;
 
-            search:
-                do {
-                    // check if we found a gap in our cycle
-                    if (!graph.containsEdge(indexList.get(x), indexList.get(R[x]))){
-                        changed = true;
+            search: do {
+                // check if we found a gap in our cycle
+                if (!graph.containsEdge(indexList.get(x), indexList.get(R[x]))) {
+                    changed = true;
 
-                        /*
-                            Search for a node y such that the four vertices x, R[x], y, and R[y] are all distinct and
-                            such that the graph contains edges from x to y and from R[y] to R[x]
-                         */
-                        int y = 0;
-                        do{
-                            int u = x, v = R[x];
-                            int p = y, q = R[y];
+                    /*
+                     * Search for a node y such that the four vertices x, R[x], y, and R[y] are all
+                     * distinct and such that the graph contains edges from x to y and from R[y] to
+                     * R[x]
+                     */
+                    int y = 0;
+                    do {
+                        int u = x, v = R[x];
+                        int p = y, q = R[y];
 
-                            if (v != p && u != p && u != q){
-                                if (graph.containsEdge(indexList.get(u), indexList.get(p)) &&
-                                        graph.containsEdge(indexList.get(v), indexList.get(q))){
-                                    R[u] = L[u]; L[u] = p;
-                                    R[v] = R[v]; L[v] = q;
-                                    L[p] = L[p]; R[p] = u;
-                                    L[q] = R[q]; R[q] = v;
+                        if (v != p && u != p && u != q) {
+                            if (graph.containsEdge(indexList.get(u), indexList.get(p))
+                                && graph.containsEdge(indexList.get(v), indexList.get(q)))
+                            {
+                                R[u] = L[u];
+                                L[u] = p;
+                                R[v] = R[v];
+                                L[v] = q;
+                                L[p] = L[p];
+                                R[p] = u;
+                                L[q] = R[q];
+                                R[q] = v;
 
-                                    for(int z = R[u]; z != q; z = R[z]) {
-                                        int tmp = R[z];
-                                        R[z] = L[z];
-                                        L[z] = tmp;
-                                    }
-
-                                    break search;
+                                for (int z = R[u]; z != q; z = R[z]) {
+                                    int tmp = R[z];
+                                    R[z] = L[z];
+                                    L[z] = tmp;
                                 }
+
+                                break search;
                             }
+                        }
 
-                            y = R[y];
-                        } while (y != 0);
-                    }
+                        y = R[y];
+                    } while (y != 0);
+                }
 
-                    x = R[x];
-                } while (x != 0);
+                x = R[x];
+            } while (x != 0);
 
         } while (changed);
 
@@ -156,6 +170,7 @@ public class PalmerHamiltonianCycle<V, E> implements HamiltonianCycleAlgorithm<V
         // add start vertex
         vertexList.add(indexList.get(0));
 
-        return new GraphWalk<>(graph, indexList.get(0), indexList.get(0), vertexList, edgeList, edgeList.size());
+        return new GraphWalk<>(
+            graph, indexList.get(0), indexList.get(0), vertexList, edgeList, edgeList.size());
     }
 }

@@ -51,8 +51,10 @@ import org.jgrapht.*;
  * @since August 2016
  */
 public class CSVExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 

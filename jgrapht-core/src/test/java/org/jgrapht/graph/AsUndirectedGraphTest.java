@@ -52,7 +52,7 @@ public class AsUndirectedGraphTest
     {
         try {
             undirected.addEdge(v3, v4);
-            Assert.fail(); //should not get here
+            Assert.fail(); // should not get here
         } catch (UnsupportedOperationException e) {
         }
 

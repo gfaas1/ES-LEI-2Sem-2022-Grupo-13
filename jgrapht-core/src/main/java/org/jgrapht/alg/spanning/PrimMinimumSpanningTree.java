@@ -43,7 +43,8 @@ import java.util.*;
  * @since Mar 5, 2013
  */
 public class PrimMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+    implements
+    SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> g;
 
@@ -70,19 +71,19 @@ public class PrimMinimumSpanningTree<V, E>
         final int N = g.vertexSet().size();
 
         /*
-         * Normalize the graph
-         *   map each vertex to an integer (using a HashMap)
-         *   keep the reverse mapping  (using an ArrayList)
+         * Normalize the graph map each vertex to an integer (using a HashMap) keep the reverse
+         * mapping (using an ArrayList)
          */
         Map<V, Integer> vertexMap = new HashMap<>();
         List<V> indexList = new ArrayList<>();
-        for(V v : g.vertexSet()){
-            vertexMap.put(v,vertexMap.size());
+        for (V v : g.vertexSet()) {
+            vertexMap.put(v, vertexMap.size());
             indexList.add(v);
         }
 
         VertexInfo[] vertices = (VertexInfo[]) Array.newInstance(VertexInfo.class, N);
-        FibonacciHeapNode<VertexInfo>[] fibNodes = (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
+        FibonacciHeapNode<VertexInfo>[] fibNodes =
+            (FibonacciHeapNode<VertexInfo>[]) Array.newInstance(FibonacciHeapNode.class, N);
         FibonacciHeap<VertexInfo> fibonacciHeap = new FibonacciHeap<>();
 
         for (int i = 0; i < N; i++) {
@@ -116,7 +117,7 @@ public class PrimMinimumSpanningTree<V, E>
                 if (!vertices[id].spanned) {
                     double cost = g.getEdgeWeight(e);
 
-                    if (cost < vertices[id].distance){
+                    if (cost < vertices[id].distance) {
                         vertices[id].distance = cost;
                         vertices[id].edgeFromParent = e;
 
@@ -129,7 +130,8 @@ public class PrimMinimumSpanningTree<V, E>
         return new SpanningTreeImpl<>(minimumSpanningTreeEdgeSet, spanningTreeWeight);
     }
 
-    private class VertexInfo {
+    private class VertexInfo
+    {
         public int id;
         public boolean spanned;
         public double distance;

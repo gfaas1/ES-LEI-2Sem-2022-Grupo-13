@@ -41,8 +41,10 @@ import org.jgrapht.util.*;
  * @author Dimitrios Michail
  */
 public class MatrixExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     private final String delimiter = " ";
     private Format format;

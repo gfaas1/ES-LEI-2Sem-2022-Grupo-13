@@ -36,7 +36,8 @@ import static org.junit.Assert.assertEquals;
  * @since May 15, 2017
  */
 public abstract class CrossComponentIteratorTest
-    extends AbstractGraphIteratorTest
+    extends
+    AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
@@ -100,7 +101,8 @@ public abstract class CrossComponentIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+        implements
+        TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;

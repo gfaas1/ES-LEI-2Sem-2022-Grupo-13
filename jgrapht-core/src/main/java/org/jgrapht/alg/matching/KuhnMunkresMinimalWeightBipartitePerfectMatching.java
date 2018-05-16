@@ -33,8 +33,8 @@ import org.jgrapht.alg.interfaces.*;
  *
  * <p>
  * Given <a href=http://en.wikipedia.org/wiki/Complete_bipartite_graph> complete bipartite graph</a>
- * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i, j)</i>,
- * find <i>perfect</i> matching of <i>minimal cost</i>.
+ * $G = (S, T; E)$, such that $|S| = |T|$, and each edge has <i>non-negative</i> cost <i>c(i,
+ * j)</i>, find <i>perfect</i> matching of <i>minimal cost</i>.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -43,7 +43,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Alexey Kudinkin
  */
 public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private Set<? extends V> partition1;
@@ -609,7 +610,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatching<V, E>
 
                 for (int i = 0; i < excessMatrix.length; ++i) {
                     if ((excessMatrix[i][pathTailCol] == 0) && !rowsVisited[i]) {
-                        boolean extending = extendMatchingOL(i, // New tail to continue
+                        boolean extending = extendMatchingOL(
+                            i, // New tail to continue
                             pathTailCol //
                         );
                         if (extending) {

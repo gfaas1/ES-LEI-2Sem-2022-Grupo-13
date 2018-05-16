@@ -47,15 +47,16 @@ public class MutableNetworkAdapterTest
     @Test
     public void testExample1()
     {
-        MutableNetwork<String, DefaultEdge> mutableNetwork = NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
-        
+        MutableNetwork<String, DefaultEdge> mutableNetwork =
+            NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
+
         Graph<String, DefaultEdge> graph = new MutableNetworkAdapter<>(mutableNetwork);
 
         graph.addVertex("v1");
-        
+
         assertTrue(mutableNetwork.nodes().contains("v1"));
     }
-    
+
     /**
      * Test the most general version of the directed graph.
      */
@@ -230,7 +231,8 @@ public class MutableNetworkAdapterTest
         g.addEdge("v5", "v2");
         g.addEdge("v5", "v5");
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 =
+            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -254,7 +256,7 @@ public class MutableNetworkAdapterTest
 
         assertEquals(g.toString(), g2.toString());
     }
-    
+
     /**
      * Tests serialization
      */
@@ -265,7 +267,8 @@ public class MutableNetworkAdapterTest
     {
         Graph<String,
             DefaultEdge> g = new MutableNetworkAdapter<>(
-                NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+                NetworkBuilder
+                    .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
                 null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
@@ -282,7 +285,8 @@ public class MutableNetworkAdapterTest
         g.addEdge("v2", "v3");
         g.addEdge("v3", "v3");
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 =
+            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());

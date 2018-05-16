@@ -56,7 +56,8 @@ import org.jgrapht.alg.util.Pair;
  * @since October 2016
  */
 public abstract class AbstractFundamentalCycleBasis<V, E>
-    implements CycleBasisAlgorithm<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     protected Graph<V, E> graph;
 

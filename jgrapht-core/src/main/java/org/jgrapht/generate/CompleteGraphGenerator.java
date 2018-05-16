@@ -38,7 +38,8 @@ import org.jgrapht.GraphTests;
  * @since Nov 02, 2008
  */
 public class CompleteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int size;
 

@@ -42,8 +42,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class DOTImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     /**
      * Default key used in the graph updater (if provided) for the graph ID.
@@ -141,7 +143,8 @@ public class DOTImporter<V, E>
      * Common error listener for both lexer and parser which throws an exception.
      */
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
         @Override
         public void syntaxError(
@@ -159,7 +162,8 @@ public class DOTImporter<V, E>
      * grammar.
      */
     private class CreateGraphDOTListener
-        extends DOTBaseListener
+        extends
+        DOTBaseListener
     {
         // graph to update
         private Graph<V, E> graph;

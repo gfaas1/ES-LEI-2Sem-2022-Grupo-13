@@ -101,7 +101,8 @@ public abstract class BaseColoringTest
             new GnpRandomGraphGenerator<>(n, p, rng, false);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             gen.generateGraph(g);
 
             for (Function<Graph<Integer, DefaultEdge>,
@@ -313,7 +314,8 @@ public abstract class BaseColoringTest
     public void testCompleteGraph()
     {
         final int n = 20;
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(n);
         gen.generateGraph(g);
         Coloring<Integer> coloring = getAlgorithm(g).getColoring();

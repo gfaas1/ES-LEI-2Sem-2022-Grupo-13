@@ -34,7 +34,8 @@ import static org.junit.Assert.fail;
  * @author John V. Sichi
  */
 public class BellmanFordShortestPathTest
-    extends ShortestPathTestCase
+    extends
+    ShortestPathTestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -88,7 +89,7 @@ public class BellmanFordShortestPathTest
 
         BellmanFordShortestPath<String, DefaultWeightedEdge> alg = new BellmanFordShortestPath<>(g);
         SingleSourcePaths<String, DefaultWeightedEdge> paths = alg.getPaths("a");
-        assertEquals(paths.getWeight("b"), Double.POSITIVE_INFINITY,0);
+        assertEquals(paths.getWeight("b"), Double.POSITIVE_INFINITY, 0);
         assertNull(paths.getPath("b"));
     }
 

@@ -29,7 +29,8 @@ import org.jgrapht.graph.*;
  * @since July 5, 2007
  */
 final class RankingPathElementList<V, E>
-    extends AbstractPathElementList<V, E, RankingPathElement<V, E>>
+    extends
+    AbstractPathElementList<V, E, RankingPathElement<V, E>>
 {
     /**
      * Vertex that paths of the list must not disconnect.
@@ -172,12 +173,11 @@ final class RankingPathElementList<V, E>
      * Complexity =
      *
      * <ul>
-     * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the
-     * list and $np$ is the maximum number of vertices in the paths stored in the
-     * list</li>
-     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of
-     * the list, $m$ is the number of edges of the graph and $n$ is the number
-     * of vertices of the graph, $O(m + n)$ being the complexity of the <code>
+     * <li>w/o guard-vertex: $O(knp)$ where $k$ is the max size limit of the list and $np$ is the
+     * maximum number of vertices in the paths stored in the list</li>
+     * <li>with guard-vertex: $O(k(m+n)$</code>) where $k$ is the max size limit of the list, $m$ is
+     * the number of edges of the graph and $n$ is the number of vertices of the graph, $O(m + n)$
+     * being the complexity of the <code>
      * ConnectivityInspector</code> to check whether a path exists towards the guard-vertex</li>
      * </ul>
      *
@@ -308,10 +308,8 @@ final class RankingPathElementList<V, E>
         ConnectivityInspector<V, E> connectivityInspector;
         PathMask<V, E> connectivityMask = new PathMask<>(prevPathElement);
 
-        MaskSubgraph<V,
-            E> connectivityGraph = new MaskSubgraph<>(
-                this.graph, connectivityMask::isVertexMasked,
-                connectivityMask::isEdgeMasked);
+        MaskSubgraph<V, E> connectivityGraph = new MaskSubgraph<>(
+            this.graph, connectivityMask::isVertexMasked, connectivityMask::isEdgeMasked);
         connectivityInspector = new ConnectivityInspector<>(connectivityGraph);
 
         if (connectivityMask.isVertexMasked(this.guardVertexToNotDisconnect)) {
@@ -342,7 +340,8 @@ final class RankingPathElementList<V, E>
             GraphPath<V, E> prevPath;
             if (prevPathElement.getPrevEdge() == null) {
                 prevPath = new GraphWalk<>(
-                    graph, Collections.singletonList(prevPathElement.getVertex()), prevPathElement.getWeight());
+                    graph, Collections.singletonList(prevPathElement.getVertex()),
+                    prevPathElement.getWeight());
             } else {
                 List<E> prevEdges = prevPathElement.createEdgeListPath();
                 prevPath = new GraphWalk<V, E>(

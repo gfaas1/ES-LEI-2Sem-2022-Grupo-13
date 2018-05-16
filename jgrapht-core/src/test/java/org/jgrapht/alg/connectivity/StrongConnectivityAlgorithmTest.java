@@ -105,8 +105,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
@@ -159,8 +158,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
@@ -213,8 +211,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
 
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
@@ -229,10 +226,10 @@ public class StrongConnectivityAlgorithmTest
 
     public void testStronglyConnected4(Class<?> strongConnectivityAlgorithm)
     {
-        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
+        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
 
-        new RingGraphGenerator<Integer, String>(3)
-            .generateGraph(graph);
+        new RingGraphGenerator<Integer, String>(3).generateGraph(graph);
 
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);

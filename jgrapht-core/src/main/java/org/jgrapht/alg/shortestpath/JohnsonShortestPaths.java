@@ -49,11 +49,12 @@ import org.jgrapht.graph.builder.GraphTypeBuilder;
  * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private Map<V, SingleSourcePaths<V, E>> paths;
     private final Comparator<Double> comparator;
-    
+
     @Deprecated
     private VertexFactory<V> vertexFactory;
 
@@ -98,7 +99,7 @@ public class JohnsonShortestPaths<V, E>
         this.vertexFactory = Objects.requireNonNull(vertexFactory, "Vertex factory cannot be null");
         this.comparator = new ToleranceDoubleComparator(epsilon);
     }
-    
+
     /**
      * Construct a new instance.
      *
@@ -108,7 +109,7 @@ public class JohnsonShortestPaths<V, E>
     {
         this(graph, ToleranceDoubleComparator.DEFAULT_EPSILON);
     }
-    
+
     /**
      * Construct a new instance.
      *
@@ -262,9 +263,10 @@ public class JohnsonShortestPaths<V, E>
             for (V u : g.vertexSet()) {
                 Pair<Double, E> oldPair = distanceAndPredecessorMap.get(u);
                 if (oldPair != null) {
-                    Pair<Double, E> newPair = Pair.of(
-                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                        oldPair.getSecond());
+                    Pair<Double,
+                        E> newPair = Pair.of(
+                            oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                            oldPair.getSecond());
                     newDistanceAndPredecessorMap.put(u, newPair);
                 }
             }
@@ -297,15 +299,16 @@ public class JohnsonShortestPaths<V, E>
          */
         // add new vertex
         V s = null;
-        if (vertexFactory != null) { 
+        if (vertexFactory != null) {
             s = vertexFactory.createVertex();
-            if (!extraGraph.addVertex(s)) { 
+            if (!extraGraph.addVertex(s)) {
                 throw new IllegalArgumentException("Invalid vertex factory");
             }
-        } else { 
+        } else {
             s = extraGraph.addVertex();
-            if (s == null) { 
-                throw new IllegalArgumentException("Invalid vertex supplier (does not return unique vertices on each call).");
+            if (s == null) {
+                throw new IllegalArgumentException(
+                    "Invalid vertex supplier (does not return unique vertices on each call).");
             }
         }
 

@@ -46,7 +46,7 @@ public interface DirectedSimpleCycles<V, E>
      *
      * @param graph the graph.
      * @throws IllegalArgumentException if the argument is <code>null</code>.
-     * @deprecated Since not really needed on the interface. 
+     * @deprecated Since not really needed on the interface.
      */
     @Deprecated
     void setGraph(Graph<V, E> graph);

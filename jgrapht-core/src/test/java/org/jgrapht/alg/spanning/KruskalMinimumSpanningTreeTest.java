@@ -21,10 +21,15 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class KruskalMinimumSpanningTreeTest extends MinimumSpanningTreeTest{
+public class KruskalMinimumSpanningTreeTest
+    extends
+    MinimumSpanningTreeTest
+{
 
     @Override
-    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
+    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        Graph<Integer, DefaultWeightedEdge> network)
+    {
         return new KruskalMinimumSpanningTree<>(network);
     }
 }

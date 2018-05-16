@@ -34,7 +34,8 @@ import org.jgrapht.util.SupplierUtil;
  * @see DefaultUndirectedGraph
  */
 public class DefaultUndirectedWeightedGraph<V, E>
-    extends DefaultUndirectedGraph<V, E>
+    extends
+    DefaultUndirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1008165881690129042L;
 
@@ -56,9 +57,7 @@ public class DefaultUndirectedWeightedGraph<V, E>
      */
     public DefaultUndirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -69,12 +68,13 @@ public class DefaultUndirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
     {
         return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -83,18 +83,18 @@ public class DefaultUndirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-        Supplier<E> edgeSupplier)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
+            Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(null, edgeSupplier));
     }
-    
-    
+
     /**
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DefaultUndirectedWeightedGraph(EdgeFactory<V, E> ef)
@@ -109,7 +109,7 @@ public class DefaultUndirectedWeightedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V,

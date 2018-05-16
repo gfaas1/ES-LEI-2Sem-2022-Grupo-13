@@ -60,8 +60,10 @@ import org.jgrapht.*;
  * @since August 2016
  */
 public class CSVImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private static final char DEFAULT_DELIMITER = ',';
 
@@ -246,7 +248,8 @@ public class CSVImporter<V, E>
     }
 
     private class ThrowingErrorListener
-        extends BaseErrorListener
+        extends
+        BaseErrorListener
     {
 
         @Override
@@ -262,7 +265,8 @@ public class CSVImporter<V, E>
 
     // listener for the edge list format
     private class AdjacencyListCSVListener
-        extends RowCSVListener
+        extends
+        RowCSVListener
     {
         public AdjacencyListCSVListener(Graph<V, E> graph)
         {
@@ -313,7 +317,8 @@ public class CSVImporter<V, E>
 
     // listener for the edge list format
     private class MatrixCSVListener
-        extends RowCSVListener
+        extends
+        RowCSVListener
     {
         private boolean assumeNodeIds;
         private boolean assumeEdgeWeights;
@@ -475,7 +480,8 @@ public class CSVImporter<V, E>
 
     // base listener
     private abstract class RowCSVListener
-        extends CSVBaseListener
+        extends
+        CSVBaseListener
     {
         protected Graph<V, E> graph;
         protected List<String> row;

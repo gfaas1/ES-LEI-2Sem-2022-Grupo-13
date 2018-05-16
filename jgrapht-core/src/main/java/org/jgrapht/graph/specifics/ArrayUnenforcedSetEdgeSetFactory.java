@@ -33,7 +33,9 @@ import org.jgrapht.util.*;
  * @author Barak Naveh
  */
 public class ArrayUnenforcedSetEdgeSetFactory<V, E>
-    implements EdgeSetFactory<V, E>, Serializable
+    implements
+    EdgeSetFactory<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 5936902837403445985L;
 

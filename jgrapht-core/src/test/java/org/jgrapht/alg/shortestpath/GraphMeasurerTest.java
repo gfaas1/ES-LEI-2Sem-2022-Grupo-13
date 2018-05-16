@@ -43,8 +43,9 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph1()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        IntStream.range(0,7).forEach(i->g.addVertex());
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0, 7).forEach(i -> g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -56,8 +57,9 @@ public class GraphMeasurerTest
 
     private Graph<Integer, DefaultEdge> getGraph2()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        IntStream.range(0,7).forEach(i->g.addVertex());
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        IntStream.range(0, 7).forEach(i -> g.addVertex());
         g.addEdge(0, 1);
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -76,20 +78,20 @@ public class GraphMeasurerTest
         final int N = 100;
         final int M = 100000;
 
-        for (int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++) {
             g.addVertex(i);
         }
 
-        for (int i = 0; i < N - 1; i++){
+        for (int i = 0; i < N - 1; i++) {
             g.addEdge(i, i + 1);
             g.setEdgeWeight(g.getEdge(i, i + 1), 50 + random.nextInt(50));
         }
 
-        for (int i = N - 1; i < M; i++){
+        for (int i = N - 1; i < M; i++) {
             int u = random.nextInt(N);
             int v = random.nextInt(N);
 
-            if (u != v){
+            if (u != v) {
                 g.addEdge(u, v);
                 g.setEdgeWeight(g.getEdge(u, v), 100 + random.nextInt(200));
             }
@@ -103,9 +105,8 @@ public class GraphMeasurerTest
     public void testVertexEccentricityG1()
     {
         Graph<Integer, DefaultEdge> g1 = getGraph1();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
-            new FloydWarshallShortestPaths<>(g1),
-            new JohnsonShortestPaths<>(g1));
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs =
+            Arrays.asList(new FloydWarshallShortestPaths<>(g1), new JohnsonShortestPaths<>(g1));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g1, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
@@ -123,9 +124,8 @@ public class GraphMeasurerTest
     public void testVertexEccentricityG2()
     {
         Graph<Integer, DefaultEdge> g2 = getGraph2();
-        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs = Arrays.asList(
-            new FloydWarshallShortestPaths<>(g2),
-            new JohnsonShortestPaths<>(g2));
+        List<ShortestPathAlgorithm<Integer, DefaultEdge>> spAlgs =
+            Arrays.asList(new FloydWarshallShortestPaths<>(g2), new JohnsonShortestPaths<>(g2));
         for (ShortestPathAlgorithm<Integer, DefaultEdge> spAlg : spAlgs) {
             GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g2, spAlg);
             Map<Integer, Double> vertexEccentricity = gdm.getVertexEccentricityMap();
@@ -260,7 +260,11 @@ public class GraphMeasurerTest
         Graph<Integer, DefaultEdge> g3 = getGraph3();
         GraphMeasurer<Integer, DefaultEdge> gdm = new GraphMeasurer<>(g3);
         Set<Integer> graphPseudoPeriphery3 = gdm.getGraphPseudoPeriphery();
-        assertEquals(new HashSet<>(Arrays.asList(6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46,
-                48, 51, 53, 60, 61, 63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)), graphPseudoPeriphery3);
+        assertEquals(
+            new HashSet<>(
+                Arrays.asList(
+                    6, 7, 13, 17, 19, 20, 21, 24, 32, 36, 37, 39, 41, 42, 46, 48, 51, 53, 60, 61,
+                    63, 64, 66, 67, 69, 70, 71, 83, 89, 90, 95, 98)),
+            graphPseudoPeriphery3);
     }
 }

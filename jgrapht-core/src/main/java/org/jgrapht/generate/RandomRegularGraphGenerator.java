@@ -58,7 +58,8 @@ import org.jgrapht.Graph;
  * @param <E> graph edge type
  */
 public class RandomRegularGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
 
     private final int n;
@@ -198,7 +199,7 @@ public class RandomRegularGraphGenerator<V, E>
         List<V> vertices = new ArrayList<>(this.n);
         for (int i = 0; i < this.n; i++) {
             V v = target.addVertex();
-            if (v == null) { 
+            if (v == null) {
                 throw new IllegalArgumentException("Invalid vertex supplier");
             }
             vertices.add(v);
@@ -265,7 +266,7 @@ public class RandomRegularGraphGenerator<V, E>
         List<V> vertices = new ArrayList<>(this.n * this.d);
         for (int i = 0; i < this.n; i++) {
             V vertex = target.addVertex();
-            if (vertex == null) { 
+            if (vertex == null) {
                 throw new IllegalArgumentException("Invalid vertex supplier");
             }
             for (int j = 0; j < this.d; j++) {

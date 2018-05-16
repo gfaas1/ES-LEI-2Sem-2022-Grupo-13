@@ -159,12 +159,12 @@ public class GraphMeasurer<V, E>
     }
 
     /**
-     * Compute the graph pseudo-periphery.
-     * The pseudo-periphery of a graph is the set of all pseudo-peripheral vertices.
-     * A pseudo-peripheral vertex $v$ has the property that for any vertex $u$, if $v$ is as far away from $u$ as possible,
-     * then $u$ is as far away from $v$ as possible. Formally, a vertex $u$ is pseudo-peripheral, if for each
-     * vertex $v$ with $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is
-     * the eccentricity of vertex $u$.
+     * Compute the graph pseudo-periphery. The pseudo-periphery of a graph is the set of all
+     * pseudo-peripheral vertices. A pseudo-peripheral vertex $v$ has the property that for any
+     * vertex $u$, if $v$ is as far away from $u$ as possible, then $u$ is as far away from $v$ as
+     * possible. Formally, a vertex $u$ is pseudo-peripheral, if for each vertex $v$ with
+     * $d(u,v)=\epsilon(u)$ holds $\epsilon(u)=\epsilon(v)$, where $\epsilon(u)$ is the eccentricity
+     * of vertex $u$.
      *
      * @return the graph pseudo-periphery
      */
@@ -177,9 +177,9 @@ public class GraphMeasurer<V, E>
         for (Map.Entry<V, Double> entry : eccentricityMap.entrySet()) {
             V u = entry.getKey();
 
-            for (V v: graph.vertexSet())
-                if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0 &&
-                        comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
+            for (V v : graph.vertexSet())
+                if (comp.compare(shortestPathAlgorithm.getPathWeight(u, v), entry.getValue()) == 0
+                    && comp.compare(entry.getValue(), eccentricityMap.get(v)) == 0)
                     graphPseudoPeriphery.add(entry.getKey());
         }
 

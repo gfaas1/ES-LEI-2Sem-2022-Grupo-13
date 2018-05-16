@@ -61,8 +61,10 @@ import org.jgrapht.util.SupplierUtil;
  * @author Peter Giles
  */
 public class DirectedAcyclicGraph<V, E>
-    extends SimpleDirectedGraph<V, E>
-    implements Iterable<V>
+    extends
+    SimpleDirectedGraph<V, E>
+    implements
+    Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
 
@@ -90,7 +92,7 @@ public class DirectedAcyclicGraph<V, E>
     {
         this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
-    
+
     /**
      * Construct a directed acyclic graph.
      *
@@ -98,9 +100,12 @@ public class DirectedAcyclicGraph<V, E>
      * @param edgeSupplier the edge supplier
      * @param weighted if true the graph will be weighted, otherwise not
      */
-    public DirectedAcyclicGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
+    public DirectedAcyclicGraph(
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
-        this(vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), weighted);
+        this(
+            vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+            weighted);
     }
 
     /**
@@ -108,7 +113,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @param edgeClass the edge class
      * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedAcyclicGraph(Class<? extends E> edgeClass, boolean weighted)
@@ -120,7 +125,7 @@ public class DirectedAcyclicGraph<V, E>
      * Construct a directed acyclic graph.
      *
      * @param ef the edge factory
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedAcyclicGraph(EdgeFactory<V, E> ef)
@@ -133,7 +138,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @param ef the edge factory
      * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedAcyclicGraph(EdgeFactory<V, E> ef, boolean weighted)
@@ -150,7 +155,7 @@ public class DirectedAcyclicGraph<V, E>
      * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
      *        the way this class stores the topological order.
      * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     protected DirectedAcyclicGraph(
@@ -164,7 +169,7 @@ public class DirectedAcyclicGraph<V, E>
             Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
         this.topoComparator = new TopoComparator();
     }
-    
+
     /**
      * Construct a directed acyclic graph.
      * 
@@ -178,8 +183,8 @@ public class DirectedAcyclicGraph<V, E>
      */
     protected DirectedAcyclicGraph(
         Supplier<V> vertexSupplier, Supplier<E> edgeSupplier,
-        VisitedStrategyFactory visitedStrategyFactory,
-        TopoOrderMap<V> topoOrderMap, boolean weighted)
+        VisitedStrategyFactory visitedStrategyFactory, TopoOrderMap<V> topoOrderMap,
+        boolean weighted)
     {
         super(vertexSupplier, edgeSupplier, weighted);
         this.visitedStrategyFactory =
@@ -202,7 +207,7 @@ public class DirectedAcyclicGraph<V, E>
     {
         return new GraphBuilder<>(new DirectedAcyclicGraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -224,7 +229,7 @@ public class DirectedAcyclicGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
@@ -245,17 +250,17 @@ public class DirectedAcyclicGraph<V, E>
     public V addVertex()
     {
         V v = super.addVertex();
-        
-        if (v != null) { 
+
+        if (v != null) {
             // add to the topological map
             ++maxTopoIndex;
             topoOrderMap.putVertex(maxTopoIndex, v);
             ++topoModCount;
         }
-        
+
         return v;
     }
-    
+
     @Override
     public boolean addVertex(V v)
     {
@@ -463,8 +468,7 @@ public class DirectedAcyclicGraph<V, E>
         Deque<V> vertices = new ArrayDeque<>();
         vertices.push(initialVertex);
 
-        while (!vertices.isEmpty())
-        {
+        while (!vertices.isEmpty()) {
             V vertex = vertices.pop();
             int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
 
@@ -496,11 +500,11 @@ public class DirectedAcyclicGraph<V, E>
 
                 /*
                  * Note, order of checks is important as we need to make sure the vertex is in the
-                 * affected region before we check its visited status (otherwise we will be causing an
-                 * ArrayIndexOutOfBoundsException).
+                 * affected region before we check its visited status (otherwise we will be causing
+                 * an ArrayIndexOutOfBoundsException).
                  */
                 if (affectedRegion.isIn(nextVertexTopoIndex)
-                        && !visited.getVisited(nextVertexTopoIndex))
+                    && !visited.getVisited(nextVertexTopoIndex))
                 {
                     vertices.push(nextVertex); // recurse
                 }
@@ -521,8 +525,7 @@ public class DirectedAcyclicGraph<V, E>
         Deque<V> vertices = new ArrayDeque<>();
         vertices.push(initialVertex);
 
-        while (!vertices.isEmpty())
-        {
+        while (!vertices.isEmpty()) {
             V vertex = vertices.pop();
             // Assumption: vertex is in the AR and so we will get a topoIndex from
             // the map
@@ -542,11 +545,11 @@ public class DirectedAcyclicGraph<V, E>
 
                 /*
                  * Note, order of checks is important as we need to make sure the vertex is in the
-                 * affected region before we check its visited status (otherwise we will be causing an
-                 * ArrayIndexOutOfBoundsException).
+                 * affected region before we check its visited status (otherwise we will be causing
+                 * an ArrayIndexOutOfBoundsException).
                  */
                 if (affectedRegion.isIn(previousVertexTopoIndex)
-                        && !visited.getVisited(previousVertexTopoIndex))
+                    && !visited.getVisited(previousVertexTopoIndex))
                 {
                     // if previousVertexTopoIndex != null, the vertex is in the
                     // Affected Region according to our topoIndexMap
@@ -627,7 +630,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected interface TopoOrderMap<V>
-        extends Serializable
+        extends
+        Serializable
     {
         /**
          * Add a vertex at the given topological index.
@@ -714,7 +718,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected interface VisitedStrategyFactory
-        extends Serializable
+        extends
+        Serializable
     {
         /**
          * Create a new instance of {@link VisitedStrategy}.
@@ -731,7 +736,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected static class TopoVertexBiMap<V>
-        implements TopoOrderMap<V>
+        implements
+        TopoOrderMap<V>
     {
         private static final long serialVersionUID = 1L;
 
@@ -790,7 +796,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected class TopoVertexMap
-        implements TopoOrderMap<V>
+        implements
+        TopoOrderMap<V>
     {
         private static final long serialVersionUID = 1L;
 
@@ -869,7 +876,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected static class Region
-        implements Serializable
+        implements
+        Serializable
     {
         private static final long serialVersionUID = 1L;
 
@@ -944,7 +952,9 @@ public class DirectedAcyclicGraph<V, E>
      * @author John V. Sichi
      */
     protected static class VisitedBitSetImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+        implements
+        VisitedStrategy,
+        VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1009,7 +1019,9 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected static class VisitedArrayListImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+        implements
+        VisitedStrategy,
+        VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1081,7 +1093,9 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected static class VisitedHashSetImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+        implements
+        VisitedStrategy,
+        VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1131,7 +1145,9 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     protected static class VisitedArrayImpl
-        implements VisitedStrategy, VisitedStrategyFactory
+        implements
+        VisitedStrategy,
+        VisitedStrategyFactory
     {
         private static final long serialVersionUID = 1L;
 
@@ -1196,7 +1212,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     private static class CycleFoundException
-        extends Exception
+        extends
+        Exception
     {
         private static final long serialVersionUID = 5583471522212552754L;
     }
@@ -1207,7 +1224,9 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     private class TopoComparator
-        implements Comparator<V>, Serializable
+        implements
+        Comparator<V>,
+        Serializable
     {
         private static final long serialVersionUID = 8144905376266340066L;
 
@@ -1226,7 +1245,8 @@ public class DirectedAcyclicGraph<V, E>
      * @author Peter Giles
      */
     private class TopoIterator
-        implements Iterator<V>
+        implements
+        Iterator<V>
     {
         private int currentTopoIndex;
         private final long expectedTopoModCount = topoModCount;

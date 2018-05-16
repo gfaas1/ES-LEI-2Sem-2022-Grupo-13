@@ -82,8 +82,6 @@ public class GmlImporterTest
         assertTrue(g.containsEdge("2", "3"));
         assertTrue(g.containsEdge("3", "1"));
     }
-    
-    
 
     @Test
     public void testIgnoreWeightsUndirectedUnweighted()
@@ -448,7 +446,9 @@ public class GmlImporterTest
 
     @Test
     public void testExportImport()
-        throws ImportException, ExportException, UnsupportedEncodingException
+        throws ImportException,
+        ExportException,
+        UnsupportedEncodingException
     {
         DirectedWeightedPseudograph<String, DefaultWeightedEdge> g1 =
             new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -739,7 +739,7 @@ public class GmlImporterTest
         assertTrue(g.containsVertex("2"));
         assertTrue(g.containsEdge("1", "2"));
     }
-    
+
     @Test
     public void testNestedStructure()
         throws ImportException
@@ -792,7 +792,9 @@ public class GmlImporterTest
                 assertEquals("1.2", attributes.get("customweight").getValue());
                 assertEquals(AttributeType.DOUBLE, attributes.get("customweight").getType());
                 assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-                assertEquals("[ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]", attributes.get("deep").getValue());                
+                assertEquals(
+                    "[ one [ one 1.0 two 2.0 ] two [ one \"1\" two \"2\" ] ]",
+                    attributes.get("deep").getValue());
             } else if (Integer.parseInt(id) == 2) {
                 assertEquals("3", attributes.get("frequency").getValue());
                 assertEquals(AttributeType.INT, attributes.get("frequency").getType());
@@ -801,7 +803,9 @@ public class GmlImporterTest
                 assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
                 assertEquals("[ x 1.0 y 2.0 z 3.0 ]", attributes.get("points").getValue());
                 assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-                assertEquals("[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
+                assertEquals(
+                    "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]",
+                    attributes.get("deep").getValue());
             } else {
                 assertEquals("5", attributes.get("frequency").getValue());
                 assertEquals(AttributeType.INT, attributes.get("frequency").getType());
@@ -819,7 +823,8 @@ public class GmlImporterTest
             assertEquals(AttributeType.UNKNOWN, attributes.get("points").getType());
             assertEquals("[ x 1.0 y 2.0 ]", attributes.get("points").getValue());
             assertEquals(AttributeType.UNKNOWN, attributes.get("deep").getType());
-            assertEquals("[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
+            assertEquals(
+                "[ one [ one 1 two 2 ] two [ one 1 two 2 ] ]", attributes.get("deep").getValue());
             return g.getEdgeFactory().createEdge(from, to);
         };
 

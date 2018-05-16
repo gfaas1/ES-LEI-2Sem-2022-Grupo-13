@@ -15,7 +15,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class BasePathGrowingWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+    extends
+    ApproximateWeightedMatchingTest
 {
 
     public BasePathGrowingWeightedMatchingTest()
@@ -106,8 +107,8 @@ public abstract class BasePathGrowingWeightedMatchingTest
                 numberVertices, edgeProbability, seed, false);
 
         for (int i = 0; i < repeat; i++) {
-            WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            WeightedPseudograph<Integer, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             gg.generateGraph(g);
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =

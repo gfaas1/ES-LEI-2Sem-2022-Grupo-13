@@ -34,7 +34,8 @@ import static org.junit.Assert.assertTrue;
  * @author Joris Kinable
  */
 public class WeightedVertexCoverTest
-    extends VertexCoverTest
+    extends
+    VertexCoverTest
 {
 
     // ------- Approximation algorithms ------
@@ -51,21 +52,20 @@ public class WeightedVertexCoverTest
             Map<Integer, Double> vertexWeights = getRandomVertexWeights(g);
 
             VertexCoverAlgorithm<Integer> mvc1 =
-                    new ClarksonTwoApproxVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
+                new ClarksonTwoApproxVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
             VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc1.getVertexCover();
             assertTrue(isCover(g, vertexCover));
             assertEquals(
-                vertexCover.getWeight(),
-                vertexCover.stream().mapToDouble(vertexWeights::get).sum(),0);
+                vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
+                0);
 
             VertexCoverAlgorithm<Integer> mvc2 =
-                    new BarYehudaEvenTwoApproxVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
-            VertexCoverAlgorithm.VertexCover<Integer> vertexCover2 =
-                mvc2.getVertexCover();
+                new BarYehudaEvenTwoApproxVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
+            VertexCoverAlgorithm.VertexCover<Integer> vertexCover2 = mvc2.getVertexCover();
             assertTrue(isCover(g, vertexCover2));
             assertEquals(
                 vertexCover2.getWeight(),
-                vertexCover2.stream().mapToDouble(vertexWeights::get).sum(),0);
+                vertexCover2.stream().mapToDouble(vertexWeights::get).sum(), 0);
         }
     }
 
@@ -81,20 +81,20 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < TEST_REPEATS; i++) {
             Graph<Integer, DefaultEdge> g = createRandomPseudoGraph(TEST_GRAPH_SIZE);
             Map<Integer, Double> vertexWeights = getRandomVertexWeights(g);
-            VertexCoverAlgorithm<Integer> mvc = new GreedyVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
-            VertexCoverAlgorithm.VertexCover<Integer> vertexCover =
-                mvc.getVertexCover();
+            VertexCoverAlgorithm<Integer> mvc =
+                new GreedyVCImpl<>(Graphs.undirectedGraph(g), vertexWeights);
+            VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
             assertTrue(isCover(g, vertexCover));
             assertEquals(
-                vertexCover.getWeight(),
-                vertexCover.stream().mapToDouble(vertexWeights::get).sum(),0);
+                vertexCover.getWeight(), vertexCover.stream().mapToDouble(vertexWeights::get).sum(),
+                0);
         }
     }
 
     // ------- Exact algorithms ------
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover1()
     {
         int[] weightArray = { 18, 16, 13, 14, 12, 0, 20, 11, 10, 10, 10, 6, 6, 12, 15, 6, 24, 2, 6,
@@ -110,8 +110,7 @@ public class WeightedVertexCoverTest
             { 30, 51 }, { 36, 48 }, { 36, 54 }, { 37, 38 }, { 38, 43 }, { 40, 41 }, { 41, 58 },
             { 44, 50 }, { 45, 49 }, { 47, 49 }, { 48, 56 }, { 49, 55 }, { 52, 54 }, { 54, 55 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -120,15 +119,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 185.0,0);
+        assertEquals(vertexCover.getWeight(), 185.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover2()
     {
         int[] weightArray = { 13, 11, 3, 5, 16, 0, 16, 16, 14, 25, 15, 23, 4, 12, 23, 20, 19, 12,
@@ -150,8 +148,7 @@ public class WeightedVertexCoverTest
             { 39, 44 }, { 39, 45 }, { 39, 59 }, { 41, 44 }, { 42, 45 }, { 43, 46 }, { 43, 49 },
             { 44, 46 }, { 46, 51 }, { 47, 56 }, { 48, 56 }, { 50, 57 }, { 54, 59 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -160,15 +157,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 339.0,0);
+        assertEquals(vertexCover.getWeight(), 339.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover3()
     {
         int[] weightArray = { 20, 15, 16, 0, 20, 7, 1, 25, 0, 23, 6, 7, 8, 11, 3, 18, 25, 12, 20,
@@ -184,8 +180,7 @@ public class WeightedVertexCoverTest
             { 36, 47 }, { 37, 39 }, { 38, 42 }, { 38, 49 }, { 41, 44 }, { 49, 58 }, { 51, 55 },
             { 51, 58 }, { 53, 57 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -194,15 +189,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 220.0,0);
+        assertEquals(vertexCover.getWeight(), 220.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover4()
     {
         int[] weightArray = { 0, 20, 10, 0, 0, 15, 18, 20, 12, 18, 1, 13, 1, 25, 14, 6, 10, 16, 18,
@@ -219,8 +213,7 @@ public class WeightedVertexCoverTest
             { 30, 57 }, { 35, 50 }, { 36, 57 }, { 37, 50 }, { 38, 43 }, { 41, 47 }, { 46, 52 },
             { 47, 57 }, { 55, 59 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -229,15 +222,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 238.0,0);
+        assertEquals(vertexCover.getWeight(), 238.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover5()
     {
         int[] weightArray = { 1, 10, 13, 17, 0, 25, 4, 15, 8, 14, 20, 23, 10, 2, 21, 10, 4, 18, 4,
@@ -247,8 +239,7 @@ public class WeightedVertexCoverTest
         int[][] edges = { { 0, 30 }, { 3, 4 }, { 6, 15 }, { 7, 10 }, { 9, 56 }, { 13, 42 },
             { 19, 49 }, { 22, 44 }, { 47, 58 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -257,15 +248,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 50.0,0);
+        assertEquals(vertexCover.getWeight(), 50.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover6()
     {
         int[] weightArray = { 11, 11, 17, 25, 16, 9, 11, 5, 5, 18, 21, 3, 15, 12, 7, 14, 14, 10, 19,
@@ -285,8 +275,7 @@ public class WeightedVertexCoverTest
             { 35, 45 }, { 35, 56 }, { 36, 58 }, { 37, 47 }, { 38, 45 }, { 38, 49 }, { 38, 58 },
             { 39, 50 }, { 40, 49 }, { 42, 58 }, { 43, 58 }, { 50, 51 }, { 56, 59 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -295,15 +284,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 286.0,0);
+        assertEquals(vertexCover.getWeight(), 286.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover7()
     {
         int[] weightArray = { 24, 13, 20, 22, 17, 18, 14, 3, 10, 10, 3, 13, 25, 3, 24, 7, 12, 24,
@@ -327,8 +315,7 @@ public class WeightedVertexCoverTest
             { 43, 56 }, { 47, 50 }, { 48, 52 }, { 49, 57 }, { 50, 51 }, { 50, 58 }, { 53, 58 },
             { 54, 58 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -337,15 +324,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 401.0,0);
+        assertEquals(vertexCover.getWeight(), 401.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover8()
     {
         int[] weightArray = { 19, 24, 0, 19, 17, 12, 15, 4, 22, 23, 6, 21, 19, 20, 3, 18, 22, 19, 2,
@@ -369,8 +355,7 @@ public class WeightedVertexCoverTest
             { 41, 50 }, { 43, 53 }, { 43, 58 }, { 44, 46 }, { 45, 47 }, { 45, 48 }, { 48, 56 },
             { 50, 56 }, { 51, 52 }, { 51, 53 }, { 51, 57 }, { 51, 58 }, { 53, 59 }, { 54, 55 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -379,15 +364,14 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 336.0,0);
+        assertEquals(vertexCover.getWeight(), 336.0, 0);
     }
 
     @Test
-    @Category(SlowTests.class)    
+    @Category(SlowTests.class)
     public void testExactMinimumCover9()
     {
         int[] weightArray = { 19, 0, 13, 1, 2, 18, 3, 17, 5, 13, 1, 17, 20, 7, 18, 21, 9, 13, 11,
@@ -408,8 +392,7 @@ public class WeightedVertexCoverTest
             { 41, 54 }, { 42, 59 }, { 44, 49 }, { 47, 54 }, { 50, 56 }, { 51, 57 }, { 52, 58 },
             { 53, 55 }, { 53, 56 }, { 55, 57 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -418,11 +401,10 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 234.0,0);
+        assertEquals(vertexCover.getWeight(), 234.0, 0);
     }
 
     @Test
@@ -440,8 +422,7 @@ public class WeightedVertexCoverTest
             { 34, 36 }, { 34, 46 }, { 34, 55 }, { 35, 52 }, { 37, 44 }, { 37, 45 }, { 37, 52 },
             { 39, 45 }, { 48, 57 } };
 
-        Graph<Integer, DefaultEdge> graph =
-                new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
@@ -450,11 +431,10 @@ public class WeightedVertexCoverTest
         for (int i = 0; i < weightArray.length; i++)
             weights.put(i, (double) weightArray[i]);
 
-        VertexCoverAlgorithm<Integer> mvc =
-                new RecursiveExactVCImpl<>(graph, weights);
+        VertexCoverAlgorithm<Integer> mvc = new RecursiveExactVCImpl<>(graph, weights);
         VertexCoverAlgorithm.VertexCover<Integer> vertexCover = mvc.getVertexCover();
 
-        assertEquals(vertexCover.getWeight(), 183.0,0);
+        assertEquals(vertexCover.getWeight(), 183.0, 0);
     }
 
     // ------- Helper methods ------

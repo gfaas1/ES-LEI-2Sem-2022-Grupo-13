@@ -96,8 +96,8 @@ class GraphOrdering<V, E>
     /**
      * @param vertexNumber the number which identifies the vertex $v$ in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to $v$ by an edge outgoing
-     *         from $v$.
+     * @return the identifying numbers of all vertices which are connected to $v$ by an edge
+     *         outgoing from $v$.
      */
     public int[] getOutEdges(int vertexNumber)
     {
@@ -126,8 +126,8 @@ class GraphOrdering<V, E>
     /**
      * @param vertexNumber the number which identifies the vertex $v$ in this order.
      *
-     * @return the identifying numbers of all vertices which are connected to $v$ by an edge incoming
-     *         to $v$.
+     * @return the identifying numbers of all vertices which are connected to $v$ by an edge
+     *         incoming to $v$.
      */
     public int[] getInEdges(int vertexNumber)
     {
@@ -228,7 +228,8 @@ class GraphOrdering<V, E>
     }
 
     private static class GeneralVertexDegreeComparator<V2>
-        implements Comparator<V2>
+        implements
+        Comparator<V2>
     {
         private Graph<V2, ?> graph;
 

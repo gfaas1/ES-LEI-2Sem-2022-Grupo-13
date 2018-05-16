@@ -56,7 +56,8 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      */
     @Deprecated
     interface VertexCover<V>
-        extends Iterable<V>
+        extends
+        Iterable<V>
     {
 
         /**
@@ -93,7 +94,8 @@ public interface MinimumVertexCoverAlgorithm<V, E>
      * @param <V> the vertex type
      */
     class VertexCoverImpl<V>
-        implements VertexCover<V>
+        implements
+        VertexCover<V>
     {
         protected Set<V> cover;
         protected double weight;
@@ -119,9 +121,7 @@ public interface MinimumVertexCoverAlgorithm<V, E>
         @Override
         public String toString()
         {
-            return "Cover(" + this.getWeight() +
-                    "): " +
-                    this.getVertices().toString();
+            return "Cover(" + this.getWeight() + "): " + this.getVertices().toString();
         }
     }
 }

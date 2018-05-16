@@ -40,7 +40,8 @@ import org.jgrapht.graph.DefaultDirectedGraph;
  * @see GraphTypeBuilder
  */
 public class GraphBuilder<V, E, G extends Graph<V, E>>
-    extends AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
+    extends
+    AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
 {
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.

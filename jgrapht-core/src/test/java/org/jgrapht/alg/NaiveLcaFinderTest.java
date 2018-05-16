@@ -30,12 +30,13 @@ import java.util.Set;
 
 public class NaiveLcaFinderTest
 {
-    private static <V, E> void checkLcas(NaiveLcaFinder<V, E> finder, V a, V b, Collection<V> expectedSet){
+    private static <V,
+        E> void checkLcas(NaiveLcaFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
+    {
         Set<V> lcaSet = finder.findLcas(a, b);
         Assert.assertTrue(lcaSet.containsAll(expectedSet));
         Assert.assertEquals(lcaSet.size(), expectedSet.size());
     }
-
 
     @Test
     public void testNormalCases()
@@ -168,7 +169,8 @@ public class NaiveLcaFinderTest
     }
 
     @Test
-    public void testTwoLcas(){
+    public void testTwoLcas()
+    {
 
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 

@@ -973,12 +973,12 @@ public class GraphMLImporterTest
 
         assertEquals(2, g.vertexSet().size());
         assertEquals(1, g.edgeSet().size());
-        for(Map<String, Attribute> va: vertexAttributes.values()) { 
+        for (Map<String, Attribute> va : vertexAttributes.values()) {
             assertTrue(va.containsKey("name"));
             assertTrue(va.containsKey("id"));
             assertFalse(va.containsKey("labels"));
         }
-        for(Map<String, Attribute> ea: edgeAttributes.values()) { 
+        for (Map<String, Attribute> ea : edgeAttributes.values()) {
             assertTrue(ea.isEmpty());
         }
     }

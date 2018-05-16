@@ -36,12 +36,10 @@ import com.mxgraph.view.*;
  * </P>
  *
  * <P>
- * Note: If this class is used with an edge type such as String, you must
- * either supply unique String names via addEdge(v1, v2, "edge123"), or use a
- * custom edge factory which does so.  Otherwise, if you use addEdge(v1, v2),
- * the edge will be created with an empty String "" as value and saved (in
- * JGraphT as well as in this class), which results in the edge not saving
- * correctly.
+ * Note: If this class is used with an edge type such as String, you must either supply unique
+ * String names via addEdge(v1, v2, "edge123"), or use a custom edge factory which does so.
+ * Otherwise, if you use addEdge(v1, v2), the edge will be created with an empty String "" as value
+ * and saved (in JGraphT as well as in this class), which results in the edge not saving correctly.
  * </P>
  *
  * @param <V> the graph vertex type
@@ -51,8 +49,10 @@ import com.mxgraph.view.*;
  * @since 09 July, 2013
  */
 public class JGraphXAdapter<V, E>
-    extends mxGraph
-    implements GraphListener<V, E>
+    extends
+    mxGraph
+    implements
+    GraphListener<V, E>
 {
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".

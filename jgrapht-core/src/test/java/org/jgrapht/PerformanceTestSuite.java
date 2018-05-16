@@ -21,13 +21,13 @@ import org.junit.runner.*;
 import com.googlecode.junittoolbox.*;
 
 /**
- * Suite of performance tests only.  We use WildcardPatternSuite instead
- * of ParallelSuite to avoid running multiple benchmark tests simultaneously.
+ * Suite of performance tests only. We use WildcardPatternSuite instead of ParallelSuite to avoid
+ * running multiple benchmark tests simultaneously.
  * 
  * @author John Sichi
  */
 @RunWith(WildcardPatternSuite.class)
-@SuiteClasses({"**/perf/**/*Test.class"})
+@SuiteClasses({ "**/perf/**/*Test.class" })
 public class PerformanceTestSuite
 {
 }

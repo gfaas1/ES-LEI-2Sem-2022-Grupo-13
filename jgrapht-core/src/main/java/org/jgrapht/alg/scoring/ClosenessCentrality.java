@@ -61,7 +61,8 @@ import org.jgrapht.graph.*;
  * @since January 2017
  */
 public class ClosenessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
     /**
      * Underlying graph

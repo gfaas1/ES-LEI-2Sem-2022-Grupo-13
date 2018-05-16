@@ -306,7 +306,7 @@ public class SimpleDirectedGraphTest
         assertNull(g1.getEdgeSource(e));
         assertNull(g1.getEdgeTarget(e));
     }
-    
+
     /**
      * .
      */
@@ -578,11 +578,21 @@ public class SimpleDirectedGraphTest
     @Before
     public void setUp()
     {
-        gEmpty = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g1 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g2 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g3 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g4 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gEmpty = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g1 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g2 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g3 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g4 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
 
         eSupplier = g1.getEdgeSupplier();
         eLoop = eSupplier.get();

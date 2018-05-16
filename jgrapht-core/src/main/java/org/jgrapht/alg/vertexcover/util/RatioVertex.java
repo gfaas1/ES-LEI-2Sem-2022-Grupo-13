@@ -30,7 +30,8 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class RatioVertex<V>
-    implements Comparable<RatioVertex<V>>
+    implements
+    Comparable<RatioVertex<V>>
 {
     /** original vertex **/
     public final V v;

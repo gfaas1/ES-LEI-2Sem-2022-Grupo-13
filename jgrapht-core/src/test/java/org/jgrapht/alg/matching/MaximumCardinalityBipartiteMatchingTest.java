@@ -203,7 +203,8 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
             GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
                 new GnmRandomBipartiteGraphGenerator<>(vertices, vertices / 2, edges, 0);
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
 
             MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(

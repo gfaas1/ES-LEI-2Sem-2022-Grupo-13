@@ -33,7 +33,7 @@ import org.jgrapht.traverse.*;
  *
  * @author John V. Sichi
  * @since Sept 16, 2004
- * @deprecated  Moved to {@link org.jgrapht.alg.cycle.CycleDetector}
+ * @deprecated Moved to {@link org.jgrapht.alg.cycle.CycleDetector}
  */
 @Deprecated
 public class CycleDetector<V, E>
@@ -157,7 +157,8 @@ public class CycleDetector<V, E>
      * caught by top-level detection method.
      */
     private static class CycleDetectedException
-        extends RuntimeException
+        extends
+        RuntimeException
     {
         private static final long serialVersionUID = 3834305137802950712L;
     }
@@ -166,7 +167,8 @@ public class CycleDetector<V, E>
      * Version of DFS which maintains a backtracking path used to probe for cycles.
      */
     private static class ProbeIterator<V, E>
-        extends DepthFirstIterator<V, E>
+        extends
+        DepthFirstIterator<V, E>
     {
         private List<V> path;
         private Set<V> cycleSet;

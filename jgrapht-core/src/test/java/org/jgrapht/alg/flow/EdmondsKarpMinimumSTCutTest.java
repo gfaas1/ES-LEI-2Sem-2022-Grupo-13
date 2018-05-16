@@ -28,7 +28,8 @@ import org.junit.Test;
  * @author Joris Kinable
  */
 public class EdmondsKarpMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+    extends
+    MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(

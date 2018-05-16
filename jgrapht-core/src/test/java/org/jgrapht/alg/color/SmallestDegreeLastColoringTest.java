@@ -33,7 +33,8 @@ import org.junit.*;
  * @author Dimitrios Michail
  */
 public class SmallestDegreeLastColoringTest
-    extends BaseColoringTest
+    extends
+    BaseColoringTest
 {
 
     @Override

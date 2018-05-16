@@ -66,13 +66,15 @@ The files below make up the table of contents for a release distribution archive
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
-
+The JGraphT [wiki](https://github.com/jgrapht/jgrapht/wiki) provides various helpful pages for new users, including a [How to use JGraphT in your projects](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) page.
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
 
 To run the graph visualization demo from the downloaded release, try executing this command in the lib directory:
 
     java -jar jgrapht-demo-x.y.z.jar
 More information can be found on the [user pages](https://github.com/jgrapht/jgrapht/wiki#user-pages) of our wiki. Finally, all classes come with corresponding test classes. These test classes contain many examples.
+
+To help us understand how you use JGraphT, and which features are important to you, [tell](https://github.com/jgrapht/jgrapht/wiki/Projects-Using-JGraphT) us how you are using JGraphT, and [cite](https://github.com/jgrapht/jgrapht/wiki/How-to-cite-JGraphT) the usage of JGraphT in your book, paper, website, or technical report.
 
 ## Using via Maven
 
@@ -141,13 +143,13 @@ The JGraphT website is at [http://www.jgrapht.org](http://www.jgrapht.org). You 
 - **Report bugs**: if you have any comments, suggestions or bugs you want to report.
 - **Get support**: if you have questions or need help with JGraphT.
 
-There is also a [wiki](https://github.com/jgrapht/jgrapht/wiki) set up for everyone in the JGraphT community to share information about the project.
+There is also a [wiki](https://github.com/jgrapht/jgrapht/wiki) set up for everyone in the JGraphT community to share information about the project. For support, refer to our [support page](https://github.com/jgrapht/jgrapht/wiki/Getting-Support)
 
 Source code is hosted on [github](https://github.com/jgrapht/jgrapht). You can send contributions as pull requests there.
 
 ## Your Improvements ##
 
-If you add improvements to JGraphT please send them to us as pull requests on github. We will add them to the next release so that everyone can enjoy them. You might also benefit from it: others may fix bugs in your source files or may continue to enhance them.
+If you add improvements to JGraphT please send them to us as [pull requests on github](https://github.com/jgrapht/jgrapht/wiki/How-to-make-your-first-%28code%29-contribution). We will add them to the next release so that everyone can enjoy them. You might also benefit from it: others may fix bugs in your source files or may continue to enhance them.
 
 ## Thanks ##
 

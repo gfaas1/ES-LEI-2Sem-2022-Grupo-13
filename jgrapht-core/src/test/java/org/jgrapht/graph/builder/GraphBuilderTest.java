@@ -80,8 +80,8 @@ public class GraphBuilderTest
         assertTrue(g.containsEdge(v1, v8));
         assertEquals(e1, g.getEdge(v1, v7));
         assertEquals(e2, g.getEdge(v1, v8));
-        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)),0);
-        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)),0);
+        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)), 0);
+        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)), 0);
     }
 
     @Test

@@ -32,7 +32,8 @@ import org.jgrapht.*;
  * @since Sep 16, 2003
  */
 public class LinearGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the first vertex generated.
@@ -66,8 +67,7 @@ public class LinearGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         V lastVertex = null;
 

@@ -34,7 +34,8 @@ import org.jgrapht.util.SupplierUtil;
  *
  */
 public class Multigraph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -8313058939737164595L;
 
@@ -47,7 +48,7 @@ public class Multigraph<V, E>
     {
         this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
-    
+
     /**
      * Creates a new graph.
      * 
@@ -63,7 +64,6 @@ public class Multigraph<V, E>
                 .undirected().allowMultipleEdges(true).allowSelfLoops(false).weighted(weighted)
                 .build());
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -78,7 +78,6 @@ public class Multigraph<V, E>
     {
         return new GraphBuilder<>(new Multigraph<>(edgeClass));
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -92,7 +91,7 @@ public class Multigraph<V, E>
         E> GraphBuilder<V, E, ? extends Multigraph<V, E>> createBuilder(Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new Multigraph<>(null, edgeSupplier, false));
-    }    
+    }
 
     /**
      * Creates a new graph with the specified edge factory.
@@ -111,7 +110,7 @@ public class Multigraph<V, E>
      *
      * @param weighted if true the graph supports edge weights
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public Multigraph(EdgeFactory<V, E> ef, boolean weighted)
@@ -126,7 +125,7 @@ public class Multigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V,

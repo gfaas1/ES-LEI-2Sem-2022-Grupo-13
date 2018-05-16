@@ -609,8 +609,8 @@ public class GenericFibonacciHeap<K, T>
         }
 
         /**
-         * Decreases the key value. The structure of
-         * the heap may be changed and will not be consolidated.
+         * Decreases the key value. The structure of the heap may be changed and will not be
+         * consolidated.
          *
          * <p>
          * Running time: $O(1)$ amortized

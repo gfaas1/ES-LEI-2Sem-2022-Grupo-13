@@ -35,7 +35,6 @@ import org.jgrapht.traverse.TopologicalOrderIterator;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
-
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.
  *
@@ -110,7 +109,8 @@ public class DirectedAcyclicGraphTest
     @Test
     public void testTopoIterationOrderLinearGraph()
     {
-        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(
+            SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         LinearGraphGenerator<Long, DefaultEdge> graphGen = new LinearGraphGenerator<>(100);
         graphGen.generateGraph(dag);
 
@@ -140,8 +140,8 @@ public class DirectedAcyclicGraphTest
     public void testTopoIterationOrderComplexGraph()
     {
         for (int seed = 0; seed < 20; seed++) {
-            DirectedAcyclicGraph<Long, DefaultEdge> dag =
-                new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
                 new RepeatableRandomGraphGenerator<>(100, 500, seed);
             graphGen.generateGraph(dag);
@@ -170,7 +170,8 @@ public class DirectedAcyclicGraphTest
     {
         int vertexCount = 100;
 
-        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Long, DefaultEdge> dag = new DirectedAcyclicGraph<>(
+            SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         RepeatableRandomGraphGenerator<Long, DefaultEdge> graphGen =
             new RepeatableRandomGraphGenerator<>(vertexCount, 500, 2);
         graphGen.generateGraph(dag);
@@ -534,7 +535,8 @@ public class DirectedAcyclicGraphTest
     {
         GraphGenerator<Long, DefaultEdge, Long> randomGraphGenerator =
             new RepeatableRandomGraphGenerator<>(vertices, edges, seed);
-        Graph<Long, DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Long, DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(
+            SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         randomGraphGenerator.generateGraph(sourceGraph);
         return sourceGraph;
     }
@@ -544,7 +546,8 @@ public class DirectedAcyclicGraphTest
     // it is nice for tests to be easily repeatable, so we use a graph generator
     // that we can seed for specific configurations
     public static class RepeatableRandomGraphGenerator<V, E>
-        implements GraphGenerator<V, E, V>
+        implements
+        GraphGenerator<V, E, V>
     {
         private Random randomizer;
         private int numOfVertexes;
@@ -558,8 +561,7 @@ public class DirectedAcyclicGraphTest
         }
 
         @Override
-        public void generateGraph(
-            Graph<V, E> graph, Map<String, V> namedVerticesMap)
+        public void generateGraph(Graph<V, E> graph, Map<String, V> namedVerticesMap)
         {
             List<V> vertices = new ArrayList<>(numOfVertexes);
             Set<Integer> edgeGeneratorIds = new HashSet<>();

@@ -34,17 +34,21 @@ import static org.junit.Assert.assertNull;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphMinimalVertexSeparatorFinderTest {
+public class ChordalGraphMinimalVertexSeparatorFinderTest
+{
 
     /**
      * Test on empty graph
      */
     @Test
-    public void testGetMinimalSeparators1() {
+    public void testGetMinimalSeparators1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         assertEquals(0, separators.size());
         assertEquals(0, separatorsAndMultiplicities.size());
     }
@@ -53,16 +57,19 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
      * Test on small chordal graph
      */
     @Test
-    public void testGetMinimalSeparators2() {
+    public void testGetMinimalSeparators2()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
         Graphs.addEdgeWithVertices(graph, 2, 3);
         Graphs.addEdgeWithVertices(graph, 2, 4);
         Graphs.addEdgeWithVertices(graph, 3, 4);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
         expected.put(new HashSet<>(Arrays.asList(2, 3)), 1);
         assertEquals(expected.keySet(), separators);
@@ -73,7 +80,8 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
      * Test on big chordal graph (example from original article)
      */
     @Test
-    public void testGetMinimalSeparators3() {
+    public void testGetMinimalSeparators3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
@@ -96,9 +104,11 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
         Graphs.addEdgeWithVertices(graph, 8, 9);
         Graphs.addEdgeWithVertices(graph, 8, 10);
         Graphs.addEdgeWithVertices(graph, 9, 10);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
         expected.put(new HashSet<>(Collections.singletonList(3)), 1);
         expected.put(new HashSet<>(Arrays.asList(3, 6)), 2);
@@ -112,7 +122,8 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
      * Test on big chordal graph (example from original article)
      */
     @Test
-    public void testGetMinimalSeparators4() {
+    public void testGetMinimalSeparators4()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 2, 8);
@@ -137,9 +148,11 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
         Graphs.addEdgeWithVertices(graph, 9, 12);
         Graphs.addEdgeWithVertices(graph, 10, 11);
         Graphs.addEdgeWithVertices(graph, 11, 12);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
         expected.put(new HashSet<>(Collections.singletonList(2)), 1);
         expected.put(new HashSet<>(Arrays.asList(6, 8)), 2);
@@ -153,15 +166,18 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
      * Test on not chordal graph
      */
     @Test
-    public void testGetMinimalSeparators5() {
+    public void testGetMinimalSeparators5()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
         Graphs.addEdgeWithVertices(graph, 2, 4);
         Graphs.addEdgeWithVertices(graph, 3, 4);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         assertNull(separators);
         assertNull(separatorsAndMultiplicities);
     }
@@ -170,7 +186,8 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
      * Test on pseudograph
      */
     @Test
-    public void testGetMinimalSeparators6() {
+    public void testGetMinimalSeparators6()
+    {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 1);
         Graphs.addEdgeWithVertices(graph, 1, 1);
@@ -184,9 +201,11 @@ public class ChordalGraphMinimalVertexSeparatorFinderTest {
         Graphs.addEdgeWithVertices(graph, 5, 3);
         Graphs.addEdgeWithVertices(graph, 5, 3);
         Graphs.addEdgeWithVertices(graph, 5, 4);
-        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder = new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
+        ChordalGraphMinimalVertexSeparatorFinder<Integer, DefaultEdge> finder =
+            new ChordalGraphMinimalVertexSeparatorFinder<>(graph);
         Set<Set<Integer>> separators = finder.getMinimalSeparators();
-        Map<Set<Integer>, Integer> separatorsAndMultiplicities = finder.getMinimalSeparatorsWithMultiplicities();
+        Map<Set<Integer>, Integer> separatorsAndMultiplicities =
+            finder.getMinimalSeparatorsWithMultiplicities();
         Map<Set<Integer>, Integer> expected = new HashMap<>();
         expected.put(new HashSet<>(Collections.singletonList(2)), 1);
         expected.put(new HashSet<>(Arrays.asList(3, 5)), 1);

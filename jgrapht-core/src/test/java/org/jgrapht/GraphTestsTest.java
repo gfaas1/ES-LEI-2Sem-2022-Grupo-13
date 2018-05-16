@@ -530,21 +530,23 @@ public class GraphTestsTest
     }
 
     @Test
-    public void testIsChordal(){
+    public void testIsChordal()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        Graphs.addEdgeWithVertices(graph, 1,2);
-        Graphs.addEdgeWithVertices(graph, 2,3);
-        Graphs.addEdgeWithVertices(graph, 3,4);
-        Graphs.addEdgeWithVertices(graph, 4,5);
-        Graphs.addEdgeWithVertices(graph, 5,1);
-        Graphs.addEdgeWithVertices(graph, 1,3);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 4);
+        Graphs.addEdgeWithVertices(graph, 4, 5);
+        Graphs.addEdgeWithVertices(graph, 5, 1);
+        Graphs.addEdgeWithVertices(graph, 1, 3);
         assertFalse(GraphTests.isChordal(graph));
-        Graphs.addEdgeWithVertices(graph, 1,4);
+        Graphs.addEdgeWithVertices(graph, 1, 4);
         assertTrue(GraphTests.isChordal(graph));
     }
 
     @Test
-    public void testIsWeaklyChordal() {
+    public void testIsWeaklyChordal()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 2, 3);

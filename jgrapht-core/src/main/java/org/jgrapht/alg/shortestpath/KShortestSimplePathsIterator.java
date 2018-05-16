@@ -27,7 +27,8 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 class KShortestSimplePathsIterator<V, E>
-    implements Iterator<Set<V>>
+    implements
+    Iterator<Set<V>>
 {
     /**
      * End vertex.

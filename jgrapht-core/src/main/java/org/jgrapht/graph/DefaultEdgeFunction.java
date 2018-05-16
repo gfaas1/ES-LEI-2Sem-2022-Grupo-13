@@ -32,7 +32,9 @@ import java.util.function.Function;
  * @param <T> the value type
  */
 public class DefaultEdgeFunction<E, T>
-    implements Function<E, T>, Serializable
+    implements
+    Function<E, T>,
+    Serializable
 {
     private static final long serialVersionUID = -4247429315268336855L;
 

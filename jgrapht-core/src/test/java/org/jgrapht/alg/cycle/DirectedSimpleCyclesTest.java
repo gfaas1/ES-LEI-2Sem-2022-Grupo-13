@@ -56,8 +56,8 @@ public class DirectedSimpleCyclesTest
         Function<Graph<Integer, DefaultEdge>,
             DirectedSimpleCycles<Integer, DefaultEdge>> algProvider)
     {
-        Graph<Integer, DefaultEdge> graph =
-            new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -77,7 +77,8 @@ public class DirectedSimpleCyclesTest
         assertTrue(alg.findSimpleCycles().size() == 5);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new DefaultDirectedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }

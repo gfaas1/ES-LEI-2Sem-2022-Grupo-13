@@ -35,14 +35,14 @@ import java.util.*;
  * Resilience Metrics for Service-Oriented Networks</a>:
  *
  * <ul>
- * <li><b>Definition 4.5</b> Let $G(V; E)$ be a connected undirected graph. The block-cut point graph
- * ($BC$ graph) of $G$, denoted by $GB(VB; EB)$, is the bipartite graph defined as follows. (a) $VB$ has one
- * node corresponding to each block and one node corresponding to each cut point of $G$. (b) Each edge
- * $fx$; $yg$ in $EB$ joins a block node $x$ to a cut point $y$ if the block corresponding to $x$ contains the
- * cut point node corresponding to $y$.</li>
- * <li><b>Lemma 4.4</b> Let $G(V; E)$ be a connected undirected graph. (a) Each pair of blocks of $G$
- * share at most one node, and that node is a cutpoint. (b) The $BC$ graph of $G$ is a tree in which
- * each leaf node corresponds to a block of $G$.</li>
+ * <li><b>Definition 4.5</b> Let $G(V; E)$ be a connected undirected graph. The block-cut point
+ * graph ($BC$ graph) of $G$, denoted by $GB(VB; EB)$, is the bipartite graph defined as follows.
+ * (a) $VB$ has one node corresponding to each block and one node corresponding to each cut point of
+ * $G$. (b) Each edge $fx$; $yg$ in $EB$ joins a block node $x$ to a cut point $y$ if the block
+ * corresponding to $x$ contains the cut point node corresponding to $y$.</li>
+ * <li><b>Lemma 4.4</b> Let $G(V; E)$ be a connected undirected graph. (a) Each pair of blocks of
+ * $G$ share at most one node, and that node is a cutpoint. (b) The $BC$ graph of $G$ is a tree in
+ * which each leaf node corresponds to a block of $G$.</li>
  * </ul>
  * 
  * @param <V> the graph vertex type
@@ -53,7 +53,8 @@ import java.util.*;
  */
 @Deprecated
 public class BlockCutpointGraph<V, E>
-    extends SimpleGraph<Graph<V, E>, DefaultEdge>
+    extends
+    SimpleGraph<Graph<V, E>, DefaultEdge>
 {
     private static final long serialVersionUID = -9101341117013163934L;
 
@@ -245,7 +246,8 @@ public class BlockCutpointGraph<V, E>
     }
 
     private class BCGEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = -5115006161815760059L;
 

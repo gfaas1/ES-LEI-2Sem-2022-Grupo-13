@@ -41,7 +41,9 @@ import org.jgrapht.util.ArrayUnenforcedSet;
  * @author Joris Kinable
  */
 public class DirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+    implements
+    Specifics<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 8971725103718958232L;
 

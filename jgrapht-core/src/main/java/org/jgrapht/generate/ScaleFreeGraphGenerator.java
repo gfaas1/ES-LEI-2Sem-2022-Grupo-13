@@ -34,7 +34,8 @@ import org.jgrapht.*;
  * @author Ilya Razenshteyn
  */
 public class ScaleFreeGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final int size;
     private final Random rng;
@@ -84,15 +85,14 @@ public class ScaleFreeGraphGenerator<V, E>
      * @param resultMap unused parameter, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         List<V> vertexList = new ArrayList<>();
         List<Integer> degrees = new ArrayList<>();
         int degreeSum = 0;
         for (int i = 0; i < size; i++) {
             V newVertex = target.addVertex();
-            if (newVertex == null) { 
+            if (newVertex == null) {
                 throw new IllegalArgumentException("Invalid vertex supplier");
             }
             int newDegree = 0;

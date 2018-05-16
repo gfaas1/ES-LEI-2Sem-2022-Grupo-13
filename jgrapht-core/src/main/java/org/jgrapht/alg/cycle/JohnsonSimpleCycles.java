@@ -151,10 +151,10 @@ public class JohnsonSimpleCycles<V, E>
     private Pair<Graph<V, E>, Integer> findMinSCSG(int startIndex)
     {
         /*
-         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph of
-         * $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected component of
-         * the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum (among those SCCs) vertex
-         * index. We return that index together with the graph.
+         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph
+         * of $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected
+         * component of the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum
+         * (among those SCCs) vertex index. We return that index together with the graph.
          */
         initMinSCGState();
 

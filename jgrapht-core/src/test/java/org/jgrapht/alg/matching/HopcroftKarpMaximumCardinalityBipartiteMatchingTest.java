@@ -30,7 +30,8 @@ import org.jgrapht.graph.*;
  *
  */
 public class HopcroftKarpMaximumCardinalityBipartiteMatchingTest
-    extends MaximumCardinalityBipartiteMatchingTest
+    extends
+    MaximumCardinalityBipartiteMatchingTest
 {
 
     @Override

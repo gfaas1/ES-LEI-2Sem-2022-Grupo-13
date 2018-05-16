@@ -29,8 +29,10 @@ import org.jgrapht.util.*;
  * @since July 5, 2007
  */
 class MaskVertexSet<V>
-    extends AbstractSet<V>
-    implements Serializable
+    extends
+    AbstractSet<V>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = 3751931017141472763L;
 

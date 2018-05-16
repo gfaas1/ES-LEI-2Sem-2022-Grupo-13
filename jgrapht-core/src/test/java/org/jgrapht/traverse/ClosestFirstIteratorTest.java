@@ -31,7 +31,8 @@ import static org.junit.Assert.assertEquals;
  * @since Sep 3, 2003
  */
 public class ClosestFirstIteratorTest
-    extends CrossComponentIteratorTest
+    extends
+    CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -77,8 +78,7 @@ public class ClosestFirstIteratorTest
     {
         result = new StringBuilder();
 
-        Graph<String, DefaultEdge> graph =
-            new DirectedPseudograph<>(DefaultEdge.class);
+        Graph<String, DefaultEdge> graph = new DirectedPseudograph<>(DefaultEdge.class);
 
         graph.addVertex("1624");
         graph.addVertex("6998");
@@ -114,9 +114,7 @@ public class ClosestFirstIteratorTest
             new ClosestFirstIterator<>(graph, starts, 2);
 
         collectResult(iterator, result);
-        assertEquals(
-            "2652,1624,1002,3344,6067,7383,6009,6998",
-            result.toString());
+        assertEquals("2652,1624,1002,3344,6067,7383,6009,6998", result.toString());
     }
 
     // NOTE: the edge weights make the result deterministic

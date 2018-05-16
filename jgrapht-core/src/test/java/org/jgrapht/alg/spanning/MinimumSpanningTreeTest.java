@@ -36,9 +36,11 @@ import org.jgrapht.graph.WeightedPseudograph;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Test;
 
-public abstract class MinimumSpanningTreeTest {
+public abstract class MinimumSpanningTreeTest
+{
 
-    abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network);
+    abstract SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        Graph<Integer, DefaultWeightedEdge> network);
 
     // ~ Static fields/initializers ---------------------------------------------
 
@@ -64,31 +66,35 @@ public abstract class MinimumSpanningTreeTest {
     // ~ Methods ----------------------------------------------------------------
 
     @Test
-    public void testSimpleDisconnectedWeightedGraph(){
-        testMinimumSpanningTreeBuilding(createSolver(createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
-                Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
+    public void testSimpleDisconnectedWeightedGraph()
+    {
+        testMinimumSpanningTreeBuilding(
+            createSolver(createSimpleDisconnectedWeightedGraph()).getSpanningTree(),
+            Arrays.asList(AB, AC, BD, EG, GH, FH), 60.0);
     }
 
     @Test
-    public void testSimpleConnectedWeightedGraph() {
-        testMinimumSpanningTreeBuilding(createSolver(createSimpleConnectedWeightedGraph()).getSpanningTree(),
-                Arrays.asList(AB, AC, BD, DE), 15.0);
+    public void testSimpleConnectedWeightedGraph()
+    {
+        testMinimumSpanningTreeBuilding(
+            createSolver(createSimpleConnectedWeightedGraph()).getSpanningTree(),
+            Arrays.asList(AB, AC, BD, DE), 15.0);
     }
 
     @Test
-    public void testRandomInstances() {
+    public void testRandomInstances()
+    {
         final Random rng = new Random(33);
         final double edgeProbability = 0.5;
         final int numberVertices = 200;
         final int repeat = 100;
 
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gg =
-                new GnpRandomGraphGenerator<>(
-                        numberVertices, edgeProbability, rng, false);
+            new GnpRandomGraphGenerator<>(numberVertices, edgeProbability, rng, false);
 
         for (int i = 0; i < repeat; i++) {
-            WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            WeightedPseudograph<Integer, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             gg.generateGraph(g);
 
             for (DefaultWeightedEdge e : g.edgeSet()) {
@@ -103,26 +109,28 @@ public abstract class MinimumSpanningTreeTest {
             else
                 alg2 = new KruskalMinimumSpanningTree<>(g);
 
-            assertEquals(alg1.getSpanningTree().getWeight(), alg2.getSpanningTree().getWeight(), 1e-9);
+            assertEquals(
+                alg1.getSpanningTree().getWeight(), alg2.getSpanningTree().getWeight(), 1e-9);
         }
     }
 
-    public static <V, E>  void testMinimumSpanningTreeBuilding(
+    public static <V, E> void testMinimumSpanningTreeBuilding(
         final SpanningTree<E> mst, final Collection<E> edgeSet, final double weight)
     {
-        assertEquals(weight, mst.getWeight(),0);
+        assertEquals(weight, mst.getWeight(), 0);
         assertTrue(mst.getEdges().containsAll(edgeSet));
     }
 
     public static Graph<Integer, DefaultWeightedEdge> createSimpleDisconnectedWeightedGraph()
     {
 
-        Graph<Integer, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         /*
-
-          A -- B E -- F | | | | C -- D G -- H
-
+         * 
+         * A -- B E -- F | | | | C -- D G -- H
+         * 
          */
 
         g.addVertex(A);
@@ -151,7 +159,8 @@ public abstract class MinimumSpanningTreeTest {
     public static Graph<Integer, DefaultWeightedEdge> createSimpleConnectedWeightedGraph()
     {
 
-        Graph<Integer, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<Integer, DefaultWeightedEdge> g =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         double bias = 1;
 

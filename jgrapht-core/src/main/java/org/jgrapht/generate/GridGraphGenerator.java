@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @since Dec 29, 2010
  */
 public class GridGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * Role for the vertices at the corners.
@@ -70,8 +71,7 @@ public class GridGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         Map<Integer, V> map = new TreeMap<>();
 

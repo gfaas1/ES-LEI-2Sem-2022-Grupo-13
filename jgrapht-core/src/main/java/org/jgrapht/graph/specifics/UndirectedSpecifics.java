@@ -37,7 +37,9 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class UndirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+    implements
+    Specifics<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 6494588405178655873L;
 
@@ -185,7 +187,8 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        if (abstractBaseGraph.getType().isAllowingSelfLoops()) { // then we must count, and add loops twice
+        if (abstractBaseGraph.getType().isAllowingSelfLoops()) { // then we must count, and add
+                                                                 // loops twice
             int degree = 0;
             Set<E> edges = getEdgeContainer(vertex).vertexEdges;
 

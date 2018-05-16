@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Nikolay Ognyanov
  */
 public class TiernanSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private Graph<V, E> graph;
 

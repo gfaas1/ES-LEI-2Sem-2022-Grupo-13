@@ -31,7 +31,8 @@ import org.jgrapht.event.*;
  * @since Jul 31, 2003
  */
 public interface GraphIterator<V, E>
-    extends Iterator<V>
+    extends
+    Iterator<V>
 {
     /**
      * Test whether this iterator is set to traverse the graph across connected components.

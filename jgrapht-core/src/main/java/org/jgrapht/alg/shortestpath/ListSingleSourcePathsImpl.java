@@ -37,7 +37,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ListSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+    implements
+    SingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -60070018446561686L;
 

@@ -34,7 +34,8 @@ import static org.junit.Assert.assertTrue;
  * @author Joris Kinable
  */
 public class GusfieldGomoryHuCutTreeTest
-    extends GusfieldTreeAlgorithmsTestBase
+    extends
+    GusfieldTreeAlgorithmsTestBase
 {
 
     @Override
@@ -53,8 +54,8 @@ public class GusfieldGomoryHuCutTreeTest
         double expectedMinimumCut = minimumCutAlg.minCutWeight();
         double cheapestEdge = gomoryHuTree
             .edgeSet().stream().mapToDouble(gomoryHuTree::getEdgeWeight).min().getAsDouble();
-        assertEquals(expectedMinimumCut, cheapestEdge,0);
-        assertEquals(expectedMinimumCut, alg.calculateMinCut(),0);
+        assertEquals(expectedMinimumCut, cheapestEdge, 0);
+        assertEquals(expectedMinimumCut, alg.calculateMinCut(), 0);
         Set<Integer> partition = alg.getSourcePartition();
         double cutWeight = network
             .edgeSet().stream()
@@ -62,7 +63,7 @@ public class GusfieldGomoryHuCutTreeTest
                 e -> partition.contains(network.getEdgeSource(e))
                     ^ partition.contains(network.getEdgeTarget(e)))
             .mapToDouble(network::getEdgeWeight).sum();
-        assertEquals(expectedMinimumCut, cutWeight,0);
+        assertEquals(expectedMinimumCut, cutWeight, 0);
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> minimumSTCutAlgorithm =
             new PushRelabelMFImpl<>(network);
@@ -73,12 +74,12 @@ public class GusfieldGomoryHuCutTreeTest
 
                 // Check cut weights
                 double expectedCutWeight = minimumSTCutAlgorithm.calculateMinCut(i, j);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j),0);
-                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i),0);
-                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(),0);
-                assertEquals(expectedCutWeight, alg.calculateMinCut(j, i),0);
-                assertEquals(expectedCutWeight, alg.calculateMinCut(i, j),0);
-                assertEquals(expectedCutWeight, alg.getCutCapacity(),0);
+                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(i, j), 0);
+                assertEquals(expectedCutWeight, alg.calculateMaximumFlow(j, i), 0);
+                assertEquals(expectedCutWeight, alg.getMaximumFlowValue(), 0);
+                assertEquals(expectedCutWeight, alg.calculateMinCut(j, i), 0);
+                assertEquals(expectedCutWeight, alg.calculateMinCut(i, j), 0);
+                assertEquals(expectedCutWeight, alg.getCutCapacity(), 0);
 
                 // Check cut partitions
                 Set<Integer> sourcePartition = alg.getSourcePartition();
@@ -94,7 +95,7 @@ public class GusfieldGomoryHuCutTreeTest
                         e -> sourcePartition.contains(network.getEdgeSource(e))
                             ^ sourcePartition.contains(network.getEdgeTarget(e)))
                     .mapToDouble(network::getEdgeWeight).sum();
-                assertEquals(expectedCutWeight, cutWeight,0);
+                assertEquals(expectedCutWeight, cutWeight, 0);
 
                 // Verify the correctness of the tree
                 // a. the cost of the cheapest edge in the path from i to j must equal the weight of
@@ -106,7 +107,7 @@ public class GusfieldGomoryHuCutTreeTest
                 DefaultWeightedEdge cheapestEdgeInPath = pathEdges
                     .stream().min(Comparator.comparing(gomoryHuTreeCopy::getEdgeWeight))
                     .orElseThrow(() -> new RuntimeException("path is empty?!"));
-                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath),0);
+                assertEquals(expectedCutWeight, network.getEdgeWeight(cheapestEdgeInPath), 0);
             }
         }
     }

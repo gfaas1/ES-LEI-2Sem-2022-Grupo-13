@@ -35,7 +35,8 @@ import org.jgrapht.*;
  */
 @Deprecated
 public class GabowStrongConnectivityInspector<V, E>
-    extends AbstractStrongConnectivityInspector<V, E>
+    extends
+    AbstractStrongConnectivityInspector<V, E>
 {
     // stores the vertices
     private Deque<VertexNumber<V>> stack = new ArrayDeque<>();

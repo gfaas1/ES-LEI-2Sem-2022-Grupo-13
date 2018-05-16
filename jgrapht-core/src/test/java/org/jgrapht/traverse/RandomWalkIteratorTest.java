@@ -93,11 +93,11 @@ public class RandomWalkIteratorTest
     public void testExhausted()
     {
         Graph<String,
-        DefaultEdge> graph = GraphTypeBuilder
-            .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
-            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
-            .buildGraph();
-        
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
+                .buildGraph();
+
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
         graphGenerator.generateGraph(graph);
         int maxSteps = 4;
@@ -116,11 +116,11 @@ public class RandomWalkIteratorTest
     public void testDeterministic()
     {
         Graph<String,
-        DefaultEdge> graph = GraphTypeBuilder
-            .directed().vertexSupplier(SupplierUtil.createStringSupplier())
-            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
-            .buildGraph();
-        
+            DefaultEdge> graph = GraphTypeBuilder
+                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
+                .buildGraph();
+
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
         graphGenerator.generateGraph(graph);

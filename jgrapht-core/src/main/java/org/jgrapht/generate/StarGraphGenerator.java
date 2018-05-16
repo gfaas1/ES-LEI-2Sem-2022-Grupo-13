@@ -32,7 +32,8 @@ import org.jgrapht.*;
  * @since Dec 21, 2008
  */
 public class StarGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 
@@ -52,8 +53,7 @@ public class StarGraphGenerator<V, E>
      * Generates a star graph with the designated order from the constructor
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (order < 1) {
             return;

@@ -29,7 +29,8 @@ import org.jgrapht.Graph;
  * @param <E> the graph edge type
  */
 public class SimpleWeightedGraphMatrixGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     protected List<V> vertices;
     protected double[][] weights;
@@ -59,8 +60,7 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
     }
 
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(

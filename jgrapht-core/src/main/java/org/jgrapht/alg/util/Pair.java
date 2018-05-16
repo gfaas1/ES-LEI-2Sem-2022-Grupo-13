@@ -32,7 +32,8 @@ import java.util.*;
  * 
  */
 public class Pair<A, B>
-    implements Serializable
+    implements
+    Serializable
 {
     private static final long serialVersionUID = 8176288675989092842L;
 

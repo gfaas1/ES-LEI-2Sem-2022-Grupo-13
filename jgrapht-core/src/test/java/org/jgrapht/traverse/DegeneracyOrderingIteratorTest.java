@@ -120,7 +120,8 @@ public class DegeneracyOrderingIteratorTest
     }
 
     private static class TestTraversalListener<V, E>
-        implements TraversalListener<V, E>
+        implements
+        TraversalListener<V, E>
     {
 
         private StringBuilder sb = new StringBuilder();

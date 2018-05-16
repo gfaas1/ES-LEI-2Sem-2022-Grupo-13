@@ -28,7 +28,8 @@ import org.jgrapht.graph.*;
  * @author John V. Sichi
  */
 public class BronKerboschCliqueFinderTest
-    extends BaseBronKerboschCliqueFinderTest
+    extends
+    BaseBronKerboschCliqueFinderTest
 {
 
     @Override

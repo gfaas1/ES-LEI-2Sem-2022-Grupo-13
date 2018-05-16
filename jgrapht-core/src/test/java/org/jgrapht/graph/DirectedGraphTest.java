@@ -182,7 +182,8 @@ public class DirectedGraphTest
      * @param <E> the graph edge type
      */
     private class LinkedHashSetDirectedMultigraph<V, E>
-        extends DirectedMultigraph<V, E>
+        extends
+        DirectedMultigraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

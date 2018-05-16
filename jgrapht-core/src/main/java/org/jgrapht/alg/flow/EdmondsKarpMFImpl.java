@@ -65,7 +65,8 @@ import org.jgrapht.alg.util.extension.*;
  */
 
 public final class EdmondsKarpMFImpl<V, E>
-    extends MaximumFlowAlgorithmBase<V, E>
+    extends
+    MaximumFlowAlgorithmBase<V, E>
 {
 
     /* current source vertex */
@@ -284,7 +285,8 @@ public final class EdmondsKarpMFImpl<V, E>
     }
 
     class VertexExtension
-        extends VertexExtensionBase
+        extends
+        VertexExtensionBase
     {
         boolean visited; // this mark is used during BFS to mark visited nodes
         List<AnnotatedFlowEdge> lastArcs; // last arc(-s) in the shortest path used to reach this

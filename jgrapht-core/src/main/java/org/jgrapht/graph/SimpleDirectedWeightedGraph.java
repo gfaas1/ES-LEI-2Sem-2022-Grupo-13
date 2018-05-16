@@ -31,7 +31,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class SimpleDirectedWeightedGraph<V, E>
-    extends SimpleDirectedGraph<V, E>
+    extends
+    SimpleDirectedGraph<V, E>
 {
     private static final long serialVersionUID = -3301373580757772501L;
 
@@ -53,9 +54,7 @@ public class SimpleDirectedWeightedGraph<V, E>
      */
     public SimpleDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -66,12 +65,13 @@ public class SimpleDirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
     {
         return new GraphBuilder<>(new SimpleDirectedWeightedGraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -80,25 +80,25 @@ public class SimpleDirectedWeightedGraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
-        Supplier<E> edgeSupplier)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
+            Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new SimpleDirectedWeightedGraph<>(null, edgeSupplier));
     }
 
-    
     /**
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleDirectedWeightedGraph(EdgeFactory<V, E> ef)
     {
         super(ef, true);
     }
- 
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -106,11 +106,12 @@ public class SimpleDirectedWeightedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends SimpleDirectedWeightedGraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
     {
         return new GraphBuilder<>(new SimpleDirectedWeightedGraph<>(ef));
     }

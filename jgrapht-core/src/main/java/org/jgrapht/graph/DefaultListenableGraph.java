@@ -43,11 +43,14 @@ import org.jgrapht.util.*;
  * @since Jul 20, 2003
  */
 public class DefaultListenableGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements ListenableGraph<V, E>, Cloneable
+    extends
+    GraphDelegator<V, E>
+    implements
+    ListenableGraph<V, E>,
+    Cloneable
 {
     private static final long serialVersionUID = -1156773351121025002L;
-    
+
     private List<GraphListener<V, E>> graphListeners = new ArrayList<>();
     private List<VertexSetListener<V>> vertexSetListeners = new ArrayList<>();
     private FlyweightEdgeEvent<V, E> reuseableEdgeEvent;
@@ -183,10 +186,10 @@ public class DefaultListenableGraph<V, E>
     public E removeEdge(V sourceVertex, V targetVertex)
     {
         E e = super.getEdge(sourceVertex, targetVertex);
-        if (e != null) { 
+        if (e != null) {
             double weight = super.getEdgeWeight(e);
-            if (super.removeEdge(e)) { 
-                fireEdgeRemoved(e, sourceVertex, targetVertex, weight);                
+            if (super.removeEdge(e)) {
+                fireEdgeRemoved(e, sourceVertex, targetVertex, weight);
             }
         }
         return e;
@@ -197,7 +200,7 @@ public class DefaultListenableGraph<V, E>
     {
         V sourceVertex = getEdgeSource(e);
         V targetVertex = getEdgeTarget(e);
-        double weight = getEdgeWeight(e); 
+        double weight = getEdgeWeight(e);
 
         boolean modified = super.removeEdge(e);
 
@@ -232,15 +235,15 @@ public class DefaultListenableGraph<V, E>
             return false;
         }
     }
-    
+
     @Override
     public void setEdgeWeight(E e, double weight)
     {
         super.setEdgeWeight(e, weight);
-        
+
         V sourceVertex = getEdgeSource(e);
         V targetVertex = getEdgeTarget(e);
-        
+
         fireEdgeWeightUpdated(e, sourceVertex, targetVertex, weight);
     }
 
@@ -260,8 +263,8 @@ public class DefaultListenableGraph<V, E>
      */
     protected void fireEdgeAdded(E edge, V source, V target, double weight)
     {
-        GraphEdgeChangeEvent<V, E> e =
-            createGraphEdgeChangeEvent(GraphEdgeChangeEvent.EDGE_ADDED, edge, source, target, weight);
+        GraphEdgeChangeEvent<V, E> e = createGraphEdgeChangeEvent(
+            GraphEdgeChangeEvent.EDGE_ADDED, edge, source, target, weight);
 
         for (GraphListener<V, E> l : graphListeners) {
             l.edgeAdded(e);
@@ -274,18 +277,18 @@ public class DefaultListenableGraph<V, E>
      * @param edge the edge that was removed.
      * @param source edge source
      * @param target edge target
-     * @param weight edge weight 
+     * @param weight edge weight
      */
     protected void fireEdgeRemoved(E edge, V source, V target, double weight)
     {
-        GraphEdgeChangeEvent<V, E> e =
-            createGraphEdgeChangeEvent(GraphEdgeChangeEvent.EDGE_REMOVED, edge, source, target, weight);
+        GraphEdgeChangeEvent<V, E> e = createGraphEdgeChangeEvent(
+            GraphEdgeChangeEvent.EDGE_REMOVED, edge, source, target, weight);
 
         for (GraphListener<V, E> l : graphListeners) {
             l.edgeRemoved(e);
         }
     }
-    
+
     /**
      * Notify listeners that the weight of an edge has changed.
      *
@@ -296,8 +299,8 @@ public class DefaultListenableGraph<V, E>
      */
     protected void fireEdgeWeightUpdated(E edge, V source, V target, double weight)
     {
-        GraphEdgeChangeEvent<V, E> e =
-            createGraphEdgeChangeEvent(GraphEdgeChangeEvent.EDGE_WEIGHT_UPDATED, edge, source, target, weight);
+        GraphEdgeChangeEvent<V, E> e = createGraphEdgeChangeEvent(
+            GraphEdgeChangeEvent.EDGE_WEIGHT_UPDATED, edge, source, target, weight);
 
         for (GraphListener<V, E> l : graphListeners) {
             l.edgeWeightUpdated(e);
@@ -384,7 +387,8 @@ public class DefaultListenableGraph<V, E>
      * @since Aug 10, 2003
      */
     private static class FlyweightEdgeEvent<VV, EE>
-        extends GraphEdgeChangeEvent<VV, EE>
+        extends
+        GraphEdgeChangeEvent<VV, EE>
     {
         private static final long serialVersionUID = 3907207152526636089L;
 
@@ -415,8 +419,9 @@ public class DefaultListenableGraph<V, E>
         {
             this.edgeTarget = v;
         }
-        
-        protected void setEdgeWeight(double weight) { 
+
+        protected void setEdgeWeight(double weight)
+        {
             this.edgeWeight = weight;
         }
 
@@ -438,7 +443,8 @@ public class DefaultListenableGraph<V, E>
      * @since Aug 10, 2003
      */
     private static class FlyweightVertexEvent<VV>
-        extends GraphVertexChangeEvent<VV>
+        extends
+        GraphVertexChangeEvent<VV>
     {
         private static final long serialVersionUID = 3257848787857585716L;
 

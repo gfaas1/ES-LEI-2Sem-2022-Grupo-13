@@ -28,12 +28,12 @@ import org.jgrapht.graph.*;
 
 /**
  * Implementation of the algorithm by Padberg and Rao to compute Odd Minimum Cut-Sets. Let $G=(V,E)$
- * be an undirected, simple weighted graph, where all edge weights are positive. Let $T \subset V$ with
- * $|T|$ even, be a set of vertices that are labelled <i>odd</i>. A cut-set $(U:V-U)$ is called odd if
- * $|T \cap U|$ is an odd number. Let $c(U:V-U)$ be the weight of the cut, that is, the sum of weights
- * of the edges which have exactly one endpoint in $U$ and one endpoint in $V-U$. The problem of finding
- * an odd minimum cut-set in $G$ is stated as follows: Find $W \subseteq V$ such that
- * $c(W:V-W)=min(c(U:V-U)|U \subseteq V, |T \cap U|$ is odd).
+ * be an undirected, simple weighted graph, where all edge weights are positive. Let $T \subset V$
+ * with $|T|$ even, be a set of vertices that are labelled <i>odd</i>. A cut-set $(U:V-U)$ is called
+ * odd if $|T \cap U|$ is an odd number. Let $c(U:V-U)$ be the weight of the cut, that is, the sum
+ * of weights of the edges which have exactly one endpoint in $U$ and one endpoint in $V-U$. The
+ * problem of finding an odd minimum cut-set in $G$ is stated as follows: Find $W \subseteq V$ such
+ * that $c(W:V-W)=min(c(U:V-U)|U \subseteq V, |T \cap U|$ is odd).
  *
  * <p>
  * The algorithm has been published in: Padberg, M. Rao, M. Odd Minimum Cut-Sets and b-Matchings.
@@ -212,8 +212,8 @@ public class PadbergRaoOddMinimumCutset<V, E>
     }
 
     /**
-     * Takes a set of odd vertices with cardinality $2$ or more, and splits them into $2$ new non-empty
-     * sets.
+     * Takes a set of odd vertices with cardinality $2$ or more, and splits them into $2$ new
+     * non-empty sets.
      * 
      * @param cluster group of odd vertices
      * @param queue clusters with cardinality $2$ or more

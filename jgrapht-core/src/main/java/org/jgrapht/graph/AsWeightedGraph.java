@@ -54,8 +54,12 @@ import org.jgrapht.*;
  * @since Sep 10, 2007
  */
 public class AsWeightedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable, Graph<V, E> {
+    extends
+    GraphDelegator<V, E>
+    implements
+    Serializable,
+    Graph<V, E>
+{
     private static final long serialVersionUID = 6408608293216853184L;
 
     private final Map<E, Double> weightMap;

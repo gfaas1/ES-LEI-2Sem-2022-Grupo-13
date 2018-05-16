@@ -47,7 +47,8 @@ public class KShortestPathCostTest
 
         KShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
             new KShortestSimplePaths<>(graph);
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v3", nbPaths);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v3", nbPaths);
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -75,7 +76,8 @@ public class KShortestPathCostTest
 
         // assertEquals(2, pathFinder.getPaths("v5").size());
 
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v5", maxSize);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v5", maxSize);
         GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
             Arrays.asList(new Object[] { picture1Graph.eS1, picture1Graph.e15 }),
@@ -268,7 +270,8 @@ public class KShortestPathCostTest
 
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths = new KShortestSimplePaths<>(graph);
+        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths =
+            new KShortestSimplePaths<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {

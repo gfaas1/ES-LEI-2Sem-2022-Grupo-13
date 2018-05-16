@@ -49,7 +49,8 @@ import org.jgrapht.util.*;
  * @since December 2004
  */
 public class TopologicalOrderIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private static final String GRAPH_IS_NOT_A_DAG = "Graph is not a DAG";
 

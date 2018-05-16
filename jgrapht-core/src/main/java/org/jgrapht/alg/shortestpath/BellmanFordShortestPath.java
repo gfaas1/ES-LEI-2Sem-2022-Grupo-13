@@ -41,7 +41,8 @@ import org.jgrapht.alg.util.*;
  * @author Dimitrios Michail
  */
 public class BellmanFordShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private final Comparator<Double> comparator;
 

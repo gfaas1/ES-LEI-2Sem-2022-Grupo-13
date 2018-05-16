@@ -32,7 +32,8 @@ import org.jgrapht.util.SupplierUtil;
  * 
  */
 public class DirectedWeightedPseudograph<V, E>
-    extends DirectedPseudograph<V, E>
+    extends
+    DirectedPseudograph<V, E>
 {
     private static final long serialVersionUID = -4775269773843490859L;
 
@@ -91,7 +92,7 @@ public class DirectedWeightedPseudograph<V, E>
      * Creates a new weighted graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedWeightedPseudograph(EdgeFactory<V, E> ef)

@@ -66,7 +66,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
                     PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
-            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
             firstPartition = generator.getFirstPartition();
             secondPartition = generator.getSecondPartition();
@@ -86,7 +87,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     }
 
     public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(
@@ -98,7 +100,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     }
 
     public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(

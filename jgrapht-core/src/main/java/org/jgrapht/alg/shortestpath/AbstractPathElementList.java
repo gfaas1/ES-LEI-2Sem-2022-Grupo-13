@@ -27,7 +27,8 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
-    extends AbstractList<T>
+    extends
+    AbstractList<T>
 {
     protected Graph<V, E> graph;
 

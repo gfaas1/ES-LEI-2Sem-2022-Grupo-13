@@ -47,7 +47,8 @@ import org.jgrapht.util.*;
  * @author Dimitrios Michail
  */
 class DijkstraClosestFirstIterator<V, E>
-    implements Iterator<V>
+    implements
+    Iterator<V>
 {
     private final Graph<V, E> graph;
     private final V source;
@@ -189,7 +190,7 @@ class DijkstraClosestFirstIterator<V, E>
             seen.put(v, node);
         } else if (distance < node.getKey()) {
             heap.decreaseKey(node, distance);
-            node.getData().e = e;            
+            node.getData().e = e;
         }
     }
 

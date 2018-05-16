@@ -206,7 +206,8 @@ public abstract class BaseBronKerboschCliqueFinderTest
     public void testComplete()
     {
         final int size = 6;
-        Graph<Object, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(size);
         completeGraphGenerator.generateGraph(g);

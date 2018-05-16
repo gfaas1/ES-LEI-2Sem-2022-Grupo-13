@@ -28,7 +28,7 @@ import com.googlecode.junittoolbox.*;
  */
 @RunWith(ParallelSuite.class)
 @Categories.ExcludeCategory(SlowTests.class)
-@SuiteClasses({"**/*Test.class", "!**/perf/**"})
+@SuiteClasses({ "**/*Test.class", "!**/perf/**" })
 public class FastTestSuite
 {
 }

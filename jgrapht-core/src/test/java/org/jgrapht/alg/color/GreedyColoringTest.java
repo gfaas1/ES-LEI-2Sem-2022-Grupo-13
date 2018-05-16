@@ -33,7 +33,8 @@ import org.junit.*;
  * @author Dimitrios Michail
  */
 public class GreedyColoringTest
-    extends BaseColoringTest
+    extends
+    BaseColoringTest
 {
 
     @Override

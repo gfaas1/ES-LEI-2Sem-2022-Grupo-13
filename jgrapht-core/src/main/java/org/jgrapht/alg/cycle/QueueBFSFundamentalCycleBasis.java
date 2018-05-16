@@ -37,8 +37,8 @@ import org.jgrapht.Graphs;
  * </p>
  * 
  * <p>
- * The total length of the fundamental-cycle set can be as large as $O(n^3)$ where $n$ is the number of
- * vertices of the graph.
+ * The total length of the fundamental-cycle set can be as large as $O(n^3)$ where $n$ is the number
+ * of vertices of the graph.
  * </p>
  * 
  * @param <V> the vertex type
@@ -48,7 +48,8 @@ import org.jgrapht.Graphs;
  * @since October 2016
  */
 public class QueueBFSFundamentalCycleBasis<V, E>
-    extends AbstractFundamentalCycleBasis<V, E>
+    extends
+    AbstractFundamentalCycleBasis<V, E>
 {
     /**
      * Constructor

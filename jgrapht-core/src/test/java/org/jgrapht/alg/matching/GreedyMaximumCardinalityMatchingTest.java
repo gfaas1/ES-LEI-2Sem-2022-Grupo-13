@@ -47,7 +47,8 @@ public class GreedyMaximumCardinalityMatchingTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
             new GnmRandomGraphGenerator<>(200, 120);
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         for (int i = 0; i < 100; i++) {
             generator.generateGraph(graph);
@@ -81,7 +82,8 @@ public class GreedyMaximumCardinalityMatchingTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
             new GnmRandomGraphGenerator<>(200, 120);
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         for (int i = 0; i < 1; i++) {
             generator.generateGraph(graph);

@@ -119,8 +119,10 @@ import org.xml.sax.helpers.*;
  * @since July 2016
  */
 public class GraphMLImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
@@ -266,7 +268,8 @@ public class GraphMLImporter<V, E>
 
     // content handler
     private class GraphMLHandler
-        extends DefaultHandler
+        extends
+        DefaultHandler
     {
         private static final String GRAPH = "graph";
         private static final String GRAPH_ID = "id";

@@ -34,7 +34,8 @@ import com.touchgraph.graphlayout.interaction.*;
  * @author Carl Anderson
  */
 public class TouchgraphPanel<V, E>
-    extends GLPanel
+    extends
+    GLPanel
 {
     // ~ Static fields/initializers ---------------------------------------------
 

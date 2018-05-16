@@ -32,7 +32,8 @@ import static org.junit.Assert.*;
  * @author John V. Sichi
  */
 public class DijkstraShortestPathTest
-    extends ShortestPathTestCase
+    extends
+    ShortestPathTestCase
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -45,10 +46,8 @@ public class DijkstraShortestPathTest
         GraphPath<String, DefaultWeightedEdge> path;
         Graph<String, DefaultWeightedEdge> g = create();
 
-        path = new DijkstraShortestPath<>(g, Double.POSITIVE_INFINITY)
-            .getPath(V3, V4);
-        assertEquals(
-            Arrays.asList(e13, e12, e24), path.getEdgeList());
+        path = new DijkstraShortestPath<>(g, Double.POSITIVE_INFINITY).getPath(V3, V4);
+        assertEquals(Arrays.asList(e13, e12, e24), path.getEdgeList());
         assertEquals(10.0, path.getWeight(), 0);
 
         path = new DijkstraShortestPath<>(g, 7.0).getPath(V3, V4);
@@ -59,8 +58,7 @@ public class DijkstraShortestPathTest
     protected List<DefaultWeightedEdge> findPathBetween(
         Graph<String, DefaultWeightedEdge> g, String src, String dest)
     {
-        return new DijkstraShortestPath<>(g)
-            .getPath(src, dest).getEdgeList();
+        return new DijkstraShortestPath<>(g).getPath(src, dest).getEdgeList();
     }
 
     @Test
@@ -83,7 +81,7 @@ public class DijkstraShortestPathTest
         g.setEdgeWeight(we34, 3.0);
 
         SingleSourcePaths<String, DefaultWeightedEdge> pathsTree =
-                new DijkstraShortestPath<>(g).getPaths(V1);
+            new DijkstraShortestPath<>(g).getPaths(V1);
         assertEquals(g, pathsTree.getGraph());
         assertEquals(V1, pathsTree.getSourceVertex());
         assertEquals(0d, pathsTree.getWeight(V1), 1e-9);
@@ -139,17 +137,12 @@ public class DijkstraShortestPathTest
         g.setEdgeWeight(we32, 1.0);
         g.setEdgeWeight(we34, 3.0);
 
+        assertEquals(0d, new DijkstraShortestPath<>(g).getPathWeight(V1, V1), 0);
+        assertEquals(2d, new DijkstraShortestPath<>(g).getPathWeight(V1, V2), 0);
+        assertEquals(1d, new DijkstraShortestPath<>(g).getPathWeight(V1, V3), 0);
+        assertEquals(3d, new DijkstraShortestPath<>(g).getPathWeight(V1, V4), 0);
         assertEquals(
-            0d, new DijkstraShortestPath<>(g).getPathWeight(V1, V1),0);
-        assertEquals(
-            2d, new DijkstraShortestPath<>(g).getPathWeight(V1, V2),0);
-        assertEquals(
-            1d, new DijkstraShortestPath<>(g).getPathWeight(V1, V3),0);
-        assertEquals(
-            3d, new DijkstraShortestPath<>(g).getPathWeight(V1, V4),0);
-        assertEquals(
-            Double.POSITIVE_INFINITY,
-                new DijkstraShortestPath<>(g).getPathWeight(V1, V5),0);
+            Double.POSITIVE_INFINITY, new DijkstraShortestPath<>(g).getPathWeight(V1, V5), 0);
     }
 
     @Test

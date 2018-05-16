@@ -118,58 +118,52 @@ public class ImmutableNetworkAdapterTest
         assertEquals(new HashSet<>(), g.outgoingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e44)), g.outgoingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55_1, e55_2)), g.outgoingEdgesOf("v5"));
-        
+
         // test indeed immutable
-        try { 
+        try {
             g.addVertex("new");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.addEdge("v1", "v5");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.addEdge("v1", "v5", new DefaultEdge());
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeVertex("v1");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeEdge("v1", "v2");
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
-        try { 
+
+        try {
             g.removeEdge(e12);
             fail("Network not immutable");
-        } 
-        catch(UnsupportedOperationException e) { 
+        } catch (UnsupportedOperationException e) {
             // nothing
         }
-        
+
     }
-    
+
     /**
      * Tests serialization
      */
@@ -205,7 +199,7 @@ public class ImmutableNetworkAdapterTest
 
         Graph<String, DefaultEdge> g =
             new ImmutableNetworkAdapter<>(ImmutableNetwork.copyOf(network));
-        
+
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
         assertTrue(g.getType().isDirected());
@@ -214,7 +208,8 @@ public class ImmutableNetworkAdapterTest
         assertTrue(g.getType().isAllowingCycles());
         assertFalse(g.getType().isModifiable());
 
-        Graph<String, DefaultEdge> g2 = (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 =
+            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
 
         assertTrue(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -223,7 +218,7 @@ public class ImmutableNetworkAdapterTest
         assertFalse(g2.getType().isWeighted());
         assertTrue(g2.getType().isAllowingCycles());
         assertFalse(g2.getType().isModifiable());
-        
+
         assertTrue(g2.containsVertex("v1"));
         assertTrue(g2.containsVertex("v2"));
         assertTrue(g2.containsVertex("v3"));

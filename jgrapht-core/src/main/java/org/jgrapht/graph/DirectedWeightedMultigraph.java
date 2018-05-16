@@ -25,14 +25,15 @@ import org.jgrapht.util.SupplierUtil;
 
 /**
  * A directed weighted multigraph. A directed weighted multigraph is a non-simple directed graph in
- * which no loops are permitted, but multiple (parallel) edges between any two vertices are permitted, and
- * edges have weights.
+ * which no loops are permitted, but multiple (parallel) edges between any two vertices are
+ * permitted, and edges have weights.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
 public class DirectedWeightedMultigraph<V, E>
-    extends DirectedMultigraph<V, E>
+    extends
+    DirectedMultigraph<V, E>
 {
     private static final long serialVersionUID = 1984381120642160572L;
 
@@ -54,9 +55,7 @@ public class DirectedWeightedMultigraph<V, E>
      */
     public DirectedWeightedMultigraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -67,12 +66,13 @@ public class DirectedWeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
-        Class<? extends E> edgeClass)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+            Class<? extends E> edgeClass)
     {
         return new GraphBuilder<>(new DirectedWeightedMultigraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -81,17 +81,18 @@ public class DirectedWeightedMultigraph<V, E>
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
-    public static <V, E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
-        Supplier<E> edgeSupplier)
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+            Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DirectedWeightedMultigraph<>(null, edgeSupplier));
     }
-    
+
     /**
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedWeightedMultigraph(EdgeFactory<V, E> ef)
@@ -106,11 +107,12 @@ public class DirectedWeightedMultigraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
-    @Deprecated    
-    public static <V, E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
+    @Deprecated
+    public static <V,
+        E> GraphBuilder<V, E, ? extends DirectedWeightedMultigraph<V, E>> createBuilder(
+            EdgeFactory<V, E> ef)
     {
         return new GraphBuilder<>(new DirectedWeightedMultigraph<>(ef));
     }

@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Luiz Kill
  */
 public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private enum Operation
     {

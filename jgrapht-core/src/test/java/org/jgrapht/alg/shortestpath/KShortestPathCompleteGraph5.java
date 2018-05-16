@@ -23,7 +23,8 @@ import org.jgrapht.graph.*;
  * @since July 5, 2007
  */
 public class KShortestPathCompleteGraph5
-    extends SimpleWeightedGraph<String, DefaultWeightedEdge>
+    extends
+    SimpleWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

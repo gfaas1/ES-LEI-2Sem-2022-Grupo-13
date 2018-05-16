@@ -91,8 +91,8 @@ public class AllPairsShortestPathsTest
             new GnpRandomGraphGenerator<>(n, p, rng, true);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultWeightedEdge> g =
-                new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            Graph<Integer, DefaultWeightedEdge> g = new DirectedWeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             gen.generateGraph(g);
 
             // assign random weights

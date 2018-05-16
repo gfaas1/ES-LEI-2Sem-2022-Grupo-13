@@ -27,15 +27,15 @@ import org.jgrapht.alg.interfaces.*;
  * Computes the coreness of each vertex in an undirected graph.
  * 
  * <p>
- * A $k$-core of a graph $G$ is a maximal connected subgraph of $G$ in which all vertices have degree at
- * least $k$. Equivalently, it is one of the connected components of the subgraph of $G$ formed by
- * repeatedly deleting all vertices of degree less than $k$. A vertex $u$ has coreness $c$ if it belongs
- * to a $c$-core but not to any $(c+1)$-core.
+ * A $k$-core of a graph $G$ is a maximal connected subgraph of $G$ in which all vertices have
+ * degree at least $k$. Equivalently, it is one of the connected components of the subgraph of $G$
+ * formed by repeatedly deleting all vertices of degree less than $k$. A vertex $u$ has coreness $c$
+ * if it belongs to a $c$-core but not to any $(c+1)$-core.
  *
  * <p>
  * If a non-empty k-core exists, then, clearly, $G$ has
- * <a href="https://en.wikipedia.org/wiki/Degeneracy_(graph_theory)">degeneracy</a> at least $k$, and
- * the degeneracy of $G$ is the largest $k$ for which $G$ has a $k$-core.
+ * <a href="https://en.wikipedia.org/wiki/Degeneracy_(graph_theory)">degeneracy</a> at least $k$,
+ * and the degeneracy of $G$ is the largest $k$ for which $G$ has a $k$-core.
  *
  * <p>
  * As described in the following paper
@@ -53,7 +53,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Dimitrios Michail
  */
 public final class Coreness<V, E>
-    implements VertexScoringAlgorithm<V, Integer>
+    implements
+    VertexScoringAlgorithm<V, Integer>
 {
     private final Graph<V, E> g;
     private Map<V, Integer> scores;
@@ -96,10 +97,10 @@ public final class Coreness<V, E>
      * Compute the degeneracy of a graph.
      * 
      * <p>
-     * The degeneracy of a graph is the smallest value of $k$ for which it is $k$-degenerate. In graph
-     * theory, a $k$-degenerate graph is an undirected graph in which every subgraph has a vertex of
-     * degree at most $k$: that is, some vertex in the subgraph touches $k$ or fewer of the subgraph's
-     * edges.
+     * The degeneracy of a graph is the smallest value of $k$ for which it is $k$-degenerate. In
+     * graph theory, a $k$-degenerate graph is an undirected graph in which every subgraph has a
+     * vertex of degree at most $k$: that is, some vertex in the subgraph touches $k$ or fewer of
+     * the subgraph's edges.
      * 
      * @return the degeneracy of a graph
      */

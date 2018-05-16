@@ -34,7 +34,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ListMultiObjectiveSingleSourcePathsImpl<V, E>
-    implements MultiObjectiveSingleSourcePaths<V, E>, Serializable
+    implements
+    MultiObjectiveSingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -6213225353391554721L;
 

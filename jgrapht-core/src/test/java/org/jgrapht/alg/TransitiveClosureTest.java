@@ -35,8 +35,8 @@ public class TransitiveClosureTest
     @Test
     public void testLinearGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph =
-            new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         int N = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(N);
@@ -54,8 +54,8 @@ public class TransitiveClosureTest
     @Test
     public void testRingGraph()
     {
-        SimpleDirectedGraph<Integer, DefaultEdge> graph =
-            new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleDirectedGraph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         int N = 10;
         RingGraphGenerator<Integer, DefaultEdge> gen = new RingGraphGenerator<>(N);
@@ -84,8 +84,8 @@ public class TransitiveClosureTest
     @Test
     public void testEmptyDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         int n = 10;
         EmptyGraphGenerator<Integer, DefaultEdge> gen = new EmptyGraphGenerator<>(n);
         gen.generateGraph(graph);
@@ -98,8 +98,8 @@ public class TransitiveClosureTest
     @Test
     public void testCompleteBipartiteDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteBipartiteGraphGenerator<Integer, DefaultEdge> gen =
             new CompleteBipartiteGraphGenerator<>(5, 5);
         gen.generateGraph(graph);
@@ -112,8 +112,8 @@ public class TransitiveClosureTest
     @Test
     public void testLinearGraphForDag()
     {
-        DirectedAcyclicGraph<Integer, DefaultEdge> graph =
-            new DirectedAcyclicGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        DirectedAcyclicGraph<Integer, DefaultEdge> graph = new DirectedAcyclicGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         int n = 10;
         LinearGraphGenerator<Integer, DefaultEdge> gen = new LinearGraphGenerator<>(n);
         gen.generateGraph(graph);

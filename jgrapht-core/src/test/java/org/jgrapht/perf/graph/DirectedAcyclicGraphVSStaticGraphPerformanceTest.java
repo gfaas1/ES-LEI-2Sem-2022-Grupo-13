@@ -61,8 +61,10 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                     for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
                                                                                 // graph
                                                                                 // configurations
-                        Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                        Graph<Long,
+                            DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(
+                                SupplierUtil.createLongSupplier(),
+                                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
@@ -112,8 +114,10 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                     for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
                                                                                 // graph
                                                                                 // configurations
-                        Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                        Graph<Long,
+                            DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(
+                                SupplierUtil.createLongSupplier(),
+                                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);

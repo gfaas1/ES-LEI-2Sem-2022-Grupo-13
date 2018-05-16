@@ -32,7 +32,8 @@ import org.jgrapht.*;
  * @author John Sichi
  */
 public class ParanoidGraph<V, E>
-    extends GraphDelegator<V, E>
+    extends
+    GraphDelegator<V, E>
 {
     private static final long serialVersionUID = 5075284167422166539L;
 

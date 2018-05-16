@@ -42,10 +42,11 @@ public interface KShortestPathAlgorithm<V, E>
      * @deprecated In favor of providing k as a parameter.
      */
     @Deprecated
-    default List<GraphPath<V, E>> getPaths(V source, V sink) { 
+    default List<GraphPath<V, E>> getPaths(V source, V sink)
+    {
         return getPaths(source, sink, Integer.MAX_VALUE);
     }
-    
+
     /**
      * Get a list of k-shortest paths from a source vertex to a sink vertex. If no such paths exist
      * this method returns an empty list.

@@ -24,31 +24,24 @@ import org.jgrapht.VertexFactory;
 import java.util.*;
 
 /**
- * Create a random $l$-planted partition graph.
- * An $l$-planted partition graph is a random graph on $n = l \cdot k$ vertices
- * subdivided in $l$ groups with $k$ vertices each.
- * Vertices within the same group are connected by an edge with probability $p$,
- * while vertices belonging to different groups are connected by an edge with probability $q$.
+ * Create a random $l$-planted partition graph. An $l$-planted partition graph is a random graph on
+ * $n = l \cdot k$ vertices subdivided in $l$ groups with $k$ vertices each. Vertices within the
+ * same group are connected by an edge with probability $p$, while vertices belonging to different
+ * groups are connected by an edge with probability $q$.
  *
  * <p>
  * The $l$-planted partition model is a special case of the
- * <a href="https://en.wikipedia.org/wiki/Stochastic_block_model">Stochastic Block Model</a>.
- * If the probability matrix is a constant, in the sense that
- * $P_{ij}=p$ for all $i,j$,
- * then the result is the Erdős–Rényi model $\mathcal G(n,p)$.
- * This case is degenerate—the partition into communities becomes irrelevant—
- * but it illustrates a close relationship to the Erdős–Rényi model.
+ * <a href="https://en.wikipedia.org/wiki/Stochastic_block_model">Stochastic Block Model</a>. If the
+ * probability matrix is a constant, in the sense that $P_{ij}=p$ for all $i,j$, then the result is
+ * the Erdős–Rényi model $\mathcal G(n,p)$. This case is degenerate—the partition into communities
+ * becomes irrelevant— but it illustrates a close relationship to the Erdős–Rényi model.
  *
  * For more information on planted graphs, refer to:
  * <ol>
- *   <li>Condon, A. Karp, R.M.
- *   Algorithms for graph partitioning on the planted partition model,
- *   Random Structures and Algorithms, Volume 18, Issue 2, p.116-140, 2001
- *   </li>
- *   <li>Fortunato, S.
- *   Community Detection in Graphs,
- *   Physical Reports Volume 486, Issue 3-5 p. 75-174, 2010
- *   </li>
+ * <li>Condon, A. Karp, R.M. Algorithms for graph partitioning on the planted partition model,
+ * Random Structures and Algorithms, Volume 18, Issue 2, p.116-140, 2001</li>
+ * <li>Fortunato, S. Community Detection in Graphs, Physical Reports Volume 486, Issue 3-5 p.
+ * 75-174, 2010</li>
  * </ol>
  *
  * @param <V> the graph vertex type
@@ -57,7 +50,9 @@ import java.util.*;
  * @author Emilio Cruciani
  * @since April 2018
  */
-public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E, V>
+public class PlantedPartitionGraphGenerator<V, E>
+    implements
+    GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_SELFLOOPS = false;
 
@@ -138,7 +133,8 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
      * @throws IllegalArgumentException if p is not in [0,1]
      * @throws IllegalArgumentException if q is not in [0,1]
      */
-    public PlantedPartitionGraphGenerator(int l, int k, double p, double q, long seed, boolean selfLoops)
+    public PlantedPartitionGraphGenerator(
+        int l, int k, double p, double q, long seed, boolean selfLoops)
     {
         this(l, k, p, q, new Random(seed), selfLoops);
     }
@@ -157,13 +153,15 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
      * @throws IllegalArgumentException if p is not in [0,1]
      * @throws IllegalArgumentException if q is not in [0,1]
      */
-    public PlantedPartitionGraphGenerator(int l, int k, double p, double q, Random rng, boolean selfLoops)
+    public PlantedPartitionGraphGenerator(
+        int l, int k, double p, double q, Random rng, boolean selfLoops)
     {
         if (l < 0) {
             throw new IllegalArgumentException("number of groups must be non-negative");
         }
         if (k < 0) {
-            throw new IllegalArgumentException("number of nodes in each group must be non-negative");
+            throw new IllegalArgumentException(
+                "number of nodes in each group must be non-negative");
         }
         if (p < 0 || p > 1) {
             throw new IllegalArgumentException("invalid probability p");
@@ -184,9 +182,9 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
     /**
      * Generate an $l$-planted partition graph.
      *
-     * Note that the method can be called only once.
-     * Must instantiate another PlantedPartitionGraphGenerator object
-     * in order to generate another $l$-planted partition graph.
+     * Note that the method can be called only once. Must instantiate another
+     * PlantedPartitionGraphGenerator object in order to generate another $l$-planted partition
+     * graph.
      *
      * @param target target graph
      * @param resultMap result map
@@ -222,7 +220,7 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
             vertices.add(vertex);
 
             // populate community structure
-            int lv = i / this.k;  // group of node v
+            int lv = i / this.k; // group of node v
             communities.get(lv).add(vertex);
         }
 
@@ -234,8 +232,7 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
                         target.addEdge(v, v);
                     }
                 }
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException("target graph must allow self-loops");
             }
         }
@@ -243,9 +240,9 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
         // undirected edges
         if (target.getType().isUndirected()) {
             for (int i = 0; i < n; i++) {
-                int li = i / this.k;  // group of node i
+                int li = i / this.k; // group of node i
                 for (int j = i + 1; j < n; j++) {
-                    int lj = j / this.k;  // group of node j
+                    int lj = j / this.k; // group of node j
 
                     // edge within partition
                     if (li == lj) {
@@ -265,9 +262,9 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
         // directed edges
         else {
             for (int i = 0; i < n; i++) {
-                int li = i / this.k;  // group of node i
+                int li = i / this.k; // group of node i
                 for (int j = i + 1; j < n; j++) {
-                    int lj = j / this.k;  // group of node j
+                    int lj = j / this.k; // group of node j
 
                     // edge within partition
                     if (li == lj) {
@@ -293,8 +290,8 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
     }
 
     /**
-     * Get the community structure of the graph.
-     * The method returns a list of communities, represented as sets of nodes.
+     * Get the community structure of the graph. The method returns a list of communities,
+     * represented as sets of nodes.
      *
      * @throws IllegalStateException if getCommunities() is called before generating the graph
      * @return the community structure of the graph
@@ -302,7 +299,8 @@ public class PlantedPartitionGraphGenerator<V, E> implements GraphGenerator<V, E
     public List<Set<V>> getCommunities()
     {
         if (communities == null)
-            throw new IllegalStateException("must generate graph before getting community structure");
+            throw new IllegalStateException(
+                "must generate graph before getting community structure");
 
         return communities;
     }

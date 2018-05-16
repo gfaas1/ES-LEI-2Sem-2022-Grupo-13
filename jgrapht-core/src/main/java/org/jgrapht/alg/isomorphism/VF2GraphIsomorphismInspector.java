@@ -36,7 +36,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public class VF2GraphIsomorphismInspector<V, E>
-    extends VF2AbstractIsomorphismInspector<V, E>
+    extends
+    VF2AbstractIsomorphismInspector<V, E>
 {
     /**
      * Construct a new VF2 isomorphism inspector.

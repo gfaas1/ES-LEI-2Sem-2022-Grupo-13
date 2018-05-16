@@ -261,7 +261,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
                 new GnmRandomGraphGenerator<>(vertices, edges, 0);
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
             EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                 new EdmondsMaximumCardinalityMatching<>(graph);
@@ -281,7 +282,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
                     new GnmRandomGraphGenerator<>(n, m);
 
                 for (int i = 0; i < 25; i++) {
-                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                    Graph<Integer,
+                        DefaultEdge> graph = new SimpleGraph<>(
+                            SupplierUtil.createIntegerSupplier(),
+                            SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                     generator.generateGraph(graph);
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new EdmondsMaximumCardinalityMatching<>(graph);

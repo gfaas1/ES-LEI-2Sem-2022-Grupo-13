@@ -40,7 +40,8 @@ import org.jgrapht.Graph;
  * @since September, 2013
  */
 public class GabowStrongConnectivityInspector<V, E>
-    extends AbstractStrongConnectivityInspector<V, E>
+    extends
+    AbstractStrongConnectivityInspector<V, E>
 {
     // stores the vertices
     private Deque<VertexNumber<V>> stack = new ArrayDeque<>();

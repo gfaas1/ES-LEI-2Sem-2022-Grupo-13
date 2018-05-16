@@ -28,7 +28,8 @@ import java.util.*;
  * @since Aug 11, 2003
  */
 public class VertexTraversalEvent<V>
-    extends EventObject
+    extends
+    EventObject
 {
     private static final long serialVersionUID = 3688790267213918768L;
 

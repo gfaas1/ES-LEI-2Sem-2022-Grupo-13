@@ -111,7 +111,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
             .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
             .allowingSelfLoops(false).buildGraph();
-        
+
         for (V v : graph.vertexSet()) {
             chordalGraph.addVertex(v);
         }

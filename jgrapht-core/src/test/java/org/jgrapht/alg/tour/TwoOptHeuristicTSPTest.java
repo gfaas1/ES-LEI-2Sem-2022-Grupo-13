@@ -69,7 +69,8 @@ public class TwoOptHeuristicTSPTest
         final int maxSize = 50;
 
         for (int i = 1; i < maxSize; i++) {
-            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             CompleteGraphGenerator<Object, DefaultEdge> generator = new CompleteGraphGenerator<>(i);
             generator.generateGraph(g);
 

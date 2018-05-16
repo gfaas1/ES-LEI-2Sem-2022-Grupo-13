@@ -173,8 +173,10 @@ public class GraphPerformanceTest
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new MemoryEfficientDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new MemoryEfficientDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
             return graph;
         }
@@ -191,8 +193,10 @@ public class GraphPerformanceTest
         @Override
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> constructGraph()
         {
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
-                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             rgg.generateGraph(graph);
             return graph;
         }
@@ -227,7 +231,8 @@ public class GraphPerformanceTest
     {
         private static final long serialVersionUID = -1826738982402033648L;
 
-        public MemoryEfficientDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+        public MemoryEfficientDirectedWeightedGraph(
+            Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(vertexSupplier, edgeSupplier);
         }

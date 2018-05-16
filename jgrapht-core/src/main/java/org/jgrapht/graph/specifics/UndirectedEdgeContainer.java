@@ -36,7 +36,8 @@ import org.jgrapht.graph.*;
  * @author Barak Naveh
  */
 public class UndirectedEdgeContainer<V, E>
-    implements Serializable
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -6623207588411170010L;
     Set<E> vertexEdges;

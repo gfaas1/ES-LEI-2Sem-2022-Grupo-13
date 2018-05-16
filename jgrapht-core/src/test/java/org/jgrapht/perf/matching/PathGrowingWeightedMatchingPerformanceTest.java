@@ -61,7 +61,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
         }
 
@@ -73,7 +74,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -83,7 +85,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class PathGrowingWeightedMatchingNoHeuristicsRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -94,7 +97,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class GreedyWeightedMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -104,7 +108,8 @@ public class PathGrowingWeightedMatchingPerformanceTest
     }
 
     public static class EdmondsMaximumCardinalityMatchingRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(Graph<Integer, DefaultEdge> graph)

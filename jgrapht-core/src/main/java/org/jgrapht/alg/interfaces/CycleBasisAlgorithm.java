@@ -100,7 +100,9 @@ public interface CycleBasisAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class CycleBasisImpl<V, E>
-        implements CycleBasis<V, E>, Serializable
+        implements
+        CycleBasis<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = -1420882459022219505L;
 

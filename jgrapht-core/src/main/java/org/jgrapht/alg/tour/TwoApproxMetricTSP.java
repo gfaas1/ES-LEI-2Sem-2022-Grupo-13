@@ -50,7 +50,8 @@ import org.jgrapht.traverse.*;
  * @author Dimitrios Michail
  */
 public class TwoApproxMetricTSP<V, E>
-    implements TSPAlgorithm<V, E>
+    implements
+    TSPAlgorithm<V, E>
 {
     /**
      * Construct a new instance

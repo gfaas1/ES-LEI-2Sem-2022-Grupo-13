@@ -41,8 +41,10 @@ import org.jgrapht.*;
  * @author Avner Linder
  */
 public class VisioExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * Creates a new VisioExporter with the specified naming policy.

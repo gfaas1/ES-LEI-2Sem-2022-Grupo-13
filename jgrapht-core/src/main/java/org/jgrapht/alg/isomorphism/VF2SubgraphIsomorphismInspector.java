@@ -22,28 +22,23 @@ import java.util.*;
 import org.jgrapht.*;
 
 /**
- * This is an implementation of the VF2 algorithm using its feature of detecting
- * subgraph isomorphism between two graphs as described in Cordella et al.
- * A (sub)graph isomorphism algorithm for matching
- * large graphs (2004), DOI:10.1109/TPAMI.2004.75,
+ * This is an implementation of the VF2 algorithm using its feature of detecting subgraph
+ * isomorphism between two graphs as described in Cordella et al. A (sub)graph isomorphism algorithm
+ * for matching large graphs (2004), DOI:10.1109/TPAMI.2004.75,
  * <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804">
  * http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1323804</a>
  *
  * <p>
- * Note that this inspector only finds isomorphisms between a smaller graph and
- * all <a
- * href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">induced
- * subgraphs</a> of a larger graph.  It does not find isomorphisms between the
- * smaller graph and arbitrary subgraphs of the larger graph.  For example,
- * given as input the <a
- * href="http://mathworld.wolfram.com/CubicalGraph.html">cubical graph</a>
- * $Q_{3}$ and the <a
- * href="http://mathworld.wolfram.com/SquareGraph.html">square graph</a>,
- * isomorphic mappings will be found between the square and the faces of the
- * cube.  However, given the <a
- * href="http://mathworld.wolfram.com/CompleteGraph.html">complete graph</a>
- * $K_{5}$ and the square graph as input, no isomorphisms will be found since
- * all induced subgraphs of a complete graph are themselves complete graphs.
+ * Note that this inspector only finds isomorphisms between a smaller graph and all
+ * <a href="http://mathworld.wolfram.com/Vertex-InducedSubgraph.html">induced subgraphs</a> of a
+ * larger graph. It does not find isomorphisms between the smaller graph and arbitrary subgraphs of
+ * the larger graph. For example, given as input the
+ * <a href="http://mathworld.wolfram.com/CubicalGraph.html">cubical graph</a> $Q_{3}$ and the
+ * <a href="http://mathworld.wolfram.com/SquareGraph.html">square graph</a>, isomorphic mappings
+ * will be found between the square and the faces of the cube. However, given the
+ * <a href="http://mathworld.wolfram.com/CompleteGraph.html">complete graph</a> $K_{5}$ and the
+ * square graph as input, no isomorphisms will be found since all induced subgraphs of a complete
+ * graph are themselves complete graphs.
  *
  * <p>
  * Consequently, in the case where both input graphs have the same number of vertices, this
@@ -56,7 +51,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public class VF2SubgraphIsomorphismInspector<V, E>
-    extends VF2AbstractIsomorphismInspector<V, E>
+    extends
+    VF2AbstractIsomorphismInspector<V, E>
 {
 
     /**

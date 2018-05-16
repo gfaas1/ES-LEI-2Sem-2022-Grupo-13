@@ -34,7 +34,8 @@ import org.jgrapht.util.SupplierUtil;
  * 
  */
 public class SimpleGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 4607246833824317836L;
 
@@ -47,7 +48,7 @@ public class SimpleGraph<V, E>
     {
         this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
-    
+
     /**
      * Creates a new simple graph.
      * 
@@ -63,7 +64,6 @@ public class SimpleGraph<V, E>
                 .undirected().allowMultipleEdges(false).allowSelfLoops(false).weighted(weighted)
                 .build());
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -78,7 +78,6 @@ public class SimpleGraph<V, E>
     {
         return new GraphBuilder<>(new SimpleGraph<>(edgeClass));
     }
-    
 
     /**
      * Create a builder for this kind of graph.
@@ -99,7 +98,7 @@ public class SimpleGraph<V, E>
      *
      * @param weighted if true the graph supports edge weights
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleGraph(EdgeFactory<V, E> ef, boolean weighted)
@@ -111,7 +110,7 @@ public class SimpleGraph<V, E>
      * Creates a new simple graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleGraph(EdgeFactory<V, E> ef)
@@ -126,7 +125,7 @@ public class SimpleGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V,

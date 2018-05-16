@@ -37,7 +37,8 @@ import static org.junit.Assert.assertNull;
  * @since Jul 30, 2003
  */
 public class BreadthFirstIteratorTest
-    extends CrossComponentIteratorTest
+    extends
+    CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 
@@ -90,9 +91,9 @@ public class BreadthFirstIteratorTest
     }
 
     @Test
-    public void searchTreeTest(){
-        Graph<String, DefaultEdge> g =
-                new DefaultDirectedGraph<>(DefaultEdge.class);
+    public void searchTreeTest()
+    {
+        Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         g.addVertex("a");
         g.addVertex("b");
         g.addVertex("c");
@@ -100,14 +101,15 @@ public class BreadthFirstIteratorTest
         g.addVertex("e");
         g.addVertex("z");
 
-        DefaultEdge e1=g.addEdge("a", "b");
-        DefaultEdge e2=g.addEdge("b", "c");
-        DefaultEdge e3=g.addEdge("b", "z");
-        DefaultEdge e4=g.addEdge("b", "d");
-        DefaultEdge e5=g.addEdge("d", "e");
+        DefaultEdge e1 = g.addEdge("a", "b");
+        DefaultEdge e2 = g.addEdge("b", "c");
+        DefaultEdge e3 = g.addEdge("b", "z");
+        DefaultEdge e4 = g.addEdge("b", "d");
+        DefaultEdge e5 = g.addEdge("d", "e");
 
-        BreadthFirstIterator<String, DefaultEdge> bfs= new BreadthFirstIterator<>(g, "a");
-        while(bfs.hasNext()) bfs.next();
+        BreadthFirstIterator<String, DefaultEdge> bfs = new BreadthFirstIterator<>(g, "a");
+        while (bfs.hasNext())
+            bfs.next();
 
         assertEquals(0, bfs.getDepth("a"));
         assertEquals(1, bfs.getDepth("b"));
@@ -133,15 +135,17 @@ public class BreadthFirstIteratorTest
     }
 
     @Test
-    public void searchTreeDirectedCycleTest(){
-        Graph<Integer,DefaultEdge> g= new SimpleDirectedGraph<>(DefaultEdge.class);
-        DefaultEdge e1=Graphs.addEdgeWithVertices(g, 0,1);
-        DefaultEdge e2=Graphs.addEdgeWithVertices(g, 1,2);
-        DefaultEdge e3=Graphs.addEdgeWithVertices(g, 2,3);
-        Graphs.addEdgeWithVertices(g, 3,0);
+    public void searchTreeDirectedCycleTest()
+    {
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
+        DefaultEdge e1 = Graphs.addEdgeWithVertices(g, 0, 1);
+        DefaultEdge e2 = Graphs.addEdgeWithVertices(g, 1, 2);
+        DefaultEdge e3 = Graphs.addEdgeWithVertices(g, 2, 3);
+        Graphs.addEdgeWithVertices(g, 3, 0);
 
-        BreadthFirstIterator<Integer, DefaultEdge> bfs= new BreadthFirstIterator<>(g, 0);
-        while(bfs.hasNext()) bfs.next();
+        BreadthFirstIterator<Integer, DefaultEdge> bfs = new BreadthFirstIterator<>(g, 0);
+        while (bfs.hasNext())
+            bfs.next();
 
         assertEquals(0, bfs.getDepth(0));
         assertEquals(1, bfs.getDepth(1));

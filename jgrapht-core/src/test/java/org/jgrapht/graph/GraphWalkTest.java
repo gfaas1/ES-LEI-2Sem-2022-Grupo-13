@@ -139,7 +139,8 @@ public class GraphWalkTest
     {
         CompleteGraphGenerator<Integer, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(5);
-        Graph<Integer, DefaultEdge> completeGraph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> completeGraph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         completeGraphGenerator.generateGraph(completeGraph);
 
         List<Integer> vertexList = Arrays.asList(0, 1, 2, 3, 2, 3, 4);

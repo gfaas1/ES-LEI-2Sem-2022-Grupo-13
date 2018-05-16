@@ -27,8 +27,8 @@ import org.jgrapht.graph.*;
  * "Cormen et al: Introduction to algorithms", Chapter 22.5. It has a running time of $O(V + E)$.
  *
  * <p>
- * Unlike {@link ConnectivityInspector}, this class does not implement incremental
- * inspection. The full algorithm is executed at the first call of
+ * Unlike {@link ConnectivityInspector}, this class does not implement incremental inspection. The
+ * full algorithm is executed at the first call of
  * {@link KosarajuStrongConnectivityInspector#stronglyConnectedSets()} or
  * {@link KosarajuStrongConnectivityInspector#isStronglyConnected()}.
  *
@@ -40,7 +40,8 @@ import org.jgrapht.graph.*;
  * @since Feb 2, 2005
  */
 public class KosarajuStrongConnectivityInspector<V, E>
-    extends AbstractStrongConnectivityInspector<V, E>
+    extends
+    AbstractStrongConnectivityInspector<V, E>
 {
     // stores the vertices, ordered by their finishing time in first dfs
     private LinkedList<VertexData<V>> orderedVertices;
@@ -214,7 +215,8 @@ public class KosarajuStrongConnectivityInspector<V, E>
     }
 
     private static final class VertexData1<V>
-        extends VertexData<V>
+        extends
+        VertexData<V>
     {
         private final VertexData<V> finishedData;
 
@@ -238,7 +240,8 @@ public class KosarajuStrongConnectivityInspector<V, E>
     }
 
     private static final class VertexData2<V>
-        extends VertexData<V>
+        extends
+        VertexData<V>
     {
         private final V vertex;
 

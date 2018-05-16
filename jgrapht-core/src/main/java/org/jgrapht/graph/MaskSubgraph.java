@@ -36,8 +36,10 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 public class MaskSubgraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -7397441126669119179L;
 
@@ -96,7 +98,7 @@ public class MaskSubgraph<V, E>
     {
         throw new UnsupportedOperationException(UNMODIFIABLE);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -248,6 +250,7 @@ public class MaskSubgraph<V, E>
 
     /**
      * {@inheritDoc}
+     * 
      * @deprecated Use suppliers instead
      */
     @Override
@@ -256,7 +259,7 @@ public class MaskSubgraph<V, E>
     {
         return base.getEdgeFactory();
     }
-    
+
     /**
      * {@inheritDoc}
      */

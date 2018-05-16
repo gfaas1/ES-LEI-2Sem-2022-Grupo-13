@@ -31,10 +31,10 @@ import org.jgrapht.graph.*;
  * efficiently query the maximum flows and minimum cuts for all pairs of vertices. The algorithm is
  * described in: <i>Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM
  * Journal on Computing, 19(1), p142-155, 1990</i><br>
- * In an undirected graph, there exist $\frac{n(n-1)}{2}$ different vertex pairs. This class computes the
- * maximum flow/minimum cut between each of these pairs efficiently by performing exactly $(n-1)$
- * minimum $s-t$ cut computations. If your application needs fewer than $n-1$ flow/cut computations,
- * consider computing the maximum flows/minimum cuts manually through
+ * In an undirected graph, there exist $\frac{n(n-1)}{2}$ different vertex pairs. This class
+ * computes the maximum flow/minimum cut between each of these pairs efficiently by performing
+ * exactly $(n-1)$ minimum $s-t$ cut computations. If your application needs fewer than $n-1$
+ * flow/cut computations, consider computing the maximum flows/minimum cuts manually through
  * {@link MaximumFlowAlgorithm}/{@link MinimumSTCutAlgorithm}.
  *
  *
@@ -67,7 +67,9 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class GusfieldGomoryHuCutTree<V, E>
-    implements MaximumFlowAlgorithm<V, E>, MinimumSTCutAlgorithm<V, E>
+    implements
+    MaximumFlowAlgorithm<V, E>,
+    MinimumSTCutAlgorithm<V, E>
 {
 
     private final Graph<V, E> network;

@@ -59,8 +59,12 @@ import com.google.common.graph.MutableGraph;
  * @param <V> the graph vertex type
  */
 public class MutableGraphAdapter<V>
-    extends BaseGraphAdapter<V, MutableGraph<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseGraphAdapter<V, MutableGraph<V>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -7556855931445010748L;
 
@@ -253,7 +257,8 @@ public class MutableGraphAdapter<V>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

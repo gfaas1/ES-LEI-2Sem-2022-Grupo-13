@@ -60,7 +60,8 @@ public class MaximalCliqueEnumerationPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
             generator.generateGraph(graph);
         }
@@ -76,7 +77,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class BronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -86,7 +88,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class PivotBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -96,7 +99,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class DegeneracyBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)

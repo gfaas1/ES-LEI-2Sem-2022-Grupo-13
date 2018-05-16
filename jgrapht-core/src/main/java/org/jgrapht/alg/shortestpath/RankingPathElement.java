@@ -27,13 +27,16 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 final class RankingPathElement<V, E>
-    extends AbstractPathElement<V, E> implements GraphPath<V, E>
+    extends
+    AbstractPathElement<V, E>
+    implements
+    GraphPath<V, E>
 {
     /**
      * Weight of the path.
      */
     private double weight;
-    
+
     private Graph<V, E> graph;
 
     /**
@@ -82,7 +85,7 @@ final class RankingPathElement<V, E>
     {
         return (RankingPathElement<V, E>) super.getPrevPathElement();
     }
-    
+
     @Override
     public Graph<V, E> getGraph()
     {
@@ -109,8 +112,7 @@ final class RankingPathElement<V, E>
     {
         return super.createEdgeListPath();
     }
-    
-    
+
 }
 
 // End RankingPathElement.java

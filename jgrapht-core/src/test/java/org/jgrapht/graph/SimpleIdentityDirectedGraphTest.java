@@ -75,7 +75,8 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     public static class SimpleIdentityDirectedGraph<V, E>
-        extends SimpleDirectedGraph<V, E>
+        extends
+        SimpleDirectedGraph<V, E>
     {
         private static final long serialVersionUID = 4600490314100246989L;
 

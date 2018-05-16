@@ -36,7 +36,9 @@ import org.jgrapht.GraphPath;
  * @deprecated interface replaced by {@link HamiltonianCycleAlgorithm}
  */
 @Deprecated
-public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
+public interface TSPAlgorithm<V, E>
+    extends
+    HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

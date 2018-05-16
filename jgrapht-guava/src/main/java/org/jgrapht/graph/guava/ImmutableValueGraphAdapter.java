@@ -36,18 +36,21 @@ import com.google.common.graph.ValueGraphBuilder;
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph}.
  * 
- * <p>The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph 
+ * <p>
+ * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph
  * is immutable, the resulting graph is unmodifiable.
  * 
  * <p>
  * The class uses a converter from Guava's values to JGraphT's double weights. Thus, the resulting
  * graph is weighted.
  * 
- * <p>Assume for example that the following class is the value type: <blockquote>
+ * <p>
+ * Assume for example that the following class is the value type: <blockquote>
  * 
  * <pre>
  * class MyValue
- *     implements Serializable
+ *     implements
+ *     Serializable
  * {
  *     private double value;
  *
@@ -74,7 +77,8 @@ import com.google.common.graph.ValueGraphBuilder;
  * valueGraph.addNode("v2");
  * valueGraph.putEdgeValue("v1", "v2", new MyValue(5.0));
  * 
- * ImmutableValueGraph&lt;String, MyValue&gt; immutableValueGraph = ImmutableValueGraph.copyOf(valueGraph);
+ * ImmutableValueGraph&lt;String, MyValue&gt; immutableValueGraph =
+ *     ImmutableValueGraph.copyOf(valueGraph);
  * 
  * Graph&lt;String, EndpointPair&lt;String&gt;&gt; graph = new ImmutableValueGraphAdapter&lt;&gt;(
  *     immutableValueGraph, (ToDoubleFunction&lt;MyValue&gt; &amp; Serializable) MyValue::getValue);
@@ -90,8 +94,12 @@ import com.google.common.graph.ValueGraphBuilder;
  * @param <W> the value type
  */
 public class ImmutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseValueGraphAdapter<V, W, ImmutableValueGraph<V, W>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = 2629294259825656044L;
 
@@ -126,7 +134,7 @@ public class ImmutableValueGraphAdapter<V, W>
     {
         throw new UnsupportedOperationException(GRAPH_IS_IMMUTABLE);
     }
-    
+
     @Override
     public boolean addVertex(V v)
     {
@@ -219,7 +227,8 @@ public class ImmutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

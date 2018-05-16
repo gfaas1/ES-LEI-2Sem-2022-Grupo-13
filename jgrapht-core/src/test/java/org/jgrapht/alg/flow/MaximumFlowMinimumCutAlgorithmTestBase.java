@@ -930,7 +930,8 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new GnmRandomGraphGenerator<>(100, 500);
         Random rand = new Random();
         SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> directedGraph =
-            new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            new SimpleDirectedWeightedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
         randomGraphGenerator.generateGraph(directedGraph);
         directedGraph
             .edgeSet().stream().forEach(e -> directedGraph.setEdgeWeight(e, rand.nextInt(100)));
@@ -1473,7 +1474,8 @@ public abstract class MaximumFlowMinimumCutAlgorithmTestBase
             new GnmRandomGraphGenerator<>(100, 500);
         Random rand = new Random();
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> undirectedGraph =
-            new SimpleWeightedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            new SimpleWeightedGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
         randomGraphGenerator.generateGraph(undirectedGraph);
         undirectedGraph
             .edgeSet().stream().forEach(e -> undirectedGraph.setEdgeWeight(e, rand.nextInt(100)));

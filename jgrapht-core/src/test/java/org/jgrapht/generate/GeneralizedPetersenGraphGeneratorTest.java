@@ -37,7 +37,8 @@ public class GeneralizedPetersenGraphGeneratorTest
     @Test
     public void testCubicalGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GeneralizedPetersenGraphGenerator<Integer, DefaultEdge> gpgg =
             new GeneralizedPetersenGraphGenerator<>(4, 1);
         gpgg.generateGraph(g);

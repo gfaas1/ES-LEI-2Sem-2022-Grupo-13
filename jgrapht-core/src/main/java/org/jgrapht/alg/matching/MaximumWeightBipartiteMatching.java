@@ -55,7 +55,8 @@ import org.jgrapht.util.GenericFibonacciHeap;
  * @author Dimitrios Michail
  */
 public class MaximumWeightBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Set<V> partition1;

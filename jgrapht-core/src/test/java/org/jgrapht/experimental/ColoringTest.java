@@ -41,11 +41,11 @@ public class ColoringTest
     @Test
     public void testBacktrackColoring()
     {
-        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> completeGraph = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(6);
-        completeGraphGenerator
-            .generateGraph(completeGraph);
+        completeGraphGenerator.generateGraph(completeGraph);
         BrownBacktrackColoring<Object, DefaultEdge> colorer =
             new BrownBacktrackColoring<>(completeGraph);
         assertEquals(new Integer(6), colorer.getResult(null));

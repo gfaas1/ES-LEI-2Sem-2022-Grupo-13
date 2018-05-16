@@ -55,11 +55,11 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilderWithEdgeSupplier()
     {
-        Graph<Integer, DefaultWeightedEdge> graph = GraphTypeBuilder
-            .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-            .edgeSupplier(()-> new DefaultWeightedEdge())
-            .vertexSupplier(SupplierUtil.createIntegerSupplier())
-            .buildGraph();
+        Graph<Integer,
+            DefaultWeightedEdge> graph = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .edgeSupplier(() -> new DefaultWeightedEdge())
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());

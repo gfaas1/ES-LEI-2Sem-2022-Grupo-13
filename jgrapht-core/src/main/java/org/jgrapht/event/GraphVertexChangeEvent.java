@@ -29,7 +29,8 @@ package org.jgrapht.event;
  * @since Aug 10, 2003
  */
 public class GraphVertexChangeEvent<V>
-    extends GraphChangeEvent
+    extends
+    GraphChangeEvent
 {
     private static final long serialVersionUID = 3690189962679104053L;
 

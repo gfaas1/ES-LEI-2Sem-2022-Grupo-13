@@ -19,8 +19,8 @@ package org.jgrapht.alg.util;
 
 /**
  * Primitive but efficient implementation of a fixed size queue for integers. Note: this queue is
- * not implemented as a ring, so at most $N$ enqueue operations are allowed, where $N$ is the maximum
- * capacity of the queue! After that, queue.clear() must be invoked.
+ * not implemented as a ring, so at most $N$ enqueue operations are allowed, where $N$ is the
+ * maximum capacity of the queue! After that, queue.clear() must be invoked.
  *
  * @author Joris Kinable
  */

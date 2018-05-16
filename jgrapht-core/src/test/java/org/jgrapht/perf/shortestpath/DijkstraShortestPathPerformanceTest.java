@@ -87,7 +87,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class DijkstraBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -104,7 +105,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class ClosestFirstIteratorBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -157,7 +159,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class BidirectionalDijkstraBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -175,7 +178,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class AStarNoHeuristicBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         @Override
         ShortestPathAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -193,7 +197,8 @@ public class DijkstraShortestPathPerformanceTest
     }
 
     public static class ALTBenchmark
-        extends BenchmarkBase
+        extends
+        BenchmarkBase
     {
         private int totalLandmarks;
 

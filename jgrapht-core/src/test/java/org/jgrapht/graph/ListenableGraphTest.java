@@ -188,18 +188,18 @@ public class ListenableGraphTest
 
         DefaultWeightedEdge e = g.addEdge(v1, v2);
         g.setEdgeWeight(e, 10.0);
-        assertEquals(10.0, g.getEdgeWeight(e),0);
+        assertEquals(10.0, g.getEdgeWeight(e), 0);
         assertEquals(e, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
     }
-    
+
     @Test
     public void testListenableDirectedWeightedGraphWithCustomEdge()
     {
         init();
 
-        ListenableGraph<Object, DefaultEdge> g = new DefaultListenableGraph<>(
-            new DefaultDirectedWeightedGraph<>(DefaultEdge.class));
+        ListenableGraph<Object, DefaultEdge> g =
+            new DefaultListenableGraph<>(new DefaultDirectedWeightedGraph<>(DefaultEdge.class));
 
         GraphListener<Object, DefaultEdge> listener = new MyGraphListener<>();
         g.addGraphListener(listener);
@@ -220,15 +220,15 @@ public class ListenableGraphTest
         assertEquals(10.0, g.getEdgeWeight(e), 0);
         assertEquals(e, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
-        
+
         init();
-        
+
         g.setEdgeWeight(e, 5.5d);
         assertEquals(5.5, g.getEdgeWeight(e), 1e-9);
         assertEquals(null, lastAddedEdge);
         assertEquals(null, lastRemovedEdge);
         assertEquals(5.5, lastWeightUpdate, 1e-9);
-        
+
         g.setEdgeWeight(e, 20.5d);
         assertEquals(20.5, g.getEdgeWeight(e), 1e-9);
         assertEquals(null, lastAddedEdge);
@@ -254,7 +254,8 @@ public class ListenableGraphTest
      * @since Aug 3, 2003
      */
     private class MyGraphListener<E>
-        implements GraphListener<Object, E>
+        implements
+        GraphListener<Object, E>
     {
         @Override
         public void edgeAdded(GraphEdgeChangeEvent<Object, E> e)
@@ -279,9 +280,10 @@ public class ListenableGraphTest
         {
             lastRemovedVertex = e.getVertex();
         }
-        
+
         @Override
-        public void edgeWeightUpdated(GraphEdgeChangeEvent<Object, E> e) {
+        public void edgeWeightUpdated(GraphEdgeChangeEvent<Object, E> e)
+        {
             lastWeightUpdate = e.getEdgeWeight();
         }
     }

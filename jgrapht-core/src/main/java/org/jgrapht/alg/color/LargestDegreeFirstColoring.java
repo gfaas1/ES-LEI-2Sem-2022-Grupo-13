@@ -39,7 +39,8 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class LargestDegreeFirstColoring<V, E>
-    extends GreedyColoring<V, E>
+    extends
+    GreedyColoring<V, E>
 {
     /**
      * Construct a new coloring algorithm.

@@ -66,7 +66,8 @@ import com.google.common.graph.MutableValueGraph;
  * @param <V> the graph vertex type
  */
 public class MutableDoubleValueGraphAdapter<V>
-    extends MutableValueGraphAdapter<V, Double>
+    extends
+    MutableValueGraphAdapter<V, Double>
 {
     private static final long serialVersionUID = -6335845255406679994L;
 

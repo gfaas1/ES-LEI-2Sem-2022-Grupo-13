@@ -39,8 +39,10 @@ import org.jgrapht.util.*;
  * @author Ilya Razenshteyn
  */
 public class AsGraphUnion<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3848082143382987713L;
 
@@ -135,7 +137,7 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * @throws UnsupportedOperationException always, since operation is unsupported
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Override
     @Deprecated

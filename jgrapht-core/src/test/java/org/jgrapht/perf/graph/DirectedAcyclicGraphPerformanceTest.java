@@ -73,43 +73,51 @@ public class DirectedAcyclicGraphPerformanceTest
     }
 
     public static class ArrayDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
 
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+            return new ArrayDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class ArrayListDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new ArrayListDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+            return new ArrayListDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class HashSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new HashSetDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+            return new HashSetDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
     public static class BitSetDAGRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         DirectedAcyclicGraph<Long, DefaultEdge> createDAG()
         {
-            return new BitSetDAG<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+            return new BitSetDAG<>(
+                SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
         }
     }
 
@@ -132,7 +140,8 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the array visited strategy
      */
     private static class ArrayDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
@@ -144,8 +153,9 @@ public class DirectedAcyclicGraphPerformanceTest
          */
         public ArrayDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
-            super(vertexSupplier, edgeSupplier, new VisitedArrayImpl(),
-                new TopoVertexBiMap<>(), false);
+            super(
+                vertexSupplier, edgeSupplier, new VisitedArrayImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -153,7 +163,8 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the array list visited strategy
      */
     private static class ArrayListDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
@@ -166,8 +177,8 @@ public class DirectedAcyclicGraphPerformanceTest
         public ArrayListDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                vertexSupplier, edgeSupplier, new VisitedArrayListImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedArrayListImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -175,7 +186,8 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the hash set visited strategy
      */
     private static class HashSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
@@ -188,8 +200,8 @@ public class DirectedAcyclicGraphPerformanceTest
         public HashSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                vertexSupplier, edgeSupplier, new VisitedHashSetImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedHashSetImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 
@@ -197,7 +209,8 @@ public class DirectedAcyclicGraphPerformanceTest
      * A DAG using the bitset visited strategy
      */
     private static class BitSetDAG<V, E>
-        extends DirectedAcyclicGraph<V, E>
+        extends
+        DirectedAcyclicGraph<V, E>
     {
         private static final long serialVersionUID = 1L;
 
@@ -210,8 +223,8 @@ public class DirectedAcyclicGraphPerformanceTest
         public BitSetDAG(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
         {
             super(
-                vertexSupplier, edgeSupplier, new VisitedBitSetImpl(),
-                new TopoVertexBiMap<>(), false);
+                vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
+                false);
         }
     }
 

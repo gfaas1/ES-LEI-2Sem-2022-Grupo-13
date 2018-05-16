@@ -116,18 +116,18 @@ public class AsWeightedGraphTest
         Map<DefaultEdge, Double> weightMap = new HashMap<>();
         weightMap.put(e1, 9.0);
 
-        assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT,0);
+        assertEquals(graph.getEdgeWeight(e1), Graph.DEFAULT_EDGE_WEIGHT, 0);
 
         Graph<String, DefaultEdge> graphView;
         graphView = new AsWeightedGraph<>(graph, weightMap);
 
-        assertEquals(graphView.getEdgeWeight(e1), 9.0,0);
-        assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT,0);
-        assertEquals(graphView.getEdgeWeight(e3), Graph.DEFAULT_EDGE_WEIGHT,0);
+        assertEquals(graphView.getEdgeWeight(e1), 9.0, 0);
+        assertEquals(graphView.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT, 0);
+        assertEquals(graphView.getEdgeWeight(e3), Graph.DEFAULT_EDGE_WEIGHT, 0);
 
         graphView.setEdgeWeight(e2, 5.0);
-        assertEquals(graphView.getEdgeWeight(e2), 5.0,0);
-        assertEquals(graph.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT,0);
+        assertEquals(graphView.getEdgeWeight(e2), 5.0, 0);
+        assertEquals(graph.getEdgeWeight(e2), Graph.DEFAULT_EDGE_WEIGHT, 0);
     }
 
     /*** Weighted graphs ***/
@@ -153,13 +153,13 @@ public class AsWeightedGraphTest
         Graph<String, DefaultWeightedEdge> graphView;
         graphView = new AsWeightedGraph<>(graph, weightMap);
 
-        assertEquals(graphView.getEdgeWeight(e1), 9.0,0);
-        assertEquals(graphView.getEdgeWeight(e2), 2.0,0);
-        assertEquals(graphView.getEdgeWeight(e3), 8.0,0);
+        assertEquals(graphView.getEdgeWeight(e1), 9.0, 0);
+        assertEquals(graphView.getEdgeWeight(e2), 2.0, 0);
+        assertEquals(graphView.getEdgeWeight(e3), 8.0, 0);
 
         graphView.setEdgeWeight(e2, 5.0);
-        assertEquals(graphView.getEdgeWeight(e2), 5.0,0);
-        assertEquals(graph.getEdgeWeight(e2), 5.0,0);
+        assertEquals(graphView.getEdgeWeight(e2), 5.0, 0);
+        assertEquals(graph.getEdgeWeight(e2), 5.0, 0);
 
         try {
             graphView.getEdgeWeight(null);

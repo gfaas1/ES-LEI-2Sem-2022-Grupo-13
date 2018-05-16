@@ -68,7 +68,9 @@ public class PrefetchIteratorTest
 
     // This test class supplies enumeration of integer from 1 till 100.
     public static class IterateFrom1To99
-        implements Enumeration<Integer>, Iterator<Integer>
+        implements
+        Enumeration<Integer>,
+        Iterator<Integer>
     {
         private int counter = 0;
         private PrefetchIterator<Integer> nextSupplier;

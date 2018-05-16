@@ -31,7 +31,8 @@ import org.jgrapht.graph.*;
  * @author Carl Anderson
  */
 public class SimpleTouchgraphApplet
-    extends Applet
+    extends
+    Applet
 {
     // ~ Static fields/initializers ---------------------------------------------
 
