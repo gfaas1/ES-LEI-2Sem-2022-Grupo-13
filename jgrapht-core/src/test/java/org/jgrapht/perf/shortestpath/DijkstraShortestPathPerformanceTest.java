@@ -17,20 +17,20 @@
  */
 package org.jgrapht.perf.shortestpath;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;
-import org.junit.Test;
+import org.junit.*;
 import org.openjdk.jmh.runner.*;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A small benchmark comparing Dijkstra like algorithms. The benchmark creates a random graph and

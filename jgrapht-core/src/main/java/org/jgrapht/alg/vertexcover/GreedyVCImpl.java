@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.util.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Greedy algorithm to find a vertex cover for a graph. A vertex cover is a set of vertices that

@@ -17,14 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.color.ChordalGraphColoring;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.interfaces.CliqueAlgorithm;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
-import org.jgrapht.traverse.LexBreadthFirstIterator;
-import org.jgrapht.traverse.MaximumCardinalityIterator;
+import org.jgrapht.*;
+import org.jgrapht.alg.color.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 

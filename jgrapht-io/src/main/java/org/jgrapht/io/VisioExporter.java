@@ -17,9 +17,9 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-
 import org.jgrapht.*;
+
+import java.io.*;
 
 /**
  * Exports a graph to a CSV format that can be imported into MS Visio.

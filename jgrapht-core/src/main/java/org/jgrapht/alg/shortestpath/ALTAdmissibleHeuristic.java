@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * An admissible heuristic for the A* algorithm using a set of landmarks and the triangle

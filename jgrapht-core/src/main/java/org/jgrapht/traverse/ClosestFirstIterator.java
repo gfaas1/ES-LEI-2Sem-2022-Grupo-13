@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly

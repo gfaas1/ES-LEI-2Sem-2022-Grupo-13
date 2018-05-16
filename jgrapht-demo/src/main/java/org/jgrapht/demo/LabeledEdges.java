@@ -18,12 +18,10 @@
 
 package org.jgrapht.demo;
 
-import java.util.ArrayList;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A simple introduction to using JGraphT.

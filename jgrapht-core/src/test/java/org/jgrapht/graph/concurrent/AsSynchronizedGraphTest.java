@@ -17,12 +17,14 @@
  */
 package org.jgrapht.graph.concurrent;
 
-import java.util.*;
 import junit.extensions.*;
 import junit.framework.*;
 import junit.textui.*;
 import org.jgrapht.graph.*;
 import org.junit.Test;
+
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 /**

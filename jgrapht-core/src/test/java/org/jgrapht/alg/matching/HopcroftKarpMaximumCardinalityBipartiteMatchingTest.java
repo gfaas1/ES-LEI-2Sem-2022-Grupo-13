@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Unit test for the HopcroftKarpMaximumCardinalityBipartiteMatching class

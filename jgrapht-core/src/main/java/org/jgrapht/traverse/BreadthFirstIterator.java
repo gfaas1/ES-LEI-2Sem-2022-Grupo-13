@@ -17,9 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A breadth-first iterator for a directed or undirected graph.

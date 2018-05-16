@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
 
 /**
  * Test base class for the GusfieldGomoryHuCutTree and GusfieldEquivalentFlow implementations

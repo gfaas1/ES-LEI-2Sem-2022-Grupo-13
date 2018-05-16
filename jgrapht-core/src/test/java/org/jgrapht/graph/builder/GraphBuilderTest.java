@@ -17,18 +17,13 @@
  */
 package org.jgrapht.graph.builder;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GraphBuilderTest
 {

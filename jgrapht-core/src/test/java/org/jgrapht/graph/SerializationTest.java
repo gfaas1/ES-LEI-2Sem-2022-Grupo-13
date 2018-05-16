@@ -17,12 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.junit.*;
+
 import java.io.*;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.

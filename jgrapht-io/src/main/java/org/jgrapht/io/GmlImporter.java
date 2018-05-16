@@ -17,15 +17,15 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import org.apache.commons.lang3.*;
 import org.jgrapht.*;
 import org.jgrapht.io.GmlParser.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).

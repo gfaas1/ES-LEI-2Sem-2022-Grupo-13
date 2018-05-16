@@ -18,11 +18,10 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for graph generic vertex/edge parameters.

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Tiernan's algorithm.

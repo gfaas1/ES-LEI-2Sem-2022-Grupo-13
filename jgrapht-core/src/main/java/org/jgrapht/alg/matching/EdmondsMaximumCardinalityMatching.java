@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in

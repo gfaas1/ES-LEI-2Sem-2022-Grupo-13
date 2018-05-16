@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Compares two vertices based on their degree.

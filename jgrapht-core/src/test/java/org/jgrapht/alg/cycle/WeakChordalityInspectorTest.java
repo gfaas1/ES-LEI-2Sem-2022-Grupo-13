@@ -17,18 +17,13 @@
  */
 package org.jgrapht.alg.cycle;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.generate.NamedGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 

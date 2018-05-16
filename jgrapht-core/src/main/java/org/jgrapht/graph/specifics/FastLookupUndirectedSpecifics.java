@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.util.*;
-
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Fast implementation of UndirectedSpecifics. This class uses additional data structures to improve

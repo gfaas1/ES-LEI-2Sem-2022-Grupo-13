@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A common interface for classes implementing algorithms for enumeration of the simple cycles of a

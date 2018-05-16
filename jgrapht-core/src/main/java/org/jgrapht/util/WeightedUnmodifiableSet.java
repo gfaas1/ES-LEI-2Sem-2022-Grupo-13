@@ -17,11 +17,8 @@
  */
 package org.jgrapht.util;
 
-import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * Implementation of a weighted, unmodifiable set. This class can for instance be used to store a

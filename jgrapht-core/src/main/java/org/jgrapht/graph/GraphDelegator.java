@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-import java.util.function.Supplier;
-
-import org.jgrapht.*;
+import java.util.function.*;
 
 /**
  * A graph backed by the the graph specified at the constructor, which delegates all its methods to

@@ -17,16 +17,13 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.io.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link GmlImporter}.

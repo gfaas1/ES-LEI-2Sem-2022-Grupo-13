@@ -17,9 +17,9 @@
  */
 package org.jgrapht;
 
-import org.junit.runner.*;
-import org.junit.experimental.categories.*;
 import com.googlecode.junittoolbox.*;
+import org.junit.experimental.categories.*;
+import org.junit.runner.*;
 
 /**
  * Suite of fast unit tests only (as run by mvn test).

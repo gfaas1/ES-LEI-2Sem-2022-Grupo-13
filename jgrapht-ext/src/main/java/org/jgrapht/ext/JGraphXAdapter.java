@@ -17,13 +17,12 @@
  */
 package org.jgrapht.ext;
 
-import java.util.*;
-
+import com.mxgraph.model.*;
+import com.mxgraph.view.*;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 
-import com.mxgraph.model.*;
-import com.mxgraph.view.*;
+import java.util.*;
 
 /**
  * <P>

@@ -17,10 +17,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Exporter which exports graphs in graph6 or sparse6 format. A description of the format can be

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.experimental;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Brown graph coloring algorithm.

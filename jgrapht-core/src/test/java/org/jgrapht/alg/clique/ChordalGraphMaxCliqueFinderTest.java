@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 

@@ -17,14 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
+import java.util.function.*;
 
 import static org.junit.Assert.*;
 

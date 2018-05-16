@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * Computes the coreness of each vertex in an undirected graph.

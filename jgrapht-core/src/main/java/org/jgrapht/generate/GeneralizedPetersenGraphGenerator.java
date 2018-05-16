@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generator for <a href="http://mathworld.wolfram.com/GeneralizedPetersenGraph.html">Generalized

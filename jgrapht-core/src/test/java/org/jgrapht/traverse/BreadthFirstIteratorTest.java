@@ -19,10 +19,9 @@ package org.jgrapht.traverse;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link BreadthFirstIterator} class.

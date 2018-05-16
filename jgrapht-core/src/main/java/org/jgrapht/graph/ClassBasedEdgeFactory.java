@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-
 import org.jgrapht.*;
+
+import java.io.*;
 
 /**
  * An {@link EdgeFactory} for producing edges by using a class as a factory.

@@ -17,12 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import java.util.*;
 
 /**
  * Generate a set of fundamental cycles by building a spanning tree (forest) using a straightforward

@@ -17,23 +17,17 @@
  */
 package org.jgrapht.graph;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.generate.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.generate.LinearGraphGenerator;
-import org.jgrapht.traverse.TopologicalOrderIterator;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for the DirectedAcyclicGraph, a dynamic DAG implementation.

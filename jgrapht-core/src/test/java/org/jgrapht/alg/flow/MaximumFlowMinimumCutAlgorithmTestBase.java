@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public abstract class MaximumFlowMinimumCutAlgorithmTestBase
 {

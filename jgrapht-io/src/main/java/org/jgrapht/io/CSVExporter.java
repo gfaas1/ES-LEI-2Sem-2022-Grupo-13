@@ -17,10 +17,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Exports a graph into a CSV Format or any other Delimiter-separated value format.

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.util.WeightedUnmodifiableSet;
+import org.jgrapht.util.*;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Computes a (weighted) <a href="http://mathworld.wolfram.com/VertexCover.html">vertex cover</a> in

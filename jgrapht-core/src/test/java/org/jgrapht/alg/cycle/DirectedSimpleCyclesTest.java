@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.cycle;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.function.Function;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.function.*;
+
+import static org.junit.Assert.*;
 
 public class DirectedSimpleCyclesTest
 {

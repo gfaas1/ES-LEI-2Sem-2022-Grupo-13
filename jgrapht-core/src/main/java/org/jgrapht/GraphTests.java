@@ -17,16 +17,11 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.connectivity.BiconnectivityInspector;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.cycle.BergeGraphInspector;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
-import org.jgrapht.alg.cycle.WeakChordalityInspector;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.cycle.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 /**
  * A collection of utilities to test for various graph properties.

@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and Wagner minimum cut

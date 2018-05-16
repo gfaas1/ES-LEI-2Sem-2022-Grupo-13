@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.util.WeightedUnmodifiableSet;
+import org.jgrapht.util.*;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Algorithm to compute a (weighted) <a href="http://mathworld.wolfram.com/Clique.html">Clique</a>

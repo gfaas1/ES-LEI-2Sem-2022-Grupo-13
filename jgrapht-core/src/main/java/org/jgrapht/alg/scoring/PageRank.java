@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * PageRank implementation.

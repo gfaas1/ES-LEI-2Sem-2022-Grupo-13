@@ -17,13 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some

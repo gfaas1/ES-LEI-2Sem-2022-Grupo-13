@@ -17,24 +17,17 @@
  */
 package org.jgrapht.graph.guava;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
-
-import org.jgrapht.EdgeFactory;
+import com.google.common.graph.*;
+import org.jgrapht.*;
 import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultGraphType;
+import org.jgrapht.graph.*;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.ValueGraph;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link ValueGraph}. This

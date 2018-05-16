@@ -17,15 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.graph.EdgeSetFactory;
-import org.jgrapht.util.ArrayUnenforcedSet;
+import java.io.*;
+import java.util.*;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of

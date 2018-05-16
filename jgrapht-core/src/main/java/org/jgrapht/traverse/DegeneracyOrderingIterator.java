@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
+import org.jgrapht.*;
+
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * A degeneracy ordering iterator.

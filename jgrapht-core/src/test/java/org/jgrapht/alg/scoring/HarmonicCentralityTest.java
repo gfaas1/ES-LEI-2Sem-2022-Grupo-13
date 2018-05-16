@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.scoring;
 
-import static org.junit.Assert.assertEquals;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for harmonic centrality.

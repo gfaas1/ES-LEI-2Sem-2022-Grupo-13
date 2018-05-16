@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
 import java.util.*;
 

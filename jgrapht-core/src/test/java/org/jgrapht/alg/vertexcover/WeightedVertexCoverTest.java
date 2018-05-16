@@ -17,16 +17,15 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests the weighted vertex cover algorithms

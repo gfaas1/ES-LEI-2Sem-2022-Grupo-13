@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of

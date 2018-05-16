@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A skeletal implementation of the <tt>Graph</tt> interface, to minimize the effort required to

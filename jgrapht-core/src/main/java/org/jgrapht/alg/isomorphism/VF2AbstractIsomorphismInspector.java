@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Base implementation of the VF2 algorithm using its feature of detecting

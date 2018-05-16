@@ -17,14 +17,13 @@
  */
 package org.jgrapht;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test class GraphTests.

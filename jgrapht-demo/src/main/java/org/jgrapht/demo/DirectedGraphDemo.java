@@ -18,14 +18,14 @@
 
 package org.jgrapht.demo;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * This class demonstrates some of the operations that can be performed on directed graphs. After

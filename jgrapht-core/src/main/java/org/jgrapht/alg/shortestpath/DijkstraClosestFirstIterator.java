@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A light-weight version of the closest-first iterator for a directed or undirected graphs. For

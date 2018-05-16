@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of vertices that

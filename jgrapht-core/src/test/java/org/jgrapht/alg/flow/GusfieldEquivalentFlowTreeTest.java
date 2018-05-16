@@ -17,16 +17,15 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test class for the GusfieldEquivalentFlowTree implementation

@@ -17,8 +17,8 @@
  */
 package org.jgrapht;
 
-import org.junit.runner.*;
 import com.googlecode.junittoolbox.*;
+import org.junit.runner.*;
 
 /**
  * Suite of performance tests only. We use WildcardPatternSuite instead of ParallelSuite to avoid

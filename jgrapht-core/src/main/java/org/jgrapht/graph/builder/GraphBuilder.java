@@ -18,7 +18,7 @@
 package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.*;
 
 /**
  * A builder class for {@link Graph}. This is a helper class which helps adding vertices and edges

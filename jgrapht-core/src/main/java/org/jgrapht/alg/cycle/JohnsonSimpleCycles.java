@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.

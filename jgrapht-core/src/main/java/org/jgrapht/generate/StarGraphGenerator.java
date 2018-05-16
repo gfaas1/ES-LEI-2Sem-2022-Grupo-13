@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star graph</a> of any size.

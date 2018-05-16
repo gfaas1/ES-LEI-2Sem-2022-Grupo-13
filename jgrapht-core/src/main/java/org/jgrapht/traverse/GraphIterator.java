@@ -17,9 +17,9 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * A graph iterator.

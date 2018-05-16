@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Implementation of the GraphMapping interface. The performance of <code>

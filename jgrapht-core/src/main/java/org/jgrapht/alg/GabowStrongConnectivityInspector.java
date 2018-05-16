@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Computes the strongly connected components of a directed graph. The implemented algorithm follows

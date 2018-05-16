@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A weighted multigraph. A weighted multigraph is a non-simple undirected graph in which no loops

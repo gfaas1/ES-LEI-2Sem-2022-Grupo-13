@@ -17,11 +17,11 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.GraphDelegator;
+import org.jgrapht.graph.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/WheelGraph.html">wheel graph</a> of any size.

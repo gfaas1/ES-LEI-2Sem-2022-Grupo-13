@@ -18,14 +18,12 @@
 
 package org.jgrapht.demo;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.traverse.TopologicalOrderIterator;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.alg.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /***
  * This class is a demonstration program for creating a dependency chart, directed graph, then

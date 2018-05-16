@@ -17,14 +17,6 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.applet.*;
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
 /**
  * SimpleTouchgraphApplet
  *

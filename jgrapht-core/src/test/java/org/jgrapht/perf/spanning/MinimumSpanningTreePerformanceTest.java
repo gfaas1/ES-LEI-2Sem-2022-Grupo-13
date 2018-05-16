@@ -17,25 +17,17 @@
  */
 package org.jgrapht.perf.spanning;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
-import org.jgrapht.generate.GnmRandomGraphGenerator;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.util.StopWatch;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A small benchmark comparing spanning tree algorithms on random graphs.

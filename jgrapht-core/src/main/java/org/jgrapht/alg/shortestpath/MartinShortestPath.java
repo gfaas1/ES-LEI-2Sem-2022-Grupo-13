@@ -17,23 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.util.GenericFibonacciHeap;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Martin's algorithm for the multi-objective shortest paths problem.

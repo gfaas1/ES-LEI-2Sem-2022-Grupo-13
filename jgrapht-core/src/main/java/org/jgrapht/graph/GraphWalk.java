@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
 
 /**
  * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a

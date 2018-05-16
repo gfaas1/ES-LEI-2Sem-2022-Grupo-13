@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.util.WeightedUnmodifiableSet;
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;

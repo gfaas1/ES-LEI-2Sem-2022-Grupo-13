@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.connectivity;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Computes strongly connected components of a directed graph. The algorithm is implemented after

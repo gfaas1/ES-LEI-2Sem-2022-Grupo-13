@@ -17,8 +17,6 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
@@ -26,6 +24,8 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 {

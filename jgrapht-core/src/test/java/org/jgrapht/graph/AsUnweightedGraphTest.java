@@ -20,7 +20,7 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for the AsUnweighted[Directed]Graph views.

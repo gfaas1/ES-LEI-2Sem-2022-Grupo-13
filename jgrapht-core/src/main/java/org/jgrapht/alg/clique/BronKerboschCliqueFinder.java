@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.clique;
 
+import org.jgrapht.*;
+
 import java.util.*;
 import java.util.concurrent.*;
-
-import org.jgrapht.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm.

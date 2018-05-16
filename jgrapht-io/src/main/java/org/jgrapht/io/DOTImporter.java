@@ -17,14 +17,14 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.text.translate.*;
 import org.jgrapht.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Import a graph from a DOT file.

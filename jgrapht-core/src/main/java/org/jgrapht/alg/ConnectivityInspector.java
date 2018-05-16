@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified

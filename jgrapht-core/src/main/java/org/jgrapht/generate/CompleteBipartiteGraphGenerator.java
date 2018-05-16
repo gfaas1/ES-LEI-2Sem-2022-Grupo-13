@@ -17,11 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete bipartite

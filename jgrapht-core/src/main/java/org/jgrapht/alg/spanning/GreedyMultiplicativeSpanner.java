@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Greedy algorithm for $(2k-1)$-multiplicative spanner construction (for any integer

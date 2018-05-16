@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 abstract class VF2MappingIterator<V, E>
     implements

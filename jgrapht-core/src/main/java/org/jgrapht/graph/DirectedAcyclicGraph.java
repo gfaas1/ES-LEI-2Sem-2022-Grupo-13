@@ -17,14 +17,14 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.builder.GraphBuilder;
-import org.jgrapht.traverse.DepthFirstIterator;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A directed acyclic graph (DAG).

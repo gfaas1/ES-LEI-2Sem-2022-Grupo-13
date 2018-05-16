@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link MultiObjectiveSingleSourcePaths} which stores one list of paths per

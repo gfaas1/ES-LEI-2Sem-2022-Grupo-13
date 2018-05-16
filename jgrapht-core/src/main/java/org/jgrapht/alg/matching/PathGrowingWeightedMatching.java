@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * A linear time $\frac{1}{2}$-approximation algorithm for finding a maximum weight matching in an

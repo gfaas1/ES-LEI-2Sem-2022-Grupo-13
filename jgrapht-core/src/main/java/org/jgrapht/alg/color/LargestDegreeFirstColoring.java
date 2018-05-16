@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.color;
 
+import org.jgrapht.*;
+
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * The largest degree first greedy coloring algorithm.

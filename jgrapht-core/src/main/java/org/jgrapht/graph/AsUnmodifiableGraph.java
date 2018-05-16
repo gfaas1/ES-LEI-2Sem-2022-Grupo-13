@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * An unmodifiable view of the backing graph specified in the constructor. This graph allows modules

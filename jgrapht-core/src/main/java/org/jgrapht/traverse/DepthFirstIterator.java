@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A depth-first iterator for a directed or undirected graph.

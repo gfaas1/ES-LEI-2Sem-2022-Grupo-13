@@ -17,11 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Default implementation of an edge function which uses a map to store values.

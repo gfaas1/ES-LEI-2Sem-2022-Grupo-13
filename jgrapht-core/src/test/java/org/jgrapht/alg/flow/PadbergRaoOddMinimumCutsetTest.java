@@ -17,19 +17,17 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class for the PadbergRaoOddMinimumCutset implementation

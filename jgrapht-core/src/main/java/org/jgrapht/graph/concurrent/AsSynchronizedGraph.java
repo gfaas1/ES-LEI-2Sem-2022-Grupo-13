@@ -17,14 +17,15 @@
  */
 package org.jgrapht.graph.concurrent;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import java.util.function.*;
 import java.util.stream.*;
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
 
 /**
  * Create a synchronized (thread-safe) Graph backed by the specified Graph. This Graph is designed

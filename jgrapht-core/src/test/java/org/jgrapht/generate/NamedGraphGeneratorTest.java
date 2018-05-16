@@ -17,15 +17,15 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.jgrapht.*;
-import java.util.*;
-import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.isomorphism.*;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for NamedGraphGenerator

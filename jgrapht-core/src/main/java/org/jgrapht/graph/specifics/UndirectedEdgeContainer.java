@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph.specifics;
 
+import org.jgrapht.graph.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.graph.*;
 
 /**
  * A container for vertex edges.

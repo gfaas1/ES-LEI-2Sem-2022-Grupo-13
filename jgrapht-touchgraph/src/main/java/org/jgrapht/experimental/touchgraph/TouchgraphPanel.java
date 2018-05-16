@@ -17,11 +17,6 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.awt.*;
-import java.util.*;
-
-import org.jgrapht.*;
-
 import com.touchgraph.graphlayout.*;
 import com.touchgraph.graphlayout.interaction.*;
 

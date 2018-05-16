@@ -17,11 +17,11 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Exports a graph to a plain text matrix format, which can be processed by matrix manipulation

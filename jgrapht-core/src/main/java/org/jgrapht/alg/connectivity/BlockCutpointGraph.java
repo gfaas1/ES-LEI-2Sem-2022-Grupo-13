@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.connectivity;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A Block-Cutpoint graph (also known as a block-cut tree). If $G$ is a graph, the block-cutpoint

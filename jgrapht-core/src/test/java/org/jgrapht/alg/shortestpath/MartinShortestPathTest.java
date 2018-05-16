@@ -17,17 +17,15 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.DefaultEdgeFunction;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Test {@link MartinShortestPath}.

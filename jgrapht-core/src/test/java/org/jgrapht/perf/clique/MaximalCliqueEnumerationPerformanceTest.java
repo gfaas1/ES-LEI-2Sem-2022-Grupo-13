@@ -17,18 +17,18 @@
  */
 package org.jgrapht.perf.clique;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.clique.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing maximal clique enumeration algorithms.

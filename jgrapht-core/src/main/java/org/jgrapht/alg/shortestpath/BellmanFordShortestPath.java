@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The Bellman-Ford algorithm.

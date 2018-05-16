@@ -17,10 +17,10 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 /**
  * @author Christoph Zauner

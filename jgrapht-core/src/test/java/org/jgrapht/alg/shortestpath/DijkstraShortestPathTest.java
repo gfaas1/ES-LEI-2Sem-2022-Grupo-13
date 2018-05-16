@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 

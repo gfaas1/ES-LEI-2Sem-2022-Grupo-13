@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which stores one path per vertex.

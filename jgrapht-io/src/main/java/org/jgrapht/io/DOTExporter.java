@@ -17,16 +17,12 @@
  */
 package org.jgrapht.io;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.regex.Matcher;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
+import java.util.regex.*;
 
 /**
  * Exports a graph into a DOT file.

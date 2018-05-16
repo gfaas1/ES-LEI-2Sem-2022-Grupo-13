@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-
 import org.jgrapht.*;
+
+import java.io.*;
 
 /**
  * An unweighted view of a graph.

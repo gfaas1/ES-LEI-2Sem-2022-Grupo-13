@@ -17,12 +17,10 @@
  */
 package org.jgrapht.alg.independentset;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.interfaces.IndependentSetAlgorithm;
-import org.jgrapht.traverse.LexBreadthFirstIterator;
-import org.jgrapht.traverse.MaximumCardinalityIterator;
+import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+
+import java.util.*;
 
 /**
  * Harmonic centrality.

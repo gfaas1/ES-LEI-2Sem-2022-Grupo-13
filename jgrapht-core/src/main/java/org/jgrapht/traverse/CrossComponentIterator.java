@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.

@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.alg.util.extension.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Base class backing algorithms allowing to derive

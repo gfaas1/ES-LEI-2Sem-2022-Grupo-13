@@ -17,18 +17,18 @@
  */
 package org.jgrapht.perf.flow;
 
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.concurrent.*;
 
 public class MaximumFlowAlgorithmPerformanceTest
 {

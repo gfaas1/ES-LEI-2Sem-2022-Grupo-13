@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty graph</a> of any size.

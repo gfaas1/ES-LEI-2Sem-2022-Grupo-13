@@ -17,10 +17,8 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 /**
  * Helper methods for graph creation on all tests.

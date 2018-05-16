@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Base implementation of the Bron-Kerbosch algorithm.

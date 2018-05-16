@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.extension.*;
+
+import java.util.*;
 
 /**
  * This class computes a maximum flow in a

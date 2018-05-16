@@ -17,21 +17,16 @@
  */
 package org.jgrapht.alg.tour;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.SlowTests;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link TwoOptHeuristicTSP}.

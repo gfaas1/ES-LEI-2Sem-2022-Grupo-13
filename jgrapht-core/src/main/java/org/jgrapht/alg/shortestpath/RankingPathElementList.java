@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * List of simple paths in increasing order of weight.

@@ -17,12 +17,11 @@
  */
 package org.jgrapht.alg.connectivity;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.jgrapht.*;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified

@@ -17,17 +17,16 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.io.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for Graph6Sparse6Exporter

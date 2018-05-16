@@ -17,15 +17,14 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-import java.util.function.ToDoubleFunction;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+import java.util.function.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for AlphaCentrality

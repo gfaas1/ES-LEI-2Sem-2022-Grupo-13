@@ -17,20 +17,13 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.*;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.ImmutableGraph;
-import com.google.common.graph.MutableGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableGraph}.

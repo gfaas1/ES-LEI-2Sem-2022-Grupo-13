@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * An empty implementation of a graph iterator to minimize the effort required to implement graph

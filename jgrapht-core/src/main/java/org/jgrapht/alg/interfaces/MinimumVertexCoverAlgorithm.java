@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Computes a vertex cover in an undirected graph. A vertex cover of a graph is a set of vertices

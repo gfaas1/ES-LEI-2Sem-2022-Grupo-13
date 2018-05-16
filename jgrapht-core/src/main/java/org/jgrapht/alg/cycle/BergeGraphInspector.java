@@ -17,24 +17,14 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.shortestpath.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.generate.ComplementGraphGenerator;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.graph.Multigraph;
-import org.jgrapht.graph.SimpleGraph;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * <p>

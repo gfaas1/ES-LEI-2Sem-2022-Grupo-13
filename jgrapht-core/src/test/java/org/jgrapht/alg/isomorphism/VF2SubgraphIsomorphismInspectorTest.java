@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class VF2SubgraphIsomorphismInspectorTest
 {

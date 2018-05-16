@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.extension.ExtensionFactory;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.extension.*;
 
 import java.util.*;
 

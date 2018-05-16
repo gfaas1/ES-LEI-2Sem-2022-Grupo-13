@@ -17,13 +17,11 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.Serializable;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.ImmutableValueGraph;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph} specialized with double values.

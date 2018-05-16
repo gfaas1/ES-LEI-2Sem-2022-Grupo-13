@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The Dsatur greedy coloring algorithm.

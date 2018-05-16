@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Johnson's all pairs shortest paths algorithm.

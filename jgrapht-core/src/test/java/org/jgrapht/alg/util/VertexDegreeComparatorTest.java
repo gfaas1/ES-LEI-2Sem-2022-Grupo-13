@@ -17,16 +17,15 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for VertexDegreeComparator

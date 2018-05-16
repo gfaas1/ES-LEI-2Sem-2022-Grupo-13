@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Provides an edge-reversed view $g'$ of a directed graph $g$. The vertex sets for the two graphs

@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * A simple class which computes a random, maximum cardinality matching. The algorithm can run in

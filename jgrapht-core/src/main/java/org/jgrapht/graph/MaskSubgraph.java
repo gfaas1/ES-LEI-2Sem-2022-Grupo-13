@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
 
 /**
  * An unmodifiable subgraph induced by a vertex/edge masking function. The subgraph will keep track

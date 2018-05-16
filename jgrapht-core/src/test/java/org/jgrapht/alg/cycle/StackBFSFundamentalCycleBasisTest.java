@@ -17,25 +17,16 @@
  */
 package org.jgrapht.alg.cycle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.CycleBasis;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for {@link StackBFSFundamentalCycleBasis}.

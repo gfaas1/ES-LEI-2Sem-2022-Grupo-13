@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A graph backed by the the graph specified at the constructor, which can be listened by

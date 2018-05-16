@@ -17,12 +17,11 @@
  */
 package org.jgrapht.util;
 
-import java.io.Serializable;
-import java.util.UUID;
-import java.util.function.Supplier;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Helper class for suppliers.

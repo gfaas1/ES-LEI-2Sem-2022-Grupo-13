@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A Dijkstra-like algorithm to find all paths between two sets of nodes in a directed graph, with

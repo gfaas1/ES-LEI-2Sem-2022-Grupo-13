@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * A weighted view of a graph.

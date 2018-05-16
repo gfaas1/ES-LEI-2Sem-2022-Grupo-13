@@ -17,16 +17,14 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
-
-import javax.swing.*;
-
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * The greedy coloring algorithm with a random vertex ordering.

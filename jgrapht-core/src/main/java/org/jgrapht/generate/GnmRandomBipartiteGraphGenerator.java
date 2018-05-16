@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Create a random bipartite graph based on the $G(n, M)$ Erdős–Rényi model. See the Wikipedia

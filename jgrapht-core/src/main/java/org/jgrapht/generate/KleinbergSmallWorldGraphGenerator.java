@@ -17,10 +17,10 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Kleinberg's small-world graph generator.

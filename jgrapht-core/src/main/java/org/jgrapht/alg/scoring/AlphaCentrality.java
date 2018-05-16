@@ -17,10 +17,11 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-import java.util.function.ToDoubleFunction;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * AlphaCentrality implementation.

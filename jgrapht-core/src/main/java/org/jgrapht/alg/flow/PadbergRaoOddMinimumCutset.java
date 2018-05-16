@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
 
 /**
  * Implementation of the algorithm by Padberg and Rao to compute Odd Minimum Cut-Sets. Let $G=(V,E)$

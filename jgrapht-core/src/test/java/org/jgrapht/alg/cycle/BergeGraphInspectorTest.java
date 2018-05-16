@@ -17,26 +17,16 @@
  */
 package org.jgrapht.alg.cycle;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
-
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.SlowTests;
-import org.jgrapht.alg.cycle.BergeGraphInspector;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.util.SupplierUtil;
 
 public class BergeGraphInspectorTest
 {

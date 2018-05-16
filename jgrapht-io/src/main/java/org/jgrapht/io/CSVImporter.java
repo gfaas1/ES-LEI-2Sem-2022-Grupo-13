@@ -17,13 +17,13 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import org.jgrapht.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Imports a graph from a CSV Format or any other Delimiter-separated value format.

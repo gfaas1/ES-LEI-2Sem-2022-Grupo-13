@@ -17,19 +17,15 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.BiconnectedGraph;
-import org.jgrapht.alg.connectivity.NotBiconnectedGraph;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @since July 5, 2007

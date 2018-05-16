@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-import java.util.function.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from

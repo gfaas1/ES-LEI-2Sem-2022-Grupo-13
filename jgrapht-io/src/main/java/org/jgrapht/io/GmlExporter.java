@@ -17,11 +17,11 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-
 import org.apache.commons.lang3.*;
 import org.jgrapht.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Exports a graph into a GML file (Graph Modeling Language).
