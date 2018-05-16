@@ -18,14 +18,14 @@
 
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -93,11 +93,11 @@ public class RandomWalkIteratorTest
     public void testExhausted()
     {
         Graph<String,
-        DefaultEdge> graph = GraphTypeBuilder
-            .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
-            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
-            .buildGraph();
-        
+            DefaultEdge> graph = GraphTypeBuilder
+                .undirected().vertexSupplier(SupplierUtil.createStringSupplier(1))
+                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(false)
+                .buildGraph();
+
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(10);
         graphGenerator.generateGraph(graph);
         int maxSteps = 4;
@@ -116,11 +116,11 @@ public class RandomWalkIteratorTest
     public void testDeterministic()
     {
         Graph<String,
-        DefaultEdge> graph = GraphTypeBuilder
-            .directed().vertexSupplier(SupplierUtil.createStringSupplier())
-            .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
-            .buildGraph();
-        
+            DefaultEdge> graph = GraphTypeBuilder
+                .directed().vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeClass(DefaultEdge.class).allowingMultipleEdges(false).allowingSelfLoops(true)
+                .buildGraph();
+
         int ringSize = 5;
         RingGraphGenerator<String, DefaultEdge> graphGenerator = new RingGraphGenerator<>(ringSize);
         graphGenerator.generateGraph(graph);

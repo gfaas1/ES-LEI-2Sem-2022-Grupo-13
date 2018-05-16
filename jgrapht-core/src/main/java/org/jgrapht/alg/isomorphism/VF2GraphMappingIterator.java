@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * This class is used to iterate over all existing (isomorphic) mappings between two graphs. It is
@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 class VF2GraphMappingIterator<V, E>
-    extends VF2MappingIterator<V, E>
+    extends
+    VF2MappingIterator<V, E>
 {
     /**
      * @param ordering1

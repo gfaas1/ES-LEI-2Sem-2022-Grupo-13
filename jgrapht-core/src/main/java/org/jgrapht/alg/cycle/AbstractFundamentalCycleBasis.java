@@ -17,20 +17,12 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.util.Pair;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * A base implementation for the computation of a fundamental cycle basis of a graph. Subclasses
@@ -56,7 +48,8 @@ import org.jgrapht.alg.util.Pair;
  * @since October 2016
  */
 public abstract class AbstractFundamentalCycleBasis<V, E>
-    implements CycleBasisAlgorithm<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     protected Graph<V, E> graph;
 

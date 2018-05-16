@@ -17,14 +17,19 @@
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-public class PrimMinimumSpanningTreeTest extends MinimumSpanningTreeTest{
+public class PrimMinimumSpanningTreeTest
+    extends
+    MinimumSpanningTreeTest
+{
 
     @Override
-    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(Graph<Integer, DefaultWeightedEdge> network) {
+    SpanningTreeAlgorithm<DefaultWeightedEdge> createSolver(
+        Graph<Integer, DefaultWeightedEdge> network)
+    {
         return new PrimMinimumSpanningTree<>(network);
     }
 }

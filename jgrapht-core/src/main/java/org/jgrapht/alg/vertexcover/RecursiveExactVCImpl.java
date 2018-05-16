@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Finds a minimum vertex cover in a undirected graph. The implementation relies on a recursive
@@ -58,7 +58,9 @@ import org.jgrapht.alg.util.*;
  * @author Joris Kinable
  */
 public class RecursiveExactVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
+    implements
+    MinimumWeightedVertexCoverAlgorithm<V, E>,
+    VertexCoverAlgorithm<V>
 {
 
     /** Input graph **/
@@ -93,45 +95,49 @@ public class RecursiveExactVCImpl<V, E>
 
     private Map<V, Double> vertexWeightMap = null;
 
-
     /////////////
-
 
     /**
      * Temporary constructor to ensure one-version-backwards-compatibility
+     * 
      * @deprecated this constructor will be removed in the next release
      */
     @Deprecated
-    public RecursiveExactVCImpl(){
-        graph=null;
-        vertexWeightMap=null;
+    public RecursiveExactVCImpl()
+    {
+        graph = null;
+        vertexWeightMap = null;
     }
 
     /**
      * Constructs a new GreedyVCImpl instance
+     * 
      * @param graph input graph
      */
-    public RecursiveExactVCImpl(Graph<V,E> graph) {
-        this.graph=GraphTests.requireUndirected(graph);
+    public RecursiveExactVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
         this.vertexWeightMap = graph
-                .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
         weighted = false;
     }
 
     /**
      * Constructs a new GreedyVCImpl instance
+     * 
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
      */
-    public RecursiveExactVCImpl(Graph<V,E> graph, Map<V, Double> vertexWeightMap) {
-        this.graph=GraphTests.requireUndirected(graph);
-        this.vertexWeightMap=Objects.requireNonNull(vertexWeightMap);
-        weighted=true;
+    public RecursiveExactVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
+        weighted = true;
     }
 
-
     @Override
-    public VertexCoverAlgorithm.VertexCover<V> getVertexCover(){
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
+    {
         // Initialize
         this.graph = GraphTests.requireUndirected(graph);
         memo = new HashMap<>();
@@ -159,13 +165,10 @@ public class RecursiveExactVCImpl<V, E>
         // Build solution
         Set<V> verticesInCover = new LinkedHashSet<>();
         for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i < N;
-             i = vertexCover.bitSetCover.nextSetBit(i + 1))
+            i = vertexCover.bitSetCover.nextSetBit(i + 1))
             verticesInCover.add(vertices.get(i));
         return new VertexCoverAlgorithm.VertexCoverImpl<>(verticesInCover, vertexCover.weight);
     }
-
-
-
 
     @Override
     public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph)
@@ -177,7 +180,8 @@ public class RecursiveExactVCImpl<V, E>
     }
 
     @Override
-    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(
+        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
         // Initialize
         this.graph = GraphTests.requireUndirected(graph);
@@ -191,7 +195,8 @@ public class RecursiveExactVCImpl<V, E>
         N = vertices.size();
         // Sort vertices based on their weight/degree ratio in ascending order
         // TODO JK: Are there better orderings?
-        vertices.sort(Comparator.comparingDouble((V v) -> vertexWeightMap.get(v) / graph.degreeOf(v)));
+        vertices
+            .sort(Comparator.comparingDouble((V v) -> vertexWeightMap.get(v) / graph.degreeOf(v)));
         for (int i = 0; i < vertices.size(); i++)
             vertexIDDictionary.put(vertices.get(i), i);
 
@@ -210,7 +215,8 @@ public class RecursiveExactVCImpl<V, E>
         for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i < N;
             i = vertexCover.bitSetCover.nextSetBit(i + 1))
             verticesInCover.add(vertices.get(i));
-        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(verticesInCover, vertexCover.weight);
+        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(
+            verticesInCover, vertexCover.weight);
     }
 
     private BitSetCover calculateCoverRecursively(
@@ -324,8 +330,8 @@ public class RecursiveExactVCImpl<V, E>
     private double calculateUpperBound()
     {
         return Math.min(
-                new GreedyVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight(),
-                new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight());
+            new GreedyVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight(),
+            new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap).getVertexCover().getWeight());
     }
 
     /**

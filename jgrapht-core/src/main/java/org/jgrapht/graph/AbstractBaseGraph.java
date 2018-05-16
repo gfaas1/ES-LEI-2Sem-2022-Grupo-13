@@ -17,23 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.graph.specifics.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
-import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
-import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.util.TypeUtil;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add
@@ -54,11 +44,15 @@ import org.jgrapht.util.TypeUtil;
  * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -3582386521833998627L;
-    
+
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
@@ -67,7 +61,7 @@ public abstract class AbstractBaseGraph<V, E>
 
     private Supplier<V> vertexSupplier;
     private Supplier<E> edgeSupplier;
-    
+
     @Deprecated
     private EdgeFactory<V, E> edgeFactory;
 
@@ -112,7 +106,7 @@ public abstract class AbstractBaseGraph<V, E>
      *
      * @throws NullPointerException if the specified edge factory is <code>
      * null</code>.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     protected AbstractBaseGraph(
@@ -141,7 +135,7 @@ public abstract class AbstractBaseGraph<V, E>
      * an edge that its source and target vertices are the same.
      *
      * @return <code>true</code> if and only if graph loops are allowed.
-     * @deprecated Use type instead 
+     * @deprecated Use type instead
      */
     @Deprecated
     public boolean isAllowingLoops()
@@ -155,7 +149,7 @@ public abstract class AbstractBaseGraph<V, E>
      * v2.
      *
      * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
-     * @deprecated Use type instead 
+     * @deprecated Use type instead
      */
     @Deprecated
     public boolean isAllowingMultipleEdges()
@@ -167,7 +161,7 @@ public abstract class AbstractBaseGraph<V, E>
      * Returns <code>true</code> if and only if the graph supports edge weights.
      *
      * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
-     * @deprecated Use type instead 
+     * @deprecated Use type instead
      */
     @Deprecated
     public boolean isWeighted()
@@ -179,7 +173,7 @@ public abstract class AbstractBaseGraph<V, E>
      * Returns <code>true</code> if the graph is directed, false if undirected.
      *
      * @return <code>true</code> if the graph is directed, false if undirected.
-     * @deprecated Use type instead 
+     * @deprecated Use type instead
      */
     @Deprecated
     public boolean isDirected()
@@ -190,7 +184,7 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * {@inheritDoc}
      * 
-     * @deprecated Use supplier instead 
+     * @deprecated Use supplier instead
      */
     @Deprecated
     @Override
@@ -640,7 +634,9 @@ public abstract class AbstractBaseGraph<V, E>
 
     @Deprecated
     private class BackwardsCompatibleEdgeFactory
-        implements EdgeFactory<V, E>, Serializable
+        implements
+        EdgeFactory<V, E>,
+        Serializable
     {
         private EdgeFactory<V, E> ef;
 
@@ -655,9 +651,9 @@ public abstract class AbstractBaseGraph<V, E>
             if (edgeSupplier == null && this.ef == null) {
                 throw new UnsupportedOperationException("The graph contains no edge supplier");
             }
-            if (edgeSupplier != null) { 
+            if (edgeSupplier != null) {
                 return edgeSupplier.get();
-            } else { 
+            } else {
                 return ef.createEdge(sourceVertex, targetVertex);
             }
         }

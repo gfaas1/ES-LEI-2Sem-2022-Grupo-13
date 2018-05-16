@@ -17,13 +17,11 @@
  */
 package org.jgrapht.alg.util;
 
+import org.junit.*;
+
 import java.util.*;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * .

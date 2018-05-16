@@ -17,18 +17,15 @@
  */
 package org.jgrapht.alg.util;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 import org.junit.rules.*;
+
+import java.util.*;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 /**
  * .

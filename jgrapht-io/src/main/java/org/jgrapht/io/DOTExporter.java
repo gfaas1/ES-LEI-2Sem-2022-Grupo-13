@@ -17,16 +17,12 @@
  */
 package org.jgrapht.io;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.regex.Matcher;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
+import java.util.regex.*;
 
 /**
  * Exports a graph into a DOT file.
@@ -36,8 +32,8 @@ import org.jgrapht.Graph;
  * http://en.wikipedia.org/wiki/DOT_language</a>.
  * </p>
  * 
- * The user can adjust the behavior using {@link ComponentNameProvider} and {@link ComponentAttributeProvider} instances
- * given through the constructor.   
+ * The user can adjust the behavior using {@link ComponentNameProvider} and
+ * {@link ComponentAttributeProvider} instances given through the constructor.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -45,8 +41,10 @@ import org.jgrapht.Graph;
  * @author Trevor Harmon
  */
 public class DOTExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     /**
      * Default graph id used by the exporter.
@@ -366,13 +364,13 @@ public class DOTExporter<V, E>
     private String getVertexID(V v)
     {
         String vertexId = vertexIds.get(v);
-        if (vertexId == null) { 
-            /* 
-             *  use the associated id provider for an ID of the given vertex
+        if (vertexId == null) {
+            /*
+             * use the associated id provider for an ID of the given vertex
              */
             String idCandidate = vertexIDProvider.getName(v);
-            
-            /* 
+
+            /*
              * test if it is a valid ID
              */
             if (!DOTUtils.isValidID(idCandidate)) {
@@ -380,7 +378,7 @@ public class DOTExporter<V, E>
                     "Generated id '" + idCandidate + "'for vertex '" + v
                         + "' is not valid with respect to the .dot language");
             }
-            
+
             vertexIds.put(v, idCandidate);
             vertexId = idCandidate;
         }

@@ -18,7 +18,7 @@
 package org.jgrapht;
 
 /**
- * Marker interface to designate a slow tests category. 
+ * Marker interface to designate a slow tests category.
  * 
  * @author Dimitrios Michail
  */

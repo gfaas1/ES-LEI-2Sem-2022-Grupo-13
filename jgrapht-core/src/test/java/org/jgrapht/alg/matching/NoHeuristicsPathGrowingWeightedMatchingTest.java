@@ -17,17 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+import java.util.stream.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for the PathGrowingWeightedMatching without heuristics algorithm
@@ -35,7 +34,8 @@ import static org.junit.Assert.assertTrue;
  * @author Dimitrios Michail
  */
 public class NoHeuristicsPathGrowingWeightedMatchingTest
-    extends BasePathGrowingWeightedMatchingTest
+    extends
+    BasePathGrowingWeightedMatchingTest
 {
 
     @Override

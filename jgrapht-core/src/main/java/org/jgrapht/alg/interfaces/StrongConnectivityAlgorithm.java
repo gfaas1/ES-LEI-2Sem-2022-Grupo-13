@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A strong connectivity inspector algorithm.

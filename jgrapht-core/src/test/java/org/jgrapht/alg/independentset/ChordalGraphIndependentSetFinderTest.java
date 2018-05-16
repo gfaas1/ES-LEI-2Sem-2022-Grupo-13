@@ -17,16 +17,12 @@
  */
 package org.jgrapht.alg.independentset;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -35,13 +31,15 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphIndependentSetFinderTest {
+public class ChordalGraphIndependentSetFinderTest
+{
 
     /**
      * Tests finding of maximum independent set of an empty graph
      */
     @Test
-    public void testGetMaximumIndependentSet1() {
+    public void testGetMaximumIndependentSet1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         ChordalityInspector<Integer, DefaultEdge> inspector = new ChordalityInspector<>(graph);
         Set<Integer> set = new ChordalGraphIndependentSetFinder<>(graph).getIndependentSet();
@@ -53,7 +51,8 @@ public class ChordalGraphIndependentSetFinderTest {
      * Tests finding of maximum independent set on a clique.
      */
     @Test
-    public void testGetMaximumIndependentSet2() {
+    public void testGetMaximumIndependentSet2()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
@@ -70,7 +69,8 @@ public class ChordalGraphIndependentSetFinderTest {
      * Tests finding of a maximum independent set on a non-chordal graph
      */
     @Test
-    public void testGetMaximumIndependentSet3() {
+    public void testGetMaximumIndependentSet3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
@@ -84,7 +84,8 @@ public class ChordalGraphIndependentSetFinderTest {
      * Tests finding of a maximum independent set on a pseudograph
      */
     @Test
-    public void testGetMaximumIndependentSet4() {
+    public void testGetMaximumIndependentSet4()
+    {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 1);
         Graphs.addEdgeWithVertices(graph, 1, 2);
@@ -110,11 +111,12 @@ public class ChordalGraphIndependentSetFinderTest {
      * Checks whether every two vertices from {@code set} aren't adjacent.
      *
      * @param graph the tested graph.
-     * @param set   the tested set of vertices.
-     * @param <V>   the graph vertex type.
-     * @param <E>   the graph edge type.
+     * @param set the tested set of vertices.
+     * @param <V> the graph vertex type.
+     * @param <E> the graph edge type.
      */
-    private <V, E> void assertIsIndependentSet(Graph<V, E> graph, Set<V> set) {
+    private <V, E> void assertIsIndependentSet(Graph<V, E> graph, Set<V> set)
+    {
         ArrayList<V> vertices = new ArrayList<>(set);
         for (int i = 0; i < vertices.size(); i++) {
             for (int j = 0; j < i; j++) {

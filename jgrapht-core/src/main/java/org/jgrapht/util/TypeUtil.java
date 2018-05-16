@@ -40,8 +40,7 @@ public class TypeUtil
     }
 
     /**
-     * @deprecated Use {@link #uncheckedCast(Object)} instead.
-     * Casts an object to a type.
+     * @deprecated Use {@link #uncheckedCast(Object)} instead. Casts an object to a type.
      *
      * @param o object to be cast
      * @param <T> the type of the result

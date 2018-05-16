@@ -17,12 +17,12 @@
  */
 package org.jgrapht.demo;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A simple demo to test memory and CPU consumption on a graph with 3 million elements.

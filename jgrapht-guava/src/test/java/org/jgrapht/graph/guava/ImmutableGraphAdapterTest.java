@@ -17,21 +17,13 @@
  */
 package org.jgrapht.graph.guava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.junit.Test;
+import org.junit.*;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.ImmutableGraph;
-import com.google.common.graph.MutableGraph;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.

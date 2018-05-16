@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A directed pseudograph. A directed pseudograph is a non-simple directed graph in which both graph
@@ -34,7 +34,8 @@ import org.jgrapht.util.SupplierUtil;
  *
  */
 public class DirectedPseudograph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -7461248851245878913L;
 
@@ -97,7 +98,7 @@ public class DirectedPseudograph<V, E>
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedPseudograph(EdgeFactory<V, E> ef)
@@ -110,7 +111,7 @@ public class DirectedPseudograph<V, E>
      *
      * @param weighted if true the graph supports edge weights
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public DirectedPseudograph(EdgeFactory<V, E> ef, boolean weighted)
@@ -125,7 +126,7 @@ public class DirectedPseudograph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An undirected view of the backing directed graph specified in the constructor. This graph allows
@@ -52,8 +52,12 @@ import org.jgrapht.util.*;
  * @since Aug 14, 2003
  */
 public class AsUndirectedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable, Graph<V, E> {
+    extends
+    GraphDelegator<V, E>
+    implements
+    Serializable,
+    Graph<V, E>
+{
     private static final long serialVersionUID = 325983813283133557L;
 
     private static final String NO_EDGE_ADD = "this graph does not support edge addition";

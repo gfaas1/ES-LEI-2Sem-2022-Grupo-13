@@ -23,7 +23,8 @@ import org.jgrapht.graph.*;
  * @since July 5, 2007
  */
 public class NotBiconnectedGraph
-    extends SimpleGraph<String, DefaultEdge>
+    extends
+    SimpleGraph<String, DefaultEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

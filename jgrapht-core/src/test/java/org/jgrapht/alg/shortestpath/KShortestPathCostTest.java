@@ -17,19 +17,15 @@
  */
 package org.jgrapht.alg.shortestpath;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.BiconnectedGraph;
-import org.jgrapht.alg.connectivity.NotBiconnectedGraph;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @since July 5, 2007
@@ -47,7 +43,8 @@ public class KShortestPathCostTest
 
         KShortestSimplePaths<String, DefaultWeightedEdge> pathFinder =
             new KShortestSimplePaths<>(graph);
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v3", nbPaths);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v3", nbPaths);
 
         assertEquals(
             "[[(vS : v1), (v1 : v3)], [(vS : v2), (v2 : v3)],"
@@ -75,7 +72,8 @@ public class KShortestPathCostTest
 
         // assertEquals(2, pathFinder.getPaths("v5").size());
 
-        List<GraphPath<String, DefaultWeightedEdge>> pathElements = pathFinder.getPaths("vS", "v5", maxSize);
+        List<GraphPath<String, DefaultWeightedEdge>> pathElements =
+            pathFinder.getPaths("vS", "v5", maxSize);
         GraphPath<String, DefaultWeightedEdge> pathElement = pathElements.get(0);
         assertEquals(
             Arrays.asList(new Object[] { picture1Graph.eS1, picture1Graph.e15 }),
@@ -268,7 +266,8 @@ public class KShortestPathCostTest
 
         DefaultWeightedEdge src = graph.getEdge("M013", "M014");
 
-        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths = new KShortestSimplePaths<>(graph);
+        KShortestSimplePaths<String, DefaultWeightedEdge> kPaths =
+            new KShortestSimplePaths<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
 
         try {

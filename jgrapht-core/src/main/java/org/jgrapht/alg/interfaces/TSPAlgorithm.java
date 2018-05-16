@@ -17,8 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 
 /**
  * An algorithm solving the
@@ -36,7 +35,9 @@ import org.jgrapht.GraphPath;
  * @deprecated interface replaced by {@link HamiltonianCycleAlgorithm}
  */
 @Deprecated
-public interface TSPAlgorithm<V, E> extends HamiltonianCycleAlgorithm<V, E>
+public interface TSPAlgorithm<V, E>
+    extends
+    HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /**
  * Allows obtaining various connectivity aspects of a graph. The <i>inspected graph</i> is specified
@@ -36,11 +36,11 @@ import org.jgrapht.traverse.*;
  * </p>
  *
  * <p>
- * The inspector is also a {@link GraphListener}. If added as a listener to the
- * inspected graph, the inspector will amend internal cached results instead of recomputing them. It
- * is efficient when a few modifications are applied to a large graph. If many modifications are
- * expected it will not be efficient due to added overhead on graph update operations. If inspector
- * is added as listener to a graph other than the one it inspects, results are undefined.
+ * The inspector is also a {@link GraphListener}. If added as a listener to the inspected graph, the
+ * inspector will amend internal cached results instead of recomputing them. It is efficient when a
+ * few modifications are applied to a large graph. If many modifications are expected it will not be
+ * efficient due to added overhead on graph update operations. If inspector is added as listener to
+ * a graph other than the one it inspects, results are undefined.
  * </p>
  *
  * @param <V> the graph vertex type
@@ -53,7 +53,8 @@ import org.jgrapht.traverse.*;
  */
 @Deprecated
 public class ConnectivityInspector<V, E>
-    implements GraphListener<V, E>
+    implements
+    GraphListener<V, E>
 {
     private static final String GRAPH_MUST_BE_DIRECTED_OR_UNDIRECTED =
         "Graph must be directed or undirected";
@@ -80,10 +81,11 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Test if the inspected graph is connected. A graph is connected when there is a path between every pair of
-     * vertices. In a connected graph, there are no unreachable vertices. When the inspected graph is a <i>directed</i>
-     * graph, this method returns true if and only if the inspected graph is <i>weakly</i> connected.
-     * An empty graph is <i>not</i> considered connected.
+     * Test if the inspected graph is connected. A graph is connected when there is a path between
+     * every pair of vertices. In a connected graph, there are no unreachable vertices. When the
+     * inspected graph is a <i>directed</i> graph, this method returns true if and only if the
+     * inspected graph is <i>weakly</i> connected. An empty graph is <i>not</i> considered
+     * connected.
      *
      * @return <code>true</code> if and only if inspected graph is connected.
      */
@@ -143,20 +145,20 @@ public class ConnectivityInspector<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        V source=e.getEdgeSource();
-        V target=e.getEdgeTarget();
-        Set<V> sourceSet=connectedSetOf(source);
-        Set<V> targetSet=connectedSetOf(target);
+        V source = e.getEdgeSource();
+        V target = e.getEdgeTarget();
+        Set<V> sourceSet = connectedSetOf(source);
+        Set<V> targetSet = connectedSetOf(target);
 
-        //If source and target are in the same set, do nothing, otherwise, merge sets
-        if(sourceSet != targetSet){
-            Set<V> merge=new HashSet<>();
+        // If source and target are in the same set, do nothing, otherwise, merge sets
+        if (sourceSet != targetSet) {
+            Set<V> merge = new HashSet<>();
             merge.addAll(sourceSet);
             merge.addAll(targetSet);
             connectedSets.remove(sourceSet);
             connectedSets.remove(targetSet);
             connectedSets.add(merge);
-            for(V v : merge)
+            for (V v : merge)
                 vertexToConnectedSet.put(v, merge);
         }
     }
@@ -172,14 +174,15 @@ public class ConnectivityInspector<V, E>
     }
 
     /**
-     * Tests whether two vertices lay respectively in the same connected component (undirected graph), or in
-     * the same weakly connected component (directed graph).
+     * Tests whether two vertices lay respectively in the same connected component (undirected
+     * graph), or in the same weakly connected component (directed graph).
      *
      * @param sourceVertex one end of the path.
      * @param targetVertex another end of the path.
      *
-     * @return <code>true</code> if and only if the source and target vertex are in the same connected component (undirected graph),
-     * or in the same weakly connected component (directed graph).
+     * @return <code>true</code> if and only if the source and target vertex are in the same
+     *         connected component (undirected graph), or in the same weakly connected component
+     *         (directed graph).
      */
     public boolean pathExists(V sourceVertex, V targetVertex)
     {
@@ -192,7 +195,7 @@ public class ConnectivityInspector<V, E>
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e)
     {
-        Set<V> component=new HashSet<>();
+        Set<V> component = new HashSet<>();
         component.add(e.getVertex());
         connectedSets.add(component);
         vertexToConnectedSet.put(e.getVertex(), component);
@@ -242,7 +245,8 @@ public class ConnectivityInspector<V, E>
      * @since Aug 6, 2003
      */
     private class MyTraversalListener
-        extends TraversalListenerAdapter<V, E>
+        extends
+        TraversalListenerAdapter<V, E>
     {
         private Set<V> currentConnectedSet;
 

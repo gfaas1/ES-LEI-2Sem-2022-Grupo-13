@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generator for <a href="http://mathworld.wolfram.com/WindmillGraph.html">Windmill Graphs</a>,
@@ -38,7 +38,8 @@ import org.jgrapht.*;
  * @param <E> graph edge type
  */
 public class WindmillGraphsGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     /**
      * WINDMILL and DUTCHWINDMILL Modes for the Constructor
@@ -76,8 +77,7 @@ public class WindmillGraphsGenerator<V, E>
     }
 
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         V center = target.addVertex();
         List<V> sub = new ArrayList<>(n);

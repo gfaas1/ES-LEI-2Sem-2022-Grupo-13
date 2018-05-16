@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.1.1** (under development):
+- **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Updated demos (contributed by Dimitrios Michail)
     - Added assertions to NeighborCache (contributed by Joris Kinable)

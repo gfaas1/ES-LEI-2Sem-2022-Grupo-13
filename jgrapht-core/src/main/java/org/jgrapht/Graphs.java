@@ -17,16 +17,10 @@
  */
 package org.jgrapht;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.EdgeReversedGraph;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -58,15 +52,15 @@ public abstract class Graphs
     public static <V, E> E addEdge(Graph<V, E> g, V sourceVertex, V targetVertex, double weight)
     {
         Supplier<E> edgeSupplier = g.getEdgeSupplier();
-        if (edgeSupplier == null) { 
+        if (edgeSupplier == null) {
             throw new UnsupportedOperationException("Graph contains no edge supplier");
         }
         E e = edgeSupplier.get();
-        
-        if (g.addEdge(sourceVertex, targetVertex, e)) { 
+
+        if (g.addEdge(sourceVertex, targetVertex, e)) {
             g.setEdgeWeight(e, weight);
             return e;
-        } else { 
+        } else {
             return null;
         }
     }
@@ -294,7 +288,8 @@ public abstract class Graphs
      * @param <E> the graph edge type
      * @return a set of the vertices that are neighbors of the specified vertex
      */
-    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex) {
+    public static <V, E> Set<V> neighborSetOf(Graph<V, E> g, V vertex)
+    {
         Set<V> neighbors = new LinkedHashSet<>();
 
         for (E e : g.edgesOf(vertex)) {

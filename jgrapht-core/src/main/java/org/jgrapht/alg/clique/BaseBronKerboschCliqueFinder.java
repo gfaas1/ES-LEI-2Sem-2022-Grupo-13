@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Base implementation of the Bron-Kerbosch algorithm.
@@ -32,7 +32,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Ewgenij Proschak
  */
 abstract class BaseBronKerboschCliqueFinder<V, E>
-    implements MaximalCliqueEnumerationAlgorithm<V, E>
+    implements
+    MaximalCliqueEnumerationAlgorithm<V, E>
 {
     /**
      * The underlying graph

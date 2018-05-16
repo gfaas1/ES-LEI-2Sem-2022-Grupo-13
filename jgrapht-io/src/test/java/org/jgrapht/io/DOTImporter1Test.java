@@ -17,16 +17,14 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * 1st part of tests for DOTImporter. See also {@link DOTImporter2Test}.
@@ -224,7 +222,9 @@ public class DOTImporter1Test
 
     @Test
     public void testExportImportLoop()
-        throws ImportException, ExportException, UnsupportedEncodingException
+        throws ImportException,
+        ExportException,
+        UnsupportedEncodingException
     {
         DirectedMultigraph<String, DefaultEdge> start = new DirectedMultigraph<>(DefaultEdge.class);
         start.addVertex("a");
@@ -282,7 +282,8 @@ public class DOTImporter1Test
         assertEquals(1, result.vertexSet().size());
         String v = result.vertexSet().stream().findFirst().get();
         assertEquals("a", v);
-        assertEquals("------this------contains-------dashes------", attrs.get("a").get("label").getValue());
+        assertEquals(
+            "------this------contains-------dashes------", attrs.get("a").get("label").getValue());
     }
 
     @Test
@@ -306,19 +307,24 @@ public class DOTImporter1Test
         for (TestVertex v : result.vertexSet()) {
             if ("1".equals(v.getId())) {
                 assertEquals("wrong number of attributes", 2, v.getAttributes().size());
-                assertEquals("Wrong attribute values", "bar", v.getAttributes().get("foo").getValue());
-                assertEquals("Wrong attribute values", "bob", v.getAttributes().get("label").getValue());
+                assertEquals(
+                    "Wrong attribute values", "bar", v.getAttributes().get("foo").getValue());
+                assertEquals(
+                    "Wrong attribute values", "bob", v.getAttributes().get("label").getValue());
             } else {
                 assertEquals("wrong number of attributes", 1, v.getAttributes().size());
-                assertEquals("Wrong attribute values", "fred", v.getAttributes().get("label").getValue());
+                assertEquals(
+                    "Wrong attribute values", "fred", v.getAttributes().get("label").getValue());
             }
         }
 
         for (TestEdge e : result.edgeSet()) {
             assertEquals("wrong id", "friend", e.getId());
             assertEquals("wrong number of attributes", 2, e.getAttributes().size());
-            assertEquals("Wrong attribute value", "wibble", e.getAttributes().get("foo").getValue());
-            assertEquals("Wrong attribute value", "friend", e.getAttributes().get("label").getValue());
+            assertEquals(
+                "Wrong attribute value", "wibble", e.getAttributes().get("foo").getValue());
+            assertEquals(
+                "Wrong attribute value", "friend", e.getAttributes().get("label").getValue());
         }
 
     }
@@ -535,7 +541,8 @@ public class DOTImporter1Test
     }
 
     private static class GraphWithID
-        extends AbstractBaseGraph<String, DefaultEdge>
+        extends
+        AbstractBaseGraph<String, DefaultEdge>
     {
         private static final long serialVersionUID = 1L;
 
@@ -556,7 +563,7 @@ public class DOTImporter1Test
                 if (component instanceof GraphWithID) {
                     Attribute idAttribute = attributes.get("ID");
                     String id = "G";
-                    if (idAttribute != null) { 
+                    if (idAttribute != null) {
                         id = idAttribute.getValue();
                     }
                     ((GraphWithID) component).id = id;
@@ -594,7 +601,8 @@ public class DOTImporter1Test
     }
 
     private class TestEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
 

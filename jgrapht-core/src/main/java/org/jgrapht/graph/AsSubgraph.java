@@ -17,13 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * A subgraph is a graph that has a subset of vertices and a subset of edges with respect to some
@@ -90,15 +90,18 @@ import org.jgrapht.event.*;
  * @since Jul 18, 2003
  */
 public class AsSubgraph<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
 
     private static final long serialVersionUID = -1471811754881775298L;
 
     private static final String NO_SUCH_EDGE_IN_BASE = "no such edge in base graph";
     private static final String NO_SUCH_VERTEX_IN_BASE = "no such vertex in base graph";
-    private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH = "Cannot create new vertices from subgraph";
+    private static final String CANNOT_CREATE_NEW_VERTICES_FROM_SUBGRAPH =
+        "Cannot create new vertices from subgraph";
 
     protected final Set<E> edgeSet = new LinkedHashSet<>();
     protected final Set<V> vertexSet = new LinkedHashSet<>();
@@ -200,7 +203,7 @@ public class AsSubgraph<V, E>
     {
         return base.getEdgeFactory();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -367,8 +370,7 @@ public class AsSubgraph<V, E>
 
         if (baseType.isUndirected()) {
             int degree = 0;
-            Iterator<E> it =
-                base.edgesOf(vertex).stream().filter(edgeSet::contains).iterator();
+            Iterator<E> it = base.edgesOf(vertex).stream().filter(edgeSet::contains).iterator();
             while (it.hasNext()) {
                 E e = it.next();
                 degree++;
@@ -539,11 +541,10 @@ public class AsSubgraph<V, E>
             vertexSet.addAll(base.vertexSet());
         } else {
             if (vertexFilter.size() > base.vertexSet().size()) {
-                base.vertexSet().stream().filter(vertexFilter::contains).forEach(
-                        vertexSet::add);
+                base.vertexSet().stream().filter(vertexFilter::contains).forEach(vertexSet::add);
             } else {
                 vertexFilter.stream().filter(v -> v != null && base.containsVertex(v)).forEach(
-                        vertexSet::add);
+                    vertexSet::add);
             }
         }
 
@@ -582,7 +583,9 @@ public class AsSubgraph<V, E>
      * @since Jul 20, 2003
      */
     private class BaseGraphListener
-        implements GraphListener<V, E>, Serializable
+        implements
+        GraphListener<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = 4343535244243546391L;
 

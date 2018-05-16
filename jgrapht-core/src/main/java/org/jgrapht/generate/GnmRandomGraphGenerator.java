@@ -17,12 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Create a random graph based on the $G(n, M)$ Erdős–Rényi model. See the Wikipedia article for

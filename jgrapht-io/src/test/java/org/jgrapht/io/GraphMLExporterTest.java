@@ -17,23 +17,17 @@
  */
 package org.jgrapht.io;
 
-import java.io.ByteArrayOutputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.io.GraphMLExporter.*;
+import org.junit.*;
+import org.xmlunit.builder.*;
+import org.xmlunit.diff.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.GraphMLExporter.AttributeCategory;
-import org.junit.Test;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
+import java.io.*;
+import java.util.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @author Trevor Harmon
@@ -127,7 +121,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
@@ -166,7 +160,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
@@ -208,7 +202,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
@@ -253,7 +247,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
@@ -300,7 +294,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
@@ -417,10 +411,10 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     @Test
@@ -495,10 +489,10 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     @Test
@@ -611,7 +605,7 @@ public class GraphMLExporterTest
 
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
-        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());        
+        assertFalse("XML identical " + diff.toString(), diff.hasDifferences());
     }
 
     @Test
@@ -667,7 +661,7 @@ public class GraphMLExporterTest
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), "UTF-8");
-        
+
         Diff diff = DiffBuilder
             .compare(res).withTest(output).ignoreWhitespace().checkForIdentical().build();
         assertFalse("XML identical " + diff.toString(), diff.hasDifferences());

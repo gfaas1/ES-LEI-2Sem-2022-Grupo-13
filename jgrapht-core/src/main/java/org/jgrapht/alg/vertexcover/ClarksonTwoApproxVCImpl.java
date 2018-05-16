@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.util.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Implementation of the 2-opt algorithm for a minimum weighted vertex cover by Clarkson, Kenneth L.
@@ -39,46 +39,55 @@ import org.jgrapht.alg.vertexcover.util.*;
  * @author Joris Kinable
  */
 public class ClarksonTwoApproxVCImpl<V, E>
-    implements MinimumWeightedVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
+    implements
+    MinimumWeightedVertexCoverAlgorithm<V, E>,
+    VertexCoverAlgorithm<V>
 {
 
     private static int vertexCounter = 0;
 
-    private final Graph<V,E> graph;
+    private final Graph<V, E> graph;
     private final Map<V, Double> vertexWeightMap;
 
     /**
      * Temporary constructor to ensure one-version-backwards-compatibility
+     * 
      * @deprecated this constructor will be removed in the next release
      */
     @Deprecated
-    public ClarksonTwoApproxVCImpl(){
-        graph=null;
-        vertexWeightMap=null;
+    public ClarksonTwoApproxVCImpl()
+    {
+        graph = null;
+        vertexWeightMap = null;
     }
 
     /**
      * Constructs a new ClarksonTwoApproxVCImpl instance where all vertices have uniform weights.
+     * 
      * @param graph input graph
      */
-    public ClarksonTwoApproxVCImpl(Graph<V,E> graph) {
-        this.graph=GraphTests.requireUndirected(graph);
+    public ClarksonTwoApproxVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
         this.vertexWeightMap = graph
-                .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
+            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
     }
 
     /**
      * Constructs a new ClarksonTwoApproxVCImpl instance
+     * 
      * @param graph input graph
      * @param vertexWeightMap mapping of vertex weights
      */
-    public ClarksonTwoApproxVCImpl(Graph<V,E> graph, Map<V, Double> vertexWeightMap) {
-        this.graph=GraphTests.requireUndirected(graph);
-        this.vertexWeightMap=Objects.requireNonNull(vertexWeightMap);
+    public ClarksonTwoApproxVCImpl(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
+        this.vertexWeightMap = Objects.requireNonNull(vertexWeightMap);
     }
 
     @Override
-    public VertexCoverAlgorithm.VertexCover<V> getVertexCover(){
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
+    {
         // Result
         Set<V> cover = new LinkedHashSet<>();
         double weight = 0;
@@ -87,8 +96,8 @@ public class ClarksonTwoApproxVCImpl<V, E>
         // of neighbors
         Map<V, RatioVertex<V>> vertexEncapsulationMap = new HashMap<>();
         graph.vertexSet().stream().filter(v -> graph.degreeOf(v) > 0).forEach(
-                v -> vertexEncapsulationMap
-                        .put(v, new RatioVertex<V>(vertexCounter++, v, vertexWeightMap.get(v))));
+            v -> vertexEncapsulationMap
+                .put(v, new RatioVertex<V>(vertexCounter++, v, vertexWeightMap.get(v))));
 
         for (E e : graph.edgeSet()) {
             V u = graph.getEdgeSource(e);
@@ -99,14 +108,14 @@ public class ClarksonTwoApproxVCImpl<V, E>
             vx.addNeighbor(ux);
 
             assert (ux.neighbors.get(vx).equals(
-                    vx.neighbors.get(
-                            ux))) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
+                vx.neighbors.get(
+                    ux))) : " in an undirected graph, if vx is a neighbor of ux, then ux must be a neighbor of vx";
         }
 
         TreeSet<RatioVertex<V>> workingGraph = new TreeSet<>();
         workingGraph.addAll(vertexEncapsulationMap.values());
         assert (workingGraph.size() == vertexEncapsulationMap
-                .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
+            .size()) : "vertices in vertexEncapsulationMap: " + graph.vertexSet().size()
                 + "vertices in working graph: " + workingGraph.size();
 
         while (!workingGraph.isEmpty()) { // Continue until all edges are covered
@@ -114,9 +123,9 @@ public class ClarksonTwoApproxVCImpl<V, E>
             // Find a vertex vx for which W(vx)/degree(vx) is minimal
             RatioVertex<V> vx = workingGraph.pollFirst();
             assert (workingGraph.parallelStream().allMatch(
-                    ux -> vx.getRatio() <= ux
-                            .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
-                    + vx + " WorkingGraph: " + workingGraph;
+                ux -> vx.getRatio() <= ux
+                    .getRatio())) : "vx does not have the smallest ratio among all elements. VX: "
+                        + vx + " WorkingGraph: " + workingGraph;
 
             // Iterate over all the neighbors ux of vx and update ux.W
             double ratio = vx.getRatio();
@@ -141,7 +150,7 @@ public class ClarksonTwoApproxVCImpl<V, E>
             cover.add(vx.v);
             weight += vertexWeightMap.get(vx.v);
             assert (!workingGraph.parallelStream().anyMatch(
-                    ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
+                ux -> ux.ID == vx.ID)) : "vx should no longer exist in the working graph";
         }
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
@@ -155,7 +164,8 @@ public class ClarksonTwoApproxVCImpl<V, E>
      */
     @Override
     @Deprecated
-    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph, Map<V, Double> vertexWeightMap)
+    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(
+        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
     {
         GraphTests.requireUndirected(graph);
 

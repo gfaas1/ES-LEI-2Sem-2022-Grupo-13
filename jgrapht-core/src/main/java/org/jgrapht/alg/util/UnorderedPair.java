@@ -34,8 +34,10 @@ import java.util.*;
  * 
  */
 public class UnorderedPair<A, B>
-    extends Pair<A, B>
-    implements Serializable
+    extends
+    Pair<A, B>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3110454174542533876L;
 

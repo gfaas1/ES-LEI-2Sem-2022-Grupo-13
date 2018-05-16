@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.util.*;
-
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve
@@ -35,7 +35,8 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class FastLookupDirectedSpecifics<V, E>
-    extends DirectedSpecifics<V, E>
+    extends
+    DirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 

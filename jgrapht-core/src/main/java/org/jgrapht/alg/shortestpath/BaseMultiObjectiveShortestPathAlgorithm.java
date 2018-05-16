@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm;
-import org.jgrapht.graph.GraphWalk;
+import java.util.*;
 
 /**
  * A base implementation of the multi-objective shortest path interface.
@@ -36,7 +32,8 @@ import org.jgrapht.graph.GraphWalk;
  * @author Dimitrios Michail
  */
 abstract class BaseMultiObjectiveShortestPathAlgorithm<V, E>
-    implements MultiObjectiveShortestPathAlgorithm<V, E>
+    implements
+    MultiObjectiveShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting that a source vertex is missing.

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Borůvka's algorithm for the computation of a minimum spanning tree.
@@ -44,7 +44,8 @@ import org.jgrapht.alg.util.*;
  * @since November 2016
  */
 public class BoruvkaMinimumSpanningTree<V, E>
-    implements SpanningTreeAlgorithm<E>
+    implements
+    SpanningTreeAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final Comparator<Double> comparator;

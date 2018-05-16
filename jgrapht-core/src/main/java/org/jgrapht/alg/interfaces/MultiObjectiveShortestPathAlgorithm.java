@@ -17,10 +17,9 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.util.List;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import java.util.*;
 
 /**
  * An algorithm which computes multi-objective shortest paths between vertices.

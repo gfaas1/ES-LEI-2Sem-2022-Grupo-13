@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A depth-first iterator for a directed or undirected graph.
@@ -38,7 +38,8 @@ import org.jgrapht.util.*;
  * @since Jul 29, 2003
  */
 public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
+    extends
+    CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
 {
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And

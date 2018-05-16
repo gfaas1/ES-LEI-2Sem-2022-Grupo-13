@@ -24,7 +24,8 @@ package org.jgrapht.graph;
  * @author Christoph Zauner
  */
 public class TestEdge
-    extends DefaultEdge
+    extends
+    DefaultEdge
 {
 
     private static final long serialVersionUID = 1L;

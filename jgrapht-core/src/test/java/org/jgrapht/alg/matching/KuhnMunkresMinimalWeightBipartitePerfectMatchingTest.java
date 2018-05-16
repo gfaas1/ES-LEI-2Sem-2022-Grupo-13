@@ -17,8 +17,6 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
@@ -26,6 +24,8 @@ import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 {
@@ -38,7 +38,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
      * First partition
      */
     private enum FIRST_PARTITION
-        implements V
+        implements
+        V
     {
         A,
         B,
@@ -70,7 +71,8 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
      * Second partition
      */
     private enum SECOND_PARTITION
-        implements V
+        implements
+        V
     {
         A,
         B,
@@ -99,12 +101,14 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
     private static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
 
     private static class WeightedEdge
-        extends DefaultWeightedEdge
+        extends
+        DefaultWeightedEdge
     {
         private static final long serialVersionUID = 1L;
 
         class APair
-            extends Pair<V, V>
+            extends
+            Pair<V, V>
         {
             private static final long serialVersionUID = 1L;
 

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generator for <a href="http://mathworld.wolfram.com/GeneralizedPetersenGraph.html">Generalized
@@ -34,7 +34,8 @@ import org.jgrapht.*;
  * @param <E> graph edge type
  */
 public class GeneralizedPetersenGraphGenerator<V, E>
-    implements GraphGenerator<V, E, List<V>>
+    implements
+    GraphGenerator<V, E, List<V>>
 {
 
     private final int n;
@@ -78,8 +79,7 @@ public class GeneralizedPetersenGraphGenerator<V, E>
      *        list of vertices constituting the regular polygon.
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, List<V>> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, List<V>> resultMap)
     {
         List<V> verticesU = new ArrayList<>(n); // Regular polygon vertices
         List<V> verticesV = new ArrayList<>(n); // Star polygon vertices

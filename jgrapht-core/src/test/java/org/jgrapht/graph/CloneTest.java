@@ -17,12 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for a cloning bug, adapted from a forum entry from Linda Buisman.

@@ -18,7 +18,7 @@
 package org.jgrapht.graph.builder;
 
 import org.jgrapht.*;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.*;
 
 /**
  * A builder class for {@link Graph}. This is a helper class which helps adding vertices and edges
@@ -40,7 +40,8 @@ import org.jgrapht.graph.DefaultDirectedGraph;
  * @see GraphTypeBuilder
  */
 public class GraphBuilder<V, E, G extends Graph<V, E>>
-    extends AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
+    extends
+    AbstractGraphBuilder<V, E, G, GraphBuilder<V, E, G>>
 {
     /**
      * Creates a builder based on {@code baseGraph}. {@code baseGraph} must be mutable.

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the algorithm described by Hawick and James.
@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @author Luiz Kill
  */
 public class HawickJamesSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     private enum Operation
     {

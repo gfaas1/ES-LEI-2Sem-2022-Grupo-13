@@ -17,11 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete bipartite
@@ -35,7 +33,8 @@ import org.jgrapht.Graph;
  * @since Dec 21, 2008
  */
 public class CompleteBipartiteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int sizeA, sizeB;
 
@@ -58,8 +57,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
      * Construct a complete bipartite graph
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if ((sizeA < 1) && (sizeB < 1)) {
             return;

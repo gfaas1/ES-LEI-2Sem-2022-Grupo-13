@@ -17,22 +17,19 @@
  */
 package org.jgrapht.alg.color;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Base class for coloring tests.
@@ -101,7 +98,8 @@ public abstract class BaseColoringTest
             new GnpRandomGraphGenerator<>(n, p, rng, false);
 
         for (int i = 0; i < tests; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             gen.generateGraph(g);
 
             for (Function<Graph<Integer, DefaultEdge>,
@@ -313,7 +311,8 @@ public abstract class BaseColoringTest
     public void testCompleteGraph()
     {
         final int n = 20;
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Integer, DefaultEdge> gen = new CompleteGraphGenerator<>(n);
         gen.generateGraph(g);
         Coloring<Integer> coloring = getAlgorithm(g).getColoring();

@@ -18,11 +18,10 @@
 package org.jgrapht.graph;
 
 import org.jgrapht.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A unit test for graph generic vertex/edge parameters.
@@ -131,7 +130,8 @@ public class GenericGraphsTest
     // ~ Inner Classes ----------------------------------------------------------
 
     public static class CustomEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
 
@@ -158,18 +158,23 @@ public class GenericGraphsTest
     }
 
     public static class EquivGraph
-        extends AbstractBaseGraph<EquivVertex, DefaultEdge>
+        extends
+        AbstractBaseGraph<EquivVertex, DefaultEdge>
     {
         private static final long serialVersionUID = 8647217182401022498L;
 
-        public EquivGraph() { 
-            super(SupplierUtil.createSupplier(EquivVertex.class), SupplierUtil.createSupplier(DefaultEdge.class), 
+        public EquivGraph()
+        {
+            super(
+                SupplierUtil.createSupplier(EquivVertex.class),
+                SupplierUtil.createSupplier(DefaultEdge.class),
                 DefaultGraphType.directedPseudograph().asUnweighted());
         }
     }
 
     public static class FooEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
     }
@@ -196,13 +201,15 @@ public class GenericGraphsTest
     }
 
     public static class BarEdge
-        extends FooEdge
+        extends
+        FooEdge
     {
         private static final long serialVersionUID = 1L;
     }
 
     private class BarVertex
-        extends FooVertex
+        extends
+        FooVertex
     {
         public BarVertex()
         {

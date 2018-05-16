@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * A simple class which computes a random, maximum cardinality matching. The algorithm can run in
@@ -31,9 +31,9 @@ import org.jgrapht.alg.interfaces.*;
  * produce better results, albeit at the cost of some additional computational overhead.
  * <p>
  * Independent of the mode, the resulting matching is maximal, and is therefore guaranteed to
- * contain at least half of the edges that a maximum matching has ($\frac{1}{2}$ approximation). Runtime
- * complexity: $O(m)$ when the edges are not sorted, $O(m+ m \log n)$ otherwise, where $n$ is the number of
- * vertices, and m the number of edges.
+ * contain at least half of the edges that a maximum matching has ($\frac{1}{2}$ approximation).
+ * Runtime complexity: $O(m)$ when the edges are not sorted, $O(m+ m \log n)$ otherwise, where $n$
+ * is the number of vertices, and m the number of edges.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,7 +41,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Joris Kinable
  */
 public class GreedyMaximumCardinalityMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
 
     private final Graph<V, E> graph;
@@ -108,7 +109,8 @@ public class GreedyMaximumCardinalityMatching<V, E>
     }
 
     private class EdgeDegreeComparator
-        implements Comparator<E>
+        implements
+        Comparator<E>
     {
 
         @Override

@@ -17,18 +17,15 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -65,7 +62,8 @@ public class DOTExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         testUndirected(new SimpleGraph<>(DefaultEdge.class), true);
         testUndirected(new Multigraph<>(DefaultEdge.class), false);
@@ -73,7 +71,8 @@ public class DOTExporterTest
     }
 
     private void testUndirected(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -112,7 +111,8 @@ public class DOTExporterTest
     }
 
     private void testUndirectedWithGraphAttributes(Graph<String, DefaultEdge> g, boolean strict)
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         g.addVertex(V1);
         g.addVertex(V2);
@@ -183,7 +183,8 @@ public class DOTExporterTest
 
     @Test
     public void testDifferentGraphID()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
