@@ -100,56 +100,6 @@ public class KuhnMunkresMinimalWeightBipartitePerfectMatchingTest
 
     private static List<? extends V> secondPartition = Arrays.asList(SECOND_PARTITION.values());
 
-//    private static class WeightedEdge
-//        extends
-//        DefaultWeightedEdge
-//    {
-//        private static final long serialVersionUID = 1L;
-//
-//        class APair
-//            extends
-//            Pair<V, V>
-//        {
-//            private static final long serialVersionUID = 1L;
-//
-//            APair(V first, V second)
-//            {
-//                super(first, second);
-//            }
-//        }
-//
-//        WeightedEdge(V source, V target)
-//        {
-//            aPair = new APair(source, target);
-//        }
-//
-//        static WeightedEdge make(V source, V target)
-//        {
-//            return new WeightedEdge(source, target);
-//        }
-//
-//        @Override
-//        public boolean equals(Object edge)
-//        {
-//            return (edge instanceof WeightedEdge) && aPair.equals(((WeightedEdge) edge).aPair);
-//        }
-//
-//        @Override
-//        public int hashCode()
-//        {
-//            return aPair.hashCode();
-//        }
-//
-//        @Override
-//        public String toString()
-//        {
-//            return aPair.toString() + " : " + getWeight();
-//        }
-//
-//        APair aPair;
-//
-//    }
-
     private static Matching<V, DefaultWeightedEdge> match(
         final double[][] costMatrix, final int partitionCardinality)
     {
