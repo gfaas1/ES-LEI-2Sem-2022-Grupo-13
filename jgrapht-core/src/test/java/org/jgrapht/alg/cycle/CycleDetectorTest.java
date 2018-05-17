@@ -146,8 +146,8 @@ public class CycleDetectorTest
     private void runTest(
         Graph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
-        org.jgrapht.alg.CycleDetector<String, DefaultEdge> detector =
-            new org.jgrapht.alg.CycleDetector<>(g);
+        CycleDetector<String, DefaultEdge> detector =
+            new CycleDetector<>(g);
 
         Set<String> emptySet = Collections.emptySet();
 
@@ -188,8 +188,8 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        org.jgrapht.alg.CycleDetector<String, DefaultEdge> cycleDetector =
-            new org.jgrapht.alg.CycleDetector<>(graph);
+        CycleDetector<String, DefaultEdge> cycleDetector =
+            new CycleDetector<>(graph);
         Set<String> cycleVertices = cycleDetector.findCycles();
 
         boolean foundCycle = cycleDetector.detectCyclesContainingVertex(vertexA);

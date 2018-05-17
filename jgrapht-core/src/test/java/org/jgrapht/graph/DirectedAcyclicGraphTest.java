@@ -20,6 +20,7 @@ package org.jgrapht.graph;
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.generate.*;
 import org.jgrapht.traverse.*;
 import org.jgrapht.util.*;

@@ -201,34 +201,6 @@ public class BiconnectivityInspector<V, E>
     }
 
     /**
-     * Returns the biconnected vertex-components containing the vertex. A biconnected
-     * vertex-component contains all the vertices in the component. A vertex which is not a cutpoint
-     * is contained in exactly one component. A cutpoint is contained is at least 2 components.
-     *
-     * @param vertex the input vertex
-     * @return set of all biconnected vertex-components containing the vertex.
-     * @deprecated use {@link #getBlocks(Object)} instead
-     */
-    @Deprecated
-    public Set<Set<V>> getBiconnectedVertexComponents(V vertex)
-    {
-        return new LinkedHashSet<>(
-            this.getBlocks(vertex).stream().map(Graph::vertexSet).collect(Collectors.toSet()));
-    }
-
-    /**
-     * Returns the biconnected vertex-components of the graph.
-     *
-     * @return the biconnected vertec-components of the graph
-     * @deprecated use {@link #getBlocks()} instead
-     */
-    @Deprecated
-    public Set<Set<V>> getBiconnectedVertexComponents()
-    {
-        return getBlocks().stream().map(Graph::vertexSet).collect(Collectors.toSet());
-    }
-
-    /**
      * Tests if the inspected graph is biconnected. A biconnected graph is a connected graph on two
      * or more vertices having no cutpoints.
      *

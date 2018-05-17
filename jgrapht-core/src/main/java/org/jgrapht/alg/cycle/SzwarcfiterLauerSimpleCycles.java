@@ -78,7 +78,6 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
@@ -87,7 +86,6 @@ public class SzwarcfiterLauerSimpleCycles<V, E>
     /**
      * {@inheritDoc}
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");

@@ -60,16 +60,6 @@ public class JohnsonSimpleCycles<V, E>
     private Set<V> pathSet = null;
 
     /**
-     * Create a simple cycle finder with an unspecified graph.
-     * 
-     * @deprecated Use the constructor with the graph parameter.
-     */
-    @Deprecated
-    public JohnsonSimpleCycles()
-    {
-    }
-
-    /**
      * Create a simple cycle finder for the specified graph.
      *
      * @param graph - the DirectedGraph in which to find cycles.
@@ -78,33 +68,6 @@ public class JohnsonSimpleCycles<V, E>
      * null</code>.
      */
     public JohnsonSimpleCycles(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
-        if (GraphTests.hasMultipleEdges(graph)) {
-            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
         if (GraphTests.hasMultipleEdges(graph)) {

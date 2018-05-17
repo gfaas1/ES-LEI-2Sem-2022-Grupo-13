@@ -157,13 +157,6 @@ public abstract class BaseValueGraphAdapter<V, W, VG extends ValueGraph<V, W>>
     }
 
     @Override
-    @Deprecated
-    public EdgeFactory<V, EndpointPair<V>> getEdgeFactory()
-    {
-        return null;
-    }
-
-    @Override
     public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {

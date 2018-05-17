@@ -151,13 +151,6 @@ public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Grap
     }
 
     @Override
-    @Deprecated
-    public EdgeFactory<V, EndpointPair<V>> getEdgeFactory()
-    {
-        return null;
-    }
-
-    @Override
     public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {

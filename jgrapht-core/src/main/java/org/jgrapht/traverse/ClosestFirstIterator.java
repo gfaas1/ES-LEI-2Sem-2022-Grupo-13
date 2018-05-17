@@ -56,21 +56,6 @@ public class ClosestFirstIterator<V, E>
     private boolean initialized = false;
 
     /**
-     * Creates a new closest-first iterator for the specified graph. Iteration will start at an
-     * arbitrary vertex and will not be limited, that is, will be able to traverse all the graph.
-     *
-     * @param g the graph to be iterated.
-     *
-     * @deprecated this constructor never made much sense, since distance is defined with respect to
-     *             one or more start vertices
-     */
-    @Deprecated
-    public ClosestFirstIterator(Graph<V, E> g)
-    {
-        this(g, (V) null);
-    }
-
-    /**
      * Creates a new closest-first iterator for the specified graph. Iteration will start at the
      * specified start vertex and will be limited to the connected component that includes that
      * vertex. If the specified start vertex is <code>null</code>, iteration will start at an

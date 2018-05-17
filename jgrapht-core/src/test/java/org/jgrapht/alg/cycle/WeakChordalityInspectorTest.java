@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.util.*;
@@ -217,9 +218,9 @@ public class WeakChordalityInspectorTest
     @Test
     public void testIsWeaklyChordal9()
     {
-        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         CompleteGraphGenerator<Integer, DefaultEdge> generator = new CompleteGraphGenerator<>(50);
-        generator.generateGraph(graph, new IntegerVertexFactory());
+        generator.generateGraph(graph);
         WeakChordalityInspector<Integer, DefaultEdge> inspector =
             new WeakChordalityInspector<>(graph);
         assertTrue(inspector.isWeaklyChordal());

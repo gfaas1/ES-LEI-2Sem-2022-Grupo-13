@@ -48,24 +48,11 @@ import java.util.stream.*;
  */
 public class BarYehudaEvenTwoApproxVCImpl<V, E>
     implements
-    MinimumWeightedVertexCoverAlgorithm<V, E>,
     VertexCoverAlgorithm<V>
 {
 
     private final Graph<V, E> graph;
     private final Map<V, Double> vertexWeightMap;
-
-    /**
-     * Temporary constructor to ensure one-version-backwards-compatibility
-     * 
-     * @deprecated this constructor will be removed in the next release
-     */
-    @Deprecated
-    public BarYehudaEvenTwoApproxVCImpl()
-    {
-        graph = null;
-        vertexWeightMap = null;
-    }
 
     /**
      * Constructs a new BarYehudaEvenTwoApproxVCImpl instance where all vertices have uniform
@@ -125,48 +112,4 @@ public class BarYehudaEvenTwoApproxVCImpl<V, E>
         return new VertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
     }
 
-    /**
-     *
-     * @param graph the input graph
-     * @param vertexWeightMap map containing non-negative weights for each vertex
-     * @return vertex cover
-     * @deprecated Replaced by {@link #getVertexCover()}
-     */
-    @Override
-    @Deprecated
-    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(
-        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
-    {
-        GraphTests.requireUndirected(graph);
-
-        Set<V> cover = new LinkedHashSet<>();
-        double weight = 0;
-        Graph<V, E> copy = new AsSubgraph<>(graph, null, null);
-        Map<V, Double> W = new HashMap<>();
-        for (V v : graph.vertexSet())
-            W.put(v, vertexWeightMap.get(v));
-
-        // Main loop
-        Set<E> edgeSet = copy.edgeSet();
-        while (!edgeSet.isEmpty()) {
-            // Pick arbitrary edge
-            E e = edgeSet.iterator().next();
-            V p = copy.getEdgeSource(e);
-            V q = copy.getEdgeTarget(e);
-
-            if (W.get(p) <= W.get(q)) {
-                W.put(q, W.get(q) - W.get(p));
-                cover.add(p);
-                weight += vertexWeightMap.get(p);
-                copy.removeVertex(p);
-            } else {
-                W.put(p, W.get(p) - W.get(q));
-                cover.add(q);
-                weight += vertexWeightMap.get(q);
-                copy.removeVertex(q);
-            }
-        }
-
-        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(cover, weight);
-    }
 }

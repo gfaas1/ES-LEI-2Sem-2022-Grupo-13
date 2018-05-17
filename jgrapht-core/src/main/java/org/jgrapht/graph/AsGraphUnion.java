@@ -137,19 +137,6 @@ public class AsGraphUnion<V, E>
      * {@inheritDoc}
      * 
      * @throws UnsupportedOperationException always, since operation is unsupported
-     * @deprecated Use suppliers instead
-     */
-    @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        throw new UnsupportedOperationException(READ_ONLY);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
     public Supplier<V> getVertexSupplier()

@@ -47,7 +47,7 @@ public class Graph6Sparse6ImporterTest
             g = new Pseudograph<>(edgeClass);
 
         Graph6Sparse6Importer<Integer, E> importer = new Graph6Sparse6Importer<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
         try {
             importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -311,7 +311,7 @@ public class Graph6Sparse6ImporterTest
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
 
         Graph6Sparse6Importer<Integer, DefaultEdge> importer = new Graph6Sparse6Importer<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
         importer.importGraph(g, fstream);
 
         this.compare(NamedGraphGenerator.ellinghamHorton78Graph(), g);
