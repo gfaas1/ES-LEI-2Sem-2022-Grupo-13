@@ -61,7 +61,8 @@ public class TiernanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
     public Graph<V, E> getGraph()
     {
@@ -69,7 +70,8 @@ public class TiernanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
     {

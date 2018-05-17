@@ -68,7 +68,8 @@ public class TarjanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
     public Graph<V, E> getGraph()
     {
@@ -76,7 +77,8 @@ public class TarjanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
     public void setGraph(Graph<V, E> graph)
     {

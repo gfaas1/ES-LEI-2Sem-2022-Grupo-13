@@ -20,6 +20,8 @@ package org.jgrapht.graph.builder;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import java.util.function.*;
+
 /**
  * A builder class for {@link Graph}. This is a helper class which helps adding vertices and edges
  * into an already constructed graph instance.
@@ -27,7 +29,7 @@ import org.jgrapht.graph.*;
  * <p>
  * Each graph implementation contains a static helper method for the construction of such a builder.
  * For example class {@link DefaultDirectedGraph} contains method
- * {@link DefaultDirectedGraph#createBuilder(EdgeFactory)}.
+ * {@link DefaultDirectedGraph#createBuilder(Supplier)}.
  *
  * <p>
  * See {@link GraphTypeBuilder} for a builder of the actual graph instance.
