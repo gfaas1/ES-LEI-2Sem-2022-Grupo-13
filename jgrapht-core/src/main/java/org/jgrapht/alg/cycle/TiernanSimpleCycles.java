@@ -61,18 +61,18 @@ public class TiernanSimpleCycles<V, E>
     }
 
     /**
-     * {@inheritDoc}
+     * Get the graph
+     * @return graph
      */
-    @Override
     public Graph<V, E> getGraph()
     {
         return graph;
     }
 
     /**
-     * {@inheritDoc}
+     * Set the graph
+     * @param graph graph
      */
-    @Override
     public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");

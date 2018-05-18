@@ -139,18 +139,6 @@ public class GraphDelegator<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * @deprecated Use suppliers instead
-     */
-    @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return delegate.getEdgeFactory();
-    }
-
-    /**
-     * {@inheritDoc}
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)

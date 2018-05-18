@@ -38,9 +38,7 @@ import java.util.*;
  *
  * <p>
  * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
- * provide a {@link VertexFactory}. Since the graph already contains vertices, care must be taken so
- * that the provided vertex factory does not return nodes that are already contained in the original
- * input graph.
+ * provide a graph which is initialized with a vertex supplier.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -55,50 +53,6 @@ public class JohnsonShortestPaths<V, E>
     private Map<V, SingleSourcePaths<V, E>> paths;
     private final Comparator<Double> comparator;
 
-    @Deprecated
-    private VertexFactory<V> vertexFactory;
-
-    /**
-     * Construct a new instance.
-     *
-     * @param graph the input graph
-     * @param vertexClass the graph vertex class
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public JohnsonShortestPaths(Graph<V, E> graph, Class<? extends V> vertexClass)
-    {
-        this(graph, new ClassBasedVertexFactory<>(vertexClass));
-    }
-
-    /**
-     * Construct a new instance.
-     *
-     * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory)
-    {
-        this(graph, vertexFactory, ToleranceDoubleComparator.DEFAULT_EPSILON);
-    }
-
-    /**
-     * Construct a new instance.
-     *
-     * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
-     * @param epsilon tolerance when comparing floating point values
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory, double epsilon)
-    {
-        super(graph);
-        this.vertexFactory = Objects.requireNonNull(vertexFactory, "Vertex factory cannot be null");
-        this.comparator = new ToleranceDoubleComparator(epsilon);
-    }
 
     /**
      * Construct a new instance.
@@ -294,22 +248,11 @@ public class JohnsonShortestPaths<V, E>
                 .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
                 .buildGraph();
 
-        /*
-         * FIXME: After next release, keep only the else clause
-         */
         // add new vertex
-        V s = null;
-        if (vertexFactory != null) {
-            s = vertexFactory.createVertex();
-            if (!extraGraph.addVertex(s)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
-            }
-        } else {
-            s = extraGraph.addVertex();
-            if (s == null) {
-                throw new IllegalArgumentException(
-                    "Invalid vertex supplier (does not return unique vertices on each call).");
-            }
+        V s = extraGraph.addVertex();
+        if (s == null) {
+            throw new IllegalArgumentException(
+                "Invalid vertex supplier (does not return unique vertices on each call).");
         }
 
         // add new edges with zero weight

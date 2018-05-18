@@ -94,16 +94,6 @@ public interface Graph<V, E>
     E getEdge(V sourceVertex, V targetVertex);
 
     /**
-     * Returns the edge factory using which this graph creates new edges. The edge factory is
-     * defined when the graph is constructed and must not be modified.
-     *
-     * @return the edge factory using which this graph creates new edges.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    EdgeFactory<V, E> getEdgeFactory();
-
-    /**
      * Return the vertex supplier that the graph uses whenever it needs to create new vertices.
      * 
      * <p>

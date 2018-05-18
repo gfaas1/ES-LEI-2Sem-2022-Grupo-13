@@ -56,22 +56,6 @@ public class ClosestFirstIteratorTest
     }
 
     /**
-     * .
-     */
-    @Test
-    public void testNoStart()
-    {
-        result = new StringBuilder();
-
-        Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
-
-        AbstractGraphIterator<String, ?> iterator = new ClosestFirstIterator<>(graph);
-
-        collectResult(iterator, result);
-        assertEquals("1,2,3,5,6,7,9,4,8,orphan", result.toString());
-    }
-
-    /**
      * Test simultaneous search from multiple start vertices.
      */
     @Test

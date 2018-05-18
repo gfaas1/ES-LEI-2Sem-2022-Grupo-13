@@ -90,32 +90,4 @@ public class DefaultUndirectedWeightedGraph<V, E>
         return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(null, edgeSupplier));
     }
 
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DefaultUndirectedWeightedGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V,
-        E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(ef));
-    }
 }

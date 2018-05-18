@@ -62,9 +62,6 @@ public abstract class AbstractBaseGraph<V, E>
     private Supplier<V> vertexSupplier;
     private Supplier<E> edgeSupplier;
 
-    @Deprecated
-    private EdgeFactory<V, E> edgeFactory;
-
     private GraphType type;
     private Specifics<V, E> specifics;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
@@ -91,34 +88,6 @@ public abstract class AbstractBaseGraph<V, E>
             .requireNonNull(createSpecifics(type.isDirected()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
         this.intrusiveEdgesSpecifics = Objects.requireNonNull(
             createIntrusiveEdgesSpecifics(type.isWeighted()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.edgeFactory = new BackwardsCompatibleEdgeFactory(null);
-    }
-
-    /**
-     * Construct a new graph. The graph can either be directed or undirected, depending on the
-     * specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @param directed if true the graph will be directed, otherwise undirected
-     * @param allowMultipleEdges whether to allow multiple (parallel) edges or not.
-     * @param allowLoops whether to allow edges that are self-loops or not.
-     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
-     *
-     * @throws NullPointerException if the specified edge factory is <code>
-     * null</code>.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef, boolean directed, boolean allowMultipleEdges, boolean allowLoops,
-        boolean weighted)
-    {
-        this(
-            null, null,
-            new DefaultGraphType.Builder(directed, !directed)
-                .allowMultipleEdges(allowMultipleEdges).allowSelfLoops(allowLoops)
-                .weighted(weighted).build());
-        this.edgeFactory = new BackwardsCompatibleEdgeFactory(ef);
     }
 
     /**
@@ -128,69 +97,6 @@ public abstract class AbstractBaseGraph<V, E>
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         return specifics.getAllEdges(sourceVertex, targetVertex);
-    }
-
-    /**
-     * Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
-     * an edge that its source and target vertices are the same.
-     *
-     * @return <code>true</code> if and only if graph loops are allowed.
-     * @deprecated Use type instead
-     */
-    @Deprecated
-    public boolean isAllowingLoops()
-    {
-        return type.isAllowingSelfLoops();
-    }
-
-    /**
-     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph.
-     * The meaning of multiple edges is that there can be many edges going from vertex v1 to vertex
-     * v2.
-     *
-     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
-     * @deprecated Use type instead
-     */
-    @Deprecated
-    public boolean isAllowingMultipleEdges()
-    {
-        return type.isAllowingMultipleEdges();
-    }
-
-    /**
-     * Returns <code>true</code> if and only if the graph supports edge weights.
-     *
-     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
-     * @deprecated Use type instead
-     */
-    @Deprecated
-    public boolean isWeighted()
-    {
-        return type.isWeighted();
-    }
-
-    /**
-     * Returns <code>true</code> if the graph is directed, false if undirected.
-     *
-     * @return <code>true</code> if the graph is directed, false if undirected.
-     * @deprecated Use type instead
-     */
-    @Deprecated
-    public boolean isDirected()
-    {
-        return type.isDirected();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated Use supplier instead
-     */
-    @Deprecated
-    @Override
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return edgeFactory;
     }
 
     @Override
@@ -275,20 +181,10 @@ public abstract class AbstractBaseGraph<V, E>
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        E e = edgeFactory.createEdge(sourceVertex, targetVertex);
+        if (edgeSupplier == null)
+            throw new UnsupportedOperationException("The graph contains no edge supplier");
 
-        //@formatter:off
-        /*
-         * After next release, replace above call with code below:
-         * 
-         * if (edgeSupplier == null) { 
-         *     throw new UnsupportedOperationException("The graph contains no edge supplier"); 
-         * } 
-         * 
-         * E e = edgeSupplier.get();
-         */
-        //@formatter:on
-
+        E e = edgeSupplier.get();
         if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
             specifics.addEdgeToTouchingVertices(e);
             return e;
@@ -391,7 +287,6 @@ public abstract class AbstractBaseGraph<V, E>
 
             newGraph.vertexSupplier = this.vertexSupplier;
             newGraph.edgeSupplier = this.edgeSupplier;
-            newGraph.edgeFactory = this.edgeFactory;
 
             newGraph.unmodifiableVertexSet = null;
 
@@ -630,34 +525,6 @@ public abstract class AbstractBaseGraph<V, E>
         } else {
             return new UniformIntrusiveEdgesSpecifics<>();
         }
-    }
-
-    @Deprecated
-    private class BackwardsCompatibleEdgeFactory
-        implements
-        EdgeFactory<V, E>,
-        Serializable
-    {
-        private EdgeFactory<V, E> ef;
-
-        public BackwardsCompatibleEdgeFactory(EdgeFactory<V, E> ef)
-        {
-            this.ef = ef;
-        }
-
-        @Override
-        public E createEdge(V sourceVertex, V targetVertex)
-        {
-            if (edgeSupplier == null && this.ef == null) {
-                throw new UnsupportedOperationException("The graph contains no edge supplier");
-            }
-            if (edgeSupplier != null) {
-                return edgeSupplier.get();
-            } else {
-                return ef.createEdge(sourceVertex, targetVertex);
-            }
-        }
-
     }
 
 }

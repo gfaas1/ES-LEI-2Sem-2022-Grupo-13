@@ -22,9 +22,11 @@ import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.io.*;
 import org.jgrapht.io.GraphMLExporter.*;
+import org.jgrapht.util.SupplierUtil;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in
@@ -283,31 +285,31 @@ public final class GraphMLDemo
      */
     public static void main(String[] args)
     {
+
+        Supplier<CustomVertex> vSupplier = new Supplier<CustomVertex>()
+        {
+            private int id = 0;
+
+            @Override
+            public CustomVertex get()
+            {
+                return new CustomVertex(
+                        String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
+            }
+        };
+
         /*
          * Generate the complete graph. Vertices have random colors and edges have random edge
          * weights.
          */
         Graph<CustomVertex, DefaultWeightedEdge> graph1 =
-            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+                new DirectedWeightedPseudograph<>(vSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
 
         CompleteGraphGenerator<CustomVertex, DefaultWeightedEdge> completeGenerator =
             new CompleteGraphGenerator<>(SIZE);
 
-        VertexFactory<CustomVertex> vFactory = new VertexFactory<CustomVertex>()
-        {
-            private int id = 0;
-
-            @Override
-            public CustomVertex createVertex()
-            {
-                return new CustomVertex(
-                    String.valueOf(id++), GENERATOR.nextBoolean() ? Color.BLACK : Color.WHITE);
-            }
-
-        };
-
         System.out.println("-- Generating complete graph");
-        completeGenerator.generateGraph(graph1, vFactory);
+        completeGenerator.generateGraph(graph1);
 
         /*
          * Assign random weights to the graph

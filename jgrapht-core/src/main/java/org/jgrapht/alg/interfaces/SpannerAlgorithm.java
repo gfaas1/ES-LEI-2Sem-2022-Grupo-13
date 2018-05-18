@@ -57,28 +57,6 @@ public interface SpannerAlgorithm<E>
          * @return weight of the graph spanner
          */
         double getWeight();
-
-        /**
-         * Set of edges of the graph spanner.
-         * 
-         * @return edge set of the spanner
-         * @deprecated No longer needed. A spanner is now a set of edges
-         */
-        @Deprecated
-        Set<E> getEdges();
-
-        /**
-         * Returns an iterator over the edges in the spanner.
-         * 
-         * @return iterator over the edges in the spanner.
-         * @deprecated No longer needed. A spanner is now a set of edges
-         */
-        @Deprecated
-        @Override
-        default Iterator<E> iterator()
-        {
-            return getEdges().iterator();
-        }
     }
 
     /**
@@ -114,13 +92,6 @@ public interface SpannerAlgorithm<E>
         public SpannerImpl(Set<E> edges, double weight)
         {
             super(edges, weight);
-        }
-
-        @Deprecated
-        @Override
-        public Set<E> getEdges()
-        {
-            return this;
         }
 
         @Override

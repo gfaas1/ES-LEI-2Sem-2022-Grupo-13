@@ -84,33 +84,6 @@ public class SimpleWeightedGraph<V, E>
         return new GraphBuilder<>(new SimpleWeightedGraph<>(null, edgeSupplier));
     }
 
-    /**
-     * Creates a new simple weighted graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public SimpleWeightedGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends SimpleWeightedGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new SimpleWeightedGraph<>(ef));
-    }
 }
 
 // End SimpleWeightedGraph.java

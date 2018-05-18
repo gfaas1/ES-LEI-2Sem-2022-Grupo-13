@@ -51,7 +51,7 @@ import java.util.*;
  */
 public class TwoApproxMetricTSP<V, E>
     implements
-    TSPAlgorithm<V, E>
+        HamiltonianCycleAlgorithm<V, E>
 {
     /**
      * Construct a new instance

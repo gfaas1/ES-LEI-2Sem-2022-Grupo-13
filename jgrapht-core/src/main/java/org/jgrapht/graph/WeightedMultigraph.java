@@ -88,33 +88,6 @@ public class WeightedMultigraph<V, E>
         return new GraphBuilder<>(new WeightedMultigraph<>(null, edgeSupplier));
     }
 
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public WeightedMultigraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends WeightedMultigraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new WeightedMultigraph<>(ef));
-    }
 }
 
 // End WeightedMultigraph.java

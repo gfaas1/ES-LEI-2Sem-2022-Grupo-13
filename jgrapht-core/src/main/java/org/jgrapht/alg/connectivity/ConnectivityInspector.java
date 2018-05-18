@@ -79,22 +79,6 @@ public class ConnectivityInspector<V, E>
      * connected.
      *
      * @return <code>true</code> if and only if inspected graph is connected.
-     * @deprecated for consistency, this method is renamed to {@link #isConnected()}
-     */
-    @Deprecated
-    public boolean isGraphConnected()
-    {
-        return lazyFindConnectedSets().size() == 1;
-    }
-
-    /**
-     * Test if the inspected graph is connected. A graph is connected when there is a path between
-     * every pair of vertices. In a connected graph, there are no unreachable vertices. When the
-     * inspected graph is a <i>directed</i> graph, this method returns true if and only if the
-     * inspected graph is <i>weakly</i> connected. An empty graph is <i>not</i> considered
-     * connected.
-     *
-     * @return <code>true</code> if and only if inspected graph is connected.
      */
     public boolean isConnected()
     {

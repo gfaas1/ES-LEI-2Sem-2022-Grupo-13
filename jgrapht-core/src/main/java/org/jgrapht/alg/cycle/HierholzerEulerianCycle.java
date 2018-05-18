@@ -314,7 +314,7 @@ public class HierholzerEulerianCycle<V, E>
     private GraphWalk<V, E> buildWalk()
     {
         double totalWeight = 0d;
-        List<E> result = new ArrayList<E>();
+        List<E> result = new ArrayList<>();
 
         EdgeNode it = eulerianHead;
         while (it != null) {

@@ -19,6 +19,7 @@ package org.jgrapht.perf.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
 import org.jgrapht.util.*;

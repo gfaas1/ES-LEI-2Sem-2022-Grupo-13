@@ -91,46 +91,6 @@ public class SimpleDirectedGraph<V, E>
         return new GraphBuilder<>(new SimpleDirectedGraph<>(null, edgeSupplier, false));
     }
 
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public SimpleDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, true, false, false, weighted);
-    }
-
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public SimpleDirectedGraph(EdgeFactory<V, E> ef)
-    {
-        this(ef, false);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new SimpleDirectedGraph<>(ef));
-    }
 }
 
 // End SimpleDirectedGraph.java
