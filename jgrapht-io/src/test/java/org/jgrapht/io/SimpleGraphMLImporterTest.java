@@ -111,7 +111,7 @@ public class SimpleGraphMLImporterTest
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
         Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
-        Map<Pair<Graph<String, DefaultEdge>, String>, Attribute> graphAttrs = new HashMap<>();
+        Map<String, Attribute> graphAttrs = new HashMap<>();
 
         SimpleGraphMLImporter<String, DefaultEdge> importer =
             new SimpleGraphMLImporter<String, DefaultEdge>();
@@ -187,14 +187,14 @@ public class SimpleGraphMLImporterTest
         // @formatter:on
 
         Graph<String,
-        DefaultEdge> g = GraphTypeBuilder
-            .undirected().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
-            .vertexSupplier(SupplierUtil.createStringSupplier())
-            .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
         Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
         Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
-        Map<Pair<Graph<String, DefaultEdge>, String>, Attribute> graphAttrs = new HashMap<>();
+        Map<String, Attribute> graphAttrs = new HashMap<>();
 
         SimpleGraphMLImporter<String, DefaultEdge> importer =
             new SimpleGraphMLImporter<String, DefaultEdge>();
@@ -202,7 +202,7 @@ public class SimpleGraphMLImporterTest
         importer.addEdgeAttributeConsumer((k, v) -> edgeAttrs.put(k, v));
         importer.addGraphAttributeConsumer((k, v) -> graphAttrs.put(k, v));
         importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
-        
+
         assertEquals(3, g.vertexSet().size());
         assertEquals(3, g.edgeSet().size());
         assertTrue(g.containsVertex("0"));
@@ -247,6 +247,117 @@ public class SimpleGraphMLImporterTest
             fail("No!");
         } catch (ImportException e) {
         }
+    }
+
+    @Test(expected = ImportException.class)
+    public void testNestedGraphs()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<key id=\"d1\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<key id=\"d2\" for=\"all\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "<node id=\"n0\"/>" + NL +
+            "<node id=\"n1\">" + NL +
+            "  <graph id=\"n1:\" edgedefault=\"undirected\">" + NL +
+            "    <node id=\"n1:n0\"/>" + NL +
+            "    <node id=\"n1:n1\"/>" + NL +
+            "    <data key=\"d0\">green</data>" + NL +
+            "    <edge source=\"n1:n0\" target=\"n1:n1\"/>" + NL +
+            "  </graph>" + NL +
+            "</node>" + NL +
+            "<node id=\"n2\">" + NL +
+            "  <graph id=\"n2:\" edgedefault=\"undirected\">" + NL +
+            "    <node id=\"n2:n0\"/>" + NL +
+            "    <node id=\"n2:n1\"/>" + NL +
+            "    <data key=\"d0\">green</data>" + NL +
+            "    <edge source=\"n2:n0\" target=\"n2:n1\"/>" + NL +
+            "  </graph>" + NL +
+            "</node>" + NL +
+            "<edge id=\"e1\" source=\"n1\" target=\"n2\"/>" + NL +
+            "<data key=\"d1\">green</data>" + NL +
+            "</graph>" + NL +
+            "<data key=\"d2\">green</data>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        new SimpleGraphMLImporter<String, DefaultEdge>()
+            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    public void testWithAttributesAtGraphMLLevel()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"graph\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\"/>" + NL +
+            "<node id=\"n1\"/>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\"/>" + NL +
+            "</graph>" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
+        Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
+        Map<String, Attribute> graphAttrs = new HashMap<>();
+
+        SimpleGraphMLImporter<String, DefaultEdge> importer =
+            new SimpleGraphMLImporter<String, DefaultEdge>();
+        importer.addVertexAttributeConsumer((k, v) -> vertexAttrs.put(k, v));
+        importer.addEdgeAttributeConsumer((k, v) -> edgeAttrs.put(k, v));
+        importer.addGraphAttributeConsumer((k, v) -> graphAttrs.put(k, v));
+        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+
+        assertEquals(2, g.vertexSet().size());
+        assertEquals(1, g.edgeSet().size());
+        assertTrue(g.containsVertex("0"));
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsEdge("0", "1"));
+        
+        assertEquals(
+            DefaultAttribute.createAttribute("green"), graphAttrs.get("color"));
+        assertEquals(
+            DefaultAttribute.createAttribute("undirected"), graphAttrs.get("edgedefault"));
+        assertEquals(
+            DefaultAttribute.createAttribute("n0"), vertexAttrs.get(Pair.of("0", "id")));
+        assertEquals(
+            DefaultAttribute.createAttribute("n1"), vertexAttrs.get(Pair.of("1", "id")));
+        assertEquals(
+            DefaultAttribute.createAttribute("e1"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "id")));
+        assertEquals(
+            DefaultAttribute.createAttribute("n0"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")));
+        assertEquals(
+            DefaultAttribute.createAttribute("n1"), edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")));
     }
 
 }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 
 /**
@@ -40,7 +39,7 @@ import org.jgrapht.alg.util.Pair;
 class BaseListenableImporter<V, E>
 {
 
-    private List<BiConsumer<Pair<Graph<V, E>, String>, Attribute>> graphAttributeConsumers;
+    private List<BiConsumer<String, Attribute>> graphAttributeConsumers;
     private List<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumers;
     private List<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumers;
 
@@ -59,7 +58,7 @@ class BaseListenableImporter<V, E>
      * 
      * @param consumer the consumer
      */
-    public void addGraphAttributeConsumer(BiConsumer<Pair<Graph<V, E>, String>, Attribute> consumer)
+    public void addGraphAttributeConsumer(BiConsumer<String, Attribute> consumer)
     {
         graphAttributeConsumers.add(consumer);
     }
@@ -70,7 +69,7 @@ class BaseListenableImporter<V, E>
      * @param consumer the consumer
      */
     public void removeGraphAttributeConsumer(
-        BiConsumer<Pair<Graph<V, E>, String>, Attribute> consumer)
+        BiConsumer<String, Attribute> consumer)
     {
         graphAttributeConsumers.remove(consumer);
     }
@@ -118,13 +117,12 @@ class BaseListenableImporter<V, E>
     /**
      * Notify for a graph attribute
      * 
-     * @param g the graph
      * @param key the attribute key
      * @param value the attribute
      */
-    protected void notifyGraph(Graph<V, E> g, String key, Attribute value)
+    protected void notifyGraph(String key, Attribute value)
     {
-        graphAttributeConsumers.forEach(c -> c.accept(Pair.of(g, key), value));
+        graphAttributeConsumers.forEach(c -> c.accept(key, value));
     }
 
     /**

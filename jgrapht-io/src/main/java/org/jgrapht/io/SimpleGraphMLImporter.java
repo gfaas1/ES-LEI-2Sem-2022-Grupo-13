@@ -347,10 +347,10 @@ public class SimpleGraphMLImporter<V, E>
                 }
                 insideGraph++;
                 findAttribute(GRAPH_ID, attributes).ifPresent(
-                    value -> notifyGraph(graph, GRAPH_ID, DefaultAttribute.createAttribute(value)));
+                    value -> notifyGraph(GRAPH_ID, DefaultAttribute.createAttribute(value)));
                 findAttribute(GRAPH_EDGE_DEFAULT, attributes).ifPresent(
                     value -> notifyGraph(
-                        graph, GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
+                        GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
                 break;
             case NODE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -522,8 +522,7 @@ public class SimpleGraphMLImporter<V, E>
                 Key key = graphValidKeys.get(currentDataKey);
                 if (key != null) {
                     notifyGraph(
-                        graph, key.attributeName,
-                        new DefaultAttribute<>(currentDataValue, key.type));
+                        key.attributeName, new DefaultAttribute<>(currentDataValue, key.type));
                 }
             }
         }
