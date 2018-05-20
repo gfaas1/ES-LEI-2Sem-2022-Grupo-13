@@ -17,11 +17,12 @@
  */
 package org.jgrapht.io;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.Pair;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
 
 /**
  * Base implementation for a graph importer which uses consumers for attributes.
@@ -121,7 +122,7 @@ class BaseListenableImporter<V, E>
      * @param key the attribute key
      * @param value the attribute
      */
-    public void notifyGraph(Graph<V, E> g, String key, Attribute value)
+    protected void notifyGraph(Graph<V, E> g, String key, Attribute value)
     {
         graphAttributeConsumers.forEach(c -> c.accept(Pair.of(g, key), value));
     }
@@ -133,7 +134,7 @@ class BaseListenableImporter<V, E>
      * @param key the attribute key
      * @param value the attribute
      */
-    public void notifyVertex(V v, String key, Attribute value)
+    protected void notifyVertex(V v, String key, Attribute value)
     {
         vertexAttributeConsumers.forEach(c -> c.accept(Pair.of(v, key), value));
     }
@@ -145,7 +146,7 @@ class BaseListenableImporter<V, E>
      * @param key the attribute key
      * @param value the attribute
      */
-    public void notifyEdge(E e, String key, Attribute value)
+    protected void notifyEdge(E e, String key, Attribute value)
     {
         edgeAttributeConsumers.forEach(c -> c.accept(Pair.of(e, key), value));
     }
