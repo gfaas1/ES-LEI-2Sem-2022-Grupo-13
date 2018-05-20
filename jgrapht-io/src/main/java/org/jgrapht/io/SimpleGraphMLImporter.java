@@ -52,7 +52,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * The importer uses the graph suppliers ({@link Graph#getVertexSupplier()} and
  * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
  * lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
- * input file. Finally, default attribute values are completely ignored.
+ * input file. Users can register consumers for vertex, edge and graph attributes after construction
+ * of the importer. Finally, default attribute values are completely ignored.
  * 
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
@@ -172,9 +173,10 @@ public class SimpleGraphMLImporter<V, E>
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
     {
-        this.edgeWeightAttributeName = Objects.requireNonNull(edgeWeightAttributeName, "Edge weight attribute name cannot be null");
+        this.edgeWeightAttributeName = Objects
+            .requireNonNull(edgeWeightAttributeName, "Edge weight attribute name cannot be null");
     }
-    
+
     /**
      * Whether the importer validates the input
      * 
@@ -504,7 +506,7 @@ public class SimpleGraphMLImporter<V, E>
                     /*
                      * Handle special weight key
                      */
-                    if (isWeighted && key.attributeName.equals(edgeWeightAttributeName)) { 
+                    if (isWeighted && key.attributeName.equals(edgeWeightAttributeName)) {
                         try {
                             graph.setEdgeWeight(currentEdge, Double.parseDouble(currentDataValue));
                         } catch (NumberFormatException e) {
