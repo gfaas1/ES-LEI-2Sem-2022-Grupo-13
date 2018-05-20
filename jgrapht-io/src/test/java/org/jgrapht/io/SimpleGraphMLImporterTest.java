@@ -113,13 +113,12 @@ public class SimpleGraphMLImporterTest
         Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
         Map<Pair<Graph<String, DefaultEdge>, String>, Attribute> graphAttrs = new HashMap<>();
 
-        new SimpleGraphMLImporter<String, DefaultEdge>((k, v) -> {
-            vertexAttrs.put(k, v);
-        }, (k, v) -> {
-            edgeAttrs.put(k, v);
-        }, (k, v) -> {
-            graphAttrs.put(k, v);
-        }).importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        SimpleGraphMLImporter<String, DefaultEdge> importer =
+            new SimpleGraphMLImporter<String, DefaultEdge>();
+        importer.addVertexAttributeConsumer((k, v) -> vertexAttrs.put(k, v));
+        importer.addEdgeAttributeConsumer((k, v) -> edgeAttrs.put(k, v));
+        importer.addGraphAttributeConsumer((k, v) -> graphAttrs.put(k, v));
+        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
         // check graph
         assertEquals(3, g.vertexSet().size());
@@ -153,6 +152,68 @@ public class SimpleGraphMLImporterTest
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("2", "0"), "target")),
             DefaultAttribute.createAttribute("v"));
+    }
+
+    @Test
+    public void testWithAttributesWeightedGraphs()
+        throws ImportException
+    {
+        // @formatter:off
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
+            "<key id=\"d1\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\"/>" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<node id=\"n0\">" + NL +
+            "<data key=\"d0\">green</data>" + NL +
+            "</node>" + NL +
+            "<node id=\"n1\"/>" + NL +
+            "<node id=\"n2\">" + NL +
+            "<data key=\"d0\">blue</data>" + NL +
+            "</node>" + NL+
+            "<edge id=\"e0\" source=\"n0\" target=\"n2\">" + NL +
+            "<data key=\"d1\">2.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e1\" source=\"n0\" target=\"n1\">" + NL +
+            "<data key=\"d1\">3.0</data>" + NL +
+            "</edge>" + NL +
+            "<edge id=\"e2\" source=\"n1\" target=\"n2\"/>" + NL +
+            "</graph>" + NL +
+            "</graphml>";
+        // @formatter:on
+
+        Graph<String,
+        DefaultEdge> g = GraphTypeBuilder
+            .undirected().weighted(true).allowingMultipleEdges(true).allowingSelfLoops(true)
+            .vertexSupplier(SupplierUtil.createStringSupplier())
+            .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+
+        Map<Pair<String, String>, Attribute> vertexAttrs = new HashMap<>();
+        Map<Pair<DefaultEdge, String>, Attribute> edgeAttrs = new HashMap<>();
+        Map<Pair<Graph<String, DefaultEdge>, String>, Attribute> graphAttrs = new HashMap<>();
+
+        SimpleGraphMLImporter<String, DefaultEdge> importer =
+            new SimpleGraphMLImporter<String, DefaultEdge>();
+        importer.addVertexAttributeConsumer((k, v) -> vertexAttrs.put(k, v));
+        importer.addEdgeAttributeConsumer((k, v) -> edgeAttrs.put(k, v));
+        importer.addGraphAttributeConsumer((k, v) -> graphAttrs.put(k, v));
+        importer.importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        
+        assertEquals(3, g.vertexSet().size());
+        assertEquals(3, g.edgeSet().size());
+        assertTrue(g.containsVertex("0"));
+        assertTrue(g.containsVertex("1"));
+        assertTrue(g.containsVertex("2"));
+        assertTrue(g.containsEdge("0", "2"));
+        assertTrue(g.containsEdge("0", "1"));
+        assertTrue(g.containsEdge("1", "2"));
+        assertEquals(2.0, g.getEdgeWeight(g.getEdge("0", "2")), 1e-9);
+        assertEquals(3.0, g.getEdgeWeight(g.getEdge("0", "1")), 1e-9);
+        assertEquals(1.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
     }
 
     @Test

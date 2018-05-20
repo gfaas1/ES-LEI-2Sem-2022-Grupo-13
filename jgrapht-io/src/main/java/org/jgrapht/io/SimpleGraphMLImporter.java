@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
@@ -34,7 +33,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -50,57 +48,133 @@ import org.xml.sax.helpers.DefaultHandler;
  * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
  * towards parsing speed.
  * 
+ * <p>
+ * The importer uses the graph suppliers ({@link Graph#getVertexSupplier()} and
+ * {@link Graph#getEdgeSupplier()}) in order to create new vertices and edges. Moreover, it notifies
+ * lazily and completely out-of-order for any additional vertex, edge or graph attributes in the
+ * input file. Finally, default attribute values are completely ignored.
+ * 
+ * <p>
+ * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
+ * http://en.wikipedia.org/wiki/ GraphML</a> or the
+ * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
+ * </p>
+ * 
+ * <p>
+ * Below is small example of a graph in GraphML format.
+ * 
+ * <pre>
+ * {@code
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+ *   <key id="d0" for="node" attr.name="color" attr.type="string" />
+ *   <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
+ *   <graph id="G" edgedefault="undirected">
+ *     <node id="n0">
+ *       <data key="d0">green</data>
+ *     </node>
+ *     <node id="n1">
+ *       <data key="d0">black</data>
+ *     </node>     
+ *     <node id="n2">
+ *       <data key="d0">blue</data>
+ *     </node>
+ *     <node id="n3">
+ *       <data key="d0">red</data>
+ *     </node>
+ *     <node id="n4">
+ *       <data key="d0">white</data>
+ *     </node>
+ *     <node id="n5">
+ *       <data key="d0">turquoise</data>
+ *     </node>
+ *     <edge id="e0" source="n0" target="n2">
+ *       <data key="d1">1.0</data>
+ *     </edge>
+ *     <edge id="e1" source="n0" target="n1">
+ *       <data key="d1">1.0</data>
+ *     </edge>
+ *     <edge id="e2" source="n1" target="n3">
+ *       <data key="d1">2.0</data>
+ *     </edge>
+ *     <edge id="e3" source="n3" target="n2"/>
+ *     <edge id="e4" source="n2" target="n4"/>
+ *     <edge id="e5" source="n3" target="n5"/>
+ *     <edge id="e6" source="n5" target="n4">
+ *       <data key="d1">1.1</data>
+ *     </edge>
+ *   </graph>
+ * </graphml>
+ * }
+ * </pre>
+ * 
+ * <p>
+ * The importer reads the input into a graph which is provided by the user. In case the graph is
+ * weighted and the corresponding edge key with attr.name="weight" is defined, the importer also
+ * reads edge weights. Otherwise edge weights are ignored. To test whether the graph is weighted,
+ * method {@link Graph#getType()} can be used.
+ * 
+ * <p>
+ * The provided graph object, where the imported graph will be stored, must be able to support the
+ * features of the graph that is read. For example if the GraphML file contains self-loops then the
+ * graph provided must also support self-loops. The same for multiple edges. Moreover, the parser
+ * completely ignores the attribute "edgedefault" which denotes whether an edge is directed or not.
+ * Whether edges are directed or not depends on the underlying implementation of the user provided
+ * graph object.
+ * 
+ * <p>
+ * The importer by default validates the input using the 1.0
+ * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
+ * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * @since May 2018
  */
 public class SimpleGraphMLImporter<V, E>
-    implements
-    GraphImporter<V, E>
+    extends BaseListenableImporter<V, E>
+    implements GraphImporter<V, E>
 {
     private static final String GRAPHML_SCHEMA_FILENAME = "graphml.xsd";
     private static final String XLINK_SCHEMA_FILENAME = "xlink.xsd";
+    private static final String EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME = "weight";
 
     private boolean schemaValidation;
-
-    private Optional<BiConsumer<Pair<Graph<V, E>, String>, Attribute>> graphAttributeConsumer;
-    private Optional<BiConsumer<Pair<V, String>, Attribute>> vertexAttributeConsumer;
-    private Optional<BiConsumer<Pair<E, String>, Attribute>> edgeAttributeConsumer;
+    private String edgeWeightAttributeName = EDGE_WEIGHT_DEFAULT_ATTRIBUTE_NAME;
 
     /**
      * Constructs a new importer.
      */
     public SimpleGraphMLImporter()
     {
-        this(null, null, null);
+        this.schemaValidation = true;
     }
 
     /**
-     * Constructs a new importer.
+     * Get the attribute name for edge weights
      * 
-     * @param vertexAttributeConsumer consumer for vertex attributes. The consumer will receive as a
-     *        first argument a composite containing the graph vertex together with the attribute
-     *        key. The second argument will be the actual attribute.
-     * @param edgeAttributeConsumer consumer for edge attributes. The consumer will receive as a
-     *        first argument a composite containing the graph edge together with the attribute key.
-     *        The second argument will be the actual attribute.
-     * @param graphAttributeConsumer consumer for graph attributes. The consumer will receive as a
-     *        first argument a composite containing the graph together with the attribute key. The
-     *        second argument will be the actual attribute.
+     * @return the attribute name
      */
-    public SimpleGraphMLImporter(
-        BiConsumer<Pair<V, String>, Attribute> vertexAttributeConsumer,
-        BiConsumer<Pair<E, String>, Attribute> edgeAttributeConsumer,
-        BiConsumer<Pair<Graph<V, E>, String>, Attribute> graphAttributeConsumer)
+    public String getEdgeWeightAttributeName()
     {
-        this.schemaValidation = true;
-        this.vertexAttributeConsumer = Optional.ofNullable(vertexAttributeConsumer);
-        this.edgeAttributeConsumer = Optional.ofNullable(edgeAttributeConsumer);
-        this.graphAttributeConsumer = Optional.ofNullable(graphAttributeConsumer);
+        return edgeWeightAttributeName;
     }
 
+    /**
+     * Set the attribute name to use for edge weights.
+     * 
+     * @param edgeWeightAttributeName the attribute name
+     */
+    public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
+    {
+        this.edgeWeightAttributeName = Objects.requireNonNull(edgeWeightAttributeName, "Edge weight attribute name cannot be null");
+    }
+    
     /**
      * Whether the importer validates the input
      * 
@@ -191,8 +265,7 @@ public class SimpleGraphMLImporter<V, E>
 
     // content handler
     private class GraphMLHandler
-        extends
-        DefaultHandler
+        extends DefaultHandler
     {
         private static final String GRAPH = "graph";
         private static final String GRAPH_ID = "id";
@@ -214,6 +287,7 @@ public class SimpleGraphMLImporter<V, E>
         private static final String DATA_KEY = "key";
 
         private Graph<V, E> graph;
+        private boolean isWeighted;
         private Map<String, V> nodes;
 
         // parser state
@@ -235,6 +309,7 @@ public class SimpleGraphMLImporter<V, E>
         public GraphMLHandler(Graph<V, E> graph)
         {
             this.graph = Objects.requireNonNull(graph);
+            this.isWeighted = graph.getType().isWeighted();
         }
 
         @Override
@@ -269,10 +344,11 @@ public class SimpleGraphMLImporter<V, E>
                         "This importer does not support nested graphs");
                 }
                 insideGraph++;
-                findAttribute(GRAPH_ID, attributes)
-                    .ifPresent(value -> notifyGraphAttribute(graph, GRAPH_ID, value));
-                findAttribute(GRAPH_EDGE_DEFAULT, attributes)
-                    .ifPresent(value -> notifyGraphAttribute(graph, GRAPH_EDGE_DEFAULT, value));
+                findAttribute(GRAPH_ID, attributes).ifPresent(
+                    value -> notifyGraph(graph, GRAPH_ID, DefaultAttribute.createAttribute(value)));
+                findAttribute(GRAPH_EDGE_DEFAULT, attributes).ifPresent(
+                    value -> notifyGraph(
+                        graph, GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
                 break;
             case NODE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -288,7 +364,7 @@ public class SimpleGraphMLImporter<V, E>
                     nodes.put(nodeId, vertex);
                 }
                 currentNode = vertex;
-                notifyVertexAttribute(currentNode, NODE_ID, nodeId);
+                notifyVertex(currentNode, NODE_ID, DefaultAttribute.createAttribute(nodeId));
                 break;
             case EDGE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -303,10 +379,11 @@ public class SimpleGraphMLImporter<V, E>
                 V source = nodes.computeIfAbsent(sourceId, k -> graph.addVertex());
                 V target = nodes.computeIfAbsent(targetId, k -> graph.addVertex());
                 currentEdge = graph.addEdge(source, target);
-                notifyEdgeAttribute(currentEdge, EDGE_SOURCE, sourceId);
-                notifyEdgeAttribute(currentEdge, EDGE_TARGET, targetId);
-                findAttribute(EDGE_ID, attributes)
-                    .ifPresent(value -> notifyEdgeAttribute(currentEdge, EDGE_ID, value));
+                notifyEdge(currentEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(sourceId));
+                notifyEdge(currentEdge, EDGE_TARGET, DefaultAttribute.createAttribute(targetId));
+                findAttribute(EDGE_ID, attributes).ifPresent(
+                    value -> notifyEdge(
+                        currentEdge, EDGE_ID, DefaultAttribute.createAttribute(value)));
                 break;
             case KEY:
                 insideKey++;
@@ -315,8 +392,9 @@ public class SimpleGraphMLImporter<V, E>
                 String keyAttrName = findAttribute(KEY_ATTR_NAME, attributes)
                     .orElseThrow(() -> new IllegalArgumentException("Key attribute name missing"));
                 currentKey = new Key(
-                    keyId, keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
-                        .map(AttributeType::create).orElse(AttributeType.STRING),
+                    keyId,
+                    keyAttrName, findAttribute(KEY_ATTR_TYPE, attributes)
+                        .map(AttributeType::create).orElse(AttributeType.UNKNOWN),
                     findAttribute(KEY_FOR, attributes).orElse("ALL"));
                 break;
             case DEFAULT:
@@ -406,30 +484,6 @@ public class SimpleGraphMLImporter<V, E>
             return Optional.empty();
         }
 
-        private void notifyVertexAttribute(V v, String key, String value)
-        {
-            if (value != null) {
-                vertexAttributeConsumer.ifPresent(
-                    c -> c.accept(Pair.of(v, key), DefaultAttribute.createAttribute(value)));
-            }
-        }
-
-        private void notifyEdgeAttribute(E e, String key, String value)
-        {
-            if (value != null) {
-                edgeAttributeConsumer.ifPresent(
-                    c -> c.accept(Pair.of(e, key), DefaultAttribute.createAttribute(value)));
-            }
-        }
-
-        private void notifyGraphAttribute(Graph<V, E> g, String key, String value)
-        {
-            if (value != null) {
-                graphAttributeConsumer.ifPresent(
-                    c -> c.accept(Pair.of(g, key), DefaultAttribute.createAttribute(value)));
-            }
-        }
-
         private void notifyData()
         {
             if (currentDataKey == null || currentDataValue == null) {
@@ -439,28 +493,35 @@ public class SimpleGraphMLImporter<V, E>
             if (currentNode != null) {
                 Key key = nodeValidKeys.get(currentDataKey);
                 if (key != null) {
-                    vertexAttributeConsumer.ifPresent(
-                        c -> c.accept(
-                            Pair.of(currentNode, key.attributeName),
-                            new DefaultAttribute<>(currentDataValue, key.type)));
+                    notifyVertex(
+                        currentNode, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue, key.type));
                 }
             }
             if (currentEdge != null) {
                 Key key = edgeValidKeys.get(currentDataKey);
                 if (key != null) {
-                    edgeAttributeConsumer.ifPresent(
-                        c -> c.accept(
-                            Pair.of(currentEdge, key.attributeName),
-                            new DefaultAttribute<>(currentDataValue, key.type)));
+                    /*
+                     * Handle special weight key
+                     */
+                    if (isWeighted && key.attributeName.equals(edgeWeightAttributeName)) { 
+                        try {
+                            graph.setEdgeWeight(currentEdge, Double.parseDouble(currentDataValue));
+                        } catch (NumberFormatException e) {
+                            // ignore
+                        }
+                    }
+                    notifyEdge(
+                        currentEdge, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue, key.type));
                 }
-            } 
+            }
             if (graph != null) {
                 Key key = graphValidKeys.get(currentDataKey);
                 if (key != null) {
-                    graphAttributeConsumer.ifPresent(
-                        c -> c.accept(
-                            Pair.of(graph, key.attributeName),
-                            new DefaultAttribute<>(currentDataValue, key.type)));
+                    notifyGraph(
+                        graph, key.attributeName,
+                        new DefaultAttribute<>(currentDataValue, key.type));
                 }
             }
         }
