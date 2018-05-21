@@ -17,19 +17,19 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * The linearized chord diagram graph model generator.
  * 
  * <p>
  * The generator makes precise several unspecified mathematical details of the Barabási-Albert
- * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned to
- * a new node are added one by one, or simultaneously, etc. The generator is described in the paper:
- * Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
+ * model, such as the initial configuration of the first nodes, and whether the $m$ links assigned
+ * to a new node are added one by one, or simultaneously, etc. The generator is described in the
+ * paper: Bélaa Bollobás and Oliver Riordan. Journal Combinatorica, 24(1): 5--34, 2004.
  * 
  * <p>
  * In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allow for multiple
@@ -50,7 +50,8 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class LinearizedChordDiagramGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
     private final int m;
@@ -110,8 +111,7 @@ public class LinearizedChordDiagramGraphGenerator<V, E>
      * @throws IllegalArgumentException if the graph does not allow self-loops or parallel edges
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Add nodes by maintaining a list with vertex multiplicity equal to its degree for sampling

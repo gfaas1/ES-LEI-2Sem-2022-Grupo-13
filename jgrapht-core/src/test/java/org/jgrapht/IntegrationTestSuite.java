@@ -17,16 +17,16 @@
  */
 package org.jgrapht;
 
-import org.junit.runner.*;
 import com.googlecode.junittoolbox.*;
+import org.junit.runner.*;
 
 /**
- * Suite of all unit and integration tests (as run by mvn verify).  Excludes performance tests.
+ * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests.
  * 
  * @author John Sichi
  */
 @RunWith(ParallelSuite.class)
-@SuiteClasses({"**/*Test.class", "!**/perf/**"})
+@SuiteClasses({ "**/*Test.class", "!**/perf/**" })
 public class IntegrationTestSuite
 {
 }

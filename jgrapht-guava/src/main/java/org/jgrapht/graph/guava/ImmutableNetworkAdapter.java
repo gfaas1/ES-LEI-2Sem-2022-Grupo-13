@@ -17,19 +17,13 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
 import com.google.common.graph.Graphs;
-import com.google.common.graph.ImmutableNetwork;
-import com.google.common.graph.MutableNetwork;
-import com.google.common.graph.NetworkBuilder;
+import com.google.common.graph.*;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableNetwork}.
@@ -60,8 +54,12 @@ import com.google.common.graph.NetworkBuilder;
  * @param <E> the graph edge type
  */
 public class ImmutableNetworkAdapter<V, E>
-    extends BaseNetworkAdapter<V, E, ImmutableNetwork<V, E>>
-    implements Graph<V, E>, Cloneable, Serializable
+    extends
+    BaseNetworkAdapter<V, E, ImmutableNetwork<V, E>>
+    implements
+    Graph<V, E>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = 8776276294297681092L;
 
@@ -192,7 +190,8 @@ public class ImmutableNetworkAdapter<V, E>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

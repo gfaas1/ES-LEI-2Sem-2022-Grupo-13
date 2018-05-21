@@ -17,18 +17,18 @@
  */
 package org.jgrapht.perf.flow;
 
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.flow.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.concurrent.*;
 
 public class MaximumFlowAlgorithmPerformanceTest
 {
@@ -57,8 +57,10 @@ public class MaximumFlowAlgorithmPerformanceTest
                 new GnmRandomGraphGenerator<>(
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_COUNT, SEED);
 
-            SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge> network =
-                new SimpleDirectedWeightedGraph<>(SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            SimpleDirectedWeightedGraph<Integer,
+                DefaultWeightedEdge> network = new SimpleDirectedWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(1),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
 
             rgg.generateGraph(network);
 
@@ -78,7 +80,8 @@ public class MaximumFlowAlgorithmPerformanceTest
     }
 
     public static class EdmondsKarpMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -89,7 +92,8 @@ public class MaximumFlowAlgorithmPerformanceTest
     }
 
     public static class PushRelabelMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -100,10 +104,12 @@ public class MaximumFlowAlgorithmPerformanceTest
     }
 
     public static class DinicMaximumFlowRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
 
-        @Override MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
+        @Override
+        MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
             Graph<Integer, DefaultWeightedEdge> network)
         {
             return new DinicMFImpl<>(network);

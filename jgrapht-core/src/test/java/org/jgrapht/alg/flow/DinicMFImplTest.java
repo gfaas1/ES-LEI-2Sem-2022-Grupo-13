@@ -17,16 +17,16 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class DinicMFImplTest extends MaximumFlowAlgorithmTest
+public class DinicMFImplTest
+    extends
+    MaximumFlowAlgorithmTest
 {
 
     private DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> g;
@@ -43,21 +43,23 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
 
     @Override
     MaximumFlowAlgorithm<Integer, DefaultWeightedEdge> createSolver(
-            Graph<Integer, DefaultWeightedEdge> network)
+        Graph<Integer, DefaultWeightedEdge> network)
     {
         return new DinicMFImpl<>(network);
     }
 
     @Before
-    public void init() {
+    public void init()
+    {
         g = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
     }
 
     @Test
-    public void simpleTest1() {
+    public void simpleTest1()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 100.0);
         dinic = new DinicMFImpl<>(g);
         double flow = dinic.calculateMaximumFlow(v1, v2);
@@ -65,11 +67,12 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
     }
 
     @Test
-    public void simpleTest2() {
+    public void simpleTest2()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 100.0);
         edge = g.addEdge(v2, v3);
         g.setEdgeWeight(edge, 50.0);
@@ -79,7 +82,8 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void exceptionTest1() {
+    public void exceptionTest1()
+    {
         g.addVertex(v1);
         dinic = new DinicMFImpl<>(g);
         double flow = dinic.calculateMaximumFlow(v1, v1);
@@ -87,7 +91,8 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
     }
 
     @Test
-    public void disconnectedTest() {
+    public void disconnectedTest()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         dinic = new DinicMFImpl<>(g);
@@ -96,13 +101,14 @@ public class DinicMFImplTest extends MaximumFlowAlgorithmTest
     }
 
     @Test
-    public void simpleTest3() {
+    public void simpleTest3()
+    {
         g.addVertex(v1);
         g.addVertex(v2);
         g.addVertex(v3);
         String v4 = "v4";
         g.addVertex(v4);
-        edge = g.addEdge(v1,  v2);
+        edge = g.addEdge(v1, v2);
         g.setEdgeWeight(edge, 2.0);
         edge = g.addEdge(v2, v3);
         g.setEdgeWeight(edge, 2.0);

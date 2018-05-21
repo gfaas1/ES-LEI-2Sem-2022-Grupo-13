@@ -17,12 +17,12 @@
  */
 package org.jgrapht.demo;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /**
  * Demonstrates how to create a complete graph and perform a depth first search on it.

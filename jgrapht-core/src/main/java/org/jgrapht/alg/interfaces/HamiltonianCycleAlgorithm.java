@@ -17,17 +17,16 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 
 /**
- * An algorithm solving the
- * <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian cycle
- * problem</a>.
+ * An algorithm solving the <a href="https://en.wikipedia.org/wiki/Hamiltonian_path">Hamiltonian
+ * cycle problem</a>.
  * 
  * <p>
- * A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit,
- * is a graph cycle (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990, p. 196).
+ * A Hamiltonian cycle, also called a Hamiltonian circuit, Hamilton cycle, or Hamilton circuit, is a
+ * graph cycle (i.e., closed loop) through a graph that visits each node exactly once (Skiena 1990,
+ * p. 196).
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type

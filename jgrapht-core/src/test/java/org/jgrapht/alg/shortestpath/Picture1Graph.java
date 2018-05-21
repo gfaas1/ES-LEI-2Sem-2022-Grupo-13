@@ -25,7 +25,8 @@ import org.jgrapht.graph.*;
  * @since July 5, 2007
  */
 public class Picture1Graph
-    extends SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
+    extends
+    SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>
 {
     // ~ Static fields/initializers ---------------------------------------------
 

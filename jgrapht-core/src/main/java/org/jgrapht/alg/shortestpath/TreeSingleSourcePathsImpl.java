@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which uses linear space.
@@ -41,7 +41,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class TreeSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+    implements
+    SingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -5914007312734512847L;
 

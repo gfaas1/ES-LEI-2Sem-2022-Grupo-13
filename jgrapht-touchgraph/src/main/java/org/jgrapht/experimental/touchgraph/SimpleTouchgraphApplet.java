@@ -17,21 +17,14 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.applet.*;
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
 /**
  * SimpleTouchgraphApplet
  *
  * @author Carl Anderson
  */
 public class SimpleTouchgraphApplet
-    extends Applet
+    extends
+    Applet
 {
     // ~ Static fields/initializers ---------------------------------------------
 

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a ring graph of any size. A ring graph is a graph that contains a single cycle that
@@ -33,7 +33,8 @@ import org.jgrapht.*;
  * @since Sep 16, 2003
  */
 public class RingGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int size;
 
@@ -57,8 +58,7 @@ public class RingGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;

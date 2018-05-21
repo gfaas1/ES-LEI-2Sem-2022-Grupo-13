@@ -17,12 +17,9 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
+import java.util.*;
 
 /**
  * Generate a set of fundamental cycles by building a spanning tree (forest) using a straightforward
@@ -37,8 +34,8 @@ import org.jgrapht.Graphs;
  * </p>
  * 
  * <p>
- * The total length of the fundamental-cycle set can be as large as $O(n^3)$ where $n$ is the number of
- * vertices of the graph.
+ * The total length of the fundamental-cycle set can be as large as $O(n^3)$ where $n$ is the number
+ * of vertices of the graph.
  * </p>
  * 
  * @param <V> the vertex type
@@ -48,7 +45,8 @@ import org.jgrapht.Graphs;
  * @since October 2016
  */
 public class QueueBFSFundamentalCycleBasis<V, E>
-    extends AbstractFundamentalCycleBasis<V, E>
+    extends
+    AbstractFundamentalCycleBasis<V, E>
 {
     /**
      * Constructor

@@ -17,17 +17,13 @@
  */
 package org.jgrapht.alg.cycle;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.*;
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -150,7 +146,8 @@ public class CycleDetectorTest
     private void runTest(
         Graph<String, DefaultEdge> g, Set<String> cyclicSet, Set<String> acyclicSet)
     {
-        org.jgrapht.alg.CycleDetector<String, DefaultEdge> detector = new org.jgrapht.alg.CycleDetector<>(g);
+        org.jgrapht.alg.CycleDetector<String, DefaultEdge> detector =
+            new org.jgrapht.alg.CycleDetector<>(g);
 
         Set<String> emptySet = Collections.emptySet();
 
@@ -191,7 +188,8 @@ public class CycleDetectorTest
         assertEquals(2, graph.edgeSet().size());
         assertEquals(2, graph.vertexSet().size());
 
-        org.jgrapht.alg.CycleDetector<String, DefaultEdge> cycleDetector = new org.jgrapht.alg.CycleDetector<>(graph);
+        org.jgrapht.alg.CycleDetector<String, DefaultEdge> cycleDetector =
+            new org.jgrapht.alg.CycleDetector<>(graph);
         Set<String> cycleVertices = cycleDetector.findCycles();
 
         boolean foundCycle = cycleDetector.detectCyclesContainingVertex(vertexA);

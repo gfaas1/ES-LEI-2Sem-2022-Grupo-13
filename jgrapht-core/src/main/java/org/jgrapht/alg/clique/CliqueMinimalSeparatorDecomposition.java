@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.clique;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.graph.builder.*;
+
 import java.util.*;
 import java.util.Map.*;
-
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 /**
  * Clique Minimal Separator Decomposition using MCS-M+ and Atoms algorithm as described in Berry et
@@ -111,7 +111,7 @@ public class CliqueMinimalSeparatorDecomposition<V, E>
             .<V, E> undirected().edgeSupplier(graph.getEdgeSupplier())
             .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
             .allowingSelfLoops(false).buildGraph();
-        
+
         for (V v : graph.vertexSet()) {
             chordalGraph.addVertex(v);
         }

@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -34,12 +30,14 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphMaxCliqueFinderTest {
+public class ChordalGraphMaxCliqueFinderTest
+{
     /**
      * Tests maximum clique finding on an empty graph.
      */
     @Test
-    public void testGetMaximumClique1() {
+    public void testGetMaximumClique1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Set<Integer> clique = new ChordalGraphMaxCliqueFinder<>(graph).getClique();
         assertNotNull(clique);
@@ -50,7 +48,8 @@ public class ChordalGraphMaxCliqueFinderTest {
      * Tests maximum clique finding on a chordal graph
      */
     @Test
-    public void testGetMaximumClique2() {
+    public void testGetMaximumClique2()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 3, 4);
@@ -69,7 +68,8 @@ public class ChordalGraphMaxCliqueFinderTest {
      * Tests maximum clique finding on a non-chordal graph
      */
     @Test
-    public void testGetMaximumClique3() {
+    public void testGetMaximumClique3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 2, 3);
@@ -83,7 +83,8 @@ public class ChordalGraphMaxCliqueFinderTest {
      * Tests maximum clique finding on a pseudograph
      */
     @Test
-    public void testGetMaximumClique4() {
+    public void testGetMaximumClique4()
+    {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 1);
         Graphs.addEdgeWithVertices(graph, 1, 1);
@@ -102,11 +103,12 @@ public class ChordalGraphMaxCliqueFinderTest {
      * Checks whether every two vertices from {@code set} are adjacent.
      *
      * @param graph the tested graph.
-     * @param set   the tested set of vertices.
-     * @param <V>   the graph vertex type.
-     * @param <E>   the graph edge type.
+     * @param set the tested set of vertices.
+     * @param <V> the graph vertex type.
+     * @param <E> the graph edge type.
      */
-    private <V, E> void assertIsClique(Graph<V, E> graph, Set<V> set) {
+    private <V, E> void assertIsClique(Graph<V, E> graph, Set<V> set)
+    {
         ArrayList<V> vertices = new ArrayList<>(set);
         for (int i = 0; i < vertices.size(); i++) {
             for (int j = 0; j < i; j++) {

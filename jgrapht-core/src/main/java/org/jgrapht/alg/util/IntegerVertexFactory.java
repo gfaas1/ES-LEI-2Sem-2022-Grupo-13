@@ -28,7 +28,8 @@ import org.jgrapht.*;
  */
 @Deprecated
 public class IntegerVertexFactory
-    implements VertexFactory<Integer>
+    implements
+    VertexFactory<Integer>
 {
     private int counter = 0;
 

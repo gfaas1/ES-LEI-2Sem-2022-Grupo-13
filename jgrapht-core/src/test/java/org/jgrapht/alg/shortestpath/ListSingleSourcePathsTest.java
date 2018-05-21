@@ -17,15 +17,15 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
@@ -37,8 +37,10 @@ public class ListSingleSourcePathsTest
     public void test()
     {
         int n = 50;
-        DirectedPseudograph<Integer, DefaultWeightedEdge> g =
-            new DirectedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+        DirectedPseudograph<Integer,
+            DefaultWeightedEdge> g = new DirectedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER,
+                false);
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnpRandomGraphGenerator<>(n, 0.7);
         gen.generateGraph(g);

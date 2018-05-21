@@ -17,16 +17,15 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for VertexDegreeComparator
@@ -49,7 +48,8 @@ public class VertexDegreeComparatorTest
     public void testVertexDegreeComparator()
     {
         for (int repeat = 0; repeat < TEST_REPEATS; repeat++) {
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             randomGraphGenerator.generateGraph(graph);
             List<Integer> vertices = new ArrayList<>(graph.vertexSet());
             // Sort in ascending vertex degree

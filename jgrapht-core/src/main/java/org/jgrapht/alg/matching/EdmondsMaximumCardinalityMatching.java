@@ -17,38 +17,39 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-import java.util.stream.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
+import java.util.*;
+import java.util.stream.*;
+
 /**
  * This implementation of Edmonds' blossom algorithm computes maximum cardinality matchings in
- * undirected graphs. A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges in
- * $M$ have a vertex in common. A matching has at most $\frac{1}{2|V|}$ edges. A node $v$ in $G$ is matched by
- * matching $M$ if $M$ contains an edge incident to $v$. A matching is perfect if all nodes are matched.
- * By definition, a perfect matching consists of exactly $\frac{1}{2|V|}$ edges. This algorithm will return a
- * perfect matching if one exists. If no perfect matching exists, then the largest (non-perfect)
- * matching is returned instead. This algorithm does NOT compute a maximum weight matching. In the
- * special case that the input graph is bipartite, consider using
+ * undirected graphs. A matching in a graph $G(V,E)$ is a subset of edges $M$ such that no two edges
+ * in $M$ have a vertex in common. A matching has at most $\frac{1}{2|V|}$ edges. A node $v$ in $G$
+ * is matched by matching $M$ if $M$ contains an edge incident to $v$. A matching is perfect if all
+ * nodes are matched. By definition, a perfect matching consists of exactly $\frac{1}{2|V|}$ edges.
+ * This algorithm will return a perfect matching if one exists. If no perfect matching exists, then
+ * the largest (non-perfect) matching is returned instead. This algorithm does NOT compute a maximum
+ * weight matching. In the special case that the input graph is bipartite, consider using
  * {@link HopcroftKarpMaximumCardinalityBipartiteMatching} instead.
  * <p>
- * To compute a maximum cardinality matching, at most $n$ augmenting path computations are performed.
- * Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is an inverse of
- * the Ackerman function, $n$ is the number of vertices, and $m$ the number of edges. This results in a
- * total runtime complexity of O(nm alpha(m,n)). In practise, the number of augmenting path
- * computations performed is far smaller than $n$, since an efficient heuristic is used to compute a
- * near-optimal initial solution. This implementation is highly efficient: a maximum matching in a
- * graph of 2000 vertices and 1.5 million edges is calculated in a few milliseconds on a desktop
- * computer.<br>
- * The runtime complexity of this implementation could be improved to $O(nm)$ when the UnionFind data
- * structure used in this implementation is replaced by the linear-time set union data structure
- * proposed in: Gabow, H.N., Tarjan, R.E. A linear-time algorithm for a special case of disjoint set
- * union. Proc. Fifteenth Annual ACM Symposium on Theory of Computing, 1982, pp. 246-251.
+ * To compute a maximum cardinality matching, at most $n$ augmenting path computations are
+ * performed. Each augmenting path computation takes $O(m \alpha(m,n))$ time, where $\alpha(m,n)$ is
+ * an inverse of the Ackerman function, $n$ is the number of vertices, and $m$ the number of edges.
+ * This results in a total runtime complexity of O(nm alpha(m,n)). In practise, the number of
+ * augmenting path computations performed is far smaller than $n$, since an efficient heuristic is
+ * used to compute a near-optimal initial solution. This implementation is highly efficient: a
+ * maximum matching in a graph of 2000 vertices and 1.5 million edges is calculated in a few
+ * milliseconds on a desktop computer.<br>
+ * The runtime complexity of this implementation could be improved to $O(nm)$ when the UnionFind
+ * data structure used in this implementation is replaced by the linear-time set union data
+ * structure proposed in: Gabow, H.N., Tarjan, R.E. A linear-time algorithm for a special case of
+ * disjoint set union. Proc. Fifteenth Annual ACM Symposium on Theory of Computing, 1982, pp.
+ * 246-251.
  * <p>
  * Edmonds' original algorithm first appeared in Edmonds, J. Paths, trees, and flowers. Canadian
  * Journal of Mathematics 17, 1965, pp. 449-467, and had a runtime complexity of $O(n^4)$. This
@@ -71,10 +72,10 @@ import org.jgrapht.graph.*;
  * </ul>
  * <p>
  * For future reference - A more efficient algorithm than the one implemented in this class exists:
- * Micali, S., Vazirani, V. An $O(\sqrt{n}m)$ algorithm for finding maximum matching in general graphs.
- * Proc. 21st Ann. Symp. on Foundations of Computer Science, IEEE, 1980, pp. 17–27. This is the most
- * efficient algorithm known for computing maximum cardinality matchings in general graphs. More
- * details on this algorithm can be found in:
+ * Micali, S., Vazirani, V. An $O(\sqrt{n}m)$ algorithm for finding maximum matching in general
+ * graphs. Proc. 21st Ann. Symp. on Foundations of Computer Science, IEEE, 1980, pp. 17–27. This is
+ * the most efficient algorithm known for computing maximum cardinality matchings in general graphs.
+ * More details on this algorithm can be found in:
  * <ul>
  * <li><a href="http://research.microsoft.com/apps/video/dl.aspx?id=171055">Presentation from
  * Vazirani 'Dispelling an Old Myth about an Ancient Algorithm'</a></li>
@@ -88,7 +89,8 @@ import org.jgrapht.graph.*;
  * @author Joris Kinable
  */
 public class EdmondsMaximumCardinalityMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
 
     /* The graph we are matching on. */
@@ -123,8 +125,9 @@ public class EdmondsMaximumCardinalityMatching<V, E>
 
     /**
      * For each odd vertex condensed into a blossom, a bridge is defined. Suppose the examination of
-     * edge $[v,w]$ causes a blossom to form containing odd vertex $x$. We define bridge(x) to be $[v,w]$
-     * if $x$ is an ancestor of $v$ before the blossom is formed, or $[w,v]$ if $x$ is an ancestor of $w$.
+     * edge $[v,w]$ causes a blossom to form containing odd vertex $x$. We define bridge(x) to be
+     * $[v,w]$ if $x$ is an ancestor of $v$ before the blossom is formed, or $[w,v]$ if $x$ is an
+     * ancestor of $w$.
      */
     private final Map<Integer, Pair<Integer, Integer>> bridges = new HashMap<>();
 
@@ -263,8 +266,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Creates a new blossom using bridge $(v,w)$. The blossom is an odd cycle. Nodes $v$ and $w$ are both
-     * even vertices.
+     * Creates a new blossom using bridge $(v,w)$. The blossom is an odd cycle. Nodes $v$ and $w$
+     * are both even vertices.
      *
      * @param v endpoint of the bridge
      * @param w another endpoint the bridge
@@ -322,8 +325,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Computes the base of the blossom formed by bridge edge $(v,w)$. The base vertex is the nearest
-     * common ancestor of $v$ and $w$.
+     * Computes the base of the blossom formed by bridge edge $(v,w)$. The base vertex is the
+     * nearest common ancestor of $v$ and $w$.
      * 
      * @param v one side of the bridge
      * @param w other side of the bridge
@@ -373,8 +376,8 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Construct a path from vertex $v$ to the root of its tree, and use the resulting path to augment
-     * the matching.
+     * Construct a path from vertex $v$ to the root of its tree, and use the resulting path to
+     * augment the matching.
      *
      * @param v starting vertex (leaf in the tree)
      */
@@ -475,20 +478,20 @@ public class EdmondsMaximumCardinalityMatching<V, E>
     }
 
     /**
-     * Checks whether the given matching is of maximum cardinality. A matching $m$ is maximum if there
-     * does not exist a different matching $m'$ in the graph which is of larger cardinality. This
-     * method is solely intended for verification purposes. Any matching returned by the
+     * Checks whether the given matching is of maximum cardinality. A matching $m$ is maximum if
+     * there does not exist a different matching $m'$ in the graph which is of larger cardinality.
+     * This method is solely intended for verification purposes. Any matching returned by the
      * {@link #getMatching()} method in this class is guaranteed to be maximum.
      * <p>
      * To attest whether the matching is maximum, we use the Tutte-Berge Formula which provides a
-     * tight bound on the cardinality of the matching. The Tutte-Berge Formula states:
-     * $m(G) = \frac{1}{2} \min_{X \subseteq V} ( |X| - c_{\text{odd}}(G - X) + |V|),
-     * where $m(G)$ is the size of the matching, $X$ a subset of
-     * vertices, $G-X$ the induced graph on vertex set $V(G) \setminus X$, and $c_{\text{odd}}(G)$ the number of connected
-     * components of odd cardinality in graph $G$.<br>
-     * Note: to compute this bound, we do not iterate over all possible subsets $X$ (this would be too
-     * expensive). Instead, $X$ is computed as a by-product of Edmonds' algorithm. Consequently, the
-     * runtime of this method equals the time required to test for the existence of a single
+     * tight bound on the cardinality of the matching. The Tutte-Berge Formula states: $m(G) =
+     * \frac{1}{2} \min_{X \subseteq V} ( |X| - c_{\text{odd}}(G - X) + |V|), where $m(G)$ is the
+     * size of the matching, $X$ a subset of vertices, $G-X$ the induced graph on vertex set $V(G)
+     * \setminus X$, and $c_{\text{odd}}(G)$ the number of connected components of odd cardinality
+     * in graph $G$.<br>
+     * Note: to compute this bound, we do not iterate over all possible subsets $X$ (this would be
+     * too expensive). Instead, $X$ is computed as a by-product of Edmonds' algorithm. Consequently,
+     * the runtime of this method equals the time required to test for the existence of a single
      * augmenting path.<br>
      * This method does NOT check whether the matching is valid.
      * 

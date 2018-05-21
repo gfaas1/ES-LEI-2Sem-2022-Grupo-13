@@ -17,21 +17,15 @@
  */
 package org.jgrapht.graph.guava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.NetworkBuilder;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.
@@ -112,8 +106,8 @@ public class MutableGraphAdapterTest
     @Test
     public void testUndirectedGraph()
     {
-        Graph<String, EndpointPair<String>> g = new MutableGraphAdapter<>(
-            GraphBuilder.undirected().allowsSelfLoops(true).build());
+        Graph<String, EndpointPair<String>> g =
+            new MutableGraphAdapter<>(GraphBuilder.undirected().allowsSelfLoops(true).build());
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -153,8 +147,7 @@ public class MutableGraphAdapterTest
         assertEquals(3, g.inDegreeOf("v5"));
 
         assertEquals(new HashSet<>(Arrays.asList(e12)), g.incomingEdgesOf("v1"));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.incomingEdgesOf("v2"));
+        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.incomingEdgesOf("v2"));
         assertEquals(new HashSet<>(Arrays.asList(e23)), g.incomingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.incomingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55)), g.incomingEdgesOf("v5"));
@@ -166,8 +159,7 @@ public class MutableGraphAdapterTest
         assertEquals(3, g.outDegreeOf("v5"));
 
         assertEquals(new HashSet<>(Arrays.asList(e12)), g.outgoingEdgesOf("v1"));
-        assertEquals(
-            new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.outgoingEdgesOf("v2"));
+        assertEquals(new HashSet<>(Arrays.asList(e12, e23, e24, e52)), g.outgoingEdgesOf("v2"));
         assertEquals(new HashSet<>(Arrays.asList(e23)), g.outgoingEdgesOf("v3"));
         assertEquals(new HashSet<>(Arrays.asList(e24, e44)), g.outgoingEdgesOf("v4"));
         assertEquals(new HashSet<>(Arrays.asList(e52, e55)), g.outgoingEdgesOf("v5"));
@@ -181,9 +173,8 @@ public class MutableGraphAdapterTest
     public void testSerialization()
         throws Exception
     {
-        Graph<String,
-        EndpointPair<String>> g = new MutableGraphAdapter<>(
-                GraphBuilder.directed().allowsSelfLoops(true).build());
+        Graph<String, EndpointPair<String>> g =
+            new MutableGraphAdapter<>(GraphBuilder.directed().allowsSelfLoops(true).build());
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -242,7 +233,7 @@ public class MutableGraphAdapterTest
             DefaultEdge> g = new MutableNetworkAdapter<>(
                 NetworkBuilder
                     .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-                    SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+                SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

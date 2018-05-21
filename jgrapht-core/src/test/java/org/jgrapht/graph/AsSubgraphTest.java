@@ -17,14 +17,12 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Unit test for {@link AsSubgraph} class.

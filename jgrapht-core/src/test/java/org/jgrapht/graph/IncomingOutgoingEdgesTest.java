@@ -17,12 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import static org.junit.Assert.assertEquals;
+import org.jgrapht.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * Check Incoming/Outgoing edges in directed and undirected graphs.

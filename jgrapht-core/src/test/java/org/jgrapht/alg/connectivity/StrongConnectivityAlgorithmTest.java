@@ -17,20 +17,16 @@
  */
 package org.jgrapht.alg.connectivity;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.GabowStrongConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test cases for the GabowStrongConnectivityInspector. Tests are identical to the tests for the
@@ -105,8 +101,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
@@ -159,8 +154,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
 
@@ -213,8 +207,7 @@ public class StrongConnectivityAlgorithmTest
 
         actualSets.clear();
 
-        List<Graph<String, DefaultEdge>> subgraphs =
-            inspector.getStronglyConnectedComponents();
+        List<Graph<String, DefaultEdge>> subgraphs = inspector.getStronglyConnectedComponents();
 
         for (Graph<String, DefaultEdge> sg : subgraphs) {
             actualSets.add(sg.vertexSet());
@@ -229,10 +222,10 @@ public class StrongConnectivityAlgorithmTest
 
     public void testStronglyConnected4(Class<?> strongConnectivityAlgorithm)
     {
-        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
+        DefaultDirectedGraph<Integer, String> graph = new DefaultDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.createStringSupplier(), false);
 
-        new RingGraphGenerator<Integer, String>(3)
-            .generateGraph(graph);
+        new RingGraphGenerator<Integer, String>(3).generateGraph(graph);
 
         StrongConnectivityAlgorithm<Integer, String> sc =
             this.getStrongConnectivityInspector(graph, strongConnectivityAlgorithm);

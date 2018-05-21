@@ -17,16 +17,14 @@
  */
 package org.jgrapht.demo;
 
-import java.awt.*;
-
-import javax.swing.*;
-
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
-import com.mxgraph.layout.*;
-import com.mxgraph.swing.*;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
@@ -35,7 +33,8 @@ import com.mxgraph.swing.*;
  * @since July 9, 2013
  */
 public class JGraphXAdapterDemo
-    extends JApplet
+    extends
+    JApplet
 {
     private static final long serialVersionUID = 2202072534703043194L;
 

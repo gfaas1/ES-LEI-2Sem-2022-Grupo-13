@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Coloring tests
@@ -29,7 +29,8 @@ import org.jgrapht.graph.*;
  * @author Dimitrios Michail
  */
 public class RandomGreedyColoringTest
-    extends BaseColoringTest
+    extends
+    BaseColoringTest
 {
 
     final long seed = 13;

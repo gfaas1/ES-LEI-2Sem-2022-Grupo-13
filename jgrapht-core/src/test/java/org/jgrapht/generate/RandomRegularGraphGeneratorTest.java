@@ -18,48 +18,51 @@
 
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author Emilio Cruciani
  * @since March 2018
  */
-public class RandomRegularGraphGeneratorTest {
+public class RandomRegularGraphGeneratorTest
+{
 
     private final long SEED = 5;
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNegativeN() {
+    public void testNegativeN()
+    {
         new RandomRegularGraphGenerator<>(-10, 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNegativeD() {
+    public void testNegativeD()
+    {
         new RandomRegularGraphGenerator<>(10, -1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDGreaterThanN() {
+    public void testDGreaterThanN()
+    {
         new RandomRegularGraphGenerator<>(10, 15);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testOddDTimesN() {
+    public void testOddDTimesN()
+    {
         new RandomRegularGraphGenerator<>(5, 3);
     }
 
     @Test
-    public void testDirectedGraph() {
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(10, 2);
+    public void testDirectedGraph()
+    {
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(10, 2);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
         try {
             gen.generateGraph(g, new IntegerVertexFactory(0), null);
@@ -69,10 +72,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testPseudograph() {
+    public void testPseudograph()
+    {
         int n = 100;
         int d = 20;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         for (Integer v : g.vertexSet()) {
@@ -81,10 +86,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testCompletePseudograph() {
+    public void testCompletePseudograph()
+    {
         int n = 10;
         int d = n;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         for (Integer v : g.vertexSet()) {
@@ -93,10 +100,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testSimpleGraph() {
+    public void testSimpleGraph()
+    {
         int n = 100;
         int d = 20;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         for (Integer v : g.vertexSet()) {
@@ -105,10 +114,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testCompleteSimpleGraph() {
+    public void testCompleteSimpleGraph()
+    {
         int n = 10;
-        int d = n-1;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        int d = n - 1;
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         for (Integer v : g.vertexSet()) {
@@ -117,10 +128,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testZeroNodes() {
+    public void testZeroNodes()
+    {
         int n = 0;
         int d = 0;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         assertEquals(0, g.vertexSet().size());
@@ -128,10 +141,12 @@ public class RandomRegularGraphGeneratorTest {
     }
 
     @Test
-    public void testZeroDegree() {
+    public void testZeroDegree()
+    {
         int n = 10;
         int d = 0;
-        GraphGenerator<Integer, DefaultEdge, Integer> gen = new RandomRegularGraphGenerator<>(n, d, SEED);
+        GraphGenerator<Integer, DefaultEdge, Integer> gen =
+            new RandomRegularGraphGenerator<>(n, d, SEED);
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         gen.generateGraph(g, new IntegerVertexFactory(0), null);
         assertEquals(n, g.vertexSet().size());

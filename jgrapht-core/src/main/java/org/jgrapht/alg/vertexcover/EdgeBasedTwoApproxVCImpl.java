@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.vertexcover;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Finds a 2-approximation for a minimum vertex cover A vertex cover is a set of vertices that
@@ -40,25 +40,32 @@ import org.jgrapht.graph.*;
  * @since Nov 6, 2003
  */
 public class EdgeBasedTwoApproxVCImpl<V, E>
-    implements MinimumVertexCoverAlgorithm<V, E>, VertexCoverAlgorithm<V>
+    implements
+    MinimumVertexCoverAlgorithm<V, E>,
+    VertexCoverAlgorithm<V>
 {
 
-    private final Graph<V,E> graph;
+    private final Graph<V, E> graph;
 
     /**
      * Temporary constructor to ensure one-version-backwards-compatibility
+     * 
      * @deprecated this constructor will be removed in the next release
      */
     @Deprecated
-    public EdgeBasedTwoApproxVCImpl(){
-        graph=null;
+    public EdgeBasedTwoApproxVCImpl()
+    {
+        graph = null;
     }
+
     /**
      * Constructs a new EdgeBasedTwoApproxVCImpl instance
+     * 
      * @param graph input graph
      */
-    public EdgeBasedTwoApproxVCImpl(Graph<V,E> graph) {
-        this.graph=GraphTests.requireUndirected(graph);
+    public EdgeBasedTwoApproxVCImpl(Graph<V, E> graph)
+    {
+        this.graph = GraphTests.requireUndirected(graph);
     }
 
     /**
@@ -83,7 +90,8 @@ public class EdgeBasedTwoApproxVCImpl<V, E>
      * @return a set of vertices which is a vertex cover for the specified graph.
      */
     @Override
-    public VertexCoverAlgorithm.VertexCover<V> getVertexCover() {
+    public VertexCoverAlgorithm.VertexCover<V> getVertexCover()
+    {
         // C <-- {}
         Set<V> cover = new LinkedHashSet<>();
 

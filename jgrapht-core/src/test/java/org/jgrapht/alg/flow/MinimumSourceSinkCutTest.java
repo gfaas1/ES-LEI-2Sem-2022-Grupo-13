@@ -17,26 +17,22 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MinimumSTCutAlgorithm;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Joris Kinable
  */
 public abstract class MinimumSourceSinkCutTest
-    extends MaximumFlowMinimumCutAlgorithmTestBase
+    extends
+    MaximumFlowMinimumCutAlgorithmTestBase
 {
 
     public static final int NR_RANDOM_TESTS = 500;
@@ -67,7 +63,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight,0);
+        assertEquals(expectedCutWeight, cutWeight, 0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -84,7 +80,7 @@ public abstract class MinimumSourceSinkCutTest
                         && sinkPartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(), 0);
     }
 
     private void runTestUndirected(
@@ -107,7 +103,7 @@ public abstract class MinimumSourceSinkCutTest
         Set<DefaultWeightedEdge> cutEdges)
     {
 
-        assertEquals(expectedCutWeight, cutWeight,0);
+        assertEquals(expectedCutWeight, cutWeight, 0);
         assertTrue(sourcePartition.contains(source));
         assertTrue(sinkPartition.contains(sink));
         assertTrue(Collections.disjoint(sourcePartition, sinkPartition));
@@ -124,7 +120,7 @@ public abstract class MinimumSourceSinkCutTest
                         ^ sourcePartition.contains(network.getEdgeTarget(e)))
                 .collect(Collectors.toSet()),
             cutEdges);
-        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(),0);
+        assertEquals(cutWeight, cutEdges.stream().mapToDouble(network::getEdgeWeight).sum(), 0);
 
     }
 
@@ -132,7 +128,7 @@ public abstract class MinimumSourceSinkCutTest
     public void testProblematicCase()
     {
         Graph<Integer, DefaultWeightedEdge> network =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addEdgeWithVertices(network, 1, 2, 0);
         Graphs.addEdgeWithVertices(network, 1, 4, 1);
         Graphs.addEdgeWithVertices(network, 1, 5, 1);

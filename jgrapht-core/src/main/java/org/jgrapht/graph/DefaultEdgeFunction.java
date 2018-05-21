@@ -17,11 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Default implementation of an edge function which uses a map to store values.
@@ -32,7 +30,9 @@ import java.util.function.Function;
  * @param <T> the value type
  */
 public class DefaultEdgeFunction<E, T>
-    implements Function<E, T>, Serializable
+    implements
+    Function<E, T>,
+    Serializable
 {
     private static final long serialVersionUID = -4247429315268336855L;
 

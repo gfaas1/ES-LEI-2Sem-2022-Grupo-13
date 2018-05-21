@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Base implementation of the strongly connected components algorithm.
@@ -36,7 +36,8 @@ import org.jgrapht.graph.*;
  */
 @Deprecated
 abstract class AbstractStrongConnectivityInspector<V, E>
-    implements StrongConnectivityAlgorithm<V, E>
+    implements
+    StrongConnectivityAlgorithm<V, E>
 {
     protected final Graph<V, E> graph;
     protected List<Set<V>> stronglyConnectedSets;

@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.spanning;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.graph.builder.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Greedy algorithm for $(2k-1)$-multiplicative spanner construction (for any integer
@@ -31,8 +31,8 @@ import org.jgrapht.util.*;
  *
  * <p>
  * The spanner is guaranteed to contain $O(n^{1+1/k})$ edges and the shortest path distance between
- * any two vertices in the spanner is at most $2k-1$ times the corresponding shortest path distance in
- * the original graph. Here n denotes the number of vertices of the graph.
+ * any two vertices in the spanner is at most $2k-1$ times the corresponding shortest path distance
+ * in the original graph. Here n denotes the number of vertices of the graph.
  *
  * <p>
  * The algorithm is described in: Althoefer, Das, Dobkin, Joseph, Soares.
@@ -40,14 +40,14 @@ import org.jgrapht.util.*;
  * Computational Geometry 9(1):81-100, 1993.
  *
  * <p>
- * If the graph is unweighted the algorithm runs in $O(m n^{1+1/k})$ time. Setting $k$ to infinity will
- * result in a slow version of Kruskal's algorithm where cycle detection is performed by a BFS
+ * If the graph is unweighted the algorithm runs in $O(m n^{1+1/k})$ time. Setting $k$ to infinity
+ * will result in a slow version of Kruskal's algorithm where cycle detection is performed by a BFS
  * computation. In such a case use the implementation of Kruskal with union-find. Here n and m are
  * the number of vertices and edges of the graph respectively.
  *
  * <p>
- * If the graph is weighted the algorithm runs in $O(m (n^{1+1/k} + n \log n))$ time by using Dijkstra's
- * algorithm. Edge weights must be non-negative.
+ * If the graph is weighted the algorithm runs in $O(m (n^{1+1/k} + n \log n))$ time by using
+ * Dijkstra's algorithm. Edge weights must be non-negative.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -56,7 +56,8 @@ import org.jgrapht.util.*;
  * @since July 15, 2016
  */
 public class GreedyMultiplicativeSpanner<V, E>
-    implements SpannerAlgorithm<E>
+    implements
+    SpannerAlgorithm<E>
 {
     private final Graph<V, E> graph;
     private final int k;
@@ -136,7 +137,8 @@ public class GreedyMultiplicativeSpanner<V, E>
     }
 
     private class UnweightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+        extends
+        SpannerAlgorithmBase
     {
         protected Graph<V, E> spanner;
         protected Map<V, Integer> vertexDistance;
@@ -212,7 +214,8 @@ public class GreedyMultiplicativeSpanner<V, E>
     }
 
     private class WeightedSpannerAlgorithm
-        extends SpannerAlgorithmBase
+        extends
+        SpannerAlgorithmBase
     {
         protected Graph<V, DefaultWeightedEdge> spanner;
         protected FibonacciHeap<V> heap;

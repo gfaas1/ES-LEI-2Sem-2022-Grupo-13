@@ -17,12 +17,12 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
-import org.jgrapht.util.*;
 
 /**
  * Helper for {@link MaskSubgraph}.
@@ -30,8 +30,10 @@ import org.jgrapht.util.*;
  * @since July 5, 2007
  */
 class MaskEdgeSet<V, E>
-    extends AbstractSet<E>
-    implements Serializable
+    extends
+    AbstractSet<E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = 4208908842850100708L;
 

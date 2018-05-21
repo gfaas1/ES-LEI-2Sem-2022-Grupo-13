@@ -17,10 +17,10 @@
  */
 package org.jgrapht.demo;
 
-import java.net.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.net.*;
 
 /**
  * A simple introduction to using JGraphT.

@@ -17,19 +17,19 @@
  */
 package org.jgrapht.perf.matching;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing matching algorithms for bipartite graphs.
@@ -66,7 +66,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
                     PERF_BENCHMARK_EDGES_PROP, SEED);
             }
 
-            graph = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            graph = new Pseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
             firstPartition = generator.getFirstPartition();
             secondPartition = generator.getSecondPartition();
@@ -86,7 +87,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     }
 
     public static class EdmondsMaxCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(
@@ -98,7 +100,8 @@ public class MaximumCardinalityBipartiteMatchingPerformanceTest
     }
 
     public static class HopcroftKarpMaximumCardinalityBipartiteMatchingBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         MatchingAlgorithm<Integer, DefaultEdge> createSolver(

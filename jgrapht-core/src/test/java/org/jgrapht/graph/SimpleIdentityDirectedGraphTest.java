@@ -17,14 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -75,7 +73,8 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     public static class SimpleIdentityDirectedGraph<V, E>
-        extends SimpleDirectedGraph<V, E>
+        extends
+        SimpleDirectedGraph<V, E>
     {
         private static final long serialVersionUID = 4600490314100246989L;
 

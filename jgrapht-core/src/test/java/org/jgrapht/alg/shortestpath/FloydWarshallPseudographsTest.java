@@ -17,20 +17,18 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-import java.util.function.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
-import org.junit.experimental.categories.Category;
+import org.junit.experimental.categories.*;
+
+import java.util.*;
+import java.util.function.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test {@link FloydWarshallShortestPaths} on pseudo graphs.
@@ -51,8 +49,12 @@ public class FloydWarshallPseudographsTest
         Random rng = new Random();
 
         List<Supplier<Graph<Integer, DefaultWeightedEdge>>> graphs = new ArrayList<>();
-        graphs.add(() -> new DirectedWeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
-        graphs.add(() -> new WeightedPseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
+        graphs.add(
+            () -> new DirectedWeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
+        graphs.add(
+            () -> new WeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER));
 
         for (Supplier<Graph<Integer, DefaultWeightedEdge>> gSupplier : graphs) {
             GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
@@ -134,7 +136,8 @@ public class FloydWarshallPseudographsTest
         SingleSourcePaths<Integer, DefaultWeightedEdge> t1 = fw.getPaths(1);
         assertEquals(0d, t1.getWeight(1), 1e-9);
         assertTrue(t1.getPath(1).getEdgeList().isEmpty());
-        assertEquals(Collections.singletonList(g.getEdgeSource(e12_1)), t1.getPath(1).getVertexList());
+        assertEquals(
+            Collections.singletonList(g.getEdgeSource(e12_1)), t1.getPath(1).getVertexList());
         assertEquals(-5d, t1.getWeight(2), 1e-9);
         assertEquals(Collections.singletonList(e12_1), t1.getPath(2).getEdgeList());
         assertEquals(-10d, t1.getWeight(3), 1e-9);
@@ -147,7 +150,8 @@ public class FloydWarshallPseudographsTest
         assertNull(t2.getPath(1));
         assertEquals(0d, t2.getWeight(2), 1e-9);
         assertTrue(t2.getPath(2).getEdgeList().isEmpty());
-        assertEquals(Collections.singletonList(g.getEdgeSource(e23_1)), t2.getPath(2).getVertexList());
+        assertEquals(
+            Collections.singletonList(g.getEdgeSource(e23_1)), t2.getPath(2).getVertexList());
         assertEquals(-5d, t2.getWeight(3), 1e-9);
         assertEquals(Collections.singletonList(e23_3), t2.getPath(3).getEdgeList());
         assertEquals(-105d, t2.getWeight(4), 1e-9);

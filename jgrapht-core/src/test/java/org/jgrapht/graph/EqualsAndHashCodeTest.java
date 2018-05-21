@@ -17,13 +17,12 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class EqualsAndHashCodeTest
 {
@@ -277,7 +276,8 @@ public class EqualsAndHashCodeTest
      * Simple custom edge class.
      */
     public static class CustomEdge
-        extends DefaultEdge
+        extends
+        DefaultEdge
     {
         private static final long serialVersionUID = 1L;
         private String label;

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.color;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * The greedy coloring algorithm with a random vertex ordering.
@@ -28,7 +28,8 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class RandomGreedyColoring<V, E>
-    extends GreedyColoring<V, E>
+    extends
+    GreedyColoring<V, E>
 {
     /*
      * Random number generator

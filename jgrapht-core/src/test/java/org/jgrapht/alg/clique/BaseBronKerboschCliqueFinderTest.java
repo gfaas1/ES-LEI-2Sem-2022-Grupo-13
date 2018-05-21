@@ -17,17 +17,17 @@
  */
 package org.jgrapht.alg.clique;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+import java.util.concurrent.*;
+
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -206,7 +206,8 @@ public abstract class BaseBronKerboschCliqueFinderTest
     public void testComplete()
     {
         final int size = 6;
-        Graph<Object, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Object, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         CompleteGraphGenerator<Object, DefaultEdge> completeGraphGenerator =
             new CompleteGraphGenerator<>(size);
         completeGraphGenerator.generateGraph(g);

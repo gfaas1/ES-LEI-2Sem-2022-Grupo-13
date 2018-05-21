@@ -17,15 +17,15 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.jgrapht.*;
-import java.util.*;
-import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.isomorphism.*;
+import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for NamedGraphGenerator
@@ -340,15 +340,14 @@ public class NamedGraphGeneratorTest
         assertEquals(girth, GraphMetrics.getGirth(g), 0.00000001);
     }
 
-    private void validateAutomorphismCount( Graph<Integer, DefaultEdge> g, int value)
+    private void validateAutomorphismCount(Graph<Integer, DefaultEdge> g, int value)
     {
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf =
             new VF2GraphIsomorphismInspector<>(g, g);
 
         Iterator<GraphMapping<Integer, DefaultEdge>> iter = vf.getMappings();
-        int count=0;
-        while(iter.hasNext())
-        {
+        int count = 0;
+        while (iter.hasNext()) {
             count++;
             iter.next();
         }

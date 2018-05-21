@@ -17,20 +17,14 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.function.Supplier;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.*;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.MutableGraph;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableGraph}.
@@ -59,8 +53,12 @@ import com.google.common.graph.MutableGraph;
  * @param <V> the graph vertex type
  */
 public class MutableGraphAdapter<V>
-    extends BaseGraphAdapter<V, MutableGraph<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseGraphAdapter<V, MutableGraph<V>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -7556855931445010748L;
 
@@ -253,7 +251,8 @@ public class MutableGraphAdapter<V>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

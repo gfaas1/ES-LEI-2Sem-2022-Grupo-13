@@ -17,15 +17,15 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -261,7 +261,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
             GraphGenerator<Integer, DefaultEdge, Integer> generator =
                 new GnmRandomGraphGenerator<>(vertices, edges, 0);
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
             EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                 new EdmondsMaximumCardinalityMatching<>(graph);
@@ -281,7 +282,10 @@ public final class EdmondsMaximumCardinalityMatchingTest
                     new GnmRandomGraphGenerator<>(n, m);
 
                 for (int i = 0; i < 25; i++) {
-                    Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                    Graph<Integer,
+                        DefaultEdge> graph = new SimpleGraph<>(
+                            SupplierUtil.createIntegerSupplier(),
+                            SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                     generator.generateGraph(graph);
                     EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
                         new EdmondsMaximumCardinalityMatching<>(graph);
