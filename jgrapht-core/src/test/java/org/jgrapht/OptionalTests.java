@@ -15,9 +15,9 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-
+    
 /**
- * Marker interface to designate a slow tests category. 
+ * Marker interface to designate a optional tests category. 
  * 
  * @author Philipp Kaesgen
 **/
