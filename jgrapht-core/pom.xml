@@ -70,6 +70,7 @@
 								<exclude>**/perf/**</exclude>
 							</excludes>
 							<excludedGroups>org.jgrapht.SlowTests</excludedGroups>
+							<excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
 						</configuration>
 					</execution>
 				</executions>
