@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * This class represents a GraphMapping between two (subgraph)isomorphic graphs. In the subgraph
@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public class IsomorphicGraphMapping<V, E>
-    implements GraphMapping<V, E>
+    implements
+    GraphMapping<V, E>
 {
     GraphOrdering<V, E> g1, g2;
 
@@ -139,7 +140,8 @@ public class IsomorphicGraphMapping<V, E>
         int i = 0;
         for (Map.Entry<String, V> entry : vertexMap.entrySet()) {
             V u = getVertexCorrespondence(entry.getValue(), true);
-            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=").append((u == null) ? "~~" : u);
+            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=").append(
+                (u == null) ? "~~" : u);
         }
 
         return str + "]";

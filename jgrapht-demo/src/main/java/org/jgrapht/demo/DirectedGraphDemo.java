@@ -17,15 +17,15 @@
  */
 
 package org.jgrapht.demo;
- 
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.connectivity.*;
-import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * This class demonstrates some of the operations that can be performed on directed graphs. After
@@ -45,7 +45,7 @@ public class DirectedGraphDemo
      *
      * @param args ignored.
      */
-    
+
     public static void main(String args[])
     {
         // constructs a directed graph with the specified vertices and edges
@@ -100,4 +100,3 @@ public class DirectedGraphDemo
         System.out.println(cPaths.getPath("i"));
     }
 }
-

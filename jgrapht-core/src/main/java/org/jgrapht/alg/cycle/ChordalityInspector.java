@@ -17,39 +17,35 @@
  */
 package org.jgrapht.alg.cycle;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.GraphWalk;
-import org.jgrapht.traverse.GraphIterator;
-import org.jgrapht.traverse.LexBreadthFirstIterator;
-import org.jgrapht.traverse.MaximumCardinalityIterator;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
 import java.util.*;
 
 /**
- * Tests whether a graph is <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal</a>.
- * A chordal graph is a simple graph in which all <a href="http://mathworld.wolfram.com/GraphCycle.html">
- * cycles</a> of four or more vertices have a <a href="http://mathworld.wolfram.com/CycleChord.html">
- * chord</a>. A chord is an edge that is not part of the cycle but connects two vertices of the cycle.
- * A graph is chordal if and only if it has a
- * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
- * perfect elimination order</a>. A perfect elimination order in a graph is an ordering of the vertices
- * of the graph such that, for each vertex $v$, $v$ and the neighbors of $v$ that occur after $v$ in the
- * order form a clique. This implementation uses either {@link MaximumCardinalityIterator} or
- * {@link LexBreadthFirstIterator} to compute a perfect elimination order. The desired method
- * is specified during construction time.
+ * Tests whether a graph is <a href="https://en.wikipedia.org/wiki/Chordal_graph">chordal</a>. A
+ * chordal graph is a simple graph in which all
+ * <a href="http://mathworld.wolfram.com/GraphCycle.html"> cycles</a> of four or more vertices have
+ * a <a href="http://mathworld.wolfram.com/CycleChord.html"> chord</a>. A chord is an edge that is
+ * not part of the cycle but connects two vertices of the cycle. A graph is chordal if and only if
+ * it has a <a href=
+ * "https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+ * perfect elimination order</a>. A perfect elimination order in a graph is an ordering of the
+ * vertices of the graph such that, for each vertex $v$, $v$ and the neighbors of $v$ that occur
+ * after $v$ in the order form a clique. This implementation uses either
+ * {@link MaximumCardinalityIterator} or {@link LexBreadthFirstIterator} to compute a perfect
+ * elimination order. The desired method is specified during construction time.
  * <p>
  * Chordal graphs are a subset of the <a href="http://mathworld.wolfram.com/PerfectGraph.html">
- * perfect graphs</a>. They may be recognized in polynomial time, and several problems that are hard on
- * other classes of graphs such as minimum vertex coloring or determining maximum cardinality cliques and
- * independent set can be performed in polynomial time when the input is chordal.
+ * perfect graphs</a>. They may be recognized in polynomial time, and several problems that are hard
+ * on other classes of graphs such as minimum vertex coloring or determining maximum cardinality
+ * cliques and independent set can be performed in polynomial time when the input is chordal.
  * <p>
  * All methods in this class run in $\mathcal{O}(|V| + |E|)$ time. Determining whether a graph is
- * chordal, as well as computing a perfect elimination order takes $\mathcal{O}(|V| + |E|)$ time, independent
- * of the algorithm ({@link MaximumCardinalityIterator} or {@link LexBreadthFirstIterator}) used to compute
- * the perfect elimination order.
+ * chordal, as well as computing a perfect elimination order takes $\mathcal{O}(|V| + |E|)$ time,
+ * independent of the algorithm ({@link MaximumCardinalityIterator} or
+ * {@link LexBreadthFirstIterator}) used to compute the perfect elimination order.
  * <p>
  * All the methods in this class are invoked in a lazy fashion, meaning that computations are only
  * started once the method gets invoked.
@@ -60,7 +56,8 @@ import java.util.*;
  * @author Timofey Chudakov
  * @since March 2018
  */
-public class ChordalityInspector<V, E>{
+public class ChordalityInspector<V, E>
+{
     /**
      * Stores the type of iterator used by this {@code ChordalityInspector}.
      */
@@ -88,23 +85,26 @@ public class ChordalityInspector<V, E>{
     private GraphPath<V, E> hole;
 
     /**
-     * Creates a chordality inspector for {@code graph}, which uses {@link MaximumCardinalityIterator}
-     * as a default iterator.
+     * Creates a chordality inspector for {@code graph}, which uses
+     * {@link MaximumCardinalityIterator} as a default iterator.
      *
      * @param graph the graph for which a chordality inspector to be created.
      */
-    public ChordalityInspector(Graph<V, E> graph) {
+    public ChordalityInspector(Graph<V, E> graph)
+    {
         this(graph, IterationOrder.MCS);
     }
 
     /**
-     * Creates a chordality inspector for {@code graph}, which uses an iterator defined by the second
-     * parameter as an internal iterator.
+     * Creates a chordality inspector for {@code graph}, which uses an iterator defined by the
+     * second parameter as an internal iterator.
      *
-     * @param graph          the graph for which a chordality inspector is to be created.
-     * @param iterationOrder the constant, which defines iterator to be used by this {@code ChordalityInspector}.
+     * @param graph the graph for which a chordality inspector is to be created.
+     * @param iterationOrder the constant, which defines iterator to be used by this
+     *        {@code ChordalityInspector}.
      */
-    public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder) {
+    public ChordalityInspector(Graph<V, E> graph, IterationOrder iterationOrder)
+    {
         Objects.requireNonNull(graph);
         if (graph.getType().isDirected()) {
             this.graph = new AsUndirectedGraph<>(graph);
@@ -125,7 +125,8 @@ public class ChordalityInspector<V, E>{
      *
      * @return true if this graph is chordal, otherwise false.
      */
-    public boolean isChordal() {
+    public boolean isChordal()
+    {
         if (order == null) {
             order = Collections.unmodifiableList(lazyComputeOrder());
             chordal = isPerfectEliminationOrder(order, true);
@@ -134,13 +135,15 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Returns a <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * Returns a <a href=
+     * "https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
      * perfect elimination order</a> if one exists. The existence of a perfect elimination order
      * certifies that the graph is chordal. This method returns null if the graph is not chordal.
      *
      * @return a perfect elimination order of a graph or null if graph is not chordal.
      */
-    public List<V> getPerfectEliminationOrder() {
+    public List<V> getPerfectEliminationOrder()
+    {
         isChordal();
         if (chordal) {
             return order;
@@ -149,29 +152,31 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * A graph which is not chordal, must contain a <a href="http://mathworld.wolfram.com/GraphHole.html">hole</a>
-     * (chordless cycle on 4 or more vertices). The existence of a hole certifies that the graph
-     * is not chordal. This method returns a chordless cycle if the graph is not chordal, or null if the
-     * graph is chordal.
+     * A graph which is not chordal, must contain a
+     * <a href="http://mathworld.wolfram.com/GraphHole.html">hole</a> (chordless cycle on 4 or more
+     * vertices). The existence of a hole certifies that the graph is not chordal. This method
+     * returns a chordless cycle if the graph is not chordal, or null if the graph is chordal.
      *
      * @return a hole if the {@code graph} is not chordal, or null if the graph is chordal.
      */
-    public GraphPath<V, E> getHole() {
+    public GraphPath<V, E> getHole()
+    {
         isChordal();
 
         return hole;
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} form a
-     * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * Checks whether the vertices in the {@code vertexOrder} form a <a href=
+     * "https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
      * perfect elimination order</a> with respect to the inspected graph. Returns false otherwise.
      *
      * @param vertexOrder the sequence of vertices of the {@code graph}.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order, otherwise false.
+     *         perfect elimination order, otherwise false.
      */
-    public boolean isPerfectEliminationOrder(List<V> vertexOrder) {
+    public boolean isPerfectEliminationOrder(List<V> vertexOrder)
+    {
         return isPerfectEliminationOrder(vertexOrder, false);
     }
 
@@ -180,7 +185,8 @@ public class ChordalityInspector<V, E>{
      *
      * @return computed order.
      */
-    private List<V> lazyComputeOrder() {
+    private List<V> lazyComputeOrder()
+    {
         if (order == null) {
             int vertexNum = graph.vertexSet().size();
             order = new ArrayList<>(vertexNum);
@@ -192,28 +198,33 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Checks whether the vertices in the {@code vertexOrder} form a
-     * <a href="https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
+     * Checks whether the vertices in the {@code vertexOrder} form a <a href=
+     * "https://en.wikipedia.org/wiki/Chordal_graph#Perfect_elimination_and_efficient_recognition">
      * perfect elimination order</a> with respect to the inspected graph. Returns false otherwise.
      * Computes a hole if the {@code computeHole} is true.
      *
-     * @param vertexOrder           the sequence of vertices of {@code graph}.
+     * @param vertexOrder the sequence of vertices of {@code graph}.
      * @param computeHole tells whether to compute the hole if the graph isn't chordal.
      * @return true if the {@code graph} is chordal and the vertices in {@code vertexOrder} are in
-     * perfect elimination order.
+     *         perfect elimination order.
      */
-    private boolean isPerfectEliminationOrder(List<V> vertexOrder, boolean computeHole) {
+    private boolean isPerfectEliminationOrder(List<V> vertexOrder, boolean computeHole)
+    {
         Set<V> graphVertices = graph.vertexSet();
         if (graphVertices.size() == vertexOrder.size() && graphVertices.containsAll(vertexOrder)) {
             Map<V, Integer> vertexInOrder = getVertexInOrder(vertexOrder);
             for (V vertex : vertexOrder) {
                 Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
                 if (predecessors.size() > 0) {
-                    V maxPredecessor = Collections.max(predecessors, Comparator.comparingInt(vertexInOrder::get));
+                    V maxPredecessor =
+                        Collections.max(predecessors, Comparator.comparingInt(vertexInOrder::get));
                     for (V predecessor : predecessors) {
-                        if (!predecessor.equals(maxPredecessor) && !graph.containsEdge(predecessor, maxPredecessor)) {
+                        if (!predecessor.equals(maxPredecessor)
+                            && !graph.containsEdge(predecessor, maxPredecessor))
+                        {
                             if (computeHole) {
-                                // predecessor, vertex and maxPredecessor are vertices, which lie consecutively on
+                                // predecessor, vertex and maxPredecessor are vertices, which lie
+                                // consecutively on
                                 // some chordless cycle in the graph
                                 findHole(predecessor, vertex, maxPredecessor);
                             }
@@ -229,13 +240,15 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Returns a map containing vertices from the {@code vertexOrder} mapped to their
-     * indices in {@code vertexOrder}.
+     * Returns a map containing vertices from the {@code vertexOrder} mapped to their indices in
+     * {@code vertexOrder}.
      *
      * @param vertexOrder a list with vertices.
-     * @return a mapping of vertices from {@code vertexOrder} to their indices in {@code vertexOrder}.
+     * @return a mapping of vertices from {@code vertexOrder} to their indices in
+     *         {@code vertexOrder}.
      */
-    private Map<V, Integer> getVertexInOrder(List<V> vertexOrder) {
+    private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
+    {
         Map<V, Integer> vertexInOrder = new HashMap<>(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
@@ -245,20 +258,24 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Computes a hole from the vertices of {@code subgraph} of the inspected {@code graph}
-     * with vertices {@code a}, {@code b} and {@code c} on this cycle (there must be no edge between
+     * Computes a hole from the vertices of {@code subgraph} of the inspected {@code graph} with
+     * vertices {@code a}, {@code b} and {@code c} on this cycle (there must be no edge between
      * {@code a} and {@code c}.
      *
      * @param a vertex that belongs to the cycle
      * @param b vertex that belongs to the cycle
      * @param c vertex that belongs to the cycle
      */
-    private void findHole(V a, V b, V c) {
-        // b is the first vertex in the order produced by the iterator whose predecessors don't form a clique.
-        // a and c are a pair of vertices, which are predecessors of b and are not adjacent. These three vertices
+    private void findHole(V a, V b, V c)
+    {
+        // b is the first vertex in the order produced by the iterator whose predecessors don't form
+        // a clique.
+        // a and c are a pair of vertices, which are predecessors of b and are not adjacent. These
+        // three vertices
         // belong to some chordless cycle in the G[S] where G[S] is a subgraph of G on vertices in
         // S = {u : index_in_order(u) <= index_in_order(v)}.
-        // this method uses dfs to find any cycle in G, in which every vertex isn't adjacent to b, except for a and b.
+        // this method uses dfs to find any cycle in G, in which every vertex isn't adjacent to b,
+        // except for a and b.
         // then it finds a chordless subcycle in linear time and returns it.
 
         List<V> cycle = new ArrayList<>(Arrays.asList(a, b, c));
@@ -275,20 +292,23 @@ public class ChordalityInspector<V, E>{
 
     /**
      * Computes some cycle in the graph on the vertices from the domain of the map {@code visited}.
-     * More precisely, finds some path from {@code middle} to {@code finish}.
-     * The vertex {@code middle} isn't the endpoint of any chord in this cycle.
+     * More precisely, finds some path from {@code middle} to {@code finish}. The vertex
+     * {@code middle} isn't the endpoint of any chord in this cycle.
      *
-     * @param cycle   already computed part of the cycle
+     * @param cycle already computed part of the cycle
      * @param visited the map that defines which vertex has been visited by this method
-     * @param finish  the last vertex in the cycle.
-     * @param middle  the vertex, which must be adjacent onl
+     * @param finish the last vertex in the cycle.
+     * @param middle the vertex, which must be adjacent onl
      * @param current currently examined vertex.
      */
-    private void dfsVisit(List<V> cycle, Map<V, Boolean> visited, V finish, V middle, V current) {
+    private void dfsVisit(List<V> cycle, Map<V, Boolean> visited, V finish, V middle, V current)
+    {
         visited.put(current, true);
         for (E edge : graph.edgesOf(current)) {
             V opposite = Graphs.getOppositeVertex(graph, edge, current);
-            if ((!visited.get(opposite) && !graph.containsEdge(opposite, middle)) || opposite.equals(finish)) {
+            if ((!visited.get(opposite) && !graph.containsEdge(opposite, middle))
+                || opposite.equals(finish))
+            {
                 cycle.add(opposite);
                 if (opposite.equals(finish)) {
                     return;
@@ -304,19 +324,20 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Minimizes the cycle represented by the list {@code cycle}. More precisely it
-     * retains first 2 vertices and finds a chordless cycle starting from the third vertex.
+     * Minimizes the cycle represented by the list {@code cycle}. More precisely it retains first 2
+     * vertices and finds a chordless cycle starting from the third vertex.
      *
      * @param cycle vertices of the graph that represent the cycle.
      * @return a chordless cycle
      */
-    private List<V> minimizeCycle(List<V> cycle) {
+    private List<V> minimizeCycle(List<V> cycle)
+    {
         Set<V> cycleVertices = new HashSet<>(cycle);
         cycleVertices.remove(cycle.get(1));
         List<V> minimized = new ArrayList<>();
         minimized.add(cycle.get(0));
         minimized.add(cycle.get(1));
-        for (int i = 2; i < cycle.size() - 1; ) {
+        for (int i = 2; i < cycle.size() - 1;) {
             V vertex = cycle.get(i);
             minimized.add(vertex);
             cycleVertices.remove(vertex);
@@ -344,14 +365,17 @@ public class ChordalityInspector<V, E>{
     }
 
     /**
-     * Returns the predecessors of {@code vertex} in the order defined by {@code map}. More precisely,
-     * returns those of {@code vertex}, whose mapped index in {@code map} is less then the index of {@code vertex}.
+     * Returns the predecessors of {@code vertex} in the order defined by {@code map}. More
+     * precisely, returns those of {@code vertex}, whose mapped index in {@code map} is less then
+     * the index of {@code vertex}.
      *
-     * @param vertexInOrder defines the mapping of vertices in {@code graph} to their indices in order.
-     * @param vertex        the vertex whose predecessors in order are to be returned.
+     * @param vertexInOrder defines the mapping of vertices in {@code graph} to their indices in
+     *        order.
+     * @param vertex the vertex whose predecessors in order are to be returned.
      * @return the predecessors of {@code vertex} in order defines by {@code map}.
      */
-    private Set<V> getPredecessors(Map<V, Integer> vertexInOrder, V vertex) {
+    private Set<V> getPredecessors(Map<V, Integer> vertexInOrder, V vertex)
+    {
         Set<V> predecessors = new HashSet<>();
         Integer vertexPosition = vertexInOrder.get(vertex);
         Set<E> edges = graph.edgesOf(vertex);
@@ -370,16 +394,17 @@ public class ChordalityInspector<V, E>{
      *
      * @return the type of iterator used in this {@code ChordalityInspector}
      */
-    public IterationOrder getIterationOrder() {
+    public IterationOrder getIterationOrder()
+    {
         return iterationOrder;
     }
 
     /**
      * Specifies internal iterator type.
      */
-    public enum IterationOrder {
-        MCS, LEX_BFS,
+    public enum IterationOrder
+    {
+        MCS,
+        LEX_BFS,
     }
 }
-
-

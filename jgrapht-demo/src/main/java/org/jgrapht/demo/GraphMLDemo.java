@@ -17,33 +17,14 @@
  */
 package org.jgrapht.demo;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.io.*;
+import org.jgrapht.io.GraphMLExporter.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.AttributeType;
-import org.jgrapht.io.ComponentAttributeProvider;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DefaultAttribute;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.GraphMLExporter;
-import org.jgrapht.io.GraphMLExporter.AttributeCategory;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.IntegerComponentNameProvider;
-import org.jgrapht.io.VertexProvider;
+import java.io.*;
+import java.util.*;
 
 /**
  * This class demonstrates exporting and importing a graph with custom vertex and edge attributes in

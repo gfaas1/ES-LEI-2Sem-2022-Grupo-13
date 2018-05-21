@@ -17,15 +17,15 @@
  */
 package org.jgrapht.alg.color;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Coloring tests
@@ -33,7 +33,8 @@ import org.junit.*;
  * @author Dimitrios Michail
  */
 public class SmallestDegreeLastColoringTest
-    extends BaseColoringTest
+    extends
+    BaseColoringTest
 {
 
     @Override

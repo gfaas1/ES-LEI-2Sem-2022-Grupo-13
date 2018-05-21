@@ -17,15 +17,12 @@
  */
 package org.jgrapht.alg.color;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.cycle.ChordalityInspector;
-import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -34,14 +31,17 @@ import static org.junit.Assert.*;
  *
  * @author Timofey Chudakov
  */
-public class ChordalGraphColoringTest {
+public class ChordalGraphColoringTest
+{
     /**
      * Tests coloring of an empty graph
      */
     @Test
-    public void testGetColoring1() {
+    public void testGetColoring1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        VertexColoringAlgorithm.Coloring<Integer> coloring = new ChordalGraphColoring<>(graph).getColoring();
+        VertexColoringAlgorithm.Coloring<Integer> coloring =
+            new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
         assertEquals(0, coloring.getNumberColors());
         assertEquals(0, coloring.getColors().size());
@@ -52,12 +52,14 @@ public class ChordalGraphColoringTest {
      * Tests coloring on a small clique
      */
     @Test
-    public void testGetColoring2() {
+    public void testGetColoring2()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
         Graphs.addEdgeWithVertices(graph, 2, 3);
-        VertexColoringAlgorithm.Coloring<Integer> coloring = new ChordalGraphColoring<>(graph).getColoring();
+        VertexColoringAlgorithm.Coloring<Integer> coloring =
+            new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
         assertEquals(3, coloring.getNumberColors());
         assertIsColoring(graph, coloring);
@@ -67,13 +69,15 @@ public class ChordalGraphColoringTest {
      * Tests coloring on a non-chordal graph.
      */
     @Test
-    public void testGetColoring3() {
+    public void testGetColoring3()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 1, 3);
         Graphs.addEdgeWithVertices(graph, 2, 4);
         Graphs.addEdgeWithVertices(graph, 3, 4);
-        VertexColoringAlgorithm.Coloring<Integer> coloring = new ChordalGraphColoring<>(graph).getColoring();
+        VertexColoringAlgorithm.Coloring<Integer> coloring =
+            new ChordalGraphColoring<>(graph).getColoring();
         assertNull(coloring);
     }
 
@@ -81,7 +85,8 @@ public class ChordalGraphColoringTest {
      * Tests coloring of the big graph
      */
     @Test
-    public void testGetColoring4() {
+    public void testGetColoring4()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 2);
         Graphs.addEdgeWithVertices(graph, 2, 3);
@@ -103,7 +108,8 @@ public class ChordalGraphColoringTest {
         Graphs.addEdgeWithVertices(graph, 4, 8);
         Graphs.addEdgeWithVertices(graph, 4, 10);
         Graphs.addEdgeWithVertices(graph, 6, 10);
-        VertexColoringAlgorithm.Coloring<Integer> coloring = new ChordalGraphColoring<>(graph).getColoring();
+        VertexColoringAlgorithm.Coloring<Integer> coloring =
+            new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
         assertIsColoring(graph, coloring);
         assertEquals(5, coloring.getNumberColors());
@@ -113,7 +119,8 @@ public class ChordalGraphColoringTest {
      * Tests coloring of a pseudograph
      */
     @Test
-    public void testGetColoring5() {
+    public void testGetColoring5()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         Graphs.addEdgeWithVertices(graph, 1, 1);
         Graphs.addEdgeWithVertices(graph, 2, 2);
@@ -127,7 +134,8 @@ public class ChordalGraphColoringTest {
         Graphs.addEdgeWithVertices(graph, 4, 4);
         Graphs.addEdgeWithVertices(graph, 5, 5);
         Graphs.addEdgeWithVertices(graph, 5, 5);
-        VertexColoringAlgorithm.Coloring<Integer> coloring = new ChordalGraphColoring<>(graph).getColoring();
+        VertexColoringAlgorithm.Coloring<Integer> coloring =
+            new ChordalGraphColoring<>(graph).getColoring();
         assertNotNull(coloring);
         assertIsColoring(graph, coloring);
         assertEquals(3, coloring.getNumberColors());
@@ -136,12 +144,14 @@ public class ChordalGraphColoringTest {
     /**
      * Checks whether the {@code coloring} is a valid vertex coloring.
      *
-     * @param graph    the tested graph.
+     * @param graph the tested graph.
      * @param coloring the tested coloring.
-     * @param <V>      the graph vertex type.
-     * @param <E>      the graph edge type.
+     * @param <V> the graph vertex type.
+     * @param <E> the graph edge type.
      */
-    private <V, E> void assertIsColoring(Graph<V, E> graph, VertexColoringAlgorithm.Coloring<V> coloring) {
+    private <V,
+        E> void assertIsColoring(Graph<V, E> graph, VertexColoringAlgorithm.Coloring<V> coloring)
+    {
         Map<V, Integer> colors = coloring.getColors();
         for (V vertex : graph.vertexSet()) {
             for (E edge : graph.edgesOf(vertex)) {

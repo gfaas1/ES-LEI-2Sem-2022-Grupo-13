@@ -17,18 +17,13 @@
  */
 package org.jgrapht.graph.builder;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GraphBuilderTest
 {
@@ -80,8 +75,8 @@ public class GraphBuilderTest
         assertTrue(g.containsEdge(v1, v8));
         assertEquals(e1, g.getEdge(v1, v7));
         assertEquals(e2, g.getEdge(v1, v8));
-        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)),0);
-        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)),0);
+        assertEquals(10.0, g.getEdgeWeight(g.getEdge(v7, v8)), 0);
+        assertEquals(42.0, g.getEdgeWeight(g.getEdge(v1, v8)), 0);
     }
 
     @Test

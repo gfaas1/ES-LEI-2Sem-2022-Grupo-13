@@ -20,11 +20,11 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -144,7 +144,8 @@ public abstract class AbstractGraphIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+        implements
+        TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;

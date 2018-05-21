@@ -17,19 +17,19 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Schwarcfiter and Lauer's algorithm.
  *
  * <p>
  * See:<br>
- * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed graph in $O(n + m)$ per
- * cycle, Technical Report Series, #60, May 1974, Univ. of Newcastle upon Tyne, Newcastle upon Tyne,
- * England.
+ * J.L.Szwarcfiter and P.E.Lauer, Finding the elementary cycles of a directed graph in $O(n + m)$
+ * per cycle, Technical Report Series, #60, May 1974, Univ. of Newcastle upon Tyne, Newcastle upon
+ * Tyne, England.
  *
  * @param <V> the vertex type.
  * @param <E> the edge type.
@@ -37,7 +37,8 @@ import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
  * @author Nikolay Ognyanov
  */
 public class SzwarcfiterLauerSimpleCycles<V, E>
-    implements DirectedSimpleCycles<V, E>
+    implements
+    DirectedSimpleCycles<V, E>
 {
     // The graph.
     private Graph<V, E> graph;

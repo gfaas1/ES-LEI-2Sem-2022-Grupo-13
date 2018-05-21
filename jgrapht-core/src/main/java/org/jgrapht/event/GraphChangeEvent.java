@@ -26,7 +26,8 @@ import java.util.*;
  * @since Aug 10, 2003
  */
 public class GraphChangeEvent
-    extends EventObject
+    extends
+    EventObject
 {
     private static final long serialVersionUID = 3834592106026382391L;
 

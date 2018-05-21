@@ -17,18 +17,20 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.util.WeightedUnmodifiableSet;
+import org.jgrapht.util.*;
 
-import java.util.Set;
+import java.util.*;
 
 /**
- * Algorithm to compute an <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent Set</a> in a graph.
+ * Algorithm to compute an
+ * <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent Set</a> in a graph.
  *
  * @param <V> vertex the graph vertex type
  *
  * @author Joris Kinable
  */
-public interface IndependentSetAlgorithm<V> {
+public interface IndependentSetAlgorithm<V>
+{
 
     /**
      * Computes an independent set; all vertices are considered to have equal weight.
@@ -38,18 +40,21 @@ public interface IndependentSetAlgorithm<V> {
     IndependentSet<V> getIndependentSet();
 
     /**
-     * A (weighted) <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent Set</a>
+     * A (weighted) <a href="http://mathworld.wolfram.com/IndependentVertexSet.html">Independent
+     * Set</a>
      *
      * @param <V> the vertex type
      */
     interface IndependentSet<V>
-            extends Set<V>
+        extends
+        Set<V>
     {
 
         /**
          * Returns the weight of the independent set. When solving a weighted independent set
-         * problem, the weight returned is the sum of the weights of the vertices in the independent set. When
-         * solving the unweighted variant, the cardinality of the independent set is returned instead.
+         * problem, the weight returned is the sum of the weights of the vertices in the independent
+         * set. When solving the unweighted variant, the cardinality of the independent set is
+         * returned instead.
          *
          * @return weight of the independent set
          */
@@ -61,8 +66,11 @@ public interface IndependentSetAlgorithm<V> {
      *
      * @param <V> the vertex type
      */
-    class IndependentSetImpl<V> extends WeightedUnmodifiableSet<V>
-            implements IndependentSet<V>
+    class IndependentSetImpl<V>
+        extends
+        WeightedUnmodifiableSet<V>
+        implements
+        IndependentSet<V>
     {
 
         private static final long serialVersionUID = 4572451196544323306L;

@@ -17,18 +17,12 @@
  */
 package org.jgrapht.graph.builder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the graph type builder.
@@ -55,11 +49,11 @@ public class GraphTypeBuilderTest
     @Test
     public void testGraphTypeBuilderWithEdgeSupplier()
     {
-        Graph<Integer, DefaultWeightedEdge> graph = GraphTypeBuilder
-            .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-            .edgeSupplier(()-> new DefaultWeightedEdge())
-            .vertexSupplier(SupplierUtil.createIntegerSupplier())
-            .buildGraph();
+        Graph<Integer,
+            DefaultWeightedEdge> graph = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .edgeSupplier(() -> new DefaultWeightedEdge())
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());

@@ -18,10 +18,10 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Imports a graph specified in DIMACS format.
@@ -68,8 +68,10 @@ import org.jgrapht.*;
  * @param <E> the graph edge type
  */
 public class DIMACSImporter<V, E>
-    extends AbstractBaseImporter<V, E>
-    implements GraphImporter<V, E>
+    extends
+    AbstractBaseImporter<V, E>
+    implements
+    GraphImporter<V, E>
 {
     private final double defaultWeight;
 

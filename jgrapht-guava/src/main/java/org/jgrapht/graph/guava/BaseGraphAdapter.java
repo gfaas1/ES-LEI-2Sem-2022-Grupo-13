@@ -17,22 +17,17 @@
  */
 package org.jgrapht.graph.guava;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
-
-import org.jgrapht.EdgeFactory;
+import com.google.common.graph.*;
+import org.jgrapht.*;
 import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultGraphType;
+import org.jgrapht.graph.*;
 
-import com.google.common.graph.EndpointPair;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link Graph}. This is a
@@ -44,8 +39,12 @@ import com.google.common.graph.EndpointPair;
  * @param <G> type of the underlying Guava's graph
  */
 public abstract class BaseGraphAdapter<V, G extends com.google.common.graph.Graph<V>>
-    extends AbstractGraph<V, EndpointPair<V>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, EndpointPair<V>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -6742507788742087708L;
 

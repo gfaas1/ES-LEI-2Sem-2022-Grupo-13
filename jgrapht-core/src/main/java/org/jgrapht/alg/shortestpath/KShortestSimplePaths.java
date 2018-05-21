@@ -17,16 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
-import org.jgrapht.graph.GraphWalk;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * The algorithm determines the k shortest simple paths in increasing order of weight. Weights can

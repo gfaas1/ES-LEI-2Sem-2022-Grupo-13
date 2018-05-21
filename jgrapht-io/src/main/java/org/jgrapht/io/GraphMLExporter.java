@@ -17,17 +17,16 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
+import org.jgrapht.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 import javax.xml.transform.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.*;
-
-import org.jgrapht.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import java.io.*;
+import java.util.*;
+import java.util.Map.*;
 
 /**
  * Exports a graph as GraphML.
@@ -44,8 +43,10 @@ import org.xml.sax.helpers.*;
  * @author Dimitrios Michail
  */
 public class GraphMLExporter<V, E>
-    extends AbstractBaseExporter<V, E>
-    implements GraphExporter<V, E>
+    extends
+    AbstractBaseExporter<V, E>
+    implements
+    GraphExporter<V, E>
 {
     // providers
     private ComponentNameProvider<V> vertexLabelProvider;

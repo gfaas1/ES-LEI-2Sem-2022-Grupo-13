@@ -17,25 +17,21 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.junit.Assert;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 public class NaiveLcaFinderTest
 {
-    private static <V, E> void checkLcas(NaiveLcaFinder<V, E> finder, V a, V b, Collection<V> expectedSet){
+    private static <V,
+        E> void checkLcas(NaiveLcaFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
+    {
         Set<V> lcaSet = finder.findLcas(a, b);
         Assert.assertTrue(lcaSet.containsAll(expectedSet));
         Assert.assertEquals(lcaSet.size(), expectedSet.size());
     }
-
 
     @Test
     public void testNormalCases()
@@ -168,7 +164,8 @@ public class NaiveLcaFinderTest
     }
 
     @Test
-    public void testTwoLcas(){
+    public void testTwoLcas()
+    {
 
         Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 

@@ -70,7 +70,7 @@ public enum AttributeType
             return DOUBLE;
         case "string":
             return STRING;
-        case "unknown": 
+        case "unknown":
             return UNKNOWN;
         }
         throw new IllegalArgumentException("Type " + value + " is unknown");

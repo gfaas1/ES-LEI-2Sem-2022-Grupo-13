@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
+import org.jgrapht.alg.interfaces.*;
+
+import java.util.*;
 
 /**
  * A common interface for classes implementing algorithms for finding a cycle base of an undirected

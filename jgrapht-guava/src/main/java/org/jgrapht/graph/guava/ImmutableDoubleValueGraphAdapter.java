@@ -17,24 +17,22 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.Serializable;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.ImmutableValueGraph;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link ImmutableValueGraph} specialized with double values.
  * 
  * <p>
- * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph 
+ * The adapter uses class {@link EndpointPair} to represent edges. Since the underlying value graph
  * is immutable, the resulting graph is unmodifiable.
  * 
  * <p>
  * Each edge in {@link ImmutableValueGraph} is associated with a double value which is mapped to the
- * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling method 
+ * edge weight in the resulting {@link Graph}. Thus, the graph is weighted and calling method
  * {@link #getEdgeWeight(Object)} will return the value of an edge.
  * 
  * <p>
@@ -62,7 +60,8 @@ import com.google.common.graph.ImmutableValueGraph;
  * @param <V> the graph vertex type
  */
 public class ImmutableDoubleValueGraphAdapter<V>
-    extends ImmutableValueGraphAdapter<V, Double>
+    extends
+    ImmutableValueGraphAdapter<V, Double>
 {
     private static final long serialVersionUID = 8730006126353129360L;
 

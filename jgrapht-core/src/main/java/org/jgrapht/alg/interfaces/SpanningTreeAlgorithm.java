@@ -42,7 +42,8 @@ public interface SpanningTreeAlgorithm<E>
      * @param <E> the graph edge type
      */
     interface SpanningTree<E>
-        extends Iterable<E>
+        extends
+        Iterable<E>
     {
         /**
          * Returns the weight of the spanning tree.
@@ -76,7 +77,9 @@ public interface SpanningTreeAlgorithm<E>
      * @param <E> the graph edge type
      */
     class SpanningTreeImpl<E>
-        implements SpanningTree<E>, Serializable
+        implements
+        SpanningTree<E>,
+        Serializable
     {
         private static final long serialVersionUID = 402707108331703333L;
 

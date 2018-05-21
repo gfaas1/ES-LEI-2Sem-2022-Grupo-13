@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.clique;
 
+import org.jgrapht.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
-
-import org.jgrapht.*;
 
 /**
  * Bron-Kerbosch maximal clique enumeration algorithm with pivot.
@@ -35,8 +35,8 @@ import org.jgrapht.*;
  * 
  * <p>
  * where the authors show that using that rule guarantees that the Bron-Kerbosch algorithm has
- * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding time
- * to write the output, which is worst-case optimal.
+ * worst-case running time $O(3^{n/3})$ where $n$ is the number of vertices of the graph, excluding
+ * time to write the output, which is worst-case optimal.
  * 
  * <p>
  * The algorithm first computes all maximal cliques and then returns the result to the user. A
@@ -51,7 +51,8 @@ import org.jgrapht.*;
  * @author Dimitrios Michail
  */
 public class PivotBronKerboschCliqueFinder<V, E>
-    extends BaseBronKerboschCliqueFinder<V, E>
+    extends
+    BaseBronKerboschCliqueFinder<V, E>
 {
     /**
      * Constructs a new clique finder.
@@ -185,10 +186,8 @@ public class PivotBronKerboschCliqueFinder<V, E>
                 vNeighbors.add(Graphs.getOppositeVertex(graph, e, v));
             }
 
-            Set<V> newP =
-                P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
-            Set<V> newX =
-                X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
+            Set<V> newP = P.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
+            Set<V> newX = X.stream().filter(vNeighbors::contains).collect(Collectors.toSet());
             Set<V> newR = new HashSet<>(R);
             newR.add(v);
 

@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.1.1** (under development):
+- **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Updated demos (contributed by Dimitrios Michail)
     - Added assertions to NeighborCache (contributed by Joris Kinable)
@@ -63,6 +63,11 @@ Changes to JGraphT in each version:
     - Added `ChordalGraphMinimalVertexSeparatorFinder` for the detection of minimal vertex separators in chordal graphs (contributed by Timofey Chudakov)
     - Added suites for fast tests, integration tests and performance tests (contributed by John Sichi)
     - Refactored `ChordalityInspector` and revised several interfaces (vertex cover, independent set, clique, etc) (contributed by Joris Kinable)
+    - Minor improvements to `DOTExporter` (contributed by Dimitrios Michail)
+    - Added graph listener event for edge weight update (contributed by Dimitrios Michail)
+    - Added Planted Partition Graph Generator `PlantedPartitionGraphGenerator` (contributed by Emilio Cruciani)
+    - Added `BergeGraphInspector` which checks whether a graph is perfect (contributed by Philipp Kaesgen)
+    - Added Bhandari K-disjoint shortest paths implementation `BhandariKDisjointShortestPaths` (contributed by Assaf Mizrachi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)

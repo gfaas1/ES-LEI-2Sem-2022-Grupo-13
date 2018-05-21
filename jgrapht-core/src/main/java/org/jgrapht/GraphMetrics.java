@@ -17,10 +17,10 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Collection of methods which provide numerical graph information.
@@ -209,4 +209,4 @@ public abstract class GraphMetrics
     }
 }
 
-//End GraphMetrics.java
+// End GraphMetrics.java

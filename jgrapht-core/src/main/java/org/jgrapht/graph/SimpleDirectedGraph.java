@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A simple directed graph. A simple directed graph is a directed graph in which neither multiple
@@ -31,7 +31,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class SimpleDirectedGraph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = 1665314455034181409L;
 
@@ -95,7 +96,7 @@ public class SimpleDirectedGraph<V, E>
      *
      * @param weighted if true the graph supports edge weights
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleDirectedGraph(EdgeFactory<V, E> ef, boolean weighted)
@@ -107,7 +108,7 @@ public class SimpleDirectedGraph<V, E>
      * Creates a new graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleDirectedGraph(EdgeFactory<V, E> ef)
@@ -122,7 +123,7 @@ public class SimpleDirectedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends SimpleDirectedGraph<V, E>> createBuilder(

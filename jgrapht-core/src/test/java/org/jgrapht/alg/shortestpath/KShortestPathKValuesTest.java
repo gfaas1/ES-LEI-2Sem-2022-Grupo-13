@@ -20,10 +20,9 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * @since July 5, 2007
@@ -104,7 +103,8 @@ public class KShortestPathKValuesTest
                 new KShortestSimplePaths<>(graph);
             for (String targetVertex : graph.vertexSet()) {
                 if (targetVertex != sourceVertex) {
-                    assertEquals(finder.getPaths(sourceVertex, targetVertex, maxSize).size(), nbPaths);
+                    assertEquals(
+                        finder.getPaths(sourceVertex, targetVertex, maxSize).size(), nbPaths);
                 }
             }
         }

@@ -17,14 +17,11 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.Serializable;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
-
+import com.google.common.graph.*;
 import org.jgrapht.Graph;
 
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.MutableValueGraph;
+import java.io.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph} specialized with double values.
@@ -66,7 +63,8 @@ import com.google.common.graph.MutableValueGraph;
  * @param <V> the graph vertex type
  */
 public class MutableDoubleValueGraphAdapter<V>
-    extends MutableValueGraphAdapter<V, Double>
+    extends
+    MutableValueGraphAdapter<V, Double>
 {
     private static final long serialVersionUID = -6335845255406679994L;
 

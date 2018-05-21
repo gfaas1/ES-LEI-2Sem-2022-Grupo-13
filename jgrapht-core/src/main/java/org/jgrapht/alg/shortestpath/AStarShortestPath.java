@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A* shortest path.
@@ -36,10 +36,10 @@ import org.jgrapht.util.*;
  * However, there still exist several approaches in literature to improve the performance of this
  * heuristic which one could consider to implement. Another issue to take into consideration is the
  * following: given two candidate nodes, $i$, $j$ to expand, where $f(i)=f(j)$, $g(i)$ &gt; $g(j)$,
- * $h(i)$ &lt; $g(j)$, $f(i)=g(i)+h(i)$, $g(i)$ is the actual distance from the source node to $i$, $h(i)$ is the
- * estimated distance from $i$ to the target node. Usually a depth-first search is desired, so ideally
- * we would expand node $i$ first. Using the FibonacciHeap, this is not necessarily the case though.
- * This could be improved in a later version.
+ * $h(i)$ &lt; $g(j)$, $f(i)=g(i)+h(i)$, $g(i)$ is the actual distance from the source node to $i$,
+ * $h(i)$ is the estimated distance from $i$ to the target node. Usually a depth-first search is
+ * desired, so ideally we would expand node $i$ first. Using the FibonacciHeap, this is not
+ * necessarily the case though. This could be improved in a later version.
  * 
  * <p>
  * Note: This implementation works with both consistent and inconsistent admissible heuristics. For
@@ -58,7 +58,8 @@ import org.jgrapht.util.*;
  * @since Aug, 2015
  */
 public class AStarShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     // List of open nodes
     protected FibonacciHeap<V> openList;
@@ -176,9 +177,9 @@ public class AStarShortestPath<V, E>
      * plus the step cost of reaching that neighbor. For details, refer to <a href=
      * "https://en.wikipedia.org/wiki/Consistent_heuristic">https://en.wikipedia.org/wiki/Consistent_heuristic</a>.
      * In short, a heuristic is consistent iff <code>h(u)&le; d(u,v)+h(v)</code>, for every edge
-     * $(u,v)$, where $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to reach the
-     * target node from vertex u. Most natural admissible heuristics, such as Manhattan or Euclidean
-     * distance, are consistent heuristics.
+     * $(u,v)$, where $d(u,v)$ is the weight of edge $(u,v)$ and $h(u)$ is the estimated cost to
+     * reach the target node from vertex u. Most natural admissible heuristics, such as Manhattan or
+     * Euclidean distance, are consistent heuristics.
      * 
      * @param admissibleHeuristic admissible heuristic
      * @return true is the heuristic is consistent, false otherwise

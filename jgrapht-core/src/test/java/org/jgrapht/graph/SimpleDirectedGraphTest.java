@@ -17,14 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.util.*;
+import java.util.function.*;
 
 import static org.junit.Assert.*;
 
@@ -306,7 +304,7 @@ public class SimpleDirectedGraphTest
         assertNull(g1.getEdgeSource(e));
         assertNull(g1.getEdgeTarget(e));
     }
-    
+
     /**
      * .
      */
@@ -578,11 +576,21 @@ public class SimpleDirectedGraphTest
     @Before
     public void setUp()
     {
-        gEmpty = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g1 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g2 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g3 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
-        g4 = new SimpleDirectedGraph<>(SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gEmpty = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g1 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g2 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g3 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
+        g4 = new SimpleDirectedGraph<>(
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER,
+            false);
 
         eSupplier = g1.getEdgeSupplier();
         eLoop = eSupplier.get();

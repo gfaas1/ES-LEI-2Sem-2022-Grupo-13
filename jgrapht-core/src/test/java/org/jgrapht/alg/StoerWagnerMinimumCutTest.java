@@ -17,14 +17,12 @@
  */
 package org.jgrapht.alg;
 
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.util.*;
 
-import org.jgrapht.graph.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Robby McKilliam

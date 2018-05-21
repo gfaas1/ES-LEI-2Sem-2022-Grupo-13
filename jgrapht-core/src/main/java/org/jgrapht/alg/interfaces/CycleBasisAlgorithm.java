@@ -17,15 +17,11 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.cycle.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.cycle.Cycles;
+import java.io.*;
+import java.util.*;
 
 /**
  * Allows to derive an undirected <a href="https://en.wikipedia.org/wiki/Cycle_basis">cycle
@@ -100,7 +96,9 @@ public interface CycleBasisAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class CycleBasisImpl<V, E>
-        implements CycleBasis<V, E>, Serializable
+        implements
+        CycleBasis<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = -1420882459022219505L;
 

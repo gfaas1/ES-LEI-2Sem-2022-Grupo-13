@@ -17,10 +17,10 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Kleinberg's small-world graph generator.
@@ -32,12 +32,12 @@ import org.jgrapht.alg.util.*;
  * <p>
  * The basic structure is a a two-dimensional grid and allows for edges to be directed. It begins
  * with a set of nodes (representing individuals in the social network) that are identified with the
- * set of lattice points in an $n \times n$ square. For a universal constant $p \geq 1$, the node $u$
- * has a directed edge to every other node within lattice distance $p$ (these are its local contacts).
- * For universal constants $q \geq 0$ and $r \geq 0$, we also construct directed edges
+ * set of lattice points in an $n \times n$ square. For a universal constant $p \geq 1$, the node
+ * $u$ has a directed edge to every other node within lattice distance $p$ (these are its local
+ * contacts). For universal constants $q \geq 0$ and $r \geq 0$, we also construct directed edges
  * from $u$ to $q$ other nodes (the long-range contacts) using independent random trials; the i-th
- * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$ where
- * $d(u,v)$ is the lattice distance from $u$ to $v$.
+ * directed edge from $u$ has endpoint $v$ with probability proportional to \frac{1}{d(u,v)^r}$
+ * where $d(u,v)$ is the lattice distance from $u$ to $v$.
  * 
  * @author Dimitrios Michail
  * @since February 2017
@@ -46,7 +46,8 @@ import org.jgrapht.alg.util.*;
  * @param <E> the graph edge type
  */
 public class KleinbergSmallWorldGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private final Random rng;
 
@@ -131,8 +132,7 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
      * @param resultMap not used by this generator, can be null
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         /*
          * Special cases

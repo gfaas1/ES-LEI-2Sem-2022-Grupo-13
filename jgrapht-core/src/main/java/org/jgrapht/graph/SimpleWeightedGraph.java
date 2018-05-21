@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.util.function.Supplier;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A simple weighted graph.
@@ -30,7 +30,8 @@ import org.jgrapht.util.SupplierUtil;
  * @param <E> the graph edge type
  */
 public class SimpleWeightedGraph<V, E>
-    extends SimpleGraph<V, E>
+    extends
+    SimpleGraph<V, E>
 {
     private static final long serialVersionUID = -1568410577378365671L;
 
@@ -52,9 +53,7 @@ public class SimpleWeightedGraph<V, E>
      */
     public SimpleWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(
-            vertexSupplier, edgeSupplier,
-            true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -70,7 +69,7 @@ public class SimpleWeightedGraph<V, E>
     {
         return new GraphBuilder<>(new SimpleWeightedGraph<>(edgeClass));
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -85,19 +84,18 @@ public class SimpleWeightedGraph<V, E>
         return new GraphBuilder<>(new SimpleWeightedGraph<>(null, edgeSupplier));
     }
 
-    
     /**
      * Creates a new simple weighted graph with the specified edge factory.
      *
      * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public SimpleWeightedGraph(EdgeFactory<V, E> ef)
     {
         super(ef, true);
     }
- 
+
     /**
      * Create a builder for this kind of graph.
      * 
@@ -105,7 +103,7 @@ public class SimpleWeightedGraph<V, E>
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead 
+     * @deprecated Use suppliers instead
      */
     @Deprecated
     public static <V, E> GraphBuilder<V, E, ? extends SimpleWeightedGraph<V, E>> createBuilder(

@@ -17,15 +17,14 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * 2nd part of tests for DOTImporter. See also {@link DOTImporter1Test}.

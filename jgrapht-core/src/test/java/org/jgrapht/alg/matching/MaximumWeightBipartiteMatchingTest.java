@@ -17,26 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.math.*;
+import java.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.SlowTests;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.junit.Assert.*;
 
 public class MaximumWeightBipartiteMatchingTest
 {

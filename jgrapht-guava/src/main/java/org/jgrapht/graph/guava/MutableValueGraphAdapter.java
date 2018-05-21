@@ -17,23 +17,15 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
-import org.jgrapht.util.TypeUtil;
-
-import com.google.common.graph.EndpointPair;
+import com.google.common.graph.*;
 import com.google.common.graph.Graphs;
-import com.google.common.graph.MutableValueGraph;
-import com.google.common.graph.ValueGraph;
-import com.google.common.graph.ValueGraphBuilder;
+import org.jgrapht.Graph;
+import org.jgrapht.*;
+import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A graph adapter class using Guava's {@link MutableValueGraph}.
@@ -48,7 +40,8 @@ import com.google.common.graph.ValueGraphBuilder;
  * 
  * <pre>
  * class MyValue
- *     implements Serializable
+ *     implements
+ *     Serializable
  * {
  *     private double value;
  *
@@ -96,8 +89,12 @@ import com.google.common.graph.ValueGraphBuilder;
  * @param <W> the value type
  */
 public class MutableValueGraphAdapter<V, W>
-    extends BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>>
-    implements Graph<V, EndpointPair<V>>, Cloneable, Serializable
+    extends
+    BaseValueGraphAdapter<V, W, MutableValueGraph<V, W>>
+    implements
+    Graph<V, EndpointPair<V>>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -5095044027783397573L;
 
@@ -314,7 +311,8 @@ public class MutableValueGraphAdapter<V, W>
 
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
+        throws ClassNotFoundException,
+        IOException
     {
         ois.defaultReadObject();
 

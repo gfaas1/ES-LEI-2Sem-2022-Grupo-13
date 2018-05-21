@@ -17,19 +17,18 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.util.*;
 import java.util.function.*;
-
-import org.jgrapht.*;
 
 /**
  * A walk in a graph is an alternating sequence of vertices and edges, starting and ending at a
  * vertex, in which each edge is adjacent in the sequence to its two endpoints. More precisely, a
- * walk is a connected sequence of vertices and edges in a graph
- * $v_0, e_0, v_1, e_1, v_2, \dotso, v_{k-1}, e_{k-1}, v_{k}$, such that for $1 \leq i  \leq k$, the edge
- * $e_i$ has endpoints $v_{i-1}$ and $v_i$. The class makes no assumptions with
- * respect to the shape of the walk: edges may be repeated, and the start and end point of the walk
- * may be different.
+ * walk is a connected sequence of vertices and edges in a graph $v_0, e_0, v_1, e_1, v_2, \dotso,
+ * v_{k-1}, e_{k-1}, v_{k}$, such that for $1 \leq i \leq k$, the edge $e_i$ has endpoints $v_{i-1}$
+ * and $v_i$. The class makes no assumptions with respect to the shape of the walk: edges may be
+ * repeated, and the start and end point of the walk may be different.
  *
  * <p>
  * See <a href="http://mathworld.wolfram.com/Walk.html">http://mathworld.wolfram.com/Walk.html</a>
@@ -59,7 +58,8 @@ import org.jgrapht.*;
  * 
  */
 public class GraphWalk<V, E>
-    implements GraphPath<V, E>
+    implements
+    GraphPath<V, E>
 {
     protected Graph<V, E> graph;
 
@@ -74,8 +74,8 @@ public class GraphWalk<V, E>
 
     /**
      * Creates a walk defined by a sequence of edges. A walk defined by its edges can be specified
-     * for non-simple graphs. Edge repetition is permitted, the start and end point points ($v_0$ and
-     * $v_k$) can be different.
+     * for non-simple graphs. Edge repetition is permitted, the start and end point points ($v_0$
+     * and $v_k$) can be different.
      *
      * @param graph the graph
      * @param startVertex the starting vertex
@@ -248,9 +248,9 @@ public class GraphWalk<V, E>
 
     /**
      * Reverses the direction of the walk. In case of directed/mixed graphs, the arc directions will
-     * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc $(v,u)$
-     * is not present in the graph. The weight of the resulting walk equals the sum of edge weights
-     * in the walk.
+     * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc
+     * $(v,u)$ is not present in the graph. The weight of the resulting walk equals the sum of edge
+     * weights in the walk.
      * 
      * @throws InvalidGraphWalkException if the path is invalid
      * @return a reversed GraphWalk
@@ -262,8 +262,8 @@ public class GraphWalk<V, E>
 
     /**
      * Reverses the direction of the walk. In case of directed/mixed graphs, the arc directions will
-     * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc $(v,u)$
-     * is not present in the graph.
+     * be reversed. An exception is thrown if reversing an arc $(u,v)$ is impossible because arc
+     * $(v,u)$ is not present in the graph.
      * 
      * @param walkWeightCalculator Function used to calculate the weight of the reversed GraphWalk
      * @throws InvalidGraphWalkException if the path is invalid
@@ -522,7 +522,8 @@ public class GraphWalk<V, E>
  * Exception thrown in the event that the path is invalid.
  */
 class InvalidGraphWalkException
-    extends RuntimeException
+    extends
+    RuntimeException
 {
     private static final long serialVersionUID = 3811666107707436479L;
 

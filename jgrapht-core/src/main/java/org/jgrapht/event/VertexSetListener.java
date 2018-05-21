@@ -32,7 +32,8 @@ import java.util.*;
  * @since Jul 18, 2003
  */
 public interface VertexSetListener<V>
-    extends EventListener
+    extends
+    EventListener
 {
     /**
      * Notifies that a vertex has been added to the graph.

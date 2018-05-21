@@ -17,17 +17,17 @@
  */
 package org.jgrapht.perf.graph;
 
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.graph.DirectedAcyclicGraphTest.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
+
+import java.util.concurrent.*;
 
 /**
  * A somewhat frivolous test of the performance difference between doing a full cycle detection
@@ -61,8 +61,10 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                     for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
                                                                                 // graph
                                                                                 // configurations
-                        Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                        Graph<Long,
+                            DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(
+                                SupplierUtil.createLongSupplier(),
+                                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);
@@ -112,8 +114,10 @@ public class DirectedAcyclicGraphVSStaticGraphPerformanceTest
                     for (int seed = 0; seed < trialsPerConfiguration; seed++) { // test with random
                                                                                 // graph
                                                                                 // configurations
-                        Graph<Long, DefaultEdge> sourceGraph =
-                            new SimpleDirectedGraph<>(SupplierUtil.createLongSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+                        Graph<Long,
+                            DefaultEdge> sourceGraph = new SimpleDirectedGraph<>(
+                                SupplierUtil.createLongSupplier(),
+                                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                         RepeatableRandomGraphGenerator<Long, DefaultEdge> gen =
                             new RepeatableRandomGraphGenerator<>(
                                 numVertices, numVertices * connectednessFactor, seed);

@@ -17,20 +17,21 @@
  */
 package org.jgrapht.alg.flow;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Joris Kinable
  */
 public class PushRelabelMinimumSTCutTest
-    extends MinimumSourceSinkCutTest
+    extends
+    MinimumSourceSinkCutTest
 {
     @Override
     MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> createSolver(
@@ -58,7 +59,7 @@ public class PushRelabelMinimumSTCutTest
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 5);
-        assertEquals(0d, cutWeight,0);
+        assertEquals(0d, cutWeight, 0);
     }
 
     @Test
@@ -71,7 +72,7 @@ public class PushRelabelMinimumSTCutTest
 
         MinimumSTCutAlgorithm<Integer, DefaultWeightedEdge> prSolver = this.createSolver(network);
         double cutWeight = prSolver.calculateMinCut(0, 2);
-        assertEquals(0d, cutWeight,0);
+        assertEquals(0d, cutWeight, 0);
     }
 
     @Test

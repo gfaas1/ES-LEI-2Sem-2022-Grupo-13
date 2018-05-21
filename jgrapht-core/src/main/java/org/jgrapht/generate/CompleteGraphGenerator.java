@@ -17,12 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
+import java.util.*;
 
 /**
  * Generates a complete graph of any size.
@@ -38,7 +35,8 @@ import org.jgrapht.GraphTests;
  * @since Nov 02, 2008
  */
 public class CompleteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int size;
 

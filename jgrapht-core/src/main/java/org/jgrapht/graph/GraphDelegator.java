@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-import java.util.function.Supplier;
-
-import org.jgrapht.*;
+import java.util.function.*;
 
 /**
  * A graph backed by the the graph specified at the constructor, which delegates all its methods to
@@ -34,8 +34,8 @@ import org.jgrapht.*;
  * </p>
  *
  * <p>
- * This class is mostly used as a base for extending subclasses. It can also be used in order to override 
- * the vertex and edge supplier of a graph.
+ * This class is mostly used as a base for extending subclasses. It can also be used in order to
+ * override the vertex and edge supplier of a graph.
  * </p>
  * 
  * @param <V> the graph vertex type
@@ -45,8 +45,11 @@ import org.jgrapht.*;
  * @since Jul 20, 2003
  */
 public class GraphDelegator<V, E>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -215068279981825448L;
 
@@ -157,7 +160,7 @@ public class GraphDelegator<V, E>
          */
         if (edgeSupplier != null) {
             E e = edgeSupplier.get();
-            return this.addEdge(sourceVertex, targetVertex, e) ? e: null;
+            return this.addEdge(sourceVertex, targetVertex, e) ? e : null;
         }
         return delegate.addEdge(sourceVertex, targetVertex);
     }
@@ -182,7 +185,7 @@ public class GraphDelegator<V, E>
          */
         if (vertexSupplier != null) {
             V v = vertexSupplier.get();
-            return this.addVertex(v) ? v: null;
+            return this.addVertex(v) ? v : null;
         }
         return delegate.addVertex();
     }

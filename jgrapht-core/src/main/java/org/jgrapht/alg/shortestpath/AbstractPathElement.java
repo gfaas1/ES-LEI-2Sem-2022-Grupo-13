@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * A new path is created from a path concatenated to an edge. It's like a linked list.<br>

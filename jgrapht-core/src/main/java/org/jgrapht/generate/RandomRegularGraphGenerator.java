@@ -18,18 +18,9 @@
 
 package org.jgrapht.generate;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import org.jgrapht.*;
 
-import org.jgrapht.Graph;
+import java.util.*;
 
 /**
  * Generate a random $d$-regular undirected graph with $n$ vertices. A regular graph is a graph
@@ -58,7 +49,8 @@ import org.jgrapht.Graph;
  * @param <E> graph edge type
  */
 public class RandomRegularGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
 
     private final int n;
@@ -198,7 +190,7 @@ public class RandomRegularGraphGenerator<V, E>
         List<V> vertices = new ArrayList<>(this.n);
         for (int i = 0; i < this.n; i++) {
             V v = target.addVertex();
-            if (v == null) { 
+            if (v == null) {
                 throw new IllegalArgumentException("Invalid vertex supplier");
             }
             vertices.add(v);
@@ -265,7 +257,7 @@ public class RandomRegularGraphGenerator<V, E>
         List<V> vertices = new ArrayList<>(this.n * this.d);
         for (int i = 0; i < this.n; i++) {
             V vertex = target.addVertex();
-            if (vertex == null) { 
+            if (vertex == null) {
                 throw new IllegalArgumentException("Invalid vertex supplier");
             }
             for (int j = 0; j < this.d; j++) {

@@ -17,32 +17,20 @@
  */
 package org.jgrapht.alg.cycle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.CycleBasis;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.WeightedPseudograph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class PatonCycleBaseTest
 {
@@ -59,8 +47,8 @@ public class PatonCycleBaseTest
 
     private void testAlgorithm(UndirectedCycleBase<Integer, DefaultEdge> finder)
     {
-        SimpleGraph<Integer, DefaultEdge> graph =
-            new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
@@ -236,8 +224,7 @@ public class PatonCycleBaseTest
 
         for (int size = 1; size <= MAX_SIZE; size++) {
             graph = new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
-            finder =
-                new PatonCycleBase<Integer, DefaultEdge>(graph);
+            finder = new PatonCycleBase<Integer, DefaultEdge>(graph);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }

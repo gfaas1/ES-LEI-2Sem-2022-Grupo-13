@@ -17,9 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Implementation of the GraphMapping interface. The performance of <code>
@@ -34,7 +34,8 @@ import org.jgrapht.*;
  * @since Jul 30, 2005
  */
 public class DefaultGraphMapping<V, E>
-    implements GraphMapping<V, E>
+    implements
+    GraphMapping<V, E>
 {
     private Map<V, V> graphMappingForward;
     private Map<V, V> graphMappingReverse;

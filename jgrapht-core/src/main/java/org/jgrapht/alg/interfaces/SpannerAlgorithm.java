@@ -17,7 +17,7 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import org.jgrapht.util.WeightedUnmodifiableSet;
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -47,7 +47,8 @@ public interface SpannerAlgorithm<E>
      * @param <E> the graph edge type
      */
     interface Spanner<E>
-        extends Set<E>
+        extends
+        Set<E>
     {
 
         /**
@@ -85,8 +86,12 @@ public interface SpannerAlgorithm<E>
      *
      * @param <E> the graph edge type
      */
-    class SpannerImpl<E> extends WeightedUnmodifiableSet<E>
-        implements Spanner<E>, Serializable
+    class SpannerImpl<E>
+        extends
+        WeightedUnmodifiableSet<E>
+        implements
+        Spanner<E>,
+        Serializable
     {
         private static final long serialVersionUID = 5951646499902668516L;
 

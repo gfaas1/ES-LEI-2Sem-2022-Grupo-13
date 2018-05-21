@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * List of paths <code>AbstractPathElement</code> with same target vertex.
@@ -27,7 +27,8 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
-    extends AbstractList<T>
+    extends
+    AbstractList<T>
 {
     protected Graph<V, E> graph;
 

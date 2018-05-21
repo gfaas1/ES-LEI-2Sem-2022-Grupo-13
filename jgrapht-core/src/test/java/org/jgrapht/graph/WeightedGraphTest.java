@@ -17,11 +17,9 @@
  */
 package org.jgrapht.graph;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for different edge types on weighted graphs.

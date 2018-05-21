@@ -17,11 +17,10 @@
  */
 package org.jgrapht.generate;
 
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.graph.GraphDelegator;
+import java.util.*;
 
 /**
  * An interface for generating new graph structures.
@@ -52,9 +51,9 @@ public interface GraphGenerator<V, E, T>
      *        graph elements (or collections of graph elements)
      * 
      * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
-     *         suppliers, in order to be able to create new vertices and edges. 
-     *         Methods {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must
-     *         not return <code>null</code>.
+     *         suppliers, in order to be able to create new vertices and edges. Methods
+     *         {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must not return
+     *         <code>null</code>.
      */
     void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
 
@@ -95,7 +94,7 @@ public interface GraphGenerator<V, E, T>
         /*
          * Use delegator in order to switch supplier for backwards compatibility.
          */
-        if (vertexFactory != null && target.getVertexSupplier() == null) { 
+        if (vertexFactory != null && target.getVertexSupplier() == null) {
             target = new GraphDelegator<>(target, vertexFactory::createVertex, null);
         }
         generateGraph(target, resultMap);
@@ -108,7 +107,7 @@ public interface GraphGenerator<V, E, T>
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
      * @param vertexFactory called to produce new vertices
-     * @deprecated Use simpler methods 
+     * @deprecated Use simpler methods
      */
     @Deprecated
     default void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)

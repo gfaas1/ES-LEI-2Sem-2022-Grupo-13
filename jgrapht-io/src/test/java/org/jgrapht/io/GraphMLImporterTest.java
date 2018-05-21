@@ -17,18 +17,15 @@
  */
 package org.jgrapht.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
@@ -973,12 +970,12 @@ public class GraphMLImporterTest
 
         assertEquals(2, g.vertexSet().size());
         assertEquals(1, g.edgeSet().size());
-        for(Map<String, Attribute> va: vertexAttributes.values()) { 
+        for (Map<String, Attribute> va : vertexAttributes.values()) {
             assertTrue(va.containsKey("name"));
             assertTrue(va.containsKey("id"));
             assertFalse(va.containsKey("labels"));
         }
-        for(Map<String, Attribute> ea: edgeAttributes.values()) { 
+        for (Map<String, Attribute> ea : edgeAttributes.values()) {
             assertTrue(ea.isEmpty());
         }
     }

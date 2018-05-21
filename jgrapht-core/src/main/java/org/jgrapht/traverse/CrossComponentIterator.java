@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * Provides a cross-connected-component traversal functionality for iterator subclasses.
@@ -33,7 +33,8 @@ import org.jgrapht.event.*;
  * @since Jan 31, 2004
  */
 public abstract class CrossComponentIterator<V, E, D>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private static final int CCS_BEFORE_COMPONENT = 1;
     private static final int CCS_WITHIN_COMPONENT = 2;

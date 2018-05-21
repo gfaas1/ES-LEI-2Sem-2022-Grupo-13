@@ -429,7 +429,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Category(SlowTests.class)
     public void checkMöbiusKantorGraph()
     {
         reset();
@@ -503,7 +503,6 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
     public void checkGoldnerHararyGraph()
     {
         reset();
@@ -533,7 +532,6 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(SlowTests.class)
     public void checkKrackhardtKiteGraph()
     {
         reset();
@@ -552,7 +550,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Category(SlowTests.class)
     public void checkPappusGraph()
     {
         reset();
@@ -601,7 +599,7 @@ public class BergeGraphInspectorTest
     }
 
     @Test
-    @Category(OptionalTests.class)
+    @Category(SlowTests.class)
     public void checkBipartiteGraphs()
     {
         int repititions = repititionsPerTestCase;
@@ -609,59 +607,59 @@ public class BergeGraphInspectorTest
         while (repititions-- > 0) {
             int n1 = new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices) / 2
                 + minimalNumberOfVertices / 2, n2 = maximalNumberOfVertices - n1;
-    //
+
             int maximalNumberOfEdges = n1 * n2;
             int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);
-    //
+
             reset();
             new GnmRandomBipartiteGraphGenerator<Integer, Integer>(n1, n2, numberOfEdges)
                 .generateGraph(stimulus);
-    //
+
             assertTrue(dut.isBerge(stimulus));
         }
-    //
+
     }
-    
+
     @Test
-    @Category(OptionalTests.class)
+    @Category(SlowTests.class)
     public void checkWheelGraphs()
     {
-    
+
         int repititions = repititionsPerTestCase;
         while (repititions-- > 0) {
-    
+
             int numberOfVertices =
                 new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices)
                     + minimalNumberOfVertices;
             if (numberOfVertices % 2 == 0)
                 numberOfVertices += 1;
             assertTrue(maximalNumberOfVertices > minimalNumberOfVertices);
-    
+
             reset();
             new WheelGraphGenerator<Integer, Integer>(numberOfVertices).generateGraph(stimulus);
-    
+
             assertTrue(dut.isBerge(stimulus));
         }
-    
+
         repititions = repititionsPerTestCase;
         while (repititions-- > 0) {
-    
+
             int numberOfVertices =
                 new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices)
                     + minimalNumberOfVertices;
             if (numberOfVertices % 2 == 1)
                 numberOfVertices += 1;
             assertTrue(maximalNumberOfVertices > minimalNumberOfVertices);
-    
+
             reset();
             new WheelGraphGenerator<Integer, Integer>(numberOfVertices).generateGraph(stimulus);
-    
+
             assertFalse(dut.isBerge(stimulus));
         }
     }
-    
+
     @Test
-    @Category(OptionalTests.class)
+    @Category(SlowTests.class)
     public void checkWindmillGraphs()
     {
         int repititions = repititionsPerTestCase;
@@ -669,10 +667,10 @@ public class BergeGraphInspectorTest
             int m = 2;
             int numberOfVertices = new Random().nextInt(maximalNumberOfVertices - 3) + 3;
             reset();
-    
+
             new WindmillGraphsGenerator<Integer, Integer>(
                 WindmillGraphsGenerator.Mode.WINDMILL, m, numberOfVertices).generateGraph(stimulus);
-    
+
             assertTrue(dut.isBerge(stimulus));
         }
     }

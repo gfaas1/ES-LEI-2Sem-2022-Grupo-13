@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.tour;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.spanning.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /**
  * A 2-approximation algorithm for the metric TSP problem.
@@ -50,7 +50,8 @@ import org.jgrapht.traverse.*;
  * @author Dimitrios Michail
  */
 public class TwoApproxMetricTSP<V, E>
-    implements TSPAlgorithm<V, E>
+    implements
+    TSPAlgorithm<V, E>
 {
     /**
      * Construct a new instance

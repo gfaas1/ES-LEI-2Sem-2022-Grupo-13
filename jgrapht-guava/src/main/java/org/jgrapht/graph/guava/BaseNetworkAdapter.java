@@ -17,19 +17,15 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
-
-import org.jgrapht.EdgeFactory;
+import com.google.common.graph.*;
+import org.jgrapht.*;
 import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
 import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultGraphType;
+import org.jgrapht.graph.*;
 
-import com.google.common.graph.Network;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * A base abstract implementation for the graph adapter class using Guava's {@link Network}. This is
@@ -42,8 +38,12 @@ import com.google.common.graph.Network;
  * @param <N> type of the underlying Guava's network
  */
 public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
-    extends AbstractGraph<V, E>
-    implements Graph<V, E>, Cloneable, Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Graph<V, E>,
+    Cloneable,
+    Serializable
 {
     private static final long serialVersionUID = -6233085794632237761L;
 

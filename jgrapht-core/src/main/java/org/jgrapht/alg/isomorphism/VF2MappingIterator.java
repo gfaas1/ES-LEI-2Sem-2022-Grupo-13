@@ -17,12 +17,13 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
+
 abstract class VF2MappingIterator<V, E>
-    implements Iterator<GraphMapping<V, E>>
+    implements
+    Iterator<GraphMapping<V, E>>
 {
     protected Comparator<V> vertexComparator;
     protected Comparator<E> edgeComparator;

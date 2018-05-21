@@ -17,10 +17,7 @@
  */
 package org.jgrapht.graph.guava;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * Serialization test utils for the serialization and deserialization of JGraphT objects.

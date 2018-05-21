@@ -17,10 +17,10 @@
  */
 package org.jgrapht;
 
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 /**
  * @author Christoph Zauner
@@ -431,7 +431,8 @@ public class GraphsTest
     }
 
     @Test
-    public void testNeighborSetOf(){
+    public void testNeighborSetOf()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -440,7 +441,7 @@ public class GraphsTest
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(3, 4);
-        graph.addEdge(1,4);
+        graph.addEdge(1, 4);
         Set<Integer> neighborSet = Graphs.neighborSetOf(graph, 1);
         Assert.assertEquals(new HashSet<>(Arrays.asList(2, 4)), neighborSet);
     }

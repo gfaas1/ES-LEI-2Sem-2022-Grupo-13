@@ -17,15 +17,14 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Dimitrios Michail
@@ -85,7 +84,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(6, 4, 0.0, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
@@ -99,7 +99,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(6, 4, 0.5, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
@@ -113,7 +114,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(6, 4, 0.8, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
@@ -127,7 +129,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(6, 4, 0.5, true, new Random(seed));
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());
@@ -140,7 +143,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(12, 6, 0.0, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(12, g.vertexSet().size());
@@ -154,7 +158,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(12, 6, 0.7, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(12, g.vertexSet().size());
@@ -168,7 +173,8 @@ public class WattsStrogatzGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new WattsStrogatzGraphGenerator<>(6, 4, 0.0, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         gen.generateGraph(g);
 
         assertEquals(6, g.vertexSet().size());

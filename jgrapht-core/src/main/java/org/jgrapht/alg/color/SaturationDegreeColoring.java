@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.color;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The Dsatur greedy coloring algorithm.
@@ -57,7 +57,8 @@ import org.jgrapht.alg.interfaces.*;
  * @author Dimitrios Michail
  */
 public class SaturationDegreeColoring<V, E>
-    implements VertexColoringAlgorithm<V>
+    implements
+    VertexColoringAlgorithm<V>
 {
     private final Graph<V, E> graph;
 
@@ -166,7 +167,8 @@ public class SaturationDegreeColoring<V, E>
      * degree (maximum is better in both cases).
      */
     private class DSaturComparator
-        implements Comparator<V>
+        implements
+        Comparator<V>
     {
         private Map<V, Integer> saturation;
         private Map<V, Integer> degree;

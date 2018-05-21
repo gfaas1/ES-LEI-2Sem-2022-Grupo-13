@@ -28,7 +28,8 @@ import java.util.*;
  * @author Dimitrios Michail
  */
 public interface MaximalCliqueEnumerationAlgorithm<V, E>
-    extends Iterable<Set<V>>
+    extends
+    Iterable<Set<V>>
 {
 
     /**

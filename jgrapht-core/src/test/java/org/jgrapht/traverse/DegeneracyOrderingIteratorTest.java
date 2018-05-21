@@ -17,15 +17,14 @@
  */
 package org.jgrapht.traverse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link DegeneracyOrderingIterator}.
@@ -120,7 +119,8 @@ public class DegeneracyOrderingIteratorTest
     }
 
     private static class TestTraversalListener<V, E>
-        implements TraversalListener<V, E>
+        implements
+        TraversalListener<V, E>
     {
 
         private StringBuilder sb = new StringBuilder();

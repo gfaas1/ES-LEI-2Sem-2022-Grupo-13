@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A base implementation for the intrusive edges specifics.

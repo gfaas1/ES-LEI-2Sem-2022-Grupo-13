@@ -17,18 +17,16 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests for GreedyMaximumCardinalityMatching
@@ -47,7 +45,8 @@ public class GreedyMaximumCardinalityMatchingTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
             new GnmRandomGraphGenerator<>(200, 120);
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         for (int i = 0; i < 100; i++) {
             generator.generateGraph(graph);
@@ -81,7 +80,8 @@ public class GreedyMaximumCardinalityMatchingTest
     {
         GraphGenerator<Integer, DefaultEdge, Integer> generator =
             new GnmRandomGraphGenerator<>(200, 120);
-        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
         for (int i = 0; i < 1; i++) {
             generator.generateGraph(graph);

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.util.*;
-
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Fast implementation of UndirectedSpecifics. This class uses additional data structures to improve
@@ -35,7 +35,8 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class FastLookupUndirectedSpecifics<V, E>
-    extends UndirectedSpecifics<V, E>
+    extends
+    UndirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 225772727571597846L;
 
