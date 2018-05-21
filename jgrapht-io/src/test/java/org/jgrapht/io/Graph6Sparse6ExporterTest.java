@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.io.*;
@@ -140,8 +141,8 @@ public class Graph6Sparse6ExporterTest
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0, true);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer, DefaultEdge> orig = new Pseudograph<>(DefaultEdge.class);
-            gnp.generateGraph(orig, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> orig = new Pseudograph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.SPARSE6);
 
@@ -197,8 +198,8 @@ public class Graph6Sparse6ExporterTest
         GnpRandomGraphGenerator<Integer, DefaultEdge> gnp =
             new GnpRandomGraphGenerator<>(40, .55, 0);
         for (int i = 0; i < 20; i++) {
-            Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(DefaultEdge.class);
-            gnp.generateGraph(orig, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> orig = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            gnp.generateGraph(orig);
 
             String res = exportGraph(orig, Graph6Sparse6Exporter.Format.GRAPH6);
 
@@ -224,7 +225,7 @@ public class Graph6Sparse6ExporterTest
     {
         Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
         Graph6Sparse6Importer<Integer, DefaultEdge> importer = new Graph6Sparse6Importer<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
         importer.importGraph(g, g6);
         return g;
     }

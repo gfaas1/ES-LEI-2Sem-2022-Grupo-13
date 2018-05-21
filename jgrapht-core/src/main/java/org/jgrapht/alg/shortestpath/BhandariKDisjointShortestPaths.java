@@ -217,8 +217,6 @@ public class BhandariKDisjointShortestPaths<V, E>
             } else { // some edge which is part of a path
                 if (!sourceToEdgeLookup.containsKey(u)) {
                     sourceToEdgeLookup.put(u, new ArrayDeque<>());
-                } else {
-                    System.out.println("non empty queue");
                 }
                 sourceToEdgeLookup.get(u).add(e);
             }

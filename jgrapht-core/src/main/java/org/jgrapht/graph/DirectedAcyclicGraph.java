@@ -110,68 +110,6 @@ public class DirectedAcyclicGraph<V, E>
 
     /**
      * Construct a directed acyclic graph.
-     *
-     * @param edgeClass the edge class
-     * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DirectedAcyclicGraph(Class<? extends E> edgeClass, boolean weighted)
-    {
-        this(null, SupplierUtil.createSupplier(edgeClass), weighted);
-    }
-
-    /**
-     * Construct a directed acyclic graph.
-     *
-     * @param ef the edge factory
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DirectedAcyclicGraph(EdgeFactory<V, E> ef)
-    {
-        this(ef, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), false);
-    }
-
-    /**
-     * Construct a directed acyclic graph.
-     *
-     * @param ef the edge factory
-     * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DirectedAcyclicGraph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        this(ef, new VisitedBitSetImpl(), new TopoVertexBiMap<>(), weighted);
-    }
-
-    /**
-     * Construct a directed acyclic graph.
-     *
-     * @param ef the edge factory
-     * @param visitedStrategyFactory the visited strategy factory. Subclasses can change this
-     *        implementation to adjust the performance tradeoffs.
-     * @param topoOrderMap the topological order map. For performance reasons, subclasses can change
-     *        the way this class stores the topological order.
-     * @param weighted if true the graph will be weighted, otherwise not
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    protected DirectedAcyclicGraph(
-        EdgeFactory<V, E> ef, VisitedStrategyFactory visitedStrategyFactory,
-        TopoOrderMap<V> topoOrderMap, boolean weighted)
-    {
-        super(ef, weighted);
-        this.visitedStrategyFactory =
-            Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
-        this.topoOrderMap =
-            Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
-        this.topoComparator = new TopoComparator();
-    }
-
-    /**
-     * Construct a directed acyclic graph.
      * 
      * @param vertexSupplier the vertex supplier
      * @param edgeSupplier the edge supplier
@@ -220,22 +158,6 @@ public class DirectedAcyclicGraph<V, E>
         Supplier<E> edgeSupplier)
     {
         return new GraphBuilder<>(new DirectedAcyclicGraph<>(null, edgeSupplier, false));
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     *
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends DirectedAcyclicGraph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new DirectedAcyclicGraph<>(ef));
     }
 
     @Override

@@ -34,9 +34,6 @@ import java.util.*;
  */
 public class NamedGraphGenerator<V, E>
 {
-    @Deprecated
-    private VertexFactory<V> vertexFactory;
-
     private Map<Integer, V> vertexMap;
 
     /**
@@ -44,19 +41,6 @@ public class NamedGraphGenerator<V, E>
      */
     public NamedGraphGenerator()
     {
-        vertexMap = new HashMap<>();
-    }
-
-    /**
-     * Constructs a new generator for named graphs
-     * 
-     * @param vertexFactory factory for vertices
-     * @deprecated In favor of suppliers
-     */
-    @Deprecated
-    public NamedGraphGenerator(VertexFactory<V> vertexFactory)
-    {
-        this.vertexFactory = vertexFactory;
         vertexMap = new HashMap<>();
     }
 
@@ -1752,17 +1736,11 @@ public class NamedGraphGenerator<V, E>
     private V addVertex(Graph<V, E> targetGraph, int i)
     {
         if (!vertexMap.containsKey(i)) {
-            if (vertexFactory != null) {
-                V v = vertexFactory.createVertex();
-                vertexMap.put(i, v);
-                targetGraph.addVertex(v);
-            } else {
-                V v = targetGraph.addVertex();
-                if (v == null) {
-                    throw new IllegalArgumentException("Invalid vertex supplier");
-                }
-                vertexMap.put(i, v);
+            V v = targetGraph.addVertex();
+            if (v == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
+            vertexMap.put(i, v);
         }
         return vertexMap.get(i);
     }

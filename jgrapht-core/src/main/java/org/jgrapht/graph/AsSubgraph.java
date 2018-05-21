@@ -194,18 +194,6 @@ public class AsSubgraph<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * @deprecated Use suppliers instead
-     */
-    @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return base.getEdgeFactory();
-    }
-
-    /**
-     * {@inheritDoc}
      */
     @Override
     public Supplier<V> getVertexSupplier()

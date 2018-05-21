@@ -47,7 +47,7 @@ public class DIMACSImporterTest
         }
 
         DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
         try {
             importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {

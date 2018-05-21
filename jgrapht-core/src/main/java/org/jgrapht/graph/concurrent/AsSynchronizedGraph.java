@@ -34,7 +34,7 @@ import java.util.stream.*;
  * accomplished through the created Graph.
  *
  * <p>
- * Users need to manually synchronize on {@link EdgeFactory} if creating an edge needs to access
+ * Users need to manually synchronize on edge supplier (see {@link Graph#getEdgeSupplier()}) if creating an edge needs to access
  * shared resources. Failure to follow this advice may result in non-deterministic behavior.
  * </p>
  *

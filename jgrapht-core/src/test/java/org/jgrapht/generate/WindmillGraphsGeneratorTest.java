@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.SupplierUtil;
 import org.junit.*;
 
 import java.util.*;
@@ -38,10 +39,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testCubicalGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         GeneralizedPetersenGraphGenerator<Integer, DefaultEdge> gpgg =
             new GeneralizedPetersenGraphGenerator<>(4, 1);
-        gpgg.generateGraph(g, new IntegerVertexFactory(), null);
+        gpgg.generateGraph(g);
         this.validateBasics(g, 8, 12, 3, 3, 4);
         assertTrue(GraphTests.isBipartite(g));
         assertTrue(GraphTests.isCubic(g));
@@ -52,10 +53,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testGraph1a()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         new WindmillGraphsGenerator<Integer, DefaultEdge>(
             WindmillGraphsGenerator.Mode.WINDMILL, 3, 4)
-                .generateGraph(g, new IntegerVertexFactory(), null);
+                .generateGraph(g);
         assertEquals(10, g.vertexSet().size());
         assertEquals(18, g.edgeSet().size());
         this.verifyVertexDegree(g, WindmillGraphsGenerator.Mode.WINDMILL, 3, 4);
@@ -64,10 +65,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testGraph2a()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         new WindmillGraphsGenerator<Integer, DefaultEdge>(
             WindmillGraphsGenerator.Mode.WINDMILL, 4, 3)
-                .generateGraph(g, new IntegerVertexFactory(), null);
+                .generateGraph(g);
         assertEquals(9, g.vertexSet().size());
         assertEquals(12, g.edgeSet().size());
         this.verifyVertexDegree(g, WindmillGraphsGenerator.Mode.WINDMILL, 4, 3);
@@ -76,10 +77,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testGraph3a()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         new WindmillGraphsGenerator<Integer, DefaultEdge>(
             WindmillGraphsGenerator.Mode.WINDMILL, 3, 5)
-                .generateGraph(g, new IntegerVertexFactory(), null);
+                .generateGraph(g);
         assertEquals(13, g.vertexSet().size());
         assertEquals(30, g.edgeSet().size());
         this.verifyVertexDegree(g, WindmillGraphsGenerator.Mode.WINDMILL, 3, 5);
@@ -98,10 +99,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testGraph2b()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         new WindmillGraphsGenerator<Integer, DefaultEdge>(
             WindmillGraphsGenerator.Mode.DUTCHWINDMILL, 4, 3)
-                .generateGraph(g, new IntegerVertexFactory(), null);
+                .generateGraph(g);
         assertEquals(9, g.vertexSet().size());
         assertEquals(12, g.edgeSet().size());
         this.verifyVertexDegree(g, WindmillGraphsGenerator.Mode.DUTCHWINDMILL, 4, 3);
@@ -110,10 +111,10 @@ public class WindmillGraphsGeneratorTest
     @Test
     public void testGraph3b()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(),false);
         new WindmillGraphsGenerator<Integer, DefaultEdge>(
             WindmillGraphsGenerator.Mode.DUTCHWINDMILL, 3, 5)
-                .generateGraph(g, new IntegerVertexFactory(), null);
+                .generateGraph(g);
         assertEquals(13, g.vertexSet().size());
         assertEquals(15, g.edgeSet().size());
         this.verifyVertexDegree(g, WindmillGraphsGenerator.Mode.DUTCHWINDMILL, 3, 5);

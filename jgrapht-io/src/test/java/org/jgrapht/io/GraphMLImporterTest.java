@@ -365,9 +365,9 @@ public class GraphMLImporterTest
         // @formatter:on
 
         Map<String, Map<String, Attribute>> vAttributes =
-            new HashMap<String, Map<String, Attribute>>();
+                new HashMap<>();
         Map<DefaultEdge, Map<String, Attribute>> eAttributes =
-            new HashMap<DefaultEdge, Map<String, Attribute>>();
+                new HashMap<>();
         Graph<String, DefaultEdge> g =
             readGraph(input, DefaultEdge.class, false, false, vAttributes, eAttributes);
 
@@ -485,9 +485,9 @@ public class GraphMLImporterTest
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Map<String, Map<String, Attribute>> vAttributes =
-            new HashMap<String, Map<String, Attribute>>();
+                new HashMap<>();
         Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
-            new HashMap<DefaultWeightedEdge, Map<String, Attribute>>();
+                new HashMap<>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -549,9 +549,9 @@ public class GraphMLImporterTest
         Graph<String, DefaultWeightedEdge> g =
             new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         Map<String, Map<String, Attribute>> vAttributes =
-            new HashMap<String, Map<String, Attribute>>();
+                new HashMap<>();
         Map<DefaultWeightedEdge, Map<String, Attribute>> eAttributes =
-            new HashMap<DefaultWeightedEdge, Map<String, Attribute>>();
+                new HashMap<>();
 
         GraphMLImporter<String, DefaultWeightedEdge> importer =
             createGraphImporter(g, vAttributes, eAttributes);
@@ -740,7 +740,7 @@ public class GraphMLImporterTest
         throws Exception
     {
         DirectedPseudograph<String, DefaultEdge> g1 =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
         g1.addVertex("1");
         g1.addVertex("2");
         g1.addVertex("3");
@@ -748,7 +748,7 @@ public class GraphMLImporterTest
         g1.addEdge("2", "3");
         g1.addEdge("3", "3");
 
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<>();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g1, os);
         String output = new String(os.toByteArray(), "UTF-8");
@@ -904,13 +904,13 @@ public class GraphMLImporterTest
         // @formatter:on
 
         final Graph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+                new SimpleGraph<>(DefaultEdge.class);
 
         try {
             GraphMLImporter<String,
                 DefaultEdge> importer = new GraphMLImporter<>(
                     (label, attributes) -> label,
-                    (from, to, label, attributes) -> g.getEdgeFactory().createEdge(from, to));
+                    (from, to, label, attributes) -> g.getEdgeSupplier().get());
             importer.importGraph(g, new StringReader(input));
             fail("No!");
         } catch (Exception e) {
@@ -949,7 +949,7 @@ public class GraphMLImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         HashMap<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         HashMap<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
@@ -959,7 +959,7 @@ public class GraphMLImporterTest
                 vertexAttributes.put(label, attributes);
                 return label;
             }, (from, to, label, attributes) -> {
-                DefaultEdge e = g.getEdgeFactory().createEdge(from, to);
+                DefaultEdge e = g.getEdgeSupplier().get();
                 edgeAttributes.put(e, attributes);
                 return e;
             });
@@ -997,7 +997,7 @@ public class GraphMLImporterTest
         // @formatter:on
 
         Graph<String, DefaultEdge> g =
-            new DirectedPseudograph<String, DefaultEdge>(DefaultEdge.class);
+                new DirectedPseudograph<>(DefaultEdge.class);
 
         HashMap<String, Map<String, Attribute>> vertexAttributes = new HashMap<>();
         HashMap<DefaultEdge, Map<String, Attribute>> edgeAttributes = new HashMap<>();
@@ -1007,7 +1007,7 @@ public class GraphMLImporterTest
                 vertexAttributes.put(label, attributes);
                 return label;
             }, (from, to, label, attributes) -> {
-                DefaultEdge e = g.getEdgeFactory().createEdge(from, to);
+                DefaultEdge e = g.getEdgeSupplier().get();
                 edgeAttributes.put(e, attributes);
                 return e;
             });
@@ -1022,7 +1022,7 @@ public class GraphMLImporterTest
         throws ImportException
     {
         return readGraph(
-            input, edgeClass, directed, weighted, new HashMap<String, Map<String, Attribute>>(),
+            input, edgeClass, directed, weighted, new HashMap<>(),
             new HashMap<E, Map<String, Attribute>>());
     }
 
@@ -1031,27 +1031,8 @@ public class GraphMLImporterTest
         throws ImportException
     {
         return readGraph(
-            input, edgeClass, directed, weighted, new HashMap<String, Map<String, Attribute>>(),
+            input, edgeClass, directed, weighted, new HashMap<>(),
             new HashMap<E, Map<String, Attribute>>());
-    }
-
-    public <E> Graph<String, E> readGraph(
-        String input, Graph<String, E> g, VertexProvider<String> vp, EdgeProvider<String, E> ep)
-        throws ImportException
-    {
-        GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
-        importer.importGraph(g, new StringReader(input));
-        return g;
-    }
-
-    public <E> Graph<String, E> readGraph(
-        InputStream input, Graph<String, E> g, VertexProvider<String> vp,
-        EdgeProvider<String, E> ep)
-        throws ImportException
-    {
-        GraphMLImporter<String, E> importer = createGraphImporter(g, vp, ep);
-        importer.importGraph(g, input);
-        return g;
     }
 
     public <E> GraphMLImporter<String, E> createGraphImporter(
@@ -1062,7 +1043,7 @@ public class GraphMLImporterTest
             vertexAttributes.put(label, attributes);
             return label;
         }, (from, to, label, attributes) -> {
-            E e = g.getEdgeFactory().createEdge(from, to);
+            E e = g.getEdgeSupplier().get();
             edgeAttributes.put(e, attributes);
             return e;
         });
@@ -1071,7 +1052,7 @@ public class GraphMLImporterTest
     public <E> GraphMLImporter<String, E> createGraphImporter(
         Graph<String, E> g, VertexProvider<String> vp, EdgeProvider<String, E> ep)
     {
-        GraphMLImporter<String, E> importer = new GraphMLImporter<String, E>(vp, ep);
+        GraphMLImporter<String, E> importer = new GraphMLImporter<>(vp, ep);
 
         return importer;
     }
@@ -1085,15 +1066,15 @@ public class GraphMLImporterTest
         Graph<String, E> g;
         if (directed) {
             if (weighted) {
-                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+                g = new DirectedWeightedPseudograph<>(edgeClass);
             } else {
-                g = new DirectedPseudograph<String, E>(edgeClass);
+                g = new DirectedPseudograph<>(edgeClass);
             }
         } else {
             if (weighted) {
-                g = new WeightedPseudograph<String, E>(edgeClass);
+                g = new WeightedPseudograph<>(edgeClass);
             } else {
-                g = new Pseudograph<String, E>(edgeClass);
+                g = new Pseudograph<>(edgeClass);
             }
         }
 
@@ -1112,15 +1093,15 @@ public class GraphMLImporterTest
         Graph<String, E> g;
         if (directed) {
             if (weighted) {
-                g = new DirectedWeightedPseudograph<String, E>(edgeClass);
+                g = new DirectedWeightedPseudograph<>(edgeClass);
             } else {
-                g = new DirectedPseudograph<String, E>(edgeClass);
+                g = new DirectedPseudograph<>(edgeClass);
             }
         } else {
             if (weighted) {
-                g = new WeightedPseudograph<String, E>(edgeClass);
+                g = new WeightedPseudograph<>(edgeClass);
             } else {
-                g = new Pseudograph<String, E>(edgeClass);
+                g = new Pseudograph<>(edgeClass);
             }
         }
 

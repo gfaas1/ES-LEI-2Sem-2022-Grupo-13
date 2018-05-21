@@ -51,7 +51,7 @@ import java.util.*;
  */
 public class HeldKarpTSP<V, E>
     implements
-    TSPAlgorithm<V, E>
+    HamiltonianCycleAlgorithm<V, E>
 {
 
     /**

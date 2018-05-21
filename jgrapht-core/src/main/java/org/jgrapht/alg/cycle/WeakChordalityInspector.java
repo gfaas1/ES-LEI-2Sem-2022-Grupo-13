@@ -536,7 +536,7 @@ public class WeakChordalityInspector<V, E>
     {
         // Generating the complement of the inspected graph
         ComplementGraphGenerator<V, E> generator = new ComplementGraphGenerator<>(graph, false);
-        Graph<V, E> complement = new Pseudograph<>(graph.getEdgeFactory());
+        Graph<V, E> complement = Pseudograph.<V, E>createBuilder(graph.getEdgeSupplier()).build();
         generator.generateGraph(complement);
 
         E cycleFormer = complement.getEdge(source, targetInSeparator);

@@ -542,7 +542,7 @@ public class DOTImporter1Test
 
     private static class GraphWithID
         extends
-        AbstractBaseGraph<String, DefaultEdge>
+        SimpleGraph<String, DefaultEdge>
     {
         private static final long serialVersionUID = 1L;
 
@@ -550,7 +550,7 @@ public class DOTImporter1Test
 
         protected GraphWithID()
         {
-            super(new ClassBasedEdgeFactory<>(DefaultEdge.class), false, false, false, false);
+            super(DefaultEdge.class);
         }
 
     }

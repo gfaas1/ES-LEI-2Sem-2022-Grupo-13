@@ -43,8 +43,7 @@ public class LabeledEdges
 
     public static void main(String[] args)
     {
-        Graph<String, RelationshipEdge> graph = new DirectedMultigraph<String, RelationshipEdge>(
-            new ClassBasedEdgeFactory<String, RelationshipEdge>(RelationshipEdge.class));
+        Graph<String, RelationshipEdge> graph = new DirectedMultigraph<>(RelationshipEdge.class);
 
         ArrayList<String> people = new ArrayList<String>();
         people.add("John");

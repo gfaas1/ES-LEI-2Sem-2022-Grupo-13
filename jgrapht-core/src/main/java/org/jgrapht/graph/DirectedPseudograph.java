@@ -93,47 +93,6 @@ public class DirectedPseudograph<V, E>
     {
         return new GraphBuilder<>(new DirectedPseudograph<>(null, edgeSupplier, false));
     }
-
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DirectedPseudograph(EdgeFactory<V, E> ef)
-    {
-        this(ef, false);
-    }
-
-    /**
-     * Creates a new graph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public DirectedPseudograph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, true, true, true, weighted);
-    }
-
-    /**
-     * Create a builder for this kind of graph.
-     * 
-     * @param ef the edge factory of the new graph
-     * @param <V> the graph vertex type
-     * @param <E> the graph edge type
-     * @return a builder for this kind of graph
-     * @deprecated Use suppliers instead
-     */
-    @Deprecated
-    public static <V, E> GraphBuilder<V, E, ? extends DirectedPseudograph<V, E>> createBuilder(
-        EdgeFactory<V, E> ef)
-    {
-        return new GraphBuilder<>(new DirectedPseudograph<>(ef));
-    }
 }
 
 // End DirectedPseudograph.java

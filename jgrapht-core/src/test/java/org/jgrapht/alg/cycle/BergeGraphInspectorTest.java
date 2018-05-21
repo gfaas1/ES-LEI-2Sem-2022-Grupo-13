@@ -609,17 +609,17 @@ public class BergeGraphInspectorTest
         while (repititions-- > 0) {
             int n1 = new Random().nextInt(maximalNumberOfVertices - minimalNumberOfVertices) / 2
                 + minimalNumberOfVertices / 2, n2 = maximalNumberOfVertices - n1;
-    //
+ 
             int maximalNumberOfEdges = n1 * n2;
             int numberOfEdges = new Random().nextInt(maximalNumberOfEdges);
-    //
+
             reset();
             new GnmRandomBipartiteGraphGenerator<Integer, Integer>(n1, n2, numberOfEdges)
                 .generateGraph(stimulus);
-    //
+
             assertTrue(dut.isBerge(stimulus));
         }
-    //
+
     }
     
     @Test

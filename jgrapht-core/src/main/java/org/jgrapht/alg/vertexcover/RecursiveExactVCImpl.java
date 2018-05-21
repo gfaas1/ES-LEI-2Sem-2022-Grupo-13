@@ -59,7 +59,6 @@ import java.util.stream.*;
  */
 public class RecursiveExactVCImpl<V, E>
     implements
-    MinimumWeightedVertexCoverAlgorithm<V, E>,
     VertexCoverAlgorithm<V>
 {
 
@@ -96,18 +95,6 @@ public class RecursiveExactVCImpl<V, E>
     private Map<V, Double> vertexWeightMap = null;
 
     /////////////
-
-    /**
-     * Temporary constructor to ensure one-version-backwards-compatibility
-     * 
-     * @deprecated this constructor will be removed in the next release
-     */
-    @Deprecated
-    public RecursiveExactVCImpl()
-    {
-        graph = null;
-        vertexWeightMap = null;
-    }
 
     /**
      * Constructs a new GreedyVCImpl instance
@@ -170,54 +157,6 @@ public class RecursiveExactVCImpl<V, E>
         return new VertexCoverAlgorithm.VertexCoverImpl<>(verticesInCover, vertexCover.weight);
     }
 
-    @Override
-    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(Graph<V, E> graph)
-    {
-        Map<V, Double> vertexWeightMap = graph
-            .vertexSet().stream().collect(Collectors.toMap(Function.identity(), vertex -> 1.0));
-        weighted = false;
-        return this.getVertexCover(graph, vertexWeightMap);
-    }
-
-    @Override
-    public MinimumVertexCoverAlgorithm.VertexCover<V> getVertexCover(
-        Graph<V, E> graph, Map<V, Double> vertexWeightMap)
-    {
-        // Initialize
-        this.graph = GraphTests.requireUndirected(graph);
-        memo = new HashMap<>();
-        vertices = new ArrayList<>(graph.vertexSet());
-        neighborCache = new NeighborCache<>(graph);
-        vertexIDDictionary = new HashMap<>();
-        this.vertexWeightMap = vertexWeightMap;
-        this.weighted = vertexWeightMap != null;
-
-        N = vertices.size();
-        // Sort vertices based on their weight/degree ratio in ascending order
-        // TODO JK: Are there better orderings?
-        vertices
-            .sort(Comparator.comparingDouble((V v) -> vertexWeightMap.get(v) / graph.degreeOf(v)));
-        for (int i = 0; i < vertices.size(); i++)
-            vertexIDDictionary.put(vertices.get(i), i);
-
-        // Calculate a bound on the maximum depth using heuristics and mathematical bounding
-        // procedures.
-        // TODO JK: Is there a lower bounding procedure which allows us to prematurely terminate the
-        // search once a solution is found which is equal to the lower bound? Preferably a bounding
-        // procedure which gets better throughout the search.
-        upperBoundOnVertexCoverWeight = this.calculateUpperBound();
-
-        // Invoke recursive algorithm
-        BitSetCover vertexCover = this.calculateCoverRecursively(0, new BitSet(N), 0);
-
-        // Build solution
-        Set<V> verticesInCover = new LinkedHashSet<>();
-        for (int i = vertexCover.bitSetCover.nextSetBit(0); i >= 0 && i < N;
-            i = vertexCover.bitSetCover.nextSetBit(i + 1))
-            verticesInCover.add(vertices.get(i));
-        return new MinimumVertexCoverAlgorithm.VertexCoverImpl<>(
-            verticesInCover, vertexCover.weight);
-    }
 
     private BitSetCover calculateCoverRecursively(
         int indexNextCandidate, BitSet visited, double accumulatedWeight)

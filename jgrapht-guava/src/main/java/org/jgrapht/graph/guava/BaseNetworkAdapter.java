@@ -144,13 +144,6 @@ public abstract class BaseNetworkAdapter<V, E, N extends Network<V, E>>
     }
 
     @Override
-    @Deprecated
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return null;
-    }
-
-    @Override
     public Set<V> vertexSet()
     {
         if (unmodifiableVertexSet == null) {

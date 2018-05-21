@@ -121,13 +121,13 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
 
         // handle self-loops
         if (source.equals(target)) {
-            return Pair.of(Arrays.asList(e), graph.getEdgeWeight(e));
+            return Pair.of(Collections.singletonList(e), graph.getEdgeWeight(e));
         }
 
         /*
          * traverse half cycle
          */
-        Set<E> path1 = new LinkedHashSet<E>();
+        Set<E> path1 = new LinkedHashSet<>();
         path1.add(e);
         V cur = source;
         while (!cur.equals(target)) {
@@ -144,7 +144,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
          * traverse the other half cycle, while removing common edges
          */
         double path2Weight = 0d;
-        LinkedList<E> path2 = new LinkedList<E>();
+        LinkedList<E> path2 = new LinkedList<>();
         if (!cur.equals(target)) {
             cur = target;
             while (true) {
