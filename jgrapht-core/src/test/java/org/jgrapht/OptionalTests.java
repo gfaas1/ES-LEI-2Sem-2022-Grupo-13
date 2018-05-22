@@ -16,13 +16,13 @@
  * the Eclipse Foundation.
  */
     
+package org.jgrapht;
+
 /**
  * Marker interface to designate a optional tests category. 
  * 
  * @author Philipp Kaesgen
 **/
-package org.jgrapht;
-
-public interface OptionalTests {
+public interface OptionalTests {    
 
 }

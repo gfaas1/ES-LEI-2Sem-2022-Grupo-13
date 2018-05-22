@@ -18,6 +18,7 @@
 package org.jgrapht;
 
 import com.googlecode.junittoolbox.*;
+import org.junit.experimental.categories.*;
 import org.junit.runner.*;
 
 /**
