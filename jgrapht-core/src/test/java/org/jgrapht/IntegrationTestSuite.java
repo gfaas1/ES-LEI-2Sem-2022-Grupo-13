@@ -21,11 +21,12 @@ import com.googlecode.junittoolbox.*;
 import org.junit.runner.*;
 
 /**
- * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests.
+ * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests and optional tests.
  * 
  * @author John Sichi
  */
 @RunWith(ParallelSuite.class)
+@Categories.ExcludeCategory(OptionalTests.class)
 @SuiteClasses({ "**/*Test.class", "!**/perf/**" })
 public class IntegrationTestSuite
 {
