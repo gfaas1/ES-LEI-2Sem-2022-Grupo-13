@@ -83,6 +83,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 	        		<groups>org.jgrapht.SlowTests</groups>
+		                <excludedGroups>org.jgrapht.OptionalTests</excludedGroups>
 	        	</configuration>
       		</plugin>
 			<plugin>
