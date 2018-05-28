@@ -55,7 +55,7 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
         } else {
             intrusiveEdge = new IntrusiveEdge();
         }
-        
+
         intrusiveEdge.source = sourceVertex;
         intrusiveEdge.target = targetVertex;
 

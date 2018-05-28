@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.traverse.*;
+
+import java.util.*;
 
 /**
  * Constructs the transitive closure of the input graph.
@@ -96,7 +96,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes floor(log_2(n)) + 1
+     * Computes floor($\log_2 (n)$) $+ 1$
      */
     private int computeBinaryLog(int n)
     {
@@ -112,7 +112,7 @@ public class TransitiveClosure
     }
 
     /**
-     * Computes the transitive closure of a directed acyclic graph in O(n*m)
+     * Computes the transitive closure of a directed acyclic graph in $O(nm)$
      *
      * @param graph - Graph to compute transitive closure for.
      * @param <V> the graph vertex type

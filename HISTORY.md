@@ -2,7 +2,11 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.1.1** (under development):
+- **version 1.2.1** (under development):
+    - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
+    - Restored optional tests for `BergeGraphInspector` (contributed by Philipp Kaesgen)
+
+- **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Updated demos (contributed by Dimitrios Michail)
     - Added assertions to NeighborCache (contributed by Joris Kinable)
@@ -30,9 +34,44 @@ Changes to JGraphT in each version:
     - Allow digits as non-leading character in DOTUtils#isValidID (contributed by Mariusz Smykuła)
     - Escape quotes in identifiers in `DOTExporter` (contributed by Mariusz Smykuła)
     - Added `AlphaCentrality` (contributed by Pratik Tibrewal)
-    - Fixed bug in AbstractBaseGraph where degreeOf() method would create vertex instead of throwing an exception (spotted and fixed by Yimismi)
+    - Fixed bug in AbstractBaseGraph where degreeOf() method would create vertex instead of throwing an exception (spotted and fixed by Chen Kui)
     - Added Folkman, Diamond, Tietze, Pappus and Tutte named graphs (contributed by Pratik Tibrewal)
-    - Add automorphism count verification to NamedGraphGeneratorTest (contributed by Pratik Tibrewal)
+    - Added automorphism count verification to NamedGraphGeneratorTest (contributed by Pratik Tibrewal)
+    - Removed old JGraph dependency, updated JGraphX to version 3.4.1.3, minor revision of `JGraphXAdapterDemo` (contributed by John Sichi)
+    - Added `ChordalityInspector`, `LexBreadthFirstIterator`, and `MaximumCardinalityIterator` (contributed by Timofey Chudakov)
+    - Removed redundant parameter from `TypeUtil.uncheckedCast` method (contributed by Konstantinos Karatsenidis)
+    - Removed recursion from `NaiveLcaFinder.findLca` method (contributed by Konstantinos Karatsenidis)
+    - Added `AsSynchronizedGraph` in new package `org.jgrapht.graph.concurrent` (contributed by Chen Kui)
+    - Fixed bug with `ClosestFirstIterator` when given multiple start vertices (repro by shevek, fixed by John Sichi)
+    - Added method `GraphMeasurer.getGraphPseudoPeriphery` to compute the Pseudo-Periphery of a graph (contributed by Alexandru Văleanu)
+    - Added `PalmerHamiltonianCycle` which implements Palmer's exact algorithm to find Hamiltonian Cycles in undirected graphs. Added new interface `HamiltonianCycleAlgorithm`. (contributed by Alexandru Văleanu) 
+    - Removed lazy instantiation of containers in edge specifics (contributed by Dimitrios Michail)
+    - Added `DinicMFImpl` which implements Dinic's maximum flow algorithm (contributed by Kirill Vishnyakov)
+    - Optimized `PushRelabelMFImpl` implementation which drastically improves max flow computations on certain graphs. (contributed by Alexandru Văleanu) 
+    - Added `RandomRegularGraphGenerator` (contributed by Emilio Cruciani)
+    - Reimplemented significantly faster version of Prim's minimum spanning tree algorithm using a FibonacciHeap (suggested by Joris Kinable, contributed by Alexandru Văleanu)
+    - Added new jgrapht-guava module containing adapters for package com.google.common.graph (contributed by Dimitrios Michail)
+    - Demo classes listed on our wiki page are now also included in our demo package (contributed by Vivek Talreja)
+    - Added missing math markup to javadoc in all classes (contributed by Kirill Vishnyakov)
+    - Expose lock as public for `AsSynchronizedGraph`, and add copyless access mode (contributed by John Sichi)
+    - Handle nested structures in `GmlImporter` (suggested by Philippe Marchesseault, contributed by Dimitrios Michail)
+    - Replaced StringBuffer with StringBuilder (contributed by John Sichi)
+    - Added search tree query methods to `BreadthFirstIterator` (contributed by Joris Kinable)
+    - Improved documentation of VF2 subgraph isomorphism algorithm (contributed by John Sichi)
+    - Removed recursion from DAG forward and backwards DFS methods (contributed by Gilles Gosuin)
+    - Implemented performance improvements for `GnmRandomGraphGenerator` and `GnpRandomGraphGenerator` (suggested by @Shevek, contributed by Dimitrios Michail)
+    - Added `WeakChordalityInspector` to test whether a graph is weakly chordal (contributed by Timofey Chudakov)
+    - Fixed typo in `TreeSingleSourcePathsImpl` (contributed by Viktor Volkov)
+    - Deprecated `EdgeFactory` in favor of `Supplier`, and added supplier support for vertices as well (contributed by Dimitrios Michail)
+    - Separate fast and slow tests, via mvn test vs verify (contributed by Dimitrios Michail)
+    - Added `ChordalGraphMinimalVertexSeparatorFinder` for the detection of minimal vertex separators in chordal graphs (contributed by Timofey Chudakov)
+    - Added suites for fast tests, integration tests and performance tests (contributed by John Sichi)
+    - Refactored `ChordalityInspector` and revised several interfaces (vertex cover, independent set, clique, etc) (contributed by Joris Kinable)
+    - Minor improvements to `DOTExporter` (contributed by Dimitrios Michail)
+    - Added graph listener event for edge weight update (contributed by Dimitrios Michail)
+    - Added Planted Partition Graph Generator `PlantedPartitionGraphGenerator` (contributed by Emilio Cruciani)
+    - Added `BergeGraphInspector` which checks whether a graph is perfect (contributed by Philipp Kaesgen)
+    - Added Bhandari K-disjoint shortest paths implementation `BhandariKDisjointShortestPaths` (contributed by Assaf Mizrachi)
 
 - **version 1.1.0** (13-Nov-2017):
     - Added ID descriptor to maven-assembly-plugin configuration to prevent a 'Assembly is incorrectly configured' error being thrown (contributed by Joris Kinable)
@@ -114,6 +153,7 @@ Changes to JGraphT in each version:
     - Replaced the `ClosestFirstIterator` in `DijkstraShortestPath` by a light-weight version of the iterator which significantly speeds up the shortest path computations. (contributed by Dimitrios Michail)
     - Added implementation of Larry Page's `PageRank` algorithm. (contributed by Dimitrios Michail)
     - Added faster transitive closure calculation for DAGs. (contributed by Martin Sturm)
+    - K-shortest paths interface now accepts k as a parameter (contributed by Dimitrios Michail)
     
 - **version 1.0.0** (19-Sept-2016):
     - Moved to JDK 1.8 (cleanup contributed by Joris Kinable)

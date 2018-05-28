@@ -17,18 +17,14 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+
 import java.io.*;
 import java.nio.charset.*;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -51,7 +47,7 @@ public class DIMACSImporterTest
         }
 
         DIMACSImporter<Integer, E> importer = new DIMACSImporter<>(
-            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeFactory().createEdge(f, t));
+            (l, a) -> Integer.parseInt(l), (f, t, l, a) -> g.getEdgeSupplier().get());
         try {
             importer.importGraph(g, new InputStreamReader(in, "UTF-8"));
         } catch (UnsupportedEncodingException e) {

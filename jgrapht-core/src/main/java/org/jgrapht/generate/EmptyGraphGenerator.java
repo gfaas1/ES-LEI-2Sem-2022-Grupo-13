@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates an <a href="http://mathworld.wolfram.com/EmptyGraph.html">empty graph</a> of any size.
@@ -32,7 +32,8 @@ import org.jgrapht.*;
  * @since Sep 16, 2003
  */
 public class EmptyGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int size;
 
@@ -56,11 +57,10 @@ public class EmptyGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         for (int i = 0; i < size; ++i) {
-            target.addVertex(vertexFactory.createVertex());
+            target.addVertex();
         }
     }
 }

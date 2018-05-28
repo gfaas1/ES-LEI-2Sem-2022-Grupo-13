@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * List of paths <code>AbstractPathElement</code> with same target vertex.
@@ -27,7 +27,8 @@ import org.jgrapht.*;
  * @since July 5, 2007
  */
 abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>>
-    extends AbstractList<T>
+    extends
+    AbstractList<T>
 {
     protected Graph<V, E> graph;
 
@@ -55,7 +56,7 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
      *
      * @throws NullPointerException if the specified prevPathElementList or edge is
      *         <code>null</code>.
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or 0.
+     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
     protected AbstractPathElementList(
         Graph<V, E> graph, int maxSize, AbstractPathElementList<V, E, T> elementList, E edge)
@@ -76,7 +77,7 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
     }
 
     /**
-     * Creates a list with an empty path. The list size is 1.
+     * Creates a list with an empty path. The list size is $1$.
      *
      * @param maxSize maximum number of paths the list is able to store.
      *
@@ -105,11 +106,11 @@ abstract class AbstractPathElementList<V, E, T extends AbstractPathElement<V, E>
     }
 
     /**
-     * Creates an empty list. The list size is 0.
+     * Creates an empty list. The list size is $0$.
      *
      * @param maxSize maximum number of paths the list is able to store.
      *
-     * @throws IllegalArgumentException if <code>maxSize</code> is negative or 0.
+     * @throws IllegalArgumentException if <code>maxSize</code> is negative or $0$.
      */
     protected AbstractPathElementList(Graph<V, E> graph, int maxSize, V vertex)
     {

@@ -17,32 +17,32 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Betweenness centrality.
  * 
  * <p>
- * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a node
- * $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
+ * Computes the betweenness centrality of each vertex of a graph. The betweenness centrality of a
+ * node $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
  * t}\frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the total number of shortest paths
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
  * $v$. For more details see
  * <a href="https://en.wikipedia.org/wiki/Betweenness_centrality">wikipedia</a>.
  * 
- * The algorithm is based on 
+ * The algorithm is based on
  * <ul>
- * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". 
- * Journal of Mathematical Sociology. 25 (2): 163–177.</li>
+ * <li>Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
+ * Mathematical Sociology. 25 (2): 163–177.</li>
  * </ul>
  *
- * The running time is $O(nm) and $O(nm +n^2 \log n)$ for unweighted and weighted graph respectively, 
- * where $n$ is the number of vertices and $m$ the number of edges of the graph. The space
- * complexity is $O(n + m)$.
+ * The running time is $O(nm) and $O(nm +n^2 \log n)$ for unweighted and weighted graph
+ * respectively, where $n$ is the number of vertices and $m$ the number of edges of the graph. The
+ * space complexity is $O(n + m)$.
  *
  * 
  * @param <V> the graph vertex type
@@ -52,10 +52,11 @@ import org.jgrapht.util.*;
  * @since December 2017
  */
 public class BetweennessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
 
-   /**
+    /**
      * Underlying graph
      */
     private final Graph<V, E> graph;
@@ -77,13 +78,13 @@ public class BetweennessCentrality<V, E>
     {
         this(graph, false);
     }
-    
+
     /**
      * Construct a new instance.
      * 
      * @param graph the input graph
-     * @param normalize whether to normalize by dividing the closeness by (n-1)*(n-2), where n is the
-     *        number of vertices of the graph
+     * @param normalize whether to normalize by dividing the closeness by $(n-1) \cdot (n-2)$, where
+     *        $n$ is the number of vertices of the graph
      */
     public BetweennessCentrality(Graph<V, E> graph, boolean normalize)
     {
@@ -130,17 +131,17 @@ public class BetweennessCentrality<V, E>
         this.graph.vertexSet().forEach(v -> this.scores.put(v, 0.0));
 
         // compute for each source
-        this.graph.vertexSet().forEach(s -> compute(s));
+        this.graph.vertexSet().forEach(this::compute);
 
         // For undirected graph, divide scores by two as each shortest path
         // considered twice.
         if (!this.graph.getType().isDirected()) {
             this.scores.forEach((v, score) -> this.scores.put(v, score / 2));
         }
-        
+
         if (normalize) {
-            int n = this.graph.vertexSet().size();         
-            int normalizationFactor = (n - 1) * (n - 2);       
+            int n = this.graph.vertexSet().size();
+            int normalizationFactor = (n - 1) * (n - 2);
             if (normalizationFactor != 0) {
                 this.scores.forEach((v, score) -> this.scores.put(v, score / normalizationFactor));
             }
@@ -208,7 +209,7 @@ public class BetweennessCentrality<V, E>
             if (!w.equals(s)) {
                 this.scores.put(w, this.scores.get(w) + dependency.get(w));
             }
-        }        
+        }
     }
 
     private interface MyQueue<T, D>
@@ -223,7 +224,8 @@ public class BetweennessCentrality<V, E>
     }
 
     private class WeightedQueue
-        implements MyQueue<V, Double>
+        implements
+        MyQueue<V, Double>
     {
 
         FibonacciHeap<V> delegate = new FibonacciHeap<>();
@@ -261,7 +263,8 @@ public class BetweennessCentrality<V, E>
     }
 
     private class UnweightedQueue
-        implements MyQueue<V, Double>
+        implements
+        MyQueue<V, Double>
     {
 
         Queue<V> delegate = new ArrayDeque<>();

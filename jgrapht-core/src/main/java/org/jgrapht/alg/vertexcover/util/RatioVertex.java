@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.vertexcover.util;
 
-import java.util.*;
-
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * Helper class for vertex covers. Guarantees that vertices can be sorted, thereby obtaining a
@@ -30,7 +30,8 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class RatioVertex<V>
-    implements Comparable<RatioVertex<V>>
+    implements
+    Comparable<RatioVertex<V>>
 {
     /** original vertex **/
     public final V v;
@@ -134,7 +135,7 @@ public class RatioVertex<V>
             return true;
         else if (!(o instanceof RatioVertex))
             return false;
-        RatioVertex<V> other = TypeUtil.uncheckedCast(o, null);
+        RatioVertex<V> other = TypeUtil.uncheckedCast(o);
         return this.ID == other.ID;
     }
 

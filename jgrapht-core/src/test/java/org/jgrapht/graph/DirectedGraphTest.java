@@ -17,15 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * A unit test for directed multigraph.
@@ -182,7 +180,8 @@ public class DirectedGraphTest
      * @param <E> the graph edge type
      */
     private class LinkedHashSetDirectedMultigraph<V, E>
-        extends DirectedMultigraph<V, E>
+        extends
+        DirectedMultigraph<V, E>
     {
         private static final long serialVersionUID = -1826738982402033648L;
 

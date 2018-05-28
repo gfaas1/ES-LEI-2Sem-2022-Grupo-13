@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generator which produces the
@@ -44,7 +44,8 @@ import org.jgrapht.*;
  * @param <E> edge type
  */
 public class ComplementGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
 
     private final Graph<V, E> graph;
@@ -75,21 +76,8 @@ public class ComplementGraphGenerator<V, E>
         this.generateSelfLoops = generateSelfLoops;
     }
 
-    /**
-     * Generates the complement graph.
-     * 
-     * @param target receives the generated edges and vertices; if this is non-empty on entry, the
-     *        result will be a disconnected graph since generated elements will not be connected to
-     *        existing elements
-     */
-    public void generateGraph(Graph<V, E> target)
-    {
-        this.generateGraph(target, null, null);
-    }
-
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         Graphs.addAllVertices(target, graph.vertexSet());
 

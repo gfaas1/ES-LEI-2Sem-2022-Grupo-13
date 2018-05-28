@@ -18,11 +18,9 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class KSPExampleTest
 {
@@ -34,10 +32,10 @@ public class KSPExampleTest
         SimpleWeightedGraph<String, DefaultWeightedEdge> graph = new KSPExampleGraph();
 
         String sourceVertex = "S";
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, 4);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(3, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(3, ksp.getPaths(sourceVertex, targetVertex, 4).size());
     }
 
     @Test
@@ -47,10 +45,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 3;
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex, nbPaths).size());
     }
 
     @Test
@@ -60,10 +58,10 @@ public class KSPExampleTest
 
         String sourceVertex = "S";
         int nbPaths = 2;
-        KShortestPaths<String, DefaultWeightedEdge> ksp = new KShortestPaths<>(graph, nbPaths);
+        KShortestSimplePaths<String, DefaultWeightedEdge> ksp = new KShortestSimplePaths<>(graph);
 
         String targetVertex = "T";
-        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex).size());
+        assertEquals(nbPaths, ksp.getPaths(sourceVertex, targetVertex, nbPaths).size());
     }
 }
 

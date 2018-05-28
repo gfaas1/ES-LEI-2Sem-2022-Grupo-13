@@ -17,16 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
-import org.junit.Test;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Test cases for the AllDirectedPaths algorithm.
@@ -84,8 +81,8 @@ public class AllDirectedPathsTest
 
         assertEquals(
             "Toy network should have correct number of trivial simple paths", 2, allPaths.size());
-	assertEquals(Arrays.asList(I1), allPaths.get(0).getVertexList());
-	assertEquals(Arrays.asList(I1, A), allPaths.get(1).getVertexList());
+        assertEquals(Arrays.asList(I1), allPaths.get(0).getVertexList());
+        assertEquals(Arrays.asList(I1, A), allPaths.get(1).getVertexList());
     }
 
     @Test
@@ -94,18 +91,18 @@ public class AllDirectedPathsTest
         // Verify fix for http://github.com/jgrapht/jgrapht/issues/441.
         DefaultDirectedGraph<String, DefaultEdge> graph =
             new DefaultDirectedGraph<>(DefaultEdge.class);
-	graph.addVertex("A");
-	graph.addVertex("B");
-	graph.addEdge("B", "A");
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addEdge("B", "A");
 
-	AllDirectedPaths<String, DefaultEdge> all = new AllDirectedPaths<>(graph);
-	List<GraphPath<String, DefaultEdge>> allPaths =
-	    all.getAllPaths(graph.vertexSet(), graph.vertexSet(), true, graph.edgeSet().size());
+        AllDirectedPaths<String, DefaultEdge> all = new AllDirectedPaths<>(graph);
+        List<GraphPath<String, DefaultEdge>> allPaths =
+            all.getAllPaths(graph.vertexSet(), graph.vertexSet(), true, graph.edgeSet().size());
 
         assertEquals(3, allPaths.size());
-	assertEquals(Arrays.asList("A"), allPaths.get(0).getVertexList());
-	assertEquals(Arrays.asList("B"), allPaths.get(1).getVertexList());
-	assertEquals(Arrays.asList("B", "A"), allPaths.get(2).getVertexList());
+        assertEquals(Arrays.asList("A"), allPaths.get(0).getVertexList());
+        assertEquals(Arrays.asList("B"), allPaths.get(1).getVertexList());
+        assertEquals(Arrays.asList("B", "A"), allPaths.get(2).getVertexList());
     }
 
     @Test

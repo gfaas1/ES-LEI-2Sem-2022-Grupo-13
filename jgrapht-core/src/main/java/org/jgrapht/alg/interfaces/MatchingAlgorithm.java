@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.interfaces;
 
+import org.jgrapht.*;
+
 import java.io.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * Allows to derive a <a href="http://en.wikipedia.org/wiki/Matching_(graph_theory)">matching</a> of
@@ -50,7 +50,8 @@ public interface MatchingAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     interface Matching<V, E>
-        extends Iterable<E>
+        extends
+        Iterable<E>
     {
         /**
          * Returns the graph over which this matching is defined.
@@ -90,7 +91,8 @@ public interface MatchingAlgorithm<V, E>
          * in the graph is incident to an edge in the matching.
          * 
          * @return true if the matching is perfect. By definition, a perfect matching consists of
-         *         exactly 1/2|V| edges, and the number of vertices in the graph must be even.
+         *         exactly $\frac{1}{2|V|}$ edges, and the number of vertices in the graph must be
+         *         even.
          */
         default boolean isPerfect()
         {
@@ -116,7 +118,9 @@ public interface MatchingAlgorithm<V, E>
      * @param <E> the graph edge type
      */
     class MatchingImpl<V, E>
-        implements Matching<V, E>, Serializable
+        implements
+        Matching<V, E>,
+        Serializable
     {
         private static final long serialVersionUID = 4767675421846527768L;
 

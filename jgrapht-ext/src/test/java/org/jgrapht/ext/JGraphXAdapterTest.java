@@ -17,15 +17,14 @@
  */
 package org.jgrapht.ext;
 
-import static org.junit.Assert.fail;
-
-import java.util.*;
-
+import com.mxgraph.model.*;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
 
-import com.mxgraph.model.*;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Test methods for the class JGraphXAdapter.

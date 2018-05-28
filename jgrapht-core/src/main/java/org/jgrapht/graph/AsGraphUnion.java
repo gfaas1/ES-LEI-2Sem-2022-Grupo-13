@@ -17,11 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Read-only union of two graphs.
@@ -38,8 +39,10 @@ import org.jgrapht.util.*;
  * @author Ilya Razenshteyn
  */
 public class AsGraphUnion<V, E>
-    extends AbstractGraph<V, E>
-    implements Serializable
+    extends
+    AbstractGraph<V, E>
+    implements
+    Serializable
 {
     private static final long serialVersionUID = -3848082143382987713L;
 
@@ -136,7 +139,18 @@ public class AsGraphUnion<V, E>
      * @throws UnsupportedOperationException always, since operation is unsupported
      */
     @Override
-    public EdgeFactory<V, E> getEdgeFactory()
+    public Supplier<V> getVertexSupplier()
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public Supplier<E> getEdgeSupplier()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }
@@ -159,6 +173,17 @@ public class AsGraphUnion<V, E>
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
+    {
+        throw new UnsupportedOperationException(READ_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
+     */
+    @Override
+    public V addVertex()
     {
         throw new UnsupportedOperationException(READ_ONLY);
     }

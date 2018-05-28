@@ -17,20 +17,18 @@
  */
 package org.jgrapht.perf.clique;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.clique.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
-import junit.framework.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * A small benchmark comparing maximal clique enumeration algorithms.
@@ -62,9 +60,10 @@ public class MaximalCliqueEnumerationPerformanceTest
                     PERF_BENCHMARK_VERTICES_COUNT, PERF_BENCHMARK_EDGES_PROP, SEED, false);
             }
 
-            graph = new SimpleGraph<>(DefaultEdge.class);
+            graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
 
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            generator.generateGraph(graph);
         }
 
         @Benchmark
@@ -78,7 +77,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class BronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -88,7 +88,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class PivotBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)
@@ -98,7 +99,8 @@ public class MaximalCliqueEnumerationPerformanceTest
     }
 
     public static class DegeneracyBronKerboschRandomGraphBenchmark
-        extends RandomGraphBenchmarkBase
+        extends
+        RandomGraphBenchmarkBase
     {
         @Override
         Iterable<Set<Integer>> createSolver(Graph<Integer, DefaultEdge> graph)

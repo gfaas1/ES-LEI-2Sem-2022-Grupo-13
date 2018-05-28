@@ -17,24 +17,12 @@
  */
 package org.jgrapht.alg.matching;
 
-import java.math.BigDecimal;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.MatchingAlgorithm;
-import org.jgrapht.util.GenericFibonacciHeap;
+import java.math.*;
+import java.util.*;
 
 /**
  * Maximum weight matching in bipartite graphs.
@@ -55,7 +43,8 @@ import org.jgrapht.util.GenericFibonacciHeap;
  * @author Dimitrios Michail
  */
 public class MaximumWeightBipartiteMatching<V, E>
-    implements MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     private final Graph<V, E> graph;
     private final Set<V> partition1;
@@ -126,7 +115,7 @@ public class MaximumWeightBipartiteMatching<V, E>
         heap = new GenericFibonacciHeap<>(comparator);
         nodeInHeap = new HashMap<>();
         pred = new HashMap<>();
-        graph.vertexSet().stream().forEach(v -> {
+        graph.vertexSet().forEach(v -> {
             pot.put(v, BigDecimal.ZERO);
             pred.put(v, null);
             dist.put(v, BigDecimal.ZERO);
@@ -175,7 +164,7 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     /**
      * Augment from a particular node. The algorithm always looks for augmenting paths from nodes in
-     * partition1. In the following code partition1 is A and partition2 is B.
+     * partition1. In the following code partition1 is $A$ and partition2 is $B$.
      * 
      * @param a the node
      */
@@ -306,8 +295,8 @@ public class MaximumWeightBipartiteMatching<V, E>
 
     private void augmentPathTo(V v)
     {
-        List<E> matched = new ArrayList<E>();
-        List<E> free = new ArrayList<E>();
+        List<E> matched = new ArrayList<>();
+        List<E> free = new ArrayList<>();
 
         E e1 = pred.get(v);
         while (e1 != null) {

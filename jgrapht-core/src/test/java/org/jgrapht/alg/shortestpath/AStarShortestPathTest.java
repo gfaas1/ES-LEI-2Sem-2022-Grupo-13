@@ -20,9 +20,7 @@ package org.jgrapht.alg.shortestpath;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
-
-import junit.framework.*;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.*;
 
@@ -243,7 +241,8 @@ public class AStarShortestPathTest
     }
 
     private class ManhattanDistance
-        implements AStarAdmissibleHeuristic<Node>
+        implements
+        AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)
@@ -254,7 +253,8 @@ public class AStarShortestPathTest
     }
 
     private class EuclideanDistance
-        implements AStarAdmissibleHeuristic<Node>
+        implements
+        AStarAdmissibleHeuristic<Node>
     {
         @Override
         public double getCostEstimate(Node sourceVertex, Node targetVertex)

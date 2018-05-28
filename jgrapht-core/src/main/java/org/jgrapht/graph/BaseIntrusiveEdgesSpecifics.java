@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A base implementation for the intrusive edges specifics.
@@ -96,7 +96,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.source, null);
+        return TypeUtil.uncheckedCast(ie.source);
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
         if (ie == null) {
             throw new IllegalArgumentException("no such edge in graph: " + e.toString());
         }
-        return TypeUtil.uncheckedCast(ie.target, null);
+        return TypeUtil.uncheckedCast(ie.target);
     }
 
     /**

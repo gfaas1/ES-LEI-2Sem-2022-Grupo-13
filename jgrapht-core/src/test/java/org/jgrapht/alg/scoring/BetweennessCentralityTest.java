@@ -17,15 +17,16 @@
  */
 package org.jgrapht.alg.scoring;
 
-import static org.junit.Assert.*;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class BetweennessCentralityTest
 {
@@ -34,48 +35,48 @@ public class BetweennessCentralityTest
     public void testNullGraph()
     {
         Graph<Integer, DefaultEdge> g = null;
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         bc.getScores();
     }
-    
+
     @Test
     public void testEmptyGraph()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertTrue(scores.isEmpty());
     }
-    
+
     @Test
     public void testEmptyGraphNormalized()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);
         Map<Integer, Double> scores = bc.getScores();
         assertTrue(scores.isEmpty());
     }
-    
+
     @Test
     public void testSingletonGraph()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(0);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertEquals(0.0, scores.get(0), 0.0);
     }
-    
+
     @Test
     public void testSingletonGraphNormalized()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(0);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);
         Map<Integer, Double> scores = bc.getScores();
         assertEquals(0.0, scores.get(0), 0.0);
     }
-    
+
     @Test
     public void testK2Graph()
     {
@@ -83,12 +84,12 @@ public class BetweennessCentralityTest
         g.addVertex(0);
         g.addVertex(1);
         g.addEdge(0, 1);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertEquals(0.0, scores.get(0), 0.0);
         assertEquals(0.0, scores.get(1), 0.0);
     }
-    
+
     @Test
     public void testK2GraphNormalized()
     {
@@ -96,21 +97,21 @@ public class BetweennessCentralityTest
         g.addVertex(0);
         g.addVertex(1);
         g.addEdge(0, 1);
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);     
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);
         Map<Integer, Double> scores = bc.getScores();
         assertEquals(0.0, scores.get(0), 0.0);
         assertEquals(0.0, scores.get(1), 0.0);
     }
-    
+
     @Test
     public void testUnweighted1()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted1();
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);        
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertGraph1(scores);
     }
-    
+
     @Test
     public void testAsWeighted1()
     {
@@ -119,97 +120,90 @@ public class BetweennessCentralityTest
         Map<Integer, Double> scores = bc.getScores();
         assertGraph1(scores);
     }
-    
+
     @Test
     public void testNormalization()
     {
         Graph<Integer, DefaultEdge> g = new AsWeightedGraph<>(createUnweighted1(), new HashMap<>());
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g, true);
         Map<Integer, Double> scores = new HashMap<>(bc.getScores());
-        int n = g.vertexSet().size();            
+        int n = g.vertexSet().size();
         scores.forEach((v, score) -> scores.put(v, score * ((n - 1) * (n - 2))));
         assertGraph1(scores);
     }
-    
+
     @Test
     public void testUnweighted2()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted2();
-        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);    
+        VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
         assertGraph2(scores);
     }
-    
+
     @Test
     public void testUnweighted3()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted3();
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
-        assertGraph3(scores);        
-        
+        assertGraph3(scores);
+
     }
-    
+
     @Test
     public void testUnweighted4()
     {
         Graph<Integer, DefaultEdge> g = createUnweighted4();
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
         Map<Integer, Double> scores = bc.getScores();
-        assertGraph4(scores);        
-        
+        assertGraph4(scores);
+
     }
-    
+
     @Test
     public void testWeighted5()
     {
         Graph<String, DefaultWeightedEdge> g = createWeighted5();
         VertexScoringAlgorithm<String, Double> bc = new BetweennessCentrality<>(g);
         Map<String, Double> scores = bc.getScores();
-        assertGraph5(scores);        
-        
+        assertGraph5(scores);
+
     }
-    
+
     @Test
     public void testStar()
     {
         testStar(5);
         testStar(12);
-        
+
     }
-    
+
     private void testStar(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new StarGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
-        
-        assertStar(bc.getScores(), resultMap.get(StarGraphGenerator.CENTER_VERTEX), order);        
-        
+
+        assertStar(bc.getScores(), resultMap.get(StarGraphGenerator.CENTER_VERTEX), order);
+
     }
-    
+
     private void assertStar(Map<Integer, Double> scores, Integer center, int order)
     {
         for (Integer v : scores.keySet()) {
             if (v.equals(center)) {
-                assertEquals((order -2) * (order-1) / 2 , scores.get(v), 0.0);
+                assertEquals((order - 2) * (order - 1) / 2, scores.get(v), 0.0);
             } else {
                 assertEquals(0.0, scores.get(v), 0.0);
             }
         }
-        
+
     }
-    
+
     @Test
     public void testLinear()
     {
@@ -217,31 +211,24 @@ public class BetweennessCentralityTest
         testLinear(12);
         testLinear(37);
     }
-    
+
     private void testLinear(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new LinearGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
-        
+
         if (order == 5) {
-            assertLinear5(bc.getScores());        
+            assertLinear5(bc.getScores());
         } else {
-            assertLinear(bc.getScores(), order);        
+            assertLinear(bc.getScores(), order);
         }
-        
+
     }
-    
+
     private void assertLinear5(Map<Integer, Double> scores)
     {
         for (Integer v : scores.keySet()) {
@@ -254,16 +241,16 @@ public class BetweennessCentralityTest
             } else {
                 throw new IllegalArgumentException("Unexpected vertex " + v);
             }
-        }        
+        }
     }
-    
+
     private void assertLinear(Map<Integer, Double> scores, int order)
     {
         for (int i = 0; i < order / 2; i++) {
             assertEquals(scores.get(i), scores.get(order - i - 1), 0.0);
-        }        
+        }
     }
-    
+
     @Test
     public void testRing()
     {
@@ -271,46 +258,40 @@ public class BetweennessCentralityTest
         testRing(12);
         testRing(37);
     }
-    
+
     private void testRing(int order)
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GraphGenerator<Integer, DefaultEdge, Integer> generator = new RingGraphGenerator<>(order);
         Map<String, Integer> resultMap = new HashMap<>();
-        generator.generateGraph(g, new VertexFactory<Integer>()
-        {
-            private int id = 0; 
-            @Override
-            public Integer createVertex()
-            {
-                return id++;
-            }
-        }, resultMap);
+        generator.generateGraph(g, resultMap);
         VertexScoringAlgorithm<Integer, Double> bc = new BetweennessCentrality<>(g);
-        
+
         if (order == 5) {
-            assertRing5(bc.getScores());        
+            assertRing5(bc.getScores());
         } else {
-            assertRing(bc.getScores(), order);        
+            assertRing(bc.getScores(), order);
         }
-        
+
     }
-    
+
     private void assertRing5(Map<Integer, Double> scores)
     {
         for (Integer v : scores.keySet()) {
             assertEquals(1.0, scores.get(v), 0.0);
-        }        
+        }
     }
-    
+
     private void assertRing(Map<Integer, Double> scores, int order)
     {
         for (int i = 0; i < order - 1; i++) {
             assertEquals(scores.get(i), scores.get(i + 1), 0.0);
-        }        
+        }
     }
 
-    private void assertGraph3(Map<Integer, Double> scores) {
+    private void assertGraph3(Map<Integer, Double> scores)
+    {
         assertEquals(0.0, scores.get(1), 0.0);
         assertEquals(1.5, scores.get(2), 0.0);
         assertEquals(1.0, scores.get(3), 0.0);
@@ -318,16 +299,18 @@ public class BetweennessCentralityTest
         assertEquals(3.0, scores.get(5), 0.0);
         assertEquals(0.0, scores.get(6), 0.0);
     }
-    
-    private void assertGraph4(Map<Integer, Double> scores) {
+
+    private void assertGraph4(Map<Integer, Double> scores)
+    {
         assertEquals(0.0, scores.get(1), 0.0);
         assertEquals(3.5, scores.get(2), 0.0);
         assertEquals(1.0, scores.get(3), 0.0);
         assertEquals(1.0, scores.get(4), 0.0);
         assertEquals(0.5, scores.get(5), 0.0);
     }
-    
-    private void assertGraph5(Map<String, Double> scores) {
+
+    private void assertGraph5(Map<String, Double> scores)
+    {
         assertEquals(0.0, scores.get("A"), 0.0);
         assertEquals(3.0, scores.get("B"), 0.0);
         assertEquals(6.0, scores.get("C"), 0.0);
@@ -336,9 +319,10 @@ public class BetweennessCentralityTest
         assertEquals(5.0, scores.get("F"), 0.0);
         assertEquals(1.0, scores.get("G"), 0.0);
     }
-    
-    private void assertGraph1(Map<Integer, Double> scores) {
-        
+
+    private void assertGraph1(Map<Integer, Double> scores)
+    {
+
         assertEquals(3.0, scores.get(1), 0.0);
         assertEquals(0.0, scores.get(2), 0.0);
         assertEquals(3.0, scores.get(3), 0.0);
@@ -349,8 +333,9 @@ public class BetweennessCentralityTest
         assertEquals(0.0, scores.get(8), 0.0);
         assertEquals(0.0, scores.get(9), 0.0);
     }
-    
-    private void assertGraph2(Map<Integer, Double> scores) {
+
+    private void assertGraph2(Map<Integer, Double> scores)
+    {
         assertEquals(43.0, scores.get(0), 0.0);
         assertEquals(25.0, scores.get(1), 0.0);
         assertEquals(70.0, scores.get(2), 0.0);
@@ -367,7 +352,7 @@ public class BetweennessCentralityTest
         assertEquals(0.0, scores.get(13), 0.0);
         assertEquals(0.0, scores.get(14), 0.0);
     }
-    
+
     private Graph<Integer, DefaultEdge> createUnweighted1()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -394,10 +379,10 @@ public class BetweennessCentralityTest
         g.addEdge(6, 8);
         g.addEdge(7, 8);
         g.addEdge(7, 9);
-        
+
         return g;
     }
-    
+
     private Graph<Integer, DefaultEdge> createUnweighted2()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -430,10 +415,10 @@ public class BetweennessCentralityTest
         g.addEdge(7, 8);
         g.addEdge(7, 12);
         g.addEdge(7, 13);
-        
+
         return g;
     }
-    
+
     private Graph<Integer, DefaultEdge> createUnweighted3()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -450,10 +435,10 @@ public class BetweennessCentralityTest
         g.addEdge(3, 4);
         g.addEdge(4, 5);
         g.addEdge(4, 6);
-        
+
         return g;
     }
-    
+
     private Graph<Integer, DefaultEdge> createUnweighted4()
     {
         Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
@@ -467,13 +452,14 @@ public class BetweennessCentralityTest
         g.addEdge(2, 4);
         g.addEdge(3, 5);
         g.addEdge(4, 5);
-        
+
         return g;
     }
-    
+
     private Graph<String, DefaultWeightedEdge> createWeighted5()
     {
-        Graph<String, DefaultWeightedEdge> g = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<String, DefaultWeightedEdge> g =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
         g.addVertex("A");
         g.addVertex("B");
         g.addVertex("C");
@@ -481,42 +467,42 @@ public class BetweennessCentralityTest
         g.addVertex("E");
         g.addVertex("F");
         g.addVertex("G");
-        
+
         DefaultWeightedEdge e;
-        
+
         e = g.addEdge("A", "B");
         g.setEdgeWeight(e, 0.7);
-        
+
         e = g.addEdge("A", "D");
         g.setEdgeWeight(e, 0.3);
-        
+
         e = g.addEdge("B", "C");
         g.setEdgeWeight(e, 0.9);
-        
+
         e = g.addEdge("C", "A");
         g.setEdgeWeight(e, 1.3);
-        
+
         e = g.addEdge("C", "D");
         g.setEdgeWeight(e, 0.57);
-        
+
         e = g.addEdge("D", "B");
         g.setEdgeWeight(e, 1.0);
-        
+
         e = g.addEdge("D", "E");
         g.setEdgeWeight(e, 0.8);
-        
+
         e = g.addEdge("D", "F");
         g.setEdgeWeight(e, 0.2);
-        
+
         e = g.addEdge("E", "G");
         g.setEdgeWeight(e, 0.4);
-        
+
         e = g.addEdge("F", "E");
         g.setEdgeWeight(e, 0.6);
-        
+
         e = g.addEdge("G", "F");
         g.setEdgeWeight(e, 0.2);
-        
+
         return g;
     }
 }

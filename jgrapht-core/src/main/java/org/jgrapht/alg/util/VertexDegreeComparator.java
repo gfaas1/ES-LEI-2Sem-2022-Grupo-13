@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Compares two vertices based on their degree.
@@ -36,7 +36,8 @@ import org.jgrapht.*;
  * @since Nov 6, 2003
  */
 public class VertexDegreeComparator<V, E>
-    implements Comparator<V>
+    implements
+    Comparator<V>
 {
 
     /**

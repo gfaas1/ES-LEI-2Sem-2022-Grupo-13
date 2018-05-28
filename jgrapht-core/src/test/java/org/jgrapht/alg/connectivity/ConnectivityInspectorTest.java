@@ -18,14 +18,10 @@
 package org.jgrapht.alg.connectivity;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * .

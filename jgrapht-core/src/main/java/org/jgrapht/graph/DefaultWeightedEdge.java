@@ -24,7 +24,8 @@ package org.jgrapht.graph;
  * @author John V. Sichi
  */
 public class DefaultWeightedEdge
-    extends IntrusiveWeightedEdge
+    extends
+    IntrusiveWeightedEdge
 {
     private static final long serialVersionUID = -3259071493169286685L;
 

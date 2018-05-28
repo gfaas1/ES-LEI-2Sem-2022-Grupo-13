@@ -17,12 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * The most general implementation of the {@link org.jgrapht.Graph} interface. Its subclasses add
@@ -39,6 +40,7 @@ import org.jgrapht.util.*;
  * @param <E> the graph edge type
  *
  * @author Barak Naveh
+ * @author Dimitrios Michail
  * @since Jul 24, 2003
  */
 public abstract class AbstractBaseGraph<V, E>
@@ -49,51 +51,43 @@ public abstract class AbstractBaseGraph<V, E>
     Cloneable,
     Serializable
 {
-    private static final long serialVersionUID = 4811000483921413364L;
+    private static final long serialVersionUID = -3582386521833998627L;
 
     private static final String LOOPS_NOT_ALLOWED = "loops not allowed";
     private static final String GRAPH_SPECIFICS_MUST_NOT_BE_NULL =
         "Graph specifics must not be null";
 
-    private EdgeFactory<V, E> edgeFactory;
     private transient Set<V> unmodifiableVertexSet = null;
 
+    private Supplier<V> vertexSupplier;
+    private Supplier<E> edgeSupplier;
+
+    private GraphType type;
     private Specifics<V, E> specifics;
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
 
-    private boolean directed;
-    private boolean weighted;
-    private boolean allowingMultipleEdges;
-    private boolean allowingLoops;
-
     /**
-     * Construct a new graph. The graph can either be directed or undirected, depending on the
-     * specified edge factory.
+     * Construct a new graph.
      *
-     * @param ef the edge factory of the new graph.
-     * @param directed if true the graph will be directed, otherwise undirected
-     * @param allowMultipleEdges whether to allow multiple (parallel) edges or not.
-     * @param allowLoops whether to allow edges that are self-loops or not.
-     * @param weighted whether the graph is weighted, i.e. the edges support a weight attribute
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     * @param type the graph type
      *
-     * @throws NullPointerException if the specified edge factory is <code>
-     * null</code>.
+     * @throws IllegalArgumentException if the graph type is mixed
      */
     protected AbstractBaseGraph(
-        EdgeFactory<V, E> ef, boolean directed, boolean allowMultipleEdges, boolean allowLoops,
-        boolean weighted)
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, GraphType type)
     {
-        Objects.requireNonNull(ef);
-
-        this.edgeFactory = ef;
-        this.allowingLoops = allowLoops;
-        this.allowingMultipleEdges = allowMultipleEdges;
-        this.directed = directed;
-        this.specifics =
-            Objects.requireNonNull(createSpecifics(directed), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.weighted = weighted;
+        this.vertexSupplier = vertexSupplier;
+        this.edgeSupplier = edgeSupplier;
+        this.type = Objects.requireNonNull(type);
+        if (type.isMixed()) {
+            throw new IllegalArgumentException("Mixed graph not supported");
+        }
+        this.specifics = Objects
+            .requireNonNull(createSpecifics(type.isDirected()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
         this.intrusiveEdgesSpecifics = Objects.requireNonNull(
-            createIntrusiveEdgesSpecifics(weighted), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+            createIntrusiveEdgesSpecifics(type.isWeighted()), GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**
@@ -105,46 +99,60 @@ public abstract class AbstractBaseGraph<V, E>
         return specifics.getAllEdges(sourceVertex, targetVertex);
     }
 
-    /**
-     * Returns <code>true</code> if and only if self-loops are allowed in this graph. A self loop is
-     * an edge that its source and target vertices are the same.
-     *
-     * @return <code>true</code> if and only if graph loops are allowed.
-     */
-    public boolean isAllowingLoops()
+    @Override
+    public Supplier<E> getEdgeSupplier()
     {
-        return allowingLoops;
+        return edgeSupplier;
     }
 
     /**
-     * Returns <code>true</code> if and only if multiple (parallel) edges are allowed in this graph. The
-     * meaning of multiple edges is that there can be many edges going from vertex v1 to vertex v2.
-     *
-     * @return <code>true</code> if and only if multiple (parallel) edges are allowed.
+     * Set the edge supplier that the graph uses whenever it needs to create new edges.
+     * 
+     * <p>
+     * A graph uses the edge supplier to create new edge objects whenever a user calls method
+     * {@link Graph#addEdge(Object, Object)}. Users can also create the edge in user code and then
+     * use method {@link Graph#addEdge(Object, Object, Object)} to add the edge.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the edge supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new edge to be added in a graph <code>e</code> must <i>not</i> be equal to
+     * any other edge in the graph (even if the graph allows edge-multiplicity). More formally, the
+     * graph must not contain any edge <code>e2</code> such that <code>e2.equals(e)</code>.
+     * 
+     * @param edgeSupplier the edge supplier
      */
-    public boolean isAllowingMultipleEdges()
+    public void setEdgeSupplier(Supplier<E> edgeSupplier)
     {
-        return allowingMultipleEdges;
+        this.edgeSupplier = edgeSupplier;
+    }
+
+    @Override
+    public Supplier<V> getVertexSupplier()
+    {
+        return vertexSupplier;
     }
 
     /**
-     * Returns <code>true</code> if and only if the graph supports edge weights.
-     *
-     * @return <code>true</code> if the graph supports edge weights, <code>false</code> otherwise.
+     * Set the vertex supplier that the graph uses whenever it needs to create new vertices.
+     * 
+     * <p>
+     * A graph uses the vertex supplier to create new vertex objects whenever a user calls method
+     * {@link Graph#addVertex()}. Users can also create the vertex in user code and then use method
+     * {@link Graph#addVertex(Object)} to add the vertex.
+     * 
+     * <p>
+     * In contrast with the {@link Supplier} interface, the vertex supplier has the additional
+     * requirement that a new and distinct result is returned every time it is invoked. More
+     * specifically for a new vertex to be added in a graph <code>v</code> must <i>not</i> be equal
+     * to any other vertex in the graph. More formally, the graph must not contain any vertex
+     * <code>v2</code> such that <code>v2.equals(v)</code>.
+     * 
+     * @param vertexSupplier the vertex supplier
      */
-    public boolean isWeighted()
+    public void setVertexSupplier(Supplier<V> vertexSupplier)
     {
-        return weighted;
-    }
-
-    /**
-     * Returns <code>true</code> if the graph is directed, false if undirected.
-     *
-     * @return <code>true</code> if the graph is directed, false if undirected.
-     */
-    public boolean isDirected()
-    {
-        return directed;
+        this.vertexSupplier = vertexSupplier;
     }
 
     /**
@@ -160,30 +168,23 @@ public abstract class AbstractBaseGraph<V, E>
      * {@inheritDoc}
      */
     @Override
-    public EdgeFactory<V, E> getEdgeFactory()
-    {
-        return edgeFactory;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!allowingMultipleEdges && containsEdge(sourceVertex, targetVertex)) {
+        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
             return null;
         }
 
-        if (!allowingLoops && sourceVertex.equals(targetVertex)) {
+        if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
-        E e = edgeFactory.createEdge(sourceVertex, targetVertex);
+        if (edgeSupplier == null)
+            throw new UnsupportedOperationException("The graph contains no edge supplier");
 
+        E e = edgeSupplier.get();
         if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
             specifics.addEdgeToTouchingVertices(e);
             return e;
@@ -204,11 +205,11 @@ public abstract class AbstractBaseGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        if (!allowingMultipleEdges && containsEdge(sourceVertex, targetVertex)) {
+        if (!type.isAllowingMultipleEdges() && containsEdge(sourceVertex, targetVertex)) {
             return false;
         }
 
-        if (!allowingLoops && sourceVertex.equals(targetVertex)) {
+        if (!type.isAllowingSelfLoops() && sourceVertex.equals(targetVertex)) {
             throw new IllegalArgumentException(LOOPS_NOT_ALLOWED);
         }
 
@@ -218,6 +219,21 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         return false;
+    }
+
+    @Override
+    public V addVertex()
+    {
+        if (vertexSupplier == null) {
+            throw new UnsupportedOperationException("The graph contains no vertex supplier");
+        }
+
+        V v = vertexSupplier.get();
+
+        if (specifics.addVertex(v)) {
+            return v;
+        }
+        return null;
     }
 
     /**
@@ -232,7 +248,6 @@ public abstract class AbstractBaseGraph<V, E>
             return false;
         } else {
             specifics.addVertex(v);
-
             return true;
         }
     }
@@ -258,7 +273,7 @@ public abstract class AbstractBaseGraph<V, E>
     /**
      * Returns a shallow copy of this graph instance. Neither edges nor vertices are cloned.
      *
-     * @return a shallow copy of this set.
+     * @return a shallow copy of this graph.
      *
      * @throws RuntimeException in case the clone is not supported
      *
@@ -268,17 +283,19 @@ public abstract class AbstractBaseGraph<V, E>
     public Object clone()
     {
         try {
-            AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone(), null);
+            AbstractBaseGraph<V, E> newGraph = TypeUtil.uncheckedCast(super.clone());
 
-            newGraph.edgeFactory = this.edgeFactory;
+            newGraph.vertexSupplier = this.vertexSupplier;
+            newGraph.edgeSupplier = this.edgeSupplier;
+
             newGraph.unmodifiableVertexSet = null;
 
             // NOTE: it's important for this to happen in an object
             // method so that the new inner class instance gets associated with
             // the right outer class instance
-            newGraph.specifics = newGraph.createSpecifics(this.directed);
+            newGraph.specifics = newGraph.createSpecifics(this.getType().isDirected());
             newGraph.intrusiveEdgesSpecifics =
-                newGraph.createIntrusiveEdgesSpecifics(this.weighted);
+                newGraph.createIntrusiveEdgesSpecifics(this.getType().isWeighted());
 
             Graphs.addGraph(newGraph, this);
 
@@ -475,15 +492,7 @@ public abstract class AbstractBaseGraph<V, E>
     @Override
     public GraphType getType()
     {
-        if (directed) {
-            return new DefaultGraphType.Builder()
-                .directed().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
-                .allowSelfLoops(allowingLoops).build();
-        } else {
-            return new DefaultGraphType.Builder()
-                .undirected().weighted(weighted).allowMultipleEdges(allowingMultipleEdges)
-                .allowSelfLoops(allowingLoops).build();
-        }
+        return type;
     }
 
     /**

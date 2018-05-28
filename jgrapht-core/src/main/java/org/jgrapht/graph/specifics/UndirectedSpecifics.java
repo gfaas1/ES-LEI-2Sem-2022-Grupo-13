@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of
@@ -37,7 +37,9 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class UndirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+    implements
+    Specifics<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 6494588405178655873L;
 
@@ -87,10 +89,14 @@ public class UndirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void addVertex(V v)
+    public boolean addVertex(V v)
     {
-        // add with a lazy edge container entry
-        vertexMapUndirected.put(v, null);
+        UndirectedEdgeContainer<V, E> ec = vertexMapUndirected.get(v);
+        if (ec == null) {
+            vertexMapUndirected.put(v, new UndirectedEdgeContainer<>(edgeSetFactory, v));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -181,7 +187,8 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        if (abstractBaseGraph.isAllowingLoops()) { // then we must count, and add loops twice
+        if (abstractBaseGraph.getType().isAllowingSelfLoops()) { // then we must count, and add
+                                                                 // loops twice
             int degree = 0;
             Set<E> edges = getEdgeContainer(vertex).vertexEdges;
 
@@ -261,7 +268,7 @@ public class UndirectedSpecifics<V, E>
     }
 
     /**
-     * A lazy build of edge container for specified vertex.
+     * Get the edge container for a specified vertex.
      *
      * @param vertex a vertex in this graph
      *

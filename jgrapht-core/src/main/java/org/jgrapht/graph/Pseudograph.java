@@ -19,6 +19,9 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * A pseudograph. A pseudograph is a non-simple undirected graph in which both graph loops and
@@ -30,39 +33,35 @@ import org.jgrapht.graph.builder.*;
  * @param <E> the graph edge type
  */
 public class Pseudograph<V, E>
-    extends AbstractBaseGraph<V, E>
+    extends
+    AbstractBaseGraph<V, E>
 {
     private static final long serialVersionUID = -7574564204896552581L;
 
     /**
-     * Creates a new pseudograph.
+     * Creates a new graph.
      *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public Pseudograph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass), false);
     }
 
     /**
-     * Creates a new pseudograph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     * @param weighted whether the graph is weighted or not
      */
-    public Pseudograph(EdgeFactory<V, E> ef)
+    public Pseudograph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted)
     {
-        this(ef, false);
-    }
-
-    /**
-     * Creates a new pseudograph with the specified edge factory.
-     *
-     * @param weighted if true the graph supports edge weights
-     * @param ef the edge factory of the new graph.
-     */
-    public Pseudograph(EdgeFactory<V, E> ef, boolean weighted)
-    {
-        super(ef, false, true, true, weighted);
+        super(
+            vertexSupplier, edgeSupplier,
+            new DefaultGraphType.Builder()
+                .undirected().allowMultipleEdges(true).allowSelfLoops(true).weighted(weighted)
+                .build());
     }
 
     /**
@@ -82,16 +81,17 @@ public class Pseudograph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier of the new graph
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V,
-        E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(EdgeFactory<V, E> ef)
+        E> GraphBuilder<V, E, ? extends Pseudograph<V, E>> createBuilder(Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new Pseudograph<>(ef));
+        return new GraphBuilder<>(new Pseudograph<>(null, edgeSupplier, false));
     }
+
 }
 
 // End Pseudograph.java

@@ -283,14 +283,14 @@ public class GenericFibonacciHeap<K, T>
         }
 
         // create a new stack and put root on it
-        Stack<Node> stack = new Stack<>();
+        Deque<Node> stack = new ArrayDeque<>();
         stack.push(minNode);
 
         StringBuilder buf = new StringBuilder(512);
         buf.append("FibonacciHeap=[");
 
         // do a simple breadth-first traversal on the tree
-        while (!stack.empty()) {
+        while (!stack.isEmpty()) {
             Node curr = stack.pop();
             buf.append(curr);
             buf.append(", ");
@@ -609,8 +609,8 @@ public class GenericFibonacciHeap<K, T>
         }
 
         /**
-         * Decreases the key value. The structure of
-         * the heap may be changed and will not be consolidated.
+         * Decreases the key value. The structure of the heap may be changed and will not be
+         * consolidated.
          *
          * <p>
          * Running time: $O(1)$ amortized

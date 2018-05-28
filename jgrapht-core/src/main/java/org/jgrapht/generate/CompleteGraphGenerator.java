@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a complete graph of any size.
@@ -35,7 +35,8 @@ import org.jgrapht.*;
  * @since Nov 02, 2008
  */
 public class CompleteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int size;
 
@@ -58,8 +59,7 @@ public class CompleteGraphGenerator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (size < 1) {
             return;
@@ -76,9 +76,9 @@ public class CompleteGraphGenerator<V, E>
          */
         List<V> nodes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            V newVertex = vertexFactory.createVertex();
-            if (!target.addVertex(newVertex)) {
-                throw new IllegalArgumentException("Invalid vertex factory");
+            V newVertex = target.addVertex();
+            if (newVertex == null) {
+                throw new IllegalArgumentException("Invalid vertex supplier");
             }
             nodes.add(newVertex);
         }

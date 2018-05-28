@@ -17,31 +17,34 @@
  */
 package org.jgrapht.io;
 
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class DOTUtilsTest {
+public class DOTUtilsTest
+{
 
-	@Test
-	public void shouldAcceptIdWithDigits() {
-		String idWithDigit = "id3";
-		boolean isValid = DOTUtils.isValidID(idWithDigit);
-		assertTrue(isValid);
-	}
+    @Test
+    public void shouldAcceptIdWithDigits()
+    {
+        String idWithDigit = "id3";
+        boolean isValid = DOTUtils.isValidID(idWithDigit);
+        assertTrue(isValid);
+    }
 
-	@Test
-	public void shouldRejectIdThatStartsWithDigit() {
-		String idThatStartsWithDigit = "3id";
-		boolean isValid = DOTUtils.isValidID(idThatStartsWithDigit);
-		assertFalse(isValid);
-	}
+    @Test
+    public void shouldRejectIdThatStartsWithDigit()
+    {
+        String idThatStartsWithDigit = "3id";
+        boolean isValid = DOTUtils.isValidID(idThatStartsWithDigit);
+        assertFalse(isValid);
+    }
 
-	@Test
-	public void shouldAcceptIdThatStartWithUnderscore() {
-		String idThatStartsWithUnderscore = "_id3";
-		boolean isValid = DOTUtils.isValidID(idThatStartsWithUnderscore);
-		assertTrue(isValid);
-	}
+    @Test
+    public void shouldAcceptIdThatStartWithUnderscore()
+    {
+        String idThatStartsWithUnderscore = "_id3";
+        boolean isValid = DOTUtils.isValidID(idThatStartsWithUnderscore);
+        assertTrue(isValid);
+    }
 }

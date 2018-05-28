@@ -17,13 +17,12 @@
  */
 package org.jgrapht.graph;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.jgrapht.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for {@link MaskSubgraph} class.

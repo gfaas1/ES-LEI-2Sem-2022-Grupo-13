@@ -17,17 +17,12 @@
  */
 package org.jgrapht.graph.builder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the graph type builder.
@@ -47,21 +42,23 @@ public class GraphTypeBuilderTest
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
-        assertNotNull(graph.getEdgeFactory());
+        assertNotNull(graph.getEdgeSupplier());
+        assertNull(graph.getVertexSupplier());
     }
 
     @Test
-    public void testGraphTypeBuilderWithEdgeFactory()
+    public void testGraphTypeBuilderWithEdgeSupplier()
     {
-        Graph<Integer, DefaultWeightedEdge> graph = GraphTypeBuilder
-            .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
-            .edgeFactory(
-                new ClassBasedEdgeFactory<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class))
-            .buildGraph();
+        Graph<Integer,
+            DefaultWeightedEdge> graph = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .edgeSupplier(() -> new DefaultWeightedEdge())
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).buildGraph();
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
-        assertNotNull(graph.getEdgeFactory());
+        assertNotNull(graph.getEdgeSupplier());
+        assertNotNull(graph.getVertexSupplier());
     }
 
     @Test
@@ -74,7 +71,8 @@ public class GraphTypeBuilderTest
         assertTrue(graph.getType().isDirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertTrue(graph.getType().isAllowingSelfLoops());
-        assertNotNull(graph.getEdgeFactory());
+        assertNotNull(graph.getEdgeSupplier());
+        assertNotNull(graph.getVertexSupplier());
     }
 
     @Test
@@ -87,7 +85,7 @@ public class GraphTypeBuilderTest
         assertTrue(graph.getType().isUndirected());
         assertTrue(graph.getType().isAllowingMultipleEdges());
         assertFalse(graph.getType().isAllowingSelfLoops());
-        assertNotNull(graph.getEdgeFactory());
+        assertNotNull(graph.getEdgeSupplier());
     }
 
     @Test
@@ -99,8 +97,8 @@ public class GraphTypeBuilderTest
         assertTrue(graph1.getType().isUndirected());
         assertTrue(graph1.getType().isAllowingMultipleEdges());
         assertTrue(graph1.getType().isAllowingSelfLoops());
-        assertNotNull(graph1.getEdgeFactory());
-        assertEquals(graph.getEdgeFactory(), graph1.getEdgeFactory());
+        assertNotNull(graph1.getEdgeSupplier());
+        assertEquals(graph.getEdgeSupplier(), graph1.getEdgeSupplier());
     }
 
 }

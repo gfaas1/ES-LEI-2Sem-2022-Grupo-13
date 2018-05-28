@@ -17,18 +17,18 @@
  */
 package org.jgrapht.traverse;
 
+import org.jgrapht.*;
+
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.jgrapht.*;
 
 /**
  * A degeneracy ordering iterator.
  * 
  * <p>
- * The degeneracy of a graph G is the smallest value d such that every nonempty subgraph of G
- * contains a vertex of degree at most d. If a graph has degeneracy d, then it has a degeneracy
- * ordering, an ordering such that each vertex has d or fewer neighbors that come later in the
+ * The degeneracy of a graph $G $is the smallest value d such that every nonempty subgraph of $G$
+ * contains a vertex of degree at most $d.$ If a graph has degeneracy $d$, then it has a degeneracy
+ * ordering, an ordering such that each vertex has $d$ or fewer neighbors that come later in the
  * ordering.
  * 
  * <p>
@@ -46,7 +46,8 @@ import org.jgrapht.*;
  * @since February, 2017
  */
 public class DegeneracyOrderingIterator<V, E>
-    extends AbstractGraphIterator<V, E>
+    extends
+    AbstractGraphIterator<V, E>
 {
     private Set<V>[] buckets;
     private Map<V, Integer> degrees;

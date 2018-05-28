@@ -17,19 +17,10 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
+import java.util.*;
 
 /**
  * Find a cycle basis of an undirected graph using a variant of Paton's algorithm.
@@ -54,19 +45,10 @@ import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
  * @author Nikolay Ognyanov
  */
 public class PatonCycleBase<V, E>
-    implements UndirectedCycleBase<V, E>, CycleBasisAlgorithm<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     private Graph<V, E> graph;
-
-    /**
-     * Construct a new instance of the cycle basis algorithm.
-     * 
-     * @deprecated Use {@link #PatonCycleBase(Graph)} instead.
-     */
-    @Deprecated
-    public PatonCycleBase()
-    {
-    }
 
     /**
      * Create a cycle base finder for the specified graph.
@@ -80,112 +62,6 @@ public class PatonCycleBase<V, E>
         this.graph = GraphTests.requireUndirected(graph);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated in favor of {@link CycleBasisAlgorithm}
-     */
-    @Override
-    @Deprecated
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated in favor of {@link CycleBasisAlgorithm}
-     */
-    @Override
-    @Deprecated
-    public void setGraph(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireUndirected(graph);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws IllegalArgumentException if the graph contains multiple edges between two vertices
-     * @deprecated in favor of {@link #getCycleBasis()}
-     */
-    @Override
-    @Deprecated
-    public List<List<V>> findCycleBase()
-    {
-        if (graph == null) {
-            throw new IllegalArgumentException("Null graph.");
-        }
-        if (GraphTests.hasMultipleEdges(graph)) {
-            throw new IllegalArgumentException("Graphs with multiple edges not supported");
-        }
-
-        Map<V, Set<V>> used = new HashMap<>();
-        Map<V, V> parent = new HashMap<>();
-        ArrayDeque<V> stack = new ArrayDeque<>();
-        List<List<V>> cycles = new ArrayList<>();
-
-        for (V root : graph.vertexSet()) {
-            // Loop over the connected
-            // components of the graph.
-            if (parent.containsKey(root)) {
-                continue;
-            }
-
-            // Free some memory in case of
-            // multiple connected components.
-            used.clear();
-
-            // Prepare to walk the spanning tree.
-            parent.put(root, root);
-            used.put(root, new HashSet<>());
-            stack.push(root);
-
-            // Do the walk. It is a BFS with
-            // a LIFO instead of the usual
-            // FIFO. Thus it is easier to
-            // find the cycles in the tree.
-            while (!stack.isEmpty()) {
-                V current = stack.pop();
-                Set<V> currentUsed = used.get(current);
-                for (E e : graph.edgesOf(current)) {
-                    V neighbor = graph.getEdgeTarget(e);
-                    if (neighbor.equals(current)) {
-                        neighbor = graph.getEdgeSource(e);
-                    }
-                    if (!used.containsKey(neighbor)) {
-                        // found a new node
-                        parent.put(neighbor, current);
-                        Set<V> neighbourUsed = new HashSet<>();
-                        neighbourUsed.add(current);
-                        used.put(neighbor, neighbourUsed);
-                        stack.push(neighbor);
-                    } else if (neighbor.equals(current)) {
-                        // found a self loop
-                        List<V> cycle = new ArrayList<>();
-                        cycle.add(current);
-                        cycles.add(cycle);
-                    } else if (!currentUsed.contains(neighbor)) {
-                        // found a cycle
-                        Set<V> neighbourUsed = used.get(neighbor);
-                        List<V> cycle = new ArrayList<>();
-                        cycle.add(neighbor);
-                        cycle.add(current);
-                        V p = parent.get(current);
-                        while (!neighbourUsed.contains(p)) {
-                            cycle.add(p);
-                            p = parent.get(p);
-                        }
-                        cycle.add(p);
-                        cycles.add(cycle);
-                        neighbourUsed.add(current);
-                    }
-                }
-            }
-        }
-        return cycles;
-    }
 
     /**
      * Return an undirected cycle basis of a graph. Works only for undirected graphs which do not

@@ -17,21 +17,17 @@
  */
 package org.jgrapht.alg.matching;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Test class for maximum cardinality bipartite matching algorithms
@@ -204,8 +200,9 @@ public abstract class MaximumCardinalityBipartiteMatchingTest
             GnmRandomBipartiteGraphGenerator<Integer, DefaultEdge> generator =
                 new GnmRandomBipartiteGraphGenerator<>(vertices, vertices / 2, edges, 0);
 
-            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-            generator.generateGraph(graph, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            generator.generateGraph(graph);
 
             MatchingAlgorithm<Integer, DefaultEdge> matcher = getMatchingAlgorithm(
                 graph, generator.getFirstPartition(), generator.getSecondPartition());

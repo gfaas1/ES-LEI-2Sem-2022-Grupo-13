@@ -17,20 +17,12 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.util.Pair;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * A base implementation for the computation of a fundamental cycle basis of a graph. Subclasses
@@ -56,7 +48,8 @@ import org.jgrapht.alg.util.Pair;
  * @since October 2016
  */
 public abstract class AbstractFundamentalCycleBasis<V, E>
-    implements CycleBasisAlgorithm<V, E>
+    implements
+    CycleBasisAlgorithm<V, E>
 {
     protected Graph<V, E> graph;
 
@@ -81,7 +74,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
 
         // collect set with all tree edges
         Set<E> treeEdges = spanningForest
-            .entrySet().stream().map(e -> e.getValue()).filter(Objects::nonNull)
+            .entrySet().stream().map(Map.Entry::getValue).filter(Objects::nonNull)
             .collect(Collectors.toSet());
 
         // build cycles for all non-tree edges
@@ -128,13 +121,13 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
 
         // handle self-loops
         if (source.equals(target)) {
-            return Pair.of(Arrays.asList(e), graph.getEdgeWeight(e));
+            return Pair.of(Collections.singletonList(e), graph.getEdgeWeight(e));
         }
 
         /*
          * traverse half cycle
          */
-        Set<E> path1 = new LinkedHashSet<E>();
+        Set<E> path1 = new LinkedHashSet<>();
         path1.add(e);
         V cur = source;
         while (!cur.equals(target)) {
@@ -151,7 +144,7 @@ public abstract class AbstractFundamentalCycleBasis<V, E>
          * traverse the other half cycle, while removing common edges
          */
         double path2Weight = 0d;
-        LinkedList<E> path2 = new LinkedList<E>();
+        LinkedList<E> path2 = new LinkedList<>();
         if (!cur.equals(target)) {
             cur = target;
             while (true) {

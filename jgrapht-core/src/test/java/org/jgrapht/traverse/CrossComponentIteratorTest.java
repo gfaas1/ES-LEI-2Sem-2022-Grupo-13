@@ -17,15 +17,14 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -36,11 +35,12 @@ import static org.junit.Assert.assertEquals;
  * @since May 15, 2017
  */
 public abstract class CrossComponentIteratorTest
-    extends AbstractGraphIteratorTest
+    extends
+    AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
+    StringBuilder result;
 
     // ~ Methods ----------------------------------------------------------------
 
@@ -50,7 +50,7 @@ public abstract class CrossComponentIteratorTest
     @Test
     public void testDirectedGraphViaCCI()
     {
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         Graph<String, DefaultWeightedEdge> graph = createDirectedGraph();
 
@@ -59,14 +59,7 @@ public abstract class CrossComponentIteratorTest
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
 
-        while (iterator.hasNext()) {
-            result.append(iterator.next());
-
-            if (iterator.hasNext()) {
-                result.append(',');
-            }
-        }
-
+        collectResult(iterator, result);
         assertEquals(getExpectedCCStr3(), result.toString());
 
         assertEquals(getExpectedCCFinishString(), listener.getFinishString());
@@ -86,6 +79,11 @@ public abstract class CrossComponentIteratorTest
 
     abstract String getExpectedCCStr3();
 
+    int getExpectedCCVertexCount1()
+    {
+        return 1;
+    }
+
     String getExpectedCCFinishString()
     {
         return "";
@@ -102,7 +100,8 @@ public abstract class CrossComponentIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+        implements
+        TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;
@@ -118,7 +117,7 @@ public abstract class CrossComponentIteratorTest
             switch (componentNumber) {
             case 1:
                 assertEquals(getExpectedCCStr1(), result.toString());
-                assertEquals(1, numComponentVertices);
+                assertEquals(getExpectedCCVertexCount1(), numComponentVertices);
 
                 break;
 

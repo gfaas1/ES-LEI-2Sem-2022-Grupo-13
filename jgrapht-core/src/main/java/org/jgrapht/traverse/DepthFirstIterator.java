@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A depth-first iterator for a directed or undirected graph.
@@ -38,7 +38,8 @@ import org.jgrapht.util.*;
  * @since Jul 29, 2003
  */
 public class DepthFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
+    extends
+    CrossComponentIterator<V, E, DepthFirstIterator.VisitColor>
 {
     /**
      * Sentinel object. Unfortunately, we can't use null, because ArrayDeque won't accept those. And
@@ -171,7 +172,7 @@ public class DepthFirstIterator<V, E>
                 // Now carry on with another pop until we find a non-sentinel
             } else {
                 // Got a real vertex to start working on
-                v = TypeUtil.uncheckedCast(o, null);
+                v = TypeUtil.uncheckedCast(o);
                 break;
             }
         }
@@ -186,7 +187,7 @@ public class DepthFirstIterator<V, E>
 
     private void recordFinish()
     {
-        V v = TypeUtil.uncheckedCast(stack.removeLast(), null);
+        V v = TypeUtil.uncheckedCast(stack.removeLast());
         putSeenData(v, VisitColor.BLACK);
         finishVertex(v);
     }

@@ -17,14 +17,13 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for GeneralizedPetersenGraphGenerator
@@ -37,10 +36,11 @@ public class GeneralizedPetersenGraphGeneratorTest
     @Test
     public void testCubicalGraph()
     {
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         GeneralizedPetersenGraphGenerator<Integer, DefaultEdge> gpgg =
             new GeneralizedPetersenGraphGenerator<>(4, 1);
-        gpgg.generateGraph(g, new IntegerVertexFactory(), null);
+        gpgg.generateGraph(g);
         this.validateBasics(g, 8, 12, 3, 3, 4);
         assertTrue(GraphTests.isBipartite(g));
         assertTrue(GraphTests.isCubic(g));
