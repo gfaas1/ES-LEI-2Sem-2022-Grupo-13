@@ -7,7 +7,7 @@ before_install:
   - npm install -g hercule
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
-  - hercule docs/guide-templates/test.md -o docs/guide/CompleteGraphDemo.md
+  - etc/expandMarkdown.sh
 after_success:
   - test $TRAVIS_BRANCH = "master" && mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
 deploy:
