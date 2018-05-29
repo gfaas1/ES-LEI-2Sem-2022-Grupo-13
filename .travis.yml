@@ -8,6 +8,7 @@ before_install:
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
   - etc/expandMarkdown.sh
+  - mv target/site/apidocs docs/javadoc-SNAPSHOT
 after_success:
   - test $TRAVIS_BRANCH = "master" && mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml
 deploy:
