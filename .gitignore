@@ -33,3 +33,4 @@ out/*
 pom.xml.releaseBackup
 **/pom.xml.releaseBackup
 .classpath
+docs/javadoc
