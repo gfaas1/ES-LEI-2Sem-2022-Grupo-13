@@ -132,6 +132,10 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
         vertexColoring = new ColoringImpl<>(colorMap,chi);
     }
 
+    /**
+     * Returns the <a href="http://mathworld.wolfram.com/ChromaticNumber.html">chromatic number</a> of the input graph
+     * @return chromatic number of the graph
+     */
     public int getChromaticNumber(){
         lazyComputeColoring();
         return vertexColoring.getNumberColors();
