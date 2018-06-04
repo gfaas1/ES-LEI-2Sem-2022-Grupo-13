@@ -17,30 +17,25 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+import static org.junit.Assert.*;
 
-public class PalmerHamiltonianCycleTest {
+public class PalmerHamiltonianCycleTest
+{
 
     /**
      * Small graph of 4 nodes.
      */
     @Test
-    public void testSmallGraph(){
+    public void testSmallGraph()
+    {
         Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         graph.addVertex("A");
@@ -54,35 +49,39 @@ public class PalmerHamiltonianCycleTest {
         graph.addEdge("B", "D");
         graph.addEdge("C", "D");
 
-        GraphPath<String, DefaultEdge> tour = new PalmerHamiltonianCycle<String, DefaultEdge>().getTour(graph);
+        GraphPath<String, DefaultEdge> tour =
+            new PalmerHamiltonianCycle<String, DefaultEdge>().getTour(graph);
 
         assertNotNull(tour);
         assertHamiltonian(graph, tour);
     }
 
     /**
-     * Test that contains a simple cycle of 10 nodes.
-     * The graph has a Hamiltonian cycle but it doesn't meet Ore's condition.
+     * Test that contains a simple cycle of 10 nodes. The graph has a Hamiltonian cycle but it
+     * doesn't meet Ore's condition.
      */
-    @Test (expected = IllegalArgumentException.class)
-    public void testLineGraph(){
+    @Test(expected = IllegalArgumentException.class)
+    public void testLineGraph()
+    {
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             graph.addVertex(i);
         }
 
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             graph.addEdge(i, (i + 1) % 10);
         }
 
-        GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
+        GraphPath<Integer, DefaultEdge> tour =
+            new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
 
         assertNotNull(tour);
         assertHamiltonian(graph, tour);
     }
 
-    private void testRandomGraphs(Random random){
+    private void testRandomGraphs(Random random)
+    {
         final int NUM_TESTS = 500;
         for (int test = 0; test < NUM_TESTS; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -94,16 +93,17 @@ public class PalmerHamiltonianCycleTest {
 
             List<Integer> vertexList = new ArrayList<>(graph.vertexSet());
 
-            while (!GraphTests.hasOreProperty(graph)){
+            while (!GraphTests.hasOreProperty(graph)) {
                 Collections.shuffle(vertexList, random);
 
-                search:
-                for (int i = 0; i < vertexList.size(); i++) {
+                search: for (int i = 0; i < vertexList.size(); i++) {
                     for (int j = i + 1; j < vertexList.size(); j++) {
                         int u = vertexList.get(i);
                         int v = vertexList.get(j);
 
-                        if (!graph.containsEdge(u, v) && graph.degreeOf(u) + graph.degreeOf(v) < n){
+                        if (!graph.containsEdge(u, v)
+                            && graph.degreeOf(u) + graph.degreeOf(v) < n)
+                        {
                             graph.addEdge(u, v);
                             break search;
                         }
@@ -111,7 +111,8 @@ public class PalmerHamiltonianCycleTest {
                 }
             }
 
-            GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
+            GraphPath<Integer, DefaultEdge> tour =
+                new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
 
             assertNotNull(tour);
             assertHamiltonian(graph, tour);
@@ -119,15 +120,18 @@ public class PalmerHamiltonianCycleTest {
     }
 
     /**
-     * Test with 500 randomly generated graphs.
-     * Method of generation: randomly add edges while the graph doesn't have Ore's property
+     * Test with 500 randomly generated graphs. Method of generation: randomly add edges while the
+     * graph doesn't have Ore's property
      */
     @Test
-    public void testRandomGraphs(){
+    @Category(SlowTests.class)
+    public void testRandomGraphs()
+    {
         testRandomGraphs(new Random(0xC0FFEE));
     }
 
-    private void testRandomGraphs2(Random random){
+    private void testRandomGraphs2(Random random)
+    {
         final int NUM_TESTS = 500;
         for (int test = 0; test < NUM_TESTS; test++) {
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -140,15 +144,14 @@ public class PalmerHamiltonianCycleTest {
             List<Integer> vertexList = new ArrayList<>(graph.vertexSet());
             boolean changed;
 
-            do{
+            do {
                 changed = false;
                 Collections.shuffle(vertexList, random);
 
-                search:
-                for (int v: vertexList){
+                search: for (int v : vertexList) {
                     if (graph.degreeOf(v) < (n + 1) / 2) {
-                        for (int u: vertexList){
-                            if (u != v && !graph.containsEdge(u, v)){
+                        for (int u : vertexList) {
+                            if (u != v && !graph.containsEdge(u, v)) {
                                 graph.addEdge(u, v);
                                 changed = true;
                                 break search;
@@ -159,7 +162,8 @@ public class PalmerHamiltonianCycleTest {
 
             } while (changed);
 
-            GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
+            GraphPath<Integer, DefaultEdge> tour =
+                new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(graph);
 
             assertNotNull(tour);
             assertHamiltonian(graph, tour);
@@ -167,18 +171,21 @@ public class PalmerHamiltonianCycleTest {
     }
 
     /**
-     * Test with 500 randomly generated graphs (fixed seed).
-     * Method of generation: make sure that each node has (n+1)/2 neighbours
+     * Test with 500 randomly generated graphs (fixed seed). Method of generation: make sure that
+     * each node has (n+1)/2 neighbours
      */
     @Test
-    public void testRandomGraphs2FixedSeed(){
+    @Category(SlowTests.class)
+    public void testRandomGraphs2FixedSeed()
+    {
         testRandomGraphs2(new Random(0xBEEF));
     }
 
     private static Graph<Integer, DefaultEdge> bigGraph = new SimpleGraph<>(DefaultEdge.class);
 
     @BeforeClass
-    public static void generateBigGraph(){
+    public static void generateBigGraph()
+    {
         Random random = new Random(0xC0FFEE);
         final int n = 1000;
 
@@ -188,16 +195,17 @@ public class PalmerHamiltonianCycleTest {
 
         List<Integer> vertexList = new ArrayList<>(bigGraph.vertexSet());
 
-        while (!GraphTests.hasOreProperty(bigGraph)){
+        while (!GraphTests.hasOreProperty(bigGraph)) {
             Collections.shuffle(vertexList, random);
 
-            search:
-            for (int i = 0; i < vertexList.size(); i++) {
+            search: for (int i = 0; i < vertexList.size(); i++) {
                 for (int j = i + 1; j < vertexList.size(); j++) {
                     int u = vertexList.get(i);
                     int v = vertexList.get(j);
 
-                    if (!bigGraph.containsEdge(u, v) && bigGraph.degreeOf(u) + bigGraph.degreeOf(v) < n){
+                    if (!bigGraph.containsEdge(u, v)
+                        && bigGraph.degreeOf(u) + bigGraph.degreeOf(v) < n)
+                    {
                         bigGraph.addEdge(u, v);
                         break search;
                     }
@@ -209,8 +217,11 @@ public class PalmerHamiltonianCycleTest {
     }
 
     @Test
-    public void testBigGraph() {
-        GraphPath<Integer, DefaultEdge> tour = new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(bigGraph);
+    @Category(SlowTests.class)
+    public void testBigGraph()
+    {
+        GraphPath<Integer, DefaultEdge> tour =
+            new PalmerHamiltonianCycle<Integer, DefaultEdge>().getTour(bigGraph);
 
         assertNotNull(tour);
         assertHamiltonian(bigGraph, tour);

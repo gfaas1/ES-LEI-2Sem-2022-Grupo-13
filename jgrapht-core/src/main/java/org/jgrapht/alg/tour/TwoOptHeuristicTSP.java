@@ -17,22 +17,11 @@
  */
 package org.jgrapht.alg.tour;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.TSPAlgorithm;
-import org.jgrapht.graph.GraphWalk;
+import java.util.*;
 
 /**
  * The 2-opt heuristic algorithm for the TSP problem.
@@ -46,7 +35,8 @@ import org.jgrapht.graph.GraphWalk;
  * This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm generates k
  * random initial tours and then iteratively improves the tours until a local minimum is reached. In
  * each iteration it applies the best possible 2-opt move which means to find the best pair of edges
- * (i,i+1) and (j,j+1) such that replacing them with (i,j) and (i+1,j+1) minimizes the tour length.
+ * $(i,i+1)$ and $(j,j+1)$ such that replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour
+ * length.
  * 
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/2-opt">wikipedia</a> for more details.
@@ -62,7 +52,7 @@ import org.jgrapht.graph.GraphWalk;
  */
 public class TwoOptHeuristicTSP<V, E>
     implements
-    TSPAlgorithm<V, E>
+        HamiltonianCycleAlgorithm<V, E>
 {
     private int k;
     private Random rng;
@@ -229,8 +219,8 @@ public class TwoOptHeuristicTSP<V, E>
 
     /**
      * Improve the tour using the 2-opt heuristic. In each iteration it applies the best possible
-     * 2-opt move which means to find the best pair of edges (i,i+1) and (j,j+1) such that replacing
-     * them with (i,j) and (i+1,j+1) minimizes the tour length.
+     * 2-opt move which means to find the best pair of edges $(i,i+1)$ and $(j,j+1)$ such that
+     * replacing them with $(i,j)$ and $(i+1,j+1)$ minimizes the tour length.
      * 
      * <p>
      * The returned array instance might or might not be the input array.
@@ -311,7 +301,7 @@ public class TwoOptHeuristicTSP<V, E>
     /**
      * Transform from a path representation to an array representation.
      * 
-     * @param a graph path
+     * @param path graph path
      * @return an array containing the index of the vertices of the tour
      */
     private int[] pathToTour(GraphPath<V, E> path)

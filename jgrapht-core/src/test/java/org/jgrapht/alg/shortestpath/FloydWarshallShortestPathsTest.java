@@ -17,15 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import junit.framework.*;
-import org.junit.Test;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -41,13 +39,14 @@ public class FloydWarshallShortestPathsTest
     {
         GraphGenerator<Integer, DefaultWeightedEdge, Integer> gen =
             new GnmRandomGraphGenerator<>(10, 15);
-        VertexFactory<Integer> f = new IntegerVertexFactory();
 
         for (int i = 0; i < 10; i++) {
             // Generate directed graph
-            SimpleDirectedGraph<Integer, DefaultWeightedEdge> directed =
-                new SimpleDirectedGraph<>(DefaultWeightedEdge.class);
-            gen.generateGraph(directed, f, new HashMap<>());
+            SimpleDirectedGraph<Integer,
+                DefaultWeightedEdge> directed = new SimpleDirectedGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            gen.generateGraph(directed);
 
             // setup our shortest path measurer
             FloydWarshallShortestPaths<Integer, DefaultWeightedEdge> fw =
@@ -75,9 +74,11 @@ public class FloydWarshallShortestPathsTest
             }
 
             // Generate Undirected graph
-            SimpleGraph<Integer, DefaultWeightedEdge> undirected =
-                new SimpleGraph<>(DefaultWeightedEdge.class);
-            gen.generateGraph(undirected, f, new HashMap<>());
+            SimpleGraph<Integer,
+                DefaultWeightedEdge> undirected = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER, false);
+            gen.generateGraph(undirected);
 
             // setup our shortest path measurer
             fw = new FloydWarshallShortestPaths<>(undirected);
@@ -154,7 +155,7 @@ public class FloydWarshallShortestPathsTest
         assertEquals(Collections.singletonList(edge), path.getEdgeList());
         assertEquals("a", path.getStartVertex());
         assertEquals("b", path.getEndVertex());
-        assertEquals(5.0, path.getWeight(),0);
+        assertEquals(5.0, path.getWeight(), 0);
         assertEquals(weighted, path.getGraph());
         List<String> vertexPath = path.getVertexList();
         assertEquals(fw.getFirstHop("a", "b"), vertexPath.get(1));

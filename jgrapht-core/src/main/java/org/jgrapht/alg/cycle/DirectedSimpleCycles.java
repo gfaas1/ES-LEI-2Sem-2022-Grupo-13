@@ -19,8 +19,6 @@ package org.jgrapht.alg.cycle;
 
 import java.util.*;
 
-import org.jgrapht.*;
-
 /**
  * A common interface for classes implementing algorithms for enumeration of the simple cycles of a
  * directed graph.
@@ -32,25 +30,6 @@ import org.jgrapht.*;
  */
 public interface DirectedSimpleCycles<V, E>
 {
-    /**
-     * Returns the graph on which the simple cycle search algorithm is executed by this object.
-     *
-     * @return The graph.
-     * @deprecated Since not really needed on the interface.
-     */
-    @Deprecated
-    Graph<V, E> getGraph();
-
-    /**
-     * Sets the graph on which the simple cycle search algorithm is executed by this object.
-     *
-     * @param graph the graph.
-     * @throws IllegalArgumentException if the argument is <code>null</code>.
-     * @deprecated Since not really needed on the interface. 
-     */
-    @Deprecated
-    void setGraph(Graph<V, E> graph);
-
     /**
      * Find the simple cycles of the graph.
      *

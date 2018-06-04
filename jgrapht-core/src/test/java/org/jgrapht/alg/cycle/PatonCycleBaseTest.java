@@ -17,31 +17,21 @@
  */
 package org.jgrapht.alg.cycle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.*;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm;
-import org.jgrapht.alg.interfaces.CycleBasisAlgorithm.CycleBasis;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.WeightedPseudograph;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class PatonCycleBaseTest
 {
@@ -49,22 +39,15 @@ public class PatonCycleBaseTest
     private static int[] RESULTS = { 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36 };
 
     @Test
-    public void test()
+    public void testAlgorithm()
     {
-        PatonCycleBase<Integer, DefaultEdge> patonFinder = new PatonCycleBase<>();
-
-        testAlgorithm(patonFinder);
-    }
-
-    private void testAlgorithm(UndirectedCycleBase<Integer, DefaultEdge> finder)
-    {
-        SimpleGraph<Integer, DefaultEdge> graph =
-            new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+        SimpleGraph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
 
-        finder.setGraph(graph);
+        CycleBasisAlgorithm<Integer, DefaultEdge> finder = new PatonCycleBase<>(graph);
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(2, 0);
@@ -86,7 +69,7 @@ public class PatonCycleBaseTest
         checkResult(finder, 6);
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            graph = new SimpleGraph<>(DefaultEdge.class);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }
@@ -97,14 +80,14 @@ public class PatonCycleBaseTest
                     }
                 }
             }
-            finder.setGraph(graph);
+            finder = new PatonCycleBase<>(graph);
             checkResult(finder, RESULTS[size]);
         }
     }
 
-    private void checkResult(UndirectedCycleBase<Integer, DefaultEdge> finder, int size)
+    private void checkResult(CycleBasisAlgorithm<Integer, DefaultEdge> finder, int size)
     {
-        assertTrue(finder.findCycleBase().size() == size);
+        assertTrue(finder.getCycleBasis().getCycles().size() == size);
     }
 
     @Test
@@ -135,12 +118,12 @@ public class PatonCycleBaseTest
         // 
         // @formatter:on
 
-        List<List<Integer>> ucb = new PatonCycleBase<Integer, DefaultEdge>(g).findCycleBase();
+        Set<List<DefaultEdge>> ucb = new PatonCycleBase<>(g).getCycleBasis().getCycles();
 
         int[] cyclesSizes = { 3, 5, 3 };
-        Iterator<List<Integer>> it = ucb.iterator();
+        Iterator<List<DefaultEdge>> it = ucb.iterator();
         for (int i = 0; i < 3; i++) {
-            List<Integer> cycle = it.next();
+            List<DefaultEdge> cycle = it.next();
             assertEquals(cyclesSizes[i], cycle.size());
         }
     }
@@ -173,7 +156,7 @@ public class PatonCycleBaseTest
         g.addEdge(11, 15);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 8, 8, 9, 5, 7, 4 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -190,13 +173,13 @@ public class PatonCycleBaseTest
     public void testPatonCycleBasis2()
     {
         SimpleGraph<Integer, DefaultEdge> graph =
-            new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
+            new SimpleGraph<>(DefaultEdge.class);
         for (int i = 0; i < 7; i++) {
             graph.addVertex(i);
         }
 
         CycleBasisAlgorithm<Integer, DefaultEdge> finder =
-            new PatonCycleBase<Integer, DefaultEdge>(graph);
+                new PatonCycleBase<>(graph);
         CycleBasis<Integer, DefaultEdge> basis;
 
         graph.addEdge(0, 1);
@@ -234,9 +217,8 @@ public class PatonCycleBaseTest
         assertEquals(18, basis.getLength());
 
         for (int size = 1; size <= MAX_SIZE; size++) {
-            graph = new SimpleGraph<>(new ClassBasedEdgeFactory<>(DefaultEdge.class));
-            finder =
-                new PatonCycleBase<Integer, DefaultEdge>(graph);
+            graph = new SimpleGraph<>(DefaultEdge.class);
+            finder = new PatonCycleBase<>(graph);
             for (int i = 0; i < size; i++) {
                 graph.addVertex(i);
             }
@@ -303,7 +285,7 @@ public class PatonCycleBaseTest
         g.addEdge(8, 15);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 24; i++) {
@@ -343,7 +325,7 @@ public class PatonCycleBaseTest
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 3; i++) {
@@ -381,7 +363,7 @@ public class PatonCycleBaseTest
         g.addEdge(8, 10);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 3, 3, 5, 3 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -411,7 +393,7 @@ public class PatonCycleBaseTest
         g.addEdge(5, 7);
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         int[] cyclesSizes = { 3, 4, 4 };
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
@@ -447,7 +429,7 @@ public class PatonCycleBaseTest
         // @formatter:on
 
         CycleBasis<Integer, DefaultEdge> ucb =
-            new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                new PatonCycleBase<>(g).getCycleBasis();
 
         Iterator<List<DefaultEdge>> it = ucb.getCycles().iterator();
         for (int i = 0; i < 2; i++) {
@@ -466,10 +448,10 @@ public class PatonCycleBaseTest
         final int graphs = 10;
         GnpRandomGraphGenerator<Integer, DefaultEdge> gen = new GnpRandomGraphGenerator<>(n, p);
         for (int i = 0; i < graphs; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gen.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(SupplierUtil.createIntegerSupplier(), SupplierUtil.createDefaultEdgeSupplier(), false);
+            gen.generateGraph(g);
             CycleBasis<Integer, DefaultEdge> ucb =
-                new PatonCycleBase<Integer, DefaultEdge>(g).getCycleBasis();
+                    new PatonCycleBase<>(g).getCycleBasis();
 
             int k = new ConnectivityInspector<>(g).connectedSets().size();
             int cycleSpaceDimension = g.edgeSet().size() - g.vertexSet().size() + k;
@@ -523,19 +505,19 @@ public class PatonCycleBaseTest
             assertCycle(graph, c);
             switch (i) {
             case 0:
-                assertEquals(Arrays.asList(e00), c);
+                assertEquals(Collections.singletonList(e00), c);
                 break;
             case 1:
-                assertEquals(Arrays.asList(e33), c);
+                assertEquals(Collections.singletonList(e33), c);
                 break;
             case 2:
                 assertEquals(Arrays.asList(e12, e23, e30, e01), c);
                 break;
             case 3:
-                assertEquals(Arrays.asList(e22), c);
+                assertEquals(Collections.singletonList(e22), c);
                 break;
             case 4:
-                assertEquals(Arrays.asList(e11), c);
+                assertEquals(Collections.singletonList(e11), c);
                 break;
             }
         }
@@ -549,7 +531,7 @@ public class PatonCycleBaseTest
     public void testSingleLoops()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0));
+        Graphs.addAllVertices(graph, Collections.singletonList(0));
         DefaultEdge e1 = graph.addEdge(0, 0);
 
         CycleBasisAlgorithm<Integer, DefaultEdge> fcb = new PatonCycleBase<>(graph);
@@ -562,7 +544,7 @@ public class PatonCycleBaseTest
             assertCycle(graph, c);
             switch (i) {
             case 0:
-                assertEquals(Arrays.asList(e1), c);
+                assertEquals(Collections.singletonList(e1), c);
                 break;
             }
         }
@@ -575,11 +557,11 @@ public class PatonCycleBaseTest
     public void testMultipleEdges()
     {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
-        Graphs.addAllVertices(graph, Arrays.asList(0));
+        Graphs.addAllVertices(graph, Collections.singletonList(0));
         graph.addEdge(0, 0);
         graph.addEdge(0, 0);
 
-        new PatonCycleBase<Integer, DefaultEdge>(graph).getCycleBasis();
+        new PatonCycleBase<>(graph).getCycleBasis();
     }
 
     @Test

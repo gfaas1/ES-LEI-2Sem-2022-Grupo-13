@@ -17,14 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.*;
 
@@ -75,18 +74,19 @@ public class SimpleIdentityDirectedGraphTest
     }
 
     public static class SimpleIdentityDirectedGraph<V, E>
-        extends SimpleDirectedGraph<V, E>
+        extends
+        SimpleDirectedGraph<V, E>
     {
         private static final long serialVersionUID = 4600490314100246989L;
 
         public SimpleIdentityDirectedGraph(Class<? extends E> edgeClass)
         {
-            this(new ClassBasedEdgeFactory<>(edgeClass));
+            super(edgeClass);
         }
 
-        public SimpleIdentityDirectedGraph(EdgeFactory<V, E> ef)
+        public SimpleIdentityDirectedGraph(Supplier<E> es)
         {
-            super(ef, false);
+            super(null, es, false);
         }
 
         @Override
@@ -105,7 +105,7 @@ public class SimpleIdentityDirectedGraphTest
     private Graph<Holder<String>, DefaultEdge> g3;
     private Graph<Holder<String>, DefaultEdge> g4;
     private DefaultEdge eLoop;
-    private EdgeFactory<Holder<String>, DefaultEdge> eFactory;
+    private Supplier<DefaultEdge> eSupplier;
     private Holder<String> v1 = new Holder<>("v1");
     private Holder<String> v2 = new Holder<>("v2");
     private Holder<String> v3 = new Holder<>("v3");
@@ -141,7 +141,7 @@ public class SimpleIdentityDirectedGraphTest
         } catch (NullPointerException e) {
         }
 
-        DefaultEdge e = eFactory.createEdge(v2, v1);
+        DefaultEdge e = eSupplier.get();
 
         try {
             g1.addEdge(new Holder<>("ya"), new Holder<>("ya"), e); // no such vertex in graph
@@ -347,11 +347,11 @@ public class SimpleIdentityDirectedGraphTest
      * .
      */
     @Test
-    public void testGetEdgeFactory()
+    public void testGetEdgeSupplier()
     {
-        assertNotNull(g1.getEdgeFactory());
-        EdgeFactory<Holder<String>, DefaultEdge> ef = g1.getEdgeFactory();
-        DefaultEdge e = ef.createEdge(v1, v2);
+        assertNotNull(g1.getEdgeSupplier());
+        Supplier<DefaultEdge> es=g1.getEdgeSupplier();
+        DefaultEdge e = es.get();
         assertNotNull(e);
         assertNull(g1.getEdgeSource(e));
         assertNull(g1.getEdgeTarget(e));
@@ -617,8 +617,8 @@ public class SimpleIdentityDirectedGraphTest
         g3 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
         g4 = new SimpleIdentityDirectedGraph<>(DefaultEdge.class);
 
-        eFactory = g1.getEdgeFactory();
-        eLoop = eFactory.createEdge(v1, v1);
+        eSupplier=g1.getEdgeSupplier();
+        eLoop = eSupplier.get();
 
         g1.addVertex(v1);
 

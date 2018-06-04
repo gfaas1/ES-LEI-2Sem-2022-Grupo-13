@@ -91,7 +91,6 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
                     recursiveColor(pos + 1);
                 } else { //Otherwise we have found a feasible coloring
                     chi = colorCount[pos];
-                    System.out.println("chi1: "+chi+" "+Arrays.toString(partialColorAssignment));
                     System.arraycopy(partialColorAssignment,0,completeColorAssignment,0, partialColorAssignment.length);
                 }
             }
@@ -104,7 +103,6 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
                 recursiveColor(pos + 1);
             } else {
                 chi = colorCount[pos];
-                System.out.println("chi2: "+chi+" "+Arrays.toString(partialColorAssignment));
                 System.arraycopy(partialColorAssignment,0,completeColorAssignment,0, partialColorAssignment.length);
             }
         }
@@ -133,54 +131,6 @@ public class BrownBacktrackColoring<V, E> implements VertexColoringAlgorithm<V>
             colorMap.put(vertexList.get(i), completeColorAssignment[i]);
         vertexColoring = new ColoringImpl<>(colorMap,chi);
     }
-
-    //////////////////Non recursive version
-    private void computeNonRecursiveColoring(){
-        partialColorAssignment = new int[neighbors.length];
-        completeColorAssignment = new int[neighbors.length];
-
-        colorCount = new int[neighbors.length];
-        colorCount[0] = 1;
-        allowedColors = new BitSet[neighbors.length];
-        for (int i = 0; i < neighbors.length; i++)
-            allowedColors[i] = new BitSet();
-
-
-        int start=0;
-        boolean back=false;
-        while(start >= 0){
-            back=false;
-            for(int i=start; i<graph.vertexSet().size(); i++){
-                if(start > i){
-                    //find uncolored vertex x of maximal degree of saturation
-                    //U=set of free colors, represented by a bitset
-                    allowedColors[x].set(0, colorCount[x] + 1); //To color the ith vertex, one can use the number of colors needed to color the i-1th vertex plus 1
-                }
-
-                if(!allowedColors[x].isEmpty()){ //test whether some color can be assigned to x
-                    int k=allowedColors[x].nextSetBit(0); //find next unused color
-                    partialColorAssignment[x]=k; //and assign it to x
-                    allowedColors[x].clear(k);
-
-                }else{
-                    start=i-1;
-                    back=true;
-                    break;
-                }
-                if(back){ //backtrack
-
-                }
-
-            }
-
-
-        }
-
-    }
-
-
-
-    //////////////////Non recursive version
 
     public int getChromaticNumber(){
         lazyComputeColoring();

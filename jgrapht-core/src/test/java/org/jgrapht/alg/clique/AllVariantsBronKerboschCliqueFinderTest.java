@@ -17,15 +17,15 @@
  */
 package org.jgrapht.alg.clique;
 
-import static org.junit.Assert.assertEquals;
+import org.jgrapht.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
 import java.util.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * Test that all Bron-Kerbosch variants return the same results.
@@ -48,8 +48,9 @@ public class AllVariantsBronKerboschCliqueFinderTest
                 numberVertices, edgeProbability, rng, false);
 
         for (int i = 0; i < repeat; i++) {
-            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+            Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+            gg.generateGraph(g);
 
             Iterable<Set<Integer>> alg1 = new BronKerboschCliqueFinder<>(g);
             Iterable<Set<Integer>> alg2 = new PivotBronKerboschCliqueFinder<>(g);

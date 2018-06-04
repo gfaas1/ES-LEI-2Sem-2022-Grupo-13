@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
+
+import java.util.*;
 
 /**
  * An empty implementation of a graph iterator to minimize the effort required to implement graph
@@ -33,7 +33,8 @@ import org.jgrapht.event.*;
  * @since Jul 19, 2003
  */
 public abstract class AbstractGraphIterator<V, E>
-    implements GraphIterator<V, E>
+    implements
+    GraphIterator<V, E>
 {
     private final Set<TraversalListener<V, E>> traversalListeners = new LinkedHashSet<>();
 
@@ -226,7 +227,8 @@ public abstract class AbstractGraphIterator<V, E>
      * @since Aug 11, 2003
      */
     static class FlyweightEdgeEvent<VV, localE>
-        extends EdgeTraversalEvent<localE>
+        extends
+        EdgeTraversalEvent<localE>
     {
         private static final long serialVersionUID = 4051327833765000755L;
 
@@ -259,7 +261,8 @@ public abstract class AbstractGraphIterator<V, E>
      * @since Aug 11, 2003
      */
     static class FlyweightVertexEvent<VV>
-        extends VertexTraversalEvent<VV>
+        extends
+        VertexTraversalEvent<VV>
     {
         private static final long serialVersionUID = 3834024753848399924L;
 

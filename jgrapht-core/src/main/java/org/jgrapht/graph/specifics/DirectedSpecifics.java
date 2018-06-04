@@ -17,11 +17,11 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of
@@ -37,7 +37,9 @@ import org.jgrapht.util.*;
  * @author Joris Kinable
  */
 public class DirectedSpecifics<V, E>
-    implements Specifics<V, E>, Serializable
+    implements
+    Specifics<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = 8971725103718958232L;
 
@@ -87,9 +89,14 @@ public class DirectedSpecifics<V, E>
      * {@inheritDoc}
      */
     @Override
-    public void addVertex(V v)
+    public boolean addVertex(V v)
     {
-        getEdgeContainer(v);
+        DirectedEdgeContainer<V, E> ec = vertexMapDirected.get(v);
+        if (ec == null) {
+            vertexMapDirected.put(v, new DirectedEdgeContainer<>(edgeSetFactory, v));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -180,7 +187,7 @@ public class DirectedSpecifics<V, E>
         inAndOut.addAll(getEdgeContainer(vertex).outgoing);
 
         // we have two copies for each self-loop - remove one of them.
-        if (abstractBaseGraph.isAllowingLoops()) {
+        if (abstractBaseGraph.getType().isAllowingSelfLoops()) {
             Set<E> loops = getAllEdges(vertex, vertex);
 
             for (int i = 0; i < inAndOut.size();) {

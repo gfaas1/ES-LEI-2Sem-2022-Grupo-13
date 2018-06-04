@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * @author John V. Sichi
  */
 public final class DijkstraShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private final double radius;
 

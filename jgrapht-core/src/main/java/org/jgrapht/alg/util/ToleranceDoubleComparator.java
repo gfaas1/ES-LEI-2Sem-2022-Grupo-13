@@ -25,7 +25,8 @@ import java.util.*;
  * @author Dimitrios Michail
  */
 public class ToleranceDoubleComparator
-    implements Comparator<Double>
+    implements
+    Comparator<Double>
 {
     /**
      * Default tolerance used by the comparator.

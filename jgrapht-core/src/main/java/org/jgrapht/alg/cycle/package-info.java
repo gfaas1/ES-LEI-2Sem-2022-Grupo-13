@@ -6,14 +6,14 @@
  * Contains four different algorithms for the enumeration of simple cycles in directed graphs. The
  * worst case time complexity of the algorithms is:
  * <ol>
- * <li>Szwarcfiter and Lauer - O(V+EC)</li>
- * <li>Tarjan - O(VEC)</li>
- * <li>Johnson - O(((V+E)C)</li>
- * <li>Tiernan - O(V.const^V)</li>
+ * <li>Szwarcfiter and Lauer - $O(V + EC)$</li>
+ * <li>Tarjan - $O(VEC)$</li>
+ * <li>Johnson - $O(((V+E)C)$</li>
+ * <li>Tiernan - $O(V.const^V)$</li>
  * </ol>
- * where V is the number of vertices, E is the number of edges and C is the number of the simple
- * cycles in the graph. All the above implementations work correctly with loops but not with
- * multiple edges. Space complexity for all cases is O(V+E).
+ * where $V$ is the number of vertices, $E$ is the number of edges and $C$ is the number of the
+ * simple cycles in the graph. All the above implementations work correctly with loops but not with
+ * multiple edges. Space complexity for all cases is $O(V+E)$.
  * 
  * <p>
  * The worst case performance is achieved for graphs with special structure, so on practical
@@ -53,8 +53,8 @@
  * implementation supports graphs with self-loops and multiple (parallel) edges.</li>
  * </ol>
  *
- * The worst case time complexity of all above algorithms is O(|V|^3) since the length of the cycle
- * basis can be that large.
+ * The worst case time complexity of all above algorithms is $O(|V|^3)$ since the length of the
+ * cycle basis can be that large.
  *
  * <p>
  * See the following papers for details of the above algorithms:

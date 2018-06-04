@@ -19,6 +19,9 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * The default implementation of an undirected weighted graph. A default undirected weighted graph
@@ -31,28 +34,30 @@ import org.jgrapht.graph.builder.*;
  * @see DefaultUndirectedGraph
  */
 public class DefaultUndirectedWeightedGraph<V, E>
-    extends DefaultUndirectedGraph<V, E>
+    extends
+    DefaultUndirectedGraph<V, E>
 {
     private static final long serialVersionUID = -1008165881690129042L;
 
     /**
-     * Creates a new weighted undirected graph with the specified edge factory.
+     * Creates a new graph.
      *
-     * @param ef the edge factory of the new graph.
-     */
-    public DefaultUndirectedWeightedGraph(EdgeFactory<V, E> ef)
-    {
-        super(ef, true);
-    }
-
-    /**
-     * Creates a new weighted undirected graph.
-     *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public DefaultUndirectedWeightedGraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass));
+    }
+
+    /**
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
+     */
+    public DefaultUndirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
+    {
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -73,15 +78,16 @@ public class DefaultUndirectedWeightedGraph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V,
         E> GraphBuilder<V, E, ? extends DefaultUndirectedWeightedGraph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
+            Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(ef));
+        return new GraphBuilder<>(new DefaultUndirectedWeightedGraph<>(null, edgeSupplier));
     }
+
 }

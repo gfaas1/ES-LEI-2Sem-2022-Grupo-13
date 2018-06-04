@@ -17,20 +17,19 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
+import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 
+import java.util.*;
+
 /**
  * An implementation of Hierholzer's algorithm for finding an Eulerian cycle in Eulerian graphs. The
  * algorithm works with directed and undirected graphs which may contain loops and/or multiple
- * (parallel) edges. The running time is linear, i.e. O(|E|) where |E| is the cardinality of the
+ * (parallel) edges. The running time is linear, i.e. $O(|E|)$ where $|E|$ is the cardinality of the
  * edge set of the graph.
  * 
  * <p>
@@ -98,7 +97,7 @@ public class HierholzerEulerianCycle<V, E>
             }
             // check that at most one connected component contains edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new ConnectivityInspector<V, E>(graph).connectedSets()) {
+            for (Set<V> component : new ConnectivityInspector<>(graph).connectedSets()) {
                 for (V v : component) {
                     if (graph.degreeOf(v) > 0) {
                         if (foundComponentWithEdges) {
@@ -120,7 +119,7 @@ public class HierholzerEulerianCycle<V, E>
             // check that at most one strongly connected component contains
             // edges
             boolean foundComponentWithEdges = false;
-            for (Set<V> component : new KosarajuStrongConnectivityInspector<V, E>(graph)
+            for (Set<V> component : new KosarajuStrongConnectivityInspector<>(graph)
                 .stronglyConnectedSets())
             {
                 for (V v : component) {
@@ -283,7 +282,7 @@ public class HierholzerEulerianCycle<V, E>
      * partial cycles from already visited vertices.
      * 
      * @param partialCycle the partial cycle
-     * @param partialCycleStartVertex the source vertex of the first edge in the partial cycle
+     * @param partialCycleSourceVertex the source vertex of the first edge in the partial cycle
      */
     private void updateGraphAndInsertLocations(
         Pair<EdgeNode, EdgeNode> partialCycle, VertexNode partialCycleSourceVertex)
@@ -315,7 +314,7 @@ public class HierholzerEulerianCycle<V, E>
     private GraphWalk<V, E> buildWalk()
     {
         double totalWeight = 0d;
-        List<E> result = new ArrayList<E>();
+        List<E> result = new ArrayList<>();
 
         EdgeNode it = eulerianHead;
         while (it != null) {

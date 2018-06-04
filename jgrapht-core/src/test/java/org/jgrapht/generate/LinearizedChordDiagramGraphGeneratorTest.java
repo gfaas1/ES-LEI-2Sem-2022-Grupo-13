@@ -17,13 +17,12 @@
  */
 package org.jgrapht.generate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link LinearizedChordDiagramGraphGenerator}.
@@ -66,8 +65,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
         final long seed = 5;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new Multigraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Multigraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -76,8 +76,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
         final long seed = 5;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -86,8 +87,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
         final long seed = 5;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new DirectedMultigraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedMultigraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -96,8 +98,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
         final long seed = 5;
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(10, 2, seed);
-        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new SimpleDirectedGraph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
     }
 
     @Test
@@ -107,8 +110,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(20, 1, seed);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(20, g.vertexSet().size());
     }
@@ -120,8 +124,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(20, 2, seed);
-        Graph<Integer, DefaultEdge> g = new Pseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new Pseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(20, g.vertexSet().size());
     }
@@ -133,8 +138,9 @@ public class LinearizedChordDiagramGraphGeneratorTest
 
         GraphGenerator<Integer, DefaultEdge, Integer> gen =
             new LinearizedChordDiagramGraphGenerator<>(20, 1, seed);
-        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(DefaultEdge.class);
-        gen.generateGraph(g, new IntegerVertexFactory(), null);
+        Graph<Integer, DefaultEdge> g = new DirectedPseudograph<>(
+            SupplierUtil.createIntegerSupplier(1), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+        gen.generateGraph(g);
 
         assertEquals(20, g.vertexSet().size());
     }

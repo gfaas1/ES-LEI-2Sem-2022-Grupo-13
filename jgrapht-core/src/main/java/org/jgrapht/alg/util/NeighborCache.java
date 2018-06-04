@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.util;
 
-import java.util.*;
-import java.util.function.*;
-
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Maintains a cache of each vertex's neighbors. While lists of neighbors can be obtained from
@@ -41,7 +41,8 @@ import org.jgrapht.util.*;
  * @since November 2017
  */
 public class NeighborCache<V, E>
-    implements GraphListener<V, E>
+    implements
+    GraphListener<V, E>
 {
     private Map<V, Neighbors<V>> successors = new HashMap<>();
     private Map<V, Neighbors<V>> predecessors = new HashMap<>();
@@ -125,7 +126,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -150,7 +152,8 @@ public class NeighborCache<V, E>
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         V source = e.getEdgeSource();
         V target = e.getEdgeTarget();
@@ -181,7 +184,8 @@ public class NeighborCache<V, E>
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e)
     {
-        assert e.getSource()==this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
+        assert e
+            .getSource() == this.graph : "This NeighborCache is added as a listener to a graph other than the one specified during the construction of this NeighborCache!";
 
         successors.remove(e.getVertex());
         predecessors.remove(e.getVertex());

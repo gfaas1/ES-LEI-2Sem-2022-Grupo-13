@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * A base implementation of the shortest path interface.
@@ -32,7 +32,8 @@ import org.jgrapht.graph.*;
  * @author Dimitrios Michail
  */
 abstract class BaseShortestPathAlgorithm<V, E>
-    implements ShortestPathAlgorithm<V, E>
+    implements
+    ShortestPathAlgorithm<V, E>
 {
     /**
      * Error message for reporting the existence of a negative-weight cycle.

@@ -17,11 +17,6 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import java.awt.*;
-import java.util.*;
-
-import org.jgrapht.*;
-
 import com.touchgraph.graphlayout.*;
 import com.touchgraph.graphlayout.interaction.*;
 
@@ -34,7 +29,8 @@ import com.touchgraph.graphlayout.interaction.*;
  * @author Carl Anderson
  */
 public class TouchgraphPanel<V, E>
-    extends GLPanel
+    extends
+    GLPanel
 {
     // ~ Static fields/initializers ---------------------------------------------
 

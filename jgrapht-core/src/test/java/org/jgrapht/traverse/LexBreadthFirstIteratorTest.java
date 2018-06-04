@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018, by Timofey Chudakov and Contributors.
+ * (C) Copyright 2018-2018, by Timofey Chudakov and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -17,46 +17,37 @@
  */
 package org.jgrapht.traverse;
 
-import org.jgrapht.Graph;
-import org.jgrapht.event.EdgeTraversalEvent;
-import org.jgrapht.event.TraversalListenerAdapter;
-import org.jgrapht.event.VertexTraversalEvent;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.Pseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.event.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link LexBreadthFirstIterator}
  *
  * @author Timofey Chudakov
  */
-public class LexBreadthFirstIteratorTest {
+public class LexBreadthFirstIteratorTest
+{
 
     /**
      * Tests basic properties of events fired by {@code LexBreadthFirstIterator}
      */
     @Test
-    public void testEvents() {
+    public void testEvents()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        graph.addVertex(1);
-        graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(1, 4);
-        graph.addEdge(2, 4);
-        graph.addEdge(3, 4);
-        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 1, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 4);
+        Graphs.addEdgeWithVertices(graph, 2, 4);
+        Graphs.addEdgeWithVertices(graph, 3, 4);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator =
+            new LexBreadthFirstIterator<>(graph);
         MyTraversalListener<Integer, DefaultEdge> listener = new MyTraversalListener<>(graph);
         iterator.addTraversalListener(listener);
         for (int i = 0; i < 4; i++) {
@@ -70,9 +61,11 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator on empty graph.
      */
     @Test(expected = NoSuchElementException.class)
-    public void testLexicographicalBfsIterator1() {
+    public void testLexicographicalBfsIterator1()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator =
+            new LexBreadthFirstIterator<>(graph);
 
         assertFalse(iterator.hasNext());
 
@@ -83,16 +76,18 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator for basic invariants.
      */
     @Test
-    public void testLexicographicalBfsIterator2() {
+    public void testLexicographicalBfsIterator2()
+    {
         Graph<Integer, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
         graph.addVertex(4);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 4);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator =
+            new LexBreadthFirstIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -124,13 +119,15 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator on disconnected graph.
      */
     @Test
-    public void testLexicographicalBfsIterator3() {
+    public void testLexicographicalBfsIterator3()
+    {
         Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
         graph.addVertex("a");
         graph.addVertex("b");
         graph.addVertex("c");
         graph.addVertex("d");
-        LexBreadthFirstIterator<String, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        LexBreadthFirstIterator<String, DefaultEdge> iterator =
+            new LexBreadthFirstIterator<>(graph);
 
         Set<String> returned = new HashSet<>();
 
@@ -163,21 +160,23 @@ public class LexBreadthFirstIteratorTest {
      * Tests iterator on pseudograph.
      */
     @Test
-    public void testLexicographicalBfsIterator4() {
+    public void testLexicographicalBfsIterator4()
+    {
         Graph<Integer, DefaultEdge> graph = new Pseudograph<>(DefaultEdge.class);
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
-        graph.addEdge(1, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 3);
-        graph.addEdge(3, 3);
-        LexBreadthFirstIterator<Integer, DefaultEdge> iterator = new LexBreadthFirstIterator<>(graph);
+        Graphs.addEdgeWithVertices(graph, 1, 1);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 1, 2);
+        Graphs.addEdgeWithVertices(graph, 1, 3);
+        Graphs.addEdgeWithVertices(graph, 1, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 2, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 3);
+        Graphs.addEdgeWithVertices(graph, 3, 3);
+        LexBreadthFirstIterator<Integer, DefaultEdge> iterator =
+            new LexBreadthFirstIterator<>(graph);
         Set<Integer> returned = new HashSet<>();
 
         assertTrue(iterator.hasNext());
@@ -203,26 +202,31 @@ public class LexBreadthFirstIteratorTest {
     /**
      * TraversalListener for testing basic events invariants.
      */
-    static class MyTraversalListener<V, E> extends TraversalListenerAdapter<V, E> {
+    static class MyTraversalListener<V, E>
+        extends
+        TraversalListenerAdapter<V, E>
+    {
         Set<V> verticesTraversed = new HashSet<>();
         Set<V> verticesFinished = new HashSet<>();
         Graph<V, E> graph;
 
-        MyTraversalListener(Graph<V, E> graph) {
+        MyTraversalListener(Graph<V, E> graph)
+        {
             this.graph = graph;
         }
 
         @Override
-        public void vertexTraversed(VertexTraversalEvent<V> e) {
+        public void vertexTraversed(VertexTraversalEvent<V> e)
+        {
             assertTrue(graph.containsVertex(e.getVertex()));
             verticesTraversed.add(e.getVertex());
         }
 
         @Override
-        public void vertexFinished(VertexTraversalEvent<V> e) {
+        public void vertexFinished(VertexTraversalEvent<V> e)
+        {
             assertTrue(graph.containsVertex(e.getVertex()));
             verticesFinished.add(e.getVertex());
         }
     }
 }
-

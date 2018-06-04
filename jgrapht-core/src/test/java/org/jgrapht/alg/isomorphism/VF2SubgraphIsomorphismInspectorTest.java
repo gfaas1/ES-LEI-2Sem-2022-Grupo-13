@@ -17,14 +17,14 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class VF2SubgraphIsomorphismInspectorTest
 {
@@ -883,7 +883,8 @@ public class VF2SubgraphIsomorphismInspectorTest
     }
 
     private class VertexComp
-        implements Comparator<String>
+        implements
+        Comparator<String>
     {
         @Override
         public int compare(String o1, String o2)
@@ -896,7 +897,8 @@ public class VF2SubgraphIsomorphismInspectorTest
     }
 
     private class EdgeComp
-        implements Comparator<Integer>
+        implements
+        Comparator<Integer>
     {
         @Override
         public int compare(Integer o1, Integer o2)

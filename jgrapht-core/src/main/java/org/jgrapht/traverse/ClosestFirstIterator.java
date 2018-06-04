@@ -17,10 +17,10 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A closest-first iterator for a directed or undirected graph. For this iterator to work correctly
@@ -40,7 +40,8 @@ import org.jgrapht.util.*;
  * @since Sep 2, 2003
  */
 public class ClosestFirstIterator<V, E>
-    extends CrossComponentIterator<V, E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
+    extends
+    CrossComponentIterator<V, E, FibonacciHeapNode<ClosestFirstIterator.QueueEntry<V, E>>>
 {
     /**
      * Priority queue of fringe vertices.
@@ -53,22 +54,6 @@ public class ClosestFirstIterator<V, E>
     private double radius = Double.POSITIVE_INFINITY;
 
     private boolean initialized = false;
-
-    /**
-     * Creates a new closest-first iterator for the specified graph.  Iteration
-     * will start at an arbitrary vertex and will not be limited, that is, will
-     * be able to traverse all the graph.
-     *
-     * @param g the graph to be iterated.
-     *
-     * @deprecated this constructor never made much sense, since distance is
-     * defined with respect to one or more start vertices
-     */
-    @Deprecated
-    public ClosestFirstIterator(Graph<V, E> g)
-    {
-        this(g, (V) null);
-    }
 
     /**
      * Creates a new closest-first iterator for the specified graph. Iteration will start at the
@@ -85,13 +70,12 @@ public class ClosestFirstIterator<V, E>
     }
 
     /**
-     * Creates a new closest-first iterator for the specified graph. Iteration
-     * will start at the specified start vertices and will be limited to the
-     * subset of the graph reachable from those vertices.
-     * Iteration order is based on minimum distance from any of the
-     * start vertices, regardless of the order in which the start vertices are
-     * supplied.  Because of this, the entire traversal is treated as if it
-     * were over a single connected component with respect to events fired.
+     * Creates a new closest-first iterator for the specified graph. Iteration will start at the
+     * specified start vertices and will be limited to the subset of the graph reachable from those
+     * vertices. Iteration order is based on minimum distance from any of the start vertices,
+     * regardless of the order in which the start vertices are supplied. Because of this, the entire
+     * traversal is treated as if it were over a single connected component with respect to events
+     * fired.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.
@@ -121,13 +105,11 @@ public class ClosestFirstIterator<V, E>
     /**
      * Creates a new radius-bounded closest-first iterator for the specified graph. Iteration will
      * start at the specified start vertices and will be limited to the subset of the graph
-     * reachable from those vertices via paths of weighted length less
-     * than or equal to the specified radius. The specified collection of start
-     * vertices may not be <code>null</code>.  Iteration order is based on minimum
-     * distance from any of the start vertices, regardless of the order in
-     * which the start vertices are supplied.  Because of this, the entire
-     * traversal is treated as if it were over a single connected component
-     * with respect to events fired.
+     * reachable from those vertices via paths of weighted length less than or equal to the
+     * specified radius. The specified collection of start vertices may not be <code>null</code>.
+     * Iteration order is based on minimum distance from any of the start vertices, regardless of
+     * the order in which the start vertices are supplied. Because of this, the entire traversal is
+     * treated as if it were over a single connected component with respect to events fired.
      *
      * @param g the graph to be iterated.
      * @param startVertices the vertices iteration to be started.

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generator for <a href="http://mathworld.wolfram.com/WindmillGraph.html">Windmill Graphs</a>,
@@ -38,10 +38,13 @@ import org.jgrapht.*;
  * @param <E> graph edge type
  */
 public class WindmillGraphsGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-
-    enum Mode
+    /**
+     * WINDMILL and DUTCHWINDMILL Modes for the Constructor
+     */
+    public enum Mode
     {
         WINDMILL,
         DUTCHWINDMILL
@@ -74,11 +77,9 @@ public class WindmillGraphsGenerator<V, E>
     }
 
     @Override
-    public void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
-        V center = vertexFactory.createVertex();
-        target.addVertex(center);
+        V center = target.addVertex();
         List<V> sub = new ArrayList<>(n);
 
         if (mode == Mode.DUTCHWINDMILL) { // Generate Dutch windmill graph
@@ -86,9 +87,7 @@ public class WindmillGraphsGenerator<V, E>
                 sub.clear();
                 sub.add(center);
                 for (int j = 1; j < n; j++) {
-                    V v = vertexFactory.createVertex();
-                    target.addVertex(v);
-                    sub.add(v);
+                    sub.add(target.addVertex());
                 }
 
                 for (int r = 0; r < sub.size(); r++)
@@ -99,9 +98,7 @@ public class WindmillGraphsGenerator<V, E>
                 sub.clear();
                 sub.add(center);
                 for (int j = 1; j < n; j++) {
-                    V v = vertexFactory.createVertex();
-                    target.addVertex(v);
-                    sub.add(v);
+                    sub.add(target.addVertex());
                 }
 
                 for (int r = 0; r < sub.size() - 1; r++)

@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/CompleteBipartiteGraph.html">complete bipartite
@@ -33,7 +33,8 @@ import org.jgrapht.*;
  * @since Dec 21, 2008
  */
 public class CompleteBipartiteGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     private int sizeA, sizeB;
 
@@ -56,8 +57,7 @@ public class CompleteBipartiteGraphGenerator<V, E>
      * Construct a complete bipartite graph
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if ((sizeA < 1) && (sizeB < 1)) {
             return;
@@ -67,14 +67,10 @@ public class CompleteBipartiteGraphGenerator<V, E>
         Set<V> a = new HashSet<>();
         Set<V> b = new HashSet<>();
         for (int i = 0; i < sizeA; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
-            a.add(newVertex);
+            a.add(target.addVertex());
         }
         for (int i = 0; i < sizeB; i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
-            b.add(newVertex);
+            b.add(target.addVertex());
         }
 
         // Add an edge for each pair of vertices in different partitions

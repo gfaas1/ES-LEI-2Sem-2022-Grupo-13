@@ -17,10 +17,10 @@
  */
 package org.jgrapht.generate;
 
-import java.util.Map;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
+import java.util.*;
 
 /**
  * An interface for generating new graph structures.
@@ -35,6 +35,7 @@ import org.jgrapht.VertexFactory;
  */
 public interface GraphGenerator<V, E, T>
 {
+
     /**
      * Generate a graph structure. The topology of the generated graph is dependent on the
      * implementation. For graphs in which not all vertices share the same automorphism equivalence
@@ -46,12 +47,15 @@ public interface GraphGenerator<V, E, T>
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
-     * @param vertexFactory called to produce new vertices
      * @param resultMap if non-null, receives implementation-specific mappings from String roles to
      *        graph elements (or collections of graph elements)
+     * 
+     * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
+     *         suppliers, in order to be able to create new vertices and edges. Methods
+     *         {@link Graph#getEdgeSupplier()} and {@link Graph#getVertexSupplier()} must not return
+     *         <code>null</code>.
      */
-    void generateGraph(
-        Graph<V, E> target, VertexFactory<V> vertexFactory, Map<String, T> resultMap);
+    void generateGraph(Graph<V, E> target, Map<String, T> resultMap);
 
     /**
      * Generate a graph structure.
@@ -59,11 +63,12 @@ public interface GraphGenerator<V, E, T>
      * @param target receives the generated edges and vertices; if this is non-empty on entry, the
      *        result will be a disconnected graph since generated elements will not be connected to
      *        existing elements
-     * @param vertexFactory called to produce new vertices
+     * @throws UnsupportedOperationException if the graph does not have appropriate vertex and edge
+     *         suppliers, in order to be able to create new vertices and edges
      */
-    default void generateGraph(Graph<V, E> target, VertexFactory<V> vertexFactory)
+    default void generateGraph(Graph<V, E> target)
     {
-        generateGraph(target, vertexFactory, null);
+        generateGraph(target, null);
     }
 
 }

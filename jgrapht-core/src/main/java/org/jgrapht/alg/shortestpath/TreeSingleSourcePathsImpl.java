@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link SingleSourcePaths} which uses linear space.
@@ -33,7 +33,7 @@ import org.jgrapht.graph.*;
  * predecessor in the shortest path tree. In order to keep space to linear, the paths are recomputed
  * in each invocation of the {@link #getPath(Object)} method. The complexity of
  * {@link #getPath(Object)} is linear to the number of edges of the path while the complexity of
- * {@link #getWeight(Object)} is O(1).
+ * {@link #getWeight(Object)} is $O(1)$.
  * 
  * @author Dimitrios Michail
  *
@@ -41,7 +41,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class TreeSingleSourcePathsImpl<V, E>
-    implements SingleSourcePaths<V, E>, Serializable
+    implements
+    SingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -5914007312734512847L;
 
@@ -135,7 +137,7 @@ public class TreeSingleSourcePathsImpl<V, E>
         }
 
         double weight = 0d;
-        while (p != null && !p.equals(source)) {
+        while (p != null && !cur.equals(source)) {
             E e = p.getSecond();
             if (e == null) {
                 break;

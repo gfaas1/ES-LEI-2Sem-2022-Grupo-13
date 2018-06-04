@@ -17,10 +17,10 @@
  */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.util.*;
+
+import java.util.*;
 
 /**
  * A skeletal implementation of the <tt>Graph</tt> interface, to minimize the effort required to
@@ -34,7 +34,8 @@ import org.jgrapht.util.*;
  * @see Graph
  */
 public abstract class AbstractGraph<V, E>
-    implements Graph<V, E>
+    implements
+    Graph<V, E>
 {
     /**
      * Construct a new empty graph object.

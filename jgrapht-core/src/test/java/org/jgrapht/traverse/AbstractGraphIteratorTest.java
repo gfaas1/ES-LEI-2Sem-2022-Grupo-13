@@ -20,11 +20,11 @@ package org.jgrapht.traverse;
 import org.jgrapht.*;
 import org.jgrapht.event.*;
 import org.jgrapht.graph.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A basis for testing {@link org.jgrapht.traverse.BreadthFirstIterator} and
@@ -37,7 +37,7 @@ public abstract class AbstractGraphIteratorTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    StringBuffer result;
+    StringBuilder result;
 
     /**
      * .
@@ -52,7 +52,7 @@ public abstract class AbstractGraphIteratorTest
         doDirectedGraphTest(iterator);
     }
 
-    protected void collectResult(Iterator<String> iterator, StringBuffer result)
+    protected void collectResult(Iterator<String> iterator, StringBuilder result)
     {
         while (iterator.hasNext()) {
             result.append(iterator.next());
@@ -66,7 +66,7 @@ public abstract class AbstractGraphIteratorTest
     public void doDirectedGraphTest(AbstractGraphIterator<String, DefaultWeightedEdge> iterator)
     {
 
-        result = new StringBuffer();
+        result = new StringBuilder();
 
         MyTraversalListener<DefaultWeightedEdge> listener = new MyTraversalListener<>();
         iterator.addTraversalListener(listener);
@@ -144,7 +144,8 @@ public abstract class AbstractGraphIteratorTest
      * @author Barak Naveh
      */
     private class MyTraversalListener<E>
-        implements TraversalListener<String, E>
+        implements
+        TraversalListener<String, E>
     {
         private int componentNumber = 0;
         private int numComponentVertices = 0;

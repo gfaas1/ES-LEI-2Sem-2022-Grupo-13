@@ -1,20 +1,21 @@
 package org.jgrapht.alg.matching;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public abstract class BasePathGrowingWeightedMatchingTest
-    extends ApproximateWeightedMatchingTest
+    extends
+    ApproximateWeightedMatchingTest
 {
 
     public BasePathGrowingWeightedMatchingTest()
@@ -105,9 +106,9 @@ public abstract class BasePathGrowingWeightedMatchingTest
                 numberVertices, edgeProbability, seed, false);
 
         for (int i = 0; i < repeat; i++) {
-            WeightedPseudograph<Integer, DefaultWeightedEdge> g =
-                new WeightedPseudograph<>(DefaultWeightedEdge.class);
-            gg.generateGraph(g, new IntegerVertexFactory(), null);
+            WeightedPseudograph<Integer, DefaultWeightedEdge> g = new WeightedPseudograph<>(
+                SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
+            gg.generateGraph(g);
 
             MatchingAlgorithm<Integer, DefaultWeightedEdge> alg1 =
                 new PathGrowingWeightedMatching<>(g);

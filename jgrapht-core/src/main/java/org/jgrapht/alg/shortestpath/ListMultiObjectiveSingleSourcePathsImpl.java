@@ -17,12 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.io.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * An implementation of {@link MultiObjectiveSingleSourcePaths} which stores one list of paths per
@@ -34,7 +34,9 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  */
 public class ListMultiObjectiveSingleSourcePathsImpl<V, E>
-    implements MultiObjectiveSingleSourcePaths<V, E>, Serializable
+    implements
+    MultiObjectiveSingleSourcePaths<V, E>,
+    Serializable
 {
     private static final long serialVersionUID = -6213225353391554721L;
 
@@ -86,7 +88,7 @@ public class ListMultiObjectiveSingleSourcePathsImpl<V, E>
         List<GraphPath<V, E>> p = paths.get(targetVertex);
         if (p == null) {
             if (source.equals(targetVertex)) {
-                return Arrays.asList(GraphWalk.singletonWalk(graph, source, 0d));
+                return Collections.singletonList(GraphWalk.singletonWalk(graph, source, 0d));
             } else {
                 return Collections.emptyList();
             }

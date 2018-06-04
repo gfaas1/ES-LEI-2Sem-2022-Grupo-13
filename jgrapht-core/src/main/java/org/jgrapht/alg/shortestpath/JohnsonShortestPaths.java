@@ -17,11 +17,12 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Johnson's all pairs shortest paths algorithm.
@@ -37,9 +38,7 @@ import org.jgrapht.graph.*;
  *
  * <p>
  * Since Johnson's algorithm creates additional vertices, this implementation requires the user to
- * provide a {@link VertexFactory}. Since the graph already contains vertices, care must be taken so
- * that the provided vertex factory does not return nodes that are already contained in the original
- * input graph.
+ * provide a graph which is initialized with a vertex supplier.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -48,45 +47,32 @@ import org.jgrapht.graph.*;
  * @since February 2017
  */
 public class JohnsonShortestPaths<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private Map<V, SingleSourcePaths<V, E>> paths;
-    private VertexFactory<V> vertexFactory;
     private final Comparator<Double> comparator;
 
+
     /**
      * Construct a new instance.
      *
      * @param graph the input graph
-     * @param vertexClass the graph vertex class
      */
-    public JohnsonShortestPaths(Graph<V, E> graph, Class<? extends V> vertexClass)
+    public JohnsonShortestPaths(Graph<V, E> graph)
     {
-        this(graph, new ClassBasedVertexFactory<>(vertexClass));
+        this(graph, ToleranceDoubleComparator.DEFAULT_EPSILON);
     }
 
     /**
      * Construct a new instance.
      *
      * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
-     */
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory)
-    {
-        this(graph, vertexFactory, ToleranceDoubleComparator.DEFAULT_EPSILON);
-    }
-
-    /**
-     * Construct a new instance.
-     *
-     * @param graph the input graph
-     * @param vertexFactory the vertex factory of the graph
      * @param epsilon tolerance when comparing floating point values
      */
-    public JohnsonShortestPaths(Graph<V, E> graph, VertexFactory<V> vertexFactory, double epsilon)
+    public JohnsonShortestPaths(Graph<V, E> graph, double epsilon)
     {
         super(graph);
-        this.vertexFactory = Objects.requireNonNull(vertexFactory, "Vertex factory cannot be null");
         this.comparator = new ToleranceDoubleComparator(epsilon);
     }
 
@@ -231,9 +217,10 @@ public class JohnsonShortestPaths<V, E>
             for (V u : g.vertexSet()) {
                 Pair<Double, E> oldPair = distanceAndPredecessorMap.get(u);
                 if (oldPair != null) {
-                    Pair<Double, E> newPair = Pair.of(
-                        oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
-                        oldPair.getSecond());
+                    Pair<Double,
+                        E> newPair = Pair.of(
+                            oldPair.getFirst() - vertexWeights.get(v) + vertexWeights.get(u),
+                            oldPair.getSecond());
                     newDistanceAndPredecessorMap.put(u, newPair);
                 }
             }
@@ -255,14 +242,18 @@ public class JohnsonShortestPaths<V, E>
         assert g.getType().isDirected();
 
         // create extra graph
-        Graph<V, E> extraGraph = new DirectedPseudograph<>(graph.getEdgeFactory());
+        Graph<V,
+            E> extraGraph = GraphTypeBuilder
+                .<V, E> directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .edgeSupplier(graph.getEdgeSupplier()).vertexSupplier(graph.getVertexSupplier())
+                .buildGraph();
 
         // add new vertex
-        V s = vertexFactory.createVertex();
-        if (g.containsVertex(s)) {
-            throw new IllegalArgumentException("Invalid vertex factory");
+        V s = extraGraph.addVertex();
+        if (s == null) {
+            throw new IllegalArgumentException(
+                "Invalid vertex supplier (does not return unique vertices on each call).");
         }
-        extraGraph.addVertex(s);
 
         // add new edges with zero weight
         Map<E, Double> zeroWeightFunction = new HashMap<>();

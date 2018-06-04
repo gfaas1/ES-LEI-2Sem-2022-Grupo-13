@@ -17,13 +17,13 @@
  */
 package org.jgrapht.alg.scoring;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.graph.*;
+
+import java.util.*;
 
 /**
  * Closeness centrality.
@@ -61,7 +61,8 @@ import org.jgrapht.graph.*;
  * @since January 2017
  */
 public class ClosenessCentrality<V, E>
-    implements VertexScoringAlgorithm<V, Double>
+    implements
+    VertexScoringAlgorithm<V, Double>
 {
     /**
      * Underlying graph
@@ -96,7 +97,7 @@ public class ClosenessCentrality<V, E>
      * 
      * @param graph the input graph
      * @param incoming if true incoming paths are used, otherwise outgoing paths
-     * @param normalize whether to normalize by multiplying the closeness by n-1, where n is the
+     * @param normalize whether to normalize by multiplying the closeness by $n-1$, where $n$ is the
      *        number of vertices of the graph
      */
     public ClosenessCentrality(Graph<V, E> graph, boolean incoming, boolean normalize)

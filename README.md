@@ -7,7 +7,7 @@
 
 # JGraphT
 
-Released: November 10, 2017</p>
+Released: May 16, 2018</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
@@ -51,24 +51,30 @@ The files below make up the table of contents for a release distribution archive
 - `license-LGPL.txt` GNU Lesser General Public License 2.1
 - `javadoc/` Javadoc documentation
 - `lib/` JGraphT libraries and dependencies:
-    - `antlr4-runtime-x.y.jar` ANTLR parser runtime
-    - `commons-lang3-x.y.jar` Apache Commons Lang library
     - `jgrapht-core-x.y.z.jar` core library
     - `jgrapht-demo-x.y.z.jar` demo classes
     - `jgrapht-ext-x.y.z.jar` extensions
     - `jgrapht-ext-x.y.z-uber.jar` all libraries rolled into one
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
     - `jgrapht-io-x.y.z-uber.jar` all libraries rolled into one
+    - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
+    - `jgrapht-guava-x.y.z-uber.jar` all libraries rolled into one
     - `jgraphx-a.b.c.jar` JGraphX dependency library
+    - `antlr4-runtime-x.y.jar` ANTLR parser runtime
+    - `commons-lang3-x.y.jar` Apache Commons Lang library
+    - `guava-x.y-jre.jar` Guava library
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
-
+The JGraphT [wiki](https://github.com/jgrapht/jgrapht/wiki) provides various helpful pages for new users, including a [How to use JGraphT in your projects](https://github.com/jgrapht/jgrapht/wiki/How-to-use-JGraphT-as-a-dependency-in-your-projects) page.
 The package `org.jgrapht.demo` includes small demo applications to help you get started. If you spawn your own demo app and think others can use it, please send it to us and we will add it to that package.
 
 To run the graph visualization demo from the downloaded release, try executing this command in the lib directory:
 
     java -jar jgrapht-demo-x.y.z.jar
+More information can be found on the [user pages](https://github.com/jgrapht/jgrapht/wiki#user-pages) of our wiki. Finally, all classes come with corresponding test classes. These test classes contain many examples.
+
+To help us understand how you use JGraphT, and which features are important to you, [tell](https://github.com/jgrapht/jgrapht/wiki/Projects-Using-JGraphT) us how you are using JGraphT, and [cite](https://github.com/jgrapht/jgrapht/wiki/How-to-cite-JGraphT) the usage of JGraphT in your book, paper, website, or technical report.
 
 ## Using via Maven
 
@@ -77,7 +83,7 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 ```
 
 We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
@@ -85,7 +91,7 @@ We have also started auto-publishing SNAPSHOT builds for every successful commit
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.2.1-SNAPSHOT</version>
 ```
 
 and make sure the snapshot repository is enabled:
@@ -127,6 +133,7 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 - [JGraphX](http://www.jgraph.com/jgraph.html) is a graph visualizations and editing component (the successor to the older JGraph library). You need JGraphX only if you want to use the JGraphXAdapter to visualize the JGraphT graph interactively via JGraphX. JGraphX is licensed under the terms of the BSD license.
 - [Touchgraph](http://sourceforge.net/projects/touchgraph) is a graph visualization and layout component. You need Touchgraph only if you want to create graph visualizations using the JGraphT-to-Touchgraph converter. Touchgraph is licensed under the terms of an Apache-style License.
 - [ANTLR](http://www.antlr.org) is a parser generator.  It is used for reading text files containing graph representations, and is only required by the jgrapht-io module.  ANTLR v4 is licensed under the terms of the [BSD license](http://www.antlr.org/license.html).
+- [Guava](https://github.com/google/guava) is Google's core libraries for Java. You need Guava only if you are already using Guava's graph data-structures and wish to use our adapter classes in order to execute JGraphT's algorithms.
 
 ## Online Resources ##
 
@@ -136,13 +143,13 @@ The JGraphT website is at [http://www.jgrapht.org](http://www.jgrapht.org). You 
 - **Report bugs**: if you have any comments, suggestions or bugs you want to report.
 - **Get support**: if you have questions or need help with JGraphT.
 
-There is also a [wiki](https://github.com/jgrapht/jgrapht/wiki) set up for everyone in the JGraphT community to share information about the project.
+There is also a [wiki](https://github.com/jgrapht/jgrapht/wiki) set up for everyone in the JGraphT community to share information about the project. For support, refer to our [support page](https://github.com/jgrapht/jgrapht/wiki/Getting-Support)
 
 Source code is hosted on [github](https://github.com/jgrapht/jgrapht). You can send contributions as pull requests there.
 
 ## Your Improvements ##
 
-If you add improvements to JGraphT please send them to us as pull requests on github. We will add them to the next release so that everyone can enjoy them. You might also benefit from it: others may fix bugs in your source files or may continue to enhance them.
+If you add improvements to JGraphT please send them to us as [pull requests on github](https://github.com/jgrapht/jgrapht/wiki/How-to-make-your-first-%28code%29-contribution). We will add them to the next release so that everyone can enjoy them. You might also benefit from it: others may fix bugs in your source files or may continue to enhance them.
 
 ## Thanks ##
 

@@ -17,17 +17,13 @@
  */
 package org.jgrapht.io;
 
-import java.io.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+import org.junit.*;
 
-import junit.framework.*;
-import org.junit.Test;
+import java.io.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author John V. Sichi
@@ -253,7 +249,8 @@ public class GmlExporterTest
 
     @Test
     public void testUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
         g.addVertex(V1);
@@ -271,7 +268,8 @@ public class GmlExporterTest
 
     @Test
     public void testUnweightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -290,7 +288,8 @@ public class GmlExporterTest
 
     @Test
     public void testDirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         Graph<String, DefaultEdge> g = new SimpleDirectedGraph<>(DefaultEdge.class);
         g.addVertex(V1);
@@ -313,7 +312,8 @@ public class GmlExporterTest
 
     @Test
     public void testWeightedUndirected()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
@@ -335,7 +335,8 @@ public class GmlExporterTest
 
     @Test
     public void testWeightedUndirectedWithEdgeLabels()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
@@ -358,7 +359,8 @@ public class GmlExporterTest
 
     @Test
     public void testUndirectedWithVertexLabels()
-        throws UnsupportedEncodingException, ExportException
+        throws UnsupportedEncodingException,
+        ExportException
     {
         SimpleGraph<String, DefaultWeightedEdge> g =
             new SimpleWeightedGraph<>(DefaultWeightedEdge.class);

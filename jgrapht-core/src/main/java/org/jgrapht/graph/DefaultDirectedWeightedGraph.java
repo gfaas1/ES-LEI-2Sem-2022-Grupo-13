@@ -19,6 +19,9 @@ package org.jgrapht.graph;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+
+import java.util.function.*;
 
 /**
  * The default implementation of a directed weighted graph. A default directed weighted graph is a
@@ -31,28 +34,30 @@ import org.jgrapht.graph.builder.*;
  * @see DefaultDirectedGraph
  */
 public class DefaultDirectedWeightedGraph<V, E>
-    extends DefaultDirectedGraph<V, E>
+    extends
+    DefaultDirectedGraph<V, E>
 {
     private static final long serialVersionUID = -4867672646995721544L;
 
     /**
-     * Creates a new directed weighted graph.
+     * Creates a new graph.
      *
-     * @param edgeClass class on which to base factory for edges
+     * @param edgeClass class on which to base the edge supplier
      */
     public DefaultDirectedWeightedGraph(Class<? extends E> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<>(edgeClass));
+        this(null, SupplierUtil.createSupplier(edgeClass));
     }
 
     /**
-     * Creates a new directed weighted graph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
+     * Creates a new graph.
+     * 
+     * @param vertexSupplier the vertex supplier, can be null
+     * @param edgeSupplier the edge supplier, can be null
      */
-    public DefaultDirectedWeightedGraph(EdgeFactory<V, E> ef)
+    public DefaultDirectedWeightedGraph(Supplier<V> vertexSupplier, Supplier<E> edgeSupplier)
     {
-        super(ef, true);
+        super(vertexSupplier, edgeSupplier, true);
     }
 
     /**
@@ -73,17 +78,18 @@ public class DefaultDirectedWeightedGraph<V, E>
     /**
      * Create a builder for this kind of graph.
      * 
-     * @param ef the edge factory of the new graph
+     * @param edgeSupplier the edge supplier
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      * @return a builder for this kind of graph
      */
     public static <V,
         E> GraphBuilder<V, E, ? extends DefaultDirectedWeightedGraph<V, E>> createBuilder(
-            EdgeFactory<V, E> ef)
+            Supplier<E> edgeSupplier)
     {
-        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(ef));
+        return new GraphBuilder<>(new DefaultDirectedWeightedGraph<>(null, edgeSupplier));
     }
+
 }
 
 // End DefaultDirectedWeightedGraph.java

@@ -17,13 +17,13 @@
  */
 package org.jgrapht.traverse;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link DepthFirstIteratorTest} class.
@@ -37,7 +37,8 @@ import static org.junit.Assert.assertEquals;
  * @since Jul 30, 2003
  */
 public class DepthFirstIteratorTest
-    extends CrossComponentIteratorTest
+    extends
+    CrossComponentIteratorTest
 {
     // ~ Methods ----------------------------------------------------------------
 

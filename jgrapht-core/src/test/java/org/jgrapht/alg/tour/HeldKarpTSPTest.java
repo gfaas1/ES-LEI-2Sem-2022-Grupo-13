@@ -17,26 +17,28 @@
  */
 package org.jgrapht.alg.tour;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import java.util.Random;
+import java.util.*;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
 import static org.junit.Assert.*;
 
 /**
  * @author Alexandru Valeanu
  */
+@Category(SlowTests.class)
 public class HeldKarpTSPTest
 {
-     static Graph<String, DefaultWeightedEdge> directedGraph(){
-         // Solution exists; cost 26
+    static Graph<String, DefaultWeightedEdge> directedGraph()
+    {
+        // Solution exists; cost 26
 
         Graph<String, DefaultWeightedEdge> g =
-                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("0");
         g.addVertex("1");
@@ -58,11 +60,12 @@ public class HeldKarpTSPTest
         return g;
     }
 
-    static Graph<String, DefaultWeightedEdge> directedGraph2(){
-         // Solution exists; cost 2166782
+    static Graph<String, DefaultWeightedEdge> directedGraph2()
+    {
+        // Solution exists; cost 2166782
 
         Graph<String, DefaultWeightedEdge> g =
-                new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("0");
         g.addVertex("1");
@@ -83,9 +86,10 @@ public class HeldKarpTSPTest
         return g;
     }
 
-    static Graph<String, DefaultWeightedEdge> noSolutionDirectedGraph(){
+    static Graph<String, DefaultWeightedEdge> noSolutionDirectedGraph()
+    {
         Graph<String, DefaultWeightedEdge> g =
-                 new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("0");
         g.addVertex("1");
@@ -99,11 +103,11 @@ public class HeldKarpTSPTest
         g.setEdgeWeight(g.addEdge("0", "2"), 311063d);
 
         return g;
-     }
+    }
 
-    static Graph<String, DefaultWeightedEdge> noSolutionUndirectedGraph(){
-        Graph<String, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    static Graph<String, DefaultWeightedEdge> noSolutionUndirectedGraph()
+    {
+        Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("0");
         g.addVertex("1");
@@ -117,11 +121,11 @@ public class HeldKarpTSPTest
         return g;
     }
 
-    static Graph<String, DefaultWeightedEdge> undirectedGraph(){
+    static Graph<String, DefaultWeightedEdge> undirectedGraph()
+    {
         // Solution exists; cost 80
 
-        Graph<String, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("1");
         g.addVertex("2");
@@ -138,11 +142,11 @@ public class HeldKarpTSPTest
         return g;
     }
 
-    static Graph<String, DefaultWeightedEdge> symmetric4CitiesGraph(){
-         // Solution exists; cost 97
+    static Graph<String, DefaultWeightedEdge> symmetric4CitiesGraph()
+    {
+        // Solution exists; cost 97
 
-        Graph<String, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("A");
         g.addVertex("B");
@@ -159,9 +163,9 @@ public class HeldKarpTSPTest
         return g;
     }
 
-    static Graph<String, DefaultWeightedEdge> oneVertexGraph(){
-        Graph<String, DefaultWeightedEdge> g =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    static Graph<String, DefaultWeightedEdge> oneVertexGraph()
+    {
+        Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         g.addVertex("A");
 
@@ -174,7 +178,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = directedGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNotNull(tour);
         assertHamiltonian(g, tour);
@@ -187,7 +191,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = directedGraph2();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNotNull(tour);
         assertHamiltonian(g, tour);
@@ -200,7 +204,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = undirectedGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNotNull(tour);
         assertHamiltonian(g, tour);
@@ -213,7 +217,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = symmetric4CitiesGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNotNull(tour);
         assertHamiltonian(g, tour);
@@ -226,7 +230,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = noSolutionDirectedGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNull(tour);
     }
@@ -237,7 +241,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = noSolutionUndirectedGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertNull(tour);
     }
@@ -255,7 +259,7 @@ public class HeldKarpTSPTest
         Graph<String, DefaultWeightedEdge> g = oneVertexGraph();
 
         GraphPath<String, DefaultWeightedEdge> tour =
-                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+            new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
         assertHamiltonian(g, tour);
     }
@@ -272,7 +276,7 @@ public class HeldKarpTSPTest
 
         for (int test = 0; test < NUM_TESTS; test++) {
             Graph<String, DefaultWeightedEdge> g =
-                    new DirectedMultigraph<>(DefaultWeightedEdge.class);
+                new DirectedMultigraph<>(DefaultWeightedEdge.class);
 
             // Generate n - number of nodes; 2 <= n <= 20
             final int n = 2 + random.nextInt(19);
@@ -299,7 +303,7 @@ public class HeldKarpTSPTest
             }
 
             GraphPath<String, DefaultWeightedEdge> tour =
-                    new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
+                new HeldKarpTSP<String, DefaultWeightedEdge>().getTour(g);
 
             assertNotNull(tour);
             assertHamiltonian(g, tour);

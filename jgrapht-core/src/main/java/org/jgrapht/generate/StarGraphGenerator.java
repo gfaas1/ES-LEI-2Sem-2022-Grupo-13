@@ -17,9 +17,9 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * Generates a <a href="http://mathworld.wolfram.com/StarGraph.html">star graph</a> of any size.
@@ -32,7 +32,8 @@ import org.jgrapht.*;
  * @since Dec 21, 2008
  */
 public class StarGraphGenerator<V, E>
-    implements GraphGenerator<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
     public static final String CENTER_VERTEX = "Center Vertex";
 
@@ -52,24 +53,21 @@ public class StarGraphGenerator<V, E>
      * Generates a star graph with the designated order from the constructor
      */
     @Override
-    public void generateGraph(
-        Graph<V, E> target, final VertexFactory<V> vertexFactory, Map<String, V> resultMap)
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (order < 1) {
             return;
         }
 
         // Create center vertex
-        V centerVertex = vertexFactory.createVertex();
-        target.addVertex(centerVertex);
+        V centerVertex = target.addVertex();
         if (resultMap != null) {
             resultMap.put(CENTER_VERTEX, centerVertex);
         }
 
         // Create other vertices
         for (int i = 0; i < (order - 1); i++) {
-            V newVertex = vertexFactory.createVertex();
-            target.addVertex(newVertex);
+            V newVertex = target.addVertex();
             target.addEdge(newVertex, centerVertex);
         }
     }

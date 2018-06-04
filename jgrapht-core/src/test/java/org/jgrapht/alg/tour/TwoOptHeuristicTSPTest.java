@@ -17,25 +17,23 @@
  */
 package org.jgrapht.alg.tour;
 
-import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.assertHamiltonian;
-import static org.junit.Assert.assertTrue;
+import org.jgrapht.*;
+import org.jgrapht.alg.spanning.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+import org.junit.experimental.categories.*;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.generate.CompleteGraphGenerator;
-import org.jgrapht.graph.ClassBasedVertexFactory;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.junit.Test;
+import static org.jgrapht.alg.tour.TwoApproxMetricTSPTest.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link TwoOptHeuristicTSP}.
  * 
  * @author Dimitrios Michail
  */
+@Category(SlowTests.class)
 public class TwoOptHeuristicTSPTest
 {
 
@@ -66,9 +64,10 @@ public class TwoOptHeuristicTSPTest
         final int maxSize = 50;
 
         for (int i = 1; i < maxSize; i++) {
-            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+            SimpleGraph<Object, DefaultEdge> g = new SimpleGraph<>(
+                SupplierUtil.OBJECT_SUPPLIER, SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             CompleteGraphGenerator<Object, DefaultEdge> generator = new CompleteGraphGenerator<>(i);
-            generator.generateGraph(g, new ClassBasedVertexFactory<>(Object.class));
+            generator.generateGraph(g);
 
             GraphPath<Object, DefaultEdge> tour =
                 new TwoOptHeuristicTSP<Object, DefaultEdge>().getTour(g);

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.cycle;
 
-import java.util.*;
-
 import org.jgrapht.*;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.builder.*;
+
+import java.util.*;
 
 /**
  * Find all simple cycles of a directed graph using the Johnson's algorithm.
@@ -60,16 +60,6 @@ public class JohnsonSimpleCycles<V, E>
     private Set<V> pathSet = null;
 
     /**
-     * Create a simple cycle finder with an unspecified graph.
-     * 
-     * @deprecated Use the constructor with the graph parameter.
-     */
-    @Deprecated
-    public JohnsonSimpleCycles()
-    {
-    }
-
-    /**
      * Create a simple cycle finder for the specified graph.
      *
      * @param graph - the DirectedGraph in which to find cycles.
@@ -78,33 +68,6 @@ public class JohnsonSimpleCycles<V, E>
      * null</code>.
      */
     public JohnsonSimpleCycles(Graph<V, E> graph)
-    {
-        this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
-        if (GraphTests.hasMultipleEdges(graph)) {
-            throw new IllegalArgumentException("Graph should not have multiple (parallel) edges");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public Graph<V, E> getGraph()
-    {
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @deprecated As not really needed.
-     */
-    @Override
-    @Deprecated
-    public void setGraph(Graph<V, E> graph)
     {
         this.graph = GraphTests.requireDirected(graph, "Graph must be directed");
         if (GraphTests.hasMultipleEdges(graph)) {
@@ -151,10 +114,10 @@ public class JohnsonSimpleCycles<V, E>
     private Pair<Graph<V, E>, Integer> findMinSCSG(int startIndex)
     {
         /*
-         * Per Johnson : "adjacency structure of strong component K with least vertex in subgraph of
-         * G induced by {s, s+ 1, n}". Or in contemporary terms: the strongly connected component of
-         * the subgraph induced by {v1,...,vn} which contains the minimum (among those SCCs) vertex
-         * index. We return that index together with the graph.
+         * Per Johnson : "adjacency structure of strong component $K$ with least vertex in subgraph
+         * of $G$ induced by $(s, s + 1, n)$". Or in contemporary terms: the strongly connected
+         * component of the subgraph induced by $(v_1, \dotso ,v_n)$ which contains the minimum
+         * (among those SCCs) vertex index. We return that index together with the graph.
          */
         initMinSCGState();
 
@@ -177,7 +140,11 @@ public class JohnsonSimpleCycles<V, E>
         }
 
         // build a graph for the SCC found
-        Graph<V, E> resultGraph = new DefaultDirectedGraph<>(graph.getEdgeFactory());
+        Graph<V,
+            E> resultGraph = GraphTypeBuilder
+                .<V, E> directed().edgeSupplier(graph.getEdgeSupplier())
+                .vertexSupplier(graph.getVertexSupplier()).allowingMultipleEdges(false)
+                .allowingSelfLoops(true).buildGraph();
         for (V v : minSCC) {
             resultGraph.addVertex(v);
         }
@@ -370,12 +337,7 @@ public class JohnsonSimpleCycles<V, E>
     {
         // B sets typically not all needed,
         // so instantiate lazily.
-        Set<V> result = bSets.get(v);
-        if (result == null) {
-            result = new HashSet<>();
-            bSets.put(v, result);
-        }
-        return result;
+        return bSets.computeIfAbsent(v, k -> new HashSet<>());
     }
 }
 

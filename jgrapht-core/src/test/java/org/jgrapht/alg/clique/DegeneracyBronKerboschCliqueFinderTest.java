@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg.clique;
 
-import java.util.concurrent.*;
-
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
+
+import java.util.concurrent.*;
 
 /**
  * .
@@ -28,7 +28,8 @@ import org.jgrapht.graph.*;
  * @author John V. Sichi
  */
 public class DegeneracyBronKerboschCliqueFinderTest
-    extends BaseBronKerboschCliqueFinderTest
+    extends
+    BaseBronKerboschCliqueFinderTest
 {
 
     @Override

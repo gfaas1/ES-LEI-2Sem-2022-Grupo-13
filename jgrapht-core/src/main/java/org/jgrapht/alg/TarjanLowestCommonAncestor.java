@@ -17,10 +17,10 @@
  */
 package org.jgrapht.alg;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * Used to calculate Tarjan's Lowest Common Ancestors Algorithm
@@ -219,7 +219,8 @@ public class TarjanLowestCommonAncestor<V, E>
 
     @SuppressWarnings("serial")
     private static final class MultiMap<V>
-        extends HashMap<V, Set<LcaRequestResponse<V>>>
+        extends
+        HashMap<V, Set<LcaRequestResponse<V>>>
     {
         public Set<LcaRequestResponse<V>> getOrCreate(V key)
         {

@@ -17,11 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * The Bellman-Ford algorithm.
@@ -33,7 +33,7 @@ import org.jgrapht.alg.util.*;
  * undirected graphs.
  *
  * <p>
- * The running time is O(|E||V|).
+ * The running time is $O(|E||V|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -41,7 +41,8 @@ import org.jgrapht.alg.util.*;
  * @author Dimitrios Michail
  */
 public class BellmanFordShortestPath<V, E>
-    extends BaseShortestPathAlgorithm<V, E>
+    extends
+    BaseShortestPathAlgorithm<V, E>
 {
     private final Comparator<Double> comparator;
 

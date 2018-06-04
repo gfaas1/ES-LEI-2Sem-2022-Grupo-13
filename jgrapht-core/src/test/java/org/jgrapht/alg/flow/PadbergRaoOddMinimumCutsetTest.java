@@ -17,21 +17,17 @@
  */
 package org.jgrapht.alg.flow;
 
+import org.jgrapht.*;
+import org.jgrapht.alg.connectivity.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
 import java.util.*;
 import java.util.stream.*;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.util.IntegerVertexFactory;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-
-import junit.framework.*;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class for the PadbergRaoOddMinimumCutset implementation
@@ -71,7 +67,7 @@ public class PadbergRaoOddMinimumCutsetTest
             .collect(Collectors.toSet());
         assertEquals(expectedCutEdges, cutEdges);
         double expectedWeight = cutEdges.stream().mapToDouble(network::getEdgeWeight).sum();
-        assertEquals(expectedWeight, cutValue,0);
+        assertEquals(expectedWeight, cutValue, 0);
 
         // Verify whether the returned odd cut-set is indeed of minimum weight. To verify this, we
         // exhaustively iterate over all possible cutsets.
@@ -194,13 +190,15 @@ public class PadbergRaoOddMinimumCutsetTest
     {
         Random rand = new Random(0);
         for (int i = 0; i < 8; i++) {
-            SimpleWeightedGraph<Integer, DefaultWeightedEdge> randomGraph =
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+            SimpleWeightedGraph<Integer,
+                DefaultWeightedEdge> randomGraph = new SimpleWeightedGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER);
             int vertices = rand.nextInt((30 - 10) + 1) + 10; // 10-30 vertices
             double p = 0.01 * (rand.nextInt((85 - 50) + 1) + 50); // p=[0.5;0.85]
             GnpRandomGraphGenerator<Integer, DefaultWeightedEdge> graphGen =
                 new GnpRandomGraphGenerator<>(vertices, p);
-            graphGen.generateGraph(randomGraph, new IntegerVertexFactory(0), null);
+            graphGen.generateGraph(randomGraph);
             for (DefaultWeightedEdge edge : randomGraph.edgeSet())
                 randomGraph.setEdgeWeight(edge, rand.nextInt(150));
 

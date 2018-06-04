@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import java.util.*;
-
 import org.jgrapht.*;
+
+import java.util.*;
 
 /**
  * This class represents a GraphMapping between two (subgraph)isomorphic graphs. In the subgraph
@@ -29,7 +29,8 @@ import org.jgrapht.*;
  * @param <E> the type of the edges
  */
 public class IsomorphicGraphMapping<V, E>
-    implements GraphMapping<V, E>
+    implements
+    GraphMapping<V, E>
 {
     GraphOrdering<V, E> g1, g2;
 
@@ -104,10 +105,10 @@ public class IsomorphicGraphMapping<V, E>
     }
 
     /**
-     * Checks if a vertex v from the first graph has a corresponding vertex in the second graph
+     * Checks if a vertex $v$ from the first graph has a corresponding vertex in the second graph
      *
      * @param v the vertex
-     * @return is there a corresponding vertex to v in the subgraph
+     * @return is there a corresponding vertex to $v$ in the subgraph
      */
     public boolean hasVertexCorrespondence(V v)
     {
@@ -118,7 +119,7 @@ public class IsomorphicGraphMapping<V, E>
      * Checks if a edge e from the first graph has a corresponding edge in the second graph
      *
      * @param e the edge
-     * @return is there a corresponding edge to e in the subgraph
+     * @return is there a corresponding edge to $e$ in the subgraph
      */
     public boolean hasEdgeCorrespondence(E e)
     {
@@ -128,7 +129,7 @@ public class IsomorphicGraphMapping<V, E>
     @Override
     public String toString()
     {
-        String str = "[";
+        StringBuilder str = new StringBuilder("[");
         Set<V> vertexSet = g1.getGraph().vertexSet();
         Map<String, V> vertexMap = new TreeMap<>();
 
@@ -139,7 +140,8 @@ public class IsomorphicGraphMapping<V, E>
         int i = 0;
         for (Map.Entry<String, V> entry : vertexMap.entrySet()) {
             V u = getVertexCorrespondence(entry.getValue(), true);
-            str += ((i++ == 0) ? "" : " ") + entry.getKey() + "=" + ((u == null) ? "~~" : u);
+            str.append((i++ == 0) ? "" : " ").append(entry.getKey()).append("=").append(
+                (u == null) ? "~~" : u);
         }
 
         return str + "]";
