@@ -37,3 +37,4 @@ Given two vertices, an application can check the label on the edge between them 
 :[source code](http://code.jgrapht.org/raw/master/jgrapht-demo/src/main/java/org/jgrapht/demo/LabeledEdges.java?example=isEnemyOf)
 ```
 
+You can find the complete source code for this example at [LabeledEdge.java](https://github.com/jgrapht/jgrapht/blob/master/jgrapht-demo/src/main/java/org/jgrapht/demo/LabeledEdges.java)
