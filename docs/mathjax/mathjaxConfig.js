@@ -4,4 +4,4 @@ MathJax.Hub.Config({
     processEscapes: true
   }
 });
-MathJax.Ajax.loadComplete("http://jgrapht.org/mathjax/mathjaxConfig.js");
+MathJax.Ajax.loadComplete("https://jgrapht.org/mathjax/mathjaxConfig.js");
