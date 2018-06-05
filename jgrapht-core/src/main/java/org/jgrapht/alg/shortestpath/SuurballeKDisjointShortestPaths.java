@@ -28,7 +28,7 @@ import org.jgrapht.graph.*;
 /**
  * An implementation of Suurballe algorithm for finding K edge-<em>disjoint</em> shortest paths.
  * The algorithm determines the k disjoint shortest simple paths in increasing order of
- * weight.
+ * weight. Only directed simple graphs are allowed.
  *
  * <p>
  * The algorithm is running k sequential Dijkstra iterations to find the shortest path at each step.
@@ -46,55 +46,48 @@ import org.jgrapht.graph.*;
  * @param <E> the graph edge type
  * 
  * @author Assaf Mizrachi
- * @since February 12, 2018
+ * @since March 28, 2018
  */
 public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgorithm<V, E> {
     /**
      * Graph on which shortest paths are searched.
      */
     private Graph<V, E> workingGraph;
-    
-    private final Graph<V, E> graph;
 
     private List<List<E>> pathList;
 
-    private int nPaths;
-    
     private Set<E> overlappingEdges;
+    
+    private HashMap<E, Double> weightMap;
+    
+    private Graph<V, E> originalGraph;
 
     /**
-     * Creates an object to calculate k disjoint shortest paths between the start
-     * vertex and others vertices.
+     * Creates an object to calculate $k$ disjoint shortest paths between the start vertex and
+     * others vertices.
      *
-     * @param graph
-     *            graph on which shortest paths are searched.
-     * @param nPaths
-     *            number of disjoint paths between the start vertex and an end
-     *            vertex.
+     * @param graph graph on which shortest paths are searched.
      *
-     * @throws IllegalArgumentException
-     *             if nPaths is negative or 0.
-     * @throws IllegalArgumentException 
-     *             if the graph is null.
-     * @throws IllegalArgumentException 
-     *             if the graph is undirected.
+     * @throws IllegalArgumentException if the graph is null.
+     * @throws IllegalArgumentException if the graph is undirected.
      */
-    public SuurballeKDisjointShortestPaths(Graph<V, E> graph, int nPaths) {
+    public SuurballeKDisjointShortestPaths(Graph<V, E> graph) {
                          
-        if (nPaths <= 0) {
-            throw new IllegalArgumentException("Number of paths must be positive");
-        }
-
+        this.originalGraph = graph;
         GraphTests.requireDirected(graph);
-        if (! GraphTests.isSimple(graph)) {
+        if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Graph must be simple");
-        }
-        this.graph = graph;               
-        this.nPaths = nPaths;
+        }           
+        //Assuring all weights modifications are not applied to original graph                
+        this.weightMap = new HashMap<>();
+        this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedGraph<>(
+            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier(), false), weightMap);
+        
+        Graphs.addGraph(workingGraph, this.originalGraph);
     }
     
     /**
-     * Returns the k shortest simple paths in increasing order of weight.
+     * Returns the $k$ shortest simple paths in increasing order of weight.
      *
      * @param startVertex source vertex of the calculated paths.
      * @param endVertex target vertex of the calculated paths.
@@ -107,8 +100,11 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
      * @throws IllegalArgumentException if the startVertex or the endVertex is null
      */
     @Override
-    public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex)
-    {
+    public List<GraphPath<V, E>> getPaths(V startVertex, V endVertex, int k)
+    {        
+        if (k <= 0) {
+            throw new IllegalArgumentException("Number of paths must be positive");
+        }
         if (endVertex == null) {
             throw new IllegalArgumentException("endVertex is null");
         }
@@ -118,40 +114,31 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
         if (endVertex.equals(startVertex)) {
             throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
         }
-        if (! graph.vertexSet().contains(startVertex)) {
+        if (!workingGraph.vertexSet().contains(startVertex)) {
             throw new IllegalArgumentException("graph must contain the start vertex!");
         }
-        if (! graph.vertexSet().contains(endVertex)) {
+        if (!workingGraph.vertexSet().contains(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }
         
-        if (graph.getType().isWeighted()) {
-            this.workingGraph = new DefaultDirectedWeightedGraph<>(graph.getEdgeFactory());
-        } else {
-            this.workingGraph = new AsWeightedGraph<>(graph, new HashMap<>());
-        }
-        
-        Graphs.addAllVertices(workingGraph, graph.vertexSet());
-        V source, target;
-        E edge;
-        for (E e : graph.edgeSet()) {
-            source = workingGraph.getEdgeSource(e);
-            target = workingGraph.getEdgeTarget(e);
-            edge = workingGraph.addEdge(source, target);
-            workingGraph.setEdgeWeight(edge, graph.getEdgeWeight(e));
-        }
+        //original edge weights may have changed due to previous calls
+        if (this.originalGraph.getType().isWeighted()) {            
+            this.originalGraph.edgeSet().forEach(e -> {
+                this.weightMap.put(e, this.originalGraph.getEdgeWeight(e));
+            });
+        }        
 
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
-        DijkstraShortestPath<V, E> dijkstraShortestPaths;
+        DijkstraShortestPath<V, E> dijkstraShortestPath;
         ShortestPathAlgorithm.SingleSourcePaths<V, E> singleSourcePaths = null;
-        
-        for (int cPath = 1; cPath <= this.nPaths; cPath++) {
+
+        for (int cPath = 1; cPath <= k; cPath++) {
             if (cPath > 1) {
                 prepare(this.pathList.get(cPath - 2), singleSourcePaths);
-            }                       
-            dijkstraShortestPaths = new DijkstraShortestPath<>(workingGraph);
-            singleSourcePaths = dijkstraShortestPaths.getPaths(startVertex);
+            }
+            dijkstraShortestPath = new DijkstraShortestPath<>(workingGraph);
+            singleSourcePaths = dijkstraShortestPath.getPaths(startVertex);
             currentPath = singleSourcePaths.getPath(endVertex);
             if (currentPath != null) {
                 pathList.add(currentPath.getEdgeList());
@@ -161,17 +148,17 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
         }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
+
     }
     
     /**
-     * Prepares the graph for a search of the next path:
-     * Replacing the edges of the previous path with reversed edges
-     * with negative weight
-     * @param singleSourcePaths 
+     * Prepares the graph for a search of the next path: Replacing the edges of the previous path
+     * with reversed edges with negative weight
      * 
-     * @param cPath the number of the next path to search 
+     * @param previousPath shortest path found on previous round.
      */
-    private void prepare(List<E> previousPath, SingleSourcePaths<V, E> singleSourcePaths) {
+    private void prepare(List<E> previousPath, SingleSourcePaths<V, E> singleSourcePaths)
+    {
         
         V source, target;
         E reversedEdge;
@@ -204,123 +191,101 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
     }
     
     /**
-     * At the end of the search we have list of intermediate paths - not necessarily
-     * disjoint and may contain reversed edges. Here we go over all, removing overlapping
-     * edges and merging them to valid paths (from start to end). Finally, we sort
-     * them according to their weight.
+     * At the end of the search we have list of intermediate paths - not necessarily disjoint and
+     * may contain reversed edges. Here we go over all, removing overlapping edges and merging them
+     * to valid paths (from start to end). Finally, we sort them according to their weight.
      * 
+     * @param startVertex the start vertex
      * @param endVertex the end vertex
      * 
      * @return sorted list of disjoint paths from start vertex to end vertex.
      */
-    private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex) {
-        //first we need to remove overlapping edges.        
+    private List<GraphPath<V, E>> resolvePaths(V startVertex, V endVertex)
+    {
+        // first we need to remove overlapping edges.
         findOverlappingEdges();
-        
-        //now we might be left with path fragments (not necessarily leading from start to end).
-        //We need to merge them to valid paths.
-        List<GraphPath<V, E>> paths = mergePaths(startVertex, endVertex);
-        
-        //sort paths by overall weight (ascending)
-        Collections.sort(paths, (o1, o2) -> Double.compare(o1.getWeight(), o2.getWeight()));        
+
+        // now we might be left with path fragments (not necessarily leading from start to end).
+        // We need to merge them to valid paths.
+        List<GraphPath<V, E>> paths = buildPaths(startVertex, endVertex);
+
+        // sort paths by overall weight (ascending)
+        Collections.sort(paths, Comparator.comparingDouble(GraphPath::getWeight));
         return paths;
     }
-    
+
     /**
-     * After removing overlapping edges, each path is not necessarily connecting
-     * start to end vertex. Here we connect the path fragments to valid paths
-     * (from start to end).
+     * After removing overlapping edges, each path is not necessarily connecting start to end
+     * vertex. Here we connect the path fragments to valid paths (from start to end).
      * 
+     * @param startVertex the start vertex
      * @param endVertex the end vertex
      * 
      * @return list of disjoint paths from start to end.
-     */    
-    private List<GraphPath<V, E>> mergePaths(V startVertex, V endVertex)
+     */
+    private List<GraphPath<V, E>> buildPaths(V startVertex, V endVertex)
     {
-        List<ArrayDeque<E>> pathsQueueList = new ArrayList<ArrayDeque<E>>(this.pathList.size());
-        this.pathList.forEach(path -> pathsQueueList.add(new ArrayDeque<>()));
-        ArrayDeque<E> allEdges = new ArrayDeque<>(flatPathListOrdered());
-        while (! allEdges.isEmpty()) {
-            E edge = allEdges.pop();
-            if (this.overlappingEdges.contains(edge)) {
-                continue;
-            }
-            for (ArrayDeque<E> path : pathsQueueList) {
-                if (path.isEmpty()) {
-                    path.add(edge);
-                    break;
-                }
+        List<List<E>> paths = new ArrayList<>();
+        Map<V, ArrayDeque<E>> sourceToEdgeLookup = new HashMap<>();
+        Set<E> nonOverlappingEdges = pathList
+            .stream().flatMap(List::stream).filter(e -> !this.overlappingEdges.contains(e))
+            .collect(Collectors.toSet());
 
-                if (this.workingGraph
-                    .getEdgeSource(edge).equals(this.workingGraph.getEdgeTarget(path.peekLast())))
-                {
-                    path.add(edge);
-                    break;
+        for (E e : nonOverlappingEdges) {
+            V u = workingGraph.getEdgeSource(e);
+            if (u.equals(startVertex)) { // start of a new path
+                List<E> path = new ArrayList<>();
+                path.add(e);
+                paths.add(path);
+            } else { // some edge which is part of a path
+                if (!sourceToEdgeLookup.containsKey(u)) {
+                    sourceToEdgeLookup.put(u, new ArrayDeque<>());
                 }
+                sourceToEdgeLookup.get(u).add(e);
             }
         }
 
-        return pathsQueueList
-            .stream()
-            .map(pathQueue -> createGraphPath(new ArrayList<>(pathQueue), startVertex, endVertex))
-            .collect(Collectors.toList());
-    }
-    
-    /**
-     * Flattens pathList to list of edges ordered (ascending) according to their
-     * distance (i.e. number of hops) from the source.
-     * 
-     * @return list of all paths edges.
-     */
-    private List<E> flatPathListOrdered() {
-        List<E> flatListOrdered = new ArrayList<>();
-        int maxSize = 0;
-        for (List<E> list : this.pathList) {
-            if (list.size() > maxSize) {
-                maxSize = list.size();
+        // Build the paths using the lookup table
+        for (List<E> path : paths) {
+            V v = workingGraph.getEdgeTarget(path.get(0));
+            while (!v.equals(endVertex)) {
+                E e = sourceToEdgeLookup.get(v).poll();
+                path.add(e);
+                v = workingGraph.getEdgeTarget(e);
             }
         }
         
-        for (int i = 0; i < maxSize; i++) {
-            for (List<E> list : this.pathList) {
-                if (i < list.size()) {
-                    flatListOrdered.add(list.get(i));
-                }
-            }
-        }
-        return flatListOrdered;
+        return paths
+            .stream().map(path -> createGraphPath(new ArrayList<>(path), startVertex, endVertex))
+            .collect(Collectors.toList());
     }
-    
+
     /**
-     * Iterating over all paths to removes overlapping edges (contained
-     * in more than single path). At the end of this method, each path
-     * contains unique edges but not necessarily connecting the start
-     * to end vertex.
+     * Iterating over all paths to removes overlapping edges (contained in more than single path).
+     * At the end of this method, each path contains unique edges but not necessarily connecting the
+     * start to end vertex.
      * 
      */
-    private void findOverlappingEdges() {
-        Iterator<E> path1Iter, path2Iter;
-        E e1, e2;
+    private void findOverlappingEdges()
+    {
         boolean found;
         this.overlappingEdges = new HashSet<>();
-        //removing overlapping edges
-        for (int i = 0; i < pathList.size(); i++) {
-            List<E> path1 = pathList.get(i);
-            path1Iter = path1.iterator();
-            while (path1Iter.hasNext()) {
-                e1 = path1Iter.next();
+        V sourceE1, targetE1;
+        V sourceE2, targetE2;
+        // removing overlapping edges
+        for (int i = 0; i < pathList.size() - 1; i++) {
+            for (E e1 : pathList.get(i)) {
+                sourceE1 = workingGraph.getEdgeSource(e1);
+                targetE1 = workingGraph.getEdgeTarget(e1);
                 found = false;
                 for (int j = i + 1; j < pathList.size(); j++) {
-                    List<E> path2 = pathList.get(j);
-                    path2Iter = path2.iterator();
-                    while (path2Iter.hasNext()) {
-                        e2 = path2Iter.next();
-                        //graph is directed, checking both options.
-                        if ((workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeSource(e2)) &&
-                            workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeTarget(e2))) ||
-                                
-                                (workingGraph.getEdgeSource(e1).equals(workingGraph.getEdgeTarget(e2)) &&
-                                    workingGraph.getEdgeTarget(e1).equals(workingGraph.getEdgeSource(e2)))) {
+                    for (E e2 : pathList.get(j)) {
+                        sourceE2 = workingGraph.getEdgeSource(e2);
+                        targetE2 = workingGraph.getEdgeTarget(e2);
+                        // graph is directed, checking both options.
+                        if ((sourceE1.equals(sourceE2) && targetE1.equals(targetE2))
+                            || (sourceE1.equals(targetE2) && targetE1.equals(sourceE2)))
+                        {
                             found = true;
                             this.overlappingEdges.add(e2);
                         }
@@ -331,18 +296,16 @@ public class SuurballeKDisjointShortestPaths<V, E> implements KShortestPathAlgor
                 }
             }
         }
-        
+
     }
-    
-    private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex) {
+
+    private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex)
+    {
         double weight = 0;
-        List<E> originalGraphEdgeList = new ArrayList<>(edgeList.size());
         for (E edge : edgeList) {
-            E originalGraphEdge =  this.graph.getEdge(this.graph.getEdgeSource(edge), this.graph.getEdgeTarget(edge));
-            originalGraphEdgeList.add(originalGraphEdge);
-            weight += this.graph.getEdgeWeight(originalGraphEdge);
+            weight += originalGraph.getEdgeWeight(edge);
         }
-        return new GraphWalk<>(this.graph, startVertex, endVertex, originalGraphEdgeList, weight);
+        return new GraphWalk<>(originalGraph, startVertex, endVertex, edgeList, weight);
     }
     
 }
