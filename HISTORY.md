@@ -6,6 +6,7 @@ Changes to JGraphT in each version:
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Restored optional tests for `BergeGraphInspector` (contributed by Philipp Kaesgen)
     - Use POSIX tar format for assembly (contributed by Mark Raynsford)
+    - Moved BrownBacktrackingColoring out of experimental, fixed bugs and wrote tests (contributed by Joris Kinable)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
