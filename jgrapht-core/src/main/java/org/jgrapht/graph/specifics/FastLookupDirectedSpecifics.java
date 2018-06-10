@@ -17,6 +17,7 @@
  */
 package org.jgrapht.graph.specifics;
 
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
@@ -35,8 +36,7 @@ import java.util.*;
  * @author Joris Kinable
  */
 public class FastLookupDirectedSpecifics<V, E>
-    extends
-    DirectedSpecifics<V, E>
+    extends DirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 
@@ -49,38 +49,63 @@ public class FastLookupDirectedSpecifics<V, E>
     /**
      * Construct a new fast lookup directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
+     * @deprecated Since default strategies should be decided at a higher level.
      */
-    public FastLookupDirectedSpecifics(AbstractBaseGraph<V, E> abstractBaseGraph)
+    @Deprecated
+    public FastLookupDirectedSpecifics(Graph<V, E> graph)
     {
-        this(abstractBaseGraph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, new LinkedHashMap<>(), new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
+     * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets
+     * @deprecated Since default strategies should be decided at a higher level.
      */
+    @Deprecated
     public FastLookupDirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
+        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap)
     {
-        this(abstractBaseGraph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
+        this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
 
     /**
      * Construct a new fast lookup directed specifics.
      * 
-     * @param abstractBaseGraph the graph for which these specifics are for
-     * @param vertexMap map for the storage of vertex edge sets
+     * @param graph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
+     *        iteration order.
+     * @param edgeSetFactory factory for the creation of vertex edge sets
+     * @deprecated Since default strategies should be decided at a higher level. 
+     */
+    @Deprecated
+    public FastLookupDirectedSpecifics(
+        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        EdgeSetFactory<V, E> edgeSetFactory)
+    {
+        this(graph, vertexMap, new HashMap<>(), edgeSetFactory);
+    }
+    
+    /**
+     * Construct a new fast lookup directed specifics.
+     * 
+     * @param graph the graph for which these specifics are for
+     * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
+     *        iteration order.
+     * @param touchingVerticesToEdgeMap Additional map for caching. No need for a predictable iteration order.
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public FastLookupDirectedSpecifics(
-        AbstractBaseGraph<V, E> abstractBaseGraph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        Graph<V, E> graph, 
+        Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        Map<Pair<V, V>, ArrayUnenforcedSet<E>> touchingVerticesToEdgeMap,
         EdgeSetFactory<V, E> edgeSetFactory)
     {
-        super(abstractBaseGraph, vertexMap, edgeSetFactory);
-        this.touchingVerticesToEdgeMap = new HashMap<>();
+        super(graph, vertexMap, edgeSetFactory);
+        this.touchingVerticesToEdgeMap = Objects.requireNonNull(touchingVerticesToEdgeMap);
     }
 
     /**
@@ -89,9 +114,7 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
-        if (abstractBaseGraph.containsVertex(sourceVertex)
-            && abstractBaseGraph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             Set<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
             return edges == null ? Collections.emptySet() : new ArrayUnenforcedSet<>(edges);
         } else {
@@ -118,8 +141,8 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public void addEdgeToTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).addOutgoingEdge(e);
         getEdgeContainer(target).addIncomingEdge(e);
@@ -141,15 +164,16 @@ public class FastLookupDirectedSpecifics<V, E>
     @Override
     public void removeEdgeFromTouchingVertices(E e)
     {
-        V source = abstractBaseGraph.getEdgeSource(e);
-        V target = abstractBaseGraph.getEdgeTarget(e);
+        V source = graph.getEdgeSource(e);
+        V target = graph.getEdgeTarget(e);
 
         getEdgeContainer(source).removeOutgoingEdge(e);
         getEdgeContainer(target).removeIncomingEdge(e);
 
-        // Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
-        // for a pair
-        // of touching vertices, remove the pair from the map.
+        /*
+         * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
+         * for a pair of touching vertices, remove the pair from the map.
+         */
         Pair<V, V> vertexPair = new Pair<>(source, target);
         ArrayUnenforcedSet<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null) {
