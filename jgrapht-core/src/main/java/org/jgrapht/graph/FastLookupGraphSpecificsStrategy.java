@@ -1,6 +1,7 @@
 package org.jgrapht.graph;
 
 import java.io.Serializable;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -12,7 +13,6 @@ import org.jgrapht.graph.specifics.FastLookupDirectedSpecifics;
 import org.jgrapht.graph.specifics.FastLookupUndirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
 import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
-import org.jgrapht.util.ArrayUnenforcedSet;
 
 /**
  * The fast lookup specifics strategy implementation.
@@ -67,12 +67,12 @@ public class FastLookupGraphSpecificsStrategy<V, E>
                 if (type.isDirected()) {
                     return new FastLookupDirectedSpecifics<>(graph, this
                         .<V, DirectedEdgeContainer<V, E>> getPredictableOrderIterationMapFactory()
-                        .get(), this.<Pair<V, V>, ArrayUnenforcedSet<E>> getMapFactory().get(),
+                        .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
                         getEdgeSetFactory());
                 } else {
                     return new FastLookupUndirectedSpecifics<>(graph, this
                         .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderIterationMapFactory()
-                        .get(), this.<Pair<V, V>, ArrayUnenforcedSet<E>> getMapFactory().get(),
+                        .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
                         getEdgeSetFactory());
                 }
             };
