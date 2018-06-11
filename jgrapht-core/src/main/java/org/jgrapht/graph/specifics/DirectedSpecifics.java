@@ -42,7 +42,7 @@ public class DirectedSpecifics<V, E>
     Specifics<V, E>,
     Serializable
 {
-    private static final long serialVersionUID = 8971725103718958232L;
+    private static final long serialVersionUID = 5964807709682219859L;
 
     protected Graph<V, E> graph;
     protected Map<V, DirectedEdgeContainer<V, E>> vertexMap;

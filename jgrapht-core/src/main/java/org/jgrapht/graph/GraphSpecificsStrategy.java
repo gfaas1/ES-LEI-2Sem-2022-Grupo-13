@@ -24,6 +24,7 @@ import org.jgrapht.graph.specifics.Specifics;
  * @param <E> the graph edge type
  * 
  * @see FastLookupGraphSpecificsStrategy
+ * @see DefaultGraphSpecificsStrategy
  */
 public interface GraphSpecificsStrategy<V, E> extends Serializable
 {
@@ -50,7 +51,7 @@ public interface GraphSpecificsStrategy<V, E> extends Serializable
      * @param <K1> the key type
      * @param <V1> the value type 
      */
-    default <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderIterationMapFactory()
+    default <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
     {
         return (Supplier<Map<K1, V1>> & Serializable)() -> new LinkedHashMap<>();
     }

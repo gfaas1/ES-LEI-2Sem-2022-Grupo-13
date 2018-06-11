@@ -138,7 +138,7 @@ public class FastLookupUndirectedSpecifics<V, E>
         if (edges == null || edges.isEmpty())
             return null;
         else
-            return edges.stream().findFirst().orElse(null);
+            return edges.iterator().next();
     }
 
     /**

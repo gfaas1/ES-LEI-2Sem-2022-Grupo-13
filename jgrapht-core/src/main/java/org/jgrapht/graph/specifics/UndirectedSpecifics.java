@@ -42,7 +42,7 @@ public class UndirectedSpecifics<V, E>
     Specifics<V, E>,
     Serializable
 {
-    private static final long serialVersionUID = 6494588405178655873L;
+    private static final long serialVersionUID = 4206026440450450992L;
 
     protected Graph<V, E> graph;
     protected Map<V, UndirectedEdgeContainer<V, E>> vertexMap;
@@ -65,11 +65,10 @@ public class UndirectedSpecifics<V, E>
      * 
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level. 
+     * @deprecated Since default strategies should be decided at a higher level.
      */
     @Deprecated
-    public UndirectedSpecifics(
-        Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
+    public UndirectedSpecifics(Graph<V, E> graph, Map<V, UndirectedEdgeContainer<V, E>> vertexMap)
     {
         this(graph, vertexMap, new ArrayUnenforcedSetEdgeSetFactory<>());
     }
@@ -122,9 +121,7 @@ public class UndirectedSpecifics<V, E>
     {
         Set<E> edges = null;
 
-        if (graph.containsVertex(sourceVertex)
-            && graph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             edges = new ArrayUnenforcedSet<>();
 
             for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
@@ -145,9 +142,7 @@ public class UndirectedSpecifics<V, E>
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
-        if (graph.containsVertex(sourceVertex)
-            && graph.containsVertex(targetVertex))
-        {
+        if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
 
             for (E e : getEdgeContainer(sourceVertex).vertexEdges) {
                 boolean equal = isEqualsStraightOrInverted(sourceVertex, targetVertex, e);
@@ -193,8 +188,8 @@ public class UndirectedSpecifics<V, E>
     @Override
     public int degreeOf(V vertex)
     {
-        if (graph.getType().isAllowingSelfLoops()) { 
-            /* 
+        if (graph.getType().isAllowingSelfLoops()) {
+            /*
              * Then we must count, and add loops twice
              */
             int degree = 0;

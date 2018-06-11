@@ -45,10 +45,10 @@ public class FastLookupGraphSpecificsStrategy<V, E>
         return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
             if (type.isWeighted()) {
                 return new WeightedIntrusiveEdgesSpecifics<V, E>(
-                    this.<E, IntrusiveWeightedEdge> getPredictableOrderIterationMapFactory().get());
+                    this.<E, IntrusiveWeightedEdge> getPredictableOrderMapFactory().get());
             } else {
                 return new UniformIntrusiveEdgesSpecifics<>(
-                    this.<E, IntrusiveEdge> getPredictableOrderIterationMapFactory().get());
+                    this.<E, IntrusiveEdge> getPredictableOrderMapFactory().get());
             }
         };
     }
@@ -66,12 +66,12 @@ public class FastLookupGraphSpecificsStrategy<V, E>
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
                     return new FastLookupDirectedSpecifics<>(graph, this
-                        .<V, DirectedEdgeContainer<V, E>> getPredictableOrderIterationMapFactory()
+                        .<V, DirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
                         .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
                         getEdgeSetFactory());
                 } else {
                     return new FastLookupUndirectedSpecifics<>(graph, this
-                        .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderIterationMapFactory()
+                        .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
                         .get(), this.<Pair<V, V>, Set<E>> getMapFactory().get(),
                         getEdgeSetFactory());
                 }

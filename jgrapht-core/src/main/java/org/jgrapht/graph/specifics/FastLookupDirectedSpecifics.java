@@ -35,13 +35,14 @@ import java.util.*;
  * @author Joris Kinable
  */
 public class FastLookupDirectedSpecifics<V, E>
-    extends DirectedSpecifics<V, E>
+    extends
+    DirectedSpecifics<V, E>
 {
     private static final long serialVersionUID = 4089085208843722263L;
 
     /**
-     * Maps a pair of vertices &lt;u,v&gt; to a set of edges {(u,v)}. In case of a multigraph, all edges
-     * which touch both u and v are included in the set.
+     * Maps a pair of vertices &lt;u,v&gt; to a set of edges {(u,v)}. In case of a multigraph, all
+     * edges which touch both u and v are included in the set.
      */
     protected Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap;
 
@@ -78,7 +79,7 @@ public class FastLookupDirectedSpecifics<V, E>
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
      * @param edgeSetFactory factory for the creation of vertex edge sets
-     * @deprecated Since default strategies should be decided at a higher level. 
+     * @deprecated Since default strategies should be decided at a higher level.
      */
     @Deprecated
     public FastLookupDirectedSpecifics(
@@ -87,21 +88,20 @@ public class FastLookupDirectedSpecifics<V, E>
     {
         this(graph, vertexMap, new HashMap<>(), edgeSetFactory);
     }
-    
+
     /**
      * Construct a new fast lookup directed specifics.
      * 
      * @param graph the graph for which these specifics are for
      * @param vertexMap map for the storage of vertex edge sets. Needs to have a predictable
      *        iteration order.
-     * @param touchingVerticesToEdgeMap Additional map for caching. No need for a predictable iteration order.
+     * @param touchingVerticesToEdgeMap Additional map for caching. No need for a predictable
+     *        iteration order.
      * @param edgeSetFactory factory for the creation of vertex edge sets
      */
     public FastLookupDirectedSpecifics(
-        Graph<V, E> graph, 
-        Map<V, DirectedEdgeContainer<V, E>> vertexMap,
-        Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap,
-        EdgeSetFactory<V, E> edgeSetFactory)
+        Graph<V, E> graph, Map<V, DirectedEdgeContainer<V, E>> vertexMap,
+        Map<Pair<V, V>, Set<E>> touchingVerticesToEdgeMap, EdgeSetFactory<V, E> edgeSetFactory)
     {
         super(graph, vertexMap, edgeSetFactory);
         this.touchingVerticesToEdgeMap = Objects.requireNonNull(touchingVerticesToEdgeMap);
@@ -115,9 +115,9 @@ public class FastLookupDirectedSpecifics<V, E>
     {
         if (graph.containsVertex(sourceVertex) && graph.containsVertex(targetVertex)) {
             Set<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
-            if (edges == null) { 
+            if (edges == null) {
                 return Collections.emptySet();
-            } else { 
+            } else {
                 Set<E> edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
                 edgeSet.addAll(edges);
                 return edgeSet;
@@ -136,8 +136,8 @@ public class FastLookupDirectedSpecifics<V, E>
         Set<E> edges = touchingVerticesToEdgeMap.get(new Pair<>(sourceVertex, targetVertex));
         if (edges == null || edges.isEmpty())
             return null;
-        else { 
-            return edges.stream().findFirst().orElse(null);
+        else {
+            return edges.iterator().next();
         }
     }
 
