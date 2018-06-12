@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2007-2018, by John V Sichi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,58 +15,42 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------
- * ParanoidGraph.java
- * -------------------
- * (C) Copyright 2007-2008, by John V. Sichi and Contributors.
- *
- * Original Author:  John V. Sichi
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
- * 8-Nov-2007 : Initial revision (JVS);
- *
- */
 package org.jgrapht.graph;
-
-import java.util.*;
 
 import org.jgrapht.*;
 
+import java.util.*;
 
 /**
- * ParanoidGraph provides a way to verify that objects added to a graph obey the
- * standard equals/hashCode contract. It can be used to wrap an underlying graph
- * to be verified. Note that the verification is very expensive, so
- * ParanoidGraph should only be used during debugging.
+ * ParanoidGraph provides a way to verify that objects added to a graph obey the standard
+ * equals/hashCode contract. It can be used to wrap an underlying graph to be verified. Note that
+ * the verification is very expensive, so ParanoidGraph should only be used during debugging.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author John Sichi
- * @version $Id$
  */
 public class ParanoidGraph<V, E>
-    extends GraphDelegator<V, E>
+    extends
+    GraphDelegator<V, E>
 {
-    
-
-    /**
-     */
     private static final long serialVersionUID = 5075284167422166539L;
 
-    
-
+    /**
+     * Create a new paranoid graph.
+     * 
+     * @param g the underlying wrapped graph
+     */
     public ParanoidGraph(Graph<V, E> g)
     {
         super(g);
     }
 
-    
-
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         verifyAdd(edgeSet(), e);
@@ -78,8 +58,9 @@ public class ParanoidGraph<V, E>
     }
 
     /**
-     * @see Graph#addVertex(Object)
+     * {@inheritDoc}
      */
+    @Override
     public boolean addVertex(V v)
     {
         verifyAdd(vertexSet(), v);
@@ -94,11 +75,9 @@ public class ParanoidGraph<V, E>
             }
             if (o.equals(t) && (o.hashCode() != t.hashCode())) {
                 throw new IllegalArgumentException(
-                    "ParanoidGraph detected objects "
-                    + "o1 (hashCode=" + o.hashCode()
-                    + ") and o2 (hashCode=" + t.hashCode()
-                    + ") where o1.equals(o2) "
-                    + "but o1.hashCode() != o2.hashCode()");
+                    "ParanoidGraph detected objects " + "o1 (hashCode=" + o.hashCode()
+                        + ") and o2 (hashCode=" + t.hashCode() + ") where o1.equals(o2) "
+                        + "but o1.hashCode() != o2.hashCode()");
             }
         }
     }

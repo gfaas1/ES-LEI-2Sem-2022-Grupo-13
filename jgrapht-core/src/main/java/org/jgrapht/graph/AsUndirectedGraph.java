@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,90 +15,69 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* ----------------------
- * AsUndirectedGraph.java
- * ----------------------
- * (C) Copyright 2003-2008, by John V. Sichi and Contributors.
- *
- * Original Author:  John V. Sichi
- * Contributor(s):   Christian Hammer
- *
- * $Id$
- *
- * Changes
- * -------
- * 14-Aug-2003 : Initial revision (JVS);
- * 11-Mar-2004 : Made generic (CH);
- * 07-May-2006 : Changed from List<Edge> to Set<Edge> (JVS);
- * 28-May-2006 : Moved connectivity info from edge to graph (JVS);
- *
- */
 package org.jgrapht.graph;
-
-import java.io.*;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.util.*;
 
+import java.io.*;
+import java.util.*;
 
 /**
- * An undirected view of the backing directed graph specified in the
- * constructor. This graph allows modules to apply algorithms designed for
- * undirected graphs to a directed graph by simply ignoring edge direction. If
- * the backing directed graph is an <a
- * href="http://mathworld.wolfram.com/OrientedGraph.html">oriented graph</a>,
- * then the view will be a simple graph; otherwise, it will be a multigraph.
- * Query operations on this graph "read through" to the backing graph. Attempts
- * to add edges will result in an <code>UnsupportedOperationException</code>,
- * but vertex addition/removal and edge removal are all supported (and
- * immediately reflected in the backing graph).
+ * An undirected view of the backing directed graph specified in the constructor. This graph allows
+ * modules to apply algorithms designed for undirected graphs to a directed graph by simply ignoring
+ * edge direction. If the backing directed graph is an
+ * <a href="http://mathworld.wolfram.com/OrientedGraph.html">oriented graph</a>, then the view will
+ * be a simple graph; otherwise, it will be a multigraph. Query operations on this graph "read
+ * through" to the backing graph. Attempts to add edges will result in an
+ * <code>UnsupportedOperationException</code>, but vertex addition/removal and edge removal are all
+ * supported (and immediately reflected in the backing graph).
  *
- * <p>Note that edges returned by this graph's accessors are really just the
- * edges of the underlying directed graph. Since there is no interface
- * distinction between directed and undirected edges, this detail should be
- * irrelevant to algorithms.</p>
+ * <p>
+ * Note that edges returned by this graph's accessors are really just the edges of the underlying
+ * directed graph. Since there is no interface distinction between directed and undirected edges,
+ * this detail should be irrelevant to algorithms.
+ * </p>
  *
- * <p>This graph does <i>not</i> pass the hashCode and equals operations through
- * to the backing graph, but relies on <tt>Object</tt>'s <tt>equals</tt> and
- * <tt>hashCode</tt> methods. This graph will be serializable if the backing
- * graph is serializable.</p>
+ * <p>
+ * This graph does <i>not</i> pass the hashCode and equals operations through to the backing graph,
+ * but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods. This graph will be
+ * serializable if the backing graph is serializable.
+ * </p>
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
  *
  * @author John V. Sichi
  * @since Aug 14, 2003
  */
 public class AsUndirectedGraph<V, E>
-    extends GraphDelegator<V, E>
-    implements Serializable,
-        UndirectedGraph<V, E>
+    extends
+    GraphDelegator<V, E>
+    implements
+    Serializable,
+    Graph<V, E>
 {
-    
+    private static final long serialVersionUID = 325983813283133557L;
 
-    private static final long serialVersionUID = 3257845485078065462L; // @todo renew
-    private static final String NO_EDGE_ADD =
-        "this graph does not support edge addition";
-    private static final String UNDIRECTED =
-        "this graph only supports undirected operations";
-
-    
+    private static final String NO_EDGE_ADD = "this graph does not support edge addition";
 
     /**
      * Constructor for AsUndirectedGraph.
      *
-     * @param g the backing directed graph over which an undirected view is to
-     * be created.
+     * @param g the backing directed graph over which an undirected view is to be created.
+     * @throws IllegalArgumentException if the graph is not directed
      */
-    public AsUndirectedGraph(DirectedGraph<V, E> g)
+    public AsUndirectedGraph(Graph<V, E> g)
     {
         super(g);
+        GraphTests.requireDirected(g);
     }
 
-    
-
     /**
-     * @see Graph#getAllEdges(Object, Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
         Set<E> forwardList = super.getAllEdges(sourceVertex, targetVertex);
@@ -113,9 +88,7 @@ public class AsUndirectedGraph<V, E>
         }
 
         Set<E> reverseList = super.getAllEdges(targetVertex, sourceVertex);
-        Set<E> list =
-            new ArrayUnenforcedSet<E>(
-                forwardList.size() + reverseList.size());
+        Set<E> list = new ArrayUnenforcedSet<>(forwardList.size() + reverseList.size());
         list.addAll(forwardList);
         list.addAll(reverseList);
 
@@ -123,8 +96,9 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#getEdge(Object, Object)
+     * {@inheritDoc}
      */
+    @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
         E edge = super.getEdge(sourceVertex, targetVertex);
@@ -138,65 +112,85 @@ public class AsUndirectedGraph<V, E>
     }
 
     /**
-     * @see Graph#addEdge(Object, Object)
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
      */
+    @Override
     public E addEdge(V sourceVertex, V targetVertex)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
     }
 
     /**
-     * @see Graph#addEdge(Object, Object, Object)
+     * {@inheritDoc}
+     * 
+     * @throws UnsupportedOperationException always, since operation is unsupported
      */
+    @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
     {
         throw new UnsupportedOperationException(NO_EDGE_ADD);
     }
 
     /**
-     * @see UndirectedGraph#degreeOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public int degreeOf(V vertex)
     {
-        // this counts loops twice, which is consistent with AbstractBaseGraph
-        return super.inDegreeOf(vertex) + super.outDegreeOf(vertex);
+        return super.degreeOf(vertex);
     }
 
     /**
-     * @see DirectedGraph#inDegreeOf(Object)
+     * {@inheritDoc}
      */
-    public int inDegreeOf(V vertex)
-    {
-        throw new UnsupportedOperationException(UNDIRECTED);
-    }
-
-    /**
-     * @see DirectedGraph#incomingEdgesOf(Object)
-     */
+    @Override
     public Set<E> incomingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        return super.edgesOf(vertex);
     }
 
     /**
-     * @see DirectedGraph#outDegreeOf(Object)
+     * {@inheritDoc}
      */
-    public int outDegreeOf(V vertex)
+    @Override
+    public int inDegreeOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        return super.degreeOf(vertex);
     }
 
     /**
-     * @see DirectedGraph#outgoingEdgesOf(Object)
+     * {@inheritDoc}
      */
+    @Override
     public Set<E> outgoingEdgesOf(V vertex)
     {
-        throw new UnsupportedOperationException(UNDIRECTED);
+        return super.edgesOf(vertex);
     }
 
     /**
-     * @see AbstractBaseGraph#toString()
+     * {@inheritDoc}
      */
+    @Override
+    public int outDegreeOf(V vertex)
+    {
+        return super.degreeOf(vertex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GraphType getType()
+    {
+        return super.getType().asUndirected();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString()
     {
         return super.toStringFromSets(vertexSet(), edgeSet(), false);

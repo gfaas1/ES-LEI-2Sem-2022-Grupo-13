@@ -1,4 +1,9 @@
-/* This program and the accompanying materials are dual-licensed under
+/*
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
  * either
  *
  * (a) the terms of the GNU Lesser General Public License version 2.1
@@ -12,42 +17,65 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
 
+/**
+ * A simple weighted bipartite graph matrix generator.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
-    extends WeightedGraphGeneratorAdapter<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-    
+    protected List<V> first;
+    protected List<V> second;
+    protected double[][] weights;
 
-    List<V> first;
-
-    List<V> second;
-
-    
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(
-        List<? extends V> first)
+    /**
+     * Set the first partition of the generator.
+     * 
+     * @param first the first partition
+     * @return the generator
+     */
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> first(List<? extends V> first)
     {
-        this.first = new ArrayList<V>(first);
+        this.first = new ArrayList<>(first);
         return this;
     }
 
-    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(
-        List<? extends V> second)
+    /**
+     * Set the second partition of the generator.
+     * 
+     * @param second the second partition
+     * @return the generator
+     */
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> second(List<? extends V> second)
     {
-        this.second = new ArrayList<V>(second);
+        this.second = new ArrayList<>(second);
         return this;
     }
 
-    @Override public void generateGraph(
-        WeightedGraph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    /**
+     * Set the weights of the generator.
+     * 
+     * @param weights the weights
+     * @return the generator
+     */
+    public SimpleWeightedBipartiteGraphMatrixGenerator<V, E> weights(double[][] weights)
+    {
+        this.weights = weights;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -73,9 +101,7 @@ public class SimpleWeightedBipartiteGraphMatrixGenerator<V, E>
             assert first.size() == weights[i].length;
 
             for (int j = 0; j < second.size(); ++j) {
-                target.setEdgeWeight(
-                    target.addEdge(first.get(i), second.get(j)),
-                    weights[i][j]);
+                target.setEdgeWeight(target.addEdge(first.get(i), second.get(j)), weights[i][j]);
             }
         }
     }

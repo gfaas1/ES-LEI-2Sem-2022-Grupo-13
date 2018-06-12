@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2006-2018, by Carl Anderson and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,57 +15,33 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------
- * SimpleTouchgraphApplet.java
- * -------------------
- * (C) Copyright 2006-2008, by Carl Anderson and Contributors.
- *
- * Original Author:  Carl Anderson
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
- * 8-May-2006 : Initial revision (CA);
- *
- */
 package org.jgrapht.experimental.touchgraph;
-
-import java.applet.*;
-
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-
 
 /**
  * SimpleTouchgraphApplet
  *
- * @author canderson
+ * @author Carl Anderson
  */
 public class SimpleTouchgraphApplet
-    extends Applet
+    extends
+    Applet
 {
-    //~ Static fields/initializers ---------------------------------------------
+    // ~ Static fields/initializers ---------------------------------------------
 
     /**
      */
     private static final long serialVersionUID = 6213379835360007840L;
 
-    //~ Methods ----------------------------------------------------------------
+    // ~ Methods ----------------------------------------------------------------
 
     /**
-     * create a graph: code taken from non-visible
-     * org._3pq.jgrapht.demo.createStringGraph()
+     * Create a sample graph: code taken from non-visible org._3pq.jgrapht.demo.createStringGraph()
+     * 
+     * @return return a sample graph
      */
     public static Graph<String, DefaultEdge> createSamplegraph()
     {
-        UndirectedGraph<String, DefaultEdge> g =
-            new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
+        Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
         String v2 = "v2";
@@ -92,7 +64,7 @@ public class SimpleTouchgraphApplet
     }
 
     /**
-     * initialize the applet
+     * Initialize the applet.
      */
     public void init()
     {
@@ -101,19 +73,21 @@ public class SimpleTouchgraphApplet
 
         setLayout(new BorderLayout());
         setSize(800, 600);
-        add(
-            new TouchgraphPanel<String, DefaultEdge>(g, selfReferencesAllowed),
-            BorderLayout.CENTER);
+        add(new TouchgraphPanel<>(g, selfReferencesAllowed), BorderLayout.CENTER);
     }
 
-    public static void main(String [] args)
+    /**
+     * Main entry point.
+     * 
+     * @param args command line arguments
+     */
+    public static void main(String[] args)
     {
         Graph<String, DefaultEdge> g = createSamplegraph();
         boolean selfReferencesAllowed = false;
 
         JFrame frame = new JFrame();
-        frame.getContentPane().add(
-            new TouchgraphPanel<String, DefaultEdge>(g, selfReferencesAllowed));
+        frame.getContentPane().add(new TouchgraphPanel<>(g, selfReferencesAllowed));
         frame.setPreferredSize(new Dimension(800, 800));
         frame.setTitle("JGraphT to Touchgraph Converter Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

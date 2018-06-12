@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2018, by Barak Naveh and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,41 +15,26 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* --------------------
- * ListenableGraph.java
- * --------------------
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
- *
- * Original Author:  Barak Naveh
- * Contributor(s):   Christian Hammer
- *
- * $Id$
- *
- * Changes
- * -------
- * 24-Jul-2003 : Initial revision (BN);
- * 10-Aug-2003 : Adaptation to new event model (BN);
- * 11-Mar-2004 : Made generic (CH);
- *
- */
 package org.jgrapht;
 
 import org.jgrapht.event.*;
 
-
 /**
  * A graph that supports listeners on structural change events.
  *
- * @author Barak Naveh
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
  * @see GraphListener
  * @see VertexSetListener
+ *
+ * @author Barak Naveh
  * @since Jul 20, 2003
  */
 public interface ListenableGraph<V, E>
-    extends Graph<V, E>
+    extends
+    Graph<V, E>
 {
-    
-
     /**
      * Adds the specified graph listener to this graph, if not already present.
      *
@@ -62,8 +43,7 @@ public interface ListenableGraph<V, E>
     public void addGraphListener(GraphListener<V, E> l);
 
     /**
-     * Adds the specified vertex set listener to this graph, if not already
-     * present.
+     * Adds the specified vertex set listener to this graph, if not already present.
      *
      * @param l the listener to be added.
      */

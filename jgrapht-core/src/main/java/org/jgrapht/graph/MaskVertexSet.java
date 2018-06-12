@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2007-2018, by France Telecom and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,113 +15,67 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------------
- * MaskVertexSet.java
- * -------------------------
- * (C) Copyright 2007-2008, by France Telecom
- *
- * Original Author:  Guillaume Boulmier and Contributors.
- *
- * $Id$
- *
- * Changes
- * -------
- * 05-Jun-2007 : Initial revision (GB);
- *
- */
 package org.jgrapht.graph;
 
-import java.util.*;
-
 import org.jgrapht.util.*;
-import org.jgrapht.util.PrefetchIterator.*;
 
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Helper for {@link MaskSubgraph}.
  *
- * @author Guillaume Boulmier
  * @since July 5, 2007
  */
-class MaskVertexSet<V, E>
-    extends AbstractSet<V>
+class MaskVertexSet<V>
+    extends
+    AbstractSet<V>
+    implements
+    Serializable
 {
-    
+    private static final long serialVersionUID = 3751931017141472763L;
 
-    private MaskFunctor<V, E> mask;
+    private final Set<V> vertexSet;
+    private final Predicate<V> mask;
 
-    private int size;
-
-    private Set<V> vertexSet;
-
-    private transient TypeUtil<V> vertexTypeDecl = null;
-
-    
-
-    public MaskVertexSet(Set<V> vertexSet, MaskFunctor<V, E> mask)
+    public MaskVertexSet(Set<V> vertexSet, Predicate<V> mask)
     {
         this.vertexSet = vertexSet;
         this.mask = mask;
-        this.size = -1;
     }
 
-    
-
     /**
-     * @see java.util.Collection#contains(java.lang.Object)
+     * {@inheritDoc}
      */
+    @Override
     public boolean contains(Object o)
     {
-        return
-            !this.mask.isVertexMasked(TypeUtil.uncheckedCast(o, vertexTypeDecl))
-            && this.vertexSet.contains(o);
+        if (!vertexSet.contains(o)) {
+            return false;
+        }
+        V v = TypeUtil.uncheckedCast(o);
+        return !mask.test(v);
     }
 
     /**
-     * @see java.util.Set#iterator()
+     * {@inheritDoc}
      */
+    @Override
     public Iterator<V> iterator()
     {
-        return new PrefetchIterator<V>(new MaskVertexSetNextElementFunctor());
+        return vertexSet.stream().filter(mask.negate()).iterator();
     }
 
     /**
-     * @see java.util.Set#size()
+     * {@inheritDoc}
      */
+    @Override
     public int size()
     {
-        if (this.size == -1) {
-            this.size = 0;
-            for (Iterator<V> iter = iterator(); iter.hasNext();) {
-                iter.next();
-                this.size++;
-            }
-        }
-        return this.size;
+        return (int) vertexSet.stream().filter(mask.negate()).count();
     }
 
-    
-
-    private class MaskVertexSetNextElementFunctor
-        implements NextElementFunctor<V>
-    {
-        private Iterator<V> iter;
-
-        public MaskVertexSetNextElementFunctor()
-        {
-            this.iter = MaskVertexSet.this.vertexSet.iterator();
-        }
-
-        public V nextElement()
-            throws NoSuchElementException
-        {
-            V element = this.iter.next();
-            while (MaskVertexSet.this.mask.isVertexMasked(element)) {
-                element = this.iter.next();
-            }
-            return element;
-        }
-    }
 }
 
 // End MaskVertexSet.java

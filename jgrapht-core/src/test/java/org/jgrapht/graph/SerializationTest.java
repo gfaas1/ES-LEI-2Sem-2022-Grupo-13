@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2003-2018, by John V Sichi and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,27 +15,13 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* --------------
- * SerializationTest.java
- * --------------
- * (C) Copyright 2003-2008, by John V. Sichi and Contributors.
- *
- * Original Author:  John V. Sichi
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
- * 06-Oct-2003 : Initial revision (JVS);
- *
- */
 package org.jgrapht.graph;
+
+import org.junit.*;
 
 import java.io.*;
 
-import org.jgrapht.*;
-
+import static org.junit.Assert.*;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.
@@ -47,36 +29,22 @@ import org.jgrapht.*;
  * @author John V. Sichi
  */
 public class SerializationTest
-    extends EnhancedTestCase
 {
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields --------------------------------------------------------
 
     private String v1 = "v1";
     private String v2 = "v2";
     private String v3 = "v3";
 
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * @see junit.framework.TestCase#TestCase(java.lang.String)
-     */
-    public SerializationTest(String name)
-    {
-        super(name);
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
     /**
      * Tests serialization of DirectedMultigraph.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testDirectedMultigraph()
         throws Exception
     {
-        DirectedMultigraph<String, DefaultEdge> graph =
-            new DirectedMultigraph<String, DefaultEdge>(
-                DefaultEdge.class);
+        DirectedMultigraph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
         graph.addVertex(v1);
         graph.addVertex(v2);
         graph.addVertex(v3);
@@ -84,9 +52,7 @@ public class SerializationTest
         graph.addEdge(v2, v3);
         graph.addEdge(v2, v3);
 
-        graph =
-            (DirectedMultigraph<String, DefaultEdge>) serializeAndDeserialize(
-                graph);
+        graph = (DirectedMultigraph<String, DefaultEdge>) serializeAndDeserialize(graph);
         assertTrue(graph.containsVertex(v1));
         assertTrue(graph.containsVertex(v2));
         assertTrue(graph.containsVertex(v3));
@@ -95,6 +61,38 @@ public class SerializationTest
         assertEquals(1, graph.edgesOf(v1).size());
         assertEquals(3, graph.edgesOf(v2).size());
         assertEquals(2, graph.edgesOf(v3).size());
+    }
+
+    /**
+     * Tests serialization of DirectedAcyclicGraph
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDirectedAcyclicGraph()
+        throws Exception
+    {
+        DirectedAcyclicGraph<String, DefaultEdge> graph1 =
+            new DirectedAcyclicGraph<>(DefaultEdge.class);
+        graph1.addVertex(v1);
+        graph1.addVertex(v2);
+        graph1.addVertex(v3);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v3);
+
+        DirectedAcyclicGraph<String, DefaultEdge> graph2 =
+            (DirectedAcyclicGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+        assertTrue(graph2.containsVertex(v1));
+        assertTrue(graph2.containsVertex(v2));
+        assertTrue(graph2.containsVertex(v3));
+        assertTrue(graph2.containsEdge(v1, v2));
+        assertTrue(graph2.containsEdge(v2, v3));
+        assertTrue(graph2.containsEdge(v1, v3));
+        assertEquals(2, graph2.edgesOf(v1).size());
+        assertEquals(2, graph2.edgesOf(v2).size());
+        assertEquals(2, graph2.edgesOf(v3).size());
+
+        assertEquals(graph1.toString(), graph2.toString());
     }
 
     private Object serializeAndDeserialize(Object obj)

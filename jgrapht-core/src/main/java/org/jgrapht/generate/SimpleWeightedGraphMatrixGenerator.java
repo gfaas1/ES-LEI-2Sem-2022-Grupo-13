@@ -1,4 +1,9 @@
-/* This program and the accompanying materials are dual-licensed under
+/*
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
  * either
  *
  * (a) the terms of the GNU Lesser General Public License version 2.1
@@ -12,43 +17,49 @@
  */
 package org.jgrapht.generate;
 
-import java.util.*;
-
 import org.jgrapht.*;
 
+import java.util.*;
 
+/**
+ * A simple weighted graph matrix generator.
+ *
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ */
 public class SimpleWeightedGraphMatrixGenerator<V, E>
-    extends WeightedGraphGeneratorAdapter<V, E, V>
+    implements
+    GraphGenerator<V, E, V>
 {
-    
-
     protected List<V> vertices;
+    protected double[][] weights;
 
-    
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static int [] range(final int from, final int to)
-    {
-        int [] range = new int[to - from];
-        for (int i = from; i < to; ++i) {
-            range[i - from] = i;
-        }
-        return range;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set the generator vertices.
+     * 
+     * @param vertices the graph vertices
+     * @return the generator
+     */
     public SimpleWeightedGraphMatrixGenerator<V, E> vertices(List<V> vertices)
     {
         this.vertices = vertices;
         return this;
     }
 
-    @Override public void generateGraph(
-        WeightedGraph<V, E> target,
-        VertexFactory<V> vertexFactory,
-        Map<String, V> resultMap)
+    /**
+     * Set the weights of the generator.
+     * 
+     * @param weights the weights
+     * @return the generator
+     */
+    public SimpleWeightedGraphMatrixGenerator<V, E> weights(double[][] weights)
+    {
+        this.weights = weights;
+        return this;
+    }
+
+    @Override
+    public void generateGraph(Graph<V, E> target, Map<String, V> resultMap)
     {
         if (weights == null) {
             throw new IllegalArgumentException(
@@ -72,8 +83,7 @@ public class SimpleWeightedGraphMatrixGenerator<V, E>
             for (int j = 0; j < vertices.size(); ++j) {
                 if (i != j) {
                     target.setEdgeWeight(
-                        target.addEdge(vertices.get(i), vertices.get(j)),
-                        weights[i][j]);
+                        target.addEdge(vertices.get(i), vertices.get(j)), weights[i][j]);
                 }
             }
         }

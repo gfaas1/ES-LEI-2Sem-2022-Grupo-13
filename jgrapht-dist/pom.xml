@@ -3,11 +3,14 @@
 	<parent>
 		<groupId>org.jgrapht</groupId>
 		<artifactId>jgrapht</artifactId>
-		<version>0.9.0</version>
+		<version>1.2.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jgrapht-dist</artifactId>
 	<name>JGraphT - Distributable Archives</name>
 	<packaging>pom</packaging>
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License Version 2.1, February 1999</name>
@@ -20,11 +23,20 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-io</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -38,16 +50,27 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-guava</artifactId>
+			<classifier>uber</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-demo</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>assembly</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
@@ -56,13 +79,15 @@
 							<attach>true</attach>
 							<finalName>jgrapht-${project.version}</finalName>
 							<descriptorSourceDirectory>${basedir}/src/assembly</descriptorSourceDirectory>
+							<appendAssemblyId>false</appendAssemblyId>
+							<tarLongFileMode>posix</tarLongFileMode>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>touchgraph</id>

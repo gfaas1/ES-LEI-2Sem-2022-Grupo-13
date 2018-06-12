@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2005-2018, by Assaf Lehr and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2008, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,53 +15,46 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -----------------
- * StopWatch.java
- * -----------------
- * (C) Copyright 2005-2008, by Assaf Lehr and Contributors.
- *
- * Original Author:  Assaf Lehr
- * Contributor(s):   -
- *
- * $Id$
- *
- * Changes
- * -------
- */
 package org.jgrapht.util;
 
+import java.util.concurrent.*;
+
 /**
- * @author Assaf
- * @since May 30, 2005
+ * A very simple stop watch.
+ * 
+ * @author Assaf Lehr
  */
 public class StopWatch
 {
-    //~ Instance fields --------------------------------------------------------
+    private long startTime;
 
-    long beforeTime;
+    /**
+     * Construct a new stop watch and start it.
+     */
+    public StopWatch()
+    {
+        start();
+    }
 
-    //~ Methods ----------------------------------------------------------------
-
+    /**
+     * Restart.
+     */
     public void start()
     {
-        this.beforeTime = System.currentTimeMillis();
+        this.startTime = System.nanoTime();
     }
 
-    public void stopAndReport()
+    /**
+     * Get the elapsed time from the last restart.
+     * 
+     * @param timeUnit the time unit
+     * @return the elapsed time in the given time unit
+     */
+    public long getElapsed(TimeUnit timeUnit)
     {
-        long deltaTime = System.currentTimeMillis() - beforeTime;
-        if (deltaTime > 9999) {
-            double deltaTimeSec = deltaTime / 1000.0;
-            System.out.println(
-                "# Performence: " + deltaTimeSec + " full Seconds");
-        } else {
-            String timeDesc;
-            timeDesc =
-                (deltaTime <= 10) ? "<10ms [less than minumun measurement time]"
-                : String.valueOf(deltaTime);
-            System.out.println("# Performence:  in MiliSeconds:" + timeDesc);
-        }
+        return timeUnit.convert(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
     }
+
 }
 
 // End StopWatch.java

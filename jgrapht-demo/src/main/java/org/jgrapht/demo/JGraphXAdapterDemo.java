@@ -1,4 +1,9 @@
-/* This program and the accompanying materials are dual-licensed under
+/*
+ * (C) Copyright 2013-2018, by Barak Naveh and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * This program and the accompanying materials are dual-licensed under
  * either
  *
  * (a) the terms of the GNU Lesser General Public License version 2.1
@@ -14,69 +19,63 @@ package org.jgrapht.demo;
 
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
-
-import java.awt.*;
-
-import javax.swing.*;
-
 import org.jgrapht.*;
 import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
+import javax.swing.*;
+import java.awt.*;
 
 /**
- * A demo applet that shows how to use JGraphX to visualize JGraphT graphs.
- * Applet based on JGraphAdapterDemo.
+ * A demo applet that shows how to use JGraphX to visualize JGraphT graphs. Applet based on
+ * JGraphAdapterDemo.
  *
  * @since July 9, 2013
  */
 public class JGraphXAdapterDemo
-    extends JApplet
+    extends
+    JApplet
 {
-    
-
     private static final long serialVersionUID = 2202072534703043194L;
-    private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
-    
+    private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
 
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
 
-    
-
     /**
-     * An alternative starting point for this demo, to also allow running this
-     * applet as an application.
+     * An alternative starting point for this demo, to also allow running this applet as an
+     * application.
      *
-     * @param args ignored.
+     * @param args command line arguments
      */
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
-        JGraphAdapterDemo applet = new JGraphAdapterDemo();
+        JGraphXAdapterDemo applet = new JGraphXAdapterDemo();
         applet.init();
 
         JFrame frame = new JFrame();
         frame.getContentPane().add(applet);
-        frame.setTitle("JGraphT Adapter to JGraph Demo");
+        frame.setTitle("JGraphT Adapter to JGraphX Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void init()
     {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g =
-            new ListenableDirectedGraph<String, DefaultEdge>(
-                DefaultEdge.class);
+            new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
 
         // create a visualization using JGraph, via an adapter
-        jgxAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
+        jgxAdapter = new JGraphXAdapter<>(g);
 
-        getContentPane().add(new mxGraphComponent(jgxAdapter));
+        setPreferredSize(DEFAULT_SIZE);
+        mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+        component.setConnectable(false);
+        component.getGraph().setAllowDanglingEdges(false);
+        getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
         String v1 = "v1";
@@ -97,10 +96,17 @@ public class JGraphXAdapterDemo
 
         // positioning via jgraphx layouts
         mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
-        layout.execute(jgxAdapter.getDefaultParent());
 
+        // center the circle
+        int radius = 100;
+        layout.setX0((DEFAULT_SIZE.width / 2.0) - radius);
+        layout.setY0((DEFAULT_SIZE.height / 2.0) - radius);
+        layout.setRadius(radius);
+        layout.setMoveCircle(true);
+
+        layout.execute(jgxAdapter.getDefaultParent());
         // that's all there is to it!...
     }
 }
 
-//End JGraphXAdapterDemo.java
+// End JGraphXAdapterDemo.java

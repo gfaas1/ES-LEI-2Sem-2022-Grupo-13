@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2011-2018, by Robby McKilliam, Ernst de Ridder and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2011, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,48 +15,32 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* ----------------
- * StoerWagnerMinimumCut.java
- * ----------------
- * (C) Copyright 2011-2011, by Robby McKilliam and Contributors.
- *
- * Original Author:  Robby McKilliam
- * Contributor(s):   Ernst de Ridder
- *
- * $Id: StoerWagnerMinimumCut.java $
- *
- * Changes
- * -------
- *
- */
 package org.jgrapht.alg;
-
-import java.util.*;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 
+import java.util.*;
 
 /**
- * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and
- * Wagner minimum cut algorithm</a>. Deterministically computes the minimum cut
- * in O(|V||E| + |V|log|V|) time. This implementation uses Java's PriorityQueue
- * and requires O(|V||E|log|E|) time. M. Stoer and F. Wagner, "A Simple Min-Cut
- * Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591, 1997.
+ * Implements the <a href="http://dl.acm.org/citation.cfm?id=263872">Stoer and Wagner minimum cut
+ * algorithm</a>. Deterministically computes the minimum cut in $O(|V||E| + |V| \log |V|)$ time.
+ * This implementation uses Java's PriorityQueue and requires $O(|V||E| \log |E|)$ time. M. Stoer
+ * and F. Wagner, "A Simple Min-Cut Algorithm", Journal of the ACM, volume 44, number 4. pp 585-591,
+ * 1997.
  *
- * @author Robby McKilliam, Ernst de Ridder
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ *
+ * @author Robby McKilliam
+ * @author Ernst de Ridder
  */
 public class StoerWagnerMinimumCut<V, E>
 {
-    
-
-    final WeightedGraph<Set<V>, DefaultWeightedEdge> workingGraph;
+    final Graph<Set<V>, DefaultWeightedEdge> workingGraph;
 
     protected double bestCutWeight = Double.POSITIVE_INFINITY;
     protected Set<V> bestCut;
-
-    
 
     /**
      * Will compute the minimum cut in graph.
@@ -70,28 +50,26 @@ public class StoerWagnerMinimumCut<V, E>
      * @throws IllegalArgumentException if a negative weight edge is found
      * @throws IllegalArgumentException if graph has less than 2 vertices
      */
-    public StoerWagnerMinimumCut(UndirectedGraph<V, E> graph)
+    public StoerWagnerMinimumCut(Graph<V, E> graph)
     {
+        GraphTests.requireUndirected(graph, "Graph must be undirected");
+
         if (graph.vertexSet().size() < 2) {
-            throw new IllegalArgumentException(
-                "Graph has less than 2 vertices");
+            throw new IllegalArgumentException("Graph has less than 2 vertices");
         }
 
-        //get a version of this graph where each vertex is wrapped with a list
-        workingGraph =
-            new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
-                DefaultWeightedEdge.class);
-        Map<V, Set<V>> vertexMap = new HashMap<V, Set<V>>();
+        // get a version of this graph where each vertex is wrapped with a list
+        workingGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Map<V, Set<V>> vertexMap = new HashMap<>();
         for (V v : graph.vertexSet()) {
-            Set<V> list = new HashSet<V>();
+            Set<V> list = new HashSet<>();
             list.add(v);
             vertexMap.put(v, list);
             workingGraph.addVertex(list);
         }
         for (E e : graph.edgeSet()) {
             if (graph.getEdgeWeight(e) < 0.0) {
-                throw new IllegalArgumentException(
-                    "Negative edge weights not allowed");
+                throw new IllegalArgumentException("Negative edge weights not allowed");
             }
 
             V s = graph.getEdgeSource(e);
@@ -106,13 +84,12 @@ public class StoerWagnerMinimumCut<V, E>
                 eNew = workingGraph.addEdge(sNew, tNew);
                 workingGraph.setEdgeWeight(eNew, graph.getEdgeWeight(e));
             } else {
-                workingGraph.setEdgeWeight(
-                    eNew,
-                    workingGraph.getEdgeWeight(eNew) + graph.getEdgeWeight(e));
+                workingGraph
+                    .setEdgeWeight(eNew, workingGraph.getEdgeWeight(eNew) + graph.getEdgeWeight(e));
             }
         }
 
-        //arbitrary vertex used to seed the algorithm.
+        // arbitrary vertex used to seed the algorithm.
         Set<V> a = workingGraph.vertexSet().iterator().next();
 
         while (workingGraph.vertexSet().size() > 1) {
@@ -120,10 +97,10 @@ public class StoerWagnerMinimumCut<V, E>
         }
     }
 
-    
-
     /**
-     * Implements the MinimumCutPhase function of Stoer and Wagner
+     * Implements the MinimumCutPhase function of Stoer and Wagner.
+     * 
+     * @param a the vertex
      */
     protected void minimumCutPhase(Set<V> a)
     {
@@ -131,12 +108,10 @@ public class StoerWagnerMinimumCut<V, E>
         Set<V> last = a, beforelast = null;
 
         // queue contains vertices not in A ordered by max weight of edges to A.
-        PriorityQueue<VertexAndWeight> queue =
-            new PriorityQueue<VertexAndWeight>();
+        PriorityQueue<VertexAndWeight> queue = new PriorityQueue<>();
 
         // Maps vertices to elements of queue
-        Map<Set<V>, VertexAndWeight> dmap =
-            new HashMap<Set<V>, VertexAndWeight>();
+        Map<Set<V>, VertexAndWeight> dmap = new HashMap<>();
 
         // Initialize queue
         for (Set<V> v : workingGraph.vertexSet()) {
@@ -163,10 +138,10 @@ public class StoerWagnerMinimumCut<V, E>
                 Set<V> vc = Graphs.getOppositeVertex(workingGraph, e, v);
                 VertexAndWeight vcandw = dmap.get(vc);
                 if (vcandw != null) {
-                    queue.remove(vcandw); //this is O(logn) but could be O(1)?
+                    queue.remove(vcandw); // this is O(log n) but could be O(1)?
                     vcandw.active = true;
                     vcandw.weight += workingGraph.getEdgeWeight(e);
-                    queue.add(vcandw); //this is O(logn) but could be O(1)?
+                    queue.add(vcandw); // this is O(log n) but could be O(1)?
                 }
             }
         }
@@ -178,12 +153,14 @@ public class StoerWagnerMinimumCut<V, E>
             bestCut = last;
         }
 
-        //merge the last added vertices
+        // merge the last added vertices
         mergeVertices(beforelast, last);
     }
 
     /**
      * Return the weight of the minimum cut
+     * 
+     * @return the weight of the minimum cut
      */
     public double minCutWeight()
     {
@@ -192,6 +169,8 @@ public class StoerWagnerMinimumCut<V, E>
 
     /**
      * Return a set of vertices on one side of the cut
+     * 
+     * @return a set of vertices on one side of the cut
      */
     public Set<V> minCut()
     {
@@ -199,18 +178,23 @@ public class StoerWagnerMinimumCut<V, E>
     }
 
     /**
-     * Merges vertex t into vertex s, summing the weights as required. Returns
-     * the merged vertex and the sum of its weights
+     * Merges vertex $t$ into vertex $s$, summing the weights as required. Returns the merged vertex
+     * and the sum of its weights
+     * 
+     * @param s the first vertex
+     * @param t the second vertex
+     * 
+     * @return the merged vertex and its weight
      */
     protected VertexAndWeight mergeVertices(Set<V> s, Set<V> t)
     {
-        //construct the new combinedvertex
-        Set<V> set = new HashSet<V>();
+        // construct the new combinedvertex
+        Set<V> set = new HashSet<>();
         set.addAll(s);
         set.addAll(t);
         workingGraph.addVertex(set);
 
-        //add edges and weights to the combined vertex
+        // add edges and weights to the combined vertex
         double wsum = 0.0;
         for (Set<V> v : workingGraph.vertexSet()) {
             if ((s != v) && (t != v)) {
@@ -225,14 +209,12 @@ public class StoerWagnerMinimumCut<V, E>
                 }
                 if ((etv != null) || (esv != null)) {
                     wsum += neww;
-                    workingGraph.setEdgeWeight(
-                        workingGraph.addEdge(set, v),
-                        neww);
+                    workingGraph.setEdgeWeight(workingGraph.addEdge(set, v), neww);
                 }
             }
         }
 
-        //remove original vertices
+        // remove original vertices
         workingGraph.removeVertex(t);
         workingGraph.removeVertex(s);
 
@@ -241,6 +223,9 @@ public class StoerWagnerMinimumCut<V, E>
 
     /**
      * Compute the sum of the weights entering a vertex
+     * 
+     * @param v the vertex
+     * @return the sum of the weights entering a vertex
      */
     public double vertexWeight(Set<V> v)
     {
@@ -251,18 +236,24 @@ public class StoerWagnerMinimumCut<V, E>
         return wsum;
     }
 
-    
-
     /**
      * Class for weighted vertices
      */
     protected class VertexAndWeight
-        implements Comparable<VertexAndWeight>
+        implements
+        Comparable<VertexAndWeight>
     {
         public Set<V> vertex;
         public Double weight;
         public boolean active; // active == neighbour in A
 
+        /**
+         * Construct a new weighted vertex.
+         * 
+         * @param v the vertex
+         * @param w the weight of the vertex
+         * @param active whether it is active
+         */
         public VertexAndWeight(Set<V> v, double w, boolean active)
         {
             this.vertex = v;
@@ -271,10 +262,11 @@ public class StoerWagnerMinimumCut<V, E>
         }
 
         /**
-         * compareTo that sorts in reverse order because we need extract-max and
-         * queue provides extract-min.
+         * compareTo that sorts in reverse order because we need extract-max and queue provides
+         * extract-min.
          */
-        @Override public int compareTo(VertexAndWeight that)
+        @Override
+        public int compareTo(VertexAndWeight that)
         {
             if (this.active && that.active) {
                 return -Double.compare(weight, that.weight);
@@ -290,7 +282,8 @@ public class StoerWagnerMinimumCut<V, E>
             return 0;
         }
 
-        @Override public String toString()
+        @Override
+        public String toString()
         {
             return "(" + vertex + ", " + weight + ")";
         }

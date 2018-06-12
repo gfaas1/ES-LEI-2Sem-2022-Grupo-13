@@ -1,11 +1,7 @@
-/* ==========================================
+/*
+ * (C) Copyright 2009-2018, by Ilya Razenshteyn and Contributors.
+ *
  * JGraphT : a free Java graph-theory library
- * ==========================================
- *
- * Project Info:  http://jgrapht.sourceforge.net/
- * Project Creator:  Barak Naveh (http://sourceforge.net/users/barak_naveh)
- *
- * (C) Copyright 2003-2009, by Barak Naveh and Contributors.
  *
  * This program and the accompanying materials are dual-licensed under
  * either
@@ -19,20 +15,6 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-/* -------------------------
- * WeightCombiner.java
- * -------------------------
- * (C) Copyright 2009-2009, by Ilya Razenshteyn
- *
- * Original Author:  Ilya Razenshteyn and Contributors.
- *
- * $Id$
- *
- * Changes
- * -------
- * 02-Feb-2009 : Initial revision (IR);
- *
- */
 package org.jgrapht.util;
 
 /**
@@ -40,64 +22,35 @@ package org.jgrapht.util;
  */
 public interface WeightCombiner
 {
-    
-
     /**
      * Sum of weights.
      */
-    public WeightCombiner SUM =
-        new WeightCombiner() {
-            public double combine(double a, double b)
-            {
-                return a + b;
-            }
-        };
+    WeightCombiner SUM = (a, b) -> a + b;
+
+    /**
+     * Multiplication of weights.
+     */
+    WeightCombiner MULT = (a, b) -> a * b;
 
     /**
      * Minimum weight.
      */
-    public WeightCombiner MIN =
-        new WeightCombiner() {
-            public double combine(double a, double b)
-            {
-                return Math.min(a, b);
-            }
-        };
+    WeightCombiner MIN = Math::min;
 
     /**
      * Maximum weight.
      */
-    public WeightCombiner MAX =
-        new WeightCombiner() {
-            public double combine(double a, double b)
-            {
-                return Math.max(a, b);
-            }
-        };
+    WeightCombiner MAX = Math::max;
 
     /**
      * First weight.
      */
-    public WeightCombiner FIRST =
-        new WeightCombiner() {
-            public double combine(double a, double b)
-            {
-                return a;
-            }
-        };
+    WeightCombiner FIRST = (a, b) -> a;
 
     /**
      * Second weight.
      */
-    public WeightCombiner SECOND =
-        new WeightCombiner() {
-            public double combine(double a, double b)
-            {
-                return b;
-            }
-        };
-
-    
+    WeightCombiner SECOND = (a, b) -> b;
 
     /**
      * Combines two weights.
