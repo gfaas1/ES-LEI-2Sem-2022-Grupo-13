@@ -242,38 +242,37 @@ public class BhandariKDisjointShortestPaths<V, E>
      * At the end of this method, each path contains unique edges but not necessarily connecting the
      * start to end vertex.
      * 
-     */
+     */    
     private void findOverlappingEdges()
     {
-        boolean found;
-        this.overlappingEdges = new HashSet<>();
-        V sourceE1, targetE1;
-        V sourceE2, targetE2;
-        // removing overlapping edges
-        for (int i = 0; i < pathList.size() - 1; i++) {
-            for (E e1 : pathList.get(i)) {
-                sourceE1 = workingGraph.getEdgeSource(e1);
-                targetE1 = workingGraph.getEdgeTarget(e1);
-                found = false;
-                for (int j = i + 1; j < pathList.size(); j++) {
-                    for (E e2 : pathList.get(j)) {
-                        sourceE2 = workingGraph.getEdgeSource(e2);
-                        targetE2 = workingGraph.getEdgeTarget(e2);
-                        // graph is directed, checking both options.
-                        if ((sourceE1.equals(sourceE2) && targetE1.equals(targetE2))
-                            || (sourceE1.equals(targetE2) && targetE1.equals(sourceE2)))
-                        {
-                            found = true;
-                            this.overlappingEdges.add(e2);
-                        }
-                    }
-                }
-                if (found) {
-                    this.overlappingEdges.add(e1);
-                }
+        //building a multigraph containing all the vertices and edges
+        //exist in any path
+        Graph<V, E> pathsGraph = new Multigraph<>(
+            workingGraph.getVertexSupplier(), workingGraph.getEdgeSupplier(), true);
+        for (List<E> path : pathList) {
+            for (E e : path) {
+                V source = workingGraph.getEdgeSource(e);
+                V target = workingGraph.getEdgeTarget(e);
+                pathsGraph.addVertex(source);
+                pathsGraph.addVertex(target);
+                pathsGraph.addEdge(source, target, e);
             }
         }
 
+        this.overlappingEdges = new HashSet<>();
+        for (E e : pathsGraph.edgeSet()) {
+            if (this.overlappingEdges.contains(e)) {
+                continue;
+            }
+            V source = pathsGraph.getEdgeSource(e);
+            V target = pathsGraph.getEdgeTarget(e);
+            //If there exist more than a single edge between the two
+            //vertices (disregarding direction) - all are overlapping 
+            Set<E> allEdges = pathsGraph.getAllEdges(source, target);
+            if (allEdges.size() > 1) {
+                this.overlappingEdges.addAll(allEdges);
+            }
+        }
     }
 
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex)
