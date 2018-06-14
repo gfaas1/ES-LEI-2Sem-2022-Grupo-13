@@ -28,7 +28,6 @@ import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.generate.GnpRandomBipartiteGraphGenerator;
 import org.jgrapht.generate.NamedGraphGenerator;
 import org.jgrapht.generate.StarGraphGenerator;
-import org.jgrapht.graph.AsUnweightedDirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
@@ -579,9 +578,9 @@ public class GraphTestsTest
         }
     }
 
-    @Test public void testRequireIsWeighted() {
-        Graph graph =
-            new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
+    @Test public void testRequireIsWeighted()
+    {
+        Graph graph = new DefaultUndirectedWeightedGraph<>(DefaultEdge.class);
         assertEquals(graph, GraphTests.requireWeighted(graph));
     }
 }

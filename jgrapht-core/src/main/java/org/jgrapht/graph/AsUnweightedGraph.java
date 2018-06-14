@@ -18,9 +18,9 @@
 package org.jgrapht.graph;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
 import org.jgrapht.GraphType;
 
 /**
@@ -47,11 +47,11 @@ public class AsUnweightedGraph<V, E>
      * Constructor for AsUnweightedGraph.
      *
      * @param g the backing directed graph over which an undirected view is to be created.
-     * @throws IllegalArgumentException if the graph is not directed
+     * @throws NullPointerException if the graph is null
      */
     public AsUnweightedGraph(Graph<V, E> g)
     {
-        super(GraphTests.requireWeighted(g));
+        super(Objects.requireNonNull(g));
     }
 
     @Override public double getEdgeWeight(E e)

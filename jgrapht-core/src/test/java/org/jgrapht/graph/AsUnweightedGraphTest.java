@@ -23,10 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 public class AsUnweightedGraphTest
 {
@@ -88,12 +87,10 @@ public class AsUnweightedGraphTest
     @Test public void failOnCreationOfUnweightedGraph()
     {
         try {
-            Graph<String, DefaultWeightedEdge> graph =
-                new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
-            new AsUnweightedGraph<>(graph);
-            fail("Expected an IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("Graph must be weighted"));
+            new AsUnweightedGraph<>(null);
+            fail("Expected an NullPointerException to be thrown");
+        } catch (NullPointerException e) {
+            assertNotNull(e);
         }
     }
 }
