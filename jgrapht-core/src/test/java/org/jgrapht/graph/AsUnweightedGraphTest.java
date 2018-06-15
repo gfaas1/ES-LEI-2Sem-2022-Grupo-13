@@ -79,6 +79,14 @@ public class AsUnweightedGraphTest
         assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(loop), 0);
     }
 
+    @Test public void setEdgeWeight()
+    {
+        this.unweightedGraph.setEdgeWeight(e23, 81);
+
+        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e23), 0);
+        assertFalse(this.unweightedGraph.getType().isWeighted());
+    }
+
     @Test public void getType()
     {
         assertFalse(this.unweightedGraph.getType().isWeighted());
