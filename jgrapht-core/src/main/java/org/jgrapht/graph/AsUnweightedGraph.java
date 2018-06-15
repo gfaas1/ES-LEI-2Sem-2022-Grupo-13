@@ -42,6 +42,7 @@ public class AsUnweightedGraph<V, E>
 {
 
     private static final long serialVersionUID = -5186421272597767751L;
+    private static final String EDGE_WEIGHT_IS_NOT_SUPPORTED = "Edge weight is not supported";
 
     /**
      * Constructor for AsUnweightedGraph.
@@ -57,6 +58,11 @@ public class AsUnweightedGraph<V, E>
     @Override public double getEdgeWeight(E e)
     {
         return Graph.DEFAULT_EDGE_WEIGHT;
+    }
+
+    @Override public void setEdgeWeight(E e, double weight)
+    {
+        throw new UnsupportedOperationException(EDGE_WEIGHT_IS_NOT_SUPPORTED);
     }
 
     @Override public GraphType getType()

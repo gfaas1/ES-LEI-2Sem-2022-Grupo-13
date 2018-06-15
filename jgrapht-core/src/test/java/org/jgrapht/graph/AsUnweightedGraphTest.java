@@ -23,9 +23,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class AsUnweightedGraphTest
 {
@@ -81,10 +83,11 @@ public class AsUnweightedGraphTest
 
     @Test public void setEdgeWeight()
     {
-        this.unweightedGraph.setEdgeWeight(e23, 81);
-
-        assertEquals(Graph.DEFAULT_EDGE_WEIGHT, this.unweightedGraph.getEdgeWeight(e23), 0);
-        assertFalse(this.unweightedGraph.getType().isWeighted());
+        try {
+            this.unweightedGraph.setEdgeWeight(e23, 81);
+        } catch (UnsupportedOperationException e) {
+            assertThat(e.getMessage(), is("Edge weight is not supported"));
+        }
     }
 
     @Test public void getType()
