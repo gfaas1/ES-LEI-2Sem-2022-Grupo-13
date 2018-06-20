@@ -36,7 +36,8 @@ import java.util.*;
  * degree.
  * 
  * <p>
- * Note that this Barabàsi-Albert generator only works on undirected graphs.
+ * Note that this Barabàsi-Albert generator only works on undirected graphs. For a version that works on both directed
+ * and undirected graphs and generates only connected graphs see {@link BarabasiAlbertGraphGenerator}.
  * 
  * @author Alexandru Valeanu
  * @since June 2018
