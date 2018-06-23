@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2018, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -22,15 +22,19 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
 import org.jgrapht.GraphType;
 
 /**
- * Provides a weighted view on a graph
+ * Provides a weighted view on a graph.
  *
  * Algorithms designed for weighted graphs should also work on unweighted graphs. This class
- * emulates an weighted graph based on a unweighted one by handling the storage of edge weights
+ * emulates a weighted graph based on a backing one by handling the storage of edge weights
  * internally and passing all other operations on the underlying graph. As a consequence, the edges
  * returned are the edges of the original graph.
+ *
+ * Additionally, if the underlying graph is a weighted one, the weights can be propagated to it. The
+ * default implementation does not propagate the changes, creating a weighted view only.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -42,18 +46,41 @@ public class AsWeightedGraph<V, E>
 
     private static final long serialVersionUID = -6838132233557L;
     private final Map<E, Double> weights;
+    private final boolean writeWeightsThrough;
 
     /**
-     * Constructor for AsWeightedGraph
+     * Constructor for AsWeightedGraph creating a weighted view which does not change the backing
+     * graph's edge weights.
      *
      * @param graph   the backing graph over which an weighted view is to be created.
-     * @param weights the map containing the edge weights
-     * @throws NullPointerException if the graph is null
+     * @param weights the map containing the edge weights.
+     * @throws NullPointerException if the graph or the weights are null.
      */
     public AsWeightedGraph(Graph<V, E> graph, Map<E, Double> weights)
     {
+        this(graph, weights, false);
+    }
+
+    /**
+     * Constructor for AsWeightedGraph.
+     *
+     * @param graph               the backing graph over which an weighted view is to be created
+     * @param weights             the map containing the edge weights
+     * @param writeWeightsThrough if set to true, the weights will get propagated to the backing graph.
+     * @throws NullPointerException     if the graph or the weights are null
+     * @throws IllegalArgumentException if <code>writeWeightsThrough</code> is set to true and
+     *                                  <code>graph</code> is not a weighted graph
+     */
+    public AsWeightedGraph(Graph<V, E> graph, Map<E, Double> weights, boolean writeWeightsThrough)
+    {
         super(graph);
-        this.weights = weights;
+        this.weights = Objects.requireNonNull(weights);
+        this.writeWeightsThrough = writeWeightsThrough;
+
+        if (this.writeWeightsThrough) {
+            GraphTests.requireWeighted(graph);
+            weights.forEach(graph::setEdgeWeight);
+        }
     }
 
     /**
@@ -67,7 +94,6 @@ public class AsWeightedGraph<V, E>
      */
     @Override public double getEdgeWeight(E e)
     {
-        Objects.requireNonNull(e);
         Double weight = this.weights.get(e);
 
         if (Objects.isNull(weight)) {
@@ -86,8 +112,11 @@ public class AsWeightedGraph<V, E>
      */
     @Override public void setEdgeWeight(E e, double weight)
     {
-        Objects.requireNonNull(e);
-        this.weights.put(e, weight);
+        this.weights.put(Objects.requireNonNull(e), weight);
+
+        if (this.writeWeightsThrough) {
+            this.getDelegate().setEdgeWeight(e, weight);
+        }
     }
 
     @Override public GraphType getType()

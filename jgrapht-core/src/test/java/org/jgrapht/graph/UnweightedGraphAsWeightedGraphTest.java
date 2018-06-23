@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018, by Lukas Harzenetter and Contributors.
+ * (C) Copyright 2018-2018, by Lukas Harzenetter and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -21,14 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphType;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
 import static org.jgrapht.Graph.DEFAULT_EDGE_WEIGHT;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class UnweightedGraphAsWeightedGraphTest
@@ -37,18 +35,18 @@ public class UnweightedGraphAsWeightedGraphTest
     private DefaultWeightedEdge loop;
 
     private DefaultWeightedEdge e12;
-    private double e12Weight = -123.54d;
+    private final double e12Weight = -123.54d;
 
     private DefaultWeightedEdge e23;
-    private double e23Weight = 89d;
+    private final double e23Weight = 89d;
 
     private DefaultWeightedEdge e24;
-    private double e24Weight = 3d;
+    private final double e24Weight = 3d;
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
+    private final String v1 = "v1";
+    private final String v2 = "v2";
+    private final String v3 = "v3";
+    private final String v4 = "v4";
 
     private Graph<String, DefaultWeightedEdge> weightedGraph;
 
@@ -119,5 +117,18 @@ public class UnweightedGraphAsWeightedGraphTest
     @Test public void testGetType()
     {
         assertTrue(this.weightedGraph.getType().isWeighted());
+    }
+
+    @Test public void createAsWeightedGraphWithWeightPropagationOnAnUnweightedGraph()
+    {
+        try {
+            new AsWeightedGraph<>(
+                new DefaultUndirectedGraph<>(String.class),
+                new HashMap<>(),
+                true);
+            fail("Expected a IllegalArgumentException");
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalArgumentException);
+        }
     }
 }
