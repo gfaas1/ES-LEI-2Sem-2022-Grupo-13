@@ -26,10 +26,7 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -242,6 +239,21 @@ public class GraphMetricsTest
         }
     }
 
+    private static long naiveCountTriangles(Graph<Integer, DefaultEdge> graph){
+        long naiveCount = 0;
+
+        try {
+            Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
+            method.setAccessible(true);
+            naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
+
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return naiveCount;
+    }
+
     @Test
     public void testCountTriangles(){
         final int NUM_TESTS = 300;
@@ -259,18 +271,7 @@ public class GraphMetricsTest
 
             generator.generateGraph(graph);
 
-            long naiveCount = 0;
-
-            try {
-                Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
-                method.setAccessible(true);
-                naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
-
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            Assert.assertEquals(naiveCount, GraphMetrics.getNumberOfTriangles(graph));
+            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 
@@ -291,18 +292,59 @@ public class GraphMetricsTest
 
             generator.generateGraph(graph);
 
-            long naiveCount = 0;
-
-            try {
-                Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
-                method.setAccessible(true);
-                naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
-
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            Assert.assertEquals(naiveCount, GraphMetrics.getNumberOfTriangles(graph));
+            Assert.assertEquals(naiveCountTriangles(graph), GraphMetrics.getNumberOfTriangles(graph));
         }
+    }
+
+    @Test
+    public void testCountTriangles3(){
+        Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                SupplierUtil.createIntegerSupplier(),
+                SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+        // Complete graph: expected (|V| choose 3)
+
+        GraphGenerator<Integer, DefaultEdge, Integer> generator = new CompleteGraphGenerator<>(50);
+        generator.generateGraph(graph);
+
+        Assert.assertEquals(50 * 49 * 48 / 6, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(50 * 49 * 48 / 6, naiveCountTriangles(graph));
+
+        // Wheel graph: expected |V|-1 triangles
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        generator = new WheelGraphGenerator<>(50);
+        generator.generateGraph(graph);
+
+        Assert.assertEquals(49, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(49, naiveCountTriangles(graph));
+
+        // Named graphs
+
+        NamedGraphGenerator<Integer, DefaultEdge> gen = new NamedGraphGenerator<>();
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generatePetersenGraph(graph);
+
+        Assert.assertEquals(0, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(0, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateDiamondGraph(graph);
+
+        Assert.assertEquals(2, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(2, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateGoldnerHararyGraph(graph);
+
+        Assert.assertEquals(25, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(25, naiveCountTriangles(graph));
+
+        graph.removeAllVertices(new HashSet<>(graph.vertexSet()));
+        gen.generateKlein7RegularGraph(graph);
+
+        Assert.assertEquals(56, GraphMetrics.getNumberOfTriangles(graph));
+        Assert.assertEquals(56, naiveCountTriangles(graph));
     }
 }
