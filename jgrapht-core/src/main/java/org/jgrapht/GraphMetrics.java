@@ -265,10 +265,16 @@ public abstract class GraphMetrics
         /*
             The book suggest the following comparator: "Compare vertices based on their degree.
             If equal compare them of their actual value, since they are all integers".
-
-            They are not integers in this implementation so we compare them on their hashCode.
          */
-        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(System::identityHashCode);
+
+        // fix edge order for unique comparison of edge weights
+        Map<V, Integer> vertexOrder = new HashMap<>(graph.vertexSet().size());
+        int k = 0;
+        for (V v : graph.vertexSet()) {
+            vertexOrder.put(v, k++);
+        }
+
+        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(vertexOrder::get);
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
