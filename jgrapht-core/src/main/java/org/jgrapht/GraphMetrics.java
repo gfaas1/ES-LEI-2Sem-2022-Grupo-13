@@ -211,8 +211,8 @@ public abstract class GraphMetrics
     }
 
     /**
-     * An $O(|V|^3)$ naive implementation for counting non-trivial triangles in an undirected graph
-     * induced by the subset of vertices.
+     * An $O(|V|^3)$ (assuming vertexSubset provides constant time indexing) naive implementation
+     * for counting non-trivial triangles in an undirected graph induced by the subset of vertices.
      *
      * @param graph the input graph
      * @param vertexSubset the vertex subset
@@ -268,16 +268,16 @@ public abstract class GraphMetrics
 
             They are not integers in this implementation so we compare them on their hashCode.
          */
-        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(Object::hashCode);
+        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(System::identityHashCode);
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
-        Set<V> heavyHitterVertices = vertexList.stream()
+        List<V> heavyHitterVertices = vertexList.stream()
                 .filter(x -> graph.degreeOf(x) >= sqrtV)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(ArrayList::new));
 
         // count the number of triangles formed from only heavy-hitter vertices
-        long numberTriangles = naiveCountTriangles(graph, new ArrayList<>(heavyHitterVertices));
+        long numberTriangles = naiveCountTriangles(graph, heavyHitterVertices);
 
         for (E edge: graph.edgeSet()){
             V v1 = graph.getEdgeSource(edge);
@@ -288,7 +288,7 @@ public abstract class GraphMetrics
             }
 
             if (graph.degreeOf(v1) < sqrtV || graph.degreeOf(v2) < sqrtV){
-                // ensure that v1 <= v2 (swap them otherwise
+                // ensure that v1 <= v2 (swap them otherwise)
                 if (comparator.compare(v1, v2) > 0){
                     V tmp = v1;
                     v1 = v2;
