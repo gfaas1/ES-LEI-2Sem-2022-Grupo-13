@@ -211,23 +211,24 @@ public abstract class GraphMetrics
     }
 
     /**
-     * An $O(|V|^3)$ naive implementation for counting non-trivial triangles in an undirected graph.
+     * An $O(|V|^3)$ naive implementation for counting non-trivial triangles in an undirected graph
+     * induced by the subset of vertices.
      *
      * @param graph the input graph
-     * @param vertices the vertex list
+     * @param vertexSubset the vertex subset
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
-     * @return the number of triangles in the graph
+     * @return the number of triangles in the graph induced by vertexSubset
      */
-    private static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertices){
+    private static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertexSubset){
         long total = 0;
 
-        for (int i = 0; i < vertices.size(); i++) {
-            for (int j = i + 1; j < vertices.size(); j++) {
-                for (int k = j + 1; k < vertices.size(); k++) {
-                    V u = vertices.get(i);
-                    V v = vertices.get(j);
-                    V w = vertices.get(k);
+        for (int i = 0; i < vertexSubset.size(); i++) {
+            for (int j = i + 1; j < vertexSubset.size(); j++) {
+                for (int k = j + 1; k < vertexSubset.size(); k++) {
+                    V u = vertexSubset.get(i);
+                    V v = vertexSubset.get(j);
+                    V w = vertexSubset.get(k);
 
                     if (graph.containsEdge(u, v) && graph.containsEdge(v, w) && graph.containsEdge(w, u)){
                         total++;
@@ -244,7 +245,8 @@ public abstract class GraphMetrics
      * A non-trivial triangle is formed by tree distinct vertices all connected to each others.
      *
      * <p>
-     * See "Mining of Massive Datasets" by J. Ullman for more details of this algorithm.
+     * For more details of this algorithm see Ullman, Jeffrey: "Mining of Massive Datasets", Cambridge University Press,
+     * Chapter 10
      *
      * @param graph the input graph
      * @param <V> the graph vertex type
@@ -281,7 +283,7 @@ public abstract class GraphMetrics
             V v1 = graph.getEdgeSource(edge);
             V v2 = graph.getEdgeTarget(edge);
 
-            if (v1.equals(v2)){
+            if (v1 == v2){
                 continue;
             }
 
@@ -297,7 +299,7 @@ public abstract class GraphMetrics
                     V u = Graphs.getOppositeVertex(graph, e, v1);
 
                     // check if the triangle is non-trivial: u, v1, v2 are distinct vertices
-                    if (u.equals(v1) || u.equals(v2)) {
+                    if (u == v1 || u == v2) {
                         continue;
                     }
 
