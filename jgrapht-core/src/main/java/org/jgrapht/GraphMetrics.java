@@ -17,15 +17,17 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.shortestpath.*;
-import org.jgrapht.alg.util.*;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
+import org.jgrapht.alg.util.NeighborCache;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Collection of methods which provide numerical graph information.
  *
  * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public abstract class GraphMetrics
 {
@@ -206,6 +208,112 @@ public abstract class GraphMetrics
             || graph.getType().isAllowingSelfLoops() && girth >= 1 || girth >= 2
                 && (graph.getType().isDirected() || graph.getType().isAllowingMultipleEdges());
         return girth;
+    }
+
+    /**
+     * An $O(|V|^3)$ naive implementation for counting non-trivial triangles in an undirected graph.
+     *
+     * @param graph the input graph
+     * @param vertices the vertex list
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return the number of triangles in the graph
+     */
+    private static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertices){
+        long total = 0;
+
+        for (int i = 0; i < vertices.size(); i++) {
+            for (int j = i + 1; j < vertices.size(); j++) {
+                for (int k = j + 1; k < vertices.size(); k++) {
+                    V u = vertices.get(i);
+                    V v = vertices.get(j);
+                    V w = vertices.get(k);
+
+                    if (graph.containsEdge(u, v) && graph.containsEdge(v, w) && graph.containsEdge(w, u)){
+                        total++;
+                    }
+                }
+            }
+        }
+
+        return total;
+    }
+
+    /**
+     * An $O(|E|^{3/2})$ algorithm for counting the number of non-trivial triangles in an undirected graph.
+     * A non-trivial triangle is formed by tree distinct vertices all connected to each others.
+     *
+     * <p>
+     * See "Mining of Massive Datasets" by J. Ullman for more details of this algorithm.
+     *
+     * @param graph the input graph
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     * @return the number of triangles in the graph
+     * @throws NullPointerException if {@code graph} is {@code null}
+     * @throws IllegalArgumentException if {@code graph} is not undirected
+     */
+    public static <V, E> long getNumberOfTriangles(Graph<V, E> graph){
+        GraphTests.requireUndirected(graph);
+
+        final int sqrtV = (int)Math.sqrt(graph.vertexSet().size());
+
+        List<V> vertexList = new ArrayList<>(graph.vertexSet());
+
+        /*
+            The book suggest the following comparator: "Compare vertices based on their degree.
+            If equal compare them of their actual value, since they are all integers".
+
+            They are not integers in this implementation so we compare them on their hashCode.
+         */
+        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(Object::hashCode);
+        vertexList.sort(comparator);
+
+        // vertex v is a heavy-hitter iff degree(v) >= sqrtV
+        Set<V> heavyHitterVertices = vertexList.stream()
+                .filter(x -> graph.degreeOf(x) >= sqrtV)
+                .collect(Collectors.toSet());
+
+        // count the number of triangles formed from only heavy-hitter vertices
+        long numberTriangles = naiveCountTriangles(graph, new ArrayList<>(heavyHitterVertices));
+
+        for (E edge: graph.edgeSet()){
+            V v1 = graph.getEdgeSource(edge);
+            V v2 = graph.getEdgeTarget(edge);
+
+            if (v1.equals(v2)){
+                continue;
+            }
+
+            if (graph.degreeOf(v1) < sqrtV || graph.degreeOf(v2) < sqrtV){
+                // ensure that v1 <= v2 (swap them otherwise
+                if (comparator.compare(v1, v2) > 0){
+                    V tmp = v1;
+                    v1 = v2;
+                    v2 = tmp;
+                }
+
+                for (E e: graph.edgesOf(v1)){
+                    V u = Graphs.getOppositeVertex(graph, e, v1);
+
+                    // check if the triangle is non-trivial: u, v1, v2 are distinct vertices
+                    if (u.equals(v1) || u.equals(v2)) {
+                        continue;
+                    }
+
+                    /*
+                        Check if v2 <= u and if (u, v2) is a valid edge.
+                        If both of them are true, then we have a new triangle (v1, v2, u) and all three vertices
+                        in the triangle are ordered (v1 <= v2 <= u) so we count it only once.
+                     */
+                    if (comparator.compare(v2, u) <= 0 && graph.containsEdge(u, v2)){
+                        numberTriangles++;
+                    }
+                }
+            }
+        }
+
+        return numberTriangles;
     }
 }
 

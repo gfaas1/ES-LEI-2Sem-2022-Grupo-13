@@ -17,25 +17,32 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.cycle.*;
+import org.jgrapht.alg.cycle.TarjanSimpleCycles;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import org.jgrapht.util.SupplierUtil;
+import org.junit.Assert;
+import org.junit.Test;
 
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for GraphMetrics
  * 
  * @author Joris Kinable
+ * @author Alexandru Valeanu
  */
 public class GraphMetricsTest
 {
 
-    private final double EPSILON = 0.000000001;
+    private final static double EPSILON = 0.000000001;
 
     @Test
     public void testGraphDiameter()
@@ -232,6 +239,70 @@ public class GraphMetricsTest
                 .findSimpleCycles().stream().mapToInt(List::size).min().orElse(Integer.MAX_VALUE);
 
             assertEquals(minCycle, GraphMetrics.getGirth(graph));
+        }
+    }
+
+    @Test
+    public void testCountTriangles(){
+        final int NUM_TESTS = 300;
+        Random random = new Random(0x88_88);
+
+        for (int test = 0; test < NUM_TESTS; test++) {
+            final int N = 20 + random.nextInt(100);
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator =
+                    new BarabasiAlbertGraphGenerator<>(10 + random.nextInt(10), 1 + random.nextInt(7), N, random);
+
+            generator.generateGraph(graph);
+
+            long naiveCount = 0;
+
+            try {
+                Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
+                method.setAccessible(true);
+                naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
+
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            Assert.assertEquals(naiveCount, GraphMetrics.getNumberOfTriangles(graph));
+        }
+    }
+
+    @Test
+    public void testCountTriangles2(){
+        final int NUM_TESTS = 100;
+        Random random = new Random(0x88_88);
+
+        for (int test = 0; test < NUM_TESTS; test++) {
+            final int N = 1 + random.nextInt(100);
+
+            Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
+                    SupplierUtil.createIntegerSupplier(),
+                    SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
+
+            GraphGenerator<Integer, DefaultEdge, Integer> generator =
+                    new GnpRandomGraphGenerator<>(N, .55, random.nextInt());
+
+            generator.generateGraph(graph);
+
+            long naiveCount = 0;
+
+            try {
+                Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
+                method.setAccessible(true);
+                naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
+
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            Assert.assertEquals(naiveCount, GraphMetrics.getNumberOfTriangles(graph));
         }
     }
 }
