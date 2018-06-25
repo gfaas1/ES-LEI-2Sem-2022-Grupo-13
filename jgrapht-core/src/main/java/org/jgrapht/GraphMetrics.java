@@ -267,14 +267,17 @@ public abstract class GraphMetrics
             If equal compare them of their actual value, since they are all integers".
          */
 
-        // fix edge order for unique comparison of edge weights
+        // Fix vertex order for unique comparison of vertices
         Map<V, Integer> vertexOrder = new HashMap<>(graph.vertexSet().size());
         int k = 0;
         for (V v : graph.vertexSet()) {
             vertexOrder.put(v, k++);
         }
 
-        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf).thenComparingInt(vertexOrder::get);
+        Comparator<V> comparator = Comparator.comparingInt(graph::degreeOf)
+                .thenComparingInt(System::identityHashCode)
+                .thenComparingInt(vertexOrder::get);
+
         vertexList.sort(comparator);
 
         // vertex v is a heavy-hitter iff degree(v) >= sqrtV
