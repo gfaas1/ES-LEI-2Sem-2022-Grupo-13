@@ -12,6 +12,8 @@ Changes to JGraphT in each version:
     - Added new implementation of `AsUnweightedGraph` (contributed by Lukas Harzenetter)
     - Added pull request template (contributed by Oliver Kopp)
     - Added `GraphSpecificsStrategy` and use the same edge set factory consistently (contributed by Dimitrios Michail)
+    - Added user overview doc (contributed by John Sichi)
+    - Clarified definition of `SimpleGraph` (contributed by Joris Kinable)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
