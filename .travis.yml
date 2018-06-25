@@ -7,9 +7,9 @@ before_install:
   - npm install -g hercule
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn verify -B && mvn javadoc:aggregate && mvn checkstyle:check -P checkstyle
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then etc/prepareDocs.sh; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then etc/prepareDocs.sh; fi
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then mvn deploy -DskipTests=true --settings etc/snapshot-settings.xml; fi
 deploy:
   provider: pages
   skip-cleanup: true
