@@ -242,7 +242,7 @@ public abstract class GraphMetrics
 
     /**
      * An $O(|E|^{3/2})$ algorithm for counting the number of non-trivial triangles in an undirected graph.
-     * A non-trivial triangle is formed by tree distinct vertices all connected to each others.
+     * A non-trivial triangle is formed by three distinct vertices all connected to each other.
      *
      * <p>
      * For more details of this algorithm see Ullman, Jeffrey: "Mining of Massive Datasets", Cambridge University Press,
