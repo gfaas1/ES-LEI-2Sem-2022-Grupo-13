@@ -1,3 +1,10 @@
+---
+title: Labeled Edges
+---
+
+# {{ page.title }}
+
+
 A common requirement for JGraphT applications is the need to associate a label
 with each edge.  This can be accomplished efficiently via a custom edge class:
 

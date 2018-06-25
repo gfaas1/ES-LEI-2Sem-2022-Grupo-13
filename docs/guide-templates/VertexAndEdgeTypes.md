@@ -1,9 +1,17 @@
-# Vertex and Edge Types
+---
+title: Vertex and Edge Types
+---
+
+# {{ page.title }}
+{:.no_toc}
 
 When constructing a JGraphT graph, it's important to select the vertex
 and edge types carefully in order to ensure correct behavior while
 satisfying application requirements.  This page walks through a number
-of variations based on common application use cases.
+of variations based on common application use cases:
+
+1. Table of contents
+{:toc}
 
 ## equals and hashCode
 
