@@ -220,7 +220,7 @@ public abstract class GraphMetrics
      * @param <E> the graph edge type
      * @return the number of triangles in the graph induced by vertexSubset
      */
-    private static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertexSubset){
+     static <V, E> long naiveCountTriangles(Graph<V, E> graph, List<V> vertexSubset){
         long total = 0;
 
         for (int i = 0; i < vertexSubset.size(); i++) {

@@ -24,8 +24,6 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -240,18 +238,7 @@ public class GraphMetricsTest
     }
 
     private static long naiveCountTriangles(Graph<Integer, DefaultEdge> graph){
-        long naiveCount = 0;
-
-        try {
-            Method method = GraphMetrics.class.getDeclaredMethod("naiveCountTriangles", Graph.class, List.class);
-            method.setAccessible(true);
-            naiveCount = (long)method.invoke(GraphMetrics.class, graph, new ArrayList<>(graph.vertexSet()));
-
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return naiveCount;
+        return GraphMetrics.naiveCountTriangles(graph, new ArrayList<>(graph.vertexSet()));
     }
 
     @Test
