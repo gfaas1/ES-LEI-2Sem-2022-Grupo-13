@@ -66,7 +66,8 @@ public class AsWeightedGraph<V, E>
      *
      * @param graph               the backing graph over which an weighted view is to be created
      * @param weights             the map containing the edge weights
-     * @param writeWeightsThrough if set to true, the weights will get propagated to the backing graph.
+     * @param writeWeightsThrough if set to true, the weights will get propagated to the backing
+     *                            graph in the <code>setEdgeWeight()</code> method.
      * @throws NullPointerException     if the graph or the weights are null
      * @throws IllegalArgumentException if <code>writeWeightsThrough</code> is set to true and
      *                                  <code>graph</code> is not a weighted graph
@@ -79,7 +80,6 @@ public class AsWeightedGraph<V, E>
 
         if (this.writeWeightsThrough) {
             GraphTests.requireWeighted(graph);
-            weights.forEach(graph::setEdgeWeight);
         }
     }
 
