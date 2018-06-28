@@ -66,7 +66,7 @@ public class HeavyPathDecomposition<V, E> {
     private Map<V, Integer> vertexMap;
     private List<V> indexList;
 
-    private int[] sizeSubtree, father, depth, component;
+    private int[] sizeSubtree, parent, depth, component;
     private int[] path, lengthPath, positionInPath, firstNodeInPath;
 
     private int numberOfPaths;
@@ -107,7 +107,7 @@ public class HeavyPathDecomposition<V, E> {
         final int n = graph.vertexSet().size();
 
         sizeSubtree = new int[n];
-        father = new int[n];
+        parent = new int[n];
         depth = new int[n];
         component = new int[n];
 
@@ -168,15 +168,15 @@ public class HeavyPathDecomposition<V, E> {
 
                 V vertexU = indexList.get(u);
                 for (E edge: graph.edgesOf(vertexU)){
-                    int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
+                    int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
                     /*
-                        Check if son has not been explored (i.e. dfs(son, c) has not been called)
+                        Check if child has not been explored (i.e. dfs(child, c) has not been called)
                      */
-                    if (!explored.contains(son)){
-                        father[son] = u;
-                        depth[son] = depth[u] + 1;
-                        stack.push(son);
+                    if (!explored.contains(child)){
+                        parent[child] = u;
+                        depth[child] = depth[u] + 1;
+                        stack.push(child);
                     }
                 }
             }
@@ -194,16 +194,16 @@ public class HeavyPathDecomposition<V, E> {
 
                 V vertexU = indexList.get(u);
                 for (E edge: graph.edgesOf(vertexU)){
-                    int son = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
+                    int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
                     /*
-                        Check if son if a descent of u and not its parent
+                        Check if child if a descent of u and not its parent
                      */
-                    if (son != father[u]){
-                        sizeSubtree[u] += sizeSubtree[son];
+                    if (child != parent[u]){
+                        sizeSubtree[u] += sizeSubtree[child];
 
-                        if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[son]) {
-                            heavySon = son;
+                        if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[child]) {
+                            heavySon = child;
                             heavyEdge = edge;
                         }
                     }
@@ -235,7 +235,7 @@ public class HeavyPathDecomposition<V, E> {
         normalizeGraph();
         allocateArrays();
 
-        Arrays.fill(father, -1);
+        Arrays.fill(parent, -1);
         Arrays.fill(path, -1);
         Arrays.fill(depth, -1);
         Arrays.fill(component, -1);
@@ -331,19 +331,19 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * Returns the father of vertex $v$ in the internal DFS tree/forest.
+     * Returns the parent of vertex $v$ in the internal DFS tree/forest.
      * If the vertex $v$ has not been explored or it is the root of its tree, $null$ will be returned.
      *
      * @param v vertex
-     * @return father of vertex $v$ in the DFS tree/forest
+     * @return parent of vertex $v$ in the DFS tree/forest
      */
-    public V getFather(V v){
+    public V getParent(V v){
         int index = vertexMap.getOrDefault(v, -1);
 
-        if (index == -1 || father[index] == -1)
+        if (index == -1 || parent[index] == -1)
             return null;
         else
-            return indexList.get(father[index]);
+            return indexList.get(parent[index]);
     }
 
     /**
@@ -428,14 +428,14 @@ public class HeavyPathDecomposition<V, E> {
 
 
     /**
-     * Return a copy of the internal father array.
-     * For each vertex $v \in V$, $fatherArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getFather(v) = u$ or
-     * $-1$ if $getFather(v) = null$.
+     * Return a copy of the internal parent array.
+     * For each vertex $v \in V$, $parentArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getParent(v) = u$ or
+     * $-1$ if $getParent(v) = null$.
      *
-     * @return internal father array
+     * @return internal parent array
      */
-    public int[] getFatherArray(){
-        return father.clone();
+    public int[] getParentArray(){
+        return parent.clone();
     }
 
     /**

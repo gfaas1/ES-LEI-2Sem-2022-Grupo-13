@@ -76,7 +76,7 @@ public class HeavyPathDecompositionTest {
                         cnt++;
                     }
 
-                    v = decomposition.getFather(v);
+                    v = decomposition.getParent(v);
                 }
 
                 maxim = Math.max(maxim, cnt);
