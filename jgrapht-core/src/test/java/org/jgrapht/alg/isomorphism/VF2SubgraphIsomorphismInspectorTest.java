@@ -180,7 +180,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs3 =
             new VF2SubgraphIsomorphismInspector<>(sg0v, sg4v3e);
 
-        assertEquals(Optional.of(false), vfs3.isomorphismExists());
+        assertEquals(false, vfs3.isomorphismExists());
 
         /* ECS-4: graph non-empty, subgraph single vertex */
 
@@ -208,7 +208,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs5 =
             new VF2SubgraphIsomorphismInspector<>(sg0v, sg1v);
 
-        assertEquals(Optional.of(false), vfs5.isomorphismExists());
+        assertEquals(false, vfs5.isomorphismExists());
 
         /* ECS-6: subgraph with vertices, but no edges */
 
@@ -221,7 +221,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs6 =
             new VF2SubgraphIsomorphismInspector<>(sg4v3e, sg3v0e);
 
-        assertEquals(Optional.of(false), vfs6.isomorphismExists());
+        assertEquals(false, vfs6.isomorphismExists());
 
         /* ECS-7: graph and subgraph with vertices, but no edges */
 
@@ -259,7 +259,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs8 =
             new VF2SubgraphIsomorphismInspector<>(sg3v0e, sg2v1e);
 
-        assertEquals(Optional.of(false), vfs8.isomorphismExists());
+        assertEquals(false, vfs8.isomorphismExists());
 
         /*
          * ECS-9: complete graphs of different size, graph smaller than subgraph
@@ -311,7 +311,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vfs9 =
             new VF2SubgraphIsomorphismInspector<>(sg4k, sg5k);
 
-        assertEquals(Optional.of(false), vfs9.isomorphismExists());
+        assertEquals(false, vfs9.isomorphismExists());
 
         /*
          * ECS-10: complete graphs of different size, graph bigger than subgraph
@@ -435,7 +435,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf3 =
             new VF2SubgraphIsomorphismInspector<>(dg0v, dg4v3e);
 
-        assertEquals(Optional.of(false), vf3.isomorphismExists());
+        assertEquals(false, vf3.isomorphismExists());
 
         /* ECD-4: graph non-empty, subgraph single vertex */
 
@@ -463,7 +463,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf5 =
             new VF2SubgraphIsomorphismInspector<>(dg0v, dg1v);
 
-        assertEquals(Optional.of(false), vf5.isomorphismExists());
+        assertEquals(false, vf5.isomorphismExists());
 
         /* ECD-6: subgraph with vertices, but no edges */
 
@@ -476,7 +476,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf6 =
             new VF2SubgraphIsomorphismInspector<>(dg4v3e, dg3v0e);
 
-        assertEquals(Optional.of(false), vf6.isomorphismExists());
+        assertEquals(false, vf6.isomorphismExists());
 
         /* ECD-7: graph and subgraph with vertices, but no edges */
 
@@ -514,7 +514,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf8 =
             new VF2SubgraphIsomorphismInspector<>(dg3v0e, dg2v1e);
 
-        assertEquals(Optional.of(false), vf8.isomorphismExists());
+        assertEquals(false, vf8.isomorphismExists());
 
         /*
          * ECD-9: complete graphs of different size, graph smaller than subgraph
@@ -556,7 +556,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf9 =
             new VF2SubgraphIsomorphismInspector<>(dg4c, dg5c);
 
-        assertEquals(Optional.of(false), vf9.isomorphismExists());
+        assertEquals(false, vf9.isomorphismExists());
 
         /*
          * ECD-10: complete graphs of different size, graph bigger than subgraph
@@ -923,7 +923,7 @@ public class VF2SubgraphIsomorphismInspectorTest
         VF2SubgraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
             new VF2SubgraphIsomorphismInspector<>(g1, g2);
 
-        assertEquals(Optional.of(true), vf2.isomorphismExists());
+        assertEquals(true, vf2.isomorphismExists());
 
         SubgraphIsomorphismTestUtils.showLog(
             "|V1| = " + g1.vertexSet().size() + ", |E1| = " + g1.edgeSet().size() + ", |V2| = "

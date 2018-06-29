@@ -128,10 +128,10 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
     public abstract Iterator<GraphMapping<V, E>> getMappings();
 
     @Override
-    public Optional<Boolean> isomorphismExists()
+    public boolean isomorphismExists()
     {
         Iterator<GraphMapping<V, E>> iter = getMappings();
-        return Optional.of(iter.hasNext());
+        return iter.hasNext();
     }
 }
 

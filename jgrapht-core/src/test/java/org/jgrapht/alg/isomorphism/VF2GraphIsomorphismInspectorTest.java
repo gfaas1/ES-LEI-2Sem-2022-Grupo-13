@@ -99,7 +99,7 @@ public class VF2GraphIsomorphismInspectorTest
 
         VF2GraphIsomorphismInspector<Integer, DefaultEdge> vf2 =
             new VF2GraphIsomorphismInspector<>(g1, g2);
-        assertEquals(Optional.of(false), vf2.isomorphismExists());
+        assertEquals(false, vf2.isomorphismExists());
     }
 
     @Test
@@ -182,9 +182,9 @@ public class VF2GraphIsomorphismInspectorTest
             vf3 = new VF2GraphIsomorphismInspector<>(g1, g2),
             vf4 = new VF2GraphIsomorphismInspector<>(g3, g4);
 
-        assertEquals(Optional.of(false), vf2.isomorphismExists());
-        assertEquals(Optional.of(false), vf3.isomorphismExists());
-        assertEquals(Optional.of(false), vf4.isomorphismExists());
+        assertEquals(false, vf2.isomorphismExists());
+        assertEquals(false, vf3.isomorphismExists());
+        assertEquals(false, vf4.isomorphismExists());
     }
 
 }

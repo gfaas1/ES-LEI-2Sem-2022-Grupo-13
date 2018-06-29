@@ -17,9 +17,9 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import org.jgrapht.*;
+import org.jgrapht.GraphMapping;
 
-import java.util.*;
+import java.util.Iterator;
 
 /**
  * General interface for graph and subgraph isomorphism.
@@ -27,7 +27,8 @@ import java.util.*;
  * @param <V> the type of the vertices
  * @param <E> the type of the edges
  */
-public interface IsomorphismInspector<V, E>
+@Deprecated
+public interface IsomorphismInspectorOld<V, E>
 {
     /**
      * Get an iterator over all calculated (isomorphic) mappings between two graphs.
@@ -40,9 +41,8 @@ public interface IsomorphismInspector<V, E>
      * Check if an isomorphism exists.
      * 
      * @return true if there is an isomorphism, false if there is no isomorphism
-     * @throws IsomorphismUndecidableException if the algorithm cannot decide whether the graphs are isomorphic
      */
-    boolean isomorphismExists() throws IsomorphismUndecidableException;
+    boolean isomorphismExists();
 }
 
 // End IsomorphismInspector.java
