@@ -30,18 +30,19 @@ import java.util.*;
 public interface IsomorphismInspector<V, E>
 {
     /**
-     * Get an iterator over all existing (isomorphic) mappings between two graphs.
+     * Get an iterator over all calculated (isomorphic) mappings between two graphs.
      * 
-     * @return an iterator over all existing (isomorphic) mappings between two graphs
+     * @return an iterator over all calculated (isomorphic) mappings between two graphs
      */
     Iterator<GraphMapping<V, E>> getMappings();
 
     /**
      * Check if an isomorphism exists.
      * 
-     * @return true if there is an isomorphism, false otherwise
+     * @return Optional.of(true) if there is an isomorphism, Optional.of(false) if there is no isomorphism,
+     * Optional.empty if ut cannot be decided whether there is an isomorphism or not.
      */
-    boolean isomorphismExists();
+    Optional<Boolean> isomorphismExists();
 }
 
 // End IsomorphismInspector.java
