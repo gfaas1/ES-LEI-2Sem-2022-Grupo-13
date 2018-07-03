@@ -94,7 +94,7 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
     public Iterator<GraphMapping<V, E>> getMappings() throws IllegalStateException {
         if(!isomorphismTestExecuted) {
             try {
-                isomorphismExists();
+                isomorphismExistsWithUndecidableCase();
             } catch(IsomorphismUndecidableException ignored) {
 
             }
@@ -108,6 +108,16 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
         }
     }
 
+    @Override
+    public boolean isomorphismExists() {
+        try {
+            throw new IllegalAccessException("This method is deprecated and is undefined in this IsomorphismInspector!");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * Check if an isomorphism exists.
      *
@@ -115,7 +125,7 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
      * Optional.empty if ut cannot be decided whether there is an isomorphism or not.
      */
     @Override
-    public boolean isomorphismExists() throws IsomorphismUndecidableException {
+    public boolean isomorphismExistsWithUndecidableCase() throws IsomorphismUndecidableException {
         if(isomorphismTestExecuted) {
             if(isIsomorphic != null) {
                 return isIsomorphic;
@@ -147,7 +157,7 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
     public boolean isColoringDiscrete() {
         if(!isomorphismTestExecuted) {
             try {
-                isomorphismExists();
+                isomorphismExistsWithUndecidableCase();
             } catch(IsomorphismUndecidableException ignored) {
 
             }
@@ -165,7 +175,7 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
     public boolean isForest() {
         if(!isomorphismTestExecuted) {
             try {
-                isomorphismExists();
+                isomorphismExistsWithUndecidableCase();
             } catch (IsomorphismUndecidableException ignored) {
 
             }

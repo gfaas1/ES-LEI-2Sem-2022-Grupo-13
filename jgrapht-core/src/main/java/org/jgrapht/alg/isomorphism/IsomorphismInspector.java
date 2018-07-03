@@ -38,11 +38,19 @@ public interface IsomorphismInspector<V, E>
 
     /**
      * Check if an isomorphism exists.
+     *
+     * @return true if there is an isomorphism, false if there is no isomorphism
+     */
+    @Deprecated
+    boolean isomorphismExists();
+
+    /**
+     * Check if an isomorphism exists.
      * 
      * @return true if there is an isomorphism, false if there is no isomorphism
      * @throws IsomorphismUndecidableException if the algorithm cannot decide whether the graphs are isomorphic
      */
-    boolean isomorphismExists() throws IsomorphismUndecidableException;
+    boolean isomorphismExistsWithUndecidableCase() throws IsomorphismUndecidableException;
 }
 
 // End IsomorphismInspector.java
