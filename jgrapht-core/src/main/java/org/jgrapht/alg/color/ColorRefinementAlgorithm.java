@@ -357,7 +357,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
         int numberColors = alpha.getNumberColors();
         // We use an ArrayDeque since it is fast, can be initialized with the correct size
         // and because Stack is kind of deprecated
-        Deque<Integer> stack = new ArrayDeque<>(numberColors);
+        Deque<Integer> stack = new ArrayDeque<>(graph.vertexSet().size());
         for(int i = numberColors; i > 0; --i) {
             stack.push(i);
         }
