@@ -40,6 +40,7 @@ public interface IsomorphismInspector<V, E>
      * Check if an isomorphism exists.
      *
      * @return true if there is an isomorphism, false if there is no isomorphism
+     * @deprecated because throwing of IsomorphismUndecidableException is need for ColorRefinementIsomorphismInspector
      */
     @Deprecated
     boolean isomorphismExists();
