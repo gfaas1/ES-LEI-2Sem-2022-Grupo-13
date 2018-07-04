@@ -19,6 +19,7 @@ package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
@@ -239,40 +240,34 @@ public class BhandariKDisjointShortestPaths<V, E>
 
     /**
      * Iterating over all paths to removes overlapping edges (contained in more than single path).
+     * Edges are considered as overlapping in case both resides between the same ends 
+     * disregarding direction.
      * At the end of this method, each path contains unique edges but not necessarily connecting the
      * start to end vertex.
      * 
-     */    
+     */
     private void findOverlappingEdges()
     {
-        //building a multigraph containing all the vertices and edges
-        //exist in any path
-        Graph<V, E> pathsGraph = new Multigraph<>(
-            workingGraph.getVertexSupplier(), workingGraph.getEdgeSupplier(), true);
+        Map<UnorderedPair<V, V>, Integer> edgeOccuranceCount = new HashMap<>();
         for (List<E> path : pathList) {
-            for (E e : path) {
-                V source = workingGraph.getEdgeSource(e);
-                V target = workingGraph.getEdgeTarget(e);
-                pathsGraph.addVertex(source);
-                pathsGraph.addVertex(target);
-                pathsGraph.addEdge(source, target, e);
+            for (E e : path) {                
+                V v = this.workingGraph.getEdgeSource(e);
+                V u = this.workingGraph.getEdgeTarget(e);                
+                UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
+                
+                if (edgeOccuranceCount.containsKey(edgePair)) {
+                    edgeOccuranceCount.put(edgePair, 2);
+                } else {
+                    edgeOccuranceCount.put(edgePair, 1);
+                }
             }
         }
 
-        this.overlappingEdges = new HashSet<>();
-        for (E e : pathsGraph.edgeSet()) {
-            if (this.overlappingEdges.contains(e)) {
-                continue;
-            }
-            V source = pathsGraph.getEdgeSource(e);
-            V target = pathsGraph.getEdgeTarget(e);
-            //If there exist more than a single edge between the two
-            //vertices (disregarding direction) - all are overlapping 
-            Set<E> allEdges = pathsGraph.getAllEdges(source, target);
-            if (allEdges.size() > 1) {
-                this.overlappingEdges.addAll(allEdges);
-            }
-        }
+        this.overlappingEdges = pathList.stream().flatMap(List::stream).filter(
+            e -> edgeOccuranceCount.get(new UnorderedPair<>(
+                this.workingGraph.getEdgeSource(e), 
+                this.workingGraph.getEdgeTarget(e))) > 1)
+            .collect(Collectors.toSet());
     }
 
     private GraphPath<V, E> createGraphPath(List<E> edgeList, V startVertex, V endVertex)
