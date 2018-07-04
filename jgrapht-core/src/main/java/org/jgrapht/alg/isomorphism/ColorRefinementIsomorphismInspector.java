@@ -19,6 +19,7 @@ package org.jgrapht.alg.isomorphism;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
+import org.jgrapht.GraphTests;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
@@ -228,7 +229,7 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
                 isColoringDiscrete = true;
                 calculateGraphMapping(coloring1, coloring2);
                 return true;
-            } else if(isForest(graph1) && isForest(graph2)) {
+            } else if(GraphTests.isForest(graph1) && GraphTests.isForest(graph2)) {
                 isForest = true;
                 calculateGraphMapping(coloring1, coloring2);
                 return true;
@@ -294,31 +295,5 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
         }
 
         isomorphicGraphMapping = new IsomorphicGraphMapping<>(graphOrdering1, graphOrdering2, core1, core2);
-    }
-
-    /**
-     * Checks whether the given <code>graph</code> is a forest
-     *
-     * @param graph the graph to test for being a forest
-     * @return true, if <code>graph</code> is a forest; false, otherwise
-     */
-    private boolean isForest(Graph<V, E> graph) {
-        BreadthFirstIterator<V, E> breadthFirstIterator = new BreadthFirstIterator<>(graph);
-        Set<V> visitedVertices = new HashSet<>();
-
-        while (breadthFirstIterator.hasNext()) {
-            V current = breadthFirstIterator.next();
-            if(visitedVertices.contains(current)) {
-                return false;
-            }
-            for(E e : graph.outgoingEdgesOf(current)) {
-                V v = Graphs.getOppositeVertex(graph, e, current);
-                if(!v.equals(breadthFirstIterator.getParent(current)) && visitedVertices.contains(v)) {
-                    return false;
-                }
-            }
-            visitedVertices.add(current);
-        }
-        return true;
     }
 }
