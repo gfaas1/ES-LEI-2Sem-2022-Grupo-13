@@ -381,7 +381,7 @@ public class ColorRefinementAlgorithm<V, E> implements VertexColoringAlgorithm<V
     }
 
     /**
-     * returns a coloring such that all vertices have color 1.
+     * Returns a coloring such that all vertices have color 1.
      *
      * @param vertices the vertices that should be colored
      * @return the all-1 coloring
