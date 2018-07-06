@@ -58,14 +58,16 @@ public class ColorRefinementIsomorphismInspectorTest {
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
                 new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertNull(isomorphismInspector.getMappings());
         boolean testOK = false;
         try {
-            isomorphismInspector.isomorphismExistsWithUndecidableCase();
+            isomorphismInspector.isomorphismExists();
         } catch (IsomorphismUndecidableException e) {
             testOK = true;
         }
         assertTrue(testOK);
+
+        assertFalse(isomorphismInspector.getMappings().hasNext());
+
         assertFalse(isomorphismInspector.isColoringDiscrete());
         assertFalse(isomorphismInspector.isForest());
     }
@@ -99,7 +101,7 @@ public class ColorRefinementIsomorphismInspectorTest {
 
         assertNotNull(isomorphismInspector.getMappings());
         try {
-            assertTrue(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+            assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }
@@ -192,7 +194,7 @@ public class ColorRefinementIsomorphismInspectorTest {
 
         assertNotNull(isomorphismInspector.getMappings());
         try {
-            assertTrue(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+            assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }
@@ -234,9 +236,9 @@ public class ColorRefinementIsomorphismInspectorTest {
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
                 new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertNull(isomorphismInspector.getMappings());
+        assertFalse(isomorphismInspector.getMappings().hasNext());
         try {
-            assertFalse(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+            assertFalse(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }
@@ -264,8 +266,9 @@ public class ColorRefinementIsomorphismInspectorTest {
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
                 new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertNull(isomorphismInspector.getMappings());try {
-            assertFalse(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+        assertFalse(isomorphismInspector.getMappings().hasNext());
+        try {
+            assertFalse(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }
@@ -296,7 +299,7 @@ public class ColorRefinementIsomorphismInspectorTest {
                 new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
         assertNotNull(isomorphismInspector.getMappings());try {
-            assertTrue(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+            assertTrue(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }
@@ -352,8 +355,9 @@ public class ColorRefinementIsomorphismInspectorTest {
         ColorRefinementIsomorphismInspector<Integer, DefaultEdge> isomorphismInspector =
                 new ColorRefinementIsomorphismInspector<>(graph1, graph2);
 
-        assertNull(isomorphismInspector.getMappings());try {
-            assertFalse(isomorphismInspector.isomorphismExistsWithUndecidableCase());
+        assertFalse(isomorphismInspector.getMappings().hasNext());
+        try {
+            assertFalse(isomorphismInspector.isomorphismExists());
         } catch (IsomorphismUndecidableException e) {
             fail();
         }

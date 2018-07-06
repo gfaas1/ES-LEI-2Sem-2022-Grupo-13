@@ -20,7 +20,7 @@ package org.jgrapht.alg.isomorphism;
 /**
  * Implementation of IsomorphismUndecidableException to indicate undecidable isomorphism cases in isomorphism inspectors
  */
-public class IsomorphismUndecidableException extends Exception {
+public class IsomorphismUndecidableException extends RuntimeException {
 
     /**
      * Constructs a new exception with null as its detail message. The cause is not initialized,

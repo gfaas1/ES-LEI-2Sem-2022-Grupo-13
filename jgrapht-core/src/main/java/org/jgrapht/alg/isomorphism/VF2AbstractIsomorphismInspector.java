@@ -133,12 +133,6 @@ public abstract class VF2AbstractIsomorphismInspector<V, E>
         Iterator<GraphMapping<V, E>> iter = getMappings();
         return iter.hasNext();
     }
-
-    @Override
-    public boolean isomorphismExistsWithUndecidableCase()
-    {
-        return isomorphismExists();
-    }
 }
 
 // End VF2AbstractIsomorphismInspector.java

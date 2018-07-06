@@ -69,7 +69,4 @@ public abstract class RefinementAbstractIsomorphismInspector<V, E> implements Is
 
     @Override
     public abstract Iterator<GraphMapping<V, E>> getMappings();
-
-    @Override
-    public abstract boolean isomorphismExistsWithUndecidableCase() throws IsomorphismUndecidableException;
 }

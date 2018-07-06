@@ -33,25 +33,20 @@ public interface IsomorphismInspector<V, E>
      * Get an iterator over all calculated (isomorphic) mappings between two graphs.
      * 
      * @return an iterator over all calculated (isomorphic) mappings between two graphs
+     *
+     * @throws IsomorphismUndecidableException if the isomorphism test was not executed and the inspector cannot decide whether the graphs are isomorphic
      */
     Iterator<GraphMapping<V, E>> getMappings();
 
     /**
      * Check if an isomorphism exists.
+     * An IsomorphismUndecidableException is thrown if the inspector cannot decide whether there is an isomorphism.
      *
      * @return true if there is an isomorphism, false if there is no isomorphism
-     * @deprecated because throwing of IsomorphismUndecidableException is need for ColorRefinementIsomorphismInspector
+     *
+     * @throws IsomorphismUndecidableException if the inspector cannot decide whether the graphs are isomorphic
      */
-    @Deprecated
     boolean isomorphismExists();
-
-    /**
-     * Check if an isomorphism exists.
-     * 
-     * @return true if there is an isomorphism, false if there is no isomorphism
-     * @throws IsomorphismUndecidableException if the algorithm cannot decide whether the graphs are isomorphic
-     */
-    boolean isomorphismExistsWithUndecidableCase() throws IsomorphismUndecidableException;
 }
 
 // End IsomorphismInspector.java
