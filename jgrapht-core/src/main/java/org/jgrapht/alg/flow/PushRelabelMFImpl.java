@@ -86,6 +86,8 @@ public class PushRelabelMFImpl<V, E>
     // number of relabels already performed
     private int relabelCounter;
 
+    private ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
+
     /**
      * Construct a new push-relabel algorithm.
      *
@@ -523,7 +525,6 @@ public class PushRelabelMFImpl<V, E>
         private int height; // also called label (or distance label) in some papers
         private boolean active;
         private int currentArc;
-        private ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
 
         private boolean hasExcess()
         {
