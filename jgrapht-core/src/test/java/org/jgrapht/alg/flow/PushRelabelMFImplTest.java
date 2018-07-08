@@ -17,12 +17,16 @@
  */
 package org.jgrapht.alg.flow;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.junit.Assert;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PushRelabelMFImplTest
     extends
@@ -33,6 +37,42 @@ public class PushRelabelMFImplTest
         Graph<Integer, DefaultWeightedEdge> network)
     {
         return new PushRelabelMFImpl<>(network);
+    }
+
+    @Test
+    public void testSimpleDirectedWeightedGraph(){
+        /*
+            This fixes issue #620 (see https://github.com/jgrapht/jgrapht/issues/620 for more details)
+         */
+
+        SimpleDirectedWeightedGraph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+
+        graph.addVertex(-1);
+        graph.addVertex(-2);
+        graph.addVertex(0);
+        graph.addVertex(1);
+
+        graph.addEdge(-1, 0);
+        graph.setEdgeWeight(graph.getEdge(-1, 0), 1.0);
+
+        graph.addEdge(0, -2);
+        graph.setEdgeWeight(graph.getEdge(0, -2), 0.9999999999999999);
+
+        graph.addEdge(-1, 1);
+        graph.setEdgeWeight(graph.getEdge(-1, 1), 1.0);
+
+        graph.addEdge(1, -2);
+        graph.setEdgeWeight(graph.getEdge(1, -2), 1.66498);
+
+        graph.addEdge(0, 1);
+        graph.setEdgeWeight(graph.getEdge(0, 1), 0.66498);
+
+        graph.addEdge(1, 0);
+        graph.setEdgeWeight(graph.getEdge(1, 0), 0.66498);
+
+        PushRelabelMFImpl<Integer, DefaultEdge> mf = new PushRelabelMFImpl<>(graph);
+
+        Assert.assertEquals(2.0, mf.calculateMinCut(-1, -2), 1e-9);
     }
 
     @Test
