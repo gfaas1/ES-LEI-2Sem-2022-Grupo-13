@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2003-2018, by Linda Buisman and Contributors.
+ * (C) Copyright 2018-2018, by Alexandru Valeanu and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -20,12 +20,17 @@ package org.jgrapht.alg.vertexcover;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
 
-/**
- * Tests the vertex cover algorithms.
- *
- * @author Linda Buisman
- */
-public interface VertexCoverTest {
+import java.util.Map;
 
-    <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph);
+public class ClarksonTwoApproxVCImplTest extends WeightedVertexCoverTwoApproxTest {
+
+    @Override
+    public <V, E> VertexCoverAlgorithm<V> createSolver(Graph<V, E> graph) {
+        return new ClarksonTwoApproxVCImpl<>(graph);
+    }
+
+    @Override
+    public <V, E> VertexCoverAlgorithm<V> createWeightedSolver(Graph<V, E> graph, Map<V, Double> vertexWeightMap) {
+        return new ClarksonTwoApproxVCImpl<>(graph, vertexWeightMap);
+    }
 }
