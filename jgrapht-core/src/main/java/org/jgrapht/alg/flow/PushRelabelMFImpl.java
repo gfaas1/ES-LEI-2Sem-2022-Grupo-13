@@ -86,7 +86,7 @@ public class PushRelabelMFImpl<V, E>
     // number of relabels already performed
     private int relabelCounter;
 
-    private ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
+    private static ToleranceDoubleComparator comparator = new ToleranceDoubleComparator();
 
     /**
      * Construct a new push-relabel algorithm.

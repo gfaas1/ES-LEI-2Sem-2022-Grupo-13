@@ -41,10 +41,6 @@ public class PushRelabelMFImplTest
 
     @Test
     public void testSimpleDirectedWeightedGraph(){
-        /*
-            This fixes issue #620 (see https://github.com/jgrapht/jgrapht/issues/620 for more details)
-         */
-
         SimpleDirectedWeightedGraph<Integer, DefaultEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
 
         graph.addVertex(-1);
