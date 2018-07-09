@@ -216,7 +216,7 @@ public class SimpleGraphMLImporterTest
         assertEquals(1.0, g.getEdgeWeight(g.getEdge("1", "2")), 1e-9);
     }
 
-    @Test
+    @Test(expected = ImportException.class)
     public void testValidate()
         throws ImportException
     {
@@ -235,18 +235,14 @@ public class SimpleGraphMLImporterTest
             "</graphml>";
         // @formatter:on
 
-        try {
-            Graph<String,
-                DefaultEdge> g = GraphTypeBuilder
-                    .undirected().weighted(false).allowingMultipleEdges(true)
-                    .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
-                    .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
+        Graph<String,
+            DefaultEdge> g = GraphTypeBuilder
+                .undirected().weighted(false).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).vertexSupplier(SupplierUtil.createStringSupplier())
+                .edgeSupplier(SupplierUtil.createDefaultEdgeSupplier()).buildGraph();
 
-            new SimpleGraphMLImporter<String, DefaultEdge>()
-                .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
-            fail("No!");
-        } catch (ImportException e) {
-        }
+        new SimpleGraphMLImporter<String, DefaultEdge>()
+            .importGraph(g, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
     }
 
     @Test(expected = ImportException.class)
