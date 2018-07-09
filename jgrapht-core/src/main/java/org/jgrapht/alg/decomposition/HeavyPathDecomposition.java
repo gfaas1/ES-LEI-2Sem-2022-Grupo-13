@@ -182,14 +182,14 @@ public class HeavyPathDecomposition<V, E> {
             }
             else{
                 /*
-                    For u compute heavySon. If it exists then u becomes part of heavySon's path.
+                    For u compute heavyChild. If it exists then u becomes part of heavyChild's path.
                     If not then start a new path with u.
 
-                    heavySon = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
-                    heavyEdge = edge(u, heavySon)
+                    heavyChild = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
+                    heavyEdge = edge(u, heavyChild)
                  */
 
-                int heavySon = -1;
+                int heavyChild = -1;
                 E heavyEdge = null;
 
                 V vertexU = indexList.get(u);
@@ -202,18 +202,18 @@ public class HeavyPathDecomposition<V, E> {
                     if (child != parent[u]){
                         sizeSubtree[u] += sizeSubtree[child];
 
-                        if (heavySon == -1 || sizeSubtree[heavySon] < sizeSubtree[child]) {
-                            heavySon = child;
+                        if (heavyChild == -1 || sizeSubtree[heavyChild] < sizeSubtree[child]) {
+                            heavyChild = child;
                             heavyEdge = edge;
                         }
                     }
                 }
 
-                if (heavySon == -1)
+                if (heavyChild == -1)
                     path[u] = numberOfPaths++;
                 else {
                     heavyEdges.add(heavyEdge);
-                    path[u] = path[heavySon];
+                    path[u] = path[heavyChild];
                 }
 
                 /*
