@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
     - Added O(m^1.5) algorithm for counting triangles in undirected graphs (contributed by Alexandru Văleanu)
     - Calculate actual path weight in `AllDirectedPaths` (contributed by Andrew Gainer-Dewar)
     - Refactored vertex cover tests (contributed by Alexandru Văleanu)
+    - Added `SimpleGraphMLImporter` for faster parsing (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
