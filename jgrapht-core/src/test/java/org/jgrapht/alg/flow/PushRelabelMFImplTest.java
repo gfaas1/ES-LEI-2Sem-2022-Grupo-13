@@ -90,7 +90,7 @@ public class PushRelabelMFImplTest
         g1.addEdge("v2", "v1");
 
         MaximumFlowAlgorithm<String, DefaultEdge> mf1 = new PushRelabelMFImpl<>(g1);
-        String sourceFlow = "v" + new String("v3").substring(1);
+        String sourceFlow = "v3";
         String sinkFlow = "v0";
         double flow = mf1.calculateMaximumFlow(sourceFlow, sinkFlow);
         assertEquals(0.0, flow, 0);
