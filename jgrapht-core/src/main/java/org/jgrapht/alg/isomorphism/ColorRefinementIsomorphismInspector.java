@@ -17,15 +17,10 @@
  */
 package org.jgrapht.alg.isomorphism;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphMapping;
-import org.jgrapht.GraphTests;
-import org.jgrapht.Graphs;
+import org.jgrapht.*;
 import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
-import org.jgrapht.traverse.BreadthFirstIterator;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -41,7 +36,12 @@ import java.util.*;
  *
  * @author Christoph Grüne
  */
-public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstractIsomorphismInspector<V, E> {
+public class ColorRefinementIsomorphismInspector<V, E> implements IsomorphismInspector<V, E> {
+
+    /**
+     * The input graphs
+     */
+    private Graph<V, E> graph1, graph2;
 
     /**
      * The isomorphism that is calculated by this color refinement isomorphism inspector
@@ -76,7 +76,23 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
      * @param graph2 the second graph
      */
     public ColorRefinementIsomorphismInspector(Graph<V, E> graph1, Graph<V, E> graph2) {
-        super(graph1, graph2);
+
+        GraphType type1 = graph1.getType();
+        GraphType type2 = graph2.getType();
+        if (type1.isAllowingMultipleEdges() || type2.isAllowingMultipleEdges()) {
+            throw new IllegalArgumentException("graphs with multiple (parallel) edges are not supported");
+        }
+
+        if (type1.isMixed() || type2.isMixed()) {
+            throw new IllegalArgumentException("mixed graphs not supported");
+        }
+
+        if (type1.isUndirected() && type2.isDirected() || type1.isDirected() && type2.isUndirected()) {
+            throw new IllegalArgumentException("can not match directed with " + "undirected graphs");
+        }
+
+        this.graph1 = graph1;
+        this.graph2 = graph2;
         this.isomorphicGraphMapping = null;
         this.isColoringDiscrete = false;
         this.isomorphismTestExecuted = false;
