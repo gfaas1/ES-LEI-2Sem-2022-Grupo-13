@@ -18,6 +18,7 @@ Changes to JGraphT in each version:
     - Calculate actual path weight in `AllDirectedPaths` (contributed by Andrew Gainer-Dewar)
     - Refactored vertex cover tests (contributed by Alexandru Văleanu)
     - Added `SimpleGraphMLImporter` for faster parsing (contributed by Dimitrios Michail)
+    - Increased numeric precision in PushRelabelMFImpl (contributed by Alexandru Văleanu)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
