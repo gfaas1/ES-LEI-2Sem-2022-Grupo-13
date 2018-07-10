@@ -239,8 +239,9 @@ public class BhandariKDisjointShortestPaths<V, E>
     }
 
     /**
-     * Iterating over all paths to removes overlapping edges (contained in more than single path).
-     * Edges are considered as overlapping in case both resides between the same ends 
+     * Iterate over all paths to remove overlapping edges (i.e. those edges contained in more than 
+     * one path).
+     * Two edges are considered as overlapping in case both edges connect the same vertex pair, 
      * disregarding direction.
      * At the end of this method, each path contains unique edges but not necessarily connecting the
      * start to end vertex.
@@ -248,23 +249,23 @@ public class BhandariKDisjointShortestPaths<V, E>
      */
     private void findOverlappingEdges()
     {
-        Map<UnorderedPair<V, V>, Integer> edgeOccuranceCount = new HashMap<>();
+        Map<UnorderedPair<V, V>, Integer> edgeOccurenceCount = new HashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {                
                 V v = this.workingGraph.getEdgeSource(e);
                 V u = this.workingGraph.getEdgeTarget(e);                
                 UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
                 
-                if (edgeOccuranceCount.containsKey(edgePair)) {
-                    edgeOccuranceCount.put(edgePair, 2);
+                if (edgeOccurenceCount.containsKey(edgePair)) {
+                    edgeOccurenceCount.put(edgePair, 2);
                 } else {
-                    edgeOccuranceCount.put(edgePair, 1);
+                    edgeOccurenceCount.put(edgePair, 1);
                 }
             }
         }
 
         this.overlappingEdges = pathList.stream().flatMap(List::stream).filter(
-            e -> edgeOccuranceCount.get(new UnorderedPair<>(
+            e -> edgeOccurenceCount.get(new UnorderedPair<>(
                 this.workingGraph.getEdgeSource(e), 
                 this.workingGraph.getEdgeTarget(e))) > 1)
             .collect(Collectors.toSet());
