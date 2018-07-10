@@ -83,6 +83,11 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
         this.isForest = false;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IsomorphismUndecidableException if the isomorphism test was not executed and the inspector cannot decide whether the graphs are isomorphic
+     */
     @Override
     public Iterator<GraphMapping<V, E>> getMappings() {
         if(!isomorphismTestExecuted) {
@@ -95,6 +100,11 @@ public class ColorRefinementIsomorphismInspector<V, E> extends RefinementAbstrac
         return iteratorList.iterator();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IsomorphismUndecidableException if the inspector cannot decide whether the graphs are isomorphic
+     */
     @Override
     public boolean isomorphismExists() {
         if(isomorphismTestExecuted) {
