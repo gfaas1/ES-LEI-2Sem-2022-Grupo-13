@@ -51,7 +51,6 @@ public class HeavyPathDecompositionTest {
     /*
         Count the maximum number of distinct paths on any root-to-leaf path
      */
-    @SuppressWarnings("unchecked")
     public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
         List<List<V>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
@@ -65,7 +64,7 @@ public class HeavyPathDecompositionTest {
         }
 
         int maxim = 0;
-        HeavyPathDecomposition.InternalState state = decomposition.getInternalState();
+        HeavyPathDecomposition<V, E>.InternalState state = decomposition.getInternalState();
 
         for (V v: vertexSet){
             if (whichPath.containsKey(v)){
@@ -78,7 +77,7 @@ public class HeavyPathDecompositionTest {
                         cnt++;
                     }
 
-                    v = (V)state.getParent(v);
+                    v = state.getParent(v);
                 }
 
                 maxim = Math.max(maxim, cnt);
