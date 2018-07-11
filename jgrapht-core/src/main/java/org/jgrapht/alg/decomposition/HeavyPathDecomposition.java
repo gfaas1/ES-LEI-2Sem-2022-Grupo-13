@@ -19,6 +19,7 @@ package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.TreeToPathDecompositionAlgorithm;
 import org.jgrapht.alg.util.Pair;
 
 import java.util.*;
@@ -58,7 +59,7 @@ import java.util.stream.Collectors;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class HeavyPathDecomposition<V, E> {
+public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgorithm<V, E> {
 
     private final Graph<V, E> graph;
     private final Set<V> roots;
@@ -302,20 +303,6 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * @return (immutable) path decomposition
-     */
-    public List<List<V>> getPaths(){
-        return this.paths;
-    }
-
-    /**
-     * @return number of paths in the decomposition
-     */
-    public int numberOfPaths(){
-        return this.paths.size();
-    }
-
-    /**
      * @return (immutable) set of heavy edges
      */
     public Set<E> getHeavyEdges(){
@@ -331,178 +318,190 @@ public class HeavyPathDecomposition<V, E> {
     }
 
     /**
-     * Returns the parent of vertex $v$ in the internal DFS tree/forest.
-     * If the vertex $v$ has not been explored or it is the root of its tree, $null$ will be returned.
-     *
-     * @param v vertex
-     * @return parent of vertex $v$ in the DFS tree/forest
+     * {@inheritDoc}
      */
-    public V getParent(V v){
-        int index = vertexMap.getOrDefault(v, -1);
-
-        if (index == -1 || parent[index] == -1)
-            return null;
-        else
-            return indexList.get(parent[index]);
+    @Override
+    public PathDecomposition<V, E> getPathDecomposition() {
+        return new PathDecompositionImpl<>(getHeavyEdges(), this.paths);
     }
 
     /**
-     * Returns the depth of vertex $v$ in the internal DFS tree/forest.
+     * Return the internal representation of the data.
      *
-     * <p> The depth of a vertex $v$ is defined as the number of edges traversed on
-     * the path from the root of the DFS tree to vertex $v$. The root of each DFS tree has depth 0.
+     * Note: For developer use only
      *
-     * <p>
-     * If the vertex $v$ has not been explored, $-1$ will be returned.
-     *
-     * @param v vertex
-     * @return depth of vertex $v$ in the DFS tree/forest
+     * @return the internal state representation
      */
-    public int getDepth(V v){
-        int index = vertexMap.getOrDefault(v, -1);
-
-        if (index == -1)
-            return -1;
-        else
-            return depth[index];
+    public InternalState getInternalState(){
+        return new InternalState();
     }
 
     /**
-     * Returns the size of vertex $v$'s subtree in the internal DFS tree/forest.
-     *
-     * <p>
-     * The size of a vertex $v$'s subtree is
-     * defined as the number of vertices in the subtree rooted at $v$ (including $v).
-     *
-     * <p>
-     * If the vertex $v$ has not been explored, $0$ will be returned.
-     *
-     * @param v vertex
-     * @return size of vertex $v$'s subtree in the DFS tree/forest
+     *  Internal representation of the data
      */
-    public int getSizeSubtree(V v){
-        int index = vertexMap.getOrDefault(v, -1);
+    public class InternalState{
+        /**
+         * Returns the parent of vertex $v$ in the internal DFS tree/forest.
+         * If the vertex $v$ has not been explored or it is the root of its tree, $null$ will be returned.
+         *
+         * @param v vertex
+         * @return parent of vertex $v$ in the DFS tree/forest
+         */
+        public V getParent(V v){
+            int index = vertexMap.getOrDefault(v, -1);
 
-        if (index == -1)
-            return 0;
-        else
-            return sizeSubtree[index];
-    }
+            if (index == -1 || parent[index] == -1)
+                return null;
+            else
+                return indexList.get(parent[index]);
+        }
 
-    /**
-     * Returns the component id of vertex $v$ in the internal DFS tree/forest. For two vertices $u$ and $v$,
-     * $component[u] = component[v]$ iff $u$ and $v$ are in the same tree.
-     *
-     * <p>
-     * The component ids are numbers between $0$ and $numberOfTrees - 1$.
-     *
-     * <p>
-     * If the vertex $v$ has not been explored, $-1$ will be returned.
-     *
-     * @param v vertex
-     * @return component id of vertex $v$ in the DFS tree/forest
-     */
-    public int getComponent(V v){
-        int index = vertexMap.getOrDefault(v, -1);
+        /**
+         * Returns the depth of vertex $v$ in the internal DFS tree/forest.
+         *
+         * <p> The depth of a vertex $v$ is defined as the number of edges traversed on
+         * the path from the root of the DFS tree to vertex $v$. The root of each DFS tree has depth 0.
+         *
+         * <p>
+         * If the vertex $v$ has not been explored, $-1$ will be returned.
+         *
+         * @param v vertex
+         * @return depth of vertex $v$ in the DFS tree/forest
+         */
+        public int getDepth(V v){
+            int index = vertexMap.getOrDefault(v, -1);
 
-        if (index == -1)
-            return -1;
-        else
-            return component[index];
-    }
+            if (index == -1)
+                return -1;
+            else
+                return depth[index];
+        }
 
-    /**
-     * Return the normalized version of the input graph: a map from vertices to unique integers and the reverse
-     * mapping as a list.
-     *
-     * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
-     * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
-     *
-     * Note: The two structures returned are immutable.
-     *
-     * @return a pair which consists of the vertexMap and the indexList
-     */
-    public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
-        return Pair.of(Collections.unmodifiableMap(vertexMap), Collections.unmodifiableList(indexList));
-    }
+        /**
+         * Returns the size of vertex $v$'s subtree in the internal DFS tree/forest.
+         *
+         * <p>
+         * The size of a vertex $v$'s subtree is
+         * defined as the number of vertices in the subtree rooted at $v$ (including $v).
+         *
+         * <p>
+         * If the vertex $v$ has not been explored, $0$ will be returned.
+         *
+         * @param v vertex
+         * @return size of vertex $v$'s subtree in the DFS tree/forest
+         */
+        public int getSizeSubtree(V v){
+            int index = vertexMap.getOrDefault(v, -1);
 
+            if (index == -1)
+                return 0;
+            else
+                return sizeSubtree[index];
+        }
 
-    /**
-     * Return a copy of the internal parent array.
-     * For each vertex $v \in V$, $parentArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getParent(v) = u$ or
-     * $-1$ if $getParent(v) = null$.
-     *
-     * @return internal parent array
-     */
-    public int[] getParentArray(){
-        return parent.clone();
-    }
+        /**
+         * Returns the component id of vertex $v$ in the internal DFS tree/forest. For two vertices $u$ and $v$,
+         * $component[u] = component[v]$ iff $u$ and $v$ are in the same tree.
+         *
+         * <p>
+         * The component ids are numbers between $0$ and $numberOfTrees - 1$.
+         *
+         * <p>
+         * If the vertex $v$ has not been explored, $-1$ will be returned.
+         *
+         * @param v vertex
+         * @return component id of vertex $v$ in the DFS tree/forest
+         */
+        public int getComponent(V v){
+            int index = vertexMap.getOrDefault(v, -1);
 
-    /**
-     * Return a copy of the internal depth array.
-     * For each vertex $v \in V$, $depthArray[normalizeVertex(v)] = getDepth(v)$
-     *
-     * @return internal depth array
-     */
-    public int[] getDepthArray(){
-        return depth.clone();
-    }
+            if (index == -1)
+                return -1;
+            else
+                return component[index];
+        }
 
-    /**
-     * Return a copy of the internal sizeSubtree array.
-     * For each vertex $v$, $sizeSubtreeArray[normalizeVertex(v)] = getSizeSubtree(v)$
-     *
-     * @return internal sizeSubtree array
-     */
-    public int[] getSizeSubtreeArray(){
-        return sizeSubtree.clone();
-    }
+        /**
+         * Return the normalized version of the input graph: a map from vertices to unique integers and the reverse
+         * mapping as a list.
+         *
+         * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
+         * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
+         *
+         * Note: The two structures returned are immutable.
+         *
+         * @return a pair which consists of the vertexMap and the indexList
+         */
+        public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
+            return Pair.of(Collections.unmodifiableMap(vertexMap), Collections.unmodifiableList(indexList));
+        }
 
-    /**
-     * Return a copy of the internal component array.
-     * For each vertex $v$, $componentArray[normalizeVertex(v)] = getComponent(v)$
-     *
-     * @return internal component array
-     */
-    public int[] getComponentArray(){
-        return component.clone();
-    }
+        /**
+         * Return a copy of the internal depth array.
+         * For each vertex $v \in V$, $depthArray[normalizeVertex(v)] = getDepth(v)$
+         *
+         * @return internal depth array
+         */
+        public int[] getDepthArray(){
+            return depth.clone();
+        }
 
-    /**
-     * Return a copy of the internal path array.
-     * For each vertex $v$, $pathArray[normalizeVertex(v)] = i$ iff $v$ appears on path $i$ or $-1$
-     * if $v$ doesn't belong to any path.
-     *
-     * <p>
-     * Note: the indexing of paths is consistent with {@link #getPaths()}.
-     *
-     * @return internal path array
-     */
-    public int[] getPathArray(){
-        return path.clone();
-    }
+        /**
+         * Return a copy of the internal sizeSubtree array.
+         * For each vertex $v$, $sizeSubtreeArray[normalizeVertex(v)] = getSizeSubtree(v)$
+         *
+         * @return internal sizeSubtree array
+         */
+        public int[] getSizeSubtreeArray(){
+            return sizeSubtree.clone();
+        }
 
-    /**
-     * Return a copy of the internal positionInPath array.
-     * For each vertex $v$, $positionInPathArray[normalizeVertex(v)] = k$ iff $v$ appears as the $k-th$ vertex on its
-     * path (0-indexed) or $-1$ if $v$ doesn't belong to any path.
-     *
-     * @return internal positionInPath array
-     */
-    public int[] getPositionInPathArray(){
-        return positionInPath.clone();
-    }
+        /**
+         * Return a copy of the internal component array.
+         * For each vertex $v$, $componentArray[normalizeVertex(v)] = getComponent(v)$
+         *
+         * @return internal component array
+         */
+        public int[] getComponentArray(){
+            return component.clone();
+        }
 
-    /**
-     * Return a copy of the internal firstNodeInPath array.
-     * For each path $i$, $firstNodeInPath[i] = normalizeVertex(v)$ iff $v$ appears as the first vertex on the path.
-     *
-     * <p>
-     * Note: the indexing of paths is consistent with {@link #getPaths()}.
-     *
-     * @return internal firstNodeInPath array
-     */
-    public int[] getFirstNodeInPathArray(){
-        return firstNodeInPath.clone();
+        /**
+         * Return a copy of the internal path array.
+         * For each vertex $v$, $pathArray[normalizeVertex(v)] = i$ iff $v$ appears on path $i$ or $-1$
+         * if $v$ doesn't belong to any path.
+         *
+         * <p>
+         * Note: the indexing of paths is consistent with {@link PathDecomposition#getPaths()}.
+         *
+         * @return internal path array
+         */
+        public int[] getPathArray(){
+            return path.clone();
+        }
+
+        /**
+         * Return a copy of the internal positionInPath array.
+         * For each vertex $v$, $positionInPathArray[normalizeVertex(v)] = k$ iff $v$ appears as the $k-th$ vertex on its
+         * path (0-indexed) or $-1$ if $v$ doesn't belong to any path.
+         *
+         * @return internal positionInPath array
+         */
+        public int[] getPositionInPathArray(){
+            return positionInPath.clone();
+        }
+
+        /**
+         * Return a copy of the internal firstNodeInPath array.
+         * For each path $i$, $firstNodeInPath[i] = normalizeVertex(v)$ iff $v$ appears as the first vertex on the path.
+         *
+         * <p>
+         * Note: the indexing of paths is consistent with {@link PathDecomposition#getPaths()}.
+         *
+         * @return internal firstNodeInPath array
+         */
+        public int[] getFirstNodeInPathArray(){
+            return firstNodeInPath.clone();
+        }
     }
 }
