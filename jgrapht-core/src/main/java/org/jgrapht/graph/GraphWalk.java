@@ -53,6 +53,9 @@ import java.util.function.Function;
  * the sequence of edges or the sequence of vertices provided during construction forms an actual
  * walk. It is the responsibility of the invoking class to provide correct input data.
  *
+ * <p>
+ *     Note: Serialization of a GraphWalk implies the serialization of the entire underlying graph.
+ * </p>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
