@@ -243,7 +243,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         Arrays.fill(positionInPath, -1);
 
         /*
-            Iterative through all roots and compute the paths for each tree individually
+            Iterate through all roots and compute the paths for each tree individually
          */
         int numberComponent = 0;
         for (V root: roots){
@@ -303,6 +303,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     /**
+     * Set of heavy edges.
+     *
      * @return (immutable) set of heavy edges
      */
     public Set<E> getHeavyEdges(){
@@ -310,6 +312,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     /**
+     * Set of light edges.
+     *
      * @return (immutable) set of light edges
      */
     public Set<E> getLightEdges(){
