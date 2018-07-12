@@ -19,11 +19,13 @@ package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -162,7 +164,48 @@ public class HeavyPathDecompositionTest {
                 }
         }
 
-        return true;
+        for (V root: roots){
+            BreadthFirstIterator<V, E> bfs = new BreadthFirstIterator<>(graph, root);
+
+            List<V> postOrder = new ArrayList<>();
+
+            while (bfs.hasNext()){
+                V v = bfs.next();
+                postOrder.add(v);
+            }
+
+            Collections.reverse(postOrder);
+
+            Map<V, Integer> sizeSubtree = new HashMap<>(graph.vertexSet().size());
+            for (V v: postOrder){
+                sizeSubtree.put(v, 1);
+
+                for (E edge: graph.edgesOf(v)){
+                    V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                    if (!u.equals(bfs.getParent(v))){
+                        int sizeU = sizeSubtree.get(u);
+
+                        sizeSubtree.put(v, sizeSubtree.get(v) + sizeU);
+                    }
+                }
+
+                final int totalSize = sizeSubtree.get(v) - 1;
+
+                for (E edge: graph.edgesOf(v)){
+                    if (lightEdges.contains(edge)){
+                        V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) > totalSize) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return countMaxPath(graph.vertexSet(), decomposition) <= log2(graph.vertexSet().size());
     }
 
     @Test(expected = NullPointerException.class)
@@ -228,7 +271,7 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 5);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
         Assert.assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
     }
 
@@ -253,9 +296,6 @@ public class HeavyPathDecompositionTest {
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
         Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
-
-        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                <= log2(graph.vertexSet().size()));
     }
 
     @Test
@@ -296,9 +336,6 @@ public class HeavyPathDecompositionTest {
                     new HeavyPathDecomposition<>(graph, roots);
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -325,9 +362,6 @@ public class HeavyPathDecompositionTest {
                     new HeavyPathDecomposition<>(graph, roots);
 
             Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-            Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                    <= log2(graph.vertexSet().size()));
         }
     }
 
@@ -351,8 +385,5 @@ public class HeavyPathDecompositionTest {
                 new HeavyPathDecomposition<>(graph, roots);
 
         Assert.assertTrue(isValidDecomposition(graph, roots, heavyPathDecomposition));
-
-        Assert.assertTrue(countMaxPath(graph.vertexSet(), heavyPathDecomposition)
-                <= log2(graph.vertexSet().size()));
     }
 }
