@@ -219,18 +219,11 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it involves copying the edge sets of the two
-     * underlying graphs.
      */
     @Override
     public Set<E> edgeSet()
     {
-        Set<E> res = new LinkedHashSet<>();
-        res.addAll(g1.edgeSet());
-        res.addAll(g2.edgeSet());
-        return Collections.unmodifiableSet(res);
+        return new UnmodifiableUnionSet<>(g1.edgeSet(), g2.edgeSet());
     }
 
     /**
@@ -403,18 +396,11 @@ public class AsGraphUnion<V, E>
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Note that this operation might by expensive as it currently involves copying the vertex sets
-     * of the two underlying graphs.
      */
     @Override
     public Set<V> vertexSet()
     {
-        Set<V> res = new HashSet<>();
-        res.addAll(g1.vertexSet());
-        res.addAll(g2.vertexSet());
-        return Collections.unmodifiableSet(res);
+        return new UnmodifiableUnionSet<>(g1.vertexSet(), g2.vertexSet());
     }
 
     /**
