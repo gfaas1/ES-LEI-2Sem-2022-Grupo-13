@@ -249,23 +249,23 @@ public class BhandariKDisjointShortestPaths<V, E>
      */
     private void findOverlappingEdges()
     {
-        Map<UnorderedPair<V, V>, Integer> edgeOccurenceCount = new HashMap<>();
+        Map<UnorderedPair<V, V>, Integer> edgeOccurrenceCount = new HashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {                
                 V v = this.workingGraph.getEdgeSource(e);
                 V u = this.workingGraph.getEdgeTarget(e);                
                 UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
                 
-                if (edgeOccurenceCount.containsKey(edgePair)) {
-                    edgeOccurenceCount.put(edgePair, 2);
+                if (edgeOccurrenceCount.containsKey(edgePair)) {
+                    edgeOccurrenceCount.put(edgePair, 2);
                 } else {
-                    edgeOccurenceCount.put(edgePair, 1);
+                    edgeOccurrenceCount.put(edgePair, 1);
                 }
             }
         }
 
         this.overlappingEdges = pathList.stream().flatMap(List::stream).filter(
-            e -> edgeOccurenceCount.get(new UnorderedPair<>(
+            e -> edgeOccurrenceCount.get(new UnorderedPair<>(
                 this.workingGraph.getEdgeSource(e), 
                 this.workingGraph.getEdgeTarget(e))) > 1)
             .collect(Collectors.toSet());
