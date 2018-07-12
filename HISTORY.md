@@ -21,6 +21,7 @@ Changes to JGraphT in each version:
     - Increased numeric precision in PushRelabelMFImpl (contributed by Alexandru Văleanu)
     - Added ColorRefinement and ColorRefinementIsomorphismInspector (contributed by Christoph Grüne, Daniel Mock, Oliver Feith and Abdallah Atouani)
     - Improved efficiency of `BhandariKDisjointShortestPaths` (contributed by Assaf Mizrachi)
+    - Added `UnmodifiableUnionSet` to optimize `AsGraphUnion` (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
