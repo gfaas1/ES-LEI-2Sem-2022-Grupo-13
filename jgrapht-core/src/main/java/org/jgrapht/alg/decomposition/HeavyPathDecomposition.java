@@ -441,37 +441,37 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         /**
-         * Return a copy of the internal depth array.
+         * Return the internal depth array.
          * For each vertex $v \in V$, $depthArray[normalizeVertex(v)] = getDepth(v)$
          *
          * @return internal depth array
          */
         public int[] getDepthArray(){
-            return depth.clone();
+            return depth;
         }
 
         /**
-         * Return a copy of the internal sizeSubtree array.
+         * Return the internal sizeSubtree array.
          * For each vertex $v$, $sizeSubtreeArray[normalizeVertex(v)] = getSizeSubtree(v)$
          *
          * @return internal sizeSubtree array
          */
         public int[] getSizeSubtreeArray(){
-            return sizeSubtree.clone();
+            return sizeSubtree;
         }
 
         /**
-         * Return a copy of the internal component array.
+         * Return the internal component array.
          * For each vertex $v$, $componentArray[normalizeVertex(v)] = getComponent(v)$
          *
          * @return internal component array
          */
         public int[] getComponentArray(){
-            return component.clone();
+            return component;
         }
 
         /**
-         * Return a copy of the internal path array.
+         * Return the internal path array.
          * For each vertex $v$, $pathArray[normalizeVertex(v)] = i$ iff $v$ appears on path $i$ or $-1$
          * if $v$ doesn't belong to any path.
          *
@@ -481,22 +481,22 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
          * @return internal path array
          */
         public int[] getPathArray(){
-            return path.clone();
+            return path;
         }
 
         /**
-         * Return a copy of the internal positionInPath array.
+         * Return the internal positionInPath array.
          * For each vertex $v$, $positionInPathArray[normalizeVertex(v)] = k$ iff $v$ appears as the $k-th$ vertex on its
          * path (0-indexed) or $-1$ if $v$ doesn't belong to any path.
          *
          * @return internal positionInPath array
          */
         public int[] getPositionInPathArray(){
-            return positionInPath.clone();
+            return positionInPath;
         }
 
         /**
-         * Return a copy of the internal firstNodeInPath array.
+         * Return the internal firstNodeInPath array.
          * For each path $i$, $firstNodeInPath[i] = normalizeVertex(v)$ iff $v$ appears as the first vertex on the path.
          *
          * <p>
@@ -505,7 +505,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
          * @return internal firstNodeInPath array
          */
         public int[] getFirstNodeInPathArray(){
-            return firstNodeInPath.clone();
+            return firstNodeInPath;
         }
     }
 }
