@@ -179,12 +179,14 @@ public class HeavyPathDecompositionTest {
             Map<V, Integer> sizeSubtree = new HashMap<>(graph.vertexSet().size());
             for (V v: postOrder){
                 sizeSubtree.put(v, 1);
+                int maxSizeSubtree = -1;
 
                 for (E edge: graph.edgesOf(v)){
                     V u = Graphs.getOppositeVertex(graph, edge, v);
 
                     if (!u.equals(bfs.getParent(v))){
                         int sizeU = sizeSubtree.get(u);
+                        maxSizeSubtree = Math.max(maxSizeSubtree, sizeU);
 
                         sizeSubtree.put(v, sizeSubtree.get(v) + sizeU);
                     }
@@ -197,6 +199,13 @@ public class HeavyPathDecompositionTest {
                         V u = Graphs.getOppositeVertex(graph, edge, v);
 
                         if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) > totalSize) {
+                            return false;
+                        }
+                    }
+                    else{ // edge is heavy
+                        V u = Graphs.getOppositeVertex(graph, edge, v);
+
+                        if (!u.equals(bfs.getParent(v)) && sizeSubtree.get(u) < maxSizeSubtree) {
                             return false;
                         }
                     }
