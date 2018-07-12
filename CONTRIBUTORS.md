@@ -112,9 +112,9 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Philipp Kaesgen](https://github.com/PhilippKaesgen)
 - [Lukas Harzenetter](https://github.com/lharzenetter)
 - [Christoph Grüne](https://github.com/christophgruene)
-- Daniel Mock
-- Oliver Feith
-- Abdallah Atouani
+- [Daniel Mock](https://github.com/danielmock)
+- [Oliver Feith](https://github.com/Watercrystal)
+- [Abdallah Atouani](https://github.com/AbdallahAt)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
