@@ -18,6 +18,7 @@
 package org.jgrapht.alg.decomposition;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.SlowTests;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.generate.BarabasiAlbertForestGenerator;
@@ -52,15 +53,18 @@ public class HeavyPathDecompositionTest {
         Count the maximum number of distinct paths on any root-to-leaf path
      */
     public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
-        List<List<V>> paths = decomposition.getPathDecomposition().getPaths();
+        Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
 
-        for (int i = 0; i < paths.size(); i++) {
-            List<V> path = paths.get(i);
+        int i = 0;
+        for (GraphPath<V, E> path: paths) {
+            List<V> vertexList = path.getVertexList();
 
-            for (int j = 0; j < path.size(); j++) {
-                whichPath.put(path.get(j), i);
+            for (int j = 0; j < vertexList.size(); j++) {
+                whichPath.put(vertexList.get(j), i);
             }
+
+            i++;
         }
 
         int maxim = 0;
@@ -100,26 +104,27 @@ public class HeavyPathDecompositionTest {
         if (!allEdges.equals(graph.edgeSet()))
             return false;
 
-        List<List<V>> paths = decomposition.getPathDecomposition().getPaths();
+        Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
         Set<E> edgesInPaths = new HashSet<>();
 
-        for (int i = 0; i < paths.size(); i++) {
-            List<V> path = paths.get(i);
+        int i = 0;
+        for (GraphPath<V, E> path: paths) {
+            List<V> vertexList = path.getVertexList();
 
-            for (int j = 0; j < path.size(); j++) {
+            for (int j = 0; j < vertexList.size(); j++) {
                 // Check if a vertex appear more than once in the decomposition
-                if (whichPath.containsKey(path.get(j)))
+                if (whichPath.containsKey(vertexList.get(j)))
                     return false;
 
-                whichPath.put(path.get(j), i);
+                whichPath.put(vertexList.get(j), i);
 
                 // Check if the path is actually a valid path in the graph
                 if (j > 0){
-                    if (!graph.containsEdge(path.get(j - 1), path.get(j)))
+                    if (!graph.containsEdge(vertexList.get(j - 1), vertexList.get(j)))
                         return false;
 
-                    E edge = graph.getEdge(path.get(j - 1), path.get(j));
+                    E edge = graph.getEdge(vertexList.get(j - 1), vertexList.get(j));
 
                     if (!heavyEdges.contains(edge))
                         return false;
@@ -127,6 +132,8 @@ public class HeavyPathDecompositionTest {
                     edgesInPaths.add(edge);
                 }
             }
+
+            i++;
         }
 
         for (E edge: graph.edgeSet()){

@@ -17,9 +17,14 @@
  */
 package org.jgrapht.alg.interfaces;
 
-import java.io.Serializable;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.ArrayUnenforcedSet;
+
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An algorithm which computes a decomposition into disjoint paths for a given tree/forest
@@ -50,11 +55,11 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
         Set<E> getEdges();
 
         /**
-         * List of disjoint vertex paths of the decomposition
+         * Set of disjoint paths of the decomposition
          *
          * @return list of vertex paths
          */
-        List<List<V>> getPaths();
+        Set<GraphPath<V, E>> getPaths();
 
         /**
          * @return number of paths in the decomposition
@@ -70,21 +75,23 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E>, Serializable {
+    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E> {
 
-        private static final long serialVersionUID = -5745023840678523568L;
         private final Set<E> edges;
-        private final List<List<V>> paths;
+        private final Set<GraphPath<V, E>> paths;
 
         /**
          * Construct a new spanning tree.
          *
+         * @param graph the graph
          * @param edges the edges
          * @param paths the vertex paths
          */
-        public PathDecompositionImpl(Set<E> edges, List<List<V>> paths) {
+        public PathDecompositionImpl(Graph<V, E> graph, Set<E> edges, List<List<V>> paths) {
             this.edges = edges;
-            this.paths = paths;
+            this.paths = paths.stream()
+                    .map(path -> new GraphWalk<>(graph, path, path.size()))
+                    .collect(Collectors.toCollection(ArrayUnenforcedSet::new));
         }
 
         @Override
@@ -93,7 +100,7 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
         }
 
         @Override
-        public List<List<V>> getPaths() {
+        public Set<GraphPath<V, E>> getPaths() {
             return paths;
         }
 

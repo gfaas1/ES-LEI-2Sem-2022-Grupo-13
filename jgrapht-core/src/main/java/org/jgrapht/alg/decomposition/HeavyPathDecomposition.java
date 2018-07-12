@@ -326,7 +326,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      */
     @Override
     public PathDecomposition<V, E> getPathDecomposition() {
-        return new PathDecompositionImpl<>(getHeavyEdges(), this.paths);
+        return new PathDecompositionImpl<>(graph, getHeavyEdges(), this.paths);
     }
 
     /**
