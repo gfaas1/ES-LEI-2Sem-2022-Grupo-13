@@ -42,6 +42,9 @@ public class UnmodifiableUnionSet<E>
 
     /**
      * Constructs a new set.
+     * 
+     * @param first the first set
+     * @param second the second set
      */
     public UnmodifiableUnionSet(Set<E> first, Set<E> second)
     {
