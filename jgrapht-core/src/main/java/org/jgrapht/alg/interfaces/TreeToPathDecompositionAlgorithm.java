@@ -81,7 +81,7 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
         private final Set<GraphPath<V, E>> paths;
 
         /**
-         * Construct a new spanning tree.
+         * Construct a new path decomposition.
          *
          * @param graph the graph
          * @param edges the edges
