@@ -35,6 +35,10 @@ import java.util.*;
  * In a heavy path decomposition, the edges set if partitioned into two sets, a set of heavy edges and a
  * set of light ones according to the relative number of nodes in the vertex's subtree.
  *
+ * We define the size of a vertex v in the forest, denoted by size(v), to be the number of descendants
+ * of v, including v itself. We define a tree edge (v,parent(v)) to be heavy if $2*size(v)$ &gt; $size(parent(v))$
+ * and light, otherwise.
+ *
  * The set of heavy edges form the edges of the decomposition.
  *
  * <p>
@@ -316,8 +320,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     /**
-     * Set of heavy edges. An edge from vertex $parent(v)$ to $v$ is called heavy if $2 * size(v)$ &gt; $size(parent(v))$
-     * where $size(v)$ = number of vertices in the subtree rooted at $v$ (including $v$).
+     * Set of heavy edges.
      *
      * @return (immutable) set of heavy edges
      */
@@ -326,7 +329,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     /**
-     * Set of light edges. Any edge that is not heavy is light.
+     * Set of light edges.
      *
      * @return (immutable) set of light edges
      */
