@@ -26,24 +26,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Algorithm for computing the heavy path decomposition of a tree/forest.
+ * Algorithm for computing the heavy path decomposition of a rooted tree/forest.
  *
  * <p>
  *  Heavy path decomposition is a technique for decomposing a rooted tree/forest
  *  into a set of disjoint paths.
  *
  * <p>
- * In a heavy path decomposition,
- * each non-leaf node selects one "heavy edge", the edge to the child that has the greatest
- * number of descendants (breaking ties arbitrarily). The set of these edges form the paths of the decomposition.
+ * In a heavy path decomposition, the edges set if partitioned into two sets, a set of heavy edges and a
+ * set of light ones according to the relative number of nodes in the vertex's subtree.
  *
- * <p>
- * If the edges of a tree/forest T are partitioned into a set of heavy edges and light edges,
- * with one heavy edge from each non-leaf node to one of its children,
- * then the subgraph formed by the heavy edges consists of a set of paths,
- * with each non-leaf vertex belonging to exactly one path, the one containing its heavy edge.
- * Leaf nodes of the tree that are not the endpoint of a heavy edge may be considered as forming paths of length zero.
- * In this way, each vertex belongs to exactly one of the paths and each path has a head vertex, its topmost vertex.
+ * The set of heavy edges form the edges of the decomposition.
  *
  * <p>
  *  A benefit of this decomposition is that on any root-to-leaf path of a tree with n nodes,
@@ -52,6 +45,10 @@ import java.util.stream.Collectors;
  * <p>
  *   This implementation runs in $O(|V|)$ time and requires $O(|V|)$ extra memory, where $|V|$ is the number of
  *   vertices in the tree/forest.
+ *
+ * <p>
+ *   Note: This implementation is tested only with {@link org.jgrapht.graph.SimpleGraph}.
+ * </p>
  *
  * @author Alexandru Valeanu
  * @since June 2018

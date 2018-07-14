@@ -52,9 +52,9 @@ public class HeavyPathDecompositionTest {
     }
 
     /*
-        Count the maximum number of distinct paths on any root-to-leaf path
+        Count the maximum number of light edges on any root-to-leaf path
      */
-    public static <V, E> int countMaxPath(Set<V> vertexSet, HeavyPathDecomposition<V, E> decomposition){
+    public static <V, E> int countMaxPath(Graph<V, E> graph, HeavyPathDecomposition<V, E> decomposition){
         Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
 
@@ -72,18 +72,24 @@ public class HeavyPathDecompositionTest {
         int maxim = 0;
         HeavyPathDecomposition<V, E>.InternalState state = decomposition.getInternalState();
 
-        for (V v: vertexSet){
+        for (V v: graph.vertexSet()){
             if (whichPath.containsKey(v)){
-                int lastPath = -1;
                 int cnt = 0;
 
-                while (v != null){
-                    if (lastPath != whichPath.get(v)){
-                        lastPath = whichPath.get(v);
-                        cnt++;
-                    }
+                while (true){
+                    V u = state.getParent(v);
 
-                    v = state.getParent(v);
+                    if (u != null){
+                        E edge = graph.getEdge(u, v);
+
+                        if (decomposition.getLightEdges().contains(edge)){
+                            cnt++;
+                        }
+
+                        v = u;
+                    }
+                    else
+                        break;
                 }
 
                 maxim = Math.max(maxim, cnt);
@@ -184,7 +190,7 @@ public class HeavyPathDecompositionTest {
             }
         }
 
-        return countMaxPath(graph.vertexSet(), decomposition) <= log2(graph.vertexSet().size());
+        return countMaxPath(graph, decomposition) <= log2(graph.vertexSet().size());
     }
 
     @Test(expected = NullPointerException.class)
@@ -227,6 +233,7 @@ public class HeavyPathDecompositionTest {
                 new HeavyPathDecomposition<>(graph, "1");
 
         Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton("1"), heavyPathDecomposition));
     }
 
     @Test
@@ -238,6 +245,7 @@ public class HeavyPathDecompositionTest {
                 new HeavyPathDecomposition<>(graph, "a");
 
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton("a"), heavyPathDecomposition));
     }
 
     @Test
@@ -252,8 +260,8 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
     @Test
@@ -268,8 +276,8 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 5);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
         Assert.assertEquals(2, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(5), heavyPathDecomposition));
     }
 
     @Test
@@ -308,8 +316,8 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
+        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
     }
 
     @Test
