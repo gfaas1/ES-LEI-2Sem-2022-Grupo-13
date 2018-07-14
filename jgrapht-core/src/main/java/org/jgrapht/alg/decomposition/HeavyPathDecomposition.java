@@ -74,6 +74,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     private List<List<V>> paths;
 
     private Set<E> heavyEdges;
+    private Set<E> lightEdges;
 
     /**
      * Create an instance with a reference to the tree that we will decompose and to the root of the tree.
@@ -117,6 +118,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         positionInPath = new int[n];
 
         heavyEdges = new HashSet<>();
+        lightEdges = new HashSet<>();
     }
 
     private void normalizeGraph(){
@@ -183,15 +185,14 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
             }
             else{
                 /*
-                    For u compute heavyChild. If it exists then u becomes part of heavyChild's path.
+                    For u compute pathChild. If it exists then u becomes part of pathChild's path.
                     If not then start a new path with u.
 
-                    heavyChild = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
-                    heavyEdge = edge(u, heavyChild)
+                    pathChild = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
                  */
 
-                int heavyChild = -1;
-                E heavyEdge = null;
+                int pathChild = -1;
+                E pathEdge = null;
 
                 V vertexU = indexList.get(u);
                 for (E edge: graph.edgesOf(vertexU)){
@@ -203,18 +204,22 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                     if (child != parent[u]){
                         sizeSubtree[u] += sizeSubtree[child];
 
-                        if (heavyChild == -1 || sizeSubtree[heavyChild] < sizeSubtree[child]) {
-                            heavyChild = child;
-                            heavyEdge = edge;
+                        if (pathChild == -1 || sizeSubtree[pathChild] < sizeSubtree[child]) {
+                            pathChild = child;
+                            pathEdge = edge;
                         }
                     }
                 }
 
-                if (heavyChild == -1)
+                if (pathChild == -1)
                     path[u] = numberOfPaths++;
                 else {
-                    heavyEdges.add(heavyEdge);
-                    path[u] = path[heavyChild];
+                    path[u] = path[pathChild];
+
+                    // Is pathEdge=(pathChild, u) a heavy edge?
+                    if (2 * sizeSubtree[pathChild] > sizeSubtree[u]){
+                        heavyEdges.add(pathEdge);
+                    }
                 }
 
                 /*
@@ -300,25 +305,29 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         this.paths = Collections.unmodifiableList(paths);
+
+        this.heavyEdges = Collections.unmodifiableSet(this.heavyEdges);
+        this.lightEdges = Collections.unmodifiableSet(graph.edgeSet().stream()
+                .filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
     }
 
     /**
-     * Set of heavy edges.
+     * Set of heavy edges. An edge from vertex $parent(v)$ to $v$ is called heavy if $2 * size(v) > size(parent(v))$
+     * where $size(v)$ = number of vertices in the subtree rooted at $v$ (including $v$).
      *
      * @return (immutable) set of heavy edges
      */
     public Set<E> getHeavyEdges(){
-        return Collections.unmodifiableSet(this.heavyEdges);
+        return this.heavyEdges;
     }
 
     /**
-     * Set of light edges.
+     * Set of light edges. Any edge that is not heavy is light.
      *
      * @return (immutable) set of light edges
      */
     public Set<E> getLightEdges(){
-        return Collections.unmodifiableSet(
-                graph.edgeSet().stream().filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
+        return this.lightEdges;
     }
 
     /**

@@ -108,7 +108,6 @@ public class HeavyPathDecompositionTest {
 
         Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
-        Set<E> edgesInPaths = new HashSet<>();
 
         int i = 0;
         for (GraphPath<V, E> path: paths) {
@@ -125,33 +124,10 @@ public class HeavyPathDecompositionTest {
                 if (j > 0){
                     if (!graph.containsEdge(vertexList.get(j - 1), vertexList.get(j)))
                         return false;
-
-                    E edge = graph.getEdge(vertexList.get(j - 1), vertexList.get(j));
-
-                    if (!heavyEdges.contains(edge))
-                        return false;
-
-                    edgesInPaths.add(edge);
                 }
             }
 
             i++;
-        }
-
-        for (E edge: graph.edgeSet()){
-            if (edgesInPaths.contains(edge)){
-                // edge must be a heavy edge
-
-                if (!heavyEdges.contains(edge))
-                    return false;
-            }
-            else{
-                // edge must be a light edge
-
-                if (!lightEdges.contains(edge)){
-                    return false;
-                }
-            }
         }
 
         ConnectivityInspector<V, E> connectivityInspector = new ConnectivityInspector<>(graph);
@@ -179,40 +155,34 @@ public class HeavyPathDecompositionTest {
             Map<V, Integer> sizeSubtree = new HashMap<>(graph.vertexSet().size());
             for (V v: postOrder){
                 sizeSubtree.put(v, 1);
-                int maxSizeSubtree = -1;
 
                 for (E edge: graph.edgesOf(v)){
                     V u = Graphs.getOppositeVertex(graph, edge, v);
 
                     if (!u.equals(bfs.getParent(v))){
                         int sizeU = sizeSubtree.get(u);
-                        maxSizeSubtree = Math.max(maxSizeSubtree, sizeU);
-
                         sizeSubtree.put(v, sizeSubtree.get(v) + sizeU);
                     }
                 }
-
-                final int totalSize = sizeSubtree.get(v) - 1;
 
                 for (E edge: graph.edgesOf(v)){
                     if (lightEdges.contains(edge)){
                         V u = Graphs.getOppositeVertex(graph, edge, v);
 
-                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) > totalSize) {
+                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) > sizeSubtree.get(v)) {
                             return false;
                         }
                     }
                     else{ // edge is heavy
                         V u = Graphs.getOppositeVertex(graph, edge, v);
 
-                        if (!u.equals(bfs.getParent(v)) && sizeSubtree.get(u) < maxSizeSubtree) {
+                        if (!u.equals(bfs.getParent(v)) && 2 * sizeSubtree.get(u) <= sizeSubtree.get(v)) {
                             return false;
                         }
                     }
                 }
             }
         }
-
 
         return countMaxPath(graph.vertexSet(), decomposition) <= log2(graph.vertexSet().size());
     }
@@ -239,6 +209,24 @@ public class HeavyPathDecompositionTest {
 
         HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
                 new HeavyPathDecomposition<>(graph, "b");
+    }
+
+    @Test
+    public void testNoHeavyEdges(){
+        Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        graph.addVertex("1");
+        graph.addVertex("2");
+        graph.addVertex("3");
+        graph.addVertex("4");
+
+        graph.addEdge("1", "2");
+        graph.addEdge("1", "3");
+        graph.addEdge("1", "4");
+
+        HeavyPathDecomposition<String, DefaultEdge> heavyPathDecomposition =
+                new HeavyPathDecomposition<>(graph, "1");
+
+        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
     }
 
     @Test
