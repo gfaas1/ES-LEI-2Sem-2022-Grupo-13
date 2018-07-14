@@ -309,7 +309,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     /**
-     * Set of heavy edges. An edge from vertex $parent(v)$ to $v$ is called heavy if $2 * size(v) > size(parent(v))$
+     * Set of heavy edges. An edge from vertex $parent(v)$ to $v$ is called heavy if $2 * size(v)$ &gt; $size(parent(v))$
      * where $size(v)$ = number of vertices in the subtree rooted at $v$ (including $v$).
      *
      * @return (immutable) set of heavy edges
