@@ -22,6 +22,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.ArrayUnenforcedSet;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -75,8 +76,9 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
      * @param <V> the graph vertex type
      * @param <E> the graph edge type
      */
-    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E> {
+    class PathDecompositionImpl<V, E> implements PathDecomposition<V, E>, Serializable {
 
+        private static final long serialVersionUID = 8468626434814461297L;
         private final Set<E> edges;
         private final Set<GraphPath<V, E>> paths;
 
