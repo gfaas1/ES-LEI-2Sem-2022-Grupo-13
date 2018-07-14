@@ -23,7 +23,6 @@ import org.jgrapht.alg.interfaces.TreeToPathDecompositionAlgorithm;
 import org.jgrapht.alg.util.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Algorithm for computing the heavy path decomposition of a rooted tree/forest.
@@ -45,6 +44,11 @@ import java.util.stream.Collectors;
  * <p>
  *   This implementation runs in $O(|V|)$ time and requires $O(|V|)$ extra memory, where $|V|$ is the number of
  *   vertices in the tree/forest.
+ *
+ * <p>
+ *   Note: If an edge is not reachable from any of the roots provided, then that edge is neither light
+ *   nor heavy.
+ * </p>
  *
  * <p>
  *   Note: This implementation is tested only with {@link org.jgrapht.graph.SimpleGraph}.
@@ -205,6 +209,9 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                             pathChild = child;
                             pathEdge = edge;
                         }
+
+                        // assume all edges are light
+                        lightEdges.add(edge);
                     }
                 }
 
@@ -216,6 +223,9 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                     // Is pathEdge=(pathChild, u) a heavy edge?
                     if (2 * sizeSubtree[pathChild] > sizeSubtree[u]){
                         heavyEdges.add(pathEdge);
+
+                        // assumption was wrong => remove pathEdge from heavy-edges set
+                        lightEdges.remove(pathEdge);
                     }
                 }
 
@@ -302,10 +312,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         this.paths = Collections.unmodifiableList(paths);
-
         this.heavyEdges = Collections.unmodifiableSet(this.heavyEdges);
-        this.lightEdges = Collections.unmodifiableSet(graph.edgeSet().stream()
-                .filter(n -> !this.heavyEdges.contains(n)).collect(Collectors.toSet()));
     }
 
     /**

@@ -317,7 +317,8 @@ public class HeavyPathDecompositionTest {
         HeavyPathDecomposition<Integer, DefaultEdge> heavyPathDecomposition = new HeavyPathDecomposition<>(graph, 1);
 
         Assert.assertEquals(1, heavyPathDecomposition.getPathDecomposition().numberOfPaths());
-        Assert.assertTrue(isValidDecomposition(graph, Collections.singleton(1), heavyPathDecomposition));
+        Assert.assertTrue(heavyPathDecomposition.getHeavyEdges().isEmpty());
+        Assert.assertEquals(1, heavyPathDecomposition.getLightEdges().size());
     }
 
     @Test
