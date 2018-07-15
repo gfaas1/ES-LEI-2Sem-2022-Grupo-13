@@ -48,7 +48,9 @@ public class FloydWarshallShortestPaths<V, E>
     private final List<V> vertices;
     private final List<Integer> degrees;
     private final Map<V, Integer> vertexIndices;
+    // minimum vertex with degree at least 1
     private final int minDegreeOne;
+    // minimum vertex with degree at least 2    
     private final int minDegreeTwo;
 
     private double[][] d = null;
@@ -73,6 +75,7 @@ public class FloydWarshallShortestPaths<V, E>
             vertices, new VertexDegreeComparator<>(graph, VertexDegreeComparator.Order.ASCENDING));
         this.degrees = new ArrayList<>();
         this.vertexIndices = new HashMap<>(this.vertices.size());
+        
         int i = 0;
         int minDegreeOne = vertices.size();
         int minDegreeTwo = vertices.size();
@@ -80,12 +83,18 @@ public class FloydWarshallShortestPaths<V, E>
             vertexIndices.put(vertex, i);
             int degree = graph.degreeOf(vertex);
             degrees.add(degree);
-            if (degree > 0 && i < minDegreeOne) {
+            
+            if (degree > 1) {
+                if (i < minDegreeOne) {
+                    minDegreeOne = i;
+                }
+                if (i < minDegreeTwo) {
+                    minDegreeTwo = i;
+                }
+            } else if (i < minDegreeOne && degree == 1) {
                 minDegreeOne = i;
             }
-            if (degree > 1 && i < minDegreeTwo) {
-                minDegreeTwo = i;
-            }
+            
             ++i;
         }
         this.minDegreeOne = minDegreeOne;
