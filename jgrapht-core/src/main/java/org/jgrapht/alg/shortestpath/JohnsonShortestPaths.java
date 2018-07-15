@@ -60,7 +60,7 @@ public class JohnsonShortestPaths<V, E>
     extends BaseShortestPathAlgorithm<V, E>
 {
     private double[][] distance;
-    private Object[][] pred;
+    private E [][] pred;
     private Map<V, Integer> vertexIndices;
 
     private final Comparator<Double> comparator;
@@ -113,7 +113,7 @@ public class JohnsonShortestPaths<V, E>
         int vSink = vertexIndices.get(sink);
         
         V cur = sink;
-        E e = TypeUtil.uncheckedCast(pred[vSource][vSink]);
+        E e = pred[vSource][vSink];
         if (e == null) { 
             return null;
         }
@@ -122,7 +122,7 @@ public class JohnsonShortestPaths<V, E>
         while(e != null) { 
             edgeList.addFirst(e);
             cur = Graphs.getOppositeVertex(graph, e, cur);
-            e = TypeUtil.uncheckedCast(pred[vSource][vertexIndices.get(cur)]);
+            e = pred[vSource][vertexIndices.get(cur)];
         }
 
         return new GraphWalk<>(graph, source, sink, null, edgeList, distance[vSource][vSink]);
@@ -202,7 +202,7 @@ public class JohnsonShortestPaths<V, E>
         vertexIndices = computeVertexIndices(g);
         final int n = g.vertexSet().size();
         distance = new double[n][n];
-        pred = new Object[n][n];
+        pred = TypeUtil.uncheckedCast(new Object[n][n]);
 
         /*
          * Execute Dijkstra multiple times
@@ -260,7 +260,7 @@ public class JohnsonShortestPaths<V, E>
         vertexIndices = computeVertexIndices(g);
         final int n = g.vertexSet().size();
         distance = new double[n][n];
-        pred = new Object[n][n];
+        pred = TypeUtil.uncheckedCast(new Object[n][n]);
 
         /*
          * Run Dijkstra using new weights for all vertices
