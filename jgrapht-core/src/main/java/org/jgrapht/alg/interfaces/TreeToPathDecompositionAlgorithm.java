@@ -23,6 +23,7 @@ import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.ArrayUnenforcedSet;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -91,9 +92,12 @@ public interface TreeToPathDecompositionAlgorithm<V, E> {
          */
         public PathDecompositionImpl(Graph<V, E> graph, Set<E> edges, List<List<V>> paths) {
             this.edges = edges;
-            this.paths = paths.stream()
+
+            Set<GraphPath<V, E>> arrayUnenforcedSet = paths.stream()
                     .map(path -> new GraphWalk<>(graph, path, path.size()))
                     .collect(Collectors.toCollection(ArrayUnenforcedSet::new));
+
+            this.paths = Collections.unmodifiableSet(arrayUnenforcedSet);
         }
 
         @Override

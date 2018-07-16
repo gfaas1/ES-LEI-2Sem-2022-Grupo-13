@@ -20,7 +20,6 @@ package org.jgrapht.alg.decomposition;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.TreeToPathDecompositionAlgorithm;
-import org.jgrapht.alg.util.Pair;
 
 import java.util.*;
 
@@ -32,7 +31,7 @@ import java.util.*;
  *  into a set of disjoint paths.
  *
  * <p>
- * In a heavy path decomposition, the edges set if partitioned into two sets, a set of heavy edges and a
+ * In a heavy path decomposition, the edges set is partitioned into two sets, a set of heavy edges and a
  * set of light ones according to the relative number of nodes in the vertex's subtree.
  *
  * We define the size of a vertex v in the forest, denoted by size(v), to be the number of descendants
@@ -52,10 +51,6 @@ import java.util.*;
  * <p>
  *   Note: If an edge is not reachable from any of the roots provided, then that edge is neither light
  *   nor heavy.
- * </p>
- *
- * <p>
- *   Note: This implementation is tested only with {@link org.jgrapht.graph.SimpleGraph}.
  * </p>
  *
  * @author Alexandru Valeanu
@@ -97,7 +92,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      * Create an instance with a reference to the forest that we will decompose and to the sets of roots of the
      * forest (one root per tree).
      *
-     * Note: If two roots appear in the same tree, any one can be used as the actual root of that tree.
+     * Note: If two roots appear in the same tree, an error will be thrown.
      * Note: The constructor will NOT check if the input forest is a valid forest.
      *
      * @param forest the input forest
@@ -127,18 +122,16 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     private void normalizeGraph(){
-        /*
-         * Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
+        /**
+           Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
+           mapping (using an ArrayList)
          */
         vertexMap = new HashMap<>(graph.vertexSet().size());
         indexList = new ArrayList<>(graph.vertexSet().size());
 
         for (V v : graph.vertexSet()) {
-            if (!vertexMap.containsKey(v)) {
-                vertexMap.put(v, vertexMap.size());
-                indexList.add(v);
-            }
+            vertexMap.put(v, vertexMap.size());
+            indexList.add(v);
         }
     }
 
@@ -153,7 +146,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      * @param c the component number to be used for u's tree
      */
     private void dfsIterative(int u, int c){
-        /*
+        /**
             Set of vertices for which the the part of the if has been performed
             (In other words: u ∈ explored iff dfs(u, c') has been called as some point)
          */
@@ -178,7 +171,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                 for (E edge: graph.edgesOf(vertexU)){
                     int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
-                    /*
+                    /**
                         Check if child has not been explored (i.e. dfs(child, c) has not been called)
                      */
                     if (!explored.contains(child)){
@@ -189,7 +182,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                 }
             }
             else{
-                /*
+                /**
                     For u compute pathChild. If it exists then u becomes part of pathChild's path.
                     If not then start a new path with u.
 
@@ -203,8 +196,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                 for (E edge: graph.edgesOf(vertexU)){
                     int child = vertexMap.get(Graphs.getOppositeVertex(graph, edge, vertexU));
 
-                    /*
-                        Check if child if a descent of u and not its parent
+                    /**
+                        Check if child if a descendant of u and not its parent
                      */
                     if (child != parent[u]){
                         sizeSubtree[u] += sizeSubtree[child];
@@ -228,12 +221,12 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                     if (2 * sizeSubtree[pathChild] > sizeSubtree[u]){
                         heavyEdges.add(pathEdge);
 
-                        // assumption was wrong => remove pathEdge from heavy-edges set
+                        // assumption was wrong => remove pathEdge from light-edges set
                         lightEdges.remove(pathEdge);
                     }
                 }
 
-                /*
+                /**
                     Compute the positions in reverse order: the first node in the path is the first one that was
                     added (the order will be reversed in decompose).
                  */
@@ -243,7 +236,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     private void decompose(){
-        /*
+        /**
             If we already have a decomposition stop.
          */
         if (path != null)
@@ -258,24 +251,28 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         Arrays.fill(component, -1);
         Arrays.fill(positionInPath, -1);
 
-        /*
+        /**
             Iterate through all roots and compute the paths for each tree individually
          */
         int numberComponent = 0;
         for (V root: roots){
             Integer u = vertexMap.get(root);
 
-            if (u == null)
+            if (u == null) {
                 throw new IllegalArgumentException("root: " + root + " not contained in graph");
+            }
 
             if (component[u] == -1) {
                 dfsIterative(u, numberComponent++);
+            }
+            else{
+                throw new IllegalArgumentException("multiple roots in the same tree");
             }
         }
 
         firstNodeInPath = new int[numberOfPaths];
 
-        /*
+        /**
             Reverse the position of all vertices that are present in some path.
             After this the positionInPath[u] = 0 if u is the first node in the path (i.e. the node closest to the root)
 
@@ -290,7 +287,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
             }
         }
 
-        /*
+        /**
             Compute the paths as unmodifiable data structures (list)
          */
         List<List<V>> paths = new ArrayList<>(numberOfPaths);
@@ -348,7 +345,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     /**
      * Return the internal representation of the data.
      *
-     * Note: For developer use only
+     * Note: this data representation is intended only for use by other
+     * components within JGraphT
      *
      * @return the internal state representation
      */
@@ -442,18 +440,31 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         /**
-         * Return the normalized version of the input graph: a map from vertices to unique integers and the reverse
-         * mapping as a list.
+         * Return the normalized map from vertices to unique integers.
          *
          * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
          * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
          *
-         * Note: The two structures returned are immutable.
+         * Note: The structure returned is immutable.
          *
-         * @return a pair which consists of the vertexMap and the indexList
+         * @return the vertexMap
          */
-        public Pair<Map<V, Integer>, List<V>> getNormalizedGraph(){
-            return Pair.of(Collections.unmodifiableMap(vertexMap), Collections.unmodifiableList(indexList));
+        public Map<V, Integer> getVertexMap(){
+            return Collections.unmodifiableMap(vertexMap);
+        }
+
+        /**
+         * Return the index list, a mapping from integers to vertices.
+         *
+         * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
+         * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
+         *
+         * Note: The structure returned is immutable.
+         *
+         * @return the indexList
+         */
+        public List<V> getIndexList(){
+            return Collections.unmodifiableList(indexList);
         }
 
         /**
