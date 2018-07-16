@@ -122,10 +122,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     }
 
     private void normalizeGraph(){
-        /*
-         * Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
-         * mapping (using an ArrayList)
-         */
+        // Normalize the graph: map each vertex to an integer (using a HashMap) keep the reverse
+        // mapping (using an ArrayList)
         vertexMap = new HashMap<>(graph.vertexSet().size());
         indexList = new ArrayList<>(graph.vertexSet().size());
 
@@ -146,10 +144,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      * @param c the component number to be used for u's tree
      */
     private void dfsIterative(int u, int c){
-        /*
-         * Set of vertices for which the the part of the if has been performed
-         * (In other words: u ∈ explored iff dfs(u, c') has been called as some point)
-         */
+        // Set of vertices for which the the part of the if has been performed
+        // (In other words: u ∈ explored iff dfs(u, c') has been called as some point)
         Set<Integer> explored = new HashSet<>();
 
         ArrayDeque<Integer> stack = new ArrayDeque<>();
@@ -180,12 +176,10 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                 }
             }
             else{
-                /*
-                 * For u compute pathChild. If it exists then u becomes part of pathChild's path.
-                 * If not then start a new path with u.
-                 *
-                 * pathChild = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
-                 */
+                // For u compute pathChild. If it exists then u becomes part of pathChild's path.
+                // If not then start a new path with u.
+                //
+                // pathChild = v ∈ children(u) such that sizeSubtree(v) = max{sizeSubtree(v') | v' ∈ children(u)}
 
                 int pathChild = -1;
                 E pathEdge = null;
@@ -222,10 +216,8 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
                     }
                 }
 
-                /*
-                 * Compute the positions in reverse order: the first node in the path is the first one that was
-                 * added (the order will be reversed in decompose).
-                 */
+                 // Compute the positions in reverse order: the first node in the path is the first one that was
+                 // added (the order will be reversed in decompose).
                 positionInPath[u] = lengthPath[path[u]]++;
             }
         }
@@ -264,12 +256,10 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
 
         firstNodeInPath = new int[numberOfPaths];
 
-        /*
-         * Reverse the position of all vertices that are present in some path.
-         * After this the positionInPath[u] = 0 if u is the first node in the path (i.e. the node closest to the root)
-         *
-         * Also compute firstNodeInPath[i] = u such that path[u] = i and positionInPath[u] = 0
-         */
+         // Reverse the position of all vertices that are present in some path.
+         // After this the positionInPath[u] = 0 if u is the first node in the path (i.e. the node closest to the root)
+         //
+         // Also compute firstNodeInPath[i] = u such that path[u] = i and positionInPath[u] = 0
         for (int i = 0; i < graph.vertexSet().size(); i++){
             if (path[i] != -1){
                 positionInPath[i] = lengthPath[path[i]] - positionInPath[i] - 1;
@@ -279,9 +269,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
             }
         }
 
-        /**
-            Compute the paths as unmodifiable data structures (list)
-         */
+        // Compute the paths as unmodifiable data structures (list)
         List<List<V>> paths = new ArrayList<>(numberOfPaths);
 
         for (int i = 0; i < numberOfPaths; i++) {

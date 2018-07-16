@@ -51,9 +51,7 @@ public class HeavyPathDecompositionTest {
         return log + ( n >>> 1 );
     }
 
-    /**
-        Count the maximum number of light edges on any root-to-leaf path
-     */
+    // Count the maximum number of light edges on any root-to-leaf path
     public static <V, E> int countMaxPath(Graph<V, E> graph, HeavyPathDecomposition<V, E> decomposition){
         Set<GraphPath<V, E>> paths = decomposition.getPathDecomposition().getPaths();
         Map<V, Integer> whichPath = new HashMap<>();
