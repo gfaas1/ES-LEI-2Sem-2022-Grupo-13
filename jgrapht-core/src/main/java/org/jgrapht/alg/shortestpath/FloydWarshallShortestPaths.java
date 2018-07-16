@@ -17,12 +17,20 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
 import org.jgrapht.alg.util.VertexDegreeComparator;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * The Floyd-Warshall algorithm.
