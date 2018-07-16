@@ -34,22 +34,14 @@ import org.junit.experimental.categories.Category;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.jgrapht.util.MathUtil.log2;
+
 /**
  * Tests for {@link HeavyPathDecomposition}
  *
  * @author Alexandru Valeanu
  */
 public class HeavyPathDecompositionTest {
-
-    public static int log2(int n) // returns 0 for n=0
-    {
-        int log = 0;
-        if( ( n & 0xffff0000 ) != 0 ) { n >>>= 16; log = 16; }
-        if( n >= 256 ) { n >>>= 8; log += 8; }
-        if( n >= 16  ) { n >>>= 4; log += 4; }
-        if( n >= 4   ) { n >>>= 2; log += 2; }
-        return log + ( n >>> 1 );
-    }
 
     // Count the maximum number of light edges on any root-to-leaf path
     public static <V, E> int countMaxPath(Graph<V, E> graph, HeavyPathDecomposition<V, E> decomposition){
