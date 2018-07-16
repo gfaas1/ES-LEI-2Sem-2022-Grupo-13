@@ -42,13 +42,14 @@ public class MathUtil
     }
 
     /**
-     * Calculate the floor of the binary logarithm  of $n$.
+     * Calculate the floor of the binary logarithm of $n$.
      *
      * @param n the input number
      * @return the binary logarithm
      */
-    public static int log2(int n) // returns 0 for n=0
+    public static int log2(int n)
     {
+        // returns 0 for n=0
         int log = 0;
         if( ( n & 0xffff0000 ) != 0 ) { n >>>= 16; log = 16; }
         if( n >= 256 ) { n >>>= 8; log += 8; }
