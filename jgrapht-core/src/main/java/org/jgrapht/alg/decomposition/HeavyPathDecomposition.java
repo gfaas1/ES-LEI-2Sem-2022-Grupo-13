@@ -440,7 +440,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         /**
-         * Return the normalized map from vertices to unique integers.
+         * Return the vertex map, a mapping from vertices to unique integers.
          *
          * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
          * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
@@ -454,7 +454,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         }
 
         /**
-         * Return the index list, a mapping from integers to vertices.
+         * Return the index list, a mapping from unique integers to vertices.
          *
          * For each vertex $v \in V$, let $vertexMap(v) = x$ such that no two vertices share the same x and all x's are
          * integers between $0$ and $|V| - 1$. Let $indexList(x) = v$ be the reverse mapping from integers to vertices.
