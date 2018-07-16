@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Improved efficiency of `BhandariKDisjointShortestPaths` (contributed by Assaf Mizrachi)
     - Added `UnmodifiableUnionSet` to optimize `AsGraphUnion` (contributed by Dimitrios Michail)
     - Made `GraphWalk` serializable (contributed by Alexandru Văleanu)
+    - Optimize `JohnsonShortestPaths` space usage (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
