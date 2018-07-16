@@ -40,9 +40,11 @@ Please note that JGraphT is distributed WITHOUT ANY WARRANTY; without even the i
 
 Please refer to the license for details.
 
+SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-1.0
+
 ## Release Contents ##
 
-The files below make up the table of contents for a release distribution archive:
+The files below make up the table of contents for a release distribution archive (produced by `mvn package`):
 
 - `README.md` this file
 - `CONTRIBUTORS.md` list of contributors

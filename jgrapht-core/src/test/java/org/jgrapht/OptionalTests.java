@@ -19,7 +19,7 @@
 package org.jgrapht;
 
 /**
- * Marker interface to designate a optional tests category. 
+ * Marker interface to designate an optional tests category.
  * 
  * @author Philipp Kaesgen
 **/

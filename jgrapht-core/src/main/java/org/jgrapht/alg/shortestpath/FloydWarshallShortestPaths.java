@@ -17,11 +17,17 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.util.TypeUtil;
 
 /**
  * The Floyd-Warshall algorithm.
@@ -42,8 +48,7 @@ import java.util.*;
  * @author Dimitrios Michail
  */
 public class FloydWarshallShortestPaths<V, E>
-    extends
-    BaseShortestPathAlgorithm<V, E>
+    extends BaseShortestPathAlgorithm<V, E>
 {
     private final List<V> vertices;
     private final Map<V, Integer> vertexIndices;
@@ -318,8 +323,7 @@ public class FloydWarshallShortestPaths<V, E>
     }
 
     class FloydWarshallSingleSourcePaths
-        implements
-        SingleSourcePaths<V, E>
+        implements SingleSourcePaths<V, E>
     {
         private V source;
 
@@ -343,49 +347,14 @@ public class FloydWarshallShortestPaths<V, E>
         @Override
         public double getWeight(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            return d[vertexIndices.get(source)][vertexIndices.get(sink)];
+            return FloydWarshallShortestPaths.this.getPathWeight(source, sink);
         }
 
         @Override
         public GraphPath<V, E> getPath(V sink)
         {
-            if (!graph.containsVertex(source)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SOURCE_VERTEX);
-            }
-            if (!graph.containsVertex(sink)) {
-                throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
-            }
-
-            lazyCalculateMatrix();
-
-            int v_a = vertexIndices.get(source);
-            int v_b = vertexIndices.get(sink);
-
-            if (backtrace[v_a][v_b] == null) { // No path exists
-                return createEmptyPath(source, sink);
-            }
-
-            // Reconstruct the path
-            List<E> edges = new ArrayList<>();
-            V u = source;
-            while (!u.equals(sink)) {
-                int v_u = vertexIndices.get(u);
-                E e = TypeUtil.uncheckedCast(backtrace[v_u][v_b]);
-                edges.add(e);
-                u = Graphs.getOppositeVertex(graph, e, u);
-            }
-            return new GraphWalk<>(graph, source, sink, null, edges, d[v_a][v_b]);
+            return FloydWarshallShortestPaths.this.getPath(source, sink);
         }
-
     }
 
 }

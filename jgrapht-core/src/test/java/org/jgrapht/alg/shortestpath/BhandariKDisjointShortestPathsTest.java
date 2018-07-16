@@ -96,7 +96,6 @@ public class BhandariKDisjointShortestPathsTest extends KDisjointShortestPathsTe
         assertEquals(-10.0, pathList.get(1).getWeight(), 0.0);
     }
 
-
     @Override
     protected <V, E> KShortestPathAlgorithm<V, E> getKShortestPathAlgorithm(Graph<V, E> graph)
     {
