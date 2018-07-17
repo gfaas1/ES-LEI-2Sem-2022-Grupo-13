@@ -36,18 +36,37 @@ import org.jgrapht.graph.builder.GraphBuilder;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 /**
- * The Dulmage-Mendelsohn Decomposition
- * (https://en.wikipedia.org/wiki/Dulmage%E2%80%93Mendelsohn_decomposition)
- * partitions a bipartite graph into subsets. One subset is dominated by the
- * first partition, one by the second partition, and the third is the remaining
- * vertices.
- *
- * A fine decomposition can be performed that additionally performs a
- * strongly-connected-components algorithm on the remaining subset.
- *
- * The implementation is based on: Bunus P., Fritzson P., Methods for Structural
- * Analysis and Debugging of Modelica Models, 2nd International Modelica
- * Conference 2002 It has a running time of $O(V + E)$.
+ * This class computes a Dulmage-Mendelsohn Decomposition of a bipartite graph. 
+ * A Dulmage–Mendelsohn decomposition is a partition of the vertices of a 
+ * bipartite graph into subsets, with the property that two adjacent vertices 
+ * belong to the same subset if and only if they are paired with each other in a 
+ * perfect matching of the graph. This particular implementation is capable of 
+ * computing both a coarse and a fine Dulmage-Mendelsohn Decomposition.
+ * 
+ * The Dulmage-Mendelsohn Decomposition is based on a maximum-matching of the 
+ * graph G. This implementation uses the Hopcroft-Karp maximum matching 
+ * algorithm by default.
+ * 
+ * A coarse Dulmage-Mendelsohn Decomposition is a partitioning into three 
+ * subsets. Where D is the set of vertices in G that are not matched in the 
+ * maximum matching of G, these subsets are:
+ *   - The vertices in D ∩ U and their neighbors
+ *   - The vertices in D ∩ V and their neighbors
+ *   - The remaining vertices
+ *  
+ * A fine Dulmage-Mendelsohn Decomposition further partitions the remaining 
+ * vertices into strongly-connected sets. This implementation uses Kosaraju's 
+ * algorithm for the strong-connectivity analysis.
+ * 
+ * The Dulmage-Mendelsohn Decomposition was introduced in: 
+ * Dulmage, A.L., Mendelsohn, N.S. Coverings of bipartitegraphs, 
+ * Canadian J. Math., 10, 517-534, 1958.
+ * 
+ * The implementation of this class is based on: 
+ * Bunus P., Fritzson P., Methods for Structural Analysis and Debugging of 
+ * Modelica Models, 2nd International Modelica Conference 2002
+ * 
+ * The runtime complexity of this class is $O(V + E)$.
  *
  * @author Peter Harman
  * @param <V> Vertex type
