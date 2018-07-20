@@ -26,6 +26,7 @@ Changes to JGraphT in each version:
     - Optimize `JohnsonShortestPaths` space usage (contributed by Dimitrios Michail)
     - Heuristics for `FloydWarshallShortestPaths` (suggested by shevek, contributed by Dimitrios Michail)
     - Added new `TreeToPathDecompositionAlgorithm` interface and implementation `HeavyPathDecomposition` (contributed by Alexandru Văleanu)
+    - Removed recursion from `FibonacciHeap` (contributed by Timofey Chudakov)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
