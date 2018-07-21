@@ -110,8 +110,8 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap) {
         GraphTests.requireUndirected(target);
 
-        // remove old vertices and edges ???
-        target.removeAllVertices(target.vertexSet());
+        // remove old vertices and edges
+        target.removeAllVertices(new HashSet<>(target.vertexSet()));
 
         assert target.vertexSet().isEmpty();
         assert target.edgeSet().isEmpty();
