@@ -83,12 +83,8 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         if (k <= 0) {
             throw new IllegalArgumentException("Number of paths must be positive");
         }
-        if (endVertex == null) {
-            throw new IllegalArgumentException("endVertex is null");
-        }
-        if (startVertex == null) {
-            throw new IllegalArgumentException("startVertex is null");
-        }
+        Objects.requireNonNull(startVertex, "startVertex is null");
+        Objects.requireNonNull(endVertex, "endVertex is null");
         if (endVertex.equals(startVertex)) {
             throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
         }
