@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
  * @param <E> the graph edge type
  *
  * @author Alexandru Valeanu
- * @since June 2018
  */
 public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Double> {
 
@@ -100,7 +99,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      * Computes the average clustering coefficient. The average clustering coefficient $\={C}$ is defined as
      * $\={C} = \frac{\sum_{i=1}^{n} C_i}{n}$ where $n$ is the number of vertices.
      *
-     * Note: the average is $0$ is the graph is empty
+     * Note: the average is $0$ if the graph is empty
      *
      * @return the average clustering coefficient
      */
@@ -109,6 +108,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
             return 0;
 
         if (!computedAverage){
+            computeScoreMap();
             computedAverage = true;
             averageClusteringCoefficient = 0;
 
@@ -120,11 +120,6 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
 
         return averageClusteringCoefficient;
     }
-
-    // https://data.graphstream-project.org/api/gs-algo/current/
-    // https://en.wikipedia.org/wiki/Clustering_coefficient
-    // https://math.stackexchange.com/questions/2657701/what-is-mean-number-of-connected-triplets-of-vertices-in-global-clustering
-    // https://github.com/jgrapht/jgrapht/pull/607
 
     private void computeGlobalClusteringCoefficient(){
         computed = true;
@@ -142,16 +137,19 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
         globalClusteringCoefficient = 3 * GraphMetrics.getNumberOfTriangles(graph) / numberTriplets;
     }
 
-    private void compute(){
+    private void computeScoreMap(){
+        if (scores != null)
+            return;
+
         scores = new HashMap<>(graph.vertexSet().size());
 
         for (V v: graph.vertexSet()){
             Set<V> neighbourhood = new HashSet<>();
 
             neighbourhood.addAll(
-                    graph.incomingEdgesOf(v).stream().map(graph::getEdgeTarget).collect(Collectors.toSet()));
+                    graph.incomingEdgesOf(v).stream().map(graph::getEdgeSource).collect(Collectors.toSet()));
             neighbourhood.addAll(
-                    graph.outgoingEdgesOf(v).stream().map(graph::getEdgeSource).collect(Collectors.toSet()));
+                    graph.outgoingEdgesOf(v).stream().map(graph::getEdgeTarget).collect(Collectors.toSet()));
 
             neighbourhood.remove(v);
 
@@ -163,7 +161,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
                     if (graph.containsEdge(p, q))
                         numberTriplets++;
 
-            if (k == 1)
+            if (k <= 1)
                 scores.put(v, 0.0);
             else
                 scores.put(v, numberTriplets / (k * (k - 1)));
@@ -175,10 +173,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      */
     @Override
     public Map<V, Double> getScores() {
-        if (scores == null) {
-            compute();
-        }
-
+        computeScoreMap();
         return Collections.unmodifiableMap(scores);
     }
 
@@ -191,10 +186,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
             throw new IllegalArgumentException("Cannot return score of unknown vertex");
         }
 
-        if (scores == null) {
-            compute();
-        }
-
+        computeScoreMap();
         return scores.get(v);
     }
 }
