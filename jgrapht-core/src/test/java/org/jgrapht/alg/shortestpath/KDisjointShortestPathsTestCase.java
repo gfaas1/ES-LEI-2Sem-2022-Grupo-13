@@ -408,6 +408,26 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
 
     }
+    
+    /**
+     * Tests that sequential calls return the same result.
+     */
+    @Test
+    public void testSequentialCallsSanity() {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        DefaultWeightedEdge edge = graph.addEdge(1, 2);
+        graph.setEdgeWeight(edge, 8);
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
+        
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList_1 = alg.getPaths(1, 2, 5);
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList_2 = alg.getPaths(1, 2, 5);
+        
+        assertEquals(pathList_1, pathList_2);
+              
+    }
 
     private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraph()
     {

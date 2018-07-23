@@ -37,8 +37,6 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
 
     protected Set<E> overlappingEdges;
     
-    protected HashMap<E, Double> weightMap;
-    
     protected Graph<V, E> originalGraph;
 
     /**
@@ -56,12 +54,8 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         GraphTests.requireDirected(graph);
         if (!GraphTests.isSimple(graph)) {
             throw new IllegalArgumentException("Graph must be simple");
-        }   
-        //Assuring all weights modifications are not applied to original graph                
-        this.weightMap = new HashMap<>();
-        this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedGraph<>(
-            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier(), false), weightMap);
-        Graphs.addGraph(workingGraph, this.originalGraph);     
+        }    
+              
     }
 
     /**
@@ -88,19 +82,18 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         if (endVertex.equals(startVertex)) {
             throw new IllegalArgumentException("The end vertex is the same as the start vertex!");
         }
-        if (!workingGraph.vertexSet().contains(startVertex)) {
+        if (!originalGraph.containsVertex(startVertex)) {
             throw new IllegalArgumentException("graph must contain the start vertex!");
         }
-        if (!workingGraph.vertexSet().contains(endVertex)) {
+        if (!originalGraph.containsVertex(endVertex)) {
             throw new IllegalArgumentException("graph must contain the end vertex!");
-        }
+        }   
         
-        //original edge weights may have changed due to previous calls
-        if (this.originalGraph.getType().isWeighted()) {            
-            this.originalGraph.edgeSet().forEach(e -> {
-                this.weightMap.put(e, this.originalGraph.getEdgeWeight(e));
-            });
-        }        
+        //avoiding original graph modifications and residuals from previous calls
+        this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
+            this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()), 
+            new HashMap<>(), false);
+        Graphs.addGraph(workingGraph, this.originalGraph);     
 
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
@@ -163,7 +156,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
             .collect(Collectors.toSet());
 
         for (E e : nonOverlappingEdges) {
-            V u = workingGraph.getEdgeSource(e);
+            V u = getEdgeSource(e);
             if (u.equals(startVertex)) { // start of a new path
                 List<E> path = new ArrayList<>();
                 path.add(e);
@@ -178,11 +171,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
 
         // Build the paths using the lookup table
         for (List<E> path : paths) {
-            V v = workingGraph.getEdgeTarget(path.get(0));
+            V v = getEdgeTarget(path.get(0));
             while (!v.equals(endVertex)) {
                 E e = sourceToEdgeLookup.get(v).poll();
                 path.add(e);
-                v = workingGraph.getEdgeTarget(e);
+                v = getEdgeTarget(e);
             }
         }
         
@@ -205,8 +198,8 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         Map<UnorderedPair<V, V>, Integer> edgeOccurrenceCount = new HashMap<>();
         for (List<E> path : pathList) {
             for (E e : path) {                
-                V v = this.workingGraph.getEdgeSource(e);
-                V u = this.workingGraph.getEdgeTarget(e);                
+                V v = this.getEdgeSource(e);
+                V u = this.getEdgeTarget(e);                
                 UnorderedPair<V, V> edgePair = new UnorderedPair<>(v, u);
                 
                 if (edgeOccurrenceCount.containsKey(edgePair)) {
@@ -219,8 +212,8 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
 
         this.overlappingEdges = pathList.stream().flatMap(List::stream).filter(
             e -> edgeOccurrenceCount.get(new UnorderedPair<>(
-                this.workingGraph.getEdgeSource(e), 
-                this.workingGraph.getEdgeTarget(e))) > 1)
+                this.getEdgeSource(e), 
+                this.getEdgeTarget(e))) > 1)
             .collect(Collectors.toSet());
     }
 
@@ -231,6 +224,14 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
             weight += originalGraph.getEdgeWeight(edge);
         }
         return new GraphWalk<>(originalGraph, startVertex, endVertex, edgeList, weight);
+    }
+    
+    private V getEdgeSource(E e) {
+        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeSource(e) : this.originalGraph.getEdgeSource(e);
+    }
+    
+    private V getEdgeTarget(E e) {
+        return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeTarget(e) : this.originalGraph.getEdgeTarget(e);
     }
 
 
