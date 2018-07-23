@@ -98,9 +98,9 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         GraphPath<V, E> currentPath;
         this.pathList = new ArrayList<>();
 
-        for (int cPath = 1; cPath <= k; cPath++) {
-            if (cPath > 1) {
-                prepare(this.pathList.get(cPath - 2));
+        for (int pathNum = 0; pathNum < k; pathNum++) {
+            if (pathNum > 0) {
+                prepare(this.pathList.get(pathNum - 1));
             }
             currentPath = calculateShortestPath(startVertex, endVertex);
             if (currentPath != null) {
