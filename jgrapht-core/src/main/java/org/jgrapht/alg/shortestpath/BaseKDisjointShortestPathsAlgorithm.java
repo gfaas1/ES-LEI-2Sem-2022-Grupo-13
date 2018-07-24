@@ -95,19 +95,17 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
             new HashMap<>(), false);
         Graphs.addGraph(workingGraph, this.originalGraph);     
 
-        GraphPath<V, E> currentPath;
-        this.pathList = new ArrayList<>();
 
-        for (int pathNum = 0; pathNum < k; pathNum++) {
-            if (pathNum > 0) {
-                prepare(this.pathList.get(pathNum - 1));
-            }
-            currentPath = calculateShortestPath(startVertex, endVertex);
+        this.pathList = new ArrayList<>();
+        GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
+        for (int i = 0; i < k; i++) {
             if (currentPath != null) {
                 pathList.add(currentPath.getEdgeList());
             } else {
                 break;
             }
+            prepare(this.pathList.get(i));
+            currentPath = calculateShortestPath(startVertex, endVertex);            
         }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
@@ -233,14 +231,6 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     private V getEdgeTarget(E e) {
         return this.workingGraph.containsEdge(e) ? this.workingGraph.getEdgeTarget(e) : this.originalGraph.getEdgeTarget(e);
     }
-
-
-    /**
-     * Prepares the working graph for next iteration.
-     *  
-     * @param previousPaths list of previous paths found
-     */
-    protected abstract void prepare(List<E> previousPaths);
         
     /**
      * Calculates the shortest paths for the current iteration.
@@ -253,5 +243,13 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
      * @return the shortest path between start and end vertices.
      */
     protected abstract GraphPath<V, E> calculateShortestPath(V startVertex, V endVertex);
+    
+    /**
+     * Prepares the working graph for next iteration. To be called from the second iteration
+     *  and on, so implementation may assume a preceding {@link #calculateShortestPath} call.
+     *  
+     * @param previousPath the path found at the previous iteration.
+     */
+    protected abstract void prepare(List<E> previousPath);
 
 }
