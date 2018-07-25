@@ -81,7 +81,7 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
     }
 
     @Override
-    protected void prepare(List<E> previousPath)
+    protected void transformGraph(List<E> previousPath)
     {
         V source, target;
         E reversedEdge;

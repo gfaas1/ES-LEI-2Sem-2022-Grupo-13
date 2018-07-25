@@ -98,14 +98,19 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
 
         this.pathList = new ArrayList<>();
         GraphPath<V, E> currentPath = calculateShortestPath(startVertex, endVertex);
-        for (int i = 0; i < k; i++) {
-            if (currentPath != null) {
-                pathList.add(currentPath.getEdgeList());
-            } else {
-                break;
+        if (currentPath != null) {
+            pathList.add(currentPath.getEdgeList());
+            
+            for (int i = 0; i < k - 1; i++) {
+                transformGraph(this.pathList.get(i));
+                currentPath = calculateShortestPath(startVertex, endVertex);   
+                
+                if (currentPath != null) {
+                    pathList.add(currentPath.getEdgeList());
+                } else {
+                    break;
+                }
             }
-            prepare(this.pathList.get(i));
-            currentPath = calculateShortestPath(startVertex, endVertex);            
         }
 
         return pathList.size() > 0 ? resolvePaths(startVertex, endVertex) : Collections.emptyList();
@@ -246,10 +251,10 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
     
     /**
      * Prepares the working graph for next iteration. To be called from the second iteration
-     *  and on, so implementation may assume a preceding {@link #calculateShortestPath} call.
+     *  and on so implementation may assume a preceding {@link #calculateShortestPath} call.
      *  
      * @param previousPath the path found at the previous iteration.
      */
-    protected abstract void prepare(List<E> previousPath);
+    protected abstract void transformGraph(List<E> previousPath);
 
 }

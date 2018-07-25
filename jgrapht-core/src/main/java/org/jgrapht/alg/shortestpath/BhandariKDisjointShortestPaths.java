@@ -62,7 +62,7 @@ public class BhandariKDisjointShortestPaths<V, E> extends BaseKDisjointShortestP
     }
 
     @Override
-    protected void prepare(List<E> previousPath)
+    protected void transformGraph(List<E> previousPath)
     {
 
         V source, target;

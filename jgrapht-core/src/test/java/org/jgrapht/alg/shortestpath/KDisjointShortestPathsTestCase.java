@@ -409,6 +409,23 @@ public abstract class KDisjointShortestPathsTestCase
 
     }
     
+    @Test
+    public void testMaximumKPathsAreReturned()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph = createThreeDisjointPathsGraph();
+
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
+
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5, 1);
+        assertEquals(1, pathList.size());
+        
+        pathList = alg.getPaths(1, 5, 2);
+        assertEquals(2, pathList.size());
+        
+        pathList = alg.getPaths(1, 5, 3);
+        assertEquals(3, pathList.size());
+    }
+    
     /**
      * Tests that sequential calls return the same result.
      */
