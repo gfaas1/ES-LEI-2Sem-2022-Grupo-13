@@ -33,7 +33,45 @@ public class VertexToIntegerMapping<V> {
     private final List<V> indexList;
 
     /**
-     * Create a new mapping.
+     * Create a new mapping from a set of vertices.
+     *
+     * @param vertices the input set of vertices
+     */
+    public VertexToIntegerMapping(Set<V> vertices){
+        Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
+
+        vertexMap = new HashMap<>(vertices.size());
+        indexList = new ArrayList<>(vertices.size());
+
+        for (V v : vertices) {
+            vertexMap.put(v, vertexMap.size());
+            indexList.add(v);
+        }
+    }
+
+    /**
+     * Create a new mapping from a list of vertices. The input list will be used as
+     * the {@code indexList} so it must not be modified.
+     *
+     * @param vertices the input list of vertices
+     */
+    public VertexToIntegerMapping(List<V> vertices){
+        Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
+
+        vertexMap = new HashMap<>(vertices.size());
+        indexList = vertices;
+
+        for (int i = 0; i < vertices.size(); i++) {
+            V v = vertices.get(i);
+
+            if (!vertexMap.containsKey(v)){
+                vertexMap.put(v, i);
+            }
+        }
+    }
+
+    /**
+     * Create a new mapping from a collection of vertices.
      *
      * @param vertices the input collection of vertices
      */
