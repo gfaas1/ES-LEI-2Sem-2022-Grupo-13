@@ -103,12 +103,9 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
             if (zeroWeight != 0) {
                 throw new IllegalStateException("Expected zero weight edge along the path");
             }                       
-            workingGraph.removeEdge(originalEdge); 
+            workingGraph.removeEdge(originalEdge);             
+            workingGraph.addEdge(target, source);
             reversedEdge = workingGraph.getEdge(target, source);
-            if (reversedEdge != null) {
-                workingGraph.removeEdge(reversedEdge);                
-            }
-            reversedEdge = workingGraph.addEdge(target, source);
             workingGraph.setEdgeWeight(reversedEdge, zeroWeight);
         }
         
