@@ -57,7 +57,6 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(1, pathList.get(0).getLength());
         assertTrue(pathList.get(0).getEdgeList().contains(edge));
         assertEquals(new Integer(2), pathList.get(0).getEndVertex());
-        // assertEquals(graph, pathList.get(0).getGraph());
         assertEquals(new Integer(1), pathList.get(0).getStartVertex());
         assertEquals(2, pathList.get(0).getVertexList().size());
         assertTrue(pathList.get(0).getVertexList().contains(1));
@@ -107,23 +106,23 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
 
         // We have four potential paths all must pass through the joint node #3
-        GraphPath<Integer, DefaultWeightedEdge> potetialP1_1 =
+        GraphPath<Integer, DefaultWeightedEdge> potentialP1_1 =
             new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 4, 5), 4);
-        GraphPath<Integer, DefaultWeightedEdge> potetialP1_2 =
+        GraphPath<Integer, DefaultWeightedEdge> potentialP1_2 =
             new GraphWalk<>(graph, Arrays.asList(1, 2, 3, 6, 5), 4);
-        GraphPath<Integer, DefaultWeightedEdge> potetialP1_3 =
+        GraphPath<Integer, DefaultWeightedEdge> potentialP1_3 =
             new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 4, 5), 4);
-        GraphPath<Integer, DefaultWeightedEdge> potetialP1_4 =
+        GraphPath<Integer, DefaultWeightedEdge> potentialP1_4 =
             new GraphWalk<>(graph, Arrays.asList(1, 7, 3, 6, 5), 4);
 
-        if (pathList.get(0).equals(potetialP1_1)) {
-            assertEquals(potetialP1_4, pathList.get(1));
-        } else if (pathList.get(0).equals(potetialP1_2)) {
-            assertEquals(potetialP1_3, pathList.get(1));
-        } else if (pathList.get(0).equals(potetialP1_3)) {
-            assertEquals(potetialP1_2, pathList.get(1));
-        } else if (pathList.get(0).equals(potetialP1_4)) {
-            assertEquals(potetialP1_1, pathList.get(1));
+        if (pathList.get(0).equals(potentialP1_1)) {
+            assertEquals(potentialP1_4, pathList.get(1));
+        } else if (pathList.get(0).equals(potentialP1_2)) {
+            assertEquals(potentialP1_3, pathList.get(1));
+        } else if (pathList.get(0).equals(potentialP1_3)) {
+            assertEquals(potentialP1_2, pathList.get(1));
+        } else if (pathList.get(0).equals(potentialP1_4)) {
+            assertEquals(potentialP1_1, pathList.get(1));
         } else {
             fail("Unexpected path");
         }
@@ -586,7 +585,7 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     /**
-     * Only single disjoint path should exist on the line
+     * Only one disjoint path should exist on the line
      */
     @Test
     public void testLinear()
@@ -612,7 +611,7 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     /**
-     * Exactly single disjoint path should exist on the ring
+     * Exactly one disjoint path should exist on the ring
      */
     @Test
     public void testRing()
@@ -638,7 +637,7 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     /**
-     * Exactly single disjoint path should exist on the ring
+     * Exactly one disjoint path should exist in a clique
      */
     @Test
     public void testClique()
@@ -660,7 +659,7 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     /**
-     * Exactly single disjoint path should exist on the ring
+     * Exactly one disjoint path should exist is a star graph.
      */
     @Test
     public void testStar()
