@@ -25,6 +25,34 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.graph.*;
 
+/**
+ * A base implementation of a $k$ disjoint shortest paths algorithm based on the strategy used in 
+ * Suurballe and Bhandari algorithms.
+ * The algorithm procedure goes as follow:
+ * <ol>
+ * <li> Using some known shortest path algorithm (e.g. Dijkstra) to find the shortest
+ * path $P_1$ from source to target.
+ * <li> For i = 2,...,$k$
+ * <li> &emsp;Perform some graph transformations based on the previously found path
+ * <li> &emsp;Find the shortest path $P_i$ from source to target
+ * <li> Remove all overlapping edges to get $k$ disjoint paths.
+ * </ol> 
+ * The class implements the above procedure and resolves final paths (step 5) from the
+ * intermediate path results found in step 4.
+ * An extending class has to implement two methods:
+ * <ul>
+ * <li> {@link #transformGraph} - to be used in step 3.
+ * <li> {@link #calculateShortestPath} - to be used in step 4.
+ * </ul>
+ * Currently known extensions are {@link SuurballeKDisjointShortestPaths} and 
+ * {@link BhandariKDisjointShortestPaths}.
+ * 
+ * @param <V> the graph vertex type
+ * @param <E> the graph edge type
+ * 
+ * @author Assaf Mizrachi
+ * @since July 26, 2018
+ */
 abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPathAlgorithm<V, E>
 {
 
