@@ -239,7 +239,7 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
         
     /**
      * Calculates the shortest paths for the current iteration.
-     * Path is not final and to be used in a "post-production" phase
+     * Path is not final; rather, it is intended to be used in a "post-production" phase
      * (see resolvePaths method).
      * 
      * @param startVertex the start vertex
