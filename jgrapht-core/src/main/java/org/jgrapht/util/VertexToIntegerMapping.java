@@ -52,7 +52,7 @@ public class VertexToIntegerMapping<V> {
     }
 
     /**
-     * Get the vertexMap, a mapping from vertices to integers (i.e. the inverse of {@link this#getIndexList()}).
+     * Get the {@code vertexMap}, a mapping from vertices to integers (i.e. the inverse of {@code indexList}).
      *
      * @return a mapping from vertices to integers
      */
@@ -61,9 +61,9 @@ public class VertexToIntegerMapping<V> {
     }
 
     /**
-     * Get the indexList, a mapping from integers to mapping (i.e. the inverse of {@link this#getVertexMap()} ()}).
+     * Get the {@code indexList}, a mapping from integers to vertices (i.e. the inverse of {@code vertexMap}).
      *
-     * @return a mapping from vertices to integers
+     * @return a mapping from integers to vertices
      */
     public List<V> getIndexList(){
         return indexList;
