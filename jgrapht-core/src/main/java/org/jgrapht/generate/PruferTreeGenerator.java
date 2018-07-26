@@ -43,10 +43,45 @@ import java.util.*;
 public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
 
     // number of vertices
-    private int n;
+    private final int n;
 
     // random number generator
-    private Random rng;
+    private final Random rng;
+
+    // input Prufer sequence
+    private final int[] inputPruferSeq;
+
+    /**
+     * Construct a new PruferTreeGenerator from an input Prüfer sequence. Note that
+     * the size of the generated tree will $l+2$ where $l$ is the length of the input
+     * sequence. The Prüfer sequence must contain integers between $0$ and $l+1$ (inclusive).
+     *
+     * Note: In this case, the same tree will be generated every time.
+     *
+     * @param pruferSequence the input Prüfer sequence
+     * @throws IllegalArgumentException if {@code n} is &le; 0
+     * @throws IllegalArgumentException if {@code pruferSequence} is {@code null}
+     * @throws IllegalArgumentException if {@code pruferSequence} is invalid.
+     */
+    public PruferTreeGenerator(int[] pruferSequence){
+        if (Objects.isNull(pruferSequence)){
+            throw new IllegalArgumentException("pruferSequence cannot be null");
+        }
+
+        this.n = pruferSequence.length + 2;
+        this.rng = null;
+        this.inputPruferSeq = pruferSequence.clone();
+
+        if (n <= 0){
+            throw new IllegalArgumentException("n must be greater than 0");
+        }
+
+        for (int i = 0; i < n - 2; i++) {
+            if (pruferSequence[i] < 0 || pruferSequence[i] >= n){
+                throw new IllegalArgumentException("invalid pruferSequence");
+            }
+        }
+    }
 
     /**
      * Construct a new PruferTreeGenerator.
@@ -84,32 +119,29 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
 
         this.n = n;
         this.rng = Objects.requireNonNull(rng, "Random number generator cannot be null");
+        this.inputPruferSeq = null;
     }
 
     /**
      * Generates a tree.
      *
-     * Note: All existing vertices and edges of the target graph will be removed.
+     * <p>
+     * Note: An exception will be thrown if the target graph is not empty (i.e. contains
+     * at least one vertex)
+     * </p>
      *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
      * @throws NullPointerException if {@code target} is {@code null}
      * @throws IllegalArgumentException if {@code target} is not undirected
+     * @throws IllegalArgumentException if {@code target} is not empty
      */
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap) {
         GraphTests.requireUndirected(target);
 
-        // remove old vertices and edges
-        target.removeAllVertices(new HashSet<>(target.vertexSet()));
-
-        // base case
-        if (n == 1){
-            if (target.addVertex() == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-
-            return;
+        if (!target.vertexSet().isEmpty()){
+            throw new IllegalArgumentException("target graph is not empty");
         }
 
         List<V> vertexList = new ArrayList<>(n);
@@ -125,28 +157,41 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
             vertexList.add(newVertex);
         }
 
+        // base case
+        if (n == 1){
+            return;
+        }
+
         // degree stores the remaining degree (plus one) for each node. The
         // degree of a node in the decoded tree is one more than the number
         // of times it appears in the code.
         int[] degree = new int[n];
         Arrays.fill(degree, 1);
 
-        int[] pruferSeq = new int[n - 2];
-        for (int i = 0; i < n - 2; i++) {
-            pruferSeq[i] = rng.nextInt(n);
-            ++degree[pruferSeq[i]];
+        int[] pruferSeq;
+
+        if (inputPruferSeq == null){
+            pruferSeq = new int[n - 2];
+
+            for (int i = 0; i < n - 2; i++) {
+                pruferSeq[i] = rng.nextInt(n);
+                ++degree[pruferSeq[i]];
+            }
+        }
+        else{
+            pruferSeq = inputPruferSeq;
         }
 
-        int index = -1, x = -1;
-
+        int index = -1;
         for (int k = 0; k < n; k++){
             if (degree[k] == 1){
-                index = x = k;
+                index = k;
                 break;
             }
         }
 
         assert index != -1;
+        int x = index;
 
         // set of nodes without a parent
         Set<V> orphans = new HashSet<>(target.vertexSet());
