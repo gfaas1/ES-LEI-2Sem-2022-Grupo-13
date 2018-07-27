@@ -26,6 +26,7 @@ import org.jgrapht.util.SupplierUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -76,6 +77,11 @@ public class PruferTreeGeneratorTest {
         generator.generateGraph(tree);
 
         Assert.assertEquals(6, tree.vertexSet().size());
+
+        int[] degrees = tree.vertexSet().stream().mapToInt(tree::degreeOf).toArray();
+        Arrays.sort(degrees);
+
+        Assert.assertArrayEquals(new int[]{1, 1, 1, 1, 2, 4}, degrees);
     }
 
     @Test(expected = IllegalArgumentException.class)

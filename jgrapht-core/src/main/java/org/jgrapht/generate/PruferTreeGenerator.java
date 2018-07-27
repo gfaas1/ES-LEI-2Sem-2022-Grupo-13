@@ -53,7 +53,7 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
 
     /**
      * Construct a new PruferTreeGenerator from an input Prüfer sequence. Note that
-     * the size of the generated tree will $l+2$ where $l$ is the length of the input
+     * the size of the generated tree will be $l+2$ where $l$ is the length of the input
      * sequence. The Prüfer sequence must contain integers between $0$ and $l+1$ (inclusive).
      *
      * Note: In this case, the same tree will be generated every time.

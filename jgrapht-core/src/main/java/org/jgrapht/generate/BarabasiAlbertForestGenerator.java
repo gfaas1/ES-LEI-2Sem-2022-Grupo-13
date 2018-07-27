@@ -101,17 +101,24 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
     /**
      * Generates an instance.
      *
-     * Note: All existing vertices and edges of the target graph will be removed.
+     * <p>
+     * Note: An exception will be thrown if the target graph is not empty (i.e. contains
+     * at least one vertex)
+     * </p>
      *
      * @param target the target graph
      * @param resultMap not used by this generator, can be null
+     * @throws NullPointerException if {@code target} is {@code null}
+     * @throws IllegalArgumentException if {@code target} is not undirected
+     * @throws IllegalArgumentException if {@code target} is not empty
      */
     @Override
     public void generateGraph(Graph<V, E> target, Map<String, V> resultMap) {
         GraphTests.requireUndirected(target);
 
-        // remove old vertices and edges
-        target.removeAllVertices(new HashSet<>(target.vertexSet()));
+        if (!target.vertexSet().isEmpty()){
+            throw new IllegalArgumentException("target graph is not empty");
+        }
 
         assert target.vertexSet().isEmpty();
         assert target.edgeSet().isEmpty();
