@@ -21,7 +21,7 @@ import java.util.*;
 
 /**
  * Helper class for building a one-to-one mapping for a collection of vertices to the integer range $[0, n)$
- * where $n$ is the number of unique vertices in the collection.
+ * where $n$ is the number of vertices in the collection.
  *
  * <p>
  *     This class computes the mapping only once, on instantiation. It does not support
@@ -61,7 +61,7 @@ public class VertexToIntegerMapping<V> {
      *
      * @param vertices the input list of vertices
      * @throws NullPointerException if {@code vertices} is {@code null}
-     * @throws IllegalArgumentException if vertices are not distinct
+     * @throws IllegalArgumentException if the vertices are not distinct
      */
     public VertexToIntegerMapping(List<V> vertices){
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
@@ -86,7 +86,7 @@ public class VertexToIntegerMapping<V> {
      *
      * @param vertices the input collection of vertices
      * @throws NullPointerException if {@code vertices} is {@code null}
-     * @throws IllegalArgumentException if vertices are not distinct
+     * @throws IllegalArgumentException if the vertices are not distinct
      */
     public VertexToIntegerMapping(Collection<V> vertices){
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");

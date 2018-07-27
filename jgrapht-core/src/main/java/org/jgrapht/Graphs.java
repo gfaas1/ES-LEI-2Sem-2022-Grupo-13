@@ -17,10 +17,14 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.graph.*;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.util.VertexToIntegerMapping;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A collection of utilities to assist with graph manipulation.
@@ -575,6 +579,60 @@ public abstract class Graphs
     public static <V, E> boolean vertexHasPredecessors(Graph<V, E> graph, V vertex)
     {
         return !graph.incomingEdgesOf(vertex).isEmpty();
+    }
+
+    /**
+     * Compute a new mapping from a set of vertices to the integer range $[0, n)$
+     * where $n$ is the number of vertices in the set.
+     *
+     * @param vertices the input set of vertices
+     * @param <V> the graph vertex type
+     * @throws NullPointerException if {@code vertices} is {@code null}
+     *
+     * @return the mapping as a pair consisting of the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V> Pair<Map<V, Integer>, List<V>> getVertexToIntegerMapping(Set<V> vertices){
+        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(vertices);
+        return Pair.of(vertexToIntegerMapping.getVertexMap(), vertexToIntegerMapping.getIndexList());
+    }
+
+    /**
+     * Compute a new mapping from a list of vertices to the integer range $[0, n)$
+     * where $n$ is the number of vertices in the list.
+     *
+     * @param vertices the input set of vertices
+     * @param <V> the graph vertex type
+     * @throws NullPointerException if {@code vertices} is {@code null}
+     * @throws IllegalArgumentException if vertices are not distinct
+     *
+     * @return the mapping as a pair consisting of the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V> Pair<Map<V, Integer>, List<V>> getVertexToIntegerMapping(List<V> vertices){
+        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(vertices);
+        return Pair.of(vertexToIntegerMapping.getVertexMap(), vertexToIntegerMapping.getIndexList());
+    }
+
+
+    /**
+     * Compute a new mapping from a collection of vertices to the integer range $[0, n)$
+     * where $n$ is the number of vertices in the collection.
+     *
+     * @param vertices the input set of vertices
+     * @param <V> the graph vertex type
+     * @throws NullPointerException if {@code vertices} is {@code null}
+     * @throws IllegalArgumentException if the vertices are not distinct
+     *
+     * @return the mapping as a pair consisting of the {@code vertexMap} and the {@code indexList}
+     *
+     * @see VertexToIntegerMapping
+     */
+    public static <V> Pair<Map<V, Integer>, List<V>> getVertexToIntegerMapping(Collection<V> vertices){
+        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(vertices);
+        return Pair.of(vertexToIntegerMapping.getVertexMap(), vertexToIntegerMapping.getIndexList());
     }
 }
 
