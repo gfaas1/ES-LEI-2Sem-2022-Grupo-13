@@ -23,6 +23,11 @@ import java.util.*;
  * Helper class for building a one-to-one mapping for a collection of vertices to the integer range $[0, n)$
  * where $n$ is the number of unique vertices in the collection.
  *
+ * <p>
+ *     This class computes the mapping only once, on instantiation. It does not support
+ *     live updates.
+ * </p>
+ *
  * @author Alexandru Valeanu
  *
  * @param <V> the graph vertex type
@@ -36,6 +41,7 @@ public class VertexToIntegerMapping<V> {
      * Create a new mapping from a set of vertices.
      *
      * @param vertices the input set of vertices
+     * @throws NullPointerException if {@code vertices} is {@code null}
      */
     public VertexToIntegerMapping(Set<V> vertices){
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
@@ -54,6 +60,8 @@ public class VertexToIntegerMapping<V> {
      * the {@code indexList} so it must not be modified.
      *
      * @param vertices the input list of vertices
+     * @throws NullPointerException if {@code vertices} is {@code null}
+     * @throws IllegalArgumentException if vertices are not distinct
      */
     public VertexToIntegerMapping(List<V> vertices){
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
@@ -67,6 +75,9 @@ public class VertexToIntegerMapping<V> {
             if (!vertexMap.containsKey(v)){
                 vertexMap.put(v, i);
             }
+            else{
+                throw new IllegalArgumentException("vertices are not distinct");
+            }
         }
     }
 
@@ -74,6 +85,8 @@ public class VertexToIntegerMapping<V> {
      * Create a new mapping from a collection of vertices.
      *
      * @param vertices the input collection of vertices
+     * @throws NullPointerException if {@code vertices} is {@code null}
+     * @throws IllegalArgumentException if vertices are not distinct
      */
     public VertexToIntegerMapping(Collection<V> vertices){
         Objects.requireNonNull(vertices, "the input collection of vertices cannot be null");
@@ -85,6 +98,9 @@ public class VertexToIntegerMapping<V> {
             if (!vertexMap.containsKey(v)){
                 vertexMap.put(v, vertexMap.size());
                 indexList.add(v);
+            }
+            else{
+                throw new IllegalArgumentException("vertices are not distinct");
             }
         }
     }
