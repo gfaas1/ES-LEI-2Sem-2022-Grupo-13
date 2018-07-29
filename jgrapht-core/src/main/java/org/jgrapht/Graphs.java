@@ -17,7 +17,6 @@
  */
 package org.jgrapht;
 
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.util.VertexToIntegerMapping;
@@ -594,11 +593,8 @@ public abstract class Graphs
      *
      * @see VertexToIntegerMapping
      */
-    public static <V, E> Pair<Map<V, Integer>, List<V>> getVertexToIntegerMapping(Graph<V, E> graph){
-        Objects.requireNonNull(graph);
-
-        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(graph.vertexSet());
-        return Pair.of(vertexToIntegerMapping.getVertexMap(), vertexToIntegerMapping.getIndexList());
+    public static <V, E> VertexToIntegerMapping<V> getVertexToIntegerMapping(Graph<V, E> graph){
+        return new VertexToIntegerMapping<>(Objects.requireNonNull(graph).vertexSet());
     }
 }
 
