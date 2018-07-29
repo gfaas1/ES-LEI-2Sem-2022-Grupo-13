@@ -126,7 +126,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
         /*
          * Normalize the graph by mapping each vertex to an integer.
          */
-        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(graph.vertexSet());
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
         vertexMap = vertexToIntegerMapping.getVertexMap();
         indexList = vertexToIntegerMapping.getIndexList();
     }

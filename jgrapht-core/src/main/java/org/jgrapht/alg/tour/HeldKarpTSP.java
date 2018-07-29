@@ -19,6 +19,7 @@ package org.jgrapht.alg.tour;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.VertexToIntegerMapping;
@@ -133,7 +134,7 @@ public class HeldKarpTSP<V, E>
         /*
          * Normalize the graph by mapping each vertex to an integer.
          */
-        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(graph.vertexSet());
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(graph);
         Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
         List<V> indexList = vertexToIntegerMapping.getIndexList();
 

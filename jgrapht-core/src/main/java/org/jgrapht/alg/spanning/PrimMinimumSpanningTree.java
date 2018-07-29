@@ -74,7 +74,7 @@ public class PrimMinimumSpanningTree<V, E>
         /*
          * Normalize the graph by mapping each vertex to an integer.
          */
-        VertexToIntegerMapping<V> vertexToIntegerMapping = new VertexToIntegerMapping<>(g.vertexSet());
+        VertexToIntegerMapping<V> vertexToIntegerMapping = Graphs.getVertexToIntegerMapping(g);
         Map<V, Integer> vertexMap = vertexToIntegerMapping.getVertexMap();
         List<V> indexList = vertexToIntegerMapping.getIndexList();
 
