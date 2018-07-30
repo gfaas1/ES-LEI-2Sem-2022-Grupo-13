@@ -28,6 +28,7 @@ Changes to JGraphT in each version:
     - Added new `TreeToPathDecompositionAlgorithm` interface and implementation `HeavyPathDecomposition` (contributed by Alexandru Văleanu)
     - Removed recursion from `FibonacciHeap` (contributed by Timofey Chudakov)
     - Added `PruferTreeGenerator` for generating trees based on Prüfer sequences (contributed by Alexandru Văleanu)
+    - Added `VertexToIntegerMapping` utility class (contributed by Alexandru Văleanu)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

@@ -589,7 +589,7 @@ public abstract class Graphs
      * @param <E> the graph edge type
      * @throws NullPointerException if {@code graph} is {@code null}
      *
-     * @return the mapping as a pair consisting of the {@code vertexMap} and the {@code indexList}
+     * @return the mapping as an object containing the {@code vertexMap} and the {@code indexList}
      *
      * @see VertexToIntegerMapping
      */
