@@ -84,7 +84,6 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
     protected void transformGraph(List<E> previousPath)
     {
         V source, target;
-        E reversedEdge;
         
         for (E edge : this.workingGraph.edgeSet()) {
             source = workingGraph.getEdgeSource(edge);
@@ -94,6 +93,8 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
             
             this.workingGraph.setEdgeWeight(edge, modifiedWeight);
         }
+
+        E reversedEdge;
         
         for (E originalEdge : previousPath) {
             source = workingGraph.getEdgeSource(originalEdge);
