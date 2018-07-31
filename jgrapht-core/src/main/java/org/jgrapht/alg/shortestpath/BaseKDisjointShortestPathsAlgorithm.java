@@ -117,7 +117,11 @@ abstract class BaseKDisjointShortestPathsAlgorithm<V, E> implements KShortestPat
             throw new IllegalArgumentException("graph must contain the end vertex!");
         }   
         
-        //avoiding original graph modifications and residuals from previous calls
+        // Create a working graph copy to avoid modifying the underlying graph. This gets
+        // reinitialized for every call to getPaths since previous calls may have modified it. Since
+        // the original graph may be using intrusive edges, we have to use an AsWeightedGraph view
+        // (even when the graph copy is already weighted) to avoid writing weight changes through to
+        // the underlying graph.
         this.workingGraph = new AsWeightedGraph<>(new DefaultDirectedWeightedGraph<>(
             this.originalGraph.getVertexSupplier(), this.originalGraph.getEdgeSupplier()), 
             new HashMap<>(), false);
