@@ -74,10 +74,9 @@ public class BhandariKDisjointShortestPaths<V, E> extends BaseKDisjointShortestP
             target = workingGraph.getEdgeTarget(originalEdge);
             double originalEdgeWeight = workingGraph.getEdgeWeight(originalEdge);
             workingGraph.removeEdge(originalEdge);
-            reversedEdge = workingGraph.addEdge(target, source);
-            if (reversedEdge != null) {
-                workingGraph.setEdgeWeight(reversedEdge, -originalEdgeWeight);
-            }
+            workingGraph.addEdge(target, source);
+            reversedEdge = workingGraph.getEdge(target, source);
+            workingGraph.setEdgeWeight(reversedEdge, -originalEdgeWeight);
         }
     }
 
