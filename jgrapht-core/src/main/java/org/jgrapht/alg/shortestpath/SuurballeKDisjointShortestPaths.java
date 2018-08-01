@@ -83,11 +83,9 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
     @Override
     protected void transformGraph(List<E> previousPath)
     {
-        V source, target;
-        
         for (E edge : this.workingGraph.edgeSet()) {
-            source = workingGraph.getEdgeSource(edge);
-            target = workingGraph.getEdgeTarget(edge);
+            V source = workingGraph.getEdgeSource(edge);
+            V target = workingGraph.getEdgeTarget(edge);
             double modifiedWeight = this.workingGraph.getEdgeWeight(edge)
                 - singleSourcePaths.getWeight(target) + singleSourcePaths.getWeight(source);
             
@@ -96,14 +94,15 @@ public class SuurballeKDisjointShortestPaths<V, E> extends BaseKDisjointShortest
 
         E reversedEdge;
         
-        for (E originalEdge : previousPath) {
-            source = workingGraph.getEdgeSource(originalEdge);
-            target = workingGraph.getEdgeTarget(originalEdge);
-            
+        for (E originalEdge : previousPath) {        
             double zeroWeight = workingGraph.getEdgeWeight(originalEdge);
             if (zeroWeight != 0) {
                 throw new IllegalStateException("Expected zero weight edge along the path");
-            }                       
+            }
+            
+            V source = workingGraph.getEdgeSource(originalEdge);
+            V target = workingGraph.getEdgeTarget(originalEdge);
+            
             workingGraph.removeEdge(originalEdge);             
             workingGraph.addEdge(target, source);
             reversedEdge = workingGraph.getEdge(target, source);
