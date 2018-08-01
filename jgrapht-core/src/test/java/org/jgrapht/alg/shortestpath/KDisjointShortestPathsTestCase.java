@@ -409,6 +409,37 @@ public abstract class KDisjointShortestPathsTestCase
     }
     
     @Test
+    public void testThreeDisjointPathsReverseEdgeExist()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph = createThreeDisjointPathsGraphBidirectional();
+
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
+
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 5, 5);
+
+        assertEquals(3, pathList.size());
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 =
+            new GraphWalk<>(graph, Arrays.asList(1, 4, 5), 5);
+        assertEquals(expectedP1, pathList.get(0));
+        assertEquals(2, pathList.get(0).getLength());
+        assertEquals(5.0, pathList.get(0).getWeight(), 0.0);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 =
+            new GraphWalk<>(graph, Arrays.asList(1, 2, 5), 7);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(2, pathList.get(1).getLength());
+        assertEquals(7.0, pathList.get(1).getWeight(), 0.0);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP3 =
+            new GraphWalk<>(graph, Arrays.asList(1, 3, 5), 9);
+        assertEquals(expectedP3, pathList.get(2));
+        assertEquals(2, pathList.get(2).getLength());
+        assertEquals(9.0, pathList.get(2).getWeight(), 0.0);
+
+    }
+    
+    @Test
     public void testMaximumKPathsAreReturned()
     {
         Graph<Integer, DefaultWeightedEdge> graph = createThreeDisjointPathsGraph();
@@ -472,6 +503,67 @@ public abstract class KDisjointShortestPathsTestCase
         graph.setEdgeWeight(e45, 1);
         graph.setEdgeWeight(e23, 1);
         graph.setEdgeWeight(e34, 1);
+
+        return graph;
+    }
+    
+    private Graph<Integer, DefaultWeightedEdge> createThreeDisjointPathsGraphBidirectional()
+    {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addVertex(5);
+
+        DefaultWeightedEdge e12 = graph.addEdge(1, 2);
+        DefaultWeightedEdge e21 = graph.addEdge(2, 1);
+        
+        DefaultWeightedEdge e25 = graph.addEdge(2, 5);
+        DefaultWeightedEdge e52 = graph.addEdge(5, 2);
+        
+        DefaultWeightedEdge e13 = graph.addEdge(1, 3);
+        DefaultWeightedEdge e31 = graph.addEdge(3, 1);
+        
+        DefaultWeightedEdge e35 = graph.addEdge(3, 5);
+        DefaultWeightedEdge e53 = graph.addEdge(5, 3);
+        
+        DefaultWeightedEdge e14 = graph.addEdge(1, 4);
+        DefaultWeightedEdge e41 = graph.addEdge(4, 1);
+        
+        DefaultWeightedEdge e45 = graph.addEdge(4, 5);
+        DefaultWeightedEdge e54 = graph.addEdge(5, 4);
+        
+        DefaultWeightedEdge e23 = graph.addEdge(2, 3);
+        DefaultWeightedEdge e32 = graph.addEdge(3, 2);
+        
+        DefaultWeightedEdge e34 = graph.addEdge(3, 4);
+        DefaultWeightedEdge e43 = graph.addEdge(4, 3);
+
+        graph.setEdgeWeight(e12, 1);
+        graph.setEdgeWeight(e21, 1);
+        
+        graph.setEdgeWeight(e25, 6);
+        graph.setEdgeWeight(e52, 6);
+        
+        graph.setEdgeWeight(e13, 4);
+        graph.setEdgeWeight(e31, 4);
+        
+        graph.setEdgeWeight(e35, 5);
+        graph.setEdgeWeight(e53, 5);
+        
+        graph.setEdgeWeight(e14, 4);
+        graph.setEdgeWeight(e41, 4);
+        
+        graph.setEdgeWeight(e45, 1);
+        graph.setEdgeWeight(e54, 1);
+        
+        graph.setEdgeWeight(e23, 1);
+        graph.setEdgeWeight(e32, 1);
+        
+        graph.setEdgeWeight(e34, 1);
+        graph.setEdgeWeight(e43, 1);
 
         return graph;
     }
@@ -582,6 +674,86 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(expectedP3, pathList.get(2));
         assertEquals(4, pathList.get(2).getLength());
         assertEquals(4.0, pathList.get(2).getWeight(), 0.0);
+    }
+    
+    @Test
+    public void testWikipediaGraph()
+    {
+        Graph<String, DefaultWeightedEdge> graph = buildWikipediaGraph();
+        
+        KShortestPathAlgorithm<String, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
+        
+        List<GraphPath<String, DefaultWeightedEdge>> pathList = alg.getPaths("A", "F", 3);
+
+        assertEquals(2, pathList.size());
+        
+        GraphPath<String, DefaultWeightedEdge> expectedP1 =
+            new GraphWalk<>(graph, Arrays.asList("A", "C", "D", "F"), 5);
+        
+        GraphPath<String, DefaultWeightedEdge> expectedP2 =
+            new GraphWalk<>(graph, Arrays.asList("A", "B", "E", "F"), 5);
+        
+        if (pathList.get(0).equals(expectedP1)) {
+            assertEquals(expectedP2, pathList.get(1));
+        } 
+        else if (pathList.get(0).equals(expectedP2)) {
+            assertEquals(expectedP1, pathList.get(1));
+        } 
+        else {
+            fail("Unexpected result");
+        }
+        
+    }
+    
+    private Graph<String, DefaultWeightedEdge> buildWikipediaGraph() 
+    {
+        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addVertex("F");
+
+        DefaultWeightedEdge e;
+        e = graph.addEdge("A", "B");
+        graph.setEdgeWeight(e, 1.0);
+        e = graph.addEdge("B", "A");
+        graph.setEdgeWeight(e, 1.0);
+        
+        e = graph.addEdge("A", "C");
+        graph.setEdgeWeight(e, 2.0);
+        e = graph.addEdge("C", "A");
+        graph.setEdgeWeight(e, 2.0);
+        
+        e = graph.addEdge("B", "D");
+        graph.setEdgeWeight(e, 1.0);
+        e = graph.addEdge("D", "B");
+        graph.setEdgeWeight(e, 1.0);
+        
+        e = graph.addEdge("B", "E");
+        graph.setEdgeWeight(e, 2.0);
+        e = graph.addEdge("E", "B");
+        graph.setEdgeWeight(e, 2.0);
+        
+        e = graph.addEdge("D", "C");
+        graph.setEdgeWeight(e, 2.0);
+        e = graph.addEdge("C", "D");
+        graph.setEdgeWeight(e, 2.0);
+        
+        e = graph.addEdge("D", "F");
+        graph.setEdgeWeight(e, 1.0);
+        e = graph.addEdge("F", "D");
+        graph.setEdgeWeight(e, 1.0);
+        
+        e = graph.addEdge("E", "F");
+        graph.setEdgeWeight(e, 2.0);
+        e = graph.addEdge("F", "E");
+        graph.setEdgeWeight(e, 2.0);
+
+        return graph;
     }
 
     /**
