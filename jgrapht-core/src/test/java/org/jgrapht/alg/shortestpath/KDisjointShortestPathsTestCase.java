@@ -167,6 +167,69 @@ public abstract class KDisjointShortestPathsTestCase
         assertEquals(2.0, pathList.get(1).getWeight(), 0.0);
 
     }
+    
+    @Test
+    public void testDisconnectedGraph()
+    {
+        
+        Graph<Integer, DefaultWeightedEdge> graph = createDisconnectedGraph();
+
+        KShortestPathAlgorithm<Integer, DefaultWeightedEdge> alg = getKShortestPathAlgorithm(graph);
+
+        List<GraphPath<Integer, DefaultWeightedEdge>> pathList = alg.getPaths(1, 3, 5);
+
+        assertEquals(2, pathList.size());
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP1 =
+            new GraphWalk<>(graph, Arrays.asList(1, 2, 3), 3);
+        assertEquals(expectedP1, pathList.get(0));
+        assertEquals(2, pathList.get(0).getLength());
+        assertEquals(3.0, pathList.get(0).getWeight(), 0.0);
+
+        GraphPath<Integer, DefaultWeightedEdge> expectedP2 =
+            new GraphWalk<>(graph, Arrays.asList(1, 3), 4);
+        assertEquals(expectedP2, pathList.get(1));
+        assertEquals(1, pathList.get(1).getLength());
+        assertEquals(4.0, pathList.get(1).getWeight(), 0.0);
+
+    }
+    
+    private Graph<Integer, DefaultWeightedEdge> createDisconnectedGraph() {
+        DefaultDirectedWeightedGraph<Integer, DefaultWeightedEdge> graph =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addVertex(5);
+        graph.addVertex(6);
+
+        DefaultWeightedEdge e;
+        e = graph.addEdge(1, 2);
+        graph.setEdgeWeight(e, 2.0);
+        e = graph.addEdge(2, 1);
+        graph.setEdgeWeight(e, 2.0);
+        
+        e = graph.addEdge(2, 3);
+        graph.setEdgeWeight(e, 1.0);
+        e = graph.addEdge(3, 2);
+        graph.setEdgeWeight(e, 1.0);
+        
+        e = graph.addEdge(3, 1);
+        graph.setEdgeWeight(e, 4.0);
+        e = graph.addEdge(1, 3);
+        graph.setEdgeWeight(e, 4.0);
+        
+        e = graph.addEdge(4, 5);
+        graph.setEdgeWeight(e, 7.0);
+        e = graph.addEdge(5, 6);
+        graph.setEdgeWeight(e, 8.0);
+        e = graph.addEdge(6, 4);
+        graph.setEdgeWeight(e, 9.0);
+        
+        return graph;
+    }
 
     /**
      * Tests two joint paths from 1 to 4, merge paths is not required.
@@ -597,9 +660,19 @@ public abstract class KDisjointShortestPathsTestCase
     }
 
     @Test
-    public void testGraphIsNotChanged()
+    public void testThreeDisjointPathsGraphIsNotChanged()
     {
-        Graph<Integer, DefaultWeightedEdge> source = createThreeDisjointPathsGraph();
+        checkGraphIsNotChanged(createThreeDisjointPathsGraph());
+    }
+    
+    @Test
+    public void testDisconnectedGraphIsNotChanged()
+    {
+        checkGraphIsNotChanged(createDisconnectedGraph());
+    }
+    
+    public void checkGraphIsNotChanged(Graph<Integer, DefaultWeightedEdge> source)
+    {
         Graph<Integer, DefaultWeightedEdge> destination = new DefaultDirectedWeightedGraph<>(
             source.getVertexSupplier(), source.getEdgeSupplier());
         Graphs.addGraph(destination, source);
