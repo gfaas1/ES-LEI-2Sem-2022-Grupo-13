@@ -31,6 +31,7 @@ Changes to JGraphT in each version:
     - Added `VertexToIntegerMapping` utility class (contributed by Alexandru Văleanu)
     - Handle maxLength=0 case in AllDirectedPaths (reported by Nikolas Havrikov, contributed by Andrew Gainer-Dewar)
     - Added `SuurballeKDisjointShortestPaths` (contributed by Assaf Mizrachi)
+    - Make AsWeightedGraph propagate weight changes by default when backing graph is weighted (contributed by John Sichi)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
