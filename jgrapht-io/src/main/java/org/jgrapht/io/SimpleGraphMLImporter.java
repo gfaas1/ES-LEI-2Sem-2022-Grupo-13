@@ -452,7 +452,7 @@ public class SimpleGraphMLImporter<V, E>
             throws SAXException
         {
             if (insideData == 1) {
-                currentDataValue.append(new String(ch, start, length));
+                currentDataValue.append(ch, start, length);
             }
         }
 
