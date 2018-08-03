@@ -218,7 +218,7 @@ public interface Graph<V, E>
      * <code>null</code>, then this method cannot create vertices and throws an
      * {@link UnsupportedOperationException}.
      *
-     * @return The newly created vertex if added to the graph, otherwise <code>null</code>.
+     * @return The newly created vertex if added to the graph.
      *
      * @throws IllegalArgumentException if the graph supplier returns a vertex which is already in the graph
      * @throws UnsupportedOperationException if the graph was not initialized with a vertex supplier
