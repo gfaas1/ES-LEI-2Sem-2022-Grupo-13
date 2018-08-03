@@ -15,8 +15,9 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg.connectivity;
+package org.jgrapht.alg.decomposition;
 
+import org.jgrapht.alg.decomposition.DulmageMendelsohnDecomposition;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
