@@ -78,6 +78,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>jgrapht-bundle</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 			    <groupId>org.xmlunit</groupId>
 			    <artifactId>xmlunit-core</artifactId>
 			    <version>2.5.1</version>
@@ -150,7 +155,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
-					<version>1.5</version>
+					<version>3.1.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -219,6 +224,7 @@
 		<module>jgrapht-ext</module>
 		<module>jgrapht-guava</module>
 		<module>jgrapht-demo</module>
+		<module>jgrapht-bundle</module>
 		<module>jgrapht-dist</module>
 	</modules>
 

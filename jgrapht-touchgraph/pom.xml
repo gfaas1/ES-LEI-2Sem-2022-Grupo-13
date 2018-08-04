@@ -30,7 +30,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Automatic-Module-Name>org.jgrapht.demo</Automatic-Module-Name>
+							<Automatic-Module-Name>org.jgrapht.touchgraph</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
 				</configuration>
