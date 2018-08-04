@@ -20,15 +20,16 @@ package org.jgrapht.alg.scoring;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMetrics;
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
+import org.jgrapht.alg.util.NeighborCache;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Clustering coefficient.
  *
  * <p>
- * Computes the local clustering coefficient of each vertex of a graph. The local clustering coefficient of a
+ * Computes the <a href="https://en.wikipedia.org/wiki/Clustering_coefficient#Local_clustering_coefficient">local clustering coefficient</a>
+ * of each vertex of a graph. The local clustering coefficient of a
  * node $v$ is given by the expression: $g(v)= \sum_{s \neq v \neq
  * t}\frac{\sigma_{st}(v)}{\sigma_{st}}$ where $\sigma_{st}$ is the total number of shortest paths
  * from node $s$ to node $t$ and $\sigma_{st}(v)$ is the number of those paths that pass through
@@ -36,11 +37,28 @@ import java.util.stream.Collectors;
  * <a href="https://en.wikipedia.org/wiki/Clustering_coefficient">wikipedia</a>.
  *
  * <p>
+ *     This implementation computes both the global, the local and the average clustering coefficient in an undirected
+ *     or a directed network.
+ * </p>
+ *
+ * <p>
+ *     Global clustering coefficient was introduced in
+ *     <i>R. D. Luce and A. D. Perry (1949). "A method of matrix analysis of group structure". Psychometrika. 14 (1):
+ *     95–116. doi:10.1007/BF02289146</i>
+ * </p>
+ *
+ * <p>
+ *     Local clustering coefficient was introduced in
+ *     <i>D. J. Watts and Steven Strogatz (June 1998). "Collective dynamics of 'small-world' networks". Nature.
+ *     393 (6684): 440–442. doi:10.1038/30918</i>
+ * </p>
+ *
+ * <p>
  * This implementation also computes the global clustering coefficient as well as the average clustering coefficient.
  *
  * <p>
- * The running time is $O(|V| + |D|^2) where $|V|$ is the number of vertices and $|D|$ is the maximum degree of a
- * vertex. The space complexity is $O(|V|)$.
+ * The running time is $O(|V| + \Delta(G)^2)$ where $|V|$ is the number of vertices and $\Delta(G)$ is the maximum
+ * degree of a vertex. The space complexity is $O(|V|)$.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -85,6 +103,11 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      * Computes the global clustering coefficient. The global clustering coefficient $C$ is defined as
      * $C = 3 \times number\_of\_triangles / number\_of\_triplets$.
      *
+     * <p>
+     *     A triplet is three nodes that are connected by either two (open triplet) or
+     *     three (closed triplet) undirected ties.
+     * </p>
+     *
      * @return the global clustering coefficient
      */
     public double getGlobalClusteringCoefficient() {
@@ -122,6 +145,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
     }
 
     private void computeGlobalClusteringCoefficient(){
+        NeighborCache<V, E> neighborCache = new NeighborCache<>(graph);
         computed = true;
         double numberTriplets = 0;
 
@@ -130,7 +154,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
                 numberTriplets += 1.0 * graph.degreeOf(v) * (graph.degreeOf(v) - 1) / 2;
             }
             else{
-                numberTriplets += 1.0 * graph.inDegreeOf(v) * graph.outDegreeOf(v);
+                numberTriplets += 1.0 * neighborCache.predecessorsOf(v).size() * neighborCache.successorsOf(v).size();
             }
         }
 
@@ -144,14 +168,8 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
         scores = new HashMap<>(graph.vertexSet().size());
 
         for (V v: graph.vertexSet()){
-            Set<V> neighbourhood = new HashSet<>();
-
-            neighbourhood.addAll(
-                    graph.incomingEdgesOf(v).stream().map(graph::getEdgeSource).collect(Collectors.toSet()));
-            neighbourhood.addAll(
-                    graph.outgoingEdgesOf(v).stream().map(graph::getEdgeTarget).collect(Collectors.toSet()));
-
-            neighbourhood.remove(v);
+            NeighborCache<V, E> neighborCache = new NeighborCache<>(graph);
+            Set<V> neighbourhood = neighborCache.neighborsOf(v);
 
             final double k = neighbourhood.size();
             double numberTriplets = 0;
@@ -169,7 +187,9 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
     }
 
     /**
-     * {@inheritDoc}
+     * Get a map with the local clustering coefficients of all vertices
+     *
+     * @return a map with all local clustering coefficients
      */
     @Override
     public Map<V, Double> getScores() {
@@ -178,7 +198,10 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
     }
 
     /**
-     * {@inheritDoc}
+     * Get a vertex's local clustering coefficient
+     *
+     * @param v the vertex
+     * @return the local clustering coefficient
      */
     @Override
     public Double getVertexScore(V v) {
