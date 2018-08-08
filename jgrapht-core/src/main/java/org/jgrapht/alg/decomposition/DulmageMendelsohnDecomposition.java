@@ -45,14 +45,14 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * computing both a coarse and a fine Dulmage-Mendelsohn Decomposition.
  * 
  * The Dulmage-Mendelsohn Decomposition is based on a maximum-matching of the 
- * graph G. This implementation uses the Hopcroft-Karp maximum matching 
+ * graph $G$. This implementation uses the Hopcroft-Karp maximum matching 
  * algorithm by default.
  * 
  * A coarse Dulmage-Mendelsohn Decomposition is a partitioning into three 
- * subsets. Where D is the set of vertices in G that are not matched in the 
- * maximum matching of G, these subsets are:
- *   - The vertices in D ∩ U and their neighbors
- *   - The vertices in D ∩ V and their neighbors
+ * subsets. Where $D$ is the set of vertices in G that are not matched in the 
+ * maximum matching of $G$, these subsets are:
+ *   - The vertices in $D \cap U$ and their neighbors
+ *   - The vertices in $D \cap V$ and their neighbors
  *   - The remaining vertices
  *  
  * A fine Dulmage-Mendelsohn Decomposition further partitions the remaining 
@@ -84,8 +84,8 @@ public class DulmageMendelsohnDecomposition<V, E> {
      * it's partitions $V_1$ and $V_2$, where $V_1\cap V_2=\emptyset$.
      *
      * @param graph bipartite graph
-     * @param partition1 the first partition, V_1, of vertices in the bipartite graph
-     * @param partition2 the second partition, V_2, of vertices in the bipartite graph
+     * @param partition1 the first partition, $V_1$, of vertices in the bipartite graph
+     * @param partition2 the second partition, $V_2$, of vertices in the bipartite graph
      */
     public DulmageMendelsohnDecomposition(Graph<V, E> graph, Set<V> partition1, Set<V> partition2) {
         this.graph = Objects.requireNonNull(graph);
@@ -196,11 +196,11 @@ public class DulmageMendelsohnDecomposition<V, E> {
 
         /**
          * Gets the subset dominated by partition1.
-         * Where D is the set of vertices in G that are not matched in the 
-         * maximum matching of G, this set contains members of the first partition 
+         * Where $D$ is the set of vertices in $G$ that are not matched in the 
+         * maximum matching of $G$, this set contains members of the first partition 
          * and vertices from the second partition that neighbour them.
          *
-         * @return The vertices in D ∩ V_1 and their neighbours
+         * @return The vertices in $D \cap V_1$ and their neighbours
          */
         public Set<V> getPartition1DominatedSet() {
             return subset1;
@@ -208,11 +208,11 @@ public class DulmageMendelsohnDecomposition<V, E> {
 
         /**
          * Gets the subset dominated by partition2.
-         * Where D is the set of vertices in G that are not matched in the 
-         * maximum matching of G, this set contains members of the second partition 
+         * Where $D$ is the set of vertices in $G$ that are not matched in the 
+         * maximum matching of $G$, this set contains members of the second partition 
          * and vertices from the first partition that neighbour them.
          *
-         * @return The vertices in D ∩ V and their neighbours
+         * @return The vertices in $D \cap V_2$ and their neighbours
          */
         public Set<V> getPartition2DominatedSet() {
             return subset2;
@@ -221,9 +221,9 @@ public class DulmageMendelsohnDecomposition<V, E> {
         /**
          * Gets the remaining subset, or subsets in the fine decomposition.
          * This set contains vertices that are matched in the maximum matching 
-         * of the graph G. If the fine decomposition was used, this will be 
+         * of the graph $G$. If the fine decomposition was used, this will be 
          * multiple sets, each a strongly-connected-component of the matched 
-         * subset of G.
+         * subset of $G$.
          *
          * @return List of Sets of vertices in the subsets
          */
