@@ -30,24 +30,9 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Automatic-Module-Name>org.jgrapht.demo</Automatic-Module-Name>
+							<Automatic-Module-Name>org.jgrapht.touchgraph</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<finalName>${project.artifactId}-${project.version}-uber</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

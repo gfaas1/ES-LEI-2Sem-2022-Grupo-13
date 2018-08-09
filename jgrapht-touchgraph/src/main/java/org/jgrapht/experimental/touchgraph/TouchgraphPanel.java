@@ -17,6 +17,11 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
+import org.jgrapht.Graph;
+
+import java.awt.Color;
+import java.util.Hashtable;
+
 import com.touchgraph.graphlayout.*;
 import com.touchgraph.graphlayout.interaction.*;
 
