@@ -35,6 +35,7 @@ Changes to JGraphT in each version:
     - Fix assumptions about SAX `characters()` method calls in GraphML importers (contributed by Dimitrios Michail)
     - Throw exception from no-arg `addVertex` when duplicate vertex generated (contributed by Dimitrios Michail)
     - Replace `GenericFibonacciHeap` with dependency on jheaps library (contributed by Dimitrios Michail)
+    - Added `DulmageMendelsohnDecomposition` (contributed by Peter Harman)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
