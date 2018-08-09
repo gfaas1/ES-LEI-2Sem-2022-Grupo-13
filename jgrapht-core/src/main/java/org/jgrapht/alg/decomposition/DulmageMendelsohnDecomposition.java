@@ -37,37 +37,53 @@ import org.jgrapht.graph.builder.GraphBuilder;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 /**
+ * <p>
  * This class computes a Dulmage-Mendelsohn Decomposition of a bipartite graph. 
  * A Dulmage–Mendelsohn decomposition is a partition of the vertices of a 
  * bipartite graph into subsets, with the property that two adjacent vertices 
  * belong to the same subset if and only if they are paired with each other in a 
  * perfect matching of the graph. This particular implementation is capable of 
  * computing both a coarse and a fine Dulmage-Mendelsohn Decomposition.
+ * </p>
  * 
+ * <p>
  * The Dulmage-Mendelsohn Decomposition is based on a maximum-matching of the 
  * graph $G$. This implementation uses the Hopcroft-Karp maximum matching 
  * algorithm by default.
+ * </p>
  * 
+ * <p>
  * A coarse Dulmage-Mendelsohn Decomposition is a partitioning into three 
  * subsets. Where $D$ is the set of vertices in G that are not matched in the 
  * maximum matching of $G$, these subsets are:
- *   - The vertices in $D \cap U$ and their neighbors
- *   - The vertices in $D \cap V$ and their neighbors
- *   - The remaining vertices
- *  
+ * <ul>
+ * <li>The vertices in $D \cap U$ and their neighbors</li>
+ * <li>The vertices in $D \cap V$ and their neighbors</li>
+ * <li>The remaining vertices</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
  * A fine Dulmage-Mendelsohn Decomposition further partitions the remaining 
  * vertices into strongly-connected sets. This implementation uses Kosaraju's 
  * algorithm for the strong-connectivity analysis.
+ * </p>
  * 
- * The Dulmage-Mendelsohn Decomposition was introduced in: 
+ * <p>
+ * The Dulmage-Mendelsohn Decomposition was introduced in: <br>
  * Dulmage, A.L., Mendelsohn, N.S. Coverings of bipartitegraphs, 
  * Canadian J. Math., 10, 517-534, 1958.
+ * </p>
  * 
- * The implementation of this class is based on: 
+ * <p>
+ * The implementation of this class is based on: <br>
  * Bunus P., Fritzson P., Methods for Structural Analysis and Debugging of 
  * Modelica Models, 2nd International Modelica Conference 2002
+ * </p>
  * 
+ * <p>
  * The runtime complexity of this class is $O(V + E)$.
+ * </p>
  *
  * @author Peter Harman
  * @param <V> Vertex type
