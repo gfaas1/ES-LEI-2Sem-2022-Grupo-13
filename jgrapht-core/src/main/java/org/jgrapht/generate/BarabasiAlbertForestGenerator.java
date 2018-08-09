@@ -126,17 +126,10 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
         List<V> nodes = new ArrayList<>();
 
         /*
-            Add t roots, one for each tree in the forest
+         * Add t roots, one for each tree in the forest
          */
         for (int i = 0; i < t; i++) {
-            V root = target.addVertex();
-
-            if (root == null) {
-                throw new IllegalArgumentException(
-                        "Invalid vertex supplier (does not return unique vertices on each call).");
-            }
-
-            nodes.add(root);
+            nodes.add(target.addVertex());
         }
 
         /*
@@ -144,12 +137,6 @@ public class BarabasiAlbertForestGenerator<V, E> implements GraphGenerator<V, E,
          */
         for (int i = t; i < n; i++) {
             V v = target.addVertex();
-
-            if (v == null) {
-                throw new IllegalArgumentException(
-                        "Invalid vertex supplier (does not return unique vertices on each call).");
-            }
-
             V u = nodes.get(rng.nextInt(nodes.size()));
 
             assert !target.containsEdge(v, u);

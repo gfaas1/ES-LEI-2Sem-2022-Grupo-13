@@ -33,6 +33,8 @@ Changes to JGraphT in each version:
     - Added `SuurballeKDisjointShortestPaths` (contributed by Assaf Mizrachi)
     - Make AsWeightedGraph propagate weight changes by default when backing graph is weighted (contributed by John Sichi)
     - Fix assumptions about SAX `characters()` method calls in GraphML importers (contributed by Dimitrios Michail)
+    - Throw exception from no-arg `addVertex` when duplicate vertex generated (contributed by Dimitrios Michail)
+    - Replace `GenericFibonacciHeap` with dependency on jheaps library (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)

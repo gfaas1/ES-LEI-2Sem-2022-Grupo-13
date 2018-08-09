@@ -148,13 +148,7 @@ public class PruferTreeGenerator<V, E> implements GraphGenerator<V, E, V> {
 
         // add vertices
         for (int i = 0; i < n; i++) {
-            V newVertex = target.addVertex();
-
-            if (newVertex == null) {
-                throw new IllegalArgumentException("Invalid vertex supplier");
-            }
-
-            vertexList.add(newVertex);
+            vertexList.add(target.addVertex());
         }
 
         // base case
