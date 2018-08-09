@@ -17,7 +17,15 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
-import com.touchgraph.graphlayout.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.touchgraph.graphlayout.Edge;
+import com.touchgraph.graphlayout.Node;
+import com.touchgraph.graphlayout.TGException;
+import com.touchgraph.graphlayout.TGPanel;
+
+import org.jgrapht.Graph;
 
 /**
  * A Converter class that converts a JGraphT graph to that used in the TouchGraph library.

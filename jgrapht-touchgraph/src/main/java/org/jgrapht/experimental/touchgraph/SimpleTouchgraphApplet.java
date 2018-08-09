@@ -17,6 +17,16 @@
  */
 package org.jgrapht.experimental.touchgraph;
 
+import java.applet.Applet;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
 /**
  * SimpleTouchgraphApplet
  *

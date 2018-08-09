@@ -56,11 +56,9 @@ The files below make up the table of contents for a release distribution archive
     - `jgrapht-core-x.y.z.jar` core library
     - `jgrapht-demo-x.y.z.jar` demo classes
     - `jgrapht-ext-x.y.z.jar` extensions
-    - `jgrapht-ext-x.y.z-uber.jar` all libraries rolled into one
     - `jgrapht-io-x.y.z.jar` Importers/Exporters for various graph formats
-    - `jgrapht-io-x.y.z-uber.jar` all libraries rolled into one
     - `jgrapht-guava-x.y.z.jar` Adapter classes for the Guava library
-    - `jgrapht-guava-x.y.z-uber.jar` all libraries rolled into one
+    - `jgrapht-bundle-x.y.z.jar` all libraries rolled into one
     - `jgraphx-a.b.c.jar` JGraphX dependency library
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
     - `commons-lang3-x.y.jar` Apache Commons Lang library
