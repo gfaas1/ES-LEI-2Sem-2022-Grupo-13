@@ -56,12 +56,12 @@ import org.jgrapht.traverse.DepthFirstIterator;
  * A coarse Dulmage-Mendelsohn Decomposition is a partitioning into three 
  * subsets. Where $D$ is the set of vertices in G that are not matched in the 
  * maximum matching of $G$, these subsets are:
+ * </p>
  * <ul>
  * <li>The vertices in $D \cap U$ and their neighbors</li>
  * <li>The vertices in $D \cap V$ and their neighbors</li>
  * <li>The remaining vertices</li>
  * </ul>
- * </p>
  * 
  * <p>
  * A fine Dulmage-Mendelsohn Decomposition further partitions the remaining 
