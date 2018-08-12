@@ -77,6 +77,8 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      */
     private Map<V, Double> scores;
 
+    private boolean fullyComputedMap = false;
+
     /**
      * Global Clustering Coefficient
      */
@@ -97,6 +99,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      */
     public ClusteringCoefficient(Graph<V, E> graph) {
         this.graph = Objects.requireNonNull(graph);
+        this.scores = new HashMap<>();
     }
 
     /**
@@ -131,7 +134,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
             return 0;
 
         if (!computedAverage){
-            computeScoreMap();
+            computeFullScoreMap();
             computedAverage = true;
             averageClusteringCoefficient = 0;
 
@@ -161,28 +164,41 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
         globalClusteringCoefficient = 3 * GraphMetrics.getNumberOfTriangles(graph) / numberTriplets;
     }
 
-    private void computeScoreMap(){
-        if (scores != null)
-            return;
+    private double computeLocalClusteringCoefficient(V v){
+        if (scores.containsKey(v)){
+            return scores.get(v);
+        }
 
-        scores = new HashMap<>(graph.vertexSet().size());
+        NeighborCache<V, E> neighborCache = new NeighborCache<>(graph);
+        Set<V> neighbourhood = neighborCache.neighborsOf(v);
+
+        final double k = neighbourhood.size();
+        double numberTriplets = 0;
+
+        for (V p: neighbourhood)
+            for (V q: neighbourhood)
+                if (graph.containsEdge(p, q))
+                    numberTriplets++;
+
+        if (k <= 1)
+           return 0.0;
+        else
+            return numberTriplets / (k * (k - 1));
+    }
+
+    private void computeFullScoreMap(){
+        if (fullyComputedMap) {
+            return;
+        }
+
+        fullyComputedMap = true;
 
         for (V v: graph.vertexSet()){
-            NeighborCache<V, E> neighborCache = new NeighborCache<>(graph);
-            Set<V> neighbourhood = neighborCache.neighborsOf(v);
+            if (scores.containsKey(v)){
+                continue;
+            }
 
-            final double k = neighbourhood.size();
-            double numberTriplets = 0;
-
-            for (V p: neighbourhood)
-                for (V q: neighbourhood)
-                    if (graph.containsEdge(p, q))
-                        numberTriplets++;
-
-            if (k <= 1)
-                scores.put(v, 0.0);
-            else
-                scores.put(v, numberTriplets / (k * (k - 1)));
+            scores.put(v, computeLocalClusteringCoefficient(v));
         }
     }
 
@@ -193,7 +209,7 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
      */
     @Override
     public Map<V, Double> getScores() {
-        computeScoreMap();
+        computeFullScoreMap();
         return Collections.unmodifiableMap(scores);
     }
 
@@ -209,7 +225,6 @@ public class ClusteringCoefficient<V, E> implements VertexScoringAlgorithm<V, Do
             throw new IllegalArgumentException("Cannot return score of unknown vertex");
         }
 
-        computeScoreMap();
-        return scores.get(v);
+        return computeLocalClusteringCoefficient(v);
     }
 }
