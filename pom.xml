@@ -180,7 +180,6 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.0.0</version>
 					<configuration>
-						<exclude>org.jgrapht.experimental</exclude>
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
