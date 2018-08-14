@@ -235,12 +235,6 @@
 
 	<profiles>
 		<profile>
-			<id>touchgraph</id>
-			<modules>
-				<module>jgrapht-touchgraph</module>
-			</modules>
-		</profile>
-		<profile>
 			<id>checkstyle</id>
 			<build>
 				<plugins>
