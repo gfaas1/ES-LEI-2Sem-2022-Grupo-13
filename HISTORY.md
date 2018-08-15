@@ -38,6 +38,7 @@ Changes to JGraphT in each version:
     - Added `DulmageMendelsohnDecomposition` (contributed by Peter Harman)
     - Package one bundle jar instead of multiple uber jars (contributed by Dimitrios Michail)
     - Removed touchgraph support and corresponding module jgrapht-touchgraph (contributed by John Sichi)
+    - Added `ClusteringCoefficient` to compute the local and global clustering coefficient of a graph (contributed by Alexandru Văleanu)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
