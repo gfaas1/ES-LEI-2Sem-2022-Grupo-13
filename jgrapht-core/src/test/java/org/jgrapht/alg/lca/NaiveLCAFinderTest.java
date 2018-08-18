@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2018, by Barak Naveh, Alexandru Valeanu and Contributors.
+ * (C) Copyright 2016-2018, by Barak Naveh and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -15,20 +15,31 @@
  * (b) the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation.
  */
-package org.jgrapht.alg;
+package org.jgrapht.alg.lca;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.junit.Assert;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
 
-public class NaiveLcaFinderTest
-{
+/**
+ * Tests for the {@link NaiveLCAFinder}
+ *
+ * @author Barak Naveh
+ * @author Alexandru Valeanu
+ */
+public class NaiveLCAFinderTest {
+
     private static <V,
-        E> void checkLcas(NaiveLcaFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
+            E> void checkLcas(NaiveLCAFinder<V, E> finder, V a, V b, Collection<V> expectedSet)
     {
-        Set<V> lcaSet = finder.findLcas(a, b);
+        Set<V> lcaSet = finder.getLCASet(a, b);
         Assert.assertTrue(lcaSet.containsAll(expectedSet));
         Assert.assertEquals(lcaSet.size(), expectedSet.size());
     }
@@ -56,13 +67,13 @@ public class NaiveLcaFinderTest
         g.addEdge("f", "e");
         g.addEdge("e", "h");
 
-        NaiveLcaFinder<String, DefaultEdge> finder = new NaiveLcaFinder<>(g);
+        NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
 
-        Assert.assertEquals("f", finder.findLca("f", "h"));
-        Assert.assertEquals("f", finder.findLca("h", "f"));
-        Assert.assertEquals("b", finder.findLca("g", "h"));
-        Assert.assertEquals("c", finder.findLca("c", "c"));
-        Assert.assertEquals("a", finder.findLca("a", "e")); // tests one path not descending
+        Assert.assertEquals("f", finder.getLCA("f", "h"));
+        Assert.assertEquals("f", finder.getLCA("h", "f"));
+        Assert.assertEquals("b", finder.getLCA("g", "h"));
+        Assert.assertEquals("c", finder.getLCA("c", "c"));
+        Assert.assertEquals("a", finder.getLCA("a", "e")); // tests one path not descending
 
         checkLcas(finder, "f", "h", Arrays.asList("f"));
         checkLcas(finder, "h", "f", Arrays.asList("f"));
@@ -95,10 +106,10 @@ public class NaiveLcaFinderTest
         g.addEdge("g", "i");
         g.addEdge("h", "i");
 
-        NaiveLcaFinder<String, DefaultEdge> finder = new NaiveLcaFinder<>(g);
+        NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
 
-        Assert.assertEquals(null, finder.findLca("i", "e"));
-        Assert.assertTrue(finder.findLcas("i", "e").isEmpty());
+        Assert.assertNull(finder.getLCA("i", "e"));
+        Assert.assertTrue(finder.getLCASet("i", "e").isEmpty());
     }
 
     @Test
@@ -127,13 +138,14 @@ public class NaiveLcaFinderTest
         g.addEdge("h", "e");
         g.addEdge("h", "h");
         g.addEdge("i", "i");
-        NaiveLcaFinder<String, DefaultEdge> finder = new NaiveLcaFinder<>(g);
 
-        Assert.assertEquals("f", finder.findLca("h", "f"));
-        Assert.assertEquals(null, finder.findLca("a", "i"));
+        NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
+
+        Assert.assertEquals("f", finder.getLCA("h", "f"));
+        Assert.assertNull(finder.getLCA("a", "i"));
 
         checkLcas(finder, "h", "f", Arrays.asList("f"));
-        Assert.assertTrue(finder.findLcas("a", "i").isEmpty());
+        Assert.assertTrue(finder.getLCASet("a", "i").isEmpty());
     }
 
     @Test
@@ -154,10 +166,11 @@ public class NaiveLcaFinderTest
         g.addEdge("b", "g");
         g.addEdge("g", "e");
         g.addEdge("e", "h");
-        NaiveLcaFinder<String, DefaultEdge> finder = new NaiveLcaFinder<>(g);
 
-        Assert.assertEquals("b", finder.findLca("b", "h"));
-        Assert.assertEquals("b", finder.findLca("c", "e"));
+        NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
+
+        Assert.assertEquals("b", finder.getLCA("b", "h"));
+        Assert.assertEquals("b", finder.getLCA("c", "e"));
 
         checkLcas(finder, "b", "h", Arrays.asList("b"));
         checkLcas(finder, "c", "e", Arrays.asList("b"));
@@ -179,7 +192,7 @@ public class NaiveLcaFinderTest
         g.addEdge("b", "c");
         g.addEdge("b", "d");
 
-        NaiveLcaFinder<String, DefaultEdge> finder = new NaiveLcaFinder<>(g);
+        NaiveLCAFinder<String, DefaultEdge> finder = new NaiveLCAFinder<>(g);
 
         checkLcas(finder, "c", "d", Arrays.asList("a", "b"));
     }

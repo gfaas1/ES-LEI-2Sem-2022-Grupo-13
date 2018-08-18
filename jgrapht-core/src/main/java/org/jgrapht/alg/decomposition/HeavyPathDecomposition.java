@@ -32,6 +32,12 @@ import java.util.*;
  *  into a set of disjoint paths.
  *
  * <p>
+ *  The techniques was first introduced in <i>Sleator, D. D.; Tarjan, R. E. (1983).
+ *  "A Data Structure for Dynamic Trees". Proceedings of the thirteenth annual ACM symposium on Theory of computing
+ *  - STOC '81 doi:10.1145/800076.802464 </i>
+ * </p>
+ *
+ * <p>
  * In a heavy path decomposition, the edges set is partitioned into two sets, a set of heavy edges and a
  * set of light ones according to the relative number of nodes in the vertex's subtree.
  *
@@ -80,7 +86,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
     /**
      * Create an instance with a reference to the tree that we will decompose and to the root of the tree.
      *
-     * Note: The constructor will NOT check if the input tree is a valid tree.
+     * Note: The constructor will NOT check if the input graph is a valid tree.
      *
      * @param tree the input tree
      * @param root the root of the tree
@@ -94,7 +100,7 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
      * forest (one root per tree).
      *
      * Note: If two roots appear in the same tree, an error will be thrown.
-     * Note: The constructor will NOT check if the input forest is a valid forest.
+     * Note: The constructor will NOT check if the input graph is a valid forest.
      *
      * @param forest the input forest
      * @param roots the set of roots of the graph
@@ -511,6 +517,17 @@ public class HeavyPathDecomposition<V, E> implements TreeToPathDecompositionAlgo
          */
         public int[] getFirstNodeInPathArray(){
             return firstNodeInPath;
+        }
+
+        /**
+         * Return the internal parent array.
+         * For each vertex $v \in V$, $parentArray[normalizeVertex(v)] = normalizeVertex(u)$ if $getParent(v) = u$ or
+         * $-1$ if $getParent(v) = null$.
+         *
+         * @return internal parent array
+         */
+        public int[] getParentArray(){
+            return parent;
         }
     }
 }
