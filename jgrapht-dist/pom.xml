@@ -46,6 +46,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>jgrapht-opt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jgrapht-bundle</artifactId>
 		</dependency>
 	</dependencies>
