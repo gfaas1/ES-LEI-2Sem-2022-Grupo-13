@@ -41,6 +41,7 @@ Changes to JGraphT in each version:
     - Added `ClusteringCoefficient` to compute the local and global clustering coefficient of a graph (contributed by Alexandru Văleanu)
     - Refactored LCA interface, reimplemented Tarjan's algorithm and added HeavyPathLCAFinder, BinaryLiftingLCAFinder, EulerTourRMQLCAFinder (contributed by Alexandru Văleanu)
     - Added jgrapht-opt module with fastutil graph implementation (contributed by Dimitrios Michail)
+    - Added negative weight cycle reporting in Bellman-Ford (contributed by Dimitrios Michail in response to proposal from Miron Balcerzak)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
