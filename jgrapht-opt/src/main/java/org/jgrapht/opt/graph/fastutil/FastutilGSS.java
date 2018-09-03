@@ -1,21 +1,20 @@
-package org.jgrapht.opt.graph;
+package org.jgrapht.opt.graph.fastutil;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.GraphSpecificsStrategy;
-import org.jgrapht.graph.specifics.DirectedEdgeContainer;
+import org.jgrapht.graph.IntrusiveEdgesSpecifics;
+import org.jgrapht.graph.UniformIntrusiveEdgesSpecifics;
+import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
 import org.jgrapht.graph.specifics.DirectedSpecifics;
 import org.jgrapht.graph.specifics.Specifics;
-import org.jgrapht.graph.specifics.UndirectedEdgeContainer;
 import org.jgrapht.graph.specifics.UndirectedSpecifics;
 
-import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 
 /**
  * A specifics strategy implementation using fastutil maps for storage.
@@ -25,25 +24,19 @@ import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
  * edge retrievals. Methods which depend on edge retrievals, e.g. getEdge(V u, V v), containsEdge(V
  * u, V v), addEdge(V u, V v), etc may be relatively slow when the average degree of a vertex is
  * high (dense graphs). For a fast implementation, use
- * {@link FastutilFastLookupGraphSpecificsStrategy}.
+ * {@link FastutilFastLookupGSS}.
  * 
  * @author Dimitrios Michail
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class FastutilGraphSpecificsStrategy<V, E>
+public class FastutilGSS<V, E>
     implements
     GraphSpecificsStrategy<V, E>
 {
     private static final long serialVersionUID = -4319431062943632549L;
 
-    /**
-     * Get a function which creates the specifics. The factory will accept the graph type as a
-     * parameter.
-     * 
-     * @return a function which creates intrusive edges specifics.
-     */
     @Override
     public BiFunction<Graph<V, E>, GraphType, Specifics<V, E>> getSpecificsFactory()
     {
@@ -51,31 +44,25 @@ public class FastutilGraphSpecificsStrategy<V, E>
             Specifics<V, E>> & Serializable) (graph, type) -> {
                 if (type.isDirected()) {
                     return new DirectedSpecifics<>(
-                        graph,
-                        this.<V, DirectedEdgeContainer<V, E>> getPredictableOrderMapFactory().get(),
-                        getEdgeSetFactory());
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 } else {
                     return new UndirectedSpecifics<>(
-                        graph,
-                        this
-                            .<V, UndirectedEdgeContainer<V, E>> getPredictableOrderMapFactory()
-                            .get(),
-                        getEdgeSetFactory());
+                        graph, new Object2ObjectLinkedOpenHashMap<>(), getEdgeSetFactory());
                 }
             };
     }
 
     @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getPredictableOrderMapFactory()
+    public Function<GraphType, IntrusiveEdgesSpecifics<V, E>> getIntrusiveEdgesSpecificsFactory()
     {
-        return (Supplier<
-            Map<K1, V1>> & Serializable) () -> new Object2ReferenceLinkedOpenHashMap<>();
-    }
-
-    @Override
-    public <K1, V1> Supplier<Map<K1, V1>> getMapFactory()
-    {
-        return (Supplier<Map<K1, V1>> & Serializable) () -> new Object2ReferenceOpenHashMap<>();
+        return (Function<GraphType, IntrusiveEdgesSpecifics<V, E>> & Serializable) (type) -> {
+            if (type.isWeighted()) {
+                return new WeightedIntrusiveEdgesSpecifics<V, E>(
+                    new Object2ObjectLinkedOpenHashMap<>());
+            } else {
+                return new UniformIntrusiveEdgesSpecifics<>(new Object2ObjectLinkedOpenHashMap<>());
+            }
+        };
     }
 
 }
