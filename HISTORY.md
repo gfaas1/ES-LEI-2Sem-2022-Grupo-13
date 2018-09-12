@@ -44,6 +44,7 @@ Changes to JGraphT in each version:
     - Added negative weight cycle reporting in Bellman-Ford (contributed by Dimitrios Michail in response to proposal from Miron Balcerzak)
     - Added `KolmogorovMinimumWeightPerfectMatching` (contributed by Timofey Chudakov)
     - Added graph implementation specified for Integer vertices to jgrapht-opt module (contributed by Dimitrios Michail)
+    - Added Christofides algorithm for computing 3/2 approximate TSP solutions (contributed by Timofey Chudakov)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
