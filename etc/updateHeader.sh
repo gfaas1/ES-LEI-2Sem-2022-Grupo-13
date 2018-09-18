@@ -1,17 +1,23 @@
 #!/bin/bash
 
-#Updates the year in our copyright statement. i.e. "* (C) Copyright 2003-2016," gets replaced by "* (C) Copyright 2003-[current_year],"
+# Updates the headers for all source files to match our current boilerplate
 
 set -e
 
 SRC_DIR=`dirname "$BASH_SOURCE"`/..
 
-#get the current year
-year=$(date +'%Y')
-
 function updateOneFile() {
     file="$1"
-    sed -i "s/\(\*\s(C)\sCopyright\s[0-9]\{4\}-\)[0-9]\{4\},/\1"$year",/" $file
+    if [ -n "$file" ]; then
+        echo "Updating $file"
+        sed -i '/@since/d' "$file"
+        sed -i '/^\/\/ End/d' "$file"
+        sed -i'' '/(C) Copyright/,/\*\// {
+                    /(C) Copyright/n
+                    /\*\//r etc/header-boilerplate.txt
+                    d
+                }' "$file"
+    fi
 }
 
 function updateOneModule() {
