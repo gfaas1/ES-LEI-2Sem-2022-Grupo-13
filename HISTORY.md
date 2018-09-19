@@ -49,6 +49,7 @@ Changes to JGraphT in each version:
     - Addded `PartitioningAlgorithm` interface and `BipartitePartitioning` implementation for recognizing bipartite graphs (contributed by Alexandru Văleanu)
     - Fixed bug in `GraphTests.isStronglyConnected`: undirected graphs are now correctly identified as strongly connected whenever the graph is connected (reported by Joris Kinable, contributed by Dimitrios Michail)
     - Upgraded EPL to v2.0, copyright header cleanup, removed @since tag (contributed by John Sichi)
+    - Use checkstyle to enforce correct file headers (contributed by John Sichi)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
