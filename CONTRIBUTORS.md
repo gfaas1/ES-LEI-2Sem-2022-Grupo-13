@@ -1,6 +1,6 @@
 ## Contributors ##
 
-Copyright Notice: The JGraphT project source code is a composite of contributions by multiple authors. The copyright for each contribution is owned by the corresponding author. For details, please see HISTORY.md as well as the complete git history. All authors have agreed to license their contributions to the public as open source under the specific terms noted in README.md.
+Copyright Notice: The JGraphT project source code is a composite of contributions by multiple authors. The copyright for each contribution is owned by the corresponding author. For details, please see [HISTORY.md](HISTORY.md) as well as the complete git history. All authors have agreed to license their contributions to the public as open source under the specific terms noted in [README.md](README.md).
 
 JGraphT wouldn't be the library it is today without the source contributions and suggestions made by the authors:
 
