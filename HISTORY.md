@@ -51,6 +51,7 @@ Changes to JGraphT in each version:
     - Upgraded EPL to v2.0, copyright header cleanup, removed @since tag (contributed by John Sichi)
     - Use checkstyle to enforce correct file headers (contributed by John Sichi)
     - Added `ChinesePostman` (contributed by Joris Kinable)
+    - Added `LineGraphConverter` (contributed by Joris Kinable and Nikhil Sharma)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
