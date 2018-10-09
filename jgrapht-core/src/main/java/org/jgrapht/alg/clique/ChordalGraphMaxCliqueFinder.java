@@ -52,7 +52,6 @@ public class ChordalGraphMaxCliqueFinder<V, E>
     implements
     CliqueAlgorithm<V>
 {
-
     private final Graph<V, E> graph;
     private final ChordalityInspector.IterationOrder iterationOrder;
 
