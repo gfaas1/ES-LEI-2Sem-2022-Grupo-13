@@ -61,8 +61,11 @@ The files below make up the table of contents for a release distribution archive
     - `jgrapht-bundle-x.y.z.jar` all libraries rolled into one
     - `jgraphx-a.b.c.jar` JGraphX dependency library
     - `antlr4-runtime-x.y.jar` ANTLR parser runtime
-    - `commons-lang3-x.y.jar` Apache Commons Lang library
+    - `commons-lang3-x.y.z.jar` Apache Commons Lang library
+    - `commons-text-x.y.jar` Apache Commons Text library
+    - `fastutil-x.y.z.jar` Fastutil library
     - `guava-x.y-jre.jar` Guava library
+    - `jheaps-x.y.jar` JHeaps library    
 - `source/` complete source tree used to build this release
 
 ## Getting Started ##
