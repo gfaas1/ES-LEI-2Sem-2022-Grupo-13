@@ -119,6 +119,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Abdallah Atouani](https://github.com/AbdallahAt)
 - [Peter Harman](https://github.com/harmanpa)
 - [Nikhil Sharma](https://github.com/nks1558)
+- [Dennis Fischer](https://github.com/pdelvo)
 
 (if we have missed your name on this list, please email us to get it fixed).
 

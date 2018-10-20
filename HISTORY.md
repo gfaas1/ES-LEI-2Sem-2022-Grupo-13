@@ -57,6 +57,7 @@ Changes to JGraphT in each version:
     - Updated library dependencies (contributed by Joris Kinable)
     - Added exporter for the Lemon (LGF) format (contributed by Dimitrios Michail)
     - Added support for using an edge function in AsWeightedGraph (contributed by Joris Kinable)
+    - Fixed bug in ColorRefinementIsomorphismInspector which required a disjoint graph union (contributed by Christoph Grüne and Dennis Fischer)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
