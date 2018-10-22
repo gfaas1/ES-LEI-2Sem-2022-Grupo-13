@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -204,22 +204,34 @@ public class CSVExporter<V, E>
 
     private void exportAsEdgeList(Graph<V, E> g, PrintWriter out)
     {
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+
         for (E e : g.edgeSet()) {
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeSource(e)));
             out.print(delimiter);
             exportEscapedField(out, vertexIDProvider.getName(g.getEdgeTarget(e)));
+            if (exportEdgeWeights) { 
+                out.print(delimiter);
+                exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
+            }
             out.println();
         }
     }
 
     private void exportAsAdjacencyList(Graph<V, E> g, PrintWriter out)
     {
+        boolean exportEdgeWeights = parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS);
+        
         for (V v : g.vertexSet()) {
             exportEscapedField(out, vertexIDProvider.getName(v));
             for (E e : g.outgoingEdgesOf(v)) {
                 V w = Graphs.getOppositeVertex(g, e, v);
                 out.print(delimiter);
                 exportEscapedField(out, vertexIDProvider.getName(w));
+                if (exportEdgeWeights) { 
+                    out.print(delimiter);
+                    exportEscapedField(out, String.valueOf(g.getEdgeWeight(e)));
+                }
             }
             out.println();
         }
@@ -229,6 +241,7 @@ public class CSVExporter<V, E>
     {
         boolean exportNodeId = parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_NODEID);
         boolean exportEdgeWeights =
+            parameters.contains(CSVFormat.Parameter.EDGE_WEIGHTS) || 
             parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_EDGE_WEIGHTS);
         boolean zeroWhenNoEdge =
             parameters.contains(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE);

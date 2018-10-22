@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2016-2018, by Dimitrios Michail and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -60,6 +60,18 @@ package org.jgrapht.io;
  * which represents a graph with edges: a-&gt;b, b-&gt;a, d-&gt;a, c-&gt;a, c-&gt;b, b-&gt;d,
  * b-&gt;a. Multiple occurrences of the same edge result into a multi-graph.
  * 
+ * <p>Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
+ * set. In this case the target vertex must be followed by the edge weight. The following example illustrates
+ * the weighted variant:
+ * 
+ * <pre>
+ * a,b,2.0
+ * b,a,3.0
+ * d,a,2.0
+ * c,a,1.5,b,2.5
+ * b,d,3.3,a,5.5
+ * </pre>
+ * 
  * </li>
  * <li>
  * <p>
@@ -92,7 +104,7 @@ package org.jgrapht.io;
  * </pre>
  * 
  * <p>
- * Weighted variants are also valid if {@link CSVFormat.Parameter#MATRIX_FORMAT_EDGE_WEIGHTS} is
+ * Weighted variants are also valid if {@link CSVFormat.Parameter#EDGE_WEIGHTS} is
  * set. The above example would then be:
  * 
  * <pre>
@@ -163,6 +175,10 @@ public enum CSVFormat
     public enum Parameter
     {
         /**
+         * Whether to import/export edge weights.
+         */
+        EDGE_WEIGHTS,
+        /**
          * Whether to import/export node ids. Only valid for the {@link CSVFormat#MATRIX MATRIX}
          * format.
          */
@@ -170,7 +186,9 @@ public enum CSVFormat
         /**
          * Whether to import/export edge weights. Only valid for the {@link CSVFormat#MATRIX MATRIX}
          * format.
+         * @deprecated Use {@link #EDGE_WEIGHTS} instead.
          */
+        @Deprecated
         MATRIX_FORMAT_EDGE_WEIGHTS,
         /**
          * Whether the input/output contains zero for missing edges. Only valid for the
