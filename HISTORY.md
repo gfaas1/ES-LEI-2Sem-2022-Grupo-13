@@ -59,6 +59,7 @@ Changes to JGraphT in each version:
     - Added support for using an edge function in AsWeightedGraph (contributed by Joris Kinable)
     - Fixed bug in ColorRefinementIsomorphismInspector which required a disjoint graph union (contributed by Christoph Grüne and Dennis Fischer)
     - Bug fix in the Watts-Strogatz generator which caused a null pointer exception when the graph vertices were any type except integers (contributed by Dimitrios Michail)
+    - Added support for edge weights in CSV export/import (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
