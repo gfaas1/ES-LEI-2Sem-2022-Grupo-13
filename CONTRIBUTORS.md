@@ -120,6 +120,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Peter Harman](https://github.com/harmanpa)
 - [Nikhil Sharma](https://github.com/nks1558)
 - [Dennis Fischer](https://github.com/pdelvo)
+- [PHaroZ](https://github.com/PHaroZ)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
