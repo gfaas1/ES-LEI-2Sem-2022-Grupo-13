@@ -118,11 +118,11 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     /**
      * Number of vertices in the network
      */
-    private final int n;
+    private int n;
     /**
      * Number of edges in the network
      */
-    private final int m;
+    private int m;
     /**
      * Variable that is used to determine whether a vertex has been labeled temporarily or permanently during
      * Dijkstra's algorithm
@@ -135,11 +135,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
     /**
      * Computed minimum cost flow
      */
-    private MinimumCostFlow<E> minimumCostFLow;
-    /**
-     * Solution to the dual linear program formulated on the input flow network
-     */
-    private DualSolution<V> dualSolution;
+    private MinimumCostFlow<E> minimumCostFlow;
     /**
      * Array of internal nodes used by the algorithm. Node: these nodes are stored in the same order as vertices of
      * the specified flow network. This allows to determine quickly their counterparts in the network.
@@ -161,29 +157,30 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
 
     /**
      * Constructs a new instance of the algorithm which uses default scaling factor.
-     *
-     * @param problem a minimum cost flow problem
      */
-    public CapacityScalingMinimumCostFlow(MinimumCostFlowProblem<V, E> problem) {
-        this(problem, DEFAULT_SCALING_FACTOR);
+    public CapacityScalingMinimumCostFlow() {
+        this(DEFAULT_SCALING_FACTOR);
     }
 
     /**
      * Constructs a new instance of the algorithm with custom {@code scalingFactor}. If the {@code scalingFactor}
      * is less than 2, the algorithm doesn't use scaling.
      *
-     * @param problem       a minimum cost flow problem
      * @param scalingFactor custom scaling factor
      */
-    public CapacityScalingMinimumCostFlow(MinimumCostFlowProblem<V, E> problem, int scalingFactor) {
-        if (problem.getGraph().getType().isUndirected()) {
-            throw new IllegalArgumentException("The algorithm doesn't support undirected flow networks");
-        }
-        this.problem = Objects.requireNonNull(problem);
+    public CapacityScalingMinimumCostFlow(int scalingFactor) {
         this.scalingFactor = scalingFactor;
-        n = problem.getGraph().vertexSet().size();
-        m = problem.getGraph().edgeSet().size();
         Node.ID = 0; // for debug
+    }
+
+    /**
+     * Returns mapping from edge to flow value through this particular edge
+     *
+     * @return maximum flow mapping, or null if a MinimumCostFlowProblem has not yet been solved.
+     */
+    @Override
+    public Map<E, Double> getFlowMap() {
+        return minimumCostFlow == null ? null : this.minimumCostFlow.getFlowMap();
     }
 
     /**
@@ -198,11 +195,16 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * {@inheritDoc}
      */
     @Override
-    public MinimumCostFlow<E> getMinimumCostFlow() {
-        if (minimumCostFLow == null) {
-            lazyCalculateMinimumCostFlow();
+    public MinimumCostFlow<E> getMinimumCostFlow(final MinimumCostFlowProblem<V,E> minimumCostFlowProblem) {
+        this.problem = Objects.requireNonNull(minimumCostFlowProblem);
+        if (problem.getGraph().getType().isUndirected()) {
+            throw new IllegalArgumentException("The algorithm doesn't support undirected flow networks");
         }
-        return minimumCostFLow;
+        n = problem.getGraph().vertexSet().size();
+        m = problem.getGraph().edgeSet().size();
+        calculateMinimumCostFlow();
+        
+        return minimumCostFlow;
     }
 
     /**
@@ -211,40 +213,28 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * It is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
      * of a arc $(a, b)$ is defined as $cost((a, b)) + potential(b) - potential(b)$. According
      * to the reduced cost optimality conditions, a feasible solution to the minimum cost flow problem is
-     * optimal if and if reduced cost of every non-saturated arc is greater than or equal to $0$.
+     * optimal if and only if reduced cost of every non-saturated arc is greater than or equal to $0$.
      *
-     * @return solution to the dual linear program formulated on the network.
+     * @return solution to the dual linear program formulated on the network, or null if a MinimumCostFlowProblem has
+     * not yet been solved.
      */
-    public DualSolution<V> getDualSolution() {
-        dualSolution = lazyComputeDualSolution();
-        return dualSolution;
-    }
+    public Map<V, Double> getDualSolution() {
 
-    /**
-     * Lazily computes solution to the dual linear program formulated on the flow network.
-     *
-     * @return a solution to the dual linear program
-     */
-    private DualSolution<V> lazyComputeDualSolution() {
-        lazyCalculateMinimumCostFlow();
-        if (dualSolution == null) {
-            Map<V, Double> dualVariables = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                dualVariables.put(graphVertices.get(i), nodes[i].potential);
-            }
-            dualSolution = new DualSolution<>(dualVariables);
+        if(minimumCostFlow == null)
+            return null;
+
+        Map<V, Double> dualVariables = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            dualVariables.put(graphVertices.get(i), nodes[i].potential);
         }
-        return dualSolution;
+        return dualVariables;
     }
 
     /**
-     * Lazily calculated a solution to the specified minimum cost flow problem. If the scaling factor is greater than 1,
+     * Calculated a solution to the specified minimum cost flow problem. If the scaling factor is greater than 1,
      * performs scaling phases, otherwise uses simple capacity scaling algorithm.
      */
-    private void lazyCalculateMinimumCostFlow() {
-        if (minimumCostFLow != null) {
-            return;
-        }
+    private void calculateMinimumCostFlow() {
         init();
         if (scalingFactor > 1) {
             // run with scaling
@@ -264,7 +254,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             Pair<List<Node>, Set<Node>> pair = scale(1);
             pushAllFlow(pair.getFirst(), pair.getSecond(), 1);
         }
-        minimumCostFLow = finish();
+        minimumCostFlow = finish();
     }
 
     /**
@@ -295,7 +285,7 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
         int i = 0;
         for (V vertex : graph.vertexSet()) {
             graphVertices.add(vertex);
-            int supply = problem.getNodeDemands().apply(vertex);
+            int supply = problem.getNodeSupply().apply(vertex);
             supplySum += supply;
             nodes[i] = new Node(supply);
             nodeMap.put(vertex, nodes[i]);
@@ -599,7 +589,9 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
      * @return true, if the computed solution is optimal, false otherwise.
      */
     public boolean testOptimality(double eps) {
-        lazyCalculateMinimumCostFlow();
+        if(minimumCostFlow == null)
+            throw new RuntimeException("Cannot return a dual solution before getMinimumCostFlow(MinimumCostFlowProblem minimumCostFlowProblem) is invoked!");
+
         for (Node node : nodes) {
             for (Arc arc = node.firstNonSaturated; arc != null; arc = arc.next) {
                 if (arc.getReducedCost() < -eps) {
@@ -608,41 +600,6 @@ public class CapacityScalingMinimumCostFlow<V, E> implements MinimumCostFlowAlgo
             }
         }
         return true;
-    }
-
-    /**
-     * Solution to the dual linear program formulated on the network. Serves as a certificate of optimality.
-     * <p>
-     * It is represented as a mapping from graph nodes to their potentials (dual variables). Reduced cost
-     * of a arc $(a, b)$ is defined as $cost((a, b)) + potential(b) - potential(b)$. According
-     * to the reduced cost optimality conditions, a feasible solution to the minimum cost flow problem is
-     * optimal if and if reduced cost of every non-saturated arc is greater than or equal to $0$.
-     *
-     * @param <V> graph vertex type
-     */
-    public static class DualSolution<V> {
-        /**
-         * Mapping from vertices to their dual variables
-         */
-        Map<V, Double> dualVariables;
-
-        /**
-         * Constructs a new dual solution for minimum cost flow problem
-         *
-         * @param dualVariables mapping from vertices to their dual variables
-         */
-        public DualSolution(Map<V, Double> dualVariables) {
-            this.dualVariables = dualVariables;
-        }
-
-        /**
-         * Returns the mapping from vertices to their dual variables
-         *
-         * @return the mapping from vertices to their dual variables
-         */
-        public Map<V, Double> getDualVariables() {
-            return dualVariables;
-        }
     }
 
     /**
