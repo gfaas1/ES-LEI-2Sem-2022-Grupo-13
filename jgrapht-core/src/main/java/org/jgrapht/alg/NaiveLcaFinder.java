@@ -17,8 +17,7 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphTests;
+import org.jgrapht.*;
 
 import java.util.*;
 
@@ -261,4 +260,3 @@ public class NaiveLcaFinder<V, E>
         return y.iterator().next();
     }
 }
-

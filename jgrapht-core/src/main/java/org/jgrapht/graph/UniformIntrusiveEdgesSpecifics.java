@@ -17,8 +17,7 @@
  */
 package org.jgrapht.graph;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An uniform weights variant of the intrusive edges specifics.
@@ -51,7 +50,7 @@ public class UniformIntrusiveEdgesSpecifics<V, E>
     {
         this(new LinkedHashMap<>());
     }
-    
+
     /**
      * Constructor
      * 

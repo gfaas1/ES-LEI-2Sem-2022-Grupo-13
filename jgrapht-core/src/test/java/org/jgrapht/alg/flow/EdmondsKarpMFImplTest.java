@@ -24,7 +24,7 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 public class EdmondsKarpMFImplTest
     extends
@@ -109,4 +109,3 @@ public class EdmondsKarpMFImplTest
         }
     }
 }
-

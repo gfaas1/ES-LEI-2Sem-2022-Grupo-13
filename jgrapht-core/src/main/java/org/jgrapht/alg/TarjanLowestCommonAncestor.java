@@ -17,8 +17,8 @@
  */
 package org.jgrapht.alg;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.UnionFind;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
 
 import java.util.*;
 
@@ -32,7 +32,8 @@ import java.util.*;
  *
  * @deprecated Replaced by {@link org.jgrapht.alg.lca.TarjanLCAFinder}
  */
-@Deprecated public class TarjanLowestCommonAncestor<V, E>
+@Deprecated
+public class TarjanLowestCommonAncestor<V, E>
 {
     private Graph<V, E> g;
 
@@ -233,4 +234,3 @@ import java.util.*;
         }
     }
 }
-
