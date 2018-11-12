@@ -20,7 +20,7 @@
 1. Run `mvn javadoc:aggregate; mvn install` from the new release branch to produce the release archive distribution
 1. Upload the release archive distribution to sourceforge using the File Release System.
 1. Add the javadocs for the new release to the [javadoc repository](https://github.com/jgrapht/jgrapht-javadoc).  To do this, push a commit which replaces the contents of the existing javadoc directory, and also [adds an identical copy](https://github.com/jgrapht/jgrapht/wiki/Website-Deployment#javadoc) under a new javadoc-x.y.z directory.
-1. Update [the website](../docs) with links to the new downloads, version numbers, etc.  Be sure to push this commit **after** the javadoc update from the previous step; this will make sure that the new javadoc gets released to the website at the same time.
+1. Update [the website](../docs) with links to the new downloads, version numbers, etc.  Be sure to push this commit **after** the javadoc update from the previous step; this will trigger an automatic rebuild of the website (the javadoc gets loaded automatically).
 1. Announce the new version in the mailing lists: jgrapht-users@lists.sourceforge.net, jgrapht-announce@lists.sourceforge.net
 1. Update and commit the version number in HISTORY.md to reflect the beginning of development for the next version.  Finally, remove all existing deprecated methods.
 
