@@ -62,6 +62,7 @@ Changes to JGraphT in each version:
     - Added support for edge weights in CSV export/import (contributed by Dimitrios Michail)
     - Added support for html attributes and labels in DOTExporter (contributed by PHaroZ)
     - Unified flow interfaces (contributed by Joris Kinable)
+    - Optimizations for Edmonds maximum cardinality matchings (contributed by Dimitrios Michail)
 
 - **version 1.2.0** (16-May-2018):
     - Prepared release cycle 1.1.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
