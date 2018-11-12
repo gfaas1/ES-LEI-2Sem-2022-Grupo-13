@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.2.1** (12-Nov-2018):
+- **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Restored optional tests for `BergeGraphInspector` (contributed by Philipp Kaesgen)
     - Use POSIX tar format for assembly (contributed by Mark Raynsford)
