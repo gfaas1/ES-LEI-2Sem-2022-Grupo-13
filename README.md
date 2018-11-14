@@ -6,7 +6,9 @@
 [![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](http://www.eclipse.org/legal/epl-2.0)
 [![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
 
-<img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent.png" width="200" height="200" />
+# JGraphT
+
+<img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent.png" width="200" height="200" align="right" />
 
 Released: November 12, 2018</p>
 
