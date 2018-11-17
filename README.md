@@ -8,7 +8,7 @@
 
 # JGraphT
 
-<img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent.png" width="200" height="200" align="right" />
+<img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent-cropped.png" width="200" height="200" align="right" />
 
 Released: November 12, 2018</p>
 
