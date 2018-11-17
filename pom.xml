@@ -213,10 +213,10 @@
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
 						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;
-                                                &lt;img src="https://github.com/jkinable/jgrapht/blob/pomlogo/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"&gt;
+                                                &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"&gt;
                                                 </header>
                                                 <doctitle>${project.name} ${project.version} API
-                                                &lt;img src="https://github.com/jkinable/jgrapht/blob/pomlogo/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;    
+                                                &lt;img src="https://github.com/jgrapht/jgrapht/blob/master/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;    
                                                 </doctitle>
 					</configuration>
 				</plugin>
