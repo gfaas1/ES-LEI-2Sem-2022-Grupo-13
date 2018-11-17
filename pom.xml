@@ -44,6 +44,24 @@
 			<archive>http://lists.sourceforge.net/lists/listinfo/jgrapht-announce</archive>
 		</mailingList>
 	</mailingLists>
+	
+	<developers>
+		<developer>
+	  	  <id>jsichi</id>
+	  	  <name>John V. Sichi</name>
+	  	  <email>jsichi@gmail.com</email>
+		</developer>
+		<developer>
+		  <id>jkinable</id>
+		  <name>Joris Kinable</name>
+		  <email>j.kinable@gmail.com</email>
+		</developer>
+		<developer>
+		  <id>d-michail</id>
+		  <name>Dimitrios Michail</name>
+		  <email>dimitrios.michail@gmail.com</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -194,7 +212,12 @@
 						<show>protected</show>
 						<windowtitle>JGraphT : a free Java graph library</windowtitle>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
-						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;</header>
+						<header>&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML,https://jgrapht.org/mathjax/mathjaxConfig.js"&gt;&lt;/script&gt;
+                                                &lt;img src="https://github.com/jkinable/jgrapht/blob/pomlogo/etc/logo/jgrapht-logo-transparent-cropped-javadocheader.png?raw=true" style="height:55px;"&gt;
+                                                </header>
+                                                <doctitle>${project.name} ${project.version} API
+                                                &lt;img src="https://github.com/jkinable/jgrapht/blob/pomlogo/etc/logo/jgrapht-logo-transparent-cropped.png?raw=true" style="height:100px;float:right" &gt;    
+                                                </doctitle>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
