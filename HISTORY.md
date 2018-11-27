@@ -5,6 +5,7 @@ Changes to JGraphT in each version:
 - **version 1.3.1** (Under development):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
     - Added new logo (from 99designs, with site additions by John Sichi and Joris Kinable)
+    - Added new website (contributed by John Sichi)
     - Converted all methods and fields to protected in `HierholzerEulerianCycle` (contributed by simlu)
 
 - **version 1.3.0** (12-Nov-2018):
