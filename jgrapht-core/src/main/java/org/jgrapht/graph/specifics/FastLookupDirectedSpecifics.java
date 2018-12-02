@@ -17,11 +17,15 @@
  */
 package org.jgrapht.graph.specifics;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Supplier;
 
-import java.util.*;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.EdgeSetFactory;
 
 /**
  * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve
@@ -64,9 +68,6 @@ public class FastLookupDirectedSpecifics<V, E>
         this.touchingVerticesToEdgeMap = Objects.requireNonNull(touchingVerticesToEdgeMap);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<E> getAllEdges(V sourceVertex, V targetVertex)
     {
@@ -84,9 +85,6 @@ public class FastLookupDirectedSpecifics<V, E>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public E getEdge(V sourceVertex, V targetVertex)
     {
@@ -98,46 +96,92 @@ public class FastLookupDirectedSpecifics<V, E>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void addEdgeToTouchingVertices(E e)
+    public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
+        if (!super.addEdgeToTouchingVertices(sourceVertex, targetVertex, e)) {
+            return false;
+        }
+        addToIndex(sourceVertex, targetVertex, e);
+        return true;
+    }
+
+    @Override
+    public boolean addEdgeToTouchingVerticesIfAbsent(V sourceVertex, V targetVertex, E e)
+    {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) { 
+            return false;
+        }
+
+        return addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+    }
+
+    @Override
+    public E createEdgeToTouchingVerticesIfAbsent(
+        V sourceVertex, V targetVertex, Supplier<E> edgeSupplier)
+    {
+        // first lookup using our own index
+        E edge = getEdge(sourceVertex, targetVertex);
+        if (edge != null) { 
+            return null;
+        }
+        
+        E e = edgeSupplier.get();
+        addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
+        return e;
+    }
+
+    @Override
+    @Deprecated
+    public void removeEdgeFromTouchingVertices(E e)
+    {
+        super.removeEdgeFromTouchingVertices(e);
+
         V source = graph.getEdgeSource(e);
         V target = graph.getEdgeTarget(e);
+        removeFromIndex(source, target, e);
+    }
+    
+    @Override
+    public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
+    {
+        super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+        
+        removeFromIndex(sourceVertex, targetVertex, e);
+    }
 
-        getEdgeContainer(source).addOutgoingEdge(e);
-        getEdgeContainer(target).addIncomingEdge(e);
-
-        Pair<V, V> vertexPair = new Pair<>(source, target);
+    /**
+     * Add an edge to the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
+     */
+    protected void addToIndex(V sourceVertex, V targetVertex, E e)
+    {
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null)
             edgeSet.add(e);
         else {
-            edgeSet = edgeSetFactory.createEdgeSet(source);
+            edgeSet = edgeSetFactory.createEdgeSet(sourceVertex);
             edgeSet.add(e);
             touchingVerticesToEdgeMap.put(vertexPair, edgeSet);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Remove an edge from the index.
+     * 
+     * @param sourceVertex the source vertex
+     * @param targetVertex the target vertex
+     * @param e the edge
      */
-    @Override
-    public void removeEdgeFromTouchingVertices(E e)
+    protected void removeFromIndex(V sourceVertex, V targetVertex, E e)
     {
-        V source = graph.getEdgeSource(e);
-        V target = graph.getEdgeTarget(e);
-
-        getEdgeContainer(source).removeOutgoingEdge(e);
-        getEdgeContainer(target).removeIncomingEdge(e);
-
-        /*
-         * Remove the edge from the touchingVerticesToEdgeMap. If there are no more remaining edges
-         * for a pair of touching vertices, remove the pair from the map.
-         */
-        Pair<V, V> vertexPair = new Pair<>(source, target);
+        Pair<V, V> vertexPair = new Pair<>(sourceVertex, targetVertex);
         Set<E> edgeSet = touchingVerticesToEdgeMap.get(vertexPair);
         if (edgeSet != null) {
             edgeSet.remove(e);
