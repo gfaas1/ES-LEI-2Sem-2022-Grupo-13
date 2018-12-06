@@ -1,7 +1,7 @@
 
 ```
- * JGraphT version
- * Java version - (java -version)
+ * JGraphT version:
+ * Java version (java -version)/platform:  
 ```
 
 **Issue**
