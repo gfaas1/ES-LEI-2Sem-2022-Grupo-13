@@ -9,6 +9,7 @@ Changes to JGraphT in each version:
     - Converted all methods and fields to protected in `HierholzerEulerianCycle` (contributed by simlu)
     - Optimized specifics hash lookups (contributed by Dimitrios Michail)
     - Fixed mobile website menu (contributed by ksskreddy)
+    - Upgraded Antlr version to 4.7.2 and jheaps to 0.10 (contributed by Dimitrios Michail)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
