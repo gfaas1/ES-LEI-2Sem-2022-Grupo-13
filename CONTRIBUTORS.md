@@ -123,6 +123,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [PHaroZ](https://github.com/PHaroZ)
 - [simlu](https://github.com/simlu)
 - [Karri Sai Satish Kumar Reddy](https://github.com/ksskreddy)
+- [Stephan Schroevers](https://github.com/Stephan202)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
