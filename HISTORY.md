@@ -12,6 +12,7 @@ Changes to JGraphT in each version:
     - Upgraded Antlr version to 4.7.2 and jheaps to 0.10 (contributed by Dimitrios Michail)
     - Replaced URL with URI in HelloJGraphT example (contributed by Stephan Schroevers)
     - Deprecated `FibonacciHeap` (contributed by Timofey Chudakov)
+    - Replaced usage of `Graph.{vertex,edge}Set().contains()` by `Graph.contains{Vertex,Edge}()` (contributed by Ned Twigg)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
