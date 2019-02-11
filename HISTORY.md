@@ -15,6 +15,7 @@ Changes to JGraphT in each version:
     - Replaced usage of `Graph.{vertex,edge}Set().contains()` by `Graph.contains{Vertex,Edge}()` (contributed by Ned Twigg)
     - Updated examples with Guava adapter example (contributed by John Sichi)
     - Added Warnsdorff rule heuristic and Parberry's algorithm for closed knight's tour problem to demo package (contributed by Kirill Vishnyakov)
+    - Added min weight, max weight and max weight perfect matching algorithms (contributed by Timofey Chudakov)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
