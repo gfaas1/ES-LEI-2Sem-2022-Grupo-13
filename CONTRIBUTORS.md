@@ -125,6 +125,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Karri Sai Satish Kumar Reddy](https://github.com/ksskreddy)
 - [Stephan Schroevers](https://github.com/Stephan202)
 - [Ned Twigg](https://github.com/nedtwigg)
+- [Karri Sai Satish Kumar Reddy](https://github.com/ksskreddy)
 
 (if we have missed your name on this list, please email us to get it fixed).
 

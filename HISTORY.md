@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
     - Added Warnsdorff rule heuristic and Parberry's algorithm for closed knight's tour problem to demo package (contributed by Kirill Vishnyakov)
     - Added min weight, max weight and max weight perfect matching algorithms (contributed by Timofey Chudakov)
     - Fixed bug where DOTImporter throws NullPointerException when trying to parse a vertex without attributes (contributed by Dimitrios Michail)
+    - Added BFS as a shortest path algorithm (contributed by Karri Sai Satish Kumar Reddy)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
