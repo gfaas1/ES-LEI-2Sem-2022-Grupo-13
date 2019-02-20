@@ -49,14 +49,14 @@ import java.util.concurrent.TimeUnit;
  * $\Delta$-stepping: a parallelizable shortest path algorithm, Journal of Algorithms,
  * Volume 49, Issue 1, 2003, Pages 114-152, ISSN 0196-6774.
  * <p>
- * The $\Delta$-stepping algorithm takes as input a weighted graph $G(V,E)$, a source node $s$ and a parameter $\Delta > 0$.
+ * The $\Delta$-stepping algorithm takes as input a weighted graph $G(V,E)$, a source node $s$ and a parameter $\Delta &#62; 0$.
  * Let $tent[v]$ be the best known shortest distance from $s$ to vertex $v\in V$. At the start of the algorithm,
  * $tent[s]=0$, $tent[v]=\infty$ for $v\in V\setminus \{s\}$. The algorithm partitions vertices in a series of buckets
  * $B=(B_0, B_1, B_2, \dots)$, where a vertex $v\in V$ is placed in bucket $B_{\lfloor\frac{tent[v]}{\Delta}\rfloor}$.
  * During the execution of the algorithm, vertices in bucket $B_i$, for $i=0,1,2,\dots$, are removed one-by-one.
  * For each removed vertex $v$, and for all its outgoing edges $(v,w)$, the algorithm checks whether
- * $tent[v]+c(v,w) < tent[w]$. If so, $w$ is removed from its current bucket, $tent[w]$ is updated ($tent[w]=tent[v]+c(v,w)$),
- * and $w$ is placed into bucket $B_{\lfloor\frac{tent[w]}{\Delta}\rfloor}.
+ * $tent[v]+c(v,w) &#60; tent[w]$. If so, $w$ is removed from its current bucket, $tent[w]$ is updated ($tent[w]=tent[v]+c(v,w)$),
+ * and $w$ is placed into bucket $B_{\lfloor\frac{tent[w]}{\Delta}\rfloor}$.
  * Parallelism is achieved by processing all vertices belonging to the same bucket concurrently.
  * The algorithm terminates when all buckets are empty. At this stage the array $tent$ contains the minimal cost from $s$
  * to every vertex $v \in V$. For a more detailed description of the algorithm, refer to the aforementioned paper.
@@ -74,6 +74,7 @@ import java.util.concurrent.TimeUnit;
  * <li>$l_{\Delta}$ - maximum number of edges in a $\Delta$-path $+1$.</li>
  * </ul>
  *
+ * <p>
  * For parallelization, this implementation relies on the {@link ExecutorService}.
  *
  * @param <V> the graph vertex type
