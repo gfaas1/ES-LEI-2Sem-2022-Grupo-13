@@ -41,45 +41,40 @@ import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Concurrent implementation of the parallel version of the delta-stepping algorithm.
- *
+ * Parallel implementation of a single-source shortest path algorithm: the delta-stepping algorithm. The algorithm computes
+ * single source shortest paths in a graphs with non-negative edge weights. When using multiple threads, this implementation
+ * typically outperforms {@link DijkstraShortestPath} and {@link BellmanFordShortestPath}.
  * <p>
- * The time complexity of the algorithm is
- * $O(\frac{(|V| + |E| + n_{\Delta} + m_{\Delta})}{p} + \frac{L}{\Delta}\cdot d\cdot l_{\Delta}\cdot \log n)$, where,
- * denoting $\Delta$-path as a path of total weight at most $\Delta$ with no edge repetition,
- * <ul>
- * <li>$n_{\Delta}$ - number of vertices pairs (u,v), where u and v are connected by some $\Delta$-path (a path with total weight at most $\Delta$).</li>
- * <li>$m_{\Delta}$ - number of vertices triples (u,$v^{\prime}$,v), where u and $v^{\prime}$ are connected
- * by some $\Delta$-path and edge ($v^{\prime}$,v) has weight at most $\Delta$.</li>
- * <li>$L$ - maximal weight of a shortest path from selected source to any sink.</li>
- * <li>$d$ - maximal edge degree.</li>
- * <li>$l_{\Delta}$ - maximal number of edges in a $\Delta$-path $+1$.</li>
- * </ul>
- *
- * <p>
- * The algorithm is described in the paper: U. Meyer, P. Sanders,
+ * The delta-stepping algorithm is described in the paper: U. Meyer, P. Sanders,
  * $\Delta$-stepping: a parallelizable shortest path algorithm, Journal of Algorithms,
  * Volume 49, Issue 1, 2003, Pages 114-152, ISSN 0196-6774.
+ * <p>
+ * The $\Delta$-stepping algorithm takes as input a weighted graph $G(V,E)$, a source node $s$ and a parameter $\Delta > 0$.
+ * Let $tent[v]$ be the best known shortest distance from $s$ to vertex $v\in V$. At the start of the algorithm,
+ * $tent[s]=0$, $tent[v]=\infty$ for $v\in V\setminus \{s\}$. The algorithm partitions vertices in a series of buckets
+ * $B=(B_0, B_1, B_2, \dots)$, where a vertex $v\in V$ is placed in bucket $B_{\lfloor\frac{tent[v]}{\Delta}\rfloor}$.
+ * During the execution of the algorithm, vertices in bucket $B_i$, for $i=0,1,2,\dots$, are removed one-by-one.
+ * For each removed vertex $v$, and for all its outgoing edges $(v,w)$, the algorithm checks whether
+ * $tent[v]+c(v,w) < tent[w]$. If so, $w$ is removed from its current bucket, $tent[w]$ is updated ($tent[w]=tent[v]+c(v,w)$),
+ * and $w$ is placed into bucket $B_{\lfloor\frac{tent[w]}{\Delta}\rfloor}.
+ * Parallelism is achieved by processing all vertices belonging to the same bucket concurrently.
+ * The algorithm terminates when all buckets are empty. At this stage the array $tent$ contains the minimal cost from $s$
+ * to every vertex $v \in V$. For a more detailed description of the algorithm, refer to the aforementioned paper.
  *
  * <p>
- * The algorithm solves the single source shortest path problem in a graph with no
- * negative weight edges. Its advantage of the {@link DijkstraShortestPath} and
- * {@link BellmanFordShortestPath} algorithms is that it can benefit from multiple
- * threads. While the Dijkstra`s algorithm is fully sequential and the Bellman-Ford`s algorithm
- * has high parallelism since all edges can be relaxed simultaneously, the delta-stepping
- * introduces parameter delta, which, when chooses optimally, yields still good parallelism
- * and at the same time enables avoiding too many re-relaxations of the edges.
+ * For a given graph $G(V,E)$ and parameter $\Delta$, let a $\Delta$-path be a path of total weight at most $\Delta$ with no repeated edges.
+ * The time complexity of the algorithm is
+ * $O(\frac{(|V| + |E| + n_{\Delta} + m_{\Delta})}{p} + \frac{L}{\Delta}\cdot d\cdot l_{\Delta}\cdot \log n)$, where
+ * <ul>
+ * <li>$n_{\Delta}$ - number of vertex pairs $(u,v)$, where $u$ and $v$ are connected by some $\Delta$-path.</li>
+ * <li>$m_{\Delta}$ - number of vertex triples $(u,v^{\prime},v)$, where $u$ and $v^{\prime}$ are connected
+ * by some $\Delta$-path and edge $(v^{\prime},v)$ has weight at most $\Delta$.</li>
+ * <li>$L$ - maximum weight of a shortest path from selected source to any sink.</li>
+ * <li>$d$ - maximum vertex degree.</li>
+ * <li>$l_{\Delta}$ - maximum number of edges in a $\Delta$-path $+1$.</li>
+ * </ul>
  *
- * <p>
- * In this algorithm the vertices of the graph are maintained in the bucket structure according to
- * the their tentative distance in the shortest path tree computed so far. On each iteration the
- * first non-empty bucket is emptied and all light edges emanating from its vertices are relaxed.
- * This may take more than $1$ iteration due to the reinsertion to the same bucket occurring during
- * the relaxations process. All heavy edges of the vertices that were removed from the bucket are than
- * relaxed one and for all.
- *
- * <p>
- * This implementation delegates paralleling to the {@link ExecutorService}.
+ * For parallelization, this implementation relies on the {@link ExecutorService}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -112,12 +107,12 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
      */
     private double delta;
     /**
-     * Maximal number of threads used in the computations.
+     * Maximum number of threads used in the computations.
      */
     private int parallelism;
 
     /**
-     * Num of buckets in the bucket structure.
+     * Number of buckets in the bucket structure.
      */
     private int numOfBuckets;
     /**
@@ -192,9 +187,9 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     /**
      * Constructs a new instance of the algorithm for a given graph, delta, parallelism.
      * If delta is $0.0$ it will be computed during the algorithm execution. In general
-     * if the value of $\frac{maximum edge weight}{maximum edge outdegree}$ is know beforehand,
+     * if the value of $\frac{maximum edge weight}{maximum outdegree}$ is known beforehand,
      * it is preferable to specify it via this constructor, because processing the whole graph
-     * to compute may significantly slow down the algorithm.
+     * to compute this value may significantly slow down the algorithm.
      *
      * @param graph       the graph
      * @param delta       bucket width
@@ -231,7 +226,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     /**
      * Is used during the algorithm to compute maximum edge weight of the {@link #graph}.
      * Apart from computing the maximal edge weight in the graph the task also checks if
-     * there is emy edges with negative weights. It is done to speedup the algorithm.
+     * there exist edges with negative weights.
      */
     class MaxEdgeWeightTask extends RecursiveTask<Double> {
         /**
@@ -239,7 +234,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
          */
         Spliterator<E> spliterator;
         /**
-         * Amount of vertices at which he computation of performed sequentially.
+         * Amount of edges which are processed in parallel.
          */
         long loadBalancing;
 
@@ -255,7 +250,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         }
 
         /**
-         * Computes maximum edge weight. If amount of vertices in
+         * Computes maximum edge weight. If amount of edges in
          * {@link #spliterator} is less than {@link #loadBalancing},
          * then computation is performed sequentially. If not, the
          * {@link #spliterator} is used to split the collection and
@@ -323,7 +318,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Calculates value of {@link #delta}. The value is calculated to
+     * Calculates value of {@link #delta}. The value is calculated as the
      * maximal edge weight divided by maximal out-degree in the {@link #graph}
      * or $1.0$ if edge set of the {@link #graph} is empty.
      *
@@ -346,7 +341,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Performs computation of the shortest paths .
+     * Performs shortest path computations.
      *
      * @param source the source vertex
      */
@@ -358,7 +353,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
         while (firstNonEmptyBucket < numOfBuckets) {
             // the content of a bucket is replaced
             // in order not to handle the same vertices
-            // several times
+            // multiple times
             Set<V> bucketElements = getContentAndReplace(firstNonEmptyBucket);
 
             while (!bucketElements.isEmpty()) {  // reinsertions may occur
@@ -379,7 +374,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Performs shutting down the {@link #executor}.
+     * Shuts down the {@link #executor}.
      */
     private void shutDownExecutor() {
         executor.shutdown();
@@ -391,7 +386,7 @@ public class DeltaSteppingShortestPath<V, E> extends BaseShortestPathAlgorithm<V
     }
 
     /**
-     * Manages edges relaxation. Adds all elements from
+     * Manages edge relaxations. Adds all elements from
      * {@code vertices} to the {@link #verticesQueue}
      * and submits as many {@link #lightRelaxTask} to the
      * {@link #completionService} as needed.
