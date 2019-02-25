@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
     - Fixed bug where DOTImporter throws NullPointerException when trying to parse a vertex without attributes (contributed by Dimitrios Michail)
     - Added BFS as a shortest path algorithm (contributed by Karri Sai Satish Kumar Reddy)
     - Added concurrent implementation of the delta-stepping shortest path algorithm (contributed by Semen Chudakov)
+    - Added support for the capacitated minimum spanning tree (CMST) problem (contributed by Christoph Grüne)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
