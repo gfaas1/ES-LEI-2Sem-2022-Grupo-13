@@ -26,7 +26,15 @@ import org.jgrapht.graph.GraphWalk;
 import org.jheaps.AddressableHeap;
 import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -48,7 +56,7 @@ import java.util.function.Supplier;
  * <p>
  * Note: This implementation works with both consistent and inconsistent admissible heuristics. For
  * details on consistency, refer to the description of the method
- * {@link #isConsistentHeuristic(AStarAdmissibleHeuristic)}. However, this class is <i>not</i>
+ * {@link AStarAdmissibleHeuristic#isConsistent(Graph)}. However, this class is <i>not</i>
  * optimized for inconsistent heuristics. Several opportunities to improve both worst case and
  * average runtime complexities for A* with inconsistent heuristics described in literature can be
  * used to improve this implementation!
@@ -115,7 +123,7 @@ public class AStarShortestPath<V, E>
     }
 
     /**
-     * Initializes the data structures
+     * Initializes the data structures.
      *
      * @param admissibleHeuristic admissible heuristic
      */
@@ -194,7 +202,9 @@ public class AStarShortestPath<V, E>
      *
      * @param admissibleHeuristic admissible heuristic
      * @return true is the heuristic is consistent, false otherwise
+     * @deprecated use {@link AStarAdmissibleHeuristic#isConsistent(Graph)} instead
      */
+    @Deprecated
     public boolean isConsistentHeuristic(AStarAdmissibleHeuristic<V> admissibleHeuristic) {
         for (V targetVertex : graph.vertexSet()) {
             for (E e : graph.edgeSet()) {
