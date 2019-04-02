@@ -22,6 +22,7 @@ Changes to JGraphT in each version:
     - Added support for the capacitated minimum spanning tree (CMST) problem (contributed by Christoph Grüne)
     - Made `GraphMLImporter` ordering deterministic (contributed by Dimitrios Michail)
     - Added bidirectional A-star (contributed by Semen Chudakov)
+    - Added Yen's k shortest loopless paths algorithm (contributed by Semen Chudakov)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
