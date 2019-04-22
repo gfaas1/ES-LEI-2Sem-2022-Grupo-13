@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Made `GraphMLImporter` ordering deterministic (contributed by Dimitrios Michail)
     - Added bidirectional A-star (contributed by Semen Chudakov)
     - Added Yen's k shortest loopless paths algorithm (contributed by Semen Chudakov)
+    - Defer graph vertex iterator initialization in CrossComponentIterator (contributed by John Sichi)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
