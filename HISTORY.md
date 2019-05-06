@@ -25,6 +25,7 @@ Changes to JGraphT in each version:
     - Added Yen's k shortest loopless paths algorithm (contributed by Semen Chudakov)
     - Defer graph vertex iterator initialization in CrossComponentIterator (contributed by John Sichi)
     - Updated jgraphx version to 3.9.8.1 (contributed by John Sichi)
+    - Added JSON exporter (contributed by Dimitrios Michail)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
