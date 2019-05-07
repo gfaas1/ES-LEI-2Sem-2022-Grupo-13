@@ -27,6 +27,7 @@ Changes to JGraphT in each version:
     - Updated jgraphx version to 3.9.8.1 (contributed by John Sichi)
     - Added JSON exporter (contributed by Dimitrios Michail)
     - Enhanced `DirectedAcyclicGraph` to support multiple edges (contributed by Dimitrios Michail based on a suggestion by Sarat Chandra Balla)
+    - Refactored `SerializationTestUtils` (contributed by Lavish Kothari)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
