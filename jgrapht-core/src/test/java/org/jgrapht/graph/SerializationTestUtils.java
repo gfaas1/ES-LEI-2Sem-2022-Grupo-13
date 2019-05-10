@@ -26,6 +26,10 @@ import java.io.*;
  */
 public class SerializationTestUtils
 {
+    // don't instantiate this class
+    private SerializationTestUtils()
+    {
+    }
 
     public static Object serializeAndDeserialize(Object obj)
         throws Exception
@@ -42,5 +46,4 @@ public class SerializationTestUtils
         obj = in.readObject();
         return obj;
     }
-
 }

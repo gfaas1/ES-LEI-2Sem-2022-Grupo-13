@@ -17,7 +17,11 @@
  */
 package org.jgrapht.graph;
 
+import org.jgrapht.*;
 import org.junit.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 import static org.jgrapht.graph.SerializationTestUtils.serializeAndDeserialize;
 import static org.junit.Assert.assertEquals;
@@ -25,69 +29,631 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * SerializationTest tests serialization and deserialization of JGraphT objects.
+ * <p>
+ * The following classes are tested here:
+ * <ul>
+ * <li>{@link SimpleGraph}</li>
+ * <li>{@link Multigraph}</li>
+ * <li>{@link Pseudograph}</li>
+ * <li>{@link DefaultUndirectedGraph}</li>
+ *
+ * <li>{@link SimpleWeightedGraph}</li>
+ * <li>{@link WeightedMultigraph}</li>
+ * <li>{@link WeightedPseudograph}</li>
+ * <li>{@link DefaultUndirectedWeightedGraph}</li>
+ *
+ * <li>{@link SimpleDirectedGraph}</li>
+ * <li>{@link DirectedMultigraph}</li>
+ * <li>{@link DirectedPseudograph}</li>
+ * <li>{@link DefaultDirectedGraph}</li>
+ *
+ * <li>{@link SimpleDirectedWeightedGraph}</li>
+ * <li>{@link DirectedWeightedMultigraph}</li>
+ * <li>{@link DirectedWeightedPseudograph}</li>
+ * <li>{@link DefaultDirectedWeightedGraph}</li>
+ * </ul>
  *
  * @author John V. Sichi
  */
 public class SerializationTest
 {
-    // ~ Instance fields --------------------------------------------------------
+    private static final String v1 = "v1";
+    private static final String v2 = "v2";
+    private static final String v3 = "v3";
+    private static final List<String> vertexList = Arrays.asList(v1, v2, v3);
+    private static final List<List<String>> vertexPairs = Arrays
+        .asList(Arrays.asList(v1, v2), Arrays.asList(v2, v1), Arrays.asList(v1, v3),
+            Arrays.asList(v3, v1), Arrays.asList(v2, v3), Arrays.asList(v3, v2));
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-
-    /**
-     * Tests serialization of DirectedMultigraph.
-     */
-    @SuppressWarnings("unchecked") @Test public void testDirectedMultigraph()
-        throws Exception
+    public static <V, E> void assertContainsAllVertices(Graph<V, E> graph, List<V> vertices)
     {
-        DirectedMultigraph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
-        graph.addEdge(v1, v2);
-        graph.addEdge(v2, v3);
-        graph.addEdge(v2, v3);
+        for (V v : vertices) {
+            assertTrue(graph.containsVertex(v));
+        }
+    }
 
-        graph = (DirectedMultigraph<String, DefaultEdge>) serializeAndDeserialize(graph);
-        assertTrue(graph.containsVertex(v1));
-        assertTrue(graph.containsVertex(v2));
-        assertTrue(graph.containsVertex(v3));
-        assertTrue(graph.containsEdge(v1, v2));
-        assertTrue(graph.containsEdge(v2, v3));
-        assertEquals(1, graph.edgesOf(v1).size());
-        assertEquals(3, graph.edgesOf(v2).size());
-        assertEquals(2, graph.edgesOf(v3).size());
+    public static <V, E> void checkEdgesOf(Graph<V, E> graph, List<Integer> edges, List<V> vertices)
+    {
+        if (edges.size() != vertices.size()) {
+            throw new IllegalArgumentException(
+                "the size of list of #edges and vertices should match");
+        }
+        for (int i = 0; i < edges.size(); i++) {
+            assertEquals(edges.get(i).intValue(), graph.edgesOf(vertices.get(i)).size());
+        }
+    }
+
+    public static <E> void assertAllEdges(Graph<String, E> graph1, Graph<String, E> graph2)
+    {
+        for (int i = 0; i < vertexPairs.size(); i++) {
+            String a = vertexPairs.get(i).get(0);
+            String b = vertexPairs.get(i).get(1);
+            assertEquals(graph1.getAllEdges(a, b).size(), graph2.getAllEdges(a, b).size());
+            assertEquals(graph1.containsEdge(a, b), graph2.containsEdge(a, b));
+        }
+    }
+
+    private static <E> void verifyBasic(
+        Graph<String, E> graph1, Graph<String, E> graph2, List<Integer> numberOfEdges)
+    {
+        assertContainsAllVertices(graph2, vertexList);
+        assertContainsAllVertices(graph1, vertexList);
+
+        assertAllEdges(graph1, graph2);
+
+        checkEdgesOf(graph2, numberOfEdges, vertexList);
+        checkEdgesOf(graph1, numberOfEdges, vertexList);
+
+        assertEquals(graph1.toString(), graph2.toString());
+    }
+
+    private static <E> void assertWeight(
+        Graph<String, E> graph1, Graph<String, E> graph2, List<Double> weights, String vertex1,
+        String vertex2)
+    {
+        assertWeight(graph1, weights, vertex1, vertex2);
+        assertWeight(graph2, weights, vertex1, vertex2);
+    }
+
+    private static <E> void assertWeight(
+        Graph<String, E> graph, List<Double> weights, String vertex1, String vertex2)
+    {
+        Set<E> edgeSet = graph.getAllEdges(vertex1, vertex2);
+        for (E e : edgeSet)
+            assertTrue(e instanceof DefaultWeightedEdge);
+        assertEquals(new HashSet<>(weights),
+            edgeSet.stream().map(e -> (DefaultWeightedEdge) e).map(DefaultWeightedEdge::getWeight)
+                .collect(Collectors.toSet()));
     }
 
     /**
-     * Tests serialization of DirectedAcyclicGraph
+     * Tests serialization of {@link SimpleGraph}.
+     * <p>
+     * undirected
+     * no self-loop
+     * no multiple-edges
+     * unweighted
      */
-    @SuppressWarnings("unchecked") @Test public void testDirectedAcyclicGraph()
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSimpleGraph()
         throws Exception
     {
-        DirectedAcyclicGraph<String, DefaultEdge> graph1 =
-            new DirectedAcyclicGraph<>(DefaultEdge.class);
-        graph1.addVertex(v1);
-        graph1.addVertex(v2);
-        graph1.addVertex(v3);
+        SimpleGraph<String, DefaultEdge> graph1 = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
         graph1.addEdge(v1, v2);
         graph1.addEdge(v2, v3);
         graph1.addEdge(v1, v3);
 
-        DirectedAcyclicGraph<String, DefaultEdge> graph2 =
-            (DirectedAcyclicGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
-        assertTrue(graph2.containsVertex(v1));
-        assertTrue(graph2.containsVertex(v2));
-        assertTrue(graph2.containsVertex(v3));
-        assertTrue(graph2.containsEdge(v1, v2));
-        assertTrue(graph2.containsEdge(v2, v3));
-        assertTrue(graph2.containsEdge(v1, v3));
-        assertEquals(2, graph2.edgesOf(v1).size());
-        assertEquals(2, graph2.edgesOf(v2).size());
-        assertEquals(2, graph2.edgesOf(v3).size());
+        SimpleGraph<String, DefaultEdge> graph2 =
+            (SimpleGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
 
-        assertEquals(graph1.toString(), graph2.toString());
+        verifyBasic(graph1, graph2, Arrays.asList(2, 2, 2));
     }
+
+    /**
+     * Tests serialization of {@link Multigraph}.
+     * undirected
+     * no self-loop
+     * multiple-edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testMultiGraph()
+        throws Exception
+    {
+        Multigraph<String, DefaultEdge> graph1 = new Multigraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v3);
+
+        Multigraph<String, DefaultEdge> graph2 =
+            (Multigraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 3, 2));
+    }
+
+    /**
+     * Tests serialization of {@link Pseudograph}.
+     * undirected
+     * self-loop
+     * multiple-edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testPseudograph()
+        throws Exception
+    {
+        Pseudograph<String, DefaultEdge> graph1 = new Pseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v1, v2); // multiple edge
+        graph1.addEdge(v1, v1); // self loop
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v3);
+
+        Pseudograph<String, DefaultEdge> graph2 =
+            (Pseudograph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(4, 3, 2));
+    }
+
+    /**
+     * Tests serialization of {@link DefaultUndirectedGraph}
+     * <p>
+     * undirected
+     * self-loops
+     * no multiple edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDefaultUndirectedGraph()
+        throws Exception
+    {
+        DefaultUndirectedGraph<String, DefaultEdge> graph1 =
+            new DefaultUndirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v1, v1);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v3, v1);
+
+        DefaultUndirectedGraph<String, DefaultEdge> graph2 =
+            (DefaultUndirectedGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 2, 2));
+    }
+
+    /**
+     * Tests serialization of {@link SimpleWeightedGraph}
+     * <p>
+     * undirected
+     * no self-loops
+     * no-multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSimpleWeightedGraph()
+        throws Exception
+    {
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph1 =
+            new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e12 = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e12, 1.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        SimpleWeightedGraph<String, DefaultWeightedEdge> graph2 =
+            (SimpleWeightedGraph<String, DefaultWeightedEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(2, 2, 2));
+
+        assertWeight(graph1, graph2, Arrays.asList(1.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v3, v2);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v1, v3);
+    }
+
+    /**
+     * Tests serialization of {@link WeightedMultigraph}
+     * <p>
+     * undirected
+     * no self-loops
+     * multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testWeightedMultigraph()
+        throws Exception
+    {
+        WeightedMultigraph<String, DefaultWeightedEdge> graph1 =
+            new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e12a = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e12b = graph1.addEdge(v1, v2);
+
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e12a, 1.0);
+        graph1.setEdgeWeight(e12b, 10.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        WeightedMultigraph<String, DefaultWeightedEdge> graph2 =
+            (WeightedMultigraph<String, DefaultWeightedEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 3, 2));
+
+        assertEquals(2, graph1.getAllEdges(v1, v2).size());
+        assertEquals(2, graph2.getAllEdges(v1, v2).size());
+
+        assertWeight(graph1, graph2, Arrays.asList(1.0, 10.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v3, v2);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v1, v3);
+    }
+
+    /**
+     * Tests serialization of {@link WeightedPseudograph}
+     * <p>
+     * undirected
+     * self-loops
+     * multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testWeightedPseudograph()
+        throws Exception
+    {
+        WeightedPseudograph<String, DefaultWeightedEdge> graph1 =
+            new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e11 = graph1.addEdge(v1, v1);
+        DefaultWeightedEdge e12a = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e12b = graph1.addEdge(v1, v2);
+
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e11, 100.0);
+        graph1.setEdgeWeight(e12a, 1.0);
+        graph1.setEdgeWeight(e12b, 10.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        WeightedPseudograph<String, DefaultWeightedEdge> graph2 =
+            (WeightedPseudograph<String, DefaultWeightedEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(4, 3, 2));
+
+        assertEquals(2, graph1.getAllEdges(v1, v2).size());
+        assertEquals(2, graph2.getAllEdges(v1, v2).size());
+
+        assertWeight(graph1, graph2, Arrays.asList(100.0), v1, v1);
+        assertWeight(graph1, graph2, Arrays.asList(1.0, 10.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v3, v2);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v1, v3);
+    }
+
+    /**
+     * Tests serialization of {@link DefaultUndirectedWeightedGraph}
+     * <p>
+     * undirected
+     * self-loops
+     * no multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDefaultUndirectedWeightedGraph()
+        throws Exception
+    {
+        DefaultUndirectedWeightedGraph<String, DefaultWeightedEdge> graph1 =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e11 = graph1.addEdge(v1, v1);
+        DefaultWeightedEdge e12 = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e11, 100.0);
+        graph1.setEdgeWeight(e12, 1.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        DefaultUndirectedWeightedGraph<String, DefaultWeightedEdge> graph2 =
+            (DefaultUndirectedWeightedGraph<String, DefaultWeightedEdge>) serializeAndDeserialize(
+                graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 2, 2));
+
+        assertWeight(graph1, graph2, Arrays.asList(100.0), v1, v1);
+        assertWeight(graph1, graph2, Arrays.asList(1.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v3, v2);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v1, v3);
+    }
+
+    /**
+     * Tests serialization of {@link SimpleDirectedGraph}
+     * directed
+     * no self-loop
+     * no multiple-edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSimpleDirectedGraph()
+        throws Exception
+    {
+        SimpleDirectedGraph<String, DefaultEdge> graph1 =
+            new SimpleDirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v3);
+
+        SimpleDirectedGraph<String, DefaultEdge> graph2 =
+            (SimpleDirectedGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(2, 2, 2));
+    }
+
+    /**
+     * Tests serialization of {@link DirectedMultigraph}
+     * <p>
+     * directed
+     * no-self loops
+     * multiple edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDirectedMultigraph()
+        throws Exception
+    {
+        DirectedMultigraph<String, DefaultEdge> graph1 =
+            new DirectedMultigraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v2, v3);
+
+        DirectedMultigraph<String, DefaultEdge> graph2 =
+            (DirectedMultigraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(1, 3, 2));
+    }
+
+    /**
+     * Tests serialization of {@link DirectedPseudograph}
+     * <p>
+     * directed
+     * self-loops
+     * multiple-edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDirectedPseudograph()
+        throws Exception
+    {
+        DirectedPseudograph<String, DefaultEdge> graph1 =
+            new DirectedPseudograph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v1, v2); // multi-edge
+
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v1, v1); // self-loop
+        graph1.addEdge(v1, v3);
+
+        DirectedPseudograph<String, DefaultEdge> graph2 =
+            (DirectedPseudograph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(4, 3, 2));
+    }
+
+    /**
+     * Tests serialization of {@link DefaultDirectedGraph}
+     * <p>
+     * directed
+     * self-loops
+     * no multiple-edges
+     * unweighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDefaultDirectedGraph()
+        throws Exception
+    {
+        DefaultDirectedGraph<String, DefaultEdge> graph1 =
+            new DefaultDirectedGraph<>(DefaultEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        graph1.addEdge(v1, v1);
+        graph1.addEdge(v1, v2);
+        graph1.addEdge(v2, v3);
+        graph1.addEdge(v3, v1);
+
+        DefaultDirectedGraph<String, DefaultEdge> graph2 =
+            (DefaultDirectedGraph<String, DefaultEdge>) serializeAndDeserialize(graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 2, 2));
+    }
+
+    /**
+     * Tests serialization of {@link SimpleDirectedWeightedGraph}
+     * <p>
+     * directed
+     * no self-loops
+     * no multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSimpleDirectedWeightedGraph()
+        throws Exception
+    {
+        SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> graph1 =
+            new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e12 = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e12, 1.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        SimpleDirectedWeightedGraph<String, DefaultWeightedEdge> graph2 =
+            (SimpleDirectedWeightedGraph<String, DefaultWeightedEdge>) serializeAndDeserialize(
+                graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(2, 2, 2));
+
+        assertWeight(graph1, graph2, Arrays.asList(1.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v2, v3);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v3, v1);
+    }
+
+    /**
+     * Tests serialization of {@link DirectedWeightedMultigraph}
+     * <p>
+     * directed
+     * no self-loops
+     * multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDirectedWeightedMultiGraph()
+        throws Exception
+    {
+        DirectedWeightedMultigraph<String, DefaultWeightedEdge> graph1 =
+            new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+        DefaultWeightedEdge e12a = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e12b = graph1.addEdge(v1, v2);
+
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e12a, 1.0);
+        graph1.setEdgeWeight(e12b, 10.0);
+
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        DirectedWeightedMultigraph<String, DefaultWeightedEdge> graph2 =
+            (DirectedWeightedMultigraph<String, DefaultWeightedEdge>) serializeAndDeserialize(
+                graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 3, 2));
+
+        assertEquals(2, graph2.getAllEdges(v1, v2).size());
+        assertEquals(2, graph1.getAllEdges(v1, v2).size());
+
+        assertWeight(graph1, graph2, Arrays.asList(1.0, 10.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v2, v3);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v3, v1);
+    }
+
+    /**
+     * Tests serialization of {@link DirectedWeightedPseudograph}
+     * <p>
+     * directed
+     * self-loops
+     * multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDirectedWeightedPseudograph()
+        throws Exception
+    {
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> graph1 =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+
+        DefaultWeightedEdge e11 = graph1.addEdge(v1, v1);
+
+        DefaultWeightedEdge e12a = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e12b = graph1.addEdge(v1, v2);
+
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e11, 100.0);
+
+        graph1.setEdgeWeight(e12a, 1.0);
+        graph1.setEdgeWeight(e12b, 10.0);
+
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        DirectedWeightedPseudograph<String, DefaultWeightedEdge> graph2 =
+            (DirectedWeightedPseudograph<String, DefaultWeightedEdge>) serializeAndDeserialize(
+                graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(4, 3, 2));
+
+        assertEquals(2, graph2.getAllEdges(v1, v2).size());
+        assertEquals(2, graph1.getAllEdges(v1, v2).size());
+
+        assertWeight(graph1, graph2, Arrays.asList(100.0), v1, v1);
+        assertWeight(graph1, graph2, Arrays.asList(1.0, 10.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v2, v3);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v3, v1);
+    }
+
+    /**
+     * Tests serialization of {@link DefaultDirectedWeightedGraph}
+     * <p>
+     * directed
+     * self-loops
+     * no multiple edges
+     * weighted
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDefaultDirectedWeightedGraph()
+        throws Exception
+    {
+        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> graph1 =
+            new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addAllVertices(graph1, vertexList);
+
+        DefaultWeightedEdge e11 = graph1.addEdge(v1, v1);
+        DefaultWeightedEdge e12 = graph1.addEdge(v1, v2);
+        DefaultWeightedEdge e23 = graph1.addEdge(v2, v3);
+        DefaultWeightedEdge e31 = graph1.addEdge(v3, v1);
+
+        graph1.setEdgeWeight(e11, 100.0);
+        graph1.setEdgeWeight(e12, 1.0);
+        graph1.setEdgeWeight(e23, 2.0);
+        graph1.setEdgeWeight(e31, 3.0);
+
+        DefaultDirectedWeightedGraph<String, DefaultWeightedEdge> graph2 =
+            (DefaultDirectedWeightedGraph<String, DefaultWeightedEdge>) serializeAndDeserialize(
+                graph1);
+
+        verifyBasic(graph1, graph2, Arrays.asList(3, 2, 2));
+
+        assertWeight(graph1, graph2, Arrays.asList(100.0), v1, v1);
+        assertWeight(graph1, graph2, Arrays.asList(1.0), v1, v2);
+        assertWeight(graph1, graph2, Arrays.asList(2.0), v2, v3);
+        assertWeight(graph1, graph2, Arrays.asList(3.0), v3, v1);
+    }
+
 }
