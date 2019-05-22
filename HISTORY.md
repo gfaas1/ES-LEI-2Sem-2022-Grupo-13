@@ -27,7 +27,7 @@ Changes to JGraphT in each version:
     - Updated jgraphx version to 3.9.8.1 (contributed by John Sichi)
     - Added JSON exporter (contributed by Dimitrios Michail)
     - Enhanced `DirectedAcyclicGraph` to support multiple edges (contributed by Dimitrios Michail based on a suggestion by Sarat Chandra Balla)
-    - Refactored `SerializationTestUtils` (contributed by Lavish Kothari)
+    - Refactored `SerializationTestUtils` and made it generic (contributed by Lavish Kothari)
     - Added more serialization test coverage (contributed by Lavish Kothari)
     - Added Goldberg's algorithms for the calculation of maximum density subgraphs (contributed by Andre Immig)
 
