@@ -153,7 +153,6 @@ public class ImmutableGraphAdapterTest
     /**
      * Test the most general version of the directed graph.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -175,8 +174,7 @@ public class ImmutableGraphAdapterTest
             new ImmutableGraphAdapter<>(ImmutableGraph.copyOf(graph));
 
         Graph<String, EndpointPair<String>> g =
-            (Graph<String, EndpointPair<String>>) SerializationTestUtils
-                .serializeAndDeserialize(initialGraph);
+            SerializationTestUtils.serializeAndDeserialize(initialGraph);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

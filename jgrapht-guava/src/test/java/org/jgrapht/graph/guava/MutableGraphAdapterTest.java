@@ -19,9 +19,9 @@ package org.jgrapht.graph.guava;
 
 import com.google.common.graph.*;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.vertexcover.*;
+import org.jgrapht.graph.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 
@@ -210,7 +210,6 @@ public class MutableGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
@@ -237,8 +236,7 @@ public class MutableGraphAdapterTest
         g.addEdge("v5", "v5");
         g.addEdge("v5", "v2");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, EndpointPair<String>> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -266,16 +264,13 @@ public class MutableGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization1()
         throws Exception
     {
-        Graph<String,
-            DefaultEdge> g = new MutableNetworkAdapter<>(
-                NetworkBuilder
-                    .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-                SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
+            NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -291,8 +286,7 @@ public class MutableGraphAdapterTest
         g.addEdge("v2", "v3");
         g.addEdge("v3", "v3");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, DefaultEdge> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());

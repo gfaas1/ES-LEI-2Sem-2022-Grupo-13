@@ -58,7 +58,7 @@ public class MutableValueGraphAdapterTest
 
         Graph<String, EndpointPair<String>> g =
             new MutableValueGraphAdapter<>(graph, new MyValue(1.0d),
-                (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -183,7 +183,7 @@ public class MutableValueGraphAdapterTest
     {
         Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
             ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -249,7 +249,7 @@ public class MutableValueGraphAdapterTest
     {
         Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
             ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -310,14 +310,13 @@ public class MutableValueGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization()
         throws Exception
     {
         Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
             ValueGraphBuilder.directed().allowsSelfLoops(true).build(), new MyValue(1.0),
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -338,8 +337,7 @@ public class MutableValueGraphAdapterTest
         g.addEdge("v5", "v5");
         g.addEdge("v5", "v2");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, EndpointPair<String>> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());
@@ -367,14 +365,13 @@ public class MutableValueGraphAdapterTest
     /**
      * Tests serialization
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testSerialization1()
         throws Exception
     {
         Graph<String, EndpointPair<String>> g = new MutableValueGraphAdapter<>(
             ValueGraphBuilder.undirected().allowsSelfLoops(true).build(), new MyValue(1.0),
-            (ToDoubleFunction<MyValue> & Serializable) v -> v.getValue());
+            (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -390,8 +387,7 @@ public class MutableValueGraphAdapterTest
         g.addEdge("v2", "v3");
         g.addEdge("v3", "v3");
 
-        Graph<String, DefaultEdge> g2 =
-            (Graph<String, DefaultEdge>) SerializationTestUtils.serializeAndDeserialize(g);
+        Graph<String, EndpointPair<String>> g2 = SerializationTestUtils.serializeAndDeserialize(g);
 
         assertFalse(g2.getType().isAllowingMultipleEdges());
         assertTrue(g2.getType().isAllowingSelfLoops());

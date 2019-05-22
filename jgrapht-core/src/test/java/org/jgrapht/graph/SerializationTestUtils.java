@@ -31,7 +31,8 @@ public class SerializationTestUtils
     {
     }
 
-    public static Object serializeAndDeserialize(Object obj)
+    @SuppressWarnings("unchecked")
+    public static <T> T serializeAndDeserialize(T obj)
         throws Exception
     {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -43,7 +44,7 @@ public class SerializationTestUtils
         ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
         ObjectInputStream in = new ObjectInputStream(bin);
 
-        obj = in.readObject();
+        obj = (T) in.readObject();
         return obj;
     }
 }
