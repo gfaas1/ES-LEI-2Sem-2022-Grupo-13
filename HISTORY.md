@@ -25,7 +25,7 @@ Changes to JGraphT in each version:
     - Added Yen's k shortest loopless paths algorithm (contributed by Semen Chudakov)
     - Defer graph vertex iterator initialization in CrossComponentIterator (contributed by John Sichi)
     - Updated jgraphx version to 3.9.8.1 (contributed by John Sichi)
-    - Added JSON exporter (contributed by Dimitrios Michail)
+    - Added JSON exporter and importer (contributed by Dimitrios Michail)
     - Enhanced `DirectedAcyclicGraph` to support multiple edges (contributed by Dimitrios Michail based on a suggestion by Sarat Chandra Balla)
     - Refactored `SerializationTestUtils` and made it generic (contributed by Lavish Kothari)
     - Added more serialization test coverage (contributed by Lavish Kothari)
