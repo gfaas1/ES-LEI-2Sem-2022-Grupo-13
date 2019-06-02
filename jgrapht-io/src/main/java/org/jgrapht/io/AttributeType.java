@@ -24,6 +24,7 @@ package org.jgrapht.io;
  */
 public enum AttributeType
 {
+    NULL("null"),
     BOOLEAN("boolean"),
     INT("int"),
     LONG("long"),
@@ -59,6 +60,8 @@ public enum AttributeType
     public static AttributeType create(String value)
     {
         switch (value) {
+        case "null":
+            return NULL;
         case "boolean":
             return BOOLEAN;
         case "int":

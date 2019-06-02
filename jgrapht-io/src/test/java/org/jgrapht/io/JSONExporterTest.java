@@ -18,8 +18,10 @@
 package org.jgrapht.io;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -145,7 +147,7 @@ public class JSONExporterTest
     {
         String expected =
             "{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"1\",\"stringAttribute\":\"yellow\",\"doubleAttribute\":3.4,\"intAttribute\":3,\"floatAttribute\":3.4,\"longAttribute\":3,\"booleanAttribute\":true},{\"id\":\"2\"}],\"edges\":[{\"id\":\"1\",\"source\":\"1\",\"target\":\"2\",\"color\":\"what?\",\"label\":\"e12\",\"weight\":100.0}]}";
-        
+
         Graph<Integer,
             DefaultWeightedEdge> graph = GraphTypeBuilder
                 .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
@@ -194,8 +196,8 @@ public class JSONExporterTest
         String res = new String(os.toByteArray(), "UTF-8");
         assertEquals(expected, res);
     }
-    
-    @Test(expected=IllegalArgumentException.class)
+
+    @Test(expected = IllegalArgumentException.class)
     public void testNotAllowedNanDouble()
         throws Exception
     {
@@ -225,6 +227,65 @@ public class JSONExporterTest
                 new IntegerComponentNameProvider<>(), new EmptyComponentAttributeProvider<>());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(graph, os);
+    }
+
+    @Test
+    public void testExportAndImport()
+        throws ExportException, ImportException
+    {
+        Graph<Integer,
+            DefaultWeightedEdge> graph1 = GraphTypeBuilder
+                .directed().weighted(true).edgeClass(DefaultWeightedEdge.class)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier()).allowingMultipleEdges(true)
+                .allowingSelfLoops(true).buildGraph();
+
+        graph1.addVertex(1);
+        graph1.addVertex(2);
+        graph1.addVertex(3);
+        graph1.addVertex(4);
+        graph1.addVertex(5);
+
+        graph1.addEdge(1, 2);
+        graph1.addEdge(1, 3);
+        graph1.addEdge(1, 4);
+        graph1.addEdge(1, 4);
+        graph1.addEdge(1, 4);
+        graph1.addEdge(4, 4);
+
+        JSONExporter<Integer,
+            DefaultWeightedEdge> exporter = new JSONExporter<Integer, DefaultWeightedEdge>(
+                x -> String.valueOf(x), new EmptyComponentAttributeProvider<>(),
+                new IntegerComponentNameProvider<>(), new EmptyComponentAttributeProvider<>());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        exporter.exportGraph(graph1, os);
+        String output1 = os.toString();
+
+        Graph<Integer,
+            DefaultWeightedEdge> graph2 = GraphTypeBuilder
+                .directed().allowingMultipleEdges(true).allowingSelfLoops(true)
+                .vertexSupplier(SupplierUtil.createIntegerSupplier())
+                .edgeSupplier(SupplierUtil.DEFAULT_WEIGHTED_EDGE_SUPPLIER).buildGraph();
+
+        VertexProvider<Integer> vp = (label, attributes) -> Integer.valueOf(label);
+        EdgeProvider<Integer, DefaultWeightedEdge> ep =
+            (from, to, label, attributes) -> graph2.getEdgeSupplier().get();
+
+        JSONImporter<Integer, DefaultWeightedEdge> importer = new JSONImporter<>(vp, ep);
+        importer.importGraph(graph2, new StringReader(output1));
+
+        assertEquals(5, graph2.vertexSet().size());
+        assertEquals(6, graph2.edgeSet().size());
+        assertTrue(graph2.containsVertex(1));
+        assertTrue(graph2.containsVertex(2));
+        assertTrue(graph2.containsVertex(3));
+        assertTrue(graph2.containsVertex(4));
+        assertTrue(graph2.containsVertex(5));
+        assertTrue(graph2.containsEdge(1, 2));
+        assertTrue(graph2.containsEdge(1, 3));
+        assertTrue(graph2.containsEdge(1, 4));
+        assertTrue(graph2.containsEdge(4, 4));
+        assertEquals(3, graph2.getAllEdges(1, 4).size());
+        
     }
 
 }

@@ -32,10 +32,15 @@ public class DefaultAttribute<T>
     Serializable
 {
     private static final long serialVersionUID = 366113727410278952L;
+    
+    /**
+     * The null attribute.
+     */
+    public static Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
 
     private T value;
     private AttributeType type;
-
+    
     /**
      * Create a new attribute
      * 
