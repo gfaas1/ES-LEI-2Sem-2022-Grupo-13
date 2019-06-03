@@ -17,32 +17,34 @@
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.CapacitatedSpanningTreeAlgorithm;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
+public class EsauWilliamsCapacitatedMinimumSpanningTreeTest
+{
 
     /**
      * This example is presented here: http://www.pitt.edu/~dtipper/2110/CMST_example.pdf
      */
     @Test
-    public void testInstance1() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance1()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
-        for(int i = 0; i < 7; ++i) {
+        for (int i = 0; i < 7; ++i) {
             graph.addVertex(i);
         }
-        for(int i = 0; i < 7; ++i) {
-            for(int j = i + 1; j < 7; ++j) {
+        for (int i = 0; i < 7; ++i) {
+            for (int j = i + 1; j < 7; ++j) {
                 graph.addEdge(i, j);
             }
         }
@@ -76,14 +78,23 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         weights.put(5, 1.0);
         weights.put(6, 1.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 1).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 1)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(42.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(new HashSet<>(Arrays.asList(2, 5, 6)), 3.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(3)), Pair.of(new HashSet<>(Collections.singletonList(3)), 2.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(1)),
+            Pair.of(new HashSet<>(Arrays.asList(1, 4)), 2.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(2)),
+            Pair.of(new HashSet<>(Arrays.asList(2, 5, 6)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(3)),
+            Pair.of(new HashSet<>(Collections.singletonList(3)), 2.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(4), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(5), 0);
@@ -93,15 +104,11 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         assertNotEquals(cmst.getLabels().get(2), cmst.getLabels().get(1));
         assertNotEquals(cmst.getLabels().get(2), cmst.getLabels().get(3));
 
-        for(DefaultWeightedEdge e : cmst.getEdges()) {
+        for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                || e == graph.getEdge(0, 2)
-                || e == graph.getEdge(0, 3)
-                || e == graph.getEdge(1, 4)
-                || e == graph.getEdge(2, 5)
-                || e == graph.getEdge(5, 6)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 2) || e == graph.getEdge(0, 3)
+                    || e == graph.getEdge(1, 4) || e == graph.getEdge(2, 5)
+                    || e == graph.getEdge(5, 6));
         }
     }
 
@@ -109,14 +116,17 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
      * Instance calculated by hand
      */
     @Test
-    public void testInstance2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance2()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
-        for(int i = 0; i < 6; ++i) {
+        for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
         }
-        for(int i = 0; i < 6; ++i) {
-            for(int j = i + 1; j < 6; ++j) {
+        for (int i = 0; i < 6; ++i) {
+            for (int j = i + 1; j < 6; ++j) {
                 graph.addEdge(i, j);
             }
         }
@@ -143,14 +153,23 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         weights.put(4, 3.0);
         weights.put(5, 2.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(1)),
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(2)),
+            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(4)),
+            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);
@@ -158,30 +177,30 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         assertNotEquals(cmst.getLabels().get(1), cmst.getLabels().get(4));
         assertNotEquals(cmst.getLabels().get(3), cmst.getLabels().get(4));
 
-        for(DefaultWeightedEdge e : cmst.getEdges()) {
+        for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(0, 4)
-                            || e == graph.getEdge(1, 5)
-                            || e == graph.getEdge(3, 2)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 3) || e == graph.getEdge(0, 4)
+                    || e == graph.getEdge(1, 5) || e == graph.getEdge(3, 2));
         }
     }
 
     /**
-     * Instance as in testInstance2() but without edge (0,5). That is, an incomplete graph is tested.
+     * Instance as in testInstance2() but without edge (0,5). That is, an incomplete graph is
+     * tested.
      */
     @Test
-    public void testInstance3() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance3()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
-        for(int i = 0; i < 6; ++i) {
+        for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
         }
-        for(int i = 0; i < 6; ++i) {
-            for(int j = i + 1; j < 6; ++j) {
-                if(i != 0 || j != 5) {
+        for (int i = 0; i < 6; ++i) {
+            for (int j = i + 1; j < 6; ++j) {
+                if (i != 0 || j != 5) {
                     graph.addEdge(i, j);
                 }
             }
@@ -208,14 +227,23 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         weights.put(4, 3.0);
         weights.put(5, 2.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 4, weights, 1)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(1)),
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(2)),
+            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(4)),
+            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);
@@ -223,26 +251,25 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         assertNotEquals(cmst.getLabels().get(1), cmst.getLabels().get(4));
         assertNotEquals(cmst.getLabels().get(3), cmst.getLabels().get(4));
 
-        for(DefaultWeightedEdge e : cmst.getEdges()) {
+        for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(0, 4)
-                            || e == graph.getEdge(1, 5)
-                            || e == graph.getEdge(3, 2)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 3) || e == graph.getEdge(0, 4)
+                    || e == graph.getEdge(1, 5) || e == graph.getEdge(3, 2));
         }
     }
 
     @Test
-    public void testInstanceWithRandomness() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstanceWithRandomness()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
-        for(int i = 0; i < 7; ++i) {
+        for (int i = 0; i < 7; ++i) {
             graph.addVertex(i);
         }
-        for(int i = 0; i < 7; ++i) {
-            for(int j = i + 1; j < 7; ++j) {
+        for (int i = 0; i < 7; ++i) {
+            for (int j = i + 1; j < 7; ++j) {
                 graph.addEdge(i, j);
             }
         }
@@ -276,9 +303,11 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         weights.put(5, 1.0);
         weights.put(6, 1.0);
 
-        for(int i = 0; i < 30; ++i) {
-            CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                    = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 20).getCapacitatedSpanningTree();
+        for (int i = 0; i < 30; ++i) {
+            CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+                DefaultWeightedEdge> cmst =
+                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, 3, weights, 20)
+                        .getCapacitatedSpanningTree();
 
             assertNotNull(cmst);
             assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 3, weights));
@@ -289,8 +318,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
      * An unconected graph
      */
     @Test
-    public void testUnconnectedGraph() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
+    public void testUnconnectedGraph()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
         Map<Integer, Double> demands = new HashMap<>();
         graph.addVertex(0);
         demands.put(0, 1.0);
@@ -302,8 +333,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                    = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1);
+            CapacitatedSpanningTreeAlgorithm<Integer,
+                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
+                        graph, 0, capacity, demands, 1);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }
@@ -315,8 +348,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
      * Graph violating the capacity constraint
      */
     @Test
-    public void testViolatedCapacityConstraint() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
+    public void testViolatedCapacityConstraint()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
         Map<Integer, Double> demands = new HashMap<>();
         graph.addVertex(0);
         demands.put(0, 1.0);
@@ -329,8 +364,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                    = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1);
+            CapacitatedSpanningTreeAlgorithm<Integer,
+                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
+                        graph, 0, capacity, demands, 1);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }
@@ -342,8 +379,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
      * Graph violating the capacity constraint
      */
     @Test
-    public void testInvalidGraph() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
+    public void testInvalidGraph()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedGraph<>(DefaultWeightedEdge.class);
         Map<Integer, Double> demands = new HashMap<>();
         graph.addVertex(0);
         graph.addVertex(1);
@@ -367,8 +406,10 @@ public class EsauWilliamsCapacitatedMinimumSpanningTreeTest {
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                    = new EsauWilliamsCapacitatedMinimumSpanningTree<>(graph, 0, capacity, demands, 1);
+            CapacitatedSpanningTreeAlgorithm<Integer,
+                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                    new EsauWilliamsCapacitatedMinimumSpanningTree<>(
+                        graph, 0, capacity, demands, 1);
             capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
         } catch (IllegalArgumentException e) {
             testOK = true;

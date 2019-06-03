@@ -116,14 +116,12 @@ public abstract class AbstractBaseGraph<V, E>
 
         this.graphSpecificsStrategy =
             Objects.requireNonNull(graphSpecificsStrategy, GRAPH_SPECIFICS_STRATEGY_REQUIRED);
-        this.specifics = Objects
-            .requireNonNull(
-                graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
-                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
-        this.intrusiveEdgesSpecifics = Objects
-            .requireNonNull(
-                graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
-                GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.specifics = Objects.requireNonNull(
+            graphSpecificsStrategy.getSpecificsFactory().apply(this, type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+        this.intrusiveEdgesSpecifics = Objects.requireNonNull(
+            graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
+            GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
     }
 
     /**

@@ -17,45 +17,44 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test class for AStarShortestPath implementation
  *
  * @author Joris Kinable
  */
-public class AStarShortestPathTest extends BaseHeuristicSearchTest {
+public class AStarShortestPathTest
+    extends
+    BaseHeuristicSearchTest
+{
 
     /**
      * Test on a graph with a path from the source node to the target node.
      */
     @Test
-    public void testLabyrinth1() {
+    public void testLabyrinth1()
+    {
         this.readLabyrinth(labyrinth1);
 
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new AStarShortestPath<>(graph, new ManhattanDistance());
+            new AStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
-                aStarShortestPath.getPath(sourceNode, targetNode);
+            aStarShortestPath.getPath(sourceNode, targetNode);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 47);
         assertEquals(path.getEdgeList().size(), 47);
         assertEquals(path.getLength() + 1, 48);
 
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath2 =
-                new AStarShortestPath<>(graph, new EuclideanDistance());
+            new AStarShortestPath<>(graph, new EuclideanDistance());
         GraphPath<Node, DefaultWeightedEdge> path2 =
-                aStarShortestPath2.getPath(sourceNode, targetNode);
+            aStarShortestPath2.getPath(sourceNode, targetNode);
         assertNotNull(path2);
         assertEquals((int) path2.getWeight(), 47);
         assertEquals(path2.getEdgeList().size(), 47);
@@ -65,12 +64,13 @@ public class AStarShortestPathTest extends BaseHeuristicSearchTest {
      * Test on a graph where there is no path from the source node to the target node.
      */
     @Test
-    public void testLabyrinth2() {
+    public void testLabyrinth2()
+    {
         this.readLabyrinth(labyrinth2);
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new AStarShortestPath<>(graph, new ManhattanDistance());
+            new AStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
-                aStarShortestPath.getPath(sourceNode, targetNode);
+            aStarShortestPath.getPath(sourceNode, targetNode);
         assertNull(path);
     }
 
@@ -82,10 +82,11 @@ public class AStarShortestPathTest extends BaseHeuristicSearchTest {
      * edge between (B,C). The admissible heuristic in this test is not important.
      */
     @Test
-    public void testMultiGraph() {
+    public void testMultiGraph()
+    {
         Graph<Node, DefaultWeightedEdge> multigraph = getMultigraph();
         AStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new AStarShortestPath<>(multigraph, new ManhattanDistance());
+            new AStarShortestPath<>(multigraph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path = aStarShortestPath.getPath(n1, n3);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
@@ -93,7 +94,8 @@ public class AStarShortestPathTest extends BaseHeuristicSearchTest {
     }
 
     @Test
-    public void testInconsistentHeuristic() {
+    public void testInconsistentHeuristic()
+    {
         Graph<Integer, DefaultWeightedEdge> g = getInconsistentHeuristicTestGraph();
         AStarAdmissibleHeuristic<Integer> h = getInconsistentHeuristic();
 

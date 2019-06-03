@@ -17,16 +17,13 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.EdgeSetFactory;
-import org.jgrapht.util.ArrayUnenforcedSet;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Plain implementation of DirectedSpecifics. This implementation requires the least amount of
@@ -143,7 +140,7 @@ public class DirectedSpecifics<V, E>
         getEdgeContainer(source).addOutgoingEdge(e);
         getEdgeContainer(target).addIncomingEdge(e);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -263,7 +260,9 @@ public class DirectedSpecifics<V, E>
 
     /**
      * {@inheritDoc}
-     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)} instead.
+     * 
+     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)}
+     *             instead.
      */
     @Override
     @Deprecated
@@ -275,7 +274,7 @@ public class DirectedSpecifics<V, E>
         getEdgeContainer(source).removeOutgoingEdge(e);
         getEdgeContainer(target).removeIncomingEdge(e);
     }
-    
+
     /**
      * {@inheritDoc}
      */

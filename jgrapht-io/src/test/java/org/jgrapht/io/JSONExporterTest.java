@@ -17,21 +17,17 @@
  */
 package org.jgrapht.io;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
+import org.junit.*;
+
+import java.io.*;
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
 
 /**
  * Test JSONExporter
@@ -231,7 +227,8 @@ public class JSONExporterTest
 
     @Test
     public void testExportAndImport()
-        throws ExportException, ImportException
+        throws ExportException,
+        ImportException
     {
         Graph<Integer,
             DefaultWeightedEdge> graph1 = GraphTypeBuilder
@@ -285,7 +282,7 @@ public class JSONExporterTest
         assertTrue(graph2.containsEdge(1, 4));
         assertTrue(graph2.containsEdge(4, 4));
         assertEquals(3, graph2.getAllEdges(1, 4).size());
-        
+
     }
 
 }

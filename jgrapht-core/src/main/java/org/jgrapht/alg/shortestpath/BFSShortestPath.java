@@ -17,18 +17,18 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
+
+import java.util.*;
 
 /**
  * The BFS Shortest Path algorithm.
  *
  * <p>
- * An implementation of <a href="https://en.wikipedia.org/wiki/Breadth-first_search">BFS
- * shortest path algorithm</a> to compute shortest paths from a single source vertex to all other 
- * vertices in an unweighted graph.
+ * An implementation of <a href="https://en.wikipedia.org/wiki/Breadth-first_search">BFS shortest
+ * path algorithm</a> to compute shortest paths from a single source vertex to all other vertices in
+ * an unweighted graph.
  *
  * <p>
  * The running time is $O(|V|+|E|)$.
@@ -38,7 +38,7 @@ import org.jgrapht.alg.util.*;
  *
  * @author Karri Sai Satish Kumar Reddy
  */
-public class BFSShortestPath<V,E>
+public class BFSShortestPath<V, E>
     extends
     BaseShortestPathAlgorithm<V, E>
 {
@@ -64,55 +64,52 @@ public class BFSShortestPath<V,E>
         }
 
         /*
-         * Initialize distanceAndPredecessorMap 
+         * Initialize distanceAndPredecessorMap
          */
         Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
         distanceAndPredecessorMap.put(source, Pair.of(0d, null));
-        
+
         /*
          * Declaring queue
          */
-        Deque<V> queue = new ArrayDeque<>();  
-        
+        Deque<V> queue = new ArrayDeque<>();
+
         queue.add(source);
-        
+
         /*
-         * It takes the top most vertex from queue,relax its outgoing edges,updates 
-         * the distance of the neighbouring vertices ans pushes them into queue
+         * It takes the top most vertex from queue,relax its outgoing edges,updates the distance of
+         * the neighbouring vertices ans pushes them into queue
          */
-        while(!queue.isEmpty())
-        {
+        while (!queue.isEmpty()) {
             V v = queue.poll();
             for (E e : graph.outgoingEdgesOf(v)) {
                 V u = Graphs.getOppositeVertex(graph, e, v);
-                if(!distanceAndPredecessorMap.containsKey(u))
-                {
+                if (!distanceAndPredecessorMap.containsKey(u)) {
                     queue.add(u);
                     double newDist = distanceAndPredecessorMap.get(v).getFirst() + 1.0;
-                    distanceAndPredecessorMap.put(u, Pair.of(newDist,e));
-                    
+                    distanceAndPredecessorMap.put(u, Pair.of(newDist, e));
+
                 }
             }
         }
-        
-        
+
         return new TreeSingleSourcePathsImpl<>(graph, source, distanceAndPredecessorMap);
-        
-        
+
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public GraphPath<V, E> getPath(V source, V sink)
     {
-        
+
         if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException(GRAPH_MUST_CONTAIN_THE_SINK_VERTEX);
         }
-        return getPaths(source).getPath(sink);   
+        return getPaths(source).getPath(sink);
     }
-    
+
     /**
      * Find a path between two vertices.
      * 

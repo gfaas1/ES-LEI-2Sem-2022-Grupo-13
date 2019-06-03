@@ -21,7 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.matching.*;
 import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.AsWeightedGraph;
+import org.jgrapht.graph.*;
 
 import java.util.*;
 
@@ -31,15 +31,17 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
 
 /**
  * This class computes weighted perfect matchings in general graphs using the Blossom V algorithm.
- * If maximum or minimum weight matching algorithms is needed, see {@link KolmogorovWeightedMatching}
+ * If maximum or minimum weight matching algorithms is needed, see
+ * {@link KolmogorovWeightedMatching}
  * <p>
- * Let $G = (V, E, c)$ be an undirected graph with a real-valued cost function defined on it. A matching is
- * an edge-disjoint subset of edges $M \subseteq E$. A matching is perfect if $2|M| = |V|$. In the
- * weighted perfect matching problem the goal is to maximize or minimize the weighted sum of the edges in the matching.
- * This class supports pseudographs, but a problem on a pseudograph can be easily reduced to a problem on a simple graph.
- * Moreover, this reduction can heavily influence the running time since only an edge with a maximum or minimum weight
- * between two vertices can belong to the matching in the corresponding optimization problems. Currently, users are
- * responsible for doing this reduction themselves before invoking the algorithm.
+ * Let $G = (V, E, c)$ be an undirected graph with a real-valued cost function defined on it. A
+ * matching is an edge-disjoint subset of edges $M \subseteq E$. A matching is perfect if $2|M| =
+ * |V|$. In the weighted perfect matching problem the goal is to maximize or minimize the weighted
+ * sum of the edges in the matching. This class supports pseudographs, but a problem on a
+ * pseudograph can be easily reduced to a problem on a simple graph. Moreover, this reduction can
+ * heavily influence the running time since only an edge with a maximum or minimum weight between
+ * two vertices can belong to the matching in the corresponding optimization problems. Currently,
+ * users are responsible for doing this reduction themselves before invoking the algorithm.
  * <p>
  * Note that if the graph is unweighted and dense, {@link EdmondsMaximumCardinalityMatching} may be
  * a better choice.
@@ -59,74 +61,74 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  * the matching consists of tight edges. This means that the resulting perfect matching meets
  * complementary slackness conditions, and is therefore optimal.
  * <p>
- * At construction time the set of options can be specified to define the strategies used by the algorithm
- * to perform initialization, dual updates, etc. This can be done with the {@link BlossomVOptions}. During the
- * construction time the objective sense of the optimization problem can be specified, i.e. whether to maximize of minimize the weight
- * of the resulting perfect matching. Default objective sense of the algorithm is to minimize the weight of the resulting perfect matching.
- * If the objective sense of the algorithm is to maximize the weight of the matching, the problem is reduced to minimum weight
- * perfect matching problem by multiplying all edge weights by $-1$. This class supports retrieving statistics for the
- * algorithm performance, see {@link KolmogorovWeightedPerfectMatching#getStatistics()}. It provides the time elapsed
- * during primal operations and dual updates, as well as the number of these primal operations performed.
+ * At construction time the set of options can be specified to define the strategies used by the
+ * algorithm to perform initialization, dual updates, etc. This can be done with the
+ * {@link BlossomVOptions}. During the construction time the objective sense of the optimization
+ * problem can be specified, i.e. whether to maximize of minimize the weight of the resulting
+ * perfect matching. Default objective sense of the algorithm is to minimize the weight of the
+ * resulting perfect matching. If the objective sense of the algorithm is to maximize the weight of
+ * the matching, the problem is reduced to minimum weight perfect matching problem by multiplying
+ * all edge weights by $-1$. This class supports retrieving statistics for the algorithm
+ * performance, see {@link KolmogorovWeightedPerfectMatching#getStatistics()}. It provides the time
+ * elapsed during primal operations and dual updates, as well as the number of these primal
+ * operations performed.
  * <p>
- * The solution to a weighted perfect matching problem instance comes with a certificate of optimality,
- * which is represented by a solution to a dual linear program; see {@link DualSolution}. This class
- * encapsulates a mapping from the node sets of odd cardinality to the corresponding dual variables. This mapping
- * doesn't contain the sets whose dual variables are $0$. The computation of the dual solution is performed lazily
- * and doesn't affect the running time of finding a weighted perfect matching.
+ * The solution to a weighted perfect matching problem instance comes with a certificate of
+ * optimality, which is represented by a solution to a dual linear program; see
+ * {@link DualSolution}. This class encapsulates a mapping from the node sets of odd cardinality to
+ * the corresponding dual variables. This mapping doesn't contain the sets whose dual variables are
+ * $0$. The computation of the dual solution is performed lazily and doesn't affect the running time
+ * of finding a weighted perfect matching.
  * <p>
- * Here we describe the certificates of optimality more precisely. Let the graph $G = (V, E)$ be an undirected graph
- * with cost function $c: V \mapsto \mathbb{R}$ defined on it. Let $\mathcal{O}$ be the set of all subsets of $V$ of
- * odd cardinality containing at least 3 vertices, and $\delta(S), S \subset V$ be the set of boundary edges of $V$.
- * Then <b>minimum</b> weight perfect matching problem has the following linear programming formulation:
+ * Here we describe the certificates of optimality more precisely. Let the graph $G = (V, E)$ be an
+ * undirected graph with cost function $c: V \mapsto \mathbb{R}$ defined on it. Let $\mathcal{O}$ be
+ * the set of all subsets of $V$ of odd cardinality containing at least 3 vertices, and $\delta(S),
+ * S \subset V$ be the set of boundary edges of $V$. Then <b>minimum</b> weight perfect matching
+ * problem has the following linear programming formulation:
  *
- * \[ \begin{align} \mbox{minimize} \qquad &amp; \sum_{e\in E}c_e \cdot x_e &amp;\\
- * s.t. \qquad &amp; \sum_{e\in \delta^(i)} x_e = 1 &amp; \forall i\in V\\
- * &amp; \sum_{e\in \delta(S)}x_e \ge 1 &amp; \forall S\in \mathcal{O} \\
- * &amp; x_e \ge 0 &amp; \forall e\in E
- * \end{align}\]
+ * \[ \begin{align} \mbox{minimize} \qquad &amp; \sum_{e\in E}c_e \cdot x_e &amp;\\ s.t. \qquad
+ * &amp; \sum_{e\in \delta^(i)} x_e = 1 &amp; \forall i\in V\\ &amp; \sum_{e\in \delta(S)}x_e \ge 1
+ * &amp; \forall S\in \mathcal{O} \\ &amp; x_e \ge 0 &amp; \forall e\in E \end{align}\] The
+ * corresponding dual linear program has the following form:
+ *
+ * \[ \begin{align} \mbox{maximize} \qquad &amp; \sum_{x \in V}y_e &amp;\\ s.t. \qquad &amp; y_u +
+ * y_v + \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S \le c_e &amp; \forall\ e = \{u, v\}\in E\\
+ * &amp; x_S \ge 0 &amp; \forall S\in \mathcal{O} \end{align} \] Let's use the following notation:
+ * $slack(e) = c_e - y_u - y_v - \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S$. Complementary
+ * slackness conditions have the following form:
+ *
+ * \[ \begin{align} slack(e) &gt; 0 &amp;\Rightarrow x_e = 0 \\ y_S &gt; 0 &amp;\Rightarrow
+ * \sum_{e\in \delta(S)}x_e = 1 \end{align} \] Therefore, the slacks of all edges will be
+ * non-negative and the slacks of matched edges will be $0$.
+ * <p>
+ * The <b>maximum</b> weight perfect matching problem has the following linear programming
+ * formulation:
+ *
+ * \[ \begin{align} \mbox{maximize} \qquad &amp; \sum_{e\in E}c_e \cdot x_e &amp;\\ s.t. \qquad
+ * &amp;\sum_{e\in \delta^(i)} x_e = 1 &amp; \forall i\in V\\ &amp; \sum_{e\in \delta(S)}x_e \ge 1
+ * &amp; \forall S\in \mathcal{O} \\ &amp; x_e \ge 0 &amp; \forall e\in E \end{align} \]
+ *
  * The corresponding dual linear program has the following form:
  *
- * \[ \begin{align} \mbox{maximize} \qquad &amp; \sum_{x \in V}y_e &amp;\\
- * s.t. \qquad &amp; y_u + y_v + \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S \le c_e &amp; \forall\ e = \{u, v\}\in E\\
- * &amp; x_S \ge 0 &amp; \forall S\in \mathcal{O}
- * \end{align} \]
- * Let's use the following notation: $slack(e) = c_e - y_u - y_v - \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S$. Complementary slackness conditions have the following form:
- *
- * \[ \begin{align}
- * slack(e) &gt; 0  &amp;\Rightarrow x_e = 0 \\
- * y_S &gt; 0  &amp;\Rightarrow \sum_{e\in \delta(S)}x_e = 1
- * \end{align} \]
- * Therefore, the slacks of all edges will be non-negative and the slacks of matched edges will be $0$.
- * <p>
- * The <b>maximum</b> weight perfect matching problem has the following linear programming formulation:
- *
- * \[ \begin{align} \mbox{maximize} \qquad &amp; \sum_{e\in E}c_e \cdot x_e &amp;\\
- * s.t. \qquad &amp;\sum_{e\in \delta^(i)} x_e = 1 &amp; \forall i\in V\\
- * &amp; \sum_{e\in \delta(S)}x_e \ge 1 &amp; \forall S\in \mathcal{O} \\
- * &amp; x_e \ge 0 &amp; \forall e\in E
- * \end{align} \]
- *
- * The corresponding dual linear program has the following form:
- *
- * \[ \begin{align} \mbox{minimize} \qquad &amp; \sum_{x \in V}y_e &amp;\\
- * s.t. \qquad &amp; y_u + y_v + \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S \ge c_e &amp; \forall\ e = \{u, v\}\in E\\
- * &amp; x_S \le 0 &amp; \forall S\in \mathcal{O}
- * \end{align} \]
+ * \[ \begin{align} \mbox{minimize} \qquad &amp; \sum_{x \in V}y_e &amp;\\ s.t. \qquad &amp; y_u +
+ * y_v + \sum_{S\in \mathcal{O}: e \in \delta(S)}y_S \ge c_e &amp; \forall\ e = \{u, v\}\in E\\
+ * &amp; x_S \le 0 &amp; \forall S\in \mathcal{O} \end{align} \]
  *
  * Complementary slackness conditions have the following form:
  *
- * \[ \begin{align}
- * slack(e) &lt; 0  &amp;\Rightarrow x_e = 0 \\
- * y_S &lt; 0  &amp;\Rightarrow \sum_{e\in \delta(S)}x_e = 1
- * \end{align} \]
+ * \[ \begin{align} slack(e) &lt; 0 &amp;\Rightarrow x_e = 0 \\ y_S &lt; 0 &amp;\Rightarrow
+ * \sum_{e\in \delta(S)}x_e = 1 \end{align} \]
  *
- * Therefore, the slacks of all edges will be non-positive and the slacks of matched edges will be $0$.
+ * Therefore, the slacks of all edges will be non-positive and the slacks of matched edges will be
+ * $0$.
  * <p>
- * This class supports testing the optimality of the solution via {@link KolmogorovWeightedPerfectMatching#testOptimality()}.
- * It also supports retrieval of the computation error when the edge weights are real values via
- * {@link KolmogorovWeightedPerfectMatching#getError()}. Both optimality test and error computation are performed
- * lazily and don't affect the running time of the main algorithm. If the problem instance doesn't contain a perfect
- * matching at all, the algorithm doesn't find a minimum weight maximum matching; instead, it throws an exception.
+ * This class supports testing the optimality of the solution via
+ * {@link KolmogorovWeightedPerfectMatching#testOptimality()}. It also supports retrieval of the
+ * computation error when the edge weights are real values via
+ * {@link KolmogorovWeightedPerfectMatching#getError()}. Both optimality test and error computation
+ * are performed lazily and don't affect the running time of the main algorithm. If the problem
+ * instance doesn't contain a perfect matching at all, the algorithm doesn't find a minimum weight
+ * maximum matching; instead, it throws an exception.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -136,8 +138,8 @@ import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MINIMIZE;
  * @see BlossomVDualUpdater
  */
 public class KolmogorovWeightedPerfectMatching<V, E>
-        implements
-        MatchingAlgorithm<V, E>
+    implements
+    MatchingAlgorithm<V, E>
 {
     /**
      * Default epsilon used in the algorithm
@@ -202,48 +204,55 @@ public class KolmogorovWeightedPerfectMatching<V, E>
     private ObjectiveSense objectiveSense;
 
     /**
-     * Constructs a new instance of the algorithm using the default options. The goal of the constructed
-     * algorithm is to minimize the weight of the resulting perfect matching.
+     * Constructs a new instance of the algorithm using the default options. The goal of the
+     * constructed algorithm is to minimize the weight of the resulting perfect matching.
      *
      * @param graph the graph for which to find a weighted perfect matching
      */
-    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph) {
+    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph)
+    {
         this(graph, DEFAULT_OPTIONS, MINIMIZE);
     }
 
     /**
-     * Constructs a new instance of the algorithm using the default options. The goal of the constructed
-     * algorithm is to maximize or minimize the weight of the resulting perfect matching depending on
-     * the {@code maximize} parameter.
+     * Constructs a new instance of the algorithm using the default options. The goal of the
+     * constructed algorithm is to maximize or minimize the weight of the resulting perfect matching
+     * depending on the {@code maximize} parameter.
      *
-     * @param graph          the graph for which to find a weighted perfect matching
+     * @param graph the graph for which to find a weighted perfect matching
      * @param objectiveSense objective sense of the algorithm
      */
-    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph, ObjectiveSense objectiveSense) {
+    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph, ObjectiveSense objectiveSense)
+    {
         this(graph, DEFAULT_OPTIONS, objectiveSense);
     }
 
     /**
-     * Constructs a new instance of the algorithm with the specified {@code options}. The objective sense
-     * of the constructed algorithm is to minimize the weight of the resulting matching
+     * Constructs a new instance of the algorithm with the specified {@code options}. The objective
+     * sense of the constructed algorithm is to minimize the weight of the resulting matching
      *
-     * @param graph   the graph for which to find a weighted perfect matching
-     * @param options the options which define the strategies for the initialization and dual updates
+     * @param graph the graph for which to find a weighted perfect matching
+     * @param options the options which define the strategies for the initialization and dual
+     *        updates
      */
-    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph, BlossomVOptions options) {
+    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph, BlossomVOptions options)
+    {
         this(graph, options, MINIMIZE);
     }
 
     /**
-     * Constructs a new instance of the algorithm with the specified {@code options}. The goal of the
-     * constructed algorithm is to maximize or minimize the weight of the resulting perfect matching
-     * depending on the {@code maximize} parameter.
+     * Constructs a new instance of the algorithm with the specified {@code options}. The goal of
+     * the constructed algorithm is to maximize or minimize the weight of the resulting perfect
+     * matching depending on the {@code maximize} parameter.
      *
-     * @param graph          the graph for which to find a weighted perfect matching
-     * @param options        the options which define the strategies for the initialization and dual updates
+     * @param graph the graph for which to find a weighted perfect matching
+     * @param options the options which define the strategies for the initialization and dual
+     *        updates
      * @param objectiveSense objective sense of the algorithm
      */
-    public KolmogorovWeightedPerfectMatching(Graph<V, E> graph, BlossomVOptions options, ObjectiveSense objectiveSense) {
+    public KolmogorovWeightedPerfectMatching(
+        Graph<V, E> graph, BlossomVOptions options, ObjectiveSense objectiveSense)
+    {
         Objects.requireNonNull(graph);
         this.objectiveSense = objectiveSense;
         if ((graph.vertexSet().size() & 1) == 1) {
@@ -258,8 +267,8 @@ public class KolmogorovWeightedPerfectMatching<V, E>
     }
 
     /**
-     * Computes and returns a weighted perfect matching in the {@code graph}. See the class description
-     * for the relative definitions and algorithm description.
+     * Computes and returns a weighted perfect matching in the {@code graph}. See the class
+     * description for the relative definitions and algorithm description.
      *
      * @return a weighted perfect matching for the {@code graph}
      */
@@ -273,8 +282,8 @@ public class KolmogorovWeightedPerfectMatching<V, E>
     }
 
     /**
-     * Returns the computed solution to the dual linear program with respect to the
-     * weighted perfect matching linear program formulation.
+     * Returns the computed solution to the dual linear program with respect to the weighted perfect
+     * matching linear program formulation.
      *
      * @return the solution to the dual linear program formulated on the {@code graph}
      */
@@ -287,9 +296,10 @@ public class KolmogorovWeightedPerfectMatching<V, E>
     /**
      * Performs an optimality test after the perfect matching is computed.
      * <p>
-     * More precisely, checks whether dual variables of all pseudonodes and resulting slacks of all edges
-     * are non-negative and that slacks of all matched edges are exactly 0. Since the algorithm uses floating
-     * point arithmetic, this check is done with precision of {@link KolmogorovWeightedPerfectMatching#EPS}
+     * More precisely, checks whether dual variables of all pseudonodes and resulting slacks of all
+     * edges are non-negative and that slacks of all matched edges are exactly 0. Since the
+     * algorithm uses floating point arithmetic, this check is done with precision of
+     * {@link KolmogorovWeightedPerfectMatching#EPS}
      * <p>
      * In general, this method should always return true unless the algorithm implementation has a
      * bug.
@@ -298,7 +308,8 @@ public class KolmogorovWeightedPerfectMatching<V, E>
      *         complementary slackness conditions are also satisfied. The total error must not
      *         exceed EPS
      */
-    public boolean testOptimality() {
+    public boolean testOptimality()
+    {
         lazyComputeWeightedPerfectMatching();
         return getError() < EPS; // getError() won't return -1 since matching != null
     }
@@ -779,11 +790,10 @@ public class KolmogorovWeightedPerfectMatching<V, E>
                 }
                 if (Math.abs(dual) > EPS) {
                     if (current.isBlossom) {
-                        dualMap
-                                .put(getBlossomNodes(current, nodesInBlossoms), dual);
+                        dualMap.put(getBlossomNodes(current, nodesInBlossoms), dual);
                     } else {
                         dualMap
-                                .put(Collections.singleton(state.graphVertices.get(current.pos)), dual);
+                            .put(Collections.singleton(state.graphVertices.get(current.pos)), dual);
                     }
                 }
                 current.isMarked = true;
@@ -1032,7 +1042,8 @@ public class KolmogorovWeightedPerfectMatching<V, E>
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             final StringBuilder sb = new StringBuilder("DualSolution{");
             sb.append("graph=").append(graph);
             sb.append(", dualVariables=").append(dualVariables);

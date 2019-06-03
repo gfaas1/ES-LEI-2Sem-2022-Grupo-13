@@ -126,7 +126,8 @@ public abstract class CrossComponentIterator<V, E, D>
         /*
          * Initialize start vertex
          */
-        Iterator<V> it = crossComponentTraversal ? getEntireGraphVertexIterator() : startVertexIterator;
+        Iterator<V> it =
+            crossComponentTraversal ? getEntireGraphVertexIterator() : startVertexIterator;
         // pick a start vertex if possible
         if (it.hasNext()) {
             this.startVertex = it.next();
@@ -211,7 +212,7 @@ public abstract class CrossComponentIterator<V, E, D>
     protected Iterator<V> getEntireGraphVertexIterator()
     {
         if (entireGraphVertexIterator == null) {
-            assert(isCrossComponentTraversal());
+            assert (isCrossComponentTraversal());
             entireGraphVertexIterator = graph.vertexSet().iterator();
         }
         return entireGraphVertexIterator;

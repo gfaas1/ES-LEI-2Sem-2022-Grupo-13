@@ -57,9 +57,10 @@ public class MutableNetworkAdapterTest
     @Test
     public void testDirectedGraph()
     {
-        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
-            NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
-            SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String,
+            DefaultEdge> g = new MutableNetworkAdapter<>(
+                NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
+                SupplierUtil.createStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -125,9 +126,10 @@ public class MutableNetworkAdapterTest
     @Test
     public void testUndirectedGraph()
     {
-        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
-            NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build(),
-            null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String,
+            DefaultEdge> g = new MutableNetworkAdapter<>(
+                NetworkBuilder.undirected().allowsParallelEdges(true).allowsSelfLoops(true).build(),
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -196,9 +198,10 @@ public class MutableNetworkAdapterTest
     public void testSerialization()
         throws Exception
     {
-        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
-            NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(), null,
-            SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String,
+            DefaultEdge> g = new MutableNetworkAdapter<>(
+                NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build(),
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertTrue(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());
@@ -253,9 +256,11 @@ public class MutableNetworkAdapterTest
     public void testSerialization1()
         throws Exception
     {
-        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
-            NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-            null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String,
+            DefaultEdge> g = new MutableNetworkAdapter<>(
+                NetworkBuilder
+                    .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+                null, SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

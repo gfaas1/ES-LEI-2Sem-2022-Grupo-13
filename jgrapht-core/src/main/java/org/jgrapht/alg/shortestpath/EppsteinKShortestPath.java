@@ -17,28 +17,24 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
- * Implementation of the Eppstein`s algorithm for finding
- * $k$ shortest path between two vertices in a graph.
+ * Implementation of the Eppstein`s algorithm for finding $k$ shortest path between two vertices in
+ * a graph.
  *
  * <p>
- * The algorithm is originally described in:
- * David Eppstein. 1999. Finding the k Shortest Paths. SIAM J. Comput. 28, 2
- * (February 1999), 652-673. DOI=http://dx.doi.org/10.1137/S0097539795290477.
+ * The algorithm is originally described in: David Eppstein. 1999. Finding the k Shortest Paths.
+ * SIAM J. Comput. 28, 2 (February 1999), 652-673. DOI=http://dx.doi.org/10.1137/S0097539795290477.
  *
  * <p>
- * The main advantage ot this algorithm is that it achieves the complexity of
- * $O(m + n\log n + k\log k)$ while guaranteeing that the paths are
- * produced in sorted order by weight, where $m$ is the number of edges in the graph, $n$ is
- * the number of vertices in the graph and $k$ is the number of paths needed.
+ * The main advantage ot this algorithm is that it achieves the complexity of $O(m + n\log n + k\log
+ * k)$ while guaranteeing that the paths are produced in sorted order by weight, where $m$ is the
+ * number of edges in the graph, $n$ is the number of vertices in the graph and $k$ is the number of
+ * paths needed.
  *
  * <p>
  * This implementation can only be used for directed simple graphs.
@@ -48,7 +44,10 @@ import java.util.Objects;
  * @author Semen Chudakov
  * @see EppsteinShortestPathIterator
  */
-public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E> {
+public class EppsteinKShortestPath<V, E>
+    implements
+    KShortestPathAlgorithm<V, E>
+{
     /**
      * Underlying graph.
      */
@@ -59,29 +58,30 @@ public class EppsteinKShortestPath<V, E> implements KShortestPathAlgorithm<V, E>
      *
      * @param graph graph
      */
-    public EppsteinKShortestPath(Graph<V, E> graph) {
+    public EppsteinKShortestPath(Graph<V, E> graph)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
     }
 
     /**
-     * Computes {@code k} shortest paths between {@code source}
-     * and {@code sink}. If the number of paths is denoted by $n$,
-     * the method returns $m = min\{k, n\}$ such paths. The paths are
+     * Computes {@code k} shortest paths between {@code source} and {@code sink}. If the number of
+     * paths is denoted by $n$, the method returns $m = min\{k, n\}$ such paths. The paths are
      * produced in sorted order by weights.
      *
      * @param source the source vertex
-     * @param sink   the target vertex
-     * @param k      the number of shortest paths to return
+     * @param sink the target vertex
+     * @param k the number of shortest paths to return
      * @return a list of k shortest paths
      */
     @Override
-    public List<GraphPath<V, E>> getPaths(V source, V sink, int k) {
+    public List<GraphPath<V, E>> getPaths(V source, V sink, int k)
+    {
         if (k < 0) {
             throw new IllegalArgumentException("k must be non-negative");
         }
         List<GraphPath<V, E>> result = new ArrayList<>();
         EppsteinShortestPathIterator<V, E> iterator =
-                new EppsteinShortestPathIterator<>(graph, source, sink);
+            new EppsteinShortestPathIterator<>(graph, source, sink);
         for (int i = 0; i < k && iterator.hasNext(); i++) {
             result.add(iterator.next());
         }

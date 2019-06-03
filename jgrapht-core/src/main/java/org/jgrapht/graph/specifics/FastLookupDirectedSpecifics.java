@@ -17,15 +17,12 @@
  */
 package org.jgrapht.graph.specifics;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.EdgeSetFactory;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Fast implementation of DirectedSpecifics. This class uses additional data structures to improve
@@ -111,7 +108,7 @@ public class FastLookupDirectedSpecifics<V, E>
     {
         // first lookup using our own index
         E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) { 
+        if (edge != null) {
             return false;
         }
 
@@ -124,10 +121,10 @@ public class FastLookupDirectedSpecifics<V, E>
     {
         // first lookup using our own index
         E edge = getEdge(sourceVertex, targetVertex);
-        if (edge != null) { 
+        if (edge != null) {
             return null;
         }
-        
+
         E e = edgeSupplier.get();
         addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
         return e;
@@ -143,12 +140,12 @@ public class FastLookupDirectedSpecifics<V, E>
         V target = graph.getEdgeTarget(e);
         removeFromIndex(source, target, e);
     }
-    
+
     @Override
     public void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
         super.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
-        
+
         removeFromIndex(sourceVertex, targetVertex, e);
     }
 

@@ -17,15 +17,14 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
-import org.jgrapht.alg.util.Pair;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.PairingHeap;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
+import org.jgrapht.alg.util.*;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * A light-weight version of the closest-first iterator for a directed or undirected graphs. For
@@ -35,14 +34,14 @@ import java.util.function.Supplier;
  * <p>
  * The metric for <i>closest</i> here is the weighted path length from a start vertex, i.e.
  * Graph.getEdgeWeight(Edge) is summed to calculate path length. Negative edge weights will result
- * in an IllegalArgumentException. Optionally, path length may be bounded by a finite radius.
- * This iterator can use a custom heap implementation.
+ * in an IllegalArgumentException. Optionally, path length may be bounded by a finite radius. This
+ * iterator can use a custom heap implementation.
  *
  * <p>
  * NOTE: This is an internal iterator for use in shortest paths algorithms. For an iterator that is
  * suitable to return to the users see {@link org.jgrapht.traverse.ClosestFirstIterator}. This
- * implementation is faster since it does not support graph traversal listeners nor
- * disconnected components.
+ * implementation is faster since it does not support graph traversal listeners nor disconnected
+ * components.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
@@ -50,8 +49,9 @@ import java.util.function.Supplier;
  * @author Dimitrios Michail
  */
 class DijkstraClosestFirstIterator<V, E>
-        implements
-        Iterator<V> {
+    implements
+    Iterator<V>
+{
     private final Graph<V, E> graph;
     private final V source;
     private final double radius;
@@ -60,13 +60,14 @@ class DijkstraClosestFirstIterator<V, E>
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertex and will be limited to the connected component that includes that vertex. This iterator
-     * will use pairing heap as a default heap implementation.
+     * vertex and will be limited to the connected component that includes that vertex. This
+     * iterator will use pairing heap as a default heap implementation.
      *
-     * @param graph  the graph to be iterated.
+     * @param graph the graph to be iterated.
      * @param source the source vertex
      */
-    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source) {
+    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source)
+    {
         this(graph, source, Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
@@ -76,24 +77,27 @@ class DijkstraClosestFirstIterator<V, E>
      * includes that vertex and is reachable via paths of weighted length less than or equal to the
      * specified radius. This iterator will use pairing heap as a default heap implementation.
      *
-     * @param graph  the graph
+     * @param graph the graph
      * @param source the source vertex
      * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded search
      */
-    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source, double radius) {
+    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source, double radius)
+    {
         this(graph, source, radius, PairingHeap::new);
     }
 
     /**
      * Creates a new iterator for the specified graph. Iteration will start at the specified start
-     * vertex and will be limited to the connected component that includes that vertex. This iterator
-     * will use heap supplied by the {@code heapSupplier}
+     * vertex and will be limited to the connected component that includes that vertex. This
+     * iterator will use heap supplied by the {@code heapSupplier}
      *
-     * @param graph        the graph to be iterated.
-     * @param source       the source vertex
+     * @param graph the graph to be iterated.
+     * @param source the source vertex
      * @param heapSupplier supplier of the preferable heap implementation
      */
-    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
+    public DijkstraClosestFirstIterator(
+        Graph<V, E> graph, V source, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
+    {
         this(graph, source, Double.POSITIVE_INFINITY, heapSupplier);
     }
 
@@ -103,12 +107,15 @@ class DijkstraClosestFirstIterator<V, E>
      * includes that vertex and is reachable via paths of weighted length less than or equal to the
      * specified radius. This iterator will use the heap supplied by {@code heapSupplier}
      *
-     * @param graph        the graph
-     * @param source       the source vertex
-     * @param radius       limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded search
+     * @param graph the graph
+     * @param source the source vertex
+     * @param radius limit on weighted path length, or Double.POSITIVE_INFINITY for unbounded search
      * @param heapSupplier supplier of the preferable heap implementation
      */
-    public DijkstraClosestFirstIterator(Graph<V, E> graph, V source, double radius, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier) {
+    public DijkstraClosestFirstIterator(
+        Graph<V, E> graph, V source, double radius,
+        Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null");
         this.source = Objects.requireNonNull(source, "Source vertex cannot be null");
         Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
@@ -126,7 +133,8 @@ class DijkstraClosestFirstIterator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         if (heap.isEmpty()) {
             return false;
         }
@@ -143,7 +151,8 @@ class DijkstraClosestFirstIterator<V, E>
      * {@inheritDoc}
      */
     @Override
-    public V next() {
+    public V next()
+    {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -175,7 +184,8 @@ class DijkstraClosestFirstIterator<V, E>
      *
      * @return the single source paths
      */
-    public SingleSourcePaths<V, E> getPaths() {
+    public SingleSourcePaths<V, E> getPaths()
+    {
         return new TreeSingleSourcePathsImpl<>(graph, source, getDistanceAndPredecessorMap());
     }
 
@@ -191,7 +201,8 @@ class DijkstraClosestFirstIterator<V, E>
      *
      * @return a distance and predecessor map
      */
-    public Map<V, Pair<Double, E>> getDistanceAndPredecessorMap() {
+    public Map<V, Pair<Double, E>> getDistanceAndPredecessorMap()
+    {
         Map<V, Pair<Double, E>> distanceAndPredecessorMap = new HashMap<>();
 
         for (AddressableHeap.Handle<Double, Pair<V, E>> vNode : seen.values()) {
@@ -206,7 +217,8 @@ class DijkstraClosestFirstIterator<V, E>
         return distanceAndPredecessorMap;
     }
 
-    private void updateDistance(V v, E e, double distance) {
+    private void updateDistance(V v, E e, double distance)
+    {
         AddressableHeap.Handle<Double, Pair<V, E>> node = seen.get(v);
         if (node == null) {
             node = heap.insert(distance, Pair.of(v, e));

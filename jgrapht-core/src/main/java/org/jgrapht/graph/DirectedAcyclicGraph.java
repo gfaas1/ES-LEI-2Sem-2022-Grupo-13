@@ -106,7 +106,7 @@ public class DirectedAcyclicGraph<V, E>
             vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
             weighted, false);
     }
-    
+
     /**
      * Construct a directed acyclic graph.
      *
@@ -116,7 +116,8 @@ public class DirectedAcyclicGraph<V, E>
      * @param allowMultipleEdges if true the graph will allow multiple edges, otherwise not
      */
     public DirectedAcyclicGraph(
-        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted, boolean allowMultipleEdges)
+        Supplier<V> vertexSupplier, Supplier<E> edgeSupplier, boolean weighted,
+        boolean allowMultipleEdges)
     {
         this(
             vertexSupplier, edgeSupplier, new VisitedBitSetImpl(), new TopoVertexBiMap<>(),
@@ -162,19 +163,15 @@ public class DirectedAcyclicGraph<V, E>
         super(
             vertexSupplier, edgeSupplier,
             new DefaultGraphType.Builder()
-                .directed()
-                .allowMultipleEdges(allowMultipleEdges)
-                .allowSelfLoops(false)
-                .weighted(weighted)
-                .allowCycles(false)
-                .build());
+                .directed().allowMultipleEdges(allowMultipleEdges).allowSelfLoops(false)
+                .weighted(weighted).allowCycles(false).build());
         this.visitedStrategyFactory =
             Objects.requireNonNull(visitedStrategyFactory, "Visited factory cannot be null");
         this.topoOrderMap =
             Objects.requireNonNull(topoOrderMap, "Topological order map cannot be null");
         this.topoComparator = new TopoComparator();
     }
-    
+
     /**
      * Create a builder for this kind of graph.
      *

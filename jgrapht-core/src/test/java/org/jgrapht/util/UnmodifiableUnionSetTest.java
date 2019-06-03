@@ -138,13 +138,11 @@ public class UnmodifiableUnionSetTest
         Set<Integer> biggerHash = new HashSet<>(Arrays.asList(3, 4, 5, 6, 7, 8, 9, 10));
         ProfilingSet<Integer> bigger = new ProfilingSet<>(biggerHash);
 
-        UnmodifiableUnionSet<Integer> union = new UnmodifiableUnionSet<>(
-            smaller, bigger);
+        UnmodifiableUnionSet<Integer> union = new UnmodifiableUnionSet<>(smaller, bigger);
         verifyOptimizations(smaller, bigger, union);
 
         // repeat with smaller/bigger constructor parameters swapped
-        UnmodifiableUnionSet<Integer> swapped = new UnmodifiableUnionSet<>(
-            bigger, smaller);
+        UnmodifiableUnionSet<Integer> swapped = new UnmodifiableUnionSet<>(bigger, smaller);
         verifyOptimizations(smaller, bigger, swapped);
 
         // now verify that if we dynamically resize the underlying data on
@@ -158,8 +156,7 @@ public class UnmodifiableUnionSetTest
     }
 
     private void verifyOptimizations(
-        ProfilingSet<Integer> smaller,
-        ProfilingSet<Integer> bigger,
+        ProfilingSet<Integer> smaller, ProfilingSet<Integer> bigger,
         UnmodifiableUnionSet<Integer> union)
     {
         // verify that constructor did not make calls on
@@ -186,9 +183,7 @@ public class UnmodifiableUnionSetTest
         bigger.clearCallCounts();
     }
 
-    private void verifyNoCalls(
-        ProfilingSet<Integer> smaller,
-        ProfilingSet<Integer> bigger)
+    private void verifyNoCalls(ProfilingSet<Integer> smaller, ProfilingSet<Integer> bigger)
     {
         assertEquals(0, smaller.getSizeCallCount());
         assertEquals(0, bigger.getSizeCallCount());
@@ -197,8 +192,7 @@ public class UnmodifiableUnionSetTest
     }
 
     private void verifySizeOptimizations(
-        ProfilingSet<Integer> smaller,
-        ProfilingSet<Integer> bigger,
+        ProfilingSet<Integer> smaller, ProfilingSet<Integer> bigger,
         UnmodifiableUnionSet<Integer> union)
     {
         smaller.clearCallCounts();
@@ -214,8 +208,7 @@ public class UnmodifiableUnionSetTest
     }
 
     private void verifyIterationOptimizations(
-        ProfilingSet<Integer> smaller,
-        ProfilingSet<Integer> bigger,
+        ProfilingSet<Integer> smaller, ProfilingSet<Integer> bigger,
         UnmodifiableUnionSet<Integer> union)
     {
         smaller.clearCallCounts();
@@ -237,7 +230,9 @@ public class UnmodifiableUnionSetTest
     /**
      * Set wrapper for counting calls to individual methods.
      */
-    private static class ProfilingSet<E> extends AbstractSet<E>
+    private static class ProfilingSet<E>
+        extends
+        AbstractSet<E>
     {
         private Set<E> delegate;
 
@@ -267,7 +262,8 @@ public class UnmodifiableUnionSetTest
         public Iterator<E> iterator()
         {
             iteratorCalls++;
-            return new Iterator<E>() {
+            return new Iterator<E>()
+            {
                 private Iterator<E> delegateIterator = delegate.iterator();
 
                 public boolean hasNext()

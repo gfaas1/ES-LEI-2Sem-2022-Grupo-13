@@ -17,25 +17,27 @@
  */
 package org.jgrapht.alg.spanning;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.CapacitatedSpanningTreeAlgorithm;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
+public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest
+{
 
     /**
      * A simple cyclic exchange
      */
     @Test
-    public void testInstance1() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testInstance1()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 7; ++i) {
             graph.addVertex(i);
@@ -78,32 +80,29 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         edges.add(graph.getEdge(2, 5));
         edges.add(graph.getEdge(3, 6));
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> initialSolution =
-                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(labels, partition, edges, 8);
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> initialSolution =
+                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(
+                    labels, partition, edges, 8);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                initialSolution,
-                graph,
-                0,
-                2.0,
-                weights,
-                2,
-                false,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                initialSolution, graph, 0, 2.0, weights, 2, false, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 2.0, weights));
         assertEquals(6.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(1, 5)), 2.0), cmst.getPartition().get(cmst.getLabels().get(1)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(2, 4)), 2.0), cmst.getPartition().get(cmst.getLabels().get(2)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0), cmst.getPartition().get(cmst.getLabels().get(3)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(1)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(2, 4)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(2)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(3)));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(4), 0);
@@ -114,13 +113,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 2)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(1, 5)
-                            || e == graph.getEdge(2, 4)
-                            || e == graph.getEdge(3, 6)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 2) || e == graph.getEdge(0, 3)
+                    || e == graph.getEdge(1, 5) || e == graph.getEdge(2, 4)
+                    || e == graph.getEdge(3, 6));
         }
     }
 
@@ -128,8 +123,10 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * In this example, the initial solution should not be changed
      */
     @Test
-    public void testInstance2() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public void testInstance2()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -162,29 +159,24 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         weights.put(4, 3.0);
         weights.put(5, 2.0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph,
-                0,
-                4,
-                weights,
-                7,
-                false,
-                1,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                graph, 0, 4, weights, 7, false, 1, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 4.0, weights));
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(1)),
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(2)),
+            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(4)),
+            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);
@@ -194,12 +186,8 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(0, 4)
-                            || e == graph.getEdge(1, 5)
-                            || e == graph.getEdge(3, 2)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 3) || e == graph.getEdge(0, 4)
+                    || e == graph.getEdge(1, 5) || e == graph.getEdge(3, 2));
         }
     }
 
@@ -207,8 +195,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * A double cyclic exchange
      */
     @Test
-    public void testInstance3() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance3()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -249,33 +240,32 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         edges.add(graph.getEdge(0, 4));
         edges.add(graph.getEdge(2, 5));
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> initialSolution =
-                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(labels, partition, edges, 7);
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> initialSolution =
+                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(
+                    labels, partition, edges, 7);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                initialSolution,
-                graph,
-                0,
-                2.0,
-                weights,
-                2,
-                false,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                initialSolution, graph, 0, 2.0, weights, 2, false, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 2.0, weights));
         assertEquals(5.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(1, 5)), 2.0), cmst.getPartition().get(cmst.getLabels().get(1)));
-        assertEquals(Pair.of(new HashSet<>(Collections.singletonList(2)), 1.0), cmst.getPartition().get(cmst.getLabels().get(2)));
-        assertEquals(Pair.of(new HashSet<>(Collections.singletonList(3)), 1.0), cmst.getPartition().get(cmst.getLabels().get(3)));
-        assertEquals(Pair.of(new HashSet<>(Collections.singletonList(4)), 2.0), cmst.getPartition().get(cmst.getLabels().get(4)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(1)));
+        assertEquals(
+            Pair.of(new HashSet<>(Collections.singletonList(2)), 1.0),
+            cmst.getPartition().get(cmst.getLabels().get(2)));
+        assertEquals(
+            Pair.of(new HashSet<>(Collections.singletonList(3)), 1.0),
+            cmst.getPartition().get(cmst.getLabels().get(3)));
+        assertEquals(
+            Pair.of(new HashSet<>(Collections.singletonList(4)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(4)));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertNotEquals(cmst.getLabels().get(1), cmst.getLabels().get(2));
@@ -287,12 +277,8 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 2)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(0, 4)
-                            || e == graph.getEdge(1, 5)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 2) || e == graph.getEdge(0, 3)
+                    || e == graph.getEdge(0, 4) || e == graph.getEdge(1, 5));
         }
     }
 
@@ -300,8 +286,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * A simple path exchange
      */
     @Test
-    public void testInstance4() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance4()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
         for (int i = 0; i < 8; ++i) {
             graph.addVertex(i);
@@ -344,32 +333,29 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         edges.add(graph.getEdge(3, 6));
         edges.add(graph.getEdge(5, 7));
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> initialSolution =
-                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(labels, partition, edges, 7);
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> initialSolution =
+                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(
+                    labels, partition, edges, 7);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                initialSolution,
-                graph,
-                0,
-                3.0,
-                weights,
-                3,
-                false,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                initialSolution, graph, 0, 3.0, weights, 3, false, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 3.0, weights));
         assertEquals(7.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(1, 4, 7)), 3.0), cmst.getPartition().get(cmst.getLabels().get(1)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0), cmst.getPartition().get(cmst.getLabels().get(2)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0), cmst.getPartition().get(cmst.getLabels().get(3)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(1, 4, 7)), 3.0),
+            cmst.getPartition().get(cmst.getLabels().get(1)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(2)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(3)));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(4), 0);
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(7), 0);
@@ -389,14 +375,9 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 2)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(1, 4)
-                            || e == graph.getEdge(2, 5)
-                            || e == graph.getEdge(3, 6)
-                            || e == graph.getEdge(4, 7)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 2) || e == graph.getEdge(0, 3)
+                    || e == graph.getEdge(1, 4) || e == graph.getEdge(2, 5)
+                    || e == graph.getEdge(3, 6) || e == graph.getEdge(4, 7));
         }
     }
 
@@ -404,8 +385,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * A simple subtree exchange
      */
     @Test
-    public void testInstance5() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance5()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
         for (int i = 0; i < 9; ++i) {
             graph.addVertex(i);
@@ -451,32 +435,29 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         edges.add(graph.getEdge(5, 7));
         edges.add(graph.getEdge(7, 8));
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> initialSolution =
-                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(labels, partition, edges, 8);
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> initialSolution =
+                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(
+                    labels, partition, edges, 8);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                initialSolution,
-                graph,
-                0,
-                4.0,
-                weights,
-                3,
-                false,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                initialSolution, graph, 0, 4.0, weights, 3, false, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 4.0, weights));
         assertEquals(8.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(1, 4, 7, 8)), 4.0), cmst.getPartition().get(cmst.getLabels().get(1)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0), cmst.getPartition().get(cmst.getLabels().get(2)));
-        assertEquals(Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0), cmst.getPartition().get(cmst.getLabels().get(3)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(1, 4, 7, 8)), 4.0),
+            cmst.getPartition().get(cmst.getLabels().get(1)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(2, 5)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(2)));
+        assertEquals(
+            Pair.of(new HashSet<>(Arrays.asList(3, 6)), 2.0),
+            cmst.getPartition().get(cmst.getLabels().get(3)));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(4), 0);
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(7), 0);
@@ -499,15 +480,10 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 2)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(1, 4)
-                            || e == graph.getEdge(2, 5)
-                            || e == graph.getEdge(3, 6)
-                            || e == graph.getEdge(4, 7)
-                            || e == graph.getEdge(7, 8)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 2) || e == graph.getEdge(0, 3)
+                    || e == graph.getEdge(1, 4) || e == graph.getEdge(2, 5)
+                    || e == graph.getEdge(3, 6) || e == graph.getEdge(4, 7)
+                    || e == graph.getEdge(7, 8));
         }
     }
 
@@ -515,8 +491,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * A more complicate example
      */
     @Test
-    public void testInstance6() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+    public void testInstance6()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge>(
+                DefaultWeightedEdge.class);
 
         for (int i = 0; i < 6; ++i) {
             graph.addVertex(i);
@@ -570,32 +549,29 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         edges.add(graph.getEdge(0, 4));
         edges.add(graph.getEdge(0, 5));
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> initialSolution =
-                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(labels, partition, edges, 8);
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> initialSolution =
+                new CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTreeImpl<>(
+                    labels, partition, edges, 8);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                initialSolution,
-                graph,
-                0,
-                4,
-                weights,
-                7,
-                false,
-                true,
-                true,
-                false,
-                0,
-                0
-        ).getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                initialSolution, graph, 0, 4, weights, 7, false, true, true, false, 0, 0)
+                    .getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
         assertTrue(cmst.isCapacitatedSpanningTree(graph, 0, 4.0, weights));
         assertEquals(14.0, cmst.getWeight(), 0.0000001);
 
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(1)), Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(2)), Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
-        assertEquals(cmst.getPartition().get(cmst.getLabels().get(4)), Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(1)),
+            Pair.of(new HashSet<>(Arrays.asList(1, 5)), 4.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(2)),
+            Pair.of(new HashSet<>(Arrays.asList(2, 3)), 3.0));
+        assertEquals(
+            cmst.getPartition().get(cmst.getLabels().get(4)),
+            Pair.of(new HashSet<>(Collections.singletonList(4)), 3.0));
 
         assertEquals(cmst.getLabels().get(1), cmst.getLabels().get(5), 0);
         assertEquals(cmst.getLabels().get(2), cmst.getLabels().get(3), 0);
@@ -605,270 +581,235 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
 
         for (DefaultWeightedEdge e : cmst.getEdges()) {
             assertTrue(
-                    e == graph.getEdge(0, 1)
-                            || e == graph.getEdge(0, 3)
-                            || e == graph.getEdge(0, 4)
-                            || e == graph.getEdge(1, 5)
-                            || e == graph.getEdge(3, 2)
-            );
+                e == graph.getEdge(0, 1) || e == graph.getEdge(0, 3) || e == graph.getEdge(0, 4)
+                    || e == graph.getEdge(1, 5) || e == graph.getEdge(3, 2));
         }
     }
 
     /**
-     * A complicated example, on which local search with vertex exchanges and first improvement is executed.
+     * A complicated example, on which local search with vertex exchanges and first improvement is
+     * executed.
      */
     @Test
-    public void testInstanceVertex() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertex()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                true,
-                false,
-                false,
-                0,
-                0
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, true, false,
+                    false, 0, 0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which tabu search with vertex exchanges and first improvement is executed.
+     * A complicated example, on which tabu search with vertex exchanges and first improvement is
+     * executed.
      */
     @Test
-    public void testInstanceVertexTabu() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertexTabu()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                true,
-                false,
-                true,
-                10,
-                15
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, true, false,
+                    true, 10, 15);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which local search with subtree exchanges and first improvement is executed.
+     * A complicated example, on which local search with subtree exchanges and first improvement is
+     * executed.
      */
     @Test
-    public void testInstanceSubtree() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceSubtree()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                false,
-                true,
-                false,
-                0,
-                0
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, false, true,
+                    false, 0, 0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which tabu search with subtree exchanges and first improvement is executed.
+     * A complicated example, on which tabu search with subtree exchanges and first improvement is
+     * executed.
      */
     @Test
-    public void testInstanceSubtreeTabu() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceSubtreeTabu()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                false,
-                true,
-                true,
-                10,
-                15
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, false, true,
+                    true, 10, 15);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which local search with vertex and subtree exchanges and first improvement is executed.
+     * A complicated example, on which local search with vertex and subtree exchanges and first
+     * improvement is executed.
      */
     @Test
-    public void testInstanceVertexAndSubtree() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertexAndSubtree()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                true,
-                true,
-                false,
-                0,
-                0
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, true, true,
+                    false, 0, 0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which tabu search with vertex and subtree exchanges and first improvement is executed.
+     * A complicated example, on which tabu search with vertex and subtree exchanges and first
+     * improvement is executed.
      */
     @Test
-    public void testInstanceVertexAndSubtreeTabu() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertexAndSubtreeTabu()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                false,
-                1,
-                true,
-                true,
-                true,
-                10,
-                50
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, false, 1, true, true, true,
+                    10, 50);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst
-                = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which local search with vertex exchanges and best improvement is executed.
+     * A complicated example, on which local search with vertex exchanges and best improvement is
+     * executed.
      */
     @Test
-    public void testInstanceVertexBestImprovement() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertexBestImprovement()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                true,
-                1,
-                true,
-                false,
-                false,
-                0,
-                0
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false,
+                    false, 0, 0);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
-     * A complicated example, on which tabu search with vertex exchanges and best improvement is executed.
+     * A complicated example, on which tabu search with vertex exchanges and best improvement is
+     * executed.
      */
     @Test
-    public void testInstanceVertexTabuBestImprovement() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(40);
+    public void testInstanceVertexTabuBestImprovement()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(40);
 
         double capacity = 30.0;
 
-        CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                graph.getFirst(),
-                0,
-                capacity,
-                graph.getSecond(),
-                7,
-                true,
-                1,
-                true,
-                false,
-                true,
-                10,
-                15
-        );
+        CapacitatedSpanningTreeAlgorithm<Integer,
+            DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                    graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false, true,
+                    10, 15);
 
-        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer, DefaultWeightedEdge> cmst = capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
+        CapacitatedSpanningTreeAlgorithm.CapacitatedSpanningTree<Integer,
+            DefaultWeightedEdge> cmst =
+                capacitatedSpanningTreeAlgorithm.getCapacitatedSpanningTree();
 
         assertNotNull(cmst);
-        assertTrue(cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
+        assertTrue(
+            cmst.isCapacitatedSpanningTree(graph.getFirst(), 0, capacity, graph.getSecond()));
     }
 
     /**
      * An unconected graph
      */
     @Test
-    public void testUnconnectedGraph() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(20);
+    public void testUnconnectedGraph()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(20);
         graph.getFirst().addVertex(50);
         graph.getSecond().put(50, 1.0);
 
@@ -877,21 +818,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                    = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                    graph.getFirst(),
-                    0,
-                    capacity,
-                    graph.getSecond(),
-                    7,
-                    true,
-                    1,
-                    true,
-                    false,
-                    true,
-                    10,
-                    15
-            );
+            CapacitatedSpanningTreeAlgorithm<Integer,
+                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                    new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                        graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false,
+                        true, 10, 15);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }
@@ -903,29 +834,21 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      * Graph violating the capacity constraint
      */
     @Test
-    public void testViolatedCapacityConstraint() {
-        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph = generateComplicatedTestExample(10);
+    public void testViolatedCapacityConstraint()
+    {
+        Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> graph =
+            generateComplicatedTestExample(10);
 
         double capacity = -1.0;
 
         boolean testOK = false;
 
         try {
-            CapacitatedSpanningTreeAlgorithm<Integer, DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm
-                    = new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
-                    graph.getFirst(),
-                    0,
-                    capacity,
-                    graph.getSecond(),
-                    7,
-                    true,
-                    1,
-                    true,
-                    false,
-                    true,
-                    10,
-                    15
-            );
+            CapacitatedSpanningTreeAlgorithm<Integer,
+                DefaultWeightedEdge> capacitatedSpanningTreeAlgorithm =
+                    new AhujaOrlinSharmaCapacitatedMinimumSpanningTree<>(
+                        graph.getFirst(), 0, capacity, graph.getSecond(), 7, true, 1, true, false,
+                        true, 10, 15);
         } catch (IllegalArgumentException e) {
             testOK = true;
         }
@@ -938,8 +861,11 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTreeTest {
      *
      * @return a pseudo random graph
      */
-    private Pair<Graph<Integer, DefaultWeightedEdge>, Map<Integer, Double>> generateComplicatedTestExample(int numberOfVertices) {
-        Graph<Integer, DefaultWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    private Pair<Graph<Integer, DefaultWeightedEdge>,
+        Map<Integer, Double>> generateComplicatedTestExample(int numberOfVertices)
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         Map<Integer, Double> demands = new HashMap<>();
 
         for (int i = 0; i < numberOfVertices; ++i) {

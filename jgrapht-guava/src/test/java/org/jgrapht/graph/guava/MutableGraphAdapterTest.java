@@ -170,7 +170,7 @@ public class MutableGraphAdapterTest
     @Test
     public void testAlgorithmInvocation()
     {
-        //@example:createGuavaGraph:begin
+        // @example:createGuavaGraph:begin
         MutableGraph<String> guava = GraphBuilder.undirected().build();
         guava.addNode("ul");
         guava.addNode("um");
@@ -193,18 +193,18 @@ public class MutableGraphAdapterTest
         guava.putEdge("mm", "lm");
         guava.putEdge("ur", "mr");
         guava.putEdge("mr", "lr");
-        //@example:createGuavaGraph:end
+        // @example:createGuavaGraph:end
 
-        //@example:adaptGuavaGraph:begin
+        // @example:adaptGuavaGraph:begin
         Graph<String, EndpointPair<String>> jgrapht = new MutableGraphAdapter<>(guava);
-        //@example:adaptGuavaGraph:end
+        // @example:adaptGuavaGraph:end
 
-        //@example:findVertexCover:begin
+        // @example:findVertexCover:begin
         VertexCoverAlgorithm<String> alg = new RecursiveExactVCImpl<>(jgrapht);
         VertexCoverAlgorithm.VertexCover<String> cover = alg.getVertexCover();
         Set<String> expectedCover = new HashSet<String>(Arrays.asList("um", "ml", "mr", "lm"));
         assertEquals(expectedCover, cover);
-        //@example:findVertexCover:end
+        // @example:findVertexCover:end
     }
 
     /**
@@ -268,9 +268,11 @@ public class MutableGraphAdapterTest
     public void testSerialization1()
         throws Exception
     {
-        Graph<String, DefaultEdge> g = new MutableNetworkAdapter<>(
-            NetworkBuilder.undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
-            SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
+        Graph<String,
+            DefaultEdge> g = new MutableNetworkAdapter<>(
+                NetworkBuilder
+                    .undirected().allowsParallelEdges(false).allowsSelfLoops(true).build(),
+                SupplierUtil.createRandomUUIDStringSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
         assertTrue(g.getType().isAllowingSelfLoops());

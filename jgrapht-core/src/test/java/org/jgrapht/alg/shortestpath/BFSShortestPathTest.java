@@ -18,12 +18,12 @@
 
 package org.jgrapht.alg.shortestpath;
 
-import java.util.*;
-
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.*;
 import org.jgrapht.graph.*;
 import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -37,7 +37,7 @@ public class BFSShortestPathTest
     static final String V3 = "v3";
     static final String V4 = "v4";
     static final String V5 = "v5";
-    
+
     // ~ Instance fields --------------------------------------------------------
 
     DefaultEdge e12;
@@ -45,13 +45,13 @@ public class BFSShortestPathTest
     DefaultEdge e35;
     DefaultEdge e24;
     DefaultEdge e45;
-    
+
     protected Graph<String, DefaultEdge> create()
     {
         Graph<String, DefaultEdge> g;
-        
+
         g = new DefaultDirectedGraph<>(DefaultEdge.class);
-        
+
         g.addVertex(V1);
         g.addVertex(V2);
         g.addVertex(V3);
@@ -68,11 +68,10 @@ public class BFSShortestPathTest
 
         e45 = Graphs.addEdgeWithVertices(g, V4, V5);
 
-        
         return g;
-        
+
     }
-    
+
     @Test
     public void testPathBetween()
     {
@@ -91,35 +90,30 @@ public class BFSShortestPathTest
         path = BFSShortestPath.findPathBetween(g, V4, V3);
         assertNull(path);
     }
-    
+
     @Test
     public void testAllPaths()
     {
         List<DefaultEdge> path;
         Graph<String, DefaultEdge> g = create();
-        
+
         SingleSourcePaths<String, DefaultEdge> tree = new BFSShortestPath<>(g).getPaths(V1);
-        
+
         path = tree.getPath(V1).getEdgeList();
-        assertEquals(Arrays.asList(),path);
-        
+        assertEquals(Arrays.asList(), path);
+
         path = tree.getPath(V2).getEdgeList();
         assertEquals(Arrays.asList(e12), path);
-        
+
         path = tree.getPath(V3).getEdgeList();
         assertEquals(Arrays.asList(e13), path);
-        
+
         path = tree.getPath(V4).getEdgeList();
         assertEquals(Arrays.asList(e12, e24), path);
-        
+
         path = tree.getPath(V5).getEdgeList();
         assertEquals(Arrays.asList(e13, e35), path);
-        
+
     }
-    
-    
 
 }
-
-
-

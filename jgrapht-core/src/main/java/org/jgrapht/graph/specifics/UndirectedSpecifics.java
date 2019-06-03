@@ -23,7 +23,7 @@ import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * Plain implementation of UndirectedSpecifics. This implementation requires the least amount of
@@ -154,7 +154,7 @@ public class UndirectedSpecifics<V, E>
             getEdgeContainer(target).addEdge(e);
         }
     }
-    
+
     @Override
     public boolean addEdgeToTouchingVertices(V sourceVertex, V targetVertex, E e)
     {
@@ -172,7 +172,7 @@ public class UndirectedSpecifics<V, E>
         // lookup for edge with same source and target
         UndirectedEdgeContainer<V, E> ec = getEdgeContainer(sourceVertex);
         for (E edge : ec.vertexEdges) {
-            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) { 
+            if (isEqualsStraightOrInverted(sourceVertex, targetVertex, edge)) {
                 return false;
             }
         }
@@ -277,7 +277,9 @@ public class UndirectedSpecifics<V, E>
 
     /**
      * {@inheritDoc}
-     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)} instead.
+     * 
+     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)}
+     *             instead.
      */
     @Override
     @Deprecated
@@ -292,7 +294,7 @@ public class UndirectedSpecifics<V, E>
             getEdgeContainer(target).removeEdge(e);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */

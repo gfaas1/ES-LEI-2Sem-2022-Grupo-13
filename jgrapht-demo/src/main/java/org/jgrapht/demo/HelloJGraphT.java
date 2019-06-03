@@ -61,24 +61,24 @@ public final class HelloJGraphT
 
         // note undirected edges are printed as: {<v1>,<v2>}
         System.out.println("-- toString output");
-        //@example:toString:begin
+        // @example:toString:begin
         System.out.println(stringGraph.toString());
-        //@example:toString:end
+        // @example:toString:end
         System.out.println();
 
-        //@example:traverse:begin
+        // @example:traverse:begin
 
         // create a graph based on URI objects
         Graph<URI, DefaultEdge> hrefGraph = createHrefGraph();
 
         // find the vertex corresponding to www.jgrapht.org
-        //@example:findVertex:begin
+        // @example:findVertex:begin
         URI start = hrefGraph
             .vertexSet().stream().filter(uri -> uri.getHost().equals("www.jgrapht.org")).findAny()
             .get();
-        //@example:findVertex:end
+        // @example:findVertex:end
 
-        //@example:traverse:end
+        // @example:traverse:end
 
         // perform a graph traversal starting from that vertex
         System.out.println("-- traverseHrefGraph output");
@@ -98,7 +98,7 @@ public final class HelloJGraphT
     private static Graph<URI, DefaultEdge> createHrefGraph()
         throws URISyntaxException
     {
-        //@example:uriCreate:begin
+        // @example:uriCreate:begin
 
         Graph<URI, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -117,7 +117,7 @@ public final class HelloJGraphT
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
 
-        //@example:uriCreate:end
+        // @example:uriCreate:end
 
         return g;
     }
@@ -131,13 +131,13 @@ public final class HelloJGraphT
      */
     private static void traverseHrefGraph(Graph<URI, DefaultEdge> hrefGraph, URI start)
     {
-        //@example:traverse:begin
+        // @example:traverse:begin
         Iterator<URI> iterator = new DepthFirstIterator<>(hrefGraph, start);
         while (iterator.hasNext()) {
             URI uri = iterator.next();
             System.out.println(uri);
         }
-        //@example:traverse:end
+        // @example:traverse:end
     }
 
     /**
@@ -148,7 +148,7 @@ public final class HelloJGraphT
     private static void renderHrefGraph(Graph<URI, DefaultEdge> hrefGraph)
         throws ExportException
     {
-        //@example:render:begin
+        // @example:render:begin
 
         // use helper classes to define how vertices should be rendered,
         // adhering to the DOT language restrictions
@@ -171,7 +171,7 @@ public final class HelloJGraphT
         Writer writer = new StringWriter();
         exporter.exportGraph(hrefGraph, writer);
         System.out.println(writer.toString());
-        //@example:render:end
+        // @example:render:end
     }
 
     /**

@@ -17,44 +17,50 @@
  */
 package org.jgrapht.interfaces;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.alg.shortestpath.BaseHeuristicSearchTest;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.shortestpath.*;
+import org.jgrapht.graph.*;
+import org.junit.*;
 
 import static junit.framework.TestCase.assertTrue;
 
 /**
  * This class tests default implementation of the
- * {@link org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic#isConsistent(Graph)}
- * method.
+ * {@link org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic#isConsistent(Graph)} method.
  */
-public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest {
+public class AStarAdmissibleHeuristicTest
+    extends
+    BaseHeuristicSearchTest
+{
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullValue() {
+    public void testNullValue()
+    {
         AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
         heuristic.isConsistent(null);
     }
 
     @Test
-    public void testEmptyGraph() {
-        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testEmptyGraph()
+    {
+        Graph<Integer, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         AStarAdmissibleHeuristic<Integer> heuristic = (sourceVertex, targetVertex) -> 0;
         assertTrue(heuristic.isConsistent(graph));
     }
 
     @Test
-    public void testZeroValueHeuristic() {
+    public void testZeroValueHeuristic()
+    {
         Graph<Node, DefaultWeightedEdge> graph = getMultigraph();
         AStarAdmissibleHeuristic<Node> heuristic = (sourceVertex, targetVertex) -> 0;
         assertTrue(heuristic.isConsistent(graph));
     }
 
     @Test
-    public void testEuclideanHeuristic() {
+    public void testEuclideanHeuristic()
+    {
         AStarAdmissibleHeuristic<Node> heuristic = new EuclideanDistance();
         this.readLabyrinth(labyrinth1);
         assertTrue(heuristic.isConsistent(graph));
@@ -65,7 +71,8 @@ public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest {
     }
 
     @Test
-    public void testManhattanHeuristic() {
+    public void testManhattanHeuristic()
+    {
         AStarAdmissibleHeuristic<Node> heuristic = new ManhattanDistance();
         this.readLabyrinth(labyrinth1);
         assertTrue(heuristic.isConsistent(graph));
@@ -79,12 +86,14 @@ public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest {
      * Does not override {@link AStarAdmissibleHeuristic#isConsistent(Graph)} method.
      */
     public static class ManhattanDistance
-            implements
-            AStarAdmissibleHeuristic<Node> {
+        implements
+        AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
             return Math.abs(sourceVertex.x - targetVertex.x)
-                    + Math.abs(sourceVertex.y - targetVertex.y);
+                + Math.abs(sourceVertex.y - targetVertex.y);
         }
     }
 
@@ -92,13 +101,15 @@ public class AStarAdmissibleHeuristicTest extends BaseHeuristicSearchTest {
      * Does not override {@link AStarAdmissibleHeuristic#isConsistent(Graph)} method.
      */
     public static class EuclideanDistance
-            implements
-            AStarAdmissibleHeuristic<Node> {
+        implements
+        AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
             return Math.sqrt(
-                    Math.pow(sourceVertex.x - targetVertex.x, 2)
-                            + Math.pow(sourceVertex.y - targetVertex.y, 2));
+                Math.pow(sourceVertex.x - targetVertex.x, 2)
+                    + Math.pow(sourceVertex.y - targetVertex.y, 2));
         }
     }
 

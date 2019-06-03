@@ -19,13 +19,14 @@ package org.jgrapht.io;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.util.*;
 import org.junit.*;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link JsonImporter}.
@@ -431,10 +432,13 @@ public class JSONImporterTest
         EdgeProvider<String, DefaultEdge> ep = (from, to, label, attributes) -> {
             if (from.equals("1") && to.equals("2")) {
                 assertTrue(attributes.get("array").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(attributes.get("array").getValue().equals("[{\"key1\":1},{\"key2\":2}]"));
+                assertTrue(
+                    attributes.get("array").getValue().equals("[{\"key1\":1},{\"key2\":2}]"));
             } else if (from.equals("2") && to.equals("1")) {
                 assertTrue(attributes.get("obj").getType().equals(AttributeType.UNKNOWN));
-                assertTrue(attributes.get("obj").getValue().equals("{\"key1\":[{\"key1\":1},{\"key2\":2}]}"));
+                assertTrue(
+                    attributes
+                        .get("obj").getValue().equals("{\"key1\":[{\"key1\":1},{\"key2\":2}]}"));
             }
             return g.getEdgeSupplier().get();
         };
@@ -447,7 +451,7 @@ public class JSONImporterTest
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsVertex("2"));
     }
-    
+
     @Test
     public void testSingletons()
         throws ImportException

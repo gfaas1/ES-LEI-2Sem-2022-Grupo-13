@@ -19,9 +19,8 @@ package org.jgrapht.alg.scoring;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.util.*;
-import org.jheaps.AddressableHeap;
-import org.jheaps.tree.PairingHeap;
+import org.jheaps.*;
+import org.jheaps.tree.*;
 
 import java.util.*;
 

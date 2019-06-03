@@ -17,13 +17,9 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.graph.WeightedMultigraph;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
 /**
  * Base test class for the heuristic search algorithms.
@@ -32,47 +28,49 @@ import org.jgrapht.graph.WeightedMultigraph;
  * @author Jon Robison
  * @author Thomas Breitbart
  */
-public class BaseHeuristicSearchTest {
+public class BaseHeuristicSearchTest
+{
     protected final String[] labyrinth1 =
-            {". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                    ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                    ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-                    ". . . ####. . . . . . . . . . . . . . . . ####. . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . ####T . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-                    ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-                    "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ."};
+        { ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . ####. . . . . . . . . . . . . . . . ####. . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ####T . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+            "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ." };
 
     protected final String[] labyrinth2 = { // Target node is unreachable
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
-            ". . . ####. . . . . . . . . . . . . . . . ####### . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ####T## . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-            ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-            ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
-            "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ."};
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . . . . . . . . . . . . . . . . . . . ####. . . . . . .",
+        ". . . ####. . . . . . . . . . . . . . . . ####### . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ####T## . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+        ". . . ####. . . . . . . . ####. . . . . . ##########. . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . ####. . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+        ". . . . . . . . . . . . . ####. . . . . . . . . . . . . . .",
+        "S . . . . . . . . . . . . ####. . . . . . . . . . . . . . ." };
     protected Graph<Node, DefaultWeightedEdge> graph;
     protected Node sourceNode;
     protected Node targetNode;
     protected Node n1;
     protected Node n3;
 
-    protected void readLabyrinth(String[] labyrinth) {
+    protected void readLabyrinth(String[] labyrinth)
+    {
         graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
         // Create the nodes
@@ -108,9 +106,10 @@ public class BaseHeuristicSearchTest {
         }
     }
 
-    protected Graph<Node, DefaultWeightedEdge> getMultigraph() {
+    protected Graph<Node, DefaultWeightedEdge> getMultigraph()
+    {
         WeightedMultigraph<Node, DefaultWeightedEdge> multigraph =
-                new WeightedMultigraph<>(DefaultWeightedEdge.class);
+            new WeightedMultigraph<>(DefaultWeightedEdge.class);
         n1 = new Node(0, 0);
         multigraph.addVertex(n1);
         Node n2 = new Node(1, 0);
@@ -126,9 +125,10 @@ public class BaseHeuristicSearchTest {
         return multigraph;
     }
 
-    protected Graph<Integer, DefaultWeightedEdge> getInconsistentHeuristicTestGraph() {
+    protected Graph<Integer, DefaultWeightedEdge> getInconsistentHeuristicTestGraph()
+    {
         Graph<Integer, DefaultWeightedEdge> graph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.addVertex(0);
         graph.addVertex(1);
         graph.addVertex(2);
@@ -146,7 +146,8 @@ public class BaseHeuristicSearchTest {
         return graph;
     }
 
-    protected AStarAdmissibleHeuristic<Integer> getInconsistentHeuristic() {
+    protected AStarAdmissibleHeuristic<Integer> getInconsistentHeuristic()
+    {
         return (s, t) -> {
             if (s == 0 && t == 1) {
                 // actual = 0.5822723681370429
@@ -169,46 +170,56 @@ public class BaseHeuristicSearchTest {
         };
     }
 
-    public static class Node {
+    public static class Node
+    {
         public final int x;
         public final int y;
 
-        Node(int x, int y) {
+        Node(int x, int y)
+        {
             this.x = x;
             this.y = y;
         }
 
-        public String toString() {
+        public String toString()
+        {
             return "(" + x + "," + y + ")";
         }
     }
 
     public static class ManhattanDistance
-            implements
-            AStarAdmissibleHeuristic<Node> {
+        implements
+        AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
             return Math.abs(sourceVertex.x - targetVertex.x)
-                    + Math.abs(sourceVertex.y - targetVertex.y);
+                + Math.abs(sourceVertex.y - targetVertex.y);
         }
 
         @Override
-        public <E> boolean isConsistent(Graph<Node, E> graph) {
+        public <E> boolean isConsistent(Graph<Node, E> graph)
+        {
             return true;
         }
     }
 
     public static class EuclideanDistance
-            implements
-            AStarAdmissibleHeuristic<Node> {
+        implements
+        AStarAdmissibleHeuristic<Node>
+    {
         @Override
-        public double getCostEstimate(Node sourceVertex, Node targetVertex) {
-            return Math.sqrt(Math.pow(sourceVertex.x - targetVertex.x, 2)
+        public double getCostEstimate(Node sourceVertex, Node targetVertex)
+        {
+            return Math.sqrt(
+                Math.pow(sourceVertex.x - targetVertex.x, 2)
                     + Math.pow(sourceVertex.y - targetVertex.y, 2));
         }
 
         @Override
-        public <E> boolean isConsistent(Graph<Node, E> graph) {
+        public <E> boolean isConsistent(Graph<Node, E> graph)
+        {
             return true;
         }
     }

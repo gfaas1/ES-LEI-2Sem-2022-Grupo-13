@@ -17,76 +17,61 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.GraphType;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.*;
+import org.jgrapht.alg.util.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.traverse.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Iterator over the shortest paths (not required to be simple) between two vertices in a graph sorted by weight.
+ * Iterator over the shortest paths (not required to be simple) between two vertices in a graph
+ * sorted by weight.
  *
  * <p>
- * This implementation can only be used for directed simple graphs.
- * Also for this iterator to work correctly the graph must not be modified during iteration.
- * Currently there are no means to ensure that, nor to fail-fast. The results of such
- * modifications are undefined.
+ * This implementation can only be used for directed simple graphs. Also for this iterator to work
+ * correctly the graph must not be modified during iteration. Currently there are no means to ensure
+ * that, nor to fail-fast. The results of such modifications are undefined.
  *
  * <p>
- * First the shortest paths tree in the edge reversed graph starting at
- * {@code sink} is built. Thus we get distances $d(v)$ from every vertex
- * $v$ to {@code sink}. We then define a sidetrack edge to be an edge, which
- * is not in the shortest paths tree. The key observation is that every path
- * between the {@code source} and the {@code sink} can be solely determined
- * by a sub-sequence of its edges which are sidetracks.
+ * First the shortest paths tree in the edge reversed graph starting at {@code sink} is built. Thus
+ * we get distances $d(v)$ from every vertex $v$ to {@code sink}. We then define a sidetrack edge to
+ * be an edge, which is not in the shortest paths tree. The key observation is that every path
+ * between the {@code source} and the {@code sink} can be solely determined by a sub-sequence of its
+ * edges which are sidetracks.
  *
  * <p>
- * Let $d(v)$ be the distance from $v$ to {@code sink} and $w()$ be the
- * weight function for edges in {@code graph}. If $e$ connects a pair of
- * vertices $(u, w)$, the $\delta(e)$ is defined as $w(e)+d(w)-d(u)$.
- * Intuitively, $\delta(e)$ measures how much distance is lost by being
+ * Let $d(v)$ be the distance from $v$ to {@code sink} and $w()$ be the weight function for edges in
+ * {@code graph}. If $e$ connects a pair of vertices $(u, w)$, the $\delta(e)$ is defined as
+ * $w(e)+d(w)-d(u)$. Intuitively, $\delta(e)$ measures how much distance is lost by being
  * “sidetracked” along $e$ instead of taking a shortest path to {@code sink}.
  *
  * <p>
- * The idea of the algorithm is to build a heap of sidetracks. This heap can
- * be then traversed with breadth-first search in order to retrieve the implicit
- * representations of the paths between {@code source} and {@code sink}.
+ * The idea of the algorithm is to build a heap of sidetracks. This heap can be then traversed with
+ * breadth-first search in order to retrieve the implicit representations of the paths between
+ * {@code source} and {@code sink}.
  *
  * <p>
- * This implementation has several improvements in comparison  to the original
- * description in the article:
+ * This implementation has several improvements in comparison to the original description in the
+ * article:
  *
  * <ol>
- * <li>An outgoing edge of vertex $v$ is inserted in the paths graph iff
- * it is reachable from the {@code source}.</li>
- * <li>The cross edges in the paths graph are added only for those vertices
- * which are reachable from the root vertex.</li>
- * <li>Weights of the edges in the paths graph are mot maintained explicitly,
- * because they are computed during its traversal.</li>
+ * <li>An outgoing edge of vertex $v$ is inserted in the paths graph iff it is reachable from the
+ * {@code source}.</li>
+ * <li>The cross edges in the paths graph are added only for those vertices which are reachable from
+ * the root vertex.</li>
+ * <li>Weights of the edges in the paths graph are mot maintained explicitly, because they are
+ * computed during its traversal.</li>
  * </ol>
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V, E>> {
+public class EppsteinShortestPathIterator<V, E>
+    implements
+    Iterator<GraphPath<V, E>>
+{
     /**
      * Underlying graph.
      */
@@ -101,39 +86,36 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     private final V sink;
 
     /**
-     * Vertex of the paths graph from which the BFS
-     * traversal is started.
+     * Vertex of the paths graph from which the BFS traversal is started.
      */
     private PathsGraphVertex pathsGraphRoot;
 
     /**
-     * Shortest paths tree in the edge reversed graph {@code graph}
-     * rooted at {@code sink}.
+     * Shortest paths tree in the edge reversed graph {@code graph} rooted at {@code sink}.
      */
     private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
 
     /**
-     * Priority queue of the paths generated
-     * during the computation.
+     * Priority queue of the paths generated during the computation.
      */
     private Queue<EppsteinGraphPath> pathsQueue;
 
     /**
-     * For each vertex $v$ in {@code graph} maintains
-     * the root of the balanced heap, which corresponds
-     * to it.
+     * For each vertex $v$ in {@code graph} maintains the root of the balanced heap, which
+     * corresponds to it.
      */
     private Map<V, PathsGraphVertex> hMapping;
 
     /**
-     * Constructs an instance of the algorithm for the given {@code graph},
-     * {@code source} and {@code sink}.
+     * Constructs an instance of the algorithm for the given {@code graph}, {@code source} and
+     * {@code sink}.
      *
-     * @param graph  graph
+     * @param graph graph
      * @param source source vertex
-     * @param sink   sink vertex
+     * @param sink sink vertex
      */
-    public EppsteinShortestPathIterator(Graph<V, E> graph, V source, V sink) {
+    public EppsteinShortestPathIterator(Graph<V, E> graph, V source, V sink)
+    {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
         GraphType type = graph.getType();
         if (!(type.isDirected() && type.isSimple())) {
@@ -150,15 +132,16 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
 
         pathsQueue = new PriorityQueue<>();
 
-        TreeSingleSourcePathsImpl<V, E> shortestPaths =
-                (TreeSingleSourcePathsImpl<V, E>) new DijkstraShortestPath<>(
-                        new EdgeReversedGraph<>(graph)).getPaths(sink);
+        TreeSingleSourcePathsImpl<V, E> shortestPaths = (TreeSingleSourcePathsImpl<V,
+            E>) new DijkstraShortestPath<>(new EdgeReversedGraph<>(graph)).getPaths(sink);
 
         GraphPath<V, E> shortestPath = shortestPaths.getPath(source);
         if (shortestPath != null) {
             distanceAndPredecessorMap = shortestPaths.getDistanceAndPredecessorMap();
-            pathsQueue.add(new EppsteinGraphPath(graph, new ArrayList<>(0),
-                    distanceAndPredecessorMap, shortestPath.getWeight()));
+            pathsQueue.add(
+                new EppsteinGraphPath(
+                    graph, new ArrayList<>(0), distanceAndPredecessorMap,
+                    shortestPath.getWeight()));
             hMapping = new HashMap<>();
 
             buildPathsGraph();
@@ -169,7 +152,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * {@inheritDoc}
      */
     @Override
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return !pathsQueue.isEmpty();
     }
 
@@ -177,7 +161,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * {@inheritDoc}
      */
     @Override
-    public GraphPath<V, E> next() {
+    public GraphPath<V, E> next()
+    {
         if (pathsQueue.isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -189,78 +174,80 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Adds all one-edge extension of the {@code path} wrt
-     * the paths graph.
+     * Adds all one-edge extension of the {@code path} wrt the paths graph.
      *
      * @param path path to put extensions of
      */
-    private void addOneEdgeExtension(EppsteinGraphPath path) {
+    private void addOneEdgeExtension(EppsteinGraphPath path)
+    {
         PathsGraphVertex lastPathsGraphVertex;
 
-        if (path.pathsGraphVertices.isEmpty()) {  // if this is shortest path between the source and sink
+        if (path.pathsGraphVertices.isEmpty()) { // if this is shortest path between the source and
+                                                 // sink
             lastPathsGraphVertex = pathsGraphRoot;
         } else {
             lastPathsGraphVertex = path.pathsGraphVertices.get(path.pathsGraphVertices.size() - 1);
         }
 
         if (lastPathsGraphVertex.left != null) {
-            addExtension(path, lastPathsGraphVertex.left,
-                    lastPathsGraphVertex.left.delta - lastPathsGraphVertex.delta);
+            addExtension(
+                path, lastPathsGraphVertex.left,
+                lastPathsGraphVertex.left.delta - lastPathsGraphVertex.delta);
         }
         if (lastPathsGraphVertex.right != null) {
-            addExtension(path, lastPathsGraphVertex.right,
-                    lastPathsGraphVertex.right.delta - lastPathsGraphVertex.delta);
+            addExtension(
+                path, lastPathsGraphVertex.right,
+                lastPathsGraphVertex.right.delta - lastPathsGraphVertex.delta);
         }
         if (lastPathsGraphVertex.rest != null) {
-            addExtension(path, lastPathsGraphVertex.rest,
-                    lastPathsGraphVertex.rest.delta - lastPathsGraphVertex.delta);
+            addExtension(
+                path, lastPathsGraphVertex.rest,
+                lastPathsGraphVertex.rest.delta - lastPathsGraphVertex.delta);
         }
         if (lastPathsGraphVertex.cross != null) {
-            addExtension(path, lastPathsGraphVertex.cross,
-                    lastPathsGraphVertex.cross.delta);
+            addExtension(path, lastPathsGraphVertex.cross, lastPathsGraphVertex.cross.delta);
         }
     }
 
     /**
-     * Adds an extension of {@code paths} with {@code extendingVertex}
-     * being its last element.
+     * Adds an extension of {@code paths} with {@code extendingVertex} being its last element.
      *
-     * @param path            path to put extension of
+     * @param path path to put extension of
      * @param extendingVertex vertex to extend path with
-     * @param weight          weight of the resulting path
+     * @param weight weight of the resulting path
      */
-    private void addExtension(EppsteinGraphPath path,
-                              PathsGraphVertex extendingVertex, double weight) {
+    private void addExtension(
+        EppsteinGraphPath path, PathsGraphVertex extendingVertex, double weight)
+    {
         List<PathsGraphVertex> sidetracks = new ArrayList<>(path.pathsGraphVertices);
         sidetracks.add(extendingVertex);
 
-        pathsQueue.add(new EppsteinGraphPath(graph,
-                sidetracks, distanceAndPredecessorMap, path.weight + weight));
+        pathsQueue.add(
+            new EppsteinGraphPath(
+                graph, sidetracks, distanceAndPredecessorMap, path.weight + weight));
     }
 
     /**
-     * Guides the building process of the paths graph.
-     * The process is divided into three stages. First
-     * the D(g) is constructed, then cross edges are added
-     * and finally the root vertex is created.
+     * Guides the building process of the paths graph. The process is divided into three stages.
+     * First the D(g) is constructed, then cross edges are added and finally the root vertex is
+     * created.
      */
-    private void buildPathsGraph() {
+    private void buildPathsGraph()
+    {
         buildDGraph();
         addCrossEdges();
         addPathGraphRoot();
     }
 
     /**
-     * If the {@code graph} is denoted by $G$, then for
-     * every vertex $v$ reachable from {@code source} in $G$
-     * $D(G)$ contains balanced heaps of all outroots,
-     * which corresponds to vertices on the path from $v$ to
-     * {@code sink}. If there are no sidetracks on the path
-     * from $v$ to {@code sink}, the value $null$  is stored.
-     * An outroot is connected to its rest heap if the corresponding
-     * vertex has more than one sidetrack.
+     * If the {@code graph} is denoted by $G$, then for every vertex $v$ reachable from
+     * {@code source} in $G$ $D(G)$ contains balanced heaps of all outroots, which corresponds to
+     * vertices on the path from $v$ to {@code sink}. If there are no sidetracks on the path from
+     * $v$ to {@code sink}, the value $null$ is stored. An outroot is connected to its rest heap if
+     * the corresponding vertex has more than one sidetrack.
      */
-    private void buildDGraph() {
+    private void buildDGraph()
+    {
         DepthFirstIterator<V, E> it = new DepthFirstIterator<>(graph, source);
         Deque<V> stack = new ArrayDeque<>();
         while (it.hasNext()) {
@@ -277,7 +264,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
                         stack.removeLast();
                         insertVertex(v, null);
                     } else {
-                        V predecessor = Graphs.getOppositeVertex(graph, distanceAndPredecessorMap.get(v).getSecond(), v);
+                        V predecessor = Graphs.getOppositeVertex(
+                            graph, distanceAndPredecessorMap.get(v).getSecond(), v);
 
                         if (hMapping.containsKey(predecessor)) {
                             stack.removeLast();
@@ -293,14 +281,13 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Adds cross edges for every vertex $v$ reachable
-     * from the root of balanced heap of {@code source}
-     * in the paths graph. If a sidetrack, which corresponds
-     * to $v$ connects some pair of vertices $(u,w)$, a cross
-     * edge from $v$ to the root of the balanced heap of $w$
-     * is added.
+     * Adds cross edges for every vertex $v$ reachable from the root of balanced heap of
+     * {@code source} in the paths graph. If a sidetrack, which corresponds to $v$ connects some
+     * pair of vertices $(u,w)$, a cross edge from $v$ to the root of the balanced heap of $w$ is
+     * added.
      */
-    private void addCrossEdges() {
+    private void addCrossEdges()
+    {
         Queue<PathsGraphVertex> queue = new LinkedList<>();
         PathsGraphVertex sourceMapping = hMapping.get(source);
         Set<PathsGraphVertex> seen = new HashSet<>();
@@ -329,30 +316,28 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Creates the root vertex $r$ of the paths graph
-     * and connects it to the root of the balanced heap
-     * of {@code source}.
+     * Creates the root vertex $r$ of the paths graph and connects it to the root of the balanced
+     * heap of {@code source}.
      */
-    private void addPathGraphRoot() {
+    private void addPathGraphRoot()
+    {
         PathsGraphVertex root = new PathsGraphVertex(null, 0);
         root.cross = hMapping.get(source);
         pathsGraphRoot = root;
     }
 
     /**
-     * Guides the process of adding the sidetracks of
-     * {@code v} to the paths graph. First receives the
-     * outroot and root of the rest heap of {@code v} by
-     * calling {@code getOutrootAndRestHeapRoot(Object)}.
-     * If the outroot if $null$ maps $v$ to {@code predecessorHeap}
-     * in {@code hMapping}. Otherwise inserts outroot of $v$
-     * in the balanced heap rooted at {@code predecessorHeap}
-     * and links it to the received rest heap root.
+     * Guides the process of adding the sidetracks of {@code v} to the paths graph. First receives
+     * the outroot and root of the rest heap of {@code v} by calling
+     * {@code getOutrootAndRestHeapRoot(Object)}. If the outroot if $null$ maps $v$ to
+     * {@code predecessorHeap} in {@code hMapping}. Otherwise inserts outroot of $v$ in the balanced
+     * heap rooted at {@code predecessorHeap} and links it to the received rest heap root.
      *
-     * @param v               vertex
+     * @param v vertex
      * @param predecessorHeap balanced heap root
      */
-    private void insertVertex(V v, PathsGraphVertex predecessorHeap) {
+    private void insertVertex(V v, PathsGraphVertex predecessorHeap)
+    {
         Pair<PathsGraphVertex, PathsGraphVertex> p = getOutrootAndRestHeapRoot(v);
         PathsGraphVertex outroot = p.getFirst();
         PathsGraphVertex restHeapRoot = p.getSecond();
@@ -367,15 +352,15 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Inserts {@code vertex} into the balanced heap rooted
-     * at {@code root} in a persistent (non-destructive) way.
-     * Return root of the modified heap.
+     * Inserts {@code vertex} into the balanced heap rooted at {@code root} in a persistent
+     * (non-destructive) way. Return root of the modified heap.
      *
-     * @param root   root of a balanced heap
+     * @param root root of a balanced heap
      * @param vertex vertex to be inserted
      * @return root of the modified heap
      */
-    private PathsGraphVertex insertPersistently(PathsGraphVertex root, PathsGraphVertex vertex) {
+    private PathsGraphVertex insertPersistently(PathsGraphVertex root, PathsGraphVertex vertex)
+    {
         if (root == null) {
             vertex.left = null;
             vertex.right = null;
@@ -384,7 +369,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         } else {
             PathsGraphVertex rootCopy = new PathsGraphVertex(root);
 
-            boolean leftDirection = root.left == null || (root.right != null && root.left.size <= root.right.size);
+            boolean leftDirection =
+                root.left == null || (root.right != null && root.left.size <= root.right.size);
 
             PathsGraphVertex min;
             PathsGraphVertex max;
@@ -418,10 +404,12 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * @param v vertex
      * @return outroot and rest heap root
      */
-    private Pair<PathsGraphVertex, PathsGraphVertex> getOutrootAndRestHeapRoot(V v) {
+    private Pair<PathsGraphVertex, PathsGraphVertex> getOutrootAndRestHeapRoot(V v)
+    {
         List<PathsGraphVertex> restHeapElements = new ArrayList<>();
 
-        PathsGraphVertex outroot = new PathsGraphVertex(null, Double.POSITIVE_INFINITY); // dummy vertex
+        PathsGraphVertex outroot = new PathsGraphVertex(null, Double.POSITIVE_INFINITY); // dummy
+                                                                                         // vertex
         E predecessor = distanceAndPredecessorMap.get(v).getSecond();
         for (E e : graph.outgoingEdgesOf(v)) {
             if (distanceAndPredecessorMap.containsKey(graph.getEdgeTarget(e))) {
@@ -457,15 +445,17 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * Builds a min-heap out of the {@code vertices} list
      *
      * @param vertices vertices
-     * @param size     size of vertices
+     * @param size size of vertices
      */
-    private void heapify(List<PathsGraphVertex> vertices, int size) {
+    private void heapify(List<PathsGraphVertex> vertices, int size)
+    {
         for (int i = size / 2 - 1; i >= 0; i--) {
             siftDown(vertices, i, size);
         }
     }
 
-    private void siftDown(List<PathsGraphVertex> vertices, int i, int size) {
+    private void siftDown(List<PathsGraphVertex> vertices, int i, int size)
+    {
         int left;
         int right;
         int smaller;
@@ -493,16 +483,16 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
     }
 
     /**
-     * Constructs an explicit tree-like representation of the
-     * binary heap contained in {@code vertices} starting
-     * at position {@code i}.
+     * Constructs an explicit tree-like representation of the binary heap contained in
+     * {@code vertices} starting at position {@code i}.
      *
      * @param vertices heapified vertices
-     * @param i        heap start position
-     * @param size     size of vertices
+     * @param i heap start position
+     * @param size size of vertices
      * @return root of the built heap
      */
-    private PathsGraphVertex getRestHeap(List<PathsGraphVertex> vertices, int i, int size) {
+    private PathsGraphVertex getRestHeap(List<PathsGraphVertex> vertices, int i, int size)
+    {
         int l = 2 * i + 1;
         int r = 2 * i + 2;
         if (l < size) {
@@ -514,7 +504,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         return vertices.get(i);
     }
 
-    private void swap(List<PathsGraphVertex> vertices, int i, int j) {
+    private void swap(List<PathsGraphVertex> vertices, int i, int j)
+    {
         if (i != j) {
             PathsGraphVertex tmp = vertices.get(i);
             vertices.set(i, vertices.get(j));
@@ -528,15 +519,21 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
      * @param e edge
      * @return value of $\delta(e)$
      */
-    private double delta(E e) {
-        return graph.getEdgeWeight(e) + distanceAndPredecessorMap.get(graph.getEdgeTarget(e)).getFirst() -
-                distanceAndPredecessorMap.get(graph.getEdgeSource(e)).getFirst();
+    private double delta(E e)
+    {
+        return graph.getEdgeWeight(e)
+            + distanceAndPredecessorMap.get(graph.getEdgeTarget(e)).getFirst()
+            - distanceAndPredecessorMap.get(graph.getEdgeSource(e)).getFirst();
     }
 
     /**
      * Represents a path that is generated during the computations.
      */
-    private class EppsteinGraphPath implements GraphPath<V, E>, Comparable<EppsteinGraphPath> {
+    private class EppsteinGraphPath
+        implements
+        GraphPath<V, E>,
+        Comparable<EppsteinGraphPath>
+    {
 
         /**
          * The graph.
@@ -549,8 +546,7 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         private List<PathsGraphVertex> pathsGraphVertices;
 
         /**
-         * Shortest paths tree in the edge reversed graph {@code graph}
-         * rooted at {@code sink}.
+         * Shortest paths tree in the edge reversed graph {@code graph} rooted at {@code sink}.
          */
         private Map<V, Pair<Double, E>> distanceAndPredecessorMap;
 
@@ -559,9 +555,10 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
          */
         private double weight;
 
-
-        EppsteinGraphPath(Graph<V, E> graph, List<PathsGraphVertex> pathsGraphVertices,
-                          Map<V, Pair<Double, E>> distanceAndPredecessorMap, double weight) {
+        EppsteinGraphPath(
+            Graph<V, E> graph, List<PathsGraphVertex> pathsGraphVertices,
+            Map<V, Pair<Double, E>> distanceAndPredecessorMap, double weight)
+        {
             this.graph = graph;
             this.pathsGraphVertices = pathsGraphVertices;
             this.distanceAndPredecessorMap = distanceAndPredecessorMap;
@@ -569,34 +566,38 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
 
         @Override
-        public Graph<V, E> getGraph() {
+        public Graph<V, E> getGraph()
+        {
             return graph;
         }
 
         @Override
-        public V getStartVertex() {
+        public V getStartVertex()
+        {
             return source;
         }
 
         @Override
-        public V getEndVertex() {
+        public V getEndVertex()
+        {
             return sink;
         }
 
         @Override
-        public double getWeight() {
+        public double getWeight()
+        {
             return weight;
         }
 
         /**
-         * Given the implicit representation of the path between
-         * {@code source} and {@code sink} constructs the edge
-         * list of the path.
+         * Given the implicit representation of the path between {@code source} and {@code sink}
+         * constructs the edge list of the path.
          *
          * @return edge list of the path
          */
         @Override
-        public List<E> getEdgeList() {
+        public List<E> getEdgeList()
+        {
             List<PathsGraphVertex> sidetracks = getSidetracks(pathsGraphVertices);
             List<E> result = new ArrayList<>();
 
@@ -610,9 +611,11 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
             while (sidetrack != null) {
                 V sidetrackSource = graph.getEdgeSource(sidetrack.edge);
                 while (!shortestPathSource.equals(sidetrackSource)) {
-                    E shortestPathEdge = distanceAndPredecessorMap.get(shortestPathSource).getSecond();
+                    E shortestPathEdge =
+                        distanceAndPredecessorMap.get(shortestPathSource).getSecond();
                     result.add(shortestPathEdge);
-                    shortestPathSource = Graphs.getOppositeVertex(graph, shortestPathEdge, shortestPathSource);
+                    shortestPathSource =
+                        Graphs.getOppositeVertex(graph, shortestPathEdge, shortestPathSource);
                 }
 
                 PathsGraphVertex curr = sidetrack;
@@ -644,13 +647,13 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
 
         /**
-         * Builds sequence of sidetracks in the {@code graph}
-         * this path corresponds to.
+         * Builds sequence of sidetracks in the {@code graph} this path corresponds to.
          *
          * @param vertices vertices of the paths graph
          * @return list of sidetracks
          */
-        private List<PathsGraphVertex> getSidetracks(List<PathsGraphVertex> vertices) {
+        private List<PathsGraphVertex> getSidetracks(List<PathsGraphVertex> vertices)
+        {
             if (vertices.size() > 1) {
                 List<Integer> toBeRemoved = new ArrayList<>();
                 Iterator<PathsGraphVertex> it = vertices.iterator();
@@ -666,7 +669,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
                     currPosition++;
                 }
 
-                List<PathsGraphVertex> result = new ArrayList<>(vertices.size() - toBeRemoved.size());
+                List<PathsGraphVertex> result =
+                    new ArrayList<>(vertices.size() - toBeRemoved.size());
                 int size = toBeRemoved.size();
                 for (int i = 0, j = 0; i < vertices.size(); i++) {
                     if (j < size && toBeRemoved.get(j).equals(i)) {
@@ -681,18 +685,21 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
 
         @Override
-        public int compareTo(EppsteinGraphPath o) {
+        public int compareTo(EppsteinGraphPath o)
+        {
             return Double.compare(weight, o.weight);
         }
     }
 
     /**
-     * Vertex of the paths graph. Does not maintain the weights
-     * of the edges to {@code left}, {@code right}, {@code rest}
-     * and {@code cross} vertices, because they are computed during
-     * the paths graph traversal.
+     * Vertex of the paths graph. Does not maintain the weights of the edges to {@code left},
+     * {@code right}, {@code rest} and {@code cross} vertices, because they are computed during the
+     * paths graph traversal.
      */
-    private class PathsGraphVertex implements Comparable<PathsGraphVertex> {
+    private class PathsGraphVertex
+        implements
+        Comparable<PathsGraphVertex>
+    {
 
         /**
          * Edge this vertex corresponds to.
@@ -705,20 +712,20 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         double delta;
 
         /**
-         * If this vertex is part of a balanced heap of outroots
-         * in the path graph, this value is used to determine where
-         * a new vertex should be inserted in order for the heap to
-         * remain balanced.
+         * If this vertex is part of a balanced heap of outroots in the path graph, this value is
+         * used to determine where a new vertex should be inserted in order for the heap to remain
+         * balanced.
          */
         int size;
 
-        //Connections to other vertices in the paths graph.
+        // Connections to other vertices in the paths graph.
         PathsGraphVertex left;
         PathsGraphVertex right;
         PathsGraphVertex rest;
         PathsGraphVertex cross;
 
-        PathsGraphVertex(E edge, double delta) {
+        PathsGraphVertex(E edge, double delta)
+        {
             this.edge = edge;
             this.delta = delta;
             this.size = 1;
@@ -729,7 +736,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
          *
          * @param other other vertex
          */
-        PathsGraphVertex(PathsGraphVertex other) {
+        PathsGraphVertex(PathsGraphVertex other)
+        {
             this.edge = other.edge;
             this.size = other.size;
             this.delta = other.delta;
@@ -740,7 +748,8 @@ public class EppsteinShortestPathIterator<V, E> implements Iterator<GraphPath<V,
         }
 
         @Override
-        public int compareTo(PathsGraphVertex o) {
+        public int compareTo(PathsGraphVertex o)
+        {
             return Double.compare(delta, o.delta);
         }
     }

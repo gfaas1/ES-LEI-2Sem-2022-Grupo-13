@@ -24,8 +24,8 @@ import java.util.*;
 import static org.junit.Assert.fail;
 
 /**
- * This class contains auxiliary methods for testing {@link KolmogorovWeightedPerfectMatching}
- * and related classes
+ * This class contains auxiliary methods for testing {@link KolmogorovWeightedPerfectMatching} and
+ * related classes
  *
  * @author Timofey Chudakov
  */

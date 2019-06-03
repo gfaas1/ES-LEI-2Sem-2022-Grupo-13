@@ -17,32 +17,26 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
-import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
-import org.jgrapht.generate.GnpRandomGraphGenerator;
-import org.jgrapht.generate.GraphGenerator;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedPseudograph;
-import org.jgrapht.util.SupplierUtil;
-import org.junit.Test;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.generate.*;
+import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
+import org.junit.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Test class for {@link BidirectionalAStarShortestPath} class.
  *
  * @author Semen Chudakov
  */
-public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest {
+public class BidirectionalAStarShortestPathTest
+    extends
+    BaseHeuristicSearchTest
+{
     private static final String s = "s";
     private static final String t = "t";
     private static final String y = "y";
@@ -50,22 +44,28 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
     private static final String z = "z";
 
     @Test
-    public void testEmptyGraph() {
-        Graph<String, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+    public void testEmptyGraph()
+    {
+        Graph<String, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
         graph.addVertex(s);
         new BidirectionalAStarShortestPath<>(graph, (sourceVertex, targetVertex) -> 0).getPaths(s);
     }
 
     @Test
-    public void testSimpleGraph() {
+    public void testSimpleGraph()
+    {
         Graph<String, DefaultWeightedEdge> graph = getSimpleGraph();
         AStarAdmissibleHeuristic<String> heuristic = getSimpleGraphHeuristic();
-        assertEquals(Arrays.asList(s, y, z),
-                new BidirectionalAStarShortestPath<>(graph, heuristic).getPath(s, z).getVertexList());
+        assertEquals(
+            Arrays.asList(s, y, z),
+            new BidirectionalAStarShortestPath<>(graph, heuristic).getPath(s, z).getVertexList());
     }
 
-    private Graph<String, DefaultWeightedEdge> getSimpleGraph() {
-        Graph<String, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+    private Graph<String, DefaultWeightedEdge> getSimpleGraph()
+    {
+        Graph<String, DefaultWeightedEdge> graph =
+            new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
 
         Graphs.addAllVertices(graph, Arrays.asList(s, t, y, x, z));
 
@@ -87,7 +87,8 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
         return graph;
     }
 
-    private AStarAdmissibleHeuristic<String> getSimpleGraphHeuristic() {
+    private AStarAdmissibleHeuristic<String> getSimpleGraphHeuristic()
+    {
         return (sourceVertex, targetVertex) -> {
             if (sourceVertex.equals(s) && targetVertex.equals(z)) {
                 return 7;
@@ -112,10 +113,11 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
     }
 
     @Test
-    public void testLabyrinth1() {
+    public void testLabyrinth1()
+    {
         this.readLabyrinth(labyrinth1);
         BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> shortestPath1 =
-                new BidirectionalAStarShortestPath<>(graph, new ManhattanDistance());
+            new BidirectionalAStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path = shortestPath1.getPath(sourceNode, targetNode);
         assertNotNull(path);
         assertEquals(47, (int) path.getWeight());
@@ -123,7 +125,7 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
         assertEquals(48, path.getLength() + 1);
 
         BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> shortestPath2 =
-                new BidirectionalAStarShortestPath<>(graph, new EuclideanDistance());
+            new BidirectionalAStarShortestPath<>(graph, new EuclideanDistance());
         GraphPath<Node, DefaultWeightedEdge> path2 = shortestPath2.getPath(sourceNode, targetNode);
         assertNotNull(path2);
         assertEquals(47, (int) path2.getWeight());
@@ -131,20 +133,22 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
     }
 
     @Test
-    public void testLabyrinth2() {
+    public void testLabyrinth2()
+    {
         this.readLabyrinth(labyrinth2);
         BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new BidirectionalAStarShortestPath<>(graph, new ManhattanDistance());
+            new BidirectionalAStarShortestPath<>(graph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path =
-                aStarShortestPath.getPath(sourceNode, targetNode);
+            aStarShortestPath.getPath(sourceNode, targetNode);
         assertNull(path);
     }
 
     @Test
-    public void testMultiGraph() {
+    public void testMultiGraph()
+    {
         Graph<Node, DefaultWeightedEdge> multigraph = getMultigraph();
         BidirectionalAStarShortestPath<Node, DefaultWeightedEdge> aStarShortestPath =
-                new BidirectionalAStarShortestPath<>(multigraph, new ManhattanDistance());
+            new BidirectionalAStarShortestPath<>(multigraph, new ManhattanDistance());
         GraphPath<Node, DefaultWeightedEdge> path = aStarShortestPath.getPath(n1, n3);
         assertNotNull(path);
         assertEquals((int) path.getWeight(), 6);
@@ -152,19 +156,21 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
     }
 
     @Test
-    public void testInconsistentHeuristic() {
+    public void testInconsistentHeuristic()
+    {
         Graph<Integer, DefaultWeightedEdge> g = getInconsistentHeuristicTestGraph();
         AStarAdmissibleHeuristic<Integer> h = getInconsistentHeuristic();
 
         BidirectionalAStarShortestPath<Integer, DefaultWeightedEdge> shortestPath =
-                new BidirectionalAStarShortestPath<>(g, h);
+            new BidirectionalAStarShortestPath<>(g, h);
 
         // shortest path from 3 to 2 is 3->0->1->2 with weight 0.9641320715228003
         assertEquals(0.9641320715228003, shortestPath.getPath(3, 2).getWeight(), 1e-9);
     }
 
     @Test
-    public void testRandomGraphs() {
+    public void testRandomGraphs()
+    {
         int n = 1000;
         double p = 0.40;
         for (int i = 0; i < 10; i++) {
@@ -177,7 +183,7 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
                 landmarks.add(vertices[position]);
             }
             AStarAdmissibleHeuristic<Integer> heuristic =
-                    new ALTAdmissibleHeuristic<>(graph, landmarks);
+                new ALTAdmissibleHeuristic<>(graph, landmarks);
             for (int j = 0; j < 10; j++) {
                 int source = (int) (Math.random() * n);
                 int target = (int) (Math.random() * n);
@@ -186,14 +192,19 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
         }
     }
 
-    private void testCorrectness(Graph<Integer, DefaultWeightedEdge> graph, int source, int target,
-                                 AStarAdmissibleHeuristic<Integer> heuristic) {
+    private void testCorrectness(
+        Graph<Integer, DefaultWeightedEdge> graph, int source, int target,
+        AStarAdmissibleHeuristic<Integer> heuristic)
+    {
         DijkstraShortestPath<Integer, DefaultWeightedEdge> dijkstraShortestPath =
-                new DijkstraShortestPath<>(graph);
-        BidirectionalAStarShortestPath<Integer, DefaultWeightedEdge> bidirectionalAStarShortestPath =
+            new DijkstraShortestPath<>(graph);
+        BidirectionalAStarShortestPath<Integer,
+            DefaultWeightedEdge> bidirectionalAStarShortestPath =
                 new BidirectionalAStarShortestPath<>(graph, heuristic);
-        GraphPath<Integer, DefaultWeightedEdge> path1 = dijkstraShortestPath.getPath(source, target);
-        GraphPath<Integer, DefaultWeightedEdge> path2 = bidirectionalAStarShortestPath.getPath(source, target);
+        GraphPath<Integer, DefaultWeightedEdge> path1 =
+            dijkstraShortestPath.getPath(source, target);
+        GraphPath<Integer, DefaultWeightedEdge> path2 =
+            bidirectionalAStarShortestPath.getPath(source, target);
         if (path1 == null) {
             assertNull(path2);
         } else {
@@ -201,11 +212,12 @@ public class BidirectionalAStarShortestPathTest extends BaseHeuristicSearchTest 
         }
     }
 
-    private Graph<Integer, DefaultWeightedEdge> getGnpRandomGraph(int n, double p) {
-        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator
-                = new GnpRandomGraphGenerator<>(n, p);
+    private Graph<Integer, DefaultWeightedEdge> getGnpRandomGraph(int n, double p)
+    {
+        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
+            new GnpRandomGraphGenerator<>(n, p);
         DefaultUndirectedWeightedGraph<Integer, DefaultWeightedEdge> result =
-                new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
+            new DefaultUndirectedWeightedGraph<>(DefaultWeightedEdge.class);
         result.setVertexSupplier(SupplierUtil.createIntegerSupplier());
         generator.generateGraph(result);
         for (DefaultWeightedEdge e : result.edgeSet()) {

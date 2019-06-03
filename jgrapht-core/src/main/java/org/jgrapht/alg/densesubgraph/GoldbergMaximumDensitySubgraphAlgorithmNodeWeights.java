@@ -26,32 +26,28 @@ import org.jgrapht.graph.*;
 import java.util.function.*;
 
 /**
- * This class computes a maximum density subgraph based on the algorithm described
- * by Andrew Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
- * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley.
- * <br>
+ * This class computes a maximum density subgraph based on the algorithm described by Andrew
+ * Vladislav Goldberg in <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1984/CSD-84-171.pdf">
+ * Finding Maximum Density Subgraphs</a>, 1984, University of Berkley. <br>
  * The basic concept is to construct a network that can be used to compute the maximum density
  * subgraph using a binary search approach.
  * <p>
- * This variant of the algorithm assumes the density of a positive real edge and vertex weighted graph G=(V,E)
- * to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V} w(v)}{\left|{V}\right|}\]
- * and sets the weights of the network from {@link GoldbergMaximumDensitySubgraphAlgorithmBase} as
- * proposed in the above paper. For this case the weights of the network must be chosen to be:
- * \[c_{ij}=w(ij)\,\forall \{i,j\}\in E\]
- * \[c_{it}=m'+2g-d_i-2w(i)\,\forall i \in V\]
- * \[c_{si}=m'\,\forall i \in V\]
- * where $m'$ is such that all weights are positive and $d_i$ is the degree of vertex $i$ and
- * $w(v)$ is the weight of vertex $v$.
- * <br>
- * For details see {@link GoldbergMaximumDensitySubgraphAlgorithmBase}.
- * All the math to prove the correctness of these weights is the same.
- * <br>
+ * This variant of the algorithm assumes the density of a positive real edge and vertex weighted
+ * graph G=(V,E) to be defined as \[\frac{\sum\limits_{e \in E} w(e) + \sum\limits_{v \in V}
+ * w(v)}{\left|{V}\right|}\] and sets the weights of the network from
+ * {@link GoldbergMaximumDensitySubgraphAlgorithmBase} as proposed in the above paper. For this case
+ * the weights of the network must be chosen to be: \[c_{ij}=w(ij)\,\forall \{i,j\}\in E\]
+ * \[c_{it}=m'+2g-d_i-2w(i)\,\forall i \in V\] \[c_{si}=m'\,\forall i \in V\] where $m'$ is such
+ * that all weights are positive and $d_i$ is the degree of vertex $i$ and $w(v)$ is the weight of
+ * vertex $v$. <br>
+ * For details see {@link GoldbergMaximumDensitySubgraphAlgorithmBase}. All the math to prove the
+ * correctness of these weights is the same. <br>
  * <p>
  * Because the density is per definition guaranteed to be rational, the distance of 2 possible
  * solutions for the maximum density can't be smaller than $\frac{1}{W(W-1)}$. This means shrinking
- * the binary search interval to this size, the correct solution is found.
- * The runtime can in this case be given by $O(M(n,n+m)\log{W})$, where $M(n,m)$ is the runtime of
- * the internally used {@link MinimumSTCutAlgorithm} and $W$ is the sum all edge and vertex weights from $G$.
+ * the binary search interval to this size, the correct solution is found. The runtime can in this
+ * case be given by $O(M(n,n+m)\log{W})$, where $M(n,m)$ is the runtime of the internally used
+ * {@link MinimumSTCutAlgorithm} and $W$ is the sum all edge and vertex weights from $G$.
  * </p>
  *
  * @param <V> Type of vertices
@@ -59,55 +55,68 @@ import java.util.function.*;
  *
  * @author Andre Immig
  */
-public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?,Double>,E> extends GoldbergMaximumDensitySubgraphAlgorithmBase<V,E>{
+public class GoldbergMaximumDensitySubgraphAlgorithmNodeWeights<V extends Pair<?, Double>, E>
+    extends
+    GoldbergMaximumDensitySubgraphAlgorithmBase<V, E>
+{
 
     /**
      * Constructor
+     * 
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      * @param algFactory function to construct the subalgorithm
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon,
-        Function<Graph<V,DefaultWeightedEdge>,MinimumSTCutAlgorithm<V,DefaultWeightedEdge>> algFactory){
-        super(graph, s,t, true, epsilon, algFactory);
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(
+        Graph<V, E> graph, V s, V t, double epsilon, Function<Graph<V, DefaultWeightedEdge>,
+            MinimumSTCutAlgorithm<V, DefaultWeightedEdge>> algFactory)
+    {
+        super(graph, s, t, true, epsilon, algFactory);
     }
 
     /**
      * Convenience constructor that uses PushRelabel as default MinimumSTCutAlgorithm
+     * 
      * @param graph input for computation
      * @param s additional source vertex
      * @param t additional target vertex
      * @param epsilon to use for internal computation
      */
-    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(Graph<V, E> graph, V s, V t, double epsilon){
+    public GoldbergMaximumDensitySubgraphAlgorithmNodeWeights(
+        Graph<V, E> graph, V s, V t, double epsilon)
+    {
         this(graph, s, t, epsilon, PushRelabelMFImpl::new);
     }
 
     @Override
-    protected double computeDensityNumerator(Graph<V,E> g){
-        double sum = g.edgeSet().stream().mapToDouble(
-            g::getEdgeWeight).sum();
-        for (V v: g.vertexSet()){
-            sum+=v.getSecond();
+    protected double computeDensityNumerator(Graph<V, E> g)
+    {
+        double sum = g.edgeSet().stream().mapToDouble(g::getEdgeWeight).sum();
+        for (V v : g.vertexSet()) {
+            sum += v.getSecond();
         }
         return sum;
     }
 
     @Override
-    protected double computeDensityDenominator(Graph<V,E> g){
+    protected double computeDensityDenominator(Graph<V, E> g)
+    {
         return g.vertexSet().size();
     }
 
     @Override
-    protected double getEdgeWeightFromSourceToVertex(V v){
+    protected double getEdgeWeightFromSourceToVertex(V v)
+    {
         return 0;
     }
 
     @Override
-    protected double getEdgeWeightFromVertexToSink(V v){
-        return 2*guess - this.graph.outgoingEdgesOf(v).stream().mapToDouble(
-            this.graph::getEdgeWeight).sum() - 2*v.getSecond();
+    protected double getEdgeWeightFromVertexToSink(V v)
+    {
+        return 2 * guess
+            - this.graph.outgoingEdgesOf(v).stream().mapToDouble(this.graph::getEdgeWeight).sum()
+            - 2 * v.getSecond();
     }
 }

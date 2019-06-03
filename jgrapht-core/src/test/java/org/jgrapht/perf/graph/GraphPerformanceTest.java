@@ -23,7 +23,6 @@ import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
-import org.jgrapht.graph.specifics.*;
 import org.jgrapht.util.*;
 import org.junit.*;
 import org.openjdk.jmh.annotations.*;

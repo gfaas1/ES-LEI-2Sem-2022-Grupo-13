@@ -24,13 +24,12 @@ import java.util.*;
 /**
  * This class is a data structure for Kolmogorov's Blossom V algorithm.
  * <p>
- * It represents an edge between two nodes. Even though the weighted perfect matching problem
- * is formulated on an undirected graph, each edge has direction, i.e. it is an arc. According to
- * this direction it is present in two circular doubly linked lists of incident edges. The
- * references to the next and previous edges of this list are maintained via
- * {@link BlossomVEdge#next} and {@link BlossomVEdge#prev} references. The direction of an edge
- * isn't stored in the edge, this property is only reflected by the presence of an edge in the list
- * of outgoing or incoming edges.
+ * It represents an edge between two nodes. Even though the weighted perfect matching problem is
+ * formulated on an undirected graph, each edge has direction, i.e. it is an arc. According to this
+ * direction it is present in two circular doubly linked lists of incident edges. The references to
+ * the next and previous edges of this list are maintained via {@link BlossomVEdge#next} and
+ * {@link BlossomVEdge#prev} references. The direction of an edge isn't stored in the edge, this
+ * property is only reflected by the presence of an edge in the list of outgoing or incoming edges.
  * <p>
  * For example, let a $e = \{u, v\}$ be an edge in the graph $G = (V, E)$. Let's assume that after
  * initialization this edge has become directed from $u$ to $v$, i.e. now $e = (u, v)$. Then edge

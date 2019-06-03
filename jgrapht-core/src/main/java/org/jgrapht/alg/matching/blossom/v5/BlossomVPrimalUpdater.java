@@ -21,11 +21,11 @@ import static org.jgrapht.alg.matching.blossom.v5.BlossomVNode.Label.*;
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.DEBUG;
 
 /**
- * This class is used by {@link KolmogorovWeightedPerfectMatching} for performing primal
- * operations: grow, augment, shrink and expand. This class operates on alternating trees, blossom
- * structures, and node states. It changes them after applying any primal operation. Also, this
- * class can add and subtract some values from nodes' dual variables; it never changes their actual
- * dual variables.
+ * This class is used by {@link KolmogorovWeightedPerfectMatching} for performing primal operations:
+ * grow, augment, shrink and expand. This class operates on alternating trees, blossom structures,
+ * and node states. It changes them after applying any primal operation. Also, this class can add
+ * and subtract some values from nodes' dual variables; it never changes their actual dual
+ * variables.
  * <p>
  * The augment operation is used to increase the cardinality of the matching. It is applied to a
  * tight (+, +) cross-tree edge. Its main purpose is to alter the matching on the simple path

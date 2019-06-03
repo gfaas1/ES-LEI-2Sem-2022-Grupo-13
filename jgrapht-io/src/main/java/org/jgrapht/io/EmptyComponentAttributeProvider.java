@@ -17,8 +17,7 @@
  */
 package org.jgrapht.io;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A component attribute provider which always returns an empty collection.

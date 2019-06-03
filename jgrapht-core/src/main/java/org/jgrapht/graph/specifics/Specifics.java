@@ -18,7 +18,7 @@
 package org.jgrapht.graph.specifics;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * An interface encapsulating the basic graph operations. Different implementations have different
@@ -175,7 +175,8 @@ public interface Specifics<V, E>
      * Removes the specified edge from the edge containers of its source and target vertices.
      *
      * @param e the edge
-     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)} instead.
+     * @deprecated Use method {@link #removeEdgeFromTouchingVertices(Object, Object, Object)}
+     *             instead.
      */
     @Deprecated
     void removeEdgeFromTouchingVertices(E e);
@@ -188,5 +189,5 @@ public interface Specifics<V, E>
      * @param e the edge
      */
     void removeEdgeFromTouchingVertices(V sourceVertex, V targetVertex, E e);
-    
+
 }

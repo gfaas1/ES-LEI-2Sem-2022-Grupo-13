@@ -18,14 +18,16 @@
 package org.jgrapht.alg.matching.blossom.v5;
 
 /**
- * Enum specifying the objective sense of the algorithm. {@link ObjectiveSense#MAXIMIZE}
- * means the goal is to maximize the linear programming objective value,
- * {@link ObjectiveSense#MINIMIZE} - to minimize the linear programming objective value.
+ * Enum specifying the objective sense of the algorithm. {@link ObjectiveSense#MAXIMIZE} means the
+ * goal is to maximize the linear programming objective value, {@link ObjectiveSense#MINIMIZE} - to
+ * minimize the linear programming objective value.
  *
  * @author Timofey Chudakov
  * @see KolmogorovWeightedMatching
  * @see KolmogorovWeightedPerfectMatching
  */
-public enum ObjectiveSense {
-    MAXIMIZE, MINIMIZE
+public enum ObjectiveSense
+{
+    MAXIMIZE,
+    MINIMIZE
 }

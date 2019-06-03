@@ -61,9 +61,9 @@ public class SerializationTest
     private static final String v2 = "v2";
     private static final String v3 = "v3";
     private static final List<String> vertexList = Arrays.asList(v1, v2, v3);
-    private static final List<List<String>> vertexPairs = Arrays
-        .asList(Arrays.asList(v1, v2), Arrays.asList(v2, v1), Arrays.asList(v1, v3),
-            Arrays.asList(v3, v1), Arrays.asList(v2, v3), Arrays.asList(v3, v2));
+    private static final List<List<String>> vertexPairs = Arrays.asList(
+        Arrays.asList(v1, v2), Arrays.asList(v2, v1), Arrays.asList(v1, v3), Arrays.asList(v3, v1),
+        Arrays.asList(v2, v3), Arrays.asList(v3, v2));
 
     public static <V, E> void assertContainsAllVertices(Graph<V, E> graph, List<V> vertices)
     {
@@ -121,18 +121,17 @@ public class SerializationTest
         Set<E> edgeSet = graph.getAllEdges(vertex1, vertex2);
         for (E e : edgeSet)
             assertTrue(e instanceof DefaultWeightedEdge);
-        assertEquals(new HashSet<>(weights),
-            edgeSet.stream().map(e -> (DefaultWeightedEdge) e).map(DefaultWeightedEdge::getWeight)
+        assertEquals(
+            new HashSet<>(weights),
+            edgeSet
+                .stream().map(e -> (DefaultWeightedEdge) e).map(DefaultWeightedEdge::getWeight)
                 .collect(Collectors.toSet()));
     }
 
     /**
      * Tests serialization of {@link SimpleGraph}.
      * <p>
-     * undirected
-     * no self-loop
-     * no multiple-edges
-     * unweighted
+     * undirected no self-loop no multiple-edges unweighted
      */
     @Test
     public void testSimpleGraph()
@@ -150,11 +149,7 @@ public class SerializationTest
     }
 
     /**
-     * Tests serialization of {@link Multigraph}.
-     * undirected
-     * no self-loop
-     * multiple-edges
-     * unweighted
+     * Tests serialization of {@link Multigraph}. undirected no self-loop multiple-edges unweighted
      */
     @Test
     public void testMultiGraph()
@@ -173,11 +168,7 @@ public class SerializationTest
     }
 
     /**
-     * Tests serialization of {@link Pseudograph}.
-     * undirected
-     * self-loop
-     * multiple-edges
-     * unweighted
+     * Tests serialization of {@link Pseudograph}. undirected self-loop multiple-edges unweighted
      */
     @Test
     public void testPseudograph()
@@ -199,10 +190,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DefaultUndirectedGraph}
      * <p>
-     * undirected
-     * self-loops
-     * no multiple edges
-     * unweighted
+     * undirected self-loops no multiple edges unweighted
      */
     @Test
     public void testDefaultUndirectedGraph()
@@ -224,10 +212,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link SimpleWeightedGraph}
      * <p>
-     * undirected
-     * no self-loops
-     * no-multiple edges
-     * weighted
+     * undirected no self-loops no-multiple edges weighted
      */
     @Test
     public void testSimpleWeightedGraph()
@@ -256,10 +241,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link WeightedMultigraph}
      * <p>
-     * undirected
-     * no self-loops
-     * multiple edges
-     * weighted
+     * undirected no self-loops multiple edges weighted
      */
     @Test
     public void testWeightedMultigraph()
@@ -294,10 +276,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link WeightedPseudograph}
      * <p>
-     * undirected
-     * self-loops
-     * multiple edges
-     * weighted
+     * undirected self-loops multiple edges weighted
      */
     @Test
     public void testWeightedPseudograph()
@@ -335,10 +314,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DefaultUndirectedWeightedGraph}
      * <p>
-     * undirected
-     * self-loops
-     * no multiple edges
-     * weighted
+     * undirected self-loops no multiple edges weighted
      */
     @Test
     public void testDefaultUndirectedWeightedGraph()
@@ -369,10 +345,7 @@ public class SerializationTest
     }
 
     /**
-     * Tests serialization of {@link SimpleDirectedGraph}
-     * directed
-     * no self-loop
-     * no multiple-edges
+     * Tests serialization of {@link SimpleDirectedGraph} directed no self-loop no multiple-edges
      * unweighted
      */
     @Test
@@ -394,10 +367,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DirectedMultigraph}
      * <p>
-     * directed
-     * no-self loops
-     * multiple edges
-     * unweighted
+     * directed no-self loops multiple edges unweighted
      */
     @Test
     public void testDirectedMultigraph()
@@ -418,10 +388,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DirectedPseudograph}
      * <p>
-     * directed
-     * self-loops
-     * multiple-edges
-     * unweighted
+     * directed self-loops multiple-edges unweighted
      */
     @Test
     public void testDirectedPseudograph()
@@ -446,10 +413,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DefaultDirectedGraph}
      * <p>
-     * directed
-     * self-loops
-     * no multiple-edges
-     * unweighted
+     * directed self-loops no multiple-edges unweighted
      */
     @Test
     public void testDefaultDirectedGraph()
@@ -471,10 +435,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link SimpleDirectedWeightedGraph}
      * <p>
-     * directed
-     * no self-loops
-     * no multiple edges
-     * weighted
+     * directed no self-loops no multiple edges weighted
      */
     @Test
     public void testSimpleDirectedWeightedGraph()
@@ -504,10 +465,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DirectedWeightedMultigraph}
      * <p>
-     * directed
-     * no self-loops
-     * multiple edges
-     * weighted
+     * directed no self-loops multiple edges weighted
      */
     @Test
     public void testDirectedWeightedMultiGraph()
@@ -544,10 +502,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DirectedWeightedPseudograph}
      * <p>
-     * directed
-     * self-loops
-     * multiple edges
-     * weighted
+     * directed self-loops multiple edges weighted
      */
     @Test
     public void testDirectedWeightedPseudograph()
@@ -590,10 +545,7 @@ public class SerializationTest
     /**
      * Tests serialization of {@link DefaultDirectedWeightedGraph}
      * <p>
-     * directed
-     * self-loops
-     * no multiple edges
-     * weighted
+     * directed self-loops no multiple edges weighted
      */
     @Test
     public void testDefaultDirectedWeightedGraph()

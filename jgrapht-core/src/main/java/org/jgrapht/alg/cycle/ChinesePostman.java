@@ -69,9 +69,9 @@ public class ChinesePostman<V, E>
 
     /**
      * Solves the Chinese Postman Problem on the given graph. For Undirected graph, this
-     * implementation uses the @{@link KolmogorovWeightedPerfectMatching} matching algorithm;
-     * for directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used
-     * instead. The input graph must be strongly connected. Otherwise the behavior of this class is
+     * implementation uses the @{@link KolmogorovWeightedPerfectMatching} matching algorithm; for
+     * directed graphs, @{@link KuhnMunkresMinimalWeightBipartitePerfectMatching} is used instead.
+     * The input graph must be strongly connected. Otherwise the behavior of this class is
      * undefined.
      * 
      * @param graph the input graph (must be a strongly connected graph)

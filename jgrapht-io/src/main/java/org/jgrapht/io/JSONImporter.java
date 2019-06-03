@@ -21,12 +21,12 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import org.jgrapht.*;
-import org.jgrapht.io.JsonParser.JsonContext;
-import org.jgrapht.util.SupplierUtil;
+import org.jgrapht.io.JsonParser.*;
+import org.jgrapht.util.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * Imports a graph from a <a href="https://tools.ietf.org/html/rfc8259">JSON</a> file.
@@ -44,7 +44,7 @@ import java.util.function.Supplier;
  *     { "source": "1", "target": "2", "weight": 2.0, "label": "Edge between 1 and 2" },
  *     { "source": "2", "target": "3", "weight": 3.0, "label": "Edge between 2 and 3" }
  *   ]
- * } 
+ * }
  * </pre>
  * 
  * <p>
@@ -54,8 +54,8 @@ import java.util.function.Supplier;
  * 
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
- * of the graph. Moreover, complicated nested structures which are inside vertices or edges are simply
- * returned as a whole. For example, in the following graph
+ * of the graph. Moreover, complicated nested structures which are inside vertices or edges are
+ * simply returned as a whole. For example, in the following graph
  * 
  * <pre>
  * {
@@ -69,8 +69,8 @@ import java.util.function.Supplier;
  * }
  * </pre>
  * 
- * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same is 
- * done for arrays or any other arbitrary nested structure. 
+ * the points attribute of the edge is returned as a string containing {"x":1.0,"y":2.0}. The same
+ * is done for arrays or any other arbitrary nested structure.
  * 
  * @param <V> the vertex type
  * @param <E> the edge type
@@ -212,28 +212,28 @@ public class JSONImporter<V, E>
 
             // add singleton nodes
             if (!singletons.isEmpty()) {
-                Supplier<String> singletonIdSupplier = SupplierUtil.createRandomUUIDStringSupplier();
+                Supplier<String> singletonIdSupplier =
+                    SupplierUtil.createRandomUUIDStringSupplier();
                 for (Node n : singletons) {
-                    graph
-                        .addVertex(
-                            vertexProvider.buildVertex(singletonIdSupplier.get(), n.attributes));
+                    graph.addVertex(
+                        vertexProvider.buildVertex(singletonIdSupplier.get(), n.attributes));
                 }
             }
 
             // add edges
             for (PartialEdge pe : edges) {
                 String label = "e_" + pe.source + "_" + pe.target;
-                
+
                 V from = map.get(pe.source);
                 if (from == null) {
                     throw new ImportException("Node " + pe.source + " does not exist");
                 }
-                
+
                 V to = map.get(pe.target);
                 if (to == null) {
                     throw new ImportException("Node " + pe.target + " does not exist");
                 }
-                
+
                 E e = edgeProvider.buildEdge(from, to, label, pe.attributes);
                 graph.addEdge(from, to, e);
 
@@ -375,7 +375,7 @@ public class JSONImporter<V, E>
         {
             String name = pairNames.element();
 
-            if (objectLevel == 2 && arrayLevel < 2) { 
+            if (objectLevel == 2 && arrayLevel < 2) {
                 if (insideNode) {
                     if (ID.equals(name)) {
                         nodeId = readIdentifier(ctx);
@@ -426,15 +426,15 @@ public class JSONImporter<V, E>
 
             // other
             String other = ctx.getText();
-            if (other != null) { 
-                if ("true".equals(other)) { 
+            if (other != null) {
+                if ("true".equals(other)) {
                     return DefaultAttribute.createAttribute(Boolean.TRUE);
-                } else if ("false".equals(other)) { 
+                } else if ("false".equals(other)) {
                     return DefaultAttribute.createAttribute(Boolean.FALSE);
                 } else if ("null".equals(other)) {
                     return DefaultAttribute.NULL;
-                } else { 
-                    return new DefaultAttribute<>(other, AttributeType.UNKNOWN);        
+                } else {
+                    return new DefaultAttribute<>(other, AttributeType.UNKNOWN);
                 }
             }
             return DefaultAttribute.NULL;
@@ -471,7 +471,7 @@ public class JSONImporter<V, E>
                 return Long.valueOf(tn.getText(), 10).toString();
             } catch (NumberFormatException e) {
             }
-            
+
             throw new IllegalArgumentException("Failed to read valid identifier");
         }
 

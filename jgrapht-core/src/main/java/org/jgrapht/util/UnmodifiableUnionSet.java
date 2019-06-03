@@ -88,17 +88,9 @@ public class UnmodifiableUnionSet<E>
         int firstSize = first.size();
         int secondSize = second.size();
         if (secondSize > firstSize) {
-            return new SetSizeOrdering(
-                second,
-                first,
-                secondSize,
-                firstSize);
+            return new SetSizeOrdering(second, first, secondSize, firstSize);
         } else {
-            return new SetSizeOrdering(
-                first,
-                second,
-                firstSize,
-                secondSize);
+            return new SetSizeOrdering(first, second, firstSize, secondSize);
         }
     }
 
@@ -113,11 +105,7 @@ public class UnmodifiableUnionSet<E>
         final int biggerSize;
         final int smallerSize;
 
-        SetSizeOrdering(
-            Set<E> bigger,
-            Set<E> smaller,
-            int biggerSize,
-            int smallerSize)
+        SetSizeOrdering(Set<E> bigger, Set<E> smaller, int biggerSize, int smallerSize)
         {
             this.bigger = bigger;
             this.smaller = smaller;

@@ -25,8 +25,8 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatch
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.INFINITY;
 
 /**
- * This class is used by {@link KolmogorovWeightedPerfectMatching} to perform dual updates,
- * thus increasing the dual objective function value and creating new tight edges.
+ * This class is used by {@link KolmogorovWeightedPerfectMatching} to perform dual updates, thus
+ * increasing the dual objective function value and creating new tight edges.
  * <p>
  * This class currently supports three types of dual updates: single tree, multiple trees fixed
  * delta, and multiple tree variable delta. The first one is used to updates duals of a single tree,
@@ -198,8 +198,8 @@ class BlossomVDualUpdater<V, E>
         double eps = getEps(tree); // include only constraints on (+,+) in-tree edges, (+, inf)
                                    // edges and "-' blossoms
         double epsAugment = KolmogorovWeightedPerfectMatching.INFINITY; // takes into account
-                                                                             // constraints of the
-                                                                             // cross-tree edges
+                                                                        // constraints of the
+                                                                        // cross-tree edges
         BlossomVEdge augmentEdge = null; // the (+, +) cross-tree edge of minimum slack
         double delta = 0;
         for (BlossomVTree.TreeEdgeIterator iterator = tree.treeEdgeIterator();
@@ -230,7 +230,7 @@ class BlossomVDualUpdater<V, E>
         // now eps takes into account all the constraints
         if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
             throw new IllegalArgumentException(
-                    KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
+                KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
         }
         if (eps > tree.eps) {
             delta = eps - tree.eps;
@@ -365,7 +365,7 @@ class BlossomVDualUpdater<V, E>
 
             if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
                 throw new IllegalArgumentException(
-                        KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
+                    KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
             }
 
             // apply dual change to all trees in the connected component
@@ -420,7 +420,7 @@ class BlossomVDualUpdater<V, E>
         }
         if (eps > KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING_THRESHOLD) {
             throw new IllegalArgumentException(
-                    KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
+                KolmogorovWeightedPerfectMatching.NO_PERFECT_MATCHING);
         }
         for (BlossomVNode root = state.nodes[state.nodeNum].treeSiblingNext; root != null;
             root = root.treeSiblingNext)

@@ -205,7 +205,8 @@ public class ALTAdmissibleHeuristic<V, E>
      * {@inheritDoc}
      */
     @Override
-    public <ET> boolean isConsistent(Graph<V, ET> graph) {
+    public <ET> boolean isConsistent(Graph<V, ET> graph)
+    {
         return true;
     }
 }

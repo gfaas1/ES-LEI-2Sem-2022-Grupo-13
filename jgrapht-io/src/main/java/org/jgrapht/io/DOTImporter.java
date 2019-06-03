@@ -483,7 +483,7 @@ public class DOTImporter<V, E>
             if (it.hasNext()) {
                 attrs = it.next().attrs;
             }
-            if (attrs == null) { 
+            if (attrs == null) {
                 attrs = Collections.emptyMap();
             }
 

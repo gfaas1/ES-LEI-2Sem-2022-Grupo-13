@@ -17,15 +17,11 @@
  */
 package org.jgrapht.io;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import org.apache.commons.text.*;
+import org.jgrapht.*;
 
-import org.apache.commons.text.StringEscapeUtils;
-import org.jgrapht.Graph;
+import java.io.*;
+import java.util.*;
 
 /**
  * Exports a graph using <a href="https://tools.ietf.org/html/rfc8259">JSON</a>.
@@ -244,17 +240,18 @@ public class JSONExporter<V, E>
                 outputValue(out, entry.getValue());
             });
     }
-    
-    private void outputValue(PrintWriter out, Attribute value) {
+
+    private void outputValue(PrintWriter out, Attribute value)
+    {
         AttributeType type = value.getType();
         if (type.equals(AttributeType.BOOLEAN)) {
             boolean booleanValue = Boolean.parseBoolean(value.getValue());
-            out.print(booleanValue?"true":"false");
-        } else if (type.equals(AttributeType.INT)) { 
+            out.print(booleanValue ? "true" : "false");
+        } else if (type.equals(AttributeType.INT)) {
             out.print(Integer.parseInt(value.getValue()));
-        } else if (type.equals(AttributeType.LONG)) { 
+        } else if (type.equals(AttributeType.LONG)) {
             out.print(Long.parseLong(value.getValue()));
-        } else if (type.equals(AttributeType.FLOAT)) { 
+        } else if (type.equals(AttributeType.FLOAT)) {
             float floatValue = Float.parseFloat(value.getValue());
             if (!Float.isFinite(floatValue)) {
                 throw new IllegalArgumentException("Infinity and NaN not allowed in JSON");
@@ -266,7 +263,7 @@ public class JSONExporter<V, E>
                 throw new IllegalArgumentException("Infinity and NaN not allowed in JSON");
             }
             out.print(doubleValue);
-        } else { 
+        } else {
             out.print(quoted(value.toString()));
         }
     }

@@ -56,8 +56,9 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> g =
-            new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
+        Graph<String,
+            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
@@ -141,9 +142,8 @@ public class ImmutableValueGraphAdapterTest
         ImmutableValueGraph<String, MyValue> immutableValueGraph =
             ImmutableValueGraph.copyOf(mutableValueGraph);
 
-        Graph<String, EndpointPair<String>> graph =
-            new ImmutableValueGraphAdapter<>(immutableValueGraph,
-                (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
+        Graph<String, EndpointPair<String>> graph = new ImmutableValueGraphAdapter<>(
+            immutableValueGraph, (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertEquals(graph.getEdgeWeight(EndpointPair.ordered("v1", "v2")), 5.0, 1e-9);
     }
@@ -168,8 +168,9 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> g =
-            new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
+        Graph<String,
+            EndpointPair<String>> g = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         assertFalse(g.getType().isAllowingMultipleEdges());
@@ -287,8 +288,9 @@ public class ImmutableValueGraphAdapterTest
         graph.putEdgeValue("v4", "v4", new MyValue(5.0));
         graph.putEdgeValue("v5", "v2", new MyValue(6.0));
 
-        Graph<String, EndpointPair<String>> initialGraph =
-            new ImmutableValueGraphAdapter<>(ImmutableValueGraph.copyOf(graph),
+        Graph<String,
+            EndpointPair<String>> initialGraph = new ImmutableValueGraphAdapter<>(
+                ImmutableValueGraph.copyOf(graph),
                 (ToDoubleFunction<MyValue> & Serializable) MyValue::getValue);
 
         Graph<String, EndpointPair<String>> g =
@@ -346,7 +348,8 @@ public class ImmutableValueGraphAdapterTest
     }
 
     private static class MyValue
-        implements Serializable
+        implements
+        Serializable
     {
 
         private static final long serialVersionUID = 1L;
