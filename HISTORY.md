@@ -30,6 +30,7 @@ Changes to JGraphT in each version:
     - Refactored `SerializationTestUtils` and made it generic (contributed by Lavish Kothari)
     - Added more serialization test coverage (contributed by Lavish Kothari)
     - Added Goldberg's algorithms for the calculation of maximum density subgraphs (contributed by Andre Immig)
+    - Optimize UnmodifiableUnionSet to lazily read live sizes from underlying sets (contributed by John Sichi)
 
 - **version 1.3.0** (12-Nov-2018):
     - Prepared release cycle 1.2.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
