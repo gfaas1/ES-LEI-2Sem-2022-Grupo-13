@@ -130,6 +130,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Lavish Kothari](https://github.com/LavishKothari)
 - [Andre Immig](https://github.com/Aimmig)
 - [Charul Bhanawat](https://github.com/CharulBhanawat13)
+- [Benjamin Krogh](https://github.com/bkrogh)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
