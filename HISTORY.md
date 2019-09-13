@@ -8,6 +8,7 @@ Changes to JGraphT in each version:
     - Fix edge reuse bug in KDisjointShortestPaths implementations (contributed by Benjamin Krogh)
     - Updated Yen`s algorithm to operate on pseudo graphs correctly (contributed by Semen Chudakov)
     - Updated Guava to version 28.0 (contributed by John Sichi)
+    - Fixed bug in `BiconnectivityInspector` which would occasionally return an incorrect set of biconnected components (contributed by @gilcu3)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
