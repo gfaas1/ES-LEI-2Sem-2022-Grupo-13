@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
     - Updated Guava to version 28.0 (contributed by John Sichi)
     - Fixed bug in `BiconnectivityInspector` which would occasionally return an incorrect set of biconnected components (contributed by Reynaldo Gil Pons)
 	- Allow edge selection to be overridden in `CrossComponentIterator` (contributed by Sean Hudson)
+    - Reuse traversal listener implementation in tests (contributed by Timofey Chudakov)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
