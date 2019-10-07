@@ -132,6 +132,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Charul Bhanawat](https://github.com/CharulBhanawat13)
 - [Benjamin Krogh](https://github.com/bkrogh)
 - [Reynaldo Gil Pons](https://github.com/gilcu3)
+- [Sean Hudson](https://github.com/shduke)
 
 (if we have missed your name on this list, please email us to get it fixed).
 
