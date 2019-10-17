@@ -11,7 +11,8 @@ Changes to JGraphT in each version:
     - Fixed bug in `BiconnectivityInspector` which would occasionally return an incorrect set of biconnected components (contributed by Reynaldo Gil Pons)
 	- Allow edge selection to be overridden in `CrossComponentIterator` (contributed by Sean Hudson)
     - Reuse traversal listener implementation in tests (contributed by Timofey Chudakov)
-    - Add path length limit to `HawickJamesSimpleCycles`
+    - Fixed bug in `BetweennessCentrality` which occasionally returned in incorrect centrality score for vertices in weighted graphs (contributed by Gil Pons)
+    - Added path length limit to `HawickJamesSimpleCycles` (contributed by Edwin Ouwehand)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
