@@ -13,6 +13,7 @@ Changes to JGraphT in each version:
     - Reuse traversal listener implementation in tests (contributed by Timofey Chudakov)
     - Fixed bug in `BetweennessCentrality` which occasionally returned in incorrect centrality score for vertices in weighted graphs (contributed by Gil Pons)
     - Added path length limit to `HawickJamesSimpleCycles` (contributed by Edwin Ouwehand)
+    - Added links in Guava adapater package-info (contributed by John Sichi)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
