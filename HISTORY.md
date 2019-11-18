@@ -16,6 +16,7 @@ Changes to JGraphT in each version:
     - Added links in Guava adapater package-info (contributed by John Sichi)
     - Added Boyer-Myrvold planarity testing algorithm (contributed by Timofey Chudakov)
     - Added contraction hierarchy precomputation algorithm (contributed by Semen Chudakov)
+    - Enhanced `IntegerComponentNameProvider` to take arbitrary base (contributed by Amr Alhossary)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
