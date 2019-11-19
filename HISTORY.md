@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
     - Added Boyer-Myrvold planarity testing algorithm (contributed by Timofey Chudakov)
     - Added contraction hierarchy precomputation algorithm (contributed by Semen Chudakov)
     - Enhanced `IntegerComponentNameProvider` to take arbitrary base (contributed by Amr Alhossary)
+    - Fixed a bug in the `GraphWalk.equals()` method which caused a NullpointerException when invoked on an empty walk (contributed by Volkov Viktor)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
