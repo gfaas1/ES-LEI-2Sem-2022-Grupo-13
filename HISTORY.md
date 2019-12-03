@@ -20,6 +20,7 @@ Changes to JGraphT in each version:
     - Fixed a bug in the `GraphWalk.equals()` method which caused a NullpointerException when invoked on an empty walk (contributed by Volkov Viktor)
     - Added k-spanning-tree clustering algorithm (contributed by Dimitrios Michail)
     - Added directed scale-free graph generator (contributed by Amr Alhossary)
+    - Enhanced `CompleteGraphGenerator` and `CompleteBipartiteGraphGenerator` to generate edges between existing vertices (contributed by Joris Kinable)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
