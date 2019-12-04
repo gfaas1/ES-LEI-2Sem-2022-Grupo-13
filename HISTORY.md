@@ -21,6 +21,7 @@ Changes to JGraphT in each version:
     - Added k-spanning-tree clustering algorithm (contributed by Dimitrios Michail)
     - Added directed scale-free graph generator (contributed by Amr Alhossary)
     - Enhanced `CompleteGraphGenerator` and `CompleteBipartiteGraphGenerator` to generate edges between existing vertices (contributed by Joris Kinable)
+    - Added efficient bidirectional Dijkstra implementation based on contraction hierarchy (contributed by Semen Chudakov)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
