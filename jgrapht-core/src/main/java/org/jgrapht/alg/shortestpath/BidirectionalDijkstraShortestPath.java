@@ -137,12 +137,12 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         }
 
         // create frontiers
-        DijkstraSearchFrontier forwardFrontier = new DijkstraSearchFrontier(graph);
-        DijkstraSearchFrontier backwardFrontier;
+        DijkstraSearchFrontier<V,E> forwardFrontier = new DijkstraSearchFrontier<>(graph,heapSupplier);
+        DijkstraSearchFrontier<V,E> backwardFrontier;
         if (graph.getType().isDirected()) {
-            backwardFrontier = new DijkstraSearchFrontier(new EdgeReversedGraph<>(graph));
+            backwardFrontier = new DijkstraSearchFrontier<>(new EdgeReversedGraph<>(graph), heapSupplier);
         } else {
-            backwardFrontier = new DijkstraSearchFrontier(graph);
+            backwardFrontier = new DijkstraSearchFrontier<>(graph, heapSupplier);
         }
 
         assert !source.equals(sink);
@@ -155,8 +155,8 @@ public final class BidirectionalDijkstraShortestPath<V, E>
         double bestPath = Double.POSITIVE_INFINITY;
         V bestPathCommonVertex = null;
 
-        DijkstraSearchFrontier frontier = forwardFrontier;
-        DijkstraSearchFrontier otherFrontier = backwardFrontier;
+        DijkstraSearchFrontier<V,E> frontier = forwardFrontier;
+        DijkstraSearchFrontier<V,E> otherFrontier = backwardFrontier;
 
         while (true) {
             // stopping condition
@@ -190,7 +190,7 @@ public final class BidirectionalDijkstraShortestPath<V, E>
             }
 
             // swap frontiers
-            DijkstraSearchFrontier tmpFrontier = frontier;
+            DijkstraSearchFrontier<V,E> tmpFrontier = frontier;
             frontier = otherFrontier;
             otherFrontier = tmpFrontier;
 
@@ -207,16 +207,19 @@ public final class BidirectionalDijkstraShortestPath<V, E>
 
     /**
      * Maintains search frontier during shortest path computation.
+     *
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    class DijkstraSearchFrontier
+    static class DijkstraSearchFrontier<V, E>
         extends
-        BaseSearchFrontier
+        BaseSearchFrontier<V, E>
     {
 
         final AddressableHeap<Double, Pair<V, E>> heap;
         final Map<V, AddressableHeap.Handle<Double, Pair<V, E>>> seen;
 
-        DijkstraSearchFrontier(Graph<V, E> graph)
+        DijkstraSearchFrontier(Graph<V, E> graph, Supplier<AddressableHeap<Double, Pair<V, E>>> heapSupplier)
         {
             super(graph);
             this.heap = heapSupplier.get();

@@ -58,7 +58,7 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
      * @return shortest path between source and sink
      */
     protected GraphPath<V, E> createPath(
-        BaseSearchFrontier forwardFrontier, BaseSearchFrontier backwardFrontier, double weight,
+        BaseSearchFrontier<V, E> forwardFrontier, BaseSearchFrontier<V, E> backwardFrontier, double weight,
         V source, V commonVertex, V sink)
     {
         LinkedList<E> edgeList = new LinkedList<>();
@@ -100,8 +100,11 @@ public abstract class BaseBidirectionalShortestPathAlgorithm<V, E>
 
     /**
      * Base class of the search frontier used by bidirectional shortest path algorithms.
+     *
+     * @param <V> vertices type
+     * @param <E> edges type
      */
-    abstract class BaseSearchFrontier
+    abstract static class BaseSearchFrontier<V, E>
     {
         /**
          * Frontier`s graph.
