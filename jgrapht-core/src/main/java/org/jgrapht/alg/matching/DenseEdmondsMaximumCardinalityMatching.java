@@ -88,7 +88,7 @@ import java.util.stream.*;
  *
  * @author Joris Kinable
  */
-public class EdmondsMaximumCardinalityMatching<V, E>
+public class DenseEdmondsMaximumCardinalityMatching<V, E>
     implements
     MatchingAlgorithm<V, E>
 {
@@ -142,7 +142,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * 
      * @param graph undirected graph (graph does not have to be simple)
      */
-    public EdmondsMaximumCardinalityMatching(Graph<V, E> graph)
+    public DenseEdmondsMaximumCardinalityMatching(Graph<V, E> graph)
     {
         this(graph, new GreedyMaximumCardinalityMatching<>(graph, false));
     }
@@ -154,7 +154,7 @@ public class EdmondsMaximumCardinalityMatching<V, E>
      * @param initializer heuristic matching algorithm used to quickly generate a (near optimal)
      *        initial feasible solution.
      */
-    public EdmondsMaximumCardinalityMatching(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
+    public DenseEdmondsMaximumCardinalityMatching(Graph<V, E> graph, MatchingAlgorithm<V, E> initializer)
     {
         this.graph = GraphTests.requireUndirected(graph);
         this.initializer = initializer;

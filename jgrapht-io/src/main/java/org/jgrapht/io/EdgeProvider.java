@@ -24,7 +24,9 @@ import java.util.*;
  *
  * @param <V> the vertex type
  * @param <E> the edge type
+ * @deprecated Use new importers.
  */
+@Deprecated
 public interface EdgeProvider<V, E>
 {
     /**

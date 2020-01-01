@@ -57,7 +57,9 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.nio.csv.CSVImporter} instead
  */
+@Deprecated
 public class CSVImporter<V, E>
     extends
     AbstractBaseImporter<V, E>

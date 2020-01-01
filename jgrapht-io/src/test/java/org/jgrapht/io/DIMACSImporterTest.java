@@ -27,11 +27,12 @@ import java.nio.charset.*;
 import static org.junit.Assert.*;
 
 /**
- * .
+ * Tests
  *
  * @author Joris Kinable
  * @author Dimitrios Michail
  */
+@Deprecated
 public class DIMACSImporterTest
 {
 

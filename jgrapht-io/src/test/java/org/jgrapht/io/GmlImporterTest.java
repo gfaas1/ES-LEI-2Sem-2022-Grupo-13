@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
  * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class GmlImporterTest
 {
 

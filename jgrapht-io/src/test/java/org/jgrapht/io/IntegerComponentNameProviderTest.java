@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016-2017, by Dimitrios Michail and Contributors.
+ * (C) Copyright 2019-2019, by Amr ALHOSSARY and Contributors.
  *
  * JGraphT : a free Java graph-theory library
  *
@@ -26,6 +26,7 @@ import org.junit.Test;
  * 
  * @author Amr ALHOSSARY
  */
+@Deprecated
 public class IntegerComponentNameProviderTest
 {
 

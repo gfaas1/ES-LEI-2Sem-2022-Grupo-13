@@ -17,15 +17,23 @@
  */
 package org.jgrapht.io;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import org.apache.commons.text.*;
-import org.jgrapht.*;
-import org.jgrapht.io.GmlParser.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.io.*;
-import java.util.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.text.StringEscapeUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.io.GmlParser.GmlContext;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
@@ -96,7 +104,9 @@ import java.util.*;
  * @param <E> the edge type
  * 
  * @author Dimitrios Michail
+ * @deprecated Use {@link org.jgrapht.nio.gml.GmlImporter} instead
  */
+@Deprecated
 public class GmlImporter<V, E>
     extends
     AbstractBaseImporter<V, E>
@@ -394,9 +404,10 @@ public class GmlImporter<V, E>
                 if (level == 2) {
                     stringBuffer.append(' ');
                     stringBuffer.append(']');
-                    attributes.put(
-                        key,
-                        new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
+                    attributes
+                        .put(
+                            key,
+                            new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
                     stringBuffer = null;
                 } else if (level >= 3) {
                     stringBuffer.append(' ');

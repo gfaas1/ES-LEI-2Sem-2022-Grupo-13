@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author Joris Kinable
  */
-public final class EdmondsMaximumCardinalityMatchingTest
+public final class DenseEdmondsMaximumCardinalityMatchingTest
 {
 
     @Test
@@ -47,8 +47,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 3);
         assertTrue(matcher.isMaximumMatching(match));
@@ -66,8 +66,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
 
         assertEquals(6, g.edgeSet().size());
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         this.verifyMatching(g, match, 2);
         assertTrue(matcher.isMaximumMatching(match));
@@ -84,8 +84,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -103,8 +103,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -120,8 +120,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -137,8 +137,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -154,8 +154,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             g.addEdge(edge[0], edge[1]);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -171,8 +171,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         DefaultEdge e34 = g.addEdge(3, 4);
         g.addEdge(4, 1);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
 
         // Perfect matching
         Matching<Integer, DefaultEdge> m1 =
@@ -203,8 +203,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         g.addEdge(2, 6);
         g.addEdge(0, 1);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         Matching<Integer, DefaultEdge> match = matcher.getMatching();
         assertTrue(matcher.isMaximumMatching(match));
     }
@@ -228,8 +228,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         Matching<Integer, DefaultEdge> m = new MatchingAlgorithm.MatchingImpl<>(graph, mEdges, 4);
         verifyMatching(graph, m, 4);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         assertTrue(matcher.isMaximumMatching(m));
     }
 
@@ -245,8 +245,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         g.addEdge(4, 6);
         g.addEdge(2, 6);
 
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         assertTrue(matcher.isMaximumMatching(matcher.getMatching()));
     }
 
@@ -264,8 +264,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
             Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(
                 SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
             generator.generateGraph(graph);
-            EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-                new EdmondsMaximumCardinalityMatching<>(graph);
+            DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+                new DenseEdmondsMaximumCardinalityMatching<>(graph);
 
             Matching<Integer, DefaultEdge> m = matcher.getMatching();
             this.verifyMatching(graph, m, m.getEdges().size());
@@ -287,8 +287,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
                             SupplierUtil.createIntegerSupplier(),
                             SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
                     generator.generateGraph(graph);
-                    EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-                        new EdmondsMaximumCardinalityMatching<>(graph);
+                    DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+                        new DenseEdmondsMaximumCardinalityMatching<>(graph);
                     Matching<Integer, DefaultEdge> m1 = matcher.getMatching();
                     assertTrue(matcher.isMaximumMatching(m1));
                 }
@@ -322,8 +322,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
             { 192, 38 }, { 187, 104 }, { 27, 157 } };
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
-        EdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+        DenseEdmondsMaximumCardinalityMatching<Integer, DefaultEdge> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 58);
     }
 
@@ -571,7 +571,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         Matching<Integer, DefaultEdge> m = matcher.getMatching();
         verifyMatching(graph, m, 100);
         assertTrue(m.isPerfect());
@@ -712,7 +712,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 100);
     }
 
@@ -803,7 +803,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 99);
     }
 
@@ -882,7 +882,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 98);
     }
 
@@ -949,7 +949,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 96);
     }
 
@@ -1009,7 +1009,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 91);
     }
 
@@ -1060,7 +1060,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 86);
     }
 
@@ -1103,7 +1103,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 75);
     }
 
@@ -1138,7 +1138,7 @@ public final class EdmondsMaximumCardinalityMatchingTest
         for (int[] edge : edges)
             Graphs.addEdgeWithVertices(graph, edge[0], edge[1]);
         MatchingAlgorithm<Integer, DefaultEdge> matcher =
-            new EdmondsMaximumCardinalityMatching<>(graph);
+            new DenseEdmondsMaximumCardinalityMatching<>(graph);
         verifyMatching(graph, matcher.getMatching(), 66);
     }
 
@@ -1162,8 +1162,8 @@ public final class EdmondsMaximumCardinalityMatchingTest
         assertEquals(m.getEdges().size() * 2, matched.size()); // Ensure that there are no
                                                                // self-loops
 
-        EdmondsMaximumCardinalityMatching<V, E> matcher =
-            new EdmondsMaximumCardinalityMatching<>(g);
+        DenseEdmondsMaximumCardinalityMatching<V, E> matcher =
+            new DenseEdmondsMaximumCardinalityMatching<>(g);
         assertTrue(matcher.isMaximumMatching(m));
     }
 

@@ -21,7 +21,9 @@ package org.jgrapht.io;
  * An attribute
  * 
  * @author Dimitrios Michail
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public interface Attribute
 {
     /**

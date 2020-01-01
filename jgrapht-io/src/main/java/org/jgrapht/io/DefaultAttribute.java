@@ -25,7 +25,9 @@ import java.io.*;
  * @param <T> the underlying type
  * 
  * @author Dimitrios Michail
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public class DefaultAttribute<T>
     implements
     Attribute,

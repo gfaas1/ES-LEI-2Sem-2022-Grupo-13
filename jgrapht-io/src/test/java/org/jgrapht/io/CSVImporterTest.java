@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
  * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class CSVImporterTest
 {
     private static final String NL = System.getProperty("line.separator");

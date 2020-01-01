@@ -19,10 +19,13 @@ package org.jgrapht.io;
 
 /**
  * An exception that the library throws in case of graph export errors.
+ * 
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public class ExportException
     extends
-    Exception
+    RuntimeException
 {
     private static final long serialVersionUID = 1L;
 

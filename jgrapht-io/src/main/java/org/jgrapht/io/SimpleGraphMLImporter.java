@@ -124,7 +124,9 @@ import java.util.*;
  * @param <E> the graph edge type
  * 
  * @author Dimitrios Michail
+ * @deprecated In favor of {@link org.jgrapht.nio.graphml.SimpleGraphMLImporter}.
  */
+@Deprecated
 public class SimpleGraphMLImporter<V, E>
     extends
     BaseListenableImporter<V, E>

@@ -27,7 +27,9 @@ import java.nio.charset.*;
  * 
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public interface GraphImporter<V, E>
 {
 

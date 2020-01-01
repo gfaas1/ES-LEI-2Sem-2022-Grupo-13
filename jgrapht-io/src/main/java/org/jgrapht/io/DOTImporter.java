@@ -40,7 +40,10 @@ import java.util.*;
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
+ * 
+ * @deprecated Use {@link org.jgrapht.nio.dot.DOTImporter} instead
  */
+@Deprecated
 public class DOTImporter<V, E>
     extends
     AbstractBaseImporter<V, E>
@@ -246,11 +249,13 @@ public class DOTImporter<V, E>
             if (idPartial != null) {
                 try {
                     // notify graph updater
-                    graphUpdater.update(
-                        graph,
-                        Collections.singletonMap(
-                            DEFAULT_GRAPH_ID_KEY,
-                            DefaultAttribute.createAttribute(idPartial.getId())));
+                    graphUpdater
+                        .update(
+                            graph,
+                            Collections
+                                .singletonMap(
+                                    DEFAULT_GRAPH_ID_KEY,
+                                    DefaultAttribute.createAttribute(idPartial.getId())));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
                 }
@@ -446,9 +451,10 @@ public class DOTImporter<V, E>
             scope.graphAttrs.put(key, DefaultAttribute.createAttribute(value));
             if (subgraphScopes.size() == 1) {
                 try {
-                    graphUpdater.update(
-                        graph,
-                        Collections.singletonMap(key, DefaultAttribute.createAttribute(value)));
+                    graphUpdater
+                        .update(
+                            graph,
+                            Collections.singletonMap(key, DefaultAttribute.createAttribute(value)));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Graph update failed: " + e.getMessage(), e);
                 }

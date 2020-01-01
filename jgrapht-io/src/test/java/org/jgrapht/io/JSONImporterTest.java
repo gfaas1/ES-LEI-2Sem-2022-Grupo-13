@@ -33,6 +33,7 @@ import static org.junit.Assert.assertTrue;
  * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class JSONImporterTest
 {
 

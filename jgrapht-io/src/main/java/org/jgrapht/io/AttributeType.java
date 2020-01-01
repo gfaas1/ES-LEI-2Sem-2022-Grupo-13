@@ -21,7 +21,9 @@ package org.jgrapht.io;
  * Denotes the type of an attribute.
  * 
  * @author Dimitrios Michail
+ * @deprecated In favor of nio package.
  */
+@Deprecated
 public enum AttributeType
 {
     NULL("null"),

@@ -28,8 +28,11 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
+ * Tests
+ * 
  * @author Dimitrios Michail
  */
+@Deprecated
 public class GraphMLImporterTest
 {
 
