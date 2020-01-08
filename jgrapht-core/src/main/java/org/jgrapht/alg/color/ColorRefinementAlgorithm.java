@@ -19,6 +19,7 @@ package org.jgrapht.alg.color;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -118,7 +119,7 @@ public class ColorRefinementAlgorithm<V, E>
     private Set<Integer> calculateColorDegrees(int refiningColor, ColoringRepresentation rep)
     {
         int n = graph.vertexSet().size();
-        Set<Integer> adjacentColors = new LinkedHashSet<>(n);
+        Set<Integer> adjacentColors = CollectionUtil.newLinkedHashSetWithExpectedSize(n);
 
         // calculate color degree and update maxColorDegree
         for (V v : rep.colorClasses.get(refiningColor)) {
@@ -352,8 +353,8 @@ public class ColorRefinementAlgorithm<V, E>
         public ColoringRepresentation(Graph<V, E> graph, Coloring<V> alpha)
         {
             int n = graph.vertexSet().size();
-            this.colorClasses = new HashMap<>(n);
-            this.positiveDegreeColorClasses = new HashMap<>(n);
+            this.colorClasses = CollectionUtil.newHashMapWithExpectedSize(n);
+            this.positiveDegreeColorClasses = CollectionUtil.newHashMapWithExpectedSize(n);
             this.maxColorDegree = new int[n];
             this.minColorDegree = new int[n];
             this.colorDegree = new HashMap<>();

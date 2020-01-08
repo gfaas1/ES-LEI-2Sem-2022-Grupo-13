@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.cycle.*;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -93,11 +94,13 @@ public class ChordalGraphColoring<V, E>
         if (coloring == null && chordalityInspector.isChordal()) {
             List<V> perfectEliminationOrder = chordalityInspector.getPerfectEliminationOrder();
 
-            Map<V, Integer> vertexColoring = new HashMap<>(perfectEliminationOrder.size());
+            Map<V, Integer> vertexColoring =
+                CollectionUtil.newHashMapWithExpectedSize(perfectEliminationOrder.size());
             Map<V, Integer> vertexInOrder = getVertexInOrder(perfectEliminationOrder);
             for (V vertex : perfectEliminationOrder) {
                 Set<V> predecessors = getPredecessors(vertexInOrder, vertex);
-                Set<Integer> predecessorColors = new HashSet<>(predecessors.size());
+                Set<Integer> predecessorColors =
+                    CollectionUtil.newHashSetWithExpectedSize(predecessors.size());
                 predecessors.forEach(v -> predecessorColors.add(vertexColoring.get(v)));
 
                 // find the minimum unused color in the set of predecessors
@@ -122,7 +125,8 @@ public class ChordalGraphColoring<V, E>
      */
     private Map<V, Integer> getVertexInOrder(List<V> vertexOrder)
     {
-        Map<V, Integer> vertexInOrder = new HashMap<>(vertexOrder.size());
+        Map<V, Integer> vertexInOrder =
+            CollectionUtil.newHashMapWithExpectedSize(vertexOrder.size());
         int i = 0;
         for (V vertex : vertexOrder) {
             vertexInOrder.put(vertex, i++);

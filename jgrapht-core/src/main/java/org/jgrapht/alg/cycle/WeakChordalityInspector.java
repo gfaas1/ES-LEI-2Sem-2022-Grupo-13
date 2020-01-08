@@ -21,6 +21,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.util.*;
 import org.jgrapht.generate.*;
 import org.jgrapht.graph.*;
+import org.jgrapht.util.*;
 
 import java.util.*;
 
@@ -122,8 +123,8 @@ public class WeakChordalityInspector<V, E>
      */
     private void initMappings()
     {
-        vertices = new HashMap<>(n);
-        indices = new HashMap<>(n);
+        vertices = CollectionUtil.newHashMapWithExpectedSize(n);
+        indices = CollectionUtil.newHashMapWithExpectedSize(n);
         int i = 0;
         for (V v : graph.vertexSet()) {
             indices.put(i, v);
@@ -397,7 +398,7 @@ public class WeakChordalityInspector<V, E>
             bucketsByLabel.add(new HashSet<>());
         }
         List<Integer> labels = new ArrayList<>(Collections.nCopies(n, -1));
-        Set<Integer> unvisited = new HashSet<>(separator.size());
+        Set<Integer> unvisited = CollectionUtil.newHashSetWithExpectedSize(separator.size());
         separator.forEach(pair -> {
             unvisited.add(pair.getFirst());
             labels.set(pair.getFirst(), 0);
@@ -594,7 +595,8 @@ public class WeakChordalityInspector<V, E>
     private GraphPath<V, E> findHole(
         Graph<V, E> graph, V sourceInSeparator, V source, V target, V targetInSeparator)
     {
-        Map<V, Boolean> visited = new HashMap<>(graph.vertexSet().size());
+        Map<V, Boolean> visited =
+            CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
         for (V vertex : graph.vertexSet()) {
             visited.put(vertex, false);
         }
@@ -728,7 +730,7 @@ public class WeakChordalityInspector<V, E>
         V source = graph.getEdgeSource(edge);
         V target = graph.getEdgeTarget(edge);
         Set<V> neighborhood = neighborhoodSetOf(graph, edge);
-        Map<V, Byte> dfsMap = new HashMap<>(graph.vertexSet().size());
+        Map<V, Byte> dfsMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
 
         // 0 - unvisited (white), 1 - neighbor of the edge (red), 2 - visited (black)
         for (V vertex : graph.vertexSet()) {

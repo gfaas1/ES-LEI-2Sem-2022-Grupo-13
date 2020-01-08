@@ -513,7 +513,7 @@ public class GnmRandomGraphGeneratorTest
             // create a map between vertex value to its order(1st,2nd,etc)
             // "CAT"=1 "DOG"=2 "RHINO"=3
 
-            this.mapVertexToOrder = new HashMap<>(vertexSet.size());
+            this.mapVertexToOrder = CollectionUtil.newHashMapWithExpectedSize(vertexSet.size());
 
             int counter = 0;
             for (V vertex : vertexSet) {
@@ -527,7 +527,7 @@ public class GnmRandomGraphGeneratorTest
             // on directed graph, edge A->B must be (A,B)
             // on undirected graph, edge A-B can be (A,B) or (B,A)
 
-            this.labelsEdgesSet = new HashSet<>(edgeSet.size());
+            this.labelsEdgesSet = CollectionUtil.newHashSetWithExpectedSize(edgeSet.size());
             for (E edge : edgeSet) {
                 V sourceVertex = g.getEdgeSource(edge);
                 int sourceLabel = mapVertexToOrder.get(sourceVertex);
