@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Enhanced `CompleteGraphGenerator` and `CompleteBipartiteGraphGenerator` to generate edges between existing vertices (contributed by Joris Kinable)
     - Added efficient bidirectional Dijkstra implementation based on contraction hierarchy (contributed by Semen Chudakov)
     - Added sparse graphs and event-based importers, and improved numerous algorithms (contributed by Dimitrios Michail)
+    - Added `CollectionUtil` for preallocating maps and sets correctly (contributed by Hannes Wellman)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
