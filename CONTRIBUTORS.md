@@ -4,7 +4,7 @@ Copyright Notice: The JGraphT project source code is a composite of contribution
 
 JGraphT wouldn't be the library it is today without the source contributions and suggestions made by the authors:
 
-- [Barak Naveh](http://sourceforge.net/users/barak_naveh/) (project founder)
+- [Barak Naveh](https://github.com/baraknaveh) (project founder)
 - [John V Sichi](https://github.com/jsichi) (current project administrator)
 - [Joris Kinable](https://github.com/jkinable) (JGraphtT Project Reviewer/Committer and Release Manager)
 - [Dimitrios Michail](https://github.com/d-michail) (JGraphT Project Reviewer/Committer)
