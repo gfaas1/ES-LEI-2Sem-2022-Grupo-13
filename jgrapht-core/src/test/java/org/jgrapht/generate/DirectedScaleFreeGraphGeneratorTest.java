@@ -132,7 +132,7 @@ public class DirectedScaleFreeGraphGeneratorTest
     public void testNoOutDegreeZero()
     {
         DirectedScaleFreeGraphGenerator<Integer, DefaultEdge> generator =
-            new DirectedScaleFreeGraphGenerator<>(0.3f, 0.0f, 0.5f, 0.5f, -1, 1000);
+            new DirectedScaleFreeGraphGenerator<>(0.3f, 0.0f, 0.5f, 0.5f, -1, 1000, 12345);
         generator.setAllowingMultipleEdges(false);
         Graph<Integer, DefaultEdge> g = new DefaultDirectedGraph<>(
             SupplierUtil.createIntegerSupplier(), SupplierUtil.DEFAULT_EDGE_SUPPLIER, false);
