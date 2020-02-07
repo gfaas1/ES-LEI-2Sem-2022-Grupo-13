@@ -29,6 +29,7 @@ Changes to JGraphT in each version:
     - Enhanced `DoublyLinkedList` by implementing the `List` and `Deque` interfaces (contributed by Hannes Wellmann)
     - Added dedicated class for `ContractionHierarchy` (contributed by Semen Chudakov)
     - Use try with resources in default implementations of GraphImporter and GraphExporter (contributed by Hannes Wellmann)
+    - Fixed naive lca bug and code cleanup (reported by Shinpei Hayashi, contributed by Timofey Chudakov)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
