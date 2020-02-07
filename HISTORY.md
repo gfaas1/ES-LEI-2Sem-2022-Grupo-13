@@ -27,6 +27,7 @@ Changes to JGraphT in each version:
     - Added efficient many-to-many shortest path algorithm based on contraction hierarchy (contributed by Semen Chudakov)
     - Added greedy, nearest-insertion, nearest-neighbor heuristic for TSP and improved stability in two-opt heuristic (contributed by Peter Harman)
     - Enhanced `DoublyLinkedList` by implementing the `List` and `Deque` interfaces (contributed by Hannes Wellmann)
+    - Added dedicated classs for `ContractionHierarchy` (contributed by Semen Chudakov)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
