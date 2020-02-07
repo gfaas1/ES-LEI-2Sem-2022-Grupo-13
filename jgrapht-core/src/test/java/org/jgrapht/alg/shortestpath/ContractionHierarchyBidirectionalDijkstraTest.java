@@ -21,7 +21,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.util.Pair;
 import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -32,11 +31,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -173,12 +171,11 @@ public class ContractionHierarchyBidirectionalDijkstraTest {
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> dijkstraShortestPaths =
                 new DijkstraShortestPath<>(graph).getPaths(source);
 
-        Pair<Graph<ContractionVertex<Integer>, ContractionHierarchy.ContractionEdge<DefaultWeightedEdge>>,
-                Map<Integer, ContractionVertex<Integer>>> p
-                = new ContractionHierarchy<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
+        ContractionHierarchy<Integer, DefaultWeightedEdge> data
+                = new ContractionHierarchyPrecomputation<>(graph, () -> new Random(SEED)).computeContractionHierarchy();
 
         ShortestPathAlgorithm.SingleSourcePaths<Integer, DefaultWeightedEdge> contractionDijkstra =
-                new ContractionHierarchyBidirectionalDijkstra<>(graph, p.getFirst(), p.getSecond()).getPaths(source);
+                new ContractionHierarchyBidirectionalDijkstra<>(data).getPaths(source);
 
         assertEqualPaths(dijkstraShortestPaths, contractionDijkstra, graph.vertexSet());
     }

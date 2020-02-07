@@ -31,8 +31,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath.DijkstraSearchFrontier;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionEdge;
-import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVertex;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionEdge;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
+import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionVertex;
 
 /**
  * Implementation of the hierarchical query algorithm based on the bidirectional Dijkstra search.
@@ -72,11 +73,15 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchy.ContractionVerte
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
- * @see ContractionHierarchy
+ * @see ContractionHierarchyPrecomputation
  * @since July 2019
  */
 public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortestPathAlgorithm<V, E> {
 
+    /**
+     * Contraction hierarchy which is used to compute shortest paths.
+     */
+    private ContractionHierarchy<V, E> contractionHierarchy;
     /**
      * Contracted graph, which is used during the queries.
      */
@@ -98,67 +103,39 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
     private double radius;
 
     /**
-     * Constructs a new instance of the algorithm for a given graph.
+     * Constructs a new instance of the algorithm for a given {@code graph}.
      *
      * @param graph the graph
      */
     public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph) {
-        super(graph);
-        Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>> p
-                = new ContractionHierarchy<>(graph).computeContractionHierarchy();
-        init(p.getFirst(), p.getSecond(), Double.POSITIVE_INFINITY, PairingHeap::new);
+        this(new ContractionHierarchyPrecomputation<>(graph).computeContractionHierarchy());
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, contracted graph
-     * and contraction mapping.
+     * Constructs a new instance of the algorithm for a given {@code hierarchy}.
      *
-     * @param graph              the graph
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from vertices in
-     *                           graph to vertices in {@code contractionGraph}
+     * @param hierarchy contraction of the {@code graph}
      */
-    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                                                     Map<V, ContractionVertex<V>> contractionMapping) {
-        this(graph, contractedGraph, contractionMapping, Double.POSITIVE_INFINITY, PairingHeap::new);
+    public ContractionHierarchyBidirectionalDijkstra(ContractionHierarchy<V, E> hierarchy) {
+        this(hierarchy, Double.POSITIVE_INFINITY, PairingHeap::new);
     }
 
     /**
-     * Constructs a new instance of the algorithm for a given graph, contracted graph,
-     * contraction mapping, radius and heap supplier.
+     * Constructs a new instance of the algorithm for the given {@code hierarchy},
+     * {@code radius} and {@code heapSupplier}.
      *
-     * @param graph              the graph
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from vertices in
-     *                           graph to vertices in {@code contractionGraph}
-     * @param radius             search radius
-     * @param heapSupplier       supplier of the preferable heap implementation
+     * @param hierarchy    contraction of the {@code graph}
+     * @param radius       search radius
+     * @param heapSupplier supplier of the preferable heap implementation
      */
-    public ContractionHierarchyBidirectionalDijkstra(Graph<V, E> graph,
-                                                     Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                                                     Map<V, ContractionVertex<V>> contractionMapping,
+    public ContractionHierarchyBidirectionalDijkstra(ContractionHierarchy<V, E> hierarchy,
                                                      double radius,
                                                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>,
                                                              ContractionEdge<E>>>> heapSupplier) {
-        super(graph);
-        init(contractedGraph, contractionMapping, radius, heapSupplier);
-    }
-
-    /**
-     * Initializes fields of a new instance of the algorithm.
-     *
-     * @param contractedGraph    contracted graph
-     * @param contractionMapping mapping from original to contracted vertices
-     * @param radius             search radius
-     * @param heapSupplier       supplier of the preferable heap implementation
-     */
-    private void init(Graph<ContractionVertex<V>, ContractionEdge<E>> contractedGraph,
-                      Map<V, ContractionVertex<V>> contractionMapping,
-                      double radius,
-                      Supplier<AddressableHeap<Double, Pair<ContractionVertex<V>, ContractionEdge<E>>>> heapSupplier) {
-        this.contractionGraph = contractedGraph;
-        this.contractionMapping = contractionMapping;
+        super(hierarchy.getGraph());
+        this.contractionHierarchy = hierarchy;
+        this.contractionGraph = hierarchy.getContractionGraph();
+        this.contractionMapping = hierarchy.getContractionMapping();
         this.radius = radius;
         this.heapSupplier = heapSupplier;
     }
@@ -299,7 +276,7 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
                 break;
             }
 
-            unpackBackward(contractionGraph, e, vertexList, edgeList);
+            contractionHierarchy.unpackBackward(e, vertexList, edgeList);
             v = contractionGraph.getEdgeSource(e);
         }
 
@@ -312,47 +289,11 @@ public class ContractionHierarchyBidirectionalDijkstra<V, E> extends BaseShortes
                 break;
             }
 
-            unpackForward(contractionGraph, e, vertexList, edgeList);
+            contractionHierarchy.unpackForward(e, vertexList, edgeList);
             v = contractionGraph.getEdgeTarget(e);
         }
 
         return new GraphWalk<>(graph, source.vertex, sink.vertex, vertexList, edgeList, weight);
-    }
-
-    /**
-     * Unpacks {@code edge} by recursively going from target to source.
-     *
-     * @param edge       edge to unpack
-     * @param vertexList vertex list of the path
-     * @param edgeList   edge list of the path
-     */
-    static <V, E> void unpackBackward(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                      ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
-        if (edge.bypassedEdges == null) {
-            vertexList.addFirst(contractionGraph.getEdgeSource(edge).vertex);
-            edgeList.addFirst(edge.edge);
-        } else {
-            unpackBackward(contractionGraph, edge.bypassedEdges.getSecond(), vertexList, edgeList);
-            unpackBackward(contractionGraph, edge.bypassedEdges.getFirst(), vertexList, edgeList);
-        }
-    }
-
-    /**
-     * Unpacks {@code edge} by recursively going from source to target.
-     *
-     * @param edge       edge to unpack
-     * @param vertexList vertex list of the path
-     * @param edgeList   edge list of the path
-     */
-    static <V, E> void unpackForward(Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
-                                     ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
-        if (edge.bypassedEdges == null) {
-            vertexList.addLast(contractionGraph.getEdgeTarget(edge).vertex);
-            edgeList.addLast(edge.edge);
-        } else {
-            unpackForward(contractionGraph, edge.bypassedEdges.getFirst(), vertexList, edgeList);
-            unpackForward(contractionGraph, edge.bypassedEdges.getSecond(), vertexList, edgeList);
-        }
     }
 
     /**

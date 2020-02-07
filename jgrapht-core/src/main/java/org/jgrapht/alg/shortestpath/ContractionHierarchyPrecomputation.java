@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -87,7 +88,7 @@ import java.util.function.Supplier;
  * @param <E> the graph edge type
  * @author Semen Chudakov
  */
-public class ContractionHierarchy<V, E> {
+public class ContractionHierarchyPrecomputation<V, E> {
     /**
      * The underlying graph.
      */
@@ -181,7 +182,7 @@ public class ContractionHierarchy<V, E> {
      *
      * @param graph graph
      */
-    public ContractionHierarchy(Graph<V, E> graph) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph) {
         this(graph, Runtime.getRuntime().availableProcessors());
     }
 
@@ -191,7 +192,7 @@ public class ContractionHierarchy<V, E> {
      * @param graph       graph
      * @param parallelism maximum number of threads used in the computations
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism) {
         this(graph, parallelism, Random::new, PairingHeap::new);
     }
 
@@ -203,8 +204,8 @@ public class ContractionHierarchy<V, E> {
      * @param graph          graph
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchy(Graph<V, E> graph, Supplier<Random> randomSupplier) {
-        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier, PairingHeap::new);
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, Supplier<Random> randomSupplier) {
+        this(graph, Runtime.getRuntime().availableProcessors(), randomSupplier);
     }
 
     /**
@@ -215,7 +216,7 @@ public class ContractionHierarchy<V, E> {
      * @param parallelism    maximum number of threads used in the computations
      * @param randomSupplier supplier for preferable instances of {@link Random}
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier) {
         this(graph, parallelism, randomSupplier, PairingHeap::new);
     }
 
@@ -229,8 +230,8 @@ public class ContractionHierarchy<V, E> {
      * @param randomSupplier              supplier for preferable instances of {@link Random}
      * @param shortcutsSearchHeapSupplier supplier for the preferable heap implementation.
      */
-    public ContractionHierarchy(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
-                                Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
+    public ContractionHierarchyPrecomputation(Graph<V, E> graph, int parallelism, Supplier<Random> randomSupplier,
+                                              Supplier<AddressableHeap<Double, ContractionVertex<V>>> shortcutsSearchHeapSupplier) {
         this.graph = graph;
         this.contractionGraph = GraphTypeBuilder.<ContractionVertex<V>, ContractionEdge<E>>directed().weighted(true)
                 .allowingMultipleEdges(false).allowingSelfLoops(false).buildGraph();
@@ -247,7 +248,7 @@ public class ContractionHierarchy<V, E> {
                 v -> verticesData.get(v.vertexId) != null && verticesData.get(v.vertexId).isContracted, e -> false);
         contractionMapping = new HashMap<>();
 
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        executor = Executors.newFixedThreadPool(parallelism);
         completionService = new ExecutorCompletionService<>(executor);
 
         tasks = new ArrayList<>(parallelism);
@@ -278,8 +279,7 @@ public class ContractionHierarchy<V, E> {
      *
      * @return contraction hierarchy and mapping of original to contracted vertices
      */
-    public Pair<Graph<ContractionVertex<V>, ContractionEdge<E>>, Map<V, ContractionVertex<V>>>
-    computeContractionHierarchy() {
+    public ContractionHierarchy<V, E> computeContractionHierarchy() {
         fillContractionGraphAndVerticesArray();
         // compute initial priorities in parallel
         submitTasks(0, contractionGraph.vertexSet().size(), computeInitialPrioritiesConsumers);
@@ -290,7 +290,7 @@ public class ContractionHierarchy<V, E> {
         submitTasks(0, contractionGraph.vertexSet().size(), markUpwardEdgesConsumer);
         shutdownExecutor();
 
-        return Pair.of(contractionGraph, contractionMapping);
+        return new ContractionHierarchy<>(graph, contractionGraph, contractionMapping);
     }
 
     /**
@@ -845,6 +845,108 @@ public class ContractionHierarchy<V, E> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Return type of this algorithm. Contains {@code contractionGraph} and {@code contractionMapping}.
+     *
+     * @param <V> the graph vertex type
+     * @param <E> the graph edge type
+     */
+    public static class ContractionHierarchy<V, E> {
+        /**
+         * The underlying graph.
+         */
+        private Graph<V, E> graph;
+        /**
+         * Graph that stores the computed contraction hierarchy.
+         */
+        private Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph;
+        /**
+         * Mapping of the vertices in the original graph to the vertices in the
+         * contraction hierarchy graph.
+         */
+        private Map<V, ContractionVertex<V>> contractionMapping;
+
+        /**
+         * Returns the underlying graph of this contraction hierarchy.
+         *
+         * @return underlying graph of this contraction hierarchy
+         */
+        public Graph<V, E> getGraph() {
+            return graph;
+        }
+
+        /**
+         * Returns contracted graph.
+         *
+         * @return contracted graph
+         */
+        public Graph<ContractionVertex<V>, ContractionEdge<E>> getContractionGraph() {
+            return contractionGraph;
+        }
+
+        /**
+         * Returns mapping of the vertices in the original graph to
+         * the vertices in the contracted graph.
+         *
+         * @return vertices mapping
+         */
+        public Map<V, ContractionVertex<V>> getContractionMapping() {
+            return contractionMapping;
+        }
+
+        /**
+         * Constructs a new instance for the given {@code graph}, {@code contractionGraph} and
+         * {@code contractionMapping}.
+         *
+         * @param graph              graph
+         * @param contractionGraph   contracted graph
+         * @param contractionMapping vertices mapping
+         */
+        ContractionHierarchy(Graph<V, E> graph, Graph<ContractionVertex<V>, ContractionEdge<E>> contractionGraph,
+                             Map<V, ContractionVertex<V>> contractionMapping) {
+            this.graph = graph;
+            this.contractionGraph = contractionGraph;
+            this.contractionMapping = contractionMapping;
+        }
+
+
+        /**
+         * Unpacks {@code edge} by recursively going from target to source.
+         *
+         * @param edge       edge to unpack
+         * @param vertexList vertex list of the path
+         * @param edgeList   edge list of the path
+         */
+        public void unpackBackward(ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
+            if (edge.bypassedEdges == null) {
+                vertexList.addFirst(contractionGraph.getEdgeSource(edge).vertex);
+                edgeList.addFirst(edge.edge);
+            } else {
+                unpackBackward(edge.bypassedEdges.getSecond(), vertexList, edgeList);
+                unpackBackward(edge.bypassedEdges.getFirst(), vertexList, edgeList);
+            }
+        }
+
+        /**
+         * Unpacks {@code edge} by recursively going from source to target.
+         *
+         * @param edge       edge to unpack
+         * @param vertexList vertex list of the path
+         * @param edgeList   edge list of the path
+         */
+        public void unpackForward(ContractionEdge<E> edge, LinkedList<V> vertexList, LinkedList<E> edgeList) {
+            if (edge.bypassedEdges == null) {
+                vertexList.addLast(contractionGraph.getEdgeTarget(edge).vertex);
+                edgeList.addLast(edge.edge);
+            } else {
+                unpackForward(edge.bypassedEdges.getFirst(), vertexList, edgeList);
+                unpackForward(edge.bypassedEdges.getSecond(), vertexList, edgeList);
+            }
+        }
+
     }
 
 
