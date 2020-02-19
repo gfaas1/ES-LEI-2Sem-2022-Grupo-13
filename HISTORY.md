@@ -31,7 +31,8 @@ Changes to JGraphT in each version:
     - Use try with resources in default implementations of GraphImporter and GraphExporter (contributed by Hannes Wellmann)
     - Fixed naive lca bug and code cleanup (reported by Shinpei Hayashi, contributed by Timofey Chudakov)
     - Enhanced Javadoc generation by adding compatibility with newer JDKs (contributed by Dimitrios Michail)
-	- Reflection speedup (suggested by shevek, contributed by Dimitrios Michail)
+    - Reflection speedup (suggested by shevek, contributed by Dimitrios Michail)
+    - Added a graph drawing component, including various layout algorithms incl., random, circular, and tree layouts, the Fruchterman and Reingold Force-Directed Placement algorithm, and a variation of the latter augmented with the Barnes-Hut indexing technique (contributed by Dimitrios Michail)
 
 - **version 1.3.1** (3-Jun-2019):
     - Prepared release cycle 1.3.1: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
