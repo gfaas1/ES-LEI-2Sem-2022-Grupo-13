@@ -15,7 +15,7 @@ easily add us as a dependency to your project:
 &lt;version&gt;1.4.0&lt;/version&gt;
 </code></pre>
 
-(See [the wiki](https://github.com/jgrapht/jgrapht#using-via-maven) for information on how to use the latest **SNAPSHOT** build instead.)
+(There are also [instructions](https://github.com/jgrapht/jgrapht#using-via-maven) for how to use the latest **SNAPSHOT** build instead.)
 
 <br>
 
