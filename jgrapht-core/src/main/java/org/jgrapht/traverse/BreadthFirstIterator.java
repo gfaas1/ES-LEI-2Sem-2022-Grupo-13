@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * A breadth-first iterator for a directed or undirected graph.
- * 
+ *
  * <p>
  * For this iterator to work correctly the graph must not be modified during iteration. Currently
  * there are no means to ensure that, nor to fail-fast. The results of such modifications are
@@ -111,7 +111,7 @@ public class BreadthFirstIterator<V, E>
      * Returns the parent node of vertex $v$ in the BFS search tree, or null if $v$ is the root
      * node. This method can only be invoked on a vertex $v$ once the iterator has visited vertex
      * $v$!
-     * 
+     *
      * @param v vertex
      * @return parent node of vertex $v$ in the BFS search tree, or null if $v$ is a root node
      */
@@ -129,7 +129,7 @@ public class BreadthFirstIterator<V, E>
      * Returns the edge connecting vertex $v$ to its parent in the spanning tree formed by the BFS
      * search, or null if $v$ is a root node. This method can only be invoked on a vertex $v$ once
      * the iterator has visited vertex $v$!
-     * 
+     *
      * @param v vertex
      * @return edge connecting vertex $v$ in the BFS search tree to its parent, or null if $v$ is a
      *         root node
@@ -145,7 +145,7 @@ public class BreadthFirstIterator<V, E>
      * the number of edges traversed on the path from the root of the BFS tree to vertex $v$. The
      * root of the search tree has depth 0. This method can only be invoked on a vertex $v$ once the
      * iterator has visited vertex $v$!
-     * 
+     *
      * @param v vertex
      * @return depth of vertex $v$ in the search tree
      */
@@ -164,18 +164,33 @@ public class BreadthFirstIterator<V, E>
         return queue.removeFirst();
     }
 
-    static class SearchNodeData<E>
+    protected static class SearchNodeData<E>
     {
+
+        private final E edge;
+        private final int depth;
+
         /**
          * Edge to parent
          */
-        final E edge;
+        public E getEdge()
+        {
+            return edge;
+        }
+
         /**
          * Depth of node in search tree
          */
-        final int depth;
+        public int getDepth()
+        {
+            return depth;
+        }
 
-        SearchNodeData(E edge, int depth)
+        /**
+         * @param edge  Edge to parent
+         * @param depth Depth of node in search tree
+         */
+        public SearchNodeData(E edge, int depth)
         {
             this.edge = edge;
             this.depth = depth;
