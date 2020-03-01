@@ -93,4 +93,12 @@ class MaskEdgeSet<V, E>
             .count();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return !iterator().hasNext();
+    }
 }

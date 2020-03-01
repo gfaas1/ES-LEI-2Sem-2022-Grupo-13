@@ -38,11 +38,12 @@ public class MaskEdgeSetTest
     private DefaultEdge e1, e2, e3, loop1, loop2;
 
     private MaskEdgeSet<String, DefaultEdge> testMaskedEdgeSet;
+    private DefaultDirectedGraph<String, DefaultEdge> directed;
 
     @Before
     public void setUp()
     {
-        Graph<String, DefaultEdge> directed = new DefaultDirectedGraph<>(DefaultEdge.class);
+        directed = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         directed.addVertex(v1);
         directed.addVertex(v2);
@@ -88,5 +89,15 @@ public class MaskEdgeSetTest
         assertTrue(it.hasNext());
         assertEquals(loop2, it.next());
         assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testIsEmpty() {
+        assertFalse(testMaskedEdgeSet.isEmpty());
+        testMaskedEdgeSet = new MaskEdgeSet<>(directed, directed.edgeSet(), v -> v.equals(v1), e -> true);
+        assertTrue(testMaskedEdgeSet.isEmpty());
+        testMaskedEdgeSet =
+                new MaskEdgeSet<>(directed, directed.edgeSet(), v -> true, e -> e == e2);
+        assertTrue(testMaskedEdgeSet.isEmpty());
     }
 }

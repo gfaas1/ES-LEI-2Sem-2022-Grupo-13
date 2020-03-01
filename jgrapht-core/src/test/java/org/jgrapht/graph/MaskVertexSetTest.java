@@ -53,7 +53,7 @@ public class MaskVertexSetTest
         e1 = directed.addEdge(v1, v2);
         directed.addEdge(v2, v3);
 
-        testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), v -> v == v1);
+        testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), v -> v.equals(v1));
     }
 
     @Test
@@ -82,5 +82,12 @@ public class MaskVertexSetTest
         assertTrue(it.hasNext());
         assertEquals(v4, it.next());
         assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testIsEmpty() {
+        assertFalse(testMaskVertexSet.isEmpty());
+        testMaskVertexSet = new MaskVertexSet<>(directed.vertexSet(), v -> true);
+        assertTrue(testMaskVertexSet.isEmpty());
     }
 }

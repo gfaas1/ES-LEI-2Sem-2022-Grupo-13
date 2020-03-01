@@ -75,4 +75,12 @@ class MaskVertexSet<V>
         return (int) vertexSet.stream().filter(mask.negate()).count();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return !iterator().hasNext();
+    }
 }
