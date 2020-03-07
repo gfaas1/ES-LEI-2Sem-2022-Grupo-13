@@ -508,3 +508,4 @@ subgraphs, all contributed by Guillaume Boulmier.
     - moved unit-tests to a separate folder hierarchy and added more unit-tests.
 
 - **version 0.4.0** (July-2003) : Initial public release.
+
