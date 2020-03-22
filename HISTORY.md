@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
     - Bring back vertex factory in importers (contributed by Dimitrios Michail)
     - Added `LabelPropagationClustering` algorithm (contributed by Dimitrios Michail)
     - Make sure `addVertex()` fires listener event (spotted by akirschbaum, contributed by Dimitrios Michail)
+    - Change queue implementation from LinkedList to ArrayDeque (spotted by shevek, contributed by Ritik Goyal)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
