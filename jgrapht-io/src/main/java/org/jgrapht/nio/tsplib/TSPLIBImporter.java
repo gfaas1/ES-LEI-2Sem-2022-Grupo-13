@@ -274,7 +274,7 @@ public class TSPLIBImporter<V, E>
          * Returns the mapping of vertex to corresponding node imported from the
          * <em>NODE_COORD_SECTION<em> of a <em>TSPLIB95</em> file.
          * 
-         * @return
+         * @return the mapping of vertex to corresponding node
          */
         public Map<V, Node> getVertexToNodeMapping()
         {
