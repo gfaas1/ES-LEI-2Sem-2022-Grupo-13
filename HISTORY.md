@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
     - Change queue implementation from LinkedList to ArrayDeque (spotted by shevek, contributed by Ritik Goyal)
     - Added TSPLIB95 graph and tour importer (contributed by Hannes Wellmann)
     - Fixed issue with inconsistent graph after duplicate edge addition (spotted by Greg Gibeling, contributed by Dimitrios Michail)
+    - Fixed issue with failing `DirectedScaleFreeGraphGenerator` by fixing the tests seed (contributed by Timofey Chudakov)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
