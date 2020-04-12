@@ -1369,6 +1369,20 @@ public class DoublyLinkedList<E>
          * @return the value this list node contains
          */
         V getValue();
+
+        /**
+         * Returns the next node in the list structure with respect to this node
+         *
+         * @return the next node in the list structure with respect to this node
+         */
+        ListNode<V> getNext();
+
+        /**
+         * Returns the previous node in the list structure with respect to this node
+         *
+         * @return the previous node in the list structure with respect to this node
+         */
+        ListNode<V> getPrev();
     }
 
     /**
@@ -1414,6 +1428,22 @@ public class DoublyLinkedList<E>
         public V getValue()
         {
             return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ListNodeImpl<V> getNext() {
+            return next;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ListNodeImpl<V> getPrev() {
+            return prev;
         }
     }
 }
