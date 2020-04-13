@@ -29,8 +29,9 @@ import java.util.function.*;
  * Exports a graph into a GML file (Graph Modeling Language).
  *
  * <p>
- * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
- * http://www. infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
+ * For a description of the format see <a href=
+ * "https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing/blob/master/GML/gml-technical-report.pdf">
+ * https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing/blob/master/GML/gml-technical-report.pdf</a>.
  * 
  * <p>
  * The behavior of the exporter such as whether to print vertex labels, edge labels, and/or edge
@@ -56,6 +57,11 @@ public class GmlExporter<V, E>
     private static final String TAB2 = "\t\t";
 
     private static final String LABEL_ATTRIBUTE_KEY = "label";
+    private static final String WEIGHT_ATTRIBUTE_KEY = "weight";
+
+    private static final Set<String> FORBIDDEN_VERTEX_CUSTOM_ATTRIBUTE_KEYS = Set.of("id");
+    private static final Set<String> FORBIDDEN_EDGE_CUSTOM_ATTRIBUTE_KEYS =
+        Set.of("id", "source", "target");
 
     private final Set<Parameter> parameters;
 
@@ -70,14 +76,28 @@ public class GmlExporter<V, E>
          */
         EXPORT_EDGE_LABELS,
         /**
+         * If set the exporter outputs edge weights
+         */
+        EXPORT_EDGE_WEIGHTS,
+        /**
+         * If set the exporter outputs all custom edge attributes. The attributes are located from
+         * the edge attribute provider of the importer. Note that these attributes have lowest
+         * priority compared to special handled ones like "label", or "weight" and cannot contain
+         * special keys like "id", "source" and "target".
+         */
+        EXPORT_CUSTOM_EDGE_ATTRIBUTES,
+        /**
          * If set the exporter outputs vertex labels. The labels are found from the vertex attribute
          * provider of the importer using the key "label".
          */
         EXPORT_VERTEX_LABELS,
         /**
-         * If set the exporter outputs edge weights
+         * If set the exporter outputs all custom vertex attributes. The attributes are located from
+         * the vertex attribute provider of the importer. Note that these attributes have lowest
+         * priority compared to special handled ones like "label" and cannot contain special keys
+         * like "id".
          */
-        EXPORT_EDGE_WEIGHTS,
+        EXPORT_CUSTOM_VERTEX_ATTRIBUTES,
         /**
          * If set the exporter escapes all strings as Java strings, otherwise no escaping is
          * performed.
@@ -177,19 +197,65 @@ public class GmlExporter<V, E>
         out.println("Version" + DELIM + VERSION);
     }
 
+    private void exportAttribute(PrintWriter out, String key, Attribute attribute)
+    {
+        AttributeType type = attribute.getType();
+        switch (type) {
+        case INT:
+            out.println(TAB2 + key + DELIM + Integer.valueOf(attribute.getValue()));
+            break;
+        case LONG:
+            out.println(TAB2 + key + DELIM + Long.valueOf(attribute.getValue()));
+            break;
+        case FLOAT:
+            out.println(TAB2 + key + DELIM + Float.valueOf(attribute.getValue()));
+            break;
+        case DOUBLE:
+            out.println(TAB2 + key + DELIM + Double.valueOf(attribute.getValue()));
+            break;
+        default:
+            out.println(TAB2 + key + DELIM + quoted(attribute.getValue()));
+            break;
+        }
+    }
+
     private void exportVertices(PrintWriter out, Graph<V, E> g)
     {
         boolean exportVertexLabels = parameters.contains(Parameter.EXPORT_VERTEX_LABELS);
+        boolean exportCustomVertexAttributes =
+            parameters.contains(Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES);
 
         for (V from : g.vertexSet()) {
             out.println(TAB1 + "node");
             out.println(TAB1 + "[");
             out.println(TAB2 + "id" + DELIM + getVertexId(from));
+
             if (exportVertexLabels) {
                 String label = getVertexAttribute(from, LABEL_ATTRIBUTE_KEY)
                     .map(Attribute::getValue).orElse(from.toString());
                 out.println(TAB2 + "label" + DELIM + quoted(label));
             }
+            if (exportCustomVertexAttributes) {
+                getVertexAttributes(from).ifPresent(vertexAttributes -> {
+                    vertexAttributes.entrySet().stream().forEach(e -> {
+                        String customAttributeKey = e.getKey();
+                        Attribute customAttributeValue = e.getValue();
+
+                        if (FORBIDDEN_VERTEX_CUSTOM_ATTRIBUTE_KEYS.contains(customAttributeKey)) {
+                            throw new IllegalArgumentException(
+                                "Key " + customAttributeKey + " is reserved");
+                        }
+
+                        if (LABEL_ATTRIBUTE_KEY.equals(customAttributeKey) && exportVertexLabels) {
+                            // give higher priority to vertex labels
+                            return;
+                        }
+
+                        exportAttribute(out, customAttributeKey, customAttributeValue);
+                    });
+                });
+            }
+
             out.println(TAB1 + "]");
         }
     }
@@ -198,6 +264,8 @@ public class GmlExporter<V, E>
     {
         boolean exportEdgeWeights = parameters.contains(Parameter.EXPORT_EDGE_WEIGHTS);
         boolean exportEdgeLabels = parameters.contains(Parameter.EXPORT_EDGE_LABELS);
+        boolean exportCustomEdgeAttributes =
+            parameters.contains(Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES);
 
         for (E edge : g.edgeSet()) {
             out.println(TAB1 + "edge");
@@ -206,18 +274,48 @@ public class GmlExporter<V, E>
             getEdgeId(edge).ifPresent(eId -> {
                 out.println(TAB2 + "id" + DELIM + eId);
             });
+
             String s = getVertexId(g.getEdgeSource(edge));
             out.println(TAB2 + "source" + DELIM + s);
+
             String t = getVertexId(g.getEdgeTarget(edge));
             out.println(TAB2 + "target" + DELIM + t);
+
             if (exportEdgeLabels) {
-                String label = getEdgeAttribute(edge, LABEL_ATTRIBUTE_KEY)
-                    .map(Attribute::getValue).orElse(edge.toString());
-                out.println(TAB2 + "label" + DELIM + quoted(label));
+                Attribute label = getEdgeAttribute(edge, LABEL_ATTRIBUTE_KEY)
+                    .orElse(DefaultAttribute.createAttribute(edge.toString()));
+                exportAttribute(out, "label", label);
             }
             if (exportEdgeWeights && g.getType().isWeighted()) {
-                out.println(TAB2 + "weight" + DELIM + Double.toString(g.getEdgeWeight(edge)));
+                exportAttribute(
+                    out, "weight", DefaultAttribute.createAttribute(g.getEdgeWeight(edge)));
             }
+            if (exportCustomEdgeAttributes) {
+                getEdgeAttributes(edge).ifPresent(edgeAttributes -> {
+                    edgeAttributes.entrySet().stream().forEach(e -> {
+                        String customAttributeKey = e.getKey();
+                        Attribute customAttributeValue = e.getValue();
+
+                        if (FORBIDDEN_EDGE_CUSTOM_ATTRIBUTE_KEYS.contains(customAttributeKey)) {
+                            throw new IllegalArgumentException(
+                                "Key " + customAttributeKey + " is reserved");
+                        }
+
+                        if (LABEL_ATTRIBUTE_KEY.equals(customAttributeKey) && exportEdgeLabels) {
+                            // give higher priority to edge labels
+                            return;
+                        }
+
+                        if (WEIGHT_ATTRIBUTE_KEY.equals(customAttributeKey) && exportEdgeWeights) {
+                            // give higher priority to edge weights
+                            return;
+                        }
+
+                        exportAttribute(out, customAttributeKey, customAttributeValue);
+                    });
+                });
+            }
+
             out.println(TAB1 + "]");
         }
     }
