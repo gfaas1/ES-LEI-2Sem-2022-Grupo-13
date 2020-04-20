@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
     - Fixed corner case issue with `BoyerMyrvoldPlanarityInspector` (spotted by Malcolm Deck, contributed by Timofey Chudakov)
     - Added tree dynamic connectivity using the Euler tour data structure (contributed by Timofey Chudakov)
     - `GmlExporter` support for custom attributes (contributed by Dimitrios Michail)
+    - Invoking `addVertex()` on an `AsUnmodifiableGraph` now throws an `UnsupportedOperationException` (contributed by Dimitrios Michail)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
