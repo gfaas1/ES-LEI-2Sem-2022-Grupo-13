@@ -17,14 +17,28 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.util.*;
-import org.jgrapht.graph.*;
-import org.jheaps.*;
-import org.jheaps.tree.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.MaskSubgraph;
+import org.jheaps.AddressableHeap;
+import org.jheaps.tree.PairingHeap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Iterator over the shortest loopless paths between two vertices in a graph sorted by weight.
@@ -50,9 +64,13 @@ import java.util.function.*;
  * deviation vertex of current path (including the deviation vertex) it is possible to avoid
  * building duplicated candidates.
  *
+ * <p>
+ * Additionally, the algorithm supports path validation by means of {@link PathValidator}.
+ *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  * @author Semen Chudakov
+ * @see PathValidator
  */
 public class YenShortestPathIterator<V, E>
     implements
@@ -72,50 +90,57 @@ public class YenShortestPathIterator<V, E>
     private final V sink;
 
     /**
+     * Provides possibility to validate computed paths and exclude invalid ones.
+     * Whenever a candidate path $P$ first deviation vertex $u$ is produces by this
+     * algorithm, it is passed to {@code getLastValidDeviation()} to find the last
+     * valid deviation vertex $v$ for it. The algorithm puts obtained vertex in
+     * {@code lastDeviations} map. If vertex $v$ is {@code null}, the candidate is
+     * considered correct. Otherwise for the path $P$ deviation are built only from
+     * vertices between $u$ and $v$ inclusive.
+     */
+    private PathValidator<V, E> pathValidator;
+
+    /**
      * List of the paths returned so far via the {@link #next()} method.
      */
     private List<GraphPath<V, E>> resultList;
 
     /**
      * Heap of the candidate path generated so far and sorted my their weights.
+     * There is a boolean flag for every candidate in the queue, which indicates, if
+     * the path is valid ot not. An invalid path is a path which contains an edge which
+     * fails the {@code pathValidator} check. Invalid paths are kept in the queue, because
+     * it is possible to build a valid path by deviating from an invalid one.
      */
-    private AddressableHeap<Double, GraphPath<V, E>> candidatePaths;
+    private AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>> candidatePaths;
 
     /**
-     * Keeps track of the vertex at which each path deviates from its "parent" path.
+     * For each path $P$, stores its deviation point.
+     * <p>
+     * A path deviation point is a first node in the path that doesn't belong to the parent path.
+     * If the path doesn't have a parent (which is only possible for one shortest path between the
+     * {@code source} and the {@code sink}), this map stores its first node.
      */
-    private Map<GraphPath<V, E>, V> deviations;
+    private Map<GraphPath<V, E>, V> firstDeviations;
 
     /**
-     * Keeps track of the number of paths in the candidates heap which have a particular weight. The
-     * algorithm uses this map to maintain the number of paths with minimum weight in the heap.
+     * For each path $P$ stores the vertex $u$ such that $pathValidator#isValidPath([start_vertex, u], (u,v)) = false$,
+     * where $[start_vertex, u]$ denotes the subpath of $P$ from its start to vertex $u$ and $v$ is the next vertex
+     * in $P$ after $u$. Stores {@code null}, if there is no such vertex.
      */
-    private Map<Double, Integer> weightsFrequencies;
+    private Map<GraphPath<V,E>, V> lastDeviations;
 
     /**
-     * Stores the number of paths in {@code candidatePaths} with minimum weight.
+     * Stores number of valid candidates in {@code candidatePaths}.
      */
-    private int numberOfCandidatesWithMinimumWeight;
+    private int numberOfValidPathInQueue;
 
     /**
-     * Returns current number of candidate paths with minimum weight.
-     *
-     * @return current number of candidate paths with minimum weight
+     * Indicates if the {@code lazyInitializePathHeap} procedure
+     * has already been executed.
      */
-    int getNumberOfCandidatesWithMinimumWeight()
-    {
-        return numberOfCandidatesWithMinimumWeight;
-    }
+    private boolean shortestPathComputed;
 
-    /**
-     * Returns heap with candidate paths.
-     *
-     * @return heap with candidate paths
-     */
-    AddressableHeap<Double, GraphPath<V, E>> getCandidatePaths()
-    {
-        return candidatePaths;
-    }
 
     /**
      * Constructs an instance of the algorithm for given {@code graph}, {@code source} and
@@ -131,39 +156,143 @@ public class YenShortestPathIterator<V, E>
     }
 
     /**
-     * Constructs an instance of the algorithm for given {@code graph}, {@code source}, {@code sink}
-     * and {@code heapSupplier}.
+     * Constructs an instance of the algorithm for given {@code graph}, {@code source},
+     * {@code sink} and {@code pathValidator}. The {@code pathValidator} can be {@code null},
+     * which will indicate that all paths are valid.
      *
-     * @param graph graph
-     * @param source source vertex
-     * @param sink sink vertex
-     * @param heapSupplier supplier of the preferable heap implementation
+     * @param graph         graph
+     * @param source        source vertex
+     * @param sink          sink vertex
+     * @param pathValidator validator to computed paths
+     */
+    public YenShortestPathIterator(Graph<V, E> graph, V source, V sink, PathValidator<V, E> pathValidator) {
+        this(graph, source, sink, PairingHeap::new, pathValidator);
+    }
+
+    /**
+     * Constructs an instance of the algorithm for given {@code graph}, {@code source},
+     * {@code sink} and {@code heapSupplier}.
+     *
+     * @param graph         graph
+     * @param source        source vertex
+     * @param sink          sink vertex
+     * @param heapSupplier  supplier of the preferable heap implementation
      */
     public YenShortestPathIterator(
-        Graph<V, E> graph, V source, V sink,
-        Supplier<AddressableHeap<Double, GraphPath<V, E>>> heapSupplier)
+            Graph<V, E> graph, V source, V sink,
+            Supplier<AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>>> heapSupplier){
+        this(graph, source, sink, heapSupplier, null);
+    }
+
+    /**
+     * Constructs an instance of the algorithm for given {@code graph}, {@code source},
+     * {@code sink}, {@code heapSupplier} and {@code pathValidator}. The {@code pathValidator}
+     * can be {@code null}, which will indicate that all paths are valid.
+     *
+     * @param graph         graph
+     * @param source        source vertex
+     * @param sink          sink vertex
+     * @param heapSupplier  supplier of the preferable heap implementation
+     * @param pathValidator validator for computed paths
+     */
+    public YenShortestPathIterator(
+            Graph<V, E> graph, V source, V sink,
+            Supplier<AddressableHeap<Double, Pair<GraphPath<V, E>, Boolean>>> heapSupplier,
+            PathValidator<V, E> pathValidator)
     {
         this.graph = Objects.requireNonNull(graph, "Graph cannot be null!");
         if (!graph.containsVertex(source)) {
             throw new IllegalArgumentException("Graph should contain source vertex!");
         }
         this.source = source;
-        if (!graph.containsVertex(source)) {
+        if (!graph.containsVertex(sink)) {
             throw new IllegalArgumentException("Graph should contain sink vertex!");
         }
         this.sink = sink;
+        this.pathValidator = pathValidator;
         Objects.requireNonNull(heapSupplier, "Heap supplier cannot be null");
         this.resultList = new ArrayList<>();
         this.candidatePaths = heapSupplier.get();
-        this.deviations = new HashMap<>();
-        this.weightsFrequencies = new HashMap<>();
+        this.firstDeviations = new HashMap<>();
+        this.lastDeviations = new HashMap<>();
+    }
 
-        GraphPath<V, E> shortestPath = DijkstraShortestPath.findPathBetween(graph, source, sink);
-        if (shortestPath != null) {
-            candidatePaths.insert(shortestPath.getWeight(), shortestPath);
-            deviations.put(shortestPath, source);
-            weightsFrequencies.put(shortestPath.getWeight(), 1);
+    /**
+     * Lazily initializes the path heap by computing the shortest path between
+     * the {@code source} and the {@code sink} and building a necessary amount
+     * of paths until at least one valid path is found.
+     *
+     * Note: this computation is done only once during the first call to either
+     * {@code hasNext()} or {@code next()}.
+     */
+    private void lazyInitializePathHeap() {
+        if (!shortestPathComputed) {
+            GraphPath<V, E> shortestPath = DijkstraShortestPath.findPathBetween(graph, source, sink);
+
+            if (shortestPath != null) {
+                V lastValidDeviation = getLastValidDeviation(shortestPath, source);
+                boolean shortestPathIsValid = lastValidDeviation == null;
+
+                candidatePaths.insert(shortestPath.getWeight(), Pair.of(shortestPath, shortestPathIsValid));
+                firstDeviations.put(shortestPath, source);
+                lastDeviations.put(shortestPath, lastValidDeviation);
+
+                if (shortestPathIsValid) {
+                    ++numberOfValidPathInQueue;
+                }
+
+                ensureAtLeastOneValidPathInQueue();
+            }
         }
+        shortestPathComputed = true;
+    }
+
+    /**
+     * This method is used to make sure that there exist at least one valid path
+     * on the queue. During the iteration if the candidates queue is not empty
+     * then the iterator has next value. Otherwise is does not.
+     */
+    private void ensureAtLeastOneValidPathInQueue() {
+        while(numberOfValidPathInQueue == 0 && !candidatePaths.isEmpty()){
+            Pair<GraphPath<V,E>, Boolean> p = candidatePaths.deleteMin().getValue();
+            GraphPath<V,E> currentPath = p.getFirst();
+            resultList.add(currentPath);
+            int numberOfValidDeviations = addDeviations(currentPath);
+            numberOfValidPathInQueue += numberOfValidDeviations;
+        }
+    }
+
+    /**
+     * Computes vertex $u$ such that $pathValidator#isValidPath([start_vertex, u], (u,v)) = false$,
+     * where $[start_vertex, u]$ denotes the subpath of $P$ from its start to vertex $u$ and $v$ is
+     * the next vertex in $P$ after $u$. Returns null if there is no such vertex.
+     *
+     * @param path           graph path
+     * @param firstDeviation vertex at which {@code path} deviates from its parent path
+     * @return vertex which is last valid deviation for {@code path}
+     */
+    private V getLastValidDeviation(GraphPath<V,E> path, V firstDeviation){
+        if(pathValidator == null){
+            return null;
+        }
+        List<V> vertices = path.getVertexList();
+        List<E> edges = path.getEdgeList();
+
+        V result = null;
+        double partialPathWeight = 0.0;
+        int firstDeviationIndex = vertices.indexOf(firstDeviation);
+        for(int i = firstDeviationIndex; i < edges.size(); ++i){
+            GraphPath<V,E> partialPath = new GraphWalk<>(path.getGraph(), path.getStartVertex(), vertices.get(i),
+                    vertices.subList(0, i + 1), edges.subList(0, i), partialPathWeight);
+            E edge = edges.get(i);
+            boolean isValid = pathValidator.isValidPath(partialPath, edge);
+            if (!isValid) {
+                result = vertices.get(i);
+                break;
+            }
+            partialPathWeight += graph.getEdgeWeight(edge);
+        }
+        return result;
     }
 
     /**
@@ -172,6 +301,7 @@ public class YenShortestPathIterator<V, E>
     @Override
     public boolean hasNext()
     {
+        lazyInitializePathHeap();
         return !candidatePaths.isEmpty();
     }
 
@@ -181,47 +311,55 @@ public class YenShortestPathIterator<V, E>
     @Override
     public GraphPath<V, E> next()
     {
-        if (candidatePaths.isEmpty()) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
 
-        GraphPath<V, E> path = candidatePaths.deleteMin().getValue();
-        resultList.add(path);
-        double pathWeight = path.getWeight();
-        int minWeightFrequency = weightsFrequencies.get(pathWeight);
-        if (minWeightFrequency == 1) {
-            weightsFrequencies.remove(pathWeight);
-            if (candidatePaths.isEmpty()) {
-                numberOfCandidatesWithMinimumWeight = 0;
-            } else {
-                numberOfCandidatesWithMinimumWeight =
-                    weightsFrequencies.get(candidatePaths.findMin().getKey());
+        GraphPath<V,E> result = null;
+        while(result == null){
+            Pair<GraphPath<V,E>, Boolean> p = candidatePaths.deleteMin().getValue();
+            GraphPath<V, E> path = p.getFirst();
+            boolean isValid = p.getSecond();
+
+            if(isValid){
+                result = path;
+                --numberOfValidPathInQueue;
             }
-        } else {
-            weightsFrequencies.put(pathWeight, minWeightFrequency - 1);
+
+            resultList.add(path);
+
+            int numberOfValidDeviations = addDeviations(path);
+            numberOfValidPathInQueue += numberOfValidDeviations;
         }
 
-        addDeviations(path);
-
-        return path;
+        ensureAtLeastOneValidPathInQueue();
+        return result;
     }
 
     /**
      * Builds unique loopless deviations from the given path in the {@code graph}. First receives
      * the deviation vertex of the current path as well as sets of vertices and edges to be masked
      * during the computations. Then creates an instance of the {@link MaskSubgraph} and builds a
-     * reversed shortest paths tree starting at {@code sink} in it. Finally builds new paths by
-     * deviating from the vertices of the provided {@code path}.
+     * reversed shortest paths tree starting at {@code sink} in it. Finally builds new candidate paths
+     * by deviating from the vertices of the provided {@code path}. Puts only those candidates in
+     * the {@code candidatesList}, which deviate from {@code path} between $firstDeviation$ and
+     * $lastDeviation$. $firstDeviation$ and $lastDeviation$ are obtainer from {@code firstDeviations}
+     * and {@code lastDeviations} correspondingly.
+     *
      * <p>
      * For more information on this step refer to the article with the original description of the
      * algorithm.
      *
      * @param path path to build deviations of
+     *
+     * @return number of computed valid deviations
      */
-    private void addDeviations(GraphPath<V, E> path)
+    private int addDeviations(GraphPath<V, E> path)
     {
+        int result = 0;
+
         // initializations
-        V pathDeviation = deviations.get(path);
+        V pathDeviation = firstDeviations.get(path);
         List<V> pathVertices = path.getVertexList();
         List<E> pathEdges = path.getEdgeList();
         int pathVerticesSize = pathVertices.size();
@@ -244,6 +382,15 @@ public class YenShortestPathIterator<V, E>
         YenShortestPathsTree customTree = new YenShortestPathsTree(
             maskSubgraph, maskedVertices, maskedEdges, distanceAndPredecessorMap, sink);
 
+        // get index of last deviation
+        V lastDeviation = lastDeviations.get(path);
+        int lastDeviationIndex;
+        if(lastDeviation == null) { // path is valid
+            lastDeviationIndex = pathVerticesSize - 2;
+        }else{
+            lastDeviationIndex = pathVertices.indexOf(lastDeviation);
+        }
+
         // build spur paths by iteratively recovering vertices of the current path
         boolean proceed = true;
         for (int i = pathVerticesSize - 2; i >= 0 && proceed; i--) {
@@ -261,17 +408,19 @@ public class YenShortestPathIterator<V, E>
             if (spurPath != null) {
                 customTree.correctDistanceBackward(recoverVertex);
 
-                GraphPath<V, E> candidate = getCandidatePath(path, i, spurPath);
-                double candidateWeight = candidate.getWeight();
+                if (i <= lastDeviationIndex) { // candidate path can be valid
+                    GraphPath<V, E> candidate = getCandidatePath(path, i, spurPath);
+                    double candidateWeight = candidate.getWeight();
+                    V candidateLastDeviation = getLastValidDeviation(candidate, recoverVertex);
+                    boolean candidateIsValid = candidateLastDeviation == null;
 
-                candidatePaths.insert(candidateWeight, candidate);
-                deviations.put(candidate, recoverVertex);
+                    candidatePaths.insert(candidateWeight, Pair.of(candidate, candidateIsValid));
+                    firstDeviations.put(candidate, recoverVertex);
+                    lastDeviations.put(candidate, candidateLastDeviation);
 
-                if (weightsFrequencies.containsKey(candidateWeight)) {
-                    weightsFrequencies
-                        .computeIfPresent(candidateWeight, (weight, frequency) -> frequency + 1);
-                } else {
-                    weightsFrequencies.put(candidateWeight, 1);
+                    if (candidateIsValid) {
+                        ++result;
+                    }
                 }
             }
             // recover edge
@@ -287,6 +436,7 @@ public class YenShortestPathIterator<V, E>
                 customTree.correctDistanceBackward(recoverVertex);
             }
         }
+        return result;
     }
 
     /**

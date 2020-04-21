@@ -17,14 +17,24 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.*;
-import org.jgrapht.alg.interfaces.*;
-import org.jgrapht.generate.*;
-import org.jgrapht.graph.*;
-import org.jgrapht.util.*;
-import org.junit.*;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.WeightedPseudograph;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -37,18 +47,6 @@ public class YenShortestPathIteratorTest
     extends
     BaseKShortestPathTest
 {
-
-    /**
-     * Seed value which is used to generate random graphs by
-     * {@code getRandomGraph(Graph, int, double)} method.
-     */
-    private static final long SEED = 13l;
-    /**
-     * Number of path to iterate over for each random graph in the
-     * {@code testOnRandomGraph(Graph, Integer, Integer)} method.
-     */
-    private static final int NUMBER_OF_PATH_TO_ITERATE = 100;
-
     @Test(expected = IllegalArgumentException.class)
     public void testNoSourceGraph()
     {
@@ -332,41 +330,40 @@ public class YenShortestPathIteratorTest
         graph.addVertex("15");
         graph.addVertex("21");
 
-        graph.addEdge("19", "1e");
+        DefaultEdge e1 = graph.addEdge("19", "1e");
         graph.addEdge("19", "1c");
         graph.addEdge("19", "1b");
         graph.addEdge("19", "1d");
-        graph.addEdge("19", "1f");
-        graph.addEdge("19", "16");
+        DefaultEdge e5 = graph.addEdge("19", "1f");
+        DefaultEdge e6 = graph.addEdge("19", "16");
         graph.addEdge("12", "17");
         graph.addEdge("12", "14");
         graph.addEdge("12", "15");
-        graph.addEdge("12", "16");
-        graph.addEdge("12", "16");
-        graph.addEdge("12", "18");
-        graph.addEdge("12", "21");
-        graph.addEdge("21", "1f");
+        DefaultEdge e10 = graph.addEdge("12", "16");
+        DefaultEdge e11 = graph.addEdge("12", "16");
+        DefaultEdge e12 = graph.addEdge("12", "18");
+        DefaultEdge e13 = graph.addEdge("12", "21");
+        DefaultEdge e14 = graph.addEdge("21", "1f");
 
         KShortestPathAlgorithm<String, DefaultEdge> yen = new YenKShortestPath<>(graph);
-        KShortestPathAlgorithm<String, DefaultEdge> simple = new KShortestSimplePaths<>(graph);
 
         // should contain exactly 3 elements each
         List<GraphPath<String, DefaultEdge>> yenPaths = yen.getPaths("1e", "18", 7);
-        List<GraphPath<String, DefaultEdge>> kSimplePaths = simple.getPaths("1e", "18", 7);
 
-        yenPaths.sort(Comparator.comparingDouble(GraphPath::getWeight));
-        kSimplePaths.sort(Comparator.comparingDouble(GraphPath::getWeight));
+        List<DefaultEdge> expectedEdgeList1 = Arrays.asList(e1, e6, e10, e12);
+        List<DefaultEdge> expectedEdgeList2 = Arrays.asList(e1, e6, e11, e12);
+        List<DefaultEdge> expectedEdgeList3 = Arrays.asList(e1, e5, e14, e13, e12);
+
+        boolean option1 = yenPaths.get(0).getEdgeList().equals(expectedEdgeList1)
+                && yenPaths.get(1).getEdgeList().equals(expectedEdgeList2);
+        boolean option2 = yenPaths.get(0).getEdgeList().equals(expectedEdgeList2)
+                && yenPaths.get(1).getEdgeList().equals(expectedEdgeList1);
+
 
         assertEquals(3, yenPaths.size());
-        assertEquals(3, kSimplePaths.size());
-
-        boolean option1 = yenPaths.get(0).equals(kSimplePaths.get(0))
-            && yenPaths.get(1).equals(kSimplePaths.get(1));
-        boolean option2 = yenPaths.get(0).equals(kSimplePaths.get(1))
-            && yenPaths.get(1).equals(kSimplePaths.get(0));
 
         assertTrue(option1 ^ option2);
-        assertEquals(kSimplePaths.get(2), yenPaths.get(2));
+        assertEquals(expectedEdgeList3, yenPaths.get(2).getEdgeList());
     }
 
     @Test
@@ -385,58 +382,41 @@ public class YenShortestPathIteratorTest
     }
 
     @Test
-    public void testOnRandomGraphs()
+    public void testForbidAll()
     {
-        Random random = new Random(SEED);
-        int n = 50;
-        double p = 0.05;
-        for (int i = 0; i < 10; i++) {
-            DirectedWeightedPseudograph<Integer, DefaultWeightedEdge> graph =
-                new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
-            graph.setVertexSupplier(SupplierUtil.createIntegerSupplier());
-            getRandomGraph(graph, n, p);
-            Integer source = (int) (random.nextDouble() * n);
-            Integer target = (int) (random.nextDouble() * n);
-            testOnRandomGraph(graph, source, target);
-        }
+        Graph<Integer, DefaultWeightedEdge> graph = new WeightedPseudograph<>(DefaultWeightedEdge.class);
+        readGraph(graph, pseudograph1);
+        Integer source = 1;
+        Integer target = 5;
+        YenShortestPathIterator<Integer,DefaultWeightedEdge> iterator =
+                new YenShortestPathIterator<>(graph, source, target, (partialPath, edge) -> false);
+        assertFalse(iterator.hasNext());
     }
 
-    /**
-     * If the overall number of paths between {@code source} and {@code target} is denoted by $n$
-     * and the value of {@code #NUMBER_OF_PATH_TO_ITERATE} is denoted by $m$ then the method
-     * iterates over $p = min\{n, m\}$ such paths and verifies that they are built correctly. The
-     * method uses the {@link KShortestSimplePaths} implementation to verify the order of paths
-     * returned by {@link YenShortestPathIterator}. Additionally it is checked that all paths
-     * returned by the iterator are unique.
-     *
-     * @param graph graph the iterator is being tested on
-     * @param source source vertex
-     * @param target target vertex
-     */
-    private void testOnRandomGraph(
-        Graph<Integer, DefaultWeightedEdge> graph, Integer source, Integer target)
+    @Test
+    public void testNonTrivialPathValidator()
     {
-
-        Set<GraphPath<Integer, DefaultWeightedEdge>> paths = new HashSet<>();
-        List<GraphPath<Integer, DefaultWeightedEdge>> expectedPaths =
-            new KShortestSimplePaths<>(graph).getPaths(source, target, NUMBER_OF_PATH_TO_ITERATE);
-        Iterator<GraphPath<Integer, DefaultWeightedEdge>> expectedPathsIterator =
-            expectedPaths.iterator();
-        YenShortestPathIterator<Integer, DefaultWeightedEdge> yenPathIterator =
-            new YenShortestPathIterator<>(graph, source, target);
-
-        for (int i = 0; i < NUMBER_OF_PATH_TO_ITERATE && yenPathIterator.hasNext()
-            && expectedPathsIterator.hasNext(); ++i)
-        {
-            GraphPath<Integer, DefaultWeightedEdge> expected = expectedPathsIterator.next();
-            GraphPath<Integer, DefaultWeightedEdge> actual = yenPathIterator.next();
-
-            assertEquals(expected.getWeight(), actual.getWeight(), 1e-9);
-            ((GraphWalk<Integer, DefaultWeightedEdge>) actual).verify();
-            paths.add(actual);
-        }
-
-        assertEquals(expectedPaths.size(), paths.size());
+        Graph<Integer, DefaultWeightedEdge> graph = new DirectedWeightedPseudograph<>(DefaultWeightedEdge.class);
+        readGraph(graph, pseudograph3);
+        Integer source = 1;
+        Integer target = 3;
+        PathValidator<Integer,DefaultWeightedEdge> validator = (partialPath, edge) -> {
+            if (graph.getEdgeSource(edge).equals(1) &&
+                    graph.getEdgeTarget(edge).equals(2) &&
+                    graph.getEdgeWeight(edge) == 2.0){
+                return false;
+            }
+            if (graph.getEdgeSource(edge).equals(2) &&
+                    graph.getEdgeTarget(edge).equals(3) &&
+                    graph.getEdgeWeight(edge) == 4.0){
+                return false;
+            }
+            return true;
+        };
+        YenShortestPathIterator<Integer,DefaultWeightedEdge> iterator =
+                new YenShortestPathIterator<>(graph, source, target, validator);
+        verifyNextPath(iterator, 6.0, true);
+        verifyNextPath(iterator, 8.0, false);
     }
 
     /**
@@ -466,22 +446,5 @@ public class YenShortestPathIteratorTest
     {
         Set<Integer> uniqueVertices = new HashSet<>(path.getVertexList());
         assertEquals(path.getVertexList().size(), uniqueVertices.size());
-    }
-
-    /**
-     * Generates random graph from the $G(n, p)$ model.
-     *
-     * @param graph graph instance for the generator
-     * @param n the number of nodes
-     * @param p the edge probability
-     */
-    private void getRandomGraph(Graph<Integer, DefaultWeightedEdge> graph, int n, double p)
-    {
-        Random random = new Random(SEED);
-        GraphGenerator<Integer, DefaultWeightedEdge, Integer> generator =
-            new GnpRandomGraphGenerator<>(n, p, SEED);
-        generator.generateGraph(graph);
-
-        graph.edgeSet().forEach(e -> graph.setEdgeWeight(e, random.nextDouble()));
     }
 }
