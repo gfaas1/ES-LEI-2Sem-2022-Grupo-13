@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
     - Invoking `addVertex()` on an `AsUnmodifiableGraph` now throws an `UnsupportedOperationException` (contributed by Dimitrios Michail)
     - Added `PathValidator` functionality to `YenKShortestPath` (contributed by Semen Chudakov)
     - Optimize debugging in VF2 (contributed by iotamudelta)
+    - Fix calculation of matching weight in `MaximumWeightBipartiteMatching` (contributed by Dimitrios Michail)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
