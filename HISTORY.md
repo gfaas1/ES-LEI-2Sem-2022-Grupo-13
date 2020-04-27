@@ -16,7 +16,7 @@ Changes to JGraphT in each version:
     - `GmlExporter` support for custom attributes (contributed by Dimitrios Michail)
     - Invoking `addVertex()` on an `AsUnmodifiableGraph` now throws an `UnsupportedOperationException` (contributed by Dimitrios Michail)
     - Added `PathValidator` functionality to `YenKShortestPath` (contributed by Semen Chudakov)
-    - Optimize debugging in VF2 (contributed by iotamudelta)
+    - Optimize debugging in VF2 (contributed by Johannes M Dieterich)
     - Fix calculation of matching weight in `MaximumWeightBipartiteMatching` (contributed by Dimitrios Michail)
 
 - **version 1.4.0** (21-Feb-2020):
