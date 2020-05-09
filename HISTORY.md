@@ -22,6 +22,7 @@ Changes to JGraphT in each version:
     - Change cache array entries from Boolean to byte in `GraphOrdering` (contributed by Johannes M Dieterich)
     - Cache edge references in `GraphOrdering` (contributed by Johannes M Dieterich)
     - Fix to make JSON import/export symmetric (contributed by Dimitrios Michail)
+    - Added support for exporting identifiers in DotExporter (contributed by Milan Szoszkiewicz)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
