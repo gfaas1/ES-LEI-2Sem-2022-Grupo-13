@@ -32,7 +32,8 @@ public enum AttributeType
     DOUBLE("double"),
     STRING("string"),
     HTML("html"),
-    UNKNOWN("unknown");
+    UNKNOWN("unknown"),
+    IDENTIFIER("identifier");
 
     private String name;
 
@@ -78,6 +79,8 @@ public enum AttributeType
             return HTML;
         case "unknown":
             return UNKNOWN;
+        case "identifier":
+            return IDENTIFIER;
         }
         throw new IllegalArgumentException("Type " + value + " is unknown");
     }
