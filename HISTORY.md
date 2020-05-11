@@ -23,6 +23,7 @@ Changes to JGraphT in each version:
     - Cache edge references in `GraphOrdering` (contributed by Johannes M Dieterich)
     - Fix to make JSON import/export symmetric (contributed by Dimitrios Michail)
     - Added support for exporting identifiers in DotExporter (contributed by Milan Szoszkiewicz)
+    - Fixed cycle order in `HawickJamesSimpleCycles` (contributed by Dimitrios Michail)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
