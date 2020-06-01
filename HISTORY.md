@@ -26,6 +26,7 @@ Changes to JGraphT in each version:
     - Fixed cycle order in `HawickJamesSimpleCycles` (contributed by Dimitrios Michail)
     - Fixed unreported edge attributes in `SimpleGraphMLImporter` (contributed by Dimitrios Michail)
     - Optimized `isFeasiblePair` and finalized fields (contributed by Johannes M Dieterich)
+    - Unified TSP algorithms internal implementation (contributes by Hannes Wellmann) 
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
