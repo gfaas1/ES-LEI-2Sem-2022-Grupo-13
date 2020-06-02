@@ -255,7 +255,7 @@ public class AVLTreeTest
         assertEquals(node.getHeight(), Math.max(leftInfo.height, rightInfo.height) + 1);
         assertEquals(node.getSubtreeSize(), leftInfo.size + rightInfo.size + 1);
 
-        assertTrue(abs(node.getLeftHeight() - node.getRightHeight()) < 2);
+        assertTrue(Math.abs(node.getLeftHeight() - node.getRightHeight()) < 2);
 
         if (node.getLeft() == null) {
             assertEquals(node.getSubtreeMin(), node);
