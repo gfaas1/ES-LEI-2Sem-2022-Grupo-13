@@ -9,7 +9,7 @@
 
 <img src="https://raw.githubusercontent.com/jgrapht/jgrapht/master/etc/logo/jgrapht-logo-transparent-cropped.png" width="361" height="200" align="right" />
 
-Released: February 21, 2020</p>
+Released: June 2, 2020</p>
 
 Written by [Barak Naveh](mailto:barak_naveh@users.sourceforge.net)  and Contributors
 
@@ -20,7 +20,7 @@ Please address all contributions, suggestions, and inquiries to the [user mailin
 
 ## Introduction ##
 
-JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 1.8 or later starting with JGraphT 1.0.0).
+JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It runs on Java 2 Platform (requires JDK 1.8 or later starting with JGraphT 1.0.0, and JDK 11 or later starting with JGraphT 1.4.1).
 
 JGraphT may be used under the terms of either the
 
@@ -88,7 +88,7 @@ Starting from 0.9.0, every JGraphT release is published to the Maven Central Rep
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
 ```
 
 We have also started auto-publishing SNAPSHOT builds for every successful commit to master.  To use the bleeding edge:
@@ -96,7 +96,7 @@ We have also started auto-publishing SNAPSHOT builds for every successful commit
 ```
   <groupId>org.jgrapht</groupId>
   <artifactId>jgrapht-core</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
 ```
 
 and make sure the snapshot repository is enabled:
@@ -132,7 +132,7 @@ A local copy of the Javadoc HTML files is included in the distribution. The late
 
 ## Dependencies ##
 
-- JGraphT requires JDK 1.8 or later to build starting with version 1.0.0.
+- JGraphT requires JDK 11 or later to build starting with version 1.4.1.
 - [JHeaps](http://www.jheaps.org/) is a library with priority queues. JHeaps is licensed under the terms of the Apache License, Version 2.0.
 - [JUnit](http://www.junit.org) is a unit testing framework. You need JUnit only if you want to run the unit tests.  JUnit is licensed under the terms of the IBM Common Public License.  The JUnit tests included with JGraphT have been created using JUnit 4.
 - [XMLUnit](http://xmlunit.sourceforge.net) extends JUnit with XML capabilities. You need XMLUnit only if you want to run the unit tests.  XMLUnit is licensed under the terms of the BSD License.
