@@ -43,7 +43,8 @@ class VF2SubgraphIsomorphismState<V, E>
     @Override
     public boolean isFeasiblePair()
     {
-        final String pairstr = (DEBUG) ? "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ")" : null;
+        final String pairstr =
+            (DEBUG) ? "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ")" : null;
         final String abortmsg = (DEBUG) ? pairstr + " does not fit in the current matching" : null;
 
         // check for semantic equality of both vertexes
@@ -64,9 +65,10 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g2.hasEdge(addVertex2, other2)
                     || !areCompatibleEdges(addVertex1, other1, addVertex2, other2))
                 {
-                    if (DEBUG) showLog(
-                        "isFeasiblePair", abortmsg + ": edge from " + g2.getVertex(addVertex2)
-                            + " to " + g2.getVertex(other2) + " is missing in the 2nd graph");
+                    if (DEBUG)
+                        showLog(
+                            "isFeasiblePair", abortmsg + ": edge from " + g2.getVertex(addVertex2)
+                                + " to " + g2.getVertex(other2) + " is missing in the 2nd graph");
                     return false;
                 }
             } else {
@@ -92,9 +94,10 @@ class VF2SubgraphIsomorphismState<V, E>
             if (core2[other2] != NULL_NODE) {
                 int other1 = core2[other2];
                 if (!g1.hasEdge(addVertex1, other1)) {
-                    if (DEBUG) showLog(
-                        "isFeasbilePair", abortmsg + ": edge from " + g1.getVertex(addVertex1)
-                            + " to " + g1.getVertex(other1) + " is missing in the 1st graph");
+                    if (DEBUG)
+                        showLog(
+                            "isFeasbilePair", abortmsg + ": edge from " + g1.getVertex(addVertex1)
+                                + " to " + g1.getVertex(other1) + " is missing in the 1st graph");
                     return false;
                 }
             } else {
@@ -142,9 +145,11 @@ class VF2SubgraphIsomorphismState<V, E>
                 if (!g2.hasEdge(other2, addVertex2)
                     || !areCompatibleEdges(other1, addVertex1, other2, addVertex2))
                 {
-                    if (DEBUG) showLog(
-                        "isFeasbilePair", abortmsg + ": edge from " + g2.getVertex(other2) + " to "
-                            + g2.getVertex(addVertex2) + " is missing in the 2nd graph");
+                    if (DEBUG)
+                        showLog(
+                            "isFeasbilePair",
+                            abortmsg + ": edge from " + g2.getVertex(other2) + " to "
+                                + g2.getVertex(addVertex2) + " is missing in the 2nd graph");
                     return false;
                 }
             } else {
@@ -170,9 +175,11 @@ class VF2SubgraphIsomorphismState<V, E>
             if (core2[other2] != NULL_NODE) {
                 final int other1 = core2[other2];
                 if (!g1.hasEdge(other1, addVertex1)) {
-                    if (DEBUG) showLog(
-                        "isFeasiblePair", abortmsg + ": edge from " + g1.getVertex(other1) + " to "
-                            + g1.getVertex(addVertex1) + " is missing in the 1st graph");
+                    if (DEBUG)
+                        showLog(
+                            "isFeasiblePair",
+                            abortmsg + ": edge from " + g1.getVertex(other1) + " to "
+                                + g1.getVertex(addVertex1) + " is missing in the 1st graph");
                     return false;
                 }
             } else {
@@ -194,7 +201,8 @@ class VF2SubgraphIsomorphismState<V, E>
         if ((termInPred1 >= termInPred2) && (termOutPred1 >= termOutPred2)
             && (newPred1 >= newPred2))
         {
-            if (DEBUG) showLog("isFeasiblePair", pairstr + " fits");
+            if (DEBUG)
+                showLog("isFeasiblePair", pairstr + " fits");
             return true;
         } else {
             if (DEBUG) {

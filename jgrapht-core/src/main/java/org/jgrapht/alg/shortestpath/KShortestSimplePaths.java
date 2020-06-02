@@ -17,16 +17,11 @@
  */
 package org.jgrapht.alg.shortestpath;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
-import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.*;
+import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.graph.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * The algorithm determines the k shortest simple paths in increasing order of weight. Weights can
@@ -146,8 +141,10 @@ public class KShortestSimplePaths<V, E>
         }
 
         if (startVertex.equals(endVertex)) {
-            GraphPath<V, E> result = new GraphWalk<>(graph, startVertex, endVertex,
-                    Collections.singletonList(startVertex), Collections.emptyList(), 0.0);
+            GraphPath<V,
+                E> result = new GraphWalk<>(
+                    graph, startVertex, endVertex, Collections.singletonList(startVertex),
+                    Collections.emptyList(), 0.0);
             return Collections.singletonList(result);
         }
 
@@ -167,9 +164,11 @@ public class KShortestSimplePaths<V, E>
         } else {
             List<GraphPath<V, E>> result = new ArrayList<>();
             for (int i = 0; i < k && i < pathElements.size(); ++i) {
-                RankingPathElement<V,E> element = pathElements.get(i);
-                GraphPath<V,E> path = new GraphWalk<V, E>(graph, startVertex, element.getVertex(),
-                        null, element.createEdgeListPath(), element.getWeight());
+                RankingPathElement<V, E> element = pathElements.get(i);
+                GraphPath<V,
+                    E> path = new GraphWalk<V, E>(
+                        graph, startVertex, element.getVertex(), null, element.createEdgeListPath(),
+                        element.getWeight());
                 result.add(path);
             }
             return result;

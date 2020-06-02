@@ -18,7 +18,6 @@
 package org.jgrapht.alg.shortestpath;
 
 import org.jgrapht.*;
-import org.jgrapht.alg.connectivity.*;
 import org.jgrapht.graph.*;
 
 import java.util.*;
@@ -61,8 +60,7 @@ final class RankingPathElementList<V, E>
      * 
      */
     RankingPathElementList(
-        Graph<V, E> graph,  RankingPathElement<V, E> pathElement,
-        PathValidator<V, E> pathValidator)
+        Graph<V, E> graph, RankingPathElement<V, E> pathElement, PathValidator<V, E> pathValidator)
     {
         super(graph, pathElement);
         this.externalPathValidator = pathValidator;
@@ -75,8 +73,7 @@ final class RankingPathElementList<V, E>
      * RankingPathElement</code>.
      * @param edge edge reaching the end vertex of the created paths.
      */
-    RankingPathElementList(
-        Graph<V, E> graph,  RankingPathElementList<V, E> elementList, E edge)
+    RankingPathElementList(Graph<V, E> graph, RankingPathElementList<V, E> elementList, E edge)
     {
         this(graph, elementList, edge, null);
 
@@ -135,7 +132,7 @@ final class RankingPathElementList<V, E>
     /**
      * Creates an empty list. The list size is 0.
      */
-    RankingPathElementList(Graph<V, E> graph,  V vertex)
+    RankingPathElementList(Graph<V, E> graph, V vertex)
     {
         this(graph, vertex, null);
     }
@@ -146,8 +143,7 @@ final class RankingPathElementList<V, E>
      * @param pathValidator path validator to be used in addition to basic validations (path is from
      *        source to target w/o loops)
      */
-    RankingPathElementList(
-        Graph<V, E> graph,  V vertex, PathValidator<V, E> pathValidator)
+    RankingPathElementList(Graph<V, E> graph, V vertex, PathValidator<V, E> pathValidator)
     {
         super(graph, vertex);
         this.externalPathValidator = pathValidator;
@@ -304,9 +300,10 @@ final class RankingPathElementList<V, E>
         }
 
         MaskSubgraph<V, E> connectivityGraph = new MaskSubgraph<>(
-                this.graph, connectivityMask::isVertexMasked, connectivityMask::isEdgeMasked);
+            this.graph, connectivityMask::isVertexMasked, connectivityMask::isEdgeMasked);
 
-        GraphPath<V, E> path = BellmanFordShortestPath.findPathBetween(connectivityGraph, vertex, guardVertexToNotDisconnect);
+        GraphPath<V, E> path = BellmanFordShortestPath
+            .findPathBetween(connectivityGraph, vertex, guardVertexToNotDisconnect);
         if (path == null) { // path does not exist
             this.path2disconnect.put(prevPathElement, true);
             return true;

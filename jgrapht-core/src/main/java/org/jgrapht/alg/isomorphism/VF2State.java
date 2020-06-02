@@ -37,8 +37,8 @@ abstract class VF2State<V, E>
 
     protected final int n1, n2;
 
-    protected int coreLen, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen,
-        addedVertex1, addVertex1, addVertex2;
+    protected int coreLen, t1BothLen, t2BothLen, t1InLen, t2InLen, t1OutLen, t2OutLen, addedVertex1,
+        addVertex1, addVertex2;
 
     protected final GraphOrdering<V, E> g1, g2;
 
@@ -196,14 +196,16 @@ abstract class VF2State<V, E>
         }
 
         if ((addVertex1 < n1) && (addVertex2 < n2)) {
-            if (DEBUG) showLog(
-                "nextPair", "next candidate pair: (" + g1.getVertex(addVertex1) + ", "
-                    + g2.getVertex(addVertex2) + ")");
+            if (DEBUG)
+                showLog(
+                    "nextPair", "next candidate pair: (" + g1.getVertex(addVertex1) + ", "
+                        + g2.getVertex(addVertex2) + ")");
             return true;
         }
 
         // there are no more pairs..
-        if (DEBUG) showLog("nextPair", "no more candidate pairs");
+        if (DEBUG)
+            showLog("nextPair", "no more candidate pairs");
 
         addVertex1 = addVertex2 = NULL_NODE;
         return false;
@@ -214,9 +216,10 @@ abstract class VF2State<V, E>
      */
     public void addPair()
     {
-        if (DEBUG) showLog(
-            "addPair",
-            "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ") added");
+        if (DEBUG)
+            showLog(
+                "addPair",
+                "(" + g1.getVertex(addVertex1) + ", " + g2.getVertex(addVertex2) + ") added");
 
         coreLen++;
         addedVertex1 = addVertex1;
@@ -319,9 +322,10 @@ abstract class VF2State<V, E>
     {
         int addedVertex2 = core1[addedVertex1];
 
-        if (DEBUG) showLog(
-            "backtrack", "remove (" + g1.getVertex(addedVertex1) + ", " + g2.getVertex(addedVertex2)
-                + ") from the matching");
+        if (DEBUG)
+            showLog(
+                "backtrack", "remove (" + g1.getVertex(addedVertex1) + ", "
+                    + g2.getVertex(addedVertex2) + ") from the matching");
 
         if (in1[addedVertex1] == coreLen) {
             in1[addedVertex1] = 0;

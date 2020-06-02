@@ -28,27 +28,27 @@ import java.util.*;
  * clustering coefficient in an undirected or a directed network.
  *
  * <p>
- * The 
+ * The
  * <a href="https://en.wikipedia.org/wiki/Clustering_coefficient#Local_clustering_coefficient">local
- * clustering coefficient</a> of a vertex in a graph quantifies how close its neighbors are to 
- * being a clique. For a vertex $v$ it counts how many of its direct neighbors are connected by
- * an edge over the total number of neighbor pairs. In the case of undirected graphs the total
- * number of possible neighbor pairs is only half compared to directed graphs.  
+ * clustering coefficient</a> of a vertex in a graph quantifies how close its neighbors are to being
+ * a clique. For a vertex $v$ it counts how many of its direct neighbors are connected by an edge
+ * over the total number of neighbor pairs. In the case of undirected graphs the total number of
+ * possible neighbor pairs is only half compared to directed graphs.
  * 
  * <p>
- * The local clustering coefficient of a graph was introduced in <i>D. J. Watts and Steven
- * Strogatz (June 1998). "Collective dynamics of 'small-world' networks". Nature. 393
- * (6684): 440–442. doi:10.1038/30918</i>. It is simply the average of the local clustering 
- * coefficients of all the vertices of the graph.
+ * The local clustering coefficient of a graph was introduced in <i>D. J. Watts and Steven Strogatz
+ * (June 1998). "Collective dynamics of 'small-world' networks". Nature. 393 (6684): 440–442.
+ * doi:10.1038/30918</i>. It is simply the average of the local clustering coefficients of all the
+ * vertices of the graph.
  *
  * <p>
- * The global clustering coefficient of a graph is based on triplets of nodes. A triplet is three 
- * graph nodes which are connected either by two edges or by three edges. A triplet which is connected
- * by two edges, is called an open triplet. A triplet which is connected with three edges is 
- * called a closed triplet. The global clustering coefficient is defined as the number of 
- * closed triplets over the total number of triplets (open and closed). It was introduced in
- * <i>R. D. Luce and A. D. Perry (1949). "A method of matrix analysis of group structure".
- * Psychometrika. 14 (1): 95–116. doi:10.1007/BF02289146</i>.
+ * The global clustering coefficient of a graph is based on triplets of nodes. A triplet is three
+ * graph nodes which are connected either by two edges or by three edges. A triplet which is
+ * connected by two edges, is called an open triplet. A triplet which is connected with three edges
+ * is called a closed triplet. The global clustering coefficient is defined as the number of closed
+ * triplets over the total number of triplets (open and closed). It was introduced in <i>R. D. Luce
+ * and A. D. Perry (1949). "A method of matrix analysis of group structure". Psychometrika. 14 (1):
+ * 95–116. doi:10.1007/BF02289146</i>.
  *
  * <p>
  * The running time is $O(|V| + \Delta(G)^2)$ where $|V|$ is the number of vertices and $\Delta(G)$

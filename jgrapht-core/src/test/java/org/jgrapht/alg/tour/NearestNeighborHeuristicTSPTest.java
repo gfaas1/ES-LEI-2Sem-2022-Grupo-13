@@ -17,10 +17,6 @@
  */
 package org.jgrapht.alg.tour;
 
-import static java.util.stream.Collectors.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
 import org.apache.commons.math3.geometry.euclidean.twod.*;
 import org.jgrapht.*;
 import org.jgrapht.alg.interfaces.*;
@@ -31,6 +27,10 @@ import org.junit.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Tests for {@link NearestNeighborHeuristicTSP}.
