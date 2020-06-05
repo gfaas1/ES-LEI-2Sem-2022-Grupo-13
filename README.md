@@ -34,7 +34,7 @@ or the
 
 As a recipient of JGraphT, you may choose which license to receive the code under.
 
-For a detailed information on the dual license approach, see <https://github.com/jgrapht/jgrapht/wiki/Relicensing>.
+For detailed information on the dual license approach, see <https://github.com/jgrapht/jgrapht/wiki/Relicensing>.
 
 A copy of the [EPL license](license-EPL.txt) and the [LPGL license](license-LGPL.txt) is included in the download.
 
