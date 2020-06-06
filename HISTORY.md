@@ -31,6 +31,7 @@ Changes to JGraphT in each version:
     - Clean up some docs and tests (contributed by Oliver Kopp)
     - Add .editorconfig (contributed by Oliver Kopp)
     - Change assert to mandatory enforcement in `AsWeightedGraph` (contributed by Dimitrios Michail)
+    - Streamline constructors in `VertexToIntegerMapping` (contributed by Hannes Wellmann)
 
 - **version 1.4.0** (21-Feb-2020):
     - Prepared release cycle 1.3.2: removed deprecated code, updated dependencies, etc (contributed by Joris Kinable)
