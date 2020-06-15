@@ -132,9 +132,20 @@
 						<release>11</release>
 						<compilerArgs>
 							<arg>--add-modules</arg>
-            				<arg>java.xml</arg>
+            						<arg>java.xml</arg>
 						</compilerArgs>
 					</configuration>
+                                        <executions>
+                                          <execution>
+                                            <id>default-compile</id>
+					    <configuration>
+					      <failOnWarning>true</failOnWarning>
+					      <compilerArgs>
+					        <arg>-Xlint:all,-deprecation</arg>
+					      </compilerArgs>
+					    </configuration>
+                                          </execution>
+                                        </executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
