@@ -2,7 +2,7 @@
 
 Changes to JGraphT in each version:
 
-- **version 1.5.0** (under development)
+- **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
     - Bring back vertex factory in importers (contributed by Dimitrios Michail)
     - Added `LabelPropagationClustering` algorithm (contributed by Dimitrios Michail)
