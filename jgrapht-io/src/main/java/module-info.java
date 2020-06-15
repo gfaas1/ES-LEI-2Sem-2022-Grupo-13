@@ -12,7 +12,7 @@ module org.jgrapht.io
     exports org.jgrapht.nio.lemon;
     exports org.jgrapht.nio.matrix;
     exports org.jgrapht.nio.tsplib;
-    
+
     requires transitive org.jgrapht.core;
     requires transitive org.apache.commons.text;
     requires transitive java.xml;

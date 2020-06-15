@@ -38,6 +38,6 @@ module org.jgrapht.core
     exports org.jgrapht.graph.specifics;
     exports org.jgrapht.traverse;
     exports org.jgrapht.util;
-    
+
     requires transitive org.jheaps;
 }
