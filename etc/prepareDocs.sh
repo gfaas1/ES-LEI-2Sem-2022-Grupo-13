@@ -1,6 +1,8 @@
 #!/bin/bash
 # Prepare docs directory for deployment to gh-pages branch after build on master
 
+set -e
+
 : ${TRAVIS_BUILD_DIR?"variable value required"}
 
 ${TRAVIS_BUILD_DIR}/etc/expandMarkdown.sh
