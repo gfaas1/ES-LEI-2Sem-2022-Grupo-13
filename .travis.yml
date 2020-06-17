@@ -3,7 +3,7 @@ dist: trusty
 jdk:
   - oraclejdk11
 node_js:
-  - 14
+  - 10
 before_install:
   - npm install -g hercule
 script:
