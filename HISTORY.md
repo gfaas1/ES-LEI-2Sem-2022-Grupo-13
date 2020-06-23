@@ -4,6 +4,7 @@ Changes to JGraphT in each version:
 
 - **version 1.5.1** (under development)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
+    - Fix non-determinism in `BaseKDisjointShortestPathsAlgorithm` (reported by andreamarotta, contributed by Assaf Mizrachi)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
