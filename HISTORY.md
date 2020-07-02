@@ -7,6 +7,7 @@ Changes to JGraphT in each version:
     - Fix non-determinism in `BaseKDisjointShortestPathsAlgorithm` (reported by andreamarotta, contributed by Assaf Mizrachi)
     - Avoid package self-import in MANIFEST.MF (contributed by Hannes Wellmann)
     - Fixes issue with reverse path weights in `DijkstraManyToManyShortestPath` (contributed by Semen Chudakov)
+    - Added `RescaleLayoutAlgorithm2D` - layout model rescaling algorithm (contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
