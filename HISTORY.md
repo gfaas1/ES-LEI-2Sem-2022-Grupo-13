@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
     - Added `RescaleLayoutAlgorithm2D` - layout model rescaling algorithm (contributed by Dimitrios Michail)
     - Bug fix by rewriting algorithmic part of `NaiveLCAFinder` (contributed by Timofey Chudakov)
     - Added Boykov-Kolmogorov maximum flow algorithm for computer-vision related flow networks (contributed by Timofey Chudakov)
+    - Added `TransitNodeRoutingShortestPathAlgorithm` (contributed by Semen Chudakov)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
