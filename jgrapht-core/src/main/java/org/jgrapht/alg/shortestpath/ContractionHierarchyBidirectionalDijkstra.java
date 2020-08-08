@@ -58,13 +58,22 @@ import static org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.*;
  * queue is at least as large as the best candidate path found so far.
  *
  * <p>
- * After computing a contracted path, the algorithm unpacks it recursively into the actual shortest
- * path using the bypassed edges stored in the contraction hierarchy graph.
+ * After computing a contracted path, the algorithm unpacks it recursively into the actual shortest path using
+ * the bypassed edges stored in the contraction hierarchy graph.
  *
  * <p>
- * There is a possibility to provide an already computed contraction for the graph. For now there is
- * no means to ensure that the specified contraction is correct, nor to fail-fast. If algorithm uses
- * an incorrect contraction, the results of the search are unpredictable.
+ * There is a possibility to provide an already computed contraction for the graph. For now there is no means
+ * to ensure that the specified contraction is correct, nor to fail-fast. If algorithm uses an incorrect
+ * contraction, the results of the search are unpredictable.
+ *
+ * <p>
+ * Comparing to usual shortest path algorithm, as {@link DijkstraShortestPath}, {@link AStarShortestPath},
+ * etc., this algorithm spends time for computing contraction hierarchy but offers significant speedup in
+ * shortest path query performance. Therefore it is efficient to use it in order to compute many shortest
+ * path on a single graph. Furthermore, on small graphs (i.e with less than 1.000 vertices) the overhead of
+ * precomputation is higher than the speed at the stage of computing shortest paths. Typically this algorithm
+ * is used to gain speedup for shortest path queries on graphs of middle and large size (i.e. starting at 1.000
+ * vertices). If a further query performance improvement is needed take a look at {@link TransitNodeRoutingShortestPath}.
  *
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
