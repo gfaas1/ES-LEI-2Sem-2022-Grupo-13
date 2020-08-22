@@ -48,7 +48,9 @@ import java.util.*;
  *
  * @param <V> vertex type
  * @param <E> edge type
+ * @deprecated Use {@link RandomWalkVertexIterator} instead.
  */
+@Deprecated
 public class RandomWalkIterator<V, E>
     extends
     AbstractGraphIterator<V, E>
