@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
     - Added Zachary's karate club named graph (contributed by Dimitrios Michail)
     - Simplified graph creation in tests (contributed by Timofey Chudakov)
     - Add `RandomWalkVertexIterator`, replacing `RandomWalkIterator` (contributed by Dimitrios Michail)
+    - Fixed identically-positioned and isolated vertices in`FRLayoutAlgorithm2D` (reported by rlbns, contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
