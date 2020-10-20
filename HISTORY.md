@@ -18,6 +18,7 @@ Changes to JGraphT in each version:
     - Added Zhang-Shasha tree edit distance (contributed by Semen Chudakov)
     - `GraphMetrics.naiveCountTriangles` now returns the correct number of triangles when multiple edges are present (reported by FlorentinD, contributed by Dimitrios Michail)
     - Fixed JSON importer issue with negative integer weights (see #982) (reported by xianfuzheng, contributed by Dimitrios Michail)
+    - Enabled checkstyle for test files (contributed by Szabolcs Besenyei)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
