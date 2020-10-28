@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
     - `GraphMetrics.naiveCountTriangles` now returns the correct number of triangles when multiple edges are present (reported by FlorentinD, contributed by Dimitrios Michail)
     - Fixed JSON importer issue with negative integer weights (see #982) (reported by xianfuzheng, contributed by Dimitrios Michail)
     - Enabled checkstyle for test files (contributed by Szabolcs Besenyei)
+    - Fixed hashCode/equals on weighted graphs (reported by Sebastiano Vigna, contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
