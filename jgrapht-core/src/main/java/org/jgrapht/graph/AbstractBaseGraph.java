@@ -78,6 +78,8 @@ public abstract class AbstractBaseGraph<V, E>
     private IntrusiveEdgesSpecifics<V, E> intrusiveEdgesSpecifics;
     private GraphSpecificsStrategy<V, E> graphSpecificsStrategy;
 
+    private transient GraphIterables<V, E> graphIterables = null;
+
     /**
      * Construct a new graph.
      *
@@ -124,6 +126,7 @@ public abstract class AbstractBaseGraph<V, E>
             .requireNonNull(
                 graphSpecificsStrategy.getIntrusiveEdgesSpecificsFactory().apply(type),
                 GRAPH_SPECIFICS_MUST_NOT_BE_NULL);
+
     }
 
     /**
@@ -357,6 +360,8 @@ public abstract class AbstractBaseGraph<V, E>
             newGraph.intrusiveEdgesSpecifics = newGraph.graphSpecificsStrategy
                 .getIntrusiveEdgesSpecificsFactory().apply(newGraph.type);
 
+            newGraph.graphIterables = null;
+
             Graphs.addGraph(newGraph, this);
 
             return newGraph;
@@ -555,5 +560,16 @@ public abstract class AbstractBaseGraph<V, E>
     public GraphType getType()
     {
         return type;
+    }
+
+    @Override
+    public GraphIterables<V, E> iterables()
+    {
+        // override interface to avoid instantiating frequently
+        if (graphIterables == null) {
+            graphIterables =
+                new DefaultGraphIterables<>(this);
+        }
+        return graphIterables;
     }
 }
