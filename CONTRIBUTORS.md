@@ -141,6 +141,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Ritik Goyal](https://github.com/rtkg12)
 - [Johannes M Dieterich](https://github.com/iotamudelta)
 - [Milan Szoszkiewicz](https://github.com/szoszk)
+- [Baljit Singh](https://github.com/singhbaljit)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 

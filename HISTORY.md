@@ -25,6 +25,7 @@ Changes to JGraphT in each version:
     - Added `GraphIterables` interface extension for big graph support (suggested by Sebastiano Vigna, contributed by Dimitrios Michail)
     - Fixed label propagation clustering bug with isolated vertices (contributed by Dimitrios Michail)
     - Added Bipartite layout drawing algorithm (contributed by Dimitrios Michail)
+    - Fixed addEdge in `AbstractGraphBuilder` (contributed by Baljit Singh)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
