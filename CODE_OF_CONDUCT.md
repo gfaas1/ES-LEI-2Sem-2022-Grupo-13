@@ -46,7 +46,8 @@ threatening, offensive, or harmful.
 
 ## Contribution Model
 
-In the JGraphT project, we use the term "committers" rather than "maintainers".  
+In the JGraphT project, we use the term "committers" rather than "maintainers".
+
 This is because other than release management, most project maintenance is done through contributions,
 rather than through work carried out by a dedicated team.  Committers
 help contributors carry this out through processes such as issue discussions
