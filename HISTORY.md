@@ -28,6 +28,7 @@ Changes to JGraphT in each version:
     - Fixed addEdge in `AbstractGraphBuilder` (contributed by Baljit Singh)
     - Added code of conduct (contributed by John Sichi)
     - Added documentation for graph thread safety and updated graph equality (contributed by John Sichi)
+    - Enhanced and refactored AlphaCentrality to Katz- and Eigenvector-Centrality (contributed by Sebastiano Vigna)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
