@@ -30,6 +30,7 @@ Changes to JGraphT in each version:
     - Added documentation for graph thread safety and updated graph equality (contributed by John Sichi)
     - Enhanced and refactored AlphaCentrality to Katz- and Eigenvector-Centrality (contributed by Sebastiano Vigna)
     - Added overflow strategy in `BetweennessCentrality` (contributed by Dimitrios Michail)
+    - Replaced `VertexDegreeComparator` object with lambda (contributed by Hannes Wellmann)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
@@ -55,7 +56,7 @@ Changes to JGraphT in each version:
     - Fixed cycle order in `HawickJamesSimpleCycles` (contributed by Dimitrios Michail)
     - Fixed unreported edge attributes in `SimpleGraphMLImporter` (contributed by Dimitrios Michail)
     - Optimized `isFeasiblePair` and finalized fields (contributed by Johannes M Dieterich)
-    - Unified TSP algorithms internal implementation (contributes by Hannes Wellmann)
+    - Unified TSP algorithms internal implementation (contributed by Hannes Wellmann)
     - Deprecated `KShortestSimplePaths` due to bug reported in #892 (contributed by Semen Chudakov)
     - Clean up some docs and tests (contributed by Oliver Kopp)
     - Add .editorconfig (contributed by Oliver Kopp)
