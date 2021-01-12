@@ -32,6 +32,7 @@ Changes to JGraphT in each version:
     - Added overflow strategy in `BetweennessCentrality` (contributed by Dimitrios Michail)
     - Replaced `VertexDegreeComparator` object with lambda (contributed by Hannes Wellmann)
     - Improved performance of the weighted `PageRank` algorithm by caching graph adjacency lists (contributed by Florentin Dörre)
+    - Optimized integer to vertex mappings in several algorithms (contributed by Hannes Wellmann)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
