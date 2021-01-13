@@ -30,7 +30,7 @@ Changes to JGraphT in each version:
     - Added documentation for graph thread safety and updated graph equality (contributed by John Sichi)
     - Enhanced and refactored AlphaCentrality to Katz- and Eigenvector-Centrality (contributed by Sebastiano Vigna)
     - Added overflow strategy in `BetweennessCentrality` (contributed by Dimitrios Michail)
-    - Replaced `VertexDegreeComparator` object with lambda (contributed by Hannes Wellmann)
+    - Replaced `VertexDegreeComparator` and `GeneralVertexDegreeComparator` objects with lambda (contributed by Hannes Wellmann)
     - Improved performance of the weighted `PageRank` algorithm by caching graph adjacency lists (contributed by Florentin Dörre)
     - Optimized integer to vertex mappings in several algorithms (contributed by Hannes Wellmann)
 
