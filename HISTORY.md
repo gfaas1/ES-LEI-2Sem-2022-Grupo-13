@@ -36,6 +36,7 @@ Changes to JGraphT in each version:
     - Added a collection of local algorithms for link prediction (contributed by Dimitrios Michail)
     - Fixed some linty Integer comparisons (contributed by Dimitrios Michail)
     - Added `ThreadPoolExecutor` parameter to all parallel algorithms (contributed by Semen Chudakov)
+    - Fixed bug in `DeltaSteppingShortestPath` (see #994) (reported by Andreas Hartung, contributed by Semen Chudakov)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
