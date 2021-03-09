@@ -47,6 +47,7 @@ Changes to JGraphT in each version:
     - Refactored sparse graphs to allow different backend implementations (contributed by Dimitrios Michail)
     - Improved `SupplierUtil` and added tests (contributed by Hannes Wellmann)
     - Added succinct graph implementations using sux4j (contributed by Sebastiano Vigna)
+    - Ensured predictable vertex order in `MaximumCardinalityIterator` (contributed by Dimitrios Michail)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
