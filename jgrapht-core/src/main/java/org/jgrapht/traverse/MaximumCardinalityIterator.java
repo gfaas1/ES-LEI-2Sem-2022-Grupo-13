@@ -81,7 +81,7 @@ public class MaximumCardinalityIterator<V, E>
         if (remainingVertices > 0) {
             GraphTests.requireUndirected(graph);
             buckets = new ArrayList<>(Collections.nCopies(graph.vertexSet().size(), null));
-            buckets.set(0, new HashSet<>(graph.vertexSet()));
+            buckets.set(0, new LinkedHashSet<>(graph.vertexSet()));
             cardinalityMap = CollectionUtil.newHashMapWithExpectedSize(graph.vertexSet().size());
             for (V v : graph.vertexSet()) {
                 cardinalityMap.put(v, 0);
@@ -208,7 +208,7 @@ public class MaximumCardinalityIterator<V, E>
     {
         cardinalityMap.put(vertex, cardinality);
         if (buckets.get(cardinality) == null) {
-            buckets.set(cardinality, new HashSet<>());
+            buckets.set(cardinality, new LinkedHashSet<>());
         }
         buckets.get(cardinality).add(vertex);
     }
