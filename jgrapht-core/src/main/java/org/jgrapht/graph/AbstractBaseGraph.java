@@ -243,8 +243,19 @@ public abstract class AbstractBaseGraph<V, E>
         if (!type.isAllowingMultipleEdges()) {
             E e = specifics
                 .createEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, edgeSupplier);
-            if (e != null && intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
-                return e;
+            if (e != null) {
+                boolean edgeAdded = false;
+                try {
+                    edgeAdded = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+                } finally {
+                    if (!edgeAdded) {
+                        // edge was already present or adding threw an exception -> revert add
+                        specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                    }
+                }
+                if (edgeAdded) {
+                    return e;
+                }
             }
         } else {
             E e = edgeSupplier.get();
@@ -274,16 +285,20 @@ public abstract class AbstractBaseGraph<V, E>
         }
 
         if (!type.isAllowingMultipleEdges()) {
-            // check that second operation will succeed
-            if (intrusiveEdgesSpecifics.containsEdge(e)) {
-                return false;
-            }
+
             if (!specifics.addEdgeToTouchingVerticesIfAbsent(sourceVertex, targetVertex, e)) {
                 return false;
             }
-            // cannot fail due to first check
-            intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
-            return true;
+            boolean edgeAdded = false;
+            try {
+                edgeAdded = intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex);
+            } finally {
+                if (!edgeAdded) {
+                    // edge was already present or adding threw an exception -> revert add
+                    specifics.removeEdgeFromTouchingVertices(sourceVertex, targetVertex, e);
+                }
+            }
+            return edgeAdded;
         } else {
             if (intrusiveEdgesSpecifics.add(e, sourceVertex, targetVertex)) {
                 specifics.addEdgeToTouchingVertices(sourceVertex, targetVertex, e);
@@ -580,8 +595,7 @@ public abstract class AbstractBaseGraph<V, E>
     {
         // override interface to avoid instantiating frequently
         if (graphIterables == null) {
-            graphIterables =
-                new DefaultGraphIterables<>(this);
+            graphIterables = new DefaultGraphIterables<>(this);
         }
         return graphIterables;
     }

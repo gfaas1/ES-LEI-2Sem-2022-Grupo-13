@@ -148,6 +148,21 @@ public abstract class BaseIntrusiveEdgesSpecifics<V, E, IE extends IntrusiveEdge
      */
     public abstract boolean add(E e, V sourceVertex, V targetVertex);
 
+    protected boolean addIntrusiveEdge(E edge, V sourceVertex, V targetVertex, IE e)
+    {
+        if (e.source == null && e.target == null) { // edge not yet in any graph
+            e.source = sourceVertex;
+            e.target = targetVertex;
+
+        } else if (e.source != sourceVertex || e.target != targetVertex) {
+            // Edge already contained in this or another graph but with different touching
+            // edges. Reject the edge to not reset the touching vertices of the edge.
+            // Changing the touching vertices causes major inconsistent behavior.
+            throw new IntrusiveEdgeException(e.source, e.target);
+        }
+        return edgeMap.putIfAbsent(edge, e) == null;
+    }
+
     /**
      * Get the intrusive edge of an edge.
      * 
