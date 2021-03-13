@@ -49,6 +49,7 @@ Changes to JGraphT in each version:
     - Added succinct graph implementations using sux4j (contributed by Sebastiano Vigna)
     - Ensured predictable vertex order in `MaximumCardinalityIterator` (contributed by Dimitrios Michail)
     - Used -noimport to simplify package self-import exclusion (contributed by Hannes Wellmann)
+    - Reduced intrusive edge map lookups and prevented invalid reuse (contributed by Hannes Wellmann)
 
 - **version 1.5.0** (14-Jun-2020)
     - Prepared release cycle 1.4.1: removed deprecated code, updated dependencies, upgraded java to version 11 (contributed by Joris Kinable)
