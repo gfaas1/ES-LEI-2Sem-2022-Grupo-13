@@ -35,6 +35,7 @@ import java.util.*;
  * @param <E> the graph edge type
  *
  * @author Peter Harman
+ * @author Hannes Wellmann
  */
 public abstract class HamiltonianCycleAlgorithmBase<V, E>
     implements
