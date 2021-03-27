@@ -257,15 +257,17 @@ public class UnmodifiableUnionSetTest
         public Iterator<E> iterator()
         {
             iteratorCalls++;
-            return new Iterator<E>()
+            return new Iterator<>()
             {
                 private Iterator<E> delegateIterator = delegate.iterator();
 
+                @Override
                 public boolean hasNext()
                 {
                     return delegateIterator.hasNext();
                 }
 
+                @Override
                 public E next()
                 {
                     iteratorNextCalls++;
