@@ -9,6 +9,7 @@ Changes to JGraphT in each version:
     - Fixed NaN exception in case of a zero displacement in `FRLayoutAlgorithm2D` (contributed by Dimitrios Michail)
     - Fixed Eclipse warnings in tests (contributed by Hannes Wellmann)
     - Enforced naming conventions in checkstyle (contributed by Hannes Wellmann)
+    - Bug fix for `TSPLIBImporter` which failed to parse burma14 due to multi-space delimiters (reported by Joris Kinable, contributed by Hannes Wellmann)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
