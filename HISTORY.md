@@ -10,6 +10,7 @@ Changes to JGraphT in each version:
     - Fixed Eclipse warnings in tests (contributed by Hannes Wellmann)
     - Enforced naming conventions in checkstyle, allowing Latin chars (contributed by Hannes Wellmann)
     - Bug fix for `TSPLIBImporter` which failed to parse burma14 due to multi-space delimiters (reported by Joris Kinable, contributed by Hannes Wellmann)
+    - Fixed succinct graph constructors in outgoing-only case (contributed by Sebastiano Vigna)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
