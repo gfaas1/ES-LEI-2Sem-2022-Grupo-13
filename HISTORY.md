@@ -11,6 +11,7 @@ Changes to JGraphT in each version:
     - Bug fix for `TSPLIBImporter` which failed to parse burma14 due to multi-space delimiters (reported by Joris Kinable, contributed by Hannes Wellmann)
     - Fixed succinct graph constructors in outgoing-only case (contributed by Sebastiano Vigna)
     - Added support for custom names in vertices/edges collections in JSON I/O (contributed by Dimitrios Michail)
+    - Fixed assertion message in succinct graphs (contributed by Rostislav Svoboda)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
