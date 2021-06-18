@@ -14,6 +14,7 @@ Changes to JGraphT in each version:
     - Fixed assertion message in succinct graphs (contributed by Rostislav Svoboda)
     - Made result ordering predictable in some algorithms (contributed by Dimitrios Michail)
     - Added user guide for WebGraph and Sux4J adapters (contributed by Sebastiano Vigna)
+    - Github Actions maintenance (contributed by Szabolcs Besenyei)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
