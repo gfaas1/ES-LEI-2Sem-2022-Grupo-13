@@ -15,6 +15,7 @@ Changes to JGraphT in each version:
     - Made result ordering predictable in some algorithms (contributed by Dimitrios Michail)
     - Added user guide for WebGraph and Sux4J adapters (contributed by Sebastiano Vigna)
     - Github Actions maintenance (contributed by Szabolcs Besenyei)
+    - Added graph specifics strategy parameter for `DirectedAcyclicGraph` (contributed by Dariusz Dudek)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
