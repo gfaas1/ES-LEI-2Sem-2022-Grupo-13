@@ -17,13 +17,13 @@
  */
 package org.jgrapht.graph;
 
-import org.jgrapht.graph.builder.*;
-import org.jgrapht.traverse.*;
-import org.jgrapht.util.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.jgrapht.graph.builder.*;
+import org.jgrapht.traverse.*;
+import org.jgrapht.util.*;
 
 /**
  * A directed acyclic graph (DAG).
@@ -66,8 +66,6 @@ public class DirectedAcyclicGraph<V, E>
     Iterable<V>
 {
     private static final long serialVersionUID = 4522128427004938150L;
-
-    private static final String EDGE_WOULD_INDUCE_A_CYCLE = "Edge would induce a cycle";
 
     private final Comparator<V> topoComparator;
     private final TopoOrderMap<V> topoOrderMap;
@@ -313,7 +311,8 @@ public class DirectedAcyclicGraph<V, E>
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
      *
-     * @throws IllegalArgumentException if the edge would induce a cycle in the graph
+     * @throws IllegalArgumentException if the vertex is not in the graph
+     * @throws GraphCycleProhibitedException if the vertex would induce a cycle in the graph
      */
     @Override
     public E addEdge(V sourceVertex, V targetVertex)
@@ -321,14 +320,12 @@ public class DirectedAcyclicGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        E result;
         try {
             updateDag(sourceVertex, targetVertex);
-            result = super.addEdge(sourceVertex, targetVertex);
+            return super.addEdge(sourceVertex, targetVertex);
         } catch (CycleFoundException e) {
-            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
+            throw new GraphCycleProhibitedException();
         }
-        return result;
     }
 
     /**
@@ -339,7 +336,8 @@ public class DirectedAcyclicGraph<V, E>
      * the "affected region", and should in general be faster than recomputing the whole topological
      * ordering from scratch.
      *
-     * @throws IllegalArgumentException if the edge would induce a cycle in the graph
+     * @throws IllegalArgumentException if the vertex is not in the graph
+     * @throws GraphCycleProhibitedException if the vertex would induce a cycle in the graph
      */
     @Override
     public boolean addEdge(V sourceVertex, V targetVertex, E e)
@@ -353,14 +351,12 @@ public class DirectedAcyclicGraph<V, E>
         assertVertexExist(sourceVertex);
         assertVertexExist(targetVertex);
 
-        boolean result;
         try {
             updateDag(sourceVertex, targetVertex);
-            result = super.addEdge(sourceVertex, targetVertex, e);
+            return super.addEdge(sourceVertex, targetVertex, e);
         } catch (CycleFoundException ex) {
-            throw new IllegalArgumentException(EDGE_WOULD_INDUCE_A_CYCLE);
+            throw new GraphCycleProhibitedException();
         }
-        return result;
     }
 
     /**
@@ -411,6 +407,7 @@ public class DirectedAcyclicGraph<V, E>
      *
      * @return a topological order iterator
      */
+    @Override
     public Iterator<V> iterator()
     {
         return new TopoIterator();
