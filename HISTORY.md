@@ -17,6 +17,7 @@ Changes to JGraphT in each version:
     - Github Actions maintenance (contributed by Szabolcs Besenyei)
     - Added graph specifics strategy parameter for `DirectedAcyclicGraph` (contributed by Dariusz Dudek)
     - Added explicit `NotDirectedAcyclicGraphException` (contributed by Kaiichiro Ota)
+    - Added explicit `GraphCycleProhibitedException` (contributed by Magnus Gunnarsson)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
