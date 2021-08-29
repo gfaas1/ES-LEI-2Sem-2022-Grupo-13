@@ -19,6 +19,7 @@ Changes to JGraphT in each version:
     - Added explicit `NotDirectedAcyclicGraphException` (contributed by Kaiichiro Ota)
     - Added explicit `GraphCycleProhibitedException` (contributed by Magnus Gunnarsson)
     - Support custom vertex types in `DeltaSteppingShortestPath` (contributed by Semen Chudakov)
+    - Added path validation to `AllDirectedPaths` (contributed by Frans van Buul)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)

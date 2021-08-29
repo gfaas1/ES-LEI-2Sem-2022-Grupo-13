@@ -148,6 +148,7 @@ JGraphT wouldn't be the library it is today without the source contributions and
 - [Dariusz Dudek](https://github.com/dpdudek)
 - [Kaiichiro Ota](https://github.com/kigh-ota)
 - [Magnus Gunnarsson](https://github.com/EnderCrypt)
+- [Frans van Buul](https://github.com/fransvanbuul)
 
 (If we have missed your name on this list, please email us to get it fixed.)
 
