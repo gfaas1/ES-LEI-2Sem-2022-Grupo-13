@@ -50,13 +50,8 @@ public class AllDirectedPathsTest
     {
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-        sources.add(I2);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(O1);
-        targets.add(O2);
+        Set<String> sources = vertexSet(I1, I2);
+        Set<String> targets = vertexSet(O1, O2);
 
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, null);
@@ -65,17 +60,31 @@ public class AllDirectedPathsTest
     }
 
     @Test
+    public void testSmallExampleGraphWithPathValidator()
+    {
+        PathValidator<String, DefaultEdge> pathValidator =
+                (partialPath, edge) -> !"B".equals(partialPath.getGraph().getEdgeTarget(edge));
+
+        AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph(), pathValidator);
+
+        Set<String> sources = vertexSet(I1, I2);
+        Set<String> targets = vertexSet(O1, O2);
+
+        List<GraphPath<String, DefaultEdge>> allPaths =
+                pathFindingAlg.getAllPaths(sources, targets, true, null);
+
+        assertEquals("Toy network should have correct number of simple paths using path validator",
+                3, allPaths.size());
+    }
+
+    @Test
     public void testTrivialPaths()
     {
         // Verify fix for http://github.com/jgrapht/jgrapht/issues/234.
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(I1);
-        targets.add(A);
+        Set<String> sources = vertexSet(I1);
+        Set<String> targets = vertexSet(I1, A);
 
         List<GraphPath<String, DefaultEdge>> allPaths =
             pathFindingAlg.getAllPaths(sources, targets, true, 1);
@@ -104,6 +113,33 @@ public class AllDirectedPathsTest
         assertEquals(Arrays.asList("A"), allPaths.get(0).getVertexList());
         assertEquals(Arrays.asList("B"), allPaths.get(1).getVertexList());
         assertEquals(Arrays.asList("B", "A"), allPaths.get(2).getVertexList());
+    }
+
+    @Test
+    public void testLengthOnePathsWithPathValidator()
+    {
+        DefaultDirectedGraph<String, DefaultEdge> graph =
+                new DefaultDirectedGraph<>(DefaultEdge.class);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addEdge("C", "A");
+        graph.addEdge("C", "B");
+
+        PathValidator<String, DefaultEdge> pathValidator =
+                (partialPath, edge) -> !"B".equals(graph.getEdgeTarget(edge));
+        AllDirectedPaths<String, DefaultEdge> all = new AllDirectedPaths<>(graph, pathValidator);
+        List<GraphPath<String, DefaultEdge>> allPaths =
+                all.getAllPaths(graph.vertexSet(), graph.vertexSet(), true, graph.edgeSet().size());
+
+        assertEquals(4, allPaths.size());
+        assertEquals(Arrays.asList("A"), allPaths.get(0).getVertexList());
+        // The following is slightly counterintuitive, as one might think that the B-excluding pathValidator excludes
+        // this path. However, a PathValidator is designed to check additional edges, not vertices, so this is correct
+        // behavior. Included a comment on this in the Javadoc of the algorithm.
+        assertEquals(Arrays.asList("B"), allPaths.get(1).getVertexList());
+        assertEquals(Arrays.asList("C"), allPaths.get(2).getVertexList());
+        assertEquals(Arrays.asList("C", "A"), allPaths.get(3).getVertexList());
     }
 
     @Test
@@ -151,13 +187,8 @@ public class AllDirectedPathsTest
 
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph);
 
-        Set<String> sources = new HashSet<>();
-        sources.add(I1);
-        sources.add(I2);
-
-        Set<String> targets = new HashSet<>();
-        targets.add(O1);
-        targets.add(O2);
+        Set<String> sources = vertexSet(I1, I2);
+        Set<String> targets = vertexSet(O1, O2);
 
         List<GraphPath<String, DefaultEdge>> allPathsWithoutCycle =
             pathFindingAlg.getAllPaths(sources, targets, true, 8);
@@ -180,8 +211,8 @@ public class AllDirectedPathsTest
 
         AllDirectedPaths<String, DefaultEdge> pathFindingAlg = new AllDirectedPaths<>(toyGraph());
 
-        Set<String> sources = Collections.singleton(I1);
-        Set<String> targets = Collections.singleton(O1);
+        Set<String> sources = vertexSet(I1);
+        Set<String> targets = vertexSet(O1);
 
         try {
             pathFindingAlg.getAllPaths(sources, targets, false, null);
@@ -254,5 +285,9 @@ public class AllDirectedPathsTest
         graph.addEdge(F, O2);
 
         return graph;
+    }
+
+    private static HashSet<String> vertexSet(String... vertices) {
+        return new HashSet<>(Arrays.asList(vertices));
     }
 }
