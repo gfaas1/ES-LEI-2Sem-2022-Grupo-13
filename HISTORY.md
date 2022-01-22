@@ -22,6 +22,7 @@ Changes to JGraphT in each version:
     - Added path validation to `AllDirectedPaths` (contributed by Frans van Buul)
     - Added `ApBetweennessCentrality` using new dependency on apfloat library (contributed by Dimitrios Michail)
     - Added `UndirectedModularityMeasurer` (contributed by Dimitrios Michail)
+    - Added callback API to `DirectedSimpleCycles` interface (contributed by Sérgio Faria)
 
 - **version 1.5.1** (18-Mar-2021)
     - Prepared release cycle 1.5.1: removed deprecated code, updated dependencies (contributed by Joris Kinable)
