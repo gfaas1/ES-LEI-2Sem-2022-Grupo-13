@@ -1,4 +1,4 @@
-# Projetco JGraphT - Engenharia de Software
+# Projeto JGraphT - Engenharia de Software
 
 ## Grupo 13
 - 82395 Pedro Rendeiro
