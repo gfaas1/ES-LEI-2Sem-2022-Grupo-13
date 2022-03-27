@@ -28,7 +28,6 @@
 |org.jgrapht.alg.transform | 100% (1/1) | 100% (3/3) | 91% (22/24) |
 |org.jgrapht.alg.util	| 83% (10/12) | 65% (52/80) | 73% (211/286) |
 |org.jgrapht.alg.vertexcover | 100% (7/7) | 94% (37/39) | 95% (252/264) |
-|org.jgrapht.event	| 100% (7/7) | 81% (13/16) | 88% (23/26) |
 |org.jgrapht.generate	| 90% (45/50)	| 86% (327/378) | 90% (1787/1971) |
 |org.jgrapht.graph	| 91% (72/79)	| 69% (493/711) | 72% (1665/2288) |
 |org.jgrapht.traverse	| 100% (18/18) | 84% (105/125) | 87% (480/547) |
