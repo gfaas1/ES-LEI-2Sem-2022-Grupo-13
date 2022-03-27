@@ -38,7 +38,6 @@ import java.util.function.*;
  * <li>If $G$ is directed: two vertices of $L(G)$ corresponding to respectively arcs $(u,v)$ and
  * $(r,s)$ in $G$ are adjacent if and only if $v=r$.</li>
  * </ul>
- * <p>
  *
  * @author Joris Kinable
  * @author Nikhil Sharma

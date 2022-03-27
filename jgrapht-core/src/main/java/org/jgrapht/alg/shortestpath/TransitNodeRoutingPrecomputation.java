@@ -67,7 +67,7 @@ import static org.jgrapht.alg.shortestpath.DefaultManyToManyShortestPaths.Defaul
  * As mentioned is the original paper, TNR in itself is not a complete algorithm, but a framework
  * which is used to speed up shortest paths computations. Formally the framework consists of the
  * following parts:
- * <p>
+ * </p>
  * <ul style="list-style-type:circle;">
  * <li>set $T ⊆ V$ of transit vertices;</li>
  * <li>distance table $D_{T} : T × T → {\rm I\!R}^{+}_{0}$ of shortest path distances between the

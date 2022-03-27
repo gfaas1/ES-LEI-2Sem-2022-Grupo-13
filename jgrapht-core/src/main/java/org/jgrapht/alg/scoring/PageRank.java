@@ -198,9 +198,7 @@ public final class PageRank<V, E>
      * algorithm.
      * 
      * @author Dimitrios Michail
-     * 
-     * @param <V> the graph type
-     * @param <E> the edge type
+     *
      */
     private class Algorithm
     {

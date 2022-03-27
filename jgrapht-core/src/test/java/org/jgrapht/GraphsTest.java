@@ -264,7 +264,7 @@ public class GraphsTest
      *
      *      +--+ B
      *      |
-     * A <--+
+     * A &lt;--+
      *      |
      *      +--+ C
      */

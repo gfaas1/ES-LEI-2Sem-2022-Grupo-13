@@ -32,14 +32,14 @@ public class StoerWagnerMinimumCutTest
 {
     // ~ Instance fields --------------------------------------------------------
 
-    private String v1 = "v1";
-    private String v2 = "v2";
-    private String v3 = "v3";
-    private String v4 = "v4";
-    private String v5 = "v5";
-    private String v6 = "v6";
-    private String v7 = "v7";
-    private String v8 = "v8";
+    private final String v1 = "v1";
+    private final String v2 = "v2";
+    private final String v3 = "v3";
+    private final String v4 = "v4";
+    private final String v5 = "v5";
+    private final String v6 = "v6";
+    private final String v7 = "v7";
+    private final String v8 = "v8";
 
     /**
      * Test of mergeVertices method, of class StoerWagnerMinimumCut.
@@ -146,7 +146,7 @@ public class StoerWagnerMinimumCutTest
     }
 
     /**
-     * Test of StoerWagnerMinimumCut when a <1-weight edge exists.
+     * Test of StoerWagnerMinimumCut when a less that 1-weight edge exists.
      */
     @Test
     public void testMinCutSmallWeight()

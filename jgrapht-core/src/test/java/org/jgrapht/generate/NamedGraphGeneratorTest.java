@@ -79,7 +79,7 @@ public class NamedGraphGeneratorTest
     @Test
     public void testGroetzschGraph()
     {
-        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.grötzschGraph();
+        Graph<Integer, DefaultEdge> g = NamedGraphGenerator.grotzschGraph();
         this.validateBasics(g, 11, 20, 2, 2, 4);
     }
 

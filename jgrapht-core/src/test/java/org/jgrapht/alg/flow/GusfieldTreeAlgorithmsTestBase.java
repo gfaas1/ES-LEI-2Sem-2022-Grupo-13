@@ -37,8 +37,8 @@ public abstract class GusfieldTreeAlgorithmsTestBase
         SimpleWeightedGraph<Integer, DefaultWeightedEdge> network);
 
     /**
-     * Triangle graph example from the paper <it>Very simple methods for all pairs network flow
-     * analysis</it> by Dan gusfield (Figure 1)
+     * Triangle graph example from the paper. Very simple methods for all pairs network flow
+     * analysis by Dan gusfield (Figure 1)
      */
     @Test
     public void testTriangleGraph()
@@ -53,8 +53,8 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     }
 
     /**
-     * Square graph example from the paper <it>Very simple methods for all pairs network flow
-     * analysis</it> by Dan gusfield (Figure 2)
+     * Square graph example from the paper <i>Very simple methods for all pairs network flow
+     * analysis</i> by Dan gusfield (Figure 2)
      */
     @Test
     public void testSquareGraph()
@@ -73,7 +73,7 @@ public abstract class GusfieldTreeAlgorithmsTestBase
     }
 
     /**
-     * Graph example from the paper <it>Multi-Terminal Network Flows</it> by Gomory, R. and Hu, T.
+     * Graph example from the paper <i>Multi-Terminal Network Flows</i> by Gomory, R. and Hu, T.
      */
     @Test
     public void testGomoryHuExampleGraph()

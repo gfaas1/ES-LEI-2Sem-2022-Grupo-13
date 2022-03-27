@@ -23,7 +23,7 @@ package org.jgrapht.generate.netgen;
  * minimum cost flow networks can be interpreted as maximum flow problems or bipartite matching
  * problems.
  * <p>
- * In the following parameter definition the term <it>transshipment</it> is used for nodes that have
+ * In the following parameter definition the term <i>transshipment</i> is used for nodes that have
  * both incoming and outgoing arcs. This config is used to configure the following parameters:
  * <ul>
  * <li>nodeNum - number of all nodes in the network;</li>
@@ -430,7 +430,7 @@ public class NetworkGeneratorConfig
     }
 
     /**
-     * Checks if the <it>transportation</it> network is a bipartite matching problem.
+     * Checks if the transportation network is a bipartite matching problem.
      * <p>
      * A transportation problem is a bipartite matching problem, if the bipartite graph partitions
      * are of equal size, every source supply is equal to 1 (thus the demand of every sink is equal

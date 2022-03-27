@@ -957,7 +957,7 @@ public class BoyerMyrvoldPlanarityInspector<V, E>
      * Finds the highest obstructing path in the component rooted at {@code componentRoot}. See the
      * original paper for the definition of the obstructing path. This method heavily relies on the
      * fact that the method
-     * {@link BoyerMyrvoldPlanarityInspector#findPathDfs(Node, Edge, Predicate, Predicate, List)}
+     * {@link BoyerMyrvoldPlanarityInspector #findPathDfs(Node, Edge, Predicate, Predicate, List)}
      * chooses the edges in the clockwise order.
      *
      * @param componentRoot the root of the component
