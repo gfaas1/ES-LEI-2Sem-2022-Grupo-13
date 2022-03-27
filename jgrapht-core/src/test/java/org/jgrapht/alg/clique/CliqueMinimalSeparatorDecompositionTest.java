@@ -367,7 +367,7 @@ public class CliqueMinimalSeparatorDecompositionTest
     /**
      * Test graph: CliqueMinimalSeparatorDecomposition1.jpg
      * <p>
-     * <img src="CliqueMinimalSeparatorDecomposition1.jpg" />
+     * <img src="CliqueMinimalSeparatorDecomposition1.jpg" alt="" />
      */
     @Test
     public void testGraph1()

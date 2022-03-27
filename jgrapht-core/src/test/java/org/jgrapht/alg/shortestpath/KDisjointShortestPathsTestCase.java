@@ -933,7 +933,6 @@ public abstract class KDisjointShortestPathsTestCase
      * The source is node 1. Sink is node 2.
      * The weight of each edge is the unboxed number close to the edge.
      *
-     * @formatter:off
      *
      *                         +-+        2        +-+
      *                        /|3|-----------------|6|-
@@ -952,7 +951,6 @@ public abstract class KDisjointShortestPathsTestCase
      *                        \|5|-----------------|8|-
      *                         +-+         6       +-+
      *
-     * @formatter:on
      *
      * The expected result is the three paths through vertices:
      * p1 = 1, 3, 7, 2

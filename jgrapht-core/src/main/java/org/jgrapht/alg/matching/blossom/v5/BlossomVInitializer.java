@@ -53,10 +53,10 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatch
  * The fractional matching initialization (option
  * {@link BlossomVOptions.InitializationType#FRACTIONAL}) is both the most complicated and the most
  * efficient type of initialization. The linear programming formulation of the fractional matching
- * problem is identical to the one used for bipartite graphs. More precisely: <oi>
+ * problem is identical to the one used for bipartite graphs. More precisely: <ol>
  * <li>Minimize the $sum_{e\in E}x_e\times c_e$ subject to:</li>
  * <li>For all nodes: $\sum_{e is incident to v}x_e = 1$</li>
- * <li>For all edges: $x_e \ge 0$</li> </oi> <b>Note:</b> for an optimal solution in general graphs
+ * <li>For all edges: $x_e \ge 0$</li> </ol> <b>Note:</b> for an optimal solution in general graphs
  * we have to require the variables $x_e$ to be $0$ or $1$. For more information on this type of
  * initialization, see: <i>David Applegate and William J. Cook. \Solving Large-Scale Matching
  * Problems". In: Network Flows And Matching. 1991.</i>
