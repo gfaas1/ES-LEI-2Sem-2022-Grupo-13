@@ -119,7 +119,7 @@ public abstract class VertexCoverExactTest
     }
 
     /**
-     * Graph with 6 vertices in the shape >-< (Optimal=2)
+     * Graph with 6 vertices in the shape &gt;-&lt; (Optimal=2)
      */
     @Test
     public void testWhisker()

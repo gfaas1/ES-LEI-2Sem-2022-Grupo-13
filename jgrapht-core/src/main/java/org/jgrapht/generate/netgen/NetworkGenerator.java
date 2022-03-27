@@ -33,9 +33,9 @@ import java.util.stream.IntStream;
  * NETGEN-style network generator. This generator is capable of generating bipartite matching
  * problems (both weighted and unweighted), maximum flow problems and minimum cost flow problems.
  * Note, that this generator works only with directed graphs. The algorithm is originally described
- * in: <it>D. Klingman, A. Napier, and J. Shutz, "NETGEN - A program for generating large scale
+ * in: <i>D. Klingman, A. Napier, and J. Shutz, "NETGEN - A program for generating large scale
  * (un)capacitated assignment, transportation, and minimum cost flow network problems", Management
- * Science 20, 5, 814-821 (1974)</it>
+ * Science 20, 5, 814-821 (1974)</i>
  * <p>
  * This generator is not completely equivalent to the original implementation. A number of changes
  * has been made to remove bugs and ensure parameter constraints. For a complete parameter

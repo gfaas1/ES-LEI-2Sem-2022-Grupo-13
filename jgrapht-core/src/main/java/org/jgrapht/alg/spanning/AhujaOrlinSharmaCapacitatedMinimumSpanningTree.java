@@ -663,7 +663,7 @@ public class AhujaOrlinSharmaCapacitatedMinimumSpanningTree<V, E>
      * c(\{i_{a - 1}\} \cup S[i_{i_a}] \setminus \{i_a\}] $$ - exchange of rooted subtrees: $$
      * c(T_new) - c(T) = \sum_{a = 1}^{r} c(T[i_{a - 1}] \cup S[i_{i_a}] \setminus T[i_a]] $$ where
      * c is the given edge cost function and T_new is the CMST resulting by executing the cyclic
-     * exchange. Thus, an exchange is profitable if c(T_new) - c(T) < 0.
+     * exchange. Thus, an exchange is profitable if c(T_new) - c(T) &lt; 0.
      * <p>
      * Path Exchange: A path exchange follows the same idea as the cyclic exchange but it does not
      * end at the same vertex. That is, the path exchange is defined on i_1, ..., i_r. The cost

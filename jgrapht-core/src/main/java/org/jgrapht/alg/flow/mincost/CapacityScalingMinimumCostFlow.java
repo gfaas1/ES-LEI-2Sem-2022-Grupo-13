@@ -672,7 +672,7 @@ public class CapacityScalingMinimumCostFlow<V, E>
          */
         private static int nextID = 0;
         /**
-         * Reference to the {@link FibonacciHeapNode} this node is contained in
+         * Reference to the {@link FibonacciHeap} this node is contained in
          */
         AddressableHeap.Handle<Double, Node> handle;
         /**

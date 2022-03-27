@@ -220,8 +220,8 @@ public class LexBreadthFirstIterator<V, E>
          *
          * @param vertex the vertex whose presence in some {@code Bucket} in this {@code BucketList}
          *        is checked.
-         * @return <tt>true</tt> if there exists a bucket with {@code vertex} in it, otherwise
-         *         <tt>false</tt>.
+         * @return <code>true</code> if there exists a bucket with {@code vertex} in it, otherwise
+         *         <code>false</code>.
          */
         boolean containsBucketWith(V vertex)
         {
@@ -403,7 +403,7 @@ public class LexBreadthFirstIterator<V, E>
             /**
              * Checks whether this bucket is empty.
              *
-             * @return <tt>true</tt> if this bucket doesn't contain any elements, otherwise false.
+             * @return <code>true</code> if this bucket doesn't contain any elements, otherwise false.
              */
             boolean isEmpty()
             {
