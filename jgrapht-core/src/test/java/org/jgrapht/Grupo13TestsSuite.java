@@ -9,6 +9,7 @@ import org.junit.platform.suite.api.Suite;
         "org.jgrapht.alg.util",
         "org.jgrapht.alg.vertexcover",
         "org.jgrapht.generate",
+        "org.jgrapht.graph",
         "org.jgrapht.interfaces",
         "org.jgrapht.perf",
         "org.jgrapht.traverse",
