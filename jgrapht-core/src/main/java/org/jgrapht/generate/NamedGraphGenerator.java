@@ -64,7 +64,7 @@ public class NamedGraphGenerator<V, E>
 
     /**
      * Generates a <a href="http://mathworld.wolfram.com/DoyleGraph.html">Doyle Graph</a>. The Doyle
-     * graph, sometimes also known as the Holt graph (Marušič et al. 2005), is the quartic symmetric
+     * graph, sometimes also known as the Holt graph (Marušic et al. 2005), is the quartic symmetric
      * graph on 27 nodes
      * 
      * @param targetGraph receives the generated edges and vertices; if this is non-empty on entry,
@@ -160,7 +160,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Dürer Graph
      */
-    public static Graph<Integer, DefaultEdge> dürerGraph()
+    public static Graph<Integer, DefaultEdge> durerGraph()
     {
         return generalizedPetersenGraph(6, 2);
     }
@@ -174,7 +174,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateDürerGraph(Graph<V, E> targetGraph)
+    public void generateDurerGraph(Graph<V, E> targetGraph)
     {
         generateGeneralizedPetersenGraph(targetGraph, 6, 2);
     }
@@ -260,7 +260,7 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Möbius-Kantor Graph
      */
-    public static Graph<Integer, DefaultEdge> möbiusKantorGraph()
+    public static Graph<Integer, DefaultEdge> mobiusKantorGraph()
     {
         return generalizedPetersenGraph(8, 3);
     }
@@ -274,7 +274,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateMöbiusKantorGraph(Graph<V, E> targetGraph)
+    public void generateMobiusKantorGraph(Graph<V, E> targetGraph)
     {
         generateGeneralizedPetersenGraph(targetGraph, 8, 3);
     }
@@ -468,14 +468,14 @@ public class NamedGraphGenerator<V, E>
      * 
      * @return the Grötzsch Graph
      */
-    public static Graph<Integer, DefaultEdge> grötzschGraph()
+    public static Graph<Integer, DefaultEdge> grotzschGraph()
     {
         Graph<Integer,
             DefaultEdge> g = GraphTypeBuilder
                 .undirected().allowingMultipleEdges(false).allowingSelfLoops(false)
                 .vertexSupplier(SupplierUtil.createIntegerSupplier()).edgeClass(DefaultEdge.class)
                 .buildGraph();
-        new NamedGraphGenerator<Integer, DefaultEdge>().generateGrötzschGraph(g);
+        new NamedGraphGenerator<Integer, DefaultEdge>().generateGrotzschGraph(g);
         return g;
     }
 
@@ -487,7 +487,7 @@ public class NamedGraphGenerator<V, E>
      *        the result will be a disconnected graph since generated elements will not be connected
      *        to existing elements
      */
-    public void generateGrötzschGraph(Graph<V, E> targetGraph)
+    public void generateGrotzschGraph(Graph<V, E> targetGraph)
     {
         vertexMap.clear();
         for (int i = 1; i < 6; i++)
