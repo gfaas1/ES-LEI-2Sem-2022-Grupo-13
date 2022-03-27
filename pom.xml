@@ -4,61 +4,43 @@
     <groupId>org.jgrapht</groupId>
     <artifactId>jgrapht</artifactId>
     <packaging>pom</packaging>
-    <name>JGraphT - Parent</name>
+    <name>Projeto JGraphT</name>
     <version>1.5.2-SNAPSHOT</version>
-    <description>A Java class library for graph-theory data structures and algorithms.</description>
+    <description>Projeto JGraphT - Engenharia de Software</description>
     <url>http://www.jgrapht.org</url>
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License Version 2.1, February 1999</name>
-            <url>http://jgrapht.sourceforge.net/LGPL.html</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>Eclipse Public License (EPL) 2.0</name>
-            <url>http://www.eclipse.org/legal/epl-v20.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <url>https://github.com/jgrapht/jgrapht.git</url>
-        <connection>scm:git:git://github.com/jgrapht/jgrapht.git</connection>
-        <developerConnection>scm:git:git@github.com:jgrapht/jgrapht.git</developerConnection>
-        <tag>jgrapht-1.5.1</tag>
-    </scm>
     <issueManagement>
-        <url>https://github.com/jgrapht/jgrapht/issues</url>
+        <url>https://github.com/gfaas1/ES-LEI-2Sem-2022-Grupo-13/issues</url>
     </issueManagement>
-    <mailingLists>
-        <mailingList>
-            <name>jgrapht-users</name>
-            <archive>http://lists.sourceforge.net/lists/listinfo/jgrapht-users</archive>
-        </mailingList>
-        <mailingList>
-            <name>jgrapht-announce</name>
-            <archive>http://lists.sourceforge.net/lists/listinfo/jgrapht-announce</archive>
-        </mailingList>
-    </mailingLists>
     <developers>
         <developer>
-            <id>jsichi</id>
-            <name>John V. Sichi</name>
-            <email>jsichi@gmail.com</email>
+            <id>82395</id>
+            <name>Pedro Rendeiro</name>
+            <email>pascb@iscte-iul.pt</email>
         </developer>
         <developer>
-            <id>jkinable</id>
-            <name>Joris Kinable</name>
-            <email>j.kinable@gmail.com</email>
+            <id>83111</id>
+            <name>Frederico Noronha</name>
+            <email>fnnao@iscte-iul.pt </email>
         </developer>
         <developer>
-            <id>d-michail</id>
-            <name>Dimitrios Michail</name>
-            <email>dimitrios.michail@gmail.com</email>
+            <id>87361</id>
+            <name>Guilherme Antunes</name>
+            <email>gfaas1@iscte-iul.pt</email>
+        </developer>
+        <developer>
+            <id>87405</id>
+            <name>Raúl Nascimento</name>
+            <email>rgodn@iscte-iul.pt</email>
+        </developer>
+        <developer>
+            <id>88655</id>
+            <name>Constança Silva</name>
+            <email>chtfs@iscte-iul.pt</email>
+        </developer>
+        <developer>
+            <id>93251</id>
+            <name>Bernardo Grilo</name>
+            <email>bfgoa1@iscte-iul.pt</email>
         </developer>
     </developers>
 
@@ -79,18 +61,6 @@
                 <artifactId>xmlunit-core</artifactId>
                 <version>2.8.2</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                    <groupId>com.googlecode.junit-toolbox</groupId>
-                    <artifactId>junit-toolbox</artifactId>
-                    <version>2.4</version>
-                    <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
