@@ -17,8 +17,9 @@
  */
 package org.jgrapht;
 
-import com.googlecode.junittoolbox.*;
-import org.junit.runner.*;
+import org.junit.platform.suite.api.IncludeClassNamePatterns;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
 
 /**
  * Suite of performance tests only. We use WildcardPatternSuite instead of ParallelSuite to avoid
@@ -26,8 +27,10 @@ import org.junit.runner.*;
  * 
  * @author John Sichi
  */
-@RunWith(WildcardPatternSuite.class)
-@SuiteClasses({ "**/perf/**/*Test.class" })
+
+@SelectPackages("org.jgrapht.perf")
+@IncludeClassNamePatterns({"^.*Test$"})
+@Suite
 public class PerformanceTestSuite
 {
 }

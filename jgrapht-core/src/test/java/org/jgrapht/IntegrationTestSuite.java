@@ -17,9 +17,10 @@
  */
 package org.jgrapht;
 
-import com.googlecode.junittoolbox.*;
 import org.junit.experimental.categories.*;
-import org.junit.runner.*;
+import org.junit.platform.suite.api.ExcludePackages;
+import org.junit.platform.suite.api.IncludeClassNamePatterns;
+import org.junit.platform.suite.api.Suite;
 
 /**
  * Suite of all unit and integration tests (as run by mvn verify). Excludes performance tests and
@@ -27,9 +28,12 @@ import org.junit.runner.*;
  * 
  * @author John Sichi
  */
-@RunWith(ParallelSuite.class)
+
+//@RunWith(ParallelSuite.class)
 @Categories.ExcludeCategory(OptionalTests.class)
-@SuiteClasses({ "**/*Test.class", "!**/perf/**" })
+@IncludeClassNamePatterns({ "^.*Test$" })
+@ExcludePackages("org.jgrapht.perf")
+@Suite
 public class IntegrationTestSuite
 {
 }
