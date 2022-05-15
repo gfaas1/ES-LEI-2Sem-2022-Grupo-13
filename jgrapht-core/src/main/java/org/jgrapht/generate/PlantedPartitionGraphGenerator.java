@@ -50,8 +50,8 @@ import java.util.*;
  * @author Emilio Cruciani
  */
 public class PlantedPartitionGraphGenerator<V, E>
-    implements
-    GraphGenerator<V, E, V>
+        implements
+        GraphGenerator<V, E, V>
 {
     private static final boolean DEFAULT_ALLOW_SELFLOOPS = false;
 
@@ -133,7 +133,7 @@ public class PlantedPartitionGraphGenerator<V, E>
      * @throws IllegalArgumentException if q is not in [0,1]
      */
     public PlantedPartitionGraphGenerator(
-        int l, int k, double p, double q, long seed, boolean selfLoops)
+            int l, int k, double p, double q, long seed, boolean selfLoops)
     {
         this(l, k, p, q, new Random(seed), selfLoops);
     }
@@ -153,14 +153,14 @@ public class PlantedPartitionGraphGenerator<V, E>
      * @throws IllegalArgumentException if q is not in [0,1]
      */
     public PlantedPartitionGraphGenerator(
-        int l, int k, double p, double q, Random rng, boolean selfLoops)
+            int l, int k, double p, double q, Random rng, boolean selfLoops)
     {
         if (l < 0) {
             throw new IllegalArgumentException("number of groups must be non-negative");
         }
         if (k < 0) {
             throw new IllegalArgumentException(
-                "number of nodes in each group must be non-negative");
+                    "number of nodes in each group must be non-negative");
         }
         if (p < 0 || p > 1) {
             throw new IllegalArgumentException("invalid probability p");
@@ -212,18 +212,19 @@ public class PlantedPartitionGraphGenerator<V, E>
 
         // number of nodes
         int n = this.k * this.l;
+
         // integer to vertices
         List<V> vertices = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            V vertex = target.addVertex();
-            vertices.add(vertex);
-
-            // populate community structure
-            int lv = i / this.k; // group of node v
-            communities.get(lv).add(vertex);
-        }
+        processVertices(vertices, target);
 
         // add self loops
+        addSelfLoops(vertices, target);
+
+        checkPartitionsEdges(n, target, vertices);
+    }
+
+
+    private void addSelfLoops(List<V> vertices, Graph<V, E> target){
         if (this.selfLoops) {
             if (target.getType().isAllowingSelfLoops()) {
                 for (V v : vertices) {
@@ -235,58 +236,73 @@ public class PlantedPartitionGraphGenerator<V, E>
                 throw new IllegalArgumentException("target graph must allow self-loops");
             }
         }
+    }
 
-        // undirected edges
-        if (target.getType().isUndirected()) {
-            for (int i = 0; i < n; i++) {
-                int li = i / this.k; // group of node i
-                for (int j = i + 1; j < n; j++) {
-                    int lj = j / this.k; // group of node j
 
-                    // edge within partition
-                    if (li == lj) {
-                        if (this.rng.nextDouble() < this.p) {
-                            target.addEdge(vertices.get(i), vertices.get(j));
-                        }
-                    }
-                    // edge between partitions
-                    else {
-                        if (this.rng.nextDouble() < this.q) {
-                            target.addEdge(vertices.get(i), vertices.get(j));
-                        }
-                    }
-                }
-            }
+    private void processVertices(List<V> vertices, Graph<V, E> target){
+
+        for (int i = 0; i < vertices.size(); i++) {
+            V vertex = target.addVertex();
+            vertices.add(vertex);
+
+            // populate community structure
+            int lv = i / this.k; // group of node v
+            communities.get(lv).add(vertex);
         }
-        // directed edges
-        else {
-            for (int i = 0; i < n; i++) {
-                int li = i / this.k; // group of node i
-                for (int j = i + 1; j < n; j++) {
-                    int lj = j / this.k; // group of node j
 
-                    // edge within partition
-                    if (li == lj) {
-                        if (this.rng.nextDouble() < this.p) {
-                            target.addEdge(vertices.get(i), vertices.get(j));
-                        }
-                        if (this.rng.nextDouble() < this.p) {
-                            target.addEdge(vertices.get(j), vertices.get(i));
-                        }
-                    }
-                    // edge between partitions
-                    else {
-                        if (this.rng.nextDouble() < this.q) {
-                            target.addEdge(vertices.get(i), vertices.get(j));
-                        }
-                        if (this.rng.nextDouble() < this.q) {
-                            target.addEdge(vertices.get(j), vertices.get(i));
-                        }
-                    }
+    }
+
+
+    private void checkPartitionsEdges(int numberOfNodes, Graph<V, E> target, List<V> vertices){
+
+        for (int i = 0; i < numberOfNodes; i++) {
+            int li = i / this.k; // group of node i
+            for (int j = i + 1; j < numberOfNodes; j++) {
+                int lj = j / this.k; // group of node j
+
+                // edge within partition
+                if (li == lj) {
+                    setWhenEdgeWithinPartition(i, j, target, vertices);
+                }
+                // edge between partitions
+                else {
+                    setWhenEdgeBetweenPartitions(i, j, target, vertices);
                 }
             }
         }
     }
+
+
+    private void setWhenEdgeWithinPartition(int i, int j, Graph<V, E> target, List<V> vertices){
+
+        if (this.rng.nextDouble() < this.p) {
+            target.addEdge(vertices.get(i), vertices.get(j));
+        }
+
+        if(!target.getType().isUndirected()){ // is directed
+
+            if (this.rng.nextDouble() < this.p) {
+                target.addEdge(vertices.get(j), vertices.get(i));
+            }
+
+        }
+    }
+
+
+    private void setWhenEdgeBetweenPartitions(int i, int j, Graph<V, E> target, List<V> vertices){
+
+        if (this.rng.nextDouble() < this.q) {
+            target.addEdge(vertices.get(i), vertices.get(j));
+        }
+
+        if(!target.getType().isUndirected()){ // is directed
+
+            if (this.rng.nextDouble() < this.q) {
+                target.addEdge(vertices.get(j), vertices.get(i));
+            }
+        }
+    }
+
 
     /**
      * Get the community structure of the graph. The method returns a list of communities,
@@ -299,7 +315,7 @@ public class PlantedPartitionGraphGenerator<V, E>
     {
         if (communities == null)
             throw new IllegalStateException(
-                "must generate graph before getting community structure");
+                    "must generate graph before getting community structure");
 
         return communities;
     }
