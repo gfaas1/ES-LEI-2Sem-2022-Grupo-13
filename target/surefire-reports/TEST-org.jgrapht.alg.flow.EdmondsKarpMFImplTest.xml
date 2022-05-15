@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.017" tests="22" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="18"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/gui/.m2/repository/org/apache/maven/surefire/surefire-booter/3.0.0-M5/surefire-booter-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-api/3.0.0-M5/surefire-api-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-logger-api/3.0.0-M5/surefire-logger-api-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-shared-utils/3.0.0-M4/surefire-shared-utils-3.0.0-M4.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M5/surefire-extensions-spi-3.0.0-M5.jar:/home/gui/lei/3.ano/es/teste/jgrapht-core/target/test-classes:/home/gui/.m2/repository/com/googlecode/junit-toolbox/junit-toolbox/2.4/junit-toolbox-2.4.jar:/home/gui/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/gui/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/gui/.m2/repository/org/hamcrest/hamcrest-library/1.3/hamcrest-library-1.3.jar:/home/gui/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/gui/.m2/repository/org/mockito/mockito-core/1.9.5/mockito-core-1.9.5.jar:/home/gui/.m2/repository/org/objenesis/objenesis/1.0/objenesis-1.0.jar:/home/gui/.m2/repository/org/openjdk/jmh/jmh-core/1.28/jmh-core-1.28.jar:/home/gui/.m2/repository/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar:/home/gui/.m2/repository/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar:/home/gui/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.28/jmh-generator-annprocess-1.28.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-junit47/3.0.0-M5/surefire-junit47-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/common-java5/3.0.0-M5/common-java5-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/common-junit3/3.0.0-M5/common-junit3-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/common-junit4/3.0.0-M5/common-junit4-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/common-junit48/3.0.0-M5/common-junit48-3.0.0-M5.jar:/home/gui/.m2/repository/org/apache/maven/surefire/surefire-grouper/3.0.0-M5/surefire-grouper-3.0.0-M5.jar"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.country.format" value="PT"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="18"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/home/gui/.jdks/openjdk-18/lib"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /home/gui/lei/3.ano/es/teste/jgrapht-core/target/surefire 2022-03-26T17-26-35_386-jvmRun1 surefire16254114240217355026tmp surefire_011149796450419615267tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/gui/lei/3.ano/es/teste/jgrapht-core/target/test-classes:/home/gui/.m2/repository/com/googlecode/junit-toolbox/junit-toolbox/2.4/junit-toolbox-2.4.jar:/home/gui/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/gui/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/gui/.m2/repository/org/hamcrest/hamcrest-library/1.3/hamcrest-library-1.3.jar:/home/gui/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/gui/.m2/repository/org/mockito/mockito-core/1.9.5/mockito-core-1.9.5.jar:/home/gui/.m2/repository/org/objenesis/objenesis/1.0/objenesis-1.0.jar:/home/gui/.m2/repository/org/openjdk/jmh/jmh-core/1.28/jmh-core-1.28.jar:/home/gui/.m2/repository/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar:/home/gui/.m2/repository/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar:/home/gui/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.28/jmh-generator-annprocess-1.28.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/gui"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="jdk.module.path" value="/home/gui/lei/3.ano/es/teste/jgrapht-core/target/classes:/home/gui/.m2/repository/org/jheaps/jheaps/0.14/jheaps-0.14.jar:/home/gui/.m2/repository/org/apfloat/apfloat/1.10.1/apfloat-1.10.1.jar"/>
+    <property name="java.version.date" value="2022-03-22"/>
+    <property name="java.home" value="/home/gui/.jdks/openjdk-18"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/gui/lei/3.ano/es/teste/jgrapht-core"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="18+36-2087"/>
+    <property name="user.name" value="gui"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.13.0-37-generic"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/gui/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="idea.version" value="2021.3.3"/>
+    <property name="java.version" value="18"/>
+    <property name="user.dir" value="/home/gui/lei/3.ano/es/teste/jgrapht-core"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.language.format" value="pt"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="18+36-2087"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="62.0"/>
+  </properties>
+  <testcase name="testCornerCases" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testUndirectedN1" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testUndirectedN2" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testUndirectedN3" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testUndirectedN4" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.001"/>
+  <testcase name="testUndirectedN5" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.001"/>
+  <testcase name="testUndirectedN6" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.001"/>
+  <testcase name="testUndirectedN7" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testUndirectedN8" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.003"/>
+  <testcase name="testUndirectedN9" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN0" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN1" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN2" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN3" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN4" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN6" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.002"/>
+  <testcase name="testDirectedN7" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.002"/>
+  <testcase name="testDirectedN8" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN9" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0"/>
+  <testcase name="testDirectedN10" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.002"/>
+  <testcase name="testDirectedN11" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.003"/>
+  <testcase name="testDirectedN12" classname="org.jgrapht.alg.flow.EdmondsKarpMFImplTest" time="0.001"/>
+</testsuite>

@@ -1,0 +1,4 @@
+package org.jgrapht.perf.lca.jmh_generated;
+public class LowestCommonAncestorAlgorithmPerformanceTest_EulerTourRMQLCARandomForestBenchmark_jmhType extends LowestCommonAncestorAlgorithmPerformanceTest_EulerTourRMQLCARandomForestBenchmark_jmhType_B3 {
+}
+
