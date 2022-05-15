@@ -147,19 +147,59 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
          * Ensure directed or undirected
          */
         GraphTests.requireDirectedOrUndirected(target);
-        boolean isDirected = target.getType().isDirected();
 
-        /*
-         * Create vertices
-         */
         List<V> nodes = new ArrayList<>(n * n);
-        for (int i = 0; i < n * n; i++) {
-            nodes.add(target.addVertex());
-        }
+        processVertices(target, nodes);
 
-        /*
-         * Add local-contacts
-         */
+        addLocalContacts(target, nodes);
+
+        addLongRangeContacts(target, nodes);
+
+    }
+
+    private void addLongRangeContacts(Graph<V, E> target, List<V> nodes){
+        double[] p = new double[n * n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+
+
+                createInverseRPowerDistribution(i, j, p);
+
+                sampleFromDistributionAndAddLongRangeEdges(target, nodes, i, j, p);
+
+            }
+        }
+    }
+
+    private void sampleFromDistributionAndAddLongRangeEdges(Graph<V, E> target, List<V> nodes, int i, int j, double[] p){
+        V v = nodes.get(i * n + j);
+        AliasMethodSampler sampler = new AliasMethodSampler(p, rng);
+        for (int k = 0; k < q; k++) {
+            V u = nodes.get(sampler.next());
+            if (!u.equals(v) && !target.containsEdge(v, u)) {
+                target.addEdge(v, u);
+            }
+        }
+    }
+
+    private void createInverseRPowerDistribution(int i, int j, double[] p){
+        double sum = 0d;
+        for (int oi = 0; oi < n; oi++) {
+            for (int oj = 0; oj < n; oj++) {
+                if (oi != i || oj != j) {
+                    double weight = Math.pow(Math.abs(i - oi) + Math.abs(j - oj), -r);
+                    p[oi * n + oj] = weight;
+                    sum += weight;
+                }
+            }
+        }
+        p[i * n + j] = 0d;
+        for (int k = 0; k < n * n; k++) {
+            p[k] /= sum;
+        }
+    }
+
+    private void addLocalContacts(Graph<V, E> target, List<V> nodes){
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int vi = i * n + j;
@@ -172,51 +212,18 @@ public class KleinbergSmallWorldGraphGenerator<V, E>
                         if (t < 0 || t == vi || t >= n * n) {
                             continue;
                         }
-                        if (Math.abs(di) + Math.abs(dj) <= p && (isDirected || t > i * n + j)) {
+                        if (Math.abs(di) + Math.abs(dj) <= p && (target.getType().isDirected() || t > i * n + j)) {
                             target.addEdge(v, nodes.get(t));
                         }
                     }
                 }
             }
         }
+    }
 
-        /*
-         * Add long-range contacts
-         */
-        double[] p = new double[n * n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                V v = nodes.get(i * n + j);
-
-                /*
-                 * Create inverse r power distribution
-                 */
-                double sum = 0d;
-                for (int oi = 0; oi < n; oi++) {
-                    for (int oj = 0; oj < n; oj++) {
-                        if (oi != i || oj != j) {
-                            double weight = Math.pow(Math.abs(i - oi) + Math.abs(j - oj), -r);
-                            p[oi * n + oj] = weight;
-                            sum += weight;
-                        }
-                    }
-                }
-                p[i * n + j] = 0d;
-                for (int k = 0; k < n * n; k++) {
-                    p[k] /= sum;
-                }
-
-                /*
-                 * Sample from distribution and add long-range edges
-                 */
-                AliasMethodSampler sampler = new AliasMethodSampler(p, rng);
-                for (int k = 0; k < q; k++) {
-                    V u = nodes.get(sampler.next());
-                    if (!u.equals(v) && !target.containsEdge(v, u)) {
-                        target.addEdge(v, u);
-                    }
-                }
-            }
+    private void processVertices(Graph<V, E> target, List<V> nodes){
+        for (int i = 0; i < nodes.size(); i++) {
+            nodes.add(target.addVertex());
         }
     }
 
