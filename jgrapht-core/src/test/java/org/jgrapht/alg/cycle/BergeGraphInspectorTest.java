@@ -432,7 +432,7 @@ public class BergeGraphInspectorTest
     public void checkMoebiusKantorGraph()
     {
         reset();
-        new NamedGraphGenerator<Integer, Integer>().generateMöbiusKantorGraph(stimulus);
+        new NamedGraphGenerator<Integer, Integer>().generateMobiusKantorGraph(stimulus);
         assertTrue(dut.isBerge(stimulus, true));
         assertFalse(verifyCertificate(dut.getCertificate()));
     }
@@ -468,7 +468,7 @@ public class BergeGraphInspectorTest
     public void checkGroetzschGraph()
     {
         reset();
-        new NamedGraphGenerator<Integer, Integer>().generateGrötzschGraph(stimulus);
+        new NamedGraphGenerator<Integer, Integer>().generateGrotzschGraph(stimulus);
         assertFalse(dut.isBerge(stimulus, true));
         assertTrue(verifyCertificate(dut.getCertificate()));
     }
